@@ -1,0 +1,151 @@
+#set($layout="layouts/layout-null.vm")
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>天威诚信i信客户端管理</title>
+<meta name="keywords" content="天威诚信,i信,天威诚信客户端" />
+<meta name="description" content="天威诚信i信客户端管理系统" />
+<meta name="author" content="iTrusChina" />
+<meta name="copyright" content="iTrusChina" />
+<link href='../userEnroll/css/main.css' rel='stylesheet' type='text/css'>
+<script type="text/javascript" src="../userEnroll/js/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="#springUrl('/')resources/js/pta_topca.js"></script>
+<script type="text/javascript" src="#springUrl('/')resources/js/xenroll.js"></script>
+</head>
+<body oncontextmenu="return false" onselectstart="return false"  oncopy="return false"> <!--body中加入了禁止复制功能 可根据需求删除-->
+<script language="javascript">
+var keySn = external.ukeyserial;
+var vProgressTimeTAG ; 
+var timeout = 1;
+var reqBuf;
+var keystutus = 1;
+var csr;
+var id;
+function setCount() {
+	timeout = timeout + 1;
+	
+	if (timeout < 0) {
+		timeout = 0;
+	}
+	if(timeout==9){
+	$("#meg").html("正在生成...请勿拨出天威盾！");
+	}
+	if(timeout==39){
+	
+    	var downUrl;
+		if($!{method}==0){
+		downUrl = "#springUrl('/')userEnroll/downloadCert?code=$!{pin}";
+		}else{
+		downUrl = "#springUrl('/')userEnroll/downloadCertWithId?certId=$!{certId}";
+		}
+		//生成请求
+		$("#meg").html("生成请求...请勿拨出天威盾！");
+		$.getJSON(downUrl+"&productSn="+keySn,function(data){
+			id=data.certId;
+		if(data.status==1){
+            try {
+			//获取证书
+				$("#meg").html("获取证书...请勿拨出天威盾！");
+	            DoInstallCert(data);
+				$.ajax({
+					url:"#springUrl('/')userEnroll/updateCertStatus?certId="+data.certId+"&productSn="+data.productSn
+				});
+			//安装成功
+				$("#textMsg").html("更新成功");
+				window.location.href="#springUrl('/')userEnroll/updateSuccessCert?id="+id;
+            } catch(e) {
+				keystutus = 2;
+				$("#textMsg").html("证书获取失败,请检查您的证书是否输入,有误或是否已插入USB KEY");
+            }
+        }else{
+			keystutus = 2;
+			$("#textMsg").html(data.reason);
+       	 	lag = false;
+        }
+		});
+	}
+	if (timeout > 100) {
+		timeout = 100;
+		clearTimeout(vProgressTimeTAG);
+		if(keystutus==1){
+			document.getElementById('meg').innerHTML = "更新完成";
+		}else{
+			document.getElementById('meg').innerHTML = "更新失败";
+		}
+	}
+	var widthSize = document.getElementById('play_progress_bg').clientWidth;	//获得控件width的值
+	var size = (widthSize / 100) * timeout;
+	document.getElementById('play_progress_bar').style.width = size;
+	document.getElementById('size').innerHTML = timeout;
+	clearTimeout(vProgressTimeTAG);
+   	vProgressTimeTAG = setTimeout("setCount()",100);
+}
+window.onload=setCount;
+	function DoInstallCert(data) {
+            var certSignBufP7 = data.certBufP7;
+            if (certSignBufP7.length > 0) {
+                installCert(certSignBufP7);
+            }
+            var certSignBuf = data.certBuf;
+            if (!certSignBuf || certSignBuf.length == 0) {
+                throw("");
+            }
+            var certKmcBuf = "";
+            var certKmcRep1 = "";
+            var certKmcRep2 = "";
+            var installMode = "";
+            if (certKmcRep1.length > 0) {
+                installCertKmc(certSignBuf, certKmcBuf, null, null, null, certKmcRep1, certKmcRep2, null, installMode);
+                var sn = cenroll.encCertSerialNumber;
+                $("#kmcCertSn").text(sn);
+            }
+        }
+</script>
+<!–[if IE 6]>
+<script type="text/javascript" src="../userEnroll/js/DD_belatedPNG.js"></script>
+<script>
+DD_belatedPNG.fix('.nav1 a,.nav2 a,.nav3 a,.nav4 a,.nav5 a,.nav6 a,.nav1_cur a,.nav2_cur a,.nav3_cur a,.nav4_cur a,.nav5_cur a,.nav6_cur a,.btn_shezhi a,.btn_zxh a,.btn_close a,.pop_close a,.zsfw_xgpass_form,.zsfw_xgpass_ok,.zsfw_js_step2_c,.zsfw_js_step4_c,.zsfw_gxgx_error,.font_yyz,b,img');
+</script>
+<![endif]–>
+<div class="main2">
+   <div class="zsfw_xgpass_top" style="margin-left:30px;">
+      <div class="fl"><img src="../userEnroll/images/btn_gx_T.png" width="165" height="51" /></div>
+      <div class="btn_fanhuizsfw fr mt10"><a href="zhengshufuwu.html"></a></div>
+   </div>
+   <div class="clear"></div>
+   <div class="zsfw_gx_bd">
+      <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+        <td height="50">&nbsp;</td>
+        <td height="50">&nbsp;</td>
+        <td height="50" valign="top">&nbsp;</td>
+        <td height="50">&nbsp;</td>
+      </tr>
+
+      <tr>
+        <td width="19%" height="100">&nbsp;</td>
+        <td width="15%" height="100"><img src="../userEnroll/images/icon_computer2.png" width="75" height="75"></td>
+        <td width="49%" height="100" valign="top">
+        <div class="jc_jindutiao">
+		<div id="textMsg" style="color:red;margin:0 auto;text-align:center"></div>
+        <div id="play_progress_bg" style="position: absolute; width: 328px; height: 19px; left: 0px; top: 0px; color: #c1ff84; z-index: 2;background-color: transparent; background-image: url(../userEnroll/images/progressbar_bg.png); background-repeat: no-repeat;"></div>
+		<div id="play_progress_bar" style="position: absolute; width:0px; height: 19px; left: 0px; top: 0px; color: #c1ff84; z-index: 3; background-color: transparent;background-image: url(../userEnroll/images/progressbar.png); background-repeat: no-repeat;"></div>
+		<div id="meg" style="position: absolute; left: 80px; z-index: 5;top: 0px; line-height:19px;">正在更新...请勿拨出天威盾！</div>
+		<div id="size" style="position: absolute;left: 335px; top: 0px;" class="none"></div>
+		</div>
+        </td>
+        <td width="17%" height="100"><!--取消按钮-->
+        <div class="btn_xiufu fl mr10 none"><a href="#"></a></div><!--一键修复按钮--><!--返回按钮-->
+        </td>
+      </tr>
+      </table>
+   </div>
+</div>
+	<form id="updateCert_form" method="post" action="">
+		<input type = "hidden" name="code" id="pin" value ="${pin}"/>
+        <input type = "hidden" id = "ukeySn" name = "productSn" />
+        <input type = "hidden" id = "reqBuf" name = "reqBuf" />
+     </form>
+</body>
+</html>
+
