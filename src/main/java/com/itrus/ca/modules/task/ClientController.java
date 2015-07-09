@@ -307,13 +307,19 @@ public class ClientController {
 					company.setCompanyType(String.valueOf(s1.getCompanyType()));
 					company.setOrganizationNumber(s1.getOrganizationNumber());
 					
+					if (s1.getOrgExpirationTime()!=null&&!s1.getOrgExpirationTime().equals("")) {
+						company.setOrgExpirationTime(new Timestamp(dnf.parse(s1.getOrgExpirationTime()).getTime()));
+					}
 					
-					company.setOrgExpirationTime(new Timestamp(dnf.parse(s1.getOrgExpirationTime()).getTime()));
+					
 					
 					company.setSelectLv(String.valueOf(s1.getSelectLv()));
 					company.setComCertficateNumber(s1.getComCertficateNumber());
 					
+					if (s1.getComCertificateTime()!=null&&!s1.getComCertificateTime().equals("")) {
 					company.setComCertficateTime(new Timestamp(dnf.parse(s1.getComCertificateTime()).getTime()));
+					}
+					
 					//company.setComCertficateTime(s1.getComCertificateTime());
 					company.setComCertificateType(String.valueOf(s1
 							.getComCertificateType()));
