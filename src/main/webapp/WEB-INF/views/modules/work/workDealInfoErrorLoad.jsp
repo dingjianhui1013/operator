@@ -31,6 +31,37 @@
 									}
 								});
 			});
+	
+	function onSumMoney() {
+
+		if($("#type0").val()==''){
+			$("#type0").val(0);
+		}
+		if($("#type1").val()==''){
+			$("#type1").val(0);
+		}
+		if($("#type2").val()==''){
+			$("#type2").val(0);
+		}
+		if($("#type3").val()==''){
+			$("#type3").val(0);
+		}
+		if($("#type4").val()==''){
+			$("#type4").val(0);
+		}
+		if($("#type5").val()==''){
+			$("#type5").val(0);
+		}
+		
+		var sum = parseFloat($("#type0").val()!=''?$("#type0").val():0) + parseFloat($("#type1").val()!=''?$("#type1").val():0)
+				+ parseFloat($("#type2").val()!=''?$("#type2").val():0) + parseFloat($("#type3").val()!=''?$("#type3").val():0)
+				+ parseFloat($("#type4").val()!=''?$("#type4").val():0) + parseFloat($("#type5").val()!=''?$("#type5").val():0);
+		$("#sumMoney").html(sum);
+		$("#allTotalMoney").val(sum);
+	}
+	
+	
+	
 </script>
 <script type="text/javascript">
 document.onkeydown = function(event) {

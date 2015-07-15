@@ -1075,24 +1075,27 @@ public class WorkDealInfoController extends BaseController {
 		workCompany.setCompanyName(companyName);
 		workCompany.setCompanyType(companyType);
 		workCompany.setComCertificateType(comCertificateType);
-		Timestamp ts = new Timestamp(System.currentTimeMillis());
-		Timestamp ts1 = new Timestamp(System.currentTimeMillis());
+		
+		SimpleDateFormat dnf = new SimpleDateFormat("yyyy-MM-dd");
+		
+		
 		try {
-			ts = Timestamp.valueOf(comCertficateTime + " 00:00:00");
-			ts1 = Timestamp.valueOf(orgExpirationTime + " 00:00:00");
+			
+			if(orgExpirationTime!=null&&!orgExpirationTime.equals("")){
+				Timestamp ts1 = new Timestamp(dnf.parse(orgExpirationTime).getTime());
+				workCompany.setOrgExpirationTime(ts1);
+			}
+			if(comCertficateTime!=null&&!comCertficateTime.equals("")){
+				
+				
+				Timestamp ts = new Timestamp(dnf.parse(comCertficateTime).getTime());
+				workCompany.setComCertficateTime(ts);
+			}
+			
 		} catch (Exception e) {
+			e.printStackTrace();
 			// TODO: handle exception
 		}
-		
-		
-		if(orgExpirationTime!=null&&!orgExpirationTime.equals("")){
-			workCompany.setOrgExpirationTime(ts1);
-		}
-		if(comCertficateTime!=null&&!comCertficateTime.equals("")){
-			workCompany.setComCertficateTime(ts);
-		}
-		
-		
 		
 //		workCompany.setComCertficateTime(ts);
 		workCompany.setComCertficateNumber(comCertficateNumber);

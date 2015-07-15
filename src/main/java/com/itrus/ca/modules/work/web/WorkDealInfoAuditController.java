@@ -277,6 +277,7 @@ public class WorkDealInfoAuditController extends BaseController {
 			Model model) {
 		model.addAttribute("proType", ProductType.productTypeStrMap);
 		model.addAttribute("workDealInfo", workDealInfo);
+		
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		model.addAttribute("user", UserUtils.getUser());
 		model.addAttribute("date", sdf.format(new Date()));

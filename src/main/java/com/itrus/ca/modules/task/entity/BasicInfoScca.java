@@ -66,7 +66,7 @@ public class BasicInfoScca implements java.io.Serializable {
 	private String 证书类型;
 	private String 应用名;
 	private String 单证or双证;
-	private String 专用or通用;
+	//private String 专用or通用;
 	private Integer 多证书编号;
 	private String key编码Usb口的编码;
 	private Integer 证书天数;
@@ -132,7 +132,7 @@ public class BasicInfoScca implements java.io.Serializable {
 		this.证书类型 = 证书类型;
 		this.应用名 = 应用名;
 		this.单证or双证 = 单证or双证;
-		this.专用or通用 = 专用or通用;
+		//this.专用or通用 = 专用or通用;
 		this.多证书编号 = 多证书编号;
 		this.key编码Usb口的编码 = key编码Usb口的编码;
 		this.证书天数 = 证书天数;
@@ -493,14 +493,14 @@ public class BasicInfoScca implements java.io.Serializable {
 		this.单证or双证 = 单证or双证;
 	}
 
-	@Column(name = "专用or通用")
-	public String get专用or通用() {
-		return this.专用or通用;
-	}
-
-	public void set专用or通用(String 专用or通用) {
-		this.专用or通用 = 专用or通用;
-	}
+//	@Column(name = "专用or通用")
+//	public String get专用or通用() {
+//		return this.专用or通用;
+//	}
+//
+//	public void set专用or通用(String 专用or通用) {
+//		this.专用or通用 = 专用or通用;
+//	}
 
 	@Column(name = "多证书编号")
 	public Integer get多证书编号() {
@@ -702,9 +702,9 @@ public class BasicInfoScca implements java.io.Serializable {
 				&& ((this.get单证or双证() == castOther.get单证or双证()) || (this
 						.get单证or双证() != null && castOther.get单证or双证() != null && this
 						.get单证or双证().equals(castOther.get单证or双证())))
-				&& ((this.get专用or通用() == castOther.get专用or通用()) || (this
-						.get专用or通用() != null && castOther.get专用or通用() != null && this
-						.get专用or通用().equals(castOther.get专用or通用())))
+//				&& ((this.get专用or通用() == castOther.get专用or通用()) || (this
+//						.get专用or通用() != null && castOther.get专用or通用() != null && this
+//						.get专用or通用().equals(castOther.get专用or通用())))
 				&& ((this.get多证书编号() == castOther.get多证书编号()) || (this
 						.get多证书编号() != null && castOther.get多证书编号() != null && this
 						.get多证书编号().equals(castOther.get多证书编号())))
@@ -833,8 +833,8 @@ public class BasicInfoScca implements java.io.Serializable {
 				+ (get应用名() == null ? 0 : this.get应用名().hashCode());
 		result = 37 * result
 				+ (get单证or双证() == null ? 0 : this.get单证or双证().hashCode());
-		result = 37 * result
-				+ (get专用or通用() == null ? 0 : this.get专用or通用().hashCode());
+//		result = 37 * result
+//				+ (get专用or通用() == null ? 0 : this.get专用or通用().hashCode());
 		result = 37 * result
 				+ (get多证书编号() == null ? 0 : this.get多证书编号().hashCode());
 		result = 37

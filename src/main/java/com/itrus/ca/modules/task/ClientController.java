@@ -381,11 +381,11 @@ public class ClientController {
 				//String notafter = s1.getNotafter();
 				
 				
-				certInfo.setNotafter(dnf.parse(s1.getNotbefore()));
-				certInfo.setNotbefore(dnf.parse(s1.getNotafter()));
+				certInfo.setNotafter(dnf.parse(s1.getNotafter()));
+				certInfo.setNotbefore(dnf.parse(s1.getNotbefore()));
 				certInfo.setKeySn("");// 这次不需要keySn即使有也不记录
 				certInfo.setTrustDeviceCount(1);//默认送1个
-				certInfo.setTrustDeviceDate(dnf.parse(s1.getNotbefore()));//可信设备时间
+				certInfo.setTrustDeviceDate(dnf.parse(s1.getNotafter()));//可信设备时间
 				String serNum = s1.getSerialnumber();
 				if (serNum!=null) {
 					serNum = serNum.trim();
@@ -401,7 +401,12 @@ public class ClientController {
 					log.error("证书:"+certInfo.getSerialnumber());
 					Date start = certInfo.getNotbefore();
 					Date end = certInfo.getNotafter();
-					Integer year = (int) ((s1.get证书天数()) / 365);// 新增业务的年限
+					//Integer year = (int) ((s1.get证书天数()) / 365);// 新增业务的年限
+					Integer year = s1.getYear();
+					
+					
+					
+					
 					log.error("业务年限："+year);
 					WorkDealInfo workDealInfo = new WorkDealInfo();
 					WorkPayInfo workPayInfo = new WorkPayInfo();
@@ -433,6 +438,19 @@ public class ClientController {
 					workDealInfo
 							.setDealInfoType(WorkDealInfoType.TYPE_ADD_CERT);
 					workDealInfo.setYear(year);
+					
+					if(year*365>s1.get证书天数()){
+						
+						Integer certDayNum = s1.get证书天数()-year*365;
+						workDealInfo.setAddCertDays(certDayNum);
+					}else if(year*365==s1.get证书天数()){
+						workDealInfo.setAddCertDays(0);
+					}else {
+						Integer certDayNum = s1.get证书天数()-year*365;
+						workDealInfo.setAddCertDays(certDayNum);
+					}
+					
+					
 					workDealInfo
 							.setDealInfoStatus(WorkDealInfoStatus.STATUS_CERT_OBTAINED);
 					workDealInfo.setCreateBy(createBy);
@@ -447,7 +465,7 @@ public class ClientController {
 					workDealInfo.setObtainedDate(new Date());
 					workDealInfo.setStatus(0);
 					
-					workDealInfo.setNotafter(dnf.parse(s1.getNotbefore()));
+					workDealInfo.setNotafter(dnf.parse(s1.getNotafter()));
 					
 					workDealInfo.setKeySn(s1.getKey编码Usb口的编码());
 					Double openAccountMoney = 0d;

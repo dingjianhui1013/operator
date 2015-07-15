@@ -282,17 +282,17 @@ function revoke(dealInfoId){
 						<tr>
 							<th><span class="prompt" style="color:red; display: none;">*</span>应用标识：</th>
 							<td><input type="radio" disabled="disabled" name="lable"
-								<c:if test="${workDealInfo.configProduct.productLabel==0 }">checked="checked"</c:if>
+								<c:if test="${workDealInfo.configProduct.productLabel==0}">checked="checked"</c:if>
 								id="lable0" value="0">通用 &nbsp; &nbsp; <input
 								type="radio" disabled="disabled" name="lable"
-								<c:if test="${workDealInfo.configProduct.productLabel==1 }">checked="checked"</c:if>
+								<c:if test="${workDealInfo.configProduct.productLabel==1}">checked="checked"</c:if>
 								id="lable1" value="1">专用</td>
 							<th><span class="prompt" style="color:red; display: none;">*</span>业务类型：</th>
 							<td><c:if test="${not empty update}"><input type="checkbox" disabled="disabled" checked="checked">更新证书
 							<input type="hidden" value="0" name="dealInfoType"></c:if>
-								<c:if test="${reissue == 1}"><input type="checkbox" disabled="disabled" checked="checked" value = "1"
+								<c:if test="${reissue==1}"><input type="checkbox" disabled="disabled" checked="checked" value = "1"
 								name="dealInfoType1">遗失补办<input type="hidden" value="1" name="dealInfoType1"></c:if>
-								<c:if test="${reissue == 2}"><input type="checkbox" disabled="disabled" checked="checked" value = "2"
+								<c:if test="${reissue==2}"><input type="checkbox" disabled="disabled" checked="checked" value = "2"
 								name="dealInfoType1">损坏更换<input type="hidden" value="2" name="dealInfoType1"></c:if>
 								<c:if test="${not empty change}"><input type="checkbox" disabled="disabled" checked="checked" value = "3"
 								name="dealInfoType2">变更证书<input type="hidden" value="3" name="dealInfoType2"></c:if>
@@ -340,7 +340,7 @@ function revoke(dealInfoId){
 								<c:if test="${tempStyle!=3 }">disabled="disabled"</c:if>
 								name="payType" value="3">合同采购</td>
 						</tr>
-						<c:if test="${reissue == 2}">
+						<c:if test="${reissue==2}">
 						<tr id="manMade">
 							<th>人为损坏：</th>
 							<td><input type="radio" name="manMadeDamage" value="true">是
@@ -523,10 +523,16 @@ function revoke(dealInfoId){
 							<th><span class="prompt" style="color:red; display: none;">*</span>证件号码:</th>
 							<td><input type="text" name="conCertNumber" id="conCertNumber1"  onkeyup="value=value.replace(/[^\w\.\/]/ig,'')"  maxlength="18" 
 							<c:if test="${empty change && empty update }">disabled="disabled"</c:if>
+
 								value="${workDealInfo.workUser.conCertNumber }" />
-								<input type="hidden" name="conCertNumber"  id="conCertNumber"  onkeyup="value=value.replace(/[^\w\.\/]/ig,'')"  maxlength="18" 
+								
+							<input type="hidden" name="conCertNumber"  id="conCertNumber"  onkeyup="value=value.replace(/[^\w\.\/]/ig,'')"  maxlength="18" 
+								<c:if test="${empty change && empty update }">disabled="disabled"</c:if>
+								value="${workDealInfo.workUser.conCertNumber }"/>
+<%-- =======
 								<c:if test="${!(empty change && empty update) }">disabled="disabled"</c:if>
 								value="${workDealInfo.workUser.conCertNumber }" />
+>>>>>>> .r20019 --%>
 								
 								
 								</td>
