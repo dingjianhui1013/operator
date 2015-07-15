@@ -40,6 +40,11 @@
 //				}
 				$("#tStyle").val(v);
 		});
+			
+			if($("#tStyle").val()==1){
+				$("#configureNumDiv").hide();
+			}
+			
 		});
 		function checkUsed(){
 
@@ -85,7 +90,23 @@
 				top.$.jBox.tip("缴费方式至少需要选择一项");
 				return false;
 			}
-
+			
+			
+			var tempStyle = $('input:radio:checked').val();
+			if(tempStyle!=1){
+				if($("#configureNum").val()==""){
+					top.$.jBox.tip("请输入配置数量");
+					return false;
+				}else{
+					
+					if(parseInt($("#configureNum").val())<parseInt($("#avaNum").val())){
+						top.$.jBox.tip("配置数量应大于等于剩余数量！请重新输入！");
+						return false;
+					}
+					
+					
+				}
+			}
 			$.ajax({
 				url:"${ctx}/profile/configChargeAgent/checkChargeAgent?tempId="+tempId+"&_="+new Date().getTime(),
 				type:'POST',
@@ -115,13 +136,32 @@
 	<script type="text/javascript">
 		var add = '<select name="addYear" id="addDiv"><option <c:if test="${configChargeAgentDetail.chargeYear==1}">selected</c:if> value="1">一年</option><option <c:if test="${configChargeAgentDetail.chargeYear==2}">selected</c:if> value="2">二年</option><option <c:if test="${configChargeAgentDetail.chargeYear==4}">selected</c:if> value="4">四年</option></select><input type="text" name="addMoney">';
 		var update = ''
-	
-	
 		function addLine(obj){
-
-			
-			
 		}
+		
+		
+		function checkBZ(){
+			var tempStyle = $('input:radio:checked').val();
+			if($("#agentId").val() == null || $("#agentId").val()==""){
+				$("#configureNum").val("");
+				
+			}
+			if(tempStyle==1){
+				$("#configureNumDiv").hide();
+				$("#surplusNumDiv").hide();
+				$("#availableNumDiv").hide();
+			}else{
+				$("#configureNumDiv").show();
+				
+				if($("#agentId").val() != null && $("#agentId").val()!=""){
+					
+					$("#surplusNumDiv").show();
+					$("#availableNumDiv").show();
+				}
+			}
+		}
+		
+		
 	</script>
 </head>
 <body>
@@ -143,9 +183,9 @@
 			<label class="control-label"><font color="red">*</font>模板类型:</label>
 			<div class="controls">
 
-				<form:radiobutton path="tempStyle" value="1"/>标准
-				<form:radiobutton path="tempStyle" value="2"/>政府统一采购
-				<form:radiobutton path="tempStyle" value="3"/>合同采购
+				<form:radiobutton path="tempStyle" value="1" onclick="checkBZ()" />标准
+				<form:radiobutton path="tempStyle" value="2" onclick="checkBZ()" />政府统一采购
+				<form:radiobutton path="tempStyle" value="3" onclick="checkBZ()"/>合同采购
 				<input type="hidden" id="tStyle" value="${configChargeAgent.tempStyle}"/>
 			</div>
 		</div>
@@ -218,6 +258,30 @@
 				<input name="chargeMethodBank" id="chargeMethodBank"<c:if test="${configChargeAgent.chargeMethodBank}">checked</c:if> type="checkbox" value="0">银行转账	&nbsp;&nbsp;&nbsp;<br>
 			</div>
 		</div>
+		<div class="control-group" id="configureNumDiv" >
+			<label class="control-label"><font color="red">*</font>配置数量:</label>
+			<div class="controls" >
+				<input name="configureNum" id="configureNum"  type="text" value="${configChargeAgent.configureNum}" onkeyup="value=value.replace(/[^\d]/g,'')"   />
+			</div>
+		</div>
+		<c:if test="${id!=null && configChargeAgent.tempStyle!=1 }">
+		<div class="control-group" id="surplusNumDiv"   >
+			<label class="control-label">剩余数量:</label>
+			<div class="controls" >
+				${configChargeAgent.surplusNum}
+				<input type="hidden" id="avaNum" value="${configChargeAgent.availableNum}">
+			</div>
+		</div>
+		<div class="control-group" id="availableNumDiv" >
+			<label class="control-label">已用数量:</label>
+			<div class="controls" >
+				${configChargeAgent.availableNum}
+				
+				
+				<input type="hidden" id="agentId" value="${id }" /> 
+			</div>
+		</div>
+		</c:if>
 		<div class="form-actions">
 			<shiro:hasPermission name="profile:configChargeAgent:edit"><input id="btnSubmit" class="btn btn-primary" type="button" value="保 存" onclick="checkUsed();"/>&nbsp;</shiro:hasPermission>
 			<input id="btnCancel" class="btn" type="button" value="返 回" onclick="history.go(-1)"/>

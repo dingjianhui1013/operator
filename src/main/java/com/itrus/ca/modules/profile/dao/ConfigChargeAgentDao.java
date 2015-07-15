@@ -3,6 +3,8 @@
  */
 package com.itrus.ca.modules.profile.dao;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import com.itrus.ca.common.persistence.BaseDao;
 import com.itrus.ca.common.persistence.BaseDaoImpl;
+import com.itrus.ca.modules.profile.entity.ConfigApp;
 import com.itrus.ca.modules.profile.entity.ConfigChargeAgent;
 
 /**
@@ -22,7 +25,7 @@ public interface ConfigChargeAgentDao extends ConfigChargeAgentDaoCustom, CrudRe
 	@Modifying
 	@Query("delete ConfigChargeAgent where id = ?1")
 	public int deleteById(Long id);
-	
+
 }
 
 /**

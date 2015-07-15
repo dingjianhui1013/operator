@@ -143,6 +143,7 @@ public class ConfigChargeAgentController extends BaseController {
 			//List<ConfigChargeAgent> list = configChargeAgentService.findByProductId(id);
 			List<ConfigChargeAgent> list = configChargeAgentService.findById(id);
 			if (list.size() > 0) {
+				model.addAttribute("id",list.get(0).getId());
 				model.addAttribute("configChargeAgent", list.get(0));
 				List<ConfigChargeAgentDetail> list2 = configChargeAgentDetailService.findByConfigChargeAgent(list.get(0));
 				for (ConfigChargeAgentDetail d : list2) {
@@ -222,7 +223,18 @@ public class ConfigChargeAgentController extends BaseController {
 			Boolean chargeMethodBank, Boolean chargeMethodAlipay,
 			Boolean chargeMethodGov, Boolean chargeMethodContract,
 			Model model, RedirectAttributes redirectAttributes,Double[] addMoney,Double reissueMoney0,Double reissueMoney1,
-			Double[] updateMoney,Double changeMoney,Double openAccountMoney,Double[] trustDeviceMoney,String tempName,String tempStyle) {
+			Double[] updateMoney,Double changeMoney,Double openAccountMoney,Double[] trustDeviceMoney,String tempName,String tempStyle,Integer configureNum) {
+		
+		Integer conNum =0;
+		Integer surNum =0;
+		Integer avaNum =0;
+		if (configChargeAgentId!=null && configureNum!=null) {
+			ConfigChargeAgent agent = configChargeAgentService.get(configChargeAgentId);
+			conNum = configureNum;
+			surNum = agent.getSurplusNum() - agent.getConfigureNum() + configureNum;
+			avaNum = agent.getAvailableNum();
+		}
+		
 		ConfigChargeAgent configChargeAgent = new ConfigChargeAgent();
 		configChargeAgentDetailService.deleteByAgentId(configChargeAgentId);
 		configChargeAgent.setId(configChargeAgentId);
@@ -259,6 +271,25 @@ public class ConfigChargeAgentController extends BaseController {
 			} else {
 				configChargeAgent.setChargeMethodContract(false);
 			}
+			if(configChargeAgentId == null){
+				if(configureNum!=null){
+					configChargeAgent.setConfigureNum(configureNum);
+					configChargeAgent.setSurplusNum(0);
+					configChargeAgent.setAvailableNum(configureNum);
+				}else{
+					configChargeAgent.setConfigureNum(0);
+					configChargeAgent.setSurplusNum(0);
+					configChargeAgent.setAvailableNum(0);
+				}
+				
+			}else{
+					configChargeAgent.setConfigureNum(conNum);
+					configChargeAgent.setSurplusNum(surNum);
+					configChargeAgent.setAvailableNum(avaNum);
+			}
+			
+			
+			
 //		}
 //		else{
 //			configChargeAgent.setChargeMethodPos(false);

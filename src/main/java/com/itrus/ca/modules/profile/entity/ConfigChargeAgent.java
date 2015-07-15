@@ -33,6 +33,11 @@ public class ConfigChargeAgent implements java.io.Serializable {
 			0);
 	private String tempName;//模板名称
 	private String tempStyle;//模板类型 1通用 2政府统一采购 3合同采购
+	
+	private Integer configureNum;//配置数量
+	private Integer surplusNum;//剩余数量
+	private Integer availableNum;//已用数量
+	
 
 	// Constructors
 
@@ -46,7 +51,12 @@ public class ConfigChargeAgent implements java.io.Serializable {
 			Boolean chargeMethodPos, Boolean chargeMethodMoney,
 			Boolean chargeMethodBank, Boolean chargeMethodAlipay,
 			Boolean chargeMethodGov, Boolean chargeMethodContract,
-			Set<ConfigChargeAgentDetail> configChargeAgentDetails) {
+			Set<ConfigChargeAgentDetail> configChargeAgentDetails,
+			Integer configureNum,
+			Integer surplusNum,
+			Integer availableNum
+			
+			) {
 		this.configApp = configApp;
 		this.configProduct = configProduct;
 		this.configCommercialAgent = configCommercialAgent;
@@ -57,6 +67,11 @@ public class ConfigChargeAgent implements java.io.Serializable {
 		this.chargeMethodGov = chargeMethodGov;
 		this.chargeMethodContract = chargeMethodContract;
 		this.configChargeAgentDetails = configChargeAgentDetails;
+		
+		this.configureNum=configureNum;
+		this.surplusNum=surplusNum;
+		this.availableNum=availableNum;
+		
 	}
 
 	// Property accessors
@@ -184,4 +199,36 @@ public class ConfigChargeAgent implements java.io.Serializable {
 	public void setTempStyle(String tempStyle) {
 		this.tempStyle = tempStyle;
 	}
+
+	@Column(name = "configure_num" , length=11)
+	public Integer getConfigureNum() {
+		return configureNum;
+	}
+
+	public void setConfigureNum(Integer configureNum) {
+		this.configureNum = configureNum;
+	}
+
+	@Column(name = "surplus_num" , length=11)
+	public Integer getSurplusNum() {
+		return surplusNum;
+	}
+
+	public void setSurplusNum(Integer surplusNum) {
+		this.surplusNum = surplusNum;
+	}
+
+	@Column(name = "available_num" , length=11)
+	public Integer getAvailableNum() {
+		return availableNum;
+	}
+
+	public void setAvailableNum(Integer availableNum) {
+		this.availableNum = availableNum;
+	}
+	
+	
+	
+	
+	
 }
