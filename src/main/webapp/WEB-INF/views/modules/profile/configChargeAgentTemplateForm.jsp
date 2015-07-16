@@ -199,45 +199,45 @@
 		<div class="control-group">
 			<label class="control-label"><font color="red">*</font>新增:</label>
 			<div class="controls">
-				一年：<input type="text" id="xz1" name="addMoney" value="<fmt:formatNumber value='${xz1}' pattern='#,##00'/>"  maxlength="9"  onkeyup="value=value.replace(/[^\d]/g,'') "onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))"><br/>
-				两年：<input type="text" id="xz2"name="addMoney" value="<fmt:formatNumber value='${xz2}' pattern='#,##00'/>"  maxlength="9"  onkeyup="value=value.replace(/[^\d]/g,'') "onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))"><br/>
-				四年：<input type="text" id="xz3" name="addMoney" value="<fmt:formatNumber value='${xz4}' pattern='#,##00'/>"  maxlength="9"  onkeyup="value=value.replace(/[^\d]/g,'') "onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))"><br/>
-				五年：<input type="text" id="xz4" name="addMoney" value="<fmt:formatNumber value='${xz5}' pattern='#,##00'/>"  maxlength="9"  onkeyup="value=value.replace(/[^\d]/g,'') "onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))"><br/>
+				一年：<input type="text" id="xz1" name="addMoney" value="<fmt:formatNumber value='${xz1}' pattern='#,###0'/>"  maxlength="9"  onkeyup="value=value.replace(/[^\d]/g,'') "onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))"><br/>
+				两年：<input type="text" id="xz2"name="addMoney" value="<fmt:formatNumber value='${xz2}' pattern='#,###0'/>"  maxlength="9"  onkeyup="value=value.replace(/[^\d]/g,'') "onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))"><br/>
+				四年：<input type="text" id="xz3" name="addMoney" value="<fmt:formatNumber value='${xz4}' pattern='#,###0'/>"  maxlength="9"  onkeyup="value=value.replace(/[^\d]/g,'') "onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))"><br/>
+				五年：<input type="text" id="xz4" name="addMoney" value="<fmt:formatNumber value='${xz5}' pattern='#,###0'/>"  maxlength="9"  onkeyup="value=value.replace(/[^\d]/g,'') "onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))"><br/>
 			</div>
 		</div>
 		<div class="control-group">
 			<label class="control-label"><font color="red">*</font>更新:</label>
 			<div class="controls" id="updateDiv">
-				一年：<input type="text" id="gx1" name="updateMoney" value="<fmt:formatNumber value='${gx1}' pattern='#,##00'/>"  maxlength="9"  onkeyup="value=value.replace(/[^\d]/g,'') "onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))"><br>
-				两年：<input type="text" id="gx2"name="updateMoney" value="<fmt:formatNumber value='${gx2}' pattern='#,##00'/>"  maxlength="9"  onkeyup="value=value.replace(/[^\d]/g,'') "onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))"><br>
-				四年：<input type="text" id="gx3"name="updateMoney" value="<fmt:formatNumber value='${gx4}' pattern='#,##00'/>"  maxlength="9"  onkeyup="value=value.replace(/[^\d]/g,'') "onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))"><br>
-				五年：<input type="text" id="gx4"name="updateMoney" value="<fmt:formatNumber value='${gx5}' pattern='#,##00'/>"  maxlength="9"  onkeyup="value=value.replace(/[^\d]/g,'') "onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))"><br/>
+				一年：<input type="text" id="gx1" name="updateMoney" value="<fmt:formatNumber value='${gx1}' pattern='#,###0'/>"  maxlength="9"  onkeyup="value=value.replace(/[^\d]/g,'') "onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))"><br>
+				两年：<input type="text" id="gx2"name="updateMoney" value="<fmt:formatNumber value='${gx2}' pattern='#,###0'/>"  maxlength="9"  onkeyup="value=value.replace(/[^\d]/g,'') "onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))"><br>
+				四年：<input type="text" id="gx3"name="updateMoney" value="<fmt:formatNumber value='${gx4}' pattern='#,###0'/>"  maxlength="9"  onkeyup="value=value.replace(/[^\d]/g,'') "onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))"><br>
+				五年：<input type="text" id="gx4"name="updateMoney" value="<fmt:formatNumber value='${gx5}' pattern='#,###0'/>"  maxlength="9"  onkeyup="value=value.replace(/[^\d]/g,'') "onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))"><br/>
 			</div>
 		</div>
 		<div class="control-group">
 			<label class="control-label"><font color="red">*</font>补办:</label>
 			<div class="controls" id="reissueDiv">
-				遗失补办:<input type="text" id="bb0" name="reissueMoney0" value="<fmt:formatNumber value='${bb0}' pattern='#,##00'/>"  maxlength="9" onkeyup="value=value.replace(/[^\d]/g,'') " onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))"/><br>
-				损坏更换:<input type="text" id="bb1" name="reissueMoney1" value="<fmt:formatNumber value='${bb1}' pattern='#,##00'/>"  maxlength="9" onkeyup="value=value.replace(/[^\d]/g,'') " onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))"/><br>
+				遗失补办:<input type="text" id="bb0" name="reissueMoney0" value="<fmt:formatNumber value='${bb0}' pattern='#,###0'/>"  maxlength="9" onkeyup="value=value.replace(/[^\d]/g,'') " onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))"/><br>
+				损坏更换:<input type="text" id="bb1" name="reissueMoney1" value="<fmt:formatNumber value='${bb1}' pattern='#,###0'/>"  maxlength="9" onkeyup="value=value.replace(/[^\d]/g,'') " onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))"/><br>
 			</div>
 		</div>
 		<div class="control-group">
 			<label class="control-label"><font color="red">*</font>变更:</label>
 			<div class="controls">
-				<input type="text" id="th" name="changeMoney" value="<fmt:formatNumber value='${th }' pattern='#,##00'/>"  maxlength="9"  onkeyup="value=value.replace(/[^\d]/g,'') "onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))">
+				<input type="text" id="th" name="changeMoney" value="<fmt:formatNumber value='${th }' pattern='#,###0'/>"  maxlength="9"  onkeyup="value=value.replace(/[^\d]/g,'') "onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))">
 			</div>
 		</div>
 		<div class="control-group">
 			<label class="control-label"><font color="red">*</font>开户费:</label>
 			<div class="controls">
-				<input type="text" id="khf" name="openAccountMoney" value="<fmt:formatNumber value='${khf }' pattern='#,##00'/>"  maxlength="9"  onkeyup="value=value.replace(/[^\d]/g,'') "onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))">
+				<input type="text" id="khf" name="openAccountMoney" value="<fmt:formatNumber value='${khf }' pattern='#,###0'/>"  maxlength="9"  onkeyup="value=value.replace(/[^\d]/g,'') "onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))">
 			</div>
 		</div>
 		<div class="control-group">
 			<label class="control-label"><font color="red">*</font>可信移动设备:</label>
 			<div class="controls">
-				半年:<input type="text" id="trustDevice0" name="trustDeviceMoney" value="<fmt:formatNumber value='${trustDevice0 }' pattern='#,##00'/>"  maxlength="9" onkeyup="value=value.replace(/[^\d]/g,'') "onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))">
-				一年:<input type="text" id="trustDevice1" name="trustDeviceMoney" value="<fmt:formatNumber value='${trustDevice1 }' pattern='#,##00'/>"  maxlength="9" onkeyup="value=value.replace(/[^\d]/g,'') "onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))">
+				半年:<input type="text" id="trustDevice0" name="trustDeviceMoney" value="<fmt:formatNumber value='${trustDevice0 }' pattern='#,###0'/>"  maxlength="9" onkeyup="value=value.replace(/[^\d]/g,'') "onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))">
+				一年:<input type="text" id="trustDevice1" name="trustDeviceMoney" value="<fmt:formatNumber value='${trustDevice1 }' pattern='#,###0'/>"  maxlength="9" onkeyup="value=value.replace(/[^\d]/g,'') "onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))">
 			</div>
 		</div>
 		

@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.alibaba.fastjson.JSONObject;
+
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -36,11 +37,15 @@ import com.itrus.ca.modules.profile.entity.ConfigAgentAppRelation;
 import com.itrus.ca.modules.profile.entity.ConfigApp;
 import com.itrus.ca.modules.profile.entity.ConfigChargeAgent;
 import com.itrus.ca.modules.profile.entity.ConfigChargeAgentDetail;
+import com.itrus.ca.modules.profile.entity.ConfigChargeAgentDetailHistory;
+import com.itrus.ca.modules.profile.entity.ConfigChargeAgentHistory;
 import com.itrus.ca.modules.profile.entity.ConfigCommercialAgent;
 import com.itrus.ca.modules.profile.entity.ConfigProduct;
 import com.itrus.ca.modules.profile.service.ConfigAgentAppRelationService;
 import com.itrus.ca.modules.profile.service.ConfigAppService;
+import com.itrus.ca.modules.profile.service.ConfigChargeAgentDetailHistoryService;
 import com.itrus.ca.modules.profile.service.ConfigChargeAgentDetailService;
+import com.itrus.ca.modules.profile.service.ConfigChargeAgentHistoryService;
 import com.itrus.ca.modules.profile.service.ConfigChargeAgentService;
 import com.itrus.ca.modules.profile.service.ConfigProductService;
 
@@ -70,6 +75,12 @@ public class ConfigChargeAgentController extends BaseController {
 	
 	@Autowired
 	private OfficeService officeService;
+	
+	@Autowired
+	private ConfigChargeAgentHistoryService configChargeAgentHistoryService;
+	
+	@Autowired
+	private ConfigChargeAgentDetailHistoryService configChargeAgentDetailHistoryService;
 	
 	private LogUtil logUtil = new LogUtil();
 
@@ -125,6 +136,65 @@ public class ConfigChargeAgentController extends BaseController {
 		return "modules/profile/configChargeAgentTemplateList";
 	}
 
+	
+	
+	@RequestMapping(value="changeChargeAgentInfoList")
+	public String changeChargeAgentInfoList(Long agentHisId,HttpServletRequest request ,
+										 HttpServletResponse response, Model model){
+	//	Page<ConfigChargeAgent> page = configChargeAgentService.find(new Page<ConfigChargeAgent>(request,response),configChargeAgent);
+	
+		Page<ConfigChargeAgentHistory> page = configChargeAgentHistoryService.findByAgentId(new Page<ConfigChargeAgentHistory>(request,response),agentHisId);
+		
+		for (int i = 0; i < page.getList().size(); i++) {
+			
+			List<ConfigChargeAgentDetailHistory> agentDetailHistory = configChargeAgentDetailHistoryService.findByAgentHistory(page.getList().get(i).getId());
+			for (ConfigChargeAgentDetailHistory d : agentDetailHistory) {
+				if (d.getWorkType().equals(WorkType.TYPE_OPEN)) {
+					//model.addAttribute("khf", d.getMoney());
+					
+					page.getList().get(i).getMap().put("khf", d.getMoney().toString());
+				}
+				if (d.getWorkType().equals(WorkType.TYPE_CHANGE)) {
+					//model.addAttribute("th", d.getMoney());
+					page.getList().get(i).getMap().put("th", d.getMoney().toString());
+				}
+				if (d.getWorkType().equals(WorkType.TYPE_REISSUE)) {
+					//model.addAttribute("bb0", d.getMoney());
+					page.getList().get(i).getMap().put("bb0", d.getMoney().toString());
+				}
+				if (d.getWorkType().equals(WorkType.TYPE_UPDATE)) {
+					//model.addAttribute("gx" + d.getChargeYear(), d.getMoney());
+					page.getList().get(i).getMap().put("gx" + d.getChargeYear(), d.getMoney().toString());
+				}
+				if (d.getWorkType().equals(WorkType.TYPE_ADD)) {
+					//model.addAttribute("xz" + d.getChargeYear(), d.getMoney());
+					page.getList().get(i).getMap().put("xz" + d.getChargeYear(), d.getMoney().toString());
+				}
+				if (d.getWorkType().equals(WorkType.TYPE_TRUST)) {
+					///model.addAttribute("trustDevice" + d.getChargeYear(), d.getMoney());
+					page.getList().get(i).getMap().put("trustDevice" + d.getChargeYear(), d.getMoney().toString());
+				}
+				if (d.getWorkType().equals(WorkType.TYPE_DAMAGE)) {
+					//model.addAttribute("bb1", d.getMoney());
+					page.getList().get(i).getMap().put("bb1", d.getMoney().toString());
+				}
+
+			}
+			
+		}
+		
+		model.addAttribute("agentHisId",agentHisId);
+		model.addAttribute("page",page);
+		return "modules/profile/configChargeAgentHistoryList";
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 	/**
 	 * 新增和修改计费策略 跳转
 	 * @param id
@@ -316,7 +386,28 @@ public class ConfigChargeAgentController extends BaseController {
 			//detail = "更新应用"+configApp.getAppName()+"下的计费策略成功";
 		}
 		
+		
+		
 		configChargeAgentService.save(configChargeAgent);
+		
+		ConfigChargeAgentHistory agentHistory = new ConfigChargeAgentHistory();
+		agentHistory.setSuperiorId(configChargeAgent.getId());
+		
+		agentHistory.setChargeMethodBank(configChargeAgent.getChargeMethodBank());
+		agentHistory.setChargeMethodMoney(configChargeAgent.getChargeMethodMoney());
+		agentHistory.setChargeMethodPos(configChargeAgent.getChargeMethodPos());
+		agentHistory.setConfigureNum(configChargeAgent.getConfigureNum());
+		agentHistory.setSurplusNum(configChargeAgent.getSurplusNum());
+		agentHistory.setAvailableNum(configChargeAgent.getAvailableNum());
+		agentHistory.setTempName(configChargeAgent.getTempName());
+		agentHistory.setTempStyle(configChargeAgent.getTempStyle());
+		
+		configChargeAgentHistoryService.save(agentHistory);//保存主表的信息
+		
+		
+		
+		
+		
 		logUtil.saveSysLog("业务配置", detail, null);
 		
 		
@@ -341,6 +432,15 @@ public class ConfigChargeAgentController extends BaseController {
 			configChargeAgentDetail.setWorkType(WorkType.TYPE_UPDATE);
 			//configChargeAgentDetail.setProductType(productLabel);
 			configChargeAgentDetailService.save(configChargeAgentDetail);
+			
+			ConfigChargeAgentDetailHistory agentDetailHistory = new ConfigChargeAgentDetailHistory();
+			agentDetailHistory.setAgent(agentHistory);
+			agentDetailHistory.setChargeYear(configChargeAgentDetail.getChargeYear());
+			agentDetailHistory.setMoney(configChargeAgentDetail.getMoney());
+			agentDetailHistory.setProductType(configChargeAgentDetail.getProductType());
+			agentDetailHistory.setWorkType(configChargeAgentDetail.getWorkType());
+			configChargeAgentDetailHistoryService.save(agentDetailHistory);
+			
 			logUtil.saveSysLog("业务配置", "更新"+year+"年计费策略成功", null);
 			year++;
 		}
@@ -363,6 +463,16 @@ public class ConfigChargeAgentController extends BaseController {
 			configChargeAgentDetail.setWorkType(WorkType.TYPE_ADD);
 			//configChargeAgentDetail.setProductType(productLabel);
 			configChargeAgentDetailService.save(configChargeAgentDetail);
+			
+			ConfigChargeAgentDetailHistory agentDetailHistory = new ConfigChargeAgentDetailHistory();
+			agentDetailHistory.setAgent(agentHistory);
+			agentDetailHistory.setChargeYear(configChargeAgentDetail.getChargeYear());
+			agentDetailHistory.setMoney(configChargeAgentDetail.getMoney());
+			agentDetailHistory.setProductType(configChargeAgentDetail.getProductType());
+			agentDetailHistory.setWorkType(configChargeAgentDetail.getWorkType());
+			configChargeAgentDetailHistoryService.save(agentDetailHistory);
+			
+			
 			logUtil.saveSysLog("业务配置", "添加"+year+"年计费策略成功", null);
 			year++;
 		}
@@ -375,6 +485,13 @@ public class ConfigChargeAgentController extends BaseController {
 			configChargeAgentDetail.setWorkType(WorkType.TYPE_REISSUE);
 			//configChargeAgentDetail.setProductType(productLabel);
 			configChargeAgentDetailService.save(configChargeAgentDetail);
+			ConfigChargeAgentDetailHistory agentDetailHistory = new ConfigChargeAgentDetailHistory();
+			agentDetailHistory.setAgent(agentHistory);
+			agentDetailHistory.setChargeYear(configChargeAgentDetail.getChargeYear());
+			agentDetailHistory.setMoney(configChargeAgentDetail.getMoney());
+			agentDetailHistory.setProductType(configChargeAgentDetail.getProductType());
+			agentDetailHistory.setWorkType(configChargeAgentDetail.getWorkType());
+			configChargeAgentDetailHistoryService.save(agentDetailHistory);
 		}
 		
 		if (reissueMoney1!=null) {
@@ -385,6 +502,13 @@ public class ConfigChargeAgentController extends BaseController {
 			configChargeAgentDetail.setWorkType(WorkType.TYPE_DAMAGE);
 			//configChargeAgentDetail.setProductType(productLabel);
 			configChargeAgentDetailService.save(configChargeAgentDetail);
+			ConfigChargeAgentDetailHistory agentDetailHistory = new ConfigChargeAgentDetailHistory();
+			agentDetailHistory.setAgent(agentHistory);
+			agentDetailHistory.setChargeYear(configChargeAgentDetail.getChargeYear());
+			agentDetailHistory.setMoney(configChargeAgentDetail.getMoney());
+			agentDetailHistory.setProductType(configChargeAgentDetail.getProductType());
+			agentDetailHistory.setWorkType(configChargeAgentDetail.getWorkType());
+			configChargeAgentDetailHistoryService.save(agentDetailHistory);
 		}
 		
 		year = 1;
@@ -396,6 +520,13 @@ public class ConfigChargeAgentController extends BaseController {
 			configChargeAgentDetail.setWorkType(WorkType.TYPE_CHANGE);
 			//configChargeAgentDetail.setProductType(productLabel);
 			configChargeAgentDetailService.save(configChargeAgentDetail);
+			ConfigChargeAgentDetailHistory agentDetailHistory = new ConfigChargeAgentDetailHistory();
+			agentDetailHistory.setAgent(agentHistory);
+			agentDetailHistory.setChargeYear(configChargeAgentDetail.getChargeYear());
+			agentDetailHistory.setMoney(configChargeAgentDetail.getMoney());
+			agentDetailHistory.setProductType(configChargeAgentDetail.getProductType());
+			agentDetailHistory.setWorkType(configChargeAgentDetail.getWorkType());
+			configChargeAgentDetailHistoryService.save(agentDetailHistory);
 			logUtil.saveSysLog("业务配置", "保存计费策略变更成功", null);
 		}
 		
@@ -407,6 +538,13 @@ public class ConfigChargeAgentController extends BaseController {
 			configChargeAgentDetail.setWorkType(WorkType.TYPE_OPEN);
 			//configChargeAgentDetail.setProductType(productLabel);
 			configChargeAgentDetailService.save(configChargeAgentDetail);
+			ConfigChargeAgentDetailHistory agentDetailHistory = new ConfigChargeAgentDetailHistory();
+			agentDetailHistory.setAgent(agentHistory);
+			agentDetailHistory.setChargeYear(configChargeAgentDetail.getChargeYear());
+			agentDetailHistory.setMoney(configChargeAgentDetail.getMoney());
+			agentDetailHistory.setProductType(configChargeAgentDetail.getProductType());
+			agentDetailHistory.setWorkType(configChargeAgentDetail.getWorkType());
+			configChargeAgentDetailHistoryService.save(agentDetailHistory);
 			logUtil.saveSysLog("业务配置", "保存计费策略开户费成功", null);
 		}
 		
@@ -420,6 +558,13 @@ public class ConfigChargeAgentController extends BaseController {
 				configChargeAgentDetail.setWorkType(WorkType.TYPE_TRUST);
 				//configChargeAgentDetail.setProductType(productLabel);
 				configChargeAgentDetailService.save(configChargeAgentDetail);
+				ConfigChargeAgentDetailHistory agentDetailHistory = new ConfigChargeAgentDetailHistory();
+				agentDetailHistory.setAgent(agentHistory);
+				agentDetailHistory.setChargeYear(configChargeAgentDetail.getChargeYear());
+				agentDetailHistory.setMoney(configChargeAgentDetail.getMoney());
+				agentDetailHistory.setProductType(configChargeAgentDetail.getProductType());
+				agentDetailHistory.setWorkType(configChargeAgentDetail.getWorkType());
+				configChargeAgentDetailHistoryService.save(agentDetailHistory);
 				trustYear++;
 			}else {
 				trustYear++;

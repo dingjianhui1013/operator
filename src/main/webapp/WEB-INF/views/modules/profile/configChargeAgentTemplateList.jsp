@@ -66,6 +66,10 @@
 				<shiro:hasPermission name="profile:configChargeAgent:edit"><td>
 					<a href="${ctx}/profile/configChargeAgent/form?id=${configChargeAgent.id}">修改</a>
 					<a href="#" onclick="checkUsed(${configChargeAgent.id});">删除</a>
+					
+					<a href="${ctx}/profile/configChargeAgent/changeChargeAgentInfoList?agentHisId=${configChargeAgent.id}">修改历史记录详情</a>
+					
+					
 				</td></shiro:hasPermission>
 			</tr>
 		</c:forEach>
