@@ -73,7 +73,7 @@
 					<td style="vertical-align: middle;text-align: center;">${configChargeAgentHistory.tempName }</td>
 					<td style="vertical-align: middle;text-align: center;">
 					<c:if test="${configChargeAgentHistory.tempStyle == 1 }">
-					通用 
+					标准 
 					</c:if>
 					<c:if test="${configChargeAgentHistory.tempStyle == 2 }">
 					政府统一采购

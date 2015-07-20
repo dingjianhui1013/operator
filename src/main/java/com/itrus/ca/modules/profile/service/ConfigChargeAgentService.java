@@ -52,9 +52,9 @@ public class ConfigChargeAgentService extends BaseService {
 	
 	public Page<ConfigChargeAgent> find(Page<ConfigChargeAgent> page, ConfigChargeAgent configChargeAgent) {
 		DetachedCriteria dc = configChargeAgentDao.createDetachedCriteria();
-//		if (StringUtils.isNotEmpty(configChargeAgent.getConfigCommercialAgent().getAgentName())){
-//			dc.add(Restrictions.like("configCommercialAgent.agentName", "%"+EscapeUtil.escapeLike(configChargeAgent.getConfigCommercialAgent().getAgentName())+"%"));
-//		}
+		if (StringUtils.isNotEmpty(configChargeAgent.getTempName())) {
+			dc.add(Restrictions.like("tempName", "%"+configChargeAgent.getTempName()+"%"));
+		}
 		dc.addOrder(Order.desc("id"));
 		return configChargeAgentDao.find(page, dc);
 	}

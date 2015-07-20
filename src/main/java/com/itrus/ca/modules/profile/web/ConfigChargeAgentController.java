@@ -36,6 +36,7 @@ import com.itrus.ca.modules.log.service.LogUtil;
 import com.itrus.ca.modules.profile.entity.ConfigAgentAppRelation;
 import com.itrus.ca.modules.profile.entity.ConfigApp;
 import com.itrus.ca.modules.profile.entity.ConfigChargeAgent;
+import com.itrus.ca.modules.profile.entity.ConfigChargeAgentBoundConfigProduct;
 import com.itrus.ca.modules.profile.entity.ConfigChargeAgentDetail;
 import com.itrus.ca.modules.profile.entity.ConfigChargeAgentDetailHistory;
 import com.itrus.ca.modules.profile.entity.ConfigChargeAgentHistory;
@@ -43,6 +44,7 @@ import com.itrus.ca.modules.profile.entity.ConfigCommercialAgent;
 import com.itrus.ca.modules.profile.entity.ConfigProduct;
 import com.itrus.ca.modules.profile.service.ConfigAgentAppRelationService;
 import com.itrus.ca.modules.profile.service.ConfigAppService;
+import com.itrus.ca.modules.profile.service.ConfigChargeAgentBoundConfigProductService;
 import com.itrus.ca.modules.profile.service.ConfigChargeAgentDetailHistoryService;
 import com.itrus.ca.modules.profile.service.ConfigChargeAgentDetailService;
 import com.itrus.ca.modules.profile.service.ConfigChargeAgentHistoryService;
@@ -82,6 +84,10 @@ public class ConfigChargeAgentController extends BaseController {
 	@Autowired
 	private ConfigChargeAgentDetailHistoryService configChargeAgentDetailHistoryService;
 	
+	@Autowired
+	private ConfigChargeAgentBoundConfigProductService configChargeAgentBoundConfigProductService;
+	
+	
 	private LogUtil logUtil = new LogUtil();
 
 	@ModelAttribute
@@ -120,6 +126,128 @@ public class ConfigChargeAgentController extends BaseController {
 		return "modules/profile/configChargeAgentTemplateBindList";
 	}
 
+	
+	/**
+	 * 显示绑定模版的数据
+	 * @param configChargeAgent
+	 * @param request
+	 * @param response
+	 * @param model
+	 * @return
+	 */
+	@RequiresPermissions("profile:configChargeAgent:view")
+	@RequestMapping(value = "bindListNew")
+	public String bindListNew(ConfigChargeAgent configChargeAgent,Long productId,
+						   HttpServletRequest request, HttpServletResponse response, Model model) {
+		Page<ConfigChargeAgent> page = configChargeAgentService.find(new Page<ConfigChargeAgent>(request, response), configChargeAgent);
+		for (int i = 0; i < page.getList().size(); i++) {
+			ConfigChargeAgentBoundConfigProduct bound =	configChargeAgentBoundConfigProductService.findByAgentIdProductId(page.getList().get(i).getId(),productId);
+			if (bound==null) {
+				page.getList().get(i).setIsBind("1");
+			}else{
+				page.getList().get(i).setIsBind("2");
+			}
+		}
+		model.addAttribute("page", page);
+		model.addAttribute("productId", productId);
+		return "modules/profile/configChargeAgentTemplateBindNewList";
+	}
+	
+	
+	/**
+	 * 产品和计费策略绑定
+	 * @param configChargeAgent
+	 * @param request
+	 * @param response
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "bindingNew")
+	public String bindingNew(Long agentId,Long productId,
+						   HttpServletRequest request, HttpServletResponse response, Model model,RedirectAttributes redirectAttributes) {
+		
+		ConfigProduct product = configProductService.get(productId);
+	    ConfigChargeAgent agent = configChargeAgentService.get(agentId);
+		
+		ConfigChargeAgentBoundConfigProduct bound = new ConfigChargeAgentBoundConfigProduct();
+		
+		bound.setAgent(agent);
+		bound.setProduct(product);
+		configChargeAgentBoundConfigProductService.save(bound);
+	
+		addMessage(redirectAttributes, "绑定计费策略成功！");
+		return "redirect:" + Global.getAdminPath()+"/profile/configChargeAgent/bindListNew?productId="+productId;
+		
+	}
+	
+	
+	/**
+	 * 取消绑定计费策略
+	 * @param configChargeAgent
+	 * @param request
+	 * @param response
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "deleteBindingNew")
+	public String deleteBindingNew(Long agentId,Long productId,
+						   HttpServletRequest request, HttpServletResponse response, Model model,RedirectAttributes redirectAttributes) {
+		try {
+			configChargeAgentBoundConfigProductService.deleteByAgentId(agentId);
+		} catch (Exception e) {
+			e.printStackTrace();
+			// TODO: handle exception
+		}
+		addMessage(redirectAttributes, "取消绑定计费策略成功！");
+		return "redirect:" + Global.getAdminPath()+"/profile/configChargeAgent/bindListNew?productId="+productId;
+		
+	}
+	
+	
+	
+	
+	/**
+	 *
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value="checkBound")
+	@ResponseBody
+	public String checkBound(Long proId , Long agentId){
+		JSONObject jsonObject = new JSONObject();
+		try {
+			 List<ConfigChargeAgent>  agentList = configChargeAgentService.findById(agentId);
+			 jsonObject.put("isBZ","1");
+			 if (agentList.get(0).getTempStyle().equals("1")) {
+				 List<ConfigChargeAgentBoundConfigProduct> boundList = configChargeAgentBoundConfigProductService.findByProId(proId);
+				 if (boundList.size()>0) {
+					jsonObject.put("isBZ","0");
+					jsonObject.put("msg","该产品已绑定类型为标准的计费策略，不能重复绑定类型为标准的计费策略！");
+					return jsonObject.toJSONString();
+				}
+			}
+			 
+			if (agentList.get(0).getSurplusNum().equals(0)) {
+				jsonObject.put("isNum","0");
+				jsonObject.put("msg","该计费策略剩余数量为0，绑定计费策略失败！");
+			}else {
+				jsonObject.put("isNum","1");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			// TODO: handle exception
+		}
+		
+		return jsonObject.toJSONString();
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 	/**
 	 * 点击“计费策略模板” 跳转计费策略模板 界面
 	 * @param configChargeAgent
@@ -298,7 +426,7 @@ public class ConfigChargeAgentController extends BaseController {
 		Integer conNum =0;
 		Integer surNum =0;
 		Integer avaNum =0;
-		if (configChargeAgentId!=null && configureNum!=null) {
+		if (configChargeAgentId!=null && configureNum!=null) {	
 			ConfigChargeAgent agent = configChargeAgentService.get(configChargeAgentId);
 			conNum = configureNum;
 			surNum = agent.getSurplusNum() - agent.getConfigureNum() + configureNum;
@@ -341,11 +469,12 @@ public class ConfigChargeAgentController extends BaseController {
 			} else {
 				configChargeAgent.setChargeMethodContract(false);
 			}
+	
 			if(configChargeAgentId == null){
 				if(configureNum!=null){
 					configChargeAgent.setConfigureNum(configureNum);
-					configChargeAgent.setSurplusNum(0);
-					configChargeAgent.setAvailableNum(configureNum);
+					configChargeAgent.setSurplusNum(configureNum);
+					configChargeAgent.setAvailableNum(0);
 				}else{
 					configChargeAgent.setConfigureNum(0);
 					configChargeAgent.setSurplusNum(0);

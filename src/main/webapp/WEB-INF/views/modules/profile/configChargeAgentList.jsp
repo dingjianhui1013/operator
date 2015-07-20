@@ -83,15 +83,19 @@
 				</td>
 				<shiro:hasPermission name="profile:configChargeAgent:edit"><td>
     				<!--<a href="${ctx}/profile/configChargeAgent/form?id=${configProduct.id}">计费策略模板绑定</a>-->
-					<c:if test="${configProduct.chargeAgentId==null}">
+				<%-- 	<c:if test="${configProduct.chargeAgentId==null}">
 						<a onclick="showChargeAgentTempList(${configProduct.id})"  href="javascript:" class="btn btn-link" style="_padding-top:6px;">计费策略模板绑定</a>
-					</c:if>
-					<c:if test="${configProduct.chargeAgentId!=null}">
+					</c:if> --%>
+					
+					<a  href="${ctx}/profile/configChargeAgent/bindListNew?productId=${configProduct.id}" class="btn btn-link" style="_padding-top:6px;">计费策略模板绑定</a>
+					
+					
+				<%-- 	<c:if test="${configProduct.chargeAgentId!=null}">
 						<a onclick="showChargeAgentTemp(${configProduct.chargeAgentId})"  href="#" class="btn btn-link" style="_padding-top:6px;">查看绑定</a>
 					</c:if>
 					<c:if test="${configProduct.chargeAgentId!=null}">
 						<a onclick="return confirmx('确认要取消绑定该计费策略吗？', this.href)"  href="${ctx}/profile/configChargeAgent/unBindSave?productId=${configProduct.id}" class="btn btn-link" style="_padding-top:6px;">取消绑定</a>
-					</c:if>
+					</c:if> --%>
 				</td></shiro:hasPermission>
 			</tr>
 		</c:forEach>

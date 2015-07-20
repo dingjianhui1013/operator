@@ -42,11 +42,11 @@ public class Generate {
 		// packageName 包名，这里如果更改包名，请在applicationContext.xml和srping-mvc.xml中配置base-package、packagesToScan属性，来指定多个（共4处需要修改）。
 		String packageName = "com.itrus.ca.modules";
 		
-		String moduleName = "receipt";			// 模块名，例：sys
+		String moduleName = "profile";			// 模块名，例：sys
 		String subModuleName = "";				// 子模块名（可选） 
-		String className = "ReceiptCheckLogDetail";			// 类名，例：user
+		String className = "ConfigChargeAgentBoundConfigProduct";			// 类名，例：user
 		String classAuthor = "HuHao";		// 类作者，例：ThinkGem
-		String functionName = "发票盘点详情";			// 功能名，例：用户
+		String functionName = "计费策略模版详情历史";			// 功能名，例：用户
 
 		// 是否启用生成工具
 		Boolean isEnable = true;			

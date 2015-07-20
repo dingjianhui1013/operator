@@ -35,7 +35,7 @@ public class ConfigApp extends DataEntity implements java.io.Serializable {
 	private String appImg;
 	private String productName;
 	private List<WorkDealInfo> workDealInfos;
-	private Long govDeviceAmount;
+	private Long govDeviceAmount;//政府统一采购设备证书最大数量  该字段已停用
 	/**
 	 * 应用配是否支持通用，决定产品列表是否支持选通用or专用
 	 */

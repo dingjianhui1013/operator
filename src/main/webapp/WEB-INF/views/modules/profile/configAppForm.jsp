@@ -73,12 +73,12 @@
 				<form:checkbox path="supportCommon"/>支持
 			</div>
 		</div>
-		<div class="control-group">
+		<%-- <div class="control-group">
 			<label class="control-label">政府统一采购设备证书最大数量:</label>
 			<div class="controls">
 				<form:input path="govDeviceAmount" htmlEscape="false" maxlength="15"/>
 			</div>
-		</div>
+		</div> --%>
 		<div class="control-group">
 			<label class="control-label">应用描述:</label>
 			<div class="controls">

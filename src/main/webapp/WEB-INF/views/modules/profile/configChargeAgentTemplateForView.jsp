@@ -131,6 +131,25 @@
 				<c:if test="${configChargeAgent.chargeMethodBank}">银行转账</c:if> &nbsp;&nbsp;&nbsp;<br>
 			</div>
 		</div>
+		
+		<div class="control-group" id="chargeMethods">
+			<label class="control-label">配置数量:</label>
+			<div class="controls" >
+			</div>
+		</div>
+		
+		<div class="control-group" id="chargeMethods">
+			<label class="control-label">剩余数量:</label>
+			<div class="controls" >
+			</div>
+		</div>
+		
+		<div class="control-group" id="chargeMethods">
+			<label class="control-label">已用数量:</label>
+			<div class="controls" >
+			</div>
+		</div>
+		
 
 	</form:form>
 </body>

@@ -32,12 +32,13 @@ public class ConfigChargeAgent implements java.io.Serializable {
 	private Set<ConfigChargeAgentDetail> configChargeAgentDetails = new HashSet<ConfigChargeAgentDetail>(
 			0);
 	private String tempName;//模板名称
-	private String tempStyle;//模板类型 1通用 2政府统一采购 3合同采购
+	private String tempStyle;//模板类型 1标准 2政府统一采购 3合同采购
 	
 	private Integer configureNum;//配置数量
 	private Integer surplusNum;//剩余数量
 	private Integer availableNum;//已用数量
 	
+	private String isBind;
 
 	// Constructors
 
@@ -228,6 +229,18 @@ public class ConfigChargeAgent implements java.io.Serializable {
 	}
 	
 	
+	@Transient
+	public String getIsBind() {
+		return isBind;
+	}
+
+	public void setIsBind(String isBind) {
+		this.isBind = isBind;
+	}
+
+	
+	
+
 	
 	
 	

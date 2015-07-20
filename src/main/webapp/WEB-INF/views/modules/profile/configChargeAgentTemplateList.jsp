@@ -67,7 +67,7 @@
 					<a href="${ctx}/profile/configChargeAgent/form?id=${configChargeAgent.id}">修改</a>
 					<a href="#" onclick="checkUsed(${configChargeAgent.id});">删除</a>
 					
-					<a href="${ctx}/profile/configChargeAgent/changeChargeAgentInfoList?agentHisId=${configChargeAgent.id}">修改历史记录详情</a>
+					<a href="${ctx}/profile/configChargeAgent/changeChargeAgentInfoList?agentHisId=${configChargeAgent.id}">历史修改记录</a>
 					
 					
 				</td></shiro:hasPermission>
