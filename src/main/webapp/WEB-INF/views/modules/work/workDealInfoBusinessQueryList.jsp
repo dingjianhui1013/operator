@@ -251,7 +251,9 @@
 							政府统一采购
 						</c:if>
 						</td>
-						<td>${workDealInfo.workCertInfo.signDate}   </td>
+						<td>
+						<fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${workDealInfo.workCertInfo.signDate}"/> 
+						</td>
 						<td>
 						<a href="javascript:void(0)" onclick="alarmValue( ${workDealInfo.id} )" >
 						查看 </a></td>

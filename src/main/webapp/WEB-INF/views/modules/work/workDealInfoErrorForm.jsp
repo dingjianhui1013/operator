@@ -303,8 +303,65 @@
 																}
 															});
 										});
+						if("${workDealInfo.id}"!=null && "${workDealInfo.id}"!=""){
+							var boundLabelList = "${boundLabelList}";
+							var lable = "${workDealInfo.configProduct.productLabel}";
+							$("#agentId").attr("onchange","setStyleList("+lable+")");
+							var agentHtml="";
+							var obj= $.parseJSON(boundLabelList);
+							$.each(obj, function(i, item){
+								 if(item==1){
+									if (item=="${workDealInfo.payType}") {
+										agentHtml+="<option selected='selected' value='"+item+"'>标准</option>";
+									}else{
+										agentHtml+="<option value='"+item+"'>标准</option>";
+									}
+									
+								}else if(item==2){
+									if (item=="${workDealInfo.payType}") {
+										agentHtml+="<option selected='selected' value='"+item+"'>政府统一采购</option>";
+									}else{
+										agentHtml+="<option value='"+item+"'>政府统一采购</option>";
+									}
+								}else if(item==3){
+									if (item=="${workDealInfo.payType}") {
+										agentHtml+="<option selected='selected' value='"+item+"'>合同采购</option>";
+									}else{
+										agentHtml+="<option value='"+item+"'>合同采购</option>";
+									}
+								} 
+							}); 
+							$("#agentId").html(agentHtml);
+						
+						}
+						
+						var productName = $("input[name='product']:checked").val();
+						var agentId = $("#agentId").val();
+						if (agentId!=0) {
+							var url = "${ctx}/work/workDealInfo/setStyleList?lable="+lable+"&productName="+productName+"&app="+$("#appId").val()+"&infoType=0&style="+agentId+"&_="+new Date().getTime();
+							$.getJSON(url,function(data){
+								var styleList = data.array;
+								var styleHtml="";
+								$.each(styleList,function(i,item){
+									if(item.agentId=="${workDealInfo.configChargeAgentId}"){
+										styleHtml +="<option selected='selected'  value='"+item.id+"'>" + item.name + "</option>";
+										$("#boundId").val(item.id);
+										showYear();
+									}else{
+										styleHtml +="<option value='"+item.id+"'>" + item.name + "</option>";
+									}
+									
+								});
+								$("#agentDetailId").html(styleHtml);
+								
+								
+								
+							});
+						}
+						
+						
 										
-						var url = "${ctx}/work/workDealInfo/showYear?lable=${workDealInfo.configProduct.productLabel}&productName=${workDealInfo.configProduct.productName}&app=${workDealInfo.configApp.id}&infoType=${workDealInfo.dealInfoType}&_="+new Date().getTime();
+						/* var url = "${ctx}/work/workDealInfo/showYear?lable=${workDealInfo.configProduct.productLabel}&productName=${workDealInfo.configProduct.productName}&app=${workDealInfo.configApp.id}&infoType=${workDealInfo.dealInfoType}&_="+new Date().getTime();
 						$.getJSON(url, function(data) {
 							if (data.year1) {
 								$("#year1").show();
@@ -334,6 +391,8 @@
 								$("#year5").hide();
 								$("#word5").hide();
 							}
+							
+							
 							if (data.tempStyle == 1) {
 								$("#payType1").attr("checked","checked");
 								$("#payType1").removeAttr("disabled");
@@ -352,6 +411,11 @@
 							} else {
 								top.$.jBox.tip("请先配置计费策略！"); 
 							}
+							
+							
+							
+							
+							
 							var arr = [data.nameDisplayName,data.orgunitDisplayName,data.emailDisplayName,data.commonNameDisplayName,data.addtionalField1DisplayName,data.addtionalField2DisplayName,data.addtionalField3DisplayName,data.addtionalField4DisplayName,data.addtionalField5DisplayName,data.addtionalField6DisplayName,data.addtionalField7DisplayName,data.addtionalField8DisplayName]
 							var arrList = arr.unique();
 							//清除所有必填项显示
@@ -365,7 +429,7 @@
 									$("input[name='"+arrList[i]+"']").parent().parent().prev().find("span").show();
 								}
 							}
-						});
+						}); */
 
 					});
 	
@@ -398,6 +462,46 @@
 			}
 		}
 	};
+	
+	
+	/*
+	* 给计费策略模版配置赋值
+	*/
+	function setStyleList(obj){
+		var lable = obj;
+		var productName = $("input[name='product']:checked").val();
+		var agentId = $("#agentId").val();
+		if (agentId!=0) {
+			var url = "${ctx}/work/workDealInfo/setStyleList?lable="+lable+"&productName="+productName+"&app="+$("#appId").val()+"&infoType=0&style="+agentId+"&_="+new Date().getTime();
+			$.getJSON(url,function(data){
+				var styleList = data.array;
+				var styleHtml="";
+				$.each(styleList,function(i,item){
+					if(i==0){
+						$("#boundId").val(item.id);
+						showYear();
+					}
+					
+					styleHtml +="<option value='"+item.id+"'>" + item.name + "</option>";
+					
+				});
+				$("#agentDetailId").html(styleHtml);
+			});
+		}else{
+			top.$.jBox.tip("请您选择产品！");
+			
+		}
+	}
+	
+	
+	//获取计费模版相对应的年限
+	function setYearByBoundId(){
+		var boundId = $("#agentDetailId").val();
+		$("#boundId").val(boundId);
+		showYear();
+	}
+	
+	
 </script>
 <script type="text/javascript"
 	src="${ctxStatic}/jquery/jquery.bigautocomplete.js"></script>
@@ -453,10 +557,12 @@
 	* 传参：lable+name
 	* 返回值：年限1，2，4，5是否为true
 	*/ 
-	function showYear(obj){
-		var lable = obj;
-		var productName = $("input[name='product']:checked").val();
-		var url = "${ctx}/work/workDealInfo/showYear?lable="+lable+"&productName="+productName+"&app="+$("#appId").val()+"&infoType=0&_="+new Date().getTime();
+	function showYear(){
+		//var lable = obj;
+		//var productName = $("input[name='product']:checked").val();
+		var agentId = $("#boundId").val();
+		var url = "${ctx}/work/workDealInfo/showYearNew?boundId="+agentId+"&infoType=0&_="+new Date().getTime();
+		//var url = "${ctx}/work/workDealInfo/showYear?lable="+lable+"&productName="+productName+"&app="+$("#appId").val()+"&infoType=0&_="+new Date().getTime();
 		$.getJSON(url, function(data) {
 			if (data.year1) {
 				$("#year1").show();
@@ -485,24 +591,6 @@
 			} else {
 				$("#year5").hide();
 				$("#word5").hide();
-			}
-			if (data.tempStyle == 1) {
-				$("#payType1").attr("checked","checked");
-				$("#payType1").removeAttr("disabled");
-				$("#payType2").attr("disabled","disabled");
-				$("#payType3").attr("disabled","disabled");
-			}else if (data.tempStyle == 2) {
-				$("#payType2").attr("checked","checked");
-				$("#payType2").removeAttr("disabled");
-				$("#payType1").attr("disabled","disabled");
-				$("#payType3").attr("disabled","disabled");
-			}else if (data.tempStyle == 3) {
-				$("#payType3").attr("checked","checked");
-				$("#payType3").removeAttr("disabled");
-				$("#payType1").attr("disabled","disabled");
-				$("#payType2").attr("disabled","disabled");
-			} else {
-				top.$.jBox.tip("请先配置计费策略！"); 
 			}
 			var arr = [data.nameDisplayName,data.orgunitDisplayName,data.emailDisplayName,data.commonNameDisplayName,data.addtionalField1DisplayName,data.addtionalField2DisplayName,data.addtionalField3DisplayName,data.addtionalField4DisplayName,data.addtionalField5DisplayName,data.addtionalField6DisplayName,data.addtionalField7DisplayName,data.addtionalField8DisplayName]
 			var arrList = arr.unique();
@@ -546,11 +634,11 @@
 				<table class="table table-striped table-bordered table-condensed">
 					<tbody>
 						<tr>
-							<th colspan="4" style="font-size: 20px;"><span class="prompt" style="color:red; display: none;">*</span>基本信息</th>
+							<th colspan="6" style="font-size: 20px;"><span class="prompt" style="color:red; display: none;">*</span>基本信息</th>
 						</tr>
 						<tr>
 							<th><span class="prompt" style="color:red; display: none;">*</span>代办应用：</th>
-							<td><input type="text" name="configApp" 
+							<td colspan="3"><input type="text" name="configApp" 
 								value="${workDealInfo.configApp.appName }" id="app" /></td>
 							<th><span class="prompt" style="color:red; display: none;">*</span>选择产品：</th>
 								<td>
@@ -567,7 +655,7 @@
 						</tr>
 						<tr>
 							<th><span class="prompt" style="color:red; display: none;">*</span>应用标识：</th>
-							<td><input type="radio" name="lable" id="lable0" value="0" disabled="disabled"
+							<td colspan="3"><input type="radio" name="lable" id="lable0" value="0" disabled="disabled"
 							<c:if test="${workDealInfo.configProduct.productLabel==0}">checked</c:if>>通用&nbsp;
 								&nbsp; <input type="radio" name="lable" id="lable1" value="1" disabled="disabled"
 								<c:if test="${workDealInfo.configProduct.productLabel==1}">checked</c:if>>专用</td>
@@ -577,7 +665,23 @@
 							</td>
 						</tr>
 						<tr>
-							<th><span class="prompt" style="color:red; display: none;">*</span>申请年数：</th>
+							
+							<th style="width: 100px;"><span class="prompt"
+								style="color: red; display: none;">*</span>计费策略类型：</th>
+							<td  style="width: 250px;"><select id="agentId"
+								name="agentId">
+									<option value="0">请选择</option>
+							</select> <input type="hidden" id="boundId"></td>
+							<th style="width: 100px;"><span class="prompt"
+								style="color: red; display: none;">*</span>计费策略模版：</th>
+							<td style="width: 250px;"><select
+								onchange="setYearByBoundId()" id="agentDetailId"
+								name="agentDetailId">
+									<option value="0">请选择</option>
+							</select>
+							</td>
+							
+							<th style="width: 100px;"><span class="prompt" style="color:red; display: none;">*</span>申请年数：</th>
 							<td><input type="radio" name="year" value="1" id="year1"
 								<c:if test="${empty workDealInfo.year}">checked</c:if>
 								<c:if test="${workDealInfo.year==1}">checked</c:if>><span id="word1">1年</span> <input
@@ -586,11 +690,15 @@
 								type="radio" name="year" value="4" id="year4"
 								<c:if test="${workDealInfo.year==4}">checked</c:if>><span id="word4">4年</span><input
 								type="radio" name="year" value="5" id="year5"
-								<c:if test="${workDealInfo.year==5}">checked</c:if>><span id="word5">5年</span></td>
-							<th><span class="prompt" style="color:red; display: none;">*</span>缴费方式：</th>
-							<td><input type="radio" name="payType" id="payType1" <c:if test="${workDealInfo.payType == 1}">checked</c:if> <c:if test="${workDealInfo.payType != 1}">disabled="disabled"</c:if> value="1">通用
-							<input type="radio" name="payType" id="payType2" <c:if test="${workDealInfo.payType == 2}">checked</c:if> <c:if test="${workDealInfo.payType != 2}">disabled="disabled"</c:if> value="2">政府统一采购
-							<input type="radio" name="payType" id="payType3" <c:if test="${workDealInfo.payType == 3}">checked</c:if> <c:if test="${workDealInfo.payType != 3}">disabled="disabled"</c:if> value="3">合同采购</td>
+								<c:if test="${workDealInfo.year==5}">checked</c:if>><span id="word5">5年</span>
+							</td>
+						
+						
+						
+						
+						
+						
+						
 						</tr>
 					</tbody>
 				</table>

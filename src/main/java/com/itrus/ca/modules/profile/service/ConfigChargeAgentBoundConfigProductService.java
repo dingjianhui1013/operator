@@ -66,6 +66,28 @@ public class ConfigChargeAgentBoundConfigProductService extends BaseService {
 	
 	
 	@Transactional(readOnly = false)
+	public List<ConfigChargeAgentBoundConfigProduct> findByProIdAll(Long proId){
+		DetachedCriteria dc = configChargeAgentBoundConfigProductDao.createDetachedCriteria();
+		dc.add(Restrictions.eq("product.id", proId));
+		dc.createAlias("agent", "agent");
+		dc.addOrder(Order.desc("agent.tempStyle"));
+		return configChargeAgentBoundConfigProductDao.find(dc);
+	}
+	
+	@Transactional(readOnly = false)
+	public List<ConfigChargeAgentBoundConfigProduct> findByProIdAllByStyle(Long proId ,String style ){
+		DetachedCriteria dc = configChargeAgentBoundConfigProductDao.createDetachedCriteria();
+		dc.add(Restrictions.eq("product.id", proId));
+		dc.createAlias("agent", "agent");
+		dc.add(Restrictions.eq("agent.tempStyle", style));
+		dc.addOrder(Order.desc("id"));
+		return configChargeAgentBoundConfigProductDao.find(dc);
+	}
+	
+	
+	
+	
+	@Transactional(readOnly = false)
 	public ConfigChargeAgentBoundConfigProduct findByAgentIdProductId(Long agentId , Long productId) {
 		DetachedCriteria dc = configChargeAgentBoundConfigProductDao.createDetachedCriteria();
 		dc.add(Restrictions.eq("agent.id", agentId));

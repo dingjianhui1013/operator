@@ -89,6 +89,9 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 	private Integer addCertDays;//赠送天数
 	private Boolean isIxin;//i信端更新标识
 	// Constructors
+	
+	private Long configChargeAgentId;
+	
 
 	/** default constructor */
 	public WorkDealInfo() {
@@ -107,7 +110,7 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 			WorkUser workUser,
 			Integer dealInfoType, String dealInfoStatus, ConfigProduct configProduct,
 			Integer year, String certSn, String keySn, Integer certSort,Integer trustDeviceCount,
-			Set<WorkLog> workLogs) {
+			Set<WorkLog> workLogs,Long configChargeAgentId) {
 		this.configApp = configApp;
 		this.workCompany = workCompany;
 		this.workUser = workUser;
@@ -120,6 +123,7 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 		this.workLogs = workLogs;
 		this.configProduct = configProduct;
 		this.trustDeviceCount = trustDeviceCount;
+		this.configChargeAgentId = configChargeAgentId;
 	}
 
 	// Property accessors
@@ -560,6 +564,15 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 
 	public void setIsIxin(Boolean isIxin) {
 		this.isIxin = isIxin;
+	}
+
+	@Column(name = "config_agent_id")
+	public Long getConfigChargeAgentId() {
+		return configChargeAgentId;
+	}
+
+	public void setConfigChargeAgentId(Long configChargeAgentId) {
+		this.configChargeAgentId = configChargeAgentId;
 	}
 	
 	

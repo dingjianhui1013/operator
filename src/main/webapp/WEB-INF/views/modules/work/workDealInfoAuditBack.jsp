@@ -21,12 +21,24 @@
 			if($("#revoke").prop("checked")){
 				revoke = 0;//吊销
 			}
-			keySn = $("#keySn").val();
-			window.location.href="${ctx}/work/workDealInfoAudit/backMoney1?id=${workDealInfo.id}&revoke="+revoke+"&keySn="+keySn+"&receiptAmount="+$("#tfpVal").val();
+			
+			if($("#tKey").prop("checked")){
+				var same = $("#isSame").val();
+				if(same=="buyiyang"){
+					alert("当前KEY与办理业务使用的KEY不一致！无法进行退费操作！");
+				}else{
+					keySn = $("#keySn").val();
+					window.location.href="${ctx}/work/workDealInfoAudit/backMoney1?id=${workDealInfo.id}&revoke="+revoke+"&keySn="+keySn+"&receiptAmount="+$("#tfpVal").val();
+				}
+			}else{
+				keySn = $("#keySn").val();
+				window.location.href="${ctx}/work/workDealInfoAudit/backMoney1?id=${workDealInfo.id}&revoke="+revoke+"&keySn="+keySn+"&receiptAmount="+$("#tfpVal").val();
+			}
 		}
 	}
 	
 	function selectKeyNum() {
+		var dealKeySn = "${workDealInfo.keySn}";
 		try {
 			var keys = ukeyadmin.refresh(); //检测KEY
 			if (keys == 0) {
@@ -37,6 +49,12 @@
 				sn = keySn;
 				$("#keySn").attr("value", keySn);
 				$("#keySn").css("color", "red");
+				if (dealKeySn!=keySn) {
+					alert("当前KEY与办理业务使用的KEY不一致！");
+					$("#isSame").val("buyiyang");
+				}else{
+					$("#isSame").val("yiyang");
+				}
 			}
 		} catch (e) {
 			alert("没有检测到UKEY");
@@ -274,7 +292,9 @@
 								<td><input type="checkbox" id="tKey" <c:if test="${!tKey }">disabled</c:if> onclick="changeInputStatus(this)">退还key</td>
 								<td>key序列号：<input type="text" id="keySn" name="keySn" readonly="readonly"></td>
 								<td><input type="button" class="btn btn-primary" value="检测key" id="keyButton" style="display: none"
-									onclick="javascript:selectKeyNum()" /></td>
+									onclick="javascript:selectKeyNum()" />
+									<input type="hidden" id="isSame"/>
+									</td>
 							</tr>
 							</c:if>
 						</tbody>

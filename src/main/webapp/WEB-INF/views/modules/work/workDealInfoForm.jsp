@@ -1,4 +1,5 @@
-	<%@ page contentType="text/html;charset=UTF-8"%>
+
+<%@ page contentType="text/html;charset=UTF-8"%>
 <%@ include file="/WEB-INF/views/include/taglib.jsp"%>
 <!DOCTYPE html>
 <html>
@@ -33,6 +34,9 @@ var selected = false;
 									}
 								});
 
+						
+						
+						
 						var url = "${ctx}/work/workDealInfo/app?_="+new Date().getTime();
 						$
 								.getJSON(
@@ -318,8 +322,61 @@ var selected = false;
 																}
 															});
 										});
+						if("${workDealInfo.id}"!=null && "${workDealInfo.id}"!=""){
+							var boundLabelList = "${boundLabelList}";
+							var lable = "${workDealInfo.configProduct.productLabel}";
+							$("#agentId").attr("onchange","setStyleList("+lable+")");
+							var agentHtml="";
+							var obj= $.parseJSON(boundLabelList);
+							$.each(obj, function(i, item){
+								 if(item==1){
+									if (item=="${workDealInfo.payType}") {
+										agentHtml+="<option selected='selected' value='"+item+"'>标准</option>";
+									}else{
+										agentHtml+="<option value='"+item+"'>标准</option>";
+									}
+									
+								}else if(item==2){
+									if (item=="${workDealInfo.payType}") {
+										agentHtml+="<option selected='selected' value='"+item+"'>政府统一采购</option>";
+									}else{
+										agentHtml+="<option value='"+item+"'>政府统一采购</option>";
+									}
+								}else if(item==3){
+									if (item=="${workDealInfo.payType}") {
+										agentHtml+="<option selected='selected' value='"+item+"'>合同采购</option>";
+									}else{
+										agentHtml+="<option value='"+item+"'>合同采购</option>";
+									}
+								} 
+							}); 
+							$("#agentId").html(agentHtml);
+							
+							
+							
+							var productName = $("input[name='product']:checked").val();
+							var agentId = $("#agentId").val();
+							if (agentId!=0) {
+								var url = "${ctx}/work/workDealInfo/setStyleList?lable="+lable+"&productName="+productName+"&app="+$("#appId").val()+"&infoType=0&style="+agentId+"&_="+new Date().getTime();
+								$.getJSON(url,function(data){
+									var styleList = data.array;
+									var styleHtml="";
+									$.each(styleList,function(i,item){
+										if(item.agentId=="${workDealInfo.configChargeAgentId}"){
+											styleHtml +="<option selected='selected'  value='"+item.id+"'>" + item.name + "</option>";
+											$("#boundId").val(item.id);
+											showYear();
+										}else{
+											styleHtml +="<option value='"+item.id+"'>" + item.name + "</option>";
+										}
+										
+									});
+									$("#agentDetailId").html(styleHtml);
+								});
+							}
+						}
 
-					});
+	});
 	function nameFill(obj){
 		var a = checkJbrxm(obj);
 		if(a) {
@@ -386,9 +443,15 @@ var selected = false;
 			top.$.jBox.tip("请选择申请年限!"); 
 			$("input[name='year']").focus(); //让手机文本框获得焦点 
 			return false;
-		} else if($("input[name='payType']").val() == null || $("input[name='payType']").val() == ""){
+		} 
+		/* else if($("input[name='payType']").val() == null || $("input[name='payType']").val() == ""){
 			top.$.jBox.tip("请配置计费策略"); 
 			$("input[name='payType']").focus(); //让手机文本框获得焦点 
+			return false;
+		} */
+		else if($("#agentDetailId").val()==0){
+			top.$.jBox.tip("请配置计费策略"); 
+			$("#agentDetailId").focus(); 
 			return false;
 		}else {
 			$("#lable0").removeAttr("disabled");
@@ -460,32 +523,6 @@ var selected = false;
 		
 	}
 
-	function productLabel(data) {
-		selected = true;
-		var appId = $("#appId").val();
-		var url = "${ctx}/work/workDealInfo/type?name=" + data + "&appId="
-				+ appId+"&_="+new Date().getTime();
-		$.getJSON(url, function(da) {
-			if (da.type0&&da.type1){
-				$("#lable0").removeAttr("disabled");
-				$("#lable1").removeAttr("disabled");
-			}
-			if (da.type0) {
-				$("#lable0").attr("checked", "checked");
-				showYear(0);
-			}
-			if (da.type1) {
-				$("#lable1").attr("checked", "checked");
-				showYear(1);
-			}
-		});
-		//界面必填项由产品证书模版项灵活控制
-		/* if (data == 2 || data == 6) {
-			$("#proposer").show();
-		} else {
-			$("#proposer").hide();
-			} */
-	}
 	function showCert(companyId) {
 		var url = "${ctx}/work/workDealInfo/showCert?id=" + companyId;
 		top.$.jBox.open("iframe:" + url, "已有证书明细", 800, 420, {
@@ -597,16 +634,132 @@ var selected = false;
 			return false; 
 		} 
 	} 
+	
+	//根据商品获取引用标识
+	function productLabel(data) {
+		selected = true;
+		var appId = $("#appId").val();
+		var url = "${ctx}/work/workDealInfo/type?name=" + data + "&appId="
+				+ appId+"&_="+new Date().getTime();
+		$.getJSON(url, function(da) {
+			if (da.type0&&da.type1){
+				$("#lable0").removeAttr("disabled");
+				$("#lable1").removeAttr("disabled");
+			}
+			if (da.type0) {
+				$("#lable0").attr("checked", "checked");
+				//showYear(0);
+				showAgent(0)
+			}
+			if (da.type1) {
+				$("#lable1").attr("checked", "checked");
+				//showYear(1);
+				showAgent(1);
+			}
+		});
+	}
 
+	
+	/* 
+	* 功能:根据产品带回计费模版
+	* 传参：lable+name
+	* 返回值：年限1，2，4，5是否为true
+	*/ 
+	function showAgent(obj){
+		var lable = obj;
+		var productName = $("input[name='product']:checked").val();
+		var url = "${ctx}/work/workDealInfo/showAgentProduct?lable="+lable+"&productName="+productName+"&app="+$("#appId").val()+"&infoType=0&_="+new Date().getTime();
+		$.getJSON(url,function(data){
+			if(data.tempStyle!=-1){
+				var map = data.typeMap;
+				var agentHtml="";
+				$("#agentId").attr("onchange","setStyleList("+lable+")");
+				$.each(map, function(i, item){
+					agentHtml+="<option onchange=setStyleList("+lable+")  value='"+item.id+"'>" + item.name + "</option>";
+					
+					
+				});
+				$("#agentId").html(agentHtml);
+				var styleList = data.boundStyleList;
+				var styleHtml="";
+				$.each(styleList, function(i, item2){
+					if(i==0){
+						$("#boundId").val(item2.id);
+						showYear();
+					}
+					styleHtml +="<option value='"+item2.id+"'>" + item2.name + "</option>";
+				});
+				$("#agentDetailId").html(styleHtml);
+			}else{
+				var agentHtml="<option value='0'>请选择</option>";
+				$("#agentId").html(agentHtml);
+				var styleHtml="<option value='0'>请选择</option>";
+				$("#agentDetailId").html(styleHtml);
+				
+				$("#year1").show();
+				$("#word1").show();
+				$("#year2").show();
+				$("#word2").show();
+				$("#year4").show();
+				$("#word4").show();
+				$("#year5").show();
+				$("#word5").show();
+				$(".prompt").css("display","none");
+				top.$.jBox.tip("请先配置计费策略！"); 
+			}
+			
+			
+		});
+	}
+	
+	/*
+	* 给计费策略模版配置赋值
+	*/
+	function setStyleList(obj){
+		var lable = obj;
+		var productName = $("input[name='product']:checked").val();
+		var agentId = $("#agentId").val();
+		if (agentId!=0) {
+			var url = "${ctx}/work/workDealInfo/setStyleList?lable="+lable+"&productName="+productName+"&app="+$("#appId").val()+"&infoType=0&style="+agentId+"&_="+new Date().getTime();
+			$.getJSON(url,function(data){
+				var styleList = data.array;
+				var styleHtml="";
+				$.each(styleList,function(i,item){
+					if(i==0){
+						$("#boundId").val(item.id);
+						showYear();
+					}
+					
+					styleHtml +="<option value='"+item.id+"'>" + item.name + "</option>";
+					
+				});
+				$("#agentDetailId").html(styleHtml);
+			});
+		}else{
+			top.$.jBox.tip("请您选择产品！");
+			
+		}
+	}
+	
+	
+	//获取计费模版相对应的年限
+	function setYearByBoundId(){
+		var boundId = $("#agentDetailId").val();
+		$("#boundId").val(boundId);
+		showYear();
+	}
+	
+	
 	/* 
 	* 功能:根据产品带回年限
 	* 传参：lable+name
 	* 返回值：年限1，2，4，5是否为true
 	*/ 
-	function showYear(obj){
-		var lable = obj;
-		var productName = $("input[name='product']:checked").val();
-		var url = "${ctx}/work/workDealInfo/showYear?lable="+lable+"&productName="+productName+"&app="+$("#appId").val()+"&infoType=0&_="+new Date().getTime();
+	function showYear(){
+		var agentId = $("#boundId").val();
+		//var url = "${ctx}/work/workDealInfo/showYear?lable="+lable+"&productName="+productName+"&app="+$("#appId").val()+"&infoType=0&_="+new Date().getTime();
+		var url = "${ctx}/work/workDealInfo/showYearNew?boundId="+agentId+"&infoType=0&_="+new Date().getTime();
+		
 		$.getJSON(url, function(data) {
 			if (data.year1) {
 				$("#year1").show();
@@ -636,24 +789,6 @@ var selected = false;
 				$("#year5").hide();
 				$("#word5").hide();
 			}
-			if (data.tempStyle == 1) {
-				$("#payType1").attr("checked","checked");
-				$("#payType1").removeAttr("disabled");
-				$("#payType2").attr("disabled","disabled");
-				$("#payType3").attr("disabled","disabled");
-			}else if (data.tempStyle == 2) {
-				$("#payType2").attr("checked","checked");
-				$("#payType2").removeAttr("disabled");
-				$("#payType1").attr("disabled","disabled");
-				$("#payType3").attr("disabled","disabled");
-			}else if (data.tempStyle == 3) {
-				$("#payType3").attr("checked","checked");
-				$("#payType3").removeAttr("disabled");
-				$("#payType1").attr("disabled","disabled");
-				$("#payType2").attr("disabled","disabled");
-			} else {
-				top.$.jBox.tip("请先配置计费策略！"); 
-			}
 			var arr = [data.nameDisplayName,data.orgunitDisplayName,data.emailDisplayName,data.commonNameDisplayName,data.addtionalField1DisplayName,data.addtionalField2DisplayName,data.addtionalField3DisplayName,data.addtionalField4DisplayName,data.addtionalField5DisplayName,data.addtionalField6DisplayName,data.addtionalField7DisplayName,data.addtionalField8DisplayName]
 			var arrList = arr.unique();
 			//清除所有必填项显示
@@ -667,29 +802,6 @@ var selected = false;
 					$("input[name='"+arrList[i]+"']").parent().parent().prev().find("span").show();
 				}
 			}
-			
-//			$("input[name='"+data.nameDisplayName+"']").attr("required","required");
-//			$("input[name='"+data.nameDisplayName+"']").parent().prev().html("<font color='red'>*</font>"+$("input[name='"+data.nameDisplayName+"']").parent().prev().html());
-//			$("input[name='"+data.orgunitDisplayName+"']").attr("required","required");
-//			$("input[name='"+data.orgunitDisplayName+"']").parent().prev().html("<font color='red'>*</font>"+$("input[name='"+data.orgunitDisplayName+"']").parent().prev().html());
-//			$("input[name='"+data.emailDisplayName+"']").attr("required","required");
-//			$("input[name='"+data.emailDisplayName+"']").parent().prev().html("<font color='red'>*</font>"+$("input[name='"+data.emailDisplayName+"']").parent().prev().html());
-//			$("input[name='"+data.addtionalField1DisplayName+"']").attr("required","required");
-//			$("input[name='"+data.addtionalField1DisplayName+"']").parent().prev().html("<font color='red'>*</font>"+$("input[name='"+data.addtionalField1DisplayName+"']").parent().prev().html());
-//			$("input[name='"+data.addtionalField2DisplayName+"']").attr("required","required");
-//			$("input[name='"+data.addtionalField2DisplayName+"']").parent().prev().html("<font color='red'>*</font>"+$("input[name='"+data.addtionalField2DisplayName+"']").parent().prev().html());
-//			$("input[name='"+data.addtionalField3DisplayName+"']").attr("required","required");
-//			$("input[name='"+data.addtionalField3DisplayName+"']").parent().prev().html("<font color='red'>*</font>"+$("input[name='"+data.addtionalField3DisplayName+"']").parent().prev().html());
-//			$("input[name='"+data.addtionalField4DisplayName+"']").attr("required","required");
-//			$("input[name='"+data.addtionalField4DisplayName+"']").parent().prev().html("<font color='red'>*</font>"+$("input[name='"+data.addtionalField4DisplayName+"']").parent().prev().html());
-//			$("input[name='"+data.addtionalField5DisplayName+"']").attr("required","required");
-//			$("input[name='"+data.addtionalField5DisplayName+"']").parent().prev().html("<font color='red'>*</font>"+$("input[name='"+data.addtionalField5DisplayName+"']").parent().prev().html());
-//			$("input[name='"+data.addtionalField6DisplayName+"']").attr("required","required");
-//			$("input[name='"+data.addtionalField6DisplayName+"']").parent().prev().html("<font color='red'>*</font>"+$("input[name='"+data.addtionalField6DisplayName+"']").parent().prev().html());
-//			$("input[name='"+data.addtionalField7DisplayName+"']").attr("required","required");
-//			$("input[name='"+data.addtionalField7DisplayName+"']").parent().prev().html("<font color='red'>*</font>"+$("input[name='"+data.addtionalField7DisplayName+"']").parent().prev().html());
-//			$("input[name='"+data.addtionalField8DisplayName+"']").attr("required","required");
-//			$("input[name='"+data.addtionalField8DisplayName+"']").parent().prev().html("<font color='red'>*</font>"+$("input[name='"+data.addtionalField8DisplayName+"']").parent().prev().html());
 		});
 		
 	}
@@ -720,87 +832,79 @@ var selected = false;
 				<table class="table table-striped table-bordered table-condensed">
 					<tbody>
 						<tr>
-							<th colspan="4" style="font-size: 20px;"><span class="prompt" style="color:red; display: none;">*</span>基本信息</th>
+							<th colspan="6" style="font-size: 20px;"><span
+								class="prompt" style="color: red; display: none;">*</span>基本信息</th>
 						</tr>
 						<tr>
-							<th><span class="prompt" style="color:red; display: none;">*</span>代办应用：</th>
-							<td><input type="text" name="configApp" 
+							<th><span class="prompt" style="color: red; display: none;">*</span>代办应用：</th>
+							<td colspan="3"><input type="text" name="configApp"
 								value="${workDealInfo.configApp.appName }" id="app" /></td>
-							<th><span class="prompt" style="color:red; display: none;">*</span>选择产品：</th>
-								<td id="productTdId">
-								<c:forEach items="${proList }" var="pro">
+							<th><span class="prompt" style="color: red; display: none;">*</span>选择产品：</th>
+							<td id="productTdId"><c:forEach items="${proList }"
+									var="pro">
 									<div id="product${pro.id }">
-										<input type="radio" name="product" id="pro${pro.id }" 
-										onclick="productLabel(${pro.id})" 
-										<c:if test="${workDealInfo.configProduct.productName==pro.id}">checked</c:if>
-										value="${pro.id}">${pro.name }&nbsp;&nbsp;&nbsp;
+										<input type="radio" name="product" id="pro${pro.id }"
+											onclick="productLabel(${pro.id})"
+											<c:if test="${workDealInfo.configProduct.productName==pro.id}">checked</c:if>
+											value="${pro.id}">${pro.name }&nbsp;&nbsp;&nbsp;
 									</div>
-								</c:forEach>
-								</td>
-							<!-- <th>选择产品：</th>
-							<td>
-								<div id="product1">
-									<input type="radio" name="product" id="product"
-										onclick="productLabel(1)"
-										<c:if test="${workDealInfo.configProduct.productName==1}">checked</c:if>
-										value="1">企业证书&nbsp;&nbsp;&nbsp;
-								</div>
-								<div id="product2">
-									<input type="radio" name="product" id="product"
-										onclick="productLabel(2)"
-										<c:if test="${workDealInfo.configProduct.productName==2}">checked</c:if>
-										value="2">个人证书&nbsp;&nbsp;&nbsp;
-								</div>
-								<div id="product3">
-									<input type="radio" name="product" id="product"
-										onclick="productLabel(3)"
-										<c:if test="${workDealInfo.configProduct.productName==3}">checked</c:if>
-										value="3">机构证书&nbsp;&nbsp;&nbsp;
-								</div>
-								<div id="product4">
-									<input type="radio" name="product" id="product"
-										onclick="productLabel(4)"
-										<c:if test="${workDealInfo.configProduct.productName==4}">checked</c:if>
-										value="4">移动证书&nbsp;&nbsp;&nbsp;
-								</div>
-								<div id="product5">
-									<input type="radio" name="product" id="product"
-										onclick="productLabel(5)"
-										<c:if test="${workDealInfo.configProduct.productName==5}">checked</c:if>
-										value="5">电子签章&nbsp;&nbsp;&nbsp;
-								</div>
-							</td>
-							 -->
+								</c:forEach></td>
 						</tr>
 						<tr>
-							<th><span class="prompt" style="color:red; display: none;">*</span>应用标识：</th>
-							<td><input type="radio" name="lable" id="lable0" value="0"
-								disabled="disabled" onclick="showYear(0)"
+							<th><span class="prompt" style="color: red; display: none;">*</span>应用标识：</th>
+							<td colspan="3"><input type="radio" name="lable" id="lable0"
+								value="0" disabled="disabled" onclick="showYear(0)"
 								<c:if test="${workDealInfo.configProduct.productLabel==0}">checked</c:if>>通用&nbsp;
 								&nbsp; <input type="radio" name="lable" id="lable1" value="1"
 								disabled="disabled" onclick="showYear(1)"
 								<c:if test="${workDealInfo.configProduct.productLabel==1}">checked</c:if>>专用</td>
-							<th><span class="prompt" style="color:red; display: none;">*</span>业务类型：</th>
-							<td><input type="checkbox"
-								checked="checked" disabled="disabled">新增证书 
-								<input type="hidden" name="dealInfoType" value="0">
-							</td>
+							<th><span class="prompt" style="color: red; display: none;">*</span>业务类型：</th>
+							<td><input type="checkbox" checked="checked"
+								disabled="disabled">新增证书 <input type="hidden"
+								name="dealInfoType" value="0"></td>
 						</tr>
 						<tr>
-							<th><span class="prompt" style="color:red; display: none;">*</span>申请年数：</th>
+
+							<th style="width: 100px;"><span class="prompt"
+								style="color: red; display: none;">*</span>计费策略类型：</th>
+							<td style="width: 250px;"><select id="agentId"
+								name="agentId">
+									<option value="0">请选择</option>
+							</select> <input type="hidden" id="boundId"></td>
+							<th style="width: 100px;"><span class="prompt"
+								style="color: red; display: none;">*</span>计费策略模版：</th>
+							<td style="width: 250px;"><select
+								onchange="setYearByBoundId()" id="agentDetailId"
+								name="agentDetailId">
+									<option value="0">请选择</option>
+							</select> <!-- 		计费策略类型：
+							<select id="agentId" name="agentId" >
+								<option value="0">请选择</option>
+							</select>
+							
+							计费策略模版：
+								<select id="agentDetailId" name="agentDetailId" >
+									<option value="0">请选择</option>
+								</select>
+							 --> <%-- 			 		<input type="radio" name="payType" id="payType1" <c:if test="${workDealInfo.payType == 1}">checked</c:if> value="1">标准
+								<input type="radio" name="payType" id="payType2" <c:if test="${workDealInfo.payType == 2}">checked</c:if> value="2">政府统一采购
+								<input type="radio" name="payType" id="payType3" <c:if test="${workDealInfo.payType == 3}">checked</c:if> value="3">合同采购 --%>
+
+							</td>
+
+							<th style="width: 100px;"><span class="prompt"
+								style="color: red; display: none;">*</span>申请年数：</th>
 							<td><input type="radio" name="year" value="1" id="year1"
 								<c:if test="${empty workDealInfo.year}">checked</c:if>
-								<c:if test="${workDealInfo.year==1}">checked</c:if>><span id="word1">1年</span> <input
-								type="radio" name="year" value="2" id="year2"
-								<c:if test="${workDealInfo.year==2}">checked</c:if>><span id="word2">2年 </span><input
-								type="radio" name="year" value="4" id="year4"
-								<c:if test="${workDealInfo.year==4}">checked</c:if>><span id="word4">4年</span><input
-								type="radio" name="year" value="5" id="year5"
-								<c:if test="${workDealInfo.year==5}">checked</c:if>><span id="word5">5年</span></td>
-							<th><span class="prompt" style="color:red; display: none;">*</span>计费模版：</th>
-							<td><input type="radio" name="payType" id="payType1" <c:if test="${workDealInfo.payType == 1}">checked</c:if> value="1">标准
-							<input type="radio" name="payType" id="payType2" <c:if test="${workDealInfo.payType == 2}">checked</c:if> value="2">政府统一采购
-							<input type="radio" name="payType" id="payType3" <c:if test="${workDealInfo.payType == 3}">checked</c:if> value="3">合同采购</td>
+								<c:if test="${workDealInfo.year==1}">checked</c:if>><span
+								id="word1">1年</span> <input type="radio" name="year" value="2"
+								id="year2" <c:if test="${workDealInfo.year==2}">checked</c:if>><span
+								id="word2">2年 </span><input type="radio" name="year" value="4"
+								id="year4" <c:if test="${workDealInfo.year==4}">checked</c:if>><span
+								id="word4">4年</span><input type="radio" name="year" value="5"
+								id="year5" <c:if test="${workDealInfo.year==5}">checked</c:if>><span
+								id="word5">5年</span></td>
+
 						</tr>
 					</tbody>
 				</table>
@@ -814,12 +918,12 @@ var selected = false;
 							<th colspan="4" style="font-size: 20px;">单位信息</th>
 						</tr>
 						<tr>
-							<th><span class="prompt" style="color:red; display: none;">*</span>单位名称：</th>
+							<th><span class="prompt" style="color: red; display: none;">*</span>单位名称：</th>
 							<td><input type="text" name="companyName" maxlength="50"
-								 value="${workCompany.companyName }" id="tt" onchange="checkDwmc(this)">
-								<input type="hidden" name="companyId" value="${workCompany.id }"
-								id="companyId"></td>
-							<th><span class="prompt" style="color:red; display: none;">*</span>单位类型：</th>
+								value="${workCompany.companyName }" id="tt"
+								onchange="checkDwmc(this)"> <input type="hidden"
+								name="companyId" value="${workCompany.id }" id="companyId"></td>
+							<th><span class="prompt" style="color: red; display: none;">*</span>单位类型：</th>
 							<td><select name="companyType">
 									<option value="1" id="companyType1"
 										<c:if test="${workCompany.companyType==1 }">selected</c:if>>企业</option>
@@ -834,28 +938,28 @@ var selected = false;
 							</select></td>
 						</tr>
 						<tr>
-							<th><span class="prompt" style="color:red; display: none;">*</span>组织机构代码：</th>
-							<td><input type="text" name="organizationNumber" onkeyup="value=value.replace(/[^\w\.\/]/ig,'')" 
+							<th><span class="prompt" style="color: red; display: none;">*</span>组织机构代码：</th>
+							<td><input type="text" name="organizationNumber"
+								onkeyup="value=value.replace(/[^\w\.\/]/ig,'')"
 								value="${workCompany.organizationNumber }" maxlength="20"
 								id="organizationNumber" /></td>
-							<th><span class="prompt" style="color:red; display: none;">*</span>组织机构代码有效期：</th>
+							<th><span class="prompt" style="color: red; display: none;">*</span>组织机构代码有效期：</th>
 							<td><input class="input-medium Wdate"
 								value="<fmt:formatDate value="${workCompany.orgExpirationTime }" pattern="yyyy-MM-dd"/>"
-								type="text" 
-								onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});" maxlength="20"
-								readonly="readonly" name="orgExpirationTime"
+								type="text" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});"
+								maxlength="20" readonly="readonly" name="orgExpirationTime"
 								id="orgExpirationTime" /></td>
 
 						</tr>
 						<tr>
-							<th><span class="prompt" style="color:red; display: none;">*</span>服务级别：</th>
+							<th><span class="prompt" style="color: red; display: none;">*</span>服务级别：</th>
 							<td><select name="selectLv">
 									<option value="0" id="selectLv0"
 										<c:if test="${workDealInfo.workCompany.selectLv==0}">selected</c:if>>大客户</option>
 									<option value="1" id="selectLv1"
 										<c:if test="${workDealInfo.workCompany.selectLv==1}">selected</c:if>>普通客户</option>
 							</select></td>
-							<th><span class="prompt" style="color:red; display: none;">*</span>单位证照：</th>
+							<th><span class="prompt" style="color: red; display: none;">*</span>单位证照：</th>
 							<td><select name="comCertificateType">
 									<option value="0" id="comCertificateType0"
 										<c:if test="${workCompany.comCertificateType==0 }">selected</c:if>>营业执照</option>
@@ -868,22 +972,22 @@ var selected = false;
 							</select></td>
 						</tr>
 						<tr>
-							<th><span class="prompt" style="color:red; display: none;">*</span>证件号：</th>
-							<td><input type="text" name="comCertficateNumber" onkeyup="value=value.replace(/[^\w\.\/]/ig,'')" 
+							<th><span class="prompt" style="color: red; display: none;">*</span>证件号：</th>
+							<td><input type="text" name="comCertficateNumber"
 								value="${workCompany.comCertficateNumber }" maxlength="18"
 								id="comCertficateNumber" /></td>
-							<th><span class="prompt" style="color:red; display: none;">*</span>单位证照有效期：</th>
+							<th><span class="prompt" style="color: red; display: none;">*</span>单位证照有效期：</th>
 							<td><input class="input-medium Wdate" type="text"
 								value="<fmt:formatDate value="${workCompany.comCertficateTime }"  pattern="yyyy-MM-dd"/>"
-								onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});"
-								 maxlength="20" readonly="readonly"
-								name="comCertficateTime" id="comCertficateTime" /></td>
+								onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});" maxlength="20"
+								readonly="readonly" name="comCertficateTime"
+								id="comCertficateTime" /></td>
 						</tr>
 						<tr>
-							<th><span class="prompt" style="color:red; display: none;">*</span>法人姓名：</th>
+							<th><span class="prompt" style="color: red; display: none;">*</span>法人姓名：</th>
 							<td><input type="text" name="legalName" id="legalName"
-								 value="${workCompany.legalName }" maxlength="20"></td>
-							<th><span class="prompt" style="color:red; display: none;">*</span>行政所属区：</th>
+								value="${workCompany.legalName }" maxlength="20"></td>
+							<th><span class="prompt" style="color: red; display: none;">*</span>行政所属区：</th>
 							<td><select id="s_province" name="s_province"
 								style="width: 100px;"></select>&nbsp;&nbsp; <select id="s_city"
 								name="s_city" style="width: 100px;"></select>&nbsp;&nbsp; <select
@@ -895,20 +999,23 @@ var selected = false;
 									$("#s_county").append('<option value="${workDealInfo.workCompany.district}" selected="selected">${workDealInfo.workCompany.district}</option>');
 								</script>
 								<div id="show"></div>
-								<div style="margin-top:8px;">区域备注：<input type="text" name="areaRemark" value="${workCompany.areaRemark }" maxlength="50"></div>
-								</td>
+								<div style="margin-top: 8px;">
+									区域备注：<input type="text" name="areaRemark"
+										value="${workCompany.areaRemark }" maxlength="50">
+								</div></td>
 						</tr>
 						<tr>
-							<th><span class="prompt" style="color:red; display: none;">*</span>街道地址：</th>
+							<th><span class="prompt" style="color: red; display: none;">*</span>街道地址：</th>
 							<td><input type="text" name="address" id="address"
 								value="${workCompany.address }" maxlength="50"></td>
-							<th><span class="prompt" style="color:red; display: none;">*</span>单位联系电话：</th>
-							<td><input type="text" name="companyMobile" maxlength="11" id="companyMobile" 
-								value="${workCompany.companyMobile }" class="number"></td>
+							<th><span class="prompt" style="color: red; display: none;">*</span>单位联系电话：</th>
+							<td><input type="text" name="companyMobile" maxlength="11"
+								id="companyMobile" value="${workCompany.companyMobile }"
+								class="number"></td>
 
 						</tr>
 						<tr>
-							<th><span class="prompt" style="color:red; display: none;">*</span>备注信息：</th>
+							<th><span class="prompt" style="color: red; display: none;">*</span>备注信息：</th>
 							<td><input type="text" name="remarks" id="remarks"
 								value="${workCompany.remarks }"></td>
 						</tr>
@@ -924,10 +1031,11 @@ var selected = false;
 							<th colspan="4" style="font-size: 20px;">证书持有人信息</th>
 						</tr>
 						<tr>
-							<th><span class="prompt" style="color:red; display: none;">*</span>证书持有人姓名:</th>
-                                <td><input type="text" name="contactName" id="contactName" maxlength="20"
-								value="${workUser.contactName }" onblur="nameFill(this)"/></td>
-							<th><span class="prompt" style="color:red; display: none;">*</span>证书持有人证件:</th>
+							<th><span class="prompt" style="color: red; display: none;">*</span>证书持有人姓名:</th>
+							<td><input type="text" name="contactName" id="contactName"
+								maxlength="20" value="${workUser.contactName }"
+								onblur="nameFill(this)" /></td>
+							<th><span class="prompt" style="color: red; display: none;">*</span>证书持有人证件:</th>
 							<td><select name="conCertType">
 									<option value="0" id="conCertType0"
 										<c:if test="${workUser.conCertType==0 }">selected</c:if>>身份证</option>
@@ -938,53 +1046,59 @@ var selected = false;
 							</select></td>
 						</tr>
 						<tr>
-							<th><span class="prompt" style="color:red; display: none;">*</span>证件号码:</th>
-							<td><input type="text" name="conCertNumber" maxlength="18" 
-								id="conCertNumber" value="${workUser.conCertNumber }" onkeyup="value=value.replace(/[^\w\.\/]/ig,'')" 
+							<th><span class="prompt" style="color: red; display: none;">*</span>证件号码:</th>
+							<td><input type="text" name="conCertNumber" maxlength="18"
+								id="conCertNumber" value="${workUser.conCertNumber }"
+								onkeyup="value=value.replace(/[^\w\.\/]/ig,'')"
 								onchange="numberFill()" /></td>
-							<th><span class="prompt" style="color:red; display: none;">*</span>证书持有人电子邮件:</th>
-							<td><input type="text" name="contacEmail" id="contacEmail" maxlength="30"
-								 value="${workUser.contactEmail }" 
+							<th><span class="prompt" style="color: red; display: none;">*</span>证书持有人电子邮件:</th>
+							<td><input type="text" name="contacEmail" id="contacEmail"
+								maxlength="30" value="${workUser.contactEmail }"
 								onchange="emailFill(this)" /></td>
 						</tr>
 						<tr>
-							<th><span class="prompt" style="color:red; display: none;">*</span>证书持有人手机号:</th>
-							<td><input type="text" name="contactPhone" id="contactPhone" maxlength="11"
-								value="${workUser.contactPhone }" onblur="checkMobile(this)" /></td>
-							<th><span class="prompt" style="color:red; display: none;">*</span>业务系统UID:</th>
-							<td><input type="text" name="contactTel" id="contactTel" maxlength="20"
-								value="${workUser.contactTel }" /></td>
+							<th><span class="prompt" style="color: red; display: none;">*</span>证书持有人手机号:</th>
+							<td><input type="text" name="contactPhone" id="contactPhone"
+								maxlength="11" value="${workUser.contactPhone }"
+								onblur="checkMobile(this)" /></td>
+							<th><span class="prompt" style="color: red; display: none;">*</span>业务系统UID:</th>
+							<td><input type="text" name="contactTel" id="contactTel"
+								maxlength="20" value="${workUser.contactTel }" /></td>
 						</tr>
 						<tr>
-							<th><span class="prompt" style="color:red; display: none;">*</span>证书持有人性别:</th>
-							<td><input name="contactSex" id="sex0" <c:if test="${workUser.contactSex=='男' }">checked</c:if> type="radio" value="男">男&nbsp;&nbsp;&nbsp;&nbsp;
-							<input name="contactSex" id="sex1" <c:if test="${workUser.contactSex=='女' }">checked</c:if> type="radio" value="女">女</td>
+							<th><span class="prompt" style="color: red; display: none;">*</span>证书持有人性别:</th>
+							<td><input name="contactSex" id="sex0"
+								<c:if test="${workUser.contactSex=='男' }">checked</c:if>
+								type="radio" value="男">男&nbsp;&nbsp;&nbsp;&nbsp; <input
+								name="contactSex" id="sex1"
+								<c:if test="${workUser.contactSex=='女' }">checked</c:if>
+								type="radio" value="女">女</td>
 						</tr>
 					</tbody>
 				</table>
 			</div>
 		</div>
 		<div class="row-fluid">
-			<div class="span12" id="proposer"
-				<%-- <c:if test="${workDealInfo.configProduct.productName!=2}"> style="display:none"</c:if> --%>>
+			<div class="span12" id="proposer"<%-- <c:if test="${workDealInfo.configProduct.productName!=2}"> style="display:none"</c:if> --%>>
 				<table class="table table-striped table-bordered table-condensed">
 					<tbody>
 						<tr>
 							<th colspan="4" style="font-size: 20px;">经办人信息</th>
 						</tr>
 						<tr>
-							<th><span class="prompt" style="color:red; display: none;">*</span>经办人姓名:</th>
-							<td><input type="text" name="pName" id="pName" maxlength="20"
-								value="${workCertApplyInfo.name }" onchange="checkSqr(this);"/></td>
+							<th><span class="prompt" style="color: red; display: none;">*</span>经办人姓名:</th>
+							<td><input type="text" name="pName" id="pName"
+								maxlength="20" value="${workCertApplyInfo.name }"
+								onchange="checkSqr(this);" /></td>
 						</tr>
-						
+
 						<tr>
-							<th><span class="prompt" style="color:red; ">*</span>身份证号:</th>
-							<td><input type="text" name="pIDCard" id="pIDCard" maxlength="18"
-								value="${workCertApplyInfo.idCard }" /></td>
+							<th><span class="prompt" style="color: red;">*</span>身份证号:</th>
+							<td><input type="text" name="pIDCard" id="pIDCard"
+								maxlength="18" value="${workCertApplyInfo.idCard }" /></td>
 						</tr>
 						<tr>
-							<th><span class="prompt" style="color:red; display: none;">*</span>经办人邮箱:</th>
+							<th><span class="prompt" style="color: red; display: none;">*</span>经办人邮箱:</th>
 							<td><input type="text" name="pEmail" id="pEmail"
 								value="${workCertApplyInfo.email }" onchange="form_check(this)" /></td>
 						</tr>
@@ -1032,12 +1146,11 @@ var selected = false;
 		<input type="hidden" id="appId" name="appId"
 			value="${workDealInfo.configApp.id}" />
 
-		
 
-		<input type="hidden" id="workuserId" name="workuserId"
-			 />
-		
-		<div class="row-fluid" >
+
+		<input type="hidden" id="workuserId" name="workuserId" />
+
+		<div class="row-fluid">
 
 			<div class="span12">
 				<table class="table">
@@ -1049,15 +1162,11 @@ var selected = false;
 									<input id="btnSubmit" class="btn btn-primary" type="submit"
 										onclick="return onSubmit()" value="提 交" />&nbsp;</shiro:hasPermission> <input
 								id="btnCancel" class="btn" type="button" value="返 回"
-								onclick="history.go(-1)" /> 
-								<input id="btnSubmit"
+								onclick="history.go(-1)" /> <input id="btnSubmit"
 								class="btn  btn-primary" type="button" value="保 存"
-								onclick="os('one')" /> 
-								
-								<input id="btnSubmit" class="btn  btn-primary" type="button" value="保存并再次添加"
-								onclick="os('many')" /> 
-								
-								<c:if test="${!empty workDealInfo.id}">
+								onclick="os('one')" /> <input id="btnSubmit"
+								class="btn  btn-primary" type="button" value="保存并再次添加"
+								onclick="os('many')" /> <c:if test="${!empty workDealInfo.id}">
 									<input id="btnSubmit" class="btn" type="button" value="删除"
 										onclick="del(${workDealInfo.id})" />
 								</c:if>

@@ -2893,5 +2893,18 @@ public class WorkDealInfoService extends BaseService {
 		dc.addOrder(Order.desc("id"));
 		return workDealInfoDao.find(dc);
 	}
+	
+	
+	// 根据计费策略模版。判断是否计费策略模版办理过业务
+		public List<WorkDealInfo> findByAgentId(Long agentId) {
+			DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
+			dc.add(Restrictions.eq("configChargeAgentId", agentId));
+			dc.addOrder(Order.desc("id"));
+			return workDealInfoDao.find(dc);
+		}
+
+	
+	
+	
 
 }

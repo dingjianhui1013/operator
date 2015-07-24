@@ -8,7 +8,9 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -35,13 +37,16 @@ import com.itrus.ca.modules.profile.entity.ConfigAgentOfficeRelation;
 import com.itrus.ca.modules.profile.entity.ConfigApp;
 import com.itrus.ca.modules.profile.entity.ConfigAppOfficeRelation;
 import com.itrus.ca.modules.profile.entity.ConfigChargeAgent;
+import com.itrus.ca.modules.profile.entity.ConfigChargeAgentBoundConfigProduct;
 import com.itrus.ca.modules.profile.entity.ConfigCommercialAgent;
 import com.itrus.ca.modules.profile.entity.ConfigProduct;
 import com.itrus.ca.modules.profile.entity.ConfigRaAccount;
+import com.itrus.ca.modules.profile.entity.ProductTypeObj;
 import com.itrus.ca.modules.profile.service.ConfigAgentAppRelationService;
 import com.itrus.ca.modules.profile.service.ConfigAgentOfficeRelationService;
 import com.itrus.ca.modules.profile.service.ConfigAppOfficeRelationService;
 import com.itrus.ca.modules.profile.service.ConfigAppService;
+import com.itrus.ca.modules.profile.service.ConfigChargeAgentBoundConfigProductService;
 import com.itrus.ca.modules.profile.service.ConfigChargeAgentDetailService;
 import com.itrus.ca.modules.profile.service.ConfigChargeAgentService;
 import com.itrus.ca.modules.profile.service.ConfigProductService;
@@ -135,6 +140,10 @@ public class WorkDealInfoOperationController extends BaseController {
 	
 	@Autowired
 	private ConfigChargeAgentService chargeAgentService;
+	
+	@Autowired
+	private ConfigChargeAgentBoundConfigProductService configChargeAgentBoundConfigProductService;
+	
 	
 	private LogUtil logUtil = new LogUtil();
 
@@ -724,7 +733,23 @@ public class WorkDealInfoOperationController extends BaseController {
 					.getWorkCertInfo().getWorkCertApplyInfo());
 		}
 		List<WorkLog> list = workLogService.findByDealInfo(workDealInfo);
-		ConfigChargeAgent chargeAgent = chargeAgentService.get(workDealInfo.getConfigProduct().getChargeAgentId());
+		ConfigChargeAgent chargeAgent = chargeAgentService.get(workDealInfo.getConfigChargeAgentId());
+		
+
+		List<ConfigChargeAgentBoundConfigProduct> boundList = configChargeAgentBoundConfigProductService
+				.findByProIdAll(workDealInfo.getConfigProduct().getId());		
+		Set<Integer> nameSet = new HashSet<Integer>();
+		for (int i = 0; i < boundList.size(); i++) {
+			nameSet.add(Integer.parseInt(boundList.get(i).getAgent().getTempStyle()));
+		}
+		
+		model.addAttribute("boundLabelList", nameSet);
+		
+		
+		
+		
+		
+		
 		model.addAttribute("tempStyle", chargeAgent.getTempStyle());
 		model.addAttribute("workLog", list);
 		model.addAttribute("workDealInfo", workDealInfo);

@@ -30,6 +30,8 @@ import com.itrus.ca.modules.sys.entity.Office;
 import com.itrus.ca.modules.sys.entity.User;
 import com.itrus.ca.modules.sys.service.OfficeService;
 import com.itrus.ca.modules.sys.utils.UserUtils;
+import com.itrus.ca.modules.work.entity.WorkDealInfo;
+import com.itrus.ca.modules.work.service.WorkDealInfoService;
 import com.itrus.ca.modules.constant.ProductType;
 import com.itrus.ca.modules.constant.WorkType;
 import com.itrus.ca.modules.log.service.LogUtil;
@@ -87,6 +89,8 @@ public class ConfigChargeAgentController extends BaseController {
 	@Autowired
 	private ConfigChargeAgentBoundConfigProductService configChargeAgentBoundConfigProductService;
 	
+	@Autowired
+	private WorkDealInfoService workDealInfoService;
 	
 	private LogUtil logUtil = new LogUtil();
 
@@ -227,12 +231,19 @@ public class ConfigChargeAgentController extends BaseController {
 				}
 			}
 			 
-			if (agentList.get(0).getSurplusNum().equals(0)) {
-				jsonObject.put("isNum","0");
-				jsonObject.put("msg","该计费策略剩余数量为0，绑定计费策略失败！");
-			}else {
+			if (agentList.get(0).getTempStyle().equals("1")) {
+				 
 				jsonObject.put("isNum","1");
+				 
+			}else{
+				if (agentList.get(0).getSurplusNum().equals(0)) {
+					jsonObject.put("isNum","0");
+					jsonObject.put("msg","该计费策略剩余数量为0，绑定计费策略失败！");
+				}else {
+					jsonObject.put("isNum","1");
+				}
 			}
+		
 		} catch (Exception e) {
 			e.printStackTrace();
 			// TODO: handle exception
@@ -721,8 +732,9 @@ public class ConfigChargeAgentController extends BaseController {
 	@ResponseBody
 	public String checkUsed(Long id){
 		JSONObject jsonObject = new JSONObject();
-		Boolean checkUsed = configChargeAgentService.checkUsed(id);
-		if(checkUsed){
+		//Boolean checkUsed = configChargeAgentService.checkUsed(id);
+		 List<WorkDealInfo> dealList = workDealInfoService.findByAgentId(id);
+		if(dealList.size()>0){
 			jsonObject.put("status","0");
 			jsonObject.put("msg","该计费策略已经被使用，请解除绑定后再删除。");
 

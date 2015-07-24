@@ -260,14 +260,14 @@
 		<div class="control-group">
 			<label class="control-label"><span style="color : red">*</span>&nbsp;RA发证机构:</label>
 			<div class="controls">
-					<form:input path="accountOrganization" htmlEscape="false" maxlength="50"
+					<form:input path="accountOrganization" htmlEscape="false"
 					class="required" />
 			</div>
 		</div>
 		<div class="control-group">
 			<label class="control-label"><span style="color : red">*</span>&nbsp;RA发证机构单位:</label>
 			<div class="controls">
-					<form:input path="accountOrgUnit" htmlEscape="false" maxlength="50"
+					<form:input path="accountOrgUnit" htmlEscape="false" 
 					class="required" />
 			</div>
 		</div>

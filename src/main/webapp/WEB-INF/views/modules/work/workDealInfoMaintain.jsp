@@ -429,12 +429,12 @@ function revoke(dealInfoId){
 						<tr>
 							<th><span class="prompt" style="color:red; display: none;">*</span>证件号：</th>
 							<td>
-							<input type="text" name="comCertficateNumber" id="comCertficateNumber1" onkeyup="value=value.replace(/[^\w\.\/]/ig,'')" 
+							<input type="text" name="comCertficateNumber" id="comCertficateNumber1" 
 								<c:if test="${empty change && empty update }">disabled="disabled"</c:if>
 								value="${workDealInfo.workCompany.comCertficateNumber}" />
 								
-							<input type="hidden" name="comCertficateNumber"  id="comCertficateNumber"  onkeyup="value=value.replace(/[^\w\.\/]/ig,'')" 
-								 	<c:if test="${!(empty change && empty update)}">disabled="disabled"</c:if>
+							<input type="hidden" name="comCertficateNumber"  id="comCertficateNumber" 
+								 disabled="disabled"
 
 								value="${workDealInfo.workCompany.comCertficateNumber}" />
 								
@@ -527,13 +527,9 @@ function revoke(dealInfoId){
 								value="${workDealInfo.workUser.conCertNumber }" />
 								
 							<input type="hidden" name="conCertNumber"  id="conCertNumber"  onkeyup="value=value.replace(/[^\w\.\/]/ig,'')"  maxlength="18" 
-								<c:if test="${empty change && empty update }">disabled="disabled"</c:if>
+								disabled="disabled"
 								value="${workDealInfo.workUser.conCertNumber }"/>
-<%-- =======
-								<c:if test="${!(empty change && empty update) }">disabled="disabled"</c:if>
-								value="${workDealInfo.workUser.conCertNumber }" />
->>>>>>> .r20019 --%>
-								
+
 								
 								</td>
 							<th><span class="prompt" style="color:red; display: none;">*</span>证书持有人电子邮件:</th>
