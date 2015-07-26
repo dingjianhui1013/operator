@@ -32,37 +32,18 @@
 										}
 									}
 								});
-			});
-	
-	/* function deviceCertFile() {
-		var fileName = $("#deviceCert1File").val().toString();
-		if(fileName==null||fileName==""){
-			top.$.jBox.tip("上传失败：您没有添加证书文件，请上传一个base64格式的RA设备证书私钥文件");
-		}
-		var options = {
-			type : 'post',
-			dataType : 'json',
-			success : function(data) {
-				if(data.status=='2'){
-					top.$.jBox.tip("您没有添加证书文件，请上传一个base64格式的RA设备证书私钥文件");
-					 return false;
-				}
-				if(data.caEception=='ca'){
-					top.$.jBox.tip("请上传一个base64格式的RA设备证书私钥文件");
-					 return false;
-				}
-				if(data.status=='1'){
-					top.$.jBox.tip("上传成功");
-					$("#deviceCert").val(data.deviceCert);
+				
+				
+
+				var raProtocol = $("#raProtocol").val();
+				if(raProtocol=="WEBSERVICE"){
+					$("#password").show();
 				}else{
-					top.$.jBox.tip("上传失败："+data.errorMsg);
+					$("#password").hide();
 				}
-			}
-		};
-		$('#deviceCert1FileForm').ajaxSubmit(options);
-	} */
-	
-	
+				
+				
+			});
 	
 	function caCertOn() {
 		var fileName = $("#caCert1File").val().toString();
@@ -125,6 +106,10 @@
 			top.$.jBox.tip("RA模板名称不能为空");
 			return false;
 		}
+		if($("#raProtocol").val()==""){
+			top.$.jBox.tip("RA模板名称不能为空");
+			return false;
+		}
 		if($("#caName").val()==""){
 			top.$.jBox.tip("CA名称不能为空");
 			return false;
@@ -167,8 +152,18 @@
 				}
 			}
 		});
-
 	}
+	
+	function showAAPWD(){
+	
+		var raProtocol = $("#raProtocol").val();
+		if(raProtocol=="WEBSERVICE"){
+			$("#password").show();
+		}else{
+			$("#password").hide();
+		}
+	}
+	
 </script>
 </head>
 <body>
@@ -195,10 +190,17 @@
 		<div class="control-group">
 			<label class="control-label"><span style="color : red">*</span>&nbsp;CA类型:</label>
 			<div class="controls">
-				<form:select path="raProtocol">
+				<form:select onchange="showAAPWD()" path="raProtocol">
 					<form:option value="ICA">ICA</form:option>
 					<form:option value="TCA">TCA</form:option>
+					<form:option value="WEBSERVICE">WEBSERVICE</form:option>
 				</form:select>
+			</div>
+		</div>
+		<div class="control-group" id="password" style="display: none;">
+			<label class="control-label"><span style="color : red">*</span>&nbsp;AA密码:</label>
+			<div class="controls">
+				<form:input  path="aaPassword" htmlEscape="false" maxlength="50"/>
 			</div>
 		</div>
 		<div class="control-group">
@@ -250,17 +252,11 @@
 			<div class="controls">
 				<form:input path="port" htmlEscape="false" maxlength="50"/>
 			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">AA密码:</label>
-			<div class="controls">
-				<form:input path="aaPassword" htmlEscape="false" maxlength="50"/>
-			</div>
 		</div>-->
 		<div class="control-group">
 			<label class="control-label"><span style="color : red">*</span>&nbsp;RA发证机构:</label>
 			<div class="controls">
-					<form:input path="accountOrganization" htmlEscape="false"
+					<form:input path="accountOrganization" htmlEscape="false" 
 					class="required" />
 			</div>
 		</div>
