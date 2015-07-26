@@ -5,6 +5,7 @@ package com.itrus.ca.modules.work.web;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -195,6 +196,7 @@ public class WorkDealInfoFilingController extends BaseController {
 		return "modules/work/workUserListFilUser";
 	}
 
+	
 	/**
 	 * 业务办理列表
 	 * 
@@ -211,18 +213,35 @@ public class WorkDealInfoFilingController extends BaseController {
 			Model model) {
 		try {
 			WorkCompany workCompany = workCompanyService.get(comId);
+			
+			ArrayList<Long> dealInfoIds = new ArrayList<Long>();
+			WorkDealInfo dealInfo = new WorkDealInfo();
+			dealInfo = workDealInfo;
+ 			for (int i = 0;; i++) {
+ 				dealInfoIds.add(dealInfo.getId());
+ 				if (dealInfo.getPrevId()!=null) {
+ 					WorkDealInfo inDealInfo = workDealInfoService.get(dealInfo.getPrevId());
+ 					dealInfo = inDealInfo ; 
+				}else{
+					
+					break;
+				}
+			}
 			workDealInfo.setWorkCompany(workCompany);
 			model.addAttribute("proType", ProductType.productTypeStrMap);
 			model.addAttribute("wdiType", WorkDealInfoType.WorkDealInfoTypeMap);
 			model.addAttribute("wdiStatus",
 					WorkDealInfoStatus.WorkDealInfoStatusMap);
-			Page<WorkDealInfo> page = workDealInfoService.findAppList(
-					new Page<WorkDealInfo>(request, response), workDealInfo);
+//			Page<WorkDealInfo> page = workDealInfoService.findAppList(
+//					new Page<WorkDealInfo>(request, response), workDealInfo, dealInfoIds);
+			Page<WorkDealInfo> page = workDealInfoService.findByIds(new Page<WorkDealInfo>(request, response), workDealInfo , dealInfoIds);
 			model.addAttribute("page", page);
 		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		return "modules/work/workDealInfoListFilApp";
 	}
+
 
 	/**
 	 * 产品业务列表
