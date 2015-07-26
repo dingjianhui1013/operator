@@ -159,6 +159,11 @@ public class CertController extends BaseController {
 							String orgNum = dealInfo.getWorkCompany().getOrganizationNumber();
 							
 							Integer certSortInteger = workDealInfoService.getNumByOrganizationNumber(orgNum);
+							
+							if (certSortInteger==null) {
+								certSortInteger=1;
+							}
+							
 							dealInfo.setCertSort(certSortInteger);
 							
 						}else if(dealInfo.getConfigProduct().getProductName().equals("2") || dealInfo.getConfigProduct().getProductName().equals("6")){
