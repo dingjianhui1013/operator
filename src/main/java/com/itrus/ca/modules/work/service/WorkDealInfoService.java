@@ -113,6 +113,28 @@ public class WorkDealInfoService extends BaseService {
 		dc.addOrder(Order.desc("id"));
 		return workDealInfoDao.find(page, dc);
 	}
+	
+	public Page<WorkDealInfo> findByIds(Page<WorkDealInfo> page,
+			WorkDealInfo workDealInfo , ArrayList<Long> dealInfoIds ) {
+		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
+		dc.createAlias("workCompany", "workCompany");
+		if (workDealInfo.getWorkCompany() != null) {
+			if (workDealInfo.getWorkCompany().getId() != null) {
+				dc.add(Restrictions.eq("workCompany",
+						workDealInfo.getWorkCompany()));
+			}
+		}
+		dc.add(Restrictions.in("id", dealInfoIds));
+		dc.add(Restrictions.or(Restrictions.eq("dealInfoStatus",
+				WorkDealInfoStatus.STATUS_CERT_OBTAINED), Restrictions.eq(
+				"dealInfoType", WorkDealInfoType.TYPE_RETURN_MONEY),
+				Restrictions.eq("dealInfoType",
+						WorkDealInfoType.TYPE_RETURN_WORK)));
+		dc.addOrder(Order.desc("id"));
+		return workDealInfoDao.find(page, dc);
+	}
+
+	
 
 	public Page<WorkDealInfo> find(Page<WorkDealInfo> page,
 			WorkDealInfo workDealInfo) {
