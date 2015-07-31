@@ -453,11 +453,22 @@ var selected = false;
 			top.$.jBox.tip("请配置计费策略"); 
 			$("#agentDetailId").focus(); 
 			return false;
+		}else if($("#agentDetailId").val()!=0){
+			if($("#surplusNum").val()==0){
+				top.$.jBox.tip("此计费策略模版剩余数量为零，不能进行业务办理！"); 
+				return false;
+			}
 		}else {
 			$("#lable0").removeAttr("disabled");
 			$("#lable1").removeAttr("disabled");
 			return true;
 		}
+		
+		
+		
+		
+		
+		
 
 	}
 </script>
@@ -732,6 +743,8 @@ var selected = false;
 					
 					styleHtml +="<option value='"+item.id+"'>" + item.name + "</option>";
 					
+					
+					
 				});
 				$("#agentDetailId").html(styleHtml);
 			});
@@ -802,6 +815,16 @@ var selected = false;
 					$("input[name='"+arrList[i]+"']").parent().parent().prev().find("span").show();
 				}
 			}
+			
+			
+			var boundId =  $("#agentDetailId").val(); 
+			var url="${ctx}/work/workDealInfo/checkSurplusNum?boundId="+boundId+"&_="+new Date().getTime();
+			$.getJSON(url,function(data){
+				$("#surplusNum").val(data.surplusNum);
+			});
+			
+			
+			
 		});
 		
 	}
@@ -877,7 +900,9 @@ var selected = false;
 								onchange="setYearByBoundId()" id="agentDetailId"
 								name="agentDetailId">
 									<option value="0">请选择</option>
-							</select> <!-- 		计费策略类型：
+							</select> 
+							<input type="hidden" id="surplusNum" />
+							<!-- 		计费策略类型：
 							<select id="agentId" name="agentId" >
 								<option value="0">请选择</option>
 							</select>

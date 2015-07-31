@@ -380,60 +380,6 @@ public class WorkDealInfoAuditController extends BaseController {
 				.getDealInfoTypeName(workDealInfo.getDealInfoType()));
 		model.addAttribute("dealInfoType1", WorkDealInfoType
 				.getDealInfoTypeName(workDealInfo.getDealInfoType1()));
-		// ConfigChargeAgent chargeAgent = configChargeAgentService
-		// .findByAppAndProduct(workDealInfo.getConfigApp(),
-		// workDealInfo.getConfigProduct());
-		// if (workDealInfo.getDealInfoType() == 0) {
-		// Double money = configChargeAgentDetailService.selectMoney(
-		// chargeAgent, workDealInfo.getDealInfoType(), workDealInfo
-		// .getYear(), workDealInfo.getConfigProduct()
-		// .getProductLabel());
-		// model.addAttribute("type0", money);
-		// }
-		// if (workDealInfo.getDealInfoType() == 1) {
-		// Double money = configChargeAgentDetailService.selectMoney(
-		// chargeAgent, workDealInfo.getDealInfoType(), workDealInfo
-		// .getYear(), workDealInfo.getConfigProduct()
-		// .getProductLabel());
-		// model.addAttribute("type1", money);
-		// }
-		// if (workDealInfo.getDealInfoType() == 2) {
-		// Double money = configChargeAgentDetailService.selectMoney(
-		// chargeAgent, workDealInfo.getDealInfoType(), workDealInfo
-		// .getYear(), workDealInfo.getConfigProduct()
-		// .getProductLabel());
-		// model.addAttribute("type2", money);
-		// }
-		// if (workDealInfo.getDealInfoType() == 3) {
-		// Double money = configChargeAgentDetailService.selectMoney(
-		// chargeAgent, workDealInfo.getDealInfoType(), workDealInfo
-		// .getYear(), workDealInfo.getConfigProduct()
-		// .getProductLabel());
-		// model.addAttribute("type3", money);
-		// }
-		// if (workDealInfo.getDealInfoType() == 4) {
-		// Double money = configChargeAgentDetailService.selectMoney(
-		// chargeAgent, workDealInfo.getDealInfoType(), workDealInfo
-		// .getYear(), workDealInfo.getConfigProduct()
-		// .getProductLabel());
-		// model.addAttribute("type4", money);
-		// }
-		// if (workDealInfo.getDealInfoType() == 5) {
-		// Double money = configChargeAgentDetailService.selectMoney(
-		// chargeAgent, workDealInfo.getDealInfoType(), workDealInfo
-		// .getYear(), workDealInfo.getConfigProduct()
-		// .getProductLabel());
-		// model.addAttribute("type5", money);
-		// }
-		// if (workDealInfo.getDealInfoType() == 6) {
-		// Double money = configChargeAgentDetailService.selectMoney(
-		// chargeAgent, workDealInfo.getDealInfoType(), workDealInfo
-		// .getYear(), workDealInfo.getConfigProduct()
-		// .getProductLabel());
-		// model.addAttribute("type6", money);
-		//
-		// }
-		// 保存日志信息
 		WorkLog workLog = new WorkLog();
 		workLog.setRecordContent(recordContent);
 		workLog.setWorkDealInfo(workDealInfo);

@@ -31,10 +31,15 @@ import com.itrus.ca.modules.constant.WorkDealInfoType;
 import com.itrus.ca.modules.key.service.KeyUsbKeyInvoiceService;
 import com.itrus.ca.modules.log.service.LogUtil;
 import com.itrus.ca.modules.profile.dao.ConfigSupplierProductRelationDao;
+import com.itrus.ca.modules.profile.entity.ConfigAgentBoundDealInfo;
+import com.itrus.ca.modules.profile.entity.ConfigChargeAgent;
 import com.itrus.ca.modules.profile.entity.ConfigRaAccount;
 import com.itrus.ca.modules.profile.entity.ConfigRaAccountExtendInfo;
 import com.itrus.ca.modules.profile.entity.ConfigSupplier;
 import com.itrus.ca.modules.profile.entity.ConfigSupplierProductRelation;
+import com.itrus.ca.modules.profile.service.ConfigAgentBoundDealInfoService;
+import com.itrus.ca.modules.profile.service.ConfigChargeAgentBoundConfigProductService;
+import com.itrus.ca.modules.profile.service.ConfigChargeAgentService;
 import com.itrus.ca.modules.profile.service.ConfigRaAccountExtendInfoService;
 import com.itrus.ca.modules.profile.service.ConfigRaAccountService;
 import com.itrus.ca.modules.receipt.service.ReceiptInvoiceService;
@@ -87,6 +92,14 @@ public class CertController extends BaseController {
 	
 	@Autowired
 	WorkLogService workLogService;
+	
+	@Autowired
+	private ConfigAgentBoundDealInfoService configAgentBoundDealInfoService;
+	
+	@Autowired
+	private ConfigChargeAgentService configChargeAgentService;
+	
+	
 	
 	/**
 	 * 制证前判断是否入库
@@ -289,6 +302,22 @@ public class CertController extends BaseController {
 			json.put("certKmcRep1", caCert.getCertKmcRep1());
 			json.put("certKmcRep2", caCert.getCertKmcRep2());
 			json.put("installMode", caCert.getInstallMode());
+			
+			ConfigAgentBoundDealInfo dealInfoBound = new ConfigAgentBoundDealInfo();
+			dealInfoBound.setDealInfo(dealInfo);
+			
+			
+			ConfigChargeAgent agent =  configChargeAgentService.get(dealInfo.getConfigChargeAgentId());
+			dealInfoBound.setAgent(agent);
+			configAgentBoundDealInfoService.save(dealInfoBound);
+			logUtil.saveSysLog("计费策略模版", "计费策略模版："+agent.getId()+"--业务编号："+dealInfo.getId()+"--关联成功!", "");
+			Integer surplusNum = agent.getSurplusNum();//剩余数量
+			Integer availableNum = agent.getAvailableNum();//已用数量
+			agent.setSurplusNum(surplusNum-1);
+			agent.setAvailableNum(availableNum+1);
+			configChargeAgentService.save(agent);
+			logUtil.saveSysLog("计费策略模版", "更改剩余数量和使用数量成功!", "");
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			json.put("status", -1);

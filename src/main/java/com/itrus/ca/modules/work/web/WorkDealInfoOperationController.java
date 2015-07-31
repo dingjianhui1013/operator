@@ -1241,4 +1241,195 @@ public class WorkDealInfoOperationController extends BaseController {
 		return "redirect:" + Global.getAdminPath()
 				+ "/work/workDealInfo/pay?id=" + workDealInfo.getId();
 	}
+	
+	
+	
+	
+	
+	
+	@RequiresPermissions("work:workDealInfo:edit")
+	@RequestMapping(value = "maintainSaveChange")
+	public String maintainSaveChange(Long workDealInfoId, String orgExpirationTime,
+			String selectLv, String comCertificateType, String organizationNumber,
+			String comCertficateNumber, String comCertficateTime, String companyName,
+			String legalName, String s_province, String s_city,
+			String s_county, String address, String companyMobile,
+			String remarks, Integer workType, String contactName,
+			String conCertType, String contacEmail, String conCertNumber,
+			String contactPhone, String contactTel, String recordContent,
+			
+			
+			Integer dealInfoType2,
+			
+			Model model, String pName, String pEmail, String pIDCard,String contactSex,String areaRemark,
+		 Long newInfoId) {
+		//是否返回造成业务重复，如重复则删除
+		if (newInfoId != null) {
+			workDealInfoService.deleteWork(newInfoId);
+		}
+		//保存新业务信息(dealInfoType存在即为更新，dealInfoType1存在即为补办(1：遗失补办，2：损坏更换)，dealInfoType2存在即为变更)
+		WorkDealInfo workDealInfo1 = workDealInfoService.get(workDealInfoId);
+		WorkCompany workCompany = null;
+		WorkUser workUser = null;
+		WorkCompanyHis companyHis = null;
+		WorkUserHis userHis = null;
+		// 保存经办人信息
+		workUser = workDealInfo1.getWorkUser();
+		workUser.setContactName(contactName);
+		workUser.setStatus(1);
+		workUser.setConCertType(conCertType);
+		workUser.setConCertNumber(conCertNumber);
+		workUser.setContactEmail(contacEmail);
+		workUser.setContactPhone(contactPhone);
+		workUser.setContactTel(contactTel);
+		workUserService.save(workUser);
+		userHis = workUserService.change(workUser, companyHis);
+		workUserHisService.save(userHis);
+
+			//变更业务保存单位信息
+			workCompany = workDealInfo1.getWorkCompany();
+			workCompany.setComCertificateType(comCertificateType);
+			Timestamp ts = new Timestamp(System.currentTimeMillis());
+			Timestamp ts1 = new Timestamp(System.currentTimeMillis());
+			try {
+				ts = Timestamp.valueOf(comCertficateTime+" 00:00:00");
+				ts1 = Timestamp.valueOf(orgExpirationTime+" 00:00:00");
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+			//4月17号修改，变更业务可变更单位名称以及组织机构代码
+			workCompany.setCompanyName(companyName);
+			workCompany.setOrganizationNumber(organizationNumber);
+			
+			workCompany.setComCertficateTime(ts);
+			workCompany.setComCertficateNumber(comCertficateNumber);
+			workCompany.setSelectLv(selectLv);
+			workCompany.setOrgExpirationTime(ts1);
+			workCompany.setProvince(s_province);
+			workCompany.setLegalName(legalName);
+			workCompany.setCity(s_city);
+			workCompany.setDistrict(s_county);
+			workCompany.setAddress(address);
+			workCompany.setCompanyMobile(companyMobile);
+			workCompany.setRemarks(remarks);
+			workCompany.setAreaRemark(areaRemark);
+			workCompanyService.save(workCompany);
+			companyHis = workCompanyService.change(workCompany);
+			workCompanyHisService.save(companyHis);
+		
+			//workDealInfo1
+		WorkDealInfo workDealInfo = new WorkDealInfo();
+		workDealInfo.setConfigApp(workDealInfo1.getConfigApp());
+		ConfigCommercialAgent commercialAgent = configAgentAppRelationService
+				.findAgentByApp(workDealInfo.getConfigApp());
+		workDealInfo.setConfigCommercialAgent(commercialAgent);
+		List<ConfigAgentOfficeRelation> configAgentOfficeRelations = configAgentOfficeRelationService.findByOffice(UserUtils.getUser().getOffice());
+		if (configAgentOfficeRelations.size()>0) {
+			workDealInfo.setCommercialAgent(configAgentOfficeRelations.get(0).getConfigCommercialAgent());//劳务关系外键
+		}
+		workDealInfo.setWorkUser(workUser);
+		workDealInfo.setWorkCompany(workCompany);
+		workDealInfo.setWorkUserHis(userHis);
+		workDealInfo.setWorkCompanyHis(companyHis);
+		workDealInfo.setConfigProduct(workDealInfo1.getConfigProduct());
+	
+			workDealInfo.setYear(0);
+		
+	
+		
+		workDealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_ENTRY_SUCCESS);
+		
+		workDealInfo.setDealInfoType2(WorkDealInfoType.TYPE_INFORMATION_REROUTE);
+		workDealInfo.setCreateBy(UserUtils.getUser());
+		workDealInfo.setCreateDate(new Date());
+		workDealInfo.setClassifying(workDealInfo1.getClassifying());
+		workDealInfo.setSvn(workDealInfoService.getSVN(0));
+		workDealInfo.setPrevId(workDealInfo1.getId());
+		if (workDealInfo1.getWorkCertInfo().getNotafter().after(new Date())) {
+			int day = getLastCertDay(workDealInfo1.getWorkCertInfo()
+					.getNotafter());
+			workDealInfo.setLastDays(day);
+		} else {
+			workDealInfo.setLastDays(0);
+		}
+		WorkCertApplyInfo workCertApplyInfo = workDealInfo1.getWorkCertInfo().getWorkCertApplyInfo();
+//			if (workDealInfo.getConfigProduct().getProductName()
+//					.equals("2")
+//					|| workDealInfo.getConfigProduct().getProductName()
+//							.equals("3")) {
+//				workCertApplyInfo = workDealInfo1
+//						.getWorkCertInfo().getWorkCertApplyInfo();
+//				workCertApplyInfo.setName(pName);
+//				workCertApplyInfo.setEmail(pEmail);
+//				workCertApplyInfo.setIdCard(pIDCard);
+//				workCertApplyInfo.setProvince(workCompany.getProvince());
+//				workCertApplyInfo.setCity(workCompany.getCity());
+//				workCertApplyInfoService.save(workCertApplyInfo);
+//			} else {
+//				workCertApplyInfo = workDealInfo1
+//						.getWorkCertInfo().getWorkCertApplyInfo();
+//				workCertApplyInfo.setName(workCompany.getCompanyName());
+//				workCertApplyInfo.setEmail(workUser.getContactEmail());
+//				workCertApplyInfo.setMobilePhone(workCompany.getCompanyMobile());
+//				workCertApplyInfo.setProvince(workCompany.getProvince());
+//				workCertApplyInfo.setCity(workCompany.getCity());
+//				workCertApplyInfoService.save(workCertApplyInfo);
+//			}
+	
+	
+		workCertApplyInfo.setName(pName);
+		workCertApplyInfo.setEmail(pEmail);
+		workCertApplyInfo.setIdCard(pIDCard);
+		workCertApplyInfo.setProvince(workCompany.getProvince());
+		workCertApplyInfo.setCity(workCompany.getCity());
+		workCertApplyInfoService.save(workCertApplyInfo);
+		
+		
+		
+		WorkCertInfo oldCertInfo = workDealInfo1.getWorkCertInfo();
+		WorkCertInfo workCertInfo = new WorkCertInfo();
+		workCertInfo.setWorkCertApplyInfo(workCertApplyInfo);
+		workCertInfo.setRenewalPrevId(oldCertInfo.getId());
+		workCertInfo.setCreateDate( workCertInfoService.getCreateDate(oldCertInfo.getId()));
+		workCertInfoService.save(workCertInfo);
+		// 给上张证书存nextId
+		oldCertInfo.setRenewalNextId(workCertInfo.getId());
+		workCertInfoService.save(oldCertInfo);
+		workDealInfo.setWorkCertInfo(workCertInfo);
+		workDealInfoService.delete(workDealInfo1.getId());
+		workDealInfo.setPayType(workDealInfo1.getPayType());
+		workDealInfo.setConfigChargeAgentId(workDealInfo1.getConfigChargeAgentId());
+		workDealInfoService.save(workDealInfo);
+		// 保存日志信息
+		WorkLog workLog = new WorkLog();
+		workLog.setRecordContent(recordContent);
+		workLog.setWorkDealInfo(workDealInfo);
+		workLog.setCreateDate(new Date());
+		workLog.setCreateBy(UserUtils.getUser());
+		workLog.setConfigApp(workDealInfo.getConfigApp());
+		workLog.setWorkCompany(workDealInfo.getWorkCompany());
+		workLog.setOffice(UserUtils.getUser().getOffice());
+		workLogService.save(workLog);
+		
+		return "redirect:" + Global.getAdminPath()
+				+ "/work/workDealInfo/pay?id=" + workDealInfo.getId();
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

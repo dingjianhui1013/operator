@@ -2331,7 +2331,7 @@ public class WorkDealInfoController extends BaseController {
 
 		ConfigChargeAgent chargeAgent = chargeAgentService.get(workDealInfo
 				.getConfigProduct().getChargeAgentId());
-		model.addAttribute("tempStyle", chargeAgent.getTempStyle());
+		//model.addAttribute("tempStyle", chargeAgent.getTempStyle());
 		model.addAttribute("pro", ProductType.productTypeStrMap);
 		model.addAttribute("user", UserUtils.getUser());
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -2353,8 +2353,27 @@ public class WorkDealInfoController extends BaseController {
 
 			}
 		}
-
+		
 		model.addAttribute("dealType", dealType);
+		if (type.length==1) {
+			if(type[0].equals("1")){
+				ConfigChargeAgent agent =  configChargeAgentService.get(workDealInfo.getConfigChargeAgentId());
+				model.addAttribute("jfMB", agent.getTempName());
+				return "modules/work/maintain/workDealInfoMaintainChange";
+			}else if(type[0].equals("2")){
+				ConfigChargeAgent agent =  configChargeAgentService.get(workDealInfo.getConfigChargeAgentId());
+				model.addAttribute("jfMB", agent.getTempName());
+				return "modules/work/maintain/workDealInfoMaintainChange";
+			}
+			
+			
+		}else{
+			
+
+			return "modules/work/workDealInfoMaintain";
+			
+			
+		}
 
 		return "modules/work/workDealInfoMaintain";
 	}
@@ -2617,6 +2636,23 @@ public class WorkDealInfoController extends BaseController {
 		}
 		return json.toString();
 	}
+	
+	
+	@RequiresPermissions("work:workDealInfo:view")
+	@RequestMapping(value = "checkSurplusNum")
+	@ResponseBody
+	public String checkSurplusNum(Long boundId) {
+		JSONObject json = new JSONObject();
+		try {
+			ConfigChargeAgentBoundConfigProduct bound =  configChargeAgentBoundConfigProductService.get(boundId);
+			json.put("surplusNum", bound.getAgent().getSurplusNum());
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		return json.toString();
+	}
+	
 
 	/**
 	 * 

@@ -332,7 +332,7 @@ function revoke(dealInfoId){
 							<td><input type="radio"
 								<c:if test="${tempStyle==1 }">checked="checked"</c:if>
 								<c:if test="${tempStyle!=1 }">disabled="disabled"</c:if>
-								name="payType" value="1">通用 <input type="radio"
+								name="payType" value="1">标准<input type="radio"
 								<c:if test="${tempStyle==2 }">checked="checked"</c:if>
 								<c:if test="${tempStyle!=2 }">disabled="disabled"</c:if>
 								name="payType" value="2">政府统一采购 <input type="radio"
