@@ -423,7 +423,7 @@ public class WorkDealInfoAuditController extends BaseController {
 						userName, date, "支付宝转账", "" };
 				payInfos.add(s);
 			}
-			if (payInfo.getMethodGov()) {
+			/*if (payInfo.getMethodGov()) {
 				String[] s = new String[] { payInfo.getSn(), companyName, "",
 						officeName, userName, date, "政府统一采购", "" };
 				payInfos.add(s);
@@ -432,7 +432,7 @@ public class WorkDealInfoAuditController extends BaseController {
 				String[] s = new String[] { payInfo.getSn(), companyName, "",
 						officeName, userName, date, "合同采购", "" };
 				payInfos.add(s);
-			}
+			}*/
 		}
 		List<WorkFinancePayInfoRelation> list = workFinancePayInfoRelationService
 				.findByPayInfo(workDealInfo.getWorkPayInfo());

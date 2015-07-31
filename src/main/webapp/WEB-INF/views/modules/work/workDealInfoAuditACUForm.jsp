@@ -397,8 +397,7 @@ test="${workDealInfo.workUser.conCertType==2 }">selected</c:if>>其他</option>
 			</div>
 		</div>
 		<div class="row-fluid">
-			<div class="span12" id="proposer"
-				<%-- <c:if test="${workDealInfo.configProduct.productName!=2}"> 
+			<div class="span12" id="proposer"<%-- <c:if test="${workDealInfo.configProduct.productName!=2}"> 
 
 style="display:none"</c:if> --%>>
 				<table class="table table-striped table-bordered table-condensed">
@@ -481,9 +480,10 @@ style="display:none"</c:if> --%>>
 			id="mssg" style="color: red"></span>
 	</div>
 
-	<form id="recordForm" method="post" action="${ctx}/work/workDealInfoAudit/auditLoad">
-		<input type="hidden" name="recordContent"> 
-		<input type="hidden" name="id" value="${workDealInfo.id}">
+	<form id="recordForm" method="post"
+		action="${ctx}/work/workDealInfoAudit/auditLoad">
+		<input type="hidden" name="recordContent"> <input
+			type="hidden" name="id" value="${workDealInfo.id}">
 	</form>
 </body>
 </html>

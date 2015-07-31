@@ -118,6 +118,7 @@
 							<c:forEach var="i" items="${info }">
 							<td>${i }</td>
 							</c:forEach>
+							<td>&nbsp;</td>
 						</tr>
 					</c:forEach>
 				</tbody>

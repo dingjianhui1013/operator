@@ -37,7 +37,7 @@
 		
 		function showChargeAgentTemp(chargeAgentId){
 			var url = "${ctx}/profile/configChargeAgent/form?id="+chargeAgentId+"&view=1";
-			top.$.jBox.open("iframe:"+url, "计费策略查看", 600, 600, {
+			top.$.jBox.open("iframe:"+url, "计费策略查看", 600, 690, {
 				buttons:{"确定":"ok","关闭":true}, submit:function(v, h, f){
 
 				}
@@ -76,7 +76,7 @@
 		<c:forEach items="${page.list}" var="configChargeAgent" varStatus="config">
 			<tr>
 				<td>${config.index+1 }</td>
-				<td>${configChargeAgent.tempName}</td>
+				<td><a onclick="showChargeAgentTemp(${configChargeAgent.id})"  href="#">${configChargeAgent.tempName}</a></td>
 				<td>
 					<c:if test="${configChargeAgent.tempStyle == 1}">标准</c:if>
 					<c:if test="${configChargeAgent.tempStyle == 2}">政府统一采购</c:if>
@@ -86,9 +86,6 @@
 				<shiro:hasPermission name="profile:configChargeAgent:edit">
 				<td>
 					<%-- <a href="${ctx}/profile/configChargeAgent/bindSave?productId=${productId}&chargeAgentId=${configChargeAgent.id}">绑定</a> --%>
-				
-				<a onclick="showChargeAgentTemp(${configChargeAgent.id})"  href="#">查看模版信息</a>
-				
 				&nbsp;&nbsp;
 				<c:if test="${configChargeAgent.isBind==2 }">
 				<a href="${ctx}/profile/configChargeAgent/deleteBindingNew?productId=${productId}&agentId=${configChargeAgent.id}">取消绑定</a>

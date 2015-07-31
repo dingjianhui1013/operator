@@ -453,7 +453,7 @@ var selected = false;
 			top.$.jBox.tip("请配置计费策略"); 
 			$("#agentDetailId").focus(); 
 			return false;
-		}else if($("#agentDetailId").val()!=0){
+		}else if($("#agentDetailId").val()!=0 && $("#agentId").val()!=1){
 			if($("#surplusNum").val()==0){
 				top.$.jBox.tip("此计费策略模版剩余数量为零，不能进行业务办理！"); 
 				return false;
@@ -841,18 +841,18 @@ var selected = false;
 </script>
 
 </head>
-<body>
+<body style="overflow: scroll">
 	<ul class="nav nav-tabs">
 		<li><a href="${ctx}/work/workDealInfo/">业务办理列表</a></li>
 		<li class="active"><a
 			href="${ctx}/work/workDealInfo/form?id=${workDealInfo.id}">业务新增</a></li>
 	</ul>
-	<form:form id="inputForm" action="${ctx}/work/workDealInfo/save"
+	<form:form id="inputForm" action="${ctx}/work/workDealInfo/save" 
 		method="POST" class="form-horizontal">
 		<tags:message content="${message}" />
 		<div class="row-fluid">
 			<div class="span12">
-				<table class="table table-striped table-bordered table-condensed">
+				<table class="table table-striped table-bordered table-condensed" >
 					<tbody>
 						<tr>
 							<th colspan="6" style="font-size: 20px;"><span

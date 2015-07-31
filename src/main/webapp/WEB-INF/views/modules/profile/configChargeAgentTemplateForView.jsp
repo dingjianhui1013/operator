@@ -42,9 +42,6 @@
 	
 	
 		function addLine(obj){
-			
-			
-			
 		}
 
 	</script>
@@ -134,19 +131,19 @@
 		
 		<div class="control-group" id="chargeMethods">
 			<label class="control-label">配置数量:</label>
-			<div class="controls" >
+			<div class="controls" >${ configChargeAgent.configureNum}
 			</div>
 		</div>
 		
 		<div class="control-group" id="chargeMethods">
 			<label class="control-label">剩余数量:</label>
-			<div class="controls" >
+			<div class="controls" >${ configChargeAgent.surplusNum}
 			</div>
 		</div>
 		
 		<div class="control-group" id="chargeMethods">
 			<label class="control-label">已用数量:</label>
-			<div class="controls" >
+			<div class="controls" >${ configChargeAgent.availableNum}
 			</div>
 		</div>
 		

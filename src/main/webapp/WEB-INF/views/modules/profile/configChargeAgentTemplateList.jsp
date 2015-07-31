@@ -36,6 +36,15 @@
 			},{buttonsFocus:1});
 			top.$('.jbox-body .jbox-icon').css('top','55px');
 		}
+		
+		function showChargeAgentTemp(chargeAgentId){
+			var url = "${ctx}/profile/configChargeAgent/form?id="+chargeAgentId+"&view=1";
+			top.$.jBox.open("iframe:"+url, "计费策略查看", 600, 690, {
+				buttons:{"确定":"ok","关闭":true}, submit:function(v, h, f){
+
+				}
+			});
+		}
 	</script>
 </head>
 <body>
@@ -61,7 +70,10 @@
 		<c:forEach items="${page.list}" var="configChargeAgent" varStatus="config">
 			<tr>
 				<td>${config.index+1 }</td>
-				<td>${configChargeAgent.tempName}
+				<td>
+				<a onclick="showChargeAgentTemp(${configChargeAgent.id})"  href="#">
+				${configChargeAgent.tempName}
+
 				</a></td>
 				<shiro:hasPermission name="profile:configChargeAgent:edit"><td>
 					<a href="${ctx}/profile/configChargeAgent/form?id=${configChargeAgent.id}">修改</a>
