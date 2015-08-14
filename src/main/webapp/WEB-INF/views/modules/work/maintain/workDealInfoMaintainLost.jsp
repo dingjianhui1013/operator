@@ -86,7 +86,21 @@
 									$("input[name='" + arrList[i] + "']")
 											.parent().prev().find("span")
 											.show();
-								} else {
+									if(arrList[i] == "contactName"){
+										$("#contactName1").attr("disabled","disabled");
+									}else if(arrList[i] == "conCertType"){
+										$("#conCertType1").attr("disabled","disabled");
+									}else if(arrList[i] == "conCertNumber"){
+										$("#conCertNumber1").attr("disabled","disabled");
+									}else if(arrList[i] == "contactPhone"){
+										$("#contactPhone1").attr("disabled","disabled");
+									}else if(arrList[i] == "contactTel"){
+										$("#contactTel1").attr("disabled","disabled");
+									}else if(arrList[i] == "contactSex"){
+										$("#sex0").attr("disabled","disabled");
+										$("#sex1").attr("disabled","disabled");
+									}
+								}else {
 									$("input[name='" + arrList[i] + "']").attr(
 											"required", "required");
 									$("input[name='" + arrList[i] + "']")
@@ -159,23 +173,6 @@
 			$("#year4").removeAttr("checked");
 		}
 	}
-	
-	function setJBRName(){
-		var name = $("#contactName1").val();
-		$("#pName").val(name);
-	}
-	
-	function setJBRCard(){
-		var card = $("#conCertNumber1").val();
-		$("#pIDCard").val(card);
-	}
-	
-	function setJBRMail(){
-		var mail = $("#contacEmail").val();
-		$("#pEmail").val(mail);
-	}
-	
-	
 </script>
 </head>
 <body>
@@ -185,7 +182,7 @@
 			href="${ctx}/work/workDealInfo/typeForm?id=${workDealInfo.id}&reissueType=${reissue}&dealType=${dealType}">业务变更</a></li>
 	</ul>
 	<form:form id="inputForm"
-		action="${ctx}/work/workDealInfoOperation/maintainSaveChange" method="POST"
+		action="${ctx}/work/workDealInfoOperation/maintainSaveLost" method="POST"
 		class="form-horizontal">
 		<tags:message content="${message}" />
 		<div class="row-fluid">
@@ -214,9 +211,11 @@
 							<th><span class="prompt" style="color: red; display: none;">*</span>业务类型：</th>
 							<td colspan="3">
 								
-									<input type="checkbox" disabled="disabled" checked="checked"
-										value="3" name="dealInfoType2">变更证书<input
-										type="hidden" value="3" name="dealInfoType2">
+								<c:if test="${reissue==1}"><input type="checkbox" disabled="disabled" checked="checked" value = "1"
+								name="dealInfoType1">遗失补办<input type="hidden" value="1" name="dealInfoType1"></c:if>
+								<c:if test="${reissue==2}"><input type="checkbox" disabled="disabled" checked="checked" value = "2"
+								name="dealInfoType1">损坏更换<input type="hidden" value="2" name="dealInfoType1"></c:if>
+								
 						</tr>
 						<tr>
 							<th><span class="prompt" style="color: red; display: none;">*</span>申请年数：</th>
@@ -240,11 +239,15 @@
 							<select disabled="disabled">
 								<option >${jfMB}</option>
 							</select>
-							
-							
-							
 							</td>
 						</tr>
+						<c:if test="${reissue==2}">
+						<tr id="manMade">
+							<th>人为损坏：</th>
+							<td><input type="radio" name="manMadeDamage" value="true">是
+							 <input type="radio" name="manMadeDamage"value="false">否</td>
+						</tr>
+						</c:if>
 					</tbody>
 				</table>
 			</div>
@@ -258,13 +261,13 @@
 						</tr>
 						<tr>
 							<th><span class="prompt" style="color: red; display: none;">*</span>单位名称：</th>
-							<td><input type="text" name="companyName" id="companyName"
+							<td><input type="text" name="companyName" id="companyName" disabled="disabled"
 								maxlength="50" value="${workDealInfo.workCompany.companyName}" />
 
 
 							</td>
 							<th>单位类型：</th>
-							<td><select name="companyType">
+							<td><select name="companyType" disabled="disabled">
 									<option value="1" id="companyType1"
 										<c:if test="${workCompany.companyType==1 }">selected</c:if>>企业</option>
 									<option value="2" id="companyType2"
@@ -280,13 +283,13 @@
 						</tr>
 						<tr>
 							<th><span class="prompt" style="color: red; display: none;">*</span>组织机构代码：</th>
-							<td><input type="text" name="organizationNumber"
+							<td><input type="text" name="organizationNumber" disabled="disabled"
 								id="organizationNumber1"
 								onkeyup="value=value.replace(/[^\w\.\/]/ig,'')"
 								value="${workDealInfo.workCompany.organizationNumber}"
 								maxlength="20" /></td>
 							<th>组织机构代码有效期：</th>
-							<td><input class="input-medium Wdate"
+							<td><input class="input-medium Wdate" disabled="disabled"
 								
 								type="text" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});"
 								maxlength="20" readonly="readonly" name="orgExpirationTime"
@@ -295,14 +298,14 @@
 						</tr>
 						<tr>
 							<th>服务级别：</th>
-							<td><select name="selectLv">
+							<td><select name="selectLv" disabled="disabled">
 									<option value="0" id="selectLv0"
 										<c:if test="${workDealInfo.workCompany.selectLv==0}">selected</c:if>>大客户</option>
 									<option value="1" id="selectLv1"
 										<c:if test="${workDealInfo.workCompany.selectLv==1}">selected</c:if>>普通客户</option>
 							</select></td>
 							<th>单位证照：</th>
-							<td><select name="comCertificateType">
+							<td><select name="comCertificateType" disabled="disabled">
 									<option value="0" id="comCertificateType0"
 										<c:if test="${workDealInfo.workCompany.comCertificateType==0 }">selected</c:if>>营业执照</option>
 									<option value="1" id="comCertificateType1"
@@ -316,11 +319,11 @@
 						</tr>
 						<tr>
 							<th><span class="prompt" style="color: red; display: none;">*</span>证件号：</th>
-							<td><input type="text" name="comCertficateNumber"
+							<td><input type="text" name="comCertficateNumber" disabled="disabled"
 								id="comCertficateNumber1" 
 								value="${workDealInfo.workCompany.comCertficateNumber}" /></td>
 							<th>单位证照有效期：</th>
-							<td><input class="input-medium Wdate" type="text"
+							<td><input class="input-medium Wdate" type="text" disabled="disabled"
 								onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});" maxlength="20"
 								readonly="readonly" name="comCertficateTime"
 								value="<fmt:formatDate value="${workDealInfo.workCompany.comCertficateTime }"  pattern="yyyy-MM-dd"/>"></input></td>
@@ -328,13 +331,13 @@
 						</tr>
 						<tr>
 							<th><span class="prompt" style="color: red; display: none;">*</span>法人姓名：</th>
-							<td><input type="text" name="legalName"
+							<td><input type="text" name="legalName" disabled="disabled"
 								value="${workDealInfo.workCompany.legalName}"></td>
 							<th>行政所属区：</th>
-							<td><select id="s_province" name="s_province"
+							<td><select id="s_province" name="s_province" disabled="disabled"
 								style="width: 100px;">
-							</select>&nbsp;&nbsp; <select id="s_city" name="s_city"
-								style="width: 100px;"></select>&nbsp;&nbsp; <select
+							</select>&nbsp;&nbsp; <select id="s_city" name="s_city" disabled="disabled"
+								style="width: 100px;"></select>&nbsp;&nbsp; <select disabled="disabled"
 								id="s_county" name="s_county" style="width: 100px;"></select> <script
 									type="text/javascript">
 									_init_area();
@@ -350,7 +353,7 @@
 								</script>
 								<div style="margin-top: 8px;">
 									<span class="prompt" style="color: red; display: none;">*</span>区域备注：<input
-										type="text" name="areaRemark"
+										type="text" name="areaRemark" disabled="disabled"
 										value="${workCompany.areaRemark }">
 								</div></td>
 
@@ -358,16 +361,16 @@
 						</tr>
 						<tr>
 							<th><span class="prompt" style="color: red; display: none;">*</span>街道地址：</th>
-							<td><input type="text" name="address"
+							<td><input type="text" name="address" disabled="disabled"
 								value="${workDealInfo.workCompany.address}"></td>
 							<th><span class="prompt" style="color: red; display: none;">*</span>单位联系电话：</th>
-							<td><input type="text" name="companyMobile" class="number"
+							<td><input type="text" name="companyMobile" class="number" disabled="disabled"
 								id="companyMobile"
 								value="${workDealInfo.workCompany.companyMobile }"></td>
 						</tr>
 						<tr>
 							<th><span class="prompt" style="color: red; display: none;">*</span>备注信息：</th>
-							<td><input type="text" name="remarks" id="remarks"
+							<td><input type="text" name="remarks" id="remarks" disabled="disabled"
 								value="${workDealInfo.workCompany.remarks }"></td>
 						</tr>
 
@@ -387,7 +390,7 @@
 							<td><input type="text" name="contactName" id="contactName1"
 								value="${workDealInfo.workUser.contactName }" onblur="setJBRName()" /></td>
 							<th>证书持有人证件:</th>
-							<td><select name="conCertType">
+							<td><select name="conCertType" id="conCertType1">
 									<option value="0" id="conCertType0"
 										<c:if test="${workDealInfo.workUser.conCertType==0 }">selected</c:if>>身份证</option>
 									<option value="1" id="conCertType1"
@@ -411,10 +414,8 @@
 							<th><span class="prompt" style="color: red; display: none;">*</span>证书持有人手机号:</th>
 							<td><input type="text" name="contactPhone"
 								id="contactPhone1" maxlength="11" class="number"
-								value="${workDealInfo.workUser.contactPhone }" /> <input
-								type="hidden" name="contactPhone" id="contactPhone"
-								maxlength="11" class="number" disabled="disabled"
-								value="${workDealInfo.workUser.contactPhone }" /></td>
+								value="${workDealInfo.workUser.contactPhone }" /> 
+							</td>
 							<th><span class="prompt" style="color: red; display: none;">*</span>业务系统UID:</th>
 							<td><input type="text" name="contactTel" id="contactTel1"
 								maxlength="20" value="${workDealInfo.workUser.contactTel }" />
@@ -442,17 +443,17 @@
 						</tr>
 						<tr>
 							<th><span class="prompt" style="color: red; display: none;">*</span>经办人姓名:</th>
-							<td><input type="text" name="pName" id="pName" 
+							<td><input type="text" name="pName" id="pName" disabled="disabled"
 								value="${workDealInfo.workCertInfo.workCertApplyInfo.name }" /></td>
 						</tr>
 						<tr>
 							<th><span class="prompt" style="color: red; display: none;">*</span>经办人身份证号:</th>
-							<td><input type="text" name="pIDCard" id="pIDCard"
+							<td><input type="text" name="pIDCard" id="pIDCard" disabled="disabled"
 								value="${workDealInfo.workCertInfo.workCertApplyInfo.idCard }" /></td>
 						</tr>
 						<tr>
 							<th><span class="prompt" style="color: red; display: none;">*</span>经办人邮箱:</th>
-							<td><input type="text" name="pEmail" id="pEmail"
+							<td><input type="text" name="pEmail" id="pEmail" disabled="disabled"
 								value="${workDealInfo.workCertInfo.workCertApplyInfo.email }" /></td>
 						</tr>
 					</tbody>
@@ -484,10 +485,7 @@
 				</table>
 			</div>
 		</div>
-		<input type="hidden" id="appId" name="appId" />
-		<input type="hidden" name="deal_info_status" value="5">
 		<input type="hidden" name="workDealInfoId" value="${workDealInfo.id }">
-		<input type="hidden" name="newInfoId" id="newInfoId">
 		<div class="control-group span12">
 			<div class="span12">
 				<table class="table">

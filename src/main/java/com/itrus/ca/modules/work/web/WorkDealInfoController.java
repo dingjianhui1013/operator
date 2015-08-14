@@ -2355,24 +2355,100 @@ public class WorkDealInfoController extends BaseController {
 		}
 		
 		model.addAttribute("dealType", dealType);
-		if (type.length==1) {
-			if(type[0].equals("1")){
+		
+		ArrayList<String> dealInfoTypes = new ArrayList<String>();
+		for (int i = 0; i < type.length; i++) {
+			if (type[i]!=null&&!type[i].equals("")) {
+				dealInfoTypes.add(type[i]);
+			}
+		}
+
+		if (dealInfoTypes.size()==1) {
+			if(dealInfoTypes.get(0).equals("1")){
 				ConfigChargeAgent agent =  configChargeAgentService.get(workDealInfo.getConfigChargeAgentId());
 				model.addAttribute("jfMB", agent.getTempName());
 				return "modules/work/maintain/workDealInfoMaintainChange";
-			}else if(type[0].equals("2")){
+			}else if(dealInfoTypes.get(0).equals("2")){
 				ConfigChargeAgent agent =  configChargeAgentService.get(workDealInfo.getConfigChargeAgentId());
 				model.addAttribute("jfMB", agent.getTempName());
-				return "modules/work/maintain/workDealInfoMaintainChange";
+				return "modules/work/maintain/workDealInfoMaintainLost";
+			}else if(dealInfoTypes.get(0).equals("3")){
+				ConfigProduct configProduct = workDealInfo.getConfigProduct();
+				List<ConfigChargeAgentBoundConfigProduct> boundList = configChargeAgentBoundConfigProductService
+						.findByProIdAll(configProduct.getId());		
+				Set<Integer> nameSet = new HashSet<Integer>();
+				for (int i = 0; i < boundList.size(); i++) {
+					nameSet.add(Integer.parseInt(boundList.get(i).getAgent().getTempStyle()));
+				}
+				
+				model.addAttribute("boundLabelList", nameSet);
+				
+				List<WorkLog> list = workLogService.findByDealInfo(workDealInfo);
+				model.addAttribute("workLog", list);
+				model.addAttribute("tempStyle", chargeAgent.getTempStyle());
+				return "modules/work/maintain/workDealInfoMaintainUpdate";
+			}else if(dealInfoTypes.get(0).equals("4")){
+				ConfigChargeAgent agent =  configChargeAgentService.get(workDealInfo.getConfigChargeAgentId());
+				model.addAttribute("jfMB", agent.getTempName());
+				return "modules/work/maintain/workDealInfoMaintainRevoke";
 			}
 			
 			
+			
+		}else if(dealInfoTypes.size()==2){
+			if(dealInfoTypes.get(0).equals("1")&&dealInfoTypes.get(1).equals("2")){
+				ConfigChargeAgent agent =  configChargeAgentService.get(workDealInfo.getConfigChargeAgentId());
+				model.addAttribute("jfMB", agent.getTempName());
+				return "modules/work/maintain/workDealInfoMaintainChange";
+			}else if(dealInfoTypes.get(0).equals("2")&&dealInfoTypes.get(1).equals("3")){
+				ConfigProduct configProduct = workDealInfo.getConfigProduct();
+				List<ConfigChargeAgentBoundConfigProduct> boundList = configChargeAgentBoundConfigProductService
+						.findByProIdAll(configProduct.getId());		
+				Set<Integer> nameSet = new HashSet<Integer>();
+				for (int i = 0; i < boundList.size(); i++) {
+					nameSet.add(Integer.parseInt(boundList.get(i).getAgent().getTempStyle()));
+				}
+				
+				model.addAttribute("boundLabelList", nameSet);
+				
+				List<WorkLog> list = workLogService.findByDealInfo(workDealInfo);
+				model.addAttribute("workLog", list);
+				model.addAttribute("tempStyle", chargeAgent.getTempStyle());
+				return "modules/work/maintain/workDealInfoMaintainUpdate";
+			}else if(dealInfoTypes.get(0).equals("1")&&dealInfoTypes.get(1).equals("3")){
+				ConfigProduct configProduct = workDealInfo.getConfigProduct();
+				List<ConfigChargeAgentBoundConfigProduct> boundList = configChargeAgentBoundConfigProductService
+						.findByProIdAll(configProduct.getId());		
+				Set<Integer> nameSet = new HashSet<Integer>();
+				for (int i = 0; i < boundList.size(); i++) {
+					nameSet.add(Integer.parseInt(boundList.get(i).getAgent().getTempStyle()));
+				}
+				
+				model.addAttribute("boundLabelList", nameSet);
+				
+				List<WorkLog> list = workLogService.findByDealInfo(workDealInfo);
+				model.addAttribute("workLog", list);
+				model.addAttribute("tempStyle", chargeAgent.getTempStyle());
+				return "modules/work/maintain/workDealInfoMaintainUpdateChange";
+			}
+		}else if(dealInfoTypes.size()==3){
+			
+			ConfigProduct configProduct = workDealInfo.getConfigProduct();
+			List<ConfigChargeAgentBoundConfigProduct> boundList = configChargeAgentBoundConfigProductService
+					.findByProIdAll(configProduct.getId());		
+			Set<Integer> nameSet = new HashSet<Integer>();
+			for (int i = 0; i < boundList.size(); i++) {
+				nameSet.add(Integer.parseInt(boundList.get(i).getAgent().getTempStyle()));
+			}
+			
+			model.addAttribute("boundLabelList", nameSet);
+			
+			List<WorkLog> list = workLogService.findByDealInfo(workDealInfo);
+			model.addAttribute("workLog", list);
+			model.addAttribute("tempStyle", chargeAgent.getTempStyle());
+			return "modules/work/maintain/workDealInfoMaintainUpdateChange";
 		}else{
-			
-
 			return "modules/work/workDealInfoMaintain";
-			
-			
 		}
 
 		return "modules/work/workDealInfoMaintain";
@@ -2613,7 +2689,7 @@ public class WorkDealInfoController extends BaseController {
 			Integer infoType, String style) {
 		JSONObject json = new JSONObject();
 		try {
-			ConfigProduct configProduct = configProductService.findByIdOrLable(
+ 			ConfigProduct configProduct = configProductService.findByIdOrLable(
 					app, productName, lable);
 			JSONArray array = new JSONArray();
 			List<ConfigChargeAgentBoundConfigProduct> boundStyleList = configChargeAgentBoundConfigProductService

@@ -95,6 +95,69 @@
 								}
 							}
 						});
+						
+						
+						
+						
+						if("${workDealInfo.id}"!=null && "${workDealInfo.id}"!=""){
+							var boundLabelList = "${boundLabelList}";
+							var lable = "${workDealInfo.configProduct.productLabel}";
+							$("#agentId").attr("onchange","setStyleList("+lable+")");
+							var agentHtml="";
+							var obj= $.parseJSON(boundLabelList);
+							$.each(obj, function(i, item){
+								 if(item==1){
+									if (item=="${workDealInfo.payType}") {
+										agentHtml+="<option selected='selected' value='"+item+"'>标准</option>";
+									}else{
+										agentHtml+="<option value='"+item+"'>标准</option>";
+									}
+									
+								}else if(item==2){
+									if (item=="${workDealInfo.payType}") {
+										agentHtml+="<option selected='selected' value='"+item+"'>政府统一采购</option>";
+									}else{
+										agentHtml+="<option value='"+item+"'>政府统一采购</option>";
+									}
+								}else if(item==3){
+									if (item=="${workDealInfo.payType}") {
+										agentHtml+="<option selected='selected' value='"+item+"'>合同采购</option>";
+									}else{
+										agentHtml+="<option value='"+item+"'>合同采购</option>";
+									}
+								} 
+							}); 
+							$("#agentId").html(agentHtml);
+							
+							
+							
+							
+							var product = $("#product").val();
+							var agentId = $("#agentId").val();
+							var appId = $("#appId").val();
+							if (agentId!=0) {
+								var url = "${ctx}/work/workDealInfo/setStyleList?lable="+lable+"&productName="+product+"&app="+appId+"&infoType=0&style="+agentId+"&_="+new Date().getTime();
+								$.getJSON(url,function(data){
+									var styleList = data.array;
+									var styleHtml="";
+									$.each(styleList,function(i,item){
+										if(item.agentId=="${workDealInfo.configChargeAgentId}"){
+											styleHtml +="<option selected='selected'  value='"+item.id+"'>" + item.name + "</option>";
+											$("#boundId").val(item.id);
+											showYear();
+										}else{
+											styleHtml +="<option value='"+item.id+"'>" + item.name + "</option>";
+										}
+									});
+									$("#agentDetailId").html(styleHtml);
+								});
+							}
+						}
+						
+						
+						
+						
+						
 
 					});
 	Array.prototype.unique = function() {
@@ -136,12 +199,35 @@
 	};
 </script>
 <script type="text/javascript" src="${ctxStatic}/jquery/city.js"></script>
-<script type="text/javascript">
-	function onSubmit() {
+<script type="text/javascript">	
+	function onSubmit(){
 		$("#newInfoId").val(getCookie("work_deal_info_id"));
 		delCookie("work_deal_info_id");
-		$("#inputForm").submit();
+		
+			var year;
+			var isCheck = false;
+			$("input[name='year']").each(function(){
+			     if(this.checked){
+			    	 year = $(this).val();
+			    	 if (year!="on") {
+			    		 isCheck = true;
+					}
+			     }
+			 });
+			if(!isCheck){
+				top.$.jBox.tip("请选择您想要更新的年限！");
+			}else{
+				top.$.jBox.confirm("更新年限确认为&nbsp;'&nbsp;<b>"+year+"</b>&nbsp;'&nbsp;年吗？",'系统提示',function(v,h,f){
+					if(v=='ok'){
+						$("#inputForm").submit(); 
+					}
+				},{buttonsFocus:1});
+				top.$('.jbox-body .jbox-icon').css('top','55px');
+			}
+		
 	}
+	
+	
 
 	function dealType(obj) {
 		if ($(obj).prop("checked")) {
@@ -176,6 +262,93 @@
 	}
 	
 	
+	/* 
+	* 功能:根据产品带回年限
+	* 传参：lable+name
+	* 返回值：年限1，2，4，5是否为true
+	*/ 
+	function showYear(){
+		var agentId = $("#boundId").val();
+		//var url = "${ctx}/work/workDealInfo/showYear?lable="+lable+"&productName="+productName+"&app="+$("#appId").val()+"&infoType=0&_="+new Date().getTime();
+		var url = "${ctx}/work/workDealInfo/showYearNew?boundId="+agentId+"&infoType=0&_="+new Date().getTime();
+		
+		$.getJSON(url, function(data) {
+			if (data.year1) {
+				$("#year1").show();
+				$("#word1").show();
+			} else {
+				$("#year1").hide();
+				$("#word1").hide();
+			}
+			if (data.year2) {
+				$("#year2").show();
+				$("#word2").show();
+			} else {
+				$("#year2").hide();
+				$("#word2").hide();
+			}
+			if (data.year4) {
+				$("#year4").show();
+				$("#word4").show();
+			} else {
+				$("#year4").hide();
+				$("#word4").hide();
+			}
+			if (data.year5) {
+				$("#year5").show();
+				$("#word5").show();
+			} else {
+				$("#year5").hide();
+				$("#word5").hide();
+			}			
+			var boundId =  $("#agentDetailId").val(); 
+			var url="${ctx}/work/workDealInfo/checkSurplusNum?boundId="+boundId+"&_="+new Date().getTime();
+			$.getJSON(url,function(data){
+				$("#surplusNum").val(data.surplusNum);
+			});
+			
+			
+			
+		});
+		
+	}
+	
+	/*
+	* 给计费策略模版配置赋值
+	*/
+	function setStyleList(obj){
+		var lable = obj;
+		var product = $("#product").val();
+		var agentId = $("#agentId").val();
+		var appId = $("#appId").val();
+		if (agentId!=0) {
+			var url = "${ctx}/work/workDealInfo/setStyleList?lable="+lable+"&productName="+product+"&app="+appId+"&infoType=0&style="+agentId+"&_="+new Date().getTime();
+			$.getJSON(url,function(data){
+				var styleList = data.array;
+				var styleHtml="";
+				$.each(styleList,function(i,item){
+					if(i==0){
+						$("#boundId").val(item.id);
+						showYear();
+					}
+					styleHtml +="<option value='"+item.id+"'>" + item.name + "</option>";
+				});
+				$("#agentDetailId").html(styleHtml);
+			});
+		}else{
+			top.$.jBox.tip("请您选择产品！");
+			
+		}
+	}
+	
+	
+	//获取计费模版相对应的年限
+	function setYearByBoundId(){
+		var boundId = $("#agentDetailId").val();
+		$("#boundId").val(boundId);
+		showYear();
+	} 
+	
 </script>
 </head>
 <body>
@@ -185,7 +358,7 @@
 			href="${ctx}/work/workDealInfo/typeForm?id=${workDealInfo.id}&reissueType=${reissue}&dealType=${dealType}">业务变更</a></li>
 	</ul>
 	<form:form id="inputForm"
-		action="${ctx}/work/workDealInfoOperation/maintainSaveChange" method="POST"
+		action="${ctx}/work/workDealInfoOperation/maintainSaveUpdate" method="POST"
 		class="form-horizontal">
 		<tags:message content="${message}" />
 		<div class="row-fluid">
@@ -197,15 +370,23 @@
 						</tr>
 						<tr>
 							<th><span class="prompt" style="color: red; display: none;">*</span>代办应用：</th>
-							<td><input type="text" name="configApp" disabled="disabled"
-								value="${workDealInfo.configApp.appName }" id="app" /></td>
+							<td colspan="3"><input type="text" name="configApp" disabled="disabled"
+								value="${workDealInfo.configApp.appName }" id="4" />
+								
+								<input type="hidden" id="appId" value="${workDealInfo.configApp.id }" />
+								
+								</td>
 							<th><span class="prompt" style="color: red; display: none;">*</span>选择产品：</th>
-							<td colspan="3"><input type="text" name="product" disabled="disabled"
-								value="${pro[workDealInfo.configProduct.productName] }" /></td>
+							<td colspan="3"><input type="text" name="product"  disabled="disabled"
+								value="${pro[workDealInfo.configProduct.productName] }" />
+								
+								<input type="hidden" id="product" value="${workDealInfo.configProduct.productName }" />
+								
+								</td>
 						</tr>
 						<tr>
 							<th><span class="prompt" style="color: red; display: none;">*</span>应用标识：</th>
-							<td><input type="radio" disabled="disabled" name="lable"
+							<td colspan="3"><input type="radio" disabled="disabled" name="lable"
 								<c:if test="${workDealInfo.configProduct.productLabel==0}">checked="checked"</c:if>
 								id="lable0" value="0">通用 &nbsp; &nbsp; <input
 								type="radio" disabled="disabled" name="lable"
@@ -213,42 +394,53 @@
 								id="lable1" value="1">专用</td>
 							<th><span class="prompt" style="color: red; display: none;">*</span>业务类型：</th>
 							<td colspan="3">
-								
-									<input type="checkbox" disabled="disabled" checked="checked"
+							
+							
+							<input type="checkbox" disabled="disabled" checked="checked"
 										value="3" name="dealInfoType2">变更证书<input
 										type="hidden" value="3" name="dealInfoType2">
 										
-									<c:if test="${reissue==1}"><input type="checkbox" disabled="disabled" checked="checked" value = "1"
+							<input type="checkbox" disabled="disabled" checked="checked" value="0" name="dealInfoType">更新证书
+							<input type="hidden" value="0" name="dealInfoType">
+							<c:if test="${reissue==1}"><input type="checkbox" disabled="disabled" checked="checked" value = "1"
 								name="dealInfoType1">遗失补办<input type="hidden" value="1" name="dealInfoType1"></c:if>
 								<c:if test="${reissue==2}"><input type="checkbox" disabled="disabled" checked="checked" value = "2"
 								name="dealInfoType1">损坏更换<input type="hidden" value="2" name="dealInfoType1"></c:if>
-										
-										
+							
+							
 						</tr>
 						<tr>
-							<th><span class="prompt" style="color: red; display: none;">*</span>申请年数：</th>
-							<td><input type="radio" id="delay" checked="checked"
-								name="year" disabled="disabled"> <span>不延期</span>
+
+							<th style="width: 100px;"><span class="prompt"
+								style="color: red; display: none;">*</span>计费策略类型：</th>
+							<td style="width: 250px;"><select id="agentId"
+								name="agentId">
+									<option value="0">请选择</option>
+							</select> <input type="hidden" id="boundId"></td>
+							<th style="width: 100px;"><span class="prompt"
+								style="color: red; display: none;">*</span>计费策略模版：</th>
+							<td style="width: 250px;"><select
+								onchange="setYearByBoundId()" id="agentDetailId"
+								name="agentDetailId">
+									<option value="0">请选择</option>
+							</select> 
+							<input type="hidden" id="surplusNum" />
 
 							</td>
-							<th><span class="prompt" style="color: red; display: none;">*</span>计费策略类型：</th>
-							<td style="width: 100px;">
-							
-							<select  disabled="disabled" >
-								<option <c:if test="${workDealInfo.payType==1 }">selected</c:if> value="1" >标准</option>
-								<option <c:if test="${workDealInfo.payType==2 }">selected</c:if> value="2" >政府统一采购</option>
-								<option <c:if test="${workDealInfo.payType==3 }">selected</c:if> value="3" >合同采购</option>
-							</select>
-							</td>
-			
-								<th><span class="prompt" style="color: red; display: none;">*</span>计费策略模版：</th>
+
+							<th style="width: 100px;"><span class="prompt"
+								style="color: red; display: none;">*</span>申请年数：</th>
 							<td>
-							
-							<select disabled="disabled">
-								<option >${jfMB}</option>
-							</select>
-							
+								<input type="radio" name="year" value="1" id="year1">
+								<span id="word1">1年</span>
+								<input type="radio" name="year" value="2" id="year2">
+								<span id="word2">2年 </span>
+								<input type="radio" name="year" value="4" id="year4">
+								<span id="word4">4年</span>
+								<input type="radio" name="year" value="5" id="year5">
+								<span id="word5">5年</span>
 							</td>
+
 						</tr>
 						<c:if test="${reissue==2}">
 						<tr id="manMade">
@@ -459,12 +651,12 @@
 						</tr>
 						<tr>
 							<th><span class="prompt" style="color: red; display: none;">*</span>经办人身份证号:</th>
-							<td><input type="text" name="pIDCard" id="pIDCard"
+							<td><input type="text" name="pIDCard" id="pIDCard" 
 								value="${workDealInfo.workCertInfo.workCertApplyInfo.idCard }" /></td>
 						</tr>
 						<tr>
 							<th><span class="prompt" style="color: red; display: none;">*</span>经办人邮箱:</th>
-							<td><input type="text" name="pEmail" id="pEmail"
+							<td><input type="text" name="pEmail" id="pEmail" 
 								value="${workDealInfo.workCertInfo.workCertApplyInfo.email }" /></td>
 						</tr>
 					</tbody>
@@ -496,10 +688,8 @@
 				</table>
 			</div>
 		</div>
-		<input type="hidden" id="appId" name="appId" />
 		<input type="hidden" name="deal_info_status" value="5">
 		<input type="hidden" name="workDealInfoId" value="${workDealInfo.id }">
-		<input type="hidden" name="newInfoId" id="newInfoId">
 		<div class="control-group span12">
 			<div class="span12">
 				<table class="table">

@@ -469,8 +469,6 @@ function revoke(dealInfoId){
 								</script></c:if>
 								<div style="margin-top:8px;"><span class="prompt" style="color:red; display: none;">*</span>区域备注：<input type="text" name="areaRemark" <c:if test="${empty change && empty update }">disabled="disabled"</c:if> value="${workCompany.areaRemark }"></div>
 							</td>
-							
-							
 						</tr>
 						<tr>
 							<th><span class="prompt" style="color:red; display: none;">*</span>街道地址：</th>

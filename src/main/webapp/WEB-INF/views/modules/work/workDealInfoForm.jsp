@@ -457,6 +457,8 @@ var selected = false;
 			if($("#surplusNum").val()==0){
 				top.$.jBox.tip("此计费策略模版剩余数量为零，不能进行业务办理！"); 
 				return false;
+			}else{
+				return true;
 			}
 		}else {
 			$("#lable0").removeAttr("disabled");
