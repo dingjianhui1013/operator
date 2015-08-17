@@ -4,14 +4,13 @@
 package com.itrus.ca.modules.profile.web;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import com.alibaba.fastjson.JSONObject;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.itrus.ca.common.config.Global;
 import com.itrus.ca.common.persistence.Page;
 import com.itrus.ca.common.web.BaseController;
@@ -33,9 +34,11 @@ import com.itrus.ca.modules.sys.utils.UserUtils;
 import com.itrus.ca.modules.work.entity.WorkDealInfo;
 import com.itrus.ca.modules.work.service.WorkDealInfoService;
 import com.itrus.ca.modules.constant.ProductType;
+import com.itrus.ca.modules.constant.WorkDealInfoType;
 import com.itrus.ca.modules.constant.WorkType;
 import com.itrus.ca.modules.log.service.LogUtil;
 import com.itrus.ca.modules.profile.entity.ConfigAgentAppRelation;
+import com.itrus.ca.modules.profile.entity.ConfigAgentBoundDealInfo;
 import com.itrus.ca.modules.profile.entity.ConfigApp;
 import com.itrus.ca.modules.profile.entity.ConfigChargeAgent;
 import com.itrus.ca.modules.profile.entity.ConfigChargeAgentBoundConfigProduct;
@@ -45,6 +48,7 @@ import com.itrus.ca.modules.profile.entity.ConfigChargeAgentHistory;
 import com.itrus.ca.modules.profile.entity.ConfigCommercialAgent;
 import com.itrus.ca.modules.profile.entity.ConfigProduct;
 import com.itrus.ca.modules.profile.service.ConfigAgentAppRelationService;
+import com.itrus.ca.modules.profile.service.ConfigAgentBoundDealInfoService;
 import com.itrus.ca.modules.profile.service.ConfigAppService;
 import com.itrus.ca.modules.profile.service.ConfigChargeAgentBoundConfigProductService;
 import com.itrus.ca.modules.profile.service.ConfigChargeAgentDetailHistoryService;
@@ -91,6 +95,10 @@ public class ConfigChargeAgentController extends BaseController {
 	
 	@Autowired
 	private WorkDealInfoService workDealInfoService;
+	
+	@Autowired
+	private ConfigAgentBoundDealInfoService configAgentBoundDealInfoService;
+	
 	
 	private LogUtil logUtil = new LogUtil();
 
@@ -206,6 +214,42 @@ public class ConfigChargeAgentController extends BaseController {
 		return "redirect:" + Global.getAdminPath()+"/profile/configChargeAgent/bindListNew?productId="+productId;
 		
 	}
+	
+	
+	
+
+	/**
+	 * 验证绑定计费策略
+	 * @param configChargeAgent
+	 * @param request
+	 * @param response
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "isBoundCheck")
+	@ResponseBody
+	public String isBoundCheck(Long agentId,Long productId) {
+		org.json.JSONObject json = new org.json.JSONObject();
+		try {
+			List<WorkDealInfo> dealInfos =  workDealInfoService.findByAgentIdProductId(agentId,productId);
+			if (dealInfos.size()>0) {
+				json.put("isUsed","yes");
+			}else{
+				json.put("isUsed","no");
+				
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			// TODO: handle exception
+		}
+		return json.toString();
+		
+	}
+	
+	
+	
+	
+	
 	
 	
 	
@@ -329,9 +373,75 @@ public class ConfigChargeAgentController extends BaseController {
 	
 	
 	
-	
-	
-	
+
+	@RequestMapping(value="showBoundDealInfoDetails")
+	public String showBoundDealInfoDetails(
+			Long agentId,
+			HttpServletRequest request , 
+			HttpServletResponse response, 
+			Model model,
+			@RequestParam(value = "areaId", required = false) Long areaId,
+			@RequestParam(value = "officeId", required = false) Long officeId,
+			@RequestParam(value = "productId", required = false) Long productId,
+			@RequestParam(value = "congifApplyId", required = false) Long congifApplyId,
+			@RequestParam(value = "handle", required = false) String handle,
+			@RequestParam(value = "startTime", required = false) Date startTime,
+			@RequestParam(value = "endTime", required = false) Date endTime
+			
+			){
+		
+		Page<ConfigAgentBoundDealInfo> dealInfos = configAgentBoundDealInfoService.findByAgentId(new Page<ConfigAgentBoundDealInfo>(request, response),agentId,handle,startTime,endTime,areaId,officeId,congifApplyId,productId);
+		
+		
+		model.addAttribute("page",dealInfos);
+		model.addAttribute("agentId", agentId);
+
+		model.addAttribute("wdiType", WorkDealInfoType.WorkDealInfoTypeMap);
+		model.addAttribute("proType", ProductType.productTypeStrMap);
+		
+		
+		
+		
+		List<Office> offsList = officeService.getOfficeByType(
+				UserUtils.getUser(), 1);
+		for (int i = 0; i < offsList.size();) {
+			Office office = offsList.get(i);
+			if (office.getType().equals("2")) {
+				offsList.remove(i);
+			} else {
+				i++;
+			}
+		}
+		// 如果选中区域，则此处获取区域下的网点
+		if (areaId != null) {
+			List<Office> offices = officeService.findByParentId(areaId);
+			model.addAttribute("offices", offices);
+		}
+		
+		List<ConfigApp> configApps = configAppService.selectAll();
+		
+		model.addAttribute("offsList", offsList);
+		model.addAttribute("officeId", officeId);
+		model.addAttribute("areaId", areaId);
+		model.addAttribute("configApps", configApps);
+		
+		model.addAttribute("productId", productId);
+		model.addAttribute("productType", ProductType.productTypeStrMap);
+		
+		List<ConfigProduct> configProducts = new ArrayList<ConfigProduct>();
+		if (congifApplyId != null) {
+			configProducts = configProductService.findByApp(congifApplyId);
+			model.addAttribute("configProducts", configProducts);
+		}
+
+		model.addAttribute("congifApplyId", congifApplyId);
+		
+		model.addAttribute("handle", handle);
+		model.addAttribute("startTime", startTime);
+		model.addAttribute("endTime", endTime);
+		
+		return "modules/profile/configProductBoundProductList";
+	}
 	
 	
 	/**
@@ -733,13 +843,21 @@ public class ConfigChargeAgentController extends BaseController {
 	public String checkUsed(Long id){
 		JSONObject jsonObject = new JSONObject();
 		//Boolean checkUsed = configChargeAgentService.checkUsed(id);
-		 List<WorkDealInfo> dealList = workDealInfoService.findByAgentId(id);
+		List<WorkDealInfo> dealList = workDealInfoService.findByAgentId(id);
 		if(dealList.size()>0){
 			jsonObject.put("status","0");
-			jsonObject.put("msg","该计费策略已经被使用，请解除绑定后再删除。");
-
+			jsonObject.put("msg","该计费策略已经被使用，不能删除此计费策略模版！");
 		}else{
-			jsonObject.put("status","1");
+			
+			List<ConfigChargeAgentBoundConfigProduct> bounds = configChargeAgentBoundConfigProductService.findByAgentId(id);
+			if (bounds.size()>0) {
+				jsonObject.put("status","2");
+				jsonObject.put("msg","该计费策略已经绑定产品，请解除绑定后再删除。");
+				
+			}else{
+				
+				jsonObject.put("status","1");
+			}
 		}
 		return jsonObject.toJSONString();
 	}

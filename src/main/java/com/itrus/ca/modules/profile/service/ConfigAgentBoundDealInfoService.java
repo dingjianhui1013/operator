@@ -3,6 +3,8 @@
  */
 package com.itrus.ca.modules.profile.service;
 
+import java.util.Date;
+
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
@@ -46,6 +48,63 @@ public class ConfigAgentBoundDealInfoService extends BaseService {
 		dc.addOrder(Order.desc("id"));
 		return configAgentBoundDealInfoDao.find(page, dc);
 	}
+	
+	
+	
+	public Page<ConfigAgentBoundDealInfo> findByAgentId(Page<ConfigAgentBoundDealInfo> page, Long agentId , String handle,
+			Date startTime,
+			Date endTime,
+			Long areaId,
+			Long officeId,
+			 Long congifApplyId,
+			 Long productId
+			) {
+		DetachedCriteria dc = configAgentBoundDealInfoDao.createDetachedCriteria();
+		dc.createAlias("createBy", "createBy");
+		dc.createAlias("createBy.office", "office");
+		if (StringUtils.isNotEmpty(handle)) {
+			dc.add(Restrictions.like("createBy.name", handle));
+		}
+		if(startTime!=null){
+			dc.add(Restrictions.ge("createDate", startTime));
+		}
+		if(endTime!=null){
+			endTime.setHours(23);
+			endTime.setMinutes(59);
+			endTime.setSeconds(95);
+			dc.add(Restrictions.le("createDate", endTime));
+		}
+		if(areaId!=null){
+			dc.add(Restrictions.eq("office.parent.id", areaId));
+		}
+		if(officeId!=null){
+			dc.add(Restrictions.eq("office.id", officeId));
+		}
+		if(congifApplyId!=null){
+			dc.createAlias("dealInfo.configApp", "app");
+			dc.add(Restrictions.eq("app.id", congifApplyId));
+			
+		}
+		if(productId!=null){
+
+		//	dc.createAlias("configProduct", "configProduct");
+			dc.createAlias("dealInfo", "dealInfo");
+			dc.add(Restrictions.eq("dealInfo.configProduct.id", productId));
+			
+			
+		}
+		
+		
+		
+		
+		dc.add(Restrictions.eq("agent.id", agentId));
+		dc.addOrder(Order.desc("id"));
+		return configAgentBoundDealInfoDao.find(page, dc);
+	}
+	
+	
+	
+	
 	
 	@Transactional(readOnly = false)
 	public void save(ConfigAgentBoundDealInfo configAgentBoundDealInfo) {

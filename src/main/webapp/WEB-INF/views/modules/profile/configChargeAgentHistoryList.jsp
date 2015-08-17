@@ -21,7 +21,7 @@
 		<li><a
 			href="${ctx}/profile/configChargeAgent/getChargeAgentList">计费策略模板列表</a></li>
 		<li class="active"><a
-			href="${ctx}/profile/configChargeAgent/changeChargeAgentInfoList?agentHisId=${agentHisId }">计费策略模版详情历史列表</a></li>
+			href="${ctx}/profile/configChargeAgent/changeChargeAgentInfoList?agentHisId=${agentHisId }">修改记录</a></li>
 	</ul>
 	<form:form id="searchForm" modelAttribute="configChargeAgentHistory"
 		action="${ctx}/profile/configChargeAgent/changeChargeAgentInfoList?agentHisId=${agentHisId }"

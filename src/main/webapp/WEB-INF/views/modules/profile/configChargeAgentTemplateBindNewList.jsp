@@ -19,7 +19,7 @@
 		
 		function checkPD(productId,agentId){
 			var proId = productId;
-			var agentId = agentId;
+			
 			var url = "${ctx}/profile/configChargeAgent/checkBound?proId="+proId+"&agentId="+agentId+"&_="+new Date().getTime();
 			$.getJSON(url,function(data){
 				if (data.isBZ=="0") {
@@ -44,6 +44,22 @@
 			});
 		}
 	
+		function isBound(obj){
+			var productId = "${productId}";
+			var agentId = obj;
+			var url = "${ctx}/profile/configChargeAgent/isBoundCheck?agentId="+agentId+"&productId="+productId;
+			$.getJSON(url,function(data){
+				if(data.isUsed=="no"){
+					top.$.jBox.tip("该模版也已经办理过业务，不能取消绑定！");
+				}else{
+					window.location.href="${ctx}/profile/configChargeAgent/deleteBindingNew?productId="+productId+"&agentId="+agentId;
+					
+				}
+			});
+			
+			
+			
+		}
 	</script>
 </head>
 <body>
@@ -88,7 +104,13 @@
 					<%-- <a href="${ctx}/profile/configChargeAgent/bindSave?productId=${productId}&chargeAgentId=${configChargeAgent.id}">绑定</a> --%>
 				&nbsp;&nbsp;
 				<c:if test="${configChargeAgent.isBind==2 }">
-				<a href="${ctx}/profile/configChargeAgent/deleteBindingNew?productId=${productId}&agentId=${configChargeAgent.id}">取消绑定</a>
+				
+				
+				<a href="javascript:isBound(${configChargeAgent.id})">取消绑定</a>
+				
+				
+				
+				
 				</c:if>
 				<c:if test="${configChargeAgent.isBind==1 }">
 				<%-- <a href="${ctx}/profile/configChargeAgent/bindingNew?productId=${productId}&agentId=${configChargeAgent.id}">绑定</a> --%>

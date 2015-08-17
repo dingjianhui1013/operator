@@ -29,6 +29,8 @@
 							}else if(data.status == '1'){
 								loading('正在提交，请稍等...');
 								location = "${ctx}/profile/configChargeAgent/delete?id="+id;
+							}else if(data.status == '2'){
+								top.$.jBox.tip(data.msg);
 							}
 						}
 					});
@@ -78,10 +80,8 @@
 				<shiro:hasPermission name="profile:configChargeAgent:edit"><td>
 					<a href="${ctx}/profile/configChargeAgent/form?id=${configChargeAgent.id}">修改</a>
 					<a href="#" onclick="checkUsed(${configChargeAgent.id});">删除</a>
-					
-					<a href="${ctx}/profile/configChargeAgent/changeChargeAgentInfoList?agentHisId=${configChargeAgent.id}">历史修改记录</a>
-					
-					
+					<a href="${ctx}/profile/configChargeAgent/changeChargeAgentInfoList?agentHisId=${configChargeAgent.id}">修改记录</a>
+					<a href="${ctx}/profile/configChargeAgent/showBoundDealInfoDetails?agentId=${configChargeAgent.id}">使用记录</a>
 				</td></shiro:hasPermission>
 			</tr>
 		</c:forEach>
