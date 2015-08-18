@@ -18,8 +18,7 @@
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li><a
-			href="${ctx}/profile/configChargeAgent/getChargeAgentList">计费策略模板列表</a></li>
+		<li><a href="${ctx}/profile/configChargeAgent/getChargeAgentList">计费策略模板列表</a></li>
 		<li class="active"><a
 			href="${ctx}/profile/configChargeAgent/changeChargeAgentInfoList?agentHisId=${agentHisId }">修改记录</a></li>
 	</ul>
@@ -32,102 +31,102 @@
 	</form:form>
 	<tags:message content="${message}" />
 	<table id="contentTable"
-		class="table table-striped table-bordered table-condensed"  > 
-		<thead >
-			<tr >
-				<th style="vertical-align: middle;text-align: center;"  rowspan="3">计费策略模版名称</th>
-				<th style="vertical-align: middle;text-align: center;" rowspan="3">模版类型</th>
-				<th style="vertical-align: middle;text-align: center;" colspan="12">业务类型</th>
-				<th style="vertical-align: middle;text-align: center;" colspan="2" >可信移动设备</th>
-				<th style="vertical-align: middle;text-align: center;" rowspan="3" >缴费方式</th>
-				<th style="vertical-align: middle;text-align: center;" rowspan="3">配置数量</th>
-				<th style="vertical-align: middle;text-align: center;" rowspan="3">剩余数量</th>
-				<th style="vertical-align: middle;text-align: center;" rowspan="3">已用数量</th>
+		class="table table-striped table-bordered table-condensed">
+		<thead>
+			<tr>
+				<th style="vertical-align: middle; text-align: center;" rowspan="3">计费策略模版名称</th>
+				<th style="vertical-align: middle; text-align: center;" rowspan="3">模版类型</th>
+				<th style="vertical-align: middle; text-align: center;" colspan="12">业务类型</th>
+				<th style="vertical-align: middle; text-align: center;" colspan="2">可信移动设备</th>
+				<th style="vertical-align: middle; text-align: center;" rowspan="3">缴费方式</th>
+				<th style="vertical-align: middle; text-align: center;" rowspan="3">配置数量</th>
+				<th style="vertical-align: middle; text-align: center;" rowspan="3">剩余数量</th>
+				<th style="vertical-align: middle; text-align: center;" rowspan="3">已用数量</th>
 			</tr>
 			<tr>
-				<th style="vertical-align: middle;text-align: center;" colspan="4">新增</th>
-				
-				<th style="vertical-align: middle;text-align: center;" colspan="4">更新</th>
-				<th style="vertical-align: middle;text-align: center;" colspan="2">补办</th>
-				<th style="vertical-align: middle;text-align: center;" rowspan="2">变更</th>
-				<th style="vertical-align: middle;text-align: center;" rowspan="2">开户费</th>
-				<th style="vertical-align: middle;text-align: center;" rowspan="2">半年</th>
-				<th style="vertical-align: middle;text-align: center;"  rowspan="2">一年</th>
+				<th style="vertical-align: middle; text-align: center;" colspan="4">新增</th>
+
+				<th style="vertical-align: middle; text-align: center;" colspan="4">更新</th>
+				<th style="vertical-align: middle; text-align: center;" colspan="2">补办</th>
+				<th style="vertical-align: middle; text-align: center;" rowspan="2">变更</th>
+				<th style="vertical-align: middle; text-align: center;" rowspan="2">开户费</th>
+				<th style="vertical-align: middle; text-align: center;" rowspan="2">半年</th>
+				<th style="vertical-align: middle; text-align: center;" rowspan="2">一年</th>
 			</tr>
 			<tr>
-				<th style="vertical-align: middle;text-align: center;">一年</th>
-				<th style="vertical-align: middle;text-align: center;">两年</th>
-				<th style="vertical-align: middle;text-align: center;">四年</th>
-				<th style="vertical-align: middle;text-align: center;">五年</th>
-				<th style="vertical-align: middle;text-align: center;">一年</th>
-				<th style="vertical-align: middle;text-align: center;">两年</th>
-				<th style="vertical-align: middle;text-align: center;">四年</th>
-				<th style="vertical-align: middle;text-align: center;">五年</th>
-				<th style="vertical-align: middle;text-align: center;">遗失补办</th>
-				<th style="vertical-align: middle;text-align: center;">损坏更换</th>
+				<th style="vertical-align: middle; text-align: center;">一年</th>
+				<th style="vertical-align: middle; text-align: center;">两年</th>
+				<th style="vertical-align: middle; text-align: center;">四年</th>
+				<th style="vertical-align: middle; text-align: center;">五年</th>
+				<th style="vertical-align: middle; text-align: center;">一年</th>
+				<th style="vertical-align: middle; text-align: center;">两年</th>
+				<th style="vertical-align: middle; text-align: center;">四年</th>
+				<th style="vertical-align: middle; text-align: center;">五年</th>
+				<th style="vertical-align: middle; text-align: center;">遗失补办</th>
+				<th style="vertical-align: middle; text-align: center;">损坏更换</th>
 			</tr>
 		</thead>
 		<tbody>
 			<c:forEach items="${page.list}" var="configChargeAgentHistory">
-				<tr >
-					<td style="vertical-align: middle;text-align: center;">${configChargeAgentHistory.tempName }</td>
-					<td style="vertical-align: middle;text-align: center;">
-					<c:if test="${configChargeAgentHistory.tempStyle == 1 }">
+				<tr>
+					<td style="vertical-align: middle; text-align: center;">${configChargeAgentHistory.tempName }</td>
+					<td style="vertical-align: middle; text-align: center;"><c:if
+							test="${configChargeAgentHistory.tempStyle == 1 }">
 					标准 
-					</c:if>
-					<c:if test="${configChargeAgentHistory.tempStyle == 2 }">
+					</c:if> <c:if test="${configChargeAgentHistory.tempStyle == 2 }">
 					政府统一采购
-					</c:if>
-					<c:if test="${configChargeAgentHistory.tempStyle == 3 }">
+					</c:if> <c:if test="${configChargeAgentHistory.tempStyle == 3 }">
 					合同采购
-					</c:if>
-					
+					</c:if></td>
+					<td style="vertical-align: middle; text-align: center;">${configChargeAgentHistory.map.xz1}
 					</td>
-					<td style="vertical-align: middle;text-align: center;">${configChargeAgentHistory.map.xz1}   </td>
-					<td style="vertical-align: middle;text-align: center;">${configChargeAgentHistory.map.xz2}  </td>
-					<td style="vertical-align: middle;text-align: center;">${configChargeAgentHistory.map.xz4}  </td>
-					<td style="vertical-align: middle;text-align: center;">${configChargeAgentHistory.map.xz5}  </td>
-					<td style="vertical-align: middle;text-align: center;">${configChargeAgentHistory.map.gx1} </td>
-					<td style="vertical-align: middle;text-align: center;">${configChargeAgentHistory.map.gx2} </td>
-					<td style="vertical-align: middle;text-align: center;">${configChargeAgentHistory.map.gx4} </td>
-					<td style="vertical-align: middle;text-align: center;">${configChargeAgentHistory.map.gx5} </td>
-					<td style="vertical-align: middle;text-align: center;"> 
-					
-					${configChargeAgentHistory.map.bb0}
+					<td style="vertical-align: middle; text-align: center;">${configChargeAgentHistory.map.xz2}
 					</td>
-					<td style="vertical-align: middle;text-align: center;">
-					${configChargeAgentHistory.map.bb1}
-					
+					<td style="vertical-align: middle; text-align: center;">${configChargeAgentHistory.map.xz4}
 					</td>
-					<td style="vertical-align: middle;text-align: center;">
-					${configChargeAgentHistory.map.th}
-					
+					<td style="vertical-align: middle; text-align: center;">${configChargeAgentHistory.map.xz5}
 					</td>
-					<td style="vertical-align: middle;text-align: center;">
-					${configChargeAgentHistory.map.khf}
-					
+					<td style="vertical-align: middle; text-align: center;">${configChargeAgentHistory.map.gx1}
 					</td>
-					<td style="vertical-align: middle;text-align: center;">
-					${configChargeAgentHistory.map.trustDevice0}
+					<td style="vertical-align: middle; text-align: center;">${configChargeAgentHistory.map.gx2}
 					</td>
-					<td style="vertical-align: middle;text-align: center;">
-					${configChargeAgentHistory.map.trustDevice1}
-					
+					<td style="vertical-align: middle; text-align: center;">${configChargeAgentHistory.map.gx4}
 					</td>
-					<td style="vertical-align: middle;text-align: center;">
-					<c:if test="${configChargeAgentHistory.chargeMethodPos}">
+					<td style="vertical-align: middle; text-align: center;">${configChargeAgentHistory.map.gx5}
+					</td>
+					<td style="vertical-align: middle; text-align: center;">
+
+						${configChargeAgentHistory.map.bb0}</td>
+					<td style="vertical-align: middle; text-align: center;">
+						${configChargeAgentHistory.map.bb1}</td>
+					<td style="vertical-align: middle; text-align: center;">
+						${configChargeAgentHistory.map.th}</td>
+					<td style="vertical-align: middle; text-align: center;">
+						${configChargeAgentHistory.map.khf}</td>
+					<td style="vertical-align: middle; text-align: center;">
+						${configChargeAgentHistory.map.trustDevice0}</td>
+					<td style="vertical-align: middle; text-align: center;">
+						${configChargeAgentHistory.map.trustDevice1}</td>
+					<td style="vertical-align: middle; text-align: center;"><c:if
+							test="${configChargeAgentHistory.chargeMethodPos}">
 					pos
-					</c:if>
-					<c:if test="${configChargeAgentHistory.chargeMethodMoney}">
+					</c:if> <c:if test="${configChargeAgentHistory.chargeMethodMoney}">
 					&nbsp;&nbsp;&nbsp;&nbsp;现金缴费
-					</c:if>
-					<c:if test="${configChargeAgentHistory.chargeMethodBank}">
+					</c:if> <c:if test="${configChargeAgentHistory.chargeMethodBank}">
 					&nbsp;&nbsp;&nbsp;&nbsp;银行转账
-					</c:if>
-					</td>
-					<td style="vertical-align: middle;text-align: center;">${configChargeAgentHistory.configureNum }</td>
-					<td style="vertical-align: middle;text-align: center;">${configChargeAgentHistory.surplusNum }</td>
-					<td style="vertical-align: middle;text-align: center;">${configChargeAgentHistory.availableNum }</td>
+					</c:if></td>
+					<td style="vertical-align: middle; text-align: center;"><c:if
+							test="${configChargeAgentHistory.tempStyle != 1 }">
+					${configChargeAgentHistory.configureNum }
+					</c:if></td>
+					<td style="vertical-align: middle; text-align: center;"><c:if
+							test="${configChargeAgentHistory.tempStyle != 1 }">
+						${configChargeAgentHistory.surplusNum }
+						</c:if></td>
+					<td style="vertical-align: middle; text-align: center;"><c:if
+							test="${configChargeAgentHistory.tempStyle != 1 }">
+						${configChargeAgentHistory.availableNum }
+						</c:if></td>
 				</tr>
 			</c:forEach>
 		</tbody>

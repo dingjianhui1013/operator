@@ -128,7 +128,7 @@
 				<c:if test="${configChargeAgent.chargeMethodBank}">银行转账</c:if> &nbsp;&nbsp;&nbsp;<br>
 			</div>
 		</div>
-		
+		<c:if test="${configChargeAgent.tempStyle!='1'}">
 		<div class="control-group" id="chargeMethods">
 			<label class="control-label">配置数量:</label>
 			<div class="controls" >${ configChargeAgent.configureNum}
@@ -146,8 +146,7 @@
 			<div class="controls" >${ configChargeAgent.availableNum}
 			</div>
 		</div>
-		
-
+		</c:if>
 	</form:form>
 </body>
 </html>

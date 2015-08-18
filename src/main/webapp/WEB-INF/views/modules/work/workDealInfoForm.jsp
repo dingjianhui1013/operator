@@ -878,10 +878,10 @@ var selected = false;
 						<tr>
 							<th><span class="prompt" style="color: red; display: none;">*</span>应用标识：</th>
 							<td colspan="3"><input type="radio" name="lable" id="lable0"
-								value="0" disabled="disabled" onclick="showYear(0)"
+								value="0" disabled="disabled" onclick="showAgent(0)"
 								<c:if test="${workDealInfo.configProduct.productLabel==0}">checked</c:if>>通用&nbsp;
 								&nbsp; <input type="radio" name="lable" id="lable1" value="1"
-								disabled="disabled" onclick="showYear(1)"
+								disabled="disabled" onclick="showAgent(1)"
 								<c:if test="${workDealInfo.configProduct.productLabel==1}">checked</c:if>>专用</td>
 							<th><span class="prompt" style="color: red; display: none;">*</span>业务类型：</th>
 							<td><input type="checkbox" checked="checked"

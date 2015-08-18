@@ -2330,7 +2330,7 @@ public class WorkDealInfoController extends BaseController {
 		}
 
 		ConfigChargeAgent chargeAgent = chargeAgentService.get(workDealInfo
-				.getConfigProduct().getChargeAgentId());
+				.getConfigChargeAgentId());
 		//model.addAttribute("tempStyle", chargeAgent.getTempStyle());
 		model.addAttribute("pro", ProductType.productTypeStrMap);
 		model.addAttribute("user", UserUtils.getUser());
