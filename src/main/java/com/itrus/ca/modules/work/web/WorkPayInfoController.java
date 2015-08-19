@@ -38,8 +38,12 @@ import com.itrus.ca.modules.finance.service.FinancePaymentInfoService;
 import com.itrus.ca.modules.key.entity.KeyUsbKeyInvoice;
 import com.itrus.ca.modules.key.service.KeyUsbKeyInvoiceService;
 import com.itrus.ca.modules.log.service.LogUtil;
+import com.itrus.ca.modules.profile.entity.ConfigAgentBoundDealInfo;
 import com.itrus.ca.modules.profile.entity.ConfigApp;
+import com.itrus.ca.modules.profile.entity.ConfigChargeAgent;
 import com.itrus.ca.modules.profile.entity.ConfigRaAccount;
+import com.itrus.ca.modules.profile.service.ConfigAgentBoundDealInfoService;
+import com.itrus.ca.modules.profile.service.ConfigChargeAgentService;
 import com.itrus.ca.modules.profile.service.ConfigRaAccountService;
 import com.itrus.ca.modules.sys.entity.User;
 import com.itrus.ca.modules.sys.utils.UserUtils;
@@ -76,7 +80,14 @@ public class WorkPayInfoController extends BaseController {
 	private KeyUsbKeyInvoiceService keyInvoiceService;
 	
 	@Autowired
-	ConfigRaAccountService raAccountService;
+	private ConfigRaAccountService raAccountService;
+	
+	@Autowired
+	private ConfigChargeAgentService configChargeAgentService; 
+	
+	@Autowired
+	private ConfigAgentBoundDealInfoService configAgentBoundDealInfoService;
+	
 	
 	private LogUtil logUtil = new LogUtil();
 
@@ -461,6 +472,27 @@ public class WorkPayInfoController extends BaseController {
 		}
 		
 		workDealInfoService.checkWorkDealInfoNeedSettle(workDealInfo);
+		
+		if(workDealInfo.getDealInfoType().equals(1)){
+			ConfigAgentBoundDealInfo dealInfoBound = new ConfigAgentBoundDealInfo();
+			dealInfoBound.setDealInfo(workDealInfo);
+			ConfigChargeAgent agent =  configChargeAgentService.get(workDealInfo.getConfigChargeAgentId());
+			dealInfoBound.setAgent(agent);
+			configAgentBoundDealInfoService.save(dealInfoBound);
+			logUtil.saveSysLog("计费策略模版", "计费策略模版："+agent.getId()+"--业务编号："+workDealInfo.getId()+"--关联成功!", "");
+			
+			Integer avaiNum = agent.getAvailableNum();//已用数量
+			Integer reseNum = agent.getReserveNum();//预留数量
+			
+			agent.setAvailableNum(avaiNum+1);//已用数量
+			
+			agent.setReserveNum(reseNum-1);//预留数量
+			
+			configChargeAgentService.save(agent);
+			logUtil.saveSysLog("计费策略模版", "更改剩余数量和使用数量成功!", "");
+		}
+		
+		
 		workDealInfoService.save(workDealInfo);
 		ConfigRaAccount raAccount = raAccountService.get(workDealInfo.getConfigProduct().getRaAccountId());
 		List<String []> list = RaAccountUtil.outPageLine(workDealInfo, raAccount.getConfigRaAccountExtendInfo());

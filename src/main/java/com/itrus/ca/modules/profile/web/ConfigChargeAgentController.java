@@ -534,6 +534,9 @@ public class ConfigChargeAgentController extends BaseController {
 		addMessage(redirectAttributes,"计费策略解除绑定成功");
 		return "redirect:" + Global.getAdminPath()+"/profile/configChargeAgent/?repage";
 	}
+	
+	
+	
 	@RequiresPermissions("profile:configChargeAgent:edit")
 	@RequestMapping(value = "save")
 	public String save(Long productId,Long configChargeAgentDetailId,
@@ -547,11 +550,13 @@ public class ConfigChargeAgentController extends BaseController {
 		Integer conNum =0;
 		Integer surNum =0;
 		Integer avaNum =0;
+		Integer resNum = 0;
 		if (configChargeAgentId!=null && configureNum!=null) {	
 			ConfigChargeAgent agent = configChargeAgentService.get(configChargeAgentId);
 			conNum = configureNum;
 			surNum = agent.getSurplusNum() - agent.getConfigureNum() + configureNum;
 			avaNum = agent.getAvailableNum();
+			resNum = agent.getReserveNum();
 		}
 		
 		ConfigChargeAgent configChargeAgent = new ConfigChargeAgent();
@@ -596,17 +601,22 @@ public class ConfigChargeAgentController extends BaseController {
 					configChargeAgent.setConfigureNum(configureNum);
 					configChargeAgent.setSurplusNum(configureNum);
 					configChargeAgent.setAvailableNum(0);
+					configChargeAgent.setReserveNum(0);
 				}else{
 					configChargeAgent.setConfigureNum(0);
 					configChargeAgent.setSurplusNum(0);
 					configChargeAgent.setAvailableNum(0);
+					configChargeAgent.setReserveNum(0);
 				}
 				
 			}else{
 					configChargeAgent.setConfigureNum(conNum);
 					configChargeAgent.setSurplusNum(surNum);
 					configChargeAgent.setAvailableNum(avaNum);
+					configChargeAgent.setReserveNum(resNum);
 			}
+			
+			
 			
 			
 			
@@ -631,9 +641,9 @@ public class ConfigChargeAgentController extends BaseController {
 		
 		String detail = "";
 		if(configChargeAgentId==null){
-			//detail = "添加应用"+configApp.getAppName()+"下的计费策略成功";
+			detail = "添加应用"+configChargeAgent.getTempName()+"下的计费策略成功";
 		}else{
-			//detail = "更新应用"+configApp.getAppName()+"下的计费策略成功";
+			detail = "更新应用"+configChargeAgent.getTempName()+"下的计费策略成功";
 		}
 		
 		
@@ -651,11 +661,8 @@ public class ConfigChargeAgentController extends BaseController {
 		agentHistory.setAvailableNum(configChargeAgent.getAvailableNum());
 		agentHistory.setTempName(configChargeAgent.getTempName());
 		agentHistory.setTempStyle(configChargeAgent.getTempStyle());
-		
+		agentHistory.setReserveNum(configChargeAgent.getReserveNum());
 		configChargeAgentHistoryService.save(agentHistory);//保存主表的信息
-		
-		
-		
 		
 		
 		logUtil.saveSysLog("业务配置", detail, null);

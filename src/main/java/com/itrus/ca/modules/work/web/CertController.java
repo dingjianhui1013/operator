@@ -303,20 +303,24 @@ public class CertController extends BaseController {
 			json.put("certKmcRep2", caCert.getCertKmcRep2());
 			json.put("installMode", caCert.getInstallMode());
 			
-			ConfigAgentBoundDealInfo dealInfoBound = new ConfigAgentBoundDealInfo();
-			dealInfoBound.setDealInfo(dealInfo);
-			
-			
-			ConfigChargeAgent agent =  configChargeAgentService.get(dealInfo.getConfigChargeAgentId());
-			dealInfoBound.setAgent(agent);
-			configAgentBoundDealInfoService.save(dealInfoBound);
-			logUtil.saveSysLog("计费策略模版", "计费策略模版："+agent.getId()+"--业务编号："+dealInfo.getId()+"--关联成功!", "");
-			Integer surplusNum = agent.getSurplusNum();//剩余数量
-			Integer availableNum = agent.getAvailableNum();//已用数量
-			agent.setSurplusNum(surplusNum-1);
-			agent.setAvailableNum(availableNum+1);
-			configChargeAgentService.save(agent);
-			logUtil.saveSysLog("计费策略模版", "更改剩余数量和使用数量成功!", "");
+			if(dealInfo.getDealInfoType().equals(0)){
+				ConfigAgentBoundDealInfo dealInfoBound = new ConfigAgentBoundDealInfo();
+				dealInfoBound.setDealInfo(dealInfo);
+				ConfigChargeAgent agent =  configChargeAgentService.get(dealInfo.getConfigChargeAgentId());
+				dealInfoBound.setAgent(agent);
+				configAgentBoundDealInfoService.save(dealInfoBound);
+				logUtil.saveSysLog("计费策略模版", "计费策略模版："+agent.getId()+"--业务编号："+dealInfo.getId()+"--关联成功!", "");
+				
+				Integer avaiNum = agent.getAvailableNum();//已用数量
+				Integer reseNum = agent.getReserveNum();//预留数量
+				
+				agent.setAvailableNum(avaiNum+1);//已用数量
+				
+				agent.setReserveNum(reseNum-1);//预留数量
+				
+				configChargeAgentService.save(agent);
+				logUtil.saveSysLog("计费策略模版", "更改剩余数量和使用数量成功!", "");
+			}
 			
 		} catch (Exception e) {
 			e.printStackTrace();

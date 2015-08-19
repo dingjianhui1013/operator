@@ -125,14 +125,14 @@
 				<table class="table table-striped table-bordered table-condensed">
 					<tbody>
 						<tr>
-							<th colspan="4" style="font-size: 20px;">基本信息</th>
+							<th colspan="7" style="font-size: 20px;">基本信息</th>
 						</tr>
 						<tr>
 							<th>代办应用：</th>
 							<td><input type="text" name="configApp" disabled="disabled"
 								value="${workDealInfo.configApp.appName }" id="app" /></td>
 							<th>选择产品：</th>
-							<td><input type="text" name="product" disabled="disabled"
+							<td colspan="3"><input type="text" name="product" disabled="disabled"
 								value="${proType[workDealInfo.configProduct.productName] }" /></td>
 						</tr>
 						<tr>
@@ -144,7 +144,7 @@
 								<c:if test="${workDealInfo.configProduct.productLabel==1 }">checked="checked"</c:if>
 								id="lable1" value="1">专用</td>
 							<th>业务类型：</th>
-							<td><c:if test="${workDealInfo.dealInfoType==0 }">
+							<td colspan="3"><c:if test="${workDealInfo.dealInfoType==0 }">
 									<input type="checkbox" disabled="disabled" checked="checked"
 										name="dealInfType">新增证书</c:if> <input type="hidden"
 								id="dealInfoType" value="${workDealInfo.dealInfoType }">
@@ -162,26 +162,40 @@
 									<input type="radio" name="year" id="year1" value="1" />1年 
 									<input type="radio" name="year" id="year2" value="2" />2年 
 									<input type="radio" name="year" id="year4" value="4" />4年
-									<input type="radio" name="year" id="year5" value="5" />4年
+									<input type="radio" name="year" id="year5" value="5" />5年
 									<span style="color: red" id="mmsg"></span>
 								</c:if> <c:if test="${workDealInfo.dealInfoType==0 }">
-									<input type="radio" name="year" value="1" disabled="disabled"
-										<c:if 
-
-test="${workDealInfo.year==1}">checked</c:if>>1年 <input
-										type="radio" name="year" value="2" disabled="disabled"
-										<c:if 
-
-test="${workDealInfo.year==2}">checked</c:if>>2年 <input
-										type="radio" name="year" value="4" disabled="disabled"
-										<c:if 
-
-test="${workDealInfo.year==4}">checked</c:if>>4年<input
-										type="radio" name="year" value="5" disabled="disabled"
-										<c:if 
-
-test="${workDealInfo.year==5}">checked</c:if>>5年
+									&nbsp;&nbsp;${workDealInfo.year}年
 								</c:if></td>
+								<th><span class="prompt" style="color: red; display: none;">*</span>计费策略类型：</th>
+							<td style="width: 100px;">
+							
+							<select  disabled="disabled" >
+								<option <c:if test="${workDealInfo.payType==1 }">selected</c:if> value="1" >标准</option>
+								<option <c:if test="${workDealInfo.payType==2 }">selected</c:if> value="2" >政府统一采购</option>
+								<option <c:if test="${workDealInfo.payType==3 }">selected</c:if> value="3" >合同采购</option>
+							</select>
+							</td>
+								<th><span class="prompt" style="color: red; display: none;">*</span>计费策略模版：</th>
+							<td>
+							
+							<select disabled="disabled">
+								<option >${jfMB}</option>
+							</select>
+							</td>
+								
+								
+								
+								
+								
+								
+								
+								
+								
+								
+							<%-- 
+							1.0版本注释掉。
+							
 							<th>用户分类：</th>
 							<td><input type="radio" name="yar" value="1"
 								disabled="disabled"
@@ -190,7 +204,7 @@ test="${workDealInfo.year==5}">checked</c:if>>5年
 								内资 <input type="radio" name="yar" value="2" disabled="disabled"
 								<c:if test="${workDealInfo.classifying==1}">checked</c:if>>
 
-								外资</td>
+								外资</td> --%>
 						</tr>
 					</tbody>
 				</table>
@@ -336,7 +350,7 @@ value="${workDealInfo.workCompany.comCertficateTime }"  pattern="yyyy-MM-dd"/>">
 								onblur="nameFill(this)"
 								value="${workDealInfo.workUser.contactName }" /></td>
 							<th>证书持有人证件:</th>
-							<td><select name="conCertType">
+							<td><select name="conCertType" disabled="disabled">
 									<option value="0" id="conCertType0"
 										<c:if 
 

@@ -27,6 +27,7 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
+import javax.persistence.criteria.CriteriaBuilder.In;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -812,10 +813,19 @@ public class WorkDealInfoController extends BaseController {
 		workDealInfo.setConfigApp(configApp);
 		workDealInfo.setWorkUser(workUser);
 		workDealInfo.setWorkCompany(workCompany);
-		
-		
 		workDealInfo.setConfigProduct(configProduct);
-		workDealInfo.setConfigChargeAgentId(bound.getAgent().getId());
+		
+		ConfigChargeAgent agent = bound.getAgent();
+		Integer reseNum = agent.getReserveNum();
+		Integer surNum = agent.getSurplusNum();
+		agent.setReserveNum(reseNum+1);
+		agent.setSurplusNum(surNum-1);
+		configChargeAgentService.save(agent);
+		
+		
+		
+		workDealInfo.setConfigChargeAgentId(bound.getAgent().getId());		
+		
 		
 		workDealInfo.setDealInfoType(WorkDealInfoType.TYPE_ADD_CERT);
 

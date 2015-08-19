@@ -35,6 +35,7 @@ public class ConfigChargeAgentHistory implements java.io.Serializable {
 	private Integer configureNum;//配置数量
 	private Integer surplusNum;//剩余数量
 	private Integer availableNum;//已用数量
+	private Integer reserveNum;//预留数量
 	
 	private Long superiorId;//计费策略正式编号
 	
@@ -56,8 +57,8 @@ public class ConfigChargeAgentHistory implements java.io.Serializable {
 			Integer configureNum,
 			Integer surplusNum,
 			Integer availableNum,
-			Long superiorId
-			
+			Long superiorId,
+			Integer reserveNum
 			) {
 		
 		this.chargeMethodPos = chargeMethodPos;
@@ -69,7 +70,7 @@ public class ConfigChargeAgentHistory implements java.io.Serializable {
 		this.surplusNum=surplusNum;
 		this.availableNum=availableNum;
 		this.superiorId = superiorId;
-		
+		this.reserveNum = reserveNum;
 	}
 
 	// Property accessors
@@ -177,6 +178,18 @@ public class ConfigChargeAgentHistory implements java.io.Serializable {
 	public void setSuperiorId(Long superiorId) {
 		this.superiorId = superiorId;
 	}
+	
+	
+	@Column(name = "reserve_num" , length=11)
+	public Integer getReserveNum() {
+		return reserveNum;
+	}
+
+	public void setReserveNum(Integer reserveNum) {
+		this.reserveNum = reserveNum;
+	}
+	
+	
 
 	@Transient
 	public HashMap<String, String> getMap() {

@@ -13,20 +13,14 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.itrus.ca.common.config.Global;
-import com.itrus.ca.common.persistence.Page;
 import com.itrus.ca.common.utils.RaAccountUtil;
 import com.itrus.ca.common.web.BaseController;
 import com.itrus.ca.modules.constant.ProductType;
@@ -41,7 +35,6 @@ import com.itrus.ca.modules.profile.entity.ConfigChargeAgentBoundConfigProduct;
 import com.itrus.ca.modules.profile.entity.ConfigCommercialAgent;
 import com.itrus.ca.modules.profile.entity.ConfigProduct;
 import com.itrus.ca.modules.profile.entity.ConfigRaAccount;
-import com.itrus.ca.modules.profile.entity.ProductTypeObj;
 import com.itrus.ca.modules.profile.service.ConfigAgentAppRelationService;
 import com.itrus.ca.modules.profile.service.ConfigAgentOfficeRelationService;
 import com.itrus.ca.modules.profile.service.ConfigAppOfficeRelationService;
@@ -51,7 +44,6 @@ import com.itrus.ca.modules.profile.service.ConfigChargeAgentDetailService;
 import com.itrus.ca.modules.profile.service.ConfigChargeAgentService;
 import com.itrus.ca.modules.profile.service.ConfigProductService;
 import com.itrus.ca.modules.profile.service.ConfigRaAccountService;
-import com.itrus.ca.modules.sys.entity.User;
 import com.itrus.ca.modules.sys.utils.UserUtils;
 import com.itrus.ca.modules.work.entity.WorkCertApplyInfo;
 import com.itrus.ca.modules.work.entity.WorkCertInfo;
@@ -1673,7 +1665,20 @@ public class WorkDealInfoOperationController extends BaseController {
 		
 		ConfigChargeAgentBoundConfigProduct bound =  configChargeAgentBoundConfigProductService.get(agentDetailId);
 		workDealInfo.setPayType(agentId);
+		
+		
+		ConfigChargeAgent agent = bound.getAgent();
+		Integer reseNum = agent.getReserveNum();
+		Integer surNum = agent.getSurplusNum();
+		agent.setReserveNum(reseNum+1);
+		agent.setSurplusNum(surNum-1);
+		configChargeAgentService.save(agent);
+		
+		
 		workDealInfo.setConfigChargeAgentId(bound.getAgent().getId());
+		
+		
+		
 		
 		workDealInfo.setWorkUser(workUser);
 		workDealInfo.setWorkCompany(workCompany);

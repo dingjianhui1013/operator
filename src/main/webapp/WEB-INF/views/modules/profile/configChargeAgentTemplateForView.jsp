@@ -143,7 +143,7 @@
 		
 		<div class="control-group" id="chargeMethods">
 			<label class="control-label">已用数量:</label>
-			<div class="controls" >${ configChargeAgent.availableNum}
+			<div class="controls" >${ configChargeAgent.availableNum + configChargeAgent.reserveNum}
 			</div>
 		</div>
 		</c:if>

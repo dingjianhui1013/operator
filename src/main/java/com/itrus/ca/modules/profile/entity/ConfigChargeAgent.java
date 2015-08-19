@@ -37,6 +37,7 @@ public class ConfigChargeAgent implements java.io.Serializable {
 	private Integer configureNum;//配置数量
 	private Integer surplusNum;//剩余数量
 	private Integer availableNum;//已用数量
+	private Integer reserveNum;//预留数量
 	
 	private String isBind;
 
@@ -55,8 +56,8 @@ public class ConfigChargeAgent implements java.io.Serializable {
 			Set<ConfigChargeAgentDetail> configChargeAgentDetails,
 			Integer configureNum,
 			Integer surplusNum,
-			Integer availableNum
-			
+			Integer availableNum,
+			Integer reserveNum
 			) {
 		this.configApp = configApp;
 		this.configProduct = configProduct;
@@ -72,7 +73,7 @@ public class ConfigChargeAgent implements java.io.Serializable {
 		this.configureNum=configureNum;
 		this.surplusNum=surplusNum;
 		this.availableNum=availableNum;
-		
+		this.reserveNum=reserveNum;
 	}
 
 	// Property accessors
@@ -228,7 +229,16 @@ public class ConfigChargeAgent implements java.io.Serializable {
 		this.availableNum = availableNum;
 	}
 	
+	@Column(name = "reserve_num" , length=11)
+	public Integer getReserveNum() {
+		return reserveNum;
+	}
+
+	public void setReserveNum(Integer reserveNum) {
+		this.reserveNum = reserveNum;
+	}
 	
+
 	@Transient
 	public String getIsBind() {
 		return isBind;

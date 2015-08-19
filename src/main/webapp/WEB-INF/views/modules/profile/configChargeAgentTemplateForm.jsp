@@ -275,7 +275,7 @@
 		<div class="control-group" id="availableNumDiv" >
 			<label class="control-label">已用数量:</label>
 			<div class="controls" >
-				${configChargeAgent.availableNum}
+				${configChargeAgent.availableNum  + configChargeAgent.reserveNum}
 				
 				
 				<input type="hidden" id="agentId" value="${id }" /> 

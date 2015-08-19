@@ -295,6 +295,10 @@ public class WorkDealInfoAuditController extends BaseController {
 		} else {
 			model.addAttribute("canEdit", false);
 		}
+		
+		ConfigChargeAgent agent =  configChargeAgentService.get(workDealInfo.getConfigChargeAgentId());
+		model.addAttribute("jfMB", agent.getTempName());
+		
 
 		return "modules/work/workDealInfoAuditACUForm";
 	}

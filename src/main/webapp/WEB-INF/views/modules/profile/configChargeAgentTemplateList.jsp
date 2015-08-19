@@ -54,7 +54,7 @@
 		<li class="active"><a href="${ctx}/profile/configChargeAgent/getChargeAgentList">计费策略模板列表</a></li>
 		<li><a href="${ctx}/profile/configChargeAgent/form">计策策略模板添加</a></li>
 	</ul>
-	<form:form id="searchForm" modelAttribute="configChargeAgent" action="${ctx}/profile/configChargeAgent/" method="post" class="breadcrumb form-search">
+	<form:form id="searchForm" modelAttribute="configChargeAgent" action="${ctx}/profile/configChargeAgent/getChargeAgentList" method="post" class="breadcrumb form-search">
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
 		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
 		<label>计费策略模板名称 ：</label><form:input path="configApp.appName" htmlEscape="false" maxlength="50" class="input-medium"/>
