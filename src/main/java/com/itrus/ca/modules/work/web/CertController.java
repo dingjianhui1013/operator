@@ -303,7 +303,7 @@ public class CertController extends BaseController {
 			json.put("certKmcRep2", caCert.getCertKmcRep2());
 			json.put("installMode", caCert.getInstallMode());
 			
-			if(dealInfo.getDealInfoType().equals(0)){
+			if(dealInfo.getDealInfoType()!=null && dealInfo.getDealInfoType().equals(0)){
 				ConfigAgentBoundDealInfo dealInfoBound = new ConfigAgentBoundDealInfo();
 				dealInfoBound.setDealInfo(dealInfo);
 				ConfigChargeAgent agent =  configChargeAgentService.get(dealInfo.getConfigChargeAgentId());

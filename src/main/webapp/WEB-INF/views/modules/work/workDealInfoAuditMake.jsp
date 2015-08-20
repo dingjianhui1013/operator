@@ -33,13 +33,25 @@
 			if (keys == 0) {
 				alert("没有检测到UKEY");
 			} else {
-				ukeyadmin.openKey(0);
-				var keySn = ukeyadmin.getkeyserialnumber(0);
-				
-				sn = keySn;
+				var keySn = $("#keySn").val();
+				if(keySn=='' || keys==1){
+					ukeyadmin.openKey(0);
+					keySn = ukeyadmin.getkeyserialnumber(0);
+				}else{
+					ukeyadmin.openKey(0);
+					var keySnTwo = ukeyadmin.getkeyserialnumber(0);
+					if(keySn!=keySnTwo){
+						keySn = keySnTwo;
+					}else{
+						ukeyadmin.openKey(1);
+						var keySnSed = ukeyadmin.getkeyserialnumber(1);
+						keySn = keySnSed;
+					}
+				}
 				$("#keySn").attr("value", keySn);
 				$("#keySn").css("color", "red");
 				
+				keySn = keySnTwo;
 				if(${workDealInfo.dealInfoType==0||workDealInfo.dealInfoType1==2 ||workDealInfo.dealInfoType1==3}){
 				var url = "${ctx}/work/workDealInfo/findByKeySn?keySn="+keySn+"&dealId="+${workDealInfo.id}+"&_="+new Date().getTime();
 				$.getJSON(url,function(data){
@@ -80,7 +92,6 @@
 		}
 		//如果是更新的:
 		//csr = getCsrByOldCert(len);
-
 		csr = filter(csr);
 		if (csr == "") {//异常业务
 			return false;
@@ -162,8 +173,12 @@
 			if (keys == 0) {
 				alert("没有检测到UKEY");
 			} else {
-				ukeyadmin.openKey(0);
-				var keySn = ukeyadmin.getkeyserialnumber(0);
+				var keySn = $("#keySn").val();
+				
+				if(keySn==''){
+					top.$.jBox.tip("请您先检测KEY！");
+					return false;
+				}
 				
 				sn = keySn;
 				$("#keySn").attr("value", keySn);
