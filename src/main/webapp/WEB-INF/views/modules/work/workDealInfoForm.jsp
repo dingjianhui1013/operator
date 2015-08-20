@@ -461,14 +461,15 @@ var selected = false;
 				var boundId = $("#agentDetailId").val();
 				var url = "${ctx}/profile/configChargeAgent/checkAgentIsZero?agentDetailId="+boundId+"&_="+new Date().getTime();
 				$.getJSON(url,function(data){
-					if(data.status=='0'){
+					if(data.status==0){
 						top.$.jBox.tip("此计费策略模版剩余数量为零，不能进行业务办理！"); 
 						return false;
 					}else{
+						$("#inputForm").submit();
 						return true;
 					}
-					
 				});
+				return false;
 			}
 		}else {
 			$("#lable0").removeAttr("disabled");

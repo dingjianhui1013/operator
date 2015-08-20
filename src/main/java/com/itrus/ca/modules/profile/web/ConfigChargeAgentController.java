@@ -923,15 +923,21 @@ public class ConfigChargeAgentController extends BaseController {
 	@RequestMapping(value="checkAgentIsZero")
 	@ResponseBody
 	public String checkAgentIsZero(Long agentDetailId){
-		JSONObject jsonObject = new JSONObject();
-		ConfigChargeAgentBoundConfigProduct bound =  configChargeAgentBoundConfigProductService.get(agentDetailId);
-		ConfigChargeAgent agent =  bound.getAgent();
-		if(agent.getSurplusNum()<1){
-			jsonObject.put("status","0");
-		}else{
-			jsonObject.put("status","1");
+		org.json.JSONObject json = new org.json.JSONObject();
+		try {
+			ConfigChargeAgentBoundConfigProduct bound =  configChargeAgentBoundConfigProductService.get(agentDetailId);
+			ConfigChargeAgent agent =  bound.getAgent();
+			if(agent.getSurplusNum()<1){
+				json.put("status","0");
+			}else{
+				json.put("status","1");
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
 		}
-		return jsonObject.toJSONString();
+		
+		return json.toString();
 	}
 	
 	
