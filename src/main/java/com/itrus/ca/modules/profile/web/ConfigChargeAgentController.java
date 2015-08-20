@@ -914,5 +914,27 @@ public class ConfigChargeAgentController extends BaseController {
 
 		return jsonObject.toString();
 	}
+	
+	/**
+	 *
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value="checkAgentIsZero")
+	@ResponseBody
+	public String checkAgentIsZero(Long agentDetailId){
+		JSONObject jsonObject = new JSONObject();
+		ConfigChargeAgentBoundConfigProduct bound =  configChargeAgentBoundConfigProductService.get(agentDetailId);
+		ConfigChargeAgent agent =  bound.getAgent();
+		if(agent.getSurplusNum()<1){
+			jsonObject.put("status","0");
+		}else{
+			jsonObject.put("status","1");
+		}
+		return jsonObject.toJSONString();
+	}
+	
+	
+	
 
 }

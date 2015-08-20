@@ -213,26 +213,41 @@
 		$("#newInfoId").val(getCookie("work_deal_info_id"));
 		delCookie("work_deal_info_id");
 		
-			var year;
-			var isCheck = false;
-			$("input[name='year']").each(function(){
-			     if(this.checked){
-			    	 year = $(this).val();
-			    	 if (year!="on") {
-			    		 isCheck = true;
-					}
-			     }
-			 });
-			if(!isCheck){
-				top.$.jBox.tip("请选择您想要更新的年限！");
+		
+		if($("#agentDetailId").val()!=0 && $("#agentId").val()!=1){
+			if($("#surplusNum").val()==0){
+				top.$.jBox.tip("此计费策略模版剩余数量为零，不能进行业务办理！"); 
+				return false;
 			}else{
-				top.$.jBox.confirm("更新年限确认为&nbsp;'&nbsp;<b>"+year+"</b>&nbsp;'&nbsp;年吗？",'系统提示',function(v,h,f){
-					if(v=='ok'){
-						$("#inputForm").submit(); 
-					}
-				},{buttonsFocus:1});
-				top.$('.jbox-body .jbox-icon').css('top','55px');
+				var year;
+				var isCheck = false;
+				$("input[name='year']").each(function(){
+				     if(this.checked){
+				    	 year = $(this).val();
+				    	 if (year!="on") {
+				    		 isCheck = true;
+						}
+				     }
+				 });
+				if(!isCheck){
+					top.$.jBox.tip("请选择您想要更新的年限！");
+				}else{
+					top.$.jBox.confirm("更新年限确认为&nbsp;'&nbsp;<b>"+year+"</b>&nbsp;'&nbsp;年吗？",'系统提示',function(v,h,f){
+						if(v=='ok'){
+							$("#inputForm").submit(); 
+						}
+					},{buttonsFocus:1});
+					top.$('.jbox-body .jbox-icon').css('top','55px');
+				}
 			}
+		}else{
+			top.$.jBox.tip("请选择计费策略模版！"); 
+			
+		}
+		
+		
+		
+			
 		
 	}
 	
