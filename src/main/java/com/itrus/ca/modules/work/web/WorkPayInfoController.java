@@ -473,25 +473,26 @@ public class WorkPayInfoController extends BaseController {
 		
 		workDealInfoService.checkWorkDealInfoNeedSettle(workDealInfo);
 		
-		if(workDealInfo.getDealInfoType().equals(1)){
-			ConfigAgentBoundDealInfo dealInfoBound = new ConfigAgentBoundDealInfo();
-			dealInfoBound.setDealInfo(workDealInfo);
-			ConfigChargeAgent agent =  configChargeAgentService.get(workDealInfo.getConfigChargeAgentId());
-			dealInfoBound.setAgent(agent);
-			configAgentBoundDealInfoService.save(dealInfoBound);
-			logUtil.saveSysLog("计费策略模版", "计费策略模版："+agent.getId()+"--业务编号："+workDealInfo.getId()+"--关联成功!", "");
-			
-			Integer avaiNum = agent.getAvailableNum();//已用数量
-			Integer reseNum = agent.getReserveNum();//预留数量
-			
-			agent.setAvailableNum(avaiNum+1);//已用数量
-			
-			agent.setReserveNum(reseNum-1);//预留数量
-			
-			configChargeAgentService.save(agent);
-			logUtil.saveSysLog("计费策略模版", "更改剩余数量和使用数量成功!", "");
+		if (workDealInfo.getDealInfoType()!=null && workDealInfo.getDealInfoType().equals(1)) {
+			if(workDealInfo.getDealInfoType().equals(1)){
+				ConfigAgentBoundDealInfo dealInfoBound = new ConfigAgentBoundDealInfo();
+				dealInfoBound.setDealInfo(workDealInfo);
+				ConfigChargeAgent agent =  configChargeAgentService.get(workDealInfo.getConfigChargeAgentId());
+				dealInfoBound.setAgent(agent);
+				configAgentBoundDealInfoService.save(dealInfoBound);
+				logUtil.saveSysLog("计费策略模版", "计费策略模版："+agent.getId()+"--业务编号："+workDealInfo.getId()+"--关联成功!", "");
+				
+				Integer avaiNum = agent.getAvailableNum();//已用数量
+				Integer reseNum = agent.getReserveNum();//预留数量
+				
+				agent.setAvailableNum(avaiNum+1);//已用数量
+				
+				agent.setReserveNum(reseNum-1);//预留数量
+				
+				configChargeAgentService.save(agent);
+				logUtil.saveSysLog("计费策略模版", "更改剩余数量和使用数量成功!", "");
+			}
 		}
-		
 		
 		workDealInfoService.save(workDealInfo);
 		ConfigRaAccount raAccount = raAccountService.get(workDealInfo.getConfigProduct().getRaAccountId());
