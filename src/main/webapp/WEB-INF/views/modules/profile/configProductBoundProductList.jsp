@@ -42,7 +42,7 @@
 				html +="<option value=''>请选择</option>";
 				$.each(data, function(idx, ele) {
 					html += "<option value=\""+ele.id+"\">" + ele.name
-							+ "</option>"
+							+ "</option>";
 				});
 				//alert(html);
 				$("#productId").html(html);
@@ -115,10 +115,18 @@
 				class="input-medium Wdate" required="required"
 				onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});"
 				value="<fmt:formatDate value="${startTime}" pattern="yyyy-MM-dd"/>" />
-			&nbsp;-&nbsp; <input id="endTime" name="endTime" type="text"
+			&nbsp;-&nbsp;
+				
+				<input id="endTime" name="endTime" type="text"
 				readonly="readonly" maxlength="20" class="input-medium Wdate"
 				required="required" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'startTime\')}'});"
 				value="<fmt:formatDate value="${endTime}" pattern="yyyy-MM-dd"/>" />
+				
+				<%-- <input id="endTime" name="endTime" type="text" readonly="readonly"
+			maxlength="20" class="Wdate required"
+			onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false,minDate:'#F{$dp.$D(\'startTime\')}'});"
+			value="<fmt:formatDate value="${endTime}" pattern="yyyy-MM-dd"/>" /> --%>
+				
 				
 				
 		&nbsp;&nbsp;&nbsp;

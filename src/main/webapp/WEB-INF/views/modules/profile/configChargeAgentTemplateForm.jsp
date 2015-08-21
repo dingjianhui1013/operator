@@ -99,8 +99,8 @@
 					return false;
 				}else{
 					
-					if(parseInt($("#configureNum").val())<parseInt($("#avaNum").val())){
-						top.$.jBox.tip("配置数量应大于等于剩余数量！请重新输入！");
+					if(parseInt($("#configureNum").val())<parseInt($("#avaRes").val())){
+						top.$.jBox.tip("配置数量应大于已使用数量！请重新输入！");
 						return false;
 					}
 					
@@ -277,7 +277,7 @@
 			<div class="controls" >
 				${configChargeAgent.availableNum  + configChargeAgent.reserveNum}
 				
-				
+				<input type="hidden" id="avaRes" name="avaRes" value="${configChargeAgent.availableNum  + configChargeAgent.reserveNum}">
 				<input type="hidden" id="agentId" value="${id }" /> 
 			</div>
 		</div>

@@ -62,8 +62,9 @@ public class ConfigAgentBoundDealInfoService extends BaseService {
 		DetachedCriteria dc = configAgentBoundDealInfoDao.createDetachedCriteria();
 		dc.createAlias("createBy", "createBy");
 		dc.createAlias("createBy.office", "office");
+		dc.createAlias("dealInfo", "dealInfo");
 		if (StringUtils.isNotEmpty(handle)) {
-			dc.add(Restrictions.like("createBy.name", handle));
+			dc.add(Restrictions.like("createBy.name", "%"+handle+"%"));
 		}
 		if(startTime!=null){
 			dc.add(Restrictions.ge("createDate", startTime));
@@ -71,7 +72,7 @@ public class ConfigAgentBoundDealInfoService extends BaseService {
 		if(endTime!=null){
 			endTime.setHours(23);
 			endTime.setMinutes(59);
-			endTime.setSeconds(95);
+			endTime.setSeconds(59);
 			dc.add(Restrictions.le("createDate", endTime));
 		}
 		if(areaId!=null){
@@ -81,17 +82,11 @@ public class ConfigAgentBoundDealInfoService extends BaseService {
 			dc.add(Restrictions.eq("office.id", officeId));
 		}
 		if(congifApplyId!=null){
-			dc.createAlias("dealInfo.configApp", "app");
-			dc.add(Restrictions.eq("app.id", congifApplyId));
+			dc.add(Restrictions.eq("dealInfo.configApp.id", congifApplyId));
 			
 		}
 		if(productId!=null){
-
-		//	dc.createAlias("configProduct", "configProduct");
-			dc.createAlias("dealInfo", "dealInfo");
 			dc.add(Restrictions.eq("dealInfo.configProduct.id", productId));
-			
-			
 		}
 		
 		

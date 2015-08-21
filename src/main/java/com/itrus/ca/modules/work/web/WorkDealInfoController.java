@@ -31,6 +31,8 @@ import javax.persistence.criteria.CriteriaBuilder.In;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.sf.ehcache.config.ConfigError;
+
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -1554,6 +1556,14 @@ public class WorkDealInfoController extends BaseController {
 	public String delete(Long id, RedirectAttributes redirectAttributes) {
 		workDealInfoService.delete(id);
 		WorkDealInfo workDealInfo = workDealInfoService.get(id);
+		if(workDealInfo.getDealInfoType()!=null){
+			Long agentId = workDealInfo.getConfigChargeAgentId();
+			ConfigChargeAgent agent =  configChargeAgentService.get(agentId);
+			agent.setSurplusNum(agent.getSurplusNum()+1);
+			agent.setReserveNum(agent.getReserveNum()-1);
+			configChargeAgentService.save(agent);
+		}
+		
 		if (workDealInfo.getPrevId() != null) {
 			WorkDealInfo workDealInfo1 = workDealInfoService.get(workDealInfo
 					.getPrevId());

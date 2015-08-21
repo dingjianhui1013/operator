@@ -1188,6 +1188,13 @@ public class WorkDealInfoAuditController extends BaseController {
 	@RequestMapping(value = "delete")
 	public String delete(Long id, RedirectAttributes redirectAttributes) {
 		workDealInfoService.delete(id);
+		WorkDealInfo workDealInfo = workDealInfoService.get(id);
+		Long agentId = workDealInfo.getConfigChargeAgentId();
+		ConfigChargeAgent agent =  configChargeAgentService.get(agentId);
+		agent.setSurplusNum(agent.getSurplusNum()+1);
+		agent.setReserveNum(agent.getReserveNum()-1);
+		configChargeAgentService.save(agent);
+		
 		addMessage(redirectAttributes, "删除业务成功");
 		return "redirect:" + Global.getAdminPath()
 				+ "/work/workDealInfoAudit/?repage";
