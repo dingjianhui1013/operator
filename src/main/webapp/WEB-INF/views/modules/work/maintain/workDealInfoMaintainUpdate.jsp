@@ -219,26 +219,38 @@
 				top.$.jBox.tip("此计费策略模版剩余数量为零，不能进行业务办理！"); 
 				return false;
 			}else{
-				var year;
-				var isCheck = false;
-				$("input[name='year']").each(function(){
-				     if(this.checked){
-				    	 year = $(this).val();
-				    	 if (year!="on") {
-				    		 isCheck = true;
+				
+				var boundId = $("#agentDetailId").val();
+				var url = "${ctx}/profile/configChargeAgent/checkAgentIsZero?agentDetailId="+boundId+"&_="+new Date().getTime();
+				$.getJSON(url,function(data){
+					if(data.status==0){
+						top.$.jBox.tip("此计费策略模版剩余数量为零，不能进行业务办理！"); 
+					}else{
+						var year;
+						var isCheck = false;
+						$("input[name='year']").each(function(){
+						     if(this.checked){
+						    	 year = $(this).val();
+						    	 if (year!="on") {
+						    		 isCheck = true;
+								}
+						     }
+						 });
+						if(!isCheck){
+							top.$.jBox.tip("请选择您想要更新的年限！");
+						}else{
+							top.$.jBox.confirm("更新年限确认为&nbsp;'&nbsp;<b>"+year+"</b>&nbsp;'&nbsp;年吗？",'系统提示',function(v,h,f){
+								if(v=='ok'){
+									$("#inputForm").submit(); 
+								}
+							},{buttonsFocus:1});
+							top.$('.jbox-body .jbox-icon').css('top','55px');
 						}
-				     }
-				 });
-				if(!isCheck){
-					top.$.jBox.tip("请选择您想要更新的年限！");
-				}else{
-					top.$.jBox.confirm("更新年限确认为&nbsp;'&nbsp;<b>"+year+"</b>&nbsp;'&nbsp;年吗？",'系统提示',function(v,h,f){
-						if(v=='ok'){
-							$("#inputForm").submit(); 
-						}
-					},{buttonsFocus:1});
-					top.$('.jbox-body .jbox-icon').css('top','55px');
-				}
+					}
+				});
+				
+				
+				
 			}
 		}else{
 			top.$.jBox.tip("请选择计费策略模版！"); 

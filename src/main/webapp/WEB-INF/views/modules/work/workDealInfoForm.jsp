@@ -476,12 +476,6 @@ var selected = false;
 			$("#lable1").removeAttr("disabled");
 			return true;
 		}
-		
-		
-		
-		
-		
-		
 
 	}
 </script>
