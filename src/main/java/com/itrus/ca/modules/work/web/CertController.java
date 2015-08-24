@@ -303,6 +303,23 @@ public class CertController extends BaseController {
 			json.put("certKmcRep2", caCert.getCertKmcRep2());
 			json.put("installMode", caCert.getInstallMode());
 			
+			
+			
+			if(dealInfo.getDealInfoType()==null){
+				
+				ConfigAgentBoundDealInfo dealInfoBound = new ConfigAgentBoundDealInfo();
+				dealInfoBound.setDealInfo(dealInfo);
+				ConfigChargeAgent agentBound =  configChargeAgentService.get(dealInfo.getConfigChargeAgentId());
+				dealInfoBound.setAgent(agentBound);
+				configAgentBoundDealInfoService.save(dealInfoBound);
+				logUtil.saveSysLog("计费策略模版", "计费策略模版："+dealInfo.getId()+"--业务编号："+dealInfo.getId()+"--关联成功!", "");
+				
+			}
+				
+			
+			
+			
+			
 			if(dealInfo.getDealInfoType()!=null && dealInfo.getDealInfoType().equals(0)){
 				
 				ConfigChargeAgent agent =  configChargeAgentService.get(dealInfo.getConfigChargeAgentId());

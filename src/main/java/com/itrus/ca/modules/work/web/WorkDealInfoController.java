@@ -2440,12 +2440,38 @@ public class WorkDealInfoController extends BaseController {
 
 		if (dealInfoTypes.size()==1) {
 			if(dealInfoTypes.get(0).equals("1")){
-				ConfigChargeAgent agent =  configChargeAgentService.get(workDealInfo.getConfigChargeAgentId());
-				model.addAttribute("jfMB", agent.getTempName());
+				
+				ConfigProduct configProduct = workDealInfo.getConfigProduct();
+				List<ConfigChargeAgentBoundConfigProduct> boundList = configChargeAgentBoundConfigProductService
+						.findByProIdAll(configProduct.getId());		
+				Set<Integer> nameSet = new HashSet<Integer>();
+				for (int i = 0; i < boundList.size(); i++) {
+					nameSet.add(Integer.parseInt(boundList.get(i).getAgent().getTempStyle()));
+				}
+				
+				model.addAttribute("boundLabelList", nameSet);
+				
+				List<WorkLog> list = workLogService.findByDealInfo(workDealInfo);
+				model.addAttribute("workLog", list);
+				model.addAttribute("tempStyle", chargeAgent.getTempStyle());
+				
+				
+				
 				return "modules/work/maintain/workDealInfoMaintainChange";
 			}else if(dealInfoTypes.get(0).equals("2")){
-				ConfigChargeAgent agent =  configChargeAgentService.get(workDealInfo.getConfigChargeAgentId());
-				model.addAttribute("jfMB", agent.getTempName());
+				ConfigProduct configProduct = workDealInfo.getConfigProduct();
+				List<ConfigChargeAgentBoundConfigProduct> boundList = configChargeAgentBoundConfigProductService
+						.findByProIdAll(configProduct.getId());		
+				Set<Integer> nameSet = new HashSet<Integer>();
+				for (int i = 0; i < boundList.size(); i++) {
+					nameSet.add(Integer.parseInt(boundList.get(i).getAgent().getTempStyle()));
+				}
+				
+				model.addAttribute("boundLabelList", nameSet);
+				
+				List<WorkLog> list = workLogService.findByDealInfo(workDealInfo);
+				model.addAttribute("workLog", list);
+				model.addAttribute("tempStyle", chargeAgent.getTempStyle());
 				return "modules/work/maintain/workDealInfoMaintainLost";
 			}else if(dealInfoTypes.get(0).equals("3")){
 				ConfigProduct configProduct = workDealInfo.getConfigProduct();

@@ -91,7 +91,7 @@ public class ConfigAgentBoundDealInfoService extends BaseService {
 		
 		
 		
-		
+		dc.add(Restrictions.isNotNull("dealInfo.dealInfoType"));
 		dc.add(Restrictions.eq("agent.id", agentId));
 		dc.addOrder(Order.desc("id"));
 		return configAgentBoundDealInfoDao.find(page, dc);

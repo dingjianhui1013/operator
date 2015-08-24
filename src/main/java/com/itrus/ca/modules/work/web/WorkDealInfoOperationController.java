@@ -1255,7 +1255,7 @@ public class WorkDealInfoOperationController extends BaseController {
 			String conCertType, String contacEmail, String conCertNumber,
 			String contactPhone, String contactTel, String recordContent,
 			
-			
+			Integer agentId,Long agentDetailId, //获取计费策略类型  获取计费策略模版
 			Integer dealInfoType2,Integer dealInfoType1,Boolean manMadeDamage,
 			
 			Model model, String pName, String pEmail, String pIDCard,String contactSex,String areaRemark,
@@ -1385,7 +1385,11 @@ public class WorkDealInfoOperationController extends BaseController {
 		workDealInfo.setWorkCertInfo(workCertInfo);
 		workDealInfoService.delete(workDealInfo1.getId());
 		workDealInfo.setPayType(workDealInfo1.getPayType());
-		workDealInfo.setConfigChargeAgentId(workDealInfo1.getConfigChargeAgentId());
+		
+		ConfigChargeAgentBoundConfigProduct bound =  configChargeAgentBoundConfigProductService.get(agentDetailId);
+		workDealInfo.setPayType(agentId);
+		workDealInfo.setConfigChargeAgentId(bound.getAgent().getId());
+		
 		workDealInfoService.save(workDealInfo);
 		// 保存日志信息
 		WorkLog workLog = new WorkLog();
@@ -1416,7 +1420,7 @@ public class WorkDealInfoOperationController extends BaseController {
 			String conCertType, String contacEmail, String conCertNumber,
 			String contactPhone, String contactTel,String contactSex, String recordContent,
 			
-			
+			Integer agentId,Long agentDetailId, //获取计费策略类型  获取计费策略模版
 			Integer dealInfoType1,
 			
 			Boolean manMadeDamage,Model model) {
@@ -1521,8 +1525,10 @@ public class WorkDealInfoOperationController extends BaseController {
 		workCertInfoService.save(oldCertInfo);
 		workDealInfo.setWorkCertInfo(workCertInfo);
 		workDealInfoService.delete(workDealInfo1.getId());
-		workDealInfo.setPayType(workDealInfo1.getPayType());
-		workDealInfo.setConfigChargeAgentId(workDealInfo1.getConfigChargeAgentId());
+		
+		ConfigChargeAgentBoundConfigProduct bound =  configChargeAgentBoundConfigProductService.get(agentDetailId);
+		workDealInfo.setPayType(agentId);
+		workDealInfo.setConfigChargeAgentId(bound.getAgent().getId());
 		workDealInfoService.save(workDealInfo);
 		// 保存日志信息
 		WorkLog workLog = new WorkLog();
