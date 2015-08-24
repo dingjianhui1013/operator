@@ -111,4 +111,30 @@ public class ConfigAgentBoundDealInfoService extends BaseService {
 		configAgentBoundDealInfoDao.deleteById(id);
 	}
 	
+	
+	@Transactional(readOnly = false)
+	public void deleteById(Long boundId) {
+		configAgentBoundDealInfoDao.delete(boundId);
+	}
+	
+	
+	
+	@Transactional(readOnly = false)
+	public ConfigAgentBoundDealInfo findByAgentIdDealId(Long agentId , Long dealId) {
+		DetachedCriteria dc = configAgentBoundDealInfoDao.createDetachedCriteria();
+		dc.add(Restrictions.eq("agent.id", agentId));
+		dc.add(Restrictions.eq("dealInfo.id", dealId));
+		if (configAgentBoundDealInfoDao.find(dc).size()>0) {
+			return configAgentBoundDealInfoDao.find(dc).get(0);
+		}else{
+			return null;
+			
+		}
+	}
+	
+	
+	
+	
+	
+	
 }

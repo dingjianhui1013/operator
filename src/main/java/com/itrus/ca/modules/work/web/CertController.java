@@ -304,20 +304,12 @@ public class CertController extends BaseController {
 			json.put("installMode", caCert.getInstallMode());
 			
 			if(dealInfo.getDealInfoType()!=null && dealInfo.getDealInfoType().equals(0)){
-				ConfigAgentBoundDealInfo dealInfoBound = new ConfigAgentBoundDealInfo();
-				dealInfoBound.setDealInfo(dealInfo);
-				ConfigChargeAgent agent =  configChargeAgentService.get(dealInfo.getConfigChargeAgentId());
-				dealInfoBound.setAgent(agent);
-				configAgentBoundDealInfoService.save(dealInfoBound);
-				logUtil.saveSysLog("计费策略模版", "计费策略模版："+agent.getId()+"--业务编号："+dealInfo.getId()+"--关联成功!", "");
 				
+				ConfigChargeAgent agent =  configChargeAgentService.get(dealInfo.getConfigChargeAgentId());
 				Integer avaiNum = agent.getAvailableNum();//已用数量
 				Integer reseNum = agent.getReserveNum();//预留数量
-				
 				agent.setAvailableNum(avaiNum+1);//已用数量
-				
 				agent.setReserveNum(reseNum-1);//预留数量
-				
 				configChargeAgentService.save(agent);
 				logUtil.saveSysLog("计费策略模版", "更改剩余数量和使用数量成功!", "");
 			}

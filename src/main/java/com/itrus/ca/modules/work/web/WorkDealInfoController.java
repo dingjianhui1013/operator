@@ -64,6 +64,7 @@ import com.itrus.ca.modules.finance.service.FinancePaymentInfoService;
 import com.itrus.ca.modules.key.entity.KeyGeneralInfo;
 import com.itrus.ca.modules.key.service.KeyGeneralInfoService;
 import com.itrus.ca.modules.log.service.LogUtil;
+import com.itrus.ca.modules.profile.entity.ConfigAgentBoundDealInfo;
 import com.itrus.ca.modules.profile.entity.ConfigAgentOfficeRelation;
 import com.itrus.ca.modules.profile.entity.ConfigApp;
 import com.itrus.ca.modules.profile.entity.ConfigChargeAgent;
@@ -74,6 +75,7 @@ import com.itrus.ca.modules.profile.entity.ConfigProduct;
 import com.itrus.ca.modules.profile.entity.ConfigRaAccountExtendInfo;
 import com.itrus.ca.modules.profile.entity.ProductTypeObj;
 import com.itrus.ca.modules.profile.service.ConfigAgentAppRelationService;
+import com.itrus.ca.modules.profile.service.ConfigAgentBoundDealInfoService;
 import com.itrus.ca.modules.profile.service.ConfigAgentOfficeRelationService;
 import com.itrus.ca.modules.profile.service.ConfigAppOfficeRelationService;
 import com.itrus.ca.modules.profile.service.ConfigAppService;
@@ -198,7 +200,11 @@ public class WorkDealInfoController extends BaseController {
 
 	@Autowired
 	private ConfigChargeAgentBoundConfigProductService configChargeAgentBoundConfigProductService;
+	
+	@Autowired
+	private ConfigAgentBoundDealInfoService configAgentBoundDealInfoService;
 
+	
 	@Value(value = "${ixin.url}")
 	private String ixinUrl;
 
@@ -817,6 +823,8 @@ public class WorkDealInfoController extends BaseController {
 		workDealInfo.setWorkCompany(workCompany);
 		workDealInfo.setConfigProduct(configProduct);
 		
+		//新增时扣减计费策略数量 
+		
 		ConfigChargeAgent agent = bound.getAgent();
 		Integer reseNum = agent.getReserveNum();
 		Integer surNum = agent.getSurplusNum();
@@ -824,13 +832,8 @@ public class WorkDealInfoController extends BaseController {
 		agent.setSurplusNum(surNum-1);
 		configChargeAgentService.save(agent);
 		
-		
-		
 		workDealInfo.setConfigChargeAgentId(bound.getAgent().getId());		
-		
-		
 		workDealInfo.setDealInfoType(WorkDealInfoType.TYPE_ADD_CERT);
-
 		if (year == null) {
 			workDealInfo.setYear(0);
 		} else {
@@ -914,6 +917,18 @@ public class WorkDealInfoController extends BaseController {
 		// workDealInfo.setCommercialAgent(li.get(0).getConfigCommercialAgent());
 		// }
 		workDealInfoService.save(workDealInfo);
+		
+		
+		ConfigAgentBoundDealInfo dealInfoBound = new ConfigAgentBoundDealInfo();
+		dealInfoBound.setDealInfo(workDealInfo);
+		ConfigChargeAgent agentBound =  configChargeAgentService.get(workDealInfo.getConfigChargeAgentId());
+		dealInfoBound.setAgent(agentBound);
+		configAgentBoundDealInfoService.save(dealInfoBound);
+		logUtil.saveSysLog("计费策略模版", "计费策略模版："+agent.getId()+"--业务编号："+workDealInfo.getId()+"--关联成功!", "");
+		
+		
+		
+		
 		// 录入人日志保存
 		WorkLog workLog1 = new WorkLog();
 		workLog1.setRecordContent("录入完毕");
@@ -1562,6 +1577,11 @@ public class WorkDealInfoController extends BaseController {
 			agent.setSurplusNum(agent.getSurplusNum()+1);
 			agent.setReserveNum(agent.getReserveNum()-1);
 			configChargeAgentService.save(agent);
+			
+			ConfigAgentBoundDealInfo bound = configAgentBoundDealInfoService.findByAgentIdDealId(agent.getId(),id);
+			if (bound!=null) {
+				configAgentBoundDealInfoService.deleteById(bound.getId());
+			}
 		}
 		
 		if (workDealInfo.getPrevId() != null) {

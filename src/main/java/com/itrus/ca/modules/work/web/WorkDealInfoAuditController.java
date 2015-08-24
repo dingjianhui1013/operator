@@ -41,6 +41,7 @@ import com.itrus.ca.modules.finance.service.FinancePaymentInfoService;
 import com.itrus.ca.modules.key.service.KeyUsbKeyInvoiceService;
 import com.itrus.ca.modules.log.service.LogUtil;
 import com.itrus.ca.modules.profile.dao.ConfigSupplierProductRelationDao;
+import com.itrus.ca.modules.profile.entity.ConfigAgentBoundDealInfo;
 import com.itrus.ca.modules.profile.entity.ConfigAgentOfficeRelation;
 import com.itrus.ca.modules.profile.entity.ConfigChargeAgent;
 import com.itrus.ca.modules.profile.entity.ConfigCommercialAgent;
@@ -49,6 +50,7 @@ import com.itrus.ca.modules.profile.entity.ConfigRaAccountExtendInfo;
 import com.itrus.ca.modules.profile.entity.ConfigSupplier;
 import com.itrus.ca.modules.profile.entity.ConfigSupplierProductRelation;
 import com.itrus.ca.modules.profile.service.ConfigAgentAppRelationService;
+import com.itrus.ca.modules.profile.service.ConfigAgentBoundDealInfoService;
 import com.itrus.ca.modules.profile.service.ConfigAgentOfficeRelationService;
 import com.itrus.ca.modules.profile.service.ConfigChargeAgentDetailService;
 import com.itrus.ca.modules.profile.service.ConfigChargeAgentService;
@@ -157,6 +159,10 @@ public class WorkDealInfoAuditController extends BaseController {
 	
 	@Autowired
 	WorkCertApplyInfoService workCertApplyInfoService;
+	
+	@Autowired
+	private ConfigAgentBoundDealInfoService configAgentBoundDealInfoService;
+	
 
 	private LogUtil logUtil = new LogUtil();
 
@@ -1194,6 +1200,11 @@ public class WorkDealInfoAuditController extends BaseController {
 		agent.setSurplusNum(agent.getSurplusNum()+1);
 		agent.setReserveNum(agent.getReserveNum()-1);
 		configChargeAgentService.save(agent);
+		
+		ConfigAgentBoundDealInfo bound = configAgentBoundDealInfoService.findByAgentIdDealId(agent.getId(),id);
+		if (bound!=null) {
+			configAgentBoundDealInfoService.deleteById(bound.getId());
+		}
 		
 		addMessage(redirectAttributes, "删除业务成功");
 		return "redirect:" + Global.getAdminPath()

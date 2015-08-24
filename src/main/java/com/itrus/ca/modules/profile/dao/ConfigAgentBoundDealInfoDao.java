@@ -23,6 +23,10 @@ public interface ConfigAgentBoundDealInfoDao extends ConfigAgentBoundDealInfoDao
 	@Query("update ConfigAgentBoundDealInfo set delFlag='" + ConfigAgentBoundDealInfo.DEL_FLAG_DELETE + "' where id = ?1")
 	public int deleteById(Long id);
 	
+	@Modifying
+	@Query("delete from ConfigAgentBoundDealInfo where id = ?1")
+	public void delete(Long BoundId);
+	
 }
 
 /**

@@ -27,6 +27,7 @@ import com.itrus.ca.modules.constant.ProductType;
 import com.itrus.ca.modules.constant.WorkDealInfoStatus;
 import com.itrus.ca.modules.constant.WorkDealInfoType;
 import com.itrus.ca.modules.log.service.LogUtil;
+import com.itrus.ca.modules.profile.entity.ConfigAgentBoundDealInfo;
 import com.itrus.ca.modules.profile.entity.ConfigAgentOfficeRelation;
 import com.itrus.ca.modules.profile.entity.ConfigApp;
 import com.itrus.ca.modules.profile.entity.ConfigAppOfficeRelation;
@@ -36,6 +37,7 @@ import com.itrus.ca.modules.profile.entity.ConfigCommercialAgent;
 import com.itrus.ca.modules.profile.entity.ConfigProduct;
 import com.itrus.ca.modules.profile.entity.ConfigRaAccount;
 import com.itrus.ca.modules.profile.service.ConfigAgentAppRelationService;
+import com.itrus.ca.modules.profile.service.ConfigAgentBoundDealInfoService;
 import com.itrus.ca.modules.profile.service.ConfigAgentOfficeRelationService;
 import com.itrus.ca.modules.profile.service.ConfigAppOfficeRelationService;
 import com.itrus.ca.modules.profile.service.ConfigAppService;
@@ -136,6 +138,8 @@ public class WorkDealInfoOperationController extends BaseController {
 	@Autowired
 	private ConfigChargeAgentBoundConfigProductService configChargeAgentBoundConfigProductService;
 	
+	@Autowired
+	private ConfigAgentBoundDealInfoService configAgentBoundDealInfoService;
 	
 	private LogUtil logUtil = new LogUtil();
 
@@ -1668,6 +1672,10 @@ public class WorkDealInfoOperationController extends BaseController {
 		
 		
 		ConfigChargeAgent agent = bound.getAgent();
+		
+		
+		
+		
 		Integer reseNum = agent.getReserveNum();
 		Integer surNum = agent.getSurplusNum();
 		agent.setReserveNum(reseNum+1);
@@ -1759,6 +1767,13 @@ public class WorkDealInfoOperationController extends BaseController {
 		//workDealInfo.setPayType(workDealInfo1.getPayType());
 		//workDealInfo.setConfigChargeAgentId(workDealInfo1.getConfigChargeAgentId());
 		workDealInfoService.save(workDealInfo);
+		
+		ConfigAgentBoundDealInfo dealInfoBound = new ConfigAgentBoundDealInfo();
+		dealInfoBound.setDealInfo(workDealInfo);
+		dealInfoBound.setAgent(agent);
+		configAgentBoundDealInfoService.save(dealInfoBound);
+		logUtil.saveSysLog("计费策略模版", "计费策略模版："+agent.getId()+"--业务编号："+workDealInfo.getId()+"--关联成功!", "");
+		
 		// 保存日志信息
 		WorkLog workLog = new WorkLog();
 		workLog.setRecordContent(recordContent);
