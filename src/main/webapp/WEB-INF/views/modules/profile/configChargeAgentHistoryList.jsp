@@ -25,6 +25,37 @@
 	<form:form id="searchForm" modelAttribute="configChargeAgentHistory"
 		action="${ctx}/profile/configChargeAgent/changeChargeAgentInfoList?agentHisId=${agentHisId }"
 		method="post" class="breadcrumb form-search">
+		
+		
+		<div class="control-group">
+			<label>修改人：</label>
+			<input type="text" name="createName" value="${createName }"/>
+				<label>办理时间 ：</label> <input id="startTime" name="startTime"
+				type="text" readonly="readonly" maxlength="20"
+				class="input-medium Wdate" required="required"
+				onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});"
+				value="<fmt:formatDate value="${startTime}" pattern="yyyy-MM-dd"/>" />
+			&nbsp;-&nbsp;
+				
+				<input id="endTime" name="endTime" type="text"
+				readonly="readonly" maxlength="20" class="input-medium Wdate"
+				required="required" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'startTime\')}'});"
+				value="<fmt:formatDate value="${endTime}" pattern="yyyy-MM-dd"/>" />
+				
+				<%-- <input id="endTime" name="endTime" type="text" readonly="readonly"
+			maxlength="20" class="Wdate required"
+			onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false,minDate:'#F{$dp.$D(\'startTime\')}'});"
+			value="<fmt:formatDate value="${endTime}" pattern="yyyy-MM-dd"/>" /> --%>
+				
+				
+				
+		&nbsp;&nbsp;&nbsp;
+		<input id="btnSubmit" class="btn btn-primary" type="submit" value="查询" />
+		</div>
+		
+		
+		
+		
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}" />
 		<input id="pageSize" name="pageSize" type="hidden"
 			value="${page.pageSize}" />
@@ -42,6 +73,8 @@
 				<th style="vertical-align: middle; text-align: center;" rowspan="3">配置数量</th>
 				<th style="vertical-align: middle; text-align: center;" rowspan="3">剩余数量</th>
 				<th style="vertical-align: middle; text-align: center;" rowspan="3">已用数量</th>
+				<th style="vertical-align: middle; text-align: center;" rowspan="3">修改人</th>
+				<th style="vertical-align: middle; text-align: center;" rowspan="3">修改时间</th>
 			</tr>
 			<tr>
 				<th style="vertical-align: middle; text-align: center;" colspan="4">新增</th>
@@ -125,8 +158,14 @@
 						</c:if></td>
 					<td style="vertical-align: middle; text-align: center;"><c:if
 							test="${configChargeAgentHistory.tempStyle != 1 }">
-						${configChargeAgentHistory.availableNum }
+						${configChargeAgentHistory.availableNum + configChargeAgentHistory.reserveNum }
 						</c:if></td>
+					<td style="vertical-align: middle; text-align: center;">
+						${configChargeAgentHistory.createBy.name }
+					</td>
+					<td style="vertical-align: middle; text-align: center;">
+						<fmt:formatDate value="${configChargeAgentHistory.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
+					</td>
 				</tr>
 			</c:forEach>
 		</tbody>

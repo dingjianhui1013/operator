@@ -589,6 +589,7 @@ public class WorkDealInfoAuditController extends BaseController {
 		workLog.setRemarks(workDealInfo.getRemarks());
 		workDealInfo.setIsIxin(true);
 		workDealInfoService.save(workDealInfo);
+		
 		workLog.setWorkDealInfo(workDealInfo);
 		workLog.setWorkCompany(workDealInfo.getWorkCompany());
 		workLog.setOffice(UserUtils.getUser().getOffice());

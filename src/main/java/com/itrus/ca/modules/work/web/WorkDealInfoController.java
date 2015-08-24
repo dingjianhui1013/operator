@@ -824,13 +824,19 @@ public class WorkDealInfoController extends BaseController {
 		workDealInfo.setConfigProduct(configProduct);
 		
 		//新增时扣减计费策略数量 
-		
 		ConfigChargeAgent agent = bound.getAgent();
-		Integer reseNum = agent.getReserveNum();
-		Integer surNum = agent.getSurplusNum();
-		agent.setReserveNum(reseNum+1);
-		agent.setSurplusNum(surNum-1);
-		configChargeAgentService.save(agent);
+		if (workDealInfoId==null) {
+			Integer reseNum = agent.getReserveNum();
+			Integer surNum = agent.getSurplusNum();
+			agent.setReserveNum(reseNum+1);
+			agent.setSurplusNum(surNum-1);
+			configChargeAgentService.save(agent);
+		}
+		
+		
+		
+		
+		
 		
 		workDealInfo.setConfigChargeAgentId(bound.getAgent().getId());		
 		workDealInfo.setDealInfoType(WorkDealInfoType.TYPE_ADD_CERT);
@@ -918,14 +924,14 @@ public class WorkDealInfoController extends BaseController {
 		// }
 		workDealInfoService.save(workDealInfo);
 		
-		
-		ConfigAgentBoundDealInfo dealInfoBound = new ConfigAgentBoundDealInfo();
-		dealInfoBound.setDealInfo(workDealInfo);
-		ConfigChargeAgent agentBound =  configChargeAgentService.get(workDealInfo.getConfigChargeAgentId());
-		dealInfoBound.setAgent(agentBound);
-		configAgentBoundDealInfoService.save(dealInfoBound);
-		logUtil.saveSysLog("计费策略模版", "计费策略模版："+agent.getId()+"--业务编号："+workDealInfo.getId()+"--关联成功!", "");
-		
+		if (workDealInfoId==null) {
+			ConfigAgentBoundDealInfo dealInfoBound = new ConfigAgentBoundDealInfo();
+			dealInfoBound.setDealInfo(workDealInfo);
+			ConfigChargeAgent agentBound =  configChargeAgentService.get(workDealInfo.getConfigChargeAgentId());
+			dealInfoBound.setAgent(agentBound);
+			configAgentBoundDealInfoService.save(dealInfoBound);
+			logUtil.saveSysLog("计费策略模版", "计费策略模版："+agent.getId()+"--业务编号："+workDealInfo.getId()+"--关联成功!", "");
+		}
 		
 		
 		
@@ -1594,6 +1600,35 @@ public class WorkDealInfoController extends BaseController {
 				+ workDealInfo.getWorkCompany().getCompanyName(), "");
 		return "redirect:" + Global.getAdminPath() + "/work/workDealInfo/";
 	}
+	
+	
+	
+	@RequiresPermissions("work:workDealInfo:edit")
+	@RequestMapping(value = "exceptionEdit")
+	public String exceptionEdit(Long id, RedirectAttributes redirectAttributes) {
+		WorkDealInfo workDealInfo = workDealInfoService.get(id);
+		if(workDealInfo.getDealInfoType()!=null){
+			Long agentId = workDealInfo.getConfigChargeAgentId();
+			ConfigChargeAgent agent =  configChargeAgentService.get(agentId);
+			agent.setSurplusNum(agent.getSurplusNum()+1);
+			agent.setReserveNum(agent.getReserveNum()-1);
+			configChargeAgentService.save(agent);
+			
+			ConfigAgentBoundDealInfo bound = configAgentBoundDealInfoService.findByAgentIdDealId(agent.getId(),id);
+			if (bound!=null) {
+				configAgentBoundDealInfoService.deleteById(bound.getId());
+			}
+		}
+
+	//	return "redirect:" + Global.getAdminPath() + "/work/workDealInfo/";
+		return "redirect:" + Global.getAdminPath()
+				+ "/work/workDealInfo/pay?id=" + workDealInfo.getId();
+	}
+	
+	
+	
+	
+	
 
 	/**
 	 * 收费信息页面

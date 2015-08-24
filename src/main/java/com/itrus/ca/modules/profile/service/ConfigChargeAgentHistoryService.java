@@ -3,6 +3,8 @@
  */
 package com.itrus.ca.modules.profile.service;
 
+import java.util.Date;
+
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
@@ -48,8 +50,22 @@ public class ConfigChargeAgentHistoryService extends BaseService {
 	}
 	
 	
-	public Page<ConfigChargeAgentHistory> findByAgentId(Page<ConfigChargeAgentHistory> page, Long agentId) {
+	public Page<ConfigChargeAgentHistory> findByAgentId(Page<ConfigChargeAgentHistory> page, Long agentId,String createName,Date startTime,Date endTime) {
 		DetachedCriteria dc = configChargeAgentHistoryDao.createDetachedCriteria();
+		if (StringUtils.isNotEmpty(createName)) {
+			dc.createAlias("createBy", "createBy");
+			dc.add(Restrictions.like("createBy.name", "%"+createName+"%"));
+		}
+		
+		if(startTime!=null){
+			dc.add(Restrictions.ge("createDate", startTime));
+		}
+		if(endTime!=null){
+			endTime.setHours(23);
+			endTime.setMinutes(59);
+			endTime.setSeconds(59);
+			dc.add(Restrictions.le("createDate", endTime));
+		}
 //		if (StringUtils.isNotEmpty(configChargeAgentHistory.getName())){
 //			dc.add(Restrictions.like("name", "%"+configChargeAgentHistory.getName()+"%"));
 //		}

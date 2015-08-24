@@ -141,6 +141,7 @@
 		<thead>
 			<tr>
 					<th>序号</th>
+					<th>模版名称</th>
 					<th>办理人</th>
 					<th>办理时间</th>
 					<th>办理网点</th>
@@ -149,7 +150,7 @@
 					<th>产品名称</th>
 					<th>单位名称</th>
 					<th>业务类型</th>
-					<th>证书经办人</th>
+					<th>业务状态</th>
 								
 					
 			</tr>
@@ -159,6 +160,7 @@
 			<tr>
 			
 				<td>${status.index + 1}</td>
+				<td>${boundDealInfo.agent.tempName}</td>
 				<td>${boundDealInfo.createBy.name}</td>
 				<td>
 				<fmt:formatDate value="${boundDealInfo.createDate}" pattern="yyyy-MM-dd"/>
@@ -178,7 +180,10 @@
 						<c:if test="${boundDealInfo.dealInfo.dealInfoType3!=null}">${wdiType[boundDealInfo.dealInfo.dealInfoType3]}</c:if>
 				
 				</td>
-				<td>${boundDealInfo.dealInfo.workCertInfo.workCertApplyInfo.name}</td>
+				
+				
+				
+				<td>${wdiStatus[boundDealInfo.dealInfo.dealInfoStatus]}</td>
 				
 			</tr>
 		</c:forEach>

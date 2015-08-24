@@ -1,9 +1,17 @@
 package com.itrus.ca.modules.profile.entity;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.*;
+
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.itrus.ca.modules.sys.entity.User;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
@@ -57,7 +65,9 @@ public class ConfigChargeAgent implements java.io.Serializable {
 			Integer configureNum,
 			Integer surplusNum,
 			Integer availableNum,
-			Integer reserveNum
+			Integer reserveNum,
+			Date createDate,
+			User createBy
 			) {
 		this.configApp = configApp;
 		this.configProduct = configProduct;
@@ -74,6 +84,7 @@ public class ConfigChargeAgent implements java.io.Serializable {
 		this.surplusNum=surplusNum;
 		this.availableNum=availableNum;
 		this.reserveNum=reserveNum;
+		
 	}
 
 	// Property accessors
@@ -248,10 +259,5 @@ public class ConfigChargeAgent implements java.io.Serializable {
 		this.isBind = isBind;
 	}
 
-	
-	
-
-	
-	
 	
 }

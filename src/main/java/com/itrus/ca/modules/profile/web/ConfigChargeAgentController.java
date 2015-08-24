@@ -34,6 +34,7 @@ import com.itrus.ca.modules.sys.utils.UserUtils;
 import com.itrus.ca.modules.work.entity.WorkDealInfo;
 import com.itrus.ca.modules.work.service.WorkDealInfoService;
 import com.itrus.ca.modules.constant.ProductType;
+import com.itrus.ca.modules.constant.WorkDealInfoStatus;
 import com.itrus.ca.modules.constant.WorkDealInfoType;
 import com.itrus.ca.modules.constant.WorkType;
 import com.itrus.ca.modules.log.service.LogUtil;
@@ -56,6 +57,7 @@ import com.itrus.ca.modules.profile.service.ConfigChargeAgentDetailService;
 import com.itrus.ca.modules.profile.service.ConfigChargeAgentHistoryService;
 import com.itrus.ca.modules.profile.service.ConfigChargeAgentService;
 import com.itrus.ca.modules.profile.service.ConfigProductService;
+import com.mysql.jdbc.Util;
 
 /**
  * 代理商应用计费策略Controller
@@ -323,10 +325,12 @@ public class ConfigChargeAgentController extends BaseController {
 	
 	@RequestMapping(value="changeChargeAgentInfoList")
 	public String changeChargeAgentInfoList(Long agentHisId,HttpServletRequest request ,
-										 HttpServletResponse response, Model model){
+										HttpServletResponse response, Model model,@RequestParam(value="createName",required = false) String createName,
+										@RequestParam(value = "startTime", required = false) Date startTime,
+										@RequestParam(value = "endTime", required = false) Date endTime){
 	//	Page<ConfigChargeAgent> page = configChargeAgentService.find(new Page<ConfigChargeAgent>(request,response),configChargeAgent);
 	
-		Page<ConfigChargeAgentHistory> page = configChargeAgentHistoryService.findByAgentId(new Page<ConfigChargeAgentHistory>(request,response),agentHisId);
+		Page<ConfigChargeAgentHistory> page = configChargeAgentHistoryService.findByAgentId(new Page<ConfigChargeAgentHistory>(request,response),agentHisId,createName ,startTime,endTime );
 		
 		for (int i = 0; i < page.getList().size(); i++) {
 			
@@ -365,6 +369,10 @@ public class ConfigChargeAgentController extends BaseController {
 			}
 			
 		}
+		
+		model.addAttribute("createName",createName);
+		model.addAttribute("startTime",startTime);
+		model.addAttribute("endTime",endTime);
 		
 		model.addAttribute("agentHisId",agentHisId);
 		model.addAttribute("page",page);
@@ -439,7 +447,8 @@ public class ConfigChargeAgentController extends BaseController {
 		model.addAttribute("handle", handle);
 		model.addAttribute("startTime", startTime);
 		model.addAttribute("endTime", endTime);
-		
+		model.addAttribute("wdiStatus",
+				WorkDealInfoStatus.WorkDealInfoStatusMap);
 		return "modules/profile/configProductBoundProductList";
 	}
 	
@@ -662,6 +671,8 @@ public class ConfigChargeAgentController extends BaseController {
 		agentHistory.setTempName(configChargeAgent.getTempName());
 		agentHistory.setTempStyle(configChargeAgent.getTempStyle());
 		agentHistory.setReserveNum(configChargeAgent.getReserveNum());
+		agentHistory.setCreateBy(UserUtils.getUser());
+		agentHistory.setCreateDate(new Date());
 		configChargeAgentHistoryService.save(agentHistory);//保存主表的信息
 		
 		

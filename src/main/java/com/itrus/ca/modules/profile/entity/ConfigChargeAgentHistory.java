@@ -1,10 +1,18 @@
 package com.itrus.ca.modules.profile.entity;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.*;
+
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.itrus.ca.modules.sys.entity.User;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
@@ -39,6 +47,9 @@ public class ConfigChargeAgentHistory implements java.io.Serializable {
 	
 	private Long superiorId;//计费策略正式编号
 	
+	private Date createDate; //创建人
+	private User createBy;//创建时间
+	
 
 	private HashMap<String, String> map = new HashMap<String, String>();
 	
@@ -58,7 +69,9 @@ public class ConfigChargeAgentHistory implements java.io.Serializable {
 			Integer surplusNum,
 			Integer availableNum,
 			Long superiorId,
-			Integer reserveNum
+			Integer reserveNum,
+			Date createDate,
+			User createBy
 			) {
 		
 		this.chargeMethodPos = chargeMethodPos;
@@ -71,6 +84,8 @@ public class ConfigChargeAgentHistory implements java.io.Serializable {
 		this.availableNum=availableNum;
 		this.superiorId = superiorId;
 		this.reserveNum = reserveNum;
+		this.createDate = createDate;
+		this.createBy = createBy;
 	}
 
 	// Property accessors
@@ -200,6 +215,27 @@ public class ConfigChargeAgentHistory implements java.io.Serializable {
 		this.map = map;
 	}
 	
+	@JsonIgnore
+	@ManyToOne(fetch=FetchType.LAZY)
+	@NotFound(action = NotFoundAction.IGNORE)
+	public User getCreateBy() {
+		return createBy;
+	}
+
+	public void setCreateBy(User createBy) {
+		this.createBy = createBy;
+	}
+
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	public Date getCreateDate() {
+		return createDate;
+	}
+
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
+	}
 	
 	
 	
