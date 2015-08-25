@@ -30,7 +30,7 @@
 		<div class="control-group">
 			<label>修改人：</label>
 			<input type="text" name="createName" value="${createName }"/>
-				<label>办理时间 ：</label> <input id="startTime" name="startTime"
+				<label>修改时间 ：</label> <input id="startTime" name="startTime"
 				type="text" readonly="readonly" maxlength="20"
 				class="input-medium Wdate" required="required"
 				onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});"
