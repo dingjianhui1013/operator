@@ -25,6 +25,7 @@ function nextStep(){
 		var result = external.unlockresetpin($("#respCode").val(),$("#pass1").val());
 		$.getJSON("${ctxILetter}/unlock/jump?_"+new Date().getTime(),function(data){
 			if(result==100){
+			
 				$("#jsfw3form").submit();
 			}else{
 				var url = "${ctxILetter}/enroll/jsfw3Nextform?msg="+result+"&keySn="+$("#keySn").html()+"&id="+$("#unlockId").val()+"&_="+new Date().getTime();

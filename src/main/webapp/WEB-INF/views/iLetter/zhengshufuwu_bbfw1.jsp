@@ -58,7 +58,7 @@ DD_belatedPNG.fix('.nav1 a,.nav2 a,.nav3 a,.nav4 a,.nav5 a,.nav6 a,.nav1_cur a,.
 	}
 	
 	function backToMain(){
-		 window.location=external.GetCookie("zhengshufuwu");
+		window.location=external.GetCookie("zhengshufuwu"); 
 	}
 </script>
 </head>

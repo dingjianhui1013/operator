@@ -53,8 +53,15 @@
      <div class="zsfw_js_step2_c hong" id="mmssgg">
      ${status}<br /><c:if test="${msg!=null }">${msg }<br/></c:if> 如有疑问可直接联系客服！
      </div>
+     <div class="zsfw_gxgx_info1" style="margin:-43px auto 0;">
+     	<div style="padding:8px 0 0 20px">
+			请下载<a href="${ctxILetter}/enroll/downloadDoc?fileName=apply.docx" target="_blank" class="ablue">《数字证书业务申请表》</a>填写，并加盖公章。<br />传真至四川省数字证书认证管理中心（028-85336171-808）。
+     	</div>
+     </div>
+     
+     
      <c:if test="${msg==null }">
-	     <div class="btn_cxsqpj"><a href="javascript:void(0)" onclick="nextStep()"></a></div>
+	     <div class="btn_cxsqpj" style="margin-top:10px;"><a href="javascript:void(0)" onclick="nextStep()"></a></div>
      </c:if>
      <c:if test="${msg!=null }">
      <div class="btn_sqjs">
