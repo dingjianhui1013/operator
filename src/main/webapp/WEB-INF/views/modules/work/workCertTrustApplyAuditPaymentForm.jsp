@@ -130,7 +130,10 @@
 			} else {
 				$("#sumMoney").removeAttr("disabled");
 				$("#collectMoney").removeAttr("disabled");
-				$("#shouldMoney").removeAttr("disabled");
+				$("#shouldMoney").attr("disabled","");
+
+						
+				
 				$("#mc").removeAttr("disabled");
 				$("#bc").removeAttr("disabled");
 				$("#pc").removeAttr("disabled");
@@ -295,7 +298,7 @@ vertical-align: inherit
 						style=" margin: 0px auto; float: center;vertical-align: inherit;">
 						<tbody>
 							<tr>
-								<th colspan="4">本次收费明细</th>
+								<th colspan="2">本次收费明细</th>
 							</tr>
 							<tr>
 								<td><c:if test="${chargeAgent.chargeMethodPos==true }">
@@ -322,7 +325,7 @@ vertical-align: inherit
 										<input type="hidden" name="posMoney" id="pos"
 											readonly="readonly" value="0">
 									</c:if></td>
-								<td><c:if test="${chargeAgent.chargeMethodBank==true }">
+								<%-- <td><c:if test="${chargeAgent.chargeMethodBank==true }">
 										<input type="checkbox" value="1" name="methodBank" id="bc"
 											onclick="changeInputStatus(this)">银行转账<input
 											type="text" name="bankMoney" id="bank" readonly="readonly"
@@ -343,7 +346,7 @@ vertical-align: inherit
 											type="text" disabled="disabled" value="0">
 										<input type="hidden" name="alipayMoney" id="alipay"
 											readonly="readonly" value="0">
-									</c:if></td>
+									</c:if></td> --%>
 							</tr>
 							<tr>
 								<td><c:if test="${chargeAgent.chargeMethodGov==true }">
@@ -367,17 +370,27 @@ vertical-align: inherit
 							</tr>
 								<tr>
 								<td>业务应收合计:</td>
-								<td><input type="text" id="sumMoney" name="workTotalMoney" disabled="disabled" value="${apply.money }"></td>
+								<td>
+								<span id="sumMoney">${apply.money }</span>
+								<input type="hidden"  id="allTotalMoney" value="${apply.money }" />
+								</td>
 								<td><!-- 本次应收金额 -->
 									<input type="hidden" name="workReceivaMoney" id="shouldMoney" disabled="disabled" value="${apply.money }">
 								</td>
-									
+								<td>
+								<input type="text" name="workTotalMoney" id="workTotalMoney" value="${apply.money }" >
+								</td>
+								<td></td>	
 							</tr>
 							<tr>
 							<td>本次实收金额：</td>
-								<td>
+								
+									
+										<td>
 								<input type="text" name="workPayedMoney" id="collectMoney" disabled="disabled"  value="0"></td>
 									<td></td><td></td>
+									
+									
 							</tr>
 							<tr>
 								<th colspan="4">发票信息</th>

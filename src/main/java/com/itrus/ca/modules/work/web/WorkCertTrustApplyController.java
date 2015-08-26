@@ -149,7 +149,7 @@ public class WorkCertTrustApplyController extends BaseController {
 		logService.save(log);
 		WorkDealInfo workDealInfo = dealInfoService.get(dealInfoId);
 		ConfigChargeAgent chargeAgent = configChargeAgentService
-				.get(workDealInfo.getConfigProduct().getChargeAgentId());
+				.get(workDealInfo.getConfigChargeAgentId());
 		
 		model.addAttribute("applyId", id);
 		model.addAttribute("apply", workCertTrustApplyService.get(id));

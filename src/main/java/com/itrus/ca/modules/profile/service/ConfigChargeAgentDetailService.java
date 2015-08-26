@@ -80,7 +80,7 @@ public class ConfigChargeAgentDetailService extends BaseService {
 			}
 			dc.add(Restrictions.like("chargeYear", year));
 		}
-		dc.add(Restrictions.like("productType", productType));
+		//dc.add(Restrictions.like("productType", productType));
 		List<ConfigChargeAgentDetail> list =  configChargeAgentDetailDao.find(dc);
 		if (list.size()>0) {
 			return list.get(0).getMoney();
@@ -98,7 +98,7 @@ public class ConfigChargeAgentDetailService extends BaseService {
 		dc.add(Restrictions.eq("configChargeAgent", configChargeAgent));
 		dc.add(Restrictions.eq("workType", WorkType.TYPE_TRUST));
 		dc.add(Restrictions.eq("chargeYear", 0));
-		dc.add(Restrictions.eq("productType", productType));
+		//dc.add(Restrictions.eq("productType", productType));
 		List<ConfigChargeAgentDetail> list = configChargeAgentDetailDao.find(dc);
 		if (list.size()>0) {
 			return list.get(0).getMoney();
@@ -116,7 +116,7 @@ public class ConfigChargeAgentDetailService extends BaseService {
 		dc.add(Restrictions.eq("configChargeAgent", configChargeAgent));
 		dc.add(Restrictions.eq("workType", WorkType.TYPE_TRUST));
 		dc.add(Restrictions.eq("chargeYear", 1));
-		dc.add(Restrictions.eq("productType", productType));
+		//dc.add(Restrictions.eq("productType", productType));
 		List<ConfigChargeAgentDetail> list = configChargeAgentDetailDao.find(dc);
 		if (list.size()>0) {
 			return list.get(0).getMoney();

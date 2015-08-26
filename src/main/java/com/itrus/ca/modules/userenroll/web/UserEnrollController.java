@@ -604,7 +604,7 @@ public class UserEnrollController extends BaseController {
 				Double totalMoney = 0d; //结算过后总年数
 				
 				ConfigChargeAgent configChargeAgent = configChargeAgentService
-                        .get(workDealInfo.getConfigProduct().getChargeAgentId());
+                        .get(workDealInfo.getConfigChargeAgentId());
 				int i = workDealInfo.getConfigProduct().getProductLabel();
 				Double yearMoney = configChargeAgentDetailService.selectTrust1Money(configChargeAgent, i);//该应用申请移动设备1年的钱数
 				Double halfYearMoney = configChargeAgentDetailService.selectTrust0Money(configChargeAgent, i);//该应用申请移动设备半年的钱数

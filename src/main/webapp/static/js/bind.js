@@ -186,7 +186,7 @@ function addPayInfoToList() {
 	var userName = $("#userNameHid").val();
 	var curDate = $("#dateHid").val();
 	var companyName = $("#companyHid").val();
-	var sumMoney = $("#sumMoney").html();
+	var sumMoney = parseFloat($("#sumMoney").html());
 	var html = "";
 	if($("#money").val()==''){
 		$("#money").val(0);
