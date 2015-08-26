@@ -8,6 +8,7 @@ import com.itrus.ca.modules.log.dao.SysOperateLogDao;
 import com.itrus.ca.modules.log.dao.TerminalLogDao;
 import com.itrus.ca.modules.log.entity.SysOperateLog;
 import com.itrus.ca.modules.log.entity.TerminalLog;
+import com.itrus.ca.modules.sys.entity.User;
 /**
  * 记录日志
  * @author ZhangJingtao
@@ -49,4 +50,24 @@ public class LogUtil extends BaseService{
 			e.printStackTrace();
 		}
 	}
+	
+	
+	/**
+	 * 记录后台操作日志
+	 */
+	public void saveIxinSysLog(String type,String detail,String exception,User user){
+		try {
+			SysOperateLog sysOperateLog = new SysOperateLog();
+			sysOperateLog.setType(type);
+			sysOperateLog.setRemarks(detail);
+			sysOperateLog.setException(exception);
+			sysOperateLog.setCreateBy(user);
+			sysOperateLog.setUpdateBy(user);
+			sysOperateLogDao.save(sysOperateLog);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
 }

@@ -43,11 +43,13 @@ import com.itrus.ca.modules.constant.WorkDealInfoType;
 import com.itrus.ca.modules.constant.WorkType;
 import com.itrus.ca.modules.finance.entity.FinancePaymentInfo;
 import com.itrus.ca.modules.log.service.LogUtil;
+import com.itrus.ca.modules.profile.entity.ConfigAgentBoundDealInfo;
 import com.itrus.ca.modules.profile.entity.ConfigApp;
 import com.itrus.ca.modules.profile.entity.ConfigAppOfficeRelation;
 import com.itrus.ca.modules.profile.entity.ConfigChargeAgent;
 import com.itrus.ca.modules.profile.entity.ConfigChargeAgentDetail;
 import com.itrus.ca.modules.profile.entity.ConfigProduct;
+import com.itrus.ca.modules.profile.service.ConfigAgentBoundDealInfoService;
 import com.itrus.ca.modules.profile.service.ConfigAppOfficeRelationService;
 import com.itrus.ca.modules.profile.service.ConfigAppService;
 import com.itrus.ca.modules.profile.service.ConfigChargeAgentDetailService;
@@ -124,6 +126,10 @@ public class UserEnrollController extends BaseController {
 	
 	@Autowired
 	private WorkPayInfoService workPayInfoService;
+	
+	@Autowired
+	private ConfigAgentBoundDealInfoService configAgentBoundDealInfoService;
+	
 	
 	@Value(value = "${deploy.path}")
 	public String deployPath;
@@ -905,8 +911,8 @@ public class UserEnrollController extends BaseController {
 			
 			workDealInfoService.save(workDealInfo);
 			
-			ConfigChargeAgent configChargeAgent = configChargeAgentService
-					.get(workDealInfo.getConfigProduct().getChargeAgentId());
+			//ConfigChargeAgent configChargeAgent = configChargeAgentService.get(workDealInfo.getConfigChargeAgentId());
+					
 			
 			// 新建证书 并赋予值
 			WorkCertInfo workCertInfo = workDealInfo.getWorkCertInfo();
@@ -959,7 +965,28 @@ public class UserEnrollController extends BaseController {
 			new_dealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_UPDATE_USER);
 			new_dealInfo.setWorkCertInfo(certInfo);
 			new_dealInfo.setNotafter(new Timestamp(afterDate.getTime()));
+			new_dealInfo.setPayType(workDealInfo.getPayType());
+			new_dealInfo.setConfigChargeAgentId(workDealInfo.getConfigChargeAgentId());
+			
 			dealInfoService.save(new_dealInfo);
+
+			ConfigChargeAgent agentBound =  configChargeAgentService.get(workDealInfo.getConfigChargeAgentId());
+			Integer reseNum = agentBound.getReserveNum();
+			Integer surNum = agentBound.getSurplusNum();
+			agentBound.setReserveNum(reseNum+1);
+			agentBound.setSurplusNum(surNum-1);
+			configChargeAgentService.save(agentBound);
+			
+			ConfigAgentBoundDealInfo dealInfoBound = new ConfigAgentBoundDealInfo();
+			dealInfoBound.setDealInfo(new_dealInfo);
+			dealInfoBound.setAgent(agentBound);
+			dealInfoBound.setCreateBy(user);//四川1期改造，将更新证书归属到证书新增申请网点
+			dealInfoBound.setUpdateBy(user);//四川1期改造，将更新证书归属到证书新增申请网点
+			configAgentBoundDealInfoService.save(dealInfoBound);
+			logUtil.saveIxinSysLog("计费策略模版", "计费策略模版："+agentBound.getId()+"--业务编号："+new_dealInfo.getId()+"--关联成功!", "" ,user );
+						
+			
+			
 			logUtil.saveTerminalLog(request.getRemoteHost(), "申请更新业务", request.getRemoteAddr(),certSn, "申请更新");
 //			double money = configChargeAgentDetailService.selectMoney(
 //					configChargeAgent,1, new_dealInfo.getYear(), new_dealInfo
@@ -988,8 +1015,6 @@ public class UserEnrollController extends BaseController {
 		try {
 			WorkDealInfo workDealInfo = workDealInfoService
 					.get(new Long(dealInfoId));
-			ConfigChargeAgent configChargeAgent = configChargeAgentService
-					.get(workDealInfo.getConfigProduct().getChargeAgentId());
 //			double money = configChargeAgentDetailService.selectMoney(
 //					configChargeAgent,1, workDealInfo.getYear(), workDealInfo
 //							.getConfigProduct().getProductLabel());
