@@ -47,11 +47,13 @@ import com.itrus.ca.modules.profile.entity.ConfigAgentBoundDealInfo;
 import com.itrus.ca.modules.profile.entity.ConfigApp;
 import com.itrus.ca.modules.profile.entity.ConfigAppOfficeRelation;
 import com.itrus.ca.modules.profile.entity.ConfigChargeAgent;
+import com.itrus.ca.modules.profile.entity.ConfigChargeAgentBoundConfigProduct;
 import com.itrus.ca.modules.profile.entity.ConfigChargeAgentDetail;
 import com.itrus.ca.modules.profile.entity.ConfigProduct;
 import com.itrus.ca.modules.profile.service.ConfigAgentBoundDealInfoService;
 import com.itrus.ca.modules.profile.service.ConfigAppOfficeRelationService;
 import com.itrus.ca.modules.profile.service.ConfigAppService;
+import com.itrus.ca.modules.profile.service.ConfigChargeAgentBoundConfigProductService;
 import com.itrus.ca.modules.profile.service.ConfigChargeAgentDetailService;
 import com.itrus.ca.modules.profile.service.ConfigChargeAgentService;
 import com.itrus.ca.modules.profile.service.ConfigProductService;
@@ -129,6 +131,10 @@ public class UserEnrollController extends BaseController {
 	
 	@Autowired
 	private ConfigAgentBoundDealInfoService configAgentBoundDealInfoService;
+	
+	
+	@Autowired
+	private ConfigChargeAgentBoundConfigProductService configChargeAgentBoundConfigProductService;
 	
 	
 	@Value(value = "${deploy.path}")
@@ -259,7 +265,7 @@ public class UserEnrollController extends BaseController {
 				json.put("endDate", sdf.format(certInfo.getNotafter()));
 
 				ConfigChargeAgent configChargeAgent = configChargeAgentService
-						.get(dealInfos.get(0).getConfigProduct().getChargeAgentId());
+						.get(dealInfos.get(0).getConfigChargeAgentId());
 				Long product = dealInfos.get(0).getConfigProduct().getId();
 				int i = dealInfos.get(0).getConfigProduct().getProductLabel();
 				int year = 0;
@@ -282,6 +288,7 @@ public class UserEnrollController extends BaseController {
 			json.put("money", money);
 			json.put("status", "1");
 		} catch (Exception e) {
+			e.printStackTrace();
 			json.put("status", "0");
 		}
 		return json.toString();
@@ -300,8 +307,12 @@ public class UserEnrollController extends BaseController {
 		model.addAttribute("configAppId",configAppId);
 		System.out.println(configAppId);
 		
-		ConfigProduct product =  configProductService.findByAppIdProduct(configAppId , configProductId);
-		ConfigChargeAgent agent  = configChargeAgentService.get(product.getChargeAgentId());
+		//ConfigProduct product =  configProductService.findByAppIdProduct(configAppId , configProductId);
+		
+		List<ConfigChargeAgentBoundConfigProduct> list = configChargeAgentBoundConfigProductService.findByProductId(configProductId);
+		
+		//ConfigChargeAgent agent  = configChargeAgentService.get(product.getChargeAgentId());
+		ConfigChargeAgent agent = list.get(0).getAgent();
 		List<ConfigChargeAgentDetail> list2 = configChargeAgentDetailService.findByConfigChargeAgent(agent);
 		if(list2.size()==0){
 			List<ConfigApp> configApps = configAppService.selectAll();

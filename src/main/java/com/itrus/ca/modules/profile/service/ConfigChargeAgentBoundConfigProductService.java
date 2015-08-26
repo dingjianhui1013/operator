@@ -63,6 +63,15 @@ public class ConfigChargeAgentBoundConfigProductService extends BaseService {
 	
 	
 	
+	@Transactional(readOnly = false)
+	public List<ConfigChargeAgentBoundConfigProduct> findByProductId(Long proId){
+		DetachedCriteria dc = configChargeAgentBoundConfigProductDao.createDetachedCriteria();
+		dc.add(Restrictions.eq("product.id", proId));
+		return configChargeAgentBoundConfigProductDao.find(dc);
+	}
+	
+	
+	
 	
 	
 	@Transactional(readOnly = false)
