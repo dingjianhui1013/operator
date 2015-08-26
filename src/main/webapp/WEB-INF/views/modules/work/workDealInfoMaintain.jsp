@@ -259,7 +259,7 @@ function revoke(dealInfoId){
 <body>
 	<ul class="nav nav-tabs">
 		<li><a href="${ctx}/work/workDealInfo/list">业务办理列表</a></li>
-		<li class="active"><a href="${ctx}/work/workDealInfo/typeForm?id=${workDealInfo.id}&reissueType=${reissue}&dealType=${dealType}">业务<c:if test="${not empty update}">更新</c:if><c:if test="${not empty change}">变更</c:if><c:if test="${not empty reissue}">补办</c:if><c:if test="${not empty revoke}">吊销</c:if></a></li>
+		<li class="active"><a href="${ctx}/work/workDealInfo/typeForm?id=${workDealInfo.id}&reissueType=${reissue}&dealType=${dealType}">业务 <c:if test="${not empty update}">更新</c:if><c:if test="${not empty change}">变更</c:if><c:if test="${not empty reissue}">补办</c:if><c:if test="${not empty revoke}">吊销</c:if></a></li>
 	</ul>
 	<form:form id="inputForm" action="${ctx}/work/workDealInfoOperation/maintainSave"
 		method="POST" class="form-horizontal">

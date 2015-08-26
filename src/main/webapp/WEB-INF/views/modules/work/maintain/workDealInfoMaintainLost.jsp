@@ -266,7 +266,7 @@
 	<ul class="nav nav-tabs">
 		<li><a href="${ctx}/work/workDealInfo/list">业务办理列表</a></li>
 		<li class="active"><a
-			href="${ctx}/work/workDealInfo/typeForm?id=${workDealInfo.id}&reissueType=${reissue}&dealType=${dealType}">业务变更</a></li>
+			href="${ctx}/work/workDealInfo/typeForm?id=${workDealInfo.id}&reissueType=${reissue}&dealType=${dealType}">业务补办</a></li>
 	</ul>
 	<form:form id="inputForm"
 		action="${ctx}/work/workDealInfoOperation/maintainSaveLost" method="POST"
