@@ -30,26 +30,26 @@ public class WorkCompany extends BaseEntity implements java.io.Serializable {
 	// Fields
 
 	private Long id;
-	private String companyName;
+	private String companyName; // 单位名称
 	private String comEnglishName;
-	private String companyType;
-	private String comCertificateType;
-	private String comCertficateNumber;
-	private Timestamp comCertficateTime;
+	private String companyType;          // 单位类型
+	private String comCertificateType;   // 单位证照
+	private String comCertficateNumber;  // 证件号
+	private Timestamp comCertficateTime; // 单位证照有效期
 	private String businessNumber;
-	private String selectLv;
-	private String organizationNumber;
-	private Timestamp orgExpirationTime;
+	private String selectLv;             // 服务级别
+	private String organizationNumber;   // 组织机构代码
+	private Timestamp orgExpirationTime; // 组织机构代码有效期
 	private String comPhone;
 	private String zipCode;
 	private String tcpNumber;
 	private String ageDisNumber;
-	private String legalName;
-	private String province;
-	private String city;
-	private String district;
-	private String address;
-	private String companyMobile;
+	private String legalName;  		// 法人姓名
+	private String province;   		// 省份
+	private String city;	   		// 地级市
+	private String district;   		// 市、县级市
+	private String address;    		// 街道地址
+	private String companyMobile;	// 单位联系电话
 	private String enterpriseType;
 	private String marketingScope;
 	private String annualInspection;
@@ -58,8 +58,8 @@ public class WorkCompany extends BaseEntity implements java.io.Serializable {
 	private String actualCapital;
 	private String companyIp;
 	private String companyWeb;
-	private String remarks;
-	private String areaRemark;
+	private String remarks;			// 备注信息
+	private String areaRemark; 		// 区域备注
 	private Set<WorkDealInfo> workDealInfos = new HashSet<WorkDealInfo>(0);
 	private Set<WorkUser> workUsers = new HashSet<WorkUser>(0);
 	private Set<WorkLog> workLogs = new HashSet<WorkLog>(0);

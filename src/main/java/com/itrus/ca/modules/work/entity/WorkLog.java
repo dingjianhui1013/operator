@@ -33,7 +33,7 @@ public class WorkLog extends DataEntity implements java.io.Serializable {
 	private Office sysOffice;
 	private WorkCompany workCompany;
 	private WorkDealInfo workDealInfo;
-	private String recordContent;
+	private String recordContent;     //记录内容
 	private String serType;
 	private String serTitle;
 	private Integer completeType;

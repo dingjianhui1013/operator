@@ -31,13 +31,13 @@ public class WorkUser implements java.io.Serializable {
 	private Long id;
 	private String userSn;
 	private WorkCompany workCompany;
-	private String contactName;
-	private String contactSex;
-	private String conCertType;
-	private String conCertNumber;
-	private String contactEmail;
-	private String contactPhone;
-	private String contactTel;
+	private String contactName; 		// 证书持有人姓名
+	private String contactSex;			// 证书持有人性别
+	private String conCertType;			// 证书持有人证件
+	private String conCertNumber;		// 证件号码
+	private String contactEmail;		// 证书持有人电子邮件
+	private String contactPhone;		// 证书持有人手机号
+	private String contactTel;			// 业务系统UID
 	private String department;
 	private String address;
 	private Integer status;

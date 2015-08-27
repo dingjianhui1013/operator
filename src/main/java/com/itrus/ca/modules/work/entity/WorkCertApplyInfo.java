@@ -45,12 +45,12 @@ public class WorkCertApplyInfo implements java.io.Serializable {
 	private String country;
 	private String description;
 	private String dns;
-	private String email;
+	private String email;				// 经办人邮箱
 	private String idRandom;
 	private String ip;
 	private String locality;
 	private String mobilePhone;
-	private String name;
+	private String name;				// 经办人姓名
 	private String organization;
 	private String orgunit;
 	private String serialnumber;
@@ -66,7 +66,7 @@ public class WorkCertApplyInfo implements java.io.Serializable {
 	private String domain;
 	private String contactEmail;
 	private String commonName;
-	private String idCard;
+	private String idCard;				// 身份证号
 	private Set<WorkCertInfo> workCertInfos = new HashSet<WorkCertInfo>(0);
 
 	// Constructors

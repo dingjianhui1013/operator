@@ -491,15 +491,15 @@
 							<th>单位类型：</th>
 							<td><select name="companyType">
 									<option value="1" id="companyType1"
-										<c:if test="${workCompany.companyType==1 }">selected</c:if>>企业</option>
+										<c:if test="${workDealInfo.workCompany.companyType==1 }">selected</c:if>>企业</option>
 									<option value="2" id="companyType2"
-										<c:if test="${workCompany.companyType==2 }">selected</c:if>>事业单位</option>
+										<c:if test="${workDealInfo.workCompany.companyType==2 }">selected</c:if>>事业单位</option>
 									<option value="3" id="companyType3"
-										<c:if test="${workCompany.companyType==3 }">selected</c:if>>政府机关</option>
+										<c:if test="${workDealInfo.workCompany.companyType==3 }">selected</c:if>>政府机关</option>
 									<option value="4" id="companyType4"
-										<c:if test="${workCompany.companyType==4 }">selected</c:if>>社会团体</option>
+										<c:if test="${workDealInfo.workCompany.companyType==4 }">selected</c:if>>社会团体</option>
 									<option value="5" id="companyType5"
-										<c:if test="${workCompany.companyType==5 }">selected</c:if>>其他</option>
+										<c:if test="${workDealInfo.workCompany.companyType==5 }">selected</c:if>>其他</option>
 							</select></td>
 
 						</tr>
