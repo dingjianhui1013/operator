@@ -8,12 +8,148 @@
 <link href="${ctxStatic}/jquery/jquery.bigautocomplete.css"
 	rel="stylesheet" />
 <script type="text/javascript">
+$(document)
+.ready(
+		function() {
+			
+			
+			alert("${workDealInfo.isIxin}");
+			if("${workDealInfo.id}"!=null && "${workDealInfo.id}"!="" && "${workDealInfo.isIxin}"){
+				var boundLabelList = "${boundLabelList}";
+				var lable = "${workDealInfo.configProduct.productLabel}";
+				$("#agentId").attr("onchange","setStyleList("+lable+")");
+				var agentHtml="";
+				var obj= $.parseJSON(boundLabelList);
+				$.each(obj, function(i, item){
+					 if(item==1){
+						if (item=="${workDealInfo.payType}") {
+							agentHtml+="<option selected='selected' value='"+item+"'>标准</option>";
+						}else{
+							agentHtml+="<option value='"+item+"'>标准</option>";
+						}
+						
+					}else if(item==2){
+						if (item=="${workDealInfo.payType}") {
+							agentHtml+="<option selected='selected' value='"+item+"'>政府统一采购</option>";
+						}else{
+							agentHtml+="<option value='"+item+"'>政府统一采购</option>";
+						}
+					}else if(item==3){
+						if (item=="${workDealInfo.payType}") {
+							agentHtml+="<option selected='selected' value='"+item+"'>合同采购</option>";
+						}else{
+							agentHtml+="<option value='"+item+"'>合同采购</option>";
+						}
+					} 
+				}); 
+				$("#agentId").html(agentHtml);
+			}
+			
+			
+			var product = $("#product").val();
+			var agentId = $("#agentId").val();
+			var appId = $("#appId").val();
+			if (agentId!=0) {
+				var url = "${ctx}/work/workDealInfo/setStyleList?lable="+lable+"&productName="+product+"&app="+appId+"&infoType=0&style="+agentId+"&_="+new Date().getTime();
+				$.getJSON(url,function(data){
+					var styleList = data.array;
+					var styleHtml="";
+					$.each(styleList,function(i,item){
+						if(item.agentId=="${workDealInfo.configChargeAgentId}"){
+							styleHtml +="<option selected='selected'  value='"+item.id+"'>" + item.name + "</option>";
+							$("#boundId").val(item.id);
+							showYear();
+						}else{
+							styleHtml +="<option value='"+item.id+"'>" + item.name + "</option>";
+						}
+					});
+					$("#agentDetailId").html(styleHtml);
+				});
+			}
+			
+		});
+
+
 	function buttonFrom() {
 		var saveYear = 0;
 		if ($("#dealInfoType").val() == 0) {
 			$("input[name=recordContent]").val($("#recordContent").val());
 			$("#recordForm").submit();
-		} else {
+		}else if("${workDealInfo.isIxin}"){
+			
+			
+			alert($("#agentDetailId").val());
+			alert($("#agentId").val());
+			if($("#agentDetailId").val()!=0 && $("#agentId").val()!=1){
+				if($("#surplusNum").val()==0){
+					top.$.jBox.tip("此计费策略模版剩余数量为零，不能进行业务办理！"); 
+					return false;
+				}else{
+					
+					var boundId = $("#agentDetailId").val();
+					var url = "${ctx}/profile/configChargeAgent/checkAgentIsZero?agentDetailId="+boundId+"&_="+new Date().getTime();
+					$.getJSON(url,function(data){
+						if(data.status==0){
+							top.$.jBox.tip("此计费策略模版剩余数量为零，不能进行业务办理！"); 
+						}else{
+							if ($("#year1").prop("checked") == true) {
+								saveYear = $("#year1").val();
+							}
+							if ($("#year2").prop("checked") == true) {
+								saveYear = $("#year2").val();
+							}
+							if ($("#year4").prop("checked") == true) {
+								saveYear = $("#year4").val();
+							}
+							if (saveYear == 0) {
+								$("#mmsg").html("请选择更新年限");
+								$("#mssg").html("请选择更新年限");
+							} else {
+								$("#inputForm").attr(
+										"action",
+										"${ctx}/work/workDealInfoAudit/updateLoad?id=${workDealInfo.id}&year="
+												+ saveYear);
+								$("#inputForm").submit();
+								//					window.location.href="${ctx}/work/workDealInfoAudit/updateLoad?id=${workDealInfo.id}&recordContent="+$("#recordContent").val()+"&year="+saveYear;
+							}
+						}
+					});
+					
+					
+					
+				}
+			}else{
+				if ($("#year1").prop("checked") == true) {
+					saveYear = $("#year1").val();
+				}
+				if ($("#year2").prop("checked") == true) {
+					saveYear = $("#year2").val();
+				}
+				if ($("#year4").prop("checked") == true) {
+					saveYear = $("#year4").val();
+				}
+				if (saveYear == 0) {
+					$("#mmsg").html("请选择更新年限");
+					$("#mssg").html("请选择更新年限");
+				} else {
+					$("#inputForm").attr(
+							"action",
+							"${ctx}/work/workDealInfoAudit/updateLoad?id=${workDealInfo.id}&year="
+									+ saveYear);
+					$("#inputForm").submit();
+					//					window.location.href="${ctx}/work/workDealInfoAudit/updateLoad?id=${workDealInfo.id}&recordContent="+$("#recordContent").val()+"&year="+saveYear;
+				}
+				
+			}
+			
+			
+			
+			
+			
+			
+			
+			
+		}else {
 			if ($("#year1").prop("checked") == true) {
 				saveYear = $("#year1").val();
 			}
@@ -105,6 +241,91 @@
 			return false;
 		}
 	}
+	
+	
+	function showYear(){
+		var agentId = $("#boundId").val();
+		//var url = "${ctx}/work/workDealInfo/showYear?lable="+lable+"&productName="+productName+"&app="+$("#appId").val()+"&infoType=0&_="+new Date().getTime();
+		var url = "${ctx}/work/workDealInfo/showYearNew?boundId="+agentId+"&infoType=1&_="+new Date().getTime();
+		
+		$.getJSON(url, function(data) {
+			if (data.year1) {
+				$("#year1").show();
+				$("#word1").show();
+			} else {
+				$("#year1").hide();
+				$("#word1").hide();
+			}
+			if (data.year2) {
+				$("#year2").show();
+				$("#word2").show();
+			} else {
+				$("#year2").hide();
+				$("#word2").hide();
+			}
+			if (data.year4) {
+				$("#year4").show();
+				$("#word4").show();
+			} else {
+				$("#year4").hide();
+				$("#word4").hide();
+			}
+			if (data.year5) {
+				$("#year5").show();
+				$("#word5").show();
+			} else {
+				$("#year5").hide();
+				$("#word5").hide();
+			}			
+			var boundId =  $("#agentDetailId").val(); 
+			var url="${ctx}/work/workDealInfo/checkSurplusNum?boundId="+boundId+"&_="+new Date().getTime();
+			$.getJSON(url,function(data){
+				$("#surplusNum").val(data.surplusNum);
+			});
+			
+			
+			
+		});
+		
+	}
+	
+	/*
+	* 给计费策略模版配置赋值
+	*/
+	function setStyleList(obj){
+		var lable = obj;
+		var product = $("#product").val();
+		var agentId = $("#agentId").val();
+		var appId = $("#appId").val();
+		if (agentId!=0) {
+			var url = "${ctx}/work/workDealInfo/setStyleList?lable="+lable+"&productName="+product+"&app="+appId+"&infoType=0&style="+agentId+"&_="+new Date().getTime();
+			$.getJSON(url,function(data){
+				var styleList = data.array;
+				var styleHtml="";
+				$.each(styleList,function(i,item){
+					if(i==0){
+						$("#boundId").val(item.id);
+						showYear();
+					}
+					styleHtml +="<option value='"+item.id+"'>" + item.name + "</option>";
+				});
+				$("#agentDetailId").html(styleHtml);
+			});
+		}else{
+			top.$.jBox.tip("请您选择产品！");
+			
+		}
+	}
+	
+	
+	//获取计费模版相对应的年限
+	function setYearByBoundId(){
+		var boundId = $("#agentDetailId").val();
+		$("#boundId").val(boundId);
+		showYear();
+	} 
+	
+	
 </script>
 </head>
 <body>
@@ -130,10 +351,15 @@
 						<tr>
 							<th>代办应用：</th>
 							<td><input type="text" name="configApp" disabled="disabled"
-								value="${workDealInfo.configApp.appName }" id="app" /></td>
+								value="${workDealInfo.configApp.appName }" id="app" />
+								<input type="hidden" id="appId" value="${workDealInfo.configApp.id }" />
+								</td>
 							<th>选择产品：</th>
 							<td colspan="3"><input type="text" name="product" disabled="disabled"
-								value="${proType[workDealInfo.configProduct.productName] }" /></td>
+								value="${proType[workDealInfo.configProduct.productName] }" />
+								
+								<input type="hidden" id="product" value="${workDealInfo.configProduct.productName }" />	
+								</td>
 						</tr>
 						<tr>
 							<th>应用标识：</th>
@@ -159,14 +385,21 @@
 							<th>申请年数：</th>
 
 							<td><c:if test="${workDealInfo.dealInfoType!=0 }">
-									<input type="radio" name="year" id="year1" value="1" />1年 
-									<input type="radio" name="year" id="year2" value="2" />2年 
-									<input type="radio" name="year" id="year4" value="4" />4年
-									<input type="radio" name="year" id="year5" value="5" />5年
+									<input type="radio" name="year" value="1" id="year1">
+								<span id="word1">1年</span>
+								<input type="radio" name="year" value="2" id="year2">
+								<span id="word2">2年 </span>
+								<input type="radio" name="year" value="4" id="year4">
+								<span id="word4">4年</span>
+								<input type="radio" name="year" value="5" id="year5">
+								<span id="word5">5年</span>
 									<span style="color: red" id="mmsg"></span>
 								</c:if> <c:if test="${workDealInfo.dealInfoType==0 }">
 									&nbsp;&nbsp;${workDealInfo.year}年
 								</c:if></td>
+								
+								
+								<c:if test="${empty workDealInfo.isIxin}"> 
 								<th><span class="prompt" style="color: red; display: none;">*</span>计费策略类型：</th>
 							<td style="width: 100px;">
 							
@@ -183,14 +416,27 @@
 								<option >${jfMB}</option>
 							</select>
 							</td>
+							</c:if>
 								
 								
-								
-								
-								
-								
-								
-								
+								<c:if test="${workDealInfo.isIxin eq true}"> 
+								<th style="width: 100px;"><span class="prompt"
+								style="color: red; display: none;">*</span>计费策略类型：</th>
+							<td style="width: 250px;"><select id="agentId"
+								name="agentId">
+									<option value="0">请选择</option>
+							</select> <input type="hidden" id="boundId"></td>
+							<th style="width: 100px;"><span class="prompt"
+								style="color: red; display: none;">*</span>计费策略模版：</th>
+							<td style="width: 250px;"><select
+								onchange="setYearByBoundId()" id="agentDetailId"
+								name="agentDetailId">
+									<option value="0">请选择</option>
+							</select> 
+							<input type="hidden" id="surplusNum" />
+
+							</td>
+								</c:if>
 								
 								
 							<%-- 
@@ -483,7 +729,6 @@ style="display:none"</c:if> --%>>
 				</table>
 			</div>
 		</div>
-		<input type="hidden" id="appId" name="appId" />
 		<input type="hidden" name="deal_info_status" value="5">
 	</form:form>
 	<div class="form-actions"

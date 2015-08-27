@@ -6,9 +6,11 @@ package com.itrus.ca.modules.work.web;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -44,7 +46,9 @@ import com.itrus.ca.modules.profile.dao.ConfigSupplierProductRelationDao;
 import com.itrus.ca.modules.profile.entity.ConfigAgentBoundDealInfo;
 import com.itrus.ca.modules.profile.entity.ConfigAgentOfficeRelation;
 import com.itrus.ca.modules.profile.entity.ConfigChargeAgent;
+import com.itrus.ca.modules.profile.entity.ConfigChargeAgentBoundConfigProduct;
 import com.itrus.ca.modules.profile.entity.ConfigCommercialAgent;
+import com.itrus.ca.modules.profile.entity.ConfigProduct;
 import com.itrus.ca.modules.profile.entity.ConfigRaAccount;
 import com.itrus.ca.modules.profile.entity.ConfigRaAccountExtendInfo;
 import com.itrus.ca.modules.profile.entity.ConfigSupplier;
@@ -52,6 +56,7 @@ import com.itrus.ca.modules.profile.entity.ConfigSupplierProductRelation;
 import com.itrus.ca.modules.profile.service.ConfigAgentAppRelationService;
 import com.itrus.ca.modules.profile.service.ConfigAgentBoundDealInfoService;
 import com.itrus.ca.modules.profile.service.ConfigAgentOfficeRelationService;
+import com.itrus.ca.modules.profile.service.ConfigChargeAgentBoundConfigProductService;
 import com.itrus.ca.modules.profile.service.ConfigChargeAgentDetailService;
 import com.itrus.ca.modules.profile.service.ConfigChargeAgentService;
 import com.itrus.ca.modules.profile.service.ConfigRaAccountService;
@@ -163,7 +168,14 @@ public class WorkDealInfoAuditController extends BaseController {
 	@Autowired
 	private ConfigAgentBoundDealInfoService configAgentBoundDealInfoService;
 	
+	@Autowired
+	private ConfigChargeAgentBoundConfigProductService configChargeAgentBoundConfigProductService;
 
+	@Autowired
+	private ConfigChargeAgentService chargeAgentService;
+	
+
+	
 	private LogUtil logUtil = new LogUtil();
 
 	@ModelAttribute
@@ -203,21 +215,10 @@ public class WorkDealInfoAuditController extends BaseController {
 		workDealInfo.setDealInfoType(dealInfoType);
 		Page<WorkDealInfo> page = workDealInfoService.findByStatus(
 				new Page<WorkDealInfo>(request, response), workDealInfo);
-		
-		
-		
-		
 		List<WorkDealInfo> noIxInfos = page.getList();
 		List<WorkDealInfo> isIxInfos = workDealInfoService.findByIsIxin(workDealInfo);
 		noIxInfos.addAll(isIxInfos);
-		
 		page.setList(noIxInfos);
-		
-		
-		
-		
-		
-		
 		model.addAttribute("page", page);
 		model.addAttribute("proType", ProductType.productTypeStrMap);
 		model.addAttribute("wdiType", WorkDealInfoType.WorkDealInfoTypeMap);
@@ -302,8 +303,34 @@ public class WorkDealInfoAuditController extends BaseController {
 			model.addAttribute("canEdit", false);
 		}
 		
-		ConfigChargeAgent agent =  configChargeAgentService.get(workDealInfo.getConfigChargeAgentId());
-		model.addAttribute("jfMB", agent.getTempName());
+		if (workDealInfo.getIsIxin()!=null && workDealInfo.getIsIxin()) {
+			
+			ConfigProduct configProduct = workDealInfo.getConfigProduct();
+			List<ConfigChargeAgentBoundConfigProduct> boundList = configChargeAgentBoundConfigProductService
+					.findByProIdAll(configProduct.getId());		
+			Set<Integer> nameSet = new HashSet<Integer>();
+			for (int i = 0; i < boundList.size(); i++) {
+				nameSet.add(Integer.parseInt(boundList.get(i).getAgent().getTempStyle()));
+			}
+			
+			model.addAttribute("boundLabelList", nameSet);
+			ConfigChargeAgent chargeAgent = chargeAgentService.get(workDealInfo
+					.getConfigChargeAgentId());
+			model.addAttribute("tempStyle", chargeAgent.getTempStyle());
+			
+			
+			
+		}else{
+			ConfigChargeAgent agent =  configChargeAgentService.get(workDealInfo.getConfigChargeAgentId());
+			model.addAttribute("jfMB", agent.getTempName());
+			
+		}
+		
+		
+		
+		
+		
+		
 		
 
 		return "modules/work/workDealInfoAuditACUForm";
@@ -315,9 +342,14 @@ public class WorkDealInfoAuditController extends BaseController {
 			HttpServletResponse response, Model model, String contactName,
 			String conCertType, String contacEmail, String conCertNumber,
 			String contactPhone, String contactTel, String pName,String contactSex,
-			String pEmail, String pIDCard) {
+			String pEmail, String pIDCard , Integer agentId,Long agentDetailId ) {
 		workDealInfo.setYear(year);
 		// 标注为i信端更新
+
+		workDealInfo.setPayType(agentId);
+		ConfigChargeAgentBoundConfigProduct bound =  configChargeAgentBoundConfigProductService.get(agentDetailId);
+		
+		workDealInfo.setConfigChargeAgentId(bound.getAgent().getId());		
 		workDealInfo.setIsIxin(true);
 		// 保存日志信息
 		WorkLog workLog = new WorkLog();
@@ -359,12 +391,6 @@ public class WorkDealInfoAuditController extends BaseController {
 		oldCertInfo.setWorkCertApplyInfo(workCertApplyInfo);
 		workCertInfoService.save(oldCertInfo);
 		workDealInfoService.save(workDealInfo);
-		
-		
-		
-		
-		
-		
 		
 		return "redirect:" + Global.getAdminPath()
 				+ "/work/workDealInfo/pay?id=" + workDealInfo.getId();
@@ -580,7 +606,17 @@ public class WorkDealInfoAuditController extends BaseController {
 	@RequestMapping("jujue")
 	public String jujue(WorkDealInfo workDealInfo, HttpServletRequest request,
 			HttpServletResponse response, Model model) {
-		workDealInfo.setDealInfoStatus("4");
+		
+		if (workDealInfo.getIsIxin()!=null && workDealInfo.getIsIxin()) {
+			Long dealId = workDealInfo.getPrevId();
+			WorkDealInfo dealInfo = workDealInfoService.get(dealId);
+			dealInfo.setDelFlag("0");
+			workDealInfoService.save(dealInfo);
+
+			workDealInfo.setDelFlag("1");
+		}else{
+			workDealInfo.setDealInfoStatus("4");
+		}
 		WorkLog workLog = new WorkLog();
 		workLog.setConfigApp(workDealInfo.getConfigApp());
 		workLog.setCreatTime(new Date());

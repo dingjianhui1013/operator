@@ -244,6 +244,30 @@ public class UserEnrollController extends BaseController {
 		return array.toString();
 	}
 	
+	@RequestMapping("changeAgent")
+	@ResponseBody
+	public String changeAgent(Long products){
+		JSONObject json = new JSONObject();
+		JSONArray array = new JSONArray();
+		try {
+		List<ConfigChargeAgentBoundConfigProduct> agents = configChargeAgentBoundConfigProductService.findByProductId(products);
+		
+			for(int i = 0;i<agents.size();i++){
+				json=new JSONObject();
+				ConfigChargeAgentBoundConfigProduct bound = agents.get(i);
+				json.put("id", bound.getAgent().getId());
+				json.put("productName",bound.getAgent().getTempName());
+				array.put(json);
+			}
+		} catch (Exception e) {
+			return null;
+		}
+		return array.toString();
+	}
+	
+	
+	
+	
 	// 通过AJAX判断
 	@RequestMapping(value = "bbfw")
 	@ResponseBody
@@ -302,17 +326,17 @@ public class UserEnrollController extends BaseController {
 	}
 
 	@RequestMapping(value = "bbfw2form")
-	public String bbfw2form(Long configProductId,Long configAppId,Model model) {
+	public String bbfw2form(Long configProductId,Long configAppId,Model model,Long configAgentId) {
 		model.addAttribute("configProductId", configProductId);
 		model.addAttribute("configAppId",configAppId);
 		System.out.println(configAppId);
-		
+		model.addAttribute("configAgentId", configAgentId);
 		//ConfigProduct product =  configProductService.findByAppIdProduct(configAppId , configProductId);
 		
-		List<ConfigChargeAgentBoundConfigProduct> list = configChargeAgentBoundConfigProductService.findByProductId(configProductId);
+		//List<ConfigChargeAgentBoundConfigProduct> list = configChargeAgentBoundConfigProductService.findByProductId(configProductId);
 		
 		//ConfigChargeAgent agent  = configChargeAgentService.get(product.getChargeAgentId());
-		ConfigChargeAgent agent = list.get(0).getAgent();
+		ConfigChargeAgent agent = configChargeAgentService.get(configAgentId);
 		List<ConfigChargeAgentDetail> list2 = configChargeAgentDetailService.findByConfigChargeAgent(agent);
 		if(list2.size()==0){
 			List<ConfigApp> configApps = configAppService.selectAll();
@@ -330,27 +354,6 @@ public class UserEnrollController extends BaseController {
 				}
 			}
 		}
-//		chargeAgentId
-//		
-//		model.addAttribute("bb0","111");
-//		
-		
-//		List<ConfigChargeAgent> list1 = configChargeAgentService.findByProductId(configProductId);
-//		if(list1.size()==0){
-//			List<ConfigApp> configApps = configAppService.selectAll();
-//			model.addAttribute("configApps", configApps);
-//			model.addAttribute("msg","此产品没有录入补办费用，请选择其他产品！");
-//			return "iLetter/zhengshufuwu_bbfw1";
-//		}
-//		List<ConfigChargeAgentDetail> list2 = configChargeAgentDetailService.findByConfigChargeAgent(list1.get(0));
-//		for (ConfigChargeAgentDetail d : list2) {
-//			if (d.getWorkType().equals(WorkType.TYPE_REISSUE)) {
-//				model.addAttribute("bb0", d.getMoney());
-//			}
-//			if (d.getWorkType().equals(WorkType.TYPE_DAMAGE)) {
-//				model.addAttribute("bb1", d.getMoney());
-//			}
-//		}
 		return "iLetter/zhengshufuwu_bbfw2";
 	}
 
@@ -874,7 +877,15 @@ public class UserEnrollController extends BaseController {
 						List<WorkDealInfo> infos = workDealInfoService.findgx(workDealInfo.getWorkCertInfo()
 										.getRenewalNextId());
 						// 传递前台审批状态 0为新建未审核 1为异常业务 2为退费用户 3为审核通过 4为 审核不通过11审核通过待获取
-						json.put("status", infos.get(0).getDealInfoStatus());
+						if (infos.get(0).getDelFlag().equals("1")) {
+							json.put("status","4");
+						}else{
+							
+							json.put("status", infos.get(0).getDealInfoStatus());
+						}
+						
+						
+						
 						// 传递前台审批状态，如果为业务为后台办理更新并未制证可在i信端做制证操作，即未持key更新业务。 106 后台更新审批通过待制证
 						if ( WorkDealInfoType.TYPE_UPDATE_CERT.equals(infos.get(0).getDealInfoType())
 								&& WorkDealInfoStatus.STATUS_CERT_WAIT.equals(infos.get(0).getDealInfoStatus())) {
@@ -965,8 +976,6 @@ public class UserEnrollController extends BaseController {
 			new_dealInfo.setWorkUser(workDealInfo.getWorkUser());
 			new_dealInfo.setWorkCompany(workDealInfo.getWorkCompany());
 			new_dealInfo.setDealInfoType(WorkDealInfoType.TYPE_UPDATE_CERT);
-			new_dealInfo.setDealInfoType1(workDealInfo.getDealInfoType1());
-			new_dealInfo.setDealInfoType2(workDealInfo.getDealInfoType2());
 			new_dealInfo.setYear(null);
 			new_dealInfo.setCertSort(workDealInfo.getCertSort());
 			new_dealInfo.setDealTypeName(workDealInfo.getDealTypeName());
@@ -981,23 +990,6 @@ public class UserEnrollController extends BaseController {
 			
 			dealInfoService.save(new_dealInfo);
 
-			ConfigChargeAgent agentBound =  configChargeAgentService.get(workDealInfo.getConfigChargeAgentId());
-			Integer reseNum = agentBound.getReserveNum();
-			Integer surNum = agentBound.getSurplusNum();
-			agentBound.setReserveNum(reseNum+1);
-			agentBound.setSurplusNum(surNum-1);
-			configChargeAgentService.save(agentBound);
-			
-			ConfigAgentBoundDealInfo dealInfoBound = new ConfigAgentBoundDealInfo();
-			dealInfoBound.setDealInfo(new_dealInfo);
-			dealInfoBound.setAgent(agentBound);
-			dealInfoBound.setCreateBy(user);//四川1期改造，将更新证书归属到证书新增申请网点
-			dealInfoBound.setUpdateBy(user);//四川1期改造，将更新证书归属到证书新增申请网点
-			configAgentBoundDealInfoService.save(dealInfoBound);
-			logUtil.saveIxinSysLog("计费策略模版", "计费策略模版："+agentBound.getId()+"--业务编号："+new_dealInfo.getId()+"--关联成功!", "" ,user );
-						
-			
-			
 			logUtil.saveTerminalLog(request.getRemoteHost(), "申请更新业务", request.getRemoteAddr(),certSn, "申请更新");
 //			double money = configChargeAgentDetailService.selectMoney(
 //					configChargeAgent,1, new_dealInfo.getYear(), new_dealInfo

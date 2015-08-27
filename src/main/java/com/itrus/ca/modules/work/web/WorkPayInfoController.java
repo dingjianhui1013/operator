@@ -473,24 +473,41 @@ public class WorkPayInfoController extends BaseController {
 		
 		workDealInfoService.checkWorkDealInfoNeedSettle(workDealInfo);
 		
-		if (workDealInfo.getDealInfoType()!=null && workDealInfo.getDealInfoType().equals(1)) {
-			if(workDealInfo.getDealInfoType().equals(1)){
+		
+		if (workDealInfo.getIsIxin()!=null && workDealInfo.getIsIxin()) {
+			if (workDealInfo.getDealInfoType()!=null && workDealInfo.getDealInfoType().equals(1)) {
+				
+				if(workDealInfo.getDealInfoType().equals(1)){
+					ConfigChargeAgent agent =  configChargeAgentService.get(workDealInfo.getConfigChargeAgentId());
+					agent.setAvailableNum(agent.getAvailableNum()+1);//已用数量
+					agent.setSurplusNum(agent.getSurplusNum()-1);//剩余数量
+					configChargeAgentService.save(agent);
+					logUtil.saveSysLog("计费策略模版", "更改剩余数量和使用数量成功!", "");
+					
+					ConfigAgentBoundDealInfo dealInfoBound = new ConfigAgentBoundDealInfo();
+					dealInfoBound.setDealInfo(workDealInfo);
+					dealInfoBound.setAgent(agent);
+					configAgentBoundDealInfoService.save(dealInfoBound);
+					logUtil.saveSysLog("计费策略模版", "计费策略模版："+agent.getId()+"--业务编号："+workDealInfo.getId()+"--关联成功!", "");
+					
+				}
+			}
 			
-				ConfigChargeAgent agent =  configChargeAgentService.get(workDealInfo.getConfigChargeAgentId());
-				
-				
-				Integer avaiNum = agent.getAvailableNum();//已用数量
-				Integer reseNum = agent.getReserveNum();//预留数量
-				
-				agent.setAvailableNum(avaiNum+1);//已用数量
-				
-				agent.setReserveNum(reseNum-1);//预留数量
-				
-				configChargeAgentService.save(agent);
-				logUtil.saveSysLog("计费策略模版", "更改剩余数量和使用数量成功!", "");
+			
+		}else{
+			if (workDealInfo.getDealInfoType()!=null && workDealInfo.getDealInfoType().equals(1)) {
+				if(workDealInfo.getDealInfoType().equals(1)){
+					ConfigChargeAgent agent =  configChargeAgentService.get(workDealInfo.getConfigChargeAgentId());
+					Integer avaiNum = agent.getAvailableNum();//已用数量
+					Integer reseNum = agent.getReserveNum();//预留数量
+					agent.setAvailableNum(avaiNum+1);//已用数量
+					agent.setReserveNum(reseNum-1);//预留数量
+					configChargeAgentService.save(agent);
+					logUtil.saveSysLog("计费策略模版", "更改剩余数量和使用数量成功!", "");
+				}
 			}
 		}
-		
+	
 		workDealInfoService.save(workDealInfo);
 		ConfigRaAccount raAccount = raAccountService.get(workDealInfo.getConfigProduct().getRaAccountId());
 		List<String []> list = RaAccountUtil.outPageLine(workDealInfo, raAccount.getConfigRaAccountExtendInfo());
