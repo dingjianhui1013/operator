@@ -64,7 +64,15 @@ DD_belatedPNG.fix('.nav1 a,.nav2 a,.nav3 a,.nav4 a,.nav5 a,.nav6 a,.nav1_cur a,.
 	function bbfw_from() {
 		var productId = $("#products").val();
 		if (productId != "") {
-			document.bbfw2_form.submit();
+		
+			var configAgentId = $("#configAgentId").val();
+			if(configAgentId != ""){
+				
+				document.bbfw2_form.submit();
+			}else{
+				$("#msg").html("请选择计费策略！");
+				
+			}
 		} else {
 			$("#msg").html("请选择产品类型！");
 		}
@@ -107,7 +115,7 @@ DD_belatedPNG.fix('.nav1 a,.nav2 a,.nav3 a,.nav4 a,.nav5 a,.nav6 a,.nav1_cur a,.
 			<div class="zsfw_gxgx_info1HW">
 				<form action="${ctxILetter}/enroll/bbfw2form" method="post"
 					name="bbfw2_form">
-					<table width="100%" border="0" cellspacing="0" cellpadding="0">
+					<table width="100%" border="0"  cellspacing="0" cellpadding="0">
 						<tr>
 							<td height="10" colspan="3"></td>
 						</tr>
@@ -131,14 +139,14 @@ DD_belatedPNG.fix('.nav1 a,.nav2 a,.nav3 a,.nav4 a,.nav5 a,.nav6 a,.nav1_cur a,.
 				</form>
 			</div>
 			<span id="certsn" style="display: none"></span>
-			<div class="btn_sqdx" style="padding-top: 30px">
+			<div class="btn_sqdx" style="padding-top: 0px">
 				<div id="nextt" class="btn_nextStep" style="text-align: center">
 					<a href="javascript:bbfw_from()" id="aHref"></a>
 				</div>
 			</div>
 		</div>
 		<div class="clear"></div>
-		<div class="n-tispsBox" id="msg" style="color: red; margin-top: -55px">${msg }</div>
+		<div class="n-tispsBox" id="msg" style="color: red; margin-top: -70px">${msg }</div>
 	</div>
 </body>
 </html>
