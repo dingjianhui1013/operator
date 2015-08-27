@@ -11,9 +11,6 @@
 $(document)
 .ready(
 		function() {
-			
-			
-			alert("${workDealInfo.isIxin}");
 			if("${workDealInfo.id}"!=null && "${workDealInfo.id}"!="" && "${workDealInfo.isIxin}"){
 				var boundLabelList = "${boundLabelList}";
 				var lable = "${workDealInfo.configProduct.productLabel}";
@@ -76,10 +73,6 @@ $(document)
 			$("input[name=recordContent]").val($("#recordContent").val());
 			$("#recordForm").submit();
 		}else if("${workDealInfo.isIxin}"){
-			
-			
-			alert($("#agentDetailId").val());
-			alert($("#agentId").val());
 			if($("#agentDetailId").val()!=0 && $("#agentId").val()!=1){
 				if($("#surplusNum").val()==0){
 					top.$.jBox.tip("此计费策略模版剩余数量为零，不能进行业务办理！"); 
