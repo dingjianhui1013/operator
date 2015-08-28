@@ -37,6 +37,7 @@ public class ReceiptInvoice extends DataEntity implements java.io.Serializable {
 	private Integer receiptType;
 	private ReceiptType type;//例如：2元、10元、100元
 	private Integer count;
+	private Long dealInfoId;
 	
 	
 
@@ -47,9 +48,10 @@ public class ReceiptInvoice extends DataEntity implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public ReceiptInvoice(WorkPayInfo workPayInfo, Double receiptMoney) {
+	public ReceiptInvoice(WorkPayInfo workPayInfo, Double receiptMoney,Long dealInfoId) {
 		this.workPayInfo = workPayInfo;
 		this.receiptMoney = receiptMoney;
+		this.dealInfoId = dealInfoId ;
 	}
 
 	// Property accessors
@@ -130,6 +132,16 @@ public class ReceiptInvoice extends DataEntity implements java.io.Serializable {
 	public void setCount(Integer count) {
 		this.count = count;
 	}
+	
+	@Column(name="deal_info_Id")
+	public Long getDealInfoId() {
+		return dealInfoId;
+	}
+
+	public void setDealInfoId(Long dealInfoId) {
+		this.dealInfoId = dealInfoId;
+	}
+	
 	
 	
 	

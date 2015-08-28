@@ -486,15 +486,15 @@ public class CertController extends BaseController {
 			dealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_ABNORMAL_USER);//异常业务
 			workDealInfoService.save(dealInfo);
 		}
-		try {
-			//发票出库
-			//前台服务发票出库
-			if (dealInfo.getWorkPayInfo().getUserReceipt()) {
-				boolean r = receiptInvoiceService.receiptIncoiceI(dealInfo.getWorkPayInfo().getReceiptAmount(),UserUtils.getUser().getOffice(),dealInfo.getWorkCompany().getCompanyName());				//key出库
-			}
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
+//		try {
+//			//发票出库
+//			//前台服务发票出库
+//			if (dealInfo.getWorkPayInfo().getUserReceipt()) {
+//				boolean r = receiptInvoiceService.receiptIncoiceI(dealInfo.getWorkPayInfo().getReceiptAmount(),UserUtils.getUser().getOffice(),dealInfo.getWorkCompany().getCompanyName());				//key出库
+//			}
+//		} catch (Exception e) {
+//			// TODO: handle exception
+//		}
 		return json.toJSONString();
 	}
 	
@@ -526,7 +526,7 @@ public class CertController extends BaseController {
 				workDealInfoService.save(dealInfo);
 				//发票出库
 				if (dealInfo.getWorkPayInfo().getUserReceipt()) {
-					boolean r = receiptInvoiceService.receiptIncoiceI(dealInfo.getWorkPayInfo().getReceiptAmount(),UserUtils.getUser().getOffice(),dealInfo.getWorkCompany().getCompanyName());				//key出库
+					boolean r = receiptInvoiceService.receiptIncoiceI(dealInfo.getWorkPayInfo().getReceiptAmount(),UserUtils.getUser().getOffice(),dealInfo.getWorkCompany().getCompanyName(),dealInfoId);				//key出库
 				}
 				//key出库
 				keyInvoiceService.saveInvoice(dealInfo.getWorkCertInfo().getProvider(), dealInfo.getKeySn(),dealInfo.getWorkCompany().getCompanyName());

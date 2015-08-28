@@ -162,12 +162,14 @@ public class ReceiptInvoiceService extends BaseService {
 	 * @return  返回 true 则出库成功  返回false 则出库失败（余额不足 或者是 未发现此网点）
 	 */
 	@Transactional(readOnly = false)
-	public boolean receiptIncoiceI(double money,Office office,String companyName){
+	public boolean receiptIncoiceI(double money,Office office,String companyName,Long dealInfoId){
 		ReceiptInvoice receiptInvoice = new ReceiptInvoice();
 		System.out.println("==========发票出库查询=========");
 		List<ReceiptDepotInfo> depotInfos =receiptDepotInfoService.findDepotByOffice(office);
 		System.out.println("==========发票出库查询结束=========");
 		if(depotInfos.size()>0){
+			ReceiptInvoice invoice = this.findByCompanyNameDealInfoId(companyName, dealInfoId);
+			if (invoice==null) {
 			ReceiptDepotInfo receiptDepotInfo = depotInfos.get(0);
 			
 			receiptInvoice.setReceiptDepotInfo(receiptDepotInfo);
@@ -175,10 +177,12 @@ public class ReceiptInvoiceService extends BaseService {
 				receiptInvoice.setCompanyName(companyName);
 				receiptInvoice.setReceiptMoney(money);
 				receiptInvoice.setReceiptType(0);//销售出库
+				receiptInvoice.setDealInfoId(dealInfoId);
 				this.save(receiptInvoice);
 				receiptDepotInfo.setReceiptResidue(receiptDepotInfo.getReceiptResidue()-money);
 				receiptDepotInfo.setReceiptOut(receiptDepotInfo.getReceiptOut()+money);
 				receiptDepotInfoService.save(receiptDepotInfo);
+				}
 				return true;
 //			}else {
 //				return false;//余额不足
@@ -187,6 +191,19 @@ public class ReceiptInvoiceService extends BaseService {
 			return false;  //未发现此网点
 		}
 	}
+	@Transactional(readOnly = false)
+	public ReceiptInvoice findByCompanyNameDealInfoId(String companyName,Long dealInfoId){
+		DetachedCriteria dc = receiptInvoiceDao.createDetachedCriteria();
+		dc.add(Restrictions.eq("companyName", companyName));
+		dc.add(Restrictions.eq("dealInfoId", dealInfoId));
+		if (receiptInvoiceDao.find(dc).size()>0) {
+			return receiptInvoiceDao.find(dc).get(0);
+		}else{
+			return null;
+		}
+		
+	}
+	
 	/*
 	 	*判断网点是否有库存 
 	*/
