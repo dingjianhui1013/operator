@@ -179,6 +179,8 @@
 					<td><c:if test="${workDealInfo.workCompany.companyType==1}">企业</c:if>
 						<c:if test="${workDealInfo.workCompany.companyType==2}">事业单位</c:if>
 						<c:if test="${workDealInfo.workCompany.companyType==3}">政府机构</c:if>
+						<c:if test="${workDealInfo.workCompany.companyType==4}">社会团体</c:if>
+						<c:if test="${workDealInfo.workCompany.companyType==5}">其他</c:if>
 					</td>
 					<td>${workDealInfo.configApp.appName}</td>
 					<td>${workDealInfo.configApp.alias}</td>
