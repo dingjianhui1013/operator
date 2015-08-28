@@ -271,6 +271,83 @@
 		$("#pEmail").val(mail);
 	}
 	
+
+	function changeDealInfoType(){
+		var id = "${workDealInfo.id}";
+		var submit = function (v, h, f) {
+							    if (v == 'ok'){
+							    	maintain(id);
+							    }
+							   		 return true; //close
+							};
+							top.$.jBox.confirm("您确定需要更换业务类型吗？", "提示", submit);
+	}
+	
+	function maintain(obj) {
+		top.$.jBox
+		.open(
+				"iframe:${ctx}/work/workDealInfo/typeShow?infoId="+obj,
+				"请选择业务类型",
+				500,
+				300,
+				{
+					buttons : {
+						"确定" : "ok",
+						"关闭" : true
+					},
+					submit : function(v, h, f) {
+						if (v == "ok") {
+							var table = h.find("iframe")[0].contentWindow.typeForm;
+							var dealTypes = $(table).find("input[name='dealType']");
+							var dealType = "";
+							var reissueType = "";
+							for (var i = 0; i < dealTypes.length; i++) {
+								if (dealTypes[i].checked == true) {
+									if (i == 0) {
+										dealType = dealTypes[i].value;
+									} else {
+										dealType = dealType + "," + dealTypes[i].value;
+									}
+								}
+							}
+							var id = $(table).find("input[name='id']").val();
+							var reissueTypes = $(table).find("input[name='reissueType']");
+							for (var i = 0; i < reissueTypes.length; i++) {
+								if (reissueTypes[i].checked == true) {
+									reissueType = reissueTypes[i].value;
+								}
+							}
+							if (dealType == "") {
+								top.$.jBox.tip("请选择业务类型");
+							} else {
+								
+								if(dealType.indexOf("3")>=0){
+									var url = "${ctx}/work/workDealInfo/findById?dealInfoId="+id;
+									$.getJSON(url + "&_="+new Date().getTime(),	function(data){
+												if (data.status==1){
+													if (data.isUpdate==0) {
+														top.$.jBox.tip("证书未在更新范围内，不允许更新此证书 ！");
+													}else{
+														window.location.href = "${ctx}/work/workDealInfo/typeForm?id="+id+"&reissueType="+reissueType+"&dealType="+dealType;
+													}
+												}else{
+													top.$.jBox.tip("系统异常");
+												}
+									});
+								}else{
+									window.location.href = "${ctx}/work/workDealInfo/typeForm?id="+id+"&reissueType="+reissueType+"&dealType="+dealType;
+								}
+							}
+						}
+					},
+					loaded : function(h) {
+						$(".jbox-content", top.document).css(
+								"overflow-y", "hidden");
+					}
+				});
+	};
+
+	
 	
 </script>
 </head>
@@ -322,7 +399,10 @@
 								name="dealInfoType1">遗失补办<input type="hidden" value="1" name="dealInfoType1"></c:if>
 								<c:if test="${reissue==2}"><input type="checkbox" disabled="disabled" checked="checked" value = "2"
 								name="dealInfoType1">损坏更换<input type="hidden" value="2" name="dealInfoType1"></c:if>
-										
+							
+							&nbsp;&nbsp;
+								<input class="btn btn-primary" type="button" value="更改业务类型" onclick="changeDealInfoType()"  />			
+							</td>
 										
 						</tr>
 						<tr>
