@@ -43,6 +43,10 @@
 					$("#msg").html("当前key未办理业务");
 					$("#nextt").removeClass().addClass("gray_nextStep"); 
 					$('#aHref').attr('href','javascript:void(0);');
+				}else if(d.status == 110){
+					$("#msg").html("当前业务正在平台办理业务！");
+					$("#nextt").removeClass().addClass("gray_nextStep"); 
+					$('#aHref').attr('href','javascript:void(0);');
 				}else if(d.status == 104){
 					flag = true;
 				}else if(d.status == 0){

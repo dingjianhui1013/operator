@@ -1259,13 +1259,21 @@ public class WorkDealInfoOperationController extends BaseController {
 			Integer dealInfoType2,Integer dealInfoType1,Boolean manMadeDamage,
 			
 			Model model, String pName, String pEmail, String pIDCard,String contactSex,String areaRemark,
-		 Long newInfoId) {
+		 Long newInfoId, RedirectAttributes redirectAttributes) {
 		//是否返回造成业务重复，如重复则删除
 		if (newInfoId != null) {
 			workDealInfoService.deleteWork(newInfoId);
 		}
 		//保存新业务信息(dealInfoType存在即为更新，dealInfoType1存在即为补办(1：遗失补办，2：损坏更换)，dealInfoType2存在即为变更)
 		WorkDealInfo workDealInfo1 = workDealInfoService.get(workDealInfoId);
+		if (workDealInfo1.getDelFlag().equals("1")) {
+			addMessage(redirectAttributes, "此业务正在办理维护！");
+			return "redirect:" + Global.getAdminPath() + "/work/workDealInfo/?repage";
+		}
+		
+		
+		
+		
 		WorkCompany workCompany = null;
 		WorkUser workUser = null;
 		WorkCompanyHis companyHis = null;
@@ -1423,13 +1431,20 @@ public class WorkDealInfoOperationController extends BaseController {
 			Integer agentId,Long agentDetailId, //获取计费策略类型  获取计费策略模版
 			Integer dealInfoType1,
 			
-			Boolean manMadeDamage,Model model) {
+			Boolean manMadeDamage,Model model, RedirectAttributes redirectAttributes) {
 		
 		
 		
 		
 		//保存新业务信息(dealInfoType存在即为更新，dealInfoType1存在即为补办(1：遗失补办，2：损坏更换)，dealInfoType2存在即为变更)
 		WorkDealInfo workDealInfo1 = workDealInfoService.get(workDealInfoId);
+		
+		if (workDealInfo1.getDelFlag().equals("1")) {
+			addMessage(redirectAttributes, "此业务正在办理维护！");
+			return "redirect:" + Global.getAdminPath() + "/work/workDealInfo/?repage";
+		}
+		
+		
 		WorkCompany workCompany = null;
 		WorkUser workUser = null;
 		WorkCompanyHis companyHis = null;
@@ -1564,12 +1579,15 @@ public class WorkDealInfoOperationController extends BaseController {
 			String contactName,String conCertType, String contacEmail, String conCertNumber,
 			String contactPhone, String contactTel,String contactSex, Boolean manMadeDamage,
 			Model model, String recordContent
-			
 			,String pName , String pIDCard , String pEmail
-			
+			, RedirectAttributes redirectAttributes
 			) {
 		//保存新业务信息(dealInfoType存在即为更新，dealInfoType1存在即为补办(1：遗失补办，2：损坏更换)，dealInfoType2存在即为变更)
 		WorkDealInfo workDealInfo1 = workDealInfoService.get(workDealInfoId);
+		if (workDealInfo1.getDelFlag().equals("1")) {
+			addMessage(redirectAttributes, "此业务正在办理维护！");
+			return "redirect:" + Global.getAdminPath() + "/work/workDealInfo/?repage";
+		}
 		
 		WorkCompanyHis companyHis = null;
 		// 保存经办人信息
