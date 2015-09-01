@@ -292,6 +292,21 @@
 						});
 	}
 	
+	
+	function returnPayment(){
+		var submit = function (v, h, f) {
+		    if (v == 'ok'){
+		    	var id = "${workDealInfo.id}";
+				window.location.href="${ctx}/work/workPayInfo/returnPayment?workDealInfoId="+id;
+		    }
+		   		 return true; //close
+		};
+		top.$.jBox.confirm("是否重新缴费？", "提示", submit);
+	}
+	
+	
+	
+	
 </script>
 </head>
 <body>
@@ -407,6 +422,17 @@
 			<div class="form-actions" style="text-align: center; width: 100%; border-top: none;">
 				<input class="btn btn-primary" type="button" onclick="makeCert()"
 					value="制 证" />&nbsp;
+					
+					
+				<c:if test="${onlyUpdate=='onlyUpdate' }">
+				<input class="btn btn-primary" type="button" onclick="returnPayment()"
+				value="重新缴费" />
+				
+				</c:if>
+					
+					
+					
+					
 			</div>
 		</form>
 	</div>

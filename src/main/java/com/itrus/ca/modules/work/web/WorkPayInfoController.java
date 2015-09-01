@@ -1371,11 +1371,31 @@ public class WorkPayInfoController extends BaseController {
 		logUtil.saveSysLog("业务中心", "审核拒绝重新编辑业务：编号"+workDealInfo.getId()+"缴费"+workPayedMoney+"元", "");
 		return "redirect:" + Global.getAdminPath() + "/work/workDealInfo/";
 	}
+	
+	
+	
+	
 	@RequiresPermissions("work:workPayInfo:edit")
 	@RequestMapping(value = "returnPayment")
 	public String returnPayment(Long workDealInfoId, RedirectAttributes redirectAttributes, Model model) {
 		
 		WorkDealInfo dealInfo = workDealInfoService.get(workDealInfoId);
+		
+//		private Integer configureNum;//配置数量
+//		private Integer surplusNum;//剩余数量
+//		private Integer availableNum;//已用数量
+//		private Integer reserveNum;//预留数量
+
+		
+		
+		ConfigChargeAgent agentOri =  configChargeAgentService.get(dealInfo.getConfigChargeAgentId());
+		agentOri.setReserveNum(agentOri.getReserveNum()+1);
+		agentOri.setAvailableNum(agentOri.getAvailableNum()-1);
+		
+		
+		agentOri.setSurplusNum(agentOri.getSurplusNum()-1);
+		configChargeAgentService.save(agentOri);
+			
 		
 			WorkPayInfo payInfo = dealInfo.getWorkPayInfo();
 			Set<WorkFinancePayInfoRelation> relations = payInfo.getWorkFinancePayInfoRelations();

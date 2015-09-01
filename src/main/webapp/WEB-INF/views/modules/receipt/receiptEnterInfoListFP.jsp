@@ -60,6 +60,7 @@
 					<c:if test="${receiptEnterInfo.receiptType==1}">调拨入库</c:if>
 					<c:if test="${receiptEnterInfo.receiptType==2}">盘点异常入库</c:if>
 					<c:if test="${receiptEnterInfo.receiptType==3}">退费入库</c:if>
+					<c:if test="${receiptEnterInfo.receiptType==4}">重新缴费入库</c:if>
 				</td>
 				<td>${receiptEnterInfo.createBy.name}</td>
 				<td>${receiptEnterInfo.remarks}</td>

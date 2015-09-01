@@ -600,12 +600,6 @@ public class WorkDealInfoOperationController extends BaseController {
 		model.addAttribute("pt", ProductType.productTypeStrMap);
 		model.addAttribute("wdiType", WorkDealInfoType.WorkDealInfoTypeMap);
 		
-		
-		
-		
-		
-		
-		
 		if(workDealInfo.getDealInfoType()!=null&&workDealInfo.getDealInfoType1()==null){
 			if (workDealInfo.getDealInfoType().equals(WorkDealInfoType.TYPE_UPDATE_CERT)) {
 				model.addAttribute("isShow", "No");
@@ -621,9 +615,24 @@ public class WorkDealInfoOperationController extends BaseController {
 			model.addAttribute("isShow", "Yes");
 		}
 		
-		
-		
-		
+		ArrayList<Integer> dealInfoTypes = new ArrayList<Integer>();
+		if (workDealInfo.getDealInfoType()!=null) {
+			dealInfoTypes.add(workDealInfo.getDealInfoType());
+		}
+		if(workDealInfo.getDealInfoType1()!=null){
+			dealInfoTypes.add(workDealInfo.getDealInfoType1());
+		}
+		if(workDealInfo.getDealInfoType2()!=null){
+			dealInfoTypes.add(workDealInfo.getDealInfoType2());
+		}
+		if(workDealInfo.getDealInfoType3()!=null){
+			dealInfoTypes.add(workDealInfo.getDealInfoType3());
+		}
+		if(dealInfoTypes.size()==1){
+			if(dealInfoTypes.get(0).equals(1)){
+				model.addAttribute("onlyUpdate","onlyUpdate");
+			}
+		}
 		
 		if (workDealInfo.getPrevId()!=null) {
 			//获取上一张证书的签名证书序列号
