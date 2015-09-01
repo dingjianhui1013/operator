@@ -97,6 +97,14 @@
 					}
 				});
 	};
+	
+	function returnDealInfo(obj){
+		var id = obj;
+		var reissueType = "";
+		var dealType = "3";
+		window.location.href = "${ctx}/work/workDealInfo/typeFormReturnUpdate?id="+id+"&reissueType="+reissueType+"&dealType="+dealType;
+	}
+	
 </script>
 
 </head>
@@ -210,7 +218,12 @@
 							<a href="${ctx}/work/workDealInfo/pay?id=${workDealInfo.id}">缴费</a>&nbsp;&nbsp;
 					</c:if> <c:if test="${workDealInfo.dealInfoStatus==8 }">
 							<a href="${ctx}/work/workDealInfo/form?id=${workDealInfo.id}">继续编辑</a>&nbsp;&nbsp;
-					</c:if> <c:if test="${workDealInfo.dealInfoStatus==9 }">
+					</c:if>
+					
+					<c:if test="${workDealInfo.dealInfoStatus==15 }">
+							<a href="javascript:returnDealInfo(${workDealInfo.id})">编辑基本信息</a>&nbsp;&nbsp;
+					</c:if> 					
+					<c:if test="${workDealInfo.dealInfoStatus==9 }">
 							<a
 								href="${ctx}/work/workDealInfoOperation/make?id=${workDealInfo.id}">制证</a>&nbsp;&nbsp;
 					</c:if> <c:if test="${workDealInfo.dealInfoStatus==4 }">

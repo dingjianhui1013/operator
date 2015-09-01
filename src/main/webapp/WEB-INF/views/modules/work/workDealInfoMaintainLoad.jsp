@@ -61,6 +61,10 @@ document.onkeydown = function(event) {
 		}
 	}
 };
+
+
+
+
 </script>
 <script type="text/javascript">
 	function changeInputStatus(obj) {
@@ -74,6 +78,21 @@ document.onkeydown = function(event) {
 			$(nextInput).val("0");
 		}
 	}
+	
+
+	function returnDealInfo(){
+		var submit = function (v, h, f) {
+		    if (v == 'ok'){
+		    	var id = "${workDealInfo.id}";
+				var reissueType = "";
+				var dealType = "3";
+				window.location.href = "${ctx}/work/workDealInfo/typeFormReturnUpdate?id="+id+"&reissueType="+reissueType+"&dealType="+dealType;
+		    }
+		   		 return true; //close
+		};
+		top.$.jBox.confirm("是否返回用户信息页面？", "提示", submit);
+	}
+	
 </script>
 <script type="text/javascript">
 function payment(){
@@ -177,9 +196,9 @@ function hideOrShow(){
 		$("#recovery").val("隐藏");
 	}
 }
+
+
 </script>
-
-
 </head>
 <body>
 	<ul class="nav nav-tabs">
@@ -407,8 +426,21 @@ function hideOrShow(){
 			<shiro:hasPermission name="work:workDealInfo:edit">
 				<input id="btnSubmit" class="btn btn-primary" type="button"
 					onclick="onSubmit()" value="提交" />&nbsp;</shiro:hasPermission>
-			<input id="btnCancel" class="btn" type="button" value="返 回"
+			
+				
+				<c:if test="${isOneUpdate!='yes'}">
+				<input id="btnCancel" class="btn" type="button" value="返 回"
 				onclick="cencel()" />
+				</c:if>
+				<c:if test="${isOneUpdate=='yes'}">
+				&nbsp;<a class="btn" href="javascript:returnDealInfo()">返回用户信息界面</a>
+				</c:if>
+				<%-- <c:if test="${isOneUpdate=='yes'}">
+				&nbsp;<a class="btn" href="javascript:cancelMaintenance()">取消本次维护</a>
+				</c:if> --%>
+				
+				
+				
 		</div>
 	</form:form>
 

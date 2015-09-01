@@ -1816,7 +1816,221 @@ public class WorkDealInfoOperationController extends BaseController {
 	
 	
 	
+	@RequiresPermissions("work:workDealInfo:edit")
+	@RequestMapping(value = "maintainSaveReturnUpdate")
+	public String maintainSaveReturnUpdate(Long workDealInfoId, 
+			
+			String companyName,String companyType,String organizationNumber,String orgExpirationTime,String selectLv,
+			String comCertificateType, String comCertficateNumber, String comCertficateTime,String legalName, String s_province, String s_city,
+			String s_county, String areaRemark,String address, String companyMobile,String remarks, 
+			
+			Integer year,
+			Integer dealInfoType,Integer dealInfoType1,Integer dealInfoType2 , 
+			Integer agentId,Long agentDetailId, //获取计费策略类型  获取计费策略模版
+			String contactName,String conCertType, String contacEmail, String conCertNumber,
+			String contactPhone, String contactTel,String contactSex, Boolean manMadeDamage,
+			Model model, String recordContent
+			,String pName , String pIDCard , String pEmail
+			, RedirectAttributes redirectAttributes
+			) {
+		//保存新业务信息(dealInfoType存在即为更新，dealInfoType1存在即为补办(1：遗失补办，2：损坏更换)，dealInfoType2存在即为变更)
+		WorkDealInfo workDealInfo1 = workDealInfoService.get(workDealInfoId);
+		if (workDealInfo1.getDelFlag().equals("1")) {
+			addMessage(redirectAttributes, "此业务正在办理维护！");
+			return "redirect:" + Global.getAdminPath() + "/work/workDealInfo/?repage";
+		}
+		
+		ConfigChargeAgentBoundConfigProduct bound =  configChargeAgentBoundConfigProductService.get(agentDetailId);
+		if (!workDealInfo1.getConfigChargeAgentId().equals(bound.getAgent().getId())) {
+			ConfigChargeAgent agentOri =  configChargeAgentService.get(workDealInfo1.getConfigChargeAgentId());
+			agentOri.setSurplusNum(agentOri.getSurplusNum()+1);
+			agentOri.setReserveNum(agentOri.getReserveNum()-1);
+			configChargeAgentService.save(agentOri);
+			
+			ConfigAgentBoundDealInfo boundOri = 
+					configAgentBoundDealInfoService.findByAgentIdDealId(workDealInfo1.getConfigChargeAgentId(),workDealInfo1.getId());
+			if (boundOri!=null) {
+				configAgentBoundDealInfoService.deleteById(boundOri.getId());
+			}
+			ConfigChargeAgent agent = bound.getAgent();
+			agent.setReserveNum(agent.getReserveNum()+1);
+			agent.setSurplusNum(agent.getSurplusNum()-1);
+			configChargeAgentService.save(agent);
+			ConfigAgentBoundDealInfo boundDealNow = new ConfigAgentBoundDealInfo();
+			boundDealNow.setAgent(bound.getAgent());
+			boundDealNow.setDealInfo(workDealInfo1);
+			configAgentBoundDealInfoService.save(boundDealNow);
+		}
+		
+		workDealInfo1.setPayType(agentId);
+		workDealInfo1.setConfigChargeAgentId(bound.getAgent().getId());
+		
+		
+		WorkCompanyHis companyHis = null;
+		// 保存经办人信息
+		WorkUser workUser = workDealInfo1.getWorkUser();
+		if (contactName!=null&&!contactName.equals("")) {
+			workUser.setContactName(contactName);
+		}
+		workUser.setStatus(1);
+		if (conCertType!=null&&!conCertType.equals("")) {
+			workUser.setConCertType(conCertType);
+		}
+		if (conCertNumber!=null&&!conCertNumber.equals("")) {
+			workUser.setConCertNumber(conCertNumber);
+		}
+		workUser.setContactEmail(contacEmail);
+		if (contactPhone!=null&&!contactPhone.equals("")) {
+			workUser.setContactPhone(contactPhone);
+		}
+		if (contactTel!=null&&!contactTel.equals("")) {
+			workUser.setContactTel(contactTel);
+		}
+		if (contactSex!=null&&!contactSex.equals("")) {
+			workUser.setContactSex(contactSex);
+		}
+		workUserService.save(workUser);
+		WorkUserHis userHis = workUserService.change(workUser, companyHis);
+		workUserHisService.save(userHis);
+
+			//变更业务保存单位信息
+		WorkCompany workCompany = workDealInfo1.getWorkCompany();
+		
+		if(companyName!=null && !companyName.equals("")){
+			workCompany.setCompanyName(companyName);
+		}
+		if(companyType!=null && !companyType.equals("")){
+			workCompany.setCompanyType(companyType);
+		}
+		if(organizationNumber!=null && !organizationNumber.equals("")){
+			workCompany.setOrganizationNumber(organizationNumber);
+		}
+		
+		Timestamp ts = new Timestamp(System.currentTimeMillis());
+		Timestamp ts1 = new Timestamp(System.currentTimeMillis());
+		try {
+			ts = Timestamp.valueOf(comCertficateTime+" 00:00:00");
+			ts1 = Timestamp.valueOf(orgExpirationTime+" 00:00:00");
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+
+		workCompany.setOrgExpirationTime(ts1);
+		workCompany.setComCertficateTime(ts);
+		
+		if(selectLv!=null && !selectLv.equals("")){
+			workCompany.setSelectLv(selectLv);
+		}
+		if(comCertificateType!=null && !comCertificateType.equals("")){
+			workCompany.setComCertificateType(comCertificateType);
+		}
+		if(comCertficateNumber!=null && !comCertficateNumber.equals("")){
+			workCompany.setComCertficateNumber(comCertficateNumber);
+		}
+		if(legalName!=null && !legalName.equals("")){
+			workCompany.setLegalName(legalName);
+		}
+		if(s_province!=null && !s_province.equals("")){
+			workCompany.setProvince(s_province);
+		}
+		if(s_city!=null && !s_city.equals("")){
+			workCompany.setCity(s_city);
+		}
+		if(s_county!=null && !s_county.equals("")){
+			workCompany.setDistrict(s_county);
+		}	
+		if(areaRemark!=null && !areaRemark.equals("")){
+			workCompany.setAreaRemark(areaRemark);
+		}	
+		if(address!=null && !address.equals("")){
+			workCompany.setAddress(address);
+		}
+		if(address!=null && !address.equals("")){
+			workCompany.setCompanyMobile(companyMobile);
+		}
+		if(remarks!=null && !remarks.equals("")){
+			workCompany.setRemarks(remarks);
+		}
+		workCompanyService.save(workCompany);
+		companyHis = workCompanyService.change(workCompany);
+		workCompanyHisService.save(companyHis);
+		
+		
+		workDealInfo1.setWorkUser(workUser);
+		workDealInfo1.setWorkCompany(workCompany);
+		workDealInfo1.setWorkUserHis(userHis);
+		workDealInfo1.setWorkCompanyHis(companyHis);
 	
+		if (year == null) {
+			workDealInfo1.setYear(0);
+		} else {
+			workDealInfo1.setYear(year);
+		}
+	
+		workDealInfo1.setDealInfoStatus(WorkDealInfoStatus.STATUS_ENTRY_SUCCESS);
+		workDealInfo1.setDealInfoType(WorkDealInfoType.TYPE_UPDATE_CERT);
+	
+		if (manMadeDamage!=null) {
+			workDealInfo1.setManMadeDamage(manMadeDamage);
+		}
+	
+//		if (workDealInfo1.getWorkCertInfo().getNotafter().after(new Date())) {
+//			int day = getLastCertDay(workDealInfo1.getWorkCertInfo()
+//					.getNotafter());
+//			workDealInfo1.setLastDays(day);
+//		} else {
+//			workDealInfo1.setLastDays(0);
+//		}
+		WorkCertApplyInfo workCertApplyInfo = workDealInfo1.getWorkCertInfo().getWorkCertApplyInfo();
+		
+		
+		if (pName!=null && !pName.equals("")) {
+			workCertApplyInfo.setName(pName);
+		}
+		if (pEmail!=null && !pEmail.equals("")) {
+			workCertApplyInfo.setEmail(pEmail);
+		}            
+		if (pIDCard!=null && !pIDCard.equals("")) {
+			workCertApplyInfo.setIdCard(pIDCard);
+		}
+		
+		
+		
+		workCertApplyInfo.setProvince(workCompany.getProvince());
+		workCertApplyInfo.setCity(workCompany.getCity());
+		workCertApplyInfoService.save(workCertApplyInfo);
+		
+		
+		
+		WorkCertInfo oldCertInfo = workDealInfo1.getWorkCertInfo();
+		WorkCertInfo workCertInfo = new WorkCertInfo();
+		workCertInfo.setWorkCertApplyInfo(workCertApplyInfo);
+		workCertInfo.setRenewalPrevId(oldCertInfo.getId());
+		workCertInfo.setCreateDate( workCertInfoService.getCreateDate(oldCertInfo.getId()));
+		workCertInfoService.save(workCertInfo);
+		// 给上张证书存nextId
+		oldCertInfo.setRenewalNextId(workCertInfo.getId());
+		workCertInfoService.save(oldCertInfo);
+		workDealInfo1.setWorkCertInfo(workCertInfo);
+		
+		//workDealInfo.setPayType(workDealInfo1.getPayType());
+		//workDealInfo.setConfigChargeAgentId(workDealInfo1.getConfigChargeAgentId());
+		workDealInfoService.save(workDealInfo1);
+		
+		// 保存日志信息
+		WorkLog workLog = new WorkLog();
+		workLog.setRecordContent(recordContent);
+		workLog.setWorkDealInfo(workDealInfo1);
+		workLog.setCreateDate(new Date());
+		workLog.setCreateBy(UserUtils.getUser());
+		workLog.setConfigApp(workDealInfo1.getConfigApp());
+		workLog.setWorkCompany(workDealInfo1.getWorkCompany());
+		workLog.setOffice(UserUtils.getUser().getOffice());
+		workLogService.save(workLog);
+		
+		return "redirect:" + Global.getAdminPath()
+				+ "/work/workDealInfo/pay?id=" + workDealInfo1.getId();
+	}
 	
 	
 	
