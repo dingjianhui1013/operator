@@ -1391,9 +1391,6 @@ public class WorkPayInfoController extends BaseController {
 		ConfigChargeAgent agentOri =  configChargeAgentService.get(dealInfo.getConfigChargeAgentId());
 		agentOri.setReserveNum(agentOri.getReserveNum()+1);
 		agentOri.setAvailableNum(agentOri.getAvailableNum()-1);
-		
-		
-		agentOri.setSurplusNum(agentOri.getSurplusNum()-1);
 		configChargeAgentService.save(agentOri);
 			
 		

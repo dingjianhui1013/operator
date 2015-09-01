@@ -50,7 +50,11 @@ public interface WorkDealInfoDao extends WorkDealInfoDaoCustom, CrudRepository<W
 	@Modifying
 	@Query("From WorkDealInfo w where w.keySn=?1 and w.workCertInfo.id=?2")
 	public List<WorkDealInfo> findgx(String keySn, Long id);
-
+	
+	@Modifying
+	@Query("update WorkDealInfo set delFlag='" + WorkDealInfo.DEL_FLAG_NORMAL + "' where id = ?1")
+	public void deleteReturnById(Long id);
+	
 }
 
 /**

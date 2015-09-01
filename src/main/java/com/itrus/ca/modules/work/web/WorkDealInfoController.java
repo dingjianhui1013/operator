@@ -84,6 +84,10 @@ import com.itrus.ca.modules.profile.service.ConfigChargeAgentDetailService;
 import com.itrus.ca.modules.profile.service.ConfigChargeAgentService;
 import com.itrus.ca.modules.profile.service.ConfigProductService;
 import com.itrus.ca.modules.profile.service.ConfigRaAccountExtendInfoService;
+import com.itrus.ca.modules.receipt.entity.ReceiptDepotInfo;
+import com.itrus.ca.modules.receipt.entity.ReceiptEnterInfo;
+import com.itrus.ca.modules.receipt.service.ReceiptDepotInfoService;
+import com.itrus.ca.modules.receipt.service.ReceiptEnterInfoService;
 import com.itrus.ca.modules.service.ItrustProxyUtil;
 import com.itrus.ca.modules.sys.entity.Office;
 import com.itrus.ca.modules.sys.entity.User;
@@ -204,6 +208,12 @@ public class WorkDealInfoController extends BaseController {
 	@Autowired
 	private ConfigAgentBoundDealInfoService configAgentBoundDealInfoService;
 
+	@Autowired
+	private ReceiptDepotInfoService receiptDepotInfoService;
+	@Autowired
+	private ReceiptEnterInfoService receiptEnterInfoService;
+
+	
 	
 	@Value(value = "${ixin.url}")
 	private String ixinUrl;
@@ -3404,5 +3414,128 @@ public class WorkDealInfoController extends BaseController {
 		}
 		return json.toString();
 	}
+	
+	@RequiresPermissions("work:workDealInfo:view")
+	@RequestMapping(value = "cancelMaintenance")
+	public String cancelMaintenance(Long id, Integer type , Model model, RedirectAttributes redirectAttributes){
+		try {
+			WorkDealInfo dealinfo = workDealInfoService.get(id);
+			Long certId = dealinfo.getWorkCertInfo().getId();
+			Long agnetId = dealinfo.getConfigChargeAgentId();
+			Long dealPreId = dealinfo.getPrevId();
+			
+			ConfigChargeAgent agentOri =  configChargeAgentService.get(agnetId);
+			agentOri.setReserveNum(agentOri.getReserveNum()-1);
+			agentOri.setSurplusNum(agentOri.getSurplusNum()+1);
+			configChargeAgentService.save(agentOri);
+			
+			ConfigAgentBoundDealInfo bound = configAgentBoundDealInfoService.findByAgentIdDealId(agnetId,id);
+			if (bound!=null) {
+				configAgentBoundDealInfoService.deleteById(bound.getId());
+			}
+			
+			workDealInfoService.deleteWork(id);
+			workCertInfoService.delete(certId);
+			workDealInfoService.deleteReturnById(dealPreId);
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		logUtil.saveSysLog("业务中心", "删除业务：编号" + id + "成功", "");
+		model.addAttribute("message", "取消业务编号为"+id+"业务成功！");
+		return "redirect:" + Global.getAdminPath() + "/work/workDealInfo/";
+	}
+	
+	
+	
+	
+	@RequiresPermissions("work:workDealInfo:view")
+	@RequestMapping(value = "cancelMaintenanceByReturn")
+	public String cancelMaintenanceByReturn(Long id, Model model, RedirectAttributes redirectAttributes){
+		try {
+			
+				WorkDealInfo dealInfo = workDealInfoService.get(id);
+				WorkPayInfo payInfo = dealInfo.getWorkPayInfo();
+				Set<WorkFinancePayInfoRelation> relations = payInfo.getWorkFinancePayInfoRelations();
+				if (relations.size() != 0) {
+					for (WorkFinancePayInfoRelation relation : relations) {// 退费
+						FinancePaymentInfo financePaymentInfo = relation
+								.getFinancePaymentInfo();
+						financePaymentInfo.setBingdingTimes(financePaymentInfo
+								.getBingdingTimes() - 1);
+						financePaymentInfo.setResidueMoney(financePaymentInfo
+								.getResidueMoney() + relation.getMoney());// 返还金额
+						financePaymentInfoService.save(financePaymentInfo);
+						workFinancePayInfoRelationService.delete(relation
+								.getId());
+					}
+				}
+			
+			//this.fixOldPayInfo(dealInfo);
+			
+			Double money = dealInfo.getWorkPayInfo().getReceiptAmount();
+			if (money>0d) {
+				ReceiptDepotInfo receiptDepotInfo = receiptDepotInfoService.findDepotByOffice(dealInfo.getCreateBy().getOffice()).get(0);
+				// 修改余额
+				receiptDepotInfo.setReceiptResidue(receiptDepotInfo
+						.getReceiptResidue() + money);
+				receiptDepotInfo.setReceiptTotal(receiptDepotInfo.getReceiptTotal()+money);
+				
+				// 创建入库信息
+				ReceiptEnterInfo receiptEnterInfo = new ReceiptEnterInfo();
+				receiptEnterInfo.setReceiptDepotInfo(receiptDepotInfo);
+				receiptEnterInfo.setNow_Money(Double.valueOf(money));
+				receiptEnterInfo.setBeforMoney(receiptEnterInfo
+						.getReceiptDepotInfo().getReceiptResidue()
+						- Double.valueOf(money));
+				receiptEnterInfo.setReceiptMoney(receiptEnterInfo
+						.getReceiptDepotInfo().getReceiptResidue());
+				receiptEnterInfo.setReceiptType(4);// 退费入库
+				receiptEnterInfoService.save(receiptEnterInfo);
+				
+				logUtil.saveSysLog("更新业务办理重新缴费",
+						"库房" + receiptDepotInfo.getReceiptName() + "添加入库信息成功",
+						"");
+				receiptDepotInfoService.save(receiptDepotInfo);
+			}
+			
+			workPayInfoService.delete(dealInfo.getWorkPayInfo().getId());
+			dealInfo.setWorkPayInfo(null);
+			dealInfo.setDealInfoStatus("5");
+			workDealInfoService.save(dealInfo);
+			
+//			private Integer configureNum;//配置数量
+//			private Integer surplusNum;//剩余数量
+//			private Integer availableNum;//已用数量
+//			private Integer reserveNum;//预留数量
+			
+			ConfigChargeAgent agentOri =  configChargeAgentService.get(dealInfo.getConfigChargeAgentId());
+			agentOri.setAvailableNum(agentOri.getAvailableNum()-1);
+			agentOri.setSurplusNum(agentOri.getSurplusNum()+1);
+			configChargeAgentService.save(agentOri);
+			
+			ConfigAgentBoundDealInfo bound = configAgentBoundDealInfoService.findByAgentIdDealId(agentOri.getId(),id);
+			if (bound!=null) {
+				configAgentBoundDealInfoService.deleteById(bound.getId());
+			}
+			
+			
+			
+			WorkDealInfo dealinfo = workDealInfoService.get(id);
+			Long certId = dealinfo.getWorkCertInfo().getId();
+			Long dealPreId = dealinfo.getPrevId();
+			workDealInfoService.deleteWork(id);
+			workCertInfoService.delete(certId);
+			workDealInfoService.deleteReturnById(dealPreId);
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		logUtil.saveSysLog("业务中心", "删除业务：编号" + id + "成功", "");
+		model.addAttribute("message", "取消业务编号为"+id+"业务成功！");
+		return "redirect:" + Global.getAdminPath() + "/work/workDealInfo/";
+	}
+	
 
 }

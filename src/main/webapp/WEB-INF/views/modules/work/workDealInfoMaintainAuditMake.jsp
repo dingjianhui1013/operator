@@ -305,7 +305,18 @@
 	}
 	
 	
-	
+	function cancelMaintenance(){
+		var submit = function (v, h, f) {
+		    if (v == 'ok'){
+		    	var id = "${workDealInfo.id}";
+				window.location.href = "${ctx}/work/workDealInfo/cancelMaintenanceByReturn?id="+id;
+		    }
+		   		 return true; //close
+		};
+		top.$.jBox.confirm("是否取消本次维护？", "提示", submit);
+		
+		
+	}
 	
 </script>
 </head>
@@ -427,7 +438,7 @@
 				<c:if test="${onlyUpdate=='onlyUpdate' }">
 				<input class="btn btn-primary" type="button" onclick="returnPayment()"
 				value="重新缴费" />
-				
+				&nbsp;<a class="btn btn-primary" href="javascript:cancelMaintenance()">取消本次维护</a>
 				</c:if>
 					
 					

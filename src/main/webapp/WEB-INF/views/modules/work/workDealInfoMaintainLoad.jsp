@@ -198,6 +198,19 @@ function hideOrShow(){
 }
 
 
+
+function cancelMaintenance(){
+	var submit = function (v, h, f) {
+	    if (v == 'ok'){
+			var id = "${workDealInfo.id}";
+			window.location.href = "${ctx}/work/workDealInfo/cancelMaintenance?id="+id;
+	    }
+	   		 return true; //close
+	};
+	top.$.jBox.confirm("是否取消本次维护？", "提示", submit);
+}
+
+
 </script>
 </head>
 <body>
@@ -435,9 +448,9 @@ function hideOrShow(){
 				<c:if test="${isOneUpdate=='yes'}">
 				&nbsp;<a class="btn" href="javascript:returnDealInfo()">返回用户信息界面</a>
 				</c:if>
-				<%-- <c:if test="${isOneUpdate=='yes'}">
+				<c:if test="${isOneUpdate=='yes'}">
 				&nbsp;<a class="btn" href="javascript:cancelMaintenance()">取消本次维护</a>
-				</c:if> --%>
+				</c:if>
 				
 				
 				

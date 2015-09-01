@@ -2936,5 +2936,9 @@ public class WorkDealInfoService extends BaseService {
 	}
 	
 	
+	@Transactional(readOnly = false)
+	public void deleteReturnById(Long id) {
+		workDealInfoDao.deleteReturnById(id);
+	}
 
 }
