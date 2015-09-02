@@ -548,7 +548,11 @@ value="${workDealInfo.workCompany.comCertficateTime }"  pattern="yyyy-MM-dd"/>">
 							<th>行政所属区：</th>
 							<td>${workDealInfo.workCompany.province}&nbsp;
 								${workDealInfo.workCompany.city}&nbsp;
-								${workDealInfo.workCompany.district}</td>
+								${workDealInfo.workCompany.district}&nbsp;
+								区域备注：${workDealInfo.workCompany.areaRemark}
+								
+							
+							</td>
 							<th>街道地址：</th>
 							<td><input type="text" name="address" disabled="disabled"
 								value="${workDealInfo.workCompany.address}"></td>

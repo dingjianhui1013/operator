@@ -525,7 +525,7 @@
 								<div style="margin-top: 8px;">
 									<span class="prompt" style="color: red; display: none;">*</span>区域备注：<input
 										type="text" name="areaRemark" disabled="disabled"
-										value="${workCompany.areaRemark }">
+										value="${workDealInfo.workCompany.areaRemark }">
 								</div></td>
 
 

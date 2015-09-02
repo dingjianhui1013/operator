@@ -785,6 +785,11 @@
 									type="text/javascript">
 									_init_area();
 								</script>
+								<div style="margin-top: 8px;">
+									<span class="prompt" style="color: red; display: none;">*</span>区域备注：<input
+										type="text" name="areaRemark"
+										value="${workDealInfo.workCompany.areaRemark }">
+								</div>
 								<div id="show"></div></td>
 						</tr>
 						<tr>
