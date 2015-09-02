@@ -144,37 +144,23 @@
 			}
 	}
 
-	function forbid() {
-		top.$.jBox
-				.open(
-						"iframe:${ctx}/work/workCertTrustApply/forbidForm?applyId="
-								+ $("#applyId").val(),
-						"审核拒绝",
-						600,
-						400,
-						{
-							buttons : {
-								"确定" : "ok",
-								"取消" : true
-							},
-							bottomText : "填写审核拒绝的原因",
-							submit : function(v, h, f) {
-								var suggest = h.find("iframe")[0].contentWindow.suggest.value;
-								//nodes = selectedTree.getSelectedNodes();
-								if (v == "ok") {
-									window.location.href = "${ctx}/work/workCertTrustApply/audit?agree=0&applyId="
-											+ $("#applyId").val()
-											+ "&suggest="
-											+ suggest;
-									return true;
-								}
-							},
-							loaded : function(h) {
-								$(".jbox-content", top.document).css(
-										"overflow-y", "hidden");
-							}
-						});
+	
+	
+	function forbid(){
+		top.$.jBox.open("iframe:${ctx}/work/workCertTrustApply/forbidForm?applyId="+$("#applyId").val(), "审核拒绝",600,400,{
+			buttons:{"确定":"ok", "取消":true}, bottomText:"填写审核拒绝的原因",submit:function(v, h, f){
+				//nodes = selectedTree.getSelectedNodes();
+				if (v=="ok"){
+					var suggest = h.find("iframe")[0].contentWindow.$("#suggest").val();
+					window.location.href = "${ctx}/work/workCertTrustApply/audit?agree=0&applyId="+$("#applyId").val()+"&suggest="+suggest;
+			    	return true;
+				}
+			}, loaded:function(h){
+				$(".jbox-content", top.document).css("overflow-y","hidden");
+			}
+		});
 	}
+
 </script>
 <style type="text/css">
 .table td{
@@ -378,7 +364,7 @@ vertical-align: inherit
 									<input type="hidden" name="workReceivaMoney" id="shouldMoney" disabled="disabled" value="${apply.money }">
 								</td>
 								<td>
-								<input type="text" name="workTotalMoney" id="workTotalMoney" value="${apply.money }" >
+								<input type="hidden" name="workTotalMoney" id="workTotalMoney" value="${apply.money }" >
 								</td>
 								<td></td>	
 							</tr>
