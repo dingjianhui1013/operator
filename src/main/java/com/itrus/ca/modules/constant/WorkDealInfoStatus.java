@@ -20,6 +20,7 @@ public class WorkDealInfoStatus {
 	public static String STATUS_CERT_UNABLE = "10";//已失效
 	public static String STATUS_OBTAINED_WAIT = "11";//待获取
 	public static String STATUS_UPDATE_USER = "12";//未缴费，待审核（客户端更新可用）
+	public static String STATUS_UPDATE_FALLBACK_INFO = "15";//更新返回填写信息
 	
 public static HashMap<String,String> WorkDealInfoStatusMap = new HashMap<String, String>();
 	
@@ -36,5 +37,6 @@ public static HashMap<String,String> WorkDealInfoStatusMap = new HashMap<String,
 		WorkDealInfoStatusMap.put(STATUS_CERT_UNABLE, "已失效");
 		WorkDealInfoStatusMap.put(STATUS_OBTAINED_WAIT, "审核通过");
 		WorkDealInfoStatusMap.put(STATUS_UPDATE_USER, "未缴费，待审核");
+		WorkDealInfoStatusMap.put(STATUS_UPDATE_FALLBACK_INFO, "更新返回填写信息");
 	}
 }
