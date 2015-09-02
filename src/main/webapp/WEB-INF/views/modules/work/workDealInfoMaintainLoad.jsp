@@ -210,7 +210,14 @@ function cancelMaintenance(){
 	top.$.jBox.confirm("是否取消本次维护？", "提示", submit);
 }
 
-
+function setReceiptMoneyNull(){
+	if ($("#sff1").is(":checked")) {
+		$("#receiptAmount").val(0);
+	}
+	if ($("#sff0").is(":checked")) {
+		$("#receiptAmount").val($("#allTotalMoney").val());
+	}
+}
 </script>
 </head>
 <body>
@@ -422,10 +429,10 @@ function cancelMaintenance(){
 							</tr>
 							<tr>
 								<td>是否开具发票：</td>
-								<td><input type="radio" name="userReceipt" value="true" checked="checked" id="sff0">是
-									<input type="radio" name="userReceipt" value="false" id="sff1">否</td>
+								<td><input type="radio" name="userReceipt" onclick="setReceiptMoneyNull()" value="true" checked="checked" id="sff0">是
+									<input type="radio" name="userReceipt" onclick="setReceiptMoneyNull()"  value="false" id="sff1">否</td>
 								<td>发票金额：</td>
-								<td><input type="text" name="receiptAmount"
+								<td><input type="text" name="receiptAmount" id = "receiptAmount"
 									value="0">元</td>
 							</tr>
 						</tbody>

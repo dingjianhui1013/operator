@@ -940,6 +940,7 @@ public class ConfigChargeAgentController extends BaseController {
 			ConfigChargeAgent agent =  bound.getAgent();
 			if(agent.getSurplusNum()<1){
 				json.put("status","0");
+				json.put("agentId",agent.getId());
 			}else{
 				json.put("status","1");
 			}
