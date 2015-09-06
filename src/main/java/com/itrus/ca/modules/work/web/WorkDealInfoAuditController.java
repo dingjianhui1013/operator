@@ -350,7 +350,7 @@ public class WorkDealInfoAuditController extends BaseController {
 		ConfigChargeAgentBoundConfigProduct bound =  configChargeAgentBoundConfigProductService.get(agentDetailId);
 		
 		workDealInfo.setConfigChargeAgentId(bound.getAgent().getId());		
-		workDealInfo.setIsIxin(true);
+		//workDealInfo.setIsIxin(true);
 		// 保存日志信息
 		WorkLog workLog = new WorkLog();
 		workLog.setRecordContent(recordContent);
@@ -623,7 +623,7 @@ public class WorkDealInfoAuditController extends BaseController {
 		workLog.setOffice(workDealInfo.getCreateBy().getOffice());
 		workLog.setRecordContent(workDealInfo.getRemarks());
 		workLog.setRemarks(workDealInfo.getRemarks());
-		workDealInfo.setIsIxin(true);
+		//workDealInfo.setIsIxin(true);
 		workDealInfoService.save(workDealInfo);
 		
 		workLog.setWorkDealInfo(workDealInfo);
