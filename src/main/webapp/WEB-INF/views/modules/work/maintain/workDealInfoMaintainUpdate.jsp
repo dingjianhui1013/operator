@@ -325,7 +325,7 @@
 	function showYear(){
 		var agentId = $("#boundId").val();
 		//var url = "${ctx}/work/workDealInfo/showYear?lable="+lable+"&productName="+productName+"&app="+$("#appId").val()+"&infoType=0&_="+new Date().getTime();
-		var url = "${ctx}/work/workDealInfo/showYearNew?boundId="+agentId+"&infoType=0&_="+new Date().getTime();
+		var url = "${ctx}/work/workDealInfo/showYearNew?boundId="+agentId+"&infoType=1&_="+new Date().getTime();
 		
 		$.getJSON(url, function(data) {
 			if (data.year1) {
