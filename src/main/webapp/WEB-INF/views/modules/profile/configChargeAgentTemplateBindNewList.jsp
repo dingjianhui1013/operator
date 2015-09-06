@@ -18,15 +18,18 @@
 		
 		
 		function checkPD(productId,agentId){
+			var href = $("#"+agentId+"").attr("href");
+			$("#"+agentId+"").attr("href","javascript:void()");
 			var proId = productId;
-			
 			var url = "${ctx}/profile/configChargeAgent/checkBound?proId="+proId+"&agentId="+agentId+"&_="+new Date().getTime();
 			$.getJSON(url,function(data){
 				if (data.isBZ=="0") {
 					top.$.jBox.tip(data.msg);
+					$("#"+agentId+"").attr("href",href);
 				}else{
 					if (data.isNum=="0") {
 						top.$.jBox.tip(data.msg);
+						$("#"+agentId+"").attr("href",href);
 					}else{
 						window.location.href="${ctx}/profile/configChargeAgent/bindingNew?productId=${productId}&agentId="+agentId;
 					}
@@ -114,7 +117,7 @@
 				</c:if>
 				<c:if test="${configChargeAgent.isBind==1 }">
 				<%-- <a href="${ctx}/profile/configChargeAgent/bindingNew?productId=${productId}&agentId=${configChargeAgent.id}">绑定</a> --%>
-				<a href="javascript:checkPD(${productId},${configChargeAgent.id})">绑定</a>
+				<a id="${configChargeAgent.id}" href="javascript:checkPD(${productId},${configChargeAgent.id})">绑定</a>
 				</c:if>
 				
 				
