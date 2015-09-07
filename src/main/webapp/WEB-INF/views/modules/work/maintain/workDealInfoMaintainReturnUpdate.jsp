@@ -11,7 +11,6 @@
 	$(document)
 			.ready(
 					function() {
-						alert("123");
 						$("#name").focus();
 						$("#inputForm").validate(
 								{
