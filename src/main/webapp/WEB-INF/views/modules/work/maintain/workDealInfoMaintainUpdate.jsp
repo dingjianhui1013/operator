@@ -556,7 +556,7 @@
 							</select> <input type="hidden" id="boundId"></td>
 							<th style="width: 100px;"><span class="prompt"
 								style="color: red; display: none;">*</span>计费策略模版：</th>
-							<td style="width: 250px;"><select
+							<td style="width: 270px;"><select
 								onchange="setYearByBoundId()" id="agentDetailId"
 								name="agentDetailId">
 									<option value="0">请选择</option>
