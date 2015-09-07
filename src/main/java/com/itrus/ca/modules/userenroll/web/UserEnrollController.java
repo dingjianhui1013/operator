@@ -565,6 +565,16 @@ public class UserEnrollController extends BaseController {
 	public String ktydsb1Nextform(String count, String certsn,String keySn)
 			throws JSONException {
 		JSONObject json = new JSONObject();
+		if (count.equals("")) {
+			json.put("msg", "请填写申请数量！");
+			json.put("status", 4);
+			return json.toString();
+			
+		}
+		
+		
+		
+		
 		List<WorkDealInfo> dealInfos = workDealInfoService.findgxfw1(certsn);
 		try {
 			if (dealInfos.size() > 0) {

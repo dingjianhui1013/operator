@@ -65,6 +65,8 @@ function nextStep(){
 			}else if(data.status == 2){
 				var msg = encodeURI(encodeURI(data.msg));
 				window.location.href="${ctxILetter}/enroll/ktydsb2Nextform?count="+data.count+"&date="+data.date+"&id="+data.id;
+			}else if(data.status == 4){
+				$("#msg").html(data.msg);
 			}else{
 				$("#msg").html(data.msg);
 			}
