@@ -2952,6 +2952,7 @@ public class WorkDealInfoController extends BaseController {
 		try {
 			ConfigChargeAgentBoundConfigProduct bound =  configChargeAgentBoundConfigProductService.get(boundId);
 			json.put("surplusNum", bound.getAgent().getSurplusNum());
+			json.put("agentId", bound.getAgent().getId());
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();

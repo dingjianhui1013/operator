@@ -453,7 +453,7 @@ var selected = false;
 			top.$.jBox.tip("请配置计费策略"); 
 			$("#agentDetailId").focus(); 
 			return false;
-		}else if($("#agentDetailId").val()!=0 && $("#agentId").val()!=1){
+		}else if($("#agentDetailId").val()!=0  && $("#agentId").val()!=1){
 			if($("#surplusNum").val()==0){
 				top.$.jBox.tip("此计费策略模版剩余数量为零，不能进行业务办理！"); 
 				return false;
@@ -830,6 +830,9 @@ var selected = false;
 				$("#surplusNum").val(data.surplusNum);
 				if($("#surplusNum").val()==0&&$("#agentId").val()!=1){
 					top.$.jBox.tip("此计费策略模版剩余数量为零，不能进行业务办理！");
+					$("#agentMes").show();
+				}else{
+					$("#agentMes").hide();
 				}
 				
 			});
@@ -905,11 +908,11 @@ var selected = false;
 							</select> <input type="hidden" id="boundId"></td>
 							<th style="width: 100px;"><span class="prompt"
 								style="color: red; display: none;">*</span>计费策略模版：</th>
-							<td style="width: 250px;"><select
+							<td style="width: 270px;"><select
 								onchange="setYearByBoundId()" id="agentDetailId"
 								name="agentDetailId">
 									<option value="0">请选择</option>
-							</select> 
+							</select>&nbsp;<label id="agentMes" style="color: red;display: none;">不可用</label>
 							<input type="hidden" id="surplusNum" />
 							<!-- 		计费策略类型：
 							<select id="agentId" name="agentId" >

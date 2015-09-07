@@ -11,6 +11,7 @@
 	$(document)
 			.ready(
 					function() {
+						alert("123");
 						$("#name").focus();
 						$("#inputForm").validate(
 								{
@@ -213,13 +214,12 @@
 		$("#newInfoId").val(getCookie("work_deal_info_id"));
 		delCookie("work_deal_info_id");
 		
-		
 		if($("#agentDetailId").val()!=0 && $("#agentId").val()!=1){
 			
 				var boundId = $("#agentDetailId").val();
 				var url = "${ctx}/profile/configChargeAgent/checkAgentIsZero?agentDetailId="+boundId+"&_="+new Date().getTime();
 				$.getJSON(url,function(data){
-					if(data.status==0 && data.agentId != "${workDealInfo.configChargeAgentId}" ){
+					if(data.status==0 && $("#agentId").val()!=1 && data.agentId != "${workDealInfo.configChargeAgentId}" ){
 						top.$.jBox.tip("此计费策略模版剩余数量为零，不能进行业务办理！"); 
 					}else{
 						var year;
@@ -353,8 +353,11 @@
 			var url="${ctx}/work/workDealInfo/checkSurplusNum?boundId="+boundId+"&_="+new Date().getTime();
 			$.getJSON(url,function(data){
 				$("#surplusNum").val(data.surplusNum);
-				if($("#surplusNum").val()==0 && $("#agentId").val()!=1){
+				if($("#surplusNum").val()==0 && $("#agentId").val()!=1 && data.agentId != "${workDealInfo.configChargeAgentId}"){
 					top.$.jBox.tip("此计费策略模版剩余数量为零，不能进行业务办理！");
+					$("#agentMes").show();
+				}else{
+					$("#agentMes").hide();
 				}
 			});
 			
@@ -540,11 +543,11 @@
 							</select> <input type="hidden" id="boundId"></td>
 							<th style="width: 100px;"><span class="prompt"
 								style="color: red; display: none;">*</span>计费策略模版：</th>
-							<td style="width: 250px;"><select
+							<td style="width: 270px;"><select
 								onchange="setYearByBoundId()" id="agentDetailId"
 								name="agentDetailId">
 									<option value="0">请选择</option>
-							</select> 
+							</select> &nbsp;<label id="agentMes" style="color: red;display: none;">不可用</label>
 							<input type="hidden" id="surplusNum" />
 
 							</td>

@@ -362,6 +362,9 @@
 				$("#surplusNum").val(data.surplusNum);
 				if($("#surplusNum").val()==0 && $("#agentId").val()!=1){
 					top.$.jBox.tip("此计费策略模版剩余数量为零，不能进行业务办理！");
+					$("#agentMes").show();
+				}else{
+					$("#agentMes").hide();
 				}
 			});
 			
@@ -557,7 +560,7 @@
 								onchange="setYearByBoundId()" id="agentDetailId"
 								name="agentDetailId">
 									<option value="0">请选择</option>
-							</select> 
+							</select>  &nbsp;<label id="agentMes" style="color: red;display: none;">不可用</label>
 							<input type="hidden" id="surplusNum" />
 
 							</td>
