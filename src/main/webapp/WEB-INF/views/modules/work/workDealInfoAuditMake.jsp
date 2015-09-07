@@ -51,7 +51,7 @@
 				$("#keySn").attr("value", keySn);
 				$("#keySn").css("color", "red");
 				
-				keySn = keySnTwo;
+				//keySn = keySnTwo;
 				if(${workDealInfo.dealInfoType==0||workDealInfo.dealInfoType1==2 ||workDealInfo.dealInfoType1==3}){
 				var url = "${ctx}/work/workDealInfo/findByKeySn?keySn="+keySn+"&dealId="+${workDealInfo.id}+"&_="+new Date().getTime();
 				$.getJSON(url,function(data){
