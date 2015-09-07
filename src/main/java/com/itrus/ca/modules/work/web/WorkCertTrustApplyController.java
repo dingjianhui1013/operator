@@ -29,6 +29,7 @@ import com.itrus.ca.modules.finance.service.FinancePaymentInfoService;
 import com.itrus.ca.modules.profile.entity.ConfigApp;
 import com.itrus.ca.modules.profile.entity.ConfigChargeAgent;
 import com.itrus.ca.modules.profile.service.ConfigChargeAgentService;
+import com.itrus.ca.modules.receipt.service.ReceiptInvoiceService;
 import com.itrus.ca.modules.sys.entity.User;
 import com.itrus.ca.modules.sys.utils.UserUtils;
 import com.itrus.ca.modules.work.entity.WorkCertInfo;
@@ -77,6 +78,9 @@ public class WorkCertTrustApplyController extends BaseController {
 	
 	@Autowired
 	WorkCertInfoService workCertInfoService;
+	
+	@Autowired
+	ReceiptInvoiceService receiptInvoiceService;
 	
 	@ModelAttribute
 	public WorkCertTrustApply get(@RequestParam(required=false) Long id) {
@@ -285,7 +289,9 @@ public class WorkCertTrustApplyController extends BaseController {
 		workPayInfoService.save(workPayInfo);
 
 		apply.setWorkPayInfo(workPayInfo);
-		
+		if (workPayInfo.getUserReceipt()) {
+			receiptInvoiceService.receiptIncoiceIYDSBSL(workPayInfo.getReceiptAmount(),UserUtils.getUser().getOffice(),workDealInfo.getWorkCompany().getCompanyName(),workDealInfo.getId());				//key出库
+		}
 		if (financePayInfoId != null && financePayInfoId.length > 0) {
 			for (int i = 0; i < financePayInfoId.length; i++) {
 				if (bindMoney==0) {

@@ -160,6 +160,15 @@
 			}
 		});
 	}
+	
+	function setReceiptMoneyNull(){
+		if ($("#sff1").is(":checked")) {
+			$("#receiptAmount").val(0);
+		}
+		if ($("#sff0").is(":checked")) {
+			$("#receiptAmount").val($("#allTotalMoney").val());
+		}
+	}
 
 </script>
 <style type="text/css">
@@ -383,10 +392,10 @@ vertical-align: inherit
 							</tr>
 							<tr>
 								<td>是否开具发票：</td>
-								<td><input type="radio" name="userReceipt" value="true" checked="checked" id="sff0">是
-									<input type="radio" name="userReceipt" value="false" id="sff1">否</td>
+								<td><input type="radio" onclick="setReceiptMoneyNull()" name="userReceipt" value="true" checked="checked" id="sff0">是
+									<input type="radio" onclick="setReceiptMoneyNull()" name="userReceipt" value="false" id="sff1">否</td>
 								<td>发票金额：</td>
-								<td><input type="text" name="receiptAmount"
+								<td><input type="text" name="receiptAmount" id= "receiptAmount"
 									value="0">元</td>
 							</tr>
 						</tbody>
