@@ -15,7 +15,7 @@
 		return false;
 	}
 	function hisgoMoney(obj) {
-		var html = "<div style='padding:10px;'><input type='radio' value='0' name='yourname' checked='checked'>变更缴费方式<br><input type='radio' value='1' name='yourname'>现金退费</div>";
+		var html = "<div style='padding:10px;'><input type='radio' value='0' name='yourname' checked='checked'>变更缴费类型<br><input type='radio' value='1' name='yourname'>现金退费</div>";
 		var submit = function(v, h, f) {
 			if (f.yourname == '') {
 				$.jBox.tip("请选择退费方式。", 'error', {
