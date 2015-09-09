@@ -529,11 +529,6 @@
 				showYear(1);
 			}
 		});
-		if (data == 2) {
-			$("#proposer").attr("style", "display:");
-		} else {
-			$("#proposer").attr("style", "display:none");
-		}
 	}
 	function showCert(companyId) {
 		var url = "${ctx}/work/workDealInfo/showCert?id=" + companyId;
@@ -617,6 +612,69 @@
 		 }
 		 return res;
 		}
+	
+	function numberFill(){
+		$("#pIDCard").val($("#conCertNumber").val());
+	}
+	
+	function emailFill(obj){
+		var a = form_check(obj);
+		if (a){
+			$("#pEmail").val($("#contacEmail").val());
+		}
+	}
+	
+	function form_check(obj) {
+		var email = $(obj).val(); //获取邮箱地址
+		//判断邮箱格式是否正确
+		if(!/^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/.test(email)) {
+			if($("#emailpro").text()!=""){
+//				$(obj).focus(); //让手机文本框获得焦点
+				return false;
+			}
+			$("#contacEmail").after("<span id='emailpro' style='color:red'>邮箱格式错误!</span>");
+		/* 	top.$.jBox.tip("邮箱格式错误!");  */
+//			$(obj).focus(); //让邮箱文本框获得焦点
+			return false;
+		}
+		if($("#emailpro").text()!=""){
+			$("#emailpro").hide();
+		}
+		return true;
+	}
+	
+	function checkMobile(obj) { 
+		var mobie = $(obj).val();
+		var regu = /^[1][0-9][0-9]{9}$/; 
+		var re = new RegExp(regu); 
+		if (re.test(mobie)) { 
+			if($("#phonepro").text()!=""){
+				$("#phonepro").hide();
+			}
+			return true; 
+		} else { 
+			if($("#phonepro").text()!=""){
+				return false; 
+			}
+			$("#contactPhone").after("<span id='phonepro' style='color:red'>请输入正确的手机号码</span>");
+			return false; 
+		} 
+	} 
+	function checkSqr(obj){
+		var sqr = $(obj).val();
+
+		if(!/^[\u4e00-\u9fa5a-zA-Z0-9\.*,'\-_() （） ]+$/.test(sqr)) {
+			if($("#pNamepro").text()!=""){
+				return false;
+			}
+			$("#pName").after("<span id='pNamepro' style='color:red'>格式错误!</span>");
+			return false;
+		}
+		if($("#pNamepro").text()!=""){
+			$("#pNamepro").hide();
+		}
+		return true;
+	}
 </script>
 
 </head>
@@ -815,13 +873,13 @@
 				<table class="table table-striped table-bordered table-condensed">
 					<tbody>
 						<tr>
-							<th colspan="4" style="font-size: 20px;">经办人信息</th>
+							<th colspan="4" style="font-size: 20px;">证书持有人信息</th>
 						</tr>
 						<tr>
-							<th><span class="prompt" style="color:red; display: none;">*</span>经办人姓名:</th>
+							<th><span class="prompt" style="color:red; display: none;">*</span>证书持有人姓名:</th>
 							<td><input type="text" name="contactName" id="contactName" 
-								value="${workUser.contactName }" /></td>
-							<th><span class="prompt" style="color:red; display: none;">*</span>经办人证件:</th>
+								maxlength="20" value="${workUser.contactName }" /></td>
+							<th><span class="prompt" style="color:red; display: none;">*</span>证书持有人证件:</th>
 							<td><select name="conCertType">
 									<option value="0" id="conCertType0"
 										<c:if test="${workUser.conCertType==0 }">selected</c:if>>身份证</option>
@@ -833,51 +891,59 @@
 						</tr>
 						<tr>
 							<th><span class="prompt" style="color:red; display: none;">*</span>证件号码:</th>
-							<td><input type="text" name="conCertNumber"
-								id="conCertNumber" value="${workUser.conCertNumber }" /></td>
-							<th><span class="prompt" style="color:red; display: none;">*</span>经办人电子邮件:</th>
-							<td><input type="text" name="contacEmail" id="contacEmail"
+							<td><input type="text" name="conCertNumber" maxlength="18"
+								onkeyup="value=value.replace(/[^\w\.\/]/ig,'')"
+								id="conCertNumber" value="${workUser.conCertNumber }"
+								onchange="numberFill()" 
+								 /></td>
+							<th><span class="prompt" style="color:red; display: none;">*</span>证书持有人电子邮件:</th>
+							<td><input type="text" name="contacEmail" id="contacEmail" maxlength="50" onchange="emailFill(this)"
 								value="${workUser.contactEmail }" /></td>
 						</tr>
 						<tr>
-							<th><span class="prompt" style="color:red; display: none;">*</span>经办人手机号:</th>
-							<td><input type="text" name="contactPhone" id="contactPhone"
-								value="${workUser.contactPhone }" /></td>
+							<th><span class="prompt" style="color:red; display: none;">*</span>证书持有人手机号:</th>
+							<td><input type="text" name="contactPhone" id="contactPhone" maxlength="11"
+								value="${workUser.contactPhone }" 
+								onblur="checkMobile(this)"
+								/></td>
 							<th><span class="prompt" style="color:red; display: none;">*</span>业务系统UID:</th>
-							<td><input type="text" name="contactTel" id="contactTel"
+							<td><input type="text" name="contactTel" id="contactTel" maxlength="20"
 								value="${workUser.contactTel }" /></td>
 						</tr>
 						<tr>
-							<th><span class="prompt" style="color:red; display: none;">*</span>经办人性别:</th>
-							<td><input name="contactSex" id="sex0" <c:if test="${workDealInfo.workUser.contactSex=='男' }">checked</c:if> type="radio" value="男">男&nbsp;&nbsp;&nbsp;&nbsp;
-							<input name="contactSex" id="sex1" <c:if test="${workDealInfo.workUser.contactSex=='女'}">checked</c:if> type="radio" value="女">女</td>
+							<th><span class="prompt" style="color:red; display: none;">*</span>证书持有人性别:</th>
+							<td><input name="contactSex" id="sex0" 
+							<c:if test="${workDealInfo.workUser.contactSex=='男' }">checked</c:if> 
+							type="radio" value="男">男&nbsp;&nbsp;&nbsp;&nbsp;
+							<input name="contactSex" id="sex1" 
+							<c:if test="${workDealInfo.workUser.contactSex=='女'}">checked</c:if> 
+							type="radio" value="女">女</td>
 						</tr>
 					</tbody>
 				</table>
 			</div>
 		</div>
 		<div class="row-fluid">
-			<div class="span12" id="proposer"
-				<c:if test="${workDealInfo.configProduct.productName!=2}"> style="display:none"</c:if>>
+			<div class="span12" id="proposer" >
 				<table class="table table-striped table-bordered table-condensed">
 					<tbody>
 						<tr>
-							<th colspan="4" style="font-size: 20px;">申请人信息</th>
+							<th colspan="4" style="font-size: 20px;">经办人信息</th>
 						</tr>
 						<tr>
-							<th><span class="prompt" style="color:red; display: none;">*</span>姓名:</th>
-							<td><input type="text" name="pName"
-								value="${workDealInfo.workCertInfo.workCertApplyInfo.name }" /></td>
+							<th><span class="prompt" style="color:red; display: none;">*</span>经办人姓名:</th>
+							<td><input type="text" name="pName" id="pName" maxlength="20"
+								value="${workDealInfo.workCertInfo.workCertApplyInfo.name }" onchange="checkSqr(this);"/></td>
 						</tr>
 						<tr>
 							<th><span class="prompt" style="color:red; display: none;">*</span>身份证号:</th>
-							<td><input type="text" name="pIDCard"
+							<td><input type="text" name="pIDCard" maxlength="18" id="pIDCard"
 								value="${workDealInfo.workCertInfo.workCertApplyInfo.idCard }" /></td>
 						</tr>
 						<tr>
-							<th><span class="prompt" style="color:red; display: none;">*</span>邮箱:</th>
-							<td><input type="text" name="pEmail"
-								value="${workDealInfo.workCertInfo.workCertApplyInfo.email }" /></td>
+							<th><span class="prompt" style="color:red; display: none;">*</span>经办人邮箱:</th>
+							<td><input type="text" name="pEmail" id="pEmail"
+								value="${workDealInfo.workCertInfo.workCertApplyInfo.email }" onchange="form_check(this)"  /></td>
 						</tr>
 					</tbody>
 				</table>
