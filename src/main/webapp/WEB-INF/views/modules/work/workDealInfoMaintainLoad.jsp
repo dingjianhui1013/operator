@@ -432,7 +432,7 @@ function setReceiptMoneyNull(){
 								<td><input type="radio" name="userReceipt" onclick="setReceiptMoneyNull()" value="true" checked="checked" id="sff0">是
 									<input type="radio" name="userReceipt" onclick="setReceiptMoneyNull()"  value="false" id="sff1">否</td>
 								<td>发票金额：</td>
-								<td><input type="text" name="receiptAmount" id = "receiptAmount"
+								<td><input type="text" name="receiptAmount" id = "receiptAmount" 
 									value="0">元</td>
 							</tr>
 						</tbody>

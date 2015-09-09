@@ -3394,15 +3394,15 @@ public class WorkDealInfoController extends BaseController {
 			Date certAfter = dealInfo.getNotafter();
 			Long nowLong = now.getTime();
 			Long certAfterLong = certAfter.getTime();
-			if ((nowLong - certAfterLong) > 0) {
-				json.put("isUpdate", 0);
-			} else {
+		//	if ((nowLong - certAfterLong) > 0) {
+		//		json.put("isUpdate", 0);
+		//	} else {
 				if ((certAfterLong - nowLong) <= (1000 * 60 * 60 * 24 * 60L)) {
 					json.put("isUpdate", 1);
 				} else {
 					json.put("isUpdate", 0);
 				}
-			}
+			//}
 			json.put("status", 1);
 		} catch (Exception e) {
 			// TODO: handle exception
