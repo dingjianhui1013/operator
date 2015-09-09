@@ -271,7 +271,7 @@
 							</tr>
 							<tr>
 							<c:if test="${bgType }">
-								<td>变更缴费方式为：</td>
+								<td>变更缴费类型为：</td>
 								<td>
 									<input type="radio" id="gov" name="payType" checked="checked">政府统一采购
 									<input type="radio" id="contract" name="payType">合同采购
