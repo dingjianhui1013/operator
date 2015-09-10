@@ -157,8 +157,19 @@
 					}
 				});
 	}
-
-
+	
+	function addCertDaysCheck(){
+		if($("#addCertDays").val()<0){
+			var submit = function( v, h, f){
+				if( v != 'ok'){
+					$("#addCertDays").val(0);
+				}				
+				return true;
+			}
+			top.$.jBox.confirm("您确定赠送的时间是："+$("#addCertDays").val()+"天么？","提示",submit);
+		}
+	}
+	
 	function makeCert() {
 		try {
 			var keys = ukeyadmin.refresh(); //检测KEY
@@ -393,7 +404,7 @@
 			<tr>
 				<td>证书有效期</td>
 				<td>${workDealInfo.year*365+workDealInfo.lastDays }&nbsp;赠送<input type="text"
-					style="width: 100px" id="addCertDays" class="num required"
+					style="width: 100px" id="addCertDays" class="num required"  onblur="addCertDaysCheck()" 
 					value="0">天
 				</td>
 			</tr>
@@ -403,10 +414,10 @@
 				</select>
 				
 				  
-				<input type="checkbox" <c:if test="${!(workDealInfo.getDealInfoType()==0 || workDealInfo.getDealInfoType1()==2 || workDealInfo.getDealInfoType1()==3)}"> style="display: none;" </c:if>
+				<input type="checkbox" <c:if test="${!(workDealInfo.dealInfoType==0 || workDealInfo.dealInfoType1==2 || workDealInfo.dealInfoType1==3)}"> style="display: none;" </c:if>
 				 name="keyStatus" onclick="newKey(this)" />
 				 
-				  <label <c:if test="${!(workDealInfo.getDealInfoType()==0 || workDealInfo.getDealInfoType1()==2 || workDealInfo.getDealInfoType1()==3)}"> style="display: none;" </c:if> >新Key制证</label>
+				  <label <c:if test="${!(workDealInfo.dealInfoType==0 || workDealInfo.dealInfoType1==2 || workDealInfo.dealInfoType1==3)}"> style="display: none;" </c:if> >新Key制证</label>
 				
 							 
 				 
