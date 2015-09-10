@@ -120,4 +120,17 @@ public class KeyDepotGeneralStatisticsService extends BaseService {
 		//keyDepotGeneralStatisticsDao.deleteById(id);
 	}
 	
+	@Transactional(readOnly = true)
+	public List<KeyDepotGeneralStatistics> findByDepotIdGenename(Long depotId,String geneName) {
+		DetachedCriteria dc = keyDepotGeneralStatisticsDao.createDetachedCriteria();
+		dc.createAlias("keyGeneralInfo","keyGeneralInfo");
+		dc.add(Restrictions.eq("keyUsbKeyDepot.id", depotId));
+		dc.add(Restrictions.eq("keyGeneralInfo.name", geneName));
+	//	dc.add(Restrictions.eq(KeyUsbKey.DEL_FLAG, KeyUsbKey.DEL_FLAG_NORMAL));
+		dc.addOrder(Order.desc("id"));
+		return keyDepotGeneralStatisticsDao.find(dc);
+	}
+	
+	
+	
 }

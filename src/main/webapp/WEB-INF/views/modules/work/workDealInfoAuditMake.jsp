@@ -15,8 +15,41 @@
 		$.each(legibleNameMap, function(idx, value, ele) {
 			$("#provider").append("<option value='1'>" + idx + "</option>");
 		});
+		checkKeyGene();
 	});
 
+	
+	function checkKeyGene(){
+		var providerName = $("#provider").find("option:selected").text();
+		var url = "${ctx}/key/keyUsbKeyDepot/checkKey";
+		$.ajax({
+			url:url,
+			type:'POST',
+			data:{deneName:providerName,_:new Date().getTime()},
+			dataType:'json',success: function(data){
+				if(data.status==0){
+					top.$.jBox.tip(data.msg);
+				}else if(data.status==1){
+					$("#msg").html(data.msg);
+					$("#makeCertButton").attr("disabled","disabled");
+				}else if(data.status==2){
+					$("#msg").html(data.msg);
+					$("#makeCertButton").attr("disabled","disabled");
+				}else if(data.status==4){
+					$("#msg").html(data.msg);
+					$("#makeCertButton").attr("disabled","disabled");
+					
+				}else if(data.status==3){
+					$("#msg").html("");
+					$("#makeCertButton").removeAttr("disabled");
+				}
+			}
+		});
+		
+		
+		
+	}
+	
 	function buttonFrom() {
 		window.location.href = "${ctx}/work/workDealInfoAudit/makeDealInfo?id=${workDealInfo.id}";
 	}
@@ -389,7 +422,7 @@
 			</tr>
 			<tr>
 				<td>CSP</td>
-				<td><select name="provider" id="provider">
+				<td><select name="provider" id="provider" onchange="checkKeyGene()">
 				</select> <input type="checkbox" name="keyStatus" onclick="newKey(this)" />新Key制证</td>
 			</tr>
 			<tr>
@@ -407,10 +440,10 @@
 	</div>
 	<div class="form-actions"
 		style="text-align: center; width: 100%; border-top: none;">
-		<input class="btn btn-primary" type="button" onclick="makeCert()"
+		<input class="btn btn-primary" type="button" id="makeCertButton" onclick="makeCert()" 
 			value="制 证" />&nbsp;
 			<input class="btn btn-primary" type="button" onclick="history.go(-1)"
-			value="返回" />&nbsp;
+			value="返回" />&nbsp;<label id="msg" style="color: red;"></label>
 	</div>
 </body>
 </html>

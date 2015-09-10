@@ -415,5 +415,45 @@ public class KeyUsbKeyDepotController extends BaseController {
 		}
 		return "redirect:"+Global.getAdminPath()+"/key/keyUsbKeyDepot/?repage";
 	}
+	
+	
+	
+	@RequestMapping( value = "checkKey" )
+	@ResponseBody
+	public String checkKey(String deneName) throws JSONException{
+		JSONObject json = new JSONObject();
+		try {
+			
+			List<KeyUsbKeyDepot> depots = keyUsbKeyDepotService.findByOfficeId(UserUtils.getUser().getOffice().getId());
+			if (depots.size()>0) {
+				List<KeyDepotGeneralStatistics> depotGeneStatistics =   keyDepotGeneralStatisticsService.findByDepotIdGenename(depots.get(0).getId(),deneName);
+				if (depotGeneStatistics.size()<1) {
+					json.put("status","2");
+					json.put("msg", "当前网点库房中没有此KYE类型标识！");
+				}else{
+					if (depotGeneStatistics.get(0).getInCount()>0) {
+						json.put("status","3");
+					}else{
+						json.put("status","4");
+						json.put("msg", "当前网点库房KEY余量为0");
+					}
+				}
+			}else{
+				json.put("status","1");
+				json.put("msg", "该网点下目前没有库房！请与上级联系！");
+				
+			}
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+			json.put("status","0");
+			json.put("msg", "系统异常");
+			e.printStackTrace();
+		}
+		
+		return json.toString();
+		
+	}
+	
 
 }
