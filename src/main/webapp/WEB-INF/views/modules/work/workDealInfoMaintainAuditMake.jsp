@@ -18,7 +18,9 @@
 			$("#provider").append("<option value='1'>" + idx + "</option>");
 		});
 		
-		checkKeyGene();
+		if("${workDealInfo.dealInfoType}" == "0" || "${workDealInfo.dealInfoType1}" == "2" || "${workDealInfo.dealInfoType1}" == "3" ){
+			checkKeyGene();
+		}
 	});
 	
 	
@@ -442,7 +444,12 @@
 			</tr>
 			<tr>
 				<td>CSP</td>
-				<td><select name="provider" id="provider" onchange="checkKeyGene()" >
+				<td><select name="provider" id="provider" 
+				<c:if test="${(workDealInfo.dealInfoType==0 || workDealInfo.dealInfoType1==2 || workDealInfo.dealInfoType1==3)}">
+				onchange="checkKeyGene()" 
+				</c:if>
+				
+				>
 				</select>
 				
 				  

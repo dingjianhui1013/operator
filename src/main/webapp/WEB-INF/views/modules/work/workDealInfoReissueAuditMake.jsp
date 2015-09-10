@@ -15,8 +15,9 @@
 		$.each(legibleNameMap, function(idx, value, ele) {
 			$("#provider").append("<option value='1'>" + idx + "</option>");
 		});
-		
+		if("${workDealInfo.dealInfoType}" == "0" || "${workDealInfo.dealInfoType1}" == "2" || "${workDealInfo.dealInfoType1}" == "3" ){
 		checkKeyGene();
+		}
 	});
 	
 	function checkKeyGene(){
@@ -430,7 +431,16 @@
 			</tr>
 			<tr>
 				<td>CSP</td>
-				<td><select name="provider" id="provider" onchange="checkKeyGene()">
+				<td><select name="provider" id="provider" 
+				<c:if test="${(workDealInfo.dealInfoType==0 || workDealInfo.dealInfoType1==2 || workDealInfo.dealInfoType1==3)}">
+				onchange="checkKeyGene()" 
+				</c:if>
+				
+				>
+				
+				
+				
+				
 				</select> <input type="checkbox" name="keyStatus" onclick="newKey(this)"/>新Key制证</td>
 			</tr>
 			<tr>
