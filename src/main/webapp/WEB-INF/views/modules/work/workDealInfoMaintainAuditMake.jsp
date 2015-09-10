@@ -17,8 +17,40 @@
 		$.each(legibleNameMap, function(idx, value, ele) {
 			$("#provider").append("<option value='1'>" + idx + "</option>");
 		});
+		
+		checkKeyGene();
 	});
-
+	
+	
+	
+	function checkKeyGene(){
+		var providerName = $("#provider").find("option:selected").text();
+		var url = "${ctx}/key/keyUsbKeyDepot/checkKey";
+		$.ajax({
+			url:url,
+			type:'POST',
+			data:{deneName:providerName,_:new Date().getTime()},
+			dataType:'json',success: function(data){
+				if(data.status==0){
+					top.$.jBox.tip(data.msg);
+				}else if(data.status==1){
+					$("#msg").html(data.msg);
+					$("#makeCertButton").attr("disabled","disabled");
+				}else if(data.status==2){
+					$("#msg").html(data.msg);
+					$("#makeCertButton").attr("disabled","disabled");
+				}else if(data.status==4){
+					$("#msg").html(data.msg);
+					$("#makeCertButton").attr("disabled","disabled");
+					
+				}else if(data.status==3){
+					$("#msg").html("");
+					$("#makeCertButton").removeAttr("disabled");
+				}
+			}
+		});
+	}
+		
 	function buttonFrom() {
 		window.location.href = "${ctx}/work/workDealInfoAudit/makeDealInfo?id=${workDealInfo.id}";
 	}
@@ -410,7 +442,7 @@
 			</tr>
 			<tr>
 				<td>CSP</td>
-				<td><select name="provider" id="provider">
+				<td><select name="provider" id="provider" onchange="checkKeyGene()" >
 				</select>
 				
 				  
@@ -451,7 +483,7 @@
 				value="重新缴费" />
 				&nbsp;<a class="btn btn-primary" href="javascript:cancelMaintenance()">取消本次维护</a>
 				</c:if>
-					
+				<label id="msg" style="color: red;"></label>	
 					
 					
 					
