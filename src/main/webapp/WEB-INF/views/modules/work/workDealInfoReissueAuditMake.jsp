@@ -462,7 +462,7 @@
 			<input type="hidden" value="" name="" /> <input type="hidden"
 				value="" name="" />
 			<div class="form-actions" style="text-align: center; width: 100%; border-top: none;">
-				<input class="btn btn-primary" type="button" onclick="makeCert()"
+				<input class="btn btn-primary" type="button" onclick="makeCert()" id="makeCertButton" 
 					value="制 证" />&nbsp;<label id="msg" style="color: red;"></label>
 			</div>
 		</form>
