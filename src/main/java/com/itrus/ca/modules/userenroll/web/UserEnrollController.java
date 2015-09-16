@@ -882,11 +882,11 @@ public class UserEnrollController extends BaseController {
 				json.put("certTime", sdf.format(workDealInfo.getWorkCertInfo().getNotbefore())
 						+ " 到 " + sdf.format(workDealInfo.getWorkCertInfo().getNotafter()));
 				
-				if (workDealInfo.getDelFlag().equals("1")) {
-					json.put("status", 110);
-					return json.toString();
-				}
-				
+//				if (workDealInfo.getDelFlag().equals("1")) {
+//					json.put("status", 110);
+//					return json.toString();
+//				}
+//				
 				
 				
 				if (workDealInfo.getWorkCertInfo() != null) {

@@ -900,5 +900,66 @@ public class ClientController {
 	
 	public static void main(String[] args) {
 		System.out.println(getSvn("O-四川", 11));
+		List<Thread> allThread = new ArrayList<Thread>();
+		List<Integer> in = new ArrayList<Integer>();
+		in.add(1);
+		in.add(2);
+		for (int i = 0; i < 10; i++) {
+			MutiProcess mp = new MutiProcess(in,i+"个线程");
+			Thread thread = new Thread(mp);
+			thread.start();
+			allThread.add(thread);
+		}
+		for (Thread thread1 : allThread) {
+			try {
+				thread1.join();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		System.out.println("555555555555");
 	}
+	
+	/**
+	 * 
+	 * @param productId
+	 * @param officeId
+	 * @throws JSONException
+	 * @date:2014年8月18日 
+	 * @user:Zhang Jingtao
+	 * @return_type:String
+	 */
+	@RequestMapping(value = "importNewDealInfo")
+	@ResponseBody
+	public String importNewDealInfo(Long officeId,@RequestParam(defaultValue = "yyyy-MM-dd HH:mm:ss",required = false)String pattern)
+			throws JSONException {
+		JSONObject json = new JSONObject();
+		
+		List<Thread> allThread = new ArrayList<Thread>();
+		
+		for (int i = 0; i < 10; i++) {
+			MutiProcess mp = new MutiProcess();
+			Thread thread = new Thread(mp);
+			thread.start();
+			allThread.add(thread);
+		}
+		for (Thread thread1 : allThread) {
+			try {
+				thread1.join();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		return json.toString();
+	}
+	
+	
+	
+	
+	
+	
+	
 }
