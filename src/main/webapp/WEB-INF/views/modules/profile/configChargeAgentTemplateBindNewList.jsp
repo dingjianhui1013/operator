@@ -50,7 +50,7 @@
 		function isBound(obj){
 			var productId = "${productId}";
 			var agentId = obj;
-			var url = "${ctx}/profile/configChargeAgent/isBoundCheck?agentId="+agentId+"&productId="+productId;
+			var url = "${ctx}/profile/configChargeAgent/isBoundCheck?agentId="+agentId+"&productId="+productId+"&_="+new Date().getTime();
 			$.getJSON(url,function(data){
 				if(data.isUsed=="yes"){
 					top.$.jBox.tip("该模版也已经办理过业务，不能取消绑定！");

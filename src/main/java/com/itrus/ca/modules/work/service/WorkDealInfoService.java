@@ -2931,6 +2931,7 @@ public class WorkDealInfoService extends BaseService {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.add(Restrictions.eq("configChargeAgentId", agentId));
 		dc.add(Restrictions.eq("configProduct.id", productId));
+		dc.add(Restrictions.eq("delFlag", "0"));
 		dc.addOrder(Order.desc("id"));
 		return workDealInfoDao.find(dc);
 	}
