@@ -2520,15 +2520,19 @@ public class WorkDealInfoController extends BaseController {
 			model.addAttribute("workCertApplyInfo", workDealInfo
 					.getWorkCertInfo().getWorkCertApplyInfo());
 		}
-
-		ConfigChargeAgent chargeAgent = chargeAgentService.get(workDealInfo
-				.getConfigChargeAgentId());
-		//model.addAttribute("tempStyle", chargeAgent.getTempStyle());
 		model.addAttribute("pro", ProductType.productTypeStrMap);
 		model.addAttribute("user", UserUtils.getUser());
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		model.addAttribute("date", sdf.format(new Date()));
 		model.addAttribute("workDealInfo", workDealInfo);
+		ConfigChargeAgent chargeAgent = null;
+		if (workDealInfo.getConfigChargeAgentId()!=null) {
+			chargeAgent = chargeAgentService.get(workDealInfo
+					.getConfigChargeAgentId());
+			
+		}
+		//model.addAttribute("tempStyle", chargeAgent.getTempStyle());
+		
 
 		if (dealType.indexOf("1") >= 0) {
 
@@ -2570,7 +2574,11 @@ public class WorkDealInfoController extends BaseController {
 				
 				List<WorkLog> list = workLogService.findByDealInfo(workDealInfo);
 				model.addAttribute("workLog", list);
-				model.addAttribute("tempStyle", chargeAgent.getTempStyle());
+				
+				if (chargeAgent!=null) {
+					model.addAttribute("tempStyle", chargeAgent.getTempStyle());
+				}
+				
 				
 				
 				
@@ -2588,7 +2596,11 @@ public class WorkDealInfoController extends BaseController {
 				
 				List<WorkLog> list = workLogService.findByDealInfo(workDealInfo);
 				model.addAttribute("workLog", list);
-				model.addAttribute("tempStyle", chargeAgent.getTempStyle());
+				if (chargeAgent!=null) {
+					model.addAttribute("tempStyle", chargeAgent.getTempStyle());
+				}
+				
+				//model.addAttribute("tempStyle", chargeAgent.getTempStyle());
 				return "modules/work/maintain/workDealInfoMaintainLost";
 			}else if(dealInfoTypes.get(0).equals("3")){
 				ConfigProduct configProduct = workDealInfo.getConfigProduct();
@@ -2603,7 +2615,10 @@ public class WorkDealInfoController extends BaseController {
 				
 				List<WorkLog> list = workLogService.findByDealInfo(workDealInfo);
 				model.addAttribute("workLog", list);
-				model.addAttribute("tempStyle", chargeAgent.getTempStyle());
+				if (chargeAgent!=null) {
+					model.addAttribute("tempStyle", chargeAgent.getTempStyle());
+				}
+				//model.addAttribute("tempStyle", chargeAgent.getTempStyle());
 				return "modules/work/maintain/workDealInfoMaintainUpdate";
 			}else if(dealInfoTypes.get(0).equals("4")){
 				ConfigChargeAgent agent =  configChargeAgentService.get(workDealInfo.getConfigChargeAgentId());
@@ -2627,7 +2642,12 @@ public class WorkDealInfoController extends BaseController {
 				
 				List<WorkLog> list = workLogService.findByDealInfo(workDealInfo);
 				model.addAttribute("workLog", list);
-				model.addAttribute("tempStyle", chargeAgent.getTempStyle());
+				
+				if (chargeAgent!=null) {
+					model.addAttribute("tempStyle", chargeAgent.getTempStyle());
+				}
+				
+				//model.addAttribute("tempStyle", chargeAgent.getTempStyle());
 				
 				return "modules/work/maintain/workDealInfoMaintainChange";
 			}else if(dealInfoTypes.get(0).equals("2")&&dealInfoTypes.get(1).equals("3")){
@@ -2638,12 +2658,13 @@ public class WorkDealInfoController extends BaseController {
 				for (int i = 0; i < boundList.size(); i++) {
 					nameSet.add(Integer.parseInt(boundList.get(i).getAgent().getTempStyle()));
 				}
-				
 				model.addAttribute("boundLabelList", nameSet);
-				
 				List<WorkLog> list = workLogService.findByDealInfo(workDealInfo);
 				model.addAttribute("workLog", list);
-				model.addAttribute("tempStyle", chargeAgent.getTempStyle());
+				if (chargeAgent!=null) {
+					model.addAttribute("tempStyle", chargeAgent.getTempStyle());
+				}
+				//model.addAttribute("tempStyle", chargeAgent.getTempStyle());
 				return "modules/work/maintain/workDealInfoMaintainUpdate";
 			}else if(dealInfoTypes.get(0).equals("1")&&dealInfoTypes.get(1).equals("3")){
 				ConfigProduct configProduct = workDealInfo.getConfigProduct();
@@ -2658,7 +2679,10 @@ public class WorkDealInfoController extends BaseController {
 				
 				List<WorkLog> list = workLogService.findByDealInfo(workDealInfo);
 				model.addAttribute("workLog", list);
-				model.addAttribute("tempStyle", chargeAgent.getTempStyle());
+				if (chargeAgent!=null) {
+					model.addAttribute("tempStyle", chargeAgent.getTempStyle());
+				}
+				//model.addAttribute("tempStyle", chargeAgent.getTempStyle());
 				return "modules/work/maintain/workDealInfoMaintainUpdateChange";
 			}
 		}else if(dealInfoTypes.size()==3){
@@ -2675,7 +2699,12 @@ public class WorkDealInfoController extends BaseController {
 			
 			List<WorkLog> list = workLogService.findByDealInfo(workDealInfo);
 			model.addAttribute("workLog", list);
-			model.addAttribute("tempStyle", chargeAgent.getTempStyle());
+			
+			if (chargeAgent!=null) {
+				model.addAttribute("tempStyle", chargeAgent.getTempStyle());
+			}
+			
+			//model.addAttribute("tempStyle", chargeAgent.getTempStyle());
 			return "modules/work/maintain/workDealInfoMaintainUpdateChange";
 		}else{
 			return "modules/work/workDealInfoMaintain";

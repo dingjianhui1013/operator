@@ -493,11 +493,13 @@ public class WorkPayInfoController extends BaseController {
 				
 				if(workDealInfo.getDealInfoType().equals(1)){
 					ConfigChargeAgent agent =  configChargeAgentService.get(workDealInfo.getConfigChargeAgentId());
-					agent.setAvailableNum(agent.getAvailableNum()+1);//已用数量
-					agent.setSurplusNum(agent.getSurplusNum()-1);//剩余数量
-					configChargeAgentService.save(agent);
-					logUtil.saveSysLog("计费策略模版", "更改剩余数量和使用数量成功!", "");
-					
+					if(!agent.getTempStyle().equals("1")){
+						agent.setAvailableNum(agent.getAvailableNum()+1);//已用数量
+						agent.setSurplusNum(agent.getSurplusNum()-1);//剩余数量
+						configChargeAgentService.save(agent);
+						logUtil.saveSysLog("计费策略模版", "更改剩余数量和使用数量成功!", "");
+					}
+				
 					ConfigAgentBoundDealInfo dealInfoBound = new ConfigAgentBoundDealInfo();
 					dealInfoBound.setDealInfo(workDealInfo);
 					dealInfoBound.setAgent(agent);

@@ -87,7 +87,7 @@ public class ItrustController {
 								itrustService.listCommonApp());// 不返回po 只返回应用的id
 					}
 					if ("profile".equals(include)) {
-						if (wdi.getConfigProduct().getConfigRaAccounts().size() != 0) {
+					//	if (wdi.getConfigProduct().getConfigRaAccounts().size() != 0) {
 							ConfigRaAccount raAccount = itrustService.findRaById(wdi.getConfigProduct().getRaAccountId());
 									//itrustService.findByAppId(wdi.getConfigApp().getId());
 							JSONObject ra = new JSONObject();
@@ -99,6 +99,9 @@ public class ItrustController {
 							ra.put("serviceUrl", raAccount.getMobileDeviceUrl());
 							ra.put("id", raAccount.getId());
 							ra.put("accountHash", raAccount.getAccountHash());
+							System.out.println(wdi.getWorkCertInfo().getTrustDeviceCount());
+							System.out.println(wdi.getWorkCertInfo().getTrustDeviceCount());
+							
 							json.put("trustDeviceCount", wdi.getWorkCertInfo()
 									.getTrustDeviceCount() == null ? 0 : wdi
 									.getWorkCertInfo().getTrustDeviceCount());
@@ -108,9 +111,9 @@ public class ItrustController {
 								json.put("trustDeviceDate", 0);
 							}
 							json.put("ra", ra);
-						} else {
-							json.put("ra", "");
-						}
+//						} else {
+//							json.put("ra", "");
+//						}
 					}
 					json.put("status", 1);
 				}
