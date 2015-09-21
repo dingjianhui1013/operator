@@ -90,7 +90,8 @@ public class RaAccountUtil {
 			} else if (flag.endsWith("4")) {
 				value = u_conCertNum;
 			}
-			request.setUserOrganization(value);
+			request.setUserSurname(value);
+			//request.setUserOrganization(value);
 		}
 		if (!extendInfo.getEmailDisplayName().equals("-1")) {
 			flag = extendInfo.getEmailDisplayName();
