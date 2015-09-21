@@ -153,7 +153,9 @@ public class CaService {
 			userInfo.setUserAdditionalField8(certificateRequest.getUserAdditionalField8());
 			userInfo.setUserAdditionalField9(certificateRequest.getUserAdditionalField9());
 			userInfo.setUserAdditionalField10(certificateRequest.getUserAdditionalField10());
-//			userInfo.setUserSurName("887654321");
+
+			userInfo.setUserSurName(certificateRequest.getUserSurname());
+
 			userInfo.setCertNotBeforeDate(new Date());
 			System.out.println("CN:"+certificateRequest.getUserName());
 			System.out.println("O:"+certificateRequest.getUserOrganization());
