@@ -28,7 +28,7 @@
 	function makeData(){
 		$("#make").hide();
 		$("#returnJsonData").html("正在生成...........");
-		var url = "test/makeCertDealInfo?officeId="+$("#office").val()+"&pattern="+$("#pattern").val()+"&_="+new Date().getTime();
+		var url = "test/importNewDealInfo?officeId="+$("#office").val()+"&pattern="+$("#pattern").val()+"&_="+new Date().getTime();
 		$.getJSON(url,function(data){
 			$("#make").show();
 			$("#returnJsonData").html(data.msg);

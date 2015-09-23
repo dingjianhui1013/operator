@@ -244,7 +244,7 @@ public class ClientController {
 			}
 			List<BasicInfoScca> all = basicInfoSccaService.findAll();
 			// 保存企业信息work_company--以name为准,Long 保存company的Id
-			HashMap<String, WorkCompany> companyHash = new HashMap<String, WorkCompany>();
+ 			HashMap<String, WorkCompany> companyHash = new HashMap<String, WorkCompany>();
 			// 保存经办人信息，以concert_num（经办人证件号）为准
 			HashMap<String, WorkUser> userHash = new HashMap<String, WorkUser>();
 			//存储开户费  产品id为key
@@ -471,9 +471,10 @@ public class ClientController {
 					Double openAccountMoney = 0d;
 					Double addCert = 0d;
 					if (openAccountHash.get(product.getId())==null) {
+//						ConfigChargeAgent chargeAgent = configChargeAgentService
+//								.get(workDealInfo.getConfigProduct().getChargeAgentId());
 						ConfigChargeAgent chargeAgent = configChargeAgentService
-								.get(workDealInfo.getConfigProduct().getChargeAgentId());
-						
+								.get(s1.getAgentId());
 						
 						openAccountMoney = configChargeAgentDetailService
 								.selectMoney(chargeAgent,
@@ -905,7 +906,7 @@ public class ClientController {
 		in.add(1);
 		in.add(2);
 		for (int i = 0; i < 10; i++) {
-			MutiProcess mp = new MutiProcess(in,i+"个线程");
+			MutiProcess mp = new MutiProcess();
 			Thread thread = new Thread(mp);
 			thread.start();
 			allThread.add(thread);
@@ -935,15 +936,83 @@ public class ClientController {
 	public String importNewDealInfo(Long officeId,@RequestParam(defaultValue = "yyyy-MM-dd HH:mm:ss",required = false)String pattern)
 			throws JSONException {
 		JSONObject json = new JSONObject();
+		Date startDATE = new Date();
+		SimpleDateFormat certTimeFormat = new SimpleDateFormat(pattern);
+		if (isRunning) {
+			json.put("statu", "0");
+			json.put("msg", "有一个任务进行中，请勿重复操作"+count);
+			return json.toString();
+		}
+		isRunning = true;
 		
+		try {
+			certTimeFormat.format(new Date());
+		} catch (Exception e) {
+			json.put("statu", "0");
+			json.put("msg", "日期格式错误:"+pattern);
+			return json.toString();
+		}
+		count = 0;
+		json.put("status", -1);
+		User createBy = new User(1L);
+		//User createBy = UserUtils.getUser();
+		String  firstSvn = "";
+		if (officeId != 1L) {
+			Office office = officeService.get(officeId);
+			List<User> users = office.getUserList();
+			if (users.size() == 0) {
+				json.put("statu", "0");
+				json.put("msg", "当前网点下无用户，无法创建");
+				return json.toString();
+			} else {
+				createBy = users.get(0);
+			}
+			firstSvn  = workDealInfoService.getSVN(office.getName());
+		}
+		List<BasicInfoScca> all = basicInfoSccaService.findAll();
+		Integer num = Integer.valueOf(firstSvn.split("-")[3]);
+		String head = firstSvn.replace("-"+firstSvn.split("-")[3], "");
+		for (int i = 0; i < all.size(); i++) {
+			String svn = getSvn(head, num);
+			num++;
+			all.get(i).setSvnNum(svn);
+		}
+			
 		List<Thread> allThread = new ArrayList<Thread>();
 		
-		for (int i = 0; i < 10; i++) {
-			MutiProcess mp = new MutiProcess();
-			Thread thread = new Thread(mp);
-			thread.start();
-			allThread.add(thread);
+		int loopTime = 100;
+		int tempSize = all.size();
+		if (tempSize<=loopTime) {
+			for (int i = 0; i < tempSize; i++) {
+				List<BasicInfoScca> transToTrheads = new ArrayList<BasicInfoScca>();
+				transToTrheads.add(all.get(i));
+				MutiProcess mp = new MutiProcess(transToTrheads , officeId , createBy , 1);
+				Thread thread = new Thread(mp);
+				thread.start();
+				allThread.add(thread);
+			}
+		}else {
+			int divisor	 = tempSize/loopTime;
+			int remainder = tempSize%loopTime;
+			for (int i = 0; i < loopTime; i++) {
+				List<BasicInfoScca> transToTrheads = new ArrayList<BasicInfoScca>();
+				int newSize=divisor;
+				if (i<remainder) {
+					newSize = divisor+1;
+				}
+				
+				for (int j = newSize-1; j >=0 ; j--) {
+					transToTrheads.add(all.get(j));
+					all.remove(j);
+				}
+				MutiProcess mp = new MutiProcess(transToTrheads , officeId , createBy , (i+1));
+				Thread thread = new Thread(mp);
+				thread.start();
+				allThread.add(thread);
+			}
 		}
+		
+		
 		for (Thread thread1 : allThread) {
 			try {
 				thread1.join();
@@ -952,7 +1021,8 @@ public class ClientController {
 				e.printStackTrace();
 			}
 		}
-		
+		System.out.println("使用时间 :"+(System.currentTimeMillis()-startDATE.getTime()));
+		isRunning = false;
 		return json.toString();
 	}
 	

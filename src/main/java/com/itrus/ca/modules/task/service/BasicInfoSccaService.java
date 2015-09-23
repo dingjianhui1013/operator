@@ -8,6 +8,7 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Property;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,6 +60,8 @@ public class BasicInfoSccaService extends BaseService {
 		basicInfoSccaDao.save(sccas);
 	}
 	
+
+
 	@Transactional(readOnly = true)
 	public List<BasicInfoScca> findAll(){
 		DetachedCriteria dc = basicInfoSccaDao.createDetachedCriteria();

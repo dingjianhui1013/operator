@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 /*************************************************************
  **
@@ -29,6 +30,7 @@ public class BasicInfoScca implements java.io.Serializable {
 
 	private Long id;
 	private Long appId;
+	private Long agentId;
 	private Long productId;
 	private Integer productLabel;
 	private Integer year;
@@ -71,7 +73,11 @@ public class BasicInfoScca implements java.io.Serializable {
 	private String key编码Usb口的编码;
 	private Integer 证书天数;
 	private Boolean used;
-
+	
+	private Long times;
+	private String svnNum;
+	
+	
 	// Constructors
 
 	/** default constructor */
@@ -92,7 +98,7 @@ public class BasicInfoScca implements java.io.Serializable {
 			String issuerDn, String subjectDn, String notafter,
 			String notbefore, String serialnumber, String keySn,
 			String 证书类型, String 应用名, String 单证or双证, String 专用or通用,
-			Integer 多证书编号, String key编码Usb口的编码, Integer 证书天数) {
+			Integer 多证书编号, String key编码Usb口的编码, Integer 证书天数 ,Boolean used,Long agentId) {
 		this.id = id;
 		this.appId = appId;
 		this.productId = productId;
@@ -136,6 +142,8 @@ public class BasicInfoScca implements java.io.Serializable {
 		this.多证书编号 = 多证书编号;
 		this.key编码Usb口的编码 = key编码Usb口的编码;
 		this.证书天数 = 证书天数;
+		this.used = used;
+		this.agentId = agentId;
 	}
 
 	// Property accessors
@@ -538,6 +546,35 @@ public class BasicInfoScca implements java.io.Serializable {
 		this.used = used;
 	}
 
+	@Column(name = "agent_id")
+	public Long getAgentId() {
+		return agentId;
+	}
+
+	public void setAgentId(Long agentId) {
+		this.agentId = agentId;
+	}
+
+	@Transient
+	public Long getTimes() {
+		return times;
+	}
+
+	public void setTimes(Long times) {
+		this.times = times;
+	}
+	
+	@Transient
+	public String getSvnNum() {
+		return svnNum;
+	}
+
+	public void setSvnNum(String svnNum) {
+		this.svnNum = svnNum;
+	}
+
+
+
 	public boolean equals(Object other) {
 		if ((this == other))
 			return true;
@@ -714,9 +751,15 @@ public class BasicInfoScca implements java.io.Serializable {
 						.getKey编码Usb口的编码().equals(castOther.getKey编码Usb口的编码())))
 				&& ((this.get证书天数() == castOther.get证书天数()) || (this.get证书天数() != null
 						&& castOther.get证书天数() != null && this.get证书天数()
-						.equals(castOther.get证书天数())));
+						.equals(castOther.get证书天数())))
+				&& ((this.getAgentId() == castOther.getAgentId()) || (this
+								.getAgentId() != null && castOther.getAgentId() != null && this
+								.getAgentId().equals(castOther.getAgentId())))
+						
+						;
 	}
 
+	
 	public int hashCode() {
 		int result = 17;
 
@@ -843,6 +886,8 @@ public class BasicInfoScca implements java.io.Serializable {
 						.hashCode());
 		result = 37 * result
 				+ (get证书天数() == null ? 0 : this.get证书天数().hashCode());
+		result = 37 * result
+				+ (getAgentId() == null ? 0 : this.getAgentId().hashCode());
 		return result;
 	}
 
