@@ -196,7 +196,7 @@ function genRenewCSR(objProviderList, cryptFlag, keyLen, objOldCert, useOldKey) 
     }
     if (useOldKey) {
         //使用旧的密钥对，更新后的证书只是更新了证书有效期
-        return genKeyAndCSREx(providerFullName, providerType, keyLen, cryptFlag, objOldCert.KeyContainer);
+        return genKeyAndCSREx2(providerFullName, providerType, keyLen, cryptFlag, objOldCert.KeyContainer, objOldCert.keySpec);
     } else {
         //生成新的密钥对，更新后的证书不仅更新了证书有效期，而且换了密钥对
         return genKeyAndCSREx(providerFullName, providerType, keyLen, cryptFlag);
@@ -273,6 +273,75 @@ function genKeyAndCSR(providerFullName, providerType, cryptFlag, keyContainer) {
         }
         else {//创建1024位密钥对或产生CSR时发生其他未知错误，将错误报告给用户
             alert("在证书请求过程中发生错误！\n错误原因：" + e.description + "\n错误代码：" + e.number);
+            return "";
+        }
+    }
+}
+
+function genKeyAndCSREx2(providerFullName, providerType, keyLen, cryptFlag, keyContainer, certKeySpec) {
+    try {
+    	//alert(certKeySpec);
+        cenroll.Reset(); //首先Reset
+        cenroll.ProviderName = providerFullName;
+        cenroll.ProviderType = providerType;
+        cenroll.SignAlgOId = szOID_RSA_SHA1RSA;
+        cenroll.HashAlgorithm = "SHA1"; //SHA1
+        //1：生成密钥在加密位；2：生成密钥在签名位
+        cenroll.KeySpec = certKeySpec;        // 20140916 原为 1
+        cenroll.DeleteRequestCert = false;
+        var keyflags = 0;
+        if (typeof(cryptFlag) != "number") {
+            cryptFlag = 0x00000001; //表示私钥可导出，默认值
+        }
+        keyflags = keyflags | cryptFlag;
+
+        var keyLenFlag = 0x04000000;
+        if (typeof(keyLen) != "number") {
+            keyLenFlag = 0x04000000; // 1024位
+        } else {
+            if (keyLen == 256) {
+                cenroll.SignAlgOId = szOID_SM2_SM3SM2;
+                cenroll.HashAlgorithm = "SM3";
+            }
+            keyLenFlag = keyLen << 16;
+        }
+        if (typeof(keyContainer) == "string" && keyContainer != "") {//适用于更新证书
+            cenroll.UseExistingKeySet = true;
+            cenroll.ContainerName = keyContainer;
+        }
+        var csr = "";
+        cenroll.GenKeyFlags = keyLenFlag | keyflags;
+        csr = cenroll.generatePKCS10("CN=itrus_enroll", "1.3.6.1.5.5.7.3.2");
+        
+        return csr.replace(/\r*\n/g, "");
+    } catch (e) {
+    	alert(e);
+        var keyNotPresent = "指定的密钥服务提供者不能提供服务！可能出现的原因："
+            + "\n1、您没有插入USB KEY，或者插入的USB KEY不能识别。"
+            + "\n2、您的USB KEY还没有初始化。";
+        var keyContainerNotPresent = "指定的KeyContainer不能提供服务！\n如果您正在更新证书，请选择原证书的密钥服务提供者(CSP)。";
+        if (-2147023673 == e.number //800704C7 User Canceled
+            || -2147418113 == e.number || -2146893795 == e.number //Zhong chao USB key User Canceled when input PIN
+            || -2146434962 == e.number //FT ePass2001 USB key User Canceld
+            ) {
+            return "";
+        } else if (-2146893802 == e.number) { //80090016
+            if (providerFullName.indexOf("SafeSign") != -1)
+                alert(keyNotPresent); //捷德的KEY没插KEY会报这个错误
+            else
+                alert(keyContainerNotPresent); //当KeyContainer无法提供服务时，其他KEY会报这个错误
+            return "";
+        } else if (-2146435060 == e.number //8010000C FTSafe ePass2000没插KEY会报
+            || -2146893792 == e.number //80090020 FEITIAN ePassNG没插KEY会报
+            ) {
+            alert(keyNotPresent); //捷德的KEY没插KEY会报这个错误
+            return "";
+        } else if (-2146955245 == e.number) {
+            alert("创建新密钥容器错误:0x80081013(00000005)\n提示：请将当前站点加入可信站点！");
+            return "";
+        }
+        else {//创建1024位密钥对或产生CSR时发生其他未知错误，将错误报告给用户
+            alert("在证书请求过程中发生错误！\n错误原因：" + e.description + "(可能原因：密钥长度与类型不匹配！)\n错误代码：" + e.number);
             return "";
         }
     }
