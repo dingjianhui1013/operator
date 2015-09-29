@@ -257,7 +257,6 @@ public class MutiProcess implements Runnable {
 					WorkPayInfo workPayInfo = new WorkPayInfo();
 					
 					ConfigApp app = product.getConfigApp();
-					
 					//C-四川CA网点-1408-0826
 					workDealInfo.setSvn(s1.getSvnNum());
 					
@@ -357,6 +356,7 @@ public class MutiProcess implements Runnable {
 					log.error("新增证书费用:"+addCert);
 					// 证书序列号
 					workDealInfo.setCertSort(s1.get多证书编号());
+					workDealInfo.setConfigChargeAgentId(s1.getAgentId());
 
 					workPayInfo.setWorkTotalMoney(openAccountMoney + addCert);
 					workPayInfo.setWorkPayedMoney(0d);
