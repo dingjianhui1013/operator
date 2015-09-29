@@ -356,6 +356,12 @@ public class MutiProcess implements Runnable {
 					log.error("新增证书费用:"+addCert);
 					// 证书序列号
 					workDealInfo.setCertSort(s1.get多证书编号());
+					
+					
+					ConfigChargeAgent agent = configChargeAgentService.get(s1.getAgentId());
+					
+					workDealInfo.setPayType(Integer.parseInt(agent.getTempStyle()));
+					
 					workDealInfo.setConfigChargeAgentId(s1.getAgentId());
 
 					workPayInfo.setWorkTotalMoney(openAccountMoney + addCert);
