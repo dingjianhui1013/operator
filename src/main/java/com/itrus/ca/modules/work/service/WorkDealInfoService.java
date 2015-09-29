@@ -1116,6 +1116,27 @@ public class WorkDealInfoService extends BaseService {
 				WorkDealInfoStatus.STATUS_CERT_OBTAINED));
 		return workDealInfoDao.find(page, dc);
 	}
+	
+	
+	
+	
+	public Long findDealInfoMax() {
+		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
+		dc.add(Restrictions.eq(WorkDealInfo.DEL_FLAG,
+				WorkDealInfo.DEL_FLAG_NORMAL));
+		dc.addOrder(Order.desc("id"));
+		if (workDealInfoDao.find(dc).size()>0) {
+			return workDealInfoDao.find(dc).get(0).getId();
+		}else{
+			
+			return 0l;
+		}
+		
+		
+	}
+	
+	
+	
 
 	/**
 	 * 用于结算处的业务明细
@@ -2924,6 +2945,15 @@ public class WorkDealInfoService extends BaseService {
 		dc.addOrder(Order.desc("id"));
 		return workDealInfoDao.find(dc);
 	}
+	
+	
+	public Integer afterDealInfoId(Long dealInfoId) {
+		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
+		dc.add(Restrictions.gt("id", dealInfoId));
+		return workDealInfoDao.find(dc).size();
+	}
+	
+	
 	
 
 	// 根据计费策略模版。判断是否计费策略模版办理过业务

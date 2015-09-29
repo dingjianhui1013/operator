@@ -937,10 +937,15 @@ public class ClientController {
 			throws JSONException {
 		JSONObject json = new JSONObject();
 		Date startDATE = new Date();
+		
+		Long dealInfoId = workDealInfoService.findDealInfoMax();
+		
+		
+		
 		SimpleDateFormat certTimeFormat = new SimpleDateFormat(pattern);
 		if (isRunning) {
 			json.put("statu", "0");
-			json.put("msg", "有一个任务进行中，请勿重复操作"+count);
+			json.put("msg", "有一个任务进行中，请勿重复操作!");
 			return json.toString();
 		}
 		isRunning = true;
@@ -1021,6 +1026,13 @@ public class ClientController {
 				e.printStackTrace();
 			}
 		}
+		
+		Integer dealInfoCount =  workDealInfoService.afterDealInfoId(dealInfoId);
+		
+		
+		json.put("msg", "本次成功提交数据：" + dealInfoCount + "条！");
+		
+		
 		System.out.println("使用时间 :"+(System.currentTimeMillis()-startDATE.getTime()));
 		isRunning = false;
 		return json.toString();

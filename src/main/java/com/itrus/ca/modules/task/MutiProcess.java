@@ -307,7 +307,7 @@ public class MutiProcess implements Runnable {
 					workDealInfo.setWorkCompanyHis(companyHis);
 					workDealInfo.setWorkUserHis(userHis);
 					workDealInfo.setUpdateBy(createBy);
-					workDealInfo.setCreateDate(new Date());
+					workDealInfo.setUpdateDate(new Date());
 					workDealInfo.setWorkCertInfo(certInfo);
 					workDealInfo.setObtainedDate(new Date());
 					workDealInfo.setStatus(0);
