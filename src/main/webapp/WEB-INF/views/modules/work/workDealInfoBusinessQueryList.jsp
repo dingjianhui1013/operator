@@ -232,23 +232,20 @@
 					<td>${workDealInfo.configApp.appName}</td>
 					<td>${wdiType[workDealInfo.dealInfoType]}&nbsp;&nbsp;${wdiType[workDealInfo.dealInfoType1]}&nbsp;&nbsp;${wdiType[workDealInfo.dealInfoType2]}&nbsp;&nbsp;${wdiType[workDealInfo.dealInfoType3]}</td>
 					<td>${workDealInfo.year}年</td>
-					<td> <c:if test="${workDealInfo.workPayInfo.methodPos||(workDealInfo.workPayInfo.relationMethod==1)}">
+					<td> <c:if test="${workDealInfo.payType==1}">
+							标准
+						</c:if>
+						<c:if test="${workDealInfo.payType==3}">
+							合同采购
+						</c:if>
+						<c:if test="${workDealInfo.payType==2}">
+							政府统一采购
+						</c:if>
+						<c:if test="${workDealInfo.workPayInfo.methodPos||(workDealInfo.workPayInfo.relationMethod==1)}">
 							POS收款
 						</c:if>
 						<c:if test="${workDealInfo.workPayInfo.methodMoney||(workDealInfo.workPayInfo.relationMethod==0)}">
 							现金
-						</c:if>
-						<c:if test="${workDealInfo.workPayInfo.methodBank ||(workDealInfo.workPayInfo.relationMethod==2)}">
-							银行转账
-						</c:if>
-						<c:if test="${workDealInfo.workPayInfo.methodAlipay ||(workDealInfo.workPayInfo.relationMethod==3)}">
-							支付宝
-						</c:if>
-							<c:if test="${workDealInfo.workPayInfo.methodContract}">
-							合同采购
-						</c:if>
-							<c:if test="${workDealInfo.workPayInfo.methodGov}">
-							政府统一采购
 						</c:if>
 						</td>
 						<td>

@@ -45,7 +45,7 @@
 				}
 			});
 		}
-		function onSubmit(){
+		/* function onSubmit(){
 			if ($("#startTime").val()==""||$("#endTime").val()=="") {
 				top.$.jBox.tip("请选定时间范围");
 				return false;
@@ -57,7 +57,7 @@
 					return true;
 				}
 			}
-		}
+		} */
 	</script>
 </head>
 <body>
@@ -100,7 +100,7 @@
 			maxlength="20" class="Wdate required"
 			onclick="WdatePicker({dateFmt:'yyyy-MM',isShowClear:false,minDate:'#F{$dp.$D(\'startTime\')}'});"
 			value="${endDate}" />
-		&nbsp;&nbsp;<input id="btnSubmit" class="btn btn-primary" onclick="return onSubmit()" type="submit" value="查询"/>
+		&nbsp;&nbsp;<input id="btnSubmit" class="btn btn-primary"  type="submit" value="查询"/>
 		</div>
 	</form:form>
 	<tags:message content="${message}"/>

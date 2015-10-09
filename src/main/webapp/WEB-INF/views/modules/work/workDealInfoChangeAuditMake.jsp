@@ -116,6 +116,7 @@ function quick(keySN) {
 										});
 					} else {
 						alert(data.msg);
+						window.location.href = "${ctx}/work/workDealInfoAudit/exceptionList?dealInfoStatus=1";
 					}
 				}
 			});
@@ -269,7 +270,7 @@ function addCertDaysCheck(){
 			</tr>
 			<tr>
 				<td>key序列号</td>
-				<td><input type="text" readonly="readonly" id="keySn" /> <input
+				<td><input type="text" id="keySn" /> <input
 					type="button" class="btn btn-primary" value="检测key"
 					onclick="javascript:selectKeyNum();" />
 					</td>

@@ -2466,6 +2466,8 @@ public class WorkDealInfoService extends BaseService {
 				WorkDealInfoStatus.STATUS_CERT_OBTAINED));
 		return workDealInfoDao.find(dc);
 	}
+	
+	
 
 	public void exportExcelData(HttpServletRequest request,
 			HttpServletResponse response) {

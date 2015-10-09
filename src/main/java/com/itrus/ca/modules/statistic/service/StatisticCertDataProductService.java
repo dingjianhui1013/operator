@@ -50,9 +50,15 @@ public class StatisticCertDataProductService extends BaseService {
 	public List<StatisticCertDataProduct> getSum(Integer productType, Office office, Date startTime,
 			Date endTime){
 		DetachedCriteria dc = statisticCertDataProductDao.createDetachedCriteria();
-		dc.add(Restrictions.eq("office", office));
-		dc.add(Restrictions.ge("countDate", startTime));
-		dc.add(Restrictions.lt("countDate", endTime));
+		if (office != null) {
+			dc.add(Restrictions.eq("office", office));
+		}
+		if (startTime!=null) {
+			dc.add(Restrictions.ge("countDate", startTime));
+		}
+		if (endTime!=null) {
+			dc.add(Restrictions.lt("countDate", endTime));
+		}
 		dc.add(Restrictions.eq("productType", productType));
 		return statisticCertDataProductDao.find(dc);
 	}

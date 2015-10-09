@@ -35,6 +35,8 @@ import com.itrus.ca.modules.sys.service.OfficeService;
 import com.itrus.ca.modules.sys.utils.UserUtils;
 import com.itrus.ca.modules.statistic.entity.StatisticCertDataProduct;
 import com.itrus.ca.modules.statistic.service.StatisticCertDataProductService;
+import com.itrus.ca.modules.work.service.WorkDealInfoService;
+import com.mysql.jdbc.Util;
 
 /**
  * 证书发放统计Controller
@@ -47,6 +49,9 @@ public class StatisticCertDataProductController extends BaseController {
 
 	@Autowired
 	private StatisticCertDataProductService statisticCertDataProductService;
+	
+	@Autowired
+	private WorkDealInfoService workDealInfoService;
 	
 	@Autowired
 	private OfficeService officeService;
@@ -87,7 +92,18 @@ public class StatisticCertDataProductController extends BaseController {
 		if (startDate == null&& endDate == null) {
 			return "modules/statistic/statisticCertDataProductListF";
 		}
-		Office office = officeService.get(officeId);
+		Office office = null;
+		if (officeId!=null) {
+			office = officeService.get(officeId);
+		}
+		
+		if (startDate==null||startDate.equals("")) {
+			startDate = "2013-01";
+		}
+		if (endDate==null||endDate.equals("")) {
+			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM");
+			endDate = df.format(new Date());
+		}
 		List<String> monthList = getMonthList(startDate+"-01", endDate+"-01");
 		List<StaticProductMonth> sumList = new ArrayList<StaticProductMonth>();
 		for (int i = 1; i < ProductType.productTypeMap.size()+1; i++) {

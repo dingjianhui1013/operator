@@ -1245,7 +1245,7 @@ public class WorkDealInfoAuditController extends BaseController {
 		
 		addMessage(redirectAttributes, "删除业务成功");
 		return "redirect:" + Global.getAdminPath()
-				+ "/work/workDealInfoAudit/?repage";
+				+ "/work/workDealInfoAudit/exceptionList?dealInfoStatus=1&repage";
 	}
 
 	/**
