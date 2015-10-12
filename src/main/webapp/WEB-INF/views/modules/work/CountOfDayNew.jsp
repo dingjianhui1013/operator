@@ -233,9 +233,9 @@
 			</tr> 
 		</thead>
 		<tbody>
-			
 				<tr>
-					<td style="text-align:center; vertical-align: middle;" ><fmt:formatDate value="${appData.statisticDate}" pattern="yyyy-MM-dd"/></td>
+					<td style="text-align:center; vertical-align: middle;" >
+					<fmt:formatDate value="${appData.statisticDate}" pattern="yyyy-MM-dd"/></td>
 					<td style="text-align:center; vertical-align: middle;" >${appData.add1}</td>
 					<td style="text-align:center; vertical-align: middle;" >${appData.add2}</td>
 					<td style="text-align:center; vertical-align: middle;" >${appData.add4}</td>
@@ -247,28 +247,18 @@
 					<td style="text-align:center; vertical-align: middle;" >${appData.modifyNum}</td>
 					<td style="text-align:center; vertical-align: middle;" >${appData.reissueNum}</td>
 					<td style="text-align:center; vertical-align: middle;" >${appData.lostReplaceNum}</td>
-					
 					<td style="text-align:center; vertical-align: middle;" >${appData.updateChangeNum}</td>
 					<td style="text-align:center; vertical-align: middle;" >${appData.updateChangeNum2}</td>
 					<td style="text-align:center; vertical-align: middle;" >${appData.updateChangeNum4}</td>
 					<td style="text-align:center; vertical-align: middle;" >${appData.updateChangeNum5}</td>
-					
-					
 					<td style="text-align:center; vertical-align: middle;" >${appData.updateLostNum}</td>
 					<td style="text-align:center; vertical-align: middle;" >${appData.updateLostNum2}</td>
 					<td style="text-align:center; vertical-align: middle;" >${appData.updateLostNum4}</td>
 					<td style="text-align:center; vertical-align: middle;" >${appData.updateLostNum5}</td>
-					
-					
-					
 					<td style="text-align:center; vertical-align: middle;" >${appData.updateReplaceNum}</td>
 					<td style="text-align:center; vertical-align: middle;" >${appData.updateReplaceNum2}</td>
 					<td style="text-align:center; vertical-align: middle;" >${appData.updateReplaceNum4}</td>
 					<td style="text-align:center; vertical-align: middle;" >${appData.updateReplaceNum5}</td>
-					
-					
-					
-					
 					<td style="text-align:center; vertical-align: middle;" >${appData.changeLostNum}</td>
 					<td style="text-align:center; vertical-align: middle;" >${appData.changeReplaceNum}</td>
 					<td style="text-align:center; vertical-align: middle;" >${appData.changeUpdateLostNum}</td>

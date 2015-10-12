@@ -232,6 +232,14 @@
 		</thead>
 		<tbody>
 			<c:forEach items="${appDataList}" var="appData">
+				<c:if test="${appData.certTotal==0}">
+				<tr>
+					<td style="text-align:center; vertical-align: middle;" ><fmt:formatDate value="${appData.statisticDate}" pattern="yyyy-MM-dd"/></td>
+					<td colspan="36" >${appData.app.appName}应用当天没办理数据
+					</td>
+				</tr>
+				</c:if>
+				<c:if test="${appData.certTotal!=0}">
 				<tr>
 					<td style="text-align:center; vertical-align: middle;" ><fmt:formatDate value="${appData.statisticDate}" pattern="yyyy-MM-dd"/></td>
 					<td style="text-align:center; vertical-align: middle;" >${appData.add1}</td>
@@ -286,6 +294,8 @@
 					
 				    
 				</tr>
+				
+				</c:if>
 			</c:forEach>
 		</tbody>
 	</table>
