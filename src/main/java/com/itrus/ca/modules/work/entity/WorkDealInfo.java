@@ -88,6 +88,7 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 	private Date notafter;//证书到期时间（业务办理列表大数据流已被关闭的问题）
 	private Integer addCertDays;//赠送天数
 	private Boolean isIxin;//i信端更新标识
+	private Integer isSJQY;//是否是数据迁移的数据  是为1 否为null or 0
 	// Constructors
 	
 	private Long configChargeAgentId;
@@ -110,7 +111,7 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 			WorkUser workUser,
 			Integer dealInfoType, String dealInfoStatus, ConfigProduct configProduct,
 			Integer year, String certSn, String keySn, Integer certSort,Integer trustDeviceCount,
-			Set<WorkLog> workLogs,Long configChargeAgentId) {
+			Set<WorkLog> workLogs,Long configChargeAgentId,Integer isSJQY) {
 		this.configApp = configApp;
 		this.workCompany = workCompany;
 		this.workUser = workUser;
@@ -124,6 +125,7 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 		this.configProduct = configProduct;
 		this.trustDeviceCount = trustDeviceCount;
 		this.configChargeAgentId = configChargeAgentId;
+		this.isSJQY = isSJQY;
 	}
 
 	// Property accessors
@@ -573,6 +575,15 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 
 	public void setConfigChargeAgentId(Long configChargeAgentId) {
 		this.configChargeAgentId = configChargeAgentId;
+	}
+
+	@Column(name = "is_sjqy")
+	public Integer getIsSJQY() {
+		return isSJQY;
+	}
+
+	public void setIsSJQY(Integer isSJQY) {
+		this.isSJQY = isSJQY;
 	}
 	
 	

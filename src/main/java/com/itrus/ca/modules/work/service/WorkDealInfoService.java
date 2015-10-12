@@ -2055,6 +2055,183 @@ public class WorkDealInfoService extends BaseService {
 		dc.add(Restrictions.in("dealInfoStatus", statusIntegers));
 		return (int) workDealInfoDao.count(dc);
 	}
+	
+	
+	public int getCertAppYearInfoCountOneDeal(Date date, Long officeId, Integer year,
+			Long appId, Integer dealInfoType) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		calendar.add(Calendar.DATE, 1); //
+		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
+		dc.createAlias("createBy", "createBy");
+		dc.createAlias("createBy.office", "office");
+		dc.createAlias("configApp", "configApp");
+		dc.add(Restrictions.eq("office.id", officeId));
+		dc.add(Restrictions.eq("configApp.id", appId));
+		dc.add(Restrictions.ge("obtainedDate", date));
+		dc.add(Restrictions.lt("obtainedDate", calendar.getTime()));
+		if (dealInfoType.equals(1)) {
+			dc.add(Restrictions.eq("dealInfoType", dealInfoType));
+			dc.add(Restrictions.isNull("dealInfoType1"));
+			dc.add(Restrictions.isNull("dealInfoType2"));
+			dc.add(Restrictions.isNull("dealInfoType3"));
+		}else if (dealInfoType.equals(4)) {
+			dc.add(Restrictions.eq("dealInfoType2", dealInfoType));
+			dc.add(Restrictions.isNull("dealInfoType"));
+			dc.add(Restrictions.isNull("dealInfoType1"));
+			dc.add(Restrictions.isNull("dealInfoType3"));
+		}else if (dealInfoType.equals(2)||dealInfoType.equals(3)) {
+			dc.add(Restrictions.eq("dealInfoType1", dealInfoType));
+			dc.add(Restrictions.isNull("dealInfoType"));
+			dc.add(Restrictions.isNull("dealInfoType2"));
+			dc.add(Restrictions.isNull("dealInfoType3"));
+		}
+		if (year != 0) {
+			dc.add(Restrictions.eq("year", year));
+		}
+		
+		List<String> statusIntegers = new ArrayList<String>();
+		statusIntegers.add(WorkDealInfoStatus.STATUS_CERT_OBTAINED);
+		statusIntegers.add(WorkDealInfoStatus.STATUS_CERT_REVOKE);
+		dc.add(Restrictions.in("dealInfoStatus", statusIntegers));
+		return (int) workDealInfoDao.count(dc);
+	}
+	
+	
+	
+	public int getCertAppYearInfoUpdateChangeNum(Date date, Long officeId, Integer year,
+			Long appId, Integer dealInfoTypeUpdate, Integer dealInfoTypeChange) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		calendar.add(Calendar.DATE, 1); //
+		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
+		dc.createAlias("createBy", "createBy");
+		dc.createAlias("createBy.office", "office");
+		dc.createAlias("configApp", "configApp");
+		dc.add(Restrictions.eq("office.id", officeId));
+		dc.add(Restrictions.eq("configApp.id", appId));
+		dc.add(Restrictions.ge("obtainedDate", date));
+		dc.add(Restrictions.lt("obtainedDate", calendar.getTime()));
+		
+		dc.add(Restrictions.eq("dealInfoType", dealInfoTypeUpdate));
+		dc.add(Restrictions.isNull("dealInfoType1"));
+		dc.add(Restrictions.eq("dealInfoType2", dealInfoTypeChange));
+		dc.add(Restrictions.isNull("dealInfoType3"));
+		
+		if (year != 0) {
+			dc.add(Restrictions.eq("year", year));
+		}
+		
+		List<String> statusIntegers = new ArrayList<String>();
+		statusIntegers.add(WorkDealInfoStatus.STATUS_CERT_OBTAINED);
+		statusIntegers.add(WorkDealInfoStatus.STATUS_CERT_REVOKE);
+		dc.add(Restrictions.in("dealInfoStatus", statusIntegers));
+		return (int) workDealInfoDao.count(dc);
+	}
+	
+	
+	
+	public int getCertAppYearInfoUpdateLostReplaceNum(Date date, Long officeId, Integer year,
+			Long appId, Integer dealInfoTypeUpdate, Integer dealInfoTypeLost) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		calendar.add(Calendar.DATE, 1); //
+		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
+		dc.createAlias("createBy", "createBy");
+		dc.createAlias("createBy.office", "office");
+		dc.createAlias("configApp", "configApp");
+		dc.add(Restrictions.eq("office.id", officeId));
+		dc.add(Restrictions.eq("configApp.id", appId));
+		dc.add(Restrictions.ge("obtainedDate", date));
+		dc.add(Restrictions.lt("obtainedDate", calendar.getTime()));
+		
+		dc.add(Restrictions.eq("dealInfoType", dealInfoTypeUpdate));
+		dc.add(Restrictions.eq("dealInfoType1", dealInfoTypeLost));
+		dc.add(Restrictions.isNull("dealInfoType2"));
+		dc.add(Restrictions.isNull("dealInfoType3"));
+		
+		if (year != 0) {
+			dc.add(Restrictions.eq("year", year));
+		}
+		
+		List<String> statusIntegers = new ArrayList<String>();
+		statusIntegers.add(WorkDealInfoStatus.STATUS_CERT_OBTAINED);
+		statusIntegers.add(WorkDealInfoStatus.STATUS_CERT_REVOKE);
+		dc.add(Restrictions.in("dealInfoStatus", statusIntegers));
+		return (int) workDealInfoDao.count(dc);
+	}
+	
+	
+	
+	
+	public int getCertAppYearInfoChangeLostReplaceNum(Date date, Long officeId, Integer year,
+			Long appId, Integer dealInfoTypeChange, Integer dealInfoTypeLostReplace) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		calendar.add(Calendar.DATE, 1); //
+		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
+		dc.createAlias("createBy", "createBy");
+		dc.createAlias("createBy.office", "office");
+		dc.createAlias("configApp", "configApp");
+		dc.add(Restrictions.eq("office.id", officeId));
+		dc.add(Restrictions.eq("configApp.id", appId));
+		dc.add(Restrictions.ge("obtainedDate", date));
+		dc.add(Restrictions.lt("obtainedDate", calendar.getTime()));
+		
+		dc.add(Restrictions.eq("dealInfoType1", dealInfoTypeLostReplace));
+		
+		dc.add(Restrictions.eq("dealInfoType2", dealInfoTypeChange));
+		dc.add(Restrictions.isNull("dealInfoType"));
+		dc.add(Restrictions.isNull("dealInfoType3"));
+		
+		if (year != 0) {
+			dc.add(Restrictions.eq("year", year));
+		}
+		
+		List<String> statusIntegers = new ArrayList<String>();
+		statusIntegers.add(WorkDealInfoStatus.STATUS_CERT_OBTAINED);
+		statusIntegers.add(WorkDealInfoStatus.STATUS_CERT_REVOKE);
+		dc.add(Restrictions.in("dealInfoStatus", statusIntegers));
+		return (int) workDealInfoDao.count(dc);
+	}
+	
+	
+	public int getCertAppYearInfoChangeLostReplaceUpdateNum(Date date, Long officeId, Integer year,
+			Long appId, Integer dealInfoTypeChange, Integer dealInfoTypeLostReplace , Integer dealInfoTypeUpdate) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		calendar.add(Calendar.DATE, 1); //
+		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
+		dc.createAlias("createBy", "createBy");
+		dc.createAlias("createBy.office", "office");
+		dc.createAlias("configApp", "configApp");
+		dc.add(Restrictions.eq("office.id", officeId));
+		dc.add(Restrictions.eq("configApp.id", appId));
+		dc.add(Restrictions.ge("obtainedDate", date));
+		dc.add(Restrictions.lt("obtainedDate", calendar.getTime()));
+		dc.add(Restrictions.eq("dealInfoType", dealInfoTypeUpdate));
+		dc.add(Restrictions.eq("dealInfoType1", dealInfoTypeLostReplace));
+		dc.add(Restrictions.eq("dealInfoType2", dealInfoTypeChange));
+		dc.add(Restrictions.isNull("dealInfoType3"));
+		
+		if (year != 0) {
+			dc.add(Restrictions.eq("year", year));
+		}
+		
+		List<String> statusIntegers = new ArrayList<String>();
+		statusIntegers.add(WorkDealInfoStatus.STATUS_CERT_OBTAINED);
+		statusIntegers.add(WorkDealInfoStatus.STATUS_CERT_REVOKE);
+		dc.add(Restrictions.in("dealInfoStatus", statusIntegers));
+		return (int) workDealInfoDao.count(dc);
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 
 	public int getCertAppYearInfo(Date date, Long officeId, Integer year,
 			Long appId, Integer dealInfoType, Date endDate) {

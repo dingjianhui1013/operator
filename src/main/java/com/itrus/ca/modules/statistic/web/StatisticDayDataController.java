@@ -401,7 +401,11 @@ public class StatisticDayDataController extends BaseController {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		return "modules/work/CountOfDay";
+		
+		
+		
+		return "modules/work/CountOfDayNew";
+		//return "modules/work/CountOfDay";
 	}
 
 	/**
@@ -573,7 +577,13 @@ public class StatisticDayDataController extends BaseController {
 				.findByDate(countDate, nextDay, officeId);
 //getReceiptMoney 如果有值，这 receiptMoney是正确的，如果没有，则nowMoney是正确的，产生的原因待查
 		for (ReceiptEnterInfo receiptEnterInfo : receiptEnterInfos) {
-			receiptIn += receiptEnterInfo.getReceiptMoney()==0? receiptEnterInfo.getNow_Money():receiptEnterInfo.getReceiptMoney();
+			if (receiptEnterInfo.getReceiptMoney()!=null && receiptEnterInfo.getReceiptMoney()>0) {
+				receiptIn += receiptEnterInfo.getReceiptMoney();
+			}else{
+				
+				receiptIn += receiptEnterInfo.getNow_Money();
+			}
+			
 
 		}
 
@@ -639,30 +649,133 @@ public class StatisticDayDataController extends BaseController {
 					countDate, officeId, 5, app.getId(),
 					WorkDealInfoType.TYPE_ADD_CERT));
 			// 更新
-			certData.setRenew1(workDealInfoService.getCertAppYearInfoCount(
-					countDate, officeId, 1, app.getId(),
+//			certData.setRenew1(workDealInfoService.getCertAppYearInfoCount(
+//					countDate, officeId, 1, app.getId(),
+//					WorkDealInfoType.TYPE_UPDATE_CERT));
+			
+			certData.setRenew1(workDealInfoService.getCertAppYearInfoCountOneDeal(countDate, officeId, 1, app.getId(),
 					WorkDealInfoType.TYPE_UPDATE_CERT));
-			certData.setRenew2(workDealInfoService.getCertAppYearInfoCount(
+			
+			
+			
+			certData.setRenew2(workDealInfoService.getCertAppYearInfoCountOneDeal(
 					countDate, officeId, 2, app.getId(),
 					WorkDealInfoType.TYPE_UPDATE_CERT));
-			certData.setRenew4(workDealInfoService.getCertAppYearInfoCount(
+			certData.setRenew4(workDealInfoService.getCertAppYearInfoCountOneDeal(
 					countDate, officeId, 4, app.getId(),
 					WorkDealInfoType.TYPE_UPDATE_CERT));
-			certData.setRenew5(workDealInfoService.getCertAppYearInfoCount(
+			certData.setRenew5(workDealInfoService.getCertAppYearInfoCountOneDeal(
 					countDate, officeId, 5, app.getId(),
 					WorkDealInfoType.TYPE_UPDATE_CERT));
 
-			certData.setModifyNum(workDealInfoService.getCertAppYearInfoCount(
+			certData.setModifyNum(workDealInfoService.getCertAppYearInfoCountOneDeal(
 					countDate, officeId, 0, app.getId(),
 					WorkDealInfoType.TYPE_INFORMATION_REROUTE));
-			certData.setReissueNum(workDealInfoService.getCertAppYearInfoCount(
+			certData.setReissueNum(workDealInfoService.getCertAppYearInfoCountOneDeal(
 					countDate, officeId, 0, app.getId(),
-					WorkDealInfoType.TYPE_LOST_CHILD));
+					WorkDealInfoType.TYPE_LOST_CHILD)
+					);
+			certData.setLostReplaceNum(workDealInfoService.getCertAppYearInfoCountOneDeal(
+					countDate, officeId, 0, app.getId(),
+					WorkDealInfoType.TYPE_DAMAGED_REPLACED));
+			
+			
+			certData.setUpdateChangeNum(workDealInfoService.getCertAppYearInfoUpdateChangeNum(
+					countDate, officeId, 1, app.getId(),
+					WorkDealInfoType.TYPE_UPDATE_CERT,WorkDealInfoType.TYPE_INFORMATION_REROUTE));
+			certData.setUpdateChangeNum2(workDealInfoService.getCertAppYearInfoUpdateChangeNum(
+					countDate, officeId, 2, app.getId(),
+					WorkDealInfoType.TYPE_UPDATE_CERT,WorkDealInfoType.TYPE_INFORMATION_REROUTE));
+			certData.setUpdateChangeNum4(workDealInfoService.getCertAppYearInfoUpdateChangeNum(
+					countDate, officeId, 4, app.getId(),
+					WorkDealInfoType.TYPE_UPDATE_CERT,WorkDealInfoType.TYPE_INFORMATION_REROUTE));
+			certData.setUpdateChangeNum5(workDealInfoService.getCertAppYearInfoUpdateChangeNum(
+					countDate, officeId, 5, app.getId(),
+					WorkDealInfoType.TYPE_UPDATE_CERT,WorkDealInfoType.TYPE_INFORMATION_REROUTE));
+			
+			certData.setUpdateLostNum(workDealInfoService.getCertAppYearInfoUpdateLostReplaceNum(
+					countDate, officeId, 1, app.getId(),
+					WorkDealInfoType.TYPE_UPDATE_CERT,WorkDealInfoType.TYPE_LOST_CHILD)
+					);
+			certData.setUpdateLostNum2(workDealInfoService.getCertAppYearInfoUpdateLostReplaceNum(
+					countDate, officeId, 2, app.getId(),
+					WorkDealInfoType.TYPE_UPDATE_CERT,WorkDealInfoType.TYPE_LOST_CHILD)
+					);
+			certData.setUpdateLostNum4(workDealInfoService.getCertAppYearInfoUpdateLostReplaceNum(
+					countDate, officeId, 4, app.getId(),
+					WorkDealInfoType.TYPE_UPDATE_CERT,WorkDealInfoType.TYPE_LOST_CHILD)
+					);
+			certData.setUpdateLostNum5(workDealInfoService.getCertAppYearInfoUpdateLostReplaceNum(
+					countDate, officeId, 5, app.getId(),
+					WorkDealInfoType.TYPE_UPDATE_CERT,WorkDealInfoType.TYPE_LOST_CHILD)
+					);
+			
+			
+			certData.setUpdateReplaceNum(workDealInfoService.getCertAppYearInfoUpdateLostReplaceNum(
+					countDate, officeId, 1, app.getId(),
+					WorkDealInfoType.TYPE_UPDATE_CERT,WorkDealInfoType.TYPE_DAMAGED_REPLACED));
+			certData.setUpdateReplaceNum2(workDealInfoService.getCertAppYearInfoUpdateLostReplaceNum(
+					countDate, officeId, 2, app.getId(),
+					WorkDealInfoType.TYPE_UPDATE_CERT,WorkDealInfoType.TYPE_DAMAGED_REPLACED));
+			certData.setUpdateReplaceNum4(workDealInfoService.getCertAppYearInfoUpdateLostReplaceNum(
+					countDate, officeId, 4, app.getId(),
+					WorkDealInfoType.TYPE_UPDATE_CERT,WorkDealInfoType.TYPE_DAMAGED_REPLACED));
+			certData.setUpdateReplaceNum5(workDealInfoService.getCertAppYearInfoUpdateLostReplaceNum(
+					countDate, officeId, 5, app.getId(),
+					WorkDealInfoType.TYPE_UPDATE_CERT,WorkDealInfoType.TYPE_DAMAGED_REPLACED));
+			
+			certData.setChangeLostNum(workDealInfoService.getCertAppYearInfoChangeLostReplaceNum(
+					countDate, officeId, 0, app.getId(),
+					WorkDealInfoType.TYPE_INFORMATION_REROUTE,WorkDealInfoType.TYPE_LOST_CHILD)
+					
+					);
+			certData.setChangeReplaceNum(workDealInfoService.getCertAppYearInfoChangeLostReplaceNum(
+					countDate, officeId, 0, app.getId(),
+					WorkDealInfoType.TYPE_INFORMATION_REROUTE,WorkDealInfoType.TYPE_DAMAGED_REPLACED)
+					
+					);
+			
+			certData.setChangeUpdateLostNum(workDealInfoService.getCertAppYearInfoChangeLostReplaceUpdateNum(
+					countDate, officeId, 1, app.getId(),
+					WorkDealInfoType.TYPE_INFORMATION_REROUTE,WorkDealInfoType.TYPE_LOST_CHILD,WorkDealInfoType.TYPE_UPDATE_CERT));
+			certData.setChangeUpdateLostNum2(workDealInfoService.getCertAppYearInfoChangeLostReplaceUpdateNum(
+					countDate, officeId, 2, app.getId(),
+					WorkDealInfoType.TYPE_INFORMATION_REROUTE,WorkDealInfoType.TYPE_LOST_CHILD,WorkDealInfoType.TYPE_UPDATE_CERT));
+			certData.setChangeUpdateLostNum4(workDealInfoService.getCertAppYearInfoChangeLostReplaceUpdateNum(
+					countDate, officeId, 4, app.getId(),
+					WorkDealInfoType.TYPE_INFORMATION_REROUTE,WorkDealInfoType.TYPE_LOST_CHILD,WorkDealInfoType.TYPE_UPDATE_CERT));
+			certData.setChangeUpdateLostNum5(workDealInfoService.getCertAppYearInfoChangeLostReplaceUpdateNum(
+					countDate, officeId, 5, app.getId(),
+					WorkDealInfoType.TYPE_INFORMATION_REROUTE,WorkDealInfoType.TYPE_LOST_CHILD,WorkDealInfoType.TYPE_UPDATE_CERT));
+			
+			
+			certData.setChangeUpdateReplaceNum(workDealInfoService.getCertAppYearInfoChangeLostReplaceUpdateNum(
+					countDate, officeId, 1, app.getId(),
+					WorkDealInfoType.TYPE_INFORMATION_REROUTE,WorkDealInfoType.TYPE_DAMAGED_REPLACED,WorkDealInfoType.TYPE_UPDATE_CERT));
+			certData.setChangeUpdateReplaceNum2(workDealInfoService.getCertAppYearInfoChangeLostReplaceUpdateNum(
+					countDate, officeId, 2, app.getId(),
+					WorkDealInfoType.TYPE_INFORMATION_REROUTE,WorkDealInfoType.TYPE_DAMAGED_REPLACED,WorkDealInfoType.TYPE_UPDATE_CERT));
+			certData.setChangeUpdateReplaceNum4(workDealInfoService.getCertAppYearInfoChangeLostReplaceUpdateNum(
+					countDate, officeId, 4, app.getId(),
+					WorkDealInfoType.TYPE_INFORMATION_REROUTE,WorkDealInfoType.TYPE_DAMAGED_REPLACED,WorkDealInfoType.TYPE_UPDATE_CERT));
+			certData.setChangeUpdateReplaceNum5(workDealInfoService.getCertAppYearInfoChangeLostReplaceUpdateNum(
+					countDate, officeId, 5, app.getId(),
+					WorkDealInfoType.TYPE_INFORMATION_REROUTE,WorkDealInfoType.TYPE_DAMAGED_REPLACED,WorkDealInfoType.TYPE_UPDATE_CERT));
+			
 			certData.setCertTotal(certData.getAdd1() + certData.getAdd2()
 					+ certData.getAdd4() + certData.getRenew1()
 					+ certData.getAdd5() + certData.getRenew2()
 					+ certData.getRenew4() + certData.getRenew5()
-					+ certData.getModifyNum() + certData.getReissueNum());
+					+ certData.getModifyNum() + certData.getReissueNum()
+					+ certData.getLostReplaceNum() 
+					+ certData.getUpdateChangeNum() + certData.getUpdateChangeNum2() + certData.getUpdateChangeNum4() + certData.getUpdateChangeNum5()
+					+ certData.getUpdateLostNum() + certData.getUpdateLostNum2() + certData.getUpdateLostNum4() + certData.getUpdateLostNum5() 
+					+ certData.getUpdateReplaceNum() + certData.getUpdateReplaceNum2() + certData.getUpdateReplaceNum4() + certData.getUpdateReplaceNum5()
+					+ certData.getChangeLostNum() 
+					+ certData.getChangeReplaceNum()
+					+ certData.getChangeUpdateLostNum() + certData.getChangeUpdateLostNum2() + certData.getChangeUpdateLostNum4() + certData.getChangeUpdateLostNum5() 
+					+ certData.getChangeUpdateReplaceNum() + certData.getChangeUpdateReplaceNum2() + certData.getChangeUpdateReplaceNum4() + certData.getChangeUpdateReplaceNum5()
+					);
 			certData.setReceiptTotal(workDealInfoService
 					.getWorkPayReceiptCount(countDate, officeId, app.getId()));
 			certData.setKeyTotal(workDealInfoService.getKeyPublishTimesCount(

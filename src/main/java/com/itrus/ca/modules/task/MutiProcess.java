@@ -310,6 +310,7 @@ public class MutiProcess implements Runnable {
 					workDealInfo.setWorkCertInfo(certInfo);
 					workDealInfo.setObtainedDate(new Date());
 					workDealInfo.setStatus(0);
+					workDealInfo.setIsSJQY(1);
 					
 					workDealInfo.setNotafter(dnf.parse(s1.getNotafter()));
 					

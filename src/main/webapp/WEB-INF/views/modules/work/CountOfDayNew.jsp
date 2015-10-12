@@ -1,172 +1,171 @@
-<%@ page contentType="text/html;charset=UTF-8"%>
-<%@ include file="/WEB-INF/views/include/taglib.jsp"%>
+<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ include file="/WEB-INF/views/include/taglib.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
-<title>日经营统计</title>
-<meta name="decorator" content="default" />
-<script type="text/javascript">
-	$(document).ready(function() {
-		 
-	});
-	function page(n, s) {
-		$("#pageNo").val(n);
-		$("#pageSize").val(s);
-		$("#searchForm").submit();
-		return false;
-	}
-	
-	
-	function onSubmit(){
-		if ($("#startTime").val()==""||$("#endTime").val()=="") {
-			top.$.jBox.tip("请选定时间范围");
-			return false;
-		} else {
-			if ($("#office").val()==""){
-				top.$.jBox.tip("请选定网点");
-				return false;
-			} else {
-				$("#searchForm").submit();
-				//return true;
-			}
-		}
-	}
-	
+    <title>日经营统计</title>
+    <meta name="decorator" content="default"/>
+    <script type="text/javascript">
+        $(document).ready(function () {
 
 
-	
+        });
+        /**
+        *   校验当前日期是否已经进行统计 ajax
+         */
+        function checkDate(){
+            var countDate = $("#countDate").val();//获得需要统计的日期
+            var countDatehide = $("#countDateHidden").val();
+            if(countDate==""){//统计日期不能为空
+                top.$.jBox.tip("请选择统计日期");
+                return false;
+            }
+            if(countDate > countDatehide){
+                top.$.jBox.tip("只能统计"+countDatehide+"(含)之前的数据");
+                return false;
+            }
 
-</script>
+            var url = "${ctx}/statistic/StatisticDayData/checkDate?countDate="+countDate+"&_="+new Date().getTime();
+
+            $.ajax({
+                //type: 'POST',
+                url: url,
+                //data: data,
+                dataType : 'json',
+                success:function(data){
+                    if(data.status==0){
+                        top.$.jBox.confirm(data.msg,'系统提示',function(v,h,f){
+                            if(v=='ok'){
+                                $.ajax({
+                                    url:"${ctx}/statistic/StatisticDayData/statisticAgain?countDate="+countDate+"&_="+new Date().getTime(),
+                                    dataType:'json',
+                                    success:function(data){
+                                        top.$.jBox.tip(data.msg);
+                                        if(data.status==0){
+                                            top.$.jBox.tip(data.msg);
+                                        }else if(data.status==1){
+                                            top.$.jBox.tip(data.msg);
+                                            window.location="${ctx}/statistic/StatisticDayData/dayDateCount?countDate="+countDate;
+                                        }
+                                    }
+                                });
+                            }
+                        },{buttonsFocus:1});
+                        top.$('.jbox-body .jbox-icon').css('top','55px');
+                    }else if(data.status==1){
+                        top.$.jBox.tip(data.msg);
+                        window.location="${ctx}/statistic/StatisticDayData/dayDateCount?countDate="+countDate;
+                    }else if(data.status==2){
+                        top.$.jBox.error(data.msg);
+                        //window.location.reload();
+                    }
+                }
+            });
+
+        }
+        /**
+         *   保存当前日期统计数据ajax
+          */
+         function saveData(){
+            
+
+             var url = "${ctx}/statistic/StatisticDayData/statisticSave?countDate="+countDate+"&_="+new Date().getTime();
+
+             $.ajax({
+                 //type: 'POST',
+                 url: url,
+                 //data: data,
+                 dataType : 'json',
+                 success:function(data){
+                     if(data.status==0){
+                    	 top.$.jBox.error(data.msg);
+                     }else if(data.status==1){
+                         top.$.jBox.tip(data.msg);                        
+                     }else{
+                         top.$.jBox.error(data.msg);
+                         //window.location.reload();
+                     }
+                 }
+             });
+         }
+    </script>
 </head>
 <body>
 
 
-   
+<ul class="nav nav-tabs">
+    <li class="active"><a href="${ctx}/statistic/StatisticDayData/dayDateCount">日经营统计表</a></li>    
 
-	<ul class="nav nav-tabs">
-		<li class="active"><a href="${ctx}/statistic/StatisticDayData/list">日经营统计表</a></li>
-		
-	</ul>
-	
-	<form:form id="searchForm" modelAttribute="statisticDayData"
-		action="${ctx}/statistic/StatisticDayData/list" method="post"
-		class="breadcrumb form-search">
-		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}" />
-		<input id="pageSize" name="pageSize" type="hidden"
-			value="${page.pageSize}" />
+</ul>
 
-		<div>
-			<label>选择日期：</label> <input id="startTime" name="startTime"
-				type="text" readonly="readonly" maxlength="20"
-				class="Wdate required"
-				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"
-				value="<fmt:formatDate value="${startTime}" pattern="yyyy-MM-dd"/>" />
-			    &nbsp;-&nbsp;<input id="endTime" name="endTime" type="text" readonly="readonly"
-				maxlength="20" class="Wdate required"
-				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false,minDate:'#F{$dp.$D(\'startTime\')}'});"
-				value="<fmt:formatDate value="${endTime}" pattern="yyyy-MM-dd"/>" />
+<div class="breadcrumb form-search">
 
-		<label>选择网点 ：</label>
-		<select name="office" id="office">
-				<option value="">请选择</option>
-			<c:forEach items="${offices}" var="off">
-				<option value="${off.id}"
-					<c:if test="${off.id==office}">
-					selected="selected"
-					</c:if>>${off.name}</option>
-			</c:forEach>
-
-		</select>
-		
-		
-		&nbsp; &nbsp; &nbsp; &nbsp; <input
-			id="btnSubmit" class="btn btn-primary" type="button" onclick="onSubmit()"
-			 value="查询" />
-			 
-			 </div>
-	</form:form>
-
-	
-	
-	
-	<tags:message content="${message}" />
-	<table id="contentTable"
+    <label>统计日期：</label>
+    <input id="countDate" name="countDate"
+           type="text" readonly="readonly" maxlength="20"
+           class="Wdate required"
+           onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false,maxDate:'#F{$dp.$D(\'theDate\')}'});"
+           value="<fmt:formatDate value="${countDate}" pattern="yyyy-MM-dd"/>"/>
+    <input type="hidden" name="theDate" id="theDate" value="<fmt:formatDate value="${countDate}" pattern="yyyy-MM-dd"/>" id="countDateHidden"/>
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    <input id="tjButton" class="btn btn-primary" type="button" onclick="checkDate();"
+            value="日经营统计"/>
+     <c:if test="${sessionScope.statisticDayData!=null && sessionScope.statisticDayData.statisticDate !=null}">
+      <input id="tjButton" class="btn btn-primary" type="button" onclick="saveData();"   value="确定（保存）"/>    
+     </c:if>
+</div>
+<div>
+<c:if test="${sessionScope.statisticDayData!=null && sessionScope.statisticDayData.statisticDate !=null}">
+<c:set var="statisticDayData" value="${sessionScope.statisticDayData}"></c:set>
+<table id="contentTable"
 		class="table table-striped table-bordered table-condensed">
 		<thead>
 			<tr>
 				<th rowspan="2" style="text-align:center; vertical-align: middle;border: 1px solid #ddd;" class="thth">日期</th>
 				<th colspan="2" rowspan="1" style="text-align:center; vertical-align: middle;border: 1px solid #ddd;" class="thth">入库</th>
 				<th colspan="2" rowspan="1" style="text-align:center; vertical-align: middle;border: 1px solid #ddd;" class="thth">总量</th>
-				<!-- <th colspan="11" style="text-align:center; vertical-align: middle;">四川省地税通用证书</th> -->
 				<th colspan="3" rowspan="1" style="text-align:center; vertical-align: middle;border: 1px solid #ddd;" class="thth"> 日结</th>
 				<th colspan="2" rowspan="1" style="text-align:center; vertical-align: middle;border: 1px solid #ddd;" class="thth">余量</th>
 				
 			</tr>
-			  
-			<!-- <tr > 
-			     <th colspan="8" style="text-align:center; vertical-align: middle;">业务办理</th>
-				 <th colspan="3" style="text-align:center; vertical-align: middle;">小计</th> 
-			</tr> -->
-			<tr>
+			 <tr>
 				<td rowspan="1" style="text-align:center; vertical-align: middle;">KEY</td>
 				<td rowspan="1" style="text-align:center; vertical-align: middle;">发票</td>
 				<td rowspan="1" style="text-align:center; vertical-align: middle;">KEY</td>
 				<td rowspan="1" style="text-align:center; vertical-align: middle;">发票</td>
-				<!-- <th colspan="3" style="text-align:center; vertical-align: middle;">新增</th>
-				<th colspan="3" style="text-align:center; vertical-align: middle;">更新</th>
-				<th rowspan="2" style="text-align:center; vertical-align: middle;">变更</th>
-				<th rowspan="2" style="text-align:center; vertical-align: middle;">补办</th>
-				<th rowspan="2" style="text-align:center; vertical-align: middle;">证书</th>
-				<th rowspan="2" style="text-align:center; vertical-align: middle;">KEY</th>
-				<th rowspan="2" style="text-align:center; vertical-align: middle;">发票</th> -->
 				<td rowspan="1" style="text-align:center; vertical-align: middle;">证书</td>
 				<td rowspan="1" style="text-align:center; vertical-align: middle;">费用</td>
 				<td rowspan="1" style="text-align:center; vertical-align: middle;">KEY</td>
 				<td rowspan="1" style="text-align:center; vertical-align: middle;">KEY</td>
 				<td rowspan="1" style="text-align:center; vertical-align: middle;">发票</td>
-			</tr>
-			<!-- <tr>
-				<th style="text-align:center; vertical-align: middle;">1年</th>
-				<th style="text-align:center; vertical-align: middle;">2年</th>
-				<th style="text-align:center; vertical-align: middle;">4年</th>
-				<th style="text-align:center; vertical-align: middle;">1年</th>
-				<th style="text-align:center; vertical-align: middle;">2年</th>
-				<th style="text-align:center; vertical-align: middle;">4年</th>
-			</tr> -->
+			</tr>			
 		</thead>
 		<tbody>
-			<c:forEach items="${page.list}" var="StatisticDayData">
+			
 				<tr>
-					<td><fmt:formatDate value="${StatisticDayData.statisticDate}" pattern="yyyy-MM-dd"/></td>
-					<td>${StatisticDayData.keyIn}</td>
-					<td>${StatisticDayData.receiptIn}</td>
-					<td>${StatisticDayData.keyTotal}</td>
-					<td>${StatisticDayData.receiptTotal}</td>
-					<td>${StatisticDayData.certTotal}</td>
-					<td>${StatisticDayData.certMoneyTotal}</td>
-					<td>${StatisticDayData.keyOver}</td>
-				    <td>${StatisticDayData.keyStoreTotal}</td>
-				    <td>${StatisticDayData.receiptStoreTotal}</td>
-				    
+					<td><fmt:formatDate value="${statisticDayData.statisticDate}" pattern="yyyy-MM-dd"/></td>
+					<td>${statisticDayData.keyIn}</td>
+					<td>${statisticDayData.receiptIn}</td>
+					<td>${statisticDayData.keyTotal}</td>
+					<td>${statisticDayData.receiptTotal}</td>
+					<td>${statisticDayData.certTotal}</td>
+					<td>${statisticDayData.certMoneyTotal}</td>
+					<td>${statisticDayData.keyOver}</td>
+				    <td>${statisticDayData.keyStoreTotal}</td>
+				    <td>${statisticDayData.receiptStoreTotal}</td>				    
 				</tr>
-			</c:forEach>
+			
 		</tbody>
 	</table>
-	
-	
-	
-	<c:set var="appDatas" value="${requestScope.appDatas}"></c:set>	
-	
-	<c:forEach items="${appDatas}" var="appDataList"> 
+	<c:set var="appDatas" value="${sessionScope.appDatas}"></c:set>
+	<c:forEach items="${appDatas}" var="appData"> 
 	
 	<table id="contentTable"
 		class="table table-striped table-bordered table-condensed">
 		<thead>
 			<tr>
 				<th rowspan="4" style="text-align:center; vertical-align: middle;">日期</th>
-				<th colspan="36" style="text-align:center; vertical-align: middle;">
-				<c:if test="${fn:length(appDataList) >0 }">${appDataList.get(0).app.appName}</c:if>
-				</th> 
+				<th colspan="36" style="text-align:center; vertical-align: middle;">${appData.app.appName}</th> 
 				
 				
 			</tr>
@@ -176,7 +175,7 @@
 				 <th colspan="3" style="text-align:center; vertical-align: middle;">小计</th> 
 			</tr> 
 			<tr>
-		
+				
 				<td colspan="4" style="text-align:center; vertical-align: middle;">新增</td>
 				<td colspan="4" style="text-align:center; vertical-align: middle;">更新</td>
 				<td rowspan="2" style="text-align:center; vertical-align: middle;">变更</td>
@@ -193,6 +192,8 @@
 				<td rowspan="2" style="text-align:center; vertical-align: middle;">变更+损坏更换</td>
 				<td colspan="4" style="text-align:center; vertical-align: middle;">更新+变更+遗失补办</td>
 				<td colspan="4" style="text-align:center; vertical-align: middle;">更新+变更+损坏更换</td>
+				
+				
 				
 				<td rowspan="2" style="text-align:center; vertical-align: middle;">证书</td>
 				<td rowspan="2" style="text-align:center; vertical-align: middle;">KEY</td>
@@ -228,10 +229,11 @@
 				<td style="text-align:center; vertical-align: middle;">2年</td>
 				<td style="text-align:center; vertical-align: middle;">4年</td>
 				<td style="text-align:center; vertical-align: middle;">5年</td>
+				
 			</tr> 
 		</thead>
 		<tbody>
-			<c:forEach items="${appDataList}" var="appData">
+			
 				<tr>
 					<td style="text-align:center; vertical-align: middle;" ><fmt:formatDate value="${appData.statisticDate}" pattern="yyyy-MM-dd"/></td>
 					<td style="text-align:center; vertical-align: middle;" >${appData.add1}</td>
@@ -244,7 +246,6 @@
 					<td style="text-align:center; vertical-align: middle;" >${appData.renew5}</td>
 					<td style="text-align:center; vertical-align: middle;" >${appData.modifyNum}</td>
 					<td style="text-align:center; vertical-align: middle;" >${appData.reissueNum}</td>
-					
 					<td style="text-align:center; vertical-align: middle;" >${appData.lostReplaceNum}</td>
 					
 					<td style="text-align:center; vertical-align: middle;" >${appData.updateChangeNum}</td>
@@ -278,23 +279,18 @@
 					<td style="text-align:center; vertical-align: middle;" >${appData.changeUpdateReplaceNum2}</td>
 					<td style="text-align:center; vertical-align: middle;" >${appData.changeUpdateReplaceNum4}</td>
 					<td style="text-align:center; vertical-align: middle;" >${appData.changeUpdateReplaceNum5}</td>
-					
-					
 					<td style="text-align:center; vertical-align: middle;" >${appData.certTotal}</td>
 					<td style="text-align:center; vertical-align: middle;" >${appData.keyTotal}</td>
-					<td style="text-align:center; vertical-align: middle;" >${appData.receiptTotal}</td>
-					
-				    
+					<td style="text-align:center; vertical-align: middle;">${appData.receiptTotal}</td>
 				</tr>
-			</c:forEach>
 		</tbody>
 	</table>
 	
-	</c:forEach>
+	</c:forEach>	
 	
-	
-	
-	
-	<div class="pagination">${page}</div>
+</c:if>
+</div>
+
+
 </body>
 </html>
