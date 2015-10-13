@@ -32,7 +32,24 @@
 		}
 	}
 	
-
+	function dcCountDay(){
+		if ($("#startTime").val()==""||$("#endTime").val()=="") {
+			top.$.jBox.tip("请选定时间范围");
+			return false;
+		} else {
+			if ($("#office").val()==""){
+				top.$.jBox.tip("请选定网点");
+			} else {
+				var startTime = document.getElementById("startTime").value;
+				var endTime = document.getElementById("endTime").value;
+				var office = document.getElementById("office").value;
+				window.location.href="${ctx}/statistic/StatisticDayData/exportCountDay?startTime="+startTime+"&endTime="+endTime+"&office="+office;
+			}
+		}
+		
+		
+		
+	}
 
 	
 
@@ -82,10 +99,10 @@
 		&nbsp; &nbsp; &nbsp; &nbsp; <input
 			id="btnSubmit" class="btn btn-primary" type="button" onclick="onSubmit()"
 			 value="查询" />
-			 
+			 <input id="exportCountDay" class="btn btn-primary" type="button" onclick="dcCountDay()" value="导出" />
 			 </div>
 	</form:form>
-
+ 
 	
 	
 	
@@ -165,8 +182,13 @@
 			<tr>
 				<th rowspan="4" style="text-align:center; vertical-align: middle;">日期</th>
 				<th colspan="36" style="text-align:center; vertical-align: middle;">
-				<c:if test="${fn:length(appDataList) >0 }">${appDataList.get(0).app.appName}</c:if>
+				<c:if test="${fn:length(appDataList) >0 }">
+				
+				${appDataList[0].app.appName}
+				
+				</c:if>
 				</th> 
+
 				
 				
 			</tr>
@@ -259,7 +281,6 @@
 					<td style="text-align:center; vertical-align: middle;" >${appData.updateChangeNum2}</td>
 					<td style="text-align:center; vertical-align: middle;" >${appData.updateChangeNum4}</td>
 					<td style="text-align:center; vertical-align: middle;" >${appData.updateChangeNum5}</td>
-					
 					
 					<td style="text-align:center; vertical-align: middle;" >${appData.updateLostNum}</td>
 					<td style="text-align:center; vertical-align: middle;" >${appData.updateLostNum2}</td>
