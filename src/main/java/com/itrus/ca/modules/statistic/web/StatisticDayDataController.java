@@ -236,7 +236,12 @@ public class StatisticDayDataController extends BaseController {
 				Calendar rightNow = Calendar.getInstance();
 				rightNow.setTime(start);
 				rightNow.add(Calendar.MONTH, 1);
+				rightNow.add(Calendar.DATE, -1);
+				
 				Date end = rightNow.getTime();
+				end.setHours(23);
+				end.setSeconds(59);
+				end.setMinutes(59);
 
 				Integer keyIn = 0;
 				Integer keyOver = 0;
@@ -296,7 +301,12 @@ public class StatisticDayDataController extends BaseController {
 					Calendar rightNow = Calendar.getInstance();
 					rightNow.setTime(start);
 					rightNow.add(Calendar.MONTH, 1);
+					rightNow.add(Calendar.DATE, -1);
+					
 					Date end = rightNow.getTime();
+					end.setHours(23);
+					end.setSeconds(59);
+					end.setMinutes(59);
 
 					Integer add1 = 0;
 					Integer add2 = 0;
@@ -311,6 +321,33 @@ public class StatisticDayDataController extends BaseController {
 					Integer certTotal = 0;
 					Integer keyTotal = 0;
 					Double receiptTotal = 0d;
+					Integer lostReplaceNum = 0;
+					Integer updateChangeNum = 0;
+					Integer updateChangeNum2 = 0;
+					Integer updateChangeNum4 = 0;
+					Integer updateChangeNum5 = 0;
+					Integer updateLostNum = 0;
+					Integer updateLostNum2 = 0;
+					Integer updateLostNum4 = 0;
+					Integer updateLostNum5 = 0;
+					Integer updateReplaceNum = 0;
+					Integer updateReplaceNum2 = 0;
+					Integer updateReplaceNum4 = 0;
+					Integer updateReplaceNum5 = 0;
+					Integer changeLostNum = 0;
+					Integer changeReplaceNum = 0;
+					Integer changeUpdateLostNum = 0;
+					Integer changeUpdateLostNum2 = 0;
+					Integer changeUpdateLostNum4 = 0;
+					Integer changeUpdateLostNum5 = 0;
+					Integer changeUpdateReplaceNum = 0;
+					Integer changeUpdateReplaceNum2 = 0;
+					Integer changeUpdateReplaceNum4 = 0;
+					Integer changeUpdateReplaceNum5 = 0;
+					
+					
+					
+					
 
 					List<StatisticAppData> listMonth = statisticAppDataService
 							.findByMonth(configApp, office, start, end);
@@ -328,6 +365,33 @@ public class StatisticDayDataController extends BaseController {
 						certTotal += sad.getCertTotal();
 						keyTotal += sad.getKeyTotal();
 						receiptTotal += sad.getReceiptTotal();
+						lostReplaceNum += sad.getLostReplaceNum();
+						updateChangeNum += sad.getUpdateChangeNum();
+						updateChangeNum2 += sad.getUpdateChangeNum2();
+						updateChangeNum4 += sad.getUpdateChangeNum4();
+						updateChangeNum5 += sad.getUpdateChangeNum5();
+						updateLostNum += sad.getUpdateLostNum();
+						updateLostNum2 += sad.getUpdateLostNum2();
+						updateLostNum4 += sad.getUpdateLostNum4();
+						updateLostNum5 += sad.getUpdateLostNum5();
+						updateReplaceNum += sad.getUpdateReplaceNum();
+						updateReplaceNum2 += sad.getUpdateReplaceNum2();
+						updateReplaceNum4 += sad.getUpdateReplaceNum4();
+						updateReplaceNum5 += sad.getUpdateReplaceNum5();
+						changeLostNum += sad.getChangeLostNum();
+						changeReplaceNum += sad.getChangeReplaceNum();
+						changeUpdateLostNum += sad.getChangeUpdateLostNum();
+						changeUpdateLostNum2 += sad.getChangeUpdateLostNum2();
+						changeUpdateLostNum4 += sad.getChangeUpdateLostNum4();
+						changeUpdateLostNum5 += sad.getChangeUpdateLostNum5();
+						changeUpdateReplaceNum += sad.getChangeUpdateReplaceNum();
+						changeUpdateReplaceNum2 += sad.getChangeUpdateReplaceNum2();
+						changeUpdateReplaceNum4 += sad.getChangeUpdateReplaceNum4();
+						changeUpdateReplaceNum5 += sad.getChangeUpdateReplaceNum5();
+						
+						
+						
+						
 
 					}
 					samd.setAdd1(add1);
@@ -340,6 +404,30 @@ public class StatisticDayDataController extends BaseController {
 					samd.setRenew5(renew5);
 					samd.setModifyNum(modifyNum);
 					samd.setReissueNum(reissueNum);
+					samd.setLostReplaceNum(lostReplaceNum);
+					samd.setUpdateChangeNum(updateChangeNum);
+					samd.setUpdateChangeNum2(updateChangeNum2);
+					samd.setUpdateChangeNum4(updateChangeNum4);
+					samd.setUpdateChangeNum5(updateChangeNum5);
+					samd.setUpdateLostNum(changeUpdateLostNum);
+					samd.setUpdateLostNum2(changeUpdateLostNum2);
+					samd.setUpdateLostNum4(changeUpdateLostNum4);
+					samd.setUpdateLostNum5(changeUpdateLostNum5);
+					samd.setUpdateReplaceNum(changeUpdateReplaceNum);
+					samd.setUpdateReplaceNum2(changeUpdateReplaceNum2);
+					samd.setUpdateReplaceNum4(changeUpdateReplaceNum4);
+					samd.setUpdateReplaceNum5(changeUpdateReplaceNum5);
+					samd.setChangeLostNum(changeLostNum);
+					samd.setChangeReplaceNum(changeReplaceNum);
+					samd.setChangeUpdateLostNum(changeUpdateLostNum);
+					samd.setChangeUpdateLostNum2(changeUpdateLostNum2);
+					samd.setChangeUpdateLostNum4(changeUpdateLostNum4);
+					samd.setChangeUpdateLostNum5(changeUpdateLostNum5);
+					samd.setChangeUpdateReplaceNum(changeUpdateReplaceNum);
+					samd.setChangeUpdateReplaceNum2(changeUpdateReplaceNum2);
+					samd.setChangeUpdateReplaceNum4(changeUpdateReplaceNum4);
+					samd.setChangeUpdateReplaceNum5(changeUpdateReplaceNum5);
+					
 					samd.setCertTotal(certTotal);
 					samd.setKeyTotal(keyTotal);
 					samd.setReceiptTotal(receiptTotal);

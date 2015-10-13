@@ -2,6 +2,8 @@ package com.itrus.ca.modules.bean;
 
 import java.util.Date;
 
+import javax.persistence.Column;
+
 import com.itrus.ca.modules.profile.entity.ConfigApp;
 
 
@@ -20,12 +22,40 @@ public class StatisticAppMonthData {
 	private Integer renew4;
 	private Integer renew5;
 	private Integer modifyNum;//变更数量
-	private Integer reissueNum;//补办数量
+	private Integer reissueNum;//-遗失补办
 	private Integer certTotal;
 	private Integer keyTotal;
 	private Double receiptTotal;
 	private Double certMoneyTotal;
 	
+	private Integer lostReplaceNum;//补办数量
+	private Integer updateChangeNum;//更新+变更 
+	private Integer updateChangeNum2;//更新+变更 2年
+	private Integer updateChangeNum4;//更新+变更 4年
+	private Integer updateChangeNum5;//更新+变更 5年
+	
+	private Integer updateLostNum;//更新+遗失补办 
+	private Integer updateLostNum2;//更新+遗失补办 2年
+	private Integer updateLostNum4;//更新+遗失补办 4年
+	private Integer updateLostNum5;//更新+遗失补办 5年
+	
+	private Integer updateReplaceNum;//更新+损坏更换 
+	private Integer updateReplaceNum2;//更新+损坏更换 2年
+	private Integer updateReplaceNum4;//更新+损坏更换 4年
+	private Integer updateReplaceNum5;//更新+损坏更换 5年
+	
+	private Integer changeLostNum;//变更+遗失补办 
+	private Integer changeReplaceNum;//变更+损坏更换 
+	
+	private Integer changeUpdateLostNum;//更新+变更+遗失补办  
+	private Integer changeUpdateLostNum2;//更新+变更+遗失补办  2年
+	private Integer changeUpdateLostNum4;//更新+变更+遗失补办 4年
+	private Integer changeUpdateLostNum5;//更新+变更+遗失补办  5年
+	
+	private Integer changeUpdateReplaceNum;//更新+变更+损坏更换 
+	private Integer changeUpdateReplaceNum2;//更新+变更+损坏更换 2年
+	private Integer changeUpdateReplaceNum4;//更新+变更+损坏更换 4年
+	private Integer changeUpdateReplaceNum5;//更新+变更+损坏更换 5年
 	
 	public StatisticAppMonthData(){
 		
@@ -36,7 +66,33 @@ public class StatisticAppMonthData {
 			Integer add2, Integer add4, Integer renew1, Integer renew2,
 			Integer renew4, Integer modifyNum, Integer reissueNum,
 			Integer certTotal, Integer keyTotal, Double receiptTotal,
-			Double certMoneyTotal) {
+			Double certMoneyTotal,Integer lostReplaceNum,
+			Integer updateChangeNum,
+			Integer updateLostNum,
+			Integer updateReplaceNum,
+			Integer changeLostNum,
+			Integer changeReplaceNum,
+			Integer changeUpdateLostNum,
+			Integer changeUpdateReplaceNum,
+			Integer updateChangeNum2,
+			Integer updateChangeNum4,
+			Integer updateChangeNum5,
+			
+			Integer updateLostNum2,
+			Integer updateLostNum4,
+			Integer updateLostNum5,
+			
+			Integer updateReplaceNum2,
+			Integer updateReplaceNum4,
+			Integer updateReplaceNum5,
+			
+			Integer changeUpdateLostNum2,
+			Integer changeUpdateLostNum4,
+			Integer changeUpdateLostNum5,
+			
+			Integer changeUpdateReplaceNum2,
+			Integer changeUpdateReplaceNum4,
+			Integer changeUpdateReplaceNum5) {
 		super();
 		this.id = id;
 		this.statisticDate = statisticDate;
@@ -52,6 +108,36 @@ public class StatisticAppMonthData {
 		this.keyTotal = keyTotal;
 		this.receiptTotal = receiptTotal;
 		this.certMoneyTotal = certMoneyTotal;
+		this.lostReplaceNum = lostReplaceNum;
+		this.updateChangeNum = updateChangeNum;
+		this.updateLostNum = updateLostNum;
+		this.updateReplaceNum =updateReplaceNum;
+		this.changeLostNum = changeLostNum;
+		this.changeReplaceNum = changeReplaceNum;
+		this.changeUpdateLostNum = changeUpdateLostNum;
+		this.changeUpdateReplaceNum = changeUpdateReplaceNum;
+		this.updateChangeNum2 = updateChangeNum2;
+		this.updateChangeNum4 = updateChangeNum4;
+		this.updateChangeNum5 = updateChangeNum5;
+		
+		this.updateLostNum2 = updateLostNum2;
+		this.updateLostNum4 = updateLostNum4;
+		this.updateLostNum5 = updateLostNum5;
+		
+		this.updateReplaceNum2 = updateReplaceNum2;
+		this.updateReplaceNum4 = updateReplaceNum4;
+		this.updateReplaceNum5 = updateReplaceNum5;
+		
+		this.changeUpdateLostNum2 = changeUpdateLostNum2;
+		this.changeUpdateLostNum4 = changeUpdateLostNum4;
+		this.changeUpdateLostNum5 = changeUpdateLostNum5;
+		
+		this.changeUpdateReplaceNum2 = changeUpdateReplaceNum2;
+		this.changeUpdateReplaceNum4 = changeUpdateReplaceNum4;
+		this.changeUpdateReplaceNum5 = changeUpdateReplaceNum5;
+		
+		
+		
 	}
 
 
@@ -220,4 +306,214 @@ public class StatisticAppMonthData {
 	public void setRenew5(Integer renew5) {
 		this.renew5 = renew5;
 	}
+	
+	@Column(name = "lost_replace_num")
+	public Integer getLostReplaceNum() {
+		return lostReplaceNum;
+	}
+
+	public void setLostReplaceNum(Integer lostReplaceNum) {
+		this.lostReplaceNum = lostReplaceNum;
+	}
+
+	@Column(name = "update_change_num")
+	public Integer getUpdateChangeNum() {
+		return updateChangeNum;
+	}
+
+	public void setUpdateChangeNum(Integer updateChangeNum) {
+		this.updateChangeNum = updateChangeNum;
+	}
+
+	@Column(name = "update_lost_num")
+	public Integer getUpdateLostNum() {
+		return updateLostNum;
+	}
+
+	public void setUpdateLostNum(Integer updateLostNum) {
+		this.updateLostNum = updateLostNum;
+	}
+
+	@Column(name = "update_replace_num")
+	public Integer getUpdateReplaceNum() {
+		return updateReplaceNum;
+	}
+
+	public void setUpdateReplaceNum(Integer updateReplaceNum) {
+		this.updateReplaceNum = updateReplaceNum;
+	}
+
+	@Column(name = "change_lost_num")
+	public Integer getChangeLostNum() {
+		return changeLostNum;
+	}
+
+	public void setChangeLostNum(Integer changeLostNum) {
+		this.changeLostNum = changeLostNum;
+	}
+
+	@Column(name = "change_replace_num")
+	public Integer getChangeReplaceNum() {
+		return changeReplaceNum;
+	}
+
+	public void setChangeReplaceNum(Integer changeReplaceNum) {
+		this.changeReplaceNum = changeReplaceNum;
+	}
+
+	@Column(name = "change_update_lost_num")
+	public Integer getChangeUpdateLostNum() {
+		return changeUpdateLostNum;
+	}
+
+	public void setChangeUpdateLostNum(Integer changeUpdateLostNum) {
+		this.changeUpdateLostNum = changeUpdateLostNum;
+	}
+
+	@Column(name = "change_update_replace_num")
+	public Integer getChangeUpdateReplaceNum() {
+		return changeUpdateReplaceNum;
+	}
+
+	public void setChangeUpdateReplaceNum(Integer changeUpdateReplaceNum) {
+		this.changeUpdateReplaceNum = changeUpdateReplaceNum;
+	}
+
+	@Column(name = "update_change_num2")
+	public Integer getUpdateChangeNum2() {
+		return updateChangeNum2;
+	}
+
+	public void setUpdateChangeNum2(Integer updateChangeNum2) {
+		this.updateChangeNum2 = updateChangeNum2;
+	}
+
+	@Column(name = "update_change_num4")
+	public Integer getUpdateChangeNum4() {
+		return updateChangeNum4;
+	}
+
+	public void setUpdateChangeNum4(Integer updateChangeNum4) {
+		this.updateChangeNum4 = updateChangeNum4;
+	}
+
+	@Column(name = "update_change_num5")
+	public Integer getUpdateChangeNum5() {
+		return updateChangeNum5;
+	}
+
+	public void setUpdateChangeNum5(Integer updateChangeNum5) {
+		this.updateChangeNum5 = updateChangeNum5;
+	}
+
+	@Column(name = "update_lost_num2")
+	public Integer getUpdateLostNum2() {
+		return updateLostNum2;
+	}
+
+	public void setUpdateLostNum2(Integer updateLostNum2) {
+		this.updateLostNum2 = updateLostNum2;
+	}
+
+	@Column(name = "update_lost_num4")
+	public Integer getUpdateLostNum4() {
+		return updateLostNum4;
+	}
+
+	public void setUpdateLostNum4(Integer updateLostNum4) {
+		this.updateLostNum4 = updateLostNum4;
+	}
+
+	@Column(name = "update_lost_num5")
+	public Integer getUpdateLostNum5() {
+		return updateLostNum5;
+	}
+
+	public void setUpdateLostNum5(Integer updateLostNum5) {
+		this.updateLostNum5 = updateLostNum5;
+	}
+
+	@Column(name = "update_replace_num2")
+	public Integer getUpdateReplaceNum2() {
+		return updateReplaceNum2;
+	}
+
+	public void setUpdateReplaceNum2(Integer updateReplaceNum2) {
+		this.updateReplaceNum2 = updateReplaceNum2;
+	}
+
+	@Column(name = "update_replace_num4")
+	public Integer getUpdateReplaceNum4() {
+		return updateReplaceNum4;
+	}
+
+	public void setUpdateReplaceNum4(Integer updateReplaceNum4) {
+		this.updateReplaceNum4 = updateReplaceNum4;
+	}
+
+	@Column(name = "update_replace_num5")
+	public Integer getUpdateReplaceNum5() {
+		return updateReplaceNum5;
+	}
+
+	public void setUpdateReplaceNum5(Integer updateReplaceNum5) {
+		this.updateReplaceNum5 = updateReplaceNum5;
+	}
+
+	@Column(name = "change_update_lost_num2")
+	public Integer getChangeUpdateLostNum2() {
+		return changeUpdateLostNum2;
+	}
+
+	public void setChangeUpdateLostNum2(Integer changeUpdateLostNum2) {
+		this.changeUpdateLostNum2 = changeUpdateLostNum2;
+	}
+
+	@Column(name = "change_update_lost_num4")
+	public Integer getChangeUpdateLostNum4() {
+		return changeUpdateLostNum4;
+	}
+
+	public void setChangeUpdateLostNum4(Integer changeUpdateLostNum4) {
+		this.changeUpdateLostNum4 = changeUpdateLostNum4;
+	}
+
+	@Column(name = "change_update_lost_num5")
+	public Integer getChangeUpdateLostNum5() {
+		return changeUpdateLostNum5;
+	}
+
+	public void setChangeUpdateLostNum5(Integer changeUpdateLostNum5) {
+		this.changeUpdateLostNum5 = changeUpdateLostNum5;
+	}
+
+	@Column(name = "change_update_replace_num2")
+	public Integer getChangeUpdateReplaceNum2() {
+		return changeUpdateReplaceNum2;
+	}
+
+	public void setChangeUpdateReplaceNum2(Integer changeUpdateReplaceNum2) {
+		this.changeUpdateReplaceNum2 = changeUpdateReplaceNum2;
+	}
+
+	@Column(name = "change_update_replace_num4")
+	public Integer getChangeUpdateReplaceNum4() {
+		return changeUpdateReplaceNum4;
+	}
+
+	public void setChangeUpdateReplaceNum4(Integer changeUpdateReplaceNum4) {
+		this.changeUpdateReplaceNum4 = changeUpdateReplaceNum4;
+	}
+
+	@Column(name = "change_update_replace_num5")
+	public Integer getChangeUpdateReplaceNum5() {
+		return changeUpdateReplaceNum5;
+	}
+
+	public void setChangeUpdateReplaceNum5(Integer changeUpdateReplaceNum5) {
+		this.changeUpdateReplaceNum5 = changeUpdateReplaceNum5;
+	}
+	
+	
+	
 }
