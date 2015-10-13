@@ -307,7 +307,6 @@ public class StatisticAppMonthData {
 		this.renew5 = renew5;
 	}
 	
-	@Column(name = "lost_replace_num")
 	public Integer getLostReplaceNum() {
 		return lostReplaceNum;
 	}
@@ -316,7 +315,6 @@ public class StatisticAppMonthData {
 		this.lostReplaceNum = lostReplaceNum;
 	}
 
-	@Column(name = "update_change_num")
 	public Integer getUpdateChangeNum() {
 		return updateChangeNum;
 	}
@@ -325,7 +323,6 @@ public class StatisticAppMonthData {
 		this.updateChangeNum = updateChangeNum;
 	}
 
-	@Column(name = "update_lost_num")
 	public Integer getUpdateLostNum() {
 		return updateLostNum;
 	}
@@ -334,7 +331,6 @@ public class StatisticAppMonthData {
 		this.updateLostNum = updateLostNum;
 	}
 
-	@Column(name = "update_replace_num")
 	public Integer getUpdateReplaceNum() {
 		return updateReplaceNum;
 	}
@@ -343,7 +339,6 @@ public class StatisticAppMonthData {
 		this.updateReplaceNum = updateReplaceNum;
 	}
 
-	@Column(name = "change_lost_num")
 	public Integer getChangeLostNum() {
 		return changeLostNum;
 	}
@@ -352,7 +347,6 @@ public class StatisticAppMonthData {
 		this.changeLostNum = changeLostNum;
 	}
 
-	@Column(name = "change_replace_num")
 	public Integer getChangeReplaceNum() {
 		return changeReplaceNum;
 	}
@@ -361,7 +355,6 @@ public class StatisticAppMonthData {
 		this.changeReplaceNum = changeReplaceNum;
 	}
 
-	@Column(name = "change_update_lost_num")
 	public Integer getChangeUpdateLostNum() {
 		return changeUpdateLostNum;
 	}
@@ -370,7 +363,6 @@ public class StatisticAppMonthData {
 		this.changeUpdateLostNum = changeUpdateLostNum;
 	}
 
-	@Column(name = "change_update_replace_num")
 	public Integer getChangeUpdateReplaceNum() {
 		return changeUpdateReplaceNum;
 	}
@@ -379,7 +371,6 @@ public class StatisticAppMonthData {
 		this.changeUpdateReplaceNum = changeUpdateReplaceNum;
 	}
 
-	@Column(name = "update_change_num2")
 	public Integer getUpdateChangeNum2() {
 		return updateChangeNum2;
 	}
@@ -388,7 +379,6 @@ public class StatisticAppMonthData {
 		this.updateChangeNum2 = updateChangeNum2;
 	}
 
-	@Column(name = "update_change_num4")
 	public Integer getUpdateChangeNum4() {
 		return updateChangeNum4;
 	}
@@ -397,7 +387,6 @@ public class StatisticAppMonthData {
 		this.updateChangeNum4 = updateChangeNum4;
 	}
 
-	@Column(name = "update_change_num5")
 	public Integer getUpdateChangeNum5() {
 		return updateChangeNum5;
 	}
@@ -406,7 +395,6 @@ public class StatisticAppMonthData {
 		this.updateChangeNum5 = updateChangeNum5;
 	}
 
-	@Column(name = "update_lost_num2")
 	public Integer getUpdateLostNum2() {
 		return updateLostNum2;
 	}
@@ -415,7 +403,6 @@ public class StatisticAppMonthData {
 		this.updateLostNum2 = updateLostNum2;
 	}
 
-	@Column(name = "update_lost_num4")
 	public Integer getUpdateLostNum4() {
 		return updateLostNum4;
 	}
@@ -424,7 +411,6 @@ public class StatisticAppMonthData {
 		this.updateLostNum4 = updateLostNum4;
 	}
 
-	@Column(name = "update_lost_num5")
 	public Integer getUpdateLostNum5() {
 		return updateLostNum5;
 	}
@@ -433,7 +419,6 @@ public class StatisticAppMonthData {
 		this.updateLostNum5 = updateLostNum5;
 	}
 
-	@Column(name = "update_replace_num2")
 	public Integer getUpdateReplaceNum2() {
 		return updateReplaceNum2;
 	}
@@ -442,7 +427,6 @@ public class StatisticAppMonthData {
 		this.updateReplaceNum2 = updateReplaceNum2;
 	}
 
-	@Column(name = "update_replace_num4")
 	public Integer getUpdateReplaceNum4() {
 		return updateReplaceNum4;
 	}
@@ -451,7 +435,6 @@ public class StatisticAppMonthData {
 		this.updateReplaceNum4 = updateReplaceNum4;
 	}
 
-	@Column(name = "update_replace_num5")
 	public Integer getUpdateReplaceNum5() {
 		return updateReplaceNum5;
 	}
@@ -460,7 +443,6 @@ public class StatisticAppMonthData {
 		this.updateReplaceNum5 = updateReplaceNum5;
 	}
 
-	@Column(name = "change_update_lost_num2")
 	public Integer getChangeUpdateLostNum2() {
 		return changeUpdateLostNum2;
 	}
@@ -469,7 +451,6 @@ public class StatisticAppMonthData {
 		this.changeUpdateLostNum2 = changeUpdateLostNum2;
 	}
 
-	@Column(name = "change_update_lost_num4")
 	public Integer getChangeUpdateLostNum4() {
 		return changeUpdateLostNum4;
 	}
@@ -478,7 +459,6 @@ public class StatisticAppMonthData {
 		this.changeUpdateLostNum4 = changeUpdateLostNum4;
 	}
 
-	@Column(name = "change_update_lost_num5")
 	public Integer getChangeUpdateLostNum5() {
 		return changeUpdateLostNum5;
 	}
@@ -487,7 +467,6 @@ public class StatisticAppMonthData {
 		this.changeUpdateLostNum5 = changeUpdateLostNum5;
 	}
 
-	@Column(name = "change_update_replace_num2")
 	public Integer getChangeUpdateReplaceNum2() {
 		return changeUpdateReplaceNum2;
 	}
@@ -496,7 +475,6 @@ public class StatisticAppMonthData {
 		this.changeUpdateReplaceNum2 = changeUpdateReplaceNum2;
 	}
 
-	@Column(name = "change_update_replace_num4")
 	public Integer getChangeUpdateReplaceNum4() {
 		return changeUpdateReplaceNum4;
 	}
@@ -505,7 +483,6 @@ public class StatisticAppMonthData {
 		this.changeUpdateReplaceNum4 = changeUpdateReplaceNum4;
 	}
 
-	@Column(name = "change_update_replace_num5")
 	public Integer getChangeUpdateReplaceNum5() {
 		return changeUpdateReplaceNum5;
 	}
