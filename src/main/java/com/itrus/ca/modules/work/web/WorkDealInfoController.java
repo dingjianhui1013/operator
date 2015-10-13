@@ -2222,7 +2222,7 @@ public class WorkDealInfoController extends BaseController {
 	@RequiresPermissions("work:workDealInfo:view")
 	@RequestMapping(value = "businessQuery")
 	public String businessQuery(
-			@RequestParam(required = false) WorkDealInfo workDealInfo,
+			WorkDealInfo workDealInfo,
 			HttpServletRequest request,
 			HttpServletResponse response,
 			@RequestParam(value = "area", required = false) Long area,
@@ -2232,27 +2232,20 @@ public class WorkDealInfoController extends BaseController {
 			@RequestParam(value = "workType", required = false) Integer workType,
 			@RequestParam(value = "year", required = false) Integer year,
 			@RequestParam(value = "payMethod", required = false) String payMethod,
-			@RequestParam(value = "startTime", required = false) Date startTime,
-			@RequestParam(value = "endTime", required = false) Date endTime,
+			@RequestParam(value = "luruStartTime", required = false) Date luruStartTime,
+			@RequestParam(value = "luruEndTime", required = false) Date luruEndTime,
+			@RequestParam(value = "daoqiStartTime", required = false) Date daoqiStartTime,
+			@RequestParam(value = "daoqiEndTime", required = false) Date daoqiEndTime,
+			@RequestParam(value = "jianzhengStartTime", required = false) Date jianzhengStartTime,
+			@RequestParam(value = "jianzhengEndTime", required = false) Date jianzhengEndTime,
+			@RequestParam(value = "zhizhengStartTime", required = false) Date zhizhengStartTime,
+			@RequestParam(value = "zhizhengEndTime", required = false) Date zhizhengEndTime,
+			
 			Model model) {
-		/*
-		 * User user = UserUtils.getUser();
-		 * workDealInfo.setCreateBy(user.getCreateBy());
-		 */
-
-		WorkDealInfo workDealInfo2 = new WorkDealInfo();
-
 		// 获取前台的付款方式
 		List<Long> method = Lists.newArrayList();
 		if (payMethod != null) {
-			// String[] methods = payMethod.split(",");
-			// method = Lists.newArrayList();
-			// for (int i = 0; i < methods.length; i++) {
-			// method.add(Long.parseLong(methods[i]));
-			// }
-
 			WorkPayInfo workPayInfo = new WorkPayInfo();
-			// for (int i = 0; i < methods.length; i++) {
 			if (payMethod.equals("1")) {
 				workPayInfo.setMethodMoney(true);
 				// continue;
@@ -2278,7 +2271,7 @@ public class WorkDealInfoController extends BaseController {
 				// continue;
 			}
 			// }
-			workDealInfo2.setWorkPayInfo(workPayInfo);
+			workDealInfo.setWorkPayInfo(workPayInfo);
 		}
 
 		ProductType productType = new ProductType();
@@ -2286,14 +2279,19 @@ public class WorkDealInfoController extends BaseController {
 		List<Office> officeList = officeService.getOfficeByType(
 				UserUtils.getUser(), 2);
 		Calendar calendar = Calendar.getInstance();
-		if (endTime != null) {
+	/*	if (endTime != null) {
 			calendar.setTime(endTime);
 			calendar.add(Calendar.DATE, 1);
+		}*/
+		List<WorkCertInfo> certInfoList = new ArrayList<WorkCertInfo>() ;
+		if (zhizhengStartTime!=null&&zhizhengEndTime!=null) {
+			certInfoList =  workCertInfoService.findZhiZhengTime(zhizhengStartTime, zhizhengEndTime);
 		}
 		Page<WorkDealInfo> page = workDealInfoService.find(
-				new Page<WorkDealInfo>(request, response), workDealInfo2, area,
-				officeId, apply, certType, workType, year, startTime,
-				calendar.getTime(), officeList);
+				new Page<WorkDealInfo>(request, response), workDealInfo, area,
+				officeId, apply, certType, workType, year, luruStartTime,
+				luruEndTime, officeList, daoqiStartTime, daoqiEndTime, jianzhengStartTime, 
+				jianzhengEndTime,certInfoList);
 		model.addAttribute("proType", ProductType.productTypeStrMap);
 		model.addAttribute("wdiType", WorkDealInfoType.WorkDealInfoTypeMap);
 		model.addAttribute("wdiStatus",
@@ -2303,13 +2301,6 @@ public class WorkDealInfoController extends BaseController {
 
 		model.addAttribute("page", page);
 
-		/*
-		 * List<Office> offsList = officeService.selectAreaList(); if (area !=
-		 * null) { model.addAttribute("areaId", area); List<Office> offices =
-		 * officeService.findByParentId(area); model.addAttribute("offices",
-		 * offices); if (office != null) { model.addAttribute("office", office);
-		 * } }
-		 */
 		List<Office> offsList = officeService.getOfficeByType(
 				UserUtils.getUser(), 1);
 		for (int i = 0; i < offsList.size();) {
@@ -2337,8 +2328,18 @@ public class WorkDealInfoController extends BaseController {
 		model.addAttribute("workType", workType);
 		model.addAttribute("year", year);
 		model.addAttribute("payMethod", payMethod);
-		model.addAttribute("startTime", startTime);
-		model.addAttribute("endTime", endTime);
+		model.addAttribute("luruStartTime", luruStartTime);
+		model.addAttribute("luruEndTime", luruEndTime);
+		
+		model.addAttribute("daoqiStartTime", daoqiStartTime);
+		model.addAttribute("daoqiEndTime", daoqiEndTime);
+		
+		model.addAttribute("jianzhengStartTime", jianzhengStartTime);
+		model.addAttribute("jianzhengEndTime", jianzhengEndTime);
+		
+		model.addAttribute("zhizhengStartTime", zhizhengStartTime);
+		model.addAttribute("zhizhengEndTime", zhizhengEndTime);
+		
 		model.addAttribute("officeId", officeId);
 		model.addAttribute("area", area);
 		return "modules/work/workDealInfoBusinessQueryList";

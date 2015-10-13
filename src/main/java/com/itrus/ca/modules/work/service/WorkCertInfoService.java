@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.itrus.ca.common.persistence.Page;
 import com.itrus.ca.common.service.BaseService;
@@ -127,5 +128,25 @@ public class WorkCertInfoService extends BaseService {
 		List<WorkCertInfo> certInfos = workCertInfoDao.find(dc);
 		return certInfos;
 	}
+	
+	
+	public List<WorkCertInfo> findZhiZhengTime(Date zhizhengStartTime,Date zhizhengEndTime) {
+		DetachedCriteria dc = workCertInfoDao.createDetachedCriteria();
+		if (zhizhengStartTime!=null) {
+			dc.add(Restrictions.ge("signDate", zhizhengStartTime));
+		}
+		if (zhizhengEndTime!=null) {
+			zhizhengEndTime.setHours(23);
+			zhizhengEndTime.setMinutes(59);
+			zhizhengEndTime.setSeconds(59);
+			dc.add(Restrictions.le("signDate", zhizhengEndTime));
+		}
+		dc.addOrder(Order.desc("id"));
+		return workCertInfoDao.find(dc);
+	}
+	
+	
+	
+	
 
 }

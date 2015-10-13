@@ -75,6 +75,7 @@
 			}
 	}
 </script>
+<script type="text/javascript" src="${ctxStatic}/jquery/city.js"></script>
 </head>
 <body onload=''>
 	<ul class="nav nav-tabs">
@@ -89,25 +90,10 @@
 		<input id="pageSize" name="pageSize" type="hidden"
 			value="${page.pageSize}" />
 		<div>
-			<label>证书类型 ：</label> <select name="certType" id="certType">
-				<option value="">请选择</option>
-				<c:forEach items="${certTypes}" var="type" varStatus="status">
-					<option value="${type.id}"
-						<c:if test="${type.id==certType}">
-					selected="selected"
-					</c:if>>${type.name}</option>
-				</c:forEach>
-			</select> 
-			<label>业务类型 ：</label> <select name="workType" id="workType">
-				<option value="">请选择业务类型</option>
-				<c:forEach items="${workTypes}" var="type">
-					<option value="${type.id}"
-						<c:if test="${type.id==workType}">
-					selected="selected"
-					</c:if>>${type.name}</option>
-				</c:forEach>
-			</select> 
-			<label>应&nbsp; &nbsp; &nbsp; 用 ：</label> <select name="apply"
+			<label>按应用查询：</label><br>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<label>代办应用：</label> 
+			<select name="apply"
 				id="apply">
 				<option value="">请选择应用</option>
 				<c:forEach items="${configAppList}" var="app">
@@ -117,32 +103,39 @@
 					</c:if>>${app.appName}</option>
 				</c:forEach>
 			</select>
-			</div>
-		<br />
+			
+		</div>
+		<br>
 		<div>
-			<label>业务办理时间：从</label> 
-				<input id="startTime" name="startTime"
-				type="text" readonly="readonly" maxlength="20"
-				class="Wdate required"
-				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"
-				value="<fmt:formatDate value="${startTime}" pattern="yyyy-MM-dd"/>" />
-				到 
-				<input id="endTime" name="endTime" type="text" readonly="readonly"
-				maxlength="20" class="Wdate required"
-				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false,minDate:'#F{$dp.$D(\'startTime\')}'});"
-				value="<fmt:formatDate value="${endTime}" pattern="yyyy-MM-dd"/>" />
+			<label>按证书信息查询：</label><br>
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		
+			<label>单位名称：</label> 
+			<form:input path="workCompany.companyName" htmlEscape="false"
+				maxlength="50" class="input-medium" />
+			<label>组代码号：</label> 
+			<form:input path="workCompany.organizationNumber" htmlEscape="false"
+				maxlength="30" class="input-medium" />
+			<label>证书持有人：</label> 
+			<form:input path="workUser.contactName" htmlEscape="false"
+				maxlength="16" class="input-medium" />
+			<label>身份证号：</label> 
+			<form:input path="workUser.conCertNumber" htmlEscape="false"
+				maxlength="18" class="input-medium" />
 			<input id="btnSubmit" class="btn btn-primary" onclick="return onSubmit()" type="submit"
 				value="查询" />
 				<input id="gjcx" style="text-align:center" class="btn btn-info" onclick="show()" type="button" value="高级">
 				<span id="tjjg">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;统计结果${page.count }条</span>
 				<br />
-		</div>	
-		<br />
+		</div>
+		<br>
+		
+			
+		<br>
 		<div id="advanced" style="display:none">
-			<div>
-			<label>所属区域 ：</label> <select name="area" id="area"
+		<div>
+			<label>按受理信息查询：</label><br>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<label>受理区域：</label><select name="area" id="area"
 				onchange="addOffice()">
 				<option value="">请选择</option>
 				<c:forEach items="${offsList}" var="off">
@@ -151,7 +144,8 @@
 					selected="selected"
 					</c:if>>${off.name}</option>
 				</c:forEach>
-			</select> <label>所属网点 ：</label> <select name="officeId" id="officeId">
+			</select> 
+			<label>受理网点：</label>  <select name="officeId" id="officeId">
 				<option value="">请选择</option>
 				<c:forEach items="${offices}" var="off">
 					<option value="${off.id}"
@@ -160,8 +154,108 @@
 					</c:if>>${off.name}</option>
 				</c:forEach>
 			</select>
+			<label>产品名称：</label> <select name="certType" id="certType">
+				<option value="">请选择</option>
+				<c:forEach items="${certTypes}" var="type" varStatus="status">
+					<option value="${type.id}"
+						<c:if test="${type.id==certType}">
+					selected="selected"
+					</c:if>>${type.name}</option>
+				</c:forEach>
+			</select> 
+			<label>业务类型：</label> <select name="workType" id="workType">
+				<option value="">请选择业务类型</option>
+				<c:forEach items="${workTypes}" var="type">
+					<option value="${type.id}"
+						<c:if test="${type.id==workType}">
+					selected="selected"
+					</c:if>>${type.name}</option>
+				</c:forEach>
+			</select> <br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<label>KEY编码：</label> <form:input path="keySn" htmlEscape="false"
+				maxlength="30" class="input-medium" />
+				<!-- 录入人、鉴证人、制证人 现在由于业务中心未改造完。所以只能查两个字段 -->
+			<label>录入人：</label> 
+			<form:input path="createBy.name" htmlEscape="false"
+				maxlength="16" class="input-medium" />
+			<label>鉴证人：</label> 
+			<form:input path="updateBy.name" htmlEscape="false"
+				maxlength="16" class="input-medium" />
+			<label>制证人：</label> 
+			<input type="text"
+				maxlength="16" class="input-medium" />
+			<br><br>
+			<label>计费策略类型：</label> 
+			<form:select path="payType">
+				<form:option value="0">请选择</form:option>
+				<form:option value="1">标准</form:option>
+				<form:option value="2">政府统一采购</form:option>
+				<form:option value="3">合同采购</form:option>
+			</form:select>
+			<label>行政所属区：</label> 	
+			<select id="s_province" name="workCompany.province"
+								style="width: 100px;">
+								
+								</select>&nbsp;&nbsp; <select id="s_city"
+								name="workCompany.city" style="width: 100px;"></select>&nbsp;&nbsp; <select
+								id="s_county" name="workCompany.district" style="width: 100px;"></select> <script
+									type="text/javascript">
+									_init_area();
+									$("#s_province").append('<option value="${workDealInfo.workCompany.province}" selected="selected">${workDealInfo.workCompany.province}</option>');
+									$("#s_city").append('<option value="${workDealInfo.workCompany.city}" selected="selected">${workDealInfo.workCompany.city}</option>');
+									$("#s_county").append('<option value="${workDealInfo.workCompany.district}" selected="selected">${workDealInfo.workCompany.district}</option>');
+								</script>		
 		</div>
-		<br />	
+		<br>
+		<div>
+			<label>按时间查询：</label><br>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<label>录入日期：</label> 
+			<input id="luruStartTime" name="luruStartTime"
+				type="text" readonly="readonly" maxlength="20"
+				class="required Wdate"
+				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"
+				value="<fmt:formatDate value="${luruStartTime}" pattern="yyyy-MM-dd"/>" />
+			&nbsp;-&nbsp;<input id="luruEndTime" name="luruEndTime" type="text"
+				readonly="readonly" maxlength="20" class="Wdate required"
+				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false,minDate:'#F{$dp.$D(\'startTime\')}'});"
+				value="<fmt:formatDate value="${luruEndTime}" pattern="yyyy-MM-dd"/>" />
+			
+			<label>鉴证日期：</label> 
+			<input id="jianzhengStartTime" name="jianzhengStartTime"
+				type="text" readonly="readonly" maxlength="20"
+				class="required Wdate"
+				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"
+				value="<fmt:formatDate value="${jianzhengStartTime}" pattern="yyyy-MM-dd"/>" />
+				&nbsp;-&nbsp;
+				<input id="jianzhengEndTime" name="jianzhengEndTime" type="text"
+				readonly="readonly" maxlength="20" class="Wdate required"
+				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false,minDate:'#F{$dp.$D(\'startTime\')}'});"
+				value="<fmt:formatDate value="${jianzhengEndTime}" pattern="yyyy-MM-dd"/>" />
+				<br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<label>制证日期：</label> 
+			<input id="zhizhengStartTime" name="zhizhengStartTime"
+				type="text" readonly="readonly" maxlength="20"
+				class="required Wdate"
+				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"
+				value="<fmt:formatDate value="${zhizhengStartTime}" pattern="yyyy-MM-dd"/>" />
+			&nbsp;-&nbsp;<input id="zhizhengEndTime" name="zhizhengEndTime" type="text"
+				readonly="readonly" maxlength="20" class="Wdate required"
+				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false,minDate:'#F{$dp.$D(\'startTime\')}'});"
+				value="<fmt:formatDate value="${zhizhengEndTime}" pattern="yyyy-MM-dd"/>" />
+			<label>到期日期：</label> 
+			 <input id="daoqiStartTime" name="daoqiStartTime"
+				type="text" readonly="readonly" maxlength="20"
+				class="required Wdate"
+				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"
+				value="<fmt:formatDate value="${daoqiStartTime}" pattern="yyyy-MM-dd"/>" />
+			&nbsp;-&nbsp;<input id="daoqiEndTime" name="daoqiEndTime" type="text"
+				readonly="readonly" maxlength="20" class="Wdate required"
+				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false,minDate:'#F{$dp.$D(\'startTime\')}'});"
+				value="<fmt:formatDate value="${daoqiEndTime}" pattern="yyyy-MM-dd"/>" /> 
+		</div>
+		<br>
+		
 		<div>
 			<label>业务年限 ：</label> <select name="year" id="year">
 				<option value="">请选择证书年限</option>
@@ -212,45 +306,49 @@
 		class="table table-striped table-bordered table-condensed">
 		<thead>
 			<tr>
-				<th>证书类型</th>
-				<th>所属区域</th>
-				<th>所属网点</th>
-				<th>应用</th>
+				<th>业务编号</th>
+				<th>别名</th>
+				<th>单位名称</th>
+				<th>证书持有人</th>
+				<th>经办人</th>
+				<th>产品名称</th>
 				<th>业务类型</th>
-				<th>业务年限</th>
-				<th>付款方式</th>
-				<th>制证时间</th>
+				<th>Key编码</th>
+				<th>制证日期</th>
+				<th>有效期</th>
+				<th>到期日期</th>
+				<th>业务状态</th>
 				<th>操作</th>
 			</tr>
 		</thead>
 		<tbody>
 			<c:forEach items="${page.list}" var="workDealInfo">
 				<tr>
+				
+					<td>${workDealInfo.svn}</td>
+					<td>${workDealInfo.configApp.alias}</td>
+					<td>${workDealInfo.workCompany.companyName}</td>
+					<td>${workDealInfo.workUser.contactName}</td>
+					<td>${workDealInfo.workCertInfo.workCertApplyInfo.name}</td>
 					<td>${proType[workDealInfo.configProduct.productName]}</td>
-					<td>${workDealInfo.createBy.company.name}</td>
-					<td>${workDealInfo.createBy.office.name}</td>
-					<td>${workDealInfo.configApp.appName}</td>
-					<td>${wdiType[workDealInfo.dealInfoType]}&nbsp;&nbsp;${wdiType[workDealInfo.dealInfoType1]}&nbsp;&nbsp;${wdiType[workDealInfo.dealInfoType2]}&nbsp;&nbsp;${wdiType[workDealInfo.dealInfoType3]}</td>
-					<td>${workDealInfo.year}年</td>
-					<td> <c:if test="${workDealInfo.payType==1}">
-							标准
+					<td>
+						<c:if test="${workDealInfo.dealInfoType!=null}">${wdiType[workDealInfo.dealInfoType]}</c:if>
+						<c:if test="${workDealInfo.dealInfoType1!=null}">${wdiType[workDealInfo.dealInfoType1]}</c:if>
+						<c:if test="${workDealInfo.dealInfoType2!=null}">${wdiType[workDealInfo.dealInfoType2]}</c:if>
+						<c:if test="${workDealInfo.dealInfoType3!=null}">${wdiType[workDealInfo.dealInfoType3]}</c:if>
+					</td>
+					<td>${workDealInfo.keySn }</td>
+					<td><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${workDealInfo.workCertInfo.signDate}"/> </td>
+					<td><c:if
+							test="${not empty workDealInfo.workCertInfo.notafter && not empty workDealInfo.workCertInfo.notbefore}">
+							${empty workDealInfo.addCertDays?workDealInfo.year*365+workDealInfo.lastDays:workDealInfo.year*365+workDealInfo.lastDays+workDealInfo.addCertDays}（天）
 						</c:if>
-						<c:if test="${workDealInfo.payType==3}">
-							合同采购
-						</c:if>
-						<c:if test="${workDealInfo.payType==2}">
-							政府统一采购
-						</c:if>
-						<c:if test="${workDealInfo.workPayInfo.methodPos||(workDealInfo.workPayInfo.relationMethod==1)}">
-							POS收款
-						</c:if>
-						<c:if test="${workDealInfo.workPayInfo.methodMoney||(workDealInfo.workPayInfo.relationMethod==0)}">
-							现金
-						</c:if>
-						</td>
-						<td>
-						<fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${workDealInfo.workCertInfo.signDate}"/> 
-						</td>
+					</td>
+					<td><fmt:formatDate
+							value="${workDealInfo.notafter }"
+							pattern="yyyy-MM-dd" /> </td>
+					<td>${wdiStatus[workDealInfo.dealInfoStatus]}</td>
+					
 						<td>
 						<a href="javascript:void(0)" onclick="alarmValue( ${workDealInfo.id} )" >
 						查看 </a></td>

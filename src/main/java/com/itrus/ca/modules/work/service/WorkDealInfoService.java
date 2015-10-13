@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.google.common.collect.Lists;
 import com.itrus.ca.common.persistence.Page;
@@ -554,87 +555,67 @@ public class WorkDealInfoService extends BaseService {
 
 	public Page<WorkDealInfo> find(Page<WorkDealInfo> page,
 			WorkDealInfo workDealInfo, Long area, Long office, Long apply,
-			String certType, Integer workType, Integer year, Date startTime,
-			Date endTime, List<Office> offices) {
-		// StringBuffer sql = new
-		// StringBuffer("select id,c.product_name,g.company.name,g.office.name,e.app_name,a.deal_info_type,a.deal_info_type1,a.year,f.*,count(id) from work_deal_info a,work_company b,config_product c,sys_office d,config_app e,work_pay_info f,sys_user g where 1=1");
-		// StringBuffer groupBy = new StringBuffer();
-		// List<Object> params = new ArrayList<Object>();
-		// if (workDealInfo.getWorkPayInfo() != null) {
-		// if (workDealInfo.getWorkPayInfo().getMethodMoney() == true) {
-		// sql.append(" f.method_money=1");
-		// }
-		// if (workDealInfo.getWorkPayInfo().getMethodPos() == true) {
-		// sql.append("  and f.method_pos=1");
-		// }
-		// if (workDealInfo.getWorkPayInfo().getMethodBank() == true) {
-		// sql.append("  and f.method_bank=1");
-		// }
-		// if (workDealInfo.getWorkPayInfo().getMethodAlipay() == true) {
-		// sql.append("  and f.method_alipay=1");
-		// }
-		// if (workDealInfo.getWorkPayInfo().getMethodGov() == true) {
-		// sql.append("  and f.method_gov=1");
-		// }
-		// if (workDealInfo.getWorkPayInfo().getMethodContract() == true) {
-		// sql.append("  and f.method_contract=1");
-		// }
-		// }else {
-		// groupBy.append("f.method_money,f.method_pos,f.method_bank,f.method_alipay,f.method_gov,f.method_contract,");
-		// }
-		//
-		// if (startTime != null) {
-		// sql.append(" and create_by.create_date>?");
-		// params.add(startTime);
-		// }
-		// if (endTime != null) {
-		// sql.append(" and create_by.create_date<?");
-		// params.add(endTime);
-		// }
-		//
-		// if (office != null) {
-		// sql.append(" and create_by.office.id="+office);
-		// }
-		// if (area != null) {
-		// sql.append(" and create_by.company.id="+area);
-		// }
-		//
-		// if (apply != null) {
-		// sql.append(" and config_app.id="+apply);
-		// }
-		// if (certType != null && !certType.equals("")) {
-		// sql.append(" and config_product.product_name="+certType);
-		// }
-		//
-		// if (workType != null) {
-		// sql.append(" and (work_deal_info_type="+workType+" or work_deal_info_type1="+workType+")");
-		// }
-		// if (year != null) {
-		// sql.append(" and year="+year);
-		// }
-		//
-		// sql.append(" and company_id=work_company.id");
-		// sql.append(" and create_by=sys_user.id");
-		// sql.append(" and create_by.office_id=sys_office.id");
-		// sql.append(" and create_by.company_id=sys_office.id");
-		// sql.append(" and app_id=config_app.id");
-		// sql.append(" and product_id=config_product.id");
-		// sql.append(" and del_flag=0");
-		// sql.append(" group by year");
-		// List result = workDealInfoDao.findBySql(sql.toString(),
-		// params.toArray());
-		// return null;
-
+			String certType, Integer workType, Integer year, Date luruStartTime,
+			Date luruEndTime, List<Office> offices , Date daoqiStartTime, Date daoqiEndTime,
+			Date jianzhengStartTime,Date jianzhengEndTime, 
+			List<WorkCertInfo> certInfoList
+		
+			) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
-
 		dc.createAlias("workPayInfo", "workPayInfo");
+		dc.createAlias("workCompany", "workCompany");
+		dc.createAlias("workUser", "workUser");
 		dc.createAlias("createBy", "createBy");
+		dc.createAlias("updateBy", "updateBy");
 		dc.createAlias("createBy.office", "office");
 		dc.createAlias("configApp", "configApp");
 		dc.createAlias("configProduct", "configProduct");
-
 		// workDealInfoDao.createDetachedCriteria();
 		dc.add(Restrictions.in("createBy.office", offices));
+		
+		
+		
+		
+		//workUser.contactName
+		//workUser.conCertNumber
+		if (workDealInfo.getWorkCompany()!=null && StringUtils.isNotEmpty(workDealInfo.getWorkCompany().getCompanyName())) {
+			dc.add(Restrictions.like("workCompany.companyName", "%"+workDealInfo.getWorkCompany().getCompanyName()+"%"));
+		}
+		if (workDealInfo.getWorkCompany()!=null && StringUtils.isNotEmpty(workDealInfo.getWorkCompany().getOrganizationNumber()) ) {
+			dc.add(Restrictions.like("workCompany.organizationNumber", "%"+workDealInfo.getWorkCompany().getOrganizationNumber()+"%"));
+		}
+		if (workDealInfo.getWorkUser()!=null && StringUtils.isNotEmpty(workDealInfo.getWorkUser().getContactName())) {
+			dc.add(Restrictions.like("workUser.contactName", "%"+workDealInfo.getWorkUser().getContactName()+"%"));
+		}
+		if (workDealInfo.getWorkUser()!=null && StringUtils.isNotEmpty(workDealInfo.getWorkUser().getConCertNumber())) {
+			dc.add(Restrictions.like("workUser.conCertNumber", "%"+workDealInfo.getWorkUser().getConCertNumber()+"%"));
+		}
+		
+		if (StringUtils.isNotEmpty(workDealInfo.getKeySn())) {
+			dc.add(Restrictions.like("keySn", "%"+workDealInfo.getKeySn()+"%"));
+		}
+		if (workDealInfo.getCreateBy()!=null && StringUtils.isNotEmpty(workDealInfo.getCreateBy().getName())) {
+			dc.add(Restrictions.like("createBy.name", "%"+workDealInfo.getCreateBy().getName()+"%"));
+		}
+		if (workDealInfo.getCreateBy()!=null && StringUtils.isNotEmpty(workDealInfo.getUpdateBy().getName())) {
+			dc.add(Restrictions.like("updateBy.name", "%"+workDealInfo.getUpdateBy().getName()+"%"));
+		}
+		if (workDealInfo.getPayType()!=null && workDealInfo.getPayType()!=0) {
+			dc.add(Restrictions.eq("payType", workDealInfo.getPayType()));
+		}
+		//workCompany.province
+		//workCompany.city
+		//workCompany.district
+		if (workDealInfo.getWorkCompany()!=null && StringUtils.isNotEmpty(workDealInfo.getWorkCompany().getProvince())) {
+			dc.add(Restrictions.eq("workCompany.province", workDealInfo.getWorkCompany().getProvince()));
+		}
+		if (workDealInfo.getWorkCompany()!=null && StringUtils.isNotEmpty(workDealInfo.getWorkCompany().getCity())) {
+			dc.add(Restrictions.eq("workCompany.city", workDealInfo.getWorkCompany().getCity()));
+		}
+		if (workDealInfo.getWorkCompany()!=null && StringUtils.isNotEmpty(workDealInfo.getWorkCompany().getDistrict())) {
+			dc.add(Restrictions.eq("workCompany.district", workDealInfo.getWorkCompany().getDistrict()));
+		}
+		
 		if (workDealInfo.getWorkPayInfo() != null) {
 			if (workDealInfo.getWorkPayInfo().getMethodMoney() == true) {
 				dc.add(Restrictions.or(
@@ -664,11 +645,44 @@ public class WorkDealInfoService extends BaseService {
 			}
 		}
 
-		if (startTime != null) {
-			dc.add(Restrictions.ge("createDate", startTime));
+		if (jianzhengStartTime != null) {
+			dc.add(Restrictions.ge("updateDate", jianzhengStartTime));
 		}
-		if (endTime != null) {
-			dc.add(Restrictions.le("createDate", endTime));
+		if (jianzhengEndTime != null) {
+			jianzhengEndTime.setHours(23);
+			jianzhengEndTime.setMinutes(59);
+			jianzhengEndTime.setSeconds(59);
+			dc.add(Restrictions.le("updateDate", jianzhengEndTime));
+		}
+		
+		if (luruStartTime != null) {
+			dc.add(Restrictions.ge("createDate", luruStartTime));
+		}
+		if (luruEndTime != null) {
+			luruEndTime.setHours(23);
+			luruEndTime.setMinutes(59);
+			luruEndTime.setSeconds(59);
+			dc.add(Restrictions.le("createDate", luruEndTime));
+		}
+		if (daoqiStartTime!=null) {
+			dc.add(Restrictions.ge("notafter", daoqiStartTime));
+		}
+		if (daoqiEndTime!=null) {
+			daoqiEndTime.setHours(23);
+			daoqiEndTime.setMinutes(59);
+			daoqiEndTime.setSeconds(59);
+			dc.add(Restrictions.le("notafter", daoqiEndTime));
+		}
+		
+		if (certInfoList.size()>0) {
+			dc.add(Restrictions.in("workCertInfo", certInfoList));
+		}
+		
+		if (luruStartTime != null) {
+			dc.add(Restrictions.ge("createDate", luruStartTime));
+		}
+		if (luruEndTime != null) {
+			dc.add(Restrictions.le("createDate", luruEndTime));
 		}
 
 		if (office != null) {

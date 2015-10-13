@@ -184,7 +184,8 @@ document.onkeydown = function(event) {
 								style="width: 100px;">
 							</select>&nbsp;&nbsp; <select id="s_city" name="s_city"
 								style="width: 100px;"></select>&nbsp;&nbsp; <select
-								id="s_county" name="s_county" style="width: 100px;"></select> <script
+								id="s_county" name="s_county" style="width: 100px;"></select>
+								 <script
 									type="text/javascript">
 									_init_area();
 									$("#s_province").append('<option value="${workDealInfo.workCompany.province}" selected="selected">${workDealInfo.workCompany.province}</option>');

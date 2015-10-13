@@ -182,14 +182,8 @@
 			<tr>
 				<th rowspan="4" style="text-align:center; vertical-align: middle;">日期</th>
 				<th colspan="36" style="text-align:center; vertical-align: middle;">
-				<c:if test="${fn:length(appDataList) >0 }">
-				
-				${appDataList[0].app.appName}
-				
-				</c:if>
+				<c:if test="${fn:length(appDataList) >0 }">${appDataList[0].app.appName}</c:if>
 				</th> 
-
-				
 				
 			</tr>
 			  
