@@ -1,5 +1,9 @@
 package com.itrus.ca.modules.statistic.web;
 
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -11,6 +15,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFFont;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.util.Region;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -351,6 +362,388 @@ public class StatisticDayDataController extends BaseController {
 		return "modules/work/operateCountOfMonth";
 	}
 
+	@RequestMapping(value = "exportCountDay")
+	public void exportCountDay(
+			@RequestParam(required = false) StatisticDayData statisticDayData,
+			HttpServletRequest request,
+			HttpServletResponse response,
+			@RequestParam(value = "office", required = false) Long office,
+			@RequestParam(value = "startTime", required = false) Date startTime,
+			@RequestParam(value = "endTime", required = false) Date endTime)
+	{
+		HSSFWorkbook wb=new HSSFWorkbook();
+		HSSFSheet sheet=wb.createSheet("日经营统计表");
+		HSSFCellStyle style=wb.createCellStyle();
+		style.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+		style.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+		HSSFFont font=wb.createFont();
+		font.setFontHeightInPoints((short)20);
+		font.setCharSet(20);
+		font.setFontName("宋体");
+		font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+		style.setFont(font);
+		sheet.addMergedRegion(new Region(0, (short)0, 0, (short)9));
+		sheet.addMergedRegion(new Region(1, (short)0, 2, (short)0));
+		sheet.addMergedRegion(new Region(1, (short)1, 1, (short)2));
+		sheet.addMergedRegion(new Region(1, (short)3, 1, (short)4));
+		sheet.addMergedRegion(new Region(1, (short)5, 1, (short)7));
+		sheet.addMergedRegion(new Region(1, (short)8, 1, (short)9));
+		HSSFRow row0=sheet.createRow(0);
+		HSSFCell cell0=row0.createCell(0);
+		cell0.setCellValue("日经营统计");
+		cell0.setCellStyle(style);
+		HSSFRow row1=sheet.createRow(1);
+		row1.createCell(0).setCellValue("日期");
+		row1.createCell(1).setCellValue("入库");
+		row1.createCell(3).setCellValue("总量");
+		row1.createCell(5).setCellValue("日结");
+		row1.createCell(8).setCellValue("余量");
+		HSSFRow row2=sheet.createRow(2);
+		row2.createCell(1).setCellValue("KEY");
+		row2.createCell(2).setCellValue("发票");
+		row2.createCell(3).setCellValue("KEY");
+		row2.createCell(4).setCellValue("发票");
+		row2.createCell(5).setCellValue("证书");
+		row2.createCell(6).setCellValue("费用");
+		row2.createCell(7).setCellValue("KEY");
+		row2.createCell(8).setCellValue("kEY");
+		row2.createCell(9).setCellValue("发票");
+
+		Page<StatisticDayData> page = statisticDayDataService.findByDay(
+				new Page<StatisticDayData>(request, response),
+				statisticDayData, office, startTime, endTime);
+		List<StatisticDayData> list=page.getList();
+		
+		List<StatisticAppData> certDatas = statisticAppDataService
+				.findByCreateDateAndOffice(office, startTime, endTime);
+		List<List<StatisticAppData>> appDatas = new ArrayList<List<StatisticAppData>>();
+		List<ConfigApp> apps = configAppService.selectAll();
+		for (int i = 0; i < apps.size(); i++) {
+			List<StatisticAppData> appData = new ArrayList<StatisticAppData>();
+			for (int j = 0; j < certDatas.size(); j++) {
+				if (apps.get(i).getAppName()
+						.equals(certDatas.get(j).getApp().getAppName())) {
+					appData.add(certDatas.get(j));
+				}
+			}
+
+			if (appData.size() > 0) {
+				appDatas.add(appData);
+			}
+
+		}
+		
+		
+		for(int i=0;i<list.size();i++)
+		{
+			HSSFRow rown=sheet.createRow(i+3);
+			rown.createCell(0).setCellValue((list.get(i).getStatisticDate()).toString());
+			rown.createCell(1).setCellValue(list.get(i).getKeyIn());
+			rown.createCell(2).setCellValue(list.get(i).getReceiptIn());
+			rown.createCell(3).setCellValue(list.get(i).getKeyTotal());
+			rown.createCell(4).setCellValue(list.get(i).getReceiptTotal());
+			rown.createCell(5).setCellValue(list.get(i).getCertTotal());
+			rown.createCell(6).setCellValue(list.get(i).getCertMoneyTotal());
+			rown.createCell(7).setCellValue(list.get(i).getKeyOver());
+			rown.createCell(8).setCellValue(list.get(i).getKeyStoreTotal());
+			rown.createCell(9).setCellValue(list.get(i).getReceiptStoreTotal());
+		}
+		
+		for(int j=0;j<appDatas.size();j++)
+		{
+			sheet.addMergedRegion(new Region((j+1)*(5+appDatas.size()),(short)0,(j+1)*(5+appDatas.size())+3,(short)0));
+			sheet.addMergedRegion(new Region((j+1)*(5+appDatas.size()),(short)1,(j+1)*(5+appDatas.size()),(short)37));
+			sheet.addMergedRegion(new Region((j+1)*(5+appDatas.size())+1, (short)1, (j+1)*(5+appDatas.size())+1, (short)33));
+			sheet.addMergedRegion(new Region((j+1)*(5+appDatas.size())+1, (short)34, (j+1)*(5+appDatas.size())+1, (short)36));
+			sheet.addMergedRegion(new Region((j+1)*(5+appDatas.size())+2, (short)1, (j+1)*(5+appDatas.size())+2, (short)4));
+			sheet.addMergedRegion(new Region((j+1)*(5+appDatas.size())+2, (short)5, (j+1)*(5+appDatas.size())+2, (short)8));
+			sheet.addMergedRegion(new Region((j+1)*(5+appDatas.size())+2, (short)9, (j+1)*(5+appDatas.size())+2+1, (short)9));
+			sheet.addMergedRegion(new Region((j+1)*(5+appDatas.size())+2, (short)10, (j+1)*(5+appDatas.size())+2+1, (short)10));
+			sheet.addMergedRegion(new Region((j+1)*(5+appDatas.size())+2, (short)11, (j+1)*(5+appDatas.size())+2+1, (short)11));
+			sheet.addMergedRegion(new Region((j+1)*(5+appDatas.size())+2, (short)12, (j+1)*(5+appDatas.size())+2, (short)15));
+			sheet.addMergedRegion(new Region((j+1)*(5+appDatas.size())+2, (short)16, (j+1)*(5+appDatas.size())+2, (short)19));
+			sheet.addMergedRegion(new Region((j+1)*(5+appDatas.size())+2, (short)20, (j+1)*(5+appDatas.size())+2, (short)23));
+			sheet.addMergedRegion(new Region((j+1)*(5+appDatas.size())+2, (short)24, (j+1)*(5+appDatas.size())+2+1, (short)24));
+			sheet.addMergedRegion(new Region((j+1)*(5+appDatas.size())+2, (short)25,(j+1)*(5+appDatas.size())+2+1, (short)25));
+			sheet.addMergedRegion(new Region((j+1)*(5+appDatas.size())+2, (short)26, (j+1)*(5+appDatas.size())+2, (short)29));
+			sheet.addMergedRegion(new Region((j+1)*(5+appDatas.size())+2, (short)30, (j+1)*(5+appDatas.size())+2, (short)33));
+			sheet.addMergedRegion(new Region((j+1)*(5+appDatas.size())+2, (short)34, (j+1)*(5+appDatas.size())+2+1, (short)34));
+			sheet.addMergedRegion(new Region((j+1)*(5+appDatas.size())+2, (short)35, (j+1)*(5+appDatas.size())+2+1, (short)35));
+			sheet.addMergedRegion(new Region((j+1)*(5+appDatas.size())+2, (short)36, (j+1)*(5+appDatas.size())+2+1, (short)36));
+			
+			HSSFCellStyle stylese=wb.createCellStyle();
+			stylese.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+			stylese.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+			HSSFFont fontse=wb.createFont();
+			fontse.setFontHeightInPoints((short)10);
+//			fontse.setCharSet(20);
+			fontse.setFontName("宋体");
+			fontse.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+			stylese.setFont(fontse);
+			
+			HSSFRow serow0=sheet.createRow((j+1)*(5+appDatas.size()));
+			HSSFCell cellse0=serow0.createCell(0);
+			cellse0.setCellStyle(stylese);
+			cellse0.setCellValue("日期");
+			serow0.setHeightInPoints((short)20);
+			HSSFCell cellse1=serow0.createCell(1);
+			cellse1.setCellStyle(style);
+			cellse1.setCellValue(appDatas.get(j).get(j).getApp().getAppName());
+			HSSFRow serow1=sheet.createRow((j+1)*(5+appDatas.size())+1);
+			serow1.createCell(1).setCellValue("业务办理");
+			serow1.createCell(34).setCellValue("小计");
+			HSSFRow serow2=sheet.createRow((j+1)*(5+appDatas.size())+2);
+			serow2.createCell(1).setCellValue("新增");
+			serow2.createCell(5).setCellValue("更新");
+			serow2.createCell(9).setCellValue("变更");
+			serow2.createCell(10).setCellValue("损坏更换");
+			serow2.createCell(11).setCellValue("遗失补办");
+			serow2.createCell(12).setCellValue("更新+变更");
+			serow2.createCell(16).setCellValue("更新+遗失补办");
+			serow2.createCell(20).setCellValue("更新+遗损坏更换");
+			serow2.createCell(24).setCellValue("变更+遗失补办");
+			serow2.createCell(25).setCellValue("变更+遗损坏更换");
+			serow2.createCell(26).setCellValue("变更+遗失补办");
+			serow2.createCell(30).setCellValue("变更+遗损坏更换");
+			serow2.createCell(34).setCellValue("证书");
+			serow2.createCell(35).setCellValue("KEY");
+			serow2.createCell(36).setCellValue("发票");
+			HSSFRow serow3=sheet.createRow((j+1)*(5+appDatas.size())+3);
+			serow3.createCell(1).setCellValue("1年");
+			serow3.createCell(2).setCellValue("2年");
+			serow3.createCell(3).setCellValue("4年");
+			serow3.createCell(4).setCellValue("5年");
+			serow3.createCell(5).setCellValue("1年");
+			serow3.createCell(6).setCellValue("2年");
+			serow3.createCell(7).setCellValue("4年");
+			serow3.createCell(8).setCellValue("5年");
+			
+			serow3.createCell(12).setCellValue("1年");
+			serow3.createCell(13).setCellValue("2年");
+			serow3.createCell(14).setCellValue("4年");
+			serow3.createCell(15).setCellValue("5年");
+			serow3.createCell(16).setCellValue("1年");
+			serow3.createCell(17).setCellValue("2年");
+			serow3.createCell(18).setCellValue("4年");
+			serow3.createCell(19).setCellValue("5年");
+			serow3.createCell(20).setCellValue("1年");
+			serow3.createCell(21).setCellValue("2年");
+			serow3.createCell(22).setCellValue("4年");
+			serow3.createCell(23).setCellValue("5年");
+			serow3.createCell(26).setCellValue("1年");
+			serow3.createCell(27).setCellValue("2年");
+			serow3.createCell(28).setCellValue("4年");
+			serow3.createCell(29).setCellValue("5年");
+			serow3.createCell(30).setCellValue("1年");
+			serow3.createCell(31).setCellValue("2年");
+			serow3.createCell(32).setCellValue("4年");
+			serow3.createCell(33).setCellValue("5年");
+			
+			for(int i=0;i<appDatas.size();i++)
+			{
+				HSSFRow serow4=sheet.createRow((j+1)*(5+appDatas.size())+(4+i));
+				serow4.createCell(0).setCellValue((appDatas.get(j).get(i).getStatisticDate()).toString());
+				serow4.createCell(1).setCellValue(appDatas.get(j).get(i).getAdd1());
+				serow4.createCell(2).setCellValue(appDatas.get(j).get(i).getAdd2());
+				serow4.createCell(3).setCellValue(appDatas.get(j).get(i).getAdd4());
+				serow4.createCell(4).setCellValue(appDatas.get(j).get(i).getAdd5());
+				serow4.createCell(5).setCellValue(appDatas.get(j).get(i).getRenew1());
+				serow4.createCell(6).setCellValue(appDatas.get(j).get(i).getRenew2());
+				serow4.createCell(7).setCellValue(appDatas.get(j).get(i).getRenew4());
+				serow4.createCell(8).setCellValue(appDatas.get(j).get(i).getRenew5());
+				serow4.createCell(9).setCellValue(appDatas.get(j).get(i).getModifyNum());
+				serow4.createCell(10).setCellValue(appDatas.get(j).get(i).getReissueNum());
+				
+				serow4.createCell(11).setCellValue(appDatas.get(j).get(i).getLostReplaceNum());
+				
+				serow4.createCell(12).setCellValue(appDatas.get(j).get(i).getUpdateChangeNum());
+				serow4.createCell(13).setCellValue(appDatas.get(j).get(i).getUpdateChangeNum2());
+				serow4.createCell(14).setCellValue(appDatas.get(j).get(i).getUpdateChangeNum4());
+				serow4.createCell(15).setCellValue(appDatas.get(j).get(i).getUpdateChangeNum5());
+				
+				serow4.createCell(16).setCellValue(appDatas.get(j).get(i).getUpdateLostNum());
+				serow4.createCell(17).setCellValue(appDatas.get(j).get(i).getUpdateLostNum2());
+				serow4.createCell(18).setCellValue(appDatas.get(j).get(i).getUpdateLostNum4());
+				serow4.createCell(19).setCellValue(appDatas.get(j).get(i).getUpdateLostNum5());
+				
+				serow4.createCell(20).setCellValue(appDatas.get(j).get(i).getUpdateReplaceNum());
+				serow4.createCell(21).setCellValue(appDatas.get(j).get(i).getUpdateReplaceNum2());
+				serow4.createCell(22).setCellValue(appDatas.get(j).get(i).getUpdateReplaceNum4());
+				serow4.createCell(23).setCellValue(appDatas.get(j).get(i).getUpdateReplaceNum5());
+				
+				serow4.createCell(24).setCellValue(appDatas.get(j).get(i).getChangeLostNum());
+				serow4.createCell(25).setCellValue(appDatas.get(j).get(i).getChangeReplaceNum());
+				serow4.createCell(26).setCellValue(appDatas.get(j).get(i).getChangeUpdateLostNum());
+				serow4.createCell(27).setCellValue(appDatas.get(j).get(i).getChangeUpdateLostNum2());
+				serow4.createCell(28).setCellValue(appDatas.get(j).get(i).getChangeUpdateLostNum4());
+				serow4.createCell(29).setCellValue(appDatas.get(j).get(i).getChangeUpdateLostNum5());
+				serow4.createCell(30).setCellValue(appDatas.get(j).get(i).getChangeUpdateReplaceNum());
+				serow4.createCell(31).setCellValue(appDatas.get(j).get(i).getChangeUpdateReplaceNum2());
+				serow4.createCell(32).setCellValue(appDatas.get(j).get(i).getChangeUpdateReplaceNum4());
+				serow4.createCell(33).setCellValue(appDatas.get(j).get(i).getChangeUpdateReplaceNum5());
+				
+				serow4.createCell(34).setCellValue(appDatas.get(j).get(i).getCertTotal());
+				serow4.createCell(35).setCellValue(appDatas.get(j).get(i).getKeyTotal());
+				serow4.createCell(36).setCellValue(appDatas.get(j).get(i).getReceiptTotal());
+
+				
+			}
+			
+		}
+		
+		
+		try {
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			response.setContentType(response.getContentType());
+			response.setHeader("Content-disposition",
+					"attachment; filename=operateCountDay.xls");
+			wb.write(baos);
+			byte[] bytes = baos.toByteArray();
+			response.setHeader("Content-Length", String.valueOf(bytes.length));
+			BufferedOutputStream bos = null;
+			bos = new BufferedOutputStream(response.getOutputStream());
+			bos.write(bytes);
+			bos.close();
+			baos.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	@RequestMapping(value = "exportCountMonth")
+	public void exportCountMonth(@RequestParam(required = false) StatisticDayData statisticDayData,
+			HttpServletRequest request,
+			HttpServletResponse response,
+			@RequestParam(value = "office", required = false) Long office,
+			@RequestParam(value = "startTime", required = false) String startTime,
+			@RequestParam(value = "endTime", required = false) String endTime
+			)
+	{
+		HSSFWorkbook wb=new HSSFWorkbook();
+		HSSFSheet sheet=wb.createSheet("月经营统计表");
+		HSSFCellStyle style=wb.createCellStyle();
+		style.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+		style.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+		HSSFFont font=wb.createFont();
+		font.setFontHeightInPoints((short)20);
+		font.setCharSet(20);
+		font.setFontName("宋体");
+		font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+		style.setFont(font);
+		sheet.addMergedRegion(new Region(0, (short)0, 0, (short)9));
+		sheet.addMergedRegion(new Region(1, (short)0, 2, (short)0));
+		sheet.addMergedRegion(new Region(1, (short)1, 1, (short)2));
+		sheet.addMergedRegion(new Region(1, (short)3, 1, (short)4));
+		sheet.addMergedRegion(new Region(1, (short)5, 1, (short)7));
+		sheet.addMergedRegion(new Region(1, (short)8, 1, (short)9));
+		HSSFRow row0=sheet.createRow(0);
+		HSSFCell cell0=row0.createCell(0);
+		cell0.setCellValue("月经营统计");
+		cell0.setCellStyle(style);
+		HSSFRow row1=sheet.createRow(1);
+		row1.createCell(0).setCellValue("日期");
+		row1.createCell(1).setCellValue("入库");
+		row1.createCell(3).setCellValue("总量");
+		row1.createCell(5).setCellValue("月结");
+		row1.createCell(8).setCellValue("余量");
+		HSSFRow row2=sheet.createRow(2);
+		row2.createCell(1).setCellValue("KEY");
+		row2.createCell(2).setCellValue("发票");
+		row2.createCell(3).setCellValue("KEY");
+		row2.createCell(4).setCellValue("发票");
+		row2.createCell(5).setCellValue("证书");
+		row2.createCell(6).setCellValue("费用");
+		row2.createCell(7).setCellValue("KEY");
+		row2.createCell(8).setCellValue("kEY");
+		row2.createCell(9).setCellValue("发票");
+
+		
+		List<String> monthList = getMonthList(startTime + "-01", endTime
+				+ "-01");
+		List<StatisticMonthData> sumList = new ArrayList<StatisticMonthData>();
+		try {
+			for (String s : monthList) {
+				StatisticMonthData smd = new StatisticMonthData();
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+				Date start = sdf.parse(s);
+				Calendar rightNow = Calendar.getInstance();
+				rightNow.setTime(start);
+				rightNow.add(Calendar.MONTH, 1);
+				Date end = rightNow.getTime();
+
+				Integer keyIn = 0;
+				Integer keyOver = 0;
+				Integer keyStoreTotal = 0;
+				Double receiptIn = 0d;
+				Double receiptOver = 0d;
+				Double receiptStoreTotal = 0d;
+				Integer certTotal = 0;
+				Integer keyTotal = 0;
+				Double receiptTotal = 0d;
+				Double certMoneyTotal = 0d;
+
+				List<StatisticDayData> ListMonth = statisticDayDataService
+						.findByMonth(office, start, end);
+				for (StatisticDayData sdd : ListMonth) {
+					keyIn += sdd.getKeyIn();
+					keyOver += sdd.getKeyOver();
+					keyStoreTotal += sdd.getKeyStoreTotal();
+					receiptIn += sdd.getReceiptIn();
+					// receiptOver += sdd.getReceiptOver();
+					receiptStoreTotal += sdd.getReceiptStoreTotal();
+					certTotal += sdd.getCertTotal();
+					keyTotal += sdd.getKeyTotal();
+					receiptTotal += sdd.getReceiptTotal();
+					certMoneyTotal += sdd.getCertMoneyTotal();
+				}
+				smd.setKeyIn(keyIn);
+				smd.setKeyOver(keyOver);
+				smd.setKeyStoreTotal(keyStoreTotal);
+				smd.setReceiptIn(receiptIn);
+				// smd.setReceiptOver(receiptOver);
+				smd.setReceiptStoreTotal(receiptStoreTotal);
+				smd.setCertTotal(certTotal);
+				smd.setKeyTotal(keyTotal);
+				smd.setReceiptTotal(receiptTotal);
+				smd.setCertMoneyTotal(certMoneyTotal);
+				smd.setCreateDate(start);
+				sumList.add(smd);
+			}
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		for(int i=0;i<sumList.size();i++)
+		{
+			HSSFRow rown=sheet.createRow(i+3);
+			rown.createCell(0).setCellValue((sumList.get(i).getCreateDate()).toString());
+			rown.createCell(1).setCellValue(sumList.get(i).getKeyIn());
+			rown.createCell(2).setCellValue(sumList.get(i).getReceiptIn());
+			rown.createCell(3).setCellValue(sumList.get(i).getKeyTotal());
+			rown.createCell(4).setCellValue(sumList.get(i).getReceiptTotal());
+			rown.createCell(5).setCellValue(sumList.get(i).getCertTotal());
+			rown.createCell(6).setCellValue(sumList.get(i).getCertMoneyTotal());
+			rown.createCell(7).setCellValue(sumList.get(i).getKeyOver());
+			rown.createCell(8).setCellValue(sumList.get(i).getKeyStoreTotal());
+			rown.createCell(9).setCellValue(sumList.get(i).getReceiptStoreTotal());
+		}
+		try {
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			response.setContentType(response.getContentType());
+			response.setHeader("Content-disposition",
+					"attachment; filename=operateCountMonth.xls");
+			wb.write(baos);
+			byte[] bytes = baos.toByteArray();
+			response.setHeader("Content-Length", String.valueOf(bytes.length));
+			BufferedOutputStream bos = null;
+			bos = new BufferedOutputStream(response.getOutputStream());
+			bos.write(bytes);
+			bos.close();
+			baos.close();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	public List<String> getMonthList(String beginTime, String endTime) {
 		List<String> monthList = new ArrayList<String>();
 		SimpleDateFormat monthFormat = new SimpleDateFormat("yyyy-MM-dd");
