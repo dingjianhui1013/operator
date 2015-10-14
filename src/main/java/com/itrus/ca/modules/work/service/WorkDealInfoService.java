@@ -492,9 +492,9 @@ public class WorkDealInfoService extends BaseService {
 		dc.createAlias("workCompany", "workCompany");
 		dc.createAlias("createBy", "createBy");
 		dc.createAlias("createBy.office", "office");
-		dc.add(Restrictions.or(Restrictions.eq("dealInfoStatus",
-				WorkDealInfoStatus.STATUS_CERT_OBTAINED), Restrictions.eq(
-				"createBy.office", UserUtils.getUser().getOffice())));
+//		dc.add(Restrictions.or(Restrictions.eq("dealInfoStatus",
+//				WorkDealInfoStatus.STATUS_CERT_OBTAINED), Restrictions.eq(
+//				"createBy.office", UserUtils.getUser().getOffice())));
 
 		if (startTime != null && endTime != null) {
 			dc.add(Restrictions.ge("notafter", startTime));
