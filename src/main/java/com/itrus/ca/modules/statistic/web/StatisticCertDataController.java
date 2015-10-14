@@ -521,7 +521,7 @@ public class StatisticCertDataController extends BaseController {
 		{
 			row.createCell(2*i+1).setCellValue(monthlist1.get(i-1));
 		}
-		row.createCell(3+2*monthlist1.size()).setCellValue("小计");
+		row1.createCell(3+2*monthlist1.size()).setCellValue("小计");
 		for(int i=1;i<=2*monthlist1.size();i++)
 		{
 			if(i%2==0)
