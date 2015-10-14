@@ -77,7 +77,26 @@
 				}
 			}
 		}
-		
+
+		function dcZS()
+		{
+			if ($("#startTime").val()==""||$("#endTime").val()=="") {
+				top.$.jBox.tip("请选定时间范围");
+				return false;
+			} else {
+				if ($("#officeId").val()==""){
+					top.$.jBox.tip("请选定网点");
+				} else {
+					var applyId = document.getElementById("applyId").value;
+					var proList = document.getElementById("proList").value;
+					var areaId = document.getElementById("areaId").value;
+					var officeId = document.getElementById("officeId").value;
+					var startDate = document.getElementById("startTime").value;
+					var endDate =  document.getElementById("endTime").value;
+					window.location.href="${ctx}/statistic/statisticCertData/exportZS?applyId="+applyId+"&proList="+proList+"&areaId="+areaId+"&officeId="+officeId+"&startDate="+startDate+"&endDate="+endDate;
+				}
+			}
+		}
 	</script>
 </head>
 <body>
@@ -144,6 +163,8 @@
 		&nbsp;&nbsp;
 		
 		<input id="btnSubmit" class="btn btn-primary" onclick="return onSubmit();" type="submit" value="查询"/>
+		<input id="exportZS" class="btn btn-primary" onclick="dcZS()" type="button" value="导出"/>
+		
 		</div>
 	</form:form>
 	<tags:message content="${message}"/>
