@@ -5,7 +5,12 @@ package com.itrus.ca.modules.work.web;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.annotation.Annotation;
 import java.net.URLDecoder;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
@@ -36,12 +41,22 @@ import net.sf.ehcache.config.ConfigError;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFDataFormat;
+import org.apache.poi.hssf.usermodel.HSSFFont;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.util.Region;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.annotation.CreatedBy;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -52,6 +67,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.google.common.collect.Lists;
 import com.itrus.ca.common.config.Global;
+import com.itrus.ca.common.persistence.DataEntity;
 import com.itrus.ca.common.persistence.Page;
 import com.itrus.ca.common.utils.AdminPinEncKey;
 import com.itrus.ca.common.utils.RaAccountUtil;
@@ -2240,7 +2256,6 @@ public class WorkDealInfoController extends BaseController {
 			@RequestParam(value = "jianzhengEndTime", required = false) Date jianzhengEndTime,
 			@RequestParam(value = "zhizhengStartTime", required = false) Date zhizhengStartTime,
 			@RequestParam(value = "zhizhengEndTime", required = false) Date zhizhengEndTime,
-			
 			Model model) {
 		// 获取前台的付款方式
 		List<Long> method = Lists.newArrayList();
@@ -2723,7 +2738,214 @@ public class WorkDealInfoController extends BaseController {
 		} catch (Exception ex) {
 		}
 	}
-
+	@RequestMapping(value = "exportZS")
+	public void exportZS(
+			HttpServletRequest request,
+			HttpServletResponse response,
+			@RequestParam(value = "area", required = false) Long area,
+			@RequestParam(value = "officeId", required = false) Long officeId,
+			@RequestParam(value = "apply", required = false) Long apply,
+			@RequestParam(value = "certType", required = false) String certType,
+			@RequestParam(value = "workType", required = false) Integer workType,
+			@RequestParam(value = "companyName", required = false) String companyName,
+			@RequestParam(value = "organizationNumber", required = false) String organizationNumber,
+			@RequestParam(value = "contactName", required = false) String contactName,
+			@RequestParam(value = "conCertNumber", required = false) String conCertNumber,
+			@RequestParam(value = "keySn", required = false) String keySn,
+			@RequestParam(value = "createByname", required = false) String createByname,
+			@RequestParam(value = "zhizhengname", required = false) String zhizhengname,
+			@RequestParam(value = "updateByname", required = false) String updateByname,
+			@RequestParam(value = "payType", required = false) Integer payType,
+			@RequestParam(value = "s_province", required = false) String province,
+			@RequestParam(value = "s_city", required = false) String city,
+			@RequestParam(value = "s_county", required = false) String county,
+			@RequestParam(value = "year", required = false) Integer year,
+			@RequestParam(value = "payMethod", required = false) String payMethod,
+			@RequestParam(value = "luruStartTime", required = false) Date luruStartTime,
+			@RequestParam(value = "luruEndTime", required = false) Date luruEndTime,
+			@RequestParam(value = "daoqiStartTime", required = false) Date daoqiStartTime,
+			@RequestParam(value = "daoqiEndTime", required = false) Date daoqiEndTime,
+			@RequestParam(value = "jianzhengStartTime", required = false) Date jianzhengStartTime,
+			@RequestParam(value = "jianzhengEndTime", required = false) Date jianzhengEndTime,
+			@RequestParam(value = "zhizhengStartTime", required = false) Date zhizhengStartTime,
+			@RequestParam(value = "zhizhengEndTime", required = false) Date zhizhengEndTime
+			) 
+	{
+		WorkDealInfo workDealInfo=new WorkDealInfo();
+		WorkCompany company = new WorkCompany();
+		company.setOrganizationNumber(organizationNumber);
+		company.setCompanyName(companyName);
+		company.setCity(city);
+		company.setDistrict(county);
+		company.setProvince(province);
+		WorkUser workUser=new WorkUser();
+		workUser.setConCertNumber(conCertNumber);
+		workUser.setContactName(contactName);
+		User  user=new User();
+		user.setName(createByname);
+		User  user1=new User();
+		user1.setName(updateByname);
+		workDealInfo.setWorkCompany(company);
+		workDealInfo.setWorkUser(workUser);
+		workDealInfo.setPayType(payType);
+		workDealInfo.setKeySn(keySn);
+		workDealInfo.setCreateBy(user);
+		workDealInfo.setUpdateBy(user1);
+		if (payMethod != null) {
+			WorkPayInfo workPayInfo = new WorkPayInfo();
+			if (payMethod.equals("1")) {
+				workPayInfo.setMethodMoney(true);
+				// continue;
+			}
+			if (payMethod.equals("2")) {
+				workPayInfo.setMethodPos(true);
+				// continue;
+			}
+			if (payMethod.equals("3")) {
+				workPayInfo.setMethodBank(true);
+				// continue;
+			}
+			if (payMethod.equals("4")) {
+				workPayInfo.setMethodAlipay(true);
+				// continue;
+			}
+			if (payMethod.equals("5")) {
+				workPayInfo.setMethodGov(true);
+				// continue;
+			}
+			if (payMethod.equals("6")) {
+				workPayInfo.setMethodContract(true);
+				// continue;
+			}
+			// }
+			workDealInfo.setWorkPayInfo(workPayInfo);
+		}
+		
+		ProductType productType = new ProductType();
+		WorkDealInfoType workDealInfoType = new WorkDealInfoType();
+		WorkDealInfoStatus workDealInfoStatus=new WorkDealInfoStatus(); 
+		List<Office> officeList = officeService.getOfficeByType(
+				UserUtils.getUser(), 2);
+//		Calendar calendar = Calendar.getInstance();
+		List<WorkCertInfo> certInfoList = new ArrayList<WorkCertInfo>() ;
+		if (zhizhengStartTime!=null&&zhizhengEndTime!=null) {
+			certInfoList =  workCertInfoService.findZhiZhengTime(zhizhengStartTime, zhizhengEndTime);
+		}
+		Page<WorkDealInfo> page = workDealInfoService.find(
+				new Page<WorkDealInfo>(request, response), workDealInfo, area,
+				officeId, apply, certType, workType, year, luruStartTime,
+				luruEndTime, officeList, daoqiStartTime, daoqiEndTime, jianzhengStartTime, 
+				jianzhengEndTime,certInfoList);
+		List<WorkDealInfo> list=page.getList();
+		HSSFWorkbook wb=new HSSFWorkbook();
+		HSSFSheet sheet=wb.createSheet("业务查询");
+		sheet.addMergedRegion(new Region(0, (short)0, 0, (short)12));
+		sheet.setColumnWidth((short)0,20*256);
+		sheet.setColumnWidth((short)1,20*256);
+		sheet.setColumnWidth((short)2,20*256);
+		sheet.setColumnWidth((short)3,20*200);
+		sheet.setColumnWidth((short)6,20*256);
+		sheet.setColumnWidth((short)7,20*256);
+		sheet.setColumnWidth((short)8,20*256);
+		sheet.setColumnWidth((short)10,20*256);
+		HSSFRow row0=sheet.createRow(0);
+		row0.setHeightInPoints((short)20);
+		HSSFCellStyle style=wb.createCellStyle();
+		style.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+		style.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+		HSSFFont font=wb.createFont();
+		font.setFontHeightInPoints((short)20);
+		font.setFontName("宋体");
+		font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+		style.setFont(font);
+		HSSFCell cell0=row0.createCell(0);
+		cell0.setCellValue("业务查询");
+		cell0.setCellStyle(style);
+		HSSFRow row1=sheet.createRow(1);
+		row1.createCell(0).setCellValue("业务编号");
+		row1.createCell(1).setCellValue("别名");
+		row1.createCell(2).setCellValue("单位名称");
+		row1.createCell(3).setCellValue("证书持有人");
+		row1.createCell(4).setCellValue("经办人");
+		row1.createCell(5).setCellValue("产品名称");
+		row1.createCell(6).setCellValue("业务类型");
+		row1.createCell(7).setCellValue("key编码");
+		row1.createCell(8).setCellValue("制证日期");
+		row1.createCell(9).setCellValue("有效期");
+		row1.createCell(10).setCellValue("到期日期");
+		row1.createCell(11).setCellValue("业务状态");
+		String dealInfoType=null;
+		String dealInfoType1=null;
+		String dealInfoType2=null;
+		String dealInfoType3=null;
+		for(int i=0;i<list.size();i++)
+		{
+			HSSFRow rown=sheet.createRow(i+2);
+			rown.createCell(0).setCellValue(list.get(i).getSvn());
+			rown.createCell(1).setCellValue(list.get(i).getConfigApp().getAlias());
+			rown.createCell(2).setCellValue(list.get(i).getWorkCompany().getCompanyName());
+			rown.createCell(3).setCellValue(list.get(i).getWorkUser().getContactName());
+			rown.createCell(4).setCellValue(list.get(i).getWorkCertInfo().getWorkCertApplyInfo().getName());
+			rown.createCell(5).setCellValue(productType.getProductTypeName(Integer.parseInt(list.get(i).getConfigProduct().getProductName())));
+			
+			if(list.get(i).getDealInfoType()==null)
+			{
+				 dealInfoType="";
+			}else{
+				dealInfoType=workDealInfoType.getDealInfoTypeName(list.get(i).getDealInfoType());
+			}
+			if(list.get(i).getDealInfoType1()==null)
+			{
+				 dealInfoType1="";
+			}else{
+				dealInfoType1=workDealInfoType.getDealInfoTypeName(list.get(i).getDealInfoType1());
+			}
+			if(list.get(i).getDealInfoType2()==null)
+			{
+				 dealInfoType2="";
+			}else{
+				dealInfoType2=workDealInfoType.getDealInfoTypeName(list.get(i).getDealInfoType2());
+			}
+			if(list.get(i).getDealInfoType3()==null)
+			{
+				 dealInfoType3="";
+			}else{
+				dealInfoType3=workDealInfoType.getDealInfoTypeName(list.get(i).getDealInfoType3());
+			}
+			rown.createCell(6).setCellValue(dealInfoType+""+dealInfoType1+""+dealInfoType2+""+dealInfoType3);
+			rown.createCell(7).setCellValue(list.get(i).getKeySn());
+			rown.createCell(8).setCellValue(list.get(i).getWorkCertInfo().getSignDate());
+			if(list.get(i).getAddCertDays()==null)
+			{
+				rown.createCell(9).setCellValue(list.get(i).getYear()*365+list.get(i).getLastDays()+"（天）");
+			}else
+			{
+				rown.createCell(9).setCellValue(list.get(i).getYear()*365+list.get(i).getLastDays()+list.get(i).getAddCertDays()+"（天）");
+			}
+			rown.createCell(10).setCellValue(list.get(i).getNotafter());
+			rown.createCell(11).setCellValue(workDealInfoStatus.WorkDealInfoStatusMap.get(list.get(i).getDealInfoStatus()));
+			
+		}
+		
+		try {
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			response.setContentType(response.getContentType());
+			response.setHeader("Content-disposition",
+					"attachment; filename=wokdealInfo.xls");
+			wb.write(baos);
+			byte[] bytes = baos.toByteArray();
+			response.setHeader("Content-Length", String.valueOf(bytes.length));
+			BufferedOutputStream bos = null;
+			bos = new BufferedOutputStream(response.getOutputStream());
+			bos.write(bytes);
+			bos.close();
+			baos.close();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+			
+	}
 	@RequiresPermissions("work:workDealInfo:view")
 	@RequestMapping(value = "certCount")
 	public String certCount(Model model) {
