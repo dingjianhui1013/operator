@@ -32,6 +32,20 @@
 			}
 		}
 	}
+	function dcCountMonth(){
+		if ($("#startTime").val()==""||$("#endTime").val()=="") {
+			top.$.jBox.tip("请选定时间范围");
+		} else {
+			if ($("#office").val()==""){
+				top.$.jBox.tip("请选定网点");
+			} else {
+				var startTime = document.getElementById("startTime").value;
+				var	endTime = document.getElementById("endTime").value; 
+				var office = document.getElementById("office").value;
+				window.location.href="${ctx}/statistic/StatisticDayData/exportCountMonth?startTime="+startTime+"&endTime="+endTime+"&office="+office;
+			}
+		}
+	}
 </script>
 </head>
 <body>
@@ -83,6 +97,7 @@
 
 			</select> &nbsp; &nbsp; &nbsp; &nbsp; <input id="btnSubmit"
 				class="btn btn-primary" type="button"  onclick="onSubmit()" value="查询" />
+				<input id="exportCountMonth" class="btn btn-primary" type="button"  onclick="dcCountMonth()" value="导出" />
 
 		</div>
 	</form:form>
