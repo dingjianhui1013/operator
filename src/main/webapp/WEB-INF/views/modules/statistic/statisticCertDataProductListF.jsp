@@ -58,6 +58,14 @@
 				}
 			}
 		} */
+		function dcZS()
+		{
+			var areaId=document.getElementById("areaId").value;
+			var officeId=document.getElementById("officeId").value;
+			var startDate=document.getElementById("startTime").value;
+			var endDate=document.getElementById("endTime").value;
+			window.location.href="${ctx}/statistic/statisticCertDataProduct/exportZS?areaId="+areaId+"&officeId="+officeId+"&startDate="+startDate+"&endDate="+endDate;
+		}
 	</script>
 </head>
 <body>
@@ -101,6 +109,7 @@
 			onclick="WdatePicker({dateFmt:'yyyy-MM',isShowClear:false,minDate:'#F{$dp.$D(\'startTime\')}'});"
 			value="${endDate}" />
 		&nbsp;&nbsp;<input id="btnSubmit" class="btn btn-primary"  type="submit" value="查询"/>
+					<input id="exportZS" class="btn btn-primary" onclick="dcZS()" type="button" value="导出"/>
 		</div>
 	</form:form>
 	<tags:message content="${message}"/>
