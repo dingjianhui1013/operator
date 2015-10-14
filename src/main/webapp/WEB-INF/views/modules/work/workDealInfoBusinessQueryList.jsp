@@ -47,6 +47,7 @@
 		document.getElementById("btnSubmit").style.display="none";
 		document.getElementById("tjjg").style.display="none";
 		document.getElementById("gjcx").style.display="none";
+		document.getElementById("exportZS").style.display="none";
 		document.getElementById("advanced").style.display="";
 		}
 	function hidde(){
@@ -54,6 +55,7 @@
 		document.getElementById("btnSubmit").style.display="";
 		document.getElementById("tjjg").style.display="";
 		document.getElementById("gjcx").style.display="";
+		document.getElementById("exportZS").style.display="";
 		}
 	window.onload=function(){
 		var area = document.getElementById("area").value;
@@ -63,6 +65,40 @@
 		if(area != "" || officeId != "" || year != "" || payMethod !="0"){
 			show();
 		}
+	}
+	function dcZS(){
+		var apply=$("#apply").val();
+		var companyName=$("#companyName").val();
+		var organizationNumber=$("#organizationNumber").val();
+		var contactName=$("#contactName").val();
+		var conCertNumber=$("#conCertNumber").val();
+		var area=$("#area ").val();
+		var officeId =$("#officeId").val();
+		var certType =$("#certType").val();
+		var workType =$("#workType").val();
+		var keySn = $("#keySn").val();
+		var createByname =$("#createByname").val();
+		var zhizhengname=$("#zhizhengname").val();
+		var updateByname=$("#updateByname").val();
+		var payType =$("#payType").val();
+		var s_province =$("#s_province").val();
+		var s_city = $("#s_city").val();
+		var s_county=$("#s_county").val();
+		var luruStartTime =$("#luruStartTime").val();
+		var luruEndTime=$("#luruEndTime").val();
+		var jianzhengStartTime =$("#jianzhengStartTime").val();
+		var jianzhengEndTime = $("#jianzhengEndTime").val();
+		var zhizhengStartTime=$("#zhizhengStartTime").val();
+		var zhizhengEndTime =$("#zhizhengEndTime").val();
+		var daoqiStartTime=$("#daoqiStartTime").val();
+		var daoqiEndTime=$("#daoqiEndTime").val();
+		var year= $("#year").val();
+		var payMethod=$("#payMethod").val();
+		window.location.href="${ctx}/work/workDealInfo/exportZS?certType="+certType+"&workType="+workType+"&apply="+apply+"&area="+area+"&officeId="+officeId+"&companyName="+companyName+
+		"&organizationNumber="+organizationNumber+"&contactName="+contactName+"&conCertNumber="+conCertNumber+"&keySn="+keySn+"&createByname="+createByname+"&zhizhengname="+zhizhengname+
+		"&updateByname="+updateByname+"&payType="+payType+"&s_province="+s_province+"&s_city="+s_city+"&s_county="+s_county+"&luruStartTime="+luruStartTime+
+		"&jianzhengStartTime="+jianzhengStartTime+"&jianzhengEndTime="+jianzhengEndTime+"&zhizhengStartTime="+zhizhengStartTime+"&zhizhengEndTime="+zhizhengEndTime+
+		"&daoqiStartTime="+daoqiStartTime+"&daoqiEndTime="+daoqiEndTime+"&luruEndTime="+luruEndTime+"&payMethod="+payMethod+"&year="+year;
 	}
 	function onSubmit(){
 		var area = document.getElementById("area").value;
@@ -111,20 +147,21 @@
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			<label>单位名称：</label> 
 			<form:input path="workCompany.companyName" htmlEscape="false"
-				maxlength="50" class="input-medium" />
+				maxlength="50" class="input-medium" id="companyName"/>
 			<label>组代码号：</label> 
 			<form:input path="workCompany.organizationNumber" htmlEscape="false"
-				maxlength="30" class="input-medium" />
+				maxlength="30" class="input-medium" id="organizationNumber"/>
 			<label>证书持有人：</label> 
 			<form:input path="workUser.contactName" htmlEscape="false"
-				maxlength="16" class="input-medium" />
+				maxlength="16" class="input-medium" id="contactName"/>
 			<label>身份证号：</label> 
 			<form:input path="workUser.conCertNumber" htmlEscape="false"
-				maxlength="18" class="input-medium" />
+				maxlength="18" class="input-medium" id="conCertNumber"/>
 			<input id="btnSubmit" class="btn btn-primary" onclick="return onSubmit()" type="submit"
 				value="查询" />
 				<input id="gjcx" style="text-align:center" class="btn btn-info" onclick="show()" type="button" value="高级">
-				<span id="tjjg">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;统计结果${page.count }条</span>
+				<input id="exportZS" style="text-align:center" class="btn btn-info" onclick="dcZS()" type="button" value="导出">
+				<span id="tjjg">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;统计结果${page.count}条</span>
 				<br />
 		</div>
 		<br>
@@ -173,17 +210,17 @@
 				</c:forEach>
 			</select> <br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			<label>KEY编码：</label> <form:input path="keySn" htmlEscape="false"
-				maxlength="30" class="input-medium" />
+				maxlength="30" class="input-medium" id="keySn"/>
 				<!-- 录入人、鉴证人、制证人 现在由于业务中心未改造完。所以只能查两个字段 -->
 			<label>录入人：</label> 
 			<form:input path="createBy.name" htmlEscape="false"
-				maxlength="16" class="input-medium" />
+				maxlength="16" class="input-medium" id="createByname"/>
 			<label>鉴证人：</label> 
 			<form:input path="updateBy.name" htmlEscape="false"
-				maxlength="16" class="input-medium" />
+				maxlength="16" class="input-medium" id="updateByname"/>
 			<label>制证人：</label> 
 			<input type="text"
-				maxlength="16" class="input-medium" />
+				maxlength="16" class="input-medium" id="zhizhengname"/>
 			<br><br>
 			<label>计费策略类型：</label> 
 			<form:select path="payType">
@@ -295,6 +332,7 @@
 			<input id="btnSubmit" class="btn btn-primary" onclick="return onSubmit()" type="submit"
 				value="查询" />
 				<input style="text-align:center" class="btn btn-info" onclick="hidde()" type="button" value="收起">
+				<input id="exportZS" style="text-align:center" class="btn btn-info" onclick="dcZS()" type="button" value="导出">
 				&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;统计结果${page.count }条
 			</div>
 			<br />
