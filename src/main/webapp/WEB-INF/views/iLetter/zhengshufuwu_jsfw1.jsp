@@ -31,6 +31,7 @@ $(document).ready(function(){
 			$("#msg").html("当前key未办理业务");
 			$("#nextt").removeClass().addClass("gray_nextStep"); 
 			$('#aHref').attr('href','javascript:void(0);');
+			$("#wzTip").show();
 			return false;
 		}
 		$("#email").html(data.email);
@@ -61,6 +62,9 @@ $(document).ready(function(){
  }
 	function backToMain(){
 		 window.location=external.GetCookie("zhengshufuwu");
+	}
+function openSCCA(){	
+		window.open('http://www.scca.com.cn/');
 	}
 </script>
 </head>
@@ -94,21 +98,26 @@ $(document).ready(function(){
         	</tr>
      	</table>
 	</div>
-	<div class="blank10"></div>
-      <div class="zsfw_gxgx_info1">
+	
+      <div class="zsfw_gxgx_info1" style="margin-top:1px">
      	<div style="padding:8px 0 0 20px">
 			请下载<a href="${ctxILetter}/enroll/downloadDoc?fileName=apply.docx" target="_blank" class="ablue">《数字证书业务申请表》</a>填写，并加盖公章。<br />传真至四川省数字证书认证管理中心（028-85336171-808）。
      	</div>
      </div>
-     <div class="btn_sqjs">
-	    <div style="padding-top:10px">
+     <div class="btn_sqjs" >
+	    <div style="padding-top:1px">
 	    	<a href="javascript:nextStep();" id="aHref"></a>
 	    </div>
 	 </div>
    </div>
-   <div class="n-tispsBox"  id = "msg"  style="color: red;float: right;margin: -40px"></div>
+   <div class="n-tispsBox"  id = "msg"  style="color: red;float: right;margin: -55px"></div>
    <div class="clear"></div>
-   <div class="zsfw_js_bot"><span class="lv">为确保安全，解锁过程需在同一台计算机上操作</span></div>
+   
+   <br><br>
+  <div id="wzTip" style="display:none;margin-top: -60px;padding-left: 160px;font-size: 14px;color: black;font-weight: bold;">您的证书暂时无法通过I信办理此项业务，请通过四川CA网点查看业务办理方式<br>
+         网址：<a href="javascript:openSCCA()" >www.scca.com.cn</a>
+  </div>
+   <div class="zsfw_js_bot" style="margin-top: -20px;"><span class="lv">为确保安全，解锁过程需在同一台计算机上操作</span></div>
 </div>
 </form>
 </body>

@@ -43,6 +43,7 @@
 					$("#msg").html("当前key未办理业务");
 					$("#nextt").removeClass().addClass("gray_nextStep"); 
 					$('#aHref').attr('href','javascript:void(0);');
+					$("#wzTip").show();
 				}else if(d.status == 110){
 					$("#msg").html("当前业务正在平台办理业务！");
 					$("#nextt").removeClass().addClass("gray_nextStep"); 
@@ -98,6 +99,10 @@
 	function backToMain(){
 		 window.location=external.GetCookie("zhengshufuwu");
 	}
+	function openSCCA(){
+		
+		window.open('http://www.scca.com.cn/');
+	}
 </script>
 </head>
 <body oncontextmenu="return false" onselectstart="return false"  oncanplay="return false" >
@@ -136,6 +141,11 @@
   </div>
   <div class="clear"></div>
   <div class="n-tispsBox"  id = "msg"  style="color: red;margin-top: -37px"></div>
+  
+   <br><br>
+  <div id="wzTip" style="display:none; red;margin-top: -37px;padding-left: 160px;font-size: 14px;color: black;font-weight: bold;">您的证书暂时无法通过I信办理此项业务，请通过四川CA网点查看业务办理方式<br>
+         网址：<a href="javascript:openSCCA()" >www.scca.com.cn</a>
+  </div>
 </div>
 
        	<form  id = "updateDealInfo_form" method="post"  action="">

@@ -32,7 +32,7 @@ public class ConfigSupplier extends DataEntity implements java.io.Serializable {
 
 	private Long id;
 	private String supplierName;
-	private Integer supplierType;
+	private Integer supplierType; //0：证书 1：KEY 2：签章
 	private Long keyType;
 	private String supplierCommUsername;
 	private String supplierCommMobile;
