@@ -74,9 +74,11 @@
 				<form:radiobutton path="supplierType" onclick="showProduct(1)" value="0"></form:radiobutton>证书
 					<c:if test="${configSupplier.id==null||configSupplier.id=='' }">
 				<form:radiobutton path="supplierType" onclick="showProduct(0)" value="1" checked="checked"></form:radiobutton>key 
+				<form:radiobutton path="supplierType" onclick="showProduct(0)" value="2"></form:radiobutton>签章
 				</c:if>
 					<c:if test="${configSupplier.id!=null&&configSupplier.id!='' }">
-				<form:radiobutton path="supplierType" onclick="showProduct(0)" value="1"></form:radiobutton>key 
+					<form:radiobutton path="supplierType" onclick="showProduct(0)" value="1"></form:radiobutton>key 
+					<form:radiobutton path="supplierType" onclick="showProduct(0)" value="2"></form:radiobutton>签章
 				</c:if>
 			<%-- 	<form:radiobutton path="supplierType" onclick="showProduct(0)" value="2"></form:radiobutton>签章 --%>
 			</div>
@@ -91,7 +93,7 @@
 			}
 		</script>
 		<div class="control-group" id="ppppp" 
-		<c:if test="${configSupplier.supplierType==1|| configSupplier.supplierType==null}">style="display:none"</c:if>
+		<c:if test="${configSupplier.supplierType==1|| configSupplier.supplierType==null|| configSupplier.supplierType==2}">style="display:none"</c:if>
 		>
 			<label class="control-label">供应产品:</label>
 			<div class="controls">
