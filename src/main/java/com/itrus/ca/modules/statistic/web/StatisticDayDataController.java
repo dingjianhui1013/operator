@@ -1082,7 +1082,7 @@ public class StatisticDayDataController extends BaseController {
 				if(appSumList.get(j).get(i).getCertTotal()==0)
 				{
 					sheet.addMergedRegion(new Region((j+1)*(5+appSumList.get(j).size())+(4+i), (short)1, (j+1)*(5+appSumList.get(j).size())+(4+i), (short)36));
-					serow4.createCell(1).setCellValue(appSumList.get(j).get(j).getApp().getAppName()+"应用当天没办理数据");
+					serow4.createCell(1).setCellValue(appSumList.get(j).get(j).getApp().getAppName()+"应用当月没办理数据");
 				}else if(appSumList.get(j).get(i).getCertTotal()!=0)
 				{
 					serow4.createCell(1).setCellValue(appSumList.get(j).get(i).getAdd1());
