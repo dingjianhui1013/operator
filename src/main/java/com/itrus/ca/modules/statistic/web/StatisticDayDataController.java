@@ -497,10 +497,7 @@ public class StatisticDayDataController extends BaseController {
 		row2.createCell(8).setCellValue("kEY");
 		row2.createCell(9).setCellValue("发票");
 
-		Page<StatisticDayData> page = statisticDayDataService.findByDay(
-				new Page<StatisticDayData>(request, response),
-				statisticDayData, office, startTime, endTime);
-		List<StatisticDayData> list=page.getList();
+		List<StatisticDayData> list = statisticDayDataService.findByDay(statisticDayData, office, startTime, endTime);
 		
 		List<StatisticAppData> certDatas = statisticAppDataService
 				.findByCreateDateAndOffice(office, startTime, endTime);
@@ -715,8 +712,7 @@ public class StatisticDayDataController extends BaseController {
 			@RequestParam(value = "office", required = false) Long office,
 			@RequestParam(value = "startTime", required = false) String startTime,
 			@RequestParam(value = "endTime", required = false) String endTime
-			)
-	{
+			){
 		HSSFWorkbook wb=new HSSFWorkbook();
 		HSSFSheet sheet=wb.createSheet("月经营统计表");
 		HSSFCellStyle style=wb.createCellStyle();

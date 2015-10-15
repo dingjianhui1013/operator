@@ -70,6 +70,28 @@ public class StatisticDayDataService extends BaseService {
 		dc.addOrder(Order.desc("statisticDate"));
 		return statisticDayDataDao.find(page, dc);
 	}
+	
+	public List<StatisticDayData> findByDay(StatisticDayData statisticDayData, Long office, Date startTime,
+			Date endTime) {
+		DetachedCriteria dc = statisticDayDataDao.createDetachedCriteria();
+		dc.createAlias("office", "office");
+
+		if (office != null) {
+
+			dc.add(Restrictions.eq("office.id", office));
+		}
+
+		if (startTime != null) {
+			dc.add(Restrictions.ge("statisticDate", startTime));
+		}
+
+		if (endTime != null) {
+			dc.add(Restrictions.le("statisticDate", endTime));
+		}
+
+		dc.addOrder(Order.desc("statisticDate"));
+		return statisticDayDataDao.find(dc);
+	}
 
 	public List<StatisticDayData> getYesterDayDatas(Date yesterDay,
 			Office office) {

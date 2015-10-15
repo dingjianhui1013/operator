@@ -209,9 +209,13 @@ public class ReceiptCheckLogController extends BaseController {
 			for (int i = 0; i < types.size(); i++) {
 				int count = 0;
 				for (int j = 0; j < invoices.size(); j++) {
-					if (invoices.get(j).getType().getId().equals(types.get(i).getId())) {
-						count+=invoices.get(j).getCount();
-						yikaiMoney += invoices.get(j).getReceiptMoney();
+					if (invoices.get(j).getType()!=null) {
+						if (invoices.get(j).getType().getId().equals(types.get(i).getId())) {
+							if (invoices.get(j).getCount()!=null) {
+								count+=invoices.get(j).getCount();
+							}
+							yikaiMoney += invoices.get(j).getReceiptMoney();
+						}
 					}
 				}
 				outTypes.put(types.get(i).getTypeName(),count);

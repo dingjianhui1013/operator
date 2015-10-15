@@ -424,10 +424,10 @@ public class WorkDealInfoService extends BaseService {
 		dc.createAlias("createBy.office", "office");
 
 		dc.add(dataScopeFilter(UserUtils.getUser(), "office", "createBy"));
-		dc.add(Restrictions.or(Restrictions.eq("dealInfoStatus",
-				WorkDealInfoStatus.STATUS_CERT_OBTAINED), Restrictions.eq(
-				"createBy", UserUtils.getUser())));
-
+//		dc.add(Restrictions.or(Restrictions.eq("dealInfoStatus",
+//				WorkDealInfoStatus.STATUS_CERT_OBTAINED), Restrictions.eq(
+//				"createBy", UserUtils.getUser())));
+		
 		if (startTime != null && endTime != null) {
 			dc.add(Restrictions.ge("notafter", startTime));
 			dc.add(Restrictions.le("notafter", endTime));
@@ -714,6 +714,169 @@ public class WorkDealInfoService extends BaseService {
 		// "dealInfoType", null, null));
 
 		return workDealInfoDao.find(page, dc);
+
+	}
+
+	public List<WorkDealInfo> find(WorkDealInfo workDealInfo, Long area, Long office, Long apply,
+			String certType, Integer workType, Integer year, Date luruStartTime,
+			Date luruEndTime, List<Office> offices , Date daoqiStartTime, Date daoqiEndTime,
+			Date jianzhengStartTime,Date jianzhengEndTime, 
+			List<WorkCertInfo> certInfoList
+		
+			) {
+		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
+		dc.createAlias("workPayInfo", "workPayInfo");
+		dc.createAlias("workCompany", "workCompany");
+		dc.createAlias("workUser", "workUser");
+		dc.createAlias("createBy", "createBy");
+		dc.createAlias("updateBy", "updateBy");
+		dc.createAlias("createBy.office", "office");
+		dc.createAlias("configApp", "configApp");
+		dc.createAlias("configProduct", "configProduct");
+		// workDealInfoDao.createDetachedCriteria();
+		dc.add(Restrictions.in("createBy.office", offices));
+		
+		
+		
+		
+		//workUser.contactName
+		//workUser.conCertNumber
+		if (workDealInfo.getWorkCompany()!=null && StringUtils.isNotEmpty(workDealInfo.getWorkCompany().getCompanyName())) {
+			dc.add(Restrictions.like("workCompany.companyName", "%"+workDealInfo.getWorkCompany().getCompanyName()+"%"));
+		}
+		if (workDealInfo.getWorkCompany()!=null && StringUtils.isNotEmpty(workDealInfo.getWorkCompany().getOrganizationNumber()) ) {
+			dc.add(Restrictions.like("workCompany.organizationNumber", "%"+workDealInfo.getWorkCompany().getOrganizationNumber()+"%"));
+		}
+		if (workDealInfo.getWorkUser()!=null && StringUtils.isNotEmpty(workDealInfo.getWorkUser().getContactName())) {
+			dc.add(Restrictions.like("workUser.contactName", "%"+workDealInfo.getWorkUser().getContactName()+"%"));
+		}
+		if (workDealInfo.getWorkUser()!=null && StringUtils.isNotEmpty(workDealInfo.getWorkUser().getConCertNumber())) {
+			dc.add(Restrictions.like("workUser.conCertNumber", "%"+workDealInfo.getWorkUser().getConCertNumber()+"%"));
+		}
+		
+		if (StringUtils.isNotEmpty(workDealInfo.getKeySn())) {
+			dc.add(Restrictions.like("keySn", "%"+workDealInfo.getKeySn()+"%"));
+		}
+		if (workDealInfo.getCreateBy()!=null && StringUtils.isNotEmpty(workDealInfo.getCreateBy().getName())) {
+			dc.add(Restrictions.like("createBy.name", "%"+workDealInfo.getCreateBy().getName()+"%"));
+		}
+		if (workDealInfo.getCreateBy()!=null && StringUtils.isNotEmpty(workDealInfo.getUpdateBy().getName())) {
+			dc.add(Restrictions.like("updateBy.name", "%"+workDealInfo.getUpdateBy().getName()+"%"));
+		}
+		if (workDealInfo.getPayType()!=null && workDealInfo.getPayType()!=0) {
+			dc.add(Restrictions.eq("payType", workDealInfo.getPayType()));
+		}
+		//workCompany.province
+		//workCompany.city
+		//workCompany.district
+		if (workDealInfo.getWorkCompany()!=null && StringUtils.isNotEmpty(workDealInfo.getWorkCompany().getProvince())) {
+			dc.add(Restrictions.eq("workCompany.province", workDealInfo.getWorkCompany().getProvince()));
+		}
+		if (workDealInfo.getWorkCompany()!=null && StringUtils.isNotEmpty(workDealInfo.getWorkCompany().getCity())) {
+			dc.add(Restrictions.eq("workCompany.city", workDealInfo.getWorkCompany().getCity()));
+		}
+		if (workDealInfo.getWorkCompany()!=null && StringUtils.isNotEmpty(workDealInfo.getWorkCompany().getDistrict())) {
+			dc.add(Restrictions.eq("workCompany.district", workDealInfo.getWorkCompany().getDistrict()));
+		}
+		
+		if (workDealInfo.getWorkPayInfo() != null) {
+			if (workDealInfo.getWorkPayInfo().getMethodMoney() == true) {
+				dc.add(Restrictions.or(
+						Restrictions.eq("workPayInfo.methodMoney", true),
+						Restrictions.eq("workPayInfo.relationMethod", 0)));
+			}
+			if (workDealInfo.getWorkPayInfo().getMethodPos() == true) {
+				dc.add(Restrictions.or(
+						Restrictions.eq("workPayInfo.methodPos", true),
+						Restrictions.eq("workPayInfo.relationMethod", 1)));
+			}
+			if (workDealInfo.getWorkPayInfo().getMethodBank() == true) {
+				dc.add(Restrictions.or(
+						Restrictions.eq("workPayInfo.methodBank", true),
+						Restrictions.eq("workPayInfo.relationMethod", 2)));
+			}
+			if (workDealInfo.getWorkPayInfo().getMethodAlipay() == true) {
+				dc.add(Restrictions.or(
+						Restrictions.eq("workPayInfo.methodAlipay", true),
+						Restrictions.eq("workPayInfo.relationMethod", 3)));
+			}
+			if (workDealInfo.getWorkPayInfo().getMethodGov() == true) {
+				dc.add(Restrictions.eq("workPayInfo.methodGov", true));
+			}
+			if (workDealInfo.getWorkPayInfo().getMethodContract() == true) {
+				dc.add(Restrictions.eq("workPayInfo.methodContract", true));
+			}
+		}
+
+		if (jianzhengStartTime != null) {
+			dc.add(Restrictions.ge("updateDate", jianzhengStartTime));
+		}
+		if (jianzhengEndTime != null) {
+			jianzhengEndTime.setHours(23);
+			jianzhengEndTime.setMinutes(59);
+			jianzhengEndTime.setSeconds(59);
+			dc.add(Restrictions.le("updateDate", jianzhengEndTime));
+		}
+		
+		if (luruStartTime != null) {
+			dc.add(Restrictions.ge("createDate", luruStartTime));
+		}
+		if (luruEndTime != null) {
+			luruEndTime.setHours(23);
+			luruEndTime.setMinutes(59);
+			luruEndTime.setSeconds(59);
+			dc.add(Restrictions.le("createDate", luruEndTime));
+		}
+		if (daoqiStartTime!=null) {
+			dc.add(Restrictions.ge("notafter", daoqiStartTime));
+		}
+		if (daoqiEndTime!=null) {
+			daoqiEndTime.setHours(23);
+			daoqiEndTime.setMinutes(59);
+			daoqiEndTime.setSeconds(59);
+			dc.add(Restrictions.le("notafter", daoqiEndTime));
+		}
+		
+		if (certInfoList.size()>0) {
+			dc.add(Restrictions.in("workCertInfo", certInfoList));
+		}
+		
+		if (luruStartTime != null) {
+			dc.add(Restrictions.ge("createDate", luruStartTime));
+		}
+		if (luruEndTime != null) {
+			dc.add(Restrictions.le("createDate", luruEndTime));
+		}
+
+		if (office != null) {
+			dc.add(Restrictions.eq("office.id", office));
+		} else if (area != null) {
+
+			dc.add(Restrictions.eq("company.id", area));
+		}
+
+		if (apply != null) {
+			dc.add(Restrictions.eq("configApp.id", apply));
+		}
+		if (certType != null && !certType.equals("")) {
+			dc.add(Restrictions.eq("configProduct.productName", certType));
+		}
+
+		if (workType != null) {
+			dc.add(Restrictions.eq("dealInfoType", workType));
+		}
+
+		if (year != null) {
+			dc.add(Restrictions.eq("year", year));
+		}
+
+		dc.add(Restrictions.eq("dealInfoStatus",
+				WorkDealInfoStatus.STATUS_CERT_OBTAINED));
+		// ProjectionList projectionList1 = Projections.projectionList();
+		// projectionList1.add(Projections.sqlGroupProjection("dealInfoType",
+		// "dealInfoType", null, null));
+
+		return workDealInfoDao.find(dc);
 
 	}
 

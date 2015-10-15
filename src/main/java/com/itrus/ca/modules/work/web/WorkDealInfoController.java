@@ -2769,8 +2769,9 @@ public class WorkDealInfoController extends BaseController {
 			@RequestParam(value = "jianzhengEndTime", required = false) Date jianzhengEndTime,
 			@RequestParam(value = "zhizhengStartTime", required = false) Date zhizhengStartTime,
 			@RequestParam(value = "zhizhengEndTime", required = false) Date zhizhengEndTime
-			) 
-	{
+			) {
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat dfm = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		WorkDealInfo workDealInfo=new WorkDealInfo();
 		WorkCompany company = new WorkCompany();
 		company.setOrganizationNumber(organizationNumber);
@@ -2831,12 +2832,10 @@ public class WorkDealInfoController extends BaseController {
 		if (zhizhengStartTime!=null&&zhizhengEndTime!=null) {
 			certInfoList =  workCertInfoService.findZhiZhengTime(zhizhengStartTime, zhizhengEndTime);
 		}
-		Page<WorkDealInfo> page = workDealInfoService.find(
-				new Page<WorkDealInfo>(request, response), workDealInfo, area,
+		List<WorkDealInfo> list = workDealInfoService.find( workDealInfo, area,
 				officeId, apply, certType, workType, year, luruStartTime,
 				luruEndTime, officeList, daoqiStartTime, daoqiEndTime, jianzhengStartTime, 
 				jianzhengEndTime,certInfoList);
-		List<WorkDealInfo> list=page.getList();
 		HSSFWorkbook wb=new HSSFWorkbook();
 		HSSFSheet sheet=wb.createSheet("业务查询");
 		sheet.addMergedRegion(new Region(0, (short)0, 0, (short)12));
@@ -2914,7 +2913,8 @@ public class WorkDealInfoController extends BaseController {
 			}
 			rown.createCell(6).setCellValue(dealInfoType+""+dealInfoType1+""+dealInfoType2+""+dealInfoType3);
 			rown.createCell(7).setCellValue(list.get(i).getKeySn());
-			rown.createCell(8).setCellValue(list.get(i).getWorkCertInfo().getSignDate());
+			String signDateString = dfm.format(list.get(i).getWorkCertInfo().getSignDate());
+			rown.createCell(8).setCellValue(signDateString);
 			if(list.get(i).getAddCertDays()==null)
 			{
 				rown.createCell(9).setCellValue(list.get(i).getYear()*365+list.get(i).getLastDays()+"（天）");
@@ -2922,7 +2922,10 @@ public class WorkDealInfoController extends BaseController {
 			{
 				rown.createCell(9).setCellValue(list.get(i).getYear()*365+list.get(i).getLastDays()+list.get(i).getAddCertDays()+"（天）");
 			}
-			rown.createCell(10).setCellValue(list.get(i).getNotafter());
+			
+			String notafterString = df.format(list.get(i).getNotafter());
+			
+			rown.createCell(10).setCellValue(notafterString);
 			rown.createCell(11).setCellValue(workDealInfoStatus.WorkDealInfoStatusMap.get(list.get(i).getDealInfoStatus()));
 			
 		}
