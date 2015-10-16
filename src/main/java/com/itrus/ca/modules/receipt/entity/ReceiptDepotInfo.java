@@ -49,6 +49,7 @@ public class ReceiptDepotInfo extends DataEntity implements java.io.Serializable
 	private String codeZip; //邮政编码
 	private String department; //部门名称
 	private Double prewarning;//
+	private String warningName;//预警人姓名
 	
 	
 	private HashMap<Integer,Integer> beforeList;
@@ -68,7 +69,7 @@ public class ReceiptDepotInfo extends DataEntity implements java.io.Serializable
 	public ReceiptDepotInfo(Office sysArea, Office sysOffice,
 			String receiptName, Double receiptTotal, Double receiptOut,
 			Double receiptResidue, Integer receiptType, String receiptCommUser,
-			String receiptCommMobile) {
+			String receiptCommMobile,String warningName) {
 		this.sysArea = sysArea;
 		this.sysOffice = sysOffice;
 		this.receiptName = receiptName;
@@ -78,6 +79,7 @@ public class ReceiptDepotInfo extends DataEntity implements java.io.Serializable
 		this.receiptType = receiptType;
 		this.receiptCommUser = receiptCommUser;
 		this.receiptCommMobile = receiptCommMobile;
+		this.warningName=warningName;
 	}
 
 	// Property accessors
@@ -124,6 +126,14 @@ public class ReceiptDepotInfo extends DataEntity implements java.io.Serializable
 	@Column(name = "receipt_total", precision = 20, scale = 3)
 	public Double getReceiptTotal() {
 		return this.receiptTotal;
+	}
+	@Column(name = "warning_name", length = 20)
+	public String getWarningName() {
+		return warningName;
+	}
+
+	public void setWarningName(String warningName) {
+		this.warningName = warningName;
 	}
 
 	public void setReceiptTotal(Double receiptTotal) {
