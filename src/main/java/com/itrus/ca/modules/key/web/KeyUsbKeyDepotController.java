@@ -152,6 +152,8 @@ public class KeyUsbKeyDepotController extends BaseController {
 			@RequestParam(value = "keyId", required = false) Long keyId,
 			@RequestParam(value = "supplierId", required = false) Long supplierId,
 			Model model) {
+		  List<KeyUsbKeyDepot> list = keyUsbKeyDepotService.findAll();
+		  model.addAttribute("KeyUsbKeyDepot",list);
 		User user = UserUtils.getUser();
 		if (endTime!=null) {
 			endTime.setHours(23);
@@ -180,7 +182,7 @@ public class KeyUsbKeyDepotController extends BaseController {
 			model.addAttribute("offsList",offsList);
 			return "modules/key/keyUsbKeyDepotCountList";
 		}else{
-			  Page<KeyUsbKeyDepot> page = keyUsbKeyDepotService.findAll(new Page<KeyUsbKeyDepot>(request, response),area,office,depotName); 
+			  Page<KeyUsbKeyDepot> page = keyUsbKeyDepotService.findAll(new Page<KeyUsbKeyDepot>(request, response),area,office,depotName);
 			  for (int i = 0; i <  page.getList().size(); i++) {
 				  int total =0;
 				  int in =0;
