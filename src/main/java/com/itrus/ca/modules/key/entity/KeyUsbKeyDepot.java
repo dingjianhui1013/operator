@@ -70,6 +70,7 @@ public class KeyUsbKeyDepot extends DataEntity implements java.io.Serializable {
 	private int  isReset;
 	private int inCount;
 	private int outCount;
+	private String warningName;//预警人姓名
 	
 	
 	private String totolName;
@@ -233,6 +234,15 @@ public class KeyUsbKeyDepot extends DataEntity implements java.io.Serializable {
 
 	public void setLinkmanTel(String linkmanTel) {
 		this.linkmanTel = linkmanTel;
+	}
+
+	@Column(name = "warning_name", length= 20)
+	public String getWarningName() {
+		return warningName;
+	}
+	
+	public void setWarningName(String warningName) {
+		this.warningName = warningName;
 	}
 
 	@Column(name = "amount_total")
