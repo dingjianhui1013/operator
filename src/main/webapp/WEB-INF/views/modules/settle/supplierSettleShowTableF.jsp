@@ -52,7 +52,7 @@
 	<ul class="nav nav-tabs">
 		<li class="active"><a href="#">四川CA对账统计表</a></li>
 		<li><a href="${ctx}/settle/supplierSettle/showTableT">付款结算清单</a></li>
-		<li><a href="${ctx}/settle/settleKey/list">供应KEY数量统计</a></li>
+		<li><a href="${ctx}/settle/settleKey/list">KEY数量统计</a></li>
 	</ul>
 	<br />
 	<form:form id="searchForm" modelAttribute="configSupplier"
