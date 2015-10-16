@@ -55,6 +55,12 @@
 			</div>
 		</div>
 		<div class="control-group">
+			<label class="control-label">预警人姓名:</label>
+			<div class="controls">
+				<form:input path="warningName" htmlEscape="false" maxlength="50" class="required"/>
+			</div>
+		</div>
+		<div class="control-group">
 			<h4 class="control-label">联系人信息</h4>
 		</div>
 		<table>
