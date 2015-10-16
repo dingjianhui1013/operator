@@ -172,13 +172,12 @@ public class KeyUsbKeyDepotService extends BaseService {
 		dc.addOrder(Order.desc("id"));
 		return keyUsbKeyDepotDao.find(page, dc);
 	}
-
-	
-	
-	
-	
-	
-	
+	public List<KeyUsbKeyDepot> findAll() {
+		DetachedCriteria dc = keyUsbKeyDepotDao.createDetachedCriteria();
+		dc.add(Restrictions.eq(KeyUsbKeyDepot.DEL_FLAG, KeyUsbKeyDepot.DEL_FLAG_NORMAL));
+		dc.addOrder(Order.desc("id"));
+		return keyUsbKeyDepotDao.find(dc);
+	}
 	public List<KeyUsbKeyDepot> findByName(String name) {
 		DetachedCriteria dc = keyUsbKeyDepotDao.createDetachedCriteria();
 		if (name!=null){
