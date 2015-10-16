@@ -214,6 +214,18 @@ public class StatisticDayDataService extends BaseService {
 				.find(dc);
 		return statisticDayDataList;
 	}
+	
+
+	@Transactional(readOnly = false)
+	public List<StatisticDayData> getPrevDayDataList(Date curDate,Long officeId) {
+		DetachedCriteria dc = statisticDayDataDao.createDetachedCriteria();
+		dc.createAlias("office", "office");
+		dc.add(Restrictions.eq("office.id", officeId));
+		dc.add(Restrictions.lt("statisticDate",	curDate));
+		dc.addOrder(Order.desc("statisticDate"));
+		return  statisticDayDataDao.find(dc);
+	}
+	
 
 
 	// 获取统计日期前多少天没有进行统计的,不做全部汇总，逐条判断 //xx天内，直接在sql中使用to_date(xxxx)-30

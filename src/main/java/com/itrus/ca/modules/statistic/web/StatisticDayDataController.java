@@ -1335,7 +1335,7 @@ public class StatisticDayDataController extends BaseController {
 		Date nextDay = calendar.getTime();
 
 		List<StatisticDayData> prevDayDatas = statisticDayDataService
-				.getPrevDayDatas(countDate, officeId);
+				.getPrevDayDataList(countDate, officeId);
 		StatisticDayData oldDayData = new StatisticDayData();// 初始化空值
 		if (prevDayDatas.size() > 0) { // 如果之前做过，oldDayData 用数据库中的值赋值
 			oldDayData = prevDayDatas.get(0);
