@@ -71,7 +71,7 @@ public class SettleKeyService extends BaseService {
 		return settleKeyDao.findOne(id);
 	}
 	
-	public Page<SettleKey> find(Page<SettleKey> page, SettleKey settleKey, Long configSupplierId, Long generalId, String keySn,Date startTime,Date endTime) {
+	public Page<SettleKey> find(Page<SettleKey> page, SettleKey settleKey, Long configSupplierId, Long generalId, String keySn,Date startTime,Date endTime,Date startBackTime,Date endBackTime) {
 		DetachedCriteria dc = settleKeyDao.createDetachedCriteria();
 		if (configSupplierId!=null) {
 			dc.add(Restrictions.eq("configSupplier.id", configSupplierId));
@@ -80,13 +80,19 @@ public class SettleKeyService extends BaseService {
 			dc.add(Restrictions.eq("keyGeneralInfo.id", generalId));
 		}
 		if (StringUtils.isNotEmpty(keySn)) {
-			dc.add(Restrictions.eq("keySn", keySn));
+			dc.add(Restrictions.like("keySn", "%"+keySn+"%"));
 		}
 		if (startTime!=null) {
 			dc.add(Restrictions.ge("comeDate", startTime));
 		}
 		if (endTime!=null) {
 			dc.add(Restrictions.le("comeDate", endTime));
+		}
+		if (startBackTime!=null) {
+			dc.add(Restrictions.ge("backDate", startTime));
+		}
+		if (endBackTime!=null) {
+			dc.add(Restrictions.le("backDate", endTime));
 		}
 		dc.addOrder(Order.desc("id"));
 		return settleKeyDao.find(page, dc);
