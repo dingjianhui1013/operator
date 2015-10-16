@@ -606,13 +606,13 @@ public class WorkDealInfoService extends BaseService {
 		//workCompany.province
 		//workCompany.city
 		//workCompany.district
-		if (workDealInfo.getWorkCompany()!=null && StringUtils.isNotEmpty(workDealInfo.getWorkCompany().getProvince())) {
+		if (workDealInfo.getWorkCompany()!=null && StringUtils.isNotEmpty(workDealInfo.getWorkCompany().getProvince())&& !workDealInfo.getWorkCompany().getProvince().equals("省份")) {
 			dc.add(Restrictions.eq("workCompany.province", workDealInfo.getWorkCompany().getProvince()));
 		}
-		if (workDealInfo.getWorkCompany()!=null && StringUtils.isNotEmpty(workDealInfo.getWorkCompany().getCity())) {
+		if (workDealInfo.getWorkCompany()!=null && StringUtils.isNotEmpty(workDealInfo.getWorkCompany().getCity()) && !workDealInfo.getWorkCompany().getCity().equals("地级市")) {
 			dc.add(Restrictions.eq("workCompany.city", workDealInfo.getWorkCompany().getCity()));
 		}
-		if (workDealInfo.getWorkCompany()!=null && StringUtils.isNotEmpty(workDealInfo.getWorkCompany().getDistrict())) {
+		if (workDealInfo.getWorkCompany()!=null && StringUtils.isNotEmpty(workDealInfo.getWorkCompany().getDistrict())&& !workDealInfo.getWorkCompany().getDistrict().equals("市、县级市")) {
 			dc.add(Restrictions.eq("workCompany.district", workDealInfo.getWorkCompany().getDistrict()));
 		}
 		

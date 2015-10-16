@@ -48,6 +48,7 @@
 		document.getElementById("tjjg").style.display="none";
 		document.getElementById("gjcx").style.display="none";
 		document.getElementById("exportZS").style.display="none";
+		document.getElementById("resetTOP").style.display="none";
 		document.getElementById("advanced").style.display="";
 		}
 	function hidde(){
@@ -56,6 +57,7 @@
 		document.getElementById("tjjg").style.display="";
 		document.getElementById("gjcx").style.display="";
 		document.getElementById("exportZS").style.display="";
+		document.getElementById("resetTOP").style.display="";
 		}
 	window.onload=function(){
 		var area = document.getElementById("area").value;
@@ -110,6 +112,49 @@
 				return true;
 			}
 	}
+	
+	function resetAll(){
+		$("#companyName").val("");
+		$("#apply").val("");
+		$("#organizationNumber").val("");
+		$("#contactName").val("");
+		$("#conCertNumber").val("");
+	}
+	
+	
+	function resetAllTwo(){
+		$("#companyName").val("");
+		$("#apply").val("");
+		$("#organizationNumber").val("");
+		$("#contactName").val("");
+		$("#conCertNumber").val("");
+		
+		$("#area").val("");
+		$("#officeId").val("");
+		$("#certType").val("");
+		$("#workType").val("");
+		$("#keySn").val("");
+		$("#createByname").val("");
+		$("#updateByname").val("");
+		$("#zhizhengname").val("");
+		$("#payType").val("0");
+		$("#s_province").val("省份");
+		$("#s_city").val("地级市");
+		$("#s_county").val("市、县级市");
+		$("#luruStartTime").val("");
+		$("#luruEndTime").val("");
+		$("#daoqiStartTime").val("");
+		$("#daoqiEndTime").val("");
+		$("#jianzhengStartTime").val("");
+		$("#jianzhengEndTime").val("");
+		$("#zhizhengStartTime").val("");
+		$("#zhizhengEndTime").val("");
+		$("#year").val("");
+		$("#payMethod").val("0");
+		
+	}
+	
+	
 </script>
 <script type="text/javascript" src="${ctxStatic}/jquery/city.js"></script>
 </head>
@@ -151,6 +196,7 @@
 			<label>组代码号：</label> 
 			<form:input path="workCompany.organizationNumber" htmlEscape="false"
 				maxlength="30" class="input-medium" id="organizationNumber"/>
+			<br><br>&nbsp;&nbsp;&nbsp;&nbsp;
 			<label>证书持有人：</label> 
 			<form:input path="workUser.contactName" htmlEscape="false"
 				maxlength="16" class="input-medium" id="contactName"/>
@@ -159,6 +205,7 @@
 				maxlength="18" class="input-medium" id="conCertNumber"/>
 			<input id="btnSubmit" class="btn btn-primary" onclick="return onSubmit()" type="submit"
 				value="查询" />
+				<input id="resetTOP" type="button" class="btn btn-primary" onclick="javascript:resetAll()" value="重置"/>
 				<input id="gjcx" style="text-align:center" class="btn btn-info" onclick="show()" type="button" value="高级">
 				<input id="exportZS" style="text-align:center" class="btn btn-info" onclick="dcZS()" type="button" value="导出">
 				<span id="tjjg">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;统计结果${page.count}条</span>
@@ -200,6 +247,7 @@
 					</c:if>>${type.name}</option>
 				</c:forEach>
 			</select> 
+			<br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			<label>业务类型：</label> <select name="workType" id="workType">
 				<option value="">请选择业务类型</option>
 				<c:forEach items="${workTypes}" var="type">
@@ -208,7 +256,7 @@
 					selected="selected"
 					</c:if>>${type.name}</option>
 				</c:forEach>
-			</select> <br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			</select> 
 			<label>KEY编码：</label> <form:input path="keySn" htmlEscape="false"
 				maxlength="30" class="input-medium" id="keySn"/>
 				<!-- 录入人、鉴证人、制证人 现在由于业务中心未改造完。所以只能查两个字段 -->
@@ -218,10 +266,11 @@
 			<label>鉴证人：</label> 
 			<form:input path="updateBy.name" htmlEscape="false"
 				maxlength="16" class="input-medium" id="updateByname"/>
+			<br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			<label>制证人：</label> 
 			<input type="text"
 				maxlength="16" class="input-medium" id="zhizhengname"/>
-			<br><br>
+			
 			<label>计费策略类型：</label> 
 			<form:select path="payType">
 				<form:option value="0">请选择</form:option>
@@ -232,10 +281,14 @@
 			<label>行政所属区：</label> 	
 			<select id="s_province" name="workCompany.province"
 								style="width: 100px;">
+								</select>
 								
-								</select>&nbsp;&nbsp; <select id="s_city"
-								name="workCompany.city" style="width: 100px;"></select>&nbsp;&nbsp; <select
-								id="s_county" name="workCompany.district" style="width: 100px;"></select> <script
+								&nbsp;&nbsp; 
+								<select id="s_city"
+								name="workCompany.city" style="width: 100px;">
+								</select>&nbsp;&nbsp; <select
+								id="s_county" name="workCompany.district" style="width: 100px;">
+								</select> <script
 									type="text/javascript">
 									_init_area();
 									$("#s_province").append('<option value="${workDealInfo.workCompany.province}" selected="selected">${workDealInfo.workCompany.province}</option>');
@@ -253,10 +306,14 @@
 				class="required Wdate"
 				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"
 				value="<fmt:formatDate value="${luruStartTime}" pattern="yyyy-MM-dd"/>" />
-			&nbsp;-&nbsp;<input id="luruEndTime" name="luruEndTime" type="text"
-				readonly="readonly" maxlength="20" class="Wdate required"
-				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false,minDate:'#F{$dp.$D(\'startTime\')}'});"
+			&nbsp;-&nbsp;
+			<input id="luruEndTime" name="luruEndTime"
+				type="text" readonly="readonly" maxlength="20"
+				class="required Wdate"
+				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false,minDate:'#F{$dp.$D(\'luruStartTime\')}'});"
 				value="<fmt:formatDate value="${luruEndTime}" pattern="yyyy-MM-dd"/>" />
+			
+		
 			
 			<label>鉴证日期：</label> 
 			<input id="jianzhengStartTime" name="jianzhengStartTime"
@@ -267,7 +324,7 @@
 				&nbsp;-&nbsp;
 				<input id="jianzhengEndTime" name="jianzhengEndTime" type="text"
 				readonly="readonly" maxlength="20" class="Wdate required"
-				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false,minDate:'#F{$dp.$D(\'startTime\')}'});"
+				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false,minDate:'#F{$dp.$D(\'jianzhengStartTime\')}'});"
 				value="<fmt:formatDate value="${jianzhengEndTime}" pattern="yyyy-MM-dd"/>" />
 				<br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			<label>制证日期：</label> 
@@ -276,9 +333,10 @@
 				class="required Wdate"
 				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"
 				value="<fmt:formatDate value="${zhizhengStartTime}" pattern="yyyy-MM-dd"/>" />
-			&nbsp;-&nbsp;<input id="zhizhengEndTime" name="zhizhengEndTime" type="text"
+			&nbsp;-&nbsp;
+			<input id="zhizhengEndTime" name="zhizhengEndTime" type="text"
 				readonly="readonly" maxlength="20" class="Wdate required"
-				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false,minDate:'#F{$dp.$D(\'startTime\')}'});"
+				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false,minDate:'#F{$dp.$D(\'zhizhengStartTime\')}'});"
 				value="<fmt:formatDate value="${zhizhengEndTime}" pattern="yyyy-MM-dd"/>" />
 			<label>到期日期：</label> 
 			 <input id="daoqiStartTime" name="daoqiStartTime"
@@ -286,15 +344,16 @@
 				class="required Wdate"
 				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"
 				value="<fmt:formatDate value="${daoqiStartTime}" pattern="yyyy-MM-dd"/>" />
-			&nbsp;-&nbsp;<input id="daoqiEndTime" name="daoqiEndTime" type="text"
+			&nbsp;-&nbsp;
+			<input id="daoqiEndTime" name="daoqiEndTime" type="text"
 				readonly="readonly" maxlength="20" class="Wdate required"
-				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false,minDate:'#F{$dp.$D(\'startTime\')}'});"
+				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false,minDate:'#F{$dp.$D(\'daoqiStartTime\')}'});"
 				value="<fmt:formatDate value="${daoqiEndTime}" pattern="yyyy-MM-dd"/>" /> 
 		</div>
 		<br>
 		
 		<div>
-			<label>业务年限 ：</label> <select name="year" id="year">
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label>业务年限 ：</label> <select name="year" id="year">
 				<option value="">请选择证书年限</option>
 				<option value="1"
 					<c:if test="${'1'==year}">
@@ -331,6 +390,7 @@
 			</select>
 			<input id="btnSubmit" class="btn btn-primary" onclick="return onSubmit()" type="submit"
 				value="查询" />
+				<input onclick="javascript:resetAllTwo()" type="button" class="btn btn-primary" value="重置"/>
 				<input style="text-align:center" class="btn btn-info" onclick="hidde()" type="button" value="收起">
 				<input id="exportZS" style="text-align:center" class="btn btn-info" onclick="dcZS()" type="button" value="导出">
 				&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;统计结果${page.count }条

@@ -114,7 +114,7 @@
 	</form:form>
 	<tags:message content="${message}"/>
 	
-	 <div class="form-horizontal" style="overflow-x: auto;">
+	 <div class="form-horizontal" style="overflow-x: auto;height: 700px;">
 	 <table class="table table-striped table-bordered table-condensed">
 			<thead >
 			<tr>

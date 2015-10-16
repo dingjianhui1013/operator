@@ -47,6 +47,11 @@
 				}
 			});
 		}
+		
+		function returnBack(){
+			window.location.href="${ctx}/profile/configChargeAgent/";
+		}
+		
 	</script>
 </head>
 <body>
@@ -61,7 +66,7 @@
 		&nbsp;
 		<input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/>
 		&nbsp;
-		<input id="btnSubmit" class="btn btn-primary" onclick="history.go(-1)" type="button" value="返回"/>
+		<input id="btnSubmit" class="btn btn-primary" onclick="javascript:returnBack()" type="button" value="返回"/>
 	</form:form>
 	<tags:message content="${message}"/>
 	<table id="contentTable" class="table table-striped table-bordered table-condensed">

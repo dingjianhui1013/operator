@@ -115,8 +115,8 @@ public class SettleKeyController extends BaseController {
     	model.addAttribute("keySn", keySn);
     	model.addAttribute("configSupplierId", supplierId);
     	model.addAttribute("keyId", keyId);
-    	model.addAttribute("startTime", startTime==null? new Date(System.currentTimeMillis()- 30L*24*60*60*1000): startTime);   //开始时间为空，则为当前时间前30天
-		model.addAttribute("endTime", endTime ==null? new Date(): endTime); //结束时间，默认当前时间
+//    	model.addAttribute("startTime", startTime==null? new Date(System.currentTimeMillis()- 30L*24*60*60*1000): startTime);   //开始时间为空，则为当前时间前30天
+//		model.addAttribute("endTime", endTime ==null? new Date(): endTime); //结束时间，默认当前时间
     	model.addAttribute("checkIds", checkIds);
     	
 		model.addAttribute("suppliers",suppliers);
