@@ -101,8 +101,10 @@ public class SettleKeyController extends BaseController {
 			@RequestParam(value = "startTime", required = false) Date startTime,
 			@RequestParam(value = "endTime", required = false) Date endTime,
 			@RequestParam(value = "checkIds", required = false) String checkIds,
+			@RequestParam(value = "startBackTime", required = false) Date startBackTime,
+			@RequestParam(value = "endBackTime", required = false) Date endBackTime,
 			HttpServletRequest request, HttpServletResponse response, Model model) {
-        Page<SettleKey> page = settleKeyService.find(new Page<SettleKey>(request, response), settleKey,supplierId,keyId,keySn,startTime,endTime); 
+        Page<SettleKey> page = settleKeyService.find(new Page<SettleKey>(request, response), settleKey,supplierId,keyId,keySn,startTime,endTime,startBackTime,endBackTime); 
         model.addAttribute("page", page);
     	List<ConfigSupplier> suppliers = configSupplierService.findByKey();
     	if (checkIds!=null) {
@@ -180,6 +182,22 @@ public class SettleKeyController extends BaseController {
 
 		return "redirect:"+Global.getAdminPath()+"/settle/settleKey/?repage";
 	}
+	@RequestMapping(value = "updateBackSome")
+	public String updateBackSome(Date updateDate,Date startTime,Date endTime ,	Model model, RedirectAttributes redirectAttributes){
+		List<SettleKey> settleKeys = settleKeyService.findBySE(startTime, endTime);
+		if(settleKeys.size()>0){
+			for (int i = 0; i < settleKeys.size(); i++) {
+				settleKeys.get(i).setBackDate(new Timestamp(updateDate.getTime()));
+				settleKeyService.save(settleKeys.get(i));
+			}
+			addMessage(redirectAttributes, "批量修改返修时间成功");
+		}else{
+			addMessage(redirectAttributes, "所选时间段没有要修改的记录");
+
+		}
+
+		return "redirect:"+Global.getAdminPath()+"/settle/settleKey/?repage";
+	}
 	
 	@RequestMapping(value = "updateCheckSome")
 	public String updateCheckSome(Date changeTime,String checkIds ,	Model model, RedirectAttributes redirectAttributes){
@@ -199,7 +217,24 @@ public class SettleKeyController extends BaseController {
 		addMessage(redirectAttributes, "批量修改到货时间成功");
 		return "redirect:"+Global.getAdminPath()+"/settle/settleKey/?repage";
 	}
-	
+	@RequestMapping(value = "updateCheckBackSome")
+	public String updateCheckBackSome(Date changeTime,String checkIds ,	Model model, RedirectAttributes redirectAttributes){
+		
+		String[] ids = checkIds.split(",");
+		List<Long> idsList = new ArrayList<Long>();
+		for (int i = 0; i < ids.length; i++) {
+			if (!ids[i].equals("")) {
+				idsList.add(Long.parseLong(ids[i]));
+			}
+		}
+		List<SettleKey> settleKeys = settleKeyService.findByIds(idsList);
+		for (int i = 0; i < settleKeys.size(); i++) {
+				settleKeys.get(i).setBackDate(new Timestamp(changeTime.getTime()));
+				settleKeyService.save(settleKeys.get(i));
+			}
+		addMessage(redirectAttributes, "批量修改返修时间成功");
+		return "redirect:"+Global.getAdminPath()+"/settle/settleKey/?repage";
+	}
 	@RequestMapping(value = "delete")
 	public String delete(Long id, RedirectAttributes redirectAttributes) {
 		addMessage(redirectAttributes, "删除供应商返修Key记录成功");
@@ -219,7 +254,7 @@ public class SettleKeyController extends BaseController {
 
 			List<SettleKey> settles = settleKeyService.exportSettle(supplierId,keyId,keySn,startTime,endTime); 
 		       
-			
+//			System.out.println(settles.size());
 			Workbook wb = new HSSFWorkbook();// 定义工作簿
 			CellStyle style = wb.createCellStyle(); //样式对象
 			Cell cell =null;
