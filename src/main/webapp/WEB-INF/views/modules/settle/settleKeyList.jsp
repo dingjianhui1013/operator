@@ -56,6 +56,29 @@
 		window.location.href=url;
 		
 		}
+		function saveBackTime(){
+			var startTime = $("#startBackTime").val();
+			var endTime = $("#endBackTime").val();
+			if (startTime==null||startTime=='') {
+				top.$.jBox.tip("请选择到货开始时间！");
+				$("#modal-container-432382").hide();
+				return ;
+			}
+			if (endTime==null||endTime=='') {
+				top.$.jBox.tip("请选择到货结束时间！");
+				$("#modal-container-432382").hide();
+				return;
+			}
+			var changeTime = $("#changeBackTime").val();
+			if (changeTime==null||changeTime=='') {
+				top.$.jBox.tip("请选择要修改的时间！");
+				return;
+			}
+			
+		var url = "${ctx}/settle/settleKey/updateBackSome?updateDate="+changeTime+"&startTime="+startTime+"&endTime="+endTime;
+		window.location.href=url;
+		
+		}
 		
 		function savecheckedTime(){
 			var checkIds = $("#checkIds").val();
@@ -70,6 +93,22 @@
 				return;
 			}
 			var url = "${ctx}/settle/settleKey/updateCheckSome?changeTime="+changeTime+"&checkIds="+checkIds;
+			window.location.href=url;
+			
+		}
+		function savecheckedBackTime(){
+			var checkIds = $("#checkIds").val();
+			if(checkIds==null||checkIds==""){
+				top.$.jBox.tip("请选择您要修改的数据！");
+				$("#modal-container").hide();
+				return;
+			}
+			var changeTime = $("#changeBackTime1").val();
+			if (changeTime==null||changeTime=='') {
+				top.$.jBox.tip("请选择要修改的时间！");
+				return;
+			}
+			var url = "${ctx}/settle/settleKey/updateCheckBackSome?changeTime="+changeTime+"&checkIds="+checkIds;
 			window.location.href=url;
 			
 		}
@@ -239,9 +278,22 @@
 				readonly="readonly" maxlength="20" class="Wdate required"
 				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false,minDate:'#F{$dp.$D(\'startTime\')}'});"
 				value="<fmt:formatDate value="${endTime}" pattern="yyyy-MM-dd"/>" />
+		<label>返修时间：</label>
+		<input id="startBackTime" name="startBackTime"
+				type="text" readonly="readonly" maxlength="20"
+				class="required Wdate"
+				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"
+				value="" />
+			&nbsp;-&nbsp;<input id="endBackTime" name="endBackTime" type="text"
+				readonly="readonly" maxlength="20" class="Wdate required"
+				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false,minDate:'#F{$dp.$D(\'startTime\')}'});"
+				value="" />
 				&nbsp; &nbsp; &nbsp; &nbsp;
+				<br/><br/>
+				&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;
 		<input id="btnSubmit" class="btn btn-primary" type="submit" value="查询" />
 		<a href="#modal-container-432382" class="btn btn-primary" data-toggle="modal" >批量修改到货时间</a>
+		<a href="#modal-container-432383" class="btn btn-primary" data-toggle="modal" >批量修改返修时间</a>
 		<a target="_blank" href="${ctx}/template/xls/exportSettle.xlsx" class="btn btn-primary">模板下载</a>
 		<a id="btnImport" data-toggle="modal" href="#declareDiv" class="btn btn-primary">批量导入</a>
 		<a href="javascript:onChange()"   class="btn btn-primary">导出</a>
@@ -302,6 +354,7 @@
 			</tr>
 			<tr>	
 					<td colspan="8"><a href="#modal-container" class="btn btn-primary" data-toggle="modal" >修改选中数据到货时间</a>
+									<a href="#modal-container1" class="btn btn-primary" data-toggle="modal" >修改选中数据返修时间</a>
 					</td>
 			</tr>
 		</tbody>
@@ -330,6 +383,29 @@
 			
 		</div>
 		</div>
+		<div id="modal-container-432383" class="modal hide fade" style="width:400px;height:200px;left:50%;top:100px" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-header" >
+			 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			<h3 id="myModalLabel">
+				修改返修日期
+			</h3>
+		</div>
+		<div class="modal-body"  style="height: 210px">
+		<div class="control-group">
+			<label class="control-label">修改时间:</label>
+			<input id="changeBackTime" name="changeBackTime"
+				type="text" readonly="readonly" maxlength="20"
+				class="required Wdate"
+				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"
+				/>
+		</div>
+		<div class="control-group" align="center">
+				 <button id="qrsq" class="btn btn-primary" onclick="saveBackTime()">确认</button>&nbsp;&nbsp;&nbsp;
+				 <button class="btn" data-dismiss="modal" aria-hidden="true">取消</button> 
+			 </div>
+			
+		</div>
+		</div>
 	
 	<div id="modal-container" class="modal hide fade" style="width:400px;height:200px;left:50%;top:100px" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-header" >
@@ -349,6 +425,30 @@
 		</div>
 		<div class="control-group" align="center">
 				 <button id="qrsq" class="btn btn-primary" onclick="savecheckedTime()">确认</button>&nbsp;&nbsp;&nbsp;
+				 <button class="btn" data-dismiss="modal" aria-hidden="true">取消</button> 
+			 </div>
+			
+		</div>
+		</div>
+		
+	<div id="modal-container1" class="modal hide fade" style="width:400px;height:200px;left:50%;top:100px" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-header" >
+			 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			<h3 id="myModalLabel">
+				修改返修时间
+			</h3>
+		</div>
+		<div class="modal-body"  style="height: 210px">
+		<div class="control-group">
+			<label class="control-label">修改时间:</label>
+			<input id="changeBackTime1" name="changeBackTime1"
+				type="text" readonly="readonly" maxlength="20"
+				class="required Wdate"
+				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"
+				/>
+		</div>
+		<div class="control-group" align="center">
+				 <button id="qrsq" class="btn btn-primary" onclick="savecheckedBackTime()">确认</button>&nbsp;&nbsp;&nbsp;
 				 <button class="btn" data-dismiss="modal" aria-hidden="true">取消</button> 
 			 </div>
 			
