@@ -112,8 +112,19 @@
 
 		<div style="margin-top: 9px">
 			<label>库房名称 ：</label>
-			<form:input name="depotName" path="depotName" value="${depotName}"
-				htmlEscape="false" maxlength="50" class="input-medium" />
+<%-- 			<form:input name="depotName" path="depotName" value="${depotName}" --%>
+<%-- 				htmlEscape="false" maxlength="50" class="input-medium" /> --%>
+			 <select name="depotName"
+				id="depotName">
+				<option value="">请选择</option>
+				<c:forEach items="${KeyUsbKeyDepot}" var="keyUsbKeyDepot">
+					<option value="${keyUsbKeyDepot.depotName}" <c:if test="${keyUsbKeyDepot.depotName==depotName}">
+					selected="selected"
+					</c:if>>
+						${keyUsbKeyDepot.depotName}
+					</option>
+				</c:forEach>
+			</select>
 		</div>
 		<br/>
 		<div>
