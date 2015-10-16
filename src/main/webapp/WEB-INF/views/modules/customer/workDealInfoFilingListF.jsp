@@ -23,7 +23,7 @@
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li class="active"><a href="${ctx}/work/customer/list">工作记录</a></li>
+		<li class="active"><a href="${ctx}/work/customer/list">业务记录</a></li>
 	</ul>
 	<form:form id="searchForm" modelAttribute="workDealInfo"
 		action="${ctx}/work/customer/list" method="post"

@@ -117,13 +117,7 @@
 				class="required"/>
 			</div>
 		</div>
-		<div class="control-group">
-			<label class="control-label"><font color="red">*</font>预警人姓名:</label>
-			<div class="controls">
-				<form:input path="warningName" id="warningName" htmlEscape="false" maxlength="50" 
-				class="required"/>
-			</div>
-		</div>
+		
 		<div class="control-group">
 		<font size="4">联系人信息：</font>
 		</div>
@@ -216,6 +210,20 @@
 							maxlength="80" />
 						</div>
 					</div>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<div class="control-group">
+					<label class="control-label"><font color="red">*</font>预警人姓名:</label>
+					<div class="controls">
+						<form:input path="warningName" id="warningName" htmlEscape="false" maxlength="50" 
+						class="required"/>
+					</div>
+					</div>
+				</td>
+				<td>
+					
 				</td>
 			</tr>
 		</table>
