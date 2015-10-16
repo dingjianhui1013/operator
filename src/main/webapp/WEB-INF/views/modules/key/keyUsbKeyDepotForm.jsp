@@ -115,9 +115,13 @@
 			<div class="controls">
 				<form:input path="depotName" htmlEscape="false" maxlength="30" 
 				class="required"/>
-				
-				
-				
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label"><font color="red">*</font>预警人姓名:</label>
+			<div class="controls">
+				<form:input path="warningName" id="warningName" htmlEscape="false" maxlength="50" 
+				class="required"/>
 			</div>
 		</div>
 		<div class="control-group">
