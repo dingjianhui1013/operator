@@ -28,6 +28,7 @@ public class WorkDealInfoType {
 	public static Integer TYPE_PAY_REPLACED = 12;//变更缴费方式
 	
 	public static HashMap<Integer,String> WorkDealInfoTypeMap = new HashMap<Integer, String>();
+	public static HashMap<Integer,String> WorkDealInfoTypeMapNew = new HashMap<Integer, String>();
 	
 	static{
 		WorkDealInfoTypeMap.put(TYPE_ADD_CERT,"新增证书");
@@ -43,6 +44,17 @@ public class WorkDealInfoType {
 		WorkDealInfoTypeMap.put(TYPE_RETURN_MONEY, "退费");
 		WorkDealInfoTypeMap.put(TYPE_RETURN_WORK, "业务撤销");
 		WorkDealInfoTypeMap.put(TYPE_PAY_REPLACED, "变更缴费方式");
+		
+		WorkDealInfoTypeMapNew.put(TYPE_ADD_CERT,"新增证书");
+		WorkDealInfoTypeMapNew.put(TYPE_UPDATE_CERT, "更新证书");
+		WorkDealInfoTypeMapNew.put(TYPE_LOST_CHILD, "遗失补办");
+		WorkDealInfoTypeMapNew.put(TYPE_DAMAGED_REPLACED, "损坏更换");
+		WorkDealInfoTypeMapNew.put(TYPE_INFORMATION_REROUTE, "信息变更");
+		WorkDealInfoTypeMapNew.put(TYPE_REVOKE_CERT, "证书吊销");
+		WorkDealInfoTypeMapNew.put(TYPE_ELECTRONIC_SEAL, "电子签章");
+		WorkDealInfoTypeMapNew.put(TYPE_TRUST_MOBILE, "可信移动设备");
+		WorkDealInfoTypeMapNew.put(TYPE_UNLOCK_CERT, "key解锁");
+		WorkDealInfoTypeMapNew.put(TYPE_PAY_REPLACED, "变更缴费方式");
 	}
 	
 	public static String getDealInfoTypeName(Integer id){
@@ -91,5 +103,15 @@ public class WorkDealInfoType {
 		}
 		return list;
 	} 
+	
+	public List<WorkDealInfoTypeObj> getProductTypeListNew(){
+		List<WorkDealInfoTypeObj> list = new ArrayList<WorkDealInfoTypeObj>();
+		for (Integer id: WorkDealInfoTypeMapNew.keySet()) {
+			WorkDealInfoTypeObj obj = new WorkDealInfoTypeObj(id, WorkDealInfoTypeMap.get(id));
+			list.add(obj);
+		}
+		return list;
+	} 
+	
 	
 }
