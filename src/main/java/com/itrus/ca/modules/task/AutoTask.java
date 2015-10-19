@@ -8,6 +8,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -262,9 +263,9 @@ public class AutoTask {
 	 * 证书发放量统计定时任务
 	 * 
 	 * @throws ParseException
-	 * @see{StatisticCertData //企业证书or个人证书统计
-	 * @see{StatisticCertDataProduct //汇总统计
-	 * 
+	 * @see{StatisticCertData //5种证书
+	 * @see{StatisticCertDataProduct //汇总统计、
+	 * 当天业务第二天进行定时任务统计
 	 */
 	public void workDayStatic() throws ParseException {
 		System.out.println("=======================================");
@@ -273,15 +274,15 @@ public class AutoTask {
 																// 机构类型（1：公司；2：部门；3：小组）
 																// 符合的赋值给offices
 		List<String> productType = new ArrayList<String>();// 定义一个productType的数组，存放productType类型
-		HashMap<String, Integer> idMap = ProductType.productTypeIdMap;// 得到所有产品类型
-		productType.add(idMap.get(ProductType.PRODUCT_TYPE_ENT).toString());// 企业证书
-																			// id为
-																			// 1
-		productType.add(idMap.get(ProductType.PRODUCT_TYPE_PERE).toString());// 个人证书(企业)
-																				// 2
-		productType.add(idMap.get(ProductType.PRODUCT_TYPE_PERO).toString());// 个人证书(机构)
-																				// 6
-
+		HashMap<String, String> idMap = ProductType.productTypeStrMap;// 得到所有产品类型
+		for (Entry<Integer, String> entry : ProductType.productTypeMap.entrySet()) {    
+			productType.add(entry.getKey().toString());
+			
+		}
+		
+//		productType.add(idMap.get(ProductType.PRODUCT_TYPE_ENT).toString());// 企业证书 1
+//		productType.add(idMap.get(ProductType.PRODUCT_TYPE_PERE).toString());// 个人证书(企业) 2
+//		productType.add(idMap.get(ProductType.PRODUCT_TYPE_PERO).toString());// 个人证书(机构) 6
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Calendar calendar = Calendar.getInstance();
 		calendar.add(Calendar.DAY_OF_YEAR, -1);
@@ -304,38 +305,16 @@ public class AutoTask {
 						data.setApp(app);// 将这个应用信息set到staticCertData表里
 						data.setOffice(office);// 网点信息
 						data.setCountDate(sdf.parse(sdf.format(new Date())));// 统计时间
-						Integer add1 = workDealInfoService.getCertAppYearInfo(
-								yesterDay, office.getId(), 1, app.getId(),
-								WorkDealInfoType.TYPE_ADD_CERT, product, type);
-						Integer add2 = workDealInfoService.getCertAppYearInfo(
-								yesterDay, office.getId(), 2, app.getId(),
-								WorkDealInfoType.TYPE_ADD_CERT, product, type);
-						Integer add4 = workDealInfoService.getCertAppYearInfo(
-								yesterDay, office.getId(), 4, app.getId(),
-								WorkDealInfoType.TYPE_ADD_CERT, product, type);
-						Integer add5 = workDealInfoService.getCertAppYearInfo(
-								yesterDay, office.getId(), 5, app.getId(),
-								WorkDealInfoType.TYPE_ADD_CERT, product, type);
-						Integer renew1 = workDealInfoService
-								.getCertAppYearInfo(yesterDay, office.getId(),
-										1, app.getId(),
-										WorkDealInfoType.TYPE_UPDATE_CERT,
-										product, type);
-						Integer renew2 = workDealInfoService
-								.getCertAppYearInfo(yesterDay, office.getId(),
-										2, app.getId(),
-										WorkDealInfoType.TYPE_UPDATE_CERT,
-										product, type);
-						Integer renew4 = workDealInfoService
-								.getCertAppYearInfo(yesterDay, office.getId(),
-										4, app.getId(),
-										WorkDealInfoType.TYPE_UPDATE_CERT,
-										product, type);
-						Integer renew5 = workDealInfoService
-								.getCertAppYearInfo(yesterDay, office.getId(),
-										5, app.getId(),
-										WorkDealInfoType.TYPE_UPDATE_CERT,
-										product, type);
+						System.out.println(sdf.parse(sdf.format(new Date())));
+						System.out.println(yesterDay);
+						Integer add1 = workDealInfoService.getCertAppYearInfo(yesterDay, office.getId(), 1, app.getId(),WorkDealInfoType.TYPE_ADD_CERT, product, type);
+						Integer add2 = workDealInfoService.getCertAppYearInfo(yesterDay, office.getId(), 2, app.getId(),WorkDealInfoType.TYPE_ADD_CERT, product, type);
+						Integer add4 = workDealInfoService.getCertAppYearInfo(yesterDay, office.getId(), 4, app.getId(),WorkDealInfoType.TYPE_ADD_CERT, product, type);
+						Integer add5 = workDealInfoService.getCertAppYearInfo(yesterDay, office.getId(), 5, app.getId(),WorkDealInfoType.TYPE_ADD_CERT, product, type);
+						Integer renew1 = workDealInfoService.getCertAppYearInfo(yesterDay, office.getId(),1, app.getId(),WorkDealInfoType.TYPE_UPDATE_CERT,product, type);
+						Integer renew2 = workDealInfoService.getCertAppYearInfo(yesterDay, office.getId(),2, app.getId(),WorkDealInfoType.TYPE_UPDATE_CERT,product, type);
+						Integer renew4 = workDealInfoService.getCertAppYearInfo(yesterDay, office.getId(),4, app.getId(),WorkDealInfoType.TYPE_UPDATE_CERT,product, type);
+						Integer renew5 = workDealInfoService.getCertAppYearInfo(yesterDay, office.getId(),5, app.getId(),WorkDealInfoType.TYPE_UPDATE_CERT,product, type);
 						data.setAdd1(add1);
 						data.setAdd2(add2);
 						data.setAdd4(add4);
