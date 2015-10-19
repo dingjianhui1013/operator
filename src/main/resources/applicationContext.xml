@@ -44,11 +44,11 @@
 		<!--<task:scheduled ref="controlTask" method="staticDayCertData"
 			 cron="0 1 18  * * ? " />-->
 
-		<!--<task:scheduled ref="controlTask" method="workDayStatic"
-			 cron="0 1 18  * * ? " />--><!-- 证书发放量统计 正式上线环境cron="0 1 18  * * ? "-->
-
 		<task:scheduled ref="controlTask" method="workDayStatic"
-			 cron="1 59 23  * * ? " /><!-- 证书发放量统计 测试环境 上线请注解cron="0 1 15  * * ? "-->
+			 cron="0 1 18  * * ? " /><!-- 证书发放量统计 正式上线环境cron="0 1 18  * * ? "-->
+
+		<!--<task:scheduled ref="controlTask" method="workDayStatic"
+			 cron="1 59 23  * * ? " /> 证书发放量统计 测试环境 上线请注解cron="0 1 15  * * ? "-->
 		<task:scheduled ref="controlTask" method="receiptTask"
 			cron="0 1 0  * * ? " />
 			<!-- 0 0 9,14  * * ?  -->
