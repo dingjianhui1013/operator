@@ -298,6 +298,45 @@
 		</div>
 		<br>
 		<div>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label>业务年限 ：</label> <select name="year" id="year">
+				<option value="">请选择证书年限</option>
+				<option value="1"
+					<c:if test="${'1'==year}">
+					selected="selected"
+					</c:if>>1年</option>
+				<option value="2"
+					<c:if test="${'2'==year}">
+					selected="selected"
+					</c:if>>2年</option>
+				<option value="4"
+					<c:if test="${'4'==year}">
+					selected="selected"
+					</c:if>>4年</option>
+				<option value="5"
+					<c:if test="${'5'==year}">
+					selected="selected"
+					</c:if>>5年</option>
+			</select> 
+			<label>付款方式 ：</label> <select name="payMethod" id="payMethod">
+				<option value="0"
+					<c:if test="${payMethod=='0'}"> selected="selected" </c:if>>全部</option>
+				<option value="1"
+					<c:if test="${payMethod=='1'}"> selected="selected" </c:if>>现金</option>
+				<option value="2"
+					<c:if test="${payMethod=='2'}"> selected="selected" </c:if>>POS收款</option>
+				<option value="3"
+					<c:if test="${payMethod=='3'}"> selected="selected" </c:if>>银行转帐</option>
+				<option value="4"
+					<c:if test="${payMethod=='4'}"> selected="selected" </c:if>>支付宝转账</option>
+				<option value="5"
+					<c:if test="${payMethod=='5'}"> selected="selected" </c:if>>政府统一采购</option>
+				<option value="6"
+					<c:if test="${payMethod=='6'}"> selected="selected" </c:if>>合同采购</option>
+			</select>
+			
+			</div>
+		<br>
+		<div>
 			<label>按时间查询：</label><br>
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			<label>录入日期：</label> 
@@ -349,52 +388,19 @@
 				readonly="readonly" maxlength="20" class="Wdate required"
 				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false,minDate:'#F{$dp.$D(\'daoqiStartTime\')}'});"
 				value="<fmt:formatDate value="${daoqiEndTime}" pattern="yyyy-MM-dd"/>" /> 
-		</div>
-		<br>
-		
-		<div>
-			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label>业务年限 ：</label> <select name="year" id="year">
-				<option value="">请选择证书年限</option>
-				<option value="1"
-					<c:if test="${'1'==year}">
-					selected="selected"
-					</c:if>>1年</option>
-				<option value="2"
-					<c:if test="${'2'==year}">
-					selected="selected"
-					</c:if>>2年</option>
-				<option value="4"
-					<c:if test="${'4'==year}">
-					selected="selected"
-					</c:if>>4年</option>
-				<option value="5"
-					<c:if test="${'5'==year}">
-					selected="selected"
-					</c:if>>5年</option>
-			</select> 
-			<label>付款方式 ：</label> <select name="payMethod" id="payMethod">
-				<option value="0"
-					<c:if test="${payMethod=='0'}"> selected="selected" </c:if>>全部</option>
-				<option value="1"
-					<c:if test="${payMethod=='1'}"> selected="selected" </c:if>>现金</option>
-				<option value="2"
-					<c:if test="${payMethod=='2'}"> selected="selected" </c:if>>POS收款</option>
-				<option value="3"
-					<c:if test="${payMethod=='3'}"> selected="selected" </c:if>>银行转帐</option>
-				<option value="4"
-					<c:if test="${payMethod=='4'}"> selected="selected" </c:if>>支付宝转账</option>
-				<option value="5"
-					<c:if test="${payMethod=='5'}"> selected="selected" </c:if>>政府统一采购</option>
-				<option value="6"
-					<c:if test="${payMethod=='6'}"> selected="selected" </c:if>>合同采购</option>
-			</select>
-			<input id="btnSubmit" class="btn btn-primary" onclick="return onSubmit()" type="submit"
+				<br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				&nbsp;&nbsp;&nbsp;&nbsp;
+				<input id="btnSubmit" class="btn btn-primary" onclick="return onSubmit()" type="submit"
 				value="查询" />
 				<input onclick="javascript:resetAllTwo()" type="button" class="btn btn-primary" value="重置"/>
 				<input style="text-align:center" class="btn btn-info" onclick="hidde()" type="button" value="收起">
 				<input id="exportZS" style="text-align:center" class="btn btn-info" onclick="dcZS()" type="button" value="导出">
 				&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;统计结果${page.count }条
-			</div>
+		</div>
+		<br>
+		
+		
 			<br />
 		</div>
 
