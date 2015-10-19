@@ -183,9 +183,17 @@ function hideOrShow(){
 		$("#recovery").val("隐藏");
 	}
 }
+
+function setReceiptMoneyNull(){
+	if ($("#sff1").is(":checked")) {
+		$("#receiptAmount").val(0);
+	}
+	if ($("#sff0").is(":checked")) {
+		$("#receiptAmount").val($("#allTotalMoney").val());
+	}
+}
+
 </script>
-
-
 </head>
 <body>
 	<ul class="nav nav-tabs">
@@ -445,10 +453,10 @@ function hideOrShow(){
 							</tr>
 							<tr>
 								<td>是否开具发票：</td>
-								<td><input type="radio" name="userReceipt" value="true" checked="checked" id="sff0">是
-									<input type="radio" name="userReceipt" value="false" id="sff1">否</td>
+								<td><input type="radio" name="userReceipt" onclick="setReceiptMoneyNull()" value="true" checked="checked" id="sff0">是
+									<input type="radio" name="userReceipt" onclick="setReceiptMoneyNull()" value="false" id="sff1">否</td>
 								<td>发票金额：</td>
-								<td><input type="text" name="receiptAmount" value="0">元</td>
+								<td><input type="text" name="receiptAmount" id = "receiptAmount" value="0">元</td>
 							</tr>
 						</tbody>
 					</table>

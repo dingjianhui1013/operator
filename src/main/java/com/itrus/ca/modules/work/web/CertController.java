@@ -122,6 +122,34 @@ public class CertController extends BaseController {
 		return json.toJSONString();
 	}
 	
+	@RequestMapping(value="validateCspIsValidNew")
+	@ResponseBody
+	public String validateCspIsValidNew(String csp, Long dealId, String keySn){
+		JSONObject json = new JSONObject();
+		try {
+			json.put("status", -1);
+			csp = URLDecoder.decode(csp, "UTF-8");
+			boolean result =  keyInvoiceService.validateCSPvalid(csp);
+			json.put("status", result? 1:-1);
+			
+			WorkDealInfo dealInfo =  workDealInfoService.get(dealId);
+			if (keySn.equals(dealInfo.getKeySn())) {
+				json.put("isLastOne",0);
+			}else{
+				json.put("isLastOne",1);
+			}
+			
+			
+			
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return json.toJSONString();
+	}
+	
+	
+	
 	
 	
 	@RequestMapping(value = "makeCert")

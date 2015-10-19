@@ -262,7 +262,11 @@
 					$.getJSON(url,
 							function(data){
 						if (data.status==1) {
-							quick(sn);
+							if (data.isLastOne==1) {
+								top.$.jBox.info("KEY序列号与新增时的KEY序列号不同，请使用同一个KEY办理业务！");	
+							}else{
+								quick(sn);
+							}
 						} else {
 							top.$.jBox.tip("库存中没有该Key类型");
 						}
