@@ -62,7 +62,7 @@
 	<form:form id="searchForm" modelAttribute="configChargeAgent" action="${ctx}/profile/configChargeAgent/getChargeAgentList" method="post" class="breadcrumb form-search">
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
 		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
-		<label>计费策略模板名称 ：</label><form:input path="configApp.appName" htmlEscape="false" maxlength="50" class="input-medium"/>
+		<label>计费策略模板名称 ：</label><form:input path="tempName" htmlEscape="false" maxlength="50" class="input-medium"/>
 		&nbsp;
 		<input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/>
 		&nbsp;
