@@ -301,7 +301,7 @@ public class StatisticCertDataProductController extends BaseController {
 		HSSFRow  row0=sheet.createRow(0);
 		row0.setHeight((short)(5*100));
 		
-		sheet.addMergedRegion(new Region(0, (short)0, 0, (short)(monthList1.size()+1)));
+		sheet.addMergedRegion(new Region(0, (short)0, 0, (short)(monthList1.size()+2)));
 		
 		HSSFCell cell0=row0.createCell(0);
 		cell0.setCellValue("证书发放统计");
@@ -324,13 +324,13 @@ public class StatisticCertDataProductController extends BaseController {
 		HSSFRow rown2=null;
 		HSSFRow rown3=null;
 		HSSFRow rown4=null;
-		int sum1=0;
-		int sum2=0;
-		int sum4=0;
-		int sum5=0;
-		
+		int sum=0;
 		for(int i=0;i<sumList.size();i++)
 		{
+			int sum1=0;
+			int sum2=0;
+			int sum4=0;
+			int sum5=0;
 					sheet.addMergedRegion(new Region(i*4+2, (short)0, i*4+2+3, (short)0));
 					rown=sheet.createRow(i*4+2);
 					rown1= sheet.createRow(i*4+2);
@@ -344,11 +344,15 @@ public class StatisticCertDataProductController extends BaseController {
 			for(int j=0;j<monthList1.size();j++)
 			{
 				sum1+=sumList.get(i).getMonths().get(j).getCount1();
-				sum2+=sumList.get(i).getMonths().get(j).getCount1();
-				sum4+=sumList.get(i).getMonths().get(j).getCount1();
-				sum5+=sumList.get(i).getMonths().get(j).getCount1();
+				sum2+=sumList.get(i).getMonths().get(j).getCount2();
+				sum4+=sumList.get(i).getMonths().get(j).getCount4();
+				sum5+=sumList.get(i).getMonths().get(j).getCount5();
+				
+				
 			}
+			sum+=(sum1+sum2+sum4+sum5);
 			rown.createCell(0).setCellValue(ProductType.getProductTypeName(sumList.get(i).getProductType()));
+			
 			for(int j=0;j<monthList1.size();j++)
 			{
 				rown1.createCell(j+2).setCellValue(sumList.get(i).getMonths().get(j).getCount1());
@@ -359,11 +363,19 @@ public class StatisticCertDataProductController extends BaseController {
 				rown2.createCell(monthList1.size()+2).setCellValue(sum2);
 				rown3.createCell(monthList1.size()+2).setCellValue(sum4);
 				rown4.createCell(monthList1.size()+2).setCellValue(sum5);
-				rownz.createCell(j+2).setCellValue(sumList.get(i).getMonths().get(j).getCount1()+sumList.get(i).getMonths().get(j).getCount2()+sumList.get(i).getMonths().get(j).getCount4()+sumList.get(i).getMonths().get(j).getCount5());
-				rownz.createCell(monthList1.size()+2).setCellValue(sum1+sum2+sum4+sum5);
+				rownz.createCell(monthList1.size()+2).setCellValue(sum);
 			}
+			
 		}
-
+		for(int j=0;j<monthList1.size();j++)
+		{
+			int z=0;
+			for(int i=0;i<sumList.size();i++)
+			{
+				z+=sumList.get(i).getMonths().get(j).getCount1()+sumList.get(i).getMonths().get(j).getCount2()+sumList.get(i).getMonths().get(j).getCount4()+sumList.get(i).getMonths().get(j).getCount5();
+			}
+				rownz.createCell(j+2).setCellValue(z);
+		}
 		try {
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			response.setContentType(response.getContentType());
