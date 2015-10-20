@@ -96,11 +96,11 @@
 		var daoqiEndTime=$("#daoqiEndTime").val();
 		var year= $("#year").val();
 		var payMethod=$("#payMethod").val();
-		window.location.href="${ctx}/work/workDealInfo/exportZS?certType="+certType+"&workType="+workType+"&apply="+apply+"&area="+area+"&officeId="+officeId+"&companyName="+companyName+
+		window.open("${ctx}/work/workDealInfo/exportZS?certType="+certType+"&workType="+workType+"&apply="+apply+"&area="+area+"&officeId="+officeId+"&companyName="+companyName+
 		"&organizationNumber="+organizationNumber+"&contactName="+contactName+"&conCertNumber="+conCertNumber+"&keySn="+keySn+"&createByname="+createByname+"&zhizhengname="+zhizhengname+
 		"&updateByname="+updateByname+"&payType="+payType+"&s_province="+s_province+"&s_city="+s_city+"&s_county="+s_county+"&luruStartTime="+luruStartTime+
 		"&jianzhengStartTime="+jianzhengStartTime+"&jianzhengEndTime="+jianzhengEndTime+"&zhizhengStartTime="+zhizhengStartTime+"&zhizhengEndTime="+zhizhengEndTime+
-		"&daoqiStartTime="+daoqiStartTime+"&daoqiEndTime="+daoqiEndTime+"&luruEndTime="+luruEndTime+"&payMethod="+payMethod+"&year="+year;
+		"&daoqiStartTime="+daoqiStartTime+"&daoqiEndTime="+daoqiEndTime+"&luruEndTime="+luruEndTime+"&payMethod="+payMethod+"&year="+year);
 	}
 	function onSubmit(){
 		var area = document.getElementById("area").value;
