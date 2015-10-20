@@ -172,7 +172,7 @@
 			<tr>
 				<td>总计</td>
 				<td></td>
-				
+				<c:set var="allCountNew" value="0"/>
 				<c:forEach items="${monthList }" var="sum" varStatus="status">
 				<c:set var="allCount" value="0"/>
 					<td>
@@ -182,15 +182,16 @@
 						<c:set var="fourYear" value = "${fourYear+sum.months.get(status.index).count4 }"></c:set>
 						<c:set var="fiveYear" value = "${fiveYear+sum.months.get(status.index).count5 }"></c:set>						
 					</c:forEach>
-					<c:set var="allCount" value="${allCount + oneYear+twoYear+fourYear+fiveYear}" />
+					<c:set var="allCount" value="${allCountNew + oneYear+twoYear+fourYear+fiveYear}" />
 						${oneYear+twoYear+fourYear+fiveYear}
 						<c:set var="oneYear" value = "0"></c:set>						
 						<c:set var="twoYear" value = "0"></c:set>						
 						<c:set var="fourYear" value = "0"></c:set>
 						<c:set var="fiveYear" value = "0"></c:set>
+						<c:set var="allCountNew" value="${allCount}" />
 					</td>
 				</c:forEach>
-				<td>${allCount}</td>
+				<td>${allCountNew}</td>
 			</tr>
 			<c:set var="total" value="0"/>
 		</table>
