@@ -28,7 +28,7 @@ $(document).ready(function(){
 			window.location.href="${ctxILetter}/enroll/jsfw1Nextform?status="+data.unlockstatus+"&id="+data.id;
 		}
 		if(data.status==1){
-			$("#msg").html("当前key未办理业务");
+			//$("#msg").html("当前key未办理业务");
 			$("#nextt").removeClass().addClass("gray_nextStep"); 
 			$('#aHref').attr('href','javascript:void(0);');
 			$("#wzTip").show();

@@ -30,9 +30,11 @@ DD_belatedPNG.fix('.nav1 a,.nav2 a,.nav3 a,.nav4 a,.nav5 a,.nav6 a,.nav1_cur a,.
 				$("#certdate").html("从"+data.startDate+"到"+data.endDate);
 				flag = true;
 			}else{
-				$("#msg").html("当前key未办理业务无法办理业务，如有疑问请联系客服");
+				//$("#msg").html("当前key未办理业务无法办理业务，如有疑问请联系客服");
 				$("#nextt").removeClass().addClass("gray_nextStep"); 
 				$('#aHref').attr('href','javascript:void(0);');
+				$("#wzTip").show();
+				return false;
 			}
 		});
 	});
@@ -52,6 +54,9 @@ DD_belatedPNG.fix('.nav1 a,.nav2 a,.nav3 a,.nav4 a,.nav5 a,.nav6 a,.nav1_cur a,.
 			$('#aHref').attr('href','javascript:void(0);');
 		}
 	}
+	function openSCCA(){	
+		window.open('http://www.scca.com.cn/');
+	}
 </script>
 </head>
 <body  oncontextmenu="return false"   onselect="return false"  oncanplay="return false">
@@ -65,7 +70,7 @@ DD_belatedPNG.fix('.nav1 a,.nav2 a,.nav3 a,.nav4 a,.nav5 a,.nav6 a,.nav1_cur a,.
   <div class="clear"></div>
   <div class="zsfw_gxgx_bd">
     <div class="blank10"></div>
- <div class="zsfw_gxgx_info1">
+ <div class="zsfw_gxgx_info1" style="margin-top: -10px;">
       <table width="100%" border="0" cellspacing="0" cellpadding="0">
         <tr>
           <td height="10" colspan="3"></td>
@@ -82,7 +87,7 @@ DD_belatedPNG.fix('.nav1 a,.nav2 a,.nav3 a,.nav4 a,.nav5 a,.nav6 a,.nav1_cur a,.
       </table>
     </div> 
     <div class="blank10"></div>
-      <div class="zsfw_gxgx_info1">
+      <div class="zsfw_gxgx_info1" style="margin-top: -10px;">
       <table width="100%" border="0" cellspacing="0" cellpadding="0">
         <tr>
           <td height="10" colspan="3"></td>
@@ -103,11 +108,14 @@ DD_belatedPNG.fix('.nav1 a,.nav2 a,.nav3 a,.nav4 a,.nav5 a,.nav6 a,.nav1_cur a,.
         </tr>-->
       </table>
     </div>
-    <div class="btn_sqdx" style="padding-top:7px">
+    <div class="btn_sqdx" style="padding-top:7px;margin-top: -7px;">
 	    <div id="nextt" class="btn_nextStep">
 	    	<a href="javascript:dxfu_form();" id="aHref" ></a>
 	    </div>
 	 </div>
+	  <div id="wzTip" style="display:none; margin-top: 0px;padding-left: 160px;font-size: 14px;color: black;font-weight: bold;">您的证书暂时无法通过I信办理此项业务，请通过四川CA网点查看业务办理方式<br>
+         网址：<a href="javascript:openSCCA()" >www.scca.com.cn</a>
+  </div>
   <div class="clear"></div>
   <div class="n-tispsBox"  id = "msg"  style="color: red;margin-top: -37px"></div>
 </div>

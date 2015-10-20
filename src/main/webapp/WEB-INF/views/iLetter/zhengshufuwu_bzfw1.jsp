@@ -31,9 +31,11 @@ $(document).ready(function(){
 			$("#certdate").html("从"+data.startDate+"到"+data.endDate);
 			flag = true;
 		}else{
-			$("#msg").html("当前key未办理业务");
+			//$("#msg").html("当前key未办理业务");
 			$("#nextt").removeClass().addClass("gray_nextStep"); 
 			$('#aHref').attr('href','javascript:void(0);');
+			$("#wzTip").show();
+			return false;
 		}
 	});
 });
@@ -51,6 +53,9 @@ function bzfw_from(){
 		$("#msg").html("当前key未办理业务");
 	}
 }
+function openSCCA(){	
+	window.open('http://www.scca.com.cn/');
+}
 </script>
 </head>
 <body  oncontextmenu="return false"   onselect="return false"  oncanplay="return false">
@@ -65,7 +70,7 @@ function bzfw_from(){
  
   <div class="zsfw_gxgx_bd">
     <div class="blank10"></div>
- <div class="zsfw_gxgx_info1">
+ <div class="zsfw_gxgx_info1" style="margin-top: -10px;">
       <table width="100%" border="0" cellspacing="0" cellpadding="0">
         <tr>
           <td height="10" colspan="3"></td>
@@ -80,7 +85,7 @@ function bzfw_from(){
         </tr>
       </table>
     </div> 
-    <div class="blank10"></div>
+    <div class="blank10" style="margin-top: -10px;"></div>
       <div class="zsfw_gxgx_info1">
       <table width="100%" border="0" cellspacing="0" cellpadding="0">
         <tr>
@@ -102,11 +107,14 @@ function bzfw_from(){
         </tr>
       </table>
     </div>
-    <div class="btn_sqjd" style="padding-top:7px">
+    <div class="btn_sqjd" style="padding-top:7px;margin-top: -5px;">
 	    <div id="nextt" class="btn_nextStep">
 	    	<a href="javascript:bzfw_from();"  id="aHref"></a>
 	    </div>
 	 </div>
+  </div>
+  <div id="wzTip" style="display:none; margin-top: -40px;padding-left: 160px;font-size: 14px;color: black;font-weight: bold;">您的证书暂时无法通过I信办理此项业务，请通过四川CA网点查看业务办理方式<br>
+         网址：<a href="javascript:openSCCA()" >www.scca.com.cn</a>
   </div>
   <div class="clear"></div>
   <div class="n-tispsBox"  id = "msg"  style="color: red;margin-top: -50px"></div>
