@@ -523,6 +523,36 @@ public class StatisticCertDataController extends BaseController {
 			scdm.setCertMonths(scmList);
 			sumList.add(scdm);
 		}
+		List<Integer> totalListNum = new ArrayList<Integer>();
+		for (int i = 0; i < sumList.size(); i++) {
+			int totalLocation = 0;
+			for (int j = 0; j < sumList.get(i).getCertMonths().size(); j++) {
+				 StaticCertMonth certMonth = sumList.get(i).getCertMonths().get(j);
+				 
+				 Integer totaladd = certMonth.getOneAdd1()+certMonth.getOneAdd2()+certMonth.getOneAdd4()+certMonth.getOneAdd5()
+						 +certMonth.getTwoAdd1()+certMonth.getTwoAdd2()+certMonth.getTwoAdd4()+certMonth.getTwoAdd5()
+						 +certMonth.getFourAdd1()+certMonth.getFourAdd2()+certMonth.getFourAdd4()+certMonth.getFourAdd4();
+		
+				 if (totalListNum.size()>totalLocation) {
+					 totalListNum.set(totalLocation, totalListNum.get(totalLocation)+totaladd);
+					 
+				 }else{
+					 totalListNum.add(totalLocation,totaladd);
+				 }
+				 totalLocation++;
+				 
+				 Integer totalupdate = certMonth.getOneRenew1()+certMonth.getOneRenew2()+certMonth.getOneRenew4()+certMonth.getOneRenew5()
+						 +certMonth.getTwoRenew1()+certMonth.getTwoRenew2()+certMonth.getTwoRenew4()+certMonth.getTwoRenew5()
+						 +certMonth.getFourRenew1()+certMonth.getFourRenew2()+certMonth.getFourRenew4()+certMonth.getFourRenew5();
+			
+				 if (totalListNum.size()>totalLocation) {
+					 totalListNum.set(totalLocation, totalListNum.get(totalLocation)+totalupdate);
+				 }else{
+					 totalListNum.add(totalLocation, totalupdate);
+				 }				
+				 totalLocation++;
+			}
+		}
 		HSSFWorkbook wb=new HSSFWorkbook();
 		HSSFSheet sheet=wb.createSheet("项目发放证书统计");
 		HSSFCellStyle style=wb.createCellStyle();
@@ -544,6 +574,15 @@ public class StatisticCertDataController extends BaseController {
 		row.createCell(1).setCellValue("费用归属");
 		row.createCell(2).setCellValue("证书年限");
 		HSSFRow row1=sheet.createRow(2);
+		HSSFRow rowz=sheet.createRow(3+(3*4*(sumList.size())));
+		rowz.createCell(0).setCellValue("总计");
+		int z=0;
+		for(int i=0;i<totalListNum.size();i++)
+		{
+			z+=totalListNum.get(i);
+			rowz.createCell(3+i).setCellValue(totalListNum.get(i));
+		}
+		rowz.createCell(3+2*monthlist1.size()).setCellValue(z);
 		for(int i=1;i<monthlist1.size()+1;i++)
 		{
 			sheet.addMergedRegion(new Region(1, (short)(2*i+1), 1, (short)(2*i+2)));
@@ -553,6 +592,7 @@ public class StatisticCertDataController extends BaseController {
 			row.createCell(2*i+1).setCellValue(monthlist1.get(i-1));
 		}
 		row1.createCell(3+2*monthlist1.size()).setCellValue("小计");
+		
 		for(int i=1;i<=2*monthlist1.size();i++)
 		{
 			if(i%2==0)
@@ -600,61 +640,110 @@ public class StatisticCertDataController extends BaseController {
 			rown21.createCell(1).setCellValue("合同企业");
 			HSSFRow rown31=sheet.createRow(a*12+10+1);
 			rown31.createCell(1).setCellValue("政府统一采购");
-			
-				
+			int onea1=0;
+			int oner1=0;
+			int onea2=0;
+			int oner2=0;
+			int onea4=0;
+			int oner4=0;
+			int onea5=0;
+			int oner5=0;
+			int twoa1=0;
+			int twor1=0;
+			int twoa2=0;
+			int twor2=0;
+			int twoa4=0;
+			int twor4=0;
+			int twoa5=0;
+			int twor5=0;
+			int fourr1=0;
+			int foura1=0;
+			int foura2=0;
+			int fourr2=0;
+			int foura4=0;
+			int fourr4=0;
+			int foura5=0;
+			int fourr5=0;
+			for(int j=1;j<monthlist1.size()+1;j++)
+			{
+				onea1+=sumList.get(a).getCertMonths().get(j-1).getOneAdd1();
+				oner1+=sumList.get(a).getCertMonths().get(j-1).getOneRenew1();
+				onea2+=sumList.get(a).getCertMonths().get(j-1).getOneAdd2();
+				oner2+=sumList.get(a).getCertMonths().get(j-1).getOneRenew2();
+				onea4+=sumList.get(a).getCertMonths().get(j-1).getOneAdd4();
+				oner4+=sumList.get(a).getCertMonths().get(j-1).getOneRenew4();
+				onea5+=sumList.get(a).getCertMonths().get(j-1).getOneAdd5();
+				oner5+=sumList.get(a).getCertMonths().get(j-1).getOneRenew5();
+				twoa1+=sumList.get(a).getCertMonths().get(j-1).getTwoAdd1();
+				twor1+=sumList.get(a).getCertMonths().get(j-1).getTwoRenew1();
+				twoa2+=sumList.get(a).getCertMonths().get(j-1).getTwoAdd2();
+				twor2+=sumList.get(a).getCertMonths().get(j-1).getTwoRenew2();
+				twoa4+=sumList.get(a).getCertMonths().get(j-1).getTwoAdd4();
+				twor4+=sumList.get(a).getCertMonths().get(j-1).getTwoRenew4();
+				twoa5+=sumList.get(a).getCertMonths().get(j-1).getTwoAdd5();
+				twor5+=sumList.get(a).getCertMonths().get(j-1).getTwoRenew5();
+				foura1+=sumList.get(a).getCertMonths().get(j-1).getFourAdd1();
+				fourr1+=sumList.get(a).getCertMonths().get(j-1).getFourRenew1();
+				foura2+=sumList.get(a).getCertMonths().get(j-1).getFourAdd2();
+				fourr2+=sumList.get(a).getCertMonths().get(j-1).getFourRenew2();
+				foura4+=sumList.get(a).getCertMonths().get(j-1).getFourAdd4();
+				fourr4+=sumList.get(a).getCertMonths().get(j-1).getFourRenew4();
+				foura5+=sumList.get(a).getCertMonths().get(j-1).getFourAdd5();
+				fourr5+=sumList.get(a).getCertMonths().get(j-1).getFourRenew5();
+			}
 			for(int j=1;j<monthlist1.size()+1;j++)
 			{
 				rown11.createCell(2).setCellValue("一年期限");
 				rown11.createCell(2*j+1).setCellValue(sumList.get(a).getCertMonths().get(j-1).getOneAdd1());
 				rown11.createCell(2*j+2).setCellValue(sumList.get(a).getCertMonths().get(j-1).getOneRenew1());
-				rown11.createCell(3+2*monthlist1.size()).setCellValue(sumList.get(a).getCertMonths().get(j-1).getOneAdd1()+sumList.get(a).getCertMonths().get(j-1).getOneRenew1());
+				rown11.createCell(3+2*monthlist1.size()).setCellValue(onea1+oner1);
 				rown12.createCell(2).setCellValue("二年期限");
 				rown12.createCell(2*j+1).setCellValue(sumList.get(a).getCertMonths().get(j-1).getOneAdd2());
 				rown12.createCell(2*j+2).setCellValue(sumList.get(a).getCertMonths().get(j-1).getOneRenew2());
-				rown12.createCell(3+2*monthlist1.size()).setCellValue(sumList.get(a).getCertMonths().get(j-1).getOneAdd2()+sumList.get(a).getCertMonths().get(j-1).getOneRenew2());
+				rown12.createCell(3+2*monthlist1.size()).setCellValue(onea2+oner2);
 				rown13.createCell(2).setCellValue("四年期限");
 				rown13.createCell(2*j+1).setCellValue(sumList.get(a).getCertMonths().get(j-1).getOneAdd4());
 				rown13.createCell(2*j+2).setCellValue(sumList.get(a).getCertMonths().get(j-1).getOneRenew4());
-				rown13.createCell(3+2*monthlist1.size()).setCellValue(sumList.get(a).getCertMonths().get(j-1).getOneAdd4()+sumList.get(a).getCertMonths().get(j-1).getOneRenew4());
+				rown13.createCell(3+2*monthlist1.size()).setCellValue(onea4+oner4);
 				rown14.createCell(2).setCellValue("五年期限");
 				rown14.createCell(2*j+1).setCellValue(sumList.get(a).getCertMonths().get(j-1).getOneAdd5());
 				rown14.createCell(2*j+2).setCellValue(sumList.get(a).getCertMonths().get(j-1).getOneRenew5());
-				rown14.createCell(3+2*monthlist1.size()).setCellValue(sumList.get(a).getCertMonths().get(j-1).getOneAdd5()+sumList.get(a).getCertMonths().get(j-1).getOneRenew5());
+				rown14.createCell(3+2*monthlist1.size()).setCellValue(onea5+oner5);
 				
 				
 				rown21.createCell(2).setCellValue("一年期限");
 				rown21.createCell(2*j+1).setCellValue(sumList.get(a).getCertMonths().get(j-1).getTwoAdd1());
 				rown21.createCell(2*j+2).setCellValue(sumList.get(a).getCertMonths().get(j-1).getTwoRenew1());
-				rown21.createCell(3+2*monthlist1.size()).setCellValue(sumList.get(a).getCertMonths().get(j-1).getTwoAdd1()+sumList.get(a).getCertMonths().get(j-1).getTwoRenew1());
+				rown21.createCell(3+2*monthlist1.size()).setCellValue(twoa1+twor1);
 				rown22.createCell(2).setCellValue("二年期限");
 				rown22.createCell(2*j+1).setCellValue(sumList.get(a).getCertMonths().get(j-1).getTwoAdd2());
 				rown22.createCell(2*j+2).setCellValue(sumList.get(a).getCertMonths().get(j-1).getTwoRenew2());
-				rown22.createCell(3+2*monthlist1.size()).setCellValue(sumList.get(a).getCertMonths().get(j-1).getTwoAdd2()+sumList.get(a).getCertMonths().get(j-1).getTwoRenew2());
+				rown22.createCell(3+2*monthlist1.size()).setCellValue(twoa2+twor2);
 				rown23.createCell(2).setCellValue("四年期限");
 				rown23.createCell(2*j+1).setCellValue(sumList.get(a).getCertMonths().get(j-1).getTwoAdd4());
 				rown23.createCell(2*j+2).setCellValue(sumList.get(a).getCertMonths().get(j-1).getTwoRenew4());
-				rown23.createCell(3+2*monthlist1.size()).setCellValue(sumList.get(a).getCertMonths().get(j-1).getTwoAdd4()+sumList.get(a).getCertMonths().get(j-1).getTwoRenew4());
+				rown23.createCell(3+2*monthlist1.size()).setCellValue(twoa4+twor4);
 				rown24.createCell(2).setCellValue("五年期限");
 				rown24.createCell(2*j+1).setCellValue(sumList.get(a).getCertMonths().get(j-1).getTwoAdd5());
 				rown24.createCell(2*j+2).setCellValue(sumList.get(a).getCertMonths().get(j-1).getTwoRenew5());
-				rown24.createCell(3+2*monthlist1.size()).setCellValue(sumList.get(a).getCertMonths().get(j-1).getTwoAdd5()+sumList.get(a).getCertMonths().get(j-1).getTwoRenew5());
+				rown24.createCell(3+2*monthlist1.size()).setCellValue(twoa5+twor5);
 				
 				rown31.createCell(2).setCellValue("一年期限");
 				rown31.createCell(2*j+1).setCellValue(sumList.get(a).getCertMonths().get(j-1).getFourAdd1());
 				rown31.createCell(2*j+2).setCellValue(sumList.get(a).getCertMonths().get(j-1).getFourRenew1());
-				rown31.createCell(3+2*monthlist1.size()).setCellValue(sumList.get(a).getCertMonths().get(j-1).getFourAdd1()+sumList.get(a).getCertMonths().get(j-1).getFourRenew1());
+				rown31.createCell(3+2*monthlist1.size()).setCellValue(foura1+fourr1);
 				rown32.createCell(2).setCellValue("二年期限");
 				rown32.createCell(2*j+1).setCellValue(sumList.get(a).getCertMonths().get(j-1).getFourAdd2());
 				rown32.createCell(2*j+2).setCellValue(sumList.get(a).getCertMonths().get(j-1).getFourRenew2());
-				rown32.createCell(3+2*monthlist1.size()).setCellValue(sumList.get(a).getCertMonths().get(j-1).getFourAdd2()+sumList.get(a).getCertMonths().get(j-1).getFourRenew2());
+				rown32.createCell(3+2*monthlist1.size()).setCellValue(foura2+fourr2);
 				rown33.createCell(2).setCellValue("四年期限");
 				rown33.createCell(2*j+1).setCellValue(sumList.get(a).getCertMonths().get(j-1).getFourAdd4());
 				rown33.createCell(2*j+2).setCellValue(sumList.get(a).getCertMonths().get(j-1).getFourRenew4());
-				rown33.createCell(3+2*monthlist1.size()).setCellValue(sumList.get(a).getCertMonths().get(j-1).getFourAdd4()+sumList.get(a).getCertMonths().get(j-1).getFourRenew4());
+				rown33.createCell(3+2*monthlist1.size()).setCellValue(foura4+fourr4);
 				rown34.createCell(2).setCellValue("五年期限");
 				rown34.createCell(2*j+1).setCellValue(sumList.get(a).getCertMonths().get(j-1).getFourAdd5());
 				rown34.createCell(2*j+2).setCellValue(sumList.get(a).getCertMonths().get(j-1).getFourRenew5());
-				rown34.createCell(3+2*monthlist1.size()).setCellValue(sumList.get(a).getCertMonths().get(j-1).getFourAdd5()+sumList.get(a).getCertMonths().get(j-1).getFourRenew5());
+				rown34.createCell(3+2*monthlist1.size()).setCellValue(foura5+fourr5);
 				
 			}
 			
