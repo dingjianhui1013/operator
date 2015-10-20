@@ -309,6 +309,37 @@ public class StatisticCertDataController extends BaseController {
 			sumList.add(scdm);
 		}
 		model.addAttribute("sumList", sumList);
+		List<Integer> totalListNum = new ArrayList<Integer>();
+		for (int i = 0; i < sumList.size(); i++) {
+			int totalLocation = 0;
+			for (int j = 0; j < sumList.get(i).getCertMonths().size(); j++) {
+				 StaticCertMonth certMonth = sumList.get(i).getCertMonths().get(j);
+				 
+				 Integer totaladd = certMonth.getOneAdd1()+certMonth.getOneAdd2()+certMonth.getOneAdd4()+certMonth.getOneAdd5()
+						 +certMonth.getTwoAdd1()+certMonth.getTwoAdd2()+certMonth.getTwoAdd4()+certMonth.getTwoAdd5()
+						 +certMonth.getFourAdd1()+certMonth.getFourAdd2()+certMonth.getFourAdd4()+certMonth.getFourAdd4();
+		
+				 if (totalListNum.size()>totalLocation) {
+					 totalListNum.set(totalLocation, totalListNum.get(totalLocation)+totaladd);
+					 
+				 }else{
+					 totalListNum.add(totalLocation,totaladd);
+				 }
+				 totalLocation++;
+				 
+				 Integer totalupdate = certMonth.getOneRenew1()+certMonth.getOneRenew2()+certMonth.getOneRenew4()+certMonth.getOneRenew5()
+						 +certMonth.getTwoRenew1()+certMonth.getTwoRenew2()+certMonth.getTwoRenew4()+certMonth.getTwoRenew5()
+						 +certMonth.getFourRenew1()+certMonth.getFourRenew2()+certMonth.getFourRenew4()+certMonth.getFourRenew5();
+			
+				 if (totalListNum.size()>totalLocation) {
+					 totalListNum.set(totalLocation, totalListNum.get(totalLocation)+totalupdate);
+				 }else{
+					 totalListNum.add(totalLocation, totalupdate);
+				 }				
+				 totalLocation++;
+			}
+		}
+		model.addAttribute("totalListNum", totalListNum);
 		return "modules/statistic/statisticCertDataList";
 	}
 

@@ -325,7 +325,17 @@
 				<td>${subtotal}</td>
 			</tr>
 			</c:forEach>
-			
+			<tr>
+				<td>总计</td>
+				<td></td>
+				<td></td>
+				<c:set var="allCountNew" value="0"/>
+				<c:forEach items="${totalListNum }" var="sum">
+					<td>${sum}</td>
+					<c:set var="allCountNew" value="${allCountNew + sum }"/>
+				</c:forEach>
+				<td>${allCountNew}</td>
+			</tr>
 		</table>
 		</div>
 </body>
