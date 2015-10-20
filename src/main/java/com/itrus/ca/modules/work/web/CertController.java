@@ -269,7 +269,7 @@ public class CertController extends BaseController {
 				caCert.setReqBufType(certificateResponse.getCertReqBufType());
 				caCert.setReqOverrideValidity(Integer.valueOf(certificateResponse
 						.getCertReqOverrideValidity()));
-				caCert.setSignDate(sdf.parse(certificateResponse.getCertSignDate()));				
+				caCert.setSignDate(new Date());				
 				caCert.setSubjectDn(certificateResponse.getCertSubjectDn());
 				caCert.setSubjectHashMd5(certificateResponse
 						.getCertSubjectHashMd5());
@@ -448,7 +448,7 @@ public class CertController extends BaseController {
 				caCert.setReqBufType(certificateResponse.getCertReqBufType());
 				caCert.setReqOverrideValidity(Integer.valueOf(certificateResponse
 						.getCertReqOverrideValidity()));
-				caCert.setSignDate(sdf.parse(certificateResponse.getCertSignDate()));				
+				caCert.setSignDate(new Date());				
 				caCert.setSubjectDn(certificateResponse.getCertSubjectDn());
 				caCert.setSubjectHashMd5(certificateResponse
 						.getCertSubjectHashMd5());

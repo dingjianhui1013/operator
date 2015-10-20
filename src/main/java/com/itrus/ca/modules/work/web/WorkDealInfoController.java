@@ -72,6 +72,7 @@ import com.itrus.ca.common.persistence.DataEntity;
 import com.itrus.ca.common.persistence.Page;
 import com.itrus.ca.common.utils.AdminPinEncKey;
 import com.itrus.ca.common.utils.RaAccountUtil;
+import com.itrus.ca.common.utils.excel.ExportExcel;
 import com.itrus.ca.common.web.BaseController;
 import com.itrus.ca.modules.constant.ProductType;
 import com.itrus.ca.modules.constant.WorkDealInfoStatus;
@@ -132,6 +133,7 @@ import com.itrus.ca.modules.work.service.WorkLogService;
 import com.itrus.ca.modules.work.service.WorkPayInfoService;
 import com.itrus.ca.modules.work.service.WorkUserHisService;
 import com.itrus.ca.modules.work.service.WorkUserService;
+import com.itrus.ca.modules.work.vo.WorkDealInfoVo;
 import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
 
 /**
@@ -2740,6 +2742,7 @@ public class WorkDealInfoController extends BaseController {
 		} catch (Exception ex) {
 		}
 	}
+	
 	@RequestMapping(value = "exportZS")
 	public void exportZS(
 			HttpServletRequest request,
@@ -2830,127 +2833,88 @@ public class WorkDealInfoController extends BaseController {
 		List<Office> officeList = officeService.getOfficeByType(
 				UserUtils.getUser(), 2);
 //		Calendar calendar = Calendar.getInstance();
+		try {
 		List<WorkCertInfo> certInfoList = new ArrayList<WorkCertInfo>() ;
 		if (zhizhengStartTime!=null&&zhizhengEndTime!=null) {
 			certInfoList =  workCertInfoService.findZhiZhengTime(zhizhengStartTime, zhizhengEndTime);
 		}
-		List<WorkDealInfo> list = workDealInfoService.find( workDealInfo, area,
+		final List<WorkDealInfo> list = workDealInfoService.find( workDealInfo, area,
 				officeId, apply, certType, workType, year, luruStartTime,
 				luruEndTime, officeList, daoqiStartTime, daoqiEndTime, jianzhengStartTime, 
 				jianzhengEndTime,certInfoList);
-		HSSFWorkbook wb=new HSSFWorkbook();
-		HSSFSheet sheet=wb.createSheet("业务查询");
-		sheet.addMergedRegion(new Region(0, (short)0, 0, (short)11));
-		sheet.setColumnWidth((short)0,20*256);
-		sheet.setColumnWidth((short)1,20*256);
-		sheet.setColumnWidth((short)2,20*256);
-		sheet.setColumnWidth((short)3,20*200);
-		sheet.setColumnWidth((short)6,20*256);
-		sheet.setColumnWidth((short)7,20*256);
-		sheet.setColumnWidth((short)8,20*256);
-		sheet.setColumnWidth((short)10,20*256);
-		HSSFRow row0=sheet.createRow(0);
-		row0.setHeightInPoints((short)20);
-		HSSFCellStyle style=wb.createCellStyle();
-		style.setAlignment(HSSFCellStyle.ALIGN_CENTER);
-		style.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
-		HSSFFont font=wb.createFont();
-		font.setFontHeightInPoints((short)20);
-		font.setFontName("宋体");
-		font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
-		style.setFont(font);
-		HSSFCell cell0=row0.createCell(0);
-		cell0.setCellValue("业务查询");
-		cell0.setCellStyle(style);
-		HSSFRow row1=sheet.createRow(1);
-		row1.createCell(0).setCellValue("业务编号");
-		row1.createCell(1).setCellValue("别名");
-		row1.createCell(2).setCellValue("单位名称");
-		row1.createCell(3).setCellValue("证书持有人");
-		row1.createCell(4).setCellValue("经办人");
-		row1.createCell(5).setCellValue("产品名称");
-		row1.createCell(6).setCellValue("业务类型");
-		row1.createCell(7).setCellValue("key编码");
-		row1.createCell(8).setCellValue("制证日期");
-		row1.createCell(9).setCellValue("有效期");
-		row1.createCell(10).setCellValue("到期日期");
-		row1.createCell(11).setCellValue("业务状态");
-		String dealInfoType=null;
+		final String fileName = "WorkDealInfos.csv";
+        final List<WorkDealInfoVo> workDealInfoVos = new ArrayList<WorkDealInfoVo>();
+        String dealInfoType=null;
 		String dealInfoType1=null;
 		String dealInfoType2=null;
 		String dealInfoType3=null;
-		for(int i=0;i<list.size();i++)
-		{
-			HSSFRow rown=sheet.createRow(i+2);
-			rown.createCell(0).setCellValue(list.get(i).getSvn());
-			rown.createCell(1).setCellValue(list.get(i).getConfigApp().getAlias());
-			rown.createCell(2).setCellValue(list.get(i).getWorkCompany().getCompanyName());
-			rown.createCell(3).setCellValue(list.get(i).getWorkUser().getContactName());
-			rown.createCell(4).setCellValue(list.get(i).getWorkCertInfo().getWorkCertApplyInfo().getName());
-			rown.createCell(5).setCellValue(productType.getProductTypeName(Integer.parseInt(list.get(i).getConfigProduct().getProductName())));
-			
-			if(list.get(i).getDealInfoType()==null)
+        for (final WorkDealInfo dealInfo : list) {
+        	
+        	final WorkDealInfoVo dealInfoVo = new WorkDealInfoVo();
+        	dealInfoVo.setSvn(dealInfo.getSvn());
+        	dealInfoVo.setAlias(dealInfo.getConfigApp().getAlias());
+        	dealInfoVo.setCompanyName(dealInfo.getWorkCompany().getCompanyName());
+        	dealInfoVo.setContactName(dealInfo.getWorkUser().getContactName());
+        	dealInfoVo.setCertApplyInfoName(dealInfo.getWorkCertInfo().getWorkCertApplyInfo().getName());
+        	dealInfoVo.setProductName(productType.getProductTypeName(Integer.parseInt(dealInfo.getConfigProduct().getProductName())));
+			if(dealInfo.getDealInfoType()==null)
 			{
 				 dealInfoType="";
 			}else{
-				dealInfoType=workDealInfoType.getDealInfoTypeName(list.get(i).getDealInfoType());
+				dealInfoType=workDealInfoType.getDealInfoTypeName(dealInfo.getDealInfoType());
 			}
-			if(list.get(i).getDealInfoType1()==null)
+			if(dealInfo.getDealInfoType1()==null)
 			{
 				 dealInfoType1="";
 			}else{
-				dealInfoType1=workDealInfoType.getDealInfoTypeName(list.get(i).getDealInfoType1());
+				dealInfoType1=workDealInfoType.getDealInfoTypeName(dealInfo.getDealInfoType1());
 			}
-			if(list.get(i).getDealInfoType2()==null)
+			if(dealInfo.getDealInfoType2()==null)
 			{
 				 dealInfoType2="";
 			}else{
-				dealInfoType2=workDealInfoType.getDealInfoTypeName(list.get(i).getDealInfoType2());
+				dealInfoType2=workDealInfoType.getDealInfoTypeName(dealInfo.getDealInfoType2());
 			}
-			if(list.get(i).getDealInfoType3()==null)
+			if(dealInfo.getDealInfoType3()==null)
 			{
 				 dealInfoType3="";
 			}else{
-				dealInfoType3=workDealInfoType.getDealInfoTypeName(list.get(i).getDealInfoType3());
+				dealInfoType3=workDealInfoType.getDealInfoTypeName(dealInfo.getDealInfoType3());
 			}
-			rown.createCell(6).setCellValue(dealInfoType+""+dealInfoType1+""+dealInfoType2+""+dealInfoType3);
-			rown.createCell(7).setCellValue(list.get(i).getKeySn());
-			String signDateString = dfm.format(list.get(i).getWorkCertInfo().getSignDate());
-			rown.createCell(8).setCellValue(signDateString);
-			if(list.get(i).getAddCertDays()==null)
-			{
-				rown.createCell(9).setCellValue(list.get(i).getYear()*365+list.get(i).getLastDays()+"（天）");
-			}else
-			{
-				rown.createCell(9).setCellValue(list.get(i).getYear()*365+list.get(i).getLastDays()+list.get(i).getAddCertDays()+"（天）");
+			dealInfoVo.setDealInfoType(dealInfoType+""+dealInfoType1+""+dealInfoType2+""+dealInfoType3);
+			dealInfoVo.setKeySn(dealInfo.getKeySn());
+			
+			if (dealInfo.getWorkCertInfo().getSignDate()!=null) {
+				String signDateString = dfm.format(dealInfo.getWorkCertInfo().getSignDate());
+				dealInfoVo.setSignDateString(signDateString);
+			}else{
+				dealInfoVo.setSignDateString("");
+				
 			}
 			
-			String notafterString = df.format(list.get(i).getNotafter());
-			
-			rown.createCell(10).setCellValue(notafterString);
-			rown.createCell(11).setCellValue(workDealInfoStatus.WorkDealInfoStatusMap.get(list.get(i).getDealInfoStatus()));
-			
-		}
+			if(dealInfo.getAddCertDays()==null){
+				dealInfoVo.setCertDays(dealInfo.getYear()*365+dealInfo.getLastDays()+"（天）");
+			}else{
+				dealInfoVo.setCertDays(dealInfo.getYear()*365+dealInfo.getLastDays()+dealInfo.getAddCertDays()+"（天）");
+			}
+			String notafterString = df.format(dealInfo.getNotafter());
+			dealInfoVo.setNotAfter(notafterString);
+			dealInfoVo.setDealInfoStatus(workDealInfoStatus.WorkDealInfoStatusMap.get(dealInfo.getDealInfoStatus()));
+            workDealInfoVos.add(dealInfoVo);
+           //System.out.println(workDealInfoVos.size());
+        }
 		
-		try {
-			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			response.setContentType(response.getContentType());
-			response.setHeader("Content-disposition",
-					"attachment; filename=wokdealInfo.xls");
-			wb.write(baos);
-			byte[] bytes = baos.toByteArray();
-			response.setHeader("Content-Length", String.valueOf(bytes.length));
-			BufferedOutputStream bos = null;
-			bos = new BufferedOutputStream(response.getOutputStream());
-			bos.write(bytes);
-			bos.close();
-			baos.close();
+        new ExportExcel("业务查询", WorkDealInfoVo.class).setDataList(workDealInfoVos).write(response, fileName).dispose();
+		
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 			
 	}
+	
+	
 	@RequiresPermissions("work:workDealInfo:view")
 	@RequestMapping(value = "certCount")
 	public String certCount(Model model) {
