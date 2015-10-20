@@ -10,6 +10,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.lang.annotation.Annotation;
 import java.net.URLDecoder;
 import java.security.InvalidAlgorithmParameterException;
@@ -2257,6 +2258,7 @@ public class WorkDealInfoController extends BaseController {
 			@RequestParam(value = "zhizhengStartTime", required = false) Date zhizhengStartTime,
 			@RequestParam(value = "zhizhengEndTime", required = false) Date zhizhengEndTime,
 			Model model) {
+		
 		// 获取前台的付款方式
 		List<Long> method = Lists.newArrayList();
 		if (payMethod != null) {
@@ -2838,7 +2840,7 @@ public class WorkDealInfoController extends BaseController {
 				jianzhengEndTime,certInfoList);
 		HSSFWorkbook wb=new HSSFWorkbook();
 		HSSFSheet sheet=wb.createSheet("业务查询");
-		sheet.addMergedRegion(new Region(0, (short)0, 0, (short)12));
+		sheet.addMergedRegion(new Region(0, (short)0, 0, (short)11));
 		sheet.setColumnWidth((short)0,20*256);
 		sheet.setColumnWidth((short)1,20*256);
 		sheet.setColumnWidth((short)2,20*256);
