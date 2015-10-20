@@ -136,7 +136,7 @@
     <div class="blank10"></div>
     <div class="btn_sqgx" style="padding-top:7px">
 	    <div class="btn_nextStep" id="nextt">
-			<a href="javascript:void(0)" onclick="nextStep()" id="aHref"></a>
+			<a href="javascript:nextStep()" id="aHref"></a>
 		</div>
 	 </div>
   </div>
