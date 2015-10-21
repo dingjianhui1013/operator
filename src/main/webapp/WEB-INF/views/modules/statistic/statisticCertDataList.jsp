@@ -238,7 +238,7 @@
 				<c:forEach items="${sum.certMonths }" var="oneSm5">
 					<td>${oneSm5.oneAdd5 }</td>
 					<td>${oneSm5.oneRenew5 }</td>					
-					<c:set value="${subtotal +oneSm5.oneAdd4+oneSm5.oneRenew5 }" var="subtotal" /> 
+					<c:set value="${subtotal +oneSm5.oneAdd5+oneSm5.oneRenew5 }" var="subtotal" /> 
 				</c:forEach>
 				<td>${subtotal}</td>
 			</tr>
