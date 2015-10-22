@@ -31,10 +31,16 @@ public class CertSortController extends BaseController {
 			@RequestParam(value = "conCertNumber" , required = false) String conCertNumber,
 			@RequestParam(value = "contactName" , required = false) String contactName,
 			@RequestParam(value = "companyName" , required = false) String companyName,
-			@RequestParam(value = "companyName" , required = false) Integer productTdId
+			Integer productTdId
 			) {
 		JSONObject json = new JSONObject();
 		try {
+			if (productTdId==null||productTdId==0) {
+				json.put("status", "fail");
+				json.put("certsInSccA", "");
+				json.put("errmsg", "产品类型不能为空");
+				return json.toString();
+			}
 			if (productTdId.equals(1)) {
 				if(organizationNumber ==null || organizationNumber.equals("")){
 					json.put("status", "fail");
