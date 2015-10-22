@@ -217,7 +217,13 @@
 			</div>
 				</td>
 				<td>
-				
+				<div class="control-group">
+				<label class="control-label"><font color="red">*</font>预警人邮箱:</label>
+				<div class="controls">
+				<form:input path="warningEmail" id="warningEmail" htmlEscape="false" maxlength="50" 
+					cssClass="required email"/>
+				</div>
+			</div>
 				</td>
 			</tr>		
 			
