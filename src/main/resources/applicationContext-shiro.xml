@@ -39,6 +39,7 @@
 				/ca/** = anon
 				/js/** = anon
 				/test.jsp = anon
+				/DZSBH.jsp = anon
 				/test/** = anon
 				${adminPath}/login = authc
 				${adminPath}/logout = logout
