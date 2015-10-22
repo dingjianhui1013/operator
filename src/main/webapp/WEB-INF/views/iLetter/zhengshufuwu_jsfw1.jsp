@@ -114,7 +114,7 @@ function openSCCA(){
    <div class="clear"></div>
    
    <br><br>
-  <div id="wzTip" style="display:none;margin-top: -60px;padding-left: 160px;font-size: 14px;color: black;font-weight: bold;">您的证书暂时无法通过I信办理此项业务，请通过四川CA网点查看业务办理方式<br>
+  <div id="wzTip" style="display:none;margin-top: -60px;padding-left: 160px;font-size: 14px;color: black;font-weight: bold;">您的证书暂时无法通过I信办理此项业务，请通过四川CA网站查看业务办理方式<br>
          网址：<a href="javascript:openSCCA()" >www.scca.com.cn</a>
   </div>
    <div class="zsfw_js_bot" style="margin-top: -20px;"><span class="lv">为确保安全，解锁过程需在同一台计算机上操作</span></div>
