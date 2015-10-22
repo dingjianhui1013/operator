@@ -50,7 +50,7 @@ public class ReceiptDepotInfo extends DataEntity implements java.io.Serializable
 	private String department; //部门名称
 	private Double prewarning;//
 	private String warningName;//预警人姓名
-	
+	private String warningEmail;//预警人邮箱
 	
 	private HashMap<Integer,Integer> beforeList;
 	private HashMap<Integer,Integer> inList;
@@ -134,6 +134,14 @@ public class ReceiptDepotInfo extends DataEntity implements java.io.Serializable
 
 	public void setWarningName(String warningName) {
 		this.warningName = warningName;
+	}
+	@Column(name = "warning_email")
+	public String getWarningEmail() {
+		return warningEmail;
+	}
+
+	public void setWarningEmail(String warningEmail) {
+		this.warningEmail = warningEmail;
 	}
 
 	public void setReceiptTotal(Double receiptTotal) {
