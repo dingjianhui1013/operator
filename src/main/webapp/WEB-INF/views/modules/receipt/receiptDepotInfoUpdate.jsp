@@ -137,13 +137,17 @@
 					<div class="control-group">
 				<label class="control-label"><font color="red">*</font>预警人姓名:</label>
 				<div class="controls">
-					<form:input path="warningName" id="warningName" htmlEscape="false" maxlength="50" 
-					class="required"/>
+					<form:input path="warningName" id="warningName" htmlEscape="false" maxlength="50" class="required"/>
 				</div>
 			</div>
 				</td>
 				<td>
-				
+				<div class="control-group">
+				<label class="control-label"><font color="red">*</font>预警人邮箱:</label>
+				<div class="controls">
+				<form:input path="warningEmail" id="warningEmail" htmlEscape="false" maxlength="50" cssClass="required email"/>
+				</div>
+			</div>
 				</td>
 			</tr>		
 		</table>
