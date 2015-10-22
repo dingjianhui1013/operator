@@ -88,17 +88,57 @@ public class WorkDealInfoFilingController extends BaseController {
 	@RequiresPermissions("work:workDealInfo:view")
 	@RequestMapping(value = { "list", "" })
 	public String list(WorkDealInfo workDealInfo, HttpServletRequest request,
-			HttpServletResponse response, Model model) {
+			HttpServletResponse response, Model model,
+			@RequestParam(value = "checkIds", required = false) String checkIds
+			) {
 		String url = "modules/work/workDealInfoFilingListF";
 		Page<WorkDealInfo> page = workDealInfoService.find(
-				new Page<WorkDealInfo>(request, response), workDealInfo);	
+				new Page<WorkDealInfo>(request, response), workDealInfo);
 		model.addAttribute("proType", ProductType.productTypeStrMap);
 		model.addAttribute("wdiType", WorkDealInfoType.WorkDealInfoTypeMap);
 		model.addAttribute("wdiStatus",
 				WorkDealInfoStatus.WorkDealInfoStatusMap);
 		model.addAttribute("page", page);
 		model.addAttribute("proType", ProductType.productTypeStrMap);
+		if(checkIds!=null)
+		{
+			String[] ids = checkIds.split(",");
+    		model.addAttribute("ids", ids);
+		}
+		model.addAttribute("checkIds", checkIds);
+		model.addAttribute("status", workDealInfo.getStatus());
 		return url;
+	}
+	@RequiresPermissions("work:workDealInfo:view")
+	@RequestMapping(value ="quangui")
+	public String quangui() 
+	{
+		List<WorkDealInfo> list=workDealInfoService.findList();
+		WorkDealInfo workDealInfo=new WorkDealInfo();
+		for (int i=0;i<list.size();i++) {
+			workDealInfo=workDealInfoService.get(list.get(i).getId());
+			workDealInfo.setArchiveDate(new Timestamp(new Date().getTime()));
+			workDealInfo.setStatus(1);
+			workDealInfoService.save(workDealInfo);
+			logUtil.saveSysLog("业务中心", "业务信息归档：业务编号" + workDealInfo.getId(), "");
+		}
+		return "redirect:" + Global.getAdminPath()
+				+ "/work/workDealInfoFiling/list?status=0";
+	}
+	@RequiresPermissions("work:workDealInfo:view")
+	@RequestMapping(value ="gui")
+	public String gui(String[] ids,HttpServletRequest request, HttpServletResponse response) 
+	{
+		WorkDealInfo workDealInfo=new WorkDealInfo();
+		for (int i=0;i<ids.length;i++) {
+			workDealInfo=workDealInfoService.get(Long.parseLong(ids[i]));
+			workDealInfo.setArchiveDate(new Timestamp(new Date().getTime()));
+			workDealInfo.setStatus(1);
+			workDealInfoService.save(workDealInfo);
+			logUtil.saveSysLog("业务中心", "业务信息归档：业务编号" + workDealInfo.getId(), "");
+		}
+		return "redirect:" + Global.getAdminPath()
+				+ "/work/workDealInfoFiling/list?status=0";
 	}
 
 	/**
