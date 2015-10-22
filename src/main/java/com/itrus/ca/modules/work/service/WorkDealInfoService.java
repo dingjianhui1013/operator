@@ -3327,5 +3327,99 @@ public class WorkDealInfoService extends BaseService {
 	public void deleteReturnById(Long id) {
 		workDealInfoDao.deleteReturnById(id);
 	}
+	
+	
+	
+	/**
+	 * 根据组织机构代码获取多证书编号
+	 * 
+	 * @return
+	 */
+	public Integer getCertSortByOrganizationNumber(String organizationNumber ,Integer productTdId) {
+		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
+		dc.createAlias("workCompany", "workCompany");
+		dc.createAlias("configProduct", "configProduct");
+		dc.add(Restrictions.eq("workCompany.organizationNumber", organizationNumber));
+		dc.add(Restrictions.eq("configProduct.productName", productTdId.toString()));
+		dc.add(Restrictions.eq("dealInfoStatus",
+				WorkDealInfoStatus.STATUS_CERT_OBTAINED));
+		dc.addOrder(Order.desc("certSort"));
+		List<WorkDealInfo> dealInfos = workDealInfoDao.find(dc);
+		if (dealInfos.size() == 0) {
+			return 0;
+		} else {
+			return dealInfos.get(0).getCertSort();
+		}
+	}
+	
+	/**
+	 * 根据单位名称获取多证书编号
+	 * 
+	 * @return
+	 */
+	public Integer getCertSortByCompanyName(String companyName ,Integer productTdId) {
+		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
+		dc.createAlias("workCompany", "workCompany");
+		dc.createAlias("configProduct", "configProduct");
+		dc.add(Restrictions.eq("workCompany.companyName", companyName));
+		dc.add(Restrictions.eq("configProduct.productName", productTdId.toString()));
+		dc.add(Restrictions.eq("dealInfoStatus",
+				WorkDealInfoStatus.STATUS_CERT_OBTAINED));
+		dc.addOrder(Order.desc("certSort"));
+		List<WorkDealInfo> dealInfos = workDealInfoDao.find(dc);
+		if (dealInfos.size() == 0) {
+			return 0;
+		} else {
+			return dealInfos.get(0).getCertSort();
+		}
+	}
+
+	
+	/**
+	 * 个人证书根据持有人身份证号获取多证书编号
+	 * 
+	 * @return
+	 */
+	public Integer getCertSortByConCertNumber(String conCertNumber) {
+		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
+		dc.createAlias("workUser", "workUser");
+		dc.createAlias("configProduct", "configProduct");
+		dc.add(Restrictions.eq("workUser.conCertNumber", conCertNumber));
+		dc.add(Restrictions.or(Restrictions.eq("configProduct.productName", "2"),Restrictions.eq("configProduct.productName", "6")));
+		dc.add(Restrictions.eq("dealInfoStatus",
+				WorkDealInfoStatus.STATUS_CERT_OBTAINED));
+		dc.addOrder(Order.desc("certSort"));
+		List<WorkDealInfo> dealInfos = workDealInfoDao.find(dc);
+		if (dealInfos.size() == 0) {
+			return 0;
+		} else {
+			return dealInfos.get(0).getCertSort();
+		}
+	}
+	
+	/**
+	 * 个人证书根据持有人姓名获取多证书编号
+	 * 
+	 * @return
+	 */
+	public Integer getCertSortByContactName(String contactName) {
+		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
+		dc.createAlias("workUser", "workUser");
+		dc.createAlias("configProduct", "configProduct");
+		dc.add(Restrictions.eq("workUser.contactName", contactName));
+		dc.add(Restrictions.or(Restrictions.eq("configProduct.productName", "2"),Restrictions.eq("configProduct.productName", "6")));
+		dc.add(Restrictions.eq("dealInfoStatus",
+				WorkDealInfoStatus.STATUS_CERT_OBTAINED));
+		dc.addOrder(Order.desc("certSort"));
+		List<WorkDealInfo> dealInfos = workDealInfoDao.find(dc);
+		if (dealInfos.size() == 0) {
+			return 0;
+		} else {
+			return dealInfos.get(0).getCertSort();
+		}
+	}
+	
+	
+	
 
 }

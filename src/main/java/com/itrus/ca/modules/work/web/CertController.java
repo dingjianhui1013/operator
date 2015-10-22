@@ -6,13 +6,17 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.Valid;
 
 import org.bouncycastle.mail.smime.handlers.pkcs7_mime;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Restrictions;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,7 +26,8 @@ import cn.topca.tca.client.CertificateRequest;
 import cn.topca.tca.client.CertificateResponse;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
+import com.itrus.ca.common.utils.HttpClientUtil;
+import com.itrus.ca.common.utils.PropertiesUtil;
 import com.itrus.ca.common.utils.RaAccountUtil;
 import com.itrus.ca.common.web.BaseController;
 import com.itrus.ca.modules.constant.ProductType;
@@ -99,16 +104,17 @@ public class CertController extends BaseController {
 	@Autowired
 	private ConfigChargeAgentService configChargeAgentService;
 	
-	
+	private static String dzsBH = new PropertiesUtil("application.properties").readValue("dzsUrl");
 	
 	/**
 	 * 制证前判断是否入库
 	 * @param csp
 	 * @return
+	 * @throws JSONException 
 	 */
 	@RequestMapping(value="validateCspIsValid")
 	@ResponseBody
-	public String validateCspValid(String csp){
+	public String validateCspValid(String csp) throws JSONException{
 		JSONObject json = new JSONObject();
 		try {
 			json.put("status", -1);
@@ -119,12 +125,12 @@ public class CertController extends BaseController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return json.toJSONString();
+		return json.toString();
 	}
 	
 	@RequestMapping(value="validateCspIsValidNew")
 	@ResponseBody
-	public String validateCspIsValidNew(String csp, Long dealId, String keySn){
+	public String validateCspIsValidNew(String csp, Long dealId, String keySn) throws JSONException{
 		JSONObject json = new JSONObject();
 		try {
 			json.put("status", -1);
@@ -145,7 +151,7 @@ public class CertController extends BaseController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return json.toJSONString();
+		return json.toString();
 	}
 	
 	
@@ -155,7 +161,7 @@ public class CertController extends BaseController {
 	@RequestMapping(value = "makeCert")
 	@ResponseBody
 	public String makeCert(Long dealInfoId,String reqOverrideValidity, String addCertDays,
-			String certProvider,String csr,String keySn) {
+			String certProvider,String csr,String keySn) throws JSONException {
 		JSONObject json = new JSONObject();
 		WorkDealInfo dealInfo = workDealInfoService.get(dealInfoId);
 		try {
@@ -165,7 +171,7 @@ public class CertController extends BaseController {
 				if (!inStore) {
 					json.put("status", -1);
 					json.put("msg", "当前网点无"+certProvider+"库存，申请证书失败！");
-					return json.toJSONString();
+					return json.toString();
 				}
 			}
 			WorkCertInfo caCert = dealInfo.getWorkCertInfo();
@@ -199,23 +205,69 @@ public class CertController extends BaseController {
 							
 							String orgNum = dealInfo.getWorkCompany().getOrganizationNumber();
 							
-							Integer certSortInteger = workDealInfoService.getNumByOrganizationNumber(orgNum);
-							
-							if (certSortInteger==null) {
-								certSortInteger=1;
+							Integer certSortInteger = workDealInfoService.getCertSortByOrganizationNumber(orgNum, 1);
+							String url = dzsBH;
+							Map<String, String> params = new HashMap<String, String>();
+							params.put("param1", "按单位组织机构代码(含企业和机构证书)查单位证书");
+							params.put("param2", orgNum);
+							Integer certSortIntegerSC = 0;
+							String res =HttpClientUtil.post(url, params);
+							if (!res.equals("")) {
+
+								JSONObject jsonReturn = new JSONObject(res); 
+								
+								String status = jsonReturn.getString("status");
+								if (status.equals("success")) {
+									certSortIntegerSC = jsonReturn.getInt("certsInSccA");
+								}
 							}
-							
-							dealInfo.setCertSort(certSortInteger);
+							if (certSortInteger>certSortIntegerSC) {
+								dealInfo.setCertSort(certSortInteger+1);
+							}else{
+								dealInfo.setCertSort(certSortIntegerSC+1);
+							}
 							
 						}else if(dealInfo.getConfigProduct().getProductName().equals("2") || dealInfo.getConfigProduct().getProductName().equals("6")){
 							
-							//workUser.contactName  证书持有人姓名
-							//workUser.conCertNumber 证书持有人身份证号
-							
 							String conName =  dealInfo.getWorkUser().getContactName();
 							String conCertNumber = dealInfo.getWorkUser().getConCertNumber();
-							Integer certSortInteger = workDealInfoService.getNumByNameCard(conName, conCertNumber);
-							dealInfo.setCertSort(certSortInteger);
+							Integer certSortIntegerSC = 0;
+							Integer certSortInteger = 0;
+							if (conCertNumber!=null && !conCertNumber.equals("")) {
+								certSortInteger = workDealInfoService.getCertSortByConCertNumber(conCertNumber);
+								String url = dzsBH;
+								Map<String, String> params = new HashMap<String, String>();
+								params.put("param1", "按个人证件号(含企业和机构个人)查个人证书");
+								params.put("param2", conCertNumber);
+								String res =HttpClientUtil.post(url, params);
+								if (!res.equals("")) {
+									JSONObject jsonReturn = new JSONObject(res); 
+									String status = jsonReturn.getString("status");
+									if (status.equals("success")) {
+										certSortIntegerSC = jsonReturn.getInt("certsInSccA");
+									}
+								}
+							}else if (conName!=null && !conName.equals("")) {
+								certSortInteger = workDealInfoService.getCertSortByContactName(conName);
+								String url = dzsBH;
+								Map<String, String> params = new HashMap<String, String>();
+								params.put("param1", "按个人姓名(含企业和机构个人)号查个人证书");
+								params.put("param2", conName);
+								String res =HttpClientUtil.post(url, params);
+								if (!res.equals("")) {
+									JSONObject jsonReturn = new JSONObject(res); 
+									String status = jsonReturn.getString("status");
+									if (status.equals("success")) {
+										certSortIntegerSC = jsonReturn.getInt("certsInSccA");
+									}
+								}
+							}
+							
+							if (certSortInteger>certSortIntegerSC) {
+								dealInfo.setCertSort(certSortInteger+1);
+							}else{
+								dealInfo.setCertSort(certSortIntegerSC+1);
+							}
 							
 							
 						}else if(dealInfo.getConfigProduct().getProductName().equals("3")){
@@ -223,8 +275,44 @@ public class CertController extends BaseController {
 							String orgNum = dealInfo.getWorkCompany().getOrganizationNumber();
 							String comPanyName = dealInfo.getWorkCompany().getCompanyName();
 							
-							Integer certSortInteger = workDealInfoService.getNumByOrganizationNumberCompanyName(orgNum,comPanyName);
-							dealInfo.setCertSort(certSortInteger);
+							Integer certSortIntegerSC = 0;
+							Integer certSortInteger = 0;
+							
+							if(orgNum!=null && !orgNum.equals("")) {
+								certSortInteger = workDealInfoService.getCertSortByOrganizationNumber(orgNum,3);
+							
+								String url = dzsBH;
+								Map<String, String> params = new HashMap<String, String>();
+								params.put("param1", "按单位组织机构代码(含企业和机构证书)查单位证书");
+								params.put("param2", orgNum);
+								String res =HttpClientUtil.post(url, params);
+								if (!res.equals("")) {
+									JSONObject jsonReturn = new JSONObject(res); 
+									String status = jsonReturn.getString("status");
+									if (status.equals("success")) {
+										certSortIntegerSC = jsonReturn.getInt("certsInSccA");
+									}
+								}
+							}else if(comPanyName!=null && !comPanyName.equals("")){
+								certSortInteger = workDealInfoService.getCertSortByCompanyName(comPanyName,3);
+								String url = dzsBH;
+								Map<String, String> params = new HashMap<String, String>();
+								params.put("param1", "按单位名称(含企业和机构证书)查单位证书 ");
+								params.put("param2", comPanyName);
+								String res =HttpClientUtil.post(url, params);
+								if (!res.equals("")) {
+									JSONObject jsonReturn = new JSONObject(res); 
+									String status = jsonReturn.getString("status");
+									if (status.equals("success")) {
+										certSortIntegerSC = jsonReturn.getInt("certsInSccA");
+									}
+								}
+							}
+							if (certSortInteger>certSortIntegerSC) {
+								dealInfo.setCertSort(certSortInteger+1);
+							}else{
+								dealInfo.setCertSort(certSortIntegerSC+1);
+							}
 						}else {
 							dealInfo.setCertSort(sort);
 						}
@@ -241,7 +329,7 @@ public class CertController extends BaseController {
 				if (raAccount==null||extendInfo==null) {
 					json.put("status", -1);
 					json.put("msg", "CA配置错误：无证书注册项模板");
-					return json.toJSONString();
+					return json.toString();
 				}
 //				if (raAccount==null||raAccount.getConfigRaAccountExtendInfo()==null||raAccount.getConfigRaAccountExtendInfo().getId()==null) {
 //					json.put("status", -1);
@@ -368,13 +456,13 @@ public class CertController extends BaseController {
 			workDealInfoService.save(dealInfo);
 		}
 		logUtil.saveSysLog("业务中心", "制证：编号"+dealInfoId, "");
-		return json.toJSONString();
+		return json.toString();
 	}
 	
 	@RequestMapping(value = "enrollMakeCert")
 	@ResponseBody
 	public String enrollMakeCert(Long dealInfoId,String reqOverrideValidity,
-			String certProvider,String csr,String keySn) {
+			String certProvider,String csr,String keySn) throws JSONException {
 		JSONObject json = new JSONObject();
 		WorkDealInfo dealInfo = workDealInfoService.get(dealInfoId);
 		try {
@@ -423,7 +511,7 @@ public class CertController extends BaseController {
 				if (raAccount==null||extendInfo==null) {
 					json.put("status", -1);
 					json.put("msg", "CA配置错误：无证书注册项模板");
-					return json.toJSONString();
+					return json.toString();
 				}
 //				if (raAccount==null||raAccount.getConfigRaAccountExtendInfo()==null||raAccount.getConfigRaAccountExtendInfo().getId()==null) {
 //					json.put("status", -1);
@@ -523,7 +611,7 @@ public class CertController extends BaseController {
 //		} catch (Exception e) {
 //			// TODO: handle exception
 //		}
-		return json.toJSONString();
+		return json.toString();
 	}
 	
 	
@@ -532,10 +620,11 @@ public class CertController extends BaseController {
 	 * @param dealInfoId
 	 * @param result
 	 * @return
+	 * @throws JSONException 
 	 */
 	@RequestMapping(value="installResult")
 	@ResponseBody
-	public String installCertResult(Long dealInfoId,Integer result){
+	public String installCertResult(Long dealInfoId,Integer result) throws JSONException{
 		WorkDealInfo dealInfo = workDealInfoService.get(dealInfoId);
 		JSONObject json = new JSONObject();
 		try {
@@ -577,7 +666,7 @@ public class CertController extends BaseController {
 			e.printStackTrace();
 			json.put("status", -1);
 		}
-		return json.toJSONString();
+		return json.toString();
 	}
 	
 	
@@ -586,10 +675,11 @@ public class CertController extends BaseController {
 	 * @param dealInfoId
 	 * @param result
 	 * @return
+	 * @throws JSONException 
 	 */
 	@RequestMapping(value="installResult4Enroll")
 	@ResponseBody
-	public String installResult4Enroll(Long dealInfoId,Integer result){
+	public String installResult4Enroll(Long dealInfoId,Integer result) throws JSONException{
 		WorkDealInfo dealInfo = workDealInfoService.get(dealInfoId);
 		JSONObject json = new JSONObject();
 		try {
@@ -628,17 +718,18 @@ public class CertController extends BaseController {
 			e.printStackTrace();
 			json.put("status", -1);
 		}
-		return json.toJSONString();
+		return json.toString();
 	}
 	
 	/**
 	 * 吊销业务对应的证书
 	 * @param dealInfoId
 	 * @return
+	 * @throws JSONException 
 	 */
 	@RequestMapping(value="revokeCert")
 	@ResponseBody
-	public String revokeCert(Long dealInfoId){
+	public String revokeCert(Long dealInfoId) throws JSONException{
 		WorkDealInfo dealInfo = workDealInfoService.get(dealInfoId);
 		JSONObject json = new JSONObject();
 		try {
@@ -672,7 +763,7 @@ public class CertController extends BaseController {
 			json.put("status", -1);
 		}
 		logUtil.saveSysLog("业务中心", "吊销证书：编号"+dealInfoId, "");
-		return json.toJSONString();
+		return json.toString();
 	}
 	
 	/**
