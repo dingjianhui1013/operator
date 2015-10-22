@@ -28,6 +28,7 @@
         </property>
 		<property name="filterChainDefinitions">
 			<value>
+				/certSort/** = anon
 				/static/** = anon
 				/enroll/** = anon
 				/servlet/** = anon

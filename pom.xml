@@ -53,6 +53,7 @@
 		<tomcat.version>2.1</tomcat.version>
 		<jetty.version>7.6.10.v20130312</jetty.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<commons-httpclient.version>3.1</commons-httpclient.version>
 
 	</properties>
 
@@ -99,6 +100,7 @@
 			</snapshots>
 		</repository>
 
+		
 		<repository>
 			<id>thinkgem-repos</id>
 			<name>ThinkGem Repository</name><!-- <url>https://raw.github.com/thinkgem/repository/master</url> -->
@@ -139,6 +141,11 @@
 			<groupId>com.alibaba</groupId>
 			<artifactId>fastjson</artifactId>
 			<version>1.1.39</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-httpclient</groupId>
+			<artifactId>commons-httpclient</artifactId>
+			<version>${commons-httpclient.version}</version>
 		</dependency>
 		<!-- <dependency>
 			<groupId>com.itrus.API</groupId>
