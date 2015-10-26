@@ -108,6 +108,21 @@ public class KeyUsbKeyInvoiceController extends BaseController {
 				}
 			}
 		}
+		Integer count=0;
+		int dayCount=0;
+		for(int i=0;i<page.getList().size();i++)
+		{
+			count+=((int)page.getList().get(i).getDeliveryNum());
+			String oldDate=new SimpleDateFormat("yyyy-MM-dd").format(page.getList().get(i).getStartDate());
+			String newDate=new SimpleDateFormat("yyyy-MM-dd").format(new Date()).toString();
+			if(oldDate.indexOf(newDate)>-1)
+			{
+				dayCount+=page.getList().get(i).getDeliveryNum();
+			}
+			
+		}
+		model.addAttribute("dayCount",dayCount);
+		model.addAttribute("count",count);
 		KeyUsbKeyDepot depot = keyUsbKeyDepotService.get(depotId);
 		model.addAttribute("depot", depot);
 		model.addAttribute("depotId", depotId);
