@@ -129,21 +129,37 @@
 			</div>
 		</div>
 		<c:if test="${configChargeAgent.tempStyle!='1'}">
-		<div class="control-group" id="chargeMethods">
-			<label class="control-label">配置数量:</label>
+		<div class="control-group" >
+			<label class="control-label">配置新增数量:</label>
 			<div class="controls" >${ configChargeAgent.configureNum}
 			</div>
 		</div>
-		
-		<div class="control-group" id="chargeMethods">
-			<label class="control-label">剩余数量:</label>
-			<div class="controls" >${ configChargeAgent.surplusNum}
+		<div class="control-group" >
+			<label class="control-label">配置更新数量:</label>
+			<div class="controls" >${ configChargeAgent.configureUpdateNum}
 			</div>
 		</div>
 		
-		<div class="control-group" id="chargeMethods">
-			<label class="control-label">已用数量:</label>
+		<div class="control-group" >
+			<label class="control-label">新增剩余数量:</label>
+			<div class="controls" >${ configChargeAgent.surplusUpdateNum}
+			</div>
+		</div>
+		<div class="control-group" >
+			<label class="control-label">更新剩余数量:</label>
+			<div class="controls" >${ configChargeAgent.surplusUpdateNum}
+			</div>
+		</div>
+		
+		
+		<div class="control-group" >
+			<label class="control-label">新增已用数量:</label>
 			<div class="controls" >${ configChargeAgent.availableNum + configChargeAgent.reserveNum}
+			</div>
+		</div>
+		<div class="control-group" >
+			<label class="control-label">更新已用数量:</label>
+			<div class="controls" >${ configChargeAgent.availableUpdateNum + configChargeAgent.reserveUpdateNum}
 			</div>
 		</div>
 		</c:if>

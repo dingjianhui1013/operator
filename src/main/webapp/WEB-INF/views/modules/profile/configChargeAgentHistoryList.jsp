@@ -70,9 +70,9 @@
 				<th style="vertical-align: middle; text-align: center;" colspan="12">业务类型</th>
 				<th style="vertical-align: middle; text-align: center;" colspan="2">可信移动设备</th>
 				<th style="vertical-align: middle; text-align: center;" rowspan="3">缴费方式</th>
-				<th style="vertical-align: middle; text-align: center;" rowspan="3">配置数量</th>
-				<th style="vertical-align: middle; text-align: center;" rowspan="3">剩余数量</th>
-				<th style="vertical-align: middle; text-align: center;" rowspan="3">已用数量</th>
+				<th style="vertical-align: middle; text-align: center;" colspan="2" rowspan="2">配置数量</th>
+				<th style="vertical-align: middle; text-align: center;" colspan="2" rowspan="2">剩余数量</th>
+				<th style="vertical-align: middle; text-align: center;" colspan="2" rowspan="2">已用数量</th>
 				<th style="vertical-align: middle; text-align: center;" rowspan="3">修改人</th>
 				<th style="vertical-align: middle; text-align: center;" rowspan="3">修改时间</th>
 			</tr>
@@ -84,7 +84,8 @@
 				<th style="vertical-align: middle; text-align: center;" rowspan="2">变更</th>
 				<th style="vertical-align: middle; text-align: center;" rowspan="2">开户费</th>
 				<th style="vertical-align: middle; text-align: center;" rowspan="2">半年</th>
-				<th style="vertical-align: middle; text-align: center;" rowspan="2">一年</th>
+				<th style="vertical-align: middle; text-align: center;"  rowspan="2">一年</th>
+				
 			</tr>
 			<tr>
 				<th style="vertical-align: middle; text-align: center;">一年</th>
@@ -97,6 +98,12 @@
 				<th style="vertical-align: middle; text-align: center;">五年</th>
 				<th style="vertical-align: middle; text-align: center;">遗失补办</th>
 				<th style="vertical-align: middle; text-align: center;">损坏更换</th>
+				<th style="vertical-align: middle; text-align: center;">新增</th>
+				<th style="vertical-align: middle; text-align: center;">更新</th>
+				<th style="vertical-align: middle; text-align: center;">新增</th>
+				<th style="vertical-align: middle; text-align: center;">更新</th>
+				<th style="vertical-align: middle; text-align: center;">新增</th>
+				<th style="vertical-align: middle; text-align: center;">更新</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -154,12 +161,30 @@
 					</c:if></td>
 					<td style="vertical-align: middle; text-align: center;"><c:if
 							test="${configChargeAgentHistory.tempStyle != 1 }">
+					${configChargeAgentHistory.configureUpdateNum }
+					</c:if></td>
+					
+					
+					
+					
+					<td style="vertical-align: middle; text-align: center;"><c:if
+							test="${configChargeAgentHistory.tempStyle != 1 }">
 						${configChargeAgentHistory.surplusNum }
 						</c:if></td>
 					<td style="vertical-align: middle; text-align: center;"><c:if
 							test="${configChargeAgentHistory.tempStyle != 1 }">
+						${configChargeAgentHistory.surplusUpdateNum }
+						</c:if></td>	
+					
+					<td style="vertical-align: middle; text-align: center;"><c:if
+							test="${configChargeAgentHistory.tempStyle != 1 }">
 						${configChargeAgentHistory.availableNum + configChargeAgentHistory.reserveNum }
 						</c:if></td>
+					<td style="vertical-align: middle; text-align: center;"><c:if
+							test="${configChargeAgentHistory.tempStyle != 1 }">
+						${configChargeAgentHistory.availableUpdateNum + configChargeAgentHistory.reserveUpdateNum }
+						</c:if></td>
+						
 					<td style="vertical-align: middle; text-align: center;">
 						${configChargeAgentHistory.createBy.name }
 					</td>

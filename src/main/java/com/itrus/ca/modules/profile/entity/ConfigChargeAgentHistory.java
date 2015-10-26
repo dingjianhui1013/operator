@@ -40,10 +40,18 @@ public class ConfigChargeAgentHistory implements java.io.Serializable {
 	private String tempName;//模板名称
 	private String tempStyle;//模板类型 1通用 2政府统一采购 3合同采购
 	
-	private Integer configureNum;//配置数量
-	private Integer surplusNum;//剩余数量
-	private Integer availableNum;//已用数量
-	private Integer reserveNum;//预留数量
+	private Integer configureNum;//配置新增数量
+	private Integer configureUpdateNum;//配置更新数量
+	private Date htStartTime;//开始时间
+	private Date htEndTime;//结束时间
+	
+	
+	private Integer surplusNum;//新增剩余数量
+	private Integer surplusUpdateNum;//剩余更新数量
+	private Integer availableNum;//已用新增数量
+	private Integer availableUpdateNum;//已用更新数量
+	private Integer reserveNum;//新增预留数量
+	private Integer reserveUpdateNum;//预留更新数量
 	
 	private Long superiorId;//计费策略正式编号
 	
@@ -71,7 +79,13 @@ public class ConfigChargeAgentHistory implements java.io.Serializable {
 			Long superiorId,
 			Integer reserveNum,
 			Date createDate,
-			User createBy
+			User createBy,
+			Integer configureUpdateNum,
+			Date htStartTime,
+			Date htEndTime,
+			Integer surplusUpdateNum,
+			Integer availableUpdateNum,
+			Integer reserveUpdateNum
 			) {
 		
 		this.chargeMethodPos = chargeMethodPos;
@@ -86,6 +100,12 @@ public class ConfigChargeAgentHistory implements java.io.Serializable {
 		this.reserveNum = reserveNum;
 		this.createDate = createDate;
 		this.createBy = createBy;
+		this.configureUpdateNum=configureUpdateNum;
+		this.htStartTime=htStartTime;
+		this.htEndTime=htEndTime;
+		this.surplusUpdateNum=surplusUpdateNum;
+		this.availableUpdateNum=availableUpdateNum;
+		this.reserveUpdateNum=reserveUpdateNum;
 	}
 
 	// Property accessors
@@ -237,7 +257,61 @@ public class ConfigChargeAgentHistory implements java.io.Serializable {
 		this.createDate = createDate;
 	}
 	
+	@Column(name = "config_update_num" , length=11)
+	public Integer getConfigureUpdateNum() {
+		return configureUpdateNum;
+	}
+
+	public void setConfigureUpdateNum(Integer configureUpdateNum) {
+		this.configureUpdateNum = configureUpdateNum;
+	}
+
+	@Column(name = "ht_start_time")
+	public Date getHtStartTime() {
+		return htStartTime;
+	}
+
+	public void setHtStartTime(Date htStartTime) {
+		this.htStartTime = htStartTime;
+	}
+
+	@Column(name = "ht_end_time")
+	public Date getHtEndTime() {
+		return htEndTime;
+	}
+
+	public void setHtEndTime(Date htEndTime) {
+		this.htEndTime = htEndTime;
+	}
+
 	
+	@Column(name = "surplus_update_num" , length=11)
+	public Integer getSurplusUpdateNum() {
+		return surplusUpdateNum;
+	}
+
+	public void setSurplusUpdateNum(Integer surplusUpdateNum) {
+		this.surplusUpdateNum = surplusUpdateNum;
+	}
+
+	@Column(name = "available_update_num" , length=11)
+	public Integer getAvailableUpdateNum() {
+		return availableUpdateNum;
+	}
+
+	public void setAvailableUpdateNum(Integer availableUpdateNum) {
+		this.availableUpdateNum = availableUpdateNum;
+	}
+
+	@Column(name = "reserve_update_num" , length=11)
+	public Integer getReserveUpdateNum() {
+		return reserveUpdateNum;
+	}
+
+	public void setReserveUpdateNum(Integer reserveUpdateNum) {
+		this.reserveUpdateNum = reserveUpdateNum;
+	}
+
 	
 	
 }

@@ -43,6 +43,9 @@
 			
 			if($("#tStyle").val()==1){
 				$("#configureNumDiv").hide();
+				$("#htStartTimeDiv").hide();
+				$("#htEndTimeDiv").hide();
+				$("#configureUpdateNumDiv").hide();
 			}
 			
 		});
@@ -94,18 +97,16 @@
 			
 			var tempStyle = $('input:radio:checked').val();
 			if(tempStyle!=1){
-				if($("#configureNum").val()==""){
-					top.$.jBox.tip("请输入配置数量");
-					return false;
-				}else{
-					
-					if(parseInt($("#configureNum").val())<parseInt($("#avaRes").val())){
-						top.$.jBox.tip("配置数量应大于已使用数量！请重新输入！");
+				
+					if(parseInt($("#configureNum").val())<parseInt($("#avaNum").val())){
+						top.$.jBox.tip("配置新增数量应大于新增剩余数量！请重新输入！");
 						return false;
 					}
-					
-					
-				}
+					if(parseInt($("#configureUpdateNum").val())<parseInt($("#avaUpdateNum").val())){
+						top.$.jBox.tip("配置更新数量应大于更新剩余数量！请重新输入！");
+						return false;
+					}
+				
 			}
 			$.ajax({
 				url:"${ctx}/profile/configChargeAgent/checkChargeAgent?tempId="+tempId+"&_="+new Date().getTime(),
@@ -144,14 +145,23 @@
 			var tempStyle = $('input:radio:checked').val();
 			if($("#agentId").val() == null || $("#agentId").val()==""){
 				$("#configureNum").val("");
-				
+				$("#configureUpdateNum").val("");
+				$("#htStartTime").val("");
+				$("#htEndTime").val("");
 			}
 			if(tempStyle==1){
 				$("#configureNumDiv").hide();
+				$("#htStartTimeDiv").hide();
+				$("#htEndTimeDiv").hide();
+				$("#configureUpdateNumDiv").hide();
+				
 				$("#surplusNumDiv").hide();
 				$("#availableNumDiv").hide();
 			}else{
 				$("#configureNumDiv").show();
+				$("#htStartTimeDiv").show();
+				$("#htEndTimeDiv").show();
+				$("#configureUpdateNumDiv").show();
 				
 				if($("#agentId").val() != null && $("#agentId").val()!=""){
 					
@@ -259,27 +269,72 @@
 			</div>
 		</div>
 		<div class="control-group" id="configureNumDiv" >
-			<label class="control-label"><font color="red">*</font>配置数量:</label>
+			<label class="control-label"><font color="red">*</font>配置新增数量:</label>
 			<div class="controls" >
-				<input name="configureNum" id="configureNum"  type="text" value="${configChargeAgent.configureNum}" onkeyup="value=value.replace(/[^\d]/g,'')"   />
+				<input required="required" name="configureNum" id="configureNum"  type="text" value="${configChargeAgent.configureNum}" onkeyup="value=value.replace(/[^\d]/g,'')"   />
 			</div>
 		</div>
+		<div class="control-group" id="configureUpdateNumDiv" >
+			<label class="control-label"><font color="red">*</font>配置更新数量:</label>
+			<div class="controls" >
+				<input required="required" name="configureUpdateNum" id="configureUpdateNum"  type="text" value="${configChargeAgent.configureUpdateNum}" onkeyup="value=value.replace(/[^\d]/g,'')"   />
+			</div>
+		</div>
+		<div class="control-group" id="htStartTimeDiv" >
+			<label class="control-label"><font color="red">*</font>开始时间:</label>
+			<div class="controls" >
+				<input class="input-medium Wdate" type="text"
+				required="required" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"
+				value="<fmt:formatDate value="${configChargeAgent.htStartTime}" pattern="yyyy-MM-dd"/>" name="htStartTime" id="htStartTime" maxlength="20" readonly="readonly"
+				/>
+			</div>
+		</div>
+		<div class="control-group" id="htEndTimeDiv" >
+			<label class="control-label"><font color="red">*</font>截止时间:</label>
+			<div class="controls" >
+				<input class="input-medium Wdate" type="text"
+				required="required" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false,minDate:'#F{$dp.$D(\'htStartTime\')}'});"
+				value="<fmt:formatDate value="${configChargeAgent.htEndTime}" pattern="yyyy-MM-dd"/>" name="htEndTime" id="htEndTime" maxlength="20" readonly="readonly"
+				/>
+			</div>
+		</div>
+		
+		
+		
 		<c:if test="${id!=null && configChargeAgent.tempStyle!=1 }">
 		<div class="control-group" id="surplusNumDiv"   >
-			<label class="control-label">剩余数量:</label>
+			<label class="control-label">新增剩余数量:</label>
 			<div class="controls" >
 				${configChargeAgent.surplusNum}
-				<input type="hidden" id="avaNum" value="${configChargeAgent.availableNum}">
+				<input type="hidden" id="avaNum" value="${configChargeAgent.surplusNum}">
+			</div>
+		</div>
+		<div class="control-group" id="surplusNumDiv"   >
+			<label class="control-label">更新剩余数量:</label>
+			<div class="controls" >
+				${configChargeAgent.surplusUpdateNum}
+				
+				<input type="hidden" id="avaUpdateNum" value="${configChargeAgent.surplusUpdateNum}">
 			</div>
 		</div>
 		<div class="control-group" id="availableNumDiv" >
-			<label class="control-label">已用数量:</label>
+			<label class="control-label">新增已用数量:</label>
 			<div class="controls" >
 				${configChargeAgent.availableNum  + configChargeAgent.reserveNum}
+				<input type="hidden" id="avaRes" value="${configChargeAgent.availableNum  + configChargeAgent.reserveNum}">
 				
-				<input type="hidden" id="avaRes" name="avaRes" value="${configChargeAgent.availableNum  + configChargeAgent.reserveNum}">
+				
 				<input type="hidden" id="agentId" value="${id }" /> 
+			</div>	
+		</div>
+		<div class="control-group" id="surplusNumDiv"   >
+			<label class="control-label">更新已用数量:</label>
+			<div class="controls" >
+				${configChargeAgent.availableUpdateNum  + configChargeAgent.reserveUpdateNum}
+				<input type="hidden" id="avaUpdateRes"  value="${configChargeAgent.availableUpdateNum  + configChargeAgent.reserveUpdateNum}">
 			</div>
+			
+			
 		</div>
 		</c:if>
 		<div class="form-actions">

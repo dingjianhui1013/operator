@@ -553,19 +553,39 @@ public class ConfigChargeAgentController extends BaseController {
 			Boolean chargeMethodPos, Boolean chargeMethodMoney,
 			Boolean chargeMethodBank, Boolean chargeMethodAlipay,
 			Boolean chargeMethodGov, Boolean chargeMethodContract,
-			Model model, RedirectAttributes redirectAttributes,Double[] addMoney,Double reissueMoney0,Double reissueMoney1,
-			Double[] updateMoney,Double changeMoney,Double openAccountMoney,Double[] trustDeviceMoney,String tempName,String tempStyle,Integer configureNum) {
+			Model model, RedirectAttributes redirectAttributes,Double[] addMoney,
+			Double reissueMoney0,Double reissueMoney1,
+			Double[] updateMoney,Double changeMoney,Double openAccountMoney,
+			Double[] trustDeviceMoney,String tempName,String tempStyle,
+			Integer configureNum,Integer configureUpdateNum,
+			Date htStartTime,Date htEndTime
+			
+			) {
 		
 		Integer conNum =0;
 		Integer surNum =0;
 		Integer avaNum =0;
 		Integer resNum = 0;
+		
+		Integer conUpdateNum =0;
+		Integer surUpdateNum =0;
+		Integer avaUpdateNum =0;
+		Integer resUpdateNum = 0;
+		
 		if (configChargeAgentId!=null && configureNum!=null) {	
 			ConfigChargeAgent agent = configChargeAgentService.get(configChargeAgentId);
 			conNum = configureNum;
 			surNum = agent.getSurplusNum() - agent.getConfigureNum() + configureNum;
 			avaNum = agent.getAvailableNum();
 			resNum = agent.getReserveNum();
+			
+			conUpdateNum = configureUpdateNum;
+			surUpdateNum = agent.getSurplusUpdateNum() - agent.getConfigureUpdateNum() + configureUpdateNum;
+			avaUpdateNum = agent.getAvailableUpdateNum();
+			resUpdateNum = agent.getReserveUpdateNum();
+			
+			
+			
 		}
 		
 		ConfigChargeAgent configChargeAgent = new ConfigChargeAgent();
@@ -606,16 +626,25 @@ public class ConfigChargeAgentController extends BaseController {
 			}
 	
 			if(configChargeAgentId == null){
-				if(configureNum!=null){
+				if(configureNum!=null&&configureUpdateNum!=null){
 					configChargeAgent.setConfigureNum(configureNum);
+					configChargeAgent.setConfigureUpdateNum(configureUpdateNum);
 					configChargeAgent.setSurplusNum(configureNum);
+					configChargeAgent.setSurplusUpdateNum(configureUpdateNum);
 					configChargeAgent.setAvailableNum(0);
 					configChargeAgent.setReserveNum(0);
+					configChargeAgent.setHtStartTime(htStartTime);
+					configChargeAgent.setHtEndTime(htEndTime);
+					
 				}else{
 					configChargeAgent.setConfigureNum(0);
+					configChargeAgent.setConfigureUpdateNum(0);
 					configChargeAgent.setSurplusNum(0);
+					configChargeAgent.setSurplusUpdateNum(0);
 					configChargeAgent.setAvailableNum(0);
+					configChargeAgent.setAvailableUpdateNum(0);
 					configChargeAgent.setReserveNum(0);
+					configChargeAgent.setReserveUpdateNum(0);
 				}
 				
 			}else{
@@ -623,6 +652,10 @@ public class ConfigChargeAgentController extends BaseController {
 					configChargeAgent.setSurplusNum(surNum);
 					configChargeAgent.setAvailableNum(avaNum);
 					configChargeAgent.setReserveNum(resNum);
+					configChargeAgent.setConfigureUpdateNum(conUpdateNum);
+					configChargeAgent.setSurplusUpdateNum(surUpdateNum);
+					configChargeAgent.setAvailableUpdateNum(avaUpdateNum);
+					configChargeAgent.setReserveUpdateNum(resUpdateNum);
 			}
 			
 			
@@ -666,11 +699,20 @@ public class ConfigChargeAgentController extends BaseController {
 		agentHistory.setChargeMethodMoney(configChargeAgent.getChargeMethodMoney());
 		agentHistory.setChargeMethodPos(configChargeAgent.getChargeMethodPos());
 		agentHistory.setConfigureNum(configChargeAgent.getConfigureNum());
+		agentHistory.setConfigureUpdateNum(configChargeAgent.getConfigureUpdateNum());
+		
 		agentHistory.setSurplusNum(configChargeAgent.getSurplusNum());
+		agentHistory.setSurplusUpdateNum(configChargeAgent.getSurplusUpdateNum());
+		
 		agentHistory.setAvailableNum(configChargeAgent.getAvailableNum());
+		agentHistory.setAvailableUpdateNum(configChargeAgent.getAvailableUpdateNum());
+		
 		agentHistory.setTempName(configChargeAgent.getTempName());
 		agentHistory.setTempStyle(configChargeAgent.getTempStyle());
 		agentHistory.setReserveNum(configChargeAgent.getReserveNum());
+		agentHistory.setReserveUpdateNum(configChargeAgent.getReserveUpdateNum());
+		agentHistory.setHtStartTime(configChargeAgent.getHtStartTime());
+		agentHistory.setHtEndTime(configChargeAgent.getHtEndTime());
 		agentHistory.setCreateBy(UserUtils.getUser());
 		agentHistory.setCreateDate(new Date());
 		configChargeAgentHistoryService.save(agentHistory);//保存主表的信息
