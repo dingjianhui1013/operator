@@ -36,6 +36,12 @@
 	<table id="contentTable"
 		class="table table-striped table-bordered table-condensed">
 		<thead>
+		<tr>
+				<th>出库总量</th>
+				<th>${count }</th>
+				<th>当天出库量</th>
+				<th colspan="9" align="left">${dayCount}</th>
+			</tr>
 			<tr>
 				<th>编号</th>
 				<th>库房名称</th>
