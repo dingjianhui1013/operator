@@ -234,6 +234,7 @@ public class ReceiptDepotInfoController extends BaseController {
         Page<ReceiptInvoice> page = receiptInvoiceService.find(new Page<ReceiptInvoice>(request, response), receiptInvoice); 
         model.addAttribute("page", page);
         model.addAttribute("zkid", KeyDepotId.RECEIPT_DEPOT_ID);
+        model.addAttribute("recriptId", receiptDepotInfo.getId());
 		return "modules/receipt/receiptInvoiceListFP";
 	}
 	
@@ -247,7 +248,46 @@ public class ReceiptDepotInfoController extends BaseController {
 		model.addAttribute("userName", UserUtils.getUser().getName());
 		return "modules/receipt/receiptEnterInfoRK";
 	}
+	@RequiresPermissions("receipt:receiptDepotInfo:show")
+	@RequestMapping("addchuku")
+	public String addchuku(ReceiptInvoice receiptInvoice,HttpServletRequest request, HttpServletResponse response, Model model){
+		
+		List<ReceiptType> receiptType=receiptTypeService.getAll();
+		model.addAttribute("receiptType", receiptType);
+		model.addAttribute("date", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+		model.addAttribute("typeSize", receiptType.size());
+		return "modules/receipt/receiptDepotInfoF";
+	}
+	@RequestMapping(value= "saveZong")
+	public String saveZong(ReceiptInvoice receiptInvoice, HttpServletRequest request, HttpServletResponse response, Model model,RedirectAttributes redirectAttributes)
+	{
+		
+		ReceiptDepotInfo receipt= receiptDepotInfoService.get(receiptInvoice.getId());
+		double count= receipt.getReceiptResidue()-(((double)receiptInvoice.getType().getTypeName())*receiptInvoice.getCount());
+		if(count>=0)
+		{
+			ReceiptDepotInfo receiptDepotInfo=new ReceiptDepotInfo();
+			receiptDepotInfo.setId(receiptInvoice.getId());
+			ReceiptInvoice ri=new ReceiptInvoice();
+			ri.setReceiptDepotInfo(receiptDepotInfo);
+			ri.setCreateDate(receiptInvoice.getCreateDate());
+			ri.setCount(receiptInvoice.getCount());
+			ri.setReceiptType(receiptInvoice.getReceiptType());
+			ReceiptType receiptType=receiptTypeService.findByName(receiptInvoice.getType().getTypeName());
+			ri.setType(receiptType);
+			ri.getType().setTypeName(receiptInvoice.getType().getTypeName());
+			ri.setReceiptMoney(receiptInvoice.getCount()*(double)receiptInvoice.getType().getTypeName());
+			receiptInvoiceService.save(ri);
+			receipt.setReceiptResidue(count);
+			receiptDepotInfoService.save(receipt);
+			addMessage(redirectAttributes,"添加出库信息成功");
+		}else
+		{
+			addMessage(redirectAttributes,"您录入的出库总钱数大于库存中的余量总钱数，请检查！");
+		}
 	
+		return "redirect:"+Global.getAdminPath()+"/receipt/receiptDepotInfo/chukuList?id="+1;
+	}
 	
 	@RequestMapping(value = "alarmForm")
 	public String alarmForm(
