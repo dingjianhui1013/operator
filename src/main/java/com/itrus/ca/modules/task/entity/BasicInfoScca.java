@@ -65,13 +65,13 @@ public class BasicInfoScca implements java.io.Serializable {
 	private String notbefore;
 	private String serialnumber;
 	private String keySn;
-	private String 证书类型;
-	private String 应用名;
-	private String 单证or双证;
+	private String certType;
+	private String appName;
+	private String certCounts;
 	//private String 专用or通用;
-	private Integer 多证书编号;
-	private String key编码Usb口的编码;
-	private Integer 证书天数;
+	private Integer multiCertSns;
+	private String keyAndUsbSn;
+	private Integer certValidDays;
 	private Boolean used;
 	
 	private Long times;
@@ -135,13 +135,13 @@ public class BasicInfoScca implements java.io.Serializable {
 		this.notbefore = notbefore;
 		this.serialnumber = serialnumber;
 		this.keySn = keySn;
-		this.证书类型 = 证书类型;
-		this.应用名 = 应用名;
-		this.单证or双证 = 单证or双证;
+		this.certType = 证书类型;
+		this.appName = 应用名;
+		this.certCounts = 单证or双证;
 		//this.专用or通用 = 专用or通用;
-		this.多证书编号 = 多证书编号;
-		this.key编码Usb口的编码 = key编码Usb口的编码;
-		this.证书天数 = 证书天数;
+		this.multiCertSns = 多证书编号;
+		this.keyAndUsbSn = key编码Usb口的编码;
+		this.certValidDays = 证书天数;
 		this.used = used;
 		this.agentId = agentId;
 	}
@@ -474,31 +474,31 @@ public class BasicInfoScca implements java.io.Serializable {
 		this.keySn = keySn;
 	}
 
-	@Column(name = "证书类型")
-	public String get证书类型() {
-		return this.证书类型;
+	@Column(name = "certType")
+	public String getCertType() {
+		return this.certType;
 	}
 
-	public void set证书类型(String 证书类型) {
-		this.证书类型 = 证书类型;
+	public void setCertType(String 证书类型) {
+		this.certType = 证书类型;
 	}
 
-	@Column(name = "应用名")
-	public String get应用名() {
-		return this.应用名;
+	@Column(name = "appName")
+	public String getAppName() {
+		return this.appName;
 	}
 
-	public void set应用名(String 应用名) {
-		this.应用名 = 应用名;
+	public void setAppName(String 应用名) {
+		this.appName = 应用名;
 	}
 
-	@Column(name = "单证or双证")
-	public String get单证or双证() {
-		return this.单证or双证;
+	@Column(name = "certCounts")
+	public String getCertCounts() {
+		return this.certCounts;
 	}
 
-	public void set单证or双证(String 单证or双证) {
-		this.单证or双证 = 单证or双证;
+	public void setCertCounts(String 单证or双证) {
+		this.certCounts = 单证or双证;
 	}
 
 //	@Column(name = "专用or通用")
@@ -510,31 +510,31 @@ public class BasicInfoScca implements java.io.Serializable {
 //		this.专用or通用 = 专用or通用;
 //	}
 
-	@Column(name = "多证书编号")
-	public Integer get多证书编号() {
-		return this.多证书编号;
+	@Column(name = "multiCertSns")
+	public Integer getMultiCertSns() {
+		return this.multiCertSns;
 	}
 
-	public void set多证书编号(Integer 多证书编号) {
-		this.多证书编号 = 多证书编号;
+	public void setMultiCertSns(Integer 多证书编号) {
+		this.multiCertSns = 多证书编号;
 	}
 
 	@Column(name = "key编码_USB口的编码")
-	public String getKey编码Usb口的编码() {
-		return this.key编码Usb口的编码;
+	public String getKeyAndUsbSn() {
+		return this.keyAndUsbSn;
 	}
 
-	public void setKey编码Usb口的编码(String key编码Usb口的编码) {
-		this.key编码Usb口的编码 = key编码Usb口的编码;
+	public void setKeyAndUsbSn(String key编码Usb口的编码) {
+		this.keyAndUsbSn = key编码Usb口的编码;
 	}
 
-	@Column(name = "证书天数")
-	public Integer get证书天数() {
-		return this.证书天数;
+	@Column(name = "certValidDays")
+	public Integer getCertValidDays() {
+		return this.certValidDays;
 	}
 
-	public void set证书天数(Integer 证书天数) {
-		this.证书天数 = 证书天数;
+	public void setCertValidDays(Integer 证书天数) {
+		this.certValidDays = 证书天数;
 	}
 
 	@Column(name = "used")
@@ -730,28 +730,28 @@ public class BasicInfoScca implements java.io.Serializable {
 				&& ((this.getKeySn() == castOther.getKeySn()) || (this
 						.getKeySn() != null && castOther.getKeySn() != null && this
 						.getKeySn().equals(castOther.getKeySn())))
-				&& ((this.get证书类型() == castOther.get证书类型()) || (this.get证书类型() != null
-						&& castOther.get证书类型() != null && this.get证书类型()
-						.equals(castOther.get证书类型())))
-				&& ((this.get应用名() == castOther.get应用名()) || (this.get应用名() != null
-						&& castOther.get应用名() != null && this.get应用名().equals(
-						castOther.get应用名())))
-				&& ((this.get单证or双证() == castOther.get单证or双证()) || (this
-						.get单证or双证() != null && castOther.get单证or双证() != null && this
-						.get单证or双证().equals(castOther.get单证or双证())))
+				&& ((this.getCertType() == castOther.getCertType()) || (this.getCertType() != null
+						&& castOther.getCertType() != null && this.getCertType()
+						.equals(castOther.getCertType())))
+				&& ((this.getAppName() == castOther.getAppName()) || (this.getAppName() != null
+						&& castOther.getAppName() != null && this.getAppName().equals(
+						castOther.getAppName())))
+				&& ((this.getCertCounts() == castOther.getCertCounts()) || (this
+						.getCertCounts() != null && castOther.getCertCounts() != null && this
+						.getCertCounts().equals(castOther.getCertCounts())))
 //				&& ((this.get专用or通用() == castOther.get专用or通用()) || (this
 //						.get专用or通用() != null && castOther.get专用or通用() != null && this
 //						.get专用or通用().equals(castOther.get专用or通用())))
-				&& ((this.get多证书编号() == castOther.get多证书编号()) || (this
-						.get多证书编号() != null && castOther.get多证书编号() != null && this
-						.get多证书编号().equals(castOther.get多证书编号())))
-				&& ((this.getKey编码Usb口的编码() == castOther.getKey编码Usb口的编码()) || (this
-						.getKey编码Usb口的编码() != null
-						&& castOther.getKey编码Usb口的编码() != null && this
-						.getKey编码Usb口的编码().equals(castOther.getKey编码Usb口的编码())))
-				&& ((this.get证书天数() == castOther.get证书天数()) || (this.get证书天数() != null
-						&& castOther.get证书天数() != null && this.get证书天数()
-						.equals(castOther.get证书天数())))
+				&& ((this.getMultiCertSns() == castOther.getMultiCertSns()) || (this
+						.getMultiCertSns() != null && castOther.getMultiCertSns() != null && this
+						.getMultiCertSns().equals(castOther.getMultiCertSns())))
+				&& ((this.getKeyAndUsbSn() == castOther.getKeyAndUsbSn()) || (this
+						.getKeyAndUsbSn() != null
+						&& castOther.getKeyAndUsbSn() != null && this
+						.getKeyAndUsbSn().equals(castOther.getKeyAndUsbSn())))
+				&& ((this.getCertValidDays() == castOther.getCertValidDays()) || (this.getCertValidDays() != null
+						&& castOther.getCertValidDays() != null && this.getCertValidDays()
+						.equals(castOther.getCertValidDays())))
 				&& ((this.getAgentId() == castOther.getAgentId()) || (this
 								.getAgentId() != null && castOther.getAgentId() != null && this
 								.getAgentId().equals(castOther.getAgentId())))
@@ -871,21 +871,21 @@ public class BasicInfoScca implements java.io.Serializable {
 		result = 37 * result
 				+ (getKeySn() == null ? 0 : this.getKeySn().hashCode());
 		result = 37 * result
-				+ (get证书类型() == null ? 0 : this.get证书类型().hashCode());
+				+ (getCertType() == null ? 0 : this.getCertType().hashCode());
 		result = 37 * result
-				+ (get应用名() == null ? 0 : this.get应用名().hashCode());
+				+ (getAppName() == null ? 0 : this.getAppName().hashCode());
 		result = 37 * result
-				+ (get单证or双证() == null ? 0 : this.get单证or双证().hashCode());
+				+ (getCertCounts() == null ? 0 : this.getCertCounts().hashCode());
 //		result = 37 * result
 //				+ (get专用or通用() == null ? 0 : this.get专用or通用().hashCode());
 		result = 37 * result
-				+ (get多证书编号() == null ? 0 : this.get多证书编号().hashCode());
+				+ (getMultiCertSns() == null ? 0 : this.getMultiCertSns().hashCode());
 		result = 37
 				* result
-				+ (getKey编码Usb口的编码() == null ? 0 : this.getKey编码Usb口的编码()
+				+ (getKeyAndUsbSn() == null ? 0 : this.getKeyAndUsbSn()
 						.hashCode());
 		result = 37 * result
-				+ (get证书天数() == null ? 0 : this.get证书天数().hashCode());
+				+ (getCertValidDays() == null ? 0 : this.getCertValidDays().hashCode());
 		result = 37 * result
 				+ (getAgentId() == null ? 0 : this.getAgentId().hashCode());
 		return result;

@@ -129,14 +129,14 @@ public class MutiProcess implements Runnable {
 				WorkCompanyHis companyHis = new WorkCompanyHis();
 				WorkUserHis userHis = new WorkUserHis();
 				
-				String productName = s1.get证书类型();
-				String appName = s1.get应用名();
+				String productName = s1.getCertType();
+				String appName = s1.getAppName();
 				
 				productName = ProductType.productTypeIdMap.get(productName).toString();
 				
 				ConfigProduct product = configProductService.findByNamesLabel(s1.getProductLabel(), appName, productName);
 				if (product==null) {
-					log.error(appName+"下产品名称'"+s1.get证书类型()+"'对应的产品不存在...跳过，中间表id:"+s1.getId());
+					log.error(appName+"下产品名称'"+s1.getCertType()+"'对应的产品不存在...跳过，中间表id:"+s1.getId());
 					continue;
 				}
 
@@ -285,14 +285,14 @@ public class MutiProcess implements Runnable {
 							.setDealInfoType(WorkDealInfoType.TYPE_ADD_CERT);
 					workDealInfo.setYear(year);
 					
-					if(year*365>s1.get证书天数()){
+					if(year*365>s1.getCertValidDays()){
 						
-						Integer certDayNum = s1.get证书天数()-year*365;
+						Integer certDayNum = s1.getCertValidDays()-year*365;
 						workDealInfo.setAddCertDays(certDayNum);
-					}else if(year*365==s1.get证书天数()){
+					}else if(year*365==s1.getCertValidDays()){
 						workDealInfo.setAddCertDays(0);
 					}else {
-						Integer certDayNum = s1.get证书天数()-year*365;
+						Integer certDayNum = s1.getCertValidDays()-year*365;
 						workDealInfo.setAddCertDays(certDayNum);
 					}
 					
@@ -314,7 +314,7 @@ public class MutiProcess implements Runnable {
 					
 					workDealInfo.setNotafter(dnf.parse(s1.getNotafter()));
 					
-					workDealInfo.setKeySn(s1.getKey编码Usb口的编码());
+					workDealInfo.setKeySn(s1.getKeyAndUsbSn());
 					Double openAccountMoney = 0d;
 					Double addCert = 0d;
 					if (openAccountHash.get(product.getId())==null) {
@@ -356,7 +356,7 @@ public class MutiProcess implements Runnable {
 					log.error("开户费:"+openAccountMoney);
 					log.error("新增证书费用:"+addCert);
 					// 证书序列号
-					workDealInfo.setCertSort(s1.get多证书编号());
+					workDealInfo.setCertSort(s1.getMultiCertSns());
 					
 					
 					ConfigChargeAgent agent = configChargeAgentService.get(s1.getAgentId());
