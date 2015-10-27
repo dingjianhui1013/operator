@@ -49,22 +49,23 @@ public class SendMsgService {
 		HashMap<String, String> config = new HashMap<String, String>();
 		config = sysConfigService.selectEmailConfig();
 
-		String content = new String();
+//		String content = new String();
+		StringBuffer content=new StringBuffer();
 		try {
 			if (validateEmail(to)) {
-				content = configMsgService.gentContent(type, 0);
+//				content = configMsgService.gentContent(type, 0);
 				for (String key : params.keySet()) {
-					content = content.replace("${"+key+"}", params.get(key));
+//					content = content.replace("${"+key+"}", params.get(key));
+					content.append(params.get("CONTENT")+"\n");
 				}
 				boolean ssl = config.get(ConfigConstant.IS_NEED_SSL).equals("true")? true:false;
 				String smtp = config.get(ConfigConstant.EMAIL_URL);
 				String user = config.get(ConfigConstant.EMAIL_USER_NAME);
 				String pass = config.get(ConfigConstant.EMAIL_USER_PASS);
 				String port = config.get(ConfigConstant.PORT);
-
-				MailSendUtil util = new MailSendUtil();
-				boolean result = util.sendMail(to, title, content, ssl, smtp,
-						user, pass, port,null);
+//				boolean result = util.sendMail(to, title, content, ssl, smtp,
+//						user, pass, port,null);
+				MailSendUtil.send(smtp, user, to,title, content.toString(), user,pass);
 				logger.info("发送邮件成功!");
 			}
 		} catch (Exception e) {
