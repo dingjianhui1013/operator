@@ -21,12 +21,14 @@
 	<ul class="nav nav-tabs">
 		<li ><a href="${ctx}/receipt/receiptDepotInfo/list">库房管理</a></li>
 		<li class="active"><a href="#">出库信息列表</a></li>
+		<c:if test="${recriptId==1}"><li><a href="${ctx}/receipt/receiptDepotInfo/addchuku?id=${receiptDepotInfo.id}">添加出库信息</a></li></c:if>
 	</ul>
 	<form action = "${ctx}/receipt/receiptDepotInfo/chukuList" id = "searchForm"  method="post" class="breadcrumb form-search">
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
 		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
 		<input id="id" name="id" type="hidden" value="${receiptDepotInfo.id}"/>
 	</form>
+	<tags:message content="${message}" />
 	<table id="contentTable" class="table table-striped table-bordered table-condensed">
 		<thead>
 			<tr>
