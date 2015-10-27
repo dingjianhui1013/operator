@@ -580,12 +580,14 @@ public class ConfigChargeAgentController extends BaseController {
 			resNum = agent.getReserveNum();
 			
 			conUpdateNum = configureUpdateNum;
-			surUpdateNum = agent.getSurplusUpdateNum() - agent.getConfigureUpdateNum() + configureUpdateNum;
+			
+			if (agent.getSurplusUpdateNum()==null) {
+				surUpdateNum = configureUpdateNum;
+			}else{
+				surUpdateNum = agent.getSurplusUpdateNum() - agent.getConfigureUpdateNum() + configureUpdateNum;
+			}
 			avaUpdateNum = agent.getAvailableUpdateNum();
 			resUpdateNum = agent.getReserveUpdateNum();
-			
-			
-			
 		}
 		
 		ConfigChargeAgent configChargeAgent = new ConfigChargeAgent();

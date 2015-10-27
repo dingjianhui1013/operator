@@ -22,7 +22,7 @@
 		function showChargeAgentTempList(productId){
 			var url;
 			url = "${ctx}/profile/configChargeAgent/bindList?productId="+productId;
-			top.$.jBox.open("iframe:"+url, "计费策略绑定", 600, 600, {
+			top.$.jBox.open("iframe:"+url, "计费策略绑定", 800, 600, {
 				buttons:{"确定":"ok","关闭":true}, submit:function(v, h, f){
 					if(v=='ok'){
 						location.href="${ctx}/profile/configChargeAgent/list";
@@ -36,7 +36,7 @@
 
 		function showChargeAgentTemp(chargeAgentId){
 			var url = "${ctx}/profile/configChargeAgent/form?id="+chargeAgentId+"&view=1";
-			top.$.jBox.open("iframe:"+url, "计费策略查看", 600, 600, {
+			top.$.jBox.open("iframe:"+url, "计费策略查看", 600, 710, {
 				buttons:{"确定":"ok","关闭":true}, submit:function(v, h, f){
 
 				}
