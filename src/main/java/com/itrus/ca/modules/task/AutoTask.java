@@ -401,11 +401,12 @@ public class AutoTask {
 					&& receiptDepotInfo.getPrewarning() != null) {
 				if (receiptDepotInfo.getReceiptResidue() < receiptDepotInfo
 						.getPrewarning()) {
+					
 					HashMap<String, String> map = new HashMap<String, String>();
-					map.put("USER_NAME", receiptDepotInfo.getReceiptCommUser());
+//					map.put("USER_NAME", receiptDepotInfo.getReceiptCommUser());
 					map.put("CONTENT", receiptDepotInfo.getReceiptName()
 							+ "该网点发票库存不足请及时申请调拨");
-					msgService.sendMail(receiptDepotInfo.getEmail(), "发票库存不足",
+					msgService.sendMail(receiptDepotInfo.getWarningEmail(), "发票库存不足",
 							map, 1);
 				}
 			}
@@ -441,10 +442,10 @@ public class AutoTask {
 					}
 				}
 				HashMap<String, String> map = new HashMap<String, String>();
-				map.put("USER_NAME", depots.get(i).getLinkmanName());
+//				map.put("USER_NAME", depots.get(i).getLinkmanName());
 				map.put("CONTENT", depots.get(i).getDepotName() + "仓库中：'"
 						+ content + "'库存不足请及时申请调拨");
-				msgService.sendMail(depots.get(i).getLinkmanEmail(), "key库存不足",
+				msgService.sendMail(depots.get(i).getWarningEmail(), "key库存不足",
 						map, 0);
 			}
 		}
