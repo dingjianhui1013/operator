@@ -656,6 +656,8 @@ public class ConfigChargeAgentController extends BaseController {
 					configChargeAgent.setSurplusUpdateNum(surUpdateNum);
 					configChargeAgent.setAvailableUpdateNum(avaUpdateNum);
 					configChargeAgent.setReserveUpdateNum(resUpdateNum);
+					configChargeAgent.setHtStartTime(htStartTime);
+					configChargeAgent.setHtEndTime(htEndTime);
 			}
 			
 			

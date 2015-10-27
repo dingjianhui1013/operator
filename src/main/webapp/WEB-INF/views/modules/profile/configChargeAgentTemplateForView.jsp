@@ -162,6 +162,18 @@
 			<div class="controls" >${ configChargeAgent.availableUpdateNum + configChargeAgent.reserveUpdateNum}
 			</div>
 		</div>
+		<div class="control-group" >
+			<label class="control-label">开始时间:</label>
+			<div class="controls" >
+			<fmt:formatDate value="${configChargeAgent.htStartTime}" pattern="yyyy-MM-dd"/>
+			</div>
+		</div>
+		<div class="control-group" >
+			<label class="control-label">截止时间:</label>
+			<div class="controls" >
+			<fmt:formatDate value="${configChargeAgent.htEndTime}" pattern="yyyy-MM-dd"/>
+			</div>
+		</div>
 		</c:if>
 	</form:form>
 </body>

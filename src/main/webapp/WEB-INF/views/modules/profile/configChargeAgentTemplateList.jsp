@@ -41,7 +41,7 @@
 		
 		function showChargeAgentTemp(chargeAgentId){
 			var url = "${ctx}/profile/configChargeAgent/form?id="+chargeAgentId+"&view=1";
-			top.$.jBox.open("iframe:"+url, "计费策略查看", 600,810, {
+			top.$.jBox.open("iframe:"+url, "计费策略查看", 600,610, {
 				buttons:{"确定":"ok","关闭":true}, submit:function(v, h, f){
 
 				}

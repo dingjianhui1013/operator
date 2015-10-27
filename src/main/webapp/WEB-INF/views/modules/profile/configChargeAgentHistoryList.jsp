@@ -74,6 +74,8 @@
 				<th style="vertical-align: middle; text-align: center;" colspan="2" rowspan="2">剩余数量</th>
 				<th style="vertical-align: middle; text-align: center;" colspan="2" rowspan="2">已用数量</th>
 				<th style="vertical-align: middle; text-align: center;" rowspan="3">修改人</th>
+				<th style="vertical-align: middle; text-align: center;" rowspan="3">开始时间</th>
+				<th style="vertical-align: middle; text-align: center;" rowspan="3">截止时间</th>
 				<th style="vertical-align: middle; text-align: center;" rowspan="3">修改时间</th>
 			</tr>
 			<tr>
@@ -187,6 +189,12 @@
 						
 					<td style="vertical-align: middle; text-align: center;">
 						${configChargeAgentHistory.createBy.name }
+					</td>
+					<td style="vertical-align: middle; text-align: center;">
+						<fmt:formatDate value="${configChargeAgentHistory.htStartTime}" pattern="yyyy-MM-dd"/>
+					</td>
+					<td style="vertical-align: middle; text-align: center;">
+						<fmt:formatDate value="${configChargeAgentHistory.htEndTime}" pattern="yyyy-MM-dd"/>
 					</td>
 					<td style="vertical-align: middle; text-align: center;">
 						<fmt:formatDate value="${configChargeAgentHistory.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
