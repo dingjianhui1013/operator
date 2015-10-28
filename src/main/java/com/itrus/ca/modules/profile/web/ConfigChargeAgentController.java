@@ -637,6 +637,8 @@ public class ConfigChargeAgentController extends BaseController {
 					configChargeAgent.setReserveNum(0);
 					configChargeAgent.setHtStartTime(htStartTime);
 					configChargeAgent.setHtEndTime(htEndTime);
+					configChargeAgent.setAvailableUpdateNum(0);
+					configChargeAgent.setReserveUpdateNum(0);
 					
 				}else{
 					configChargeAgent.setConfigureNum(0);

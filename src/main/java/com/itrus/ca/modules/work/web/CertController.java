@@ -647,6 +647,7 @@ public class CertController extends BaseController {
 				}
 				//key出库
 				keyInvoiceService.saveInvoice(dealInfo.getWorkCertInfo().getProvider(), dealInfo.getKeySn(),dealInfo.getWorkCompany().getCompanyName());
+				
 				List<Integer> revokeList = new ArrayList<Integer>();
 				revokeList.add(WorkDealInfoType.TYPE_LOST_CHILD);
 				revokeList.add(WorkDealInfoType.TYPE_DAMAGED_REPLACED);

@@ -494,8 +494,8 @@ public class WorkPayInfoController extends BaseController {
 				if(workDealInfo.getDealInfoType().equals(1)){
 					ConfigChargeAgent agent =  configChargeAgentService.get(workDealInfo.getConfigChargeAgentId());
 					if(!agent.getTempStyle().equals("1")){
-						agent.setAvailableNum(agent.getAvailableNum()+1);//已用数量
-						agent.setSurplusNum(agent.getSurplusNum()-1);//剩余数量
+						agent.setAvailableUpdateNum(agent.getAvailableUpdateNum()+1);//已用数量
+						agent.setSurplusUpdateNum(agent.getSurplusUpdateNum()-1);//剩余数量
 						configChargeAgentService.save(agent);
 						logUtil.saveSysLog("计费策略模版", "更改剩余数量和使用数量成功!", "");
 					}
@@ -514,10 +514,11 @@ public class WorkPayInfoController extends BaseController {
 			if (workDealInfo.getDealInfoType()!=null && workDealInfo.getDealInfoType().equals(1)) {
 				if(workDealInfo.getDealInfoType().equals(1)){
 					ConfigChargeAgent agent =  configChargeAgentService.get(workDealInfo.getConfigChargeAgentId());
-					Integer avaiNum = agent.getAvailableNum();//已用数量
-					Integer reseNum = agent.getReserveNum();//预留数量
-					agent.setAvailableNum(avaiNum+1);//已用数量
-					agent.setReserveNum(reseNum-1);//预留数量
+					Integer avaiUpdateNum = agent.getAvailableUpdateNum();//已用数量
+					Integer reseUpdateNum = agent.getReserveUpdateNum();//预留数量
+					
+					agent.setAvailableUpdateNum(avaiUpdateNum+1);//已用数量
+					agent.setReserveUpdateNum(reseUpdateNum-1);//预留数量
 					configChargeAgentService.save(agent);
 					logUtil.saveSysLog("计费策略模版", "更改剩余数量和使用数量成功!", "");
 				}
@@ -1383,16 +1384,10 @@ public class WorkPayInfoController extends BaseController {
 		
 		WorkDealInfo dealInfo = workDealInfoService.get(workDealInfoId);
 		
-//		private Integer configureNum;//配置数量
-//		private Integer surplusNum;//剩余数量
-//		private Integer availableNum;//已用数量
-//		private Integer reserveNum;//预留数量
-
-		
 		
 		ConfigChargeAgent agentOri =  configChargeAgentService.get(dealInfo.getConfigChargeAgentId());
-		agentOri.setReserveNum(agentOri.getReserveNum()+1);
-		agentOri.setAvailableNum(agentOri.getAvailableNum()-1);
+		agentOri.setReserveUpdateNum(agentOri.getReserveUpdateNum()+1);
+		agentOri.setAvailableUpdateNum(agentOri.getAvailableUpdateNum()-1);
 		configChargeAgentService.save(agentOri);
 			
 		

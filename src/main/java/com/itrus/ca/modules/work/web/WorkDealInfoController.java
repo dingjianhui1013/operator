@@ -751,23 +751,11 @@ public class WorkDealInfoController extends BaseController {
 		ConfigApp configApp = configAppService.get(appId);
 		WorkCompany workCompany = workCompanyService.finByNameAndNumber(
 				companyName, organizationNumber);
-		
-		
 		ConfigChargeAgentBoundConfigProduct bound =  configChargeAgentBoundConfigProductService.get(agentDetailId);
-		
-		
-		
-		
 //		ConfigProduct configProduct = configProductService.findByIdOrLable(
 //				appId, product, lable);
 		// 保存单位信息
 		ConfigProduct configProduct = bound.getProduct();
-		
-		
-		
-		
-		
-		
 		workCompany.setCompanyName(companyName);
 		workCompany.setCompanyType(companyType);
 		workCompany.setComCertificateType(comCertificateType);
@@ -861,12 +849,6 @@ public class WorkDealInfoController extends BaseController {
 			agent.setSurplusNum(surNum-1);
 			configChargeAgentService.save(agent);
 		}
-		
-		
-		
-		
-		
-		
 		workDealInfo.setConfigChargeAgentId(bound.getAgent().getId());		
 		workDealInfo.setDealInfoType(WorkDealInfoType.TYPE_ADD_CERT);
 		if (year == null) {
@@ -1716,8 +1698,8 @@ public class WorkDealInfoController extends BaseController {
 		if(workDealInfo.getDealInfoType()!=null){
 			Long agentId = workDealInfo.getConfigChargeAgentId();
 			ConfigChargeAgent agent =  configChargeAgentService.get(agentId);
-			agent.setSurplusNum(agent.getSurplusNum()+1);
-			agent.setReserveNum(agent.getReserveNum()-1);
+			agent.setSurplusUpdateNum(agent.getSurplusUpdateNum()+1);
+			agent.setReserveUpdateNum(agent.getReserveUpdateNum()-1);
 			configChargeAgentService.save(agent);
 			
 			ConfigAgentBoundDealInfo bound = configAgentBoundDealInfoService.findByAgentIdDealId(agent.getId(),id);
@@ -3647,8 +3629,8 @@ public class WorkDealInfoController extends BaseController {
 			Long dealPreId = dealinfo.getPrevId();
 			
 			ConfigChargeAgent agentOri =  configChargeAgentService.get(agnetId);
-			agentOri.setReserveNum(agentOri.getReserveNum()-1);
-			agentOri.setSurplusNum(agentOri.getSurplusNum()+1);
+			agentOri.setReserveUpdateNum(agentOri.getReserveUpdateNum()-1);
+			agentOri.setSurplusUpdateNum(agentOri.getSurplusUpdateNum()+1);
 			configChargeAgentService.save(agentOri);
 			
 			ConfigAgentBoundDealInfo bound = configAgentBoundDealInfoService.findByAgentIdDealId(agnetId,id);
@@ -3733,8 +3715,8 @@ public class WorkDealInfoController extends BaseController {
 //			private Integer reserveNum;//预留数量
 			
 			ConfigChargeAgent agentOri =  configChargeAgentService.get(dealInfo.getConfigChargeAgentId());
-			agentOri.setAvailableNum(agentOri.getAvailableNum()-1);
-			agentOri.setSurplusNum(agentOri.getSurplusNum()+1);
+			agentOri.setAvailableUpdateNum(agentOri.getAvailableUpdateNum()-1);
+			agentOri.setSurplusUpdateNum(agentOri.getSurplusUpdateNum()+1);
 			configChargeAgentService.save(agentOri);
 			
 			ConfigAgentBoundDealInfo bound = configAgentBoundDealInfoService.findByAgentIdDealId(agentOri.getId(),id);

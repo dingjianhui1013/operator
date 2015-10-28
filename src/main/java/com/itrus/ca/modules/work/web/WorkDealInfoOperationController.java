@@ -1706,13 +1706,10 @@ public class WorkDealInfoOperationController extends BaseController {
 		
 		ConfigChargeAgent agent = bound.getAgent();
 		
-		
-		
-		
-		Integer reseNum = agent.getReserveNum();
-		Integer surNum = agent.getSurplusNum();
-		agent.setReserveNum(reseNum+1);
-		agent.setSurplusNum(surNum-1);
+		Integer reseUpdateNum = agent.getReserveUpdateNum();
+		Integer surUpdateNum = agent.getSurplusUpdateNum();
+		agent.setReserveUpdateNum(reseUpdateNum+1);
+		agent.setSurplusUpdateNum(surUpdateNum-1);
 		configChargeAgentService.save(agent);
 		
 		
