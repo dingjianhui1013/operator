@@ -55,6 +55,9 @@
 		class="table table-striped table-bordered table-condensed">
 		<thead>
 			<tr>
+				<th colspan="11">共&nbsp;${count}&nbsp;条数据</th>
+			</tr>
+			<tr>
 				<th>付款编号</th>
 				<th>付款单位名称</th>
 				<th>支付金额</th>
