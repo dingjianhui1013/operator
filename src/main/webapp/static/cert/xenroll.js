@@ -10,12 +10,11 @@ var szOID_SM2_SM3SM2 = "1.2.156.10197.1.501";
 
 var _useLegibleName =true;
 var legibleNameMap = {
-    "飞天 2001":"EnterSafe ePass2001 CSP For SCCA V1.0",
-    "飞天 ePass 3000 GM":"EnterSafe ePass3000GM CSP v1.0",
-    "海泰":"iTruschina Cryptographic Provider(0301) v1.0",
-    "RSA软证书":"Microsoft Enhanced Cryptographic Provider v1.0", 
-    "SM2软证书":"iTrusChina Cryptographic Service Provider v1.0.0"
-    
+		  "飞天 2001":"EnterSafe ePass2001 CSP For SCCA V1.0",
+		  "3000GM":"FEITIAN ePassNG CSP For SCCA V2.0",
+		  "海泰":"iTruschina Cryptographic Provider(0301) v1.0",
+		  "RSA软证书":"Microsoft Enhanced Cryptographic Provider v1.0", 
+		  "SM2软证书":"iTrusChina Cryptographic Service Provider v1.0.0"
 };
 //"天威盾":"iTruschina Cryptographic Provider(0301) v1.0",
 // "RSA软证书":"Microsoft Enhanced Cryptographic Provider v1.0", 
