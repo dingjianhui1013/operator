@@ -1,7 +1,9 @@
 package com.itrus.ca.modules.finance.service;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
@@ -47,17 +49,59 @@ public class FinanceQuitMoneyService extends BaseService{
 			dc.add(Restrictions.eq("financePaymentInfo.commUserName", commUserName));
 		}
 		try{
-			if(payStartTime != null && payEndTime != null){
+			if(payStartTime != null && payEndTime != null && !"".equals(payEndTime) && !"".equals(payStartTime)){
 				dc.add(Restrictions.ge("financePaymentInfo.payDate", format.parse(payStartTime)));
 				dc.add(Restrictions.le("financePaymentInfo.payDate", format.parse(payEndTime)));
 			}
-			if(quitStartTime != null && quitEndTime != null){
+
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}
+		try {
+			if(quitStartTime != null && quitEndTime != null && !"".equals(quitEndTime) && !"".equals(quitStartTime)){
 				dc.add(Restrictions.ge("quitDate", format.parse(quitStartTime)));
 				dc.add(Restrictions.le("quitDate", format.parse(quitEndTime)));
 			}
-		}catch(Exception ex){}
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		dc.addOrder(Order.desc("id"));
 		return financeQuitMoneyDao.find(page, dc);
+	}
+
+	public List<FinanceQuitMoney> findAll(
+			String commUserName, String payStartTime, String payEndTime,
+			String quitStartTime, String quitEndTime) {
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		DetachedCriteria dc = financeQuitMoneyDao.createDetachedCriteria();
+		dc.createAlias("financePaymentInfo", "financePaymentInfo");
+		if (!Strings.isNullOrEmpty(commUserName)) {
+			dc.add(Restrictions.eq("financePaymentInfo.commUserName",
+					commUserName));
+		}
+		try {
+			if (payStartTime != null && payEndTime != null && !"".equals(payEndTime) && !"".equals(payStartTime)) {
+				dc.add(Restrictions.ge("financePaymentInfo.payDate",
+						format.parse(payStartTime)));
+				dc.add(Restrictions.le("financePaymentInfo.payDate",
+						format.parse(payEndTime)));
+			}
+			
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		try {
+			if (quitStartTime != null && quitEndTime != null && !"".equals(quitEndTime) && !"".equals(quitStartTime)) {
+				dc.add(Restrictions.ge("quitDate", format.parse(quitStartTime)));
+				dc.add(Restrictions.le("quitDate", format.parse(quitEndTime)));
+			}
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		dc.addOrder(Order.desc("id"));
+		return financeQuitMoneyDao.find(dc);
 	}
 	
 	@Transactional(readOnly = false)
