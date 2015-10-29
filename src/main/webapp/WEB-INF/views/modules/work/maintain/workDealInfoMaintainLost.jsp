@@ -335,7 +335,9 @@
 					}
 				});
 	};
-
+	function count(o,c){
+ 		$("#"+c).html($("#"+o).val().length);
+	}
 </script>
 </head>
 <body>
@@ -575,7 +577,7 @@
 							<td><input type="text" name="conCertNumber"
 								id="conCertNumber1" onblur="setJBRCard()"
 								onkeyup="value=value.replace(/[^\w\.\/]/ig,'')" maxlength="18"
-								value="${workDealInfo.workUser.conCertNumber }" /></td>
+								value="${workDealInfo.workUser.conCertNumber }" oninput="count('conCertNumber1','zjmcount')"/><span id="zjmcount"></span></td>
 							<th><span class="prompt" style="color: red; display: none;">*</span>证书持有人电子邮件:</th>
 							<td><input type="text" name="contacEmail" id="contacEmail" onblur="setJBRMail()"
 								class="email" maxlength="30"
@@ -585,11 +587,11 @@
 							<th><span class="prompt" style="color: red; display: none;">*</span>证书持有人手机号:</th>
 							<td><input type="text" name="contactPhone"
 								id="contactPhone1" maxlength="11" class="number"
-								value="${workDealInfo.workUser.contactPhone }" /> 
+								value="${workDealInfo.workUser.contactPhone }" oninput="count('contactPhone1','zjtcount')"/><span id="zjtcount"></span> 
 							</td>
 							<th><span class="prompt" style="color: red; display: none;">*</span>业务系统UID:</th>
 							<td><input type="text" name="contactTel" id="contactTel1"
-								maxlength="20" value="${workDealInfo.workUser.contactTel }" />
+								maxlength="20" value="${workDealInfo.workUser.contactTel }" oninput="count('contactTel1','ywIDcount')"/><span id="ywIDcount"></span>
 							</td>
 						</tr>
 						<tr>
