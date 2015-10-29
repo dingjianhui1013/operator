@@ -78,7 +78,9 @@ public class FinanceQuitMoneyController {
 				}
 			}
 		}
+		List<FinanceQuitMoney> financeQuitMoney= financeQuitMoneyService.findAll(commUserName, payStartTime, payEndTime, quitStartTime, quitEndTime);
 		model.addAttribute("page", page);
+		model.addAttribute("count",financeQuitMoney.size());
 		return "modules/finance/financeQuitMoneyList";
 	}
 	
