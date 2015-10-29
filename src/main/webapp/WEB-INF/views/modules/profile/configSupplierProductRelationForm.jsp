@@ -44,10 +44,15 @@
 		<div class="control-group">
 			<label class="control-label">产品名称:</label>
 			<div class="controls">
-				<input name="productType" type="text"  disabled value="${productTypeMap[configSupplierProductRelation.productType] }"/>
+			<c:if test="${configSupplierProductRelation.configSupplier.supplierType==0 }">
+			<input name="productType" type="text"  disabled value="${productTypeMap[configSupplierProductRelation.productType] }"/>
+				</c:if>
+				<c:if test="${configSupplierProductRelation.configSupplier.supplierType==1 }">
+					<input name="productType" type="text"  disabled value="${configSupplierProductRelation.keyGeneralInfo.name}"/>
+				</c:if>
 			</div>
 		</div>
-		<c:if test="${configSupplierProductRelation.productType!=4&&configSupplierProductRelation.productType!=5 }">
+		<c:if test="${configSupplierProductRelation.productType!=4&&configSupplierProductRelation.productType!=5 && configSupplierProductRelation.configSupplier.supplierType==0  }">
 		<div class="control-group">
 			<label class="control-label">收费标准:</label>
 			<div class="controls">
@@ -58,7 +63,7 @@
 			</div>
 		</div>
 		</c:if>
-		<c:if test="${configSupplierProductRelation.productType==4||configSupplierProductRelation.productType==5 }">
+		<c:if test="${configSupplierProductRelation.productType==4||configSupplierProductRelation.productType==5 || configSupplierProductRelation.configSupplier.supplierType==1 }">
 		<div class="control-group">
 			<label class="control-label">收费标准:</label>
 			<div class="controls">
@@ -66,6 +71,8 @@
 			</div>
 		</div>
 		</c:if>
+		
+		
 		
 		<div class="form-actions">
 			<shiro:hasPermission name="profile:configSupplierProductRelation:edit"><input id="btnSubmit" class="btn btn-primary" type="submit" value="保 存"/>&nbsp;</shiro:hasPermission>

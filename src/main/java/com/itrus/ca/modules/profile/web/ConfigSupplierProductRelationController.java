@@ -23,6 +23,8 @@ import com.itrus.ca.common.web.BaseController;
 import com.itrus.ca.modules.sys.entity.User;
 import com.itrus.ca.modules.sys.utils.UserUtils;
 import com.itrus.ca.modules.constant.ProductType;
+import com.itrus.ca.modules.key.entity.KeyGeneralInfo;
+import com.itrus.ca.modules.key.service.KeyGeneralInfoService;
 import com.itrus.ca.modules.log.service.LogUtil;
 import com.itrus.ca.modules.profile.entity.ConfigChargeSupplierDetail;
 import com.itrus.ca.modules.profile.entity.ConfigSupplierProductRelation;
@@ -44,6 +46,10 @@ public class ConfigSupplierProductRelationController extends BaseController {
 	@Autowired
 	private ConfigChargeSupplierDetailService configChargeSupplierDetailService;
 	
+	@Autowired
+	private KeyGeneralInfoService keyGeneralInfoService;
+	
+	
 	private LogUtil logUtil = new LogUtil();
 	
 	@ModelAttribute
@@ -61,6 +67,15 @@ public class ConfigSupplierProductRelationController extends BaseController {
 		User user = UserUtils.getUser();
 
         Page<ConfigSupplierProductRelation> page = configSupplierProductRelationService.find(new Page<ConfigSupplierProductRelation>(request, response), configSupplierProductRelation);
+        for (int i = 0; i < page.getList().size(); i++) {
+        	if (page.getList().get(i).getConfigSupplier().getSupplierType().equals(1)) {
+        		KeyGeneralInfo geneInfo = keyGeneralInfoService.get(Long.parseLong(page.getList().get(i).getProductType().toString()));
+        		page.getList().get(i).setKeyGeneralInfo(geneInfo);
+			}
+		}
+        
+        
+        
         model.addAttribute("page", page);
         model.addAttribute("productType", ProductType.proTypeMap);
         model.addAttribute("proList", ProductType.getProTypeList());
@@ -70,6 +85,12 @@ public class ConfigSupplierProductRelationController extends BaseController {
 	@RequiresPermissions("profile:configSupplierProductRelation:view")
 	@RequestMapping(value = "form")
 	public String form(ConfigSupplierProductRelation configSupplierProductRelation, Model model) {
+		
+		KeyGeneralInfo geneInfo = keyGeneralInfoService.get(Long.parseLong(configSupplierProductRelation.getProductType().toString()));
+		configSupplierProductRelation.setKeyGeneralInfo(geneInfo);
+		
+		
+		
 		List<ConfigChargeSupplierDetail> list = configChargeSupplierDetailService.findByChargeSupplierId(configSupplierProductRelation);
 		model.addAttribute("list", list);
 		for (ConfigChargeSupplierDetail detail : list) {

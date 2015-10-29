@@ -127,6 +127,8 @@ public class RaAccountUtil {
 				value = c_orgNum;
 			} else if (flag.equals("5")) {
 				value = a_idCard;
+			} else if (flag.equals("6")) {
+				value = productName;
 			}
 			request.setUserAdditionalField1(value);
 		}

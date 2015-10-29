@@ -9,10 +9,14 @@ import javax.persistence.SequenceGenerator;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
+import java.beans.Transient;
+
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import com.itrus.ca.modules.key.entity.KeyGeneralInfo;
 
 /**
  * ConfigSupplierProductRelation entity. @author MyEclipse Persistence Tools
@@ -26,6 +30,9 @@ public class ConfigSupplierProductRelation implements java.io.Serializable {
 	private Long id;
 	private ConfigSupplier configSupplier;
 	private Integer productType;
+	
+	private KeyGeneralInfo keyGeneralInfo;
+	
 
 	// Constructors
 
@@ -69,6 +76,15 @@ public class ConfigSupplierProductRelation implements java.io.Serializable {
 
 	public void setProductType(Integer productType) {
 		this.productType = productType;
+	}
+
+	@Transient
+	public KeyGeneralInfo getKeyGeneralInfo() {
+		return keyGeneralInfo;
+	}
+
+	public void setKeyGeneralInfo(KeyGeneralInfo keyGeneralInfo) {
+		this.keyGeneralInfo = keyGeneralInfo;
 	}
 
 }

@@ -123,15 +123,11 @@ public class ConfigSupplierController extends BaseController {
 	@RequestMapping(value = "form")
 	public String form(ConfigSupplier configSupplier, Model model) {
 		
-//		List<ConfigProduct> list = configProductService.findAll();
-//		model.addAttribute("list", list);
 		ArrayList<Type> list = new ArrayList<Type>();
 		ProductType productType = new ProductType();
 		
 		List<ProductTypeObj> productTypeObjs = productType.getProductTypeList();
-		
-		
-		
+
 		for (int i = 0; i < productTypeObjs.size(); i++) {
 			Type map = new Type();
 			map.setId(productTypeObjs.get(i).getId());
@@ -143,7 +139,6 @@ public class ConfigSupplierController extends BaseController {
 						map.setKebl(true);
 					}
 				}
-			
 		}
 //		Type map = new Type();
 //		map.setKey(1);

@@ -138,6 +138,7 @@ $(document).ready(
 						<form:option value="3">证书持有人身份证号</form:option>
 						<form:option value="4">组织机构代码</form:option>
 						<form:option value="5">经办人身份证号</form:option>
+						<form:option value="6">证书类型</form:option>
 					</form:select>
 			</div>
 		</div>

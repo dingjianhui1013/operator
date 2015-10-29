@@ -38,6 +38,8 @@ import com.itrus.ca.common.utils.AdminPinEncKey;
 import com.itrus.ca.common.utils.StringHelper;
 import com.itrus.ca.common.web.BaseController;
 import com.itrus.ca.modules.profile.entity.ConfigSupplier;
+import com.itrus.ca.modules.profile.entity.ConfigSupplierProductRelation;
+import com.itrus.ca.modules.profile.service.ConfigSupplierProductRelationService;
 import com.itrus.ca.modules.profile.service.ConfigSupplierService;
 import com.itrus.ca.modules.sys.entity.Office;
 import com.itrus.ca.modules.sys.entity.User;
@@ -70,6 +72,10 @@ public class KeyGeneralInfoController extends BaseController {
 	
 	@Autowired
 	private KeyUsbKeyService keyUsbKeyService;
+	
+	@Autowired
+	private ConfigSupplierProductRelationService configSupplierProductRelationService;
+	
 	
 	private LogUtil logUtil = new LogUtil();
 
@@ -183,6 +189,16 @@ public class KeyGeneralInfoController extends BaseController {
 			detail = "修改key类型信息："+keyGeneralInfo.getName()+"编号：";
 		}
 		keyGeneralInfoService.save(keyGeneralInfo);
+		
+		ConfigSupplierProductRelation configSupplierProductRelation = new ConfigSupplierProductRelation();
+		
+		configSupplierProductRelation.setConfigSupplier(supplier);
+		configSupplierProductRelation.setProductType(Integer.parseInt(keyGeneralInfo.getId().toString()));
+		
+		configSupplierProductRelationService.save(configSupplierProductRelation);
+		
+		
+		
 		addMessage(redirectAttributes, "保存key类型信息'" + keyGeneralInfo.getName()
 				+ "'成功");
 		logUtil.saveSysLog("库存管理", detail+keyGeneralInfo.getId(), "");

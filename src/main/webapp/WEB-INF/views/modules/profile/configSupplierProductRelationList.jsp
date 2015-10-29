@@ -58,7 +58,19 @@
 				<td>${sta.index+1 }</td>
 				<td><a href="${ctx}/profile/configSupplierProductRelation/form?id=${configSupplierProductRelation.id}">${configSupplierProductRelation.configSupplier.supplierName}</a></td>
 				<td>
-				${productType[configSupplierProductRelation.productType] }
+				<c:if test="${configSupplierProductRelation.configSupplier.supplierType==0 }">
+					${productType[configSupplierProductRelation.productType] }
+				</c:if>
+				<c:if test="${configSupplierProductRelation.configSupplier.supplierType==1 }">
+					
+					${configSupplierProductRelation.keyGeneralInfo.name}
+					
+					
+				</c:if>
+				
+				
+				
+				
 				</td>
 				<shiro:hasPermission name="profile:configSupplierProductRelation:edit"><td>
     				<a href="${ctx}/profile/configSupplierProductRelation/form?id=${configSupplierProductRelation.id}">计费配置</a>
