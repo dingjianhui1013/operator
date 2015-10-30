@@ -185,7 +185,22 @@ public class WorkLogController extends BaseController {
 
 	@RequestMapping(value = "save")
 	public String save(Long dealInfoId, WorkLog workLog, Model model,
-			RedirectAttributes redirectAttributes) {
+			RedirectAttributes redirectAttributes,String ywzx,String ywcz,String ywxt) {
+		if(ywzx!=null)
+		{
+			String ywzxs=ywzx.replace(","," ");
+			workLog.setYwzx(ywzxs);
+		}
+		if(ywcz!=null)
+		{
+			String ywczs=ywcz.replace(","," ");
+			workLog.setYwcz(ywczs);
+		}
+		if(ywxt!=null)
+		{
+			String ywxts=ywxt.replace(","," ");
+			workLog.setYwxt(ywxts);
+		}
 		if (!beanValidator(model, workLog)) {
 			return form(workLog, model);
 		}
