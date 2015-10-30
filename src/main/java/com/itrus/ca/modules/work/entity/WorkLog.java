@@ -44,7 +44,10 @@ public class WorkLog extends DataEntity implements java.io.Serializable {
 	private Integer status; //服务类型状态 1为日常客服 0为普通客服
 	private Integer state; //状态 1为客服记录Null为工作记录
 	private ConfigApp configApp;
-
+	private String ywcz; //业务操作
+	private String ywxt;//业务系统
+	private String ywzx;//业务咨询
+	private String appName;//应用项目名称
 	// Constructors
 
 	/** default constructor */
@@ -207,5 +210,39 @@ public class WorkLog extends DataEntity implements java.io.Serializable {
 		this.state = state;
 	}
 	
+	@Column(name = "ywcz")
+	public String getYwcz() {
+		return ywcz;
+	}
+
+	public void setYwcz(String ywcz) {
+		this.ywcz = ywcz;
+	}
+
+	@Column(name = "ywxt")
+	public String getYwxt() {
+		return ywxt;
+	}
+
+	public void setYwxt(String ywxt) {
+		this.ywxt = ywxt;
+	}
+
+	@Column(name = "ywzx")
+	public String getYwzx() {
+		return ywzx;
+	}
+
+	public void setYwzx(String ywzx) {
+		this.ywzx = ywzx;
+	}
+
+	public String getAppName() {
+		return appName;
+	}
+	@Column(name = "appname")
+	public void setAppName(String appName) {
+		this.appName = appName;
+	}
 	
 }
