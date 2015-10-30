@@ -36,6 +36,7 @@ import com.itrus.ca.modules.constant.ProductType;
 import com.itrus.ca.modules.constant.WorkDealInfoStatus;
 import com.itrus.ca.modules.constant.WorkDealInfoType;
 import com.itrus.ca.modules.log.service.LogUtil;
+import com.itrus.ca.modules.profile.entity.ConfigApp;
 import com.itrus.ca.modules.profile.service.ConfigAppService;
 import com.itrus.ca.modules.sys.entity.User;
 import com.itrus.ca.modules.sys.utils.UserUtils;
@@ -129,6 +130,8 @@ public class WorkCustomerController extends BaseController {
 		model.addAttribute("workDealInfo", workDealInfo);
 		model.addAttribute("nowDate", getDateString());
 		model.addAttribute("userName", UserUtils.getUser().getName());
+		List<ConfigApp> configApp= configAppService.findall();
+		model.addAttribute("configApp", configApp);
 		return "modules/customer/workCustomerInsert";
 	}
 
@@ -158,7 +161,22 @@ public class WorkCustomerController extends BaseController {
 	@RequestMapping("insertCustomer")
 	public String insertCustomer(Long dealInfoId, WorkLog workLog,
 			HttpServletRequest request, HttpServletResponse response,
-			Model model) {
+			Model model,String ywzx,String ywcz,String ywxt) {
+		if(ywzx!=null)
+		{
+			String ywzxs=ywzx.replace(","," ");
+			workLog.setYwzx(ywzxs);
+		}
+		if(ywcz!=null)
+		{
+			String ywczs=ywcz.replace(","," ");
+			workLog.setYwcz(ywczs);
+		}
+		if(ywxt!=null)
+		{
+			String ywxts=ywxt.replace(","," ");
+			workLog.setYwxt(ywxts);
+		}
 		WorkDealInfo workDealInfo = workDealInfoService.get(dealInfoId);
 		workLog.setWorkDealInfo(workDealInfo);
 		workLog.setWorkCompany(workDealInfo.getWorkCompany());
