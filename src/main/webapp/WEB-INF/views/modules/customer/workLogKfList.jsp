@@ -25,7 +25,7 @@
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
 		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
 		<label>单位名称 ：</label><form:input path="workCompany.companyName" htmlEscape="false" maxlength="50" class="input-medium"/>
-		<label>服务主题 ：</label><form:input path="serTitle" htmlEscape="false" maxlength="50" class="input-medium"/>
+<%-- 		<label>服务主题 ：</label><form:input path="serTitle" htmlEscape="false" maxlength="50" class="input-medium"/> --%>
 		<label>客服接入 ：</label>
 		<form:select path="access"  class="input-medium">
 			<form:option value="">请选择接入方式</form:option>
@@ -53,10 +53,12 @@
 		<thead>
 			<tr>
 				<th>单位名称</th>
+				<th>应用项目名称</th>
 				<th>客服接入</th>
 				<th>服务类型</th>
-				<th>服务主题</th>
-				<th>详细记录</th>
+				<th>业务操作</th>
+				<th>业务咨询</th>
+				<th>业务系统</th>
 				<th>完成状态</th>
 				<th>记录人员</th>
 				<th>记录时间</th>
@@ -67,10 +69,12 @@
 		<c:forEach items="${page.list}" var="workLog">
 			<tr>
 				<td><a href="${ctx}/work/workDealInfoFiling/formF?id=${workLog.workDealInfo.id}">${workLog.workCompany.companyName}</a></td>
+				<td>${workLog.appName}</td>
 				<td>${workLog.access }</td>
 				<td>${workLog.serType }</td>
-				<td>${workLog.serTitle }</td>
-				<td width="80px" style="word-break: break-all">${workLog.recordContent }</td>
+				<td>${workLog.ywcz }</td>
+				<td>${workLog.ywzx }</td>
+				<td>${workLog.ywxt }</td>
 				<td>
 					<c:if test="${workLog.completeType==1 }">未完成</c:if>
 					<c:if test="${workLog.completeType==0 }">已完成</c:if>
