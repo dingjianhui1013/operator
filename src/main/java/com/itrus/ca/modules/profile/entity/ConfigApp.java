@@ -12,6 +12,9 @@ import javax.persistence.Transient;
 import static javax.persistence.GenerationType.IDENTITY;
 
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.itrus.ca.common.persistence.DataEntity;
@@ -36,6 +39,10 @@ public class ConfigApp extends DataEntity implements java.io.Serializable {
 	private String productName;
 	private List<WorkDealInfo> workDealInfos;
 	private Long govDeviceAmount;//政府统一采购设备证书最大数量  该字段已停用
+	
+	private ConfigProjectType configProjectType;
+	
+	
 	/**
 	 * 应用配是否支持通用，决定产品列表是否支持选通用or专用
 	 */
@@ -49,11 +56,12 @@ public class ConfigApp extends DataEntity implements java.io.Serializable {
 
 	/** full constructor */
 	public ConfigApp(String appName, Integer appType,
-			String appDescription, String appImg) {
+			String appDescription, String appImg , ConfigProjectType configProjectType) {
 		this.appName = appName;
 		this.appType = appType;
 		this.appDescription = appDescription;
 		this.appImg = appImg;
+		this.configProjectType = configProjectType;
 	}
 
 	// Property accessors
@@ -148,6 +156,19 @@ public class ConfigApp extends DataEntity implements java.io.Serializable {
 	public void setAlias(String alias) {
 		this.alias = alias;
 	}
+
+	@ManyToOne
+	@JoinColumn(name="config_product_type")
+	public ConfigProjectType getConfigProjectType() {
+		return configProjectType;
+	}
+
+	public void setConfigProjectType(ConfigProjectType configProjectType) {
+		this.configProjectType = configProjectType;
+	}
+	
+	
+	
 	
 	
 	

@@ -39,12 +39,15 @@ import com.itrus.ca.modules.sys.service.OfficeService;
 import com.itrus.ca.modules.sys.utils.UserUtils;
 import com.itrus.ca.modules.constant.ProductType;
 import com.itrus.ca.modules.log.service.LogUtil;
+import com.itrus.ca.modules.profile.dao.ConfigProjectTypeDao;
 import com.itrus.ca.modules.profile.entity.ConfigApp;
 import com.itrus.ca.modules.profile.entity.ConfigAppOfficeRelation;
 import com.itrus.ca.modules.profile.entity.ConfigProduct;
+import com.itrus.ca.modules.profile.entity.ConfigProjectType;
 import com.itrus.ca.modules.profile.service.ConfigAppOfficeRelationService;
 import com.itrus.ca.modules.profile.service.ConfigAppService;
 import com.itrus.ca.modules.profile.service.ConfigProductService;
+import com.itrus.ca.modules.profile.service.ConfigProjectTypeService;
 
 import org.apache.commons.io.FileUtils;
 import org.json.JSONArray;
@@ -67,6 +70,10 @@ public class ConfigAppController extends BaseController {
 	private CommonAttachService attachService;
 	@Autowired
 	private ConfigProductService configProductService;
+	
+	
+	@Autowired
+	private ConfigProjectTypeService configProjectTypeService;
 
 	@Autowired
 	private ConfigAppOfficeRelationService configAppOfficeRelationService;
@@ -166,13 +173,20 @@ public class ConfigAppController extends BaseController {
 	@RequestMapping(value = "form")
 	public String form(ConfigApp configApp, Model model) {
 		model.addAttribute("configApp", configApp);
+		
+		List<ConfigProjectType> proJectTypes = configProjectTypeService.findProjectTypeList();
+		
+		
+		model.addAttribute("proJectTypes",proJectTypes);
+		
+		
 		return "modules/profile/configAppForm";
 	}
 
 	@RequiresPermissions("profile:configApp:edit")
 	@RequestMapping(value = "save")
 	public String save(ConfigApp configApp, Model model,
-			RedirectAttributes redirectAttributes) {
+			RedirectAttributes redirectAttributes , Long configProjectTypeId ) {
 		if (!beanValidator(model, configApp)) {
 			return form(configApp, model);
 		}
@@ -191,6 +205,14 @@ public class ConfigAppController extends BaseController {
 		} else {
 			detail = "更新应用" + configApp.getAppName() + "成功";
 		}
+		
+	
+		ConfigProjectType proType =  configProjectTypeService.get(configProjectTypeId);
+		configApp.setConfigProjectType(proType);
+	
+		
+		
+		
 		configAppService.save(configApp);
 		logUtil.saveSysLog("业务配置", detail, null);
 		addMessage(redirectAttributes, "保存应用'" + configApp.getAppName() + "'成功");
