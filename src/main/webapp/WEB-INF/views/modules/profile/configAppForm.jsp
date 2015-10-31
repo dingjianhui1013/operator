@@ -73,6 +73,20 @@
 				<form:checkbox path="supportCommon"/>支持
 			</div>
 		</div>
+		
+		<div class="control-group">
+			<label class="control-label">项目类型:</label>
+			<div class="controls">
+				<select name="configProjectTypeId">
+					<option value="0">请选择</option>
+					<c:forEach items="${proJectTypes }" var="types" >
+						<option value="${types.id }"
+						<c:if test="${configApp.configProjectType.id==types.id }">selected="selected" </c:if>
+						 >${types.projectName }</option>
+					</c:forEach>
+				</select>
+			</div>
+		</div>
 		<%-- <div class="control-group">
 			<label class="control-label">政府统一采购设备证书最大数量:</label>
 			<div class="controls">
