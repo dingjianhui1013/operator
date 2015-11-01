@@ -80,8 +80,10 @@
 		<input id="btnSubmit" class="btn btn-primary" onclick="javascript:returnBack()" type="button" value="返回"/>
 		
 		&nbsp;
-		<input id="oldAgent" class="btn btn-primary" onclick="javascript:returnOldAgent()" type="button" value="重置老数据"/>
+		<c:if test="${isHaveOld>0 }">
 		
+		<input id="oldAgent" class="btn btn-primary" onclick="javascript:returnOldAgent()" type="button" value="重置老数据"/>
+		</c:if>
 	</form:form>
 	<tags:message content="${message}"/>
 	<table id="contentTable" class="table table-striped table-bordered table-condensed">

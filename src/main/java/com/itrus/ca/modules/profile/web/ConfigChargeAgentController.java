@@ -315,6 +315,8 @@ public class ConfigChargeAgentController extends BaseController {
 	public String chargeAgentList(ConfigChargeAgent configChargeAgent,HttpServletRequest request ,
 										 HttpServletResponse response, Model model){
 		Page<ConfigChargeAgent> page = configChargeAgentService.find(new Page<ConfigChargeAgent>(request,response),configChargeAgent);
+		List<ConfigChargeAgent> agents =  configChargeAgentService.findByNullUpdateNum();
+		model.addAttribute("isHaveOld", agents.size());
 		model.addAttribute("page",page);
 		return "modules/profile/configChargeAgentTemplateList";
 	}
