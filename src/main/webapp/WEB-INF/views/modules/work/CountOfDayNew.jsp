@@ -179,8 +179,8 @@
 				<td colspan="4" style="text-align:center; vertical-align: middle;">新增</td>
 				<td colspan="4" style="text-align:center; vertical-align: middle;">更新</td>
 				<td rowspan="2" style="text-align:center; vertical-align: middle;">变更</td>
-				<td rowspan="2" style="text-align:center; vertical-align: middle;">损坏更换</td>
 				<td rowspan="2" style="text-align:center; vertical-align: middle;">遗失补办</td>
+				<td rowspan="2" style="text-align:center; vertical-align: middle;">损坏更换</td>
 				
 				<td colspan="4" style="text-align:center; vertical-align: middle;">更新+变更</td>
 				

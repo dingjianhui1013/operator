@@ -1017,8 +1017,8 @@ public class WorkDealInfoService extends BaseService {
 		// a.DEAL_INFO_STATUS='6';
 		dc.add(Restrictions.ne("dealInfoStatus",
 				WorkDealInfoStatus.STATUS_CERT_REVOKE));
-		dc.add(Restrictions.eq(WorkDealInfo.DEL_FLAG,
-				WorkDealInfo.DEL_FLAG_NORMAL));
+//		dc.add(Restrictions.eq(WorkDealInfo.DEL_FLAG,
+//				WorkDealInfo.DEL_FLAG_NORMAL));
 		if (workDealInfoDao.find(dc).size() > 0) {
 			return workDealInfoDao.find(dc).size();
 		} else {
