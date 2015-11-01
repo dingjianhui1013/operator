@@ -97,8 +97,8 @@ public class BasicInfoScca implements java.io.Serializable {
 			String contactSex, String name, String idCard, String email,
 			String issuerDn, String subjectDn, String notafter,
 			String notbefore, String serialnumber, String keySn,
-			String 证书类型, String 应用名, String 单证or双证, String 专用or通用,
-			Integer 多证书编号, String key编码Usb口的编码, Integer 证书天数 ,Boolean used,Long agentId) {
+			String certType, String appName, String certCounts, String 专用or通用,
+			Integer multiCertSns, String keyAndUsbSn, Integer certValidDays ,Boolean used,Long agentId) {
 		this.id = id;
 		this.appId = appId;
 		this.productId = productId;
@@ -135,13 +135,13 @@ public class BasicInfoScca implements java.io.Serializable {
 		this.notbefore = notbefore;
 		this.serialnumber = serialnumber;
 		this.keySn = keySn;
-		this.certType = 证书类型;
-		this.appName = 应用名;
-		this.certCounts = 单证or双证;
+		this.certType = certType;
+		this.appName = appName;
+		this.certCounts = certCounts;
 		//this.专用or通用 = 专用or通用;
-		this.multiCertSns = 多证书编号;
-		this.keyAndUsbSn = key编码Usb口的编码;
-		this.certValidDays = 证书天数;
+		this.multiCertSns = multiCertSns;
+		this.keyAndUsbSn = keyAndUsbSn;
+		this.certValidDays = certValidDays;
 		this.used = used;
 		this.agentId = agentId;
 	}
@@ -519,7 +519,7 @@ public class BasicInfoScca implements java.io.Serializable {
 		this.multiCertSns = 多证书编号;
 	}
 
-	@Column(name = "key编码_USB口的编码")
+	@Column(name = "keyAndUsbSn")
 	public String getKeyAndUsbSn() {
 		return this.keyAndUsbSn;
 	}

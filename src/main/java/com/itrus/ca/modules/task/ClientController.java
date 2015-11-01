@@ -955,6 +955,7 @@ public class ClientController {
 		} catch (Exception e) {
 			json.put("statu", "0");
 			json.put("msg", "日期格式错误:"+pattern);
+			isRunning = false;
 			return json.toString();
 		}
 		count = 0;
@@ -968,6 +969,7 @@ public class ClientController {
 			if (users.size() == 0) {
 				json.put("statu", "0");
 				json.put("msg", "当前网点下无用户，无法创建");
+				isRunning = false;
 				return json.toString();
 			} else {
 				createBy = users.get(0);
@@ -975,6 +977,12 @@ public class ClientController {
 			firstSvn  = workDealInfoService.getSVN(office.getName());
 		}
 		List<BasicInfoScca> all = basicInfoSccaService.findAll();
+		if (all.size() == 0) {
+			json.put("statu", "0");
+			json.put("msg", "要导入的数据为空，请检查");
+			isRunning = false;
+			return json.toString();
+		} 
 		Integer num = Integer.valueOf(firstSvn.split("-")[3]);
 		String head = firstSvn.replace("-"+firstSvn.split("-")[3], "");
 		for (int i = 0; i < all.size(); i++) {
@@ -988,24 +996,25 @@ public class ClientController {
 		int loopTime = 100;
 		int tempSize = all.size();
 		if (tempSize<=loopTime) {
-			for (int i = 0; i < tempSize; i++) {
-				List<BasicInfoScca> transToTrheads = new ArrayList<BasicInfoScca>();
-				transToTrheads.add(all.get(i));
-				MutiProcess mp = new MutiProcess(transToTrheads , officeId , createBy , 1);
-				Thread thread = new Thread(mp);
-				thread.start();
-				allThread.add(thread);
+			List<BasicInfoScca> transToTrheads = new ArrayList<BasicInfoScca>();
+			for (int i = 0; i < tempSize; i++) {				
+				transToTrheads.add(all.get(i));				
 			}
+			MutiProcess mp = new MutiProcess(transToTrheads , officeId , createBy , 1);
+			Thread thread = new Thread(mp);
+			thread.start();
+			allThread.add(thread);
 		}else {
 			int divisor	 = tempSize/loopTime;
 			int remainder = tempSize%loopTime;
+			
 			for (int i = 0; i < loopTime; i++) {
-				List<BasicInfoScca> transToTrheads = new ArrayList<BasicInfoScca>();
+				
 				int newSize=divisor;
 				if (i<remainder) {
 					newSize = divisor+1;
 				}
-				
+				List<BasicInfoScca> transToTrheads = new ArrayList<BasicInfoScca>();
 				for (int j = newSize-1; j >=0 ; j--) {
 					transToTrheads.add(all.get(j));
 					all.remove(j);
@@ -1014,7 +1023,9 @@ public class ClientController {
 				Thread thread = new Thread(mp);
 				thread.start();
 				allThread.add(thread);
+				
 			}
+			
 		}
 		
 		
@@ -1037,10 +1048,6 @@ public class ClientController {
 		isRunning = false;
 		return json.toString();
 	}
-	
-	
-	
-	
 	
 	
 	

@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.itrus.ca.common.utils.PayinfoUtil;
 import com.itrus.ca.common.utils.SpringContextHolder;
@@ -66,7 +67,7 @@ public class MutiProcess implements Runnable {
 	ConfigChargeAgentDetailService configChargeAgentDetailService = SpringContextHolder.getBean(ConfigChargeAgentDetailService.class);
 	
 	
-	Logger log = Logger.getLogger(ClientController.class);
+	Logger log = Logger.getLogger(MutiProcess.class);
 	private List<BasicInfoScca> sccaList;
 	private Long officeId;
 	private User createBy;
@@ -88,6 +89,7 @@ public class MutiProcess implements Runnable {
 	
 	
 	@Override
+	@Transactional
 	public void run() {
 		sccaList.size();
 		System.out.println(sccaList.size());
@@ -121,7 +123,7 @@ public class MutiProcess implements Runnable {
 			
 			Integer sjNum =1;
 			for (BasicInfoScca s1 : sccaList) {
-				log.error("开始创建第"+number+"个线程,第" + sjNum + "条数据,中间表id："+s1.getId());
+				log.debug("开始创建第"+number+"个线程,第" + sjNum + "条数据,中间表id："+s1.getId());
 				WorkCompany company = new WorkCompany();
 				WorkUser user = new WorkUser();
 				WorkCertInfo certInfo = new WorkCertInfo();
@@ -141,13 +143,13 @@ public class MutiProcess implements Runnable {
 				}
 
 				if (companyHash.get(s1.getCompanyName()) != null) {// 存在企业信息
-					log.error("找到已存在的企业:" + s1.getCompanyName());
+					log.debug("找到已存在的企业:" + s1.getCompanyName());
 					company = companyHash.get(s1
 							.getCompanyName());
 					// his信息不再查询。每次自动生成新的his--实际业务中也是这样处理的
 					companyHis = change(company);
 				} else {
-					log.error("未找到企业Id,创建新的:" + s1.getCompanyName());
+					log.debug("未找到企业Id,创建新的:" + s1.getCompanyName());
 					company.setCompanyName(s1.getCompanyName());
 					company.setCompanyType(String.valueOf(s1.getCompanyType()));
 					company.setOrganizationNumber(s1.getOrganizationNumber());
@@ -186,16 +188,17 @@ public class MutiProcess implements Runnable {
 					companyHash.put(company.getCompanyName(), company);
 					companyHis = change(company);
 				}
-				log.error("保存company_his信息");
+//				log.debug("保存company_his信息");
 //				workCompanyHisService.save(companyHis);
 				companyHisList.add(companyHis);
 				
 				String conCerNum = s1.getConCertNumber();// 经办人证件号
 				if (userHash.get(conCerNum) != null) {
+					log.debug("找到 workUser ");
 					user = userHash.get(conCerNum);
 					userHis = change(user, companyHis);
 				} else {
-					log.error("创建新的 workUser ");
+					log.debug("创建新的 workUser ");
 					user = new WorkUser();
 					user.setContactName(s1.getContactName());
 					user.setConCertType(String.valueOf(s1.getConCertType()));
@@ -208,7 +211,7 @@ public class MutiProcess implements Runnable {
 //					workUserService.save(user);
 					userList.add(user);
 					userHash.put(user.getContactName(), user);
-					log.error("创建新的 workUserHis ");
+					log.debug("创建新的 workUserHis ");
 					userHis = change(user, companyHis);
 				}
 //				workUserHisService.save(userHis);
@@ -241,27 +244,20 @@ public class MutiProcess implements Runnable {
 //				workCertInfoService.save(certInfo);
 				certInfos.add(certInfo);
 				
-				log.error("证书信息、企业信息、个人信息生成完毕，开始生成业务信息...");
+				log.debug("证书信息、企业信息、个人信息生成完毕，开始生成业务信息...");
 				try {
-					log.error("证书:"+certInfo.getSerialnumber());
-					Date start = certInfo.getNotbefore();
-					Date end = certInfo.getNotafter();
+					
+//					Date start = certInfo.getNotbefore();
+//					Date end = certInfo.getNotafter();
 					//Integer year = (int) ((s1.get证书天数()) / 365);// 新增业务的年限
-					Integer year = s1.getYear();
-					
-					
-					
-					
-					log.error("业务年限："+year);
+					Integer year = s1.getYear();				
 					WorkDealInfo workDealInfo = new WorkDealInfo();
 					WorkPayInfo workPayInfo = new WorkPayInfo();
 					
 					ConfigApp app = product.getConfigApp();
 					//C-四川CA网点-1408-0826
-					workDealInfo.setSvn(s1.getSvnNum());
-					
-					log.error("业务编号:"+workDealInfo.getSvn());
-					
+					workDealInfo.setSvn(s1.getSvnNum());					
+					log.debug("证书:"+certInfo.getSerialnumber()+"\t业务年限："+year+ "\t业务编号:"+workDealInfo.getSvn());					
 					if (commercialAgentHash.get(app.getId())==null) {
 						ConfigCommercialAgent commercialAgent = configAgentAppRelationService
 								.findAgentByApp(app);
@@ -275,7 +271,7 @@ public class MutiProcess implements Runnable {
 								.setCommercialAgent(configAgentOfficeRelations
 										.get(0).getConfigCommercialAgent());// 劳务关系外键
 					}else {
-						log.error("无劳务关系代理商，未设置劳务关系...");
+						log.debug("证书:"+certInfo.getSerialnumber()+"\t无劳务关系代理商，未设置劳务关系...");
 					}
 					workDealInfo.setConfigApp(app);
 					workDealInfo.setWorkUser(user);
@@ -345,7 +341,7 @@ public class MutiProcess implements Runnable {
 						openAccountHash.put(product.getId(), openAccountMoney);
 						addMoneyHash.put(product.getId(), addCert);
 					}else {
-						log.error("从map中得到费用信息 ");
+						log.debug("从map中得到费用信息 ");
 						openAccountMoney = openAccountHash.get(product.getId());
 						addCert = addMoneyHash.get(product.getId());
 						workPayInfo.setOpenAccountMoney(openAccountMoney);
@@ -353,8 +349,8 @@ public class MutiProcess implements Runnable {
 					}
 					
 					workPayInfo.setMethodGov(true);
-					log.error("开户费:"+openAccountMoney);
-					log.error("新增证书费用:"+addCert);
+					
+					log.debug("证书:"+certInfo.getSerialnumber()+"开户费:"+openAccountMoney+"\t新增证书费用:"+addCert);
 					// 证书序列号
 					workDealInfo.setCertSort(s1.getMultiCertSns());
 					
@@ -373,7 +369,7 @@ public class MutiProcess implements Runnable {
 					workPayInfo.setSn(PayinfoUtil.getPayInfoNo());
 					workPayInfo.setCreateBy(createBy);
 					workPayInfo.setUpdateBy(createBy);
-					log.error("付款流水:"+workPayInfo.getSn());
+					log.debug("证书:"+certInfo.getSerialnumber()+"付款流水:"+workPayInfo.getSn());
 					payInfos.add(workPayInfo);
 					workDealInfo.setWorkPayInfo(workPayInfo);
 					workDealInfo
@@ -387,18 +383,18 @@ public class MutiProcess implements Runnable {
 					
 					
 					//log.error("新增业务数据生成完毕...当前第"+count+"条...");
-					log.error("开始创建第"+number+"个线程,第" + sjNum + "条数据,中间表id："+s1.getId());
+					log.debug("开始创建第"+number+"个线程,第" + sjNum + "条数据,中间表id："+s1.getId());
 					sjNum++;
-					log.error("------------------------------------------------");
+					
 				} catch (Exception e) {
-					e.printStackTrace();
+					log.error("Exception at 线程 ："+ number +"\t数据id:"+ s1.getId()+"\t" + e.getMessage());
 				}
 			}
-				log.error("保存 企业历史 数据+实时数据");
+				log.debug("保存 企业历史 数据+实时数据");
 				workCompanyService.save(companyList);
 				workCompanyHisService.save(companyHisList);
 			
-				log.error("保存 用户历史 数据+实时数据 ");
+				log.debug("保存 用户历史 数据+实时数据 ");
 				workUserService.save(userList);
 				workUserHisService.save(userHisList);
 			
@@ -415,12 +411,12 @@ public class MutiProcess implements Runnable {
 				workDealInfoService.save(unSavedDealInfos);
 				log.info("批量存储workDealinfo");
 				
-				basicInfoSccaService.saveList(usedBasicInfo);
+				basicInfoSccaService.deleteList(usedBasicInfo);
 				
 			
 		} catch (Exception e) {
-			e.printStackTrace();
-			// TODO: handle exception
+//			e.printStackTrace();
+			log.error("Excepton at num:"+ this.number+"\t" +e.getMessage());
 		}
 		
 		

@@ -3,10 +3,8 @@
  */
 package com.itrus.ca.modules.task.dao;
 
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import com.itrus.ca.common.persistence.BaseDao;
 import com.itrus.ca.common.persistence.BaseDaoImpl;
@@ -33,7 +31,7 @@ interface BasicInfoSccaDaoCustom extends BaseDao<BasicInfoScca> {
  * DAO自定义接口实现
  * @author ZhangJingtao
  */
-@Component
+@Repository
 class BasicInfoSccaDaoImpl extends BaseDaoImpl<BasicInfoScca> implements BasicInfoSccaDaoCustom {
 
 }

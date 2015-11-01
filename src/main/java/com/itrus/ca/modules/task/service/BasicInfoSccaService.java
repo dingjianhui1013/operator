@@ -8,26 +8,25 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Property;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.itrus.ca.common.persistence.Page;
 import com.itrus.ca.common.service.BaseService;
 import com.itrus.ca.common.utils.EscapeUtil;
-import com.itrus.ca.modules.task.entity.BasicInfoScca;
 import com.itrus.ca.modules.task.dao.BasicInfoSccaDao;
+import com.itrus.ca.modules.task.entity.BasicInfoScca;
 
 /**
  * 中间表数据Service
  * @author ZhangJingtao
  * @version 2014-08-18
  */
-@Component
+@Service
 @Transactional(readOnly = true)
 public class BasicInfoSccaService extends BaseService {
 
@@ -59,6 +58,17 @@ public class BasicInfoSccaService extends BaseService {
 	public void  saveList(List<BasicInfoScca>  sccas){
 		basicInfoSccaDao.save(sccas);
 	}
+	
+	@Transactional(readOnly = false)
+	public void delete(BasicInfoScca basicInfoScca) {
+		basicInfoSccaDao.delete(basicInfoScca);
+	}
+	
+	@Transactional(readOnly  = false)
+	public void  deleteList(List<BasicInfoScca>  sccas){
+		basicInfoSccaDao.delete(sccas);
+	}
+	
 	
 
 
