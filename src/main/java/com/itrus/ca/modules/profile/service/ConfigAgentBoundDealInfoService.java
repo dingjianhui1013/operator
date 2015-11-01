@@ -132,7 +132,15 @@ public class ConfigAgentBoundDealInfoService extends BaseService {
 		}
 	}
 	
-	
+	@Transactional(readOnly = false)
+	public Integer findByAgentIdDealInfoType(Long agentId , Integer dealInfoType) {
+		DetachedCriteria dc = configAgentBoundDealInfoDao.createDetachedCriteria();
+		dc.createAlias("dealInfo", "dealInfo");
+		dc.add(Restrictions.eq("agent.id", agentId));
+		dc.add(Restrictions.eq("dealInfo.dealInfoType", dealInfoType));
+		return configAgentBoundDealInfoDao.find(dc).size();
+		
+	}
 	
 	
 	

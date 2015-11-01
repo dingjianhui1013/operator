@@ -5,14 +5,13 @@ package com.itrus.ca.modules.profile.web;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.itrus.ca.common.config.Global;
 import com.itrus.ca.common.persistence.Page;
@@ -321,6 +319,51 @@ public class ConfigChargeAgentController extends BaseController {
 		return "modules/profile/configChargeAgentTemplateList";
 	}
 
+	
+	@RequestMapping(value="returnOldAgent")
+	@ResponseBody
+	public String returnOldAgent() throws JSONException{
+		org.json.JSONObject  json = new org.json.JSONObject();
+		try {
+			List<ConfigChargeAgent> agents =  configChargeAgentService.findByNullUpdateNum();
+			List<ConfigChargeAgent> agentsNews = new ArrayList<ConfigChargeAgent>();
+			for (int i = 0; i < agents.size(); i++) {
+				ConfigChargeAgent agent = agents.get(i);
+				
+				Integer updateNum =  configAgentBoundDealInfoService.findByAgentIdDealInfoType(agents.get(i).getId() , 1);
+				Integer configureNum = agent.getConfigureNum() - updateNum;
+				Integer configureUpdateNum = updateNum;
+				Integer surplusNum = agent.getSurplusNum();
+				Integer surplusUpdateNum = 0;
+				Integer availableNum = agent.getAvailableNum() - updateNum;
+				Integer availableUpdateNum = updateNum;
+				agent.setConfigureNum(configureNum);
+				agent.setSurplusNum(surplusNum);
+				agent.setAvailableNum(availableNum);
+				agent.setConfigureUpdateNum(configureUpdateNum);
+				agent.setSurplusUpdateNum(surplusUpdateNum);
+				agent.setAvailableUpdateNum(availableUpdateNum);
+				agent.setReserveUpdateNum(0);
+				agentsNews.add(agent);
+			}
+			configChargeAgentService.save(agentsNews);
+			json.put("status", 1);
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			json.put("status", 0);
+		}
+		return json.toString();
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	@RequestMapping(value="changeChargeAgentInfoList")

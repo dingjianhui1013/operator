@@ -82,6 +82,7 @@
 					<th>序号</th>
 					<th>应用名称</th>
 					<th>别名</th>
+					<th>项目类型</th>
 					<th>产品</th>
 					<th>应用描述</th>
 					<shiro:hasPermission name="profile:configApp:edit"><th>操作</th></shiro:hasPermission>
@@ -94,6 +95,7 @@
 				<td>${ status.index + 1}</td>
 				<td width="140px" style="word-break: break-all"><a href="${ctx}/profile/configApp/form?id=${configApp.id}">${configApp.appName}</a></td>
 				<td>${ configApp.alias}</td>
+				<td>${ configApp.configProjectType.projectName}</td>
 				<td>${ configApp.productName}</td>
 				<td width="140px" style="word-break: break-all">${configApp.appDescription}</td>
 				<td><shiro:hasPermission name="profile:configApp:edit">

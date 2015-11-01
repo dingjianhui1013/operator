@@ -77,6 +77,25 @@ public class ConfigChargeAgentService extends BaseService {
 		dc.add(Restrictions.eq("configProduct.id", productId));
 		return configChargeAgentDao.find(dc);
 	}
+	
+	
+	/**
+	 * 查找计费策略更新数量为0的老的数据
+	 * @param productId
+	 * @return
+	 */
+	
+	public List<ConfigChargeAgent> findByNullUpdateNum(){
+		DetachedCriteria dc = configChargeAgentDao.createDetachedCriteria();
+		dc.add(Restrictions.isNull("configureUpdateNum"));
+		List<String> styles = new ArrayList<String>();
+		styles.add("2");
+		styles.add("3");
+		dc.add(Restrictions.in("tempStyle", styles));
+		return configChargeAgentDao.find(dc);
+	}
+	
+	
 
 	/**
 	 * 经过ID 查询计费策略模板
@@ -99,6 +118,11 @@ public class ConfigChargeAgentService extends BaseService {
 	@Transactional(readOnly = false)
 	public void save(ConfigChargeAgent configChargeAgent) {
 		configChargeAgentDao.save(configChargeAgent);
+	}
+	
+	@Transactional(readOnly = false)
+	public void save(List<ConfigChargeAgent> configChargeAgents) {
+		configChargeAgentDao.save(configChargeAgents);
 	}
 	
 	@Transactional(readOnly = false)
