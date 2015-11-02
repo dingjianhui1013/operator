@@ -161,7 +161,7 @@ public class WorkCustomerController extends BaseController {
 	@RequestMapping("insertCustomer")
 	public String insertCustomer(Long dealInfoId, WorkLog workLog,
 			HttpServletRequest request, HttpServletResponse response,
-			Model model,String ywzx,String ywcz,String ywxt) {
+			Model model,String ywzx,String ywcz,String ywxt,String distinguish) {
 		if(ywzx!=null)
 		{
 			String ywzxs=ywzx.replace(","," ");
@@ -238,6 +238,7 @@ public class WorkCustomerController extends BaseController {
 		 * //判断公司是否存在业务 workDealInfoService.findByCompany(workCompany.getId());
 		 * }
 		 */
+		List<ConfigApp> appNames=configAppService.findall();
 		Date oetDate = null;
 		SimpleDateFormat sim = new SimpleDateFormat("yyyy-MM-dd");
 		if(endTime!=null&&!endTime.equals("")){
@@ -254,6 +255,7 @@ public class WorkCustomerController extends BaseController {
 		workUser.setWorkCompany(workCompany);
 		workUser.setStatus(2);
 		workUserService.save(workUser);
+		model.addAttribute("configApp", appNames);
 		model.addAttribute("workCompany", workCompany);
 		model.addAttribute("nowDate", getDateString());
 		model.addAttribute("user", UserUtils.getUser());
@@ -286,7 +288,24 @@ public class WorkCustomerController extends BaseController {
 	@RequestMapping("insertComCustomerT")
 	public String insertComCustomerT(Long workCompanyId, WorkLog workLog,
 			HttpServletRequest request, HttpServletResponse response,
-			Model model) {
+			Model model,String ywzx,String ywcz,String ywxt) {
+		
+		if(ywzx!=null)
+		{
+			String ywzxs=ywzx.replace(","," ");
+			workLog.setYwzx(ywzxs);
+		}
+		if(ywcz!=null)
+		{
+			String ywczs=ywcz.replace(","," ");
+			workLog.setYwcz(ywczs);
+		}
+		if(ywxt!=null)
+		{
+			String ywxts=ywxt.replace(","," ");
+			workLog.setYwxt(ywxts);
+		}
+		
 		workLog.setWorkCompany(workCompanyService.get(workCompanyId));
 		workLog.setCreatTime(new Date());
 		workLog.setCreateBy(UserUtils.getUser());
