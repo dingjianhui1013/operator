@@ -53,6 +53,7 @@ public class FinancePaymentInfo extends DataEntity implements java.io.Serializab
 	private String paymentAccount;		//付款账号
 	private String paymentBank;			//付款银行
 	private Integer quitMoneyStatus;		//退款状态      0：未退款      1：已退款
+	private String distinguish;			// 区别导入和手动添加  0为添加 null为导入
 	// Constructors
 
 	/** default constructor */
@@ -234,4 +235,14 @@ public class FinancePaymentInfo extends DataEntity implements java.io.Serializab
 	public void setQuitMoneyStatus(Integer quitMoneyStatus) {
 		this.quitMoneyStatus = quitMoneyStatus;
 	}
+	
+	@Column(name = "distinguish")
+	public String getDistinguish() {
+		return distinguish;
+	}
+
+	public void setDistinguish(String distinguish) {
+		this.distinguish = distinguish;
+	}
+	
 }
