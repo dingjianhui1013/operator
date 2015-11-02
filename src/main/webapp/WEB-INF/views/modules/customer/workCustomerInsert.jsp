@@ -35,7 +35,7 @@
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li ><a href="${ctx}/work/customer/list">工作记录</a></li>
+		<li ><a href="${ctx}/work/customer/list">业务记录</a></li>
 		<li  class="active"><a href="${ctx}/work/customer/insertCustomerFrom?id=${workDealInfo.id}">新增客服记录</a></li>
 	</ul><br/>
 	<form name = "customerInsert" id = "inputForm" action ="${ctx}/work/customer/insertCustomer"  method="post" class="form-horizontal">
@@ -181,6 +181,7 @@
 				<textarea id="remarks" class="valid" cols="4" rows="4" style="resize: none;" name="leftoverProblem"></textarea>
 			</div>
 		</div>
+		<input type="hidden"  name="distinguish" value="0"/>
 		<div class="form-actions">
 			<input id="btnSubmit" class="btn btn-primary" type="submit" value="保存"/>&nbsp;&nbsp;
 			<input id="btnCancel" class="btn" type="button" value="返 回" onclick="history.go(-1)"/>
