@@ -5,6 +5,7 @@ package com.itrus.ca.modules.work.service;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -33,11 +34,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.itrus.ca.common.persistence.Page;
 import com.itrus.ca.common.service.BaseService;
+import com.itrus.ca.common.utils.DateUtils;
 import com.itrus.ca.modules.finance.entity.FinancePaymentInfo;
 import com.itrus.ca.modules.sys.utils.CreateExcelUtils;
 import com.itrus.ca.modules.work.entity.WorkFinancePayInfoRelation;
 import com.itrus.ca.modules.work.entity.WorkPayInfo;
 import com.itrus.ca.modules.work.dao.WorkFinancePayInfoRelationDao;
+import com.sun.org.apache.bcel.internal.generic.SIPUSH;
 
 /**
  * 支付信息统计报表Service
@@ -70,11 +73,25 @@ public class WorkFinancePayInfoRelationService extends BaseService {
 	}
 	
 	public Page<WorkFinancePayInfoRelation> findByFinance(
-			Page<WorkFinancePayInfoRelation> page, Long id) {
+			Page<WorkFinancePayInfoRelation> page, Long id,String appName) {
 		
 		DetachedCriteria dc = workFinancePayInfoRelationDao.createDetachedCriteria();
 		dc.createAlias("financePaymentInfo", "financePaymentInfo");
+		dc.createAlias("workPayInfo", "workPayInfo");
 		dc.add(Restrictions.eq("financePaymentInfo.id", id));
+		if(appName!=null)
+		{
+			dc.createAlias("financePaymentInfo.configApp", "configApp");
+			dc.add(Restrictions.eq("configApp.appName",appName));
+		}
+//		if(startTime!=null)
+//		{
+//			dc.add(Restrictions.ge("workPayInfo.createDate", startTime));
+//		}
+//		if(endTime!=null)
+//		{
+//			dc.add(Restrictions.le("workPayInfo.createDate", endTime));
+//		}
 		dc.addOrder(Order.desc("id"));
 		return workFinancePayInfoRelationDao.find(page, dc);
 	}
