@@ -150,38 +150,46 @@ public class WorkDealInfoFilingController extends BaseController {
 	 * @param model
 	 * @return
 	 */
+//	@RequiresPermissions("work:workDealInfo:view")
+//	@RequestMapping(value = { "ulist" })
+//	public String ulist(WorkDealInfo workDealInfo, WorkUser workUser,
+//			HttpServletRequest request, HttpServletResponse response,
+//			Model model) {
+//		User user = UserUtils.getUser();
+//		model.addAttribute("proType", ProductType.productTypeStrMap);
+//		model.addAttribute("wdiType", WorkDealInfoType.WorkDealInfoTypeMap);
+//		model.addAttribute("wdiStatus",
+//				WorkDealInfoStatus.WorkDealInfoStatusMap);
+//		if (workDealInfo.getWorkUser() != null) {
+//			if (workDealInfo.getWorkUser().getContactName() != null
+//					&& !workDealInfo.getWorkUser().getContactName().equals(""))
+//				workUser.setContactName(workDealInfo.getWorkUser()
+//						.getContactName());
+//			if (workDealInfo.getWorkUser().getContactPhone() != null
+//					&& !workDealInfo.getWorkUser().getContactPhone().equals(""))
+//				workUser.setContactPhone(workDealInfo.getWorkUser()
+//						.getContactPhone());
+//			if (workDealInfo.getWorkUser().getContactTel() != null
+//					&& !workDealInfo.getWorkUser().getContactTel().equals(""))
+//				workUser.setContactTel(workDealInfo.getWorkUser()
+//						.getContactTel());
+//		}
+//		model.addAttribute("proType", ProductType.productTypeStrMap);
+//		workUser.setStatus(2);
+//		Page<WorkUser> page = workUserService.find(new Page<WorkUser>(request,
+//				response), workUser);
+//		model.addAttribute("page", page);
+//		return "modules/work/workDealInfoFilingListT";
+//	}
 	@RequiresPermissions("work:workDealInfo:view")
 	@RequestMapping(value = { "ulist" })
-	public String ulist(WorkDealInfo workDealInfo, WorkUser workUser,
-			HttpServletRequest request, HttpServletResponse response,
-			Model model) {
-		User user = UserUtils.getUser();
-		model.addAttribute("proType", ProductType.productTypeStrMap);
-		model.addAttribute("wdiType", WorkDealInfoType.WorkDealInfoTypeMap);
-		model.addAttribute("wdiStatus",
-				WorkDealInfoStatus.WorkDealInfoStatusMap);
-		if (workDealInfo.getWorkUser() != null) {
-			if (workDealInfo.getWorkUser().getContactName() != null
-					&& !workDealInfo.getWorkUser().getContactName().equals(""))
-				workUser.setContactName(workDealInfo.getWorkUser()
-						.getContactName());
-			if (workDealInfo.getWorkUser().getContactPhone() != null
-					&& !workDealInfo.getWorkUser().getContactPhone().equals(""))
-				workUser.setContactPhone(workDealInfo.getWorkUser()
-						.getContactPhone());
-			if (workDealInfo.getWorkUser().getContactTel() != null
-					&& !workDealInfo.getWorkUser().getContactTel().equals(""))
-				workUser.setContactTel(workDealInfo.getWorkUser()
-						.getContactTel());
-		}
-		model.addAttribute("proType", ProductType.productTypeStrMap);
-		workUser.setStatus(2);
-		Page<WorkUser> page = workUserService.find(new Page<WorkUser>(request,
-				response), workUser);
+	public String ulist(WorkLog workLog, HttpServletRequest request,
+			HttpServletResponse response, Model model) {
+		Page<WorkLog> page = workLogService.findKfList(new Page<WorkLog>(
+				request, response), workLog);
 		model.addAttribute("page", page);
 		return "modules/work/workDealInfoFilingListT";
-	}
-
+}
 	@RequiresPermissions("work:workDealInfo:view")
 	@RequestMapping(value = "formF")
 	public String form(Long uid, WorkDealInfo workDealInfo, Model model) {
