@@ -128,6 +128,11 @@
 		class="table table-striped table-bordered table-condensed">
 		<thead>
 			<tr>
+				<th>导入数据共有 ${count} 条</th>
+				<th>金额有剩余共有 ${money } 条</th>
+				<th colspan="9">金额无剩余共有  ${moneyIsNull} 条</th>
+			</tr>
+			<tr>
 				<th>付款单位名称</th>
 				<th>付款金额/元</th>
 				<th>未确认款项/元</th>
@@ -135,6 +140,7 @@
 				<th>联系方式</th>
 				<th>付款时间</th>
 				<th>付款方式</th>
+				<th>记录方式</th>
 				<th>记录人员</th>
 				<th>记录时间</th>
 				<th>操作</th>
@@ -155,6 +161,12 @@
 						<c:if test="${financePayInfo.paymentMethod==2}">POS收款</c:if>
 						<c:if test="${financePayInfo.paymentMethod==3}">银行转账</c:if>
 						<c:if test="${financePayInfo.paymentMethod==4}">支付宝转账</c:if>
+					</td>
+					<td>
+						<c:choose>
+							<c:when test="${financePayInfo.distinguish==0}">手动添加</c:when>
+							<c:otherwise>批量导入</c:otherwise>
+						</c:choose>
 					</td>
 					<td>${financePayInfo.createBy.name}</td>
 					<td>
