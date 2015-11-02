@@ -277,6 +277,7 @@ public class ReceiptDepotInfoController extends BaseController {
 			ri.setType(receiptType);
 			ri.getType().setTypeName(receiptInvoice.getType().getTypeName());
 			ri.setReceiptMoney(receiptInvoice.getCount()*(double)receiptInvoice.getType().getTypeName());
+			ri.setRemarks(receiptInvoice.getRemarks());
 			receiptInvoiceService.save(ri);
 			receipt.setReceiptResidue(count);
 			receiptDepotInfoService.save(receipt);
