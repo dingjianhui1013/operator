@@ -71,6 +71,12 @@
 				<input type="hidden"  name="createDate" id="time" value="${date}">
 			</div>
 		</div>
+		<div class="control-group">
+			<label class="control-label">备注:</label>
+			<div class="controls">
+				<textarea rows="3" cols="2" name="remarks"></textarea>
+			</div>
+		</div>
 		<div class="form-actions">
 			<shiro:hasPermission name="key:keyUsbKey:edit">
 				<input id="btnSubmit" class="btn btn-primary" type="submit"
