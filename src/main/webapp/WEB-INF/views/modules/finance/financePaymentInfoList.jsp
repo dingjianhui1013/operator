@@ -157,6 +157,7 @@
 				<th>付款时间</th>
 				<th>付款方式</th>
 				<th>绑定状态</th>
+				<th>记录方式</th>
 				<th>记录人员</th>
 				<th>记录时间</th>
 				<th>收费窗口</th>
@@ -189,6 +190,12 @@
    						未绑定!
    						</c:otherwise>
 					</c:choose>	
+					</td>
+					<td>
+						<c:choose>
+							<c:when test="${financePaymentInfo.distinguish==0}">手动添加</c:when>
+							<c:otherwise>批量导入</c:otherwise>
+						</c:choose>
 					</td>
 					<td>${financePaymentInfo.createBy.name}</td>
 					<td><fmt:formatDate value="${financePaymentInfo.createDate}"
