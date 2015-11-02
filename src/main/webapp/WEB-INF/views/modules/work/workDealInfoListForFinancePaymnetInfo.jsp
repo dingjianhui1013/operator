@@ -21,16 +21,37 @@
 	<ul class="nav nav-tabs">
 		<li class="active"><a href="${ctx}/work/workDealInfo/financeList?financePaymentInfoId=${financePaymentInfoId}">绑定信息列表</a></li>
 	</ul>
-	<form:form id="searchForm" modelAttribute="workDealInfo"
-		action="${ctx}/work/workDealInfo/financeList?financePaymentInfoId=${financePaymentInfoId}" method="post">
+	<form:form id="searchForm" class="breadcrumb form-search" modelAttribute="workDealInfo"
+		action="${ctx}/work/workDealInfo/financeList?financePaymentInfoId=${financePaymentInfoId}" method="post" >
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}" />
 		<input id="pageSize" name="pageSize" type="hidden"
 			value="${page.pageSize}" />
+	<div style="margin-top:9px">
+	<lable>选择应用：</lable>
+	<select name="appName">
+		<option>请选择</option>
+		<c:forEach items="${appNames}" var="appNames">
+			<option value="${appNames.appName }">${appNames.appName }</option>
+		</c:forEach>
+	</select>
+<!-- 	&nbsp;&nbsp; -->
+<!-- 	<label>起始时间：</label> -->
+<!-- 	<input type="text" readonly="readonly" name="endTime" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});" -->
+<%-- 			value="<fmt:formatDate value="${startTime}" pattern="yyyy-MM-dd"/>" /> --%>
+<!-- 	<label>结束时间：</label> -->
+<!-- 	&nbsp;&nbsp; -->
+<!-- 	<input type="text" readonly="readonly" name="startTime" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});" -->
+<%-- 			value="<fmt:formatDate value="${startTime}" pattern="yyyy-MM-dd"/>" /> --%>
+	&nbsp; <input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/>
+	</div>
 	</form:form>
 	<tags:message content="${message}" />
 	<table id="contentTable"
 		class="table table-striped table-bordered table-condensed">
 		<thead>
+		<tr>
+			<th colspan="7">总共 ${count} 数据</th>
+		</tr>
 			<tr>
 				<th>收费流水号</th>
 				<th>绑定单位名称</th>
