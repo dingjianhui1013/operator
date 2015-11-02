@@ -62,6 +62,7 @@
 				<th>完成状态</th>
 				<th>记录人员</th>
 				<th>记录时间</th>
+				<th>记录方式</th>
 				<th>操作</th>
 			</tr>
 		</thead>
@@ -82,6 +83,12 @@
 				<td>${workLog.createBy.name }</td>
 				<td>
 				<fmt:formatDate value="${workLog.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
+				</td>
+				<td>
+					<c:choose> 
+						<c:when test="${workLog.distinguish==1}">咨询处添加</c:when>
+						<c:when test="${workLog.distinguish==0}">客服处添加</c:when>
+					</c:choose>
 				</td>
 				<td>
 					<c:if test="${workLog.completeType==1 }"><a href="${ctx}/work/workLog/updateFromK?id=${workLog.id}">编辑</a></c:if> 
