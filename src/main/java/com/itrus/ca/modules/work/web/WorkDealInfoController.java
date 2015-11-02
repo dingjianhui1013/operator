@@ -3,6 +3,7 @@
  */
 package com.itrus.ca.modules.work.web;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.io.BufferedOutputStream;
@@ -280,13 +281,16 @@ public class WorkDealInfoController extends BaseController {
 	@RequiresPermissions("work:workDealInfo:view")
 	@RequestMapping(value = "financeList")
 	public String listFinancePaymentInfo(FinancePaymentInfo financePaymentInfo,
+			String appName,
 			HttpServletRequest request, HttpServletResponse response,
 			Long financePaymentInfoId, Model model) {
+		
 
 		User user = UserUtils.getUser();
+		List<ConfigApp> appNames=configAppService.findall();
 		Page<WorkFinancePayInfoRelation> financePay = workFinancePayInfoRelationService
 				.findByFinance(new Page<WorkFinancePayInfoRelation>(request,
-						response), financePaymentInfoId);
+						response), financePaymentInfoId,appName);
 		if (financePay.getCount() != 0) {
 			List<Long> idList = Lists.newArrayList();
 			if (financePay.getList().size() > 0) {
@@ -298,6 +302,9 @@ public class WorkDealInfoController extends BaseController {
 
 			Page<WorkDealInfo> page = workDealInfoService.findByFinanceId(
 					new Page<WorkDealInfo>(request, response), idList);
+			
+			List<WorkDealInfo> list=workDealInfoService.findByFinanceId(idList);
+			
 			for (int i = 0; i < page.getList().size(); i++) {
 				List<WorkFinancePayInfoRelation> financePayOne = workFinancePayInfoRelationService
 						.findByFinancePay(financePaymentInfoId, page.getList()
@@ -322,11 +329,13 @@ public class WorkDealInfoController extends BaseController {
 						WorkDealInfoType.WorkDealInfoTypeMap);
 
 			}
+			model.addAttribute("count", list.size());
 			model.addAttribute("page", page);
 		} else {
+			model.addAttribute("count", 0);
 			model.addAttribute("page", financePay);
 		}
-
+		model.addAttribute("appNames",appNames);
 		model.addAttribute("financePaymentInfoId", financePaymentInfoId);
 		return "modules/work/workDealInfoListForFinancePaymnetInfo";
 	}
