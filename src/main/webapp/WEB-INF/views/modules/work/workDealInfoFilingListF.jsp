@@ -9,7 +9,6 @@
 	var index=1;
 	var String=null;
 		$(document).ready(function() {
-			
 		});
 		function page(n,s){
 			$("#pageNo").val(n);
@@ -17,58 +16,62 @@
 			$("#searchForm").submit();
         	return false;
         }
-		function quan(obj){
-			var duo=$(".duo");
-			for(var i=0;i<duo.length;i++)
-				{
-					if(duo[i].checked == true)
-						{
-							duo[i].checked=false;
-						}else
-							{
-							duo[i].checked = true;
-							}
-				}
-			if(index==1)
-				{
-	 			String = $("#checkIds").val();
-	 			var checkIds = $("#checkIds").val();
-	 			var xz = $("#contentTable").find("[name='xz']");
-	 			if(checkIds.indexOf($(obj).val())>-1){
-	 				checkIds = checkIds.replace($(obj).val(), "");
-	 			}
-	 			for (var a = 0; a <xz.length; a++) {
-	 				var check = $($("#contentTable").find("[name='xz']")[a]);
-	 				if (check.is(":checked") == true) {
-	 					var checkOne = check.val();
-	 					if (checkIds.indexOf(checkOne)<0) {
-	 						if(checkIds==''){
-	 							checkIds+=check.val();
-	 						}else{
-	 							checkIds+=","+check.val();
-	 						}
-	 					}
-	 				}
-	 			}
-	 			checkIds = checkIds.replace(",,", ",");
-	 			if (checkIds==",") {
-	 				$("#checkIds").val("");
-	 			}else{
-	 				$("#checkIds").val(checkIds);
-	 			}
-				 index=2;
-				}else
-					{
-						$("#checkIds").val(String);
-						index=1;
-					}
-		}
+// 		function quan(obj){
+// 			var duo=$(".duo");
+// 			for(var i=0;i<duo.length;i++)
+// 				{
+// 					if(duo[i].checked == true)
+// 						{
+// 							duo[i].checked=false;
+// 						}else
+// 							{
+// 							duo[i].checked = true;
+// 							}
+// 				}
+// 			if(index==1)
+// 				{
+// 	 			String = $("#checkIds").val();
+// 	 			var checkIds = $("#checkIds").val();
+// 	 			var xz = $("#contentTable").find("[name='xz']");
+// 	 			if(checkIds.indexOf($(obj).val())>-1){
+// 	 				checkIds = checkIds.replace($(obj).val(), "");
+// 	 			}
+// 	 			for (var a = 0; a <xz.length; a++) {
+// 	 				var check = $($("#contentTable").find("[name='xz']")[a]);
+// 	 				if (check.is(":checked") == true) {
+// 	 					var checkOne = check.val();
+// 	 					if (checkIds.indexOf(checkOne)<0) {
+// 	 						if(checkIds==''){
+// 	 							checkIds+=check.val();
+// 	 						}else{
+// 	 							checkIds+=","+check.val();
+// 	 						}
+// 	 					}
+// 	 				}
+// 	 			}
+// 	 			checkIds = checkIds.replace(",,", ",");
+// 	 			if (checkIds==",") {
+// 	 				$("#checkIds").val("");
+// 	 			}else{
+// 	 				$("#checkIds").val(checkIds);
+// 	 				var count=checkIds.split(",");
+// 	 			}
+// 				 index=2;
+// 				}else
+// 					{
+// 						$("#checkIds").val(String);
+						
+// 					}
+// 		}
+
+		
 			
 		function pilianggui()
 		{
 			var workDealInfoIds=[];
 			var ids=$("#checkIds").val();
 			workDealInfoIds=ids.split(",");
+			alert(workDealInfoIds.length);
 			window.location.href="${ctx}/work/workDealInfoFiling/gui?ids="+workDealInfoIds;
 		
 		}
@@ -78,11 +81,12 @@
 		}
 		//改变ids值
 		function changeCheck(obj){
+			
 			var checkIds = $("#checkIds").val();
 			var xz = $("#contentTable").find("[name='xz']");
 			if(checkIds.indexOf($(obj).val())>-1){
 				checkIds = checkIds.replace($(obj).val(), "");
-			}
+			}			
 			for (var a = 0; a <xz.length; a++) {
 				var check = $($("#contentTable").find("[name='xz']")[a]);
 				if (check.is(":checked") == true) {
@@ -99,9 +103,93 @@
 			checkIds = checkIds.replace(",,", ",");
 			if (checkIds==",") {
 				$("#checkIds").val("");
+				document.getElementById('ckcount').innerHTML=0;
 			}else{
 				$("#checkIds").val(checkIds);
+				var a=$("#checkIds").val().split(",");
+				var b=0;
+				for(var i=0;i<a.length;i++)
+					{
+						if(a[i]=="")
+							{
+								b+=1;
+							}
+						
+					}
+				document.getElementById('ckcount').innerHTML=a.length-b;
 			}
+			
+		}
+		
+		function quan(obj){
+			var check = $($("#contentTable").find("#checkAll"));
+			var checkIds = $("#checkIds").val();
+			var xz = $("#contentTable").find("[name='xz']");
+			if (check.is(":checked") == true) {
+				$('input:checkbox').each(function() {
+			        $(this).attr('checked', true);
+				});
+				for (var a = 0; a <xz.length; a++) {
+					var check = $($("#contentTable").find("[name='xz']")[a]);
+					if (check.is(":checked") == true) {
+						var checkOne = check.val();
+						if (checkIds.indexOf(checkOne)<0) {
+							if(checkIds==''){
+								checkIds+=check.val();
+							}else{
+								checkIds+=","+check.val();
+							}
+						}
+					}
+				}
+				checkIds = checkIds.replace(",,", ",");
+				if (checkIds==",") {
+					$("#checkIds").val("");
+					document.getElementById('ckcount').innerHTML=0;
+				}else{
+					$("#checkIds").val(checkIds);
+					var a=checkIds.split(",");
+					document.getElementById('ckcount').innerHTML=a.length;
+					
+				}
+				
+			}else{
+				$('input:checkbox').each(function () {
+			        $(this).attr('checked',false);
+				});
+				for (var a = 0; a <xz.length; a++) {
+					var check = $($("#contentTable").find("[name='xz']")[a]);
+					if (check.is(":checked") == false) {
+						checkIds = checkIds.replace(check.val(), "");
+						checkIds = checkIds.replace(",,", ",");
+					}
+				}
+				if (checkIds==",") {
+					$("#checkIds").val("");
+					document.getElementById('ckcount').innerHTML=0;
+				}else{
+					$("#checkIds").val(checkIds);
+					if(checkIds=="")
+						{
+							document.getElementById('ckcount').innerHTML=0;
+						}else
+							{
+								var a=checkIds.split(",");
+								var b=0;
+								for(var i=0;i<a.length;i++)
+									{
+										if(a[i]=="")
+											{
+												b+=1;
+											}
+										
+									}
+								document.getElementById('ckcount').innerHTML=a.length-b;
+							}
+					
+				}
+			}
+			
 		}
 	</script>
 </head>
@@ -126,14 +214,22 @@
 		<c:if test="${status==0 }">&nbsp;<input id="piGui" class="btn btn-primary" type="button" value="批量归档" onclick="pilianggui()"/>
 		&nbsp;<input id="allGui" class="btn btn-primary" type="button" value="全部归档" onclick="quangui()"/></c:if>
 		</div>
-		<input type="hidden"  name="checkIds"  id="checkIds"  value="${checkIds}"/>
+		<input type="hidden"  name="checkIds"  id="checkIds"  value="${checkIds}" />
 	</form:form>
 	<tags:message content="${message}"/>
 	<table id="contentTable" class="table table-striped table-bordered table-condensed">
 		<thead>
+		<c:if test="${status==0 }">
 			<tr>
-				<th><c:if test="${status==0 }"><input type="checkbox" class="quan" name="xz" onclick="quan(this)" value=""/></c:if>用户ID</th>
-				<th>单位名称</th>
+				<th colspan="9" id="changeCount">共选择&nbsp;<span id="ckcount"><c:choose>
+						<c:when test="${count==null}">0</c:when>
+						<c:otherwise>${count}</c:otherwise>
+					</c:choose></span>&nbsp;条数据</th>
+			</tr>
+		</c:if>
+			<tr>
+				<th><c:if test="${status==0 }"><input type="checkbox" class="quan" name="xz" onclick="quan(this)" value="" id="checkAll" /></c:if>用户ID</th>
+				<th id="ceshi">单位名称</th>
 				<th>应用名称</th>
 				<th>业务类型</th>
 				<th>证书类型</th>
