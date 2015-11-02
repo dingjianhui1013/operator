@@ -42,6 +42,7 @@
 				<th>出库对象</th>
 				<th>接收库房</th>
 				<th>操作人员</th>
+				<th>备注</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -62,6 +63,7 @@
 						<td></td>
 						<td>${receiptInvoice.companyName}</td>
 						<td>${receiptInvoice.createBy.name}</td>
+						<td>${receiptInvoice.remarks}</td>
 					</tr>
 				</c:forEach>
 			</c:if>
@@ -82,6 +84,7 @@
 						<td>${receiptInvoice.companyName}</td>
 						<td></td>
 						<td>${receiptInvoice.createBy.name}</td>
+						<td>${receiptInvoice.remarks}</td>
 					</tr>
 				</c:forEach>
 			</c:if>
