@@ -256,8 +256,29 @@ public class WorkFinancePayInfoRelationController extends BaseController {
 				}
 			}
 		}        
-	    
+	  List<FinancePaymentInfo>  list=financePaymentInfoService.findAll(financePaymentInfo);
+	  int count=0;
+	  int money=0;
+	  int moneyIsNull=0;
+	  for(int i=0;i<list.size();i++)
+	  {
+		 if(list.get(i).getDistinguish()==null)
+		 {
+			 count+=1;
+		 }
+		 if(list.get(i).getResidueMoney()>0)
+		 {
+			 money+=1;
+		 }
+		 if(list.get(i).getResidueMoney()==0)
+		 {
+			 moneyIsNull+=1;
+		 }
+	  }
 	    model.addAttribute("page", page);
+	    model.addAttribute("count", count);
+	    model.addAttribute("money", money);
+	    model.addAttribute("moneyIsNull", moneyIsNull);
 		return "modules/finance/statisticalReportList";
 	}
 
