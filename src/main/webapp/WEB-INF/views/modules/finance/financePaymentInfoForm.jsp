@@ -252,7 +252,7 @@
 					style="resize: none;"></form:textarea>
 			</div>
 		</div>
-		
+		<input type="hidden" name="distinguish" value="0" />
 		<%-- <div class="row-fluid">
 			<div class="span6">
 				<table class="table table-striped table-bordered table-condensed">
