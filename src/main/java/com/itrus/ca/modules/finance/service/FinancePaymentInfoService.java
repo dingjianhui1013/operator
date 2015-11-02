@@ -187,7 +187,17 @@ public class FinancePaymentInfoService extends BaseService {
 		dc.addOrder(Order.desc("id"));
 		return financePaymentInfoDao.find(dc);
 	}
-	
+	public List<FinancePaymentInfo> findAll(FinancePaymentInfo financePaymentInfo) {
+		DetachedCriteria dc = financePaymentInfoDao.createDetachedCriteria();
+		dc.createAlias("createBy", "createBy");
+		if(financePaymentInfo.getCreateBy()!=null)
+		{
+			dc.add(Restrictions.eq("createBy", financePaymentInfo.getCreateBy()));
+		}
+		dc.add(Restrictions.eq(FinancePaymentInfo.DEL_FLAG, FinancePaymentInfo.DEL_FLAG_NORMAL));
+		dc.addOrder(Order.desc("id"));
+		return financePaymentInfoDao.find(dc);
+	}
 	//根据收款编号进行排序
 	public List<FinancePaymentInfo> findRemark() {
 		DetachedCriteria dc = financePaymentInfoDao.createDetachedCriteria();
