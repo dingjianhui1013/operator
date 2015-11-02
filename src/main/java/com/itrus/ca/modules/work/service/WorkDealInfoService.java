@@ -974,6 +974,15 @@ public class WorkDealInfoService extends BaseService {
 		dc.addOrder(Order.desc("id"));
 		return workDealInfoDao.find(page, dc);
 	}
+	public List<WorkDealInfo> findByFinanceId(
+			List<Long> idList) {
+		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
+		if (idList.size() > 0) {
+			dc.add(Restrictions.in("workPayInfo.id", idList));
+		}
+		dc.addOrder(Order.desc("id"));
+		return workDealInfoDao.find(dc);
+	}
 
 	// 根据Keysn序列号，查询统计信息
 	public List<WorkDealInfo> findByKeySn(String Keysn, int dealInfoType) {
