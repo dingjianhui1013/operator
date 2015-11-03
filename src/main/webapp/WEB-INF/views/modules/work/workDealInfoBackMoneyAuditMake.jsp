@@ -205,7 +205,7 @@
 </head>
 <body>
 	<div style="display: none">
-		<object id="ukeyadmin" codeBase="itrusukeyadmin.cab#version=3,1,13,705" classid="clsid:05395F06-244C-4599-A359-5F442B857C28"></object>
+		<object id="ukeyadmin" codeBase="itrusukeyadmin.cab#version=3,1,15,1012" classid="clsid:05395F06-244C-4599-A359-5F442B857C28"></object>
 	</div>
 
 	<ul class="nav nav-tabs">
