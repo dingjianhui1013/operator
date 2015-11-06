@@ -140,7 +140,7 @@
 		&nbsp;<input id="btnSubmit" class="btn btn-primary" type="submit"
 			value="查询" />
 			<a id="btnImport" data-toggle="modal" href="#declareDiv" class="btn btn-primary">批量导入</a>
-			<a target="_blank" href="${ctx}/enroll/downloadTemplate?fileName=finance.xlsx" class="btn btn-primary">模板下载</a>
+			<a target="_blank" href="${ctx}/template/xls/finance.xlsx" class="btn btn-primary">模板下载</a>
 		</div>
 	</form:form>
 	<tags:message content="${message}" />
