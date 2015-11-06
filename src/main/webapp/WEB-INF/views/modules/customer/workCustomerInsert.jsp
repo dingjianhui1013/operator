@@ -46,12 +46,12 @@
 <!-- 			<div class="controls"> -->
 <%-- 				${workDealInfo.workCompany.companyName } --%>
 <!-- 			</div> -->
-			<lable class="control-label">应用项目名称：</lable>
+			<label class="control-label">应用项目名称:</label>
 			<div class="controls">
 				<select name="appName">
 					<option> </option>
 					<c:forEach items="${configApp}" var="configApp">
-						<option value="${configApp.appName}">${configApp.appName}</option>
+						<option value="${configApp.appName}"  <c:if test="${configApp.appName==workDealInfo.configApp.appName}">selected="selected"</c:if>>${configApp.appName}</option>
 					</c:forEach>
 				</select>
 			</div>
