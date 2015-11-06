@@ -130,7 +130,7 @@ public class WorkCustomerController extends BaseController {
 		model.addAttribute("workDealInfo", workDealInfo);
 		model.addAttribute("nowDate", getDateString());
 		model.addAttribute("userName", UserUtils.getUser().getName());
-		List<ConfigApp> configApp= configAppService.findall();
+		List<ConfigApp> configApp= configAppService.findAllConfigApp();
 		model.addAttribute("configApp", configApp);
 		return "modules/customer/workCustomerInsert";
 	}
