@@ -427,7 +427,7 @@ public class KeyUsbKeyDepotController extends BaseController {
 		try {
 			
 			List<KeyUsbKeyDepot> depots = keyUsbKeyDepotService.findByOfficeId(UserUtils.getUser().getOffice().getId());
-			if (depots.size()>0) {
+			if (depots.size() > 0) {
 				List<KeyDepotGeneralStatistics> depotGeneStatistics = null;
 
 				for (KeyUsbKeyDepot e : depots) {
@@ -437,14 +437,32 @@ public class KeyUsbKeyDepotController extends BaseController {
 							&& depotGeneStatistics.size() > 0)
 						break;
 				}
-				if (depotGeneStatistics.size()<1) {
-					json.put("status","2");
+
+				List<KeyGeneralInfo> typeLst = keyGeneralInfoService.findAll();
+				boolean typeIsNull = true;
+				for (KeyGeneralInfo e : typeLst) {
+					if (e.getName().equals(deneName)) {
+						typeIsNull = false;
+						break;
+					}
+				}
+
+				if (typeIsNull) {
+					json.put("status", "2");
 					json.put("msg", "当前网点库房中没有此KYE类型标识！");
-				}else{
-					if (depotGeneStatistics.get(0).getInCount()>0) {
-						json.put("status","3");
-					}else{
-						json.put("status","4");
+				}
+
+				if (depotGeneStatistics.size() < 1) {
+					// 所属仓库+KEY类型没查到记录，不去查KEY管理的类型标识，直接返回没类型标识
+					json.put("status", "4");
+					json.put("msg", "当前网点库房KEY余量为0");
+				} else {
+					if (depotGeneStatistics.get(0).getInCount() > 0) {
+						// 查到记录，且库存数量大于0，提示正常
+						json.put("status", "3");
+					} else {
+						// 查到记录，且库存小于等于0，提示余量为0
+						json.put("status", "4");
 						json.put("msg", "当前网点库房KEY余量为0");
 					}
 				}
