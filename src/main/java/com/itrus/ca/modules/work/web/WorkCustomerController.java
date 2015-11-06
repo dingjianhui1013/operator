@@ -238,6 +238,7 @@ public class WorkCustomerController extends BaseController {
 		 * //判断公司是否存在业务 workDealInfoService.findByCompany(workCompany.getId());
 		 * }
 		 */
+		List<WorkCompany> list=workCompanyService.findAll();
 		List<ConfigApp> appNames=configAppService.findall();
 		Date oetDate = null;
 		SimpleDateFormat sim = new SimpleDateFormat("yyyy-MM-dd");
@@ -259,8 +260,11 @@ public class WorkCustomerController extends BaseController {
 		model.addAttribute("workCompany", workCompany);
 		model.addAttribute("nowDate", getDateString());
 		model.addAttribute("user", UserUtils.getUser());
+		model.addAttribute("list", list);
 		logUtil.saveSysLog("客服管理", "添加单位信息 " + workCompany.getCompanyName()
 				+ " 成功", "");
+		
+		
 		return "modules/customer/workCustomerComInsertT";
 	}
 
@@ -289,7 +293,6 @@ public class WorkCustomerController extends BaseController {
 	public String insertComCustomerT(Long workCompanyId, WorkLog workLog,
 			HttpServletRequest request, HttpServletResponse response,
 			Model model,String ywzx,String ywcz,String ywxt) {
-		
 		if(ywzx!=null)
 		{
 			String ywzxs=ywzx.replace(","," ");
@@ -305,8 +308,16 @@ public class WorkCustomerController extends BaseController {
 			String ywxts=ywxt.replace(","," ");
 			workLog.setYwxt(ywxts);
 		}
-		
-		workLog.setWorkCompany(workCompanyService.get(workCompanyId));
+		List<WorkCompany> com= workCompanyService.findByCompanyName(workLog.getWorkCompany().getCompanyName());
+		if(com.size()>0)
+		{
+			for(int i=0;i<com.size();i++)
+			{
+				workLog.setWorkCompany(com.get(i));
+			}
+			
+		}
+//		workLog.setWorkCompany(workCompanyService.get(workCompanyId));
 		workLog.setCreatTime(new Date());
 		workLog.setCreateBy(UserUtils.getUser());
 		String detail = "";

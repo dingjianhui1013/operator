@@ -128,8 +128,6 @@ public class WorkLogController extends BaseController {
 	@RequestMapping("kflist")
 	public String kflist(WorkLog workLog, HttpServletRequest request,
 			HttpServletResponse response, Model model) {
-		
-		
 		Page<WorkLog> page = workLogService.findKfList(new Page<WorkLog>(
 				request, response), workLog);
 		model.addAttribute("page", page);

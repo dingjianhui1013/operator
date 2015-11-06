@@ -152,7 +152,7 @@
 		<div class="control-group">
 			<label class="control-label">其他</label>
 			<div class="controls">
-				<input type="text" />
+				<input type="text" name="qita"/>
 			</div>
 		</div>
 		<div class="control-group">
@@ -180,7 +180,8 @@
 				<textarea id="remarks" class="valid" cols="4" rows="4" style="resize: none;" name="leftoverProblem"></textarea>
 			</div>
 		</div>
-		<input type="hidden"  name="distinguish" value="0"/>
+		
+		<input type="hidden"  path="distinguish" value="0"/>
 		<div class="form-actions">
 			<input id="btnSubmit" class="btn btn-primary" type="submit" value="保存"/>&nbsp;&nbsp;
 			<input id="btnCancel" class="btn" type="button" value="返 回" onclick="history.go(-1)"/>

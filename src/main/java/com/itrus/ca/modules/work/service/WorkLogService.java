@@ -245,6 +245,10 @@ public class WorkLogService extends BaseService {
 		if(workLog.getSerType()!=null&&!workLog.getSerType().equals("")){
 			dc.add(Restrictions.eq("serType", workLog.getSerType()));
 		}
+		if(workLog.getDistinguish()!=null&&!workLog.getDistinguish().equals(""))
+		{
+			dc.add(Restrictions.eq("distinguish", workLog.getDistinguish()));
+		}
 		dc.add(Restrictions.eq("state",1));
 		dc.addOrder(Order.desc("id"));
 		return workLogDao.find(page,dc);

@@ -49,6 +49,7 @@ public class WorkLog extends DataEntity implements java.io.Serializable {
 	private String ywzx;//业务咨询
 	private String appName;//应用项目名称
 	private String distinguish;//区分添加出 1为客服处添加0位咨询处添加
+	private String tel;//联系方式
 	// Constructors
 
 	/** default constructor */
@@ -252,6 +253,14 @@ public class WorkLog extends DataEntity implements java.io.Serializable {
 
 	public void setDistinguish(String distinguish) {
 		this.distinguish = distinguish;
+	}
+
+	public String getTel() {
+		return tel;
+	}
+	@Column(name = "tel")
+	public void setTel(String tel) {
+		this.tel = tel;
 	}
 	
 	
