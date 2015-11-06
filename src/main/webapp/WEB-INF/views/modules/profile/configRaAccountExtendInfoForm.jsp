@@ -35,21 +35,27 @@ $(document).ready(
 		function repeatName(){
 			var name = $("#certName").val();
 			var extendId = $("#extendId").val();
-			var url = "${ctx}/profile/configRaAccountExtendInfo/checkRepeat?certName="+name+"&extendId="+extendId+"&_="+new Date().getTime();
-			$.getJSON(url,function(data){
-				if(data.status==0){
-					if(data.type==1){
-						top.$.jBox.tip("证书名称已存在！");
-						repeat = 1;
-					}else {
-						repeat = 0;
+			var url = "${ctx}/profile/configRaAccountExtendInfo/checkRepeat";
+			$.ajax({
+					url:url,
+					data:{certName:name,extendId:extendId,_:new Date().getTime()},
+					dataType:'json',
+					success:function(data)
+					{
+						if(data.status==0){
+							if(data.type==1){
+								top.$.jBox.tip("证书名称已存在！");
+								repeat = 1;
+							}else {
+								repeat = 0;
+							}
+						}else{
+							top.$.jBox.tip("系统出现异常！");
+						}
 					}
-				}else{
-					top.$.jBox.tip("系统出现异常！");
-				}
+				
 			});
 		}
-		
 		function onSubmit(){
 			if (repeat==1) {
 				top.$.jBox.tip("证书名称已存在！");
