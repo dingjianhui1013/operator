@@ -428,7 +428,15 @@ public class KeyUsbKeyDepotController extends BaseController {
 			
 			List<KeyUsbKeyDepot> depots = keyUsbKeyDepotService.findByOfficeId(UserUtils.getUser().getOffice().getId());
 			if (depots.size()>0) {
-				List<KeyDepotGeneralStatistics> depotGeneStatistics =   keyDepotGeneralStatisticsService.findByDepotIdGenename(depots.get(0).getId(),deneName);
+				List<KeyDepotGeneralStatistics> depotGeneStatistics = null;
+
+				for (KeyUsbKeyDepot e : depots) {
+					depotGeneStatistics = keyDepotGeneralStatisticsService
+							.findByDepotIdGenename(e.getId(), deneName);
+					if (depotGeneStatistics != null
+							&& depotGeneStatistics.size() > 0)
+						break;
+				}
 				if (depotGeneStatistics.size()<1) {
 					json.put("status","2");
 					json.put("msg", "当前网点库房中没有此KYE类型标识！");
