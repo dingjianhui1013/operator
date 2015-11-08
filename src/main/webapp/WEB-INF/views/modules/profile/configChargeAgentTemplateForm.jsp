@@ -106,14 +106,16 @@
 		var tempStyle = $('input:radio:checked').val();
 		if (tempStyle != 1) {
 
-			if (parseInt($("#configureNum").val()) < 0) {
-				top.$.jBox.tip("配置新增数量应大于0！请重新输入！");
+			
+			if(parseInt($("#configureNum").val())<=parseInt($("#avaRes").val())){
+				top.$.jBox.tip("配置新增数量应大于新增已使用数量！请重新输入！");
 				return false;
 			}
-			if (parseInt($("#configureUpdateNum").val()) < 0) {
-				top.$.jBox.tip("配置更新数量应大于0！请重新输入！");
+			if(parseInt($("#configureUpdateNum").val())<=parseInt($("#avaUpdateRes").val())){
+				top.$.jBox.tip("配置更新数量应大于更新已使用数量！请重新输入！");
 				return false;
 			}
+		
 
 		}
 		$.ajax({
