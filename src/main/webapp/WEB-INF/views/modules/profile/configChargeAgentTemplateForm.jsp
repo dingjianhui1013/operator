@@ -107,12 +107,12 @@
 		if (tempStyle != 1) {
 
 			
-			if(parseInt($("#configureNum").val())<=parseInt($("#avaRes").val())){
-				top.$.jBox.tip("配置新增数量应大于新增已使用数量！请重新输入！");
+			if(parseInt($("#configureNum").val())<parseInt($("#avaRes").val())){
+				top.$.jBox.tip("配置新增数量应不小于新增已使用数量！请重新输入！");
 				return false;
 			}
-			if(parseInt($("#configureUpdateNum").val())<=parseInt($("#avaUpdateRes").val())){
-				top.$.jBox.tip("配置更新数量应大于更新已使用数量！请重新输入！");
+			if(parseInt($("#configureUpdateNum").val())<parseInt($("#avaUpdateRes").val())){
+				top.$.jBox.tip("配置更新数量应不小于更新已使用数量！请重新输入！");
 				return false;
 			}
 		
