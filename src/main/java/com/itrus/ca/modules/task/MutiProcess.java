@@ -138,7 +138,7 @@ public class MutiProcess implements Runnable {
 				
 				ConfigProduct product = configProductService.findByNamesLabel(s1.getProductLabel(), appName, productName);
 				if (product==null) {
-					log.error(appName+"下产品名称'"+s1.getCertType()+"'对应的产品不存在...跳过，中间表id:"+s1.getId());
+					log.error(appName+"下产品名称'"+s1.getCertType()+"'对应的产品不存在...跳过，中间表id:"+s1.getId()+"\t序列号:" + s1.getSerialnumber());
 					continue;
 				}
 
@@ -387,7 +387,7 @@ public class MutiProcess implements Runnable {
 					sjNum++;
 					
 				} catch (Exception e) {
-					log.error("Exception at 线程 ："+ number +"\t数据id:"+ s1.getId()+"\t" + e.getMessage());
+					log.error("Exception at 线程 ："+ number +"\t数据id:"+ s1.getId()+"\t序列号:" + s1.getSerialnumber()+"\t" + e.getMessage());
 				}
 			}
 				log.debug("保存 企业历史 数据+实时数据");
