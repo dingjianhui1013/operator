@@ -1,7 +1,9 @@
 package com.itrus.ca.common.utils;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -628,6 +630,8 @@ public class RaAccountUtil {
 					value = "organizationNumber";
 				} else if (flag.equals("5")) {
 					value = "pIDCard";
+				} else if (flag.equals("6")){
+					value = "product";
 				}
 				json.put("addtionalField1DisplayName", value);
 			}
@@ -746,4 +750,141 @@ public class RaAccountUtil {
 			e.printStackTrace();
 		}
 	}
+	
+	
+	/**
+	 * 
+	* @Title: getExtendInfo
+	* @Description: TODO(返回证书模版项对应证书新增页面name)
+	* @param @param json
+	* @param @param extendInfo
+	* @param @return    设定文件
+	* @return JSONObject    返回类型
+	* @throws
+	 */
+	public static Set<String> getExtendInfos(ConfigRaAccountExtendInfo extendInfo) {
+		Set<String> fields = new HashSet<String>();
+		try {
+			String flag = new String();
+			if (extendInfo!=null&&!"-1".equals(extendInfo.getCommonNameDisplayName())) {
+				flag = extendInfo.getCommonNameDisplayName();
+				if (flag.equals("0")) {
+					fields.add("companyName");//单位名称
+				} else if (flag.endsWith("1")) {
+					fields.add("contactName");//证书持有人名称
+				} else if (flag.endsWith("2")) {
+					fields.add("pName");//经办人名称
+				}
+			}
+			
+			if (extendInfo!=null&&!"-1".equals(extendInfo.getNameDisplayName())) {
+				flag = extendInfo.getNameDisplayName();
+				if (flag.equals("0")) {
+					fields.add("companyName");//单位名称
+				} else if (flag.endsWith("1")) {
+					fields.add("contactName");//证书持有人名称
+				} else if (flag.endsWith("2")) {
+					fields.add("pName");//经办人名称
+				}else if (flag.endsWith("3")) {
+					fields.add("organizationNumber");//组织机构代码
+				}else if (flag.endsWith("4")) {
+					fields.add("conCertNumber");//证书持有人身份证号
+				}
+			}
+			if (extendInfo!=null&&!extendInfo.getEmailDisplayName().equals("-1")) {
+				flag = extendInfo.getEmailDisplayName();
+				if (flag.equals("0")) {
+					fields.add("contacEmail");//证书持有人邮箱
+				} 
+			}
+			
+
+			if (extendInfo!=null&&!extendInfo.getAddtionalField1DisplayName().equals("-1")) {
+				flag = extendInfo.getAddtionalField1DisplayName();
+				if (flag.equals("1")) {
+					fields.add("companyName");//单位名称
+				}else if (flag.equals("3")) {
+					fields.add("conCertNumber");//证书持有人身份证号
+				} else if (flag.equals("4")) {
+					fields.add("organizationNumber");//组织机构代码
+				} else if (flag.equals("5")) {
+					fields.add("pIDCard");//经办人身份证号
+				}
+			}
+
+			if (extendInfo!=null&&!extendInfo.getAddtionalField2DisplayName().equals("-1")) {
+				flag = extendInfo.getAddtionalField2DisplayName();
+				 if (flag.equals("1")) {
+					fields.add("companyName");//单位名称
+				} else if (flag.equals("2")) {
+					fields.add("contactTel");//业务系统UID
+				} else if (flag.equals("4")) {
+					fields.add("conCertNumber");//证书持有人身份证号
+				} else if (flag.equals("5")) {
+					fields.add("organizationNumber");//组织机构代码
+				} else if (flag.equals("6")) {
+					fields.add("pIDCard");//经办人身份证号
+				}
+			}
+
+			if (extendInfo!=null&&!extendInfo.getAddtionalField3DisplayName().equals("-1")) {
+				flag = extendInfo.getAddtionalField3DisplayName();
+				 if (flag.equals("2")) {
+					fields.add("contactTel");//业务系统UID
+				}
+			}
+			
+			if (extendInfo!=null&&!extendInfo.getAddtionalField4DisplayName().equals("-1")) {
+				flag = extendInfo.getAddtionalField4DisplayName();
+				String value = new String();
+
+				if (flag.equals("0")) {
+					fields.add("comCertficateNumber");//证件号
+				} else if (flag.equals("1")) {
+					fields.add("contactTel");//业务系统UID
+				} else if (flag.equals("2")) {
+					fields.add("conCertNumber");//证书持有人身份证号
+				}else if (flag.equals("4")) {
+					fields.add("pIDCard");//经办人身份证号
+				}
+			}
+
+			if (extendInfo!=null&&!extendInfo.getAddtionalField6DisplayName().equals("-1")) {
+				flag = extendInfo.getAddtionalField6DisplayName();
+				if (flag.equals("0")) {
+					fields.add("organizationNumber");//组织机构代码
+				}
+			}
+
+			if (extendInfo!=null&&!extendInfo.getAddtionalField7DisplayName().equals("-1")) {
+				flag = extendInfo.getAddtionalField7DisplayName();
+				if (flag.equals("0")) {
+					fields.add("comCertficateNumber");//证件号
+				}
+			}
+
+			if (extendInfo!=null&&!extendInfo.getAddtionalField8DisplayName().equals("-1")) {
+				flag = extendInfo.getAddtionalField8DisplayName();
+				String value = new String();
+
+				if (flag.equals("1")) {
+					fields.add("companyName");//单位名称
+				} else if (flag.equals("3")) {
+					fields.add("conCertNumber");//证书持有人身份证号
+				} else if (flag.equals("5")) {
+					fields.add("organizationNumber");//组织机构代码
+				} else if (flag.equals("6")) {
+					fields.add("contactTel");//业务系统UID
+				} else if (flag.equals("7")) {
+					fields.add("pIDCard");//经办人身份证号
+				}
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return fields;
+	}
+	
 }

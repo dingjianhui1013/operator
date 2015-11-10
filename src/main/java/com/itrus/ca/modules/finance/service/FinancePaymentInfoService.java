@@ -181,6 +181,15 @@ public class FinancePaymentInfoService extends BaseService {
 		return financePaymentInfoDao.findCompanyId();
 	}
 	
+	
+	public List<FinancePaymentInfo> findByCompanyName(String companyName){
+		DetachedCriteria dc = financePaymentInfoDao.createDetachedCriteria();
+		dc.add(Restrictions.eq("company", companyName));
+		dc.add(Restrictions.eq(FinancePaymentInfo.DEL_FLAG, FinancePaymentInfo.DEL_FLAG_NORMAL));
+		dc.addOrder(Order.asc("residueMoney"));
+		return financePaymentInfoDao.find(dc);
+	}
+	
 	public List<FinancePaymentInfo> findAll() {
 		DetachedCriteria dc = financePaymentInfoDao.createDetachedCriteria();
 		dc.add(Restrictions.eq(FinancePaymentInfo.DEL_FLAG, FinancePaymentInfo.DEL_FLAG_NORMAL));

@@ -42,9 +42,10 @@ public class ConfigSupplierProductRelation implements java.io.Serializable {
 
 	/** full constructor */
 	public ConfigSupplierProductRelation(ConfigSupplier configSupplier,
-			ConfigProduct configProduct, Integer productType) {
+			ConfigProduct configProduct, Integer productType,KeyGeneralInfo keyGeneralInfo) {
 		this.configSupplier = configSupplier;
 		this.productType = productType;
+		this.keyGeneralInfo = keyGeneralInfo;
 	}
 
 	// Property accessors
@@ -78,7 +79,8 @@ public class ConfigSupplierProductRelation implements java.io.Serializable {
 		this.productType = productType;
 	}
 
-	@Transient
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "general_info")
 	public KeyGeneralInfo getKeyGeneralInfo() {
 		return keyGeneralInfo;
 	}

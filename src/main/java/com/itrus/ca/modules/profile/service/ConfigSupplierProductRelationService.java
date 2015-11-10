@@ -69,12 +69,36 @@ public class ConfigSupplierProductRelationService extends BaseService {
 		return list;
 	}
 	
+	@Transactional(readOnly = false)
+	public List<ConfigSupplierProductRelation> findByNotNullGeneInfo(){
+		DetachedCriteria dc = configSupplierProductRelationDao.createDetachedCriteria();
+		dc.add(Restrictions.isNotNull("keyGeneralInfo"));
+		return configSupplierProductRelationDao.find(dc);
+	}
+	
+	@Transactional(readOnly = false)
 	public List<ConfigSupplierProductRelation> findBySupplier(ConfigSupplier configSupplier){
 		DetachedCriteria dc = configSupplierProductRelationDao.createDetachedCriteria();
 		dc.add(Restrictions.like("configSupplier.id",configSupplier.getId()));
 		List<ConfigSupplierProductRelation> list = configSupplierProductRelationDao.find(dc);
 		return list;
 	}
+	
+	@Transactional(readOnly = false)
+	public ConfigSupplierProductRelation findBySupplierType(ConfigSupplier configSupplier , Integer type){
+		DetachedCriteria dc = configSupplierProductRelationDao.createDetachedCriteria();
+		dc.add(Restrictions.eq("configSupplier.id",configSupplier.getId()));
+		dc.add(Restrictions.eq("productType", type));
+		
+		if (configSupplierProductRelationDao.find(dc).size()>0) {
+			return configSupplierProductRelationDao.find(dc).get(0);
+		}else{
+			return null;
+		}
+		
+	}
+	
+	
 	
 	@Transactional(readOnly = false)
 	public void save(ConfigSupplierProductRelation configSupplierProductRelation) {

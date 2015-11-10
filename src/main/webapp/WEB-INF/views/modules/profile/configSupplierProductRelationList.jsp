@@ -15,6 +15,26 @@
 			$("#searchForm").submit();
         	return false;
         }
+		
+		function replaceHistory(){
+			top.$.jBox.tip("正在重置历史数据...", 'loading');
+			var url = "${ctx}/profile/configSupplierProductRelation/replaceHistoryKey";
+			$.getJSON(url,function(data){
+				if(data.status==0){
+					top.$.jBox.tip("系统异常！");
+				}else{
+					top.$.jBox.tip("重置成功！");
+					 setTimeout(function (){
+	            		    //something you want delayed
+	            		    	window.location.reload;
+	            		//	window.location.reload();
+	            		   }, 1000); // how long do you want t
+				}
+				
+			});
+			
+			
+		}
 	</script>
 </head>
 <body>
@@ -27,10 +47,6 @@
 		<shiro:hasPermission name="profile:configSupplierProductRelation:view">
 		<li class="active"><a href="${ctx}/profile/configSupplierProductRelation/">按供应商产品计费</a></li>
 		</shiro:hasPermission>
-		
-		
-		
-		
 	</ul>
 	<form:form id="searchForm" modelAttribute="configSupplierProductRelation" action="${ctx}/profile/configSupplierProductRelation/" method="post" class="breadcrumb form-search">
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
@@ -43,6 +59,10 @@
 				</c:forEach>
 			</form:select>
 		&nbsp;<input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/>
+		&nbsp;
+		<c:if test="${showHistory==1 }">
+		<input class="btn btn-primary" type="button" onclick="replaceHistory()" value="重置KEY历史数据"/>
+		</c:if>
 	</form:form>
 	<tags:message content="${message}"/>
 	<table id="contentTable" class="table table-striped table-bordered table-condensed">

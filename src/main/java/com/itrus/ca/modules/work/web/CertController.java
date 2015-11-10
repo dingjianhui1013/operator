@@ -206,21 +206,21 @@ public class CertController extends BaseController {
 							String orgNum = dealInfo.getWorkCompany().getOrganizationNumber();
 							
 							Integer certSortInteger = workDealInfoService.getCertSortByOrganizationNumber(orgNum, 1);
-							String url = dzsBH;
-							Map<String, String> params = new HashMap<String, String>();
-							params.put("param1", "按单位组织机构代码(含企业和机构证书)查单位证书");
-							params.put("param2", orgNum);
+//							String url = dzsBH;
+//							Map<String, String> params = new HashMap<String, String>();
+//							params.put("param1", "按单位组织机构代码(含企业和机构证书)查单位证书");
+//							params.put("param2", orgNum);
 							Integer certSortIntegerSC = 0;
-							String res =HttpClientUtil.post(url, params);
-							if (!res.equals("")) {
-
-								JSONObject jsonReturn = new JSONObject(res); 
-								
-								String status = jsonReturn.getString("status");
-								if (status.equals("success")) {
-									certSortIntegerSC = jsonReturn.getInt("certsInSccA");
-								}
-							}
+//							String res =HttpClientUtil.post(url, params);
+//							if (!res.equals("")) {
+//
+//								JSONObject jsonReturn = new JSONObject(res); 
+//								
+//								String status = jsonReturn.getString("status");
+//								if (status.equals("success")) {
+//									certSortIntegerSC = jsonReturn.getInt("certsInSccA");
+//								}
+//							}
 							if (certSortInteger>certSortIntegerSC) {
 								dealInfo.setCertSort(certSortInteger+1);
 							}else{

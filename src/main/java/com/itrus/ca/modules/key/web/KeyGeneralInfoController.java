@@ -191,10 +191,8 @@ public class KeyGeneralInfoController extends BaseController {
 		keyGeneralInfoService.save(keyGeneralInfo);
 		
 		ConfigSupplierProductRelation configSupplierProductRelation = new ConfigSupplierProductRelation();
-		
 		configSupplierProductRelation.setConfigSupplier(supplier);
-		configSupplierProductRelation.setProductType(Integer.parseInt(keyGeneralInfo.getId().toString()));
-		
+		configSupplierProductRelation.setKeyGeneralInfo(keyGeneralInfo);
 		configSupplierProductRelationService.save(configSupplierProductRelation);
 		
 		

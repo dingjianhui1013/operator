@@ -65,6 +65,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.google.common.collect.Lists;
@@ -278,6 +279,34 @@ public class WorkDealInfoController extends BaseController {
 		return "modules/work/workDealInfoList";
 	}
 
+	
+	// 批量导入
+		@RequestMapping("addAttach")
+		@ResponseBody
+		public String importFile(
+				@RequestParam(value = "fileName", required = true) MultipartFile file)
+				throws IllegalStateException, IOException, JSONException {
+			JSONObject json = new JSONObject();
+			String ifExcel = file.getOriginalFilename().substring(file.getOriginalFilename().indexOf("."));//截取.xlsx或.xls
+			if(!(ifExcel.equals(".xls") || ifExcel.equals(".xlsx"))){
+				json.put("status", -1);
+				json.put("msg", "模板必须为Excel文件");
+				return json.toString();
+			}
+			try{
+				json = workDealInfoService.saveExcelDate(file, ifExcel);//解析存储excel文件
+			}catch(Exception ex){
+				json.put("status", -1);
+				json.put("msg", json.toString());
+				return json.toString();
+			}
+			return json.toString();
+		}
+	
+	
+	
+	
+	
 	@RequiresPermissions("work:workDealInfo:view")
 	@RequestMapping(value = "financeList")
 	public String listFinancePaymentInfo(FinancePaymentInfo financePaymentInfo,

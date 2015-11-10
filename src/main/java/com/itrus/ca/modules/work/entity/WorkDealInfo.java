@@ -27,6 +27,7 @@ import com.itrus.ca.modules.profile.entity.ConfigApp;
 import com.itrus.ca.modules.profile.entity.ConfigChargeAgent;
 import com.itrus.ca.modules.profile.entity.ConfigCommercialAgent;
 import com.itrus.ca.modules.profile.entity.ConfigProduct;
+import com.itrus.ca.modules.sys.entity.User;
 
 /**
  * WorkDealInfo entity. @author MyEclipse Persistence Tools
@@ -88,10 +89,14 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 	private Date notafter;//证书到期时间（业务办理列表大数据流已被关闭的问题）
 	private Integer addCertDays;//赠送天数
 	private Boolean isIxin;//i信端更新标识
-	private Integer isSJQY;//是否是数据迁移的数据  是为1 否为null or 0
+	private Integer isSJQY;//是否是数据迁移的数据  是为1 否为null or 0 2批量导入数据
 	// Constructors
-	
 	private Long configChargeAgentId;
+	private User inputUser;// 录入人
+	private User payUser;//缴费人
+	private User attestationUser;//鉴证人
+	private User businessCardUser;//制证人
+	
 	
 
 	/** default constructor */
@@ -111,7 +116,11 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 			WorkUser workUser,
 			Integer dealInfoType, String dealInfoStatus, ConfigProduct configProduct,
 			Integer year, String certSn, String keySn, Integer certSort,Integer trustDeviceCount,
-			Set<WorkLog> workLogs,Long configChargeAgentId,Integer isSJQY) {
+			Set<WorkLog> workLogs,Long configChargeAgentId,Integer isSJQY,
+			User inputUser,
+			User payUser,
+			User attestationUser,
+			User businessCardUser) {
 		this.configApp = configApp;
 		this.workCompany = workCompany;
 		this.workUser = workUser;
@@ -126,6 +135,10 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 		this.trustDeviceCount = trustDeviceCount;
 		this.configChargeAgentId = configChargeAgentId;
 		this.isSJQY = isSJQY;
+		this.inputUser=inputUser;
+		this.payUser=payUser;
+		this.attestationUser=attestationUser;
+		this.businessCardUser=businessCardUser;
 	}
 
 	// Property accessors
@@ -584,6 +597,47 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 
 	public void setIsSJQY(Integer isSJQY) {
 		this.isSJQY = isSJQY;
+	}
+
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "input_user")
+	public User getInputUser() {
+		return inputUser;
+	}
+
+	public void setInputUser(User inputUser) {
+		this.inputUser = inputUser;
+	}
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "pay_user")
+	public User getPayUser() {
+		return payUser;
+	}
+
+	public void setPayUser(User payUser) {
+		this.payUser = payUser;
+	}
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "attestation_user")
+	public User getAttestationUser() {
+		return attestationUser;
+	}
+
+	public void setAttestationUser(User attestationUser) {
+		this.attestationUser = attestationUser;
+	}
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "business_card_user")
+	public User getBusinessCardUser() {
+		return businessCardUser;
+	}
+
+	public void setBusinessCardUser(User businessCardUser) {
+		this.businessCardUser = businessCardUser;
 	}
 	
 	
