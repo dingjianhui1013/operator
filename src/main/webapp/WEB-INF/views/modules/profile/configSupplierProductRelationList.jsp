@@ -26,8 +26,7 @@
 					top.$.jBox.tip("重置成功！");
 					 setTimeout(function (){
 	            		    //something you want delayed
-	            		    	window.location.reload;
-	            		//	window.location.reload();
+	            			window.location.reload();
 	            		   }, 1000); // how long do you want t
 				}
 				
