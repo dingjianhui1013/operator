@@ -103,7 +103,7 @@
 		
 	
 		
-		<label>统计时间 ：</label>
+		<label>付款时间：</label>
 
 		<input id="startTime" name="startTime" type="text" readonly="readonly"
 			maxlength="20" class="Wdate required"
