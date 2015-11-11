@@ -201,7 +201,7 @@ function setCount() {
     <div id="jindutiao" class="zsfw_gxgx_3info3" style="padding-top:70px;display:none" >
 	        <div id="play1" style="width: 328px; height: 19px; left: 0px; top: 0px; color: #c1ff84; z-index: 2;background-color: transparent; background-image: url(${ctxStatic}/images/progressbar_bg.png); background-repeat: no-repeat;"></div>
 			<div id="play2" style="margin-top:-19px; width:0px; height: 19px; left: 0px; top: 0px; color: #c1ff84; z-index: 3; background-color: transparent;background-image: url(${ctxStatic}/images/progressbar.png); background-repeat: no-repeat;""></div>
-			<div id="play3" style="margin-top:-19px;margin-left:100px;left: 80px; z-index: 5;top: 0px; line-height:19px;">正在更新...请勿拨出天威盾！</div>
+			<div id="play3" style="margin-top:-19px;margin-left:100px;left: 80px; z-index: 5;top: 0px; line-height:19px;">正在更新...请勿拨出USBKEY！</div>
 			<div id="play4" style="margin-top:-19px;margin-left:340px;"></div>
 	</div>
    <div id="show_key" >
