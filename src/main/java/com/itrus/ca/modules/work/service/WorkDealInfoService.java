@@ -3936,6 +3936,11 @@ public class WorkDealInfoService extends BaseService {
 				this.checkWorkDealInfoNeedSettle(workDealInfo);
 				this.save(workDealInfo);
 			}
+			
+			if (a == 1) {
+				return ifErr(-1, ifErr.toString());
+			}
+			
 
 		} catch (Exception e) {
 			// TODO: handle exception

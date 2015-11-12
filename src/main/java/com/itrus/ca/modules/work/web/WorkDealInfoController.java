@@ -255,13 +255,21 @@ public class WorkDealInfoController extends BaseController {
 	@RequestMapping(value = { "list", "" })
 	public String list(WorkDealInfo workDealInfo, Date startTime, Date endTime,
 			HttpServletRequest request, HttpServletResponse response,
-			Model model, RedirectAttributes redirectAttributes) {
+			Model model, RedirectAttributes redirectAttributes,
+			@RequestParam(value = "checkIds", required = false) String checkIds
+			) {
 		User user = UserUtils.getUser();
 		workDealInfo.setCreateBy(user.getCreateBy());
 		Page<WorkDealInfo> page = workDealInfoService.find4Apply(
 				new Page<WorkDealInfo>(request, response), workDealInfo,
 				startTime, endTime);
 
+		if (checkIds!=null) {
+    		String[] ids = checkIds.split(",");
+    		model.addAttribute("ids", ids);
+		}
+		model.addAttribute("checkIds", checkIds);
+		
 		List<WorkDealInfo> noIxinInfos = page.getList();
 		List<WorkDealInfo> isIxinInfos = workDealInfoService.find4ApplyIsIxin(
 				workDealInfo, startTime, endTime);

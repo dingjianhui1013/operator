@@ -147,6 +147,83 @@
 		};
 		$('#materialImport').ajaxSubmit(options);
 	}
+	
+	
+	function checkAll(obj){
+		var check = $($("#contentTable").find("#checkAll"));
+		var checkIds = $("#checkIds").val();
+		var xz = $("#contentTable").find("[name='oneDealCheck']");
+		if (check.is(":checked") == true) {
+			$('input:checkbox').each(function() {
+		        $(this).attr('checked', true);
+			});
+			for (var a = 0; a <xz.length; a++) {
+				var check = $($("#contentTable").find("[name='oneDealCheck']")[a]);
+				if (check.is(":checked") == true) {
+					var checkOne = check.val();
+					if (checkIds.indexOf(checkOne)<0) {
+						if(checkIds==''){
+							checkIds+=check.val();
+						}else{
+							checkIds+=","+check.val();
+						}
+					}
+				}
+			}
+			checkIds = checkIds.replace(",,", ",");
+			if (checkIds==",") {
+				$("#checkIds").val("");
+			}else{
+				$("#checkIds").val(checkIds);
+			}
+		}else{
+			$('input:checkbox').each(function () {
+		        $(this).attr('checked',false);
+			});
+			for (var a = 0; a <xz.length; a++) {
+				var check = $($("#contentTable").find("[name='oneDealCheck']")[a]);
+				if (check.is(":checked") == false) {
+					checkIds = checkIds.replace(check.val(), "");
+					checkIds = checkIds.replace(",,", ",");
+				}
+			}
+			if (checkIds==",") {
+				$("#checkIds").val("");
+			}else{
+				$("#checkIds").val(checkIds);
+			}
+		}
+	}
+	
+	
+	function changeCheck(obj){
+		var checkIds = $("#checkIds").val();
+		var xz = $("#contentTable").find("[name='oneDealCheck']");
+		if(checkIds.indexOf($(obj).val())>-1){
+			checkIds = checkIds.replace($(obj).val(), "");
+		}
+		for (var a = 0; a <xz.length; a++) {
+			var check = $($("#contentTable").find("[name='oneDealCheck']")[a]);
+			if (check.is(":checked") == true) {
+				var checkOne = check.val();
+				if (checkIds.indexOf(checkOne)<0) {
+					if(checkIds==''){
+						checkIds+=check.val();
+					}else{
+						checkIds+=","+check.val();
+					}
+				}
+			}
+		}
+		checkIds = checkIds.replace(",,", ",");
+		if (checkIds==",") {
+			$("#checkIds").val("");
+		}else{
+			$("#checkIds").val(checkIds);
+		}
+	}
+	
+	
 </script>
 
 </head>
@@ -191,7 +268,11 @@
 				&nbsp;&nbsp;&nbsp;&nbsp;
 				<a target="_blank" href="${ctx}/enroll/downloadTemplate?fileName=batchImportDealInfo.xlsx&_=new Date().getTime()" class="btn btn-primary">批量新增模板下载</a>
 				&nbsp;&nbsp;&nbsp;&nbsp;
-				<a id="btnImport" data-toggle="modal" href="#declareDiv" class="btn btn-primary">批量新增导入</a>
+				<a id="manyAdd" data-toggle="modal" href="#declareDiv" class="btn btn-primary">批量新增导入</a>
+				
+				&nbsp;&nbsp;&nbsp;&nbsp;
+				<a id="manyUpdate" data-toggle="modal" class="btn btn-primary">批量更新证书</a>
+				<input type="hidden"  name="checkIds"  id="checkIds"  value="${checkIds }"/>
 		</div>
 	</form:form>
 	<tags:message content="${message}" />
@@ -199,6 +280,12 @@
 		class="table table-striped table-bordered table-condensed">
 		<thead>
 			<tr>
+				<th><input type="checkbox" id="checkAll" name="oneDealCheck" value="${page.pageNo}" 
+				<c:forEach items="${ids }" var="id">
+					<c:if test="${id==page.pageNo}"> checked="checked"</c:if>
+				</c:forEach>
+				onchange="checkAll(this)"
+				/> </th>
 				<th>业务编号</th>
 				<th>单位名称</th>
 				<th>证书持有人名称</th>
@@ -219,6 +306,12 @@
 		<tbody>
 			<c:forEach items="${page.list}" var="workDealInfo">
 				<tr>
+					<td><input type="checkbox" name="oneDealCheck" value = "${workDealInfo.id}" 
+					<c:forEach items="${ids }" var="id">
+						<c:if test="${id==workDealInfo.id }"> checked="checked"</c:if>
+					</c:forEach>
+					onchange="changeCheck(this)"
+					 /> </td>
 					<td>${workDealInfo.svn}</td>
 					<td><a
 						href="${ctx}/work/workDealInfoFiling/formF?id=${workDealInfo.id}">${workDealInfo.workCompany.companyName}</a></td>
