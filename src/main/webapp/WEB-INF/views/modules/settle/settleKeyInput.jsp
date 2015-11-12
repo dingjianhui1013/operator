@@ -57,10 +57,13 @@
 				success:function(data){
 					$("#unitPrice").val(data.money);
 					$("#unitPrice1").val(data.money);
-					if(data.endcode!=0)
+					if(data.endcode==0)
 						{
-							$("#startCode").val(data.endcode+1);
-						}
+							$("#startCode").val("");
+						}else
+							{
+							$("#startCode").val(data.endcode);
+							}
 				}
 			});	
 		}
@@ -78,7 +81,7 @@
 				<input type="text" name="storageDate" readonly="readonly"
 				maxlength="20" class="Wdate required" 
 				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"
-				value="<fmt:formatDate value="${startdate}" pattern="yyyy-MM-dd"/>" />
+				value="<fmt:formatDate value="${startdate}" pattern="yyyy-MM-dd HH-mm-SS"/>" />
 			</div>
 		</div>
 		<div class="control-group">

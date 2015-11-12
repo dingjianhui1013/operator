@@ -32,8 +32,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import cn.emay.sdk.common.DateUtil;
+
 import com.itrus.ca.common.config.Global;
 import com.itrus.ca.common.persistence.Page;
+import com.itrus.ca.common.utils.DateUtils;
 import com.itrus.ca.common.web.BaseController;
 import com.itrus.ca.modules.key.entity.KeyGeneralInfo;
 import com.itrus.ca.modules.key.service.KeyGeneralInfoService;
@@ -93,8 +96,7 @@ public class KeyPurchaseController extends BaseController {
 			String name = supplierName + "-" + keyName;
 			generalInfos.get(i).setManuKeyName(name);
 		}
-		String sp=new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-		model.addAttribute("storageDate", keyPurchase.getStorageDate() == null ? sp : new SimpleDateFormat("yyyy-MM-dd").format(keyPurchase.getStorageDate()));
+		model.addAttribute("storageDate", keyPurchase.getStorageDate() == null ? "" : new SimpleDateFormat("yyyy-MM-dd").format(keyPurchase.getStorageDate()));
 		model.addAttribute("generalInfos", generalInfos);
 		return "modules/settle/settleKeyPurchaseList";
 	}
@@ -160,7 +162,7 @@ public class KeyPurchaseController extends BaseController {
 		String supplierName = kg.getConfigSupplier().getSupplierName();
 		String name = supplierName +"-"+keyName; 
 		List<KeyPurchase> startCode=keyPurchaseService.findByKeyName(name);
-		if(startCode.size()>=0)
+		if(startCode.size()>0)
 		{
 			Long endcode=startCode.get(0).getEndCode();
 			json.put("endcode", endcode);
@@ -168,6 +170,7 @@ public class KeyPurchaseController extends BaseController {
 		{
 			json.put("endcode", 0);
 		}
+		System.out.println(json.toString());
 		return json.toString();
 	}
 	@RequestMapping(value = "export")
@@ -209,9 +212,9 @@ public class KeyPurchaseController extends BaseController {
 			{
 				HSSFRow rown=sheet.createRow(i+2);
 				rown.createCell(0).setCellValue(list.get(i).getAppName());
-				rown.createCell(1).setCellValue(list.get(i).getStorageDate());
-				rown.createCell(2).setCellValue(list.get(i).getStartCode());
-				rown.createCell(3).setCellValue(list.get(i).getEndCode());
+				rown.createCell(1).setCellValue(DateUtils.formatDate(list.get(i).getStorageDate(), "yyyy-MM-dd") );
+				rown.createCell(2).setCellValue(list.get(i).getStartCode()+"");
+				rown.createCell(3).setCellValue(list.get(i).getEndCode()+"");
 				rown.createCell(4).setCellValue(list.get(i).getCount());
 				rown.createCell(5).setCellValue(list.get(i).getMoney());
 				rown.createCell(6).setCellValue(list.get(i).getStatus());

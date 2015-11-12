@@ -22,6 +22,7 @@ import com.itrus.ca.modules.key.entity.KeyGeneralInfo;
 import com.itrus.ca.modules.key.entity.KeyManufacturer;
 import com.itrus.ca.modules.key.entity.KeyUsbKey;
 import com.itrus.ca.modules.key.dao.KeyGeneralInfoDao;
+import com.itrus.ca.modules.settle.entity.KeyPurchase;
 
 /**
  * key类型信息Service
@@ -83,6 +84,10 @@ public class KeyGeneralInfoService extends BaseService {
 		}else {
 			return null;
 		}
+	}
+	public KeyGeneralInfo findById(Long id)
+	{
+		return keyGeneralInfoDao.findOne(id);
 	}
 	
 	public List<KeyGeneralInfo> findBySupplierId(Long supplierId) {
