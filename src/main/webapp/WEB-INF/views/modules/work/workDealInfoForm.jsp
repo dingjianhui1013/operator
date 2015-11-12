@@ -515,7 +515,7 @@ var selected = false;
 	rel="stylesheet" />
 <script type="text/javascript">
 	function os(obj) {
-		if(onSubmit()){
+		if(onSubmitOS()){
 			if (obj == "one") {
 				$("#inputForm")
 				.attr("action", "${ctx}/work/workDealInfo/temporarySave");
@@ -541,6 +541,75 @@ var selected = false;
 		
 	}
 
+	
+	function onSubmitOS(){
+		var productLength = $("#productTdId").find("[name='product']").length;
+		for (var a = 0; a <productLength; a++) {
+			var radioIndex = $($("#productTdId").find("[name='product']")[a]);
+			if(radioIndex.is(":checked")){
+				selected = true;
+			}
+		}
+		if(!selected){
+			top.$.jBox.tip("请选择要办理的产品!");
+			return false;
+		}
+		if($("#tt").val()!="" && !checkDwmc($("#tt"))){
+			top.$.jBox.tip("单位名称格式有误!");
+			return false;
+		}
+		if($("#contactName").val()!="" && !checkJbrxm($("#contactName"))){
+			top.$.jBox.tip("经办人姓名格式有误!");
+			return false;
+		}
+		
+		if($("#pName").val()!="" &&!checkSqr($("#pName"))){
+			top.$.jBox.tip("申请人姓名格式有误!");
+			return false;
+		}
+		if($("#appId").val()=="") {
+			$("#app").val("");
+			top.$.jBox.tip("该应用不存在!"); 
+			$("#app").focus(); //让手机文本框获得焦点 
+			return false;
+		} else if ($("input[name='year']").val() == null || $("input[name='year']").val() == ""){
+			top.$.jBox.tip("请选择申请年限!"); 
+			$("input[name='year']").focus(); //让手机文本框获得焦点 
+			return false;
+		} 
+		else if($("#agentDetailId").val()==0){
+			top.$.jBox.tip("请配置计费策略"); 
+			$("#agentDetailId").focus(); 
+			return false;
+		}else if($("#agentDetailId").val()!=0  && $("#agentId").val()!=1){
+			if($("#surplusNum").val()==0){
+				top.$.jBox.tip("此计费策略模版剩余数量为零，不能进行业务办理！"); 
+				return false;
+			}else{
+				var boundId = $("#agentDetailId").val();
+				var url = "${ctx}/profile/configChargeAgent/checkAgentIsZero?agentDetailId="+boundId+"&_="+new Date().getTime();
+				$.getJSON(url,function(data){
+					if(data.status==0){
+						top.$.jBox.tip("此计费策略模版剩余数量为零，不能进行业务办理！"); 
+						return false;
+					}else{
+						return true;
+					}
+				});
+				return false;
+			}
+		}else {
+			$("#lable0").removeAttr("disabled");
+			$("#lable1").removeAttr("disabled");
+			return true;
+		}
+
+	}
+	
+	
+	
+	
+	
 	function showCert(companyId) {
 		var url = "${ctx}/work/workDealInfo/showCert?id=" + companyId;
 		top.$.jBox.open("iframe:" + url, "已有证书明细", 800, 420, {
@@ -664,16 +733,16 @@ var selected = false;
 				$("#lable0").removeAttr("disabled");
 				$("#lable1").removeAttr("disabled");
 			}
-			if (da.type0) {
-				$("#lable0").attr("checked", "checked");
-				//showYear(0);
-				showAgent(0)
-			}
 			if (da.type1) {
 				$("#lable1").attr("checked", "checked");
 				//showYear(1);
 				showAgent(1);
+			}else if (da.type0) {
+				$("#lable0").attr("checked", "checked");
+				//showYear(0);
+				showAgent(0)
 			}
+			
 		});
 	}
 
