@@ -10,8 +10,16 @@
 <script type="text/javascript">
 var sn;
 var cspStr;
+var ukeyadmin = null;
 var baseDay = parseInt("${workDealInfo.year*365+workDealInfo.lastDays }");
 $(document).ready(function() {
+	//itrusukeyadmin.CAB,检测KEY序列号
+	var urlArray = new Array();
+	urlArray = window.location.toString().split('/');
+    var base = urlArray[0]+'//' + window.location.host + '/' + urlArray[3];	    
+    var objStr = "<object id='ukeyadmin2' codebase='"+base+"/download/itrusukeyadmin.CAB#version=3,1,15,1012' classid='clsid:05395F06-244C-4599-A359-5F442B857C28'></object>";
+    ukeyadmin = $(objStr).appendTo(document.body)[0];
+    
 	//生成provider
 	$.each(legibleNameMap, function(idx, value, ele) {
 		$("#provider").append("<option value='1'>" + idx + "</option>");
