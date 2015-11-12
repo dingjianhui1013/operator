@@ -84,12 +84,7 @@ public class ConfigSupplierProductRelationController extends BaseController {
 
 	@RequiresPermissions("profile:configSupplierProductRelation:view")
 	@RequestMapping(value = "form")
-	public String form(ConfigSupplierProductRelation configSupplierProductRelation, Model model) {
-		
-		KeyGeneralInfo geneInfo = keyGeneralInfoService.get(Long.parseLong(configSupplierProductRelation.getProductType().toString()));
-		configSupplierProductRelation.setKeyGeneralInfo(geneInfo);
-		
-		
+	public String form(ConfigSupplierProductRelation configSupplierProductRelation, Model model) {	
 		
 		List<ConfigChargeSupplierDetail> list = configChargeSupplierDetailService.findByChargeSupplierId(configSupplierProductRelation);
 		model.addAttribute("list", list);
