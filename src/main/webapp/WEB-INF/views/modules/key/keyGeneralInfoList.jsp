@@ -66,7 +66,7 @@
 						<td><a
 							href="${ctx}/key/keyGeneralInfo/form?id=${keyGeneralInfo.id}&supplierId=${supplierId }" >编辑</a>
 							<a
-							href="${ctx}/key/keyGeneralInfo/delete?id=${keyGeneralInfo.id}&supplierId=${manufacturerId }"
+							href="${ctx}/key/keyGeneralInfo/delete?id=${keyGeneralInfo.id}&supplierId=${supplierId }"
 							onclick="return confirmx('确认要删除该key类型信息吗？', this.href)">删除</a></td>
 					</shiro:hasPermission>
 				</tr>

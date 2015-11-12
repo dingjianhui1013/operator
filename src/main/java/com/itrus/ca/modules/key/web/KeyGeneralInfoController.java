@@ -209,7 +209,7 @@ public class KeyGeneralInfoController extends BaseController {
 	@RequiresPermissions("key:keyGeneralInfo:edit")
 	@RequestMapping(value = "delete")
 	public String delete(Long id, RedirectAttributes redirectAttributes,
-			Long manufacturerId, Model model) {
+			Long supplierId, Model model) {
 
 		List<KeyUsbKey> kuk = keyUsbKeyService.findByGeneralInfoId(id);
 		if (kuk.size() > 0) {
@@ -220,8 +220,8 @@ public class KeyGeneralInfoController extends BaseController {
 		}
 		logUtil.saveSysLog("库存信息", "删除key类型信息：编号"+id, "");
 		return "redirect:" + Global.getAdminPath()
-				+ "/key/keyGeneralInfo/?repage&manufacturerId="
-				+ manufacturerId;
+				+ "/key/keyGeneralInfo/?repage&supplierId="
+				+ supplierId;
 	}
 
 	//通过AJAX查询厂商下的所有KEY类型
