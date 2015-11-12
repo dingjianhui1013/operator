@@ -24,35 +24,13 @@
 				}
 			});
 		});
-		
-		function alarmValue(obj,obj2){
-			var html = $('#bzBox').html();
-			var submit = function (v, h, f) {
-				if(v=='ok')
-					{
-					    if (f.remarks == '') {
-					        top.$.jBox.tip("请填写备注。", 'error', { focusId: "remarks" });
-					        return false;
-					    }
-					    $("#text").val(f.remarks);
-						$("#"+obj).attr('checked',true);
-						$("#"+obj2).attr('checked',false);
-					    return true;
-					}else
-						{
-								$("#"+obj).attr('checked',false);
-						}
-			};
-
-			top.$.jBox(html, { title: "确定修改？",buttons:{"确定":"ok","关闭":true}, submit: submit });
-		}
 		function changeKey()
 		{
 			var moneyType=$("#provider").find("option:selected").val();
 			var url="${ctx}/settle/keyPurchase/changeKey";
 			$.ajax({
 				url:url,
-				data:{"moneyType":moneyType},
+				data:{"moneyType":moneyType,_:new Date().getTime()},
 				dataType:'json',
 				success:function(data){
 					$("#unitPrice").val(data.money);
@@ -62,10 +40,26 @@
 							$("#startCode").val("");
 						}else
 							{
-							$("#startCode").val(data.endcode);
+								$("#startCode").val(data.endcode+1);
 							}
 				}
 			});	
+		}
+		function changeCount()
+		{
+			var startCode=$("#startCode").val();
+			var endCode=$("#endCode").val();
+			if(startCode=="")
+				{
+					top.$.jBox.tip("请填写起始码");
+				}else{
+					$("#count").val(endCode-startCode);
+				}
+			if(endCode="")
+				{
+				top.$.jBox.tip("请填写截止码");
+				}
+			
 		}
 	</script>
 	</head>
@@ -103,13 +97,13 @@
 		<div class="control-group">
 			<label class="control-label">KEY码(截止码)：</label>
 			<div class="controls">
-				<input type="text"  name="endCode" value="" class="required"/>
+				<input type="text"  name="endCode" value="" id="endCode" class="required" onblur="changeCount()"/>
 			</div>
 		</div>
 		<div class="control-group">
 			<label class="control-label">数量：</label>
 			<div class="controls">
-				<input type="text"  name="count" value=""/>
+				<input type="text"  name="count" value="" id="count" class="required"/>
 			</div>
 		</div>
 		<div class="control-group">
@@ -122,15 +116,11 @@
 		<div class="control-group">
 			<label class="control-label">状态：</label>
 			<div class="controls">
-				已付<input type="checkbox" name="status" value="1" onclick="alarmValue('complete','noComplete')" id="complete" class="required"/>
-				未付<input type="checkbox" name="status" value="0" onclick="alarmValue('noComplete','complete')" id="noComplete" class="required"/>
+<!-- 				已付<input type="checkbox" name="status" value="1" onclick="alarmValue('complete','noComplete')" id="complete" class="required"/> -->
+<!-- 				未付<input type="checkbox" name="status" value="0" onclick="alarmValue('noComplete','complete')" id="noComplete" class="required"/> -->
+				已付<input type="radio" name="status" value="1"  id="complete" class="required"/>
+				未付<input type="radio" name="status" value="0"  id="noComplete" class="required"/>
 			</div>
-		</div>
-		<div id="bzBox" style="display: none">
-			<div class="control-group" style="padding:20px;">
-			<label class="control-label" style="margin-right:10px">备注：</label>
-				<textarea rows="2" cols="2"  id="text" name="remarks"></textarea>
-		</div>
 		</div>
 		<div class="form-actions">
 			<input id="btnSubmit" class="btn btn-primary" type="submit" value="保存"/>&nbsp;&nbsp;

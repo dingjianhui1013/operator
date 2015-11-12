@@ -23,6 +23,28 @@
 			alert(appName+":"+storageDate+":"+status);
 			window.location.href="${ctx}/settle/keyPurchase/export?appName="+appName+"&storageDate="+storageDate+"&status="+status;
 		}
+		function fk(id)
+		{
+			
+			var html = $('#bzBox').html();
+			var submit = function (v, h, f) {
+				if(v=='ok')
+					{
+					    if (f.remarks == '') {
+					        top.$.jBox.tip("请填写备注。", 'error', { focusId: "remarks" });
+					        return false;
+					    }else
+					    	{
+					    		window.location.href="${ctx}/settle/keyPurchase/updateStatus?keyID="+id+"&remarks="+f.remarks;
+					    	}
+					    return true;
+					}else
+						{
+						}
+			};
+
+			top.$.jBox(html, { title: "确定付款？",buttons:{"确定":"ok","关闭":true}, submit: submit });
+		}
 	</script>
 </head>
 <body>
@@ -71,6 +93,7 @@
 				<th>单价</th>
 				<th>状态</th>
 				<th>备注</th>
+				<th>操作</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -89,10 +112,18 @@
 					<c:if test="${keyPurchase.status==null}">状态位置</c:if>
 					</td>
 					<td>${keyPurchase.remarks}</td>
+					<td><c:if test="${keyPurchase.status==0}"><a href="javascript:fk(${keyPurchase.id})">确认付款</c:if></td>
 				</tr>
 			</c:forEach>
 		</tbody>
 	</table>
+	<div id="bzBox" style="display: none">
+		<div class="control-group" style="padding:20px;">
+			<label class="control-label" style="margin-right:10px">备注：</label>
+			<textarea rows="2" cols="2"  id="text" name="remarks" id="remarks"></textarea>
+		</div>
+	</div>
+	
 	<div class="pagination">${page}</div>
 </body>
 </html>

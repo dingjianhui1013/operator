@@ -85,7 +85,6 @@ public class KeyPurchaseController extends BaseController {
 		if (!user.isAdmin()){
 			keyPurchase.setCreateBy(user);
 		}
-		
         Page<KeyPurchase> page = keyPurchaseService.find(new Page<KeyPurchase>(request, response), keyPurchase); 
         model.addAttribute("page", page);
         
@@ -147,6 +146,7 @@ public class KeyPurchaseController extends BaseController {
 		addMessage(redirectAttributes, "删除key采购记录成功");
 		return "redirect:"+Global.getAdminPath()+"/settle/keyPurchase/?repage";
 	}
+	
 	@RequestMapping(value = "changeKey")
 	@ResponseBody
 	public String change(Integer moneyType) throws JSONException
@@ -162,6 +162,7 @@ public class KeyPurchaseController extends BaseController {
 		String supplierName = kg.getConfigSupplier().getSupplierName();
 		String name = supplierName +"-"+keyName; 
 		List<KeyPurchase> startCode=keyPurchaseService.findByKeyName(name);
+		
 		if(startCode.size()>0)
 		{
 			Long endcode=startCode.get(0).getEndCode();
@@ -170,7 +171,6 @@ public class KeyPurchaseController extends BaseController {
 		{
 			json.put("endcode", 0);
 		}
-		System.out.println(json.toString());
 		return json.toString();
 	}
 	@RequestMapping(value = "export")
@@ -236,5 +236,16 @@ public class KeyPurchaseController extends BaseController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	@RequiresPermissions("settle:keyPurchase:edit")
+	@RequestMapping(value = "updateStatus")
+	public String updateStatus(Long keyID, String remarks,RedirectAttributes redirectAttributes) {
+		KeyPurchase kp= keyPurchaseService.findById(keyID);
+		kp.setStatus(1);
+		kp.setRemarks(remarks);
+		System.out.println(remarks);
+		keyPurchaseService.save(kp);
+		addMessage(redirectAttributes, "修改key采购记录成功");
+		return "redirect:"+Global.getAdminPath()+"/settle/keyPurchase/?repage";
 	}
 }

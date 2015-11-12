@@ -98,7 +98,10 @@ public class KeyPurchaseService extends BaseService {
 		dc.addOrder(Order.desc("id"));
 		return keyPurchaseDao.find(dc);
 	}
-	
+	public KeyPurchase findById(Long id)
+	{
+		return keyPurchaseDao.findOne(id);
+	}
 	@Transactional(readOnly = false)
 	public void save(KeyPurchase keyPurchase) {
 		keyPurchaseDao.save(keyPurchase);
