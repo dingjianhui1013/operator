@@ -188,7 +188,7 @@
 			<tr>
 				<td>
 					<div class="control-group" id="chargeMethods">
-						<label class="control-label">缴费方式:</label>
+						<label class="control-label">付款方式:</label>
 						<div class="controls">
 							<c:if test="${configChargeAgent.chargeMethodPos}">pos</c:if>
 							&nbsp;&nbsp;&nbsp;

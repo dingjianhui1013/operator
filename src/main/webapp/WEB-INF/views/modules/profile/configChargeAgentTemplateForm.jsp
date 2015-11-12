@@ -401,7 +401,7 @@
 			<tr>
 				<td>
 					<div class="control-group" id="chargeMethods">
-						<label class="control-label"><font color="red">*</font>缴费方式:</label>
+						<label class="control-label"><font color="red">*</font>付款方式:</label>
 						<div class="controls">
 							<input name="chargeMethodPos" id="chargeMethodPos"
 								<c:if test="${configChargeAgent.chargeMethodPos}">checked</c:if>
