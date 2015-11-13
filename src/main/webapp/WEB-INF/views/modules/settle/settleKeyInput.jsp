@@ -28,6 +28,7 @@
 		{
 			var moneyType=$("#provider").find("option:selected").val();
 			var url="${ctx}/settle/keyPurchase/changeKey";
+			alert(moneyType);
 			$.ajax({
 				url:url,
 				data:{"moneyType":moneyType,_:new Date().getTime()},
@@ -35,6 +36,23 @@
 				success:function(data){
 					$("#unitPrice").val(data.money);
 					$("#unitPrice1").val(data.money);
+// 					alert(data.money1);
+// 					if(data.money1!=null)
+// 						{
+// 							$("#unitPrice").append("一年期：<input type=\"text\" id=\"unitPrice1\" name=\"money1\" value=\""+data.money1+"\" disabled=\"disabled\"/> <input type=\"hidden\" id=\"unitPrice\" name=\"money\" value=\""+data.money1+"\" />");
+// 						}
+// 					if(data.money2!=null)
+// 					{
+// 						$("#unitPrice").append("二年期：<input type=\"text\" id=\"unitPrice1\" name=\"money1\" value=\""+data.money2+"\" disabled=\"disabled\"/> <input type=\"hidden\" id=\"unitPrice\" name=\"money\" value=\""+data.money1+"\" />");
+// 					}
+// 					if(data.money4!=null)
+// 					{
+// 						$("#unitPrice").append("四年期：<input type=\"text\" id=\"unitPrice1\" name=\"money1\" value=\""+data.money4+"\" disabled=\"disabled\"/> <input type=\"hidden\" id=\"unitPrice\" name=\"money\" value=\""+data.money1+"\" />");
+// 					}
+// 					if(data.money5!=null)
+// 					{
+// 						$("#unitPrice").append("五年期：<input type=\"text\" id=\"unitPrice1\" name=\"money1\" value=\""+data.money5+"\" disabled=\"disabled\"/> <input type=\"hidden\" id=\"unitPrice\" name=\"money\" value=\""+data.money1+"\" />");
+// 					}
 					if(data.endcode==0)
 						{
 							$("#startCode").val("");
@@ -52,14 +70,28 @@
 			if(startCode=="")
 				{
 					top.$.jBox.tip("请填写起始码");
-				}else{
-					$("#count").val(endCode-startCode);
-				}
+				}else if(startCode > endCode){
+					top.$.jBox.tip("截止码小于起始码");
+				}else
+					{
+						$("#count").val(endCode-startCode);
+					}
 			if(endCode="")
 				{
-				top.$.jBox.tip("请填写截止码");
+					top.$.jBox.tip("请填写截止码");
 				}
 			
+		}
+		function sub()
+		{
+			var count=$("#count").val();
+			if(count<0)
+				{
+					top.$.jBox.tip("数量不能为负数");
+					return false;
+				}else{
+					return true;
+				}
 		}
 	</script>
 	</head>
@@ -122,8 +154,14 @@
 				未付<input type="radio" name="status" value="0"  id="noComplete" class="required"/>
 			</div>
 		</div>
+		<div class="control-group" >
+			<label class="control-label">备注：</label>
+			<div class="controls">
+				<textarea rows="2" cols="2" id="text" name="remarks" id="remarks"></textarea>
+			</div>
+		</div>
 		<div class="form-actions">
-			<input id="btnSubmit" class="btn btn-primary" type="submit" value="保存"/>&nbsp;&nbsp;
+			<input id="btnSubmit" class="btn btn-primary" type="submit" value="保存" onclick="return sub()"/>&nbsp;&nbsp;
 			<input id="btnCancel" class="btn" type="button" value="返 回" onclick="history.go(-1)"/>
 		</div>
 	</form:form>

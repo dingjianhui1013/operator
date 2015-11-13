@@ -41,7 +41,9 @@ import com.itrus.ca.common.web.BaseController;
 import com.itrus.ca.modules.key.entity.KeyGeneralInfo;
 import com.itrus.ca.modules.key.service.KeyGeneralInfoService;
 import com.itrus.ca.modules.profile.entity.ConfigChargeSupplierDetail;
+import com.itrus.ca.modules.profile.entity.ConfigSupplierProductRelation;
 import com.itrus.ca.modules.profile.service.ConfigChargeSupplierDetailService;
+import com.itrus.ca.modules.profile.service.ConfigSupplierProductRelationService;
 import com.itrus.ca.modules.sys.entity.User;
 import com.itrus.ca.modules.sys.utils.UserUtils;
 import com.itrus.ca.modules.settle.entity.KeyPurchase;
@@ -69,6 +71,8 @@ public class KeyPurchaseController extends BaseController {
 	@Autowired
 	private ConfigChargeSupplierDetailService configChargeSupplierDetailService;
 	
+	@Autowired
+	private ConfigSupplierProductRelationService configSupplierProductRelationService;
 	@ModelAttribute
 	public KeyPurchase get(@RequestParam(required=false) Long id) {
 		if (id != null){
@@ -152,17 +156,16 @@ public class KeyPurchaseController extends BaseController {
 	public String change(Integer moneyType) throws JSONException
 	{
 		JSONObject json=new JSONObject();
-		List<ConfigChargeSupplierDetail> list=configChargeSupplierDetailService.findByMoneyTypeId(moneyType);
-		for(int i=0;i<list.size();i++)
-		{
-			json.put("money", list.get(i).getMoney());
+		List<ConfigSupplierProductRelation> list= configSupplierProductRelationService.findByGenanID((long)moneyType);
+		List<ConfigChargeSupplierDetail>  ccsd=configChargeSupplierDetailService.findByconfigSupplierId(list.get(0).getId());
+		for (ConfigChargeSupplierDetail ccsds : ccsd) {
+			json.put("money", ccsds.getMoney());
 		}
 		KeyGeneralInfo kg= keyGeneralInfoService.findById((long)moneyType);
 		String keyName =kg.getName();
 		String supplierName = kg.getConfigSupplier().getSupplierName();
 		String name = supplierName +"-"+keyName; 
 		List<KeyPurchase> startCode=keyPurchaseService.findByKeyName(name);
-		
 		if(startCode.size()>0)
 		{
 			Long endcode=startCode.get(0).getEndCode();

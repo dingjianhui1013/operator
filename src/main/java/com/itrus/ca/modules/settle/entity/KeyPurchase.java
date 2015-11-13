@@ -16,8 +16,11 @@ import com.itrus.ca.common.persistence.DataEntity;
  * SettleKey entity. @author MyEclipse Persistence Tools
  */
 @Entity
-@Table(name = "KEY_PURCHASE")
+@Table(name = "key_purchase")
 public class KeyPurchase extends DataEntity implements java.io.Serializable{
+		/**
+	 * 
+	 */
 		private Long id; // 编号
 		private String appName; // 产品名称
 		private Date storageDate;// 入库时间
@@ -27,9 +30,12 @@ public class KeyPurchase extends DataEntity implements java.io.Serializable{
 		private Double money; // 价格
 		private Integer status; // 1为已付0为未付
 		
+		public KeyPurchase(Long id)
+		{
+			this.id=id;
+		}
 		public KeyPurchase(String appName, Date storageDate, Long startCode, Long endCode, Integer count,
 				Double money, Integer status) {
-			
 			this.appName = appName;
 			this.storageDate = storageDate;
 			this.startCode = startCode;
