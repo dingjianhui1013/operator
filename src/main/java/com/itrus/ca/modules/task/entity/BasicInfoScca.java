@@ -23,11 +23,15 @@ import javax.persistence.Transient;
  */
 
 @Entity
-@Table(name = "base_info_scca")
+@Table(name = "BASE_INFO_SCCA")
 public class BasicInfoScca implements java.io.Serializable {
 
 	// Fields
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8257633293907723252L;
 	private Long id;
 	private Long appId;
 	private Long agentId;
