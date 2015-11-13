@@ -420,8 +420,9 @@ public class AgentSettleController extends BaseController {
 			model.addAttribute("configProducts", configProducts);
 		}
 		List<ConfigApp> configApps = configAppService.selectAll();
-
+		System.out.println(nameList.size());
 		model.addAttribute("ConfigCommercialAgents", nameList);
+		
 		model.addAttribute("agentName", agentName);
 		model.addAttribute("offsList", offsList);
 		model.addAttribute("officeId", officeId);
