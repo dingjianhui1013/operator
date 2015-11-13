@@ -16,7 +16,7 @@ import com.itrus.ca.common.persistence.DataEntity;
  * SettleKey entity. @author MyEclipse Persistence Tools
  */
 @Entity
-@Table(name = "key_purchase")
+@Table(name = "KEY_PURCHASE")
 public class KeyPurchase extends DataEntity implements java.io.Serializable{
 		private Long id; // 编号
 		private String appName; // 产品名称
