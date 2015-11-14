@@ -258,16 +258,20 @@ public class StatisticDayDataController extends BaseController {
 						.findByMonth(office, start, end);
 				for (StatisticDayData sdd : ListMonth) {
 					keyIn += sdd.getKeyIn();
-					keyOver += sdd.getKeyOver();
-					keyStoreTotal += sdd.getKeyStoreTotal();
 					receiptIn += sdd.getReceiptIn();
-					// receiptOver += sdd.getReceiptOver();
-					receiptStoreTotal += sdd.getReceiptStoreTotal();
+					
 					certTotal += sdd.getCertTotal();
-					keyTotal += sdd.getKeyTotal();
-					receiptTotal += sdd.getReceiptTotal();
+					keyOver += sdd.getKeyOver();
 					certMoneyTotal += sdd.getCertMoneyTotal();
+					
+					
 				}
+				if (ListMonth.size()>0) {
+					receiptTotal = ListMonth.get(0).getReceiptTotal();
+					keyTotal = ListMonth.get(0).getKeyTotal();
+				}
+				keyStoreTotal =  keyIn - keyOver ;
+				receiptStoreTotal = receiptIn - certMoneyTotal ;
 				smd.setKeyIn(keyIn);
 				smd.setKeyOver(keyOver);
 				smd.setKeyStoreTotal(keyStoreTotal);
