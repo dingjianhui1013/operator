@@ -1963,16 +1963,30 @@ public class WorkDealInfoService extends BaseService {
 		statusIntegers.add(WorkDealInfoStatus.STATUS_CERT_OBTAINED);
 		statusIntegers.add(WorkDealInfoStatus.STATUS_CERT_REVOKE);
 		dc.add(Restrictions.in("dealInfoStatus", statusIntegers));
-		dc.add(Restrictions.ge("obtainedDate", date));
+		dc.add(Restrictions.ge("updateDate", date));
 		dc.add(Restrictions.or(Restrictions.ne("isSJQY", 1),
 				Restrictions.isNull("isSJQY")
 				));
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
 		calendar.add(Calendar.DATE, 1);
-		dc.add(Restrictions.lt("obtainedDate", calendar.getTime()));
-		int createCount = (int) workDealInfoDao.count(dc);
-
+		dc.add(Restrictions.lt("updateDate", calendar.getTime()));
+		List<WorkDealInfo> dealinfos = workDealInfoDao.find(dc);
+		int createCount = 0;
+		for (int i = 0; i < dealinfos.size(); i++) {
+			WorkDealInfo dealInfo = dealinfos.get(i);
+			if (dealInfo.getDealInfoStatus().equals("9")) {
+				if (dealInfo.getDealInfoType()!=null&&dealInfo.getDealInfoType().equals(1)) {
+					createCount++;
+				}else if(dealInfo.getDealInfoType2()!=null&&dealInfo.getDealInfoType2().equals(4)){
+					createCount++;
+				}else if(dealInfo.getDealInfoType().equals(1) && dealInfo.getDealInfoType2().equals(4)){
+					createCount++;
+				}
+			}else{
+				createCount++;
+			}
+		}
 		dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("createBy", "createBy");
 		dc.createAlias("createBy.office", "office");
@@ -2104,8 +2118,8 @@ public class WorkDealInfoService extends BaseService {
 		dc.createAlias("configApp", "configApp");
 		dc.add(Restrictions.eq("office.id", officeId));
 		dc.add(Restrictions.eq("configApp.id", appId));
-		dc.add(Restrictions.ge("obtainedDate", date));
-		dc.add(Restrictions.lt("obtainedDate", calendar.getTime()));
+		dc.add(Restrictions.ge("updateDate", date));
+		dc.add(Restrictions.lt("updateDate", calendar.getTime()));
 		dc.add(Restrictions.or(Restrictions.ne("isSJQY", 1),
 				Restrictions.isNull("isSJQY")
 				));
@@ -2133,18 +2147,21 @@ public class WorkDealInfoService extends BaseService {
 		dc.createAlias("configApp", "configApp");
 		dc.add(Restrictions.eq("office.id", officeId));
 		dc.add(Restrictions.eq("configApp.id", appId));
-		dc.add(Restrictions.ge("obtainedDate", date));
-		dc.add(Restrictions.lt("obtainedDate", calendar.getTime()));
+		dc.add(Restrictions.ge("updateDate", date));
+		dc.add(Restrictions.lt("updateDate", calendar.getTime()));
+		List<String> statusIntegers = new ArrayList<String>();
 		if (dealInfoType.equals(1)) {
 			dc.add(Restrictions.eq("dealInfoType", dealInfoType));
 			dc.add(Restrictions.isNull("dealInfoType1"));
 			dc.add(Restrictions.isNull("dealInfoType2"));
 			dc.add(Restrictions.isNull("dealInfoType3"));
+			statusIntegers.add(WorkDealInfoStatus.STATUS_CERT_WAIT);
 		} else if (dealInfoType.equals(4)) {
 			dc.add(Restrictions.eq("dealInfoType2", dealInfoType));
 			dc.add(Restrictions.isNull("dealInfoType"));
 			dc.add(Restrictions.isNull("dealInfoType1"));
 			dc.add(Restrictions.isNull("dealInfoType3"));
+			statusIntegers.add(WorkDealInfoStatus.STATUS_CERT_WAIT);
 		} else if (dealInfoType.equals(2) || dealInfoType.equals(3)) {
 			dc.add(Restrictions.eq("dealInfoType1", dealInfoType));
 			dc.add(Restrictions.isNull("dealInfoType"));
@@ -2155,7 +2172,6 @@ public class WorkDealInfoService extends BaseService {
 			dc.add(Restrictions.eq("year", year));
 		}
 
-		List<String> statusIntegers = new ArrayList<String>();
 		statusIntegers.add(WorkDealInfoStatus.STATUS_CERT_OBTAINED);
 		statusIntegers.add(WorkDealInfoStatus.STATUS_CERT_REVOKE);
 		dc.add(Restrictions.in("dealInfoStatus", statusIntegers));
@@ -2173,8 +2189,8 @@ public class WorkDealInfoService extends BaseService {
 		dc.createAlias("configApp", "configApp");
 		dc.add(Restrictions.eq("office.id", officeId));
 		dc.add(Restrictions.eq("configApp.id", appId));
-		dc.add(Restrictions.ge("obtainedDate", date));
-		dc.add(Restrictions.lt("obtainedDate", calendar.getTime()));
+		dc.add(Restrictions.ge("updateDate", date));
+		dc.add(Restrictions.lt("updateDate", calendar.getTime()));
 
 		dc.add(Restrictions.eq("dealInfoType", dealInfoTypeUpdate));
 		dc.add(Restrictions.isNull("dealInfoType1"));
@@ -2188,6 +2204,7 @@ public class WorkDealInfoService extends BaseService {
 		List<String> statusIntegers = new ArrayList<String>();
 		statusIntegers.add(WorkDealInfoStatus.STATUS_CERT_OBTAINED);
 		statusIntegers.add(WorkDealInfoStatus.STATUS_CERT_REVOKE);
+		statusIntegers.add(WorkDealInfoStatus.STATUS_CERT_WAIT);
 		dc.add(Restrictions.in("dealInfoStatus", statusIntegers));
 		return (int) workDealInfoDao.count(dc);
 	}
@@ -2203,8 +2220,8 @@ public class WorkDealInfoService extends BaseService {
 		dc.createAlias("configApp", "configApp");
 		dc.add(Restrictions.eq("office.id", officeId));
 		dc.add(Restrictions.eq("configApp.id", appId));
-		dc.add(Restrictions.ge("obtainedDate", date));
-		dc.add(Restrictions.lt("obtainedDate", calendar.getTime()));
+		dc.add(Restrictions.ge("updateDate", date));
+		dc.add(Restrictions.lt("updateDate", calendar.getTime()));
 
 		dc.add(Restrictions.eq("dealInfoType", dealInfoTypeUpdate));
 		dc.add(Restrictions.eq("dealInfoType1", dealInfoTypeLost));
@@ -2233,8 +2250,8 @@ public class WorkDealInfoService extends BaseService {
 		dc.createAlias("configApp", "configApp");
 		dc.add(Restrictions.eq("office.id", officeId));
 		dc.add(Restrictions.eq("configApp.id", appId));
-		dc.add(Restrictions.ge("obtainedDate", date));
-		dc.add(Restrictions.lt("obtainedDate", calendar.getTime()));
+		dc.add(Restrictions.ge("updateDate", date));
+		dc.add(Restrictions.lt("updateDate", calendar.getTime()));
 
 		dc.add(Restrictions.eq("dealInfoType1", dealInfoTypeLostReplace));
 
@@ -2264,8 +2281,8 @@ public class WorkDealInfoService extends BaseService {
 		dc.createAlias("configApp", "configApp");
 		dc.add(Restrictions.eq("office.id", officeId));
 		dc.add(Restrictions.eq("configApp.id", appId));
-		dc.add(Restrictions.ge("obtainedDate", date));
-		dc.add(Restrictions.lt("obtainedDate", calendar.getTime()));
+		dc.add(Restrictions.ge("updateDate", date));
+		dc.add(Restrictions.lt("updateDate", calendar.getTime()));
 		dc.add(Restrictions.eq("dealInfoType", dealInfoTypeUpdate));
 		dc.add(Restrictions.eq("dealInfoType1", dealInfoTypeLostReplace));
 		dc.add(Restrictions.eq("dealInfoType2", dealInfoTypeChange));
@@ -2547,9 +2564,12 @@ public class WorkDealInfoService extends BaseService {
 		dc.createAlias("configApp", "configApp");
 		dc.add(Restrictions.eq("configApp.id", appId));
 		dc.add(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED));
-		dc.add(Restrictions.gt("obtainedDate", date));
-		dc.add(Restrictions.lt("obtainedDate", calendar.getTime()));
-
+		dc.add(Restrictions.or(Restrictions.eq("dealInfoStatus",
+				WorkDealInfoStatus.STATUS_CERT_OBTAINED),
+				Restrictions.eq("dealInfoStatus",WorkDealInfoStatus.STATUS_CERT_WAIT)
+				));
+		dc.add(Restrictions.gt("updateDate", date));
+		dc.add(Restrictions.lt("updateDate", calendar.getTime()));
 		dc.createAlias("workPayInfo", "workPayInfo");
 		dc.add(Restrictions.eq("workPayInfo.userReceipt", true));
 
@@ -2558,7 +2578,17 @@ public class WorkDealInfoService extends BaseService {
 		for (WorkDealInfo dealInfo : dealInfos) {
 			try {// 避免null的情况
 				if(dealInfo.getIsSJQY()==null || !dealInfo.getIsSJQY().equals(1)){
-					totalReceipt += dealInfo.getWorkPayInfo().getReceiptAmount();
+					if (dealInfo.getDealInfoStatus().equals("9")) {
+						if (dealInfo.getDealInfoType()!=null&&dealInfo.getDealInfoType().equals(1)) {
+							totalReceipt += dealInfo.getWorkPayInfo().getReceiptAmount();
+						}else if(dealInfo.getDealInfoType2()!=null&&dealInfo.getDealInfoType2().equals(4)){
+							totalReceipt += dealInfo.getWorkPayInfo().getReceiptAmount();
+						}else if(dealInfo.getDealInfoType().equals(1) && dealInfo.getDealInfoType2().equals(4)){
+							totalReceipt += dealInfo.getWorkPayInfo().getReceiptAmount();
+						}
+					}else{
+						totalReceipt += dealInfo.getWorkPayInfo().getReceiptAmount();
+					}
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -3043,12 +3073,12 @@ public class WorkDealInfoService extends BaseService {
 		statusIntegers.add(WorkDealInfoStatus.STATUS_CERT_OBTAINED);
 		statusIntegers.add(WorkDealInfoStatus.STATUS_CERT_REVOKE);
 		dc.add(Restrictions.in("dealInfoStatus", statusIntegers));
-		dc.add(Restrictions.ge("obtainedDate", countDate));
+		dc.add(Restrictions.ge("updateDate", countDate));
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(countDate);
 		calendar.add(Calendar.DATE, 1);
 		countDate = calendar.getTime();
-		dc.add(Restrictions.lt("obtainedDate", countDate));
+		dc.add(Restrictions.lt("updateDate", countDate));
 		List<WorkDealInfo> dealInfos = workDealInfoDao.find(dc);
 		double totalMoney = 0d;
 		for (WorkDealInfo dealInfo : dealInfos) {
@@ -3056,7 +3086,18 @@ public class WorkDealInfoService extends BaseService {
 					// totalMoney +=
 					// dealInfo.getWorkPayInfo().getWorkPayedMoney();
 				if(dealInfo.getIsSJQY()==null || !dealInfo.getIsSJQY().equals(1)){
-					totalMoney += dealInfo.getWorkPayInfo().getWorkTotalMoney();
+					if (dealInfo.getDealInfoStatus().equals("9")) {
+						if (dealInfo.getDealInfoType()!=null&&dealInfo.getDealInfoType().equals(1)) {
+							totalMoney += dealInfo.getWorkPayInfo().getWorkTotalMoney();
+						}else if(dealInfo.getDealInfoType2()!=null&&dealInfo.getDealInfoType2().equals(4)){
+							totalMoney += dealInfo.getWorkPayInfo().getWorkTotalMoney();
+						}else if(dealInfo.getDealInfoType().equals(1) && dealInfo.getDealInfoType2().equals(4)){
+							totalMoney += dealInfo.getWorkPayInfo().getWorkTotalMoney();
+						}
+					}else{
+						totalMoney += dealInfo.getWorkPayInfo().getWorkTotalMoney();
+						
+					}
 				}
 
 			} catch (Exception e) {
@@ -3084,8 +3125,8 @@ public class WorkDealInfoService extends BaseService {
 		 Restrictions.eq("dealInfoType1",
 		 WorkDealInfoType.TYPE_DAMAGED_REPLACED)));
 		dc.add(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED));
-		dc.add(Restrictions.ge("obtainedDate", date));
-		dc.add(Restrictions.lt("obtainedDate", calendar.getTime()));
+		dc.add(Restrictions.ge("updateDate", date));
+		dc.add(Restrictions.lt("updateDate", calendar.getTime()));
 
 		List<WorkDealInfo> dealInfos = workDealInfoDao.find(dc);
 		List<String> keys = new ArrayList<String>();
