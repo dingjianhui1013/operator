@@ -51,15 +51,11 @@
 <body>
 
 
-
-
 	<ul class="nav nav-tabs">
 		<li class="active"><a
 			href="${ctx}/statistic/StatisticDayData/listMonth">月经营统计表</a></li>
 
 	</ul>
-
-
 
 
 	<form:form id="searchForm" modelAttribute="statisticDayData"
@@ -81,9 +77,6 @@
 				value="<fmt:formatDate value="${endTime}" pattern="yyyy-MM"/>" />
 
 
-
-
-
 			<label>选择网点 ：</label> <select name="office" id="office">
 
 				<option value="">请选择</option>
@@ -101,10 +94,6 @@
 
 		</div>
 	</form:form>
-
-
-
-
 
 	<tags:message content="${message}" />
 	<table id="contentTable"
@@ -160,16 +149,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
 	<c:forEach items="${appSumList}" var="appMonthDataList">
 
 		<table id="contentTable"
@@ -192,8 +171,8 @@
 					<th colspan="4" style="text-align: center; vertical-align: middle;">新增</th>
 					<th colspan="4" style="text-align: center; vertical-align: middle;">更新</th>
 					<th rowspan="2" style="text-align: center; vertical-align: middle;">变更</th>
-					<td rowspan="2" style="text-align:center; vertical-align: middle;">损坏更换</td>
 					<td rowspan="2" style="text-align:center; vertical-align: middle;">遗失补办</td>
+					<td rowspan="2" style="text-align:center; vertical-align: middle;">损坏更换</td>
 					<td colspan="4" style="text-align:center; vertical-align: middle;">更新+变更</td>
 					<td colspan="4" style="text-align:center; vertical-align: middle;">更新+遗失补办</td>
 					<td colspan="4" style="text-align:center; vertical-align: middle;">更新+损坏更换</td>
