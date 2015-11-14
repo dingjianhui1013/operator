@@ -1964,6 +1964,9 @@ public class WorkDealInfoService extends BaseService {
 		statusIntegers.add(WorkDealInfoStatus.STATUS_CERT_REVOKE);
 		dc.add(Restrictions.in("dealInfoStatus", statusIntegers));
 		dc.add(Restrictions.ge("obtainedDate", date));
+		dc.add(Restrictions.or(Restrictions.ne("isSJQY", 1),
+				Restrictions.isNull("isSJQY")
+				));
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
 		calendar.add(Calendar.DATE, 1);
@@ -2078,6 +2081,7 @@ public class WorkDealInfoService extends BaseService {
 		dc.add(Restrictions.eq("office.id", officeId));
 		dc.add(Restrictions.eq("configApp.id", appId));
 		dc.add(Restrictions.ge("obtainedDate", date));
+	
 		if (year != 0) {
 			dc.add(Restrictions.eq("year", year));
 		}
@@ -2102,7 +2106,9 @@ public class WorkDealInfoService extends BaseService {
 		dc.add(Restrictions.eq("configApp.id", appId));
 		dc.add(Restrictions.ge("obtainedDate", date));
 		dc.add(Restrictions.lt("obtainedDate", calendar.getTime()));
-
+		dc.add(Restrictions.or(Restrictions.ne("isSJQY", 1),
+				Restrictions.isNull("isSJQY")
+				));
 		if (year != 0) {
 			dc.add(Restrictions.eq("year", year));
 		}
@@ -2551,7 +2557,9 @@ public class WorkDealInfoService extends BaseService {
 		double totalReceipt = 0d;
 		for (WorkDealInfo dealInfo : dealInfos) {
 			try {// 避免null的情况
-				totalReceipt += dealInfo.getWorkPayInfo().getReceiptAmount();
+				if(dealInfo.getIsSJQY()==null || !dealInfo.getIsSJQY().equals(1)){
+					totalReceipt += dealInfo.getWorkPayInfo().getReceiptAmount();
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 				continue;
@@ -3047,7 +3055,9 @@ public class WorkDealInfoService extends BaseService {
 			try {// 避免null的情况
 					// totalMoney +=
 					// dealInfo.getWorkPayInfo().getWorkPayedMoney();
-				totalMoney += dealInfo.getWorkPayInfo().getWorkTotalMoney();
+				if(dealInfo.getIsSJQY()==null || !dealInfo.getIsSJQY().equals(1)){
+					totalMoney += dealInfo.getWorkPayInfo().getWorkTotalMoney();
+				}
 
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -3068,11 +3078,11 @@ public class WorkDealInfoService extends BaseService {
 		dc.add(Restrictions.eq("configApp.id", appId));
 		dc.add(Restrictions.eq("office.id", officeId));
 		// // 新增、置换时才有key
-		// dc.add(Restrictions.or(Restrictions.eq("dealInfoType",
-		// WorkDealInfoType.TYPE_ADD_CERT), Restrictions.eq(
-		// "dealInfoType", WorkDealInfoType.TYPE_DAMAGED_REPLACED),
-		// Restrictions.eq("dealInfoType1",
-		// WorkDealInfoType.TYPE_DAMAGED_REPLACED)));
+		 dc.add(Restrictions.or(Restrictions.eq("dealInfoType",
+		 WorkDealInfoType.TYPE_ADD_CERT), Restrictions.eq(
+		 "dealInfoType", WorkDealInfoType.TYPE_DAMAGED_REPLACED),
+		 Restrictions.eq("dealInfoType1",
+		 WorkDealInfoType.TYPE_DAMAGED_REPLACED)));
 		dc.add(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED));
 		dc.add(Restrictions.ge("obtainedDate", date));
 		dc.add(Restrictions.lt("obtainedDate", calendar.getTime()));
@@ -3080,8 +3090,10 @@ public class WorkDealInfoService extends BaseService {
 		List<WorkDealInfo> dealInfos = workDealInfoDao.find(dc);
 		List<String> keys = new ArrayList<String>();
 		for (WorkDealInfo workDealInfo : dealInfos) {
-			if (!keys.contains(workDealInfo.getKeySn())) {
-				keys.add(workDealInfo.getKeySn());
+			if(workDealInfo.getIsSJQY()==null || !workDealInfo.getIsSJQY().equals(1)){
+				if (!keys.contains(workDealInfo.getKeySn())) {
+					keys.add(workDealInfo.getKeySn());
+				}
 			}
 		}
 		return keys.size();
