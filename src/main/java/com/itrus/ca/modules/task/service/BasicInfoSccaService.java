@@ -72,7 +72,7 @@ public class BasicInfoSccaService extends BaseService {
 	
 
 
-	@Transactional(readOnly = true)
+	@Transactional(readOnly = false)
 	public List<BasicInfoScca> findAll(){
 		DetachedCriteria dc = basicInfoSccaDao.createDetachedCriteria();
 		dc.add(Restrictions.or(Restrictions.ne("used", true),Restrictions.isNull("used")));
