@@ -250,11 +250,7 @@
 									var url = "${ctx}/ca/validateCspIsValid?csp="+cspStr+"&_=" + new Date().getTime();
 									$.getJSON(url,
 											function(data){
-										if (data.status==1) {
 											quick(sn);
-										} else {
-											top.$.jBox.tip("库存中没有该Key类型");
-										}
 									});
 									
 									
@@ -291,12 +287,9 @@
 
 	function getCsrByOldCert(len) {
 		useOldKey = true;
-		//setOverlapPeriod(30);
 		var certArray = filterCerts("", 0, "${signSerialNumber}");//查找当前第一张证书,被更新的
 		var objOldCert;
 		var csp = legibleNameMap[cspStr];
-		//alert(csp);
-		//alert(certArray);
 		for (var i = 0; i < certArray.length; i++) {
 			if (certArray[i].CSP == csp) {
 				objOldCert = certArray[i];
@@ -304,7 +297,6 @@
 			}
 		}
 		try {
-			//alert(csp+"|||||||||"+ len+"||||||||||||||"+ objOldCert+"||||||||||||||||||||||||||||"+useOldKey);
 			var csr = genRenewCSR(csp, 1, len, objOldCert,useOldKey);
 			
 			if (csr.length == 0) {
@@ -314,7 +306,7 @@
 		} catch (e) {
 			top.$.jBox
 			.info("证书更新过程中发生错误,key里边没有序列号为${signSerialNumber}的证书");
-			//return false;
+			return false;
 		}
 	}
 	function newKey(obj){
@@ -414,26 +406,6 @@
 					<th>证书申请时填入的值</th>
 				</tr>
 			</thead>
-			<!-- <tr>
-				<td>单位名称</td>
-				<td>${workDealInfo.workCompany.companyName }</td>
-			</tr>
-			<tr>
-				<td>组织机构代码</td>
-				<td>${workDealInfo.workCompany.organizationNumber }</td>
-			</tr>
-			<tr>
-				<td>经办人邮箱</td>
-				<td>${workDealInfo.workUser.contactEmail }</td>
-			</tr>
-			<tr>
-				<td>工商营业执照注册号</td>
-				<td>${workDealInfo.workCompany.comCertficateNumber }</td>
-			</tr>
-			<tr>
-				<td>多证书编号(使用者编号)(SCEGB)</td>
-				<td id="sort">${workDealInfo.certSort }</td>
-			</tr> -->
 			<c:forEach items="${list }" var="lis">
 				<tr>
 					<c:forEach items="${lis }" var="li">
