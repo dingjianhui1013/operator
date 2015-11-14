@@ -138,14 +138,6 @@ public class CertController extends BaseController {
 			boolean result =  keyInvoiceService.validateCSPvalid(csp);
 			json.put("status", result? 1:-1);
 			
-			WorkDealInfo dealInfo =  workDealInfoService.get(dealId);
-			if (keySn.equals(dealInfo.getKeySn())) {
-				json.put("isLastOne",0);
-			}else{
-				json.put("isLastOne",1);
-			}
-			
-			
 			
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
@@ -643,11 +635,19 @@ public class CertController extends BaseController {
 				workDealInfoService.save(dealInfo);
 				//发票出库
 				if (dealInfo.getWorkPayInfo().getUserReceipt()) {
-					boolean r = receiptInvoiceService.receiptIncoiceI(dealInfo.getWorkPayInfo().getReceiptAmount(),UserUtils.getUser().getOffice(),dealInfo.getWorkCompany().getCompanyName(),dealInfoId);				//key出库
+					receiptInvoiceService.receiptIncoiceI(dealInfo.getWorkPayInfo().getReceiptAmount(),UserUtils.getUser().getOffice(),dealInfo.getWorkCompany().getCompanyName(),dealInfoId);				//key出库
 				}
-				//key出库
-				keyInvoiceService.saveInvoice(dealInfo.getWorkCertInfo().getProvider(), dealInfo.getKeySn(),dealInfo.getWorkCompany().getCompanyName());
-				
+				if (dealInfo.getDealInfoType()!=null && dealInfo.getDealInfoType().equals(0) ) {
+					//新增key出库
+					keyInvoiceService.saveInvoice(dealInfo.getWorkCertInfo().getProvider(), dealInfo.getKeySn(),dealInfo.getWorkCompany().getCompanyName());
+				}else if(dealInfo.getDealInfoType1()!=null){
+					if (dealInfo.getDealInfoType1().equals(2)||dealInfo.getDealInfoType1().equals(3)) {
+						//遗失补办损坏更换key出库
+						keyInvoiceService.saveInvoice(dealInfo.getWorkCertInfo().getProvider(), dealInfo.getKeySn(),dealInfo.getWorkCompany().getCompanyName());
+					
+					}
+					
+				}
 				List<Integer> revokeList = new ArrayList<Integer>();
 				revokeList.add(WorkDealInfoType.TYPE_LOST_CHILD);
 				revokeList.add(WorkDealInfoType.TYPE_DAMAGED_REPLACED);
