@@ -147,7 +147,7 @@ public class StatisticDayDataService extends BaseService {
 			dc.add(Restrictions.lt("createDate", endTime));
 		}
 
-		dc.addOrder(Order.desc("id"));
+		dc.addOrder(Order.asc("createDate"));
 		return statisticDayDataDao.find(dc);
 	}
 
