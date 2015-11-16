@@ -135,8 +135,10 @@ public class ConfigSupplierController extends BaseController {
 			if (configSupplier.getId()!=null) {
 				List<ConfigSupplierProductRelation> configSupplierProductRelation = configSupplierProductRelationService.findBySupplier(configSupplier);
 				for (ConfigSupplierProductRelation cs2 : configSupplierProductRelation) {
-					if (cs2.getProductType()==(i+1)) {
-						map.setKebl(true);
+					if(cs2.getProductType()!=null){
+						if (cs2.getProductType()==(i+1)) {
+							map.setKebl(true);
+						}
 					}
 				}
 		}

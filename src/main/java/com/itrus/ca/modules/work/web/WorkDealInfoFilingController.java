@@ -1,4 +1,5 @@
 /**
+
  * There are <a href="https://github.com/thinkgem/jeesite">JeeSite</a> code generation
  */
 package com.itrus.ca.modules.work.web;
@@ -132,7 +133,7 @@ public class WorkDealInfoFilingController extends BaseController {
 	@RequestMapping(value = "gui")
 	public String gui(String[] ids, HttpServletRequest request,
 			HttpServletResponse response) {
-		WorkDealInfo workDealInfo = new WorkDealInfo();
+		WorkDealInfo workDealInfo = new WorkDealInfo();	
 		for (int i = 0; i < ids.length; i++) {
 			workDealInfo = workDealInfoService.get(Long.parseLong(ids[i]));
 			workDealInfo.setArchiveDate(new Timestamp(new Date().getTime()));

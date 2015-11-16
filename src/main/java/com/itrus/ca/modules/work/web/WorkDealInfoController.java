@@ -198,8 +198,6 @@ public class WorkDealInfoController extends BaseController {
 	private OfficeService officeService;
 
 	@Autowired
-	private AreaService areaService;
-	@Autowired
 	private WorkCertApplyInfoService workCertApplyInfoService;
 
 	@Autowired
@@ -256,13 +254,19 @@ public class WorkDealInfoController extends BaseController {
 	public String list(WorkDealInfo workDealInfo, Date startTime, Date endTime,
 			HttpServletRequest request, HttpServletResponse response,
 			Model model, RedirectAttributes redirectAttributes,
-			@RequestParam(value = "checkIds", required = false) String checkIds
+			@RequestParam(value = "checkIds", required = false) String checkIds,
+			@RequestParam(value = "alias", required = false) Long alias
 			) {
 		User user = UserUtils.getUser();
 		workDealInfo.setCreateBy(user.getCreateBy());
+		
+		List<ConfigApp> configAppList = configAppService.selectAll();
+		model.addAttribute("configAppList", configAppList);
+		model.addAttribute("alias",alias);
+		
 		Page<WorkDealInfo> page = workDealInfoService.find4Apply(
 				new Page<WorkDealInfo>(request, response), workDealInfo,
-				startTime, endTime);
+				startTime, endTime , alias);
 
 		if (checkIds!=null) {
     		String[] ids = checkIds.split(",");
@@ -272,11 +276,13 @@ public class WorkDealInfoController extends BaseController {
 		
 		List<WorkDealInfo> noIxinInfos = page.getList();
 		List<WorkDealInfo> isIxinInfos = workDealInfoService.find4ApplyIsIxin(
-				workDealInfo, startTime, endTime);
+				workDealInfo, startTime, endTime , alias);
 		noIxinInfos.addAll(isIxinInfos);
 
 		page.setList(noIxinInfos);
 
+		model.addAttribute("workType", workDealInfo.getDealInfoStatus());
+		
 		model.addAttribute("proType", ProductType.productTypeStrMap);
 		model.addAttribute("wdiType", WorkDealInfoType.WorkDealInfoTypeMap);
 		model.addAttribute("wdiStatus",
@@ -322,8 +328,6 @@ public class WorkDealInfoController extends BaseController {
 			HttpServletRequest request, HttpServletResponse response,
 			Long financePaymentInfoId, Model model) {
 		
-
-		User user = UserUtils.getUser();
 		List<ConfigApp> appNames=configAppService.findall();
 		Page<WorkFinancePayInfoRelation> financePay = workFinancePayInfoRelationService
 				.findByFinance(new Page<WorkFinancePayInfoRelation>(request,

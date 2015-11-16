@@ -16,62 +16,12 @@
 			$("#searchForm").submit();
         	return false;
         }
-// 		function quan(obj){
-// 			var duo=$(".duo");
-// 			for(var i=0;i<duo.length;i++)
-// 				{
-// 					if(duo[i].checked == true)
-// 						{
-// 							duo[i].checked=false;
-// 						}else
-// 							{
-// 							duo[i].checked = true;
-// 							}
-// 				}
-// 			if(index==1)
-// 				{
-// 	 			String = $("#checkIds").val();
-// 	 			var checkIds = $("#checkIds").val();
-// 	 			var xz = $("#contentTable").find("[name='xz']");
-// 	 			if(checkIds.indexOf($(obj).val())>-1){
-// 	 				checkIds = checkIds.replace($(obj).val(), "");
-// 	 			}
-// 	 			for (var a = 0; a <xz.length; a++) {
-// 	 				var check = $($("#contentTable").find("[name='xz']")[a]);
-// 	 				if (check.is(":checked") == true) {
-// 	 					var checkOne = check.val();
-// 	 					if (checkIds.indexOf(checkOne)<0) {
-// 	 						if(checkIds==''){
-// 	 							checkIds+=check.val();
-// 	 						}else{
-// 	 							checkIds+=","+check.val();
-// 	 						}
-// 	 					}
-// 	 				}
-// 	 			}
-// 	 			checkIds = checkIds.replace(",,", ",");
-// 	 			if (checkIds==",") {
-// 	 				$("#checkIds").val("");
-// 	 			}else{
-// 	 				$("#checkIds").val(checkIds);
-// 	 				var count=checkIds.split(",");
-// 	 			}
-// 				 index=2;
-// 				}else
-// 					{
-// 						$("#checkIds").val(String);
-						
-// 					}
-// 		}
-
-		
 			
 		function pilianggui()
 		{
 			var workDealInfoIds=[];
 			var ids=$("#checkIds").val();
 			workDealInfoIds=ids.split(",");
-			alert(workDealInfoIds.length);
 			window.location.href="${ctx}/work/workDealInfoFiling/gui?ids="+workDealInfoIds;
 		
 		}

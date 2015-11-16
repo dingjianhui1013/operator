@@ -428,18 +428,24 @@ public class WorkDealInfoService extends BaseService {
 	}
 
 	public Page<WorkDealInfo> find4Apply(Page<WorkDealInfo> page, WorkDealInfo workDealInfo, Date startTime,
-			Date endTime) {
+			Date endTime , Long apply ) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("workUser", "workUser");
 		dc.createAlias("workCompany", "workCompany");
 		dc.createAlias("createBy", "createBy");
 		dc.createAlias("createBy.office", "office");
+		dc.createAlias("configApp", "configApp");
 
 		dc.add(dataScopeFilter(UserUtils.getUser(), "office", "createBy"));
 		// dc.add(Restrictions.or(Restrictions.eq("dealInfoStatus",
 		// WorkDealInfoStatus.STATUS_CERT_OBTAINED), Restrictions.eq(
 		// "createBy", UserUtils.getUser())));
 
+		if (apply != null) {
+			dc.add(Restrictions.eq("configApp.id", apply));
+		}
+		
+		
 		if (startTime != null && endTime != null) {
 			dc.add(Restrictions.ge("notafter", startTime));
 			dc.add(Restrictions.le("notafter", endTime));
@@ -453,6 +459,11 @@ public class WorkDealInfoService extends BaseService {
 				dc.add(Restrictions.like("workCompany.companyName",
 						"%" + EscapeUtil.escapeLike(workDealInfo.getWorkCompany().getCompanyName()) + "%"));
 			}
+			if (workDealInfo.getWorkCompany().getOrganizationNumber()!=null && !workDealInfo.getWorkCompany().getOrganizationNumber().equals("") ) {
+				dc.add(Restrictions.like("workCompany.organizationNumber",
+						EscapeUtil.escapeLike(workDealInfo.getWorkCompany().getOrganizationNumber())));
+				
+			}
 		}
 		if (workDealInfo.getWorkUser() != null) {
 			if (workDealInfo.getWorkUser().getContactName() != null
@@ -460,13 +471,8 @@ public class WorkDealInfoService extends BaseService {
 				dc.add(Restrictions.like("workUser.contactName",
 						"%" + EscapeUtil.escapeLike(workDealInfo.getWorkUser().getContactName()) + "%"));
 			}
-			if (workDealInfo.getWorkUser().getContactPhone() != null
-					&& !workDealInfo.getWorkUser().getContactPhone().equals("")) {
-				dc.add(Restrictions.like("workUser.contactPhone",
-						"%" + EscapeUtil.escapeLike(workDealInfo.getWorkUser().getContactPhone()) + "%"));
-			}
 		}
-		if (workDealInfo.getDealInfoStatus() != null) {
+		if (workDealInfo.getDealInfoStatus()!= null && !workDealInfo.getDealInfoStatus().equals("")) {
 			dc.add(Restrictions.eq("dealInfoStatus", workDealInfo.getDealInfoStatus()));
 		}
 		if (StringUtils.isNotEmpty(workDealInfo.getKeySn())) {
@@ -482,16 +488,17 @@ public class WorkDealInfoService extends BaseService {
 		return workDealInfoDao.find(page, dc);
 	}
 
-	public List<WorkDealInfo> find4ApplyIsIxin(WorkDealInfo workDealInfo, Date startTime, Date endTime) {
+	public List<WorkDealInfo> find4ApplyIsIxin(WorkDealInfo workDealInfo, Date startTime, Date endTime , Long alias) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("workUser", "workUser");
 		dc.createAlias("workCompany", "workCompany");
 		dc.createAlias("createBy", "createBy");
 		dc.createAlias("createBy.office", "office");
-		// dc.add(Restrictions.or(Restrictions.eq("dealInfoStatus",
-		// WorkDealInfoStatus.STATUS_CERT_OBTAINED), Restrictions.eq(
-		// "createBy.office", UserUtils.getUser().getOffice())));
 
+		if (alias != null) {
+			dc.add(Restrictions.eq("configApp.id", alias));
+		}
+		
 		if (startTime != null && endTime != null) {
 			dc.add(Restrictions.ge("notafter", startTime));
 			dc.add(Restrictions.le("notafter", endTime));
@@ -512,13 +519,8 @@ public class WorkDealInfoService extends BaseService {
 				dc.add(Restrictions.like("workUser.contactName",
 						"%" + EscapeUtil.escapeLike(workDealInfo.getWorkUser().getContactName()) + "%"));
 			}
-			if (workDealInfo.getWorkUser().getContactPhone() != null
-					&& !workDealInfo.getWorkUser().getContactPhone().equals("")) {
-				dc.add(Restrictions.like("workUser.contactPhone",
-						"%" + EscapeUtil.escapeLike(workDealInfo.getWorkUser().getContactPhone()) + "%"));
-			}
 		}
-		if (workDealInfo.getDealInfoStatus() != null) {
+		if (workDealInfo.getDealInfoStatus() != null && !workDealInfo.getDealInfoStatus().equals("")) {
 			dc.add(Restrictions.eq("dealInfoStatus", workDealInfo.getDealInfoStatus()));
 		}
 		if (StringUtils.isNotEmpty(workDealInfo.getKeySn())) {
@@ -2699,9 +2701,14 @@ public class WorkDealInfoService extends BaseService {
 
 	public List<WorkDealInfo> findList() {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
-		dc.createAlias("workPayInfo", "workPayInfo");
-		dc.add(Restrictions.eq("workPayInfo.delFlag", WorkPayInfo.DEL_FLAG_NORMAL));
-		dc.add(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED));
+		dc.createAlias("createBy", "createBy");
+		dc.createAlias("createBy.office", "office");
+		// dc.createAlias("workCertInfo", "workCertInfo");
+		dc.add(dataScopeFilter(UserUtils.getUser(), "office", "createBy"));
+		//dc.createAlias("workPayInfo", "workPayInfo");
+		dc.add(Restrictions.eq("status", 0));
+//		dc.add(Restrictions.eq("workPayInfo.delFlag", WorkPayInfo.DEL_FLAG_NORMAL));
+		//dc.add(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED));
 		return workDealInfoDao.find(dc);
 	}
 

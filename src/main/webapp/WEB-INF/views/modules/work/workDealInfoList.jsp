@@ -242,22 +242,45 @@
 			value="${page.pageSize}" />
 		<input id="dealId" type="hidden" value="${workDealInfo.id}" />
 		<div>
-			<label>&nbsp;&nbsp;Key ID ：&nbsp;&nbsp;</label>
-			<form:input path="keySn" htmlEscape="false" maxlength="50"
-				class="input-medium" />
+			<label>&nbsp;&nbsp;别名（代办应用） ：&nbsp;&nbsp;</label>
+			<select name="alias"
+				id="alias">
+				<option value="">请选择应用</option>
+				<c:forEach items="${configAppList}" var="app">
+					<option value="${app.id}"
+						<c:if test="${app.id==alias}">
+					selected="selected"
+					</c:if>>${app.alias}</option>
+				</c:forEach>
+			</select>
 			&nbsp;&nbsp; <label>单位名称：</label>
 			<form:input path="workCompany.companyName" htmlEscape="false"
 				maxlength="50" class="input-medium" />
-			<label>证书持有人：</label>
-			<form:input path="workUser.contactName" htmlEscape="false"
+			&nbsp;&nbsp; <label>组代码号：</label>
+			<form:input path="workCompany.organizationNumber" htmlEscape="false"
 				maxlength="50" class="input-medium" />
-			<br />
+			<br>
 		</div>
 		<div style="margin-top: 8px">
-			<label>&nbsp;&nbsp;移动电话：</label>
-			<form:input path="workUser.contactPhone" htmlEscape="false"
+			&nbsp;&nbsp;<label>证书持有人姓名：</label>
+			<form:input path="workUser.contactName" htmlEscape="false"
 				maxlength="50" class="input-medium" />
-			<label>证书到期时间：</label> <input class="input-medium Wdate" type="text"
+		&nbsp;&nbsp;<label>&nbsp;&nbsp;KEY编码 ：&nbsp;&nbsp;</label>
+			<form:input path="keySn" htmlEscape="false" maxlength="50"
+				class="input-medium" />
+		&nbsp;&nbsp;<label>&nbsp;&nbsp;业务状态 ：&nbsp;&nbsp;</label>
+			<select name="dealInfoStatus" id="dealInfoStatus">
+				<option value="">请选择业务类型</option>
+				<c:forEach items="${wdiStatus}" var="type">
+					<option value="${type.key}"
+						<c:if test="${type.key==workType}">
+					selected="selected"
+					</c:if>>${type.value}</option>
+				</c:forEach>
+			</select> 			
+		</div>
+		<div style="margin-top: 8px">
+			&nbsp;&nbsp;<label>到期日期：</label> <input class="input-medium Wdate" type="text"
 				required="required" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});"
 				value="<fmt:formatDate value="${startTime}" pattern="yyyy-MM-dd"/>" maxlength="20" readonly="readonly"
 				name="startTime" id="startTime"/> 至 <input class="input-medium Wdate" type="text"
@@ -287,20 +310,16 @@
 				onchange="checkAll(this)"
 				/> </th>
 				<th>业务编号</th>
-				<th>单位名称</th>
-				<th>证书持有人名称</th>
-				<th>经办人名称</th>
-				
-				<th>企业类型</th>
-				<th>所属应用</th>
 				<th>别名</th>
+				<th>单位名称</th>
+				<th>证书持有人</th>
+				<th>经办人</th>
 				<th>产品名称</th>
 				<th>业务类型</th>
-
-				<th>Key编码</th>
-				<th>证书到期时间</th>
+				<th>KEY编码</th>
+				<th>制证日期</th>
 				<th>有效期</th>
-
+				<th>到期日期</th>
 				<th>业务状态</th>
 				<th>操作</th>
 		<tbody>
@@ -313,24 +332,11 @@
 					onchange="changeCheck(this)"
 					 /> </td>
 					<td>${workDealInfo.svn}</td>
+					<td>${workDealInfo.configApp.alias}</td>
 					<td><a
 						href="${ctx}/work/workDealInfoFiling/formF?id=${workDealInfo.id}">${workDealInfo.workCompany.companyName}</a></td>
-					<td>
-								${workDealInfo.workUser.contactName}
-					</td>
-					<td>
-								${workDealInfo.workCertInfo.workCertApplyInfo.name}
-					</td>
-					
-					
-					<td><c:if test="${workDealInfo.workCompany.companyType==1}">企业</c:if>
-						<c:if test="${workDealInfo.workCompany.companyType==2}">事业单位</c:if>
-						<c:if test="${workDealInfo.workCompany.companyType==3}">政府机构</c:if>
-						<c:if test="${workDealInfo.workCompany.companyType==4}">社会团体</c:if>
-						<c:if test="${workDealInfo.workCompany.companyType==5}">其他</c:if>
-					</td>
-					<td>${workDealInfo.configApp.appName}</td>
-					<td>${workDealInfo.configApp.alias}</td>
+					<td>${workDealInfo.workUser.contactName}</td>
+					<td>${workDealInfo.workCertInfo.workCertApplyInfo.name}</td>
 					<td>${proType[workDealInfo.configProduct.productName]}</td>
 					<td>
 						<c:if test="${workDealInfo.dealInfoType!=null}">${wdiType[workDealInfo.dealInfoType]}</c:if>
@@ -339,13 +345,15 @@
 						<c:if test="${workDealInfo.dealInfoType3!=null}">${wdiType[workDealInfo.dealInfoType3]}</c:if>
 					</td>
 					<td>${workDealInfo.keySn }</td>
-					<td><fmt:formatDate
-							value="${workDealInfo.notafter }"
-							pattern="yyyy-MM-dd" /> </td>
+					<td><fmt:formatDate pattern="yyyy-MM-dd" value="${workDealInfo.workCertInfo.signDate}"/> </td>
 					<td><c:if
 							test="${not empty workDealInfo.workCertInfo.notafter && not empty workDealInfo.workCertInfo.notbefore}">
 							${empty workDealInfo.addCertDays?workDealInfo.year*365+workDealInfo.lastDays:workDealInfo.year*365+workDealInfo.lastDays+workDealInfo.addCertDays}（天）
 						</c:if></td>
+					<td><fmt:formatDate
+							value="${workDealInfo.notafter }"
+							pattern="yyyy-MM-dd" /> </td>
+				
 					<td>${wdiStatus[workDealInfo.dealInfoStatus]}</td>
 					<td><c:if
 							test="${workDealInfo.dealInfoStatus==3||workDealInfo.dealInfoStatus==7 }">
