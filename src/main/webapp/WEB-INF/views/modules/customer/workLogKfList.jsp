@@ -21,7 +21,7 @@
 	<ul class="nav nav-tabs">
 		<li class="active"><a href="${ctx}/work/workLog/">客服记录</a></li>
 		<li><a href="${ctx}/work/customer/insertUser">添加咨询类用户</a></li>
-		<li><a href="#">添加模糊记录</a></li>
+		<li><a href="${ctx}/work/customer/insertFuzzy">添加模糊记录</a></li>
 		<li><a href="#">添加项目记录</a></li>
 	</ul>
 	<form:form id="searchForm" modelAttribute="workLog" action="${ctx}/work/workLog/kflist" method="post" class="breadcrumb form-search">
@@ -100,6 +100,7 @@
 					<c:choose> 
 						<c:when test="${workLog.distinguish==1}">咨询记录添加</c:when>
 						<c:when test="${workLog.distinguish==0}">工作记录添加</c:when>
+						<c:when test="${workLog.distinguish==2}">模糊记录添加</c:when>
 					</c:choose>
 				</td>
 				<td>

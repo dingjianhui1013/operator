@@ -71,17 +71,10 @@
 		
 		<input id="btnSubmit" class="btn btn-primary" type="submit"
 			value="查询" />
+<!-- 			<input id="fuzzyRecord" class="btn btn-primary" type="button" -->
+<!-- 			value="模糊记录" /> -->
+			<a id="fuzzyRecord" class="btn btn-primary" href="${ctx}/work/customer/insertFuzzy">模糊记录</a>
 		</div>
-		<!-- <label>业务类型:</label>
-		<form:select path="dealInfoStatus">
-			<form:option value="0">新增用户</form:option>
-			<form:option value="1">异常用户</form:option>
-		</form:select> -->
-		<!-- <label>区域:</label><form:input path="workUser.contactPhone" htmlEscape="false" maxlength="50" class="input-medium"/>
-		<label>证书类型:</label><form:input path="workUser.contactPhone" htmlEscape="false" maxlength="50" class="input-medium"/><br/>
-		<label>办理时间:</label><form:input path="workUser.contactPhone" htmlEscape="false" maxlength="50" class="input-medium"/>至<form:input path="workUser.contactPhone" htmlEscape="false" maxlength="50" class="input-medium"/><br/>
-		<label>有效时间:</label><form:input path="workUser.contactPhone" htmlEscape="false" maxlength="50" class="input-medium"/>至<form:input path="workUser.contactPhone" htmlEscape="false" maxlength="50" class="input-medium"/>
-		 -->
 	</form:form>
 	<tags:message content="${message}" />
 	<table id="contentTable"

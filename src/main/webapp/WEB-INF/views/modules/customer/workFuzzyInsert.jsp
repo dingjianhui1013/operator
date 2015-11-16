@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>新建记录</title>
+	<title>模糊记录</title>
 	<meta name="decorator" content="default"/>
 	<script type="text/javascript">
 		$(document).ready(function() {
@@ -36,19 +36,17 @@
 <body>
 	<ul class="nav nav-tabs">
 		<li ><a href="${ctx}/work/customer/list">业务记录</a></li>
-		<li  class="active"><a href="${ctx}/work/customer/insertCustomerFrom?id=${workDealInfo.id}">新增客服记录</a></li>
+		<li class="active"><a href="${ctx}/work/customer/insertFuzzy">新增模糊记录</a></li>
 	</ul><br/>
-	<form name = "customerInsert" id = "inputForm" action ="${ctx}/work/customer/insertCustomer"  method="post" class="form-horizontal">
+	<form name = "customerInsert" id = "inputForm" action ="${ctx}/work/customer/insertFuzzyj" method="post" class="form-horizontal">
 		<tags:message content="${message}"/>
-		<input type = "hidden" name = "dealInfoId" value = "${workDealInfo.id}"/>
+<%-- 		<input type = "hidden" name = "dealInfoId" value = "${workDealInfo.id}"/> --%>
+			<input type = "hidden" name = "state" value = "1"/>
 		<div class="control-group">
-<!-- 			<label class="control-label">服务对象:</label> -->
-<!-- 			<div class="controls"> -->
-<%-- 				${workDealInfo.workCompany.companyName } --%>
-<!-- 			</div> -->
 			<label class="control-label">应用项目名称:</label>
 			<div class="controls">
 				<select name="appName">
+				<option value=""> </option>
 					<c:forEach items="${configApp}" var="configApp">
 						<option value="${configApp.appName}"  <c:if test="${configApp.appName==workDealInfo.configApp.appName}">selected="selected"</c:if>>${configApp.appName}</option>
 					</c:forEach>
@@ -81,36 +79,6 @@
 				</select>
 			</div>
 		</div>
-		
-<!-- 		<div id="wtlx" class="control-group"> -->
-<!-- 			<label class="control-label">问题类型:</label> -->
-<!-- 			<div class="controls"> -->
-<!-- 				<select name = "probleType"> -->
-<!-- 					<option value = "业务咨询">业务咨询</option> -->
-<!-- 					<option value = "环境">环境</option> -->
-<!-- 					<option value = "驱动">驱动</option> -->
-<!-- 					<option value = "key">key</option> -->
-<!-- 					<option value = "网络">网络</option> -->
-<!-- 					<option value = "解锁">解锁</option> -->
-<!-- 					<option value = "更新操作">更新操作</option> -->
-<!-- 					<option value = "业务系统">业务系统</option> -->
-<!-- 					<option value = "业务操作">业务操作</option> -->
-<!-- 					<option value = "其他">其他</option> -->
-<!-- 				</select> -->
-<!-- 			</div> -->
-<!-- 		</div> -->
-<!-- 		<div class="control-group"> -->
-<!-- 			<label class="control-label"><span style="color : red">*</span>&nbsp;服务主题:</label> -->
-<!-- 			<div class="controls"> -->
-<!-- 				<input type = "text" name = "serTitle" class="required" /> -->
-<!-- 			</div> -->
-<!-- 		</div> -->
-<!-- 		<div class="control-group"> -->
-<!-- 			<label class="control-label">详细记录:</label> -->
-<!-- 			<div class="controls"> -->
-<!-- 				<textarea  class="valid" cols="4" rows="4" style="resize: none;" name="recordContent"></textarea> -->
-<!-- 			</div> -->
-<!-- 		</div> -->
 		<div class="control-group">
 			<label class="control-label">业务咨询</label>
 			<br>
@@ -180,8 +148,7 @@
 				<textarea id="remarks" class="valid" cols="4" rows="4" style="resize: none;" name="leftoverProblem"></textarea>
 			</div>
 		</div>
-		
-		<input type="hidden"  name="distinguish" value="0"/>
+		<input type="hidden"  name="distinguish" value="2"/>
 		<div class="form-actions">
 			<input id="btnSubmit" class="btn btn-primary" type="submit" value="保存"/>&nbsp;&nbsp;
 			<input id="btnCancel" class="btn" type="button" value="返 回" onclick="history.go(-1)"/>

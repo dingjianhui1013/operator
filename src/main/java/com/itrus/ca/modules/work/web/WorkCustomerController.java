@@ -134,7 +134,18 @@ public class WorkCustomerController extends BaseController {
 		model.addAttribute("configApp", configApp);
 		return "modules/customer/workCustomerInsert";
 	}
-
+	@RequiresPermissions("work:workDealInfo:view")
+	@RequestMapping("insertFuzzy")
+	public String insertFuzzy(WorkDealInfo workDealInfo,
+			HttpServletRequest request, HttpServletResponse response,
+			Model model) {
+		model.addAttribute("workDealInfo", workDealInfo);
+		model.addAttribute("nowDate", getDateString());
+		model.addAttribute("userName", UserUtils.getUser().getName());
+		List<ConfigApp> configApp= configAppService.findAllConfigApp();
+		model.addAttribute("configApp", configApp);
+		return "modules/customer/workFuzzyInsert";
+	}
 	@RequiresPermissions("work:workDealInfo:view")
 	@RequestMapping("insertCustomerFromF")
 	public String insertCustomerFromF(Long id, HttpServletRequest request,
@@ -202,7 +213,52 @@ public class WorkCustomerController extends BaseController {
 		logUtil.saveSysLog("客服管理", detail + workLog.getId(), "");
 		return "redirect:" + Global.getAdminPath() + "/work/customer/list";
 	}
-
+	@RequiresPermissions("work:workDealInfo:view")
+	@RequestMapping("insertFuzzyj")
+	public String insertFuzzyj(WorkLog workLog,
+			HttpServletRequest request, HttpServletResponse response,
+			Model model,String ywzx,String ywcz,String ywxt,String distinguish) {
+		if(ywzx!=null)
+		{
+			String ywzxs=ywzx.replace(","," ");
+			workLog.setYwzx(ywzxs);
+		}
+		if(ywcz!=null)
+		{
+			String ywczs=ywcz.replace(","," ");
+			workLog.setYwcz(ywczs);
+		}
+		if(ywxt!=null)
+		{
+			String ywxts=ywxt.replace(","," ");
+			workLog.setYwxt(ywxts);
+		}
+//		WorkDealInfo workDealInfo = workDealInfoService.get(dealInfoId);
+//		workLog.setWorkDealInfo(workDealInfo);
+//		workLog.setWorkCompany(workDealInfo.getWorkCompany());
+//		workLog.setConfigApp(workDealInfo.getConfigApp());
+		workLog.setCreatTime(new Date());
+		workLog.setState(1);
+		workLog.setDistinguish(distinguish);
+		User user = UserUtils.getUser();
+		workLog.setOffice(UserUtils.getUser().getOffice());
+		if (!workLog.getSerType().equals("日常客服")) {
+			workLog.setProbleType(null);
+			workLog.setStatus(1);
+		} else {
+			workLog.setStatus(0);
+		}
+		workLog.setCreateBy(UserUtils.getUser());
+		String detail = "";
+		if (workLog.getId() != null) {
+			detail = "修改工作记录成功,id为";
+		} else {
+			detail = "添加工作记录成功,id为";
+		}
+		workLogService.save(workLog);
+		logUtil.saveSysLog("客服管理", detail + workLog.getId(), "");
+		return "redirect:" + Global.getAdminPath() + "/work/workLog/kflist";
+	}
 	@RequestMapping("insertUserFrom")
 	public String insertUserFrom(WorkDealInfo workDealInfo,
 			HttpServletRequest request, HttpServletResponse response,
