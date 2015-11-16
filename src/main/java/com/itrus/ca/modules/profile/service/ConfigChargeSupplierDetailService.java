@@ -52,9 +52,13 @@ public class ConfigChargeSupplierDetailService extends BaseService {
 		List<ConfigChargeSupplierDetail> list = configChargeSupplierDetailDao.find(dc);
 		return list;
 	}
-	public List<ConfigChargeSupplierDetail> findByMoneyTypeId(Integer moneyType){
+	public List<ConfigChargeSupplierDetail> findByconfigSupplierId(Long id){
 		DetachedCriteria dc=configChargeSupplierDetailDao.createDetachedCriteria();
-		dc.add(Restrictions.eq("moneyType", moneyType));
+		
+		if(id!=null&&!"".equals(id))
+		{
+			dc.add(Restrictions.eq("configSupplierProductRelation.id", id));
+		}
 		return configChargeSupplierDetailDao.find(dc);
 		
 	}

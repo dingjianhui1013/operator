@@ -47,7 +47,15 @@ public class ConfigSupplierProductRelationService extends BaseService {
 	public ConfigSupplierProductRelation get(Long id) {
 		return configSupplierProductRelationDao.findOne(id);
 	}
-	
+	public List<ConfigSupplierProductRelation> findByGenanID(Long genanId)
+	{
+		DetachedCriteria dc=configSupplierProductRelationDao.createDetachedCriteria();
+		if(genanId!=null && !"".equals(genanId))
+		{
+			dc.add(Restrictions.eq("keyGeneralInfo.id", genanId));
+		}
+		return configSupplierProductRelationDao.find(dc);
+	}
 	public Page<ConfigSupplierProductRelation> find(Page<ConfigSupplierProductRelation> page, ConfigSupplierProductRelation configSupplierProductRelation) {
 		DetachedCriteria dc = configSupplierProductRelationDao.createDetachedCriteria();
 		dc.addOrder(Order.desc("id"));
