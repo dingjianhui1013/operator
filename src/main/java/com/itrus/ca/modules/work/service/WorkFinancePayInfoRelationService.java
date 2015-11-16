@@ -72,16 +72,17 @@ public class WorkFinancePayInfoRelationService extends BaseService {
 		return workFinancePayInfoRelationDao.find(page, dc);
 	}
 	
+	@Transactional(readOnly = false)
 	public Page<WorkFinancePayInfoRelation> findByFinance(
-			Page<WorkFinancePayInfoRelation> page, Long id,String appName) {
+			Page<WorkFinancePayInfoRelation> page, Long idd,String appName) {
 		
 		DetachedCriteria dc = workFinancePayInfoRelationDao.createDetachedCriteria();
 		dc.createAlias("financePaymentInfo", "financePaymentInfo");
 		dc.createAlias("workPayInfo", "workPayInfo");
-		dc.createAlias("financePaymentInfo.configApp", "configApp");
-		dc.add(Restrictions.eq("financePaymentInfo.id", id));
+		
+		dc.add(Restrictions.eq("financePaymentInfo.id", idd));
 		if(appName!=null)
-		{
+		{	dc.createAlias("financePaymentInfo.configApp", "configApp");
 			dc.add(Restrictions.eq("configApp.appName",appName));
 		}
 //		if(startTime!=null)

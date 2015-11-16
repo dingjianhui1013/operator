@@ -2237,6 +2237,60 @@ public class WorkDealInfoController extends BaseController {
 		return jsonArray.toString();
 	}
 
+	
+	@RequestMapping(value = "paymentList")
+	@ResponseBody
+	public String paymentList(String payInfoIds)
+			throws Exception {
+		String[] ids = payInfoIds.split(",");
+		List<Long> idsL = new ArrayList<Long>();
+		for (int i = 0; i < ids.length; i++) {
+			if (ids[i]!=null && !ids[i].equals("")) {
+				idsL.add(Long.parseLong(ids[i]));
+			}
+		}
+		
+		JSONArray jsonArray = new JSONArray();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		try {
+			List<FinancePaymentInfo> list = financePaymentInfoService
+					.findByIds(idsL);
+			for (FinancePaymentInfo financePaymentInfo : list) {
+				JSONObject json = new JSONObject();
+				json.put("financePayInfoId", financePaymentInfo.getId());
+				json.put("remark", financePaymentInfo.getRemark());
+				json.put("companyName", financePaymentInfo.getCompany());
+				json.put("paymentMoney", financePaymentInfo.getPaymentMoney());
+				json.put("officeName", financePaymentInfo.getCreateBy()
+						.getOffice().getName());
+				json.put("ceartName", financePaymentInfo.getCreateBy()
+						.getName());
+				json.put("createDate",
+						sdf.format(financePaymentInfo.getCreateDate()));
+				if (financePaymentInfo.getPaymentMethod() == 1) {
+					json.put("paymentMethod", "现金");
+				} else if (financePaymentInfo.getPaymentMethod() == 2) {
+					json.put("paymentMethod", "POS收款");
+				} else if (financePaymentInfo.getPaymentMethod() == 3) {
+					json.put("paymentMethod", "银行转帐");
+				} else if (financePaymentInfo.getPaymentMethod() == 4) {
+					json.put("paymentMethod", "支付宝转账");
+				}
+				json.put("remarks",
+						financePaymentInfo.getRemarks() == null ? ""
+								: financePaymentInfo.getRemarks());
+				json.put("residueMoney", financePaymentInfo.getResidueMoney());
+				jsonArray.put(json);
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		return jsonArray.toString();
+	}
+	
+	
+	
 	@RequiresPermissions("work:workDealInfo:edit")
 	@RequestMapping(value = "quickCert")
 	@ResponseBody

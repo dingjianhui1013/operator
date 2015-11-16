@@ -181,7 +181,7 @@ function addPayInfoToList() {
 	$("#financeGovTr").remove();
 	$("#financeContractTr").remove();
 	$("#contentTable").show();
-	
+	var payInfoIds =  "";
 	var officeName = $("#officeNameHid").val();
 	var userName = $("#userNameHid").val();
 	var curDate = $("#dateHid").val();
@@ -200,52 +200,26 @@ function addPayInfoToList() {
 		return false;
 	} else if (parseFloat($("#money").val()) + parseFloat($("#pos").val()) < sumMoney) {
 		sumMoney -= (parseFloat($("#money").val()) + parseFloat($("#pos").val()));
+		
 		$("#payment")
-				.find(":checked")
-				.prop('checked', true)
-				.each(
-						function() {
-							var company = $(this).attr("companyName");
-							var office = $(this).attr("officeName");
-							var ceartName = $(this).attr("ceartName");
-							var createDate = $(this).attr("createDate");
-							var paymentMethod = $(this).attr("paymentMethod");
-							var remarks = $(this).attr("remarks");
-							var residueMoney = $(this).attr("residueMoney");
-							var financePayInfoId = $(this).attr(
-									"financePayInfoId");
-							html += "<tr id='fpifinancePayInfo'>";
-							html += "<td>" + company + "</td>";
-							if (sumMoney > residueMoney) {
-								html += "<td>" + residueMoney + "</td>";
-								sumMoney -= residueMoney;
-							} else {
-								html += "<td>" + sumMoney + "</td>";
-								sumMoney = 0;
-							}
-							html += "<td>" + office + "</td>";
-							html += "<td>" + ceartName + "</td>";
-							html += "<td>" + createDate + "</td>";
-							html += "<td>" + paymentMethod + "</td>";
-							html += "<td>" + remarks + "</td>";
-							html += "<td>" + residueMoney + "</td>";
-							html += "<input type='hidden' name='financePayInfoId' value='"
-									+ financePayInfoId + "'>";
-							html += "</tr>";
-							var money = $("#paymentMoney1").val();
-							$("#paymentMoney1").val(
-									parseFloat(residueMoney)
-											+ parseFloat(money));
-							$("#gc").attr("disabled", "disabled");
-							$("#cc").attr("disabled", "disabled");
-							if (sumMoney == 0) {
-								return false;
-							}
-						});
+		.find(":checked")
+		.prop('checked', true)
+		.each(
+				function() {var financePayInfoId = $(this).attr("financePayInfoId");
+				payInfoIds += financePayInfoId + ",";
+				});
+		
+		if(payInfoIds!=""){
+			
+			checkPayInfoList(payInfoIds , sumMoney);
+		}
 
 	} else if (parseFloat($("#money").val()) + parseFloat($("#pos").val()) == sumMoney) {
 		sumMoney = 0;
 	}
+	
+	
+	if(parseFloat($("#money").val()) + parseFloat($("#pos").val()) >= sumMoney ||payInfoIds=="") {
 	// 现金
 	if ($("#money").val() != "0" && $("#money").val() != "0.0"
 			&& $("#money").val() != "") {
@@ -279,28 +253,17 @@ function addPayInfoToList() {
 	
 	$("#financeTd").append(html);
 	$("#shouldMoney").val(parseFloat($("#sumMoney").val())-(sumMoney));
-//	$("#collectMoney").val(receiptMoney);
-//	$("input[name='receiptAmount']").val(receiptMoney);
 	$("#collectMoney").val($("#allTotalMoney").val());
 	$("input[name='receiptAmount']").val($("#allTotalMoney").val());
-	
-//	if(useReceipt){
-//		$("#sff0").prop("checked",true);
-//		$("#sff1").prop("checked",false);
-//	}else{
-//		$("#collectMoney").val("0");
-//		$("#sff0").prop("checked",false);
-//		$("#sff1").prop("checked",true);
-//	}
+
 	$("#sff0").prop("checked",true);
 	$("#sff1").prop("checked",false);
 	var btn = document.getElementById("settle");  
-	   btn.value = "删除";  
-	   btn.onclick = function(){removePayInfoToList();};  
+	btn.value = "删除";  
+	btn.onclick = function(){removePayInfoToList();};  
 	
 	
-//	$("#settle").val("删除");
-//	$("#settle").attr("onclick", "removePayInfoToList()");
+	}
 }
 // 删除按钮
 function removePayInfoToList() {

@@ -123,6 +123,100 @@ function payment(){
 		$("#recovery").val("隐藏");
 	});
 }
+
+function checkPayInfoList(obj , sumMoney){
+	var html = "";
+	var sumMoney = sumMoney;
+	var urlpay="${ctx}/work/workDealInfo/paymentList?payInfoIds="+obj+"&_="+new Date().getTime();
+	$.getJSON(urlpay,function(data){
+		$.each(data,function(idx,ele){
+			var company = ele.companyName;
+			var office = ele.officeName;
+			var ceartName = ele.ceartName;
+			var createDate = ele.createDate;
+			var paymentMethod = ele.paymentMethod;
+			var remarks = ele.remarks;
+			var residueMoney = ele.residueMoney;
+			var financePayInfoId = ele.financePayInfoId;
+			html += "<tr id='fpifinancePayInfo'>";
+			html += "<td>" + company + "</td>";
+			if (sumMoney > residueMoney) {
+				html += "<td>" + residueMoney + "</td>";
+				sumMoney -= residueMoney;
+			} else {
+				html += "<td>" + sumMoney + "</td>";
+				sumMoney = 0;
+			}
+			html += "<td>" + office + "</td>";
+			html += "<td>" + ceartName + "</td>";
+			html += "<td>" + createDate + "</td>";
+			html += "<td>" + paymentMethod + "</td>";
+			html += "<td>" + remarks + "</td>";
+			html += "<td>" + residueMoney + "</td>";
+			html += "<input type='hidden' name='financePayInfoId' value='"
+					+ financePayInfoId + "'>";
+			html += "</tr>";
+			var money = $("#paymentMoney1").val();
+			$("#paymentMoney1").val(
+					parseFloat(residueMoney)
+							+ parseFloat(money));
+			$("#gc").attr("disabled", "disabled");
+			$("#cc").attr("disabled", "disabled");
+			if (sumMoney == 0) {
+				return false;
+			}
+		});
+		
+		// 现金
+		if ($("#money").val() != "0" && $("#money").val() != "0.0"
+				&& $("#money").val() != "") {
+			html += "<tr id='financeMoneyTr'><td>" + companyName + "</td><td>"
+					+ parseInt($("#money").val()) + "</td><td>" + officeName
+					+ "</td><td>" + userName + "</td><td>" + curDate
+					+ "</td><td>现金</td><td></td><td></td>";
+			$("#money").attr("readonly", "readonly");
+			useReceipt = true;
+			receiptMoney += parseInt($("#money").val());
+		}
+		// pos
+		if ($("#pos").val() != "0" && $("#pos").val() != "0.0"
+				&& $("#pos").val() != "") {
+			html += "<tr id='financePosTr'><td>" + companyName + "</td><td>"
+					+ parseInt($("#pos").val()) + "</td><td>" + officeName
+					+ "</td><td>" + userName + "</td><td>" + curDate
+					+ "</td><td>POS收款</td><td></td><td></td>";
+			$("#pos").attr("readonly", "readonly");
+			useReceipt = true;
+			receiptMoney += parseInt($("#pos").val());
+		}
+		if (sumMoney > 0&&checkMoney) {
+			top.$.jBox.tip("您的支付金额少于本次应付金额，请确认支付金额!");
+			removePayInfoToList();
+			return false;
+		}
+		$("#mc").attr("disabled", "disabled");
+		$("#pc").attr("disabled", "disabled");
+		$("#ks").attr("disabled", "disabled");
+		
+		$("#financeTd").append(html);
+		$("#shouldMoney").val(parseFloat($("#sumMoney").val())-(sumMoney));
+		$("#collectMoney").val($("#allTotalMoney").val());
+		$("input[name='receiptAmount']").val($("#allTotalMoney").val());
+
+		$("#sff0").prop("checked",true);
+		$("#sff1").prop("checked",false);
+		var btn = document.getElementById("settle");  
+		btn.value = "删除";  
+		btn.onclick = function(){removePayInfoToList();};  
+		
+		
+	});
+	
+}
+
+
+
+
 function onSubmit(){
 	
 		if ($("#settle").val()!="删除"){
