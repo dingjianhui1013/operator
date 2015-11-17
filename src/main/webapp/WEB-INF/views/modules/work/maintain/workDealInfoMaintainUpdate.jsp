@@ -306,9 +306,10 @@
 		$("#pName").val(name);
 	}
 	
-	function setJBRCard(){
+	function setJBRCard(o){
 		var card = $("#conCertNumber1").val();
 		$("#pIDCard").val(card);
+		$("#"+o).hide();
 	}
 	
 	function setJBRMail(){
@@ -486,6 +487,16 @@
 				});
 	};
 	function count(o,c){
+		$("#"+c).show();
+ 		$("#"+c).html($("#"+o).val().length);
+	}
+	function qxCount(o)
+	{
+		$("#"+o).hide();
+	}
+	function hqcount(o,c)
+	{
+		$("#"+c).show();
  		$("#"+c).html($("#"+o).val().length);
 	}
 </script>
@@ -627,7 +638,7 @@
 								id="organizationNumber1"
 								onkeyup="value=value.replace(/[^\w\.\/]/ig,'')"
 								value="${workDealInfo.workCompany.organizationNumber}"
-								maxlength="20" oninput="count('organizationNumber1','zzcount')"/><span id="zzcount"></span></td>
+								maxlength="20" oninput="count('organizationNumber1','zzcount')" onblur="qxCount('zzcount')" onfocus="hqcount('organizationNumber1','zzcount')"/><span id="zzcount" style="color: red; margin-left: 10px"></span></td>
 							<th>组织机构代码有效期：</th>
 							<td><input class="input-medium Wdate"
 								
@@ -661,7 +672,7 @@
 							<th><span class="prompt" style="color: red; display: none;">*</span>证件号：</th>
 							<td><input type="text" name="comCertficateNumber"
 								id="comCertficateNumber1" 
-								value="${workDealInfo.workCompany.comCertficateNumber}" oninput="count('comCertficateNumber1','zjhcount')"/><span id="zjhcount"></span></td>
+								value="${workDealInfo.workCompany.comCertficateNumber}" oninput="count('comCertficateNumber1','zjhcount')" onblur="qxCount('zjhcount')" onfocus="hqcount('comCertficateNumber1','zjhcount')"/><span id="zjhcount" style="color: red; margin-left: 10px"></span></td>
 							<th>单位证照有效期：</th>
 							<td><input class="input-medium Wdate" type="text"
 								onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});" maxlength="20"
@@ -706,7 +717,7 @@
 							<th><span class="prompt" style="color: red; display: none;">*</span>单位联系电话：</th>
 							<td><input type="text" name="companyMobile" class="number"
 								id="companyMobile"
-								value="${workDealInfo.workCompany.companyMobile }" oninput="count('companyMobile','dwtcount')"><span id="dwtcount"></span></td>
+								value="${workDealInfo.workCompany.companyMobile }" oninput="count('companyMobile','dwtcount')" onblur="qxCount('dwtcount')" onfocus="hqcount('companyMobile','dwtcount')"/><span id="dwtcount" style="color: red; margin-left: 10px"></span></td>
 						</tr>
 						<tr>
 							<th><span class="prompt" style="color: red; display: none;">*</span>备注信息：</th>
@@ -742,9 +753,9 @@
 						<tr>
 							<th><span class="prompt" style="color: red; display: none;">*</span>证件号码:</th>
 							<td><input type="text" name="conCertNumber"
-								id="conCertNumber1" onblur="setJBRCard()"
+								id="conCertNumber1" onblur="setJBRCard('zjmcount')"
 								onkeyup="value=value.replace(/[^\w\.\/]/ig,'')" maxlength="18"
-								value="${workDealInfo.workUser.conCertNumber }" oninput="count('conCertNumber1','zjmcount')"/><span id="zjmcount"></span></td>
+								value="${workDealInfo.workUser.conCertNumber }" oninput="count('conCertNumber1','zjmcount')" onfocus="hqcount('conCertNumber1','zjmcount')"/><span id="zjmcount" style="color: red; margin-left: 10px"></span></td>
 							<th><span class="prompt" style="color: red; display: none;">*</span>证书持有人电子邮件:</th>
 							<td><input type="text" name="contacEmail" id="contacEmail" onblur="setJBRMail()"
 								class="email" maxlength="30"
@@ -754,13 +765,13 @@
 							<th><span class="prompt" style="color: red; display: none;">*</span>证书持有人手机号:</th>
 							<td><input type="text" name="contactPhone"
 								id="contactPhone1" maxlength="11" class="number"
-								value="${workDealInfo.workUser.contactPhone }" oninput="count('contactPhone1','zjtcount')"/><span id="zjtcount"></span> <input
+								value="${workDealInfo.workUser.contactPhone }" oninput="count('contactPhone1','zjtcount')" onblur="qxCount('zjtcount')" onfocus="hqcount('contactPhone1','zjtcount')"/><span id="zjtcount" style="color: red; margin-left: 10px"></span> <input
 								type="hidden" name="contactPhone" id="contactPhone"
 								maxlength="11" class="number" disabled="disabled"
 								value="${workDealInfo.workUser.contactPhone }" /></td>
 							<th><span class="prompt" style="color: red; display: none;">*</span>业务系统UID:</th>
 							<td><input type="text" name="contactTel" id="contactTel1"
-								maxlength="20" value="${workDealInfo.workUser.contactTel }" oninput="count('contactTel1','ywIDcount')"/><span id="ywIDcount"></span>
+								maxlength="20" value="${workDealInfo.workUser.contactTel }" oninput="count('contactTel1','ywIDcount')" onblur="qxCount('ywIDcount')" onfocus="hqcount('contactTel1','ywIDcount')"/><span id="ywIDcount" style="color: red; margin-left: 10px"></span>
 							</td>
 						</tr>
 						<tr>
