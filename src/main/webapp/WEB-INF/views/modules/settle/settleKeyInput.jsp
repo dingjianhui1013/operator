@@ -28,7 +28,6 @@
 		{
 			var moneyType=$("#provider").find("option:selected").val();
 			var url="${ctx}/settle/keyPurchase/changeKey";
-			alert(moneyType);
 			$.ajax({
 				url:url,
 				data:{"moneyType":moneyType,_:new Date().getTime()},
@@ -36,7 +35,6 @@
 				success:function(data){
 					$("#unitPrice").val(data.money);
 					$("#unitPrice1").val(data.money);
-// 					alert(data.money1);
 // 					if(data.money1!=null)
 // 						{
 // 							$("#unitPrice").append("一年期：<input type=\"text\" id=\"unitPrice1\" name=\"money1\" value=\""+data.money1+"\" disabled=\"disabled\"/> <input type=\"hidden\" id=\"unitPrice\" name=\"money\" value=\""+data.money1+"\" />");
