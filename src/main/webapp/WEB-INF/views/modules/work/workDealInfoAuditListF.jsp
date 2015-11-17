@@ -84,7 +84,13 @@
 				<td>${wdiType[workDealInfo.dealInfoType]}&nbsp;&nbsp;${wdiType[workDealInfo.dealInfoType1]}&nbsp;&nbsp;${wdiType[workDealInfo.dealInfoType2]}&nbsp;&nbsp;${wdiType[workDealInfo.dealInfoType3]}</td>
 				<td>${wdiStatus[workDealInfo.dealInfoStatus]}</td>
 				<td>
+					<c:if test="${workDealInfo.dealInfoStatus == 12 || workDealInfo.dealInfoStatus == 0}">
 					<a href="${ctx}/work/workDealInfoAudit/auditFrom?id=${workDealInfo.id}">鉴证</a>
+					</c:if>
+					
+					<c:if test="${workDealInfo.dealInfoStatus == 13}">
+					<a href="${ctx}/work/workDealInfoAudit/makeDealInfo?id=${workDealInfo.id}">制证</a>
+					</c:if>
 				</td>
 			</tr>
 		</c:forEach>

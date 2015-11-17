@@ -378,6 +378,8 @@ public class CertController extends BaseController {
 				workCertInfoService.save(caCert);
 				dealInfo.setCertSn(caCert.getSerialnumber());
 				dealInfo.setKeySn(keySn);
+				dealInfo.setBusinessCardUser(UserUtils.getUser());
+				dealInfo.setBusinessCardUserDate(new Date());
 				dealInfo.setNotafter(caCert.getNotafter());
 				dealInfo.setAddCertDays(Integer.parseInt(addCertDays));
 				if (!WorkDealInfoType.TYPE_RETURN_MONEY.equals(dealInfo.getDealInfoType()) ) {

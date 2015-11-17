@@ -983,6 +983,10 @@ public class WorkDealInfoController extends BaseController {
 		// if (li.size()>0) {
 		// workDealInfo.setCommercialAgent(li.get(0).getConfigCommercialAgent());
 		// }
+		
+		workDealInfo.setInputUser(UserUtils.getUser());
+		workDealInfo.setInputUserDate(new Date());
+		
 		workDealInfoService.save(workDealInfo);
 		
 		if (workDealInfoId==null) {

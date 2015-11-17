@@ -331,11 +331,11 @@ public class WorkDealInfoService extends BaseService {
 			}
 		}
 		if (workDealInfo.getDealInfoStatus() == null) {
-			dc.add(Restrictions.or(Restrictions.eq("dealInfoStatus", "12"), Restrictions.eq("dealInfoStatus", "0")));
+			dc.add(Restrictions.or(Restrictions.eq("dealInfoStatus", "12"), Restrictions.eq("dealInfoStatus", "0"),Restrictions.eq("dealInfoStatus", "13")));
 		} else {
 			if (workDealInfo.getDealInfoStatus().equals("-1")) {
 				dc.add(Restrictions.or(Restrictions.eq("dealInfoStatus", "12"),
-						Restrictions.eq("dealInfoStatus", "0")));
+						Restrictions.eq("dealInfoStatus", "0"),Restrictions.eq("dealInfoStatus", "13")));
 			} else {
 				dc.add(Restrictions.eq("dealInfoStatus", workDealInfo.getDealInfoStatus()));
 			}
@@ -403,7 +403,7 @@ public class WorkDealInfoService extends BaseService {
 		} else {
 			if (workDealInfo.getDealInfoStatus().equals("-1")) {
 				dc.add(Restrictions.or(Restrictions.eq("dealInfoStatus", "12"),
-						Restrictions.eq("dealInfoStatus", "0")));
+						Restrictions.eq("dealInfoStatus", "0"),Restrictions.eq("dealInfoStatus", "13")));
 			} else {
 				dc.add(Restrictions.eq("dealInfoStatus", workDealInfo.getDealInfoStatus()));
 			}
@@ -578,15 +578,30 @@ public class WorkDealInfoService extends BaseService {
 		if (StringUtils.isNotEmpty(workDealInfo.getKeySn())) {
 			dc.add(Restrictions.like("keySn", "%" + workDealInfo.getKeySn() + "%"));
 		}
-		if (workDealInfo.getCreateBy() != null && StringUtils.isNotEmpty(workDealInfo.getCreateBy().getName())) {
-			dc.add(Restrictions.like("createBy.name", "%" + workDealInfo.getCreateBy().getName() + "%"));
-		}
-		if (workDealInfo.getCreateBy() != null && StringUtils.isNotEmpty(workDealInfo.getUpdateBy().getName())) {
-			dc.add(Restrictions.like("updateBy.name", "%" + workDealInfo.getUpdateBy().getName() + "%"));
-		}
+		
 		if (workDealInfo.getPayType() != null && workDealInfo.getPayType() != 0) {
 			dc.add(Restrictions.eq("payType", workDealInfo.getPayType()));
 		}
+		
+		if (workDealInfo.getInputUser()!=null && !workDealInfo.getInputUser().getName().equals("")) {
+			dc.createAlias("inputUser", "inputUser");
+			dc.add(Restrictions.like("inputUser.name","%" + workDealInfo.getInputUser().getName() + "%"));
+		}
+		if (workDealInfo.getAttestationUser()!=null && !workDealInfo.getAttestationUser().getName().equals("")) {
+			dc.createAlias("attestationUser", "attestationUser");
+			dc.add(Restrictions.like("attestationUser.name","%" + workDealInfo.getAttestationUser().getName() + "%"));
+		}
+		//businessCardUser
+		if (workDealInfo.getBusinessCardUser()!=null && !workDealInfo.getBusinessCardUser().getName().equals("")) {
+			dc.createAlias("businessCardUser", "businessCardUser");
+			dc.add(Restrictions.like("businessCardUser.name","%" + workDealInfo.getBusinessCardUser().getName() + "%"));
+		}
+		
+		
+		
+		
+		
+		
 		// workCompany.province
 		// workCompany.city
 		// workCompany.district
@@ -639,14 +654,21 @@ public class WorkDealInfoService extends BaseService {
 		}
 
 		if (luruStartTime != null) {
-			dc.add(Restrictions.ge("createDate", luruStartTime));
+			dc.add(Restrictions.ge("inputUserDate", luruStartTime));
 		}
 		if (luruEndTime != null) {
 			luruEndTime.setHours(23);
 			luruEndTime.setMinutes(59);
 			luruEndTime.setSeconds(59);
-			dc.add(Restrictions.le("createDate", luruEndTime));
+			dc.add(Restrictions.le("inputUserDate", luruEndTime));
 		}
+		
+		
+		
+		
+		
+		
+		
 		if (daoqiStartTime != null) {
 			dc.add(Restrictions.ge("notafter", daoqiStartTime));
 		}
@@ -659,13 +681,6 @@ public class WorkDealInfoService extends BaseService {
 
 		if (certInfoList.size() > 0) {
 			dc.add(Restrictions.in("workCertInfo", certInfoList));
-		}
-
-		if (luruStartTime != null) {
-			dc.add(Restrictions.ge("createDate", luruStartTime));
-		}
-		if (luruEndTime != null) {
-			dc.add(Restrictions.le("createDate", luruEndTime));
 		}
 
 		if (office != null) {
@@ -791,13 +806,13 @@ public class WorkDealInfoService extends BaseService {
 		}
 
 		if (jianzhengStartTime != null) {
-			dc.add(Restrictions.ge("updateDate", jianzhengStartTime));
+			dc.add(Restrictions.ge("attestationUserDate", jianzhengStartTime));
 		}
 		if (jianzhengEndTime != null) {
 			jianzhengEndTime.setHours(23);
 			jianzhengEndTime.setMinutes(59);
 			jianzhengEndTime.setSeconds(59);
-			dc.add(Restrictions.le("updateDate", jianzhengEndTime));
+			dc.add(Restrictions.le("attestationUserDate", jianzhengEndTime));
 		}
 
 		if (luruStartTime != null) {
@@ -823,12 +838,7 @@ public class WorkDealInfoService extends BaseService {
 			dc.add(Restrictions.in("workCertInfo", certInfoList));
 		}
 
-		if (luruStartTime != null) {
-			dc.add(Restrictions.ge("createDate", luruStartTime));
-		}
-		if (luruEndTime != null) {
-			dc.add(Restrictions.le("createDate", luruEndTime));
-		}
+		
 
 		if (office != null) {
 			dc.add(Restrictions.eq("office.id", office));

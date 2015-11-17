@@ -1407,6 +1407,9 @@ public class WorkDealInfoOperationController extends BaseController {
 		workDealInfo.setPayType(agentId);
 		workDealInfo.setConfigChargeAgentId(bound.getAgent().getId());
 		
+		workDealInfo.setInputUser(UserUtils.getUser());
+		workDealInfo.setInputUserDate(new Date());
+		
 		workDealInfoService.save(workDealInfo);
 		// 保存日志信息
 		WorkLog workLog = new WorkLog();
@@ -1553,6 +1556,9 @@ public class WorkDealInfoOperationController extends BaseController {
 		ConfigChargeAgentBoundConfigProduct bound =  configChargeAgentBoundConfigProductService.get(agentDetailId);
 		workDealInfo.setPayType(agentId);
 		workDealInfo.setConfigChargeAgentId(bound.getAgent().getId());
+		
+		workDealInfo.setInputUser(UserUtils.getUser());
+		workDealInfo.setInputUserDate(new Date());
 		workDealInfoService.save(workDealInfo);
 		// 保存日志信息
 		WorkLog workLog = new WorkLog();
@@ -1796,6 +1802,9 @@ public class WorkDealInfoOperationController extends BaseController {
 		workDealInfoService.delete(workDealInfo1.getId());
 		//workDealInfo.setPayType(workDealInfo1.getPayType());
 		//workDealInfo.setConfigChargeAgentId(workDealInfo1.getConfigChargeAgentId());
+		
+		workDealInfo.setInputUser(UserUtils.getUser());
+		workDealInfo.setInputUserDate(new Date());
 		workDealInfoService.save(workDealInfo);
 		
 		ConfigAgentBoundDealInfo dealInfoBound = new ConfigAgentBoundDealInfo();

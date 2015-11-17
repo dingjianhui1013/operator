@@ -9,7 +9,6 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
@@ -35,9 +34,6 @@ import com.itrus.ca.common.web.BaseController;
 import com.itrus.ca.modules.constant.ProductType;
 import com.itrus.ca.modules.constant.WorkDealInfoStatus;
 import com.itrus.ca.modules.constant.WorkDealInfoType;
-import com.itrus.ca.modules.constant.ProductType;
-import com.itrus.ca.modules.constant.WorkDealInfoType;
-import com.itrus.ca.modules.constant.WorkType;
 import com.itrus.ca.modules.finance.entity.FinancePaymentInfo;
 import com.itrus.ca.modules.finance.service.FinancePaymentInfoService;
 import com.itrus.ca.modules.key.service.KeyUsbKeyInvoiceService;
@@ -50,14 +46,12 @@ import com.itrus.ca.modules.profile.entity.ConfigChargeAgentBoundConfigProduct;
 import com.itrus.ca.modules.profile.entity.ConfigCommercialAgent;
 import com.itrus.ca.modules.profile.entity.ConfigProduct;
 import com.itrus.ca.modules.profile.entity.ConfigRaAccount;
-import com.itrus.ca.modules.profile.entity.ConfigRaAccountExtendInfo;
 import com.itrus.ca.modules.profile.entity.ConfigSupplier;
 import com.itrus.ca.modules.profile.entity.ConfigSupplierProductRelation;
 import com.itrus.ca.modules.profile.service.ConfigAgentAppRelationService;
 import com.itrus.ca.modules.profile.service.ConfigAgentBoundDealInfoService;
 import com.itrus.ca.modules.profile.service.ConfigAgentOfficeRelationService;
 import com.itrus.ca.modules.profile.service.ConfigChargeAgentBoundConfigProductService;
-import com.itrus.ca.modules.profile.service.ConfigChargeAgentDetailService;
 import com.itrus.ca.modules.profile.service.ConfigChargeAgentService;
 import com.itrus.ca.modules.profile.service.ConfigRaAccountService;
 import com.itrus.ca.modules.receipt.entity.ReceiptDepotInfo;
@@ -68,7 +62,6 @@ import com.itrus.ca.modules.service.CaService;
 import com.itrus.ca.modules.settle.web.UpdateQuantityStatistics;
 import com.itrus.ca.modules.statistic.entity.StatisticCertData;
 import com.itrus.ca.modules.statistic.service.StatisticCertDataService;
-import com.itrus.ca.modules.sys.entity.User;
 import com.itrus.ca.modules.sys.utils.UserUtils;
 import com.itrus.ca.modules.work.entity.WorkCertApplyInfo;
 import com.itrus.ca.modules.work.entity.WorkCertInfo;
@@ -101,9 +94,6 @@ public class WorkDealInfoAuditController extends BaseController {
 
 	@Autowired
 	private WorkDealInfoService workDealInfoService;
-
-	@Autowired
-	private ConfigChargeAgentDetailService configChargeAgentDetailService;
 
 	@Autowired
 	private ConfigChargeAgentService configChargeAgentService;
@@ -1215,6 +1205,14 @@ public class WorkDealInfoAuditController extends BaseController {
 				raAccount.getConfigRaAccountExtendInfo());
 		model.addAttribute("list", list);
 		model.addAttribute("workDealInfo", workDealInfo);
+		
+		workDealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_APPROVE_WAIT);
+		
+		workDealInfo.setAttestationUser(UserUtils.getUser());
+		workDealInfo.setAttestationUserDate(new Date());
+		workDealInfoService.save(workDealInfo);
+		
+		
 		model.addAttribute("pt", ProductType.productTypeStrMap);
 		model.addAttribute("wdiType", WorkDealInfoType.WorkDealInfoTypeMap);
 		return "modules/work/workDealInfoAuditMake";

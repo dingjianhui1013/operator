@@ -261,16 +261,17 @@
 				maxlength="30" class="input-medium" id="keySn"/>
 				<!-- 录入人、鉴证人、制证人 现在由于业务中心未改造完。所以只能查两个字段 -->
 			<label>录入人：</label> 
-			<form:input path="createBy.name" htmlEscape="false"
+			<form:input path="inputUser.name" htmlEscape="false"
 				maxlength="16" class="input-medium" id="createByname"/>
 			<label>鉴证人：</label> 
-			<form:input path="updateBy.name" htmlEscape="false"
+			<form:input path="attestationUser.name" htmlEscape="false"
 				maxlength="16" class="input-medium" id="updateByname"/>
 			<br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			<label>制证人：</label> 
-			<input type="text"
+			<form:input path="businessCardUser.name" htmlEscape="false"
 				maxlength="16" class="input-medium" id="zhizhengname"/>
-			
+				
+				
 			<label>计费策略类型：</label> 
 			<form:select path="payType">
 				<form:option value="0">请选择</form:option>
@@ -453,9 +454,7 @@
 							pattern="yyyy-MM-dd" /> </td>
 					<td>${wdiStatus[workDealInfo.dealInfoStatus]}</td>
 					
-						<td>
-						<a href="javascript:void(0)" onclick="alarmValue( ${workDealInfo.id} )" >
-						查看 </a></td>
+						<td><a href="javaScript:alarmValue( ${workDealInfo.id} )">查看 </a></td>
 				</tr>
 			</c:forEach>
 		</tbody>

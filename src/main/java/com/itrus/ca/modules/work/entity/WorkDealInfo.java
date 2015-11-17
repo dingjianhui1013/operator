@@ -14,6 +14,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Transient;
 
+import org.springframework.data.annotation.CreatedDate;
+
 import static javax.persistence.GenerationType.IDENTITY;
 
 import javax.persistence.Id;
@@ -21,6 +23,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import com.itrus.ca.common.persistence.DataEntity;
 import com.itrus.ca.modules.profile.entity.ConfigApp;
@@ -97,6 +101,11 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 	private User attestationUser;//鉴证人
 	private User businessCardUser;//制证人
 	
+	private Date inputUserDate;// 录入人时间
+	private Date payUserDate;//缴费人时间
+	private Date attestationUserDate;//鉴证人时间
+	private Date businessCardUserDate;//制证人时间
+	
 	
 
 	/** default constructor */
@@ -120,7 +129,12 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 			User inputUser,
 			User payUser,
 			User attestationUser,
-			User businessCardUser) {
+			User businessCardUser,
+			Date inputUserDate,
+			Date payUserDate,
+			Date attestationUserDate,
+			Date businessCardUserDate
+			) {
 		this.configApp = configApp;
 		this.workCompany = workCompany;
 		this.workUser = workUser;
@@ -137,8 +151,14 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 		this.isSJQY = isSJQY;
 		this.inputUser=inputUser;
 		this.payUser=payUser;
-		this.attestationUser=attestationUser;
-		this.businessCardUser=businessCardUser;
+		this.attestationUser = attestationUser;
+		this.businessCardUser = businessCardUser;
+		this.inputUserDate = inputUserDate;
+		this.payUserDate = payUserDate;
+		this.attestationUserDate = attestationUserDate;
+		this.businessCardUserDate = businessCardUserDate;
+		
+		
 	}
 
 	// Property accessors
@@ -500,6 +520,7 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 		this.commercialAgent = commercialAgent;
 	}
 
+	
 	@Column(name = "obtained_date")
 	public Date getObtainedDate() {
 		return obtainedDate;
@@ -639,9 +660,46 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 	public void setBusinessCardUser(User businessCardUser) {
 		this.businessCardUser = businessCardUser;
 	}
+
+	@Temporal(TemporalType.DATE)
+	@Column(name = "input_user_date")
+	public Date getInputUserDate() {
+		return inputUserDate;
+	}
+
+	public void setInputUserDate(Date inputUserDate) {
+		this.inputUserDate = inputUserDate;
+	}
 	
-	
-	
+	@Temporal(TemporalType.DATE)
+	@Column(name = "pay_user_date")
+	public Date getPayUserDate() {
+		return payUserDate;
+	}
+
+	public void setPayUserDate(Date payUserDate) {
+		this.payUserDate = payUserDate;
+	}
+
+	@Temporal(TemporalType.DATE)
+	@Column(name = "attestation_user_date")
+	public Date getAttestationUserDate() {
+		return attestationUserDate;
+	}
+
+	public void setAttestationUserDate(Date attestationUserDate) {
+		this.attestationUserDate = attestationUserDate;
+	}
+
+	@Temporal(TemporalType.DATE)
+	@Column(name = "business_card_user_date")
+	public Date getBusinessCardUserDate() {
+		return businessCardUserDate;
+	}
+
+	public void setBusinessCardUserDate(Date businessCardUserDate) {
+		this.businessCardUserDate = businessCardUserDate;
+	}
 	
 	
 }
