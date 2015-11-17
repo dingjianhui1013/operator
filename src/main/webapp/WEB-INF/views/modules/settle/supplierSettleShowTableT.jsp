@@ -54,6 +54,7 @@
 		<li ><a href="${ctx}/settle/supplierSettle/showTableF">四川CA对账统计表</a></li>
 		<li class="active"><a href="${ctx}/settle/supplierSettle/showTableT">付款结算清单</a></li>
 		<li ><a href="${ctx}/settle/settleKey/list">KEY数量统计</a></li>
+		<li><a href="${ctx}/settle/keySettle/list">KEY结算功能列表</a></li>
 	</ul><br/>
 	<form:form id="searchForm" modelAttribute="configSupplier" action="${ctx}/settle/supplierSettle/showTableT" 
 	method="post" class="breadcrumb form-search">

@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.itrus.ca.common.persistence.Page;
 import com.itrus.ca.common.service.BaseService;
 import com.itrus.ca.modules.settle.entity.KeyPurchase;
+import com.itrus.ca.modules.profile.entity.ConfigSupplier;
 import com.itrus.ca.modules.settle.dao.KeyPurchaseDao;
 
 /**
@@ -46,14 +47,17 @@ public class KeyPurchaseService extends BaseService {
 //		}
 		if(keyPurchase.getAppName()!=null && !"".equals(keyPurchase.getAppName()))
 		{
+			System.out.println("appName:"+keyPurchase.getAppName());
 			dc.add(Restrictions.eq("appName", keyPurchase.getAppName()));
 		}
 		if(keyPurchase.getStorageDate()!=null && !"".equals( keyPurchase.getStorageDate()))
 		{
+			System.out.println("ssss:"+keyPurchase.getStorageDate());
 			dc.add(Restrictions.eq("storageDate", keyPurchase.getStorageDate()));
 		}
 		if(keyPurchase.getStatus()!=null && !"".equals( keyPurchase.getStatus()))
 		{
+			System.out.println("status:"+keyPurchase.getStatus());
 			dc.add(Restrictions.eq("status", keyPurchase.getStatus()));
 		}
 		dc.add(Restrictions.eq(KeyPurchase.DEL_FLAG, KeyPurchase.DEL_FLAG_NORMAL));
@@ -95,10 +99,21 @@ public class KeyPurchaseService extends BaseService {
 		dc.addOrder(Order.desc("id"));
 		return keyPurchaseDao.find(dc);
 	}
-	public KeyPurchase findById(Long id)
+//	public List<KeyPurchase> findByKey() {
+//		DetachedCriteria dc = keyPurchaseDao.createDetachedCriteria();
+//		dc.add(Restrictions.eq("delFlag", KeyPurchase.DEL_FLAG_NORMAL));
+//		return keyPurchaseDao.find(dc);
+//	}
+	public Page<KeyPurchase> findByKey(Page<KeyPurchase> page, KeyPurchase keyPurchase)
 	{
-		return keyPurchaseDao.findOne(id);
+		DetachedCriteria dc=keyPurchaseDao.createDetachedCriteria();
+		if(keyPurchase.getAppName()!=null && !"".equals(keyPurchase.getAppName()))
+		{
+			dc.add(Restrictions.eq("appName", keyPurchase.getAppName()));
+		}
+		return keyPurchaseDao.find(page,dc);
 	}
+	
 	@Transactional(readOnly = false)
 	public void save(KeyPurchase keyPurchase) {
 		keyPurchaseDao.save(keyPurchase);
