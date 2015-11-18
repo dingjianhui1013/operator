@@ -47,17 +47,14 @@ public class KeyPurchaseService extends BaseService {
 //		}
 		if(keyPurchase.getAppName()!=null && !"".equals(keyPurchase.getAppName()))
 		{
-			System.out.println("appName:"+keyPurchase.getAppName());
 			dc.add(Restrictions.eq("appName", keyPurchase.getAppName()));
 		}
 		if(keyPurchase.getStorageDate()!=null && !"".equals( keyPurchase.getStorageDate()))
 		{
-			System.out.println("ssss:"+keyPurchase.getStorageDate());
 			dc.add(Restrictions.eq("storageDate", keyPurchase.getStorageDate()));
 		}
 		if(keyPurchase.getStatus()!=null && !"".equals( keyPurchase.getStatus()))
 		{
-			System.out.println("status:"+keyPurchase.getStatus());
 			dc.add(Restrictions.eq("status", keyPurchase.getStatus()));
 		}
 		dc.add(Restrictions.eq(KeyPurchase.DEL_FLAG, KeyPurchase.DEL_FLAG_NORMAL));
@@ -71,17 +68,14 @@ public class KeyPurchaseService extends BaseService {
 //		}
 		if(keyPurchase.getAppName()!=null && !"".equals(keyPurchase.getAppName()))
 		{
-			System.out.println("appName:"+keyPurchase.getAppName());
 			dc.add(Restrictions.eq("appName", keyPurchase.getAppName()));
 		}
 		if(keyPurchase.getStorageDate()!=null && !"".equals( keyPurchase.getStorageDate()))
 		{
-			System.out.println("ssss:"+keyPurchase.getStorageDate());
 			dc.add(Restrictions.eq("storageDate", keyPurchase.getStorageDate()));
 		}
 		if(keyPurchase.getStatus()!=null && !"".equals( keyPurchase.getStatus()))
 		{
-			System.out.println("status:"+keyPurchase.getStatus());
 			dc.add(Restrictions.eq("status", keyPurchase.getStatus()));
 		}
 		dc.add(Restrictions.eq(KeyPurchase.DEL_FLAG, KeyPurchase.DEL_FLAG_NORMAL));
@@ -112,6 +106,11 @@ public class KeyPurchaseService extends BaseService {
 			dc.add(Restrictions.eq("appName", keyPurchase.getAppName()));
 		}
 		return keyPurchaseDao.find(page,dc);
+	}
+	
+	public KeyPurchase findById(Long id)
+	{
+		return keyPurchaseDao.findOne(id);
 	}
 	
 	@Transactional(readOnly = false)
