@@ -63,9 +63,9 @@
 		}
 		function changeCount()
 		{
-			var startCode=$("#startCode").val();
-			var endCode=$("#endCode").val();
-			if(startCode=="")
+			var startCode=parseInt($("#startCode").val());
+			var endCode=parseInt($("#endCode").val());
+			if(isNaN(startCode))
 				{
 					top.$.jBox.tip("请填写起始码");
 				}else if(startCode > endCode){
@@ -74,7 +74,7 @@
 					{
 						$("#count").val(endCode-startCode);
 					}
-			if(endCode="")
+			if(isNaN(endCode))
 				{
 					top.$.jBox.tip("请填写截止码");
 				}
