@@ -35,7 +35,9 @@ import com.itrus.ca.modules.constant.ProductType;
 import com.itrus.ca.modules.constant.WorkDealInfoStatus;
 import com.itrus.ca.modules.constant.WorkDealInfoType;
 import com.itrus.ca.modules.finance.entity.FinancePaymentInfo;
+import com.itrus.ca.modules.finance.entity.FinanceQuitMoney;
 import com.itrus.ca.modules.finance.service.FinancePaymentInfoService;
+import com.itrus.ca.modules.finance.service.FinanceQuitMoneyService;
 import com.itrus.ca.modules.key.service.KeyUsbKeyInvoiceService;
 import com.itrus.ca.modules.log.service.LogUtil;
 import com.itrus.ca.modules.profile.dao.ConfigSupplierProductRelationDao;
@@ -81,6 +83,8 @@ import com.itrus.ca.modules.work.service.WorkLogService;
 import com.itrus.ca.modules.work.service.WorkPayInfoService;
 import com.itrus.ca.modules.work.service.WorkUserHisService;
 import com.itrus.ca.modules.work.service.WorkUserService;
+
+import antlr.Utils;
 
 /**
  * 业务审批Controller
@@ -164,6 +168,8 @@ public class WorkDealInfoAuditController extends BaseController {
 	@Autowired
 	private ConfigChargeAgentService chargeAgentService;
 	
+	@Autowired
+	private FinanceQuitMoneyService financeQuitMoneyService;
 
 	
 	private LogUtil logUtil = new LogUtil();
@@ -741,6 +747,19 @@ public class WorkDealInfoAuditController extends BaseController {
 			// 存入修改过的payinfo
 			workDealInfo.setWorkPayInfo(payInfo);
 			workDealInfoService.save(workDealInfo);
+			
+			
+			FinanceQuitMoney quitMoney = new FinanceQuitMoney();
+			quitMoney.setQuitMoney(workDealInfo.getWorkPayInfo().getWorkTotalMoney());
+			quitMoney.setQuitDate(new Date());
+			quitMoney.setQuitWindow(UserUtils.getUser().getOffice().getName());
+			quitMoney.setQuitReason("现金退费");
+			quitMoney.setWorkDealInfo(workDealInfo);
+			quitMoney.setStatus("1");	
+			financeQuitMoneyService.save(quitMoney);
+			
+			
+			
 
 			ConfigSupplier supplier = getSupplier(Integer.valueOf(dealInfo
 					.getConfigProduct().getProductName()));

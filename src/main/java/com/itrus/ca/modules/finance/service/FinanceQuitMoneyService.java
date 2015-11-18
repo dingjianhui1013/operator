@@ -24,41 +24,39 @@ import com.itrus.ca.modules.sys.utils.UserUtils;
 
 @Service
 @Transactional(readOnly = true)
-public class FinanceQuitMoneyService extends BaseService{
+public class FinanceQuitMoneyService extends BaseService {
 
 	@SuppressWarnings("unused")
 	private static Logger logger = LoggerFactory.getLogger(FinanceQuitMoneyService.class);
-	
+
 	@Autowired
 	FinanceQuitMoneyDao financeQuitMoneyDao;
-	
-	public FinanceQuitMoney get(Long id){
+
+	public FinanceQuitMoney get(Long id) {
 		return financeQuitMoneyDao.findOne(id);
 	}
 	
-	public Page<FinanceQuitMoney> findAll(Page<FinanceQuitMoney> page
-											, String commUserName
-											, String payStartTime
-											, String payEndTime
-											, String quitStartTime
-											, String quitEndTime){
+	
+	@Transactional(readOnly = false)
+	public Page<FinanceQuitMoney> findAll(Page<FinanceQuitMoney> page, String commUserName, String payStartTime,
+			String payEndTime, String quitStartTime, String quitEndTime) {
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		DetachedCriteria dc = financeQuitMoneyDao.createDetachedCriteria();
 		dc.createAlias("financePaymentInfo", "financePaymentInfo");
-		if(!Strings.isNullOrEmpty(commUserName)){
+		if (!Strings.isNullOrEmpty(commUserName)) {
 			dc.add(Restrictions.eq("financePaymentInfo.commUserName", commUserName));
 		}
-		try{
-			if(payStartTime != null && payEndTime != null && !"".equals(payEndTime) && !"".equals(payStartTime)){
+		try {
+			if (payStartTime != null && payEndTime != null && !"".equals(payEndTime) && !"".equals(payStartTime)) {
 				dc.add(Restrictions.ge("financePaymentInfo.payDate", format.parse(payStartTime)));
 				dc.add(Restrictions.le("financePaymentInfo.payDate", format.parse(payEndTime)));
 			}
 
-		}catch(Exception ex){
+		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 		try {
-			if(quitStartTime != null && quitEndTime != null && !"".equals(quitEndTime) && !"".equals(quitStartTime)){
+			if (quitStartTime != null && quitEndTime != null && !"".equals(quitEndTime) && !"".equals(quitStartTime)) {
 				dc.add(Restrictions.ge("quitDate", format.parse(quitStartTime)));
 				dc.add(Restrictions.le("quitDate", format.parse(quitEndTime)));
 			}
@@ -70,24 +68,28 @@ public class FinanceQuitMoneyService extends BaseService{
 		return financeQuitMoneyDao.find(page, dc);
 	}
 
-	public List<FinanceQuitMoney> findAll(
-			String commUserName, String payStartTime, String payEndTime,
+	@Transactional(readOnly = false)
+	public void save(FinanceQuitMoney financeQuitMoney) {
+		financeQuitMoneyDao.save(financeQuitMoney);
+	}
+
+	public List<FinanceQuitMoney> findAll(String commUserName, String payStartTime, String payEndTime,
 			String quitStartTime, String quitEndTime) {
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		DetachedCriteria dc = financeQuitMoneyDao.createDetachedCriteria();
-		dc.createAlias("financePaymentInfo", "financePaymentInfo");
+
 		if (!Strings.isNullOrEmpty(commUserName)) {
-			dc.add(Restrictions.eq("financePaymentInfo.commUserName",
-					commUserName));
+			dc.createAlias("financePaymentInfo", "financePaymentInfo");
+			dc.add(Restrictions.eq("financePaymentInfo.commUserName", commUserName));
 		}
 		try {
+
 			if (payStartTime != null && payEndTime != null && !"".equals(payEndTime) && !"".equals(payStartTime)) {
-				dc.add(Restrictions.ge("financePaymentInfo.payDate",
-						format.parse(payStartTime)));
-				dc.add(Restrictions.le("financePaymentInfo.payDate",
-						format.parse(payEndTime)));
+				dc.createAlias("financePaymentInfo", "financePaymentInfo");
+				dc.add(Restrictions.ge("financePaymentInfo.payDate", format.parse(payStartTime)));
+				dc.add(Restrictions.le("financePaymentInfo.payDate", format.parse(payEndTime)));
 			}
-			
+
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -103,9 +105,9 @@ public class FinanceQuitMoneyService extends BaseService{
 		dc.addOrder(Order.desc("id"));
 		return financeQuitMoneyDao.find(dc);
 	}
-	
+
 	@Transactional(readOnly = false)
-	public void save(FinancePaymentInfo financePaymentInfo, String quitReason){
+	public void save(FinancePaymentInfo financePaymentInfo, String quitReason) {
 		FinanceQuitMoney financeQuitMoney = new FinanceQuitMoney();
 		financeQuitMoney.setQuitDate(new Date());
 		financeQuitMoney.setQuitMoney(financePaymentInfo.getResidueMoney());

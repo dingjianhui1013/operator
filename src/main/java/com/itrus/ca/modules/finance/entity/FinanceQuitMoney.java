@@ -15,6 +15,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.itrus.ca.common.persistence.DataEntity;
+import com.itrus.ca.modules.work.entity.WorkDealInfo;
 
 /**
  * 
@@ -31,16 +32,31 @@ public class FinanceQuitMoney extends DataEntity implements Serializable{
 	private String quitWindow;				//受理窗口
 	private String quitReason;				//退费原因
 	private FinancePaymentInfo financePaymentInfo;
+	private WorkDealInfo workDealInfo;
+	private String status;  //1：未处理  2：已处理
+	
+	
+	
 	
 	public FinanceQuitMoney() {}
 	
-	public FinanceQuitMoney(Long id, Double quitMoney, Date quitDate, String quitWindow, String quitReason, FinancePaymentInfo financePaymentInfo){
+	public FinanceQuitMoney(Long id, 
+			Double quitMoney, 
+			Date quitDate, 
+			String quitWindow, 
+			String quitReason, 
+			FinancePaymentInfo financePaymentInfo,
+			WorkDealInfo workDealInfo,
+			String status
+			){
 		this.id = id;
 		this.quitMoney = quitMoney;
 		this.quitDate = quitDate;
 		this.quitWindow = quitWindow;
 		this.quitReason = quitReason;
 		this.financePaymentInfo = financePaymentInfo;
+		this.workDealInfo = workDealInfo;
+		this.status = status;
 	}
 
 	@SequenceGenerator(name = "COMMON_SEQUENCE", sequenceName = "COMMON_SEQUENCE")
@@ -90,7 +106,6 @@ public class FinanceQuitMoney extends DataEntity implements Serializable{
 		this.quitReason = quitReason;
 	}
 
-	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "payment_id")
 	public FinancePaymentInfo getFinancePaymentInfo() {
 		return financePaymentInfo;
@@ -99,5 +114,31 @@ public class FinanceQuitMoney extends DataEntity implements Serializable{
 	public void setFinancePaymentInfo(FinancePaymentInfo financePaymentInfo) {
 		this.financePaymentInfo = financePaymentInfo;
 	}
+
+
+	@JoinColumn(name = "work_deal_info")
+	public WorkDealInfo getWorkDealInfo() {
+		return workDealInfo;
+	}
+
+	public void setWorkDealInfo(WorkDealInfo workDealInfo) {
+		this.workDealInfo = workDealInfo;
+	}
+
+	@Column(name = "status")
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	
+	
+	
+	
+	
+	
+	
 	
 }
