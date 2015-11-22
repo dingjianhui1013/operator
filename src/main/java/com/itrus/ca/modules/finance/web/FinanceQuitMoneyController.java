@@ -49,32 +49,45 @@ public class FinanceQuitMoneyController {
 						, HttpServletResponse response
 						, Model model){
 //		System.out.println(result.getErrorCount());
+		try {
+			
+	
 		Page<FinanceQuitMoney> page = financeQuitMoneyService.findAll(new Page<FinanceQuitMoney>(request, response), commUserName, payStartTime, payEndTime, quitStartTime, quitEndTime);
-		if (page.getList().size() > 0) {
+		if (page.getList().size() > 0 ) {
 			for (int i = 0; i < page.getList().size(); i++) {
-				int methode = page.getList().get(i).getFinancePaymentInfo().getPaymentMethod();
-				switch (methode) {
-				case 1:
-					page.getList().get(i).getFinancePaymentInfo().setPaymentMethodName("现金");
-					break;
-				case 2:
-					page.getList().get(i).getFinancePaymentInfo().setPaymentMethodName("POS收款");
-					break;
-				case 3:
-					page.getList().get(i).getFinancePaymentInfo().setPaymentMethodName("银行转账");
-					break;
-				case 4:
-					page.getList().get(i).getFinancePaymentInfo().setPaymentMethodName("支付宝转账");
-					break;
-				default:
-					page.getList().get(i).getFinancePaymentInfo().setPaymentMethodName("您没有选择付款方式");
-					break;
+				if (page.getList().get(i).getWorkDealInfo()==null) {
+					int methode = page.getList().get(i).getFinancePaymentInfo().getPaymentMethod();
+					switch (methode) {
+					case 1:
+						page.getList().get(i).getFinancePaymentInfo().setPaymentMethodName("现金");
+						break;
+					case 2:
+						page.getList().get(i).getFinancePaymentInfo().setPaymentMethodName("POS收款");
+						break;
+					case 3:
+						page.getList().get(i).getFinancePaymentInfo().setPaymentMethodName("银行转账");
+						break;
+					case 4:
+						page.getList().get(i).getFinancePaymentInfo().setPaymentMethodName("支付宝转账");
+						break;
+					default:
+						page.getList().get(i).getFinancePaymentInfo().setPaymentMethodName("您没有选择付款方式");
+						break;
+					}
+				}else{
+					
+					
+					
 				}
 			}
 		}
 		List<FinanceQuitMoney> financeQuitMoney= financeQuitMoneyService.findAll(commUserName, payStartTime, payEndTime, quitStartTime, quitEndTime);
 		model.addAttribute("page", page);
 		model.addAttribute("count",financeQuitMoney.size());
+		} catch (Exception e) {
+			e.printStackTrace();
+			// TODO: handle exception
+		}
 		return "modules/finance/financeQuitMoneyList";
 	}
 	
@@ -92,10 +105,38 @@ public class FinanceQuitMoneyController {
 			financePaymentInfo.setQuitMoneyStatus(1);
 			financePaymentInfoService.save(financePaymentInfo);
 		}catch(Exception ex){
+			ex.printStackTrace();
 			json.put("status", 0);
 			return json.toString();
 		}
 		json.put("status", 1);
 		return json.toString();
 	}
+	
+	
+	/*
+	 * 退费
+	 */
+	@RequestMapping(value = "quitMoneyWorkDealInfo")
+	@ResponseBody
+	public String quitMoneyWorkDealInfo(Long quitMoneyId, String quitReason, Model model) throws JSONException{
+		JSONObject json = new JSONObject();
+		try{
+			FinanceQuitMoney financeQuitMoney = financeQuitMoneyService.get(quitMoneyId);
+			financeQuitMoney.setStatus("2");
+			financeQuitMoney.setRession(quitReason);
+			financeQuitMoneyService.save(financeQuitMoney);
+		}catch(Exception ex){
+			ex.printStackTrace();
+			json.put("status", 0);
+			return json.toString();
+		}
+		json.put("status", 1);
+		return json.toString();
+	}
+	
+	
+	
+	
+	
 }

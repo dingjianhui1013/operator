@@ -37,17 +37,18 @@ public class FinanceQuitMoneyService extends BaseService {
 	}
 	
 	
-	@Transactional(readOnly = false)
+	
 	public Page<FinanceQuitMoney> findAll(Page<FinanceQuitMoney> page, String commUserName, String payStartTime,
 			String payEndTime, String quitStartTime, String quitEndTime) {
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		DetachedCriteria dc = financeQuitMoneyDao.createDetachedCriteria();
-		dc.createAlias("financePaymentInfo", "financePaymentInfo");
 		if (!Strings.isNullOrEmpty(commUserName)) {
+			dc.createAlias("financePaymentInfo", "financePaymentInfo");
 			dc.add(Restrictions.eq("financePaymentInfo.commUserName", commUserName));
 		}
 		try {
 			if (payStartTime != null && payEndTime != null && !"".equals(payEndTime) && !"".equals(payStartTime)) {
+				dc.createAlias("financePaymentInfo", "financePaymentInfo");
 				dc.add(Restrictions.ge("financePaymentInfo.payDate", format.parse(payStartTime)));
 				dc.add(Restrictions.le("financePaymentInfo.payDate", format.parse(payEndTime)));
 			}
@@ -77,7 +78,7 @@ public class FinanceQuitMoneyService extends BaseService {
 			String quitStartTime, String quitEndTime) {
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		DetachedCriteria dc = financeQuitMoneyDao.createDetachedCriteria();
-
+		
 		if (!Strings.isNullOrEmpty(commUserName)) {
 			dc.createAlias("financePaymentInfo", "financePaymentInfo");
 			dc.add(Restrictions.eq("financePaymentInfo.commUserName", commUserName));

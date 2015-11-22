@@ -34,6 +34,9 @@ public class FinanceQuitMoney extends DataEntity implements Serializable{
 	private FinancePaymentInfo financePaymentInfo;
 	private WorkDealInfo workDealInfo;
 	private String status;  //1：未处理  2：已处理
+	private String ression;  //原因
+	
+	
 	
 	
 	
@@ -47,7 +50,8 @@ public class FinanceQuitMoney extends DataEntity implements Serializable{
 			String quitReason, 
 			FinancePaymentInfo financePaymentInfo,
 			WorkDealInfo workDealInfo,
-			String status
+			String status,
+			String ression
 			){
 		this.id = id;
 		this.quitMoney = quitMoney;
@@ -57,6 +61,7 @@ public class FinanceQuitMoney extends DataEntity implements Serializable{
 		this.financePaymentInfo = financePaymentInfo;
 		this.workDealInfo = workDealInfo;
 		this.status = status;
+		this.ression = ression;
 	}
 
 	@SequenceGenerator(name = "COMMON_SEQUENCE", sequenceName = "COMMON_SEQUENCE")
@@ -106,6 +111,7 @@ public class FinanceQuitMoney extends DataEntity implements Serializable{
 		this.quitReason = quitReason;
 	}
 
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "payment_id")
 	public FinancePaymentInfo getFinancePaymentInfo() {
 		return financePaymentInfo;
@@ -115,7 +121,7 @@ public class FinanceQuitMoney extends DataEntity implements Serializable{
 		this.financePaymentInfo = financePaymentInfo;
 	}
 
-
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "work_deal_info")
 	public WorkDealInfo getWorkDealInfo() {
 		return workDealInfo;
@@ -132,6 +138,15 @@ public class FinanceQuitMoney extends DataEntity implements Serializable{
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	@Column(name = "ression")
+	public String getRession() {
+		return ression;
+	}
+
+	public void setRession(String ression) {
+		this.ression = ression;
 	}
 	
 	

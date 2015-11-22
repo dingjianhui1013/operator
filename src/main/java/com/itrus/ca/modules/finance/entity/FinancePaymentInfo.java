@@ -66,7 +66,7 @@ public class FinancePaymentInfo extends DataEntity implements java.io.Serializab
 			Integer paymentMethod, String commUserName, String commMobile,
 			String remark, Timestamp createDate, String delFlag,
 			String remarks, Timestamp updateDate, Integer bingdingTimes,String company,Date payDate,String serialNum,
-			String paymentAccount,String paymentBank) {
+			String paymentAccount,String paymentBank,String distinguish) {
 		this.configApp = configApp;
 		this.paymentMoney = paymentMoney;
 		this.paymentMethod = paymentMethod;
@@ -83,6 +83,7 @@ public class FinancePaymentInfo extends DataEntity implements java.io.Serializab
 		this.serialNum = serialNum;
 		this.paymentAccount = paymentAccount;
 		this.paymentBank = paymentBank;
+		this.distinguish = distinguish;
 	}
 
 	// Property accessors
