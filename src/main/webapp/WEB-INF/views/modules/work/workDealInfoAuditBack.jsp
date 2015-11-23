@@ -8,8 +8,89 @@
 <script type="text/javascript" src="${ctxStatic}/cert/pta_topca.js"></script>
 <script type="text/javascript" src="${ctxStatic}/cert/xenroll.js"></script>
 <script type="text/javascript">
+	$(document).ready(function() {
+		var boundLabelList = "${boundLabelList}";
+		var lable = "${workDealInfo.configProduct.productLabel}";
+		$("#agentId").attr("onchange","setStyleList("+lable+")");
+		var agentHtml="";
+		var obj= $.parseJSON(boundLabelList);
+		$.each(obj, function(i, item){
+			 if(item==1){
+				if (item=="${workDealInfo.payType}") {
+					agentHtml+="<option selected='selected' value='"+item+"'>标准</option>";
+				}else{
+					agentHtml+="<option value='"+item+"'>标准</option>";
+				}
+				
+			}else if(item==2){
+				if (item=="${workDealInfo.payType}") {
+					agentHtml+="<option selected='selected' value='"+item+"'>政府统一采购</option>";
+				}else{
+					agentHtml+="<option value='"+item+"'>政府统一采购</option>";
+				}
+			}else if(item==3){
+				if (item=="${workDealInfo.payType}") {
+					agentHtml+="<option selected='selected' value='"+item+"'>合同采购</option>";
+				}else{
+					agentHtml+="<option value='"+item+"'>合同采购</option>";
+				}
+			} 
+		}); 
+		$("#agentId").html(agentHtml);
+		
+		var productName = ${workDealInfo.configProduct.productName}; 
+		var app = ${workDealInfo.configApp.id};
+		
+		var agentId = $("#agentId").val();
+		if (agentId!=0) {
+			var url = "${ctx}/work/workDealInfo/setStyleList?lable="+lable+"&productName="+productName+"&app="+app+"&infoType=1&style="+agentId+"&_="+new Date().getTime();
+			$.getJSON(url,function(data){
+				var styleList = data.array;
+				var styleHtml="";
+				$.each(styleList,function(i,item){
+					if(item.agentId=="${workDealInfo.configChargeAgentId}"){
+						styleHtml +="<option selected='selected'  value='"+item.id+"'>" + item.name + "</option>";
+						$("#boundId").val(item.id);
+					}else{
+						styleHtml +="<option value='"+item.id+"'>" + item.name + "</option>";
+					}
+				});
+				$("#agentDetailId").html(styleHtml);
+			});
+		}
+	});
+	
+	/*
+	* 给计费策略模版配置赋值
+	*/
+	function setStyleList(obj){
+		var lable = obj;
+		var productName = ${workDealInfo.configProduct.productName}; 
+		var app = ${workDealInfo.configApp.id};
+		var agentId = $("#agentId").val();
+		if (agentId!=0) {
+			var url = "${ctx}/work/workDealInfo/setStyleList?lable="+lable+"&productName="+productName+"&app="+app+"&infoType=0&style="+agentId+"&_="+new Date().getTime();
+			$.getJSON(url,function(data){
+				var styleList = data.array;
+				var styleHtml="";
+				$.each(styleList,function(i,item){
+					if(i==0){
+						$("#boundId").val(item.id);
+					}
+					styleHtml +="<option value='"+item.id+"'>" + item.name + "</option>";
+				});
+				$("#agentDetailId").html(styleHtml);
+			});
+		}else{
+			top.$.jBox.tip("请您选择产品！");
+			
+		}
+	}
+	
+
 	function buttonFrom(){
-		if (${bgType}){
+		alert('${bgType}');
+		if (!'${bgType}'){
 			var type = 0;//政府
 			if($("#contract").prop("checked")){
 				type = 1;
@@ -34,7 +115,7 @@
 				keySn = $("#keySn").val();
 				window.location.href="${ctx}/work/workDealInfoAudit/backMoney1?id=${workDealInfo.id}&revoke="+revoke+"&keySn="+keySn+"&receiptAmount="+$("#tfpVal").val();
 			}
-		}
+		} 
 	}
 	
 	function selectKeyNum() {
@@ -241,27 +322,37 @@
 									readonly="readonly"  value="${workDealInfo.workPayInfo.posMoney }">
 									
 									</td>
-								<td><!-- <input type="checkbox" value="1" name="methodBank" id="bc" disabled="disabled"
-									onclick="changeInputStatus(this)"  <c:if test="${workDealInfo.workPayInfo.methodBank }">checked="checked"</c:if>>银行转账<input
-									type="text" name="bankMoney" id="bank" onchange="fixMoney()"
-									readonly="readonly"  value="${workDealInfo.workPayInfo.bankMoney }"> --></td>
-								<td><!-- <input type="checkbox" value="1" name="methodAlipay" id="ac" disabled="disabled"
-									onclick="changeInputStatus(this)"  <c:if test="${workDealInfo.workPayInfo.methodAlipay }">checked="checked"</c:if>>支付宝转账<input
-									type="text" name="alipayMoney" id="alipay"
-									onchange="fixMoney()" readonly="readonly" 
-									value="${workDealInfo.workPayInfo.alipayMoney }"> --></td>
+								<td>
+								
+								</td>
 								</tr>
 							<tr>
-								<td><input type="checkbox" value="1" name="methodGov" onclick="choose(this)" id="gc" disabled="disabled"
-								 <c:if test="${workDealInfo.workPayInfo.methodGov }">checked="checked"</c:if>>政府统一采购</td>
-								<td><input type="checkbox" value="1" name="methodContract" onclick="choose(this)" id="cc" disabled="disabled"
-								 <c:if test="${workDealInfo.workPayInfo.methodContract }">checked="checked"</c:if>>合同采购</td>
-									<td>
+								<td>
+									<input type="checkbox" value="1" name="methodGov" onclick="choose(this)" id="gc" disabled="disabled"
+								 		<c:if test="${agent.tempStyle == 1 }">checked="checked"</c:if>>标准：
+								 		<c:if test="${agent.tempStyle == 1 }">${agent.tempName}</c:if>
+								</td>
+								<td>
+								
+								<input type="checkbox" value="1" name="methodGov" onclick="choose(this)" id="gc" disabled="disabled"
+								 <c:if test="${agent.tempStyle == 2 }">checked="checked"</c:if>>政府统一采购：
+								<c:if test="${agent.tempStyle == 2 }">${agent.tempName}</c:if>
+								
+								</td>
+								<td>
+								
+								
+								<input type="checkbox" value="1" name="methodContract" onclick="choose(this)" id="cc" disabled="disabled"
+								 <c:if test="${agent.tempStyle == 3 }">checked="checked"</c:if>>合同采购：
+								 <c:if test="${agent.tempStyle == 3 }">${agent.tempName}</c:if>
+								 
+								</td>
+								<td>
 									<input type="hidden" id="officeNameHid" value="${officeName }">
 									<input type="hidden" id="userNameHid" value="${userName }">
 									<input type="hidden" id="dateHid" value="${date }">
 									<input type="hidden" id="companyHid" value="${workDealInfo.workCompany.companyName }">
-									</td><td></td>
+								</td>
 							</tr>
 							<tr>
 								<td>业务应收合计:</td>
@@ -273,8 +364,17 @@
 							<c:if test="${bgType }">
 								<td>变更缴费类型为：</td>
 								<td>
-									<input type="radio" id="gov" name="payType" checked="checked">政府统一采购
-									<input type="radio" id="contract" name="payType">合同采购
+									计费策略类型：
+									<select id="agentId" name="agentId"  >
+										<option value="0">请选择</option>
+									</select>
+									计费策略模版：
+									<select id="agentDetailId" name="agentDetailId">
+										<option value="0">请选择</option>
+									</select>
+								
+									<!-- <input type="radio" id="gov" name="payType" checked="checked">政府统一采购
+									<input type="radio" id="contract" name="payType">合同采购 -->
 								</td>
 								<td><input type="checkbox" id="thfapiao" onclick="changeInputStatus(this)">退还发票</td>
 								<td>发票金额：<input type="text" id="tfpVal" readonly="readonly"></td>
@@ -288,7 +388,8 @@
 						</tr>
 						 <c:if test="${revoke }">
 							<tr>
-								<td><input type="checkbox" id="revoke" <c:if test="${revoke }">checked="checked" disabled="disabled"</c:if> <c:if test="${!revoke }">disabled</c:if>>吊销</td>
+								<td><input type="checkbox" id="revoke" 
+								<c:if test="${revoke }">checked="checked" disabled="disabled"</c:if> <c:if test="${!revoke }">disabled</c:if>>吊销</td>
 								<td><input type="checkbox" id="tKey" <c:if test="${!tKey }">disabled</c:if> onclick="changeInputStatus(this)">退还key</td>
 								<td>key序列号：<input type="text" id="keySn" name="keySn" readonly="readonly"></td>
 								<td><input type="button" class="btn btn-primary" value="检测key" id="keyButton" style="display: none"

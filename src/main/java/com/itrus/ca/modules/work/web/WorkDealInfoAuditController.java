@@ -522,14 +522,14 @@ public class WorkDealInfoAuditController extends BaseController {
 					+ "网点进行退费！");
 			return "redirect:" + Global.getAdminPath() + "/work/workDealInfo/";
 		}
-		WorkPayInfo nowPayInfo = workDealInfo.getWorkPayInfo();
-		if (nowPayInfo != null) {
-			if (nowPayInfo.getMethodContract() || nowPayInfo.getMethodGov()) {
-				addMessage(redirectAttributes, "当前业务信息不允许进行退费操作");
-				return "redirect:" + Global.getAdminPath()
-						+ "/work/workDealInfo";
-			}
-		}
+//		WorkPayInfo nowPayInfo = workDealInfo.getWorkPayInfo();
+//		if (nowPayInfo != null) {
+//			if (nowPayInfo.getMethodContract() || nowPayInfo.getMethodGov()) {
+//				addMessage(redirectAttributes, "当前业务信息不允许进行退费操作");
+//				return "redirect:" + Global.getAdminPath()
+//						+ "/work/workDealInfo";
+//			}
+//		}
 		List<String[]> payInfos = new ArrayList<String[]>();
 		WorkPayInfo payInfo = workDealInfo.getWorkPayInfo();
 		if (payInfo != null) {
@@ -563,16 +563,6 @@ public class WorkDealInfoAuditController extends BaseController {
 						userName, date, "支付宝转账", "" };
 				payInfos.add(s);
 			}
-			if (payInfo.getMethodGov()) {
-				String[] s = new String[] { payInfo.getSn(), officeName, "",
-						companyName, userName, date, "政府统一采购", "" };
-				payInfos.add(s);
-			}
-			if (payInfo.getMethodContract()) {
-				String[] s = new String[] { payInfo.getSn(), officeName, "",
-						companyName, userName, date, "合同采购", "" };
-				payInfos.add(s);
-			}
 		}
 		List<WorkFinancePayInfoRelation> list = workFinancePayInfoRelationService
 				.findByPayInfo(workDealInfo.getWorkPayInfo());
@@ -581,11 +571,29 @@ public class WorkDealInfoAuditController extends BaseController {
 			model.addAttribute("bgType", true);
 			model.addAttribute("revoke", false);
 			model.addAttribute("tKey", false);
+			
+			ConfigProduct configProduct = workDealInfo.getConfigProduct();
+			
+			List<ConfigChargeAgentBoundConfigProduct> boundList = configChargeAgentBoundConfigProductService
+					.findByProIdAll(configProduct.getId());		
+			Set<Integer> nameSet = new HashSet<Integer>();
+			for (int i = 0; i < boundList.size(); i++) {
+				nameSet.add(Integer.parseInt(boundList.get(i).getAgent().getTempStyle()));
+			}
+			
+			model.addAttribute("boundLabelList", nameSet);
+			
+			
+			
+			
 		} else {
 			model.addAttribute("bgType", false);
 			model.addAttribute("revoke", true);
 			model.addAttribute("tKey", true);
 		}
+		ConfigChargeAgent agent =  chargeAgentService.get(workDealInfo.getConfigChargeAgentId());
+		model.addAttribute("agent", agent);
+		
 		model.addAttribute("fpir", list);
 		model.addAttribute("infos", payInfos);
 		return "modules/work/workDealInfoAuditBack";
