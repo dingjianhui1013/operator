@@ -386,7 +386,7 @@ public class WorkCustomerController extends BaseController {
 		workLogService.save(workLog);
 		logUtil.saveSysLog("客服管理", detail + workLog.getId(), "");
 		return "redirect:" + Global.getAdminPath()
-				+ "/work/workDealInfoFiling/ulist";
+				+ "/work/workLog/kflist";
 	}
 
 	/**
