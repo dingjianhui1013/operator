@@ -198,7 +198,14 @@
 			onchange="changeCheck(this)"/></c:if>${workDealInfo.id}</td>
 				<td><a href="${ctx}/work/workDealInfoFiling/formF?id=${workDealInfo.id}">${workDealInfo.workCompany.companyName}</a></td>
 				<td>${workDealInfo.configApp.appName}</td>
-				<td>${wdiStatus[workDealInfo.dealInfoStatus]}</td>
+				<td>
+					<c:if test="${workDealInfo.dealInfoType!=null}">${wdiType[workDealInfo.dealInfoType]}</c:if>
+					<c:if test="${workDealInfo.dealInfoType1!=null}">${wdiType[workDealInfo.dealInfoType1]}</c:if>
+					<c:if test="${workDealInfo.dealInfoType2!=null}">${wdiType[workDealInfo.dealInfoType2]}</c:if>
+					<c:if test="${workDealInfo.dealInfoType3!=null}">${wdiType[workDealInfo.dealInfoType3]}</c:if>
+				
+				
+				</td>
 				<td>${proType[workDealInfo.configProduct.productName]}</td>
 				<td>${workDealInfo.updateBy.name}</td>
 				<td>${workDealInfo.archiveDate}</td>

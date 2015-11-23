@@ -3844,7 +3844,7 @@ public class WorkDealInfoService extends BaseService {
 				workDealInfo.setConfigChargeAgentId(bound.getAgent().getId());		
 				workDealInfo.setDealInfoType(WorkDealInfoType.TYPE_ADD_CERT);
 				
-				Integer year = Integer.parseInt(row.getCell(4).toString());//申请年限
+				Integer year = Integer.parseInt(row.getCell(4).toString().replace(" ", ""));//申请年限
 				workDealInfo.setYear(year);
 				workDealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_ENTRY_SUCCESS);
 				workDealInfo.setCreateBy(UserUtils.getUser());

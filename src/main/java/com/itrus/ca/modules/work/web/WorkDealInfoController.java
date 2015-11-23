@@ -1752,8 +1752,16 @@ public class WorkDealInfoController extends BaseController {
 		if(workDealInfo.getDealInfoType()!=null){
 			Long agentId = workDealInfo.getConfigChargeAgentId();
 			ConfigChargeAgent agent =  configChargeAgentService.get(agentId);
-			agent.setSurplusUpdateNum(agent.getSurplusUpdateNum()+1);
-			agent.setReserveUpdateNum(agent.getReserveUpdateNum()-1);
+			
+			
+			if (workDealInfo.getDealInfoType().equals(1)) {
+				agent.setSurplusUpdateNum(agent.getSurplusUpdateNum()+1);
+				agent.setReserveUpdateNum(agent.getReserveUpdateNum()-1);
+			}else if(workDealInfo.getDealInfoType().equals(0)){
+				agent.setSurplusNum(agent.getSurplusNum()+1);
+				agent.setReserveNum(agent.getReserveNum()-1);
+				
+			}
 			configChargeAgentService.save(agent);
 			
 			ConfigAgentBoundDealInfo bound = configAgentBoundDealInfoService.findByAgentIdDealId(agent.getId(),id);
