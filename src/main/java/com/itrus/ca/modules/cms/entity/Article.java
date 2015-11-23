@@ -51,7 +51,7 @@ import com.itrus.ca.common.persistence.DataEntity;
 @Table(name = "cms_article")
 @DynamicInsert @DynamicUpdate
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@Indexed @Analyzer(impl = IKAnalyzer.class)
+//@Indexed @Analyzer(impl = IKAnalyzer.class)
 public class Article extends DataEntity {
 	
 	private static final long serialVersionUID = 1L;
