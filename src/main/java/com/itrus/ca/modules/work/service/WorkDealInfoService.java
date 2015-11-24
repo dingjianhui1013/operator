@@ -488,16 +488,71 @@ public class WorkDealInfoService extends BaseService {
 		return workDealInfoDao.find(page, dc);
 	}
 
-	public List<WorkDealInfo> find4ApplyIsIxin(WorkDealInfo workDealInfo, Date startTime, Date endTime , Long alias) {
+//	public List<WorkDealInfo> find4ApplyIsIxin(WorkDealInfo workDealInfo, Date startTime, Date endTime , Long alias) {
+//		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
+//		dc.createAlias("workUser", "workUser");
+//		dc.createAlias("workCompany", "workCompany");
+//		dc.createAlias("createBy", "createBy");
+//		dc.createAlias("createBy.office", "office");
+//
+//		if (alias != null) {
+//			dc.add(Restrictions.eq("configApp.id", alias));
+//		}
+//		
+//		if (startTime != null && endTime != null) {
+//			dc.add(Restrictions.ge("notafter", startTime));
+//			dc.add(Restrictions.le("notafter", endTime));
+//		}
+//		if (workDealInfo.getWorkCompany() != null) {
+//			if (workDealInfo.getWorkCompany().getId() != null) {
+//				dc.add(Restrictions.eq("workCompany", workDealInfo.getWorkCompany()));
+//			}
+//			if (workDealInfo.getWorkCompany().getCompanyName() != null
+//					&& !workDealInfo.getWorkCompany().getCompanyName().equals("")) {
+//				dc.add(Restrictions.like("workCompany.companyName",
+//						"%" + EscapeUtil.escapeLike(workDealInfo.getWorkCompany().getCompanyName()) + "%"));
+//			}
+//		}
+//		if (workDealInfo.getWorkUser() != null) {
+//			if (workDealInfo.getWorkUser().getContactName() != null
+//					&& !workDealInfo.getWorkUser().getContactName().equals("")) {
+//				dc.add(Restrictions.like("workUser.contactName",
+//						"%" + EscapeUtil.escapeLike(workDealInfo.getWorkUser().getContactName()) + "%"));
+//			}
+//		}
+//		if (workDealInfo.getDealInfoStatus() != null && !workDealInfo.getDealInfoStatus().equals("")) {
+//			dc.add(Restrictions.eq("dealInfoStatus", workDealInfo.getDealInfoStatus()));
+//		}
+//		if (StringUtils.isNotEmpty(workDealInfo.getKeySn())) {
+//			dc.add(Restrictions.like("keySn", "%" + EscapeUtil.escapeLike(workDealInfo.getKeySn()) + "%"));
+//		}
+//		if (workDealInfo.getStatus() != null) {
+//			dc.add(Restrictions.eq("status", workDealInfo.getStatus()));
+//		}
+//
+//		dc.add(Restrictions.isNotNull("isIxin"));
+//		dc.add(Restrictions.eq(WorkDealInfo.DEL_FLAG, WorkDealInfo.DEL_FLAG_NORMAL));
+//		dc.addOrder(Order.desc("createDate"));
+//		return workDealInfoDao.find(dc);
+//	}
+	public List<WorkDealInfo> find4ApplyIsIxin(WorkDealInfo workDealInfo, Date startTime,
+			Date endTime , Long apply ) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("workUser", "workUser");
 		dc.createAlias("workCompany", "workCompany");
 		dc.createAlias("createBy", "createBy");
 		dc.createAlias("createBy.office", "office");
+		dc.createAlias("configApp", "configApp");
 
-		if (alias != null) {
-			dc.add(Restrictions.eq("configApp.id", alias));
+		dc.add(dataScopeFilter(UserUtils.getUser(), "office", "createBy"));
+		// dc.add(Restrictions.or(Restrictions.eq("dealInfoStatus",
+		// WorkDealInfoStatus.STATUS_CERT_OBTAINED), Restrictions.eq(
+		// "createBy", UserUtils.getUser())));
+
+		if (apply != null) {
+			dc.add(Restrictions.eq("configApp.id", apply));
 		}
+		
 		
 		if (startTime != null && endTime != null) {
 			dc.add(Restrictions.ge("notafter", startTime));
@@ -512,6 +567,11 @@ public class WorkDealInfoService extends BaseService {
 				dc.add(Restrictions.like("workCompany.companyName",
 						"%" + EscapeUtil.escapeLike(workDealInfo.getWorkCompany().getCompanyName()) + "%"));
 			}
+			if (workDealInfo.getWorkCompany().getOrganizationNumber()!=null && !workDealInfo.getWorkCompany().getOrganizationNumber().equals("") ) {
+				dc.add(Restrictions.like("workCompany.organizationNumber",
+						EscapeUtil.escapeLike(workDealInfo.getWorkCompany().getOrganizationNumber())));
+				
+			}
 		}
 		if (workDealInfo.getWorkUser() != null) {
 			if (workDealInfo.getWorkUser().getContactName() != null
@@ -520,7 +580,7 @@ public class WorkDealInfoService extends BaseService {
 						"%" + EscapeUtil.escapeLike(workDealInfo.getWorkUser().getContactName()) + "%"));
 			}
 		}
-		if (workDealInfo.getDealInfoStatus() != null && !workDealInfo.getDealInfoStatus().equals("")) {
+		if (workDealInfo.getDealInfoStatus()!= null && !workDealInfo.getDealInfoStatus().equals("")) {
 			dc.add(Restrictions.eq("dealInfoStatus", workDealInfo.getDealInfoStatus()));
 		}
 		if (StringUtils.isNotEmpty(workDealInfo.getKeySn())) {
@@ -530,12 +590,11 @@ public class WorkDealInfoService extends BaseService {
 			dc.add(Restrictions.eq("status", workDealInfo.getStatus()));
 		}
 
-		dc.add(Restrictions.isNotNull("isIxin"));
+		dc.add(Restrictions.isNull("isIxin"));
 		dc.add(Restrictions.eq(WorkDealInfo.DEL_FLAG, WorkDealInfo.DEL_FLAG_NORMAL));
 		dc.addOrder(Order.desc("createDate"));
 		return workDealInfoDao.find(dc);
 	}
-
 	public Page<WorkDealInfo> find(Page<WorkDealInfo> page, WorkDealInfo workDealInfo, Long area, Long office,
 			Long apply, String certType, Integer workType, Integer year, Date luruStartTime, Date luruEndTime,
 			List<Office> offices, Date daoqiStartTime, Date daoqiEndTime, Date jianzhengStartTime,
