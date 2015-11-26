@@ -14,21 +14,38 @@
 			$("#searchForm").submit();
         	return false;
         }
-		function dca()
-		{	
-			alert("xx");
-			var alias = $("#alias").val();
-			var startTime = $("#startTime").val();
-			var endTime = $("#endTime").val();
-			alert(alias+":"+startTime+":"+endTime);
-			window.location.href="${ctx }/settle/projectCertificationDetails/export?alias="+alias+"&startTime="+startTime+"&endTime="+endTime;
+	
+		function dca() {
+			if ($("#alias").val() == "") {
+				top.$.jBox.tip("请选择项目");
+				return false;
+			} else {
+				if ($("#startTime").val() == "" || $("#endTime").val() == "") {
+					top.$.jBox.tip("请选定时间范围");
+				} else {
+					var alias = $("#alias").val();
+					var startTime = $("#startTime").val();
+					var endTime = $("#endTime").val();
+
+					window.location.href = "${ctx }/settle/projectCertificationDetails/export?alias="
+							+ alias
+							+ "&startTime="
+							+ startTime
+							+ "&endTime="
+							+ endTime;
+				}
+			}
 		}
-		function alarmValue(dealInfoId){
-			var url = "${ctx}/work/workDealInfo/showWorkDeal?dealInfoId="+dealInfoId;
-			top.$.jBox.open("iframe:"+url, "查看", 550, 480, {
-					buttons:{"关闭":true}, submit:function(v, h, f){
-						
-					}
+		function alarmValue(dealInfoId) {
+			var url = "${ctx}/work/workDealInfo/showWorkDeal?dealInfoId="
+					+ dealInfoId;
+			top.$.jBox.open("iframe:" + url, "查看", 550, 480, {
+				buttons : {
+					"关闭" : true
+				},
+				submit : function(v, h, f) {
+
+				}
 			});
 		}
 	</script>
