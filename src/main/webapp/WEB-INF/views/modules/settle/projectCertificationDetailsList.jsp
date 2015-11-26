@@ -87,6 +87,43 @@
 			</div>
 	</form:form>
 	<tags:message content="${message}"/>
+			<c:if test="${projectcount!=null }">
+		<table id="projectcountTable"
+		class="table table-striped table-bordered table-condensed">
+		<thead>
+				<tr>
+					<td rowspan=2>新增：</td>
+					<td>个人证书 一年期证书${projectcount.addPersonalYearCertificate}张</td>
+					<td>个人证书 二年期证书 ${projectcount.addPersonalTwoYearCertificate}张</td>
+					<td>个人证书 四年期证书 ${projectcount.addPersonalFourYearCertificate}张</td>
+				</tr>
+				<tr>
+					
+					<td>企业证书 一年期证书${projectcount.addcompanyYearCertificate}张</td>
+					<td>企业证书 二年期证书 ${projectcount.addcompanyTwoYearCertificate}张</td>
+					<td>企业证书 四年期证书 ${projectcount.addcompanyFourYearCertificate}张</td>
+				</tr>
+				<tr>
+					<td rowspan=2>更新：</td>
+					<td>个人证书 一年期证书${projectcount.updatePersonalYearCertificate}张</td>
+					<td>个人证书 二年期证书 ${projectcount.updatePersonalTwoYearCertificate}张</td>
+					<td>个人证书 四年期证书 ${projectcount.updatePersonalFourYearCertificate}张</td>
+				</tr>
+				<tr>
+					
+					<td>企业证书 一年期证书${projectcount.updatecompanyYearCertificate}张</td>
+					<td>企业证书 二年期证书 ${projectcount.updatecompanyTwoYearCertificate}张</td>
+					<td>企业证书 四年期证书 ${projectcount.updateFourYearCertificate}张</td>
+				</tr>
+				<tr>
+					<td colspan=2>遗失补办：证书${projectcount.lostCerate}张</td>
+					<td colspan=2>损坏更换：证书${projectcount.damageCertificate}张</td>
+					
+				</tr>
+		</thead>
+		
+	</table>
+	</c:if>
 	<table id="contentTable" class="table table-striped table-bordered table-condensed">
 		<thead>
 			<tr>
