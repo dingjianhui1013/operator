@@ -157,9 +157,12 @@ public class KeyPurchaseController extends BaseController {
 	{
 		JSONObject json=new JSONObject();
 		List<ConfigSupplierProductRelation> list= configSupplierProductRelationService.findByGenanID((long)moneyType);
-		List<ConfigChargeSupplierDetail>  ccsd=configChargeSupplierDetailService.findByconfigSupplierId(list.get(0).getId());
-		for (ConfigChargeSupplierDetail ccsds : ccsd) {
-			json.put("money", ccsds.getMoney());
+		if(!list.isEmpty())
+		{
+			List<ConfigChargeSupplierDetail>  ccsd=configChargeSupplierDetailService.findByconfigSupplierId(list.get(0).getId());
+			for (ConfigChargeSupplierDetail ccsds : ccsd) {
+				json.put("money", ccsds.getMoney());
+			}
 		}
 		KeyGeneralInfo kg= keyGeneralInfoService.findById((long)moneyType);
 		String keyName =kg.getName();
