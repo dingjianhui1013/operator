@@ -1235,7 +1235,69 @@ public class WorkDealInfoService extends BaseService {
 		dc.addOrder(Order.desc("id"));
 		return workDealInfoDao.find(page, dc);
 	}
-
+	/**
+	 * @param startTime
+	 * @param endTime
+	 * @param dealInfoByAreaIds
+	 * @param appId
+	 * @return
+	 */
+	public List<WorkDealInfo> findByDayPay(Date startTime,Date endTime,List<Long> officeids,List<Long> dealInfoByAreaIds,
+			Long appId) {
+		if(startTime!=null)
+		{
+			endTime.setHours(23);
+			endTime.setMinutes(59);
+			endTime.setSeconds(59);
+			DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
+			dc.createAlias("workPayInfo", "workPayInfo");
+			dc.createAlias("createBy", "createBy");
+			dc.createAlias("createBy.office", "office");
+			dc.add(Restrictions.isNotNull("workPayInfo"));
+//			dc.add(Restrictions.eq("workPayInfo.delFlag", WorkPayInfo.DEL_FLAG_NORMAL));
+//			dc.add(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED));
+//			if (workDealInfo.getWorkPayInfo() != null) {
+//				if (workDealInfo.getWorkPayInfo().getMethodMoney() == true) {
+//					dc.add(Restrictions.eq("workPayInfo.methodMoney", true));
+//				}
+//				if (workDealInfo.getWorkPayInfo().getMethodPos() == true) {
+//					dc.add(Restrictions.eq("workPayInfo.methodPos", true));
+//				}
+//				if (workDealInfo.getWorkPayInfo().getMethodBank() == true) {
+//					dc.add(Restrictions.eq("workPayInfo.methodBank", true));
+//				}
+//				if (workDealInfo.getWorkPayInfo().getMethodAlipay() == true) {
+//					dc.add(Restrictions.eq("workPayInfo.methodAlipay", true));
+//				}
+//				if (workDealInfo.getWorkPayInfo().getMethodGov() == true) {
+//					dc.add(Restrictions.eq("workPayInfo.methodGov", true));
+//				}
+//				if (workDealInfo.getWorkPayInfo().getMethodContract() == true) {
+//					dc.add(Restrictions.eq("workPayInfo.methodContract", true));
+//				}
+//			}
+			if (startTime != null) {
+				dc.add(Restrictions.ge("workPayInfo.createDate", startTime));
+				dc.add(Restrictions.le("workPayInfo.createDate", endTime));
+			}
+			if (dealInfoByAreaIds != null && dealInfoByAreaIds.size() > 0) {
+				dc.add(Restrictions.in("id", dealInfoByAreaIds));
+			}
+			if (appId != null) {
+				dc.add(Restrictions.eq("configApp.id", appId));
+			}
+			if(officeids!=null)
+			{
+				dc.add(Restrictions.in("office.id", officeids));
+			}
+			dc.addOrder(Order.desc("id"));
+			return workDealInfoDao.find(dc);
+		}else
+		{
+			return null;
+		}
+		
+	}
 	public WorkDealInfo findDealPayShow(Long dealInfoId) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.add(Restrictions.eq("id", dealInfoId));

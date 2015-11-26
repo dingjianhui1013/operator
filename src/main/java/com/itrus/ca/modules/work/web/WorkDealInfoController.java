@@ -25,6 +25,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.UUID;
 
@@ -40,6 +41,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.sf.ehcache.config.ConfigError;
 
+import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -68,11 +70,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import sun.org.mozilla.javascript.internal.ast.DoLoop;
+
 import com.google.common.collect.Lists;
 import com.itrus.ca.common.config.Global;
 import com.itrus.ca.common.persistence.DataEntity;
 import com.itrus.ca.common.persistence.Page;
 import com.itrus.ca.common.utils.AdminPinEncKey;
+import com.itrus.ca.common.utils.HttpRequest;
 import com.itrus.ca.common.utils.RaAccountUtil;
 import com.itrus.ca.common.utils.excel.ExportExcel;
 import com.itrus.ca.common.web.BaseController;
@@ -510,7 +515,6 @@ public class WorkDealInfoController extends BaseController {
 				new Page<WorkDealInfo>(request, response), workDealInfo,
 				startTime, endTime, idList, dealInfoByAreaIds,
 				dealInfoByOfficeAreaIds, appId);
-
 		// 除去合同采购和统一采购的信息
 		// for (int i = 0; i < page.getList().size(); i++) {
 		// if (page.getList().get(i).getWorkPayInfo().getMethodGov() != null) {
@@ -663,7 +667,6 @@ public class WorkDealInfoController extends BaseController {
 		}
 
 		List<ConfigApp> appList = configAppService.findAllConfigApp();
-
 		model.addAttribute("appId", appId);
 		model.addAttribute("appList", appList);
 		// model.addAttribute("method", method);
@@ -674,13 +677,280 @@ public class WorkDealInfoController extends BaseController {
 		model.addAttribute("page", page);
 		return "modules/work/statisticalDealPayList";
 	}
+	@RequiresPermissions("work:workDealInfo:view")
+	@RequestMapping(value = "StatisticalDayList")
+	public String StatisticalDayList(
+			WorkDealInfo workDealInfo,
+			@RequestParam(value = "startTime", required = false) Date startTime,
+			@RequestParam(value = "endTime", required = false) Date endTime,
+			@RequestParam(value = "area", required = false) Long area,
+			@RequestParam(value = "appId", required = false) Long appId,
+			Model model) {
+		User user = UserUtils.getUser();
+		List<Long> dealInfoByAreaIds = Lists.newArrayList();
+		List<Long> officeids = Lists.newArrayList();
+		List<String> payMethod = Lists.newArrayList();
+		List<Double> money = Lists.newArrayList();
+		Map<String, Double> officeMoneys=new HashMap<>();
+		if (area != null) {
+		List<Long> appids = Lists.newArrayList();
+		List<Office> offices = officeService.findByParentId(area);// 根据区域id获取网店id
+		model.addAttribute("wangdian", offices);
+		if (offices.size() > 0) {
+			for (int i = 0; i < offices.size(); i++) {
+				officeids.add(offices.get(i).getId());
+			}
+		} else {
+			officeids.add(-1l);
+		}
+		List<ConfigAppOfficeRelation> appOffices = configAppOfficeRelationService
+				.findAllByOfficeId(officeids);// 根据网点id获取应用id
+		if (appOffices.size() > 0) {
+			for (int i = 0; i < appOffices.size(); i++) {
+				appids.add(appOffices.get(i).getConfigApp().getId());
+			}
+		} else {
+			appids.add(-1l);
+		}
 
+		List<WorkDealInfo> deals = workDealInfoService
+				.findByAppId(appids);// 根据应用id获取dealInfo信息
+		if (deals.size() < 1) {
+			dealInfoByAreaIds.add(-1l);
+		} else {
+			for (int i = 0; i < deals.size(); i++) {
+				dealInfoByAreaIds.add(deals.get(i).getId());
+			}
+		}
+		}
+		List<WorkDealInfo> list=workDealInfoService.findByDayPay(startTime,endTime,officeids,dealInfoByAreaIds, appId);
+		if(list!=null)
+		{
+			double countMoneys=0L;
+			double countMoney =0L;
+			double countPostMoney=0L;
+			double countBankMoney=0L;
+			double countXjMoney=0L;
+			double countAlipayMoney=0L;
+			double countPostMoneys=0L;
+			double countBankMoneys=0L;
+			double countXjMoneys=0L;
+			double countAlipayMoneys=0L;
+			for(int j=0;j<officeids.size();j++)
+			{
+				for(int i=0;i<list.size();i++)
+				{
+					
+					if(list.get(i).getCreateBy().getOffice().getId()==officeids.get(j))
+					{
+						double postMoney =list.get(i).getWorkPayInfo().getPosMoney();
+						double bankMoney =list.get(i).getWorkPayInfo().getBankMoney();
+						double xjMoney =list.get(i).getWorkPayInfo().getMoney();
+						double alipayMoney =list.get(i).getWorkPayInfo().getAlipayMoney();
+						countPostMoney+=postMoney;
+						countBankMoney+=bankMoney;
+						countXjMoney+=xjMoney;
+						countAlipayMoney+=alipayMoney;
+						countMoney+=(postMoney+bankMoney+xjMoney+alipayMoney);//总计
+					}
+				}
+				String officeName=(officeService.findById(officeids.get(j))).getName();
+				officeMoneys.put(officeName, countMoney);
+				countMoneys+=countMoney;
+				countPostMoneys+=countPostMoney;
+				countBankMoneys+=countBankMoney;
+				countXjMoneys+=countXjMoney;
+				countAlipayMoneys+=countAlipayMoney;
+
+			}
+			if(countPostMoneys>0)
+			{
+				payMethod.add("Post付款");
+				money.add(countPostMoneys);
+			}
+			if(countBankMoneys>0)
+			{
+				payMethod.add("银行转账付款");
+				money.add(countBankMoneys);
+			}
+			if(countXjMoneys>0)
+			{
+				payMethod.add("现金");
+				money.add(countXjMoneys);
+			}
+			if(countAlipayMoneys>0)
+			{
+				payMethod.add("支付宝");
+				money.add(countAlipayMoneys);
+			}
+			model.addAttribute("area", area);
+			model.addAttribute("endTime", endTime);
+			model.addAttribute("appId", appId);
+			model.addAttribute("offices", officeMoneys);
+			model.addAttribute("money", money);
+			model.addAttribute("payMethod", payMethod);
+			model.addAttribute("countMoneys", countMoneys);
+			ConfigApp configApp= configAppService.findByAppId(appId);
+			model.addAttribute("appName", configApp.getAppName());
+			model.addAttribute("startTime", startTime);
+			model.addAttribute("list", list);
+			
+		}
+		List<Office> offsList = officeService.getOfficeByType(user, 1);
+		model.addAttribute("offsList", offsList);
+		List<ConfigApp> appList = configAppService.findAllConfigApp();
+		model.addAttribute("appList", appList);
+		return "modules/work/statisticalDayList";
+	}
+
+	@RequiresPermissions("work:workDealInfo:view")
+	@RequestMapping(value = "statisticalMonthList")
+	public String statisticalMonthList(
+			WorkDealInfo workDealInfo,
+			@RequestParam(value = "startTime", required = false) String startTime,
+			@RequestParam(value = "endTime", required = false) String endTime,
+			@RequestParam(value = "area", required = false) Long area,
+			@RequestParam(value = "appId", required = false) Long appId,
+			Model model) {
+		Date start=null;
+		Date end=null;
+		if(startTime!=null)
+		{
+			StringBuffer startt= new StringBuffer(startTime);
+			startt.append("-1");
+			StringBuffer endtt= new StringBuffer(endTime);
+			endtt.append("-30");
+			try {
+				start = new SimpleDateFormat("yyyy-MM-dd").parse(startt.toString());
+				end = new SimpleDateFormat("yyyy-MM-dd").parse(endtt.toString());
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		User user = UserUtils.getUser();
+		List<Long> dealInfoByAreaIds = Lists.newArrayList();
+		List<Long> officeids = Lists.newArrayList();
+		List<String> payMethod = Lists.newArrayList();
+		List<Double> money = Lists.newArrayList();
+		Map<String, Double> officeMoneys=new HashMap<>();
+		if (area != null) {
+		List<Long> appids = Lists.newArrayList();
+		List<Office> offices = officeService.findByParentId(area);// 根据区域id获取网店id
+		model.addAttribute("wangdian", offices);
+		if (offices.size() > 0) {
+			for (int i = 0; i < offices.size(); i++) {
+				officeids.add(offices.get(i).getId());
+			}
+		} else {
+			officeids.add(-1l);
+		}
+		List<ConfigAppOfficeRelation> appOffices = configAppOfficeRelationService
+				.findAllByOfficeId(officeids);// 根据网点id获取应用id
+		if (appOffices.size() > 0) {
+			for (int i = 0; i < appOffices.size(); i++) {
+				appids.add(appOffices.get(i).getConfigApp().getId());
+			}
+		} else {
+			appids.add(-1l);
+		}
+
+		List<WorkDealInfo> deals = workDealInfoService
+				.findByAppId(appids);// 根据应用id获取dealInfo信息
+		if (deals.size() < 1) {
+			dealInfoByAreaIds.add(-1l);
+		} else {
+			for (int i = 0; i < deals.size(); i++) {
+				dealInfoByAreaIds.add(deals.get(i).getId());
+			}
+		}
+		}
+		List<WorkDealInfo> list=workDealInfoService.findByDayPay(start,end,officeids,dealInfoByAreaIds, appId);
+		if(list!=null)
+		{
+			double countMoney =0L;
+			double countMoneys =0L;
+			double countPostMoney=0L;
+			double countBankMoney=0L;
+			double countXjMoney=0L;
+			double countAlipayMoney=0L;
+			double countPostMoneys=0L;
+			double countBankMoneys=0L;
+			double countXjMoneys=0L;
+			double countAlipayMoneys=0L;
+			for(int j=0;j<officeids.size();j++)
+			{
+				
+				for(int i=0;i<list.size();i++)
+				{
+					
+					if(list.get(i).getCreateBy().getOffice().getId()==officeids.get(j))
+					{
+						double postMoney =list.get(i).getWorkPayInfo().getPosMoney();
+						double bankMoney =list.get(i).getWorkPayInfo().getBankMoney();
+						double xjMoney =list.get(i).getWorkPayInfo().getMoney();
+						double alipayMoney =list.get(i).getWorkPayInfo().getAlipayMoney();
+						countPostMoney+=postMoney;
+						countBankMoney+=bankMoney;
+						countXjMoney+=xjMoney;
+						countAlipayMoney+=alipayMoney;
+						countMoney+=(postMoney+bankMoney+xjMoney+alipayMoney);//总计
+					}
+				}
+				String officeName=(officeService.findById(officeids.get(j))).getName();
+				officeMoneys.put(officeName, countMoney);
+				countMoneys+=countMoney;
+				countPostMoneys+=countPostMoney;
+				countBankMoneys+=countBankMoney;
+				countXjMoneys+=countXjMoney;
+				countAlipayMoneys+=countAlipayMoney;
+			}
+			if(countPostMoneys>0)
+			{
+				payMethod.add("Post付款");
+				money.add(countPostMoneys);
+			}
+			if(countBankMoneys>0)
+			{
+				payMethod.add("银行转账付款");
+				money.add(countBankMoneys);
+			}
+			if(countXjMoneys>0)
+			{
+				payMethod.add("现金");
+				money.add(countXjMoneys);
+			}
+			if(countAlipayMoneys>0)
+			{
+				payMethod.add("支付宝");
+				money.add(countAlipayMoneys);
+			}
+			model.addAttribute("area", area);
+			model.addAttribute("endTime", end);
+			model.addAttribute("appId", appId);
+			model.addAttribute("offices", officeMoneys);
+			model.addAttribute("money", money);
+			model.addAttribute("payMethod", payMethod);
+			model.addAttribute("countMoneys", countMoneys);
+			ConfigApp configApp= configAppService.findByAppId(appId);
+			model.addAttribute("appName", configApp.getAppName());
+			model.addAttribute("startTime", start);
+			model.addAttribute("list", list);
+			
+		}
+		List<Office> offsList = officeService.getOfficeByType(user, 1);
+		model.addAttribute("offsList", offsList);
+		List<ConfigApp> appList = configAppService.findAllConfigApp();
+		model.addAttribute("appList", appList);
+		return "modules/work/statisticalMonthList";
+	}
+	
 	@RequestMapping(value = "statisticalDealPayListShow")
 	public String statisticalReportShow(Long dealInfoId, Model model) {
 
 		WorkDealInfo workDealInfo = workDealInfoService
 				.findDealPayShow(dealInfoId);
-
 		model.addAttribute("workDealInfo", workDealInfo);
 		model.addAttribute("proType", ProductType.productTypeStrMap);
 		model.addAttribute("wType", WorkDealInfoType.WorkDealInfoTypeMap);
@@ -691,7 +961,6 @@ public class WorkDealInfoController extends BaseController {
 	@RequestMapping(value = "form")
 	public String form(WorkDealInfo workDealInfo, Model model) {
 		model.addAttribute("workDealInfo", workDealInfo);
-
 		WorkCompany workCompany = workDealInfo.getWorkCompany();
 		WorkUser workUser = workDealInfo.getWorkUser();
 		model.addAttribute("workCompany", workCompany);
@@ -3012,7 +3281,383 @@ public class WorkDealInfoController extends BaseController {
 			
 	}
 	
-	
+	@RequestMapping(value = "exportMonthPayment")
+	public void exportMonthPayment(WorkDealInfo workDealInfo,
+			@RequestParam(value = "startTime", required = false) String startTime,
+			@RequestParam(value = "endTime", required = false) String endTime,
+			@RequestParam(value = "area", required = false) Long area,
+			@RequestParam(value = "appId", required = false) Long appId,
+			HttpServletRequest request,
+			HttpServletResponse response,
+			Model model)
+	{
+		Date start=null;
+		Date end=null;
+		if(startTime!=null)
+		{
+			StringBuffer startt= new StringBuffer(startTime);
+			startt.append("-1");
+			StringBuffer endtt= new StringBuffer(endTime);
+			endtt.append("-30");
+			try {
+				start = new SimpleDateFormat("yyyy-MM-dd").parse(startt.toString());
+				end = new SimpleDateFormat("yyyy-MM-dd").parse(endtt.toString());
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		User user = UserUtils.getUser();
+		List<Long> dealInfoByAreaIds = Lists.newArrayList();
+		List<Long> officeids = Lists.newArrayList();
+		List<String> payMethod = Lists.newArrayList();
+		List<Double> money = Lists.newArrayList();
+		Map<String, Double> officeMoneys=new HashMap<>();
+		if (area != null) {
+		List<Long> appids = Lists.newArrayList();
+		List<Office> offices = officeService.findByParentId(area);// 根据区域id获取网店id
+		if (offices.size() > 0) {
+			for (int i = 0; i < offices.size(); i++) {
+				officeids.add(offices.get(i).getId());
+			}
+		} else {
+			officeids.add(-1l);
+		}
+		List<ConfigAppOfficeRelation> appOffices = configAppOfficeRelationService
+				.findAllByOfficeId(officeids);// 根据网点id获取应用id
+		if (appOffices.size() > 0) {
+			for (int i = 0; i < appOffices.size(); i++) {
+				appids.add(appOffices.get(i).getConfigApp().getId());
+			}
+		} else {
+			appids.add(-1l);
+		}
+
+		List<WorkDealInfo> deals = workDealInfoService
+				.findByAppId(appids);// 根据应用id获取dealInfo信息
+		if (deals.size() < 1) {
+			dealInfoByAreaIds.add(-1l);
+		} else {
+			for (int i = 0; i < deals.size(); i++) {
+				dealInfoByAreaIds.add(deals.get(i).getId());
+			}
+		}
+		}
+		List<WorkDealInfo> list=workDealInfoService.findByDayPay(start,end,officeids,dealInfoByAreaIds, appId);
+		double countMoney =0L;
+		double countMoneys =0L;
+		double countPostMoney=0L;
+		double countBankMoney=0L;
+		double countXjMoney=0L;
+		double countAlipayMoney=0L;
+		double countPostMoneys=0L;
+		double countBankMoneys=0L;
+		double countXjMoneys=0L;
+		double countAlipayMoneys=0L;
+		if(list!=null)
+		{
+			for(int j=0;j<officeids.size();j++)
+			{
+				
+				for(int i=0;i<list.size();i++)
+				{
+					
+					if(list.get(i).getCreateBy().getOffice().getId()==officeids.get(j))
+					{
+						double postMoney =list.get(i).getWorkPayInfo().getPosMoney();
+						double bankMoney =list.get(i).getWorkPayInfo().getBankMoney();
+						double xjMoney =list.get(i).getWorkPayInfo().getMoney();
+						double alipayMoney =list.get(i).getWorkPayInfo().getAlipayMoney();
+						countPostMoney+=postMoney;
+						countBankMoney+=bankMoney;
+						countXjMoney+=xjMoney;
+						countAlipayMoney+=alipayMoney;
+						countMoney+=(postMoney+bankMoney+xjMoney+alipayMoney);//总计
+					}
+				}
+				String officeName=(officeService.findById(officeids.get(j))).getName();
+				officeMoneys.put(officeName, countMoney);
+				countMoneys+=countMoney;
+				countPostMoneys+=countPostMoney;
+				countBankMoneys+=countBankMoney;
+				countXjMoneys+=countXjMoney;
+				countAlipayMoneys+=countAlipayMoney;
+			}
+			if(countPostMoneys>0)
+			{
+				payMethod.add("Post付款");
+				money.add(countPostMoneys);
+			}
+			if(countBankMoneys>0)
+			{
+				payMethod.add("银行转账付款");
+				money.add(countBankMoneys);
+			}
+			if(countXjMoneys>0)
+			{
+				payMethod.add("现金");
+				money.add(countXjMoneys);
+			}
+			if(countAlipayMoneys>0)
+			{
+				payMethod.add("支付宝");
+				money.add(countAlipayMoneys);
+			}
+		}
+		int sheetcount =0;
+		Iterator<Map.Entry<String, Double>> it=officeMoneys.entrySet().iterator();
+		 while (it.hasNext()) {
+		   Entry<String, Double> entry = it.next();
+			  if(entry.getValue()>0)
+			  {
+				  sheetcount+=1;
+			  }
+		  }
+		 for(int i=0;i<payMethod.size();i++)
+		 {
+			 sheetcount+=1;
+		 }
+		try {
+			HSSFWorkbook wb=new HSSFWorkbook();
+			HSSFSheet sheet = wb.createSheet("月回款统计表");
+			HSSFCellStyle style=wb.createCellStyle();
+			style.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+			style.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+			HSSFFont font=wb.createFont();
+			font.setFontName("宋体");
+			font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+			font.setFontHeightInPoints((short)18);
+			style.setFont(font);
+			sheet.addMergedRegion(new Region( 0, (short)0, 0, (short)(2+sheetcount)));
+			HSSFRow row0=sheet.createRow(0);
+			row0.setHeightInPoints((short)20);
+			HSSFCell cell0= row0.createCell(0);
+			cell0.setCellValue("月回款统计表");
+			cell0.setCellStyle(style);
+			HSSFRow row1=sheet.createRow(1);
+			row1.createCell(0).setCellValue("日期");
+			row1.createCell(1).setCellValue("项目名称");
+			
+			ConfigApp configApp= configAppService.findByAppId(appId);
+			HSSFRow row2=sheet.createRow(2);
+			row2.createCell(0).setCellValue(startTime);
+			row2.createCell(1).setCellValue(configApp.getAppName());
+			int size=0;
+			for(int i=0;i<payMethod.size();i++)
+			{
+				row1.createCell(2+i).setCellValue(payMethod.get(i));
+				size++;
+			}
+			Iterator<Map.Entry<String, Double>> offices=officeMoneys.entrySet().iterator();
+			 while (offices.hasNext()) {
+			   Entry<String, Double> entry = offices.next();
+				  if(entry.getValue()>0)
+				  {
+					  row1.createCell(2+size).setCellValue(entry.getKey());
+					  row2.createCell(2+size).setCellValue(entry.getValue());
+					  size++;
+				  }
+			  }
+			row1.createCell(2+size).setCellValue("总计");
+			for(int j=0;j<money.size();j++)
+			{
+				row2.createCell(2+j).setCellValue(money.get(j));
+			}
+			row2.createCell(2+size).setCellValue(countMoneys);
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			response.setContentType(response.getContentType());
+			response.setHeader("Content-disposition",
+					"attachment; filename=monthPayment.xls");
+			wb.write(baos);
+			byte[] bytes = baos.toByteArray();
+			response.setHeader("Content-Length", String.valueOf(bytes.length));
+			BufferedOutputStream bos = null;
+			bos = new BufferedOutputStream(response.getOutputStream());
+			bos.write(bytes);
+			bos.close();
+			baos.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	@RequestMapping(value = "exportDayPayment")
+	public void exportDayPayment(WorkDealInfo workDealInfo,
+			@RequestParam(value = "startTime", required = false) Date startTime,
+			@RequestParam(value = "endTime", required = false) Date endTime,
+			@RequestParam(value = "area", required = false) Long area,
+			@RequestParam(value = "appId", required = false) Long appId,
+			HttpServletRequest request,
+			HttpServletResponse response,
+			Model model)
+	{
+		User user = UserUtils.getUser();
+		List<Long> dealInfoByAreaIds = Lists.newArrayList();
+		List<Long> officeids = Lists.newArrayList();
+		List<String> payMethod = Lists.newArrayList();
+		List<Double> money = Lists.newArrayList();
+		Map<String, Double> officeMoneys=new HashMap<>();
+		if (area != null) {
+		List<Long> appids = Lists.newArrayList();
+		List<Office> offices = officeService.findByParentId(area);// 根据区域id获取网店id
+		
+		model.addAttribute("wangdian", offices);
+		if (offices.size() > 0) {
+			for (int i = 0; i < offices.size(); i++) {
+				officeids.add(offices.get(i).getId());
+			}
+		} else {
+			officeids.add(-1l);
+		}
+		List<ConfigAppOfficeRelation> appOffices = configAppOfficeRelationService
+				.findAllByOfficeId(officeids);// 根据网点id获取应用id
+		if (appOffices.size() > 0) {
+			for (int i = 0; i < appOffices.size(); i++) {
+				appids.add(appOffices.get(i).getConfigApp().getId());
+			}
+		} else {
+			appids.add(-1l);
+		}
+
+		List<WorkDealInfo> deals = workDealInfoService
+				.findByAppId(appids);// 根据应用id获取dealInfo信息
+		if (deals.size() < 1) {
+			dealInfoByAreaIds.add(-1l);
+		} else {
+			for (int i = 0; i < deals.size(); i++) {
+				dealInfoByAreaIds.add(deals.get(i).getId());
+			}
+		}
+		}
+		List<WorkDealInfo> list=workDealInfoService.findByDayPay(startTime,endTime,officeids,dealInfoByAreaIds, appId);
+		double countMoney =0L;
+		if(list!=null)
+		{
+			for(int j=0;j<officeids.size();j++)
+			{
+				double countPostMoney=0L;
+				double countBankMoney=0L;
+				double countXjMoney=0L;
+				double countAlipayMoney=0L;
+				for(int i=0;i<list.size();i++)
+				{
+					
+					if(list.get(i).getCreateBy().getOffice().getId()==officeids.get(j))
+					{
+						double postMoney =list.get(i).getWorkPayInfo().getPosMoney();
+						double bankMoney =list.get(i).getWorkPayInfo().getBankMoney();
+						double xjMoney =list.get(i).getWorkPayInfo().getMoney();
+						double alipayMoney =list.get(i).getWorkPayInfo().getAlipayMoney();
+						countPostMoney+=postMoney;
+						countBankMoney+=bankMoney;
+						countXjMoney+=xjMoney;
+						countAlipayMoney+=alipayMoney;
+						countMoney+=(postMoney+bankMoney+xjMoney+alipayMoney);//总计
+					}
+				}
+				String officeName=(officeService.findById(officeids.get(j))).getName();
+				officeMoneys.put(officeName, countMoney);
+				if(countPostMoney>0)
+				{
+					payMethod.add("Post付款");
+					money.add(countPostMoney);
+				}
+				if(countBankMoney>0)
+				{
+					payMethod.add("银行转账付款");
+					money.add(countBankMoney);
+				}
+				if(countXjMoney>0)
+				{
+					payMethod.add("现金");
+					money.add(countXjMoney);
+				}
+				if(countAlipayMoney>0)
+				{
+					payMethod.add("支付宝");
+					money.add(countAlipayMoney);
+				}
+				
+			}
+		}
+		int sheetcount =0;
+		Iterator<Map.Entry<String, Double>> it=officeMoneys.entrySet().iterator();
+		 while (it.hasNext()) {
+		   Entry<String, Double> entry = it.next();
+			  if(entry.getValue()>0)
+			  {
+				  sheetcount+=1;
+			  }
+		  }
+		 for(int i=0;i<payMethod.size();i++)
+		 {
+			 sheetcount+=1;
+		 }
+		try {
+			HSSFWorkbook wb=new HSSFWorkbook();
+			HSSFSheet sheet = wb.createSheet("日回款统计表");
+			HSSFCellStyle style=wb.createCellStyle();
+			style.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+			style.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+			HSSFFont font=wb.createFont();
+			font.setFontName("宋体");
+			font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+			font.setFontHeightInPoints((short)18);
+			style.setFont(font);
+			sheet.addMergedRegion(new Region( 0, (short)0, 0, (short)(2+sheetcount)));
+			HSSFRow row0=sheet.createRow(0);
+			row0.setHeightInPoints((short)20);
+			HSSFCell cell0= row0.createCell(0);
+			cell0.setCellValue("日回款统计表");
+			cell0.setCellStyle(style);
+			HSSFRow row1=sheet.createRow(1);
+			row1.createCell(0).setCellValue("日期");
+			row1.createCell(1).setCellValue("项目名称");
+			
+			String sf=new SimpleDateFormat("yyy-MM-dd").format(startTime);
+			ConfigApp configApp= configAppService.findByAppId(appId);
+			HSSFRow row2=sheet.createRow(2);
+			row2.createCell(0).setCellValue(sf);
+			row2.createCell(1).setCellValue(configApp.getAppName());
+			int size=0;
+			for(int i=0;i<payMethod.size();i++)
+			{
+				row1.createCell(2+i).setCellValue(payMethod.get(i));
+				size++;
+			}
+			Iterator<Map.Entry<String, Double>> offices=officeMoneys.entrySet().iterator();
+			 while (offices.hasNext()) {
+			   Entry<String, Double> entry = offices.next();
+				  if(entry.getValue()>0)
+				  {
+					  row1.createCell(2+size).setCellValue(entry.getKey());
+					  row2.createCell(2+size).setCellValue(entry.getValue());
+					  size++;
+				  }
+			  }
+			row1.createCell(2+size).setCellValue("总计");
+			for(int j=0;j<money.size();j++)
+			{
+				row2.createCell(2+j).setCellValue(money.get(j));
+			}
+			row2.createCell(2+size).setCellValue(countMoney);
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			response.setContentType(response.getContentType());
+			response.setHeader("Content-disposition",
+					"attachment; filename=dayPayment.xls");
+			wb.write(baos);
+			byte[] bytes = baos.toByteArray();
+			response.setHeader("Content-Length", String.valueOf(bytes.length));
+			BufferedOutputStream bos = null;
+			bos = new BufferedOutputStream(response.getOutputStream());
+			bos.write(bytes);
+			bos.close();
+			baos.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	@RequiresPermissions("work:workDealInfo:view")
 	@RequestMapping(value = "certCount")
 	public String certCount(Model model) {

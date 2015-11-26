@@ -204,7 +204,11 @@ public class OfficeService extends BaseService {
 		dc.addOrder(Order.desc("id"));
 		return officeDao.find(dc);
 	}
-	
+	public Office findById(Long officeId)
+	{
+		return officeDao.findOne(officeId);
+		
+	}
 	@Transactional(readOnly = false)
 	public void save(Office office){
 		officeDao.save(office);
