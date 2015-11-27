@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolationException;
 
-import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresUser;
 import org.json.JSONObject;
@@ -331,8 +330,8 @@ public class UserController extends BaseController {
 	
 	@RequestMapping(value = "verfyIP")
 	@ResponseBody
-	public String verfyIP(){
-		String newIP = SecurityUtils.getSubject().getSession().getHost();
+	public String verfyIP(HttpServletRequest request){
+		String newIP = StringUtils.getRemoteAddr(request);//SecurityUtils.getSubject().getSession().getHost();
 		User user = UserUtils.getUser();
 		JSONObject json = new JSONObject();
 		try {

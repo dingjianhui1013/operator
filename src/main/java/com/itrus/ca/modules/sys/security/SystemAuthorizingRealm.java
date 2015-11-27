@@ -96,9 +96,7 @@ public class SystemAuthorizingRealm extends AuthorizingRealm {
 					// 添加基于Permission的权限信息
 					info.addStringPermission(menu.getPermission());
 				}
-			}
-			// 更新登录IP和时间
-			getSystemService().updateUserLoginInfo(user.getId());
+			}			
 			return info;
 		} else {
 			return null;

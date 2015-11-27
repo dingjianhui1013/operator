@@ -249,7 +249,7 @@ public class FrontController extends BaseController{
 								+replyComment.getContent()+"</div>"+comment.getContent());
 					}
 				}
-				comment.setIp(request.getRemoteAddr());
+				comment.setIp(StringUtils.getRemoteAddr(request));
 				comment.setCreateDate(new Date());
 				comment.setDelFlag(Comment.DEL_FLAG_AUDIT);
 				commentService.save(comment);

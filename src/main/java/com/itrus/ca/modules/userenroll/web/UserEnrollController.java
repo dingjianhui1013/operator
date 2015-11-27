@@ -36,6 +36,7 @@ import com.google.common.collect.Lists;
 import com.itrus.ca.common.persistence.Page;
 import com.itrus.ca.common.utils.FileDownloadUtil;
 import com.itrus.ca.common.utils.PayinfoUtil;
+import com.itrus.ca.common.utils.StringUtils;
 import com.itrus.ca.common.web.BaseController;
 import com.itrus.ca.modules.constant.ProductType;
 import com.itrus.ca.modules.constant.WorkDealInfoStatus;
@@ -843,7 +844,7 @@ public class UserEnrollController extends BaseController {
 	@RequestMapping(value = "jsfw3Nextform")
 	public String jsfw3Nextform(Model model, String msg,HttpServletRequest request,@RequestParam(required = false)String keySn,Long id) {
 		model.addAttribute("status", "解锁失败，错误码" + msg);
-		logUtil.saveTerminalLog(request.getRemoteHost(), keySn+"解锁失败:"+msg, request.getRemoteAddr(),keySn, "申请解锁");
+		logUtil.saveTerminalLog(request.getRemoteHost(), keySn+"解锁失败:"+msg, StringUtils.getRemoteAddr(request),keySn, "申请解锁");
 		//解锁失败不允许再次申请，直接更新为解锁失败状态
 		try {
 			KeyUnlock unlock = keyUnlockService.get(id);
@@ -1009,7 +1010,7 @@ public class UserEnrollController extends BaseController {
 			
 			dealInfoService.save(new_dealInfo);
 
-			logUtil.saveTerminalLog(request.getRemoteHost(), "申请更新业务", request.getRemoteAddr(),certSn, "申请更新");
+			logUtil.saveTerminalLog(request.getRemoteHost(), "申请更新业务", StringUtils.getRemoteAddr(request),certSn, "申请更新");
 //			double money = configChargeAgentDetailService.selectMoney(
 //					configChargeAgent,1, new_dealInfo.getYear(), new_dealInfo
 //							.getConfigProduct().getProductLabel());

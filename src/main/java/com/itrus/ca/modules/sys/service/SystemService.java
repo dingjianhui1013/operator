@@ -126,8 +126,8 @@ public class SystemService extends BaseService implements InitializingBean {
 	}
 	
 	@Transactional(readOnly = false)
-	public void updateUserLoginInfo(Long id) {
-		userDao.updateLoginInfo(SecurityUtils.getSubject().getSession().getHost(), new Date(), id);
+	public void updateUserLoginInfo(Long id,String ip) {
+		userDao.updateLoginInfo(ip, new Date(), id);
 	}
 	
 	/**

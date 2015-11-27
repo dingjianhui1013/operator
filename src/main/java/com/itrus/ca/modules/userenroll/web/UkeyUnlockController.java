@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONObject;
+import com.itrus.ca.common.utils.StringUtils;
 import com.itrus.ca.common.web.BaseController;
 import com.itrus.ca.modules.key.service.KeyUsbKeyService;
 import com.itrus.ca.modules.log.service.LogUtil;
@@ -91,7 +92,7 @@ public class UkeyUnlockController extends BaseController{
 		
     	uiModel.addAttribute("enroll_id", keyunlock.getId());	
 		uiModel.addAttribute("status", "解锁申请已提交成功，等待管理员审批！");	
-		logUtil.saveTerminalLog(request.getRemoteHost(), keyunlock.getKeySn()+"提交解锁请求", request.getRemoteAddr(), keyunlock.getKeySn(), "申请解锁");
+		logUtil.saveTerminalLog(request.getRemoteHost(), keyunlock.getKeySn()+"提交解锁请求", StringUtils.getRemoteAddr(request), keyunlock.getKeySn(), "申请解锁");
         return "iLetter/zhengshufuwu_jsfw2";
     }
     
@@ -202,7 +203,7 @@ public class UkeyUnlockController extends BaseController{
     	// 返回信息
 		uiModel.addAttribute("status", "解锁成功，请牢记您设置的新口令！");
 		uiModel.addAttribute("unlockstatus", status);
-		logUtil.saveTerminalLog(request.getRemoteHost(), keyunlock1.getKeySn()+"解锁成功", request.getRemoteAddr(), keyunlock1.getKeySn(), "解锁成功");
+		logUtil.saveTerminalLog(request.getRemoteHost(), keyunlock1.getKeySn()+"解锁成功", StringUtils.getRemoteAddr(request), keyunlock1.getKeySn(), "解锁成功");
 
         return "iLetter/zhengshufuwu_jsfw4";
     }

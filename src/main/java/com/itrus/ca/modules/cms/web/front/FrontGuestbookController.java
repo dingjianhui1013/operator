@@ -9,8 +9,6 @@ import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,6 +20,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.itrus.ca.common.config.Global;
 import com.itrus.ca.common.persistence.Page;
 import com.itrus.ca.common.servlet.ValidateCodeServlet;
+import com.itrus.ca.common.utils.StringUtils;
 import com.itrus.ca.common.web.BaseController;
 import com.itrus.ca.modules.cms.entity.Guestbook;
 import com.itrus.ca.modules.cms.entity.Site;
@@ -63,7 +62,7 @@ public class FrontGuestbookController extends BaseController{
 	public String guestbookSave(Guestbook guestbook, String validateCode, HttpServletRequest request, HttpServletResponse response, RedirectAttributes redirectAttributes) {
 		if (StringUtils.isNotBlank(validateCode)){
 			if (ValidateCodeServlet.validate(request, validateCode)){
-				guestbook.setIp(request.getRemoteAddr());
+				guestbook.setIp(StringUtils.getRemoteAddr(request));
 				guestbook.setCreateDate(new Date());
 				guestbook.setDelFlag(Guestbook.DEL_FLAG_AUDIT);
 				guestbookService.save(guestbook);

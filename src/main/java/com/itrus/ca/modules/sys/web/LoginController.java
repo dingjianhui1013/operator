@@ -11,18 +11,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
-import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresUser;
 import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
-import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.common.collect.Maps;
 import com.itrus.ca.common.config.Global;
@@ -31,6 +28,7 @@ import com.itrus.ca.common.utils.CookieUtils;
 import com.itrus.ca.common.utils.StringUtils;
 import com.itrus.ca.common.web.BaseController;
 import com.itrus.ca.modules.sys.entity.User;
+import com.itrus.ca.modules.sys.service.SystemService;
 import com.itrus.ca.modules.sys.utils.UserUtils;
 
 /**
@@ -41,6 +39,8 @@ import com.itrus.ca.modules.sys.utils.UserUtils;
 @Controller
 public class LoginController extends BaseController{
 	Logger log = Logger.getLogger(LoginController.class);
+	@Autowired
+	SystemService systemService;
 	/**
 	 * 管理登录
 	 */
@@ -49,6 +49,7 @@ public class LoginController extends BaseController{
 		User user = UserUtils.getUser();
 		// 如果已经登录，则跳转到管理首页
 		if(user.getId() != null){
+			systemService.updateUserLoginInfo(user.getId(),StringUtils.getRemoteAddr(request));
 			return "redirect:"+Global.getAdminPath();
 		}
 		return "modules/sys/sysLogin";
@@ -62,6 +63,7 @@ public class LoginController extends BaseController{
 		User user = UserUtils.getUser();
 		// 如果已经登录，则跳转到管理首页
 		if(user.getId() != null){
+			systemService.updateUserLoginInfo(user.getId(),StringUtils.getRemoteAddr(request));
 			return "redirect:"+Global.getAdminPath();
 		}
 		model.addAttribute(FormAuthenticationFilter.DEFAULT_USERNAME_PARAM, username);
@@ -80,6 +82,8 @@ public class LoginController extends BaseController{
 		if(user.getId() == null){
 			return "redirect:"+Global.getAdminPath()+"/login";
 		}
+		// 更新登录IP和时间
+		systemService.updateUserLoginInfo(user.getId(),StringUtils.getRemoteAddr(request));
 		log.info(user.getId()+"登陆成功..");
 		// 登录成功后，验证码计算器清零
 		isValidateCodeLogin(user.getLoginName(), false, true);
