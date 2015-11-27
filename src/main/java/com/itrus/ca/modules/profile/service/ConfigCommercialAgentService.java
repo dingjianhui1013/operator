@@ -58,6 +58,13 @@ public class ConfigCommercialAgentService extends BaseService {
 		dc.addOrder(Order.desc("id"));
 		return configCommercialAgentDao.find(dc);
 	}
+	public List<ConfigCommercialAgent> findById(Long id) {
+		DetachedCriteria dc = configCommercialAgentDao.createDetachedCriteria();
+		dc.add(Restrictions.eq("id", id));
+		dc.add(Restrictions.ne("del_flag", 1));
+		dc.addOrder(Order.desc("id"));
+		return configCommercialAgentDao.find(dc);
+	}
 	
 	public List<ConfigCommercialAgent> findAllNameByType(Integer type) {
 		DetachedCriteria dc = configCommercialAgentDao.createDetachedCriteria();
