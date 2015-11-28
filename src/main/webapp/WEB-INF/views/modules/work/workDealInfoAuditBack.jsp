@@ -77,7 +77,7 @@
 					if(i==0){
 						$("#boundId").val(item.id);
 					}
-					styleHtml +="<option value='"+item.id+"'>" + item.name + "</option>";
+					styleHtml +="<option value='"+item.agentId+"'>" + item.name + "</option>";
 				});
 				$("#agentDetailId").html(styleHtml);
 			});
@@ -167,7 +167,41 @@
 		}else{
 			var url = "${ctx}/work/workDealInfoAudit/getAgentMoney?dealInfoId="+${workDealInfo.id}+"&newAgentId="+agentDetailId + "&_="+new Date().getTime();
 			$.getJSON(url,function(data){
-				
+				if (data.status==0) {
+					var html = "";
+					var iseq = 0;
+					alert(parseFloat(data.oldAdd)+"||||||||"+parseFloat(data.newAdd));
+					if(parseFloat(data.oldAdd)>parseFloat(data.newAdd)){
+						var money = data.oldAdd-data.newAdd;
+						html = "变更此缴费方式需要退回"+money+"元！您确定继续变更缴费方式么？";
+						iseq = 1;
+					}else if(parseFloat(data.oldAdd)<parseFloat(data.newAdd)){
+						var money = data.newAdd - data.oldAdd;
+						html = "变更此缴费方式需要缴纳"+money+"元！您确定继续变更缴费方式么？";
+						var iseq = 2;
+					}else if(parseFloat(data.oldAdd)==parseFloat(data.newAdd)){
+						html = "变更此缴费方式不需要缴纳或退回任何费用！您确定继续变更缴费方式么？";
+						var iseq = 3;
+					}
+					var submit = function (v, h, f) {
+					    if (v == 'ok') {
+					      
+					    	window.location.href="${ctx}/work/workDealInfoAudit/backMoney?id=${workDealInfo.id}&agentDetailId="+agentDetailId+"&iseq="+iseq;
+					    	
+					    }
+					    else if (v == 'cancel') {
+					        // 取消
+					    }
+					    return true; //close
+					};
+
+					top.$.jBox.confirm(html, "提示", submit);
+				}else{
+					top.$.jBox.tip("系统异常");
+					
+				}
+		
+					
 				
 				
 			});
