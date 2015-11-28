@@ -16,14 +16,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.codehaus.jackson.impl.JsonGeneratorBase;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Restrictions;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.itrus.ca.common.config.Global;
@@ -54,6 +58,7 @@ import com.itrus.ca.modules.profile.service.ConfigAgentAppRelationService;
 import com.itrus.ca.modules.profile.service.ConfigAgentBoundDealInfoService;
 import com.itrus.ca.modules.profile.service.ConfigAgentOfficeRelationService;
 import com.itrus.ca.modules.profile.service.ConfigChargeAgentBoundConfigProductService;
+import com.itrus.ca.modules.profile.service.ConfigChargeAgentDetailService;
 import com.itrus.ca.modules.profile.service.ConfigChargeAgentService;
 import com.itrus.ca.modules.profile.service.ConfigRaAccountService;
 import com.itrus.ca.modules.receipt.entity.ReceiptDepotInfo;
@@ -170,6 +175,9 @@ public class WorkDealInfoAuditController extends BaseController {
 	
 	@Autowired
 	private FinanceQuitMoneyService financeQuitMoneyService;
+	
+	@Autowired
+	private ConfigChargeAgentDetailService configChargeAgentDetailService;
 
 	
 	private LogUtil logUtil = new LogUtil();
@@ -945,7 +953,7 @@ public class WorkDealInfoAuditController extends BaseController {
 	 */
 	@RequestMapping("backMoney")
 	public String backMoney(Long id, HttpServletRequest request,
-			HttpServletResponse response, String receiptAmount, String method,
+			HttpServletResponse response, String receiptAmount, Long agentDetailId,
 			Model model) {
 		WorkDealInfo dealInfo = workDealInfoService.get(id);
 		// 修改状态为退费 0为新建 1为异常
@@ -956,113 +964,11 @@ public class WorkDealInfoAuditController extends BaseController {
 			return "redirect:" + Global.getAdminPath() + "/work/workDealInfo/list";
 
 		}
-		boolean needFixStatistic = false;
 		WorkPayInfo payInfo = dealInfo.getWorkPayInfo();
-		List<Integer> fixTypes = new ArrayList<Integer>();
-		fixTypes.add(WorkDealInfoType.TYPE_ADD_CERT);
-		fixTypes.add(WorkDealInfoType.TYPE_UPDATE_CERT);
-		if (payInfo.getMethodAlipay() || payInfo.getMethodBank()
-				|| payInfo.getMethodMoney() || payInfo.getMethodPos()) {
-			needFixStatistic = true;
-		}
-		Integer type = 2;// 更新
-		if (dealInfo.getDealInfoType() != null && dealInfo.getDealInfoType().equals(WorkDealInfoType.TYPE_ADD_CERT)) {
-			type = 1;// 新增
-		}
-		Integer year = dealInfo.getYear();
-		if (fixTypes.contains(dealInfo.getDealInfoType())
-				|| fixTypes.contains(dealInfo.getDealInfoType())) {// 修正历史数据
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-			Date date = dealInfo.getObtainedDate();
-			if (needFixStatistic && date != null) {
-				try {
-					Date staticsDate = sdf.parse(sdf.format(date));
-					List<StatisticCertData> certData = statisticCertDataService
-							.countHisData(dealInfo.getConfigApp(), staticsDate);
-					if (certData != null) {
-						StatisticCertData self = new StatisticCertData();
-						StatisticCertData contract = new StatisticCertData();
-						StatisticCertData gov = new StatisticCertData();
-						StatisticCertData fixObj = new StatisticCertData();
-						for (StatisticCertData d : certData) {
-							if (d.getPayType().equals(0)) {
-								self = d;
-							}
-							if (d.getPayType().equals(1)) {
-								gov = d;
-							}
-							if (d.getPayType().equals(2)) {
-								contract = d;
-							}
-						}
-						if (method.equals("0")) {
-							fixObj = gov;
-						} else {
-							fixObj = contract;
-						}
-						if (type.equals(2)) {// 更新
-							switch (year) {
-							case 1:
-								self.setRenew1(self.getRenew1() - 1);
-								fixObj.setRenew1(fixObj.getRenew1() + 1);
-								break;
-							case 2:
-								self.setRenew2(self.getRenew2() - 1);
-								fixObj.setRenew2(fixObj.getRenew2() + 1);
-								break;
-							case 4:
-								self.setRenew4(self.getRenew4() - 1);
-								fixObj.setRenew4(fixObj.getRenew4() + 1);
-								break;
-							}
-						} else {// 新增
-							switch (year) {
-							case 1:
-								self.setAdd1(self.getAdd1() - 1);
-								fixObj.setAdd1(fixObj.getAdd1() + 1);
-								break;
-							case 2:
-								self.setAdd2(self.getAdd2() - 1);
-								fixObj.setAdd2(fixObj.getAdd2() + 1);
-								break;
-							case 4:
-								self.setAdd4(self.getAdd4() - 1);
-								fixObj.setAdd4(fixObj.getAdd4() + 1);
-								break;
-							}
-						}
-						statisticCertDataService.save(self);
-						statisticCertDataService.save(fixObj);
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		}
+		try {
 		// 生成新的业务，类型为退费,保存原来的payInfo
 		WorkDealInfo workDealInfo = new WorkDealInfo();
-//		if(type.equals(1)){
-//			workDealInfo.setDealInfoType(WorkDealInfoType.TYPE_ADD_CERT);
-//		}else{
-//			workDealInfo.setDealInfoType(WorkDealInfoType.TYPE_RETURN_MONEY);
-//		}
 		workDealInfo.setDealInfoType(WorkDealInfoType.TYPE_PAY_REPLACED);
-//		if (dealInfo.getDealInfoType()!=null) {
-//			workDealInfo.setDealInfoType(dealInfo.getDealInfoType());
-//		}else if(dealInfo.getDealInfoType1()!=null){
-//			workDealInfo.setDealInfoType(dealInfo.getDealInfoType1());
-//			
-//		}else if(dealInfo.getDealInfoType2()!=null){
-//			workDealInfo.setDealInfoType(dealInfo.getDealInfoType2());
-//			
-//		}else if(dealInfo.getDealInfoType3()!=null){
-//			workDealInfo.setDealInfoType(dealInfo.getDealInfoType3());
-//		}
-//		
-		
-		
-		
-		//workDealInfo.setYear(0);
 		workDealInfo.setYear(dealInfo.getYear());
 		workDealInfo.setConfigApp(dealInfo.getConfigApp());
 		ConfigCommercialAgent commercialAgent = configAgentAppRelationService
@@ -1136,13 +1042,11 @@ public class WorkDealInfoAuditController extends BaseController {
 		workDealInfo.setWorkPayInfo(workPayInfo);
 		workDealInfo.setLastDays(dealInfo.getLastDays());
 		
+		ConfigChargeAgent agent =  chargeAgentService.get(agentDetailId);
 		
-		if (method.equals("0")) {
-			workDealInfo.setPayType(2);
-		}else if(method.equals("1")){
-			workDealInfo.setPayType(3);
-		}
 		
+		workDealInfo.setPayType(Integer.parseInt(agent.getTempStyle()));
+		workDealInfo.setConfigChargeAgentId(agent.getId());
 		
 		workDealInfoService.save(workDealInfo);
 
@@ -1150,8 +1054,8 @@ public class WorkDealInfoAuditController extends BaseController {
 		payInfo.setMethodMoney(false);
 		payInfo.setMethodAlipay(false);
 		payInfo.setMethodBank(false);
-		payInfo.setMethodContract(method.equals("0") ? false : true);
-		payInfo.setMethodGov(method.equals("1") ? false : true);
+//		payInfo.setMethodContract(method.equals("0") ? false : true);
+//		payInfo.setMethodGov(method.equals("1") ? false : true);
 		payInfo.setMethodPos(false);
 		payInfo.setMoney(0d);
 		payInfo.setPosMoney(0d);
@@ -1159,57 +1063,13 @@ public class WorkDealInfoAuditController extends BaseController {
 		payInfo.setAlipayMoney(0d);
 		workPayInfoService.save(payInfo);
 		dealInfo.setWorkPayInfo(payInfo);
-		workDealInfoService.save(dealInfo);
-		// 删除以前的dealinfo使其不再列表显示
+		workDealInfoService.save(dealInfo);// 删除以前的dealinfo使其不再列表显示
+		
 		workDealInfoService.delete(dealInfo.getId());
 
-		// 变更relation表money变成负数，退还绑定钱数，次数。
-		Iterator<WorkFinancePayInfoRelation> iterator = payInfo
-				.getWorkFinancePayInfoRelations().iterator();
-		while (iterator.hasNext()) {
-			WorkFinancePayInfoRelation relation = iterator.next();
-			FinancePaymentInfo fpr = relation.getFinancePaymentInfo();
-			fpr.setBingdingTimes(fpr.getBingdingTimes() - 1);
-			// fpr.setPaymentMoney(fpr.getPaymentMoney()+workDealInfo.getWorkPayInfo().getWorkReceivaMoney());
-			fpr.setResidueMoney(fpr.getResidueMoney() + relation.getMoney());
-			financePaymentInfoService.save(fpr);
-			WorkFinancePayInfoRelation financePayInfoRelation = new WorkFinancePayInfoRelation();
-			financePayInfoRelation.setMoney(-relation.getMoney());
-			financePayInfoRelation.setFinancePaymentInfo(fpr);
-			financePayInfoRelation.setWorkPayInfo(workPayInfo);
-			financePayInfoRelation.setSn(workPayInfo.getSn());
-			workFinancePayInfoRelationService.save(financePayInfoRelation);
-		}
-		try {
-			if (!receiptAmount.equals("")
-					&& Double.valueOf(receiptAmount) != 0d
-					&& Double.valueOf(receiptAmount) != 0d) {
-				// 当实际余额 大约 库存余额
-				ReceiptDepotInfo receiptDepotInfo = receiptDepotInfoService
-						.findDepotByOffice(dealInfo.getCreateBy().getOffice())
-						.get(0);
-				// 修改余额
-				receiptDepotInfo.setReceiptResidue(receiptDepotInfo
-						.getReceiptResidue() + Double.valueOf(receiptAmount));
-				// 创建入库信息
-				ReceiptEnterInfo receiptEnterInfo = new ReceiptEnterInfo();
-				receiptEnterInfo.setReceiptDepotInfo(receiptDepotInfo);
-				receiptEnterInfo.setNow_Money(Double.valueOf(receiptAmount));
-				receiptEnterInfo.setBeforMoney(receiptEnterInfo
-						.getReceiptDepotInfo().getReceiptResidue()
-						- Double.valueOf(receiptAmount));
-				receiptEnterInfo.setReceiptMoney(receiptEnterInfo
-						.getReceiptDepotInfo().getReceiptResidue());
-				receiptEnterInfo.setReceiptType(3);// 退费入库
-				receiptEnterInfoService.save(receiptEnterInfo);
-				logUtil.saveSysLog("业务办理退费",
-						"库房" + receiptDepotInfo.getReceiptName() + "添加入库信息成功",
-						"");
-				receiptDepotInfoService.save(receiptDepotInfo);
-				logUtil.saveSysLog("业务办理退费",
-						"修改库房" + receiptDepotInfo.getReceiptName()
-								+ "发票余额，异常入库", "");
-			}
+
+		
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -1342,4 +1202,344 @@ public class WorkDealInfoAuditController extends BaseController {
 		}
 		return (int) ((notAfterLong - nowLong) / MILL);
 	}
+	
+	
+	@RequestMapping(value = "getAgentMoney")
+	@ResponseBody
+	public String getAgentMoney(Long dealInfoId , Long newAgentId ) throws JSONException{
+		JSONObject json = new JSONObject();
+		try {
+			WorkDealInfo dealInfo = workDealInfoService.get(dealInfoId);
+			Double oldAdd = 0d;
+			Double newAdd = 0d;
+			if (dealInfo.getDealInfoType()!=null) {
+				if (dealInfo.getDealInfoType().equals(0)) {//新增
+					oldAdd += configChargeAgentDetailService.getChargeMoney(dealInfo.getConfigChargeAgentId(), dealInfo.getDealInfoType(), dealInfo.getYear());
+					newAdd += configChargeAgentDetailService.getChargeMoney(newAgentId, dealInfo.getDealInfoType(), dealInfo.getYear());
+					
+				}else if(dealInfo.getDealInfoType().equals(1)){//更新
+					oldAdd += configChargeAgentDetailService.getChargeMoney(dealInfo.getConfigChargeAgentId(), dealInfo.getDealInfoType(), dealInfo.getYear());
+					newAdd += configChargeAgentDetailService.getChargeMoney(newAgentId, dealInfo.getDealInfoType(), dealInfo.getYear());
+					
+					
+				}
+		
+			}
+			if (dealInfo.getDealInfoType1()!=null) {
+				if (dealInfo.getDealInfoType1().equals(2)) {
+					oldAdd += configChargeAgentDetailService.getChargeMoney(dealInfo.getConfigChargeAgentId(), dealInfo.getDealInfoType(), null);
+					newAdd += configChargeAgentDetailService.getChargeMoney(newAgentId, dealInfo.getDealInfoType(), null);
+					
+				}else if (dealInfo.getDealInfoType1().equals(3)) {
+					oldAdd += configChargeAgentDetailService.getChargeMoney(dealInfo.getConfigChargeAgentId(), dealInfo.getDealInfoType(), null);
+					newAdd += configChargeAgentDetailService.getChargeMoney(newAgentId, dealInfo.getDealInfoType(), null);
+				}
+				
+			}
+			if (dealInfo.getDealInfoType2()!=null) {
+				if (dealInfo.getDealInfoType2().equals(4)) {
+					oldAdd += configChargeAgentDetailService.getChargeMoney(dealInfo.getConfigChargeAgentId(), dealInfo.getDealInfoType(), null);
+					newAdd += configChargeAgentDetailService.getChargeMoney(newAgentId, dealInfo.getDealInfoType(), null);
+				}
+			}
+			json.put("oldAdd", oldAdd);
+			json.put("newAdd", newAdd);
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			json.put("status", 1);
+		}
+		
+		json.put("status", 0);
+		
+		return json.toString();
+	}
+	
+	
+	
+	
+	
+	
+	
+	/**   
+ 	 * 老的变更缴费类型方法
+	 * 退费处理页面 （改变缴费方式）
+	 * 
+	 * @param workDealInfo
+	 * @param request
+	 * @param response
+	 * @param model
+	 * @return
+	 
+	@RequestMapping("backMoney")
+	public String backMoney(Long id, HttpServletRequest request,
+			HttpServletResponse response, String receiptAmount, Long agentDetailId,
+			Model model) {
+		WorkDealInfo dealInfo = workDealInfoService.get(id);
+		// 修改状态为退费 0为新建 1为异常
+		// workDealInfo.setDealInfoStatus("2");
+		// workDealInfoService.save(workDealInfo);
+		// 查询当前业务完成时间
+		if("1".equals(dealInfo.getDelFlag())){//判断是否进行过退费，防止浏览器回退再次退费
+			return "redirect:" + Global.getAdminPath() + "/work/workDealInfo/list";
+
+		}
+		WorkPayInfo payInfo = dealInfo.getWorkPayInfo();
+		try {
+		
+		
+		
+//		boolean needFixStatistic = false;
+	
+//		List<Integer> fixTypes = new ArrayList<Integer>();
+//		fixTypes.add(WorkDealInfoType.TYPE_ADD_CERT);
+//		fixTypes.add(WorkDealInfoType.TYPE_UPDATE_CERT);
+//		if (payInfo.getMethodAlipay() || payInfo.getMethodBank()
+//				|| payInfo.getMethodMoney() || payInfo.getMethodPos()) {
+//			needFixStatistic = true;
+//		}
+//		Integer type = 2;// 更新
+//		if (dealInfo.getDealInfoType() != null && dealInfo.getDealInfoType().equals(WorkDealInfoType.TYPE_ADD_CERT)) {
+//			type = 1;// 新增
+//		}
+//		Integer year = dealInfo.getYear();
+//		if (fixTypes.contains(dealInfo.getDealInfoType())
+//				|| fixTypes.contains(dealInfo.getDealInfoType())) {// 修正历史数据
+//			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+//			Date date = dealInfo.getObtainedDate();
+//			if (needFixStatistic && date != null) {
+//				try {
+//					Date staticsDate = sdf.parse(sdf.format(date));
+//					List<StatisticCertData> certData = statisticCertDataService
+//							.countHisData(dealInfo.getConfigApp(), staticsDate);
+//					if (certData != null) {
+//						StatisticCertData self = new StatisticCertData();
+//						StatisticCertData contract = new StatisticCertData();
+//						StatisticCertData gov = new StatisticCertData();
+//						StatisticCertData fixObj = new StatisticCertData();
+//						for (StatisticCertData d : certData) {
+//							if (d.getPayType().equals(0)) {
+//								self = d;
+//							}
+//							if (d.getPayType().equals(1)) {
+//								gov = d;
+//							}
+//							if (d.getPayType().equals(2)) {
+//								contract = d;
+//							}
+//						}
+//						if (method.equals("0")) {
+//							fixObj = gov;
+//						} else {
+//							fixObj = contract;
+//						}
+//						if (type.equals(2)) {// 更新
+//							switch (year) {
+//							case 1:
+//								self.setRenew1(self.getRenew1() - 1);
+//								fixObj.setRenew1(fixObj.getRenew1() + 1);
+//								break;
+//							case 2:
+//								self.setRenew2(self.getRenew2() - 1);
+//								fixObj.setRenew2(fixObj.getRenew2() + 1);
+//								break;
+//							case 4:
+//								self.setRenew4(self.getRenew4() - 1);
+//								fixObj.setRenew4(fixObj.getRenew4() + 1);
+//								break;
+//							}
+//						} else {// 新增
+//							switch (year) {
+//							case 1:
+//								self.setAdd1(self.getAdd1() - 1);
+//								fixObj.setAdd1(fixObj.getAdd1() + 1);
+//								break;
+//							case 2:
+//								self.setAdd2(self.getAdd2() - 1);
+//								fixObj.setAdd2(fixObj.getAdd2() + 1);
+//								break;
+//							case 4:
+//								self.setAdd4(self.getAdd4() - 1);
+//								fixObj.setAdd4(fixObj.getAdd4() + 1);
+//								break;
+//							}
+//						}
+//						statisticCertDataService.save(self);
+//						statisticCertDataService.save(fixObj);
+//					}
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		}
+		// 生成新的业务，类型为退费,保存原来的payInfo
+		WorkDealInfo workDealInfo = new WorkDealInfo();
+		workDealInfo.setDealInfoType(WorkDealInfoType.TYPE_PAY_REPLACED);
+		workDealInfo.setYear(dealInfo.getYear());
+		workDealInfo.setConfigApp(dealInfo.getConfigApp());
+		ConfigCommercialAgent commercialAgent = configAgentAppRelationService
+				.findAgentByApp(workDealInfo.getConfigApp());
+		workDealInfo.setConfigCommercialAgent(commercialAgent);
+		workDealInfo.setConfigCommercialAgent(dealInfo
+				.getConfigCommercialAgent());
+		List<ConfigAgentOfficeRelation> configAgentOfficeRelations = configAgentOfficeRelationService
+				.findByOffice(UserUtils.getUser().getOffice());
+		if (configAgentOfficeRelations.size() > 0) {
+			workDealInfo.setCommercialAgent(configAgentOfficeRelations.get(0)
+					.getConfigCommercialAgent());// 劳务关系外键
+		}
+		//取上次业务多证书编号
+		workDealInfo.setCertSort(dealInfo.getCertSort());
+		workDealInfo.setWorkUser(dealInfo.getWorkUser());
+		workDealInfo.setWorkCompany(dealInfo.getWorkCompany());
+		workDealInfo.setWorkUserHis(dealInfo.getWorkUserHis());
+		workDealInfo.setWorkCompanyHis(dealInfo.getWorkCompanyHis());
+		workDealInfo.setConfigProduct(dealInfo.getConfigProduct());
+		workDealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_CERT_OBTAINED);
+		workDealInfo.setCreateBy(UserUtils.getUser());
+		workDealInfo.setCreateDate(new Date());
+		//workDealInfo.setSvn(workDealInfoService.getSVN(0));
+		workDealInfo.setSvn(dealInfo.getSvn());
+		workDealInfo.setPrevId(dealInfo.getId());
+		// 证书获取时间
+		workDealInfo.setObtainedDate(new Date());
+		// workcertinfo继承上次业务的
+		WorkCertInfo workCertInfo = workCertInfoService.get(dealInfo.getWorkCertInfo().getId());
+		workDealInfo.setKeySn(dealInfo.getKeySn());
+		workDealInfo.setNotafter(dealInfo.getNotafter());
+		workDealInfo.setWorkCertInfo(workCertInfo);
+
+		// 新建payInfo保存原来的payInfo数据
+		WorkPayInfo workPayInfo = new WorkPayInfo();
+		workPayInfo.setOpenAccountMoney(payInfo.getOpenAccountMoney());
+		workPayInfo.setAddCert(payInfo.getAddCert());
+		workPayInfo.setUpdateCert(payInfo.getUpdateCert());
+		workPayInfo.setErrorReplaceCert(payInfo.getErrorReplaceCert());
+		workPayInfo.setLostReplaceCert(payInfo.getLostReplaceCert());
+		workPayInfo.setInfoChange(payInfo.getInfoChange());
+		workPayInfo.setElectron(payInfo.getElectron());
+		if (payInfo.getMoney() > 0d) {
+			workPayInfo.setMoney(-payInfo.getMoney());
+		}
+		if (payInfo.getAlipayMoney() > 0d) {
+			workPayInfo.setAlipayMoney(-payInfo.getAlipayMoney());
+		}
+		if (payInfo.getPosMoney() > 0d) {
+			workPayInfo.setPosMoney(-payInfo.getPosMoney());
+		}
+		if (payInfo.getBankMoney() > 0d) {
+			workPayInfo.setBankMoney(-payInfo.getBankMoney());
+		}
+		workPayInfo.setSn(PayinfoUtil.getPayInfoNo());
+		workPayInfo.setWorkTotalMoney(-payInfo.getWorkTotalMoney());
+		workPayInfo.setWorkPayedMoney(0d);
+		workPayInfo.setWorkReceivaMoney(payInfo.getWorkReceivaMoney());
+		workPayInfo
+				.setReceiptAmount(payInfo.getReceiptAmount()
+						- Double.valueOf(receiptAmount.equals("") ? "0"
+								: receiptAmount));
+		workPayInfo.setMethodMoney(payInfo.getMethodMoney());
+		workPayInfo.setMethodAlipay(payInfo.getMethodAlipay());
+		workPayInfo.setMethodBank(payInfo.getMethodBank());
+		workPayInfo.setMethodContract(payInfo.getMethodContract());
+		workPayInfo.setMethodGov(payInfo.getMethodGov());
+		workPayInfo.setMethodPos(false);
+		workPayInfoService.save(workPayInfo);
+		workDealInfo.setWorkPayInfo(workPayInfo);
+		workDealInfo.setLastDays(dealInfo.getLastDays());
+		
+		ConfigChargeAgent agent =  chargeAgentService.get(agentDetailId);
+		
+		
+		workDealInfo.setPayType(Integer.parseInt(agent.getTempStyle()));
+		workDealInfo.setConfigChargeAgentId(agent.getId());
+		
+		workDealInfoService.save(workDealInfo);
+
+		// 原来的payInfo改变付款方式
+		payInfo.setMethodMoney(false);
+		payInfo.setMethodAlipay(false);
+		payInfo.setMethodBank(false);
+//		payInfo.setMethodContract(method.equals("0") ? false : true);
+//		payInfo.setMethodGov(method.equals("1") ? false : true);
+		payInfo.setMethodPos(false);
+		payInfo.setMoney(0d);
+		payInfo.setPosMoney(0d);
+		payInfo.setBankMoney(0d);
+		payInfo.setAlipayMoney(0d);
+		workPayInfoService.save(payInfo);
+		dealInfo.setWorkPayInfo(payInfo);
+		workDealInfoService.save(dealInfo);// 删除以前的dealinfo使其不再列表显示
+		
+		workDealInfoService.delete(dealInfo.getId());
+
+		// 变更relation表money变成负数，退还绑定钱数，次数。
+//		Iterator<WorkFinancePayInfoRelation> iterator = payInfo
+//				.getWorkFinancePayInfoRelations().iterator();
+//		while (iterator.hasNext()) {
+//			WorkFinancePayInfoRelation relation = iterator.next();
+//			FinancePaymentInfo fpr = relation.getFinancePaymentInfo();
+//			fpr.setBingdingTimes(fpr.getBingdingTimes() - 1);
+//			// fpr.setPaymentMoney(fpr.getPaymentMoney()+workDealInfo.getWorkPayInfo().getWorkReceivaMoney());
+//			fpr.setResidueMoney(fpr.getResidueMoney() + relation.getMoney());
+//			financePaymentInfoService.save(fpr);
+//			WorkFinancePayInfoRelation financePayInfoRelation = new WorkFinancePayInfoRelation();
+//			financePayInfoRelation.setMoney(-relation.getMoney());
+//			financePayInfoRelation.setFinancePaymentInfo(fpr);
+//			financePayInfoRelation.setWorkPayInfo(workPayInfo);
+//			financePayInfoRelation.setSn(workPayInfo.getSn());
+//			workFinancePayInfoRelationService.save(financePayInfoRelation);
+//		}
+//		if (!receiptAmount.equals("")
+//				&& Double.valueOf(receiptAmount) != 0d
+//				&& Double.valueOf(receiptAmount) != 0d) {
+//			// 当实际余额 大约 库存余额
+//			ReceiptDepotInfo receiptDepotInfo = receiptDepotInfoService
+//					.findDepotByOffice(dealInfo.getCreateBy().getOffice())
+//					.get(0);
+//			// 修改余额
+//			receiptDepotInfo.setReceiptResidue(receiptDepotInfo
+//					.getReceiptResidue() + Double.valueOf(receiptAmount));
+//			// 创建入库信息
+//			ReceiptEnterInfo receiptEnterInfo = new ReceiptEnterInfo();
+//			receiptEnterInfo.setReceiptDepotInfo(receiptDepotInfo);
+//			receiptEnterInfo.setNow_Money(Double.valueOf(receiptAmount));
+//			receiptEnterInfo.setBeforMoney(receiptEnterInfo
+//					.getReceiptDepotInfo().getReceiptResidue()
+//					- Double.valueOf(receiptAmount));
+//			receiptEnterInfo.setReceiptMoney(receiptEnterInfo
+//					.getReceiptDepotInfo().getReceiptResidue());
+//			receiptEnterInfo.setReceiptType(3);// 退费入库
+//			receiptEnterInfoService.save(receiptEnterInfo);
+//			logUtil.saveSysLog("业务办理退费",
+//					"库房" + receiptDepotInfo.getReceiptName() + "添加入库信息成功",
+//					"");
+//			receiptDepotInfoService.save(receiptDepotInfo);
+//			logUtil.saveSysLog("业务办理退费",
+//					"修改库房" + receiptDepotInfo.getReceiptName()
+//							+ "发票余额，异常入库", "");
+//		}
+		
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		logUtil.saveSysLog("业务办理", "异常业务退费：编号" + dealInfo.getId(), "");
+		return "redirect:" + Global.getAdminPath() + "/work/workDealInfo/list";
+	}*/
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

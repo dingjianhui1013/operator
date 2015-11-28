@@ -49,10 +49,10 @@
 				var styleHtml="";
 				$.each(styleList,function(i,item){
 					if(item.agentId=="${workDealInfo.configChargeAgentId}"){
-						styleHtml +="<option selected='selected'  value='"+item.id+"'>" + item.name + "</option>";
+						styleHtml +="<option selected='selected'  value='"+item.agentId+"'>" + item.name + "</option>";
 						$("#boundId").val(item.id);
 					}else{
-						styleHtml +="<option value='"+item.id+"'>" + item.name + "</option>";
+						styleHtml +="<option value='"+item.agentId+"'>" + item.name + "</option>";
 					}
 				});
 				$("#agentDetailId").html(styleHtml);
@@ -89,8 +89,7 @@
 	
 
 	function buttonFrom(){
-		alert('${bgType}');
-		if (!'${bgType}'){
+		if ('${bgType}'){
 			var type = 0;//政府
 			if($("#contract").prop("checked")){
 				type = 1;
@@ -158,6 +157,26 @@
 			}
 		}
 	}
+	
+	function checkAgent(){
+		
+		var agentDetailId = $("#agentDetailId").val();
+		var configChargeAgentId = ${workDealInfo.configChargeAgentId};
+		if(agentDetailId == configChargeAgentId){
+			top.$.jBox.tip("计费策略模板相同，请重新选择您要更换的模板！");
+		}else{
+			var url = "${ctx}/work/workDealInfoAudit/getAgentMoney?dealInfoId="+${workDealInfo.id}+"&newAgentId="+agentDetailId + "&_="+new Date().getTime();
+			$.getJSON(url,function(data){
+				
+				
+				
+			});
+		}
+	}
+	
+	
+	
+	
 </script>
 </head>
 <body>
@@ -404,8 +423,20 @@
 			</div>
 		</div>
 		<div class="form-actions"  style="text-align: center; width: 100%; border-top: none;">
-				<input class="btn btn-primary" type="button" value="退费" 
-			    onclick="javascript:buttonFrom();"/>&nbsp;
+				
+				
+				<c:if test="${revoke }">
+					<input class="btn btn-primary" type="button" value="退费" onclick="javascript:buttonFrom();"/>&nbsp;
+				</c:if>
+				
+				<c:if test="${!revoke}">
+					<input class="btn btn-primary" type="button" value="变更" onclick="javascript:checkAgent();"/>&nbsp;
+				
+				</c:if>
+				
+			    
+			    
+			    
 			<input id="btnCancel" class="btn" type="button" value="取 消"
 				onclick="history.go(-1)" />
 		</div>
