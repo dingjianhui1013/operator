@@ -159,7 +159,11 @@
 	}
 	
 	function checkAgent(){
-		
+		var type = "${workDealInfo.dealInfoType}";
+		if(type=='12'){
+			top.$.jBox.tip("不能重复更改缴费类型！");
+			return false;
+		}
 		var agentDetailId = $("#agentDetailId").val();
 		var configChargeAgentId = ${workDealInfo.configChargeAgentId};
 		if(agentDetailId == configChargeAgentId){
