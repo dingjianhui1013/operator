@@ -223,6 +223,50 @@
 		}
 	}
 	
+	function updateCertOK(){
+		var checkIds = $("#checkIds").val();
+		if(checkIds==null||checkIds==""){
+			top.$.jBox.tip("请选择您要更新的证书！");
+		}else{
+			var url = "${ctx}/work/workDealInfo/checkUpdateByIds?dealInfoIds="+checkIds+"&_="+new Date().getTime();
+			$.getJSON(url,function(data){
+				if (data.status==1){
+					if (data.isUpdate==0) {
+						
+						var info = "单位名称为:<br>&nbsp;&nbsp;&nbsp;&nbsp;"+data.html+"<br>的证书未在更新范围内，不允许更新这些证书 ！";
+						top.$.jBox.info(info);
+					}else{
+						
+						var html = "<div style='padding:10px;'><input type='radio' value='1' name='year' checked='checked'>1年<br><input type='radio' value='2' name='year'>2年<br><input type='radio' value='4' name='year'>4年<br><input type='radio' value='5' name='year'>5年</div>";
+						var submit = function(v, h, f) {
+							if (f.yourname == '') {
+								$.jBox.tip("请选择退费方式。", 'error', {
+									focusId : "year"
+								}); // 关闭设置 yourname 为焦点
+								return false;
+							}
+							/* window.location.href = "${ctx}/work/workDealInfoAudit/backMoneyFrom?id="
+									+ obj + "&type=" + f.yourname; */
+							alert(f.year);
+							return true;
+						};
+
+						top.$.jBox(html, {
+							title : "请选择更新年限方式！",
+							submit : submit
+						});
+						
+						
+						
+					}
+				}else{
+					top.$.jBox.tip("系统异常");
+				}
+			});
+		}
+		
+	}
+	
 	
 </script>
 
@@ -294,8 +338,8 @@
 				<a id="manyAdd" data-toggle="modal" href="#declareDiv" class="btn btn-primary">批量新增导入</a>
 				
 				&nbsp;&nbsp;&nbsp;&nbsp;
-				<a id="manyUpdate" data-toggle="modal" class="btn btn-primary">批量更新证书</a>
-				<input type="hidden"  name="checkIds"  id="checkIds"  value="${checkIds }"/>
+				<a id="manyUpdate" data-toggle="modal" href="javaScript:updateCertOK();" class="btn btn-primary">批量更新证书</a>
+				<input type="text"  name="checkIds"  id="checkIds"  value="${checkIds }"/>
 		</div>
 	</form:form>
 	<tags:message content="${message}" />
@@ -325,12 +369,18 @@
 		<tbody>
 			<c:forEach items="${page.list}" var="workDealInfo">
 				<tr>
-					<td><input type="checkbox" name="oneDealCheck" value = "${workDealInfo.id}" 
-					<c:forEach items="${ids }" var="id">
-						<c:if test="${id==workDealInfo.id }"> checked="checked"</c:if>
-					</c:forEach>
-					onchange="changeCheck(this)"
-					 /> </td>
+					<td>
+					
+					<c:if test="${workDealInfo.dealInfoStatus!=6}">
+						<input type="checkbox" name="oneDealCheck" value = "${workDealInfo.id}" 
+						<c:forEach items="${ids }" var="id">
+							<c:if test="${id==workDealInfo.id }"> checked="checked"</c:if>
+						</c:forEach>
+						onchange="changeCheck(this)"
+						 /> 
+					 </c:if>
+					 
+					 </td>
 					<td>${workDealInfo.svn}</td>
 					<td>${workDealInfo.configApp.alias}</td>
 					<td><a

@@ -590,7 +590,7 @@ public class WorkDealInfoService extends BaseService {
 			dc.add(Restrictions.eq("status", workDealInfo.getStatus()));
 		}
 
-		dc.add(Restrictions.isNull("isIxin"));
+		dc.add(Restrictions.isNotNull("isIxin"));
 		dc.add(Restrictions.eq(WorkDealInfo.DEL_FLAG, WorkDealInfo.DEL_FLAG_NORMAL));
 		dc.addOrder(Order.desc("createDate"));
 		return workDealInfoDao.find(dc);

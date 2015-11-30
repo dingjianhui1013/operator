@@ -4,6 +4,7 @@
 package com.itrus.ca.modules.profile.service;
 
 import java.util.Date;
+import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.criterion.DetachedCriteria;
@@ -131,6 +132,24 @@ public class ConfigAgentBoundDealInfoService extends BaseService {
 			
 		}
 	}
+	
+	@Transactional(readOnly = false)
+	public Integer findByAgentIdDealIds(Long agentId , List<Long> dealIds) {
+		DetachedCriteria dc = configAgentBoundDealInfoDao.createDetachedCriteria();
+		dc.add(Restrictions.eq("agent.id", agentId));
+		dc.add(Restrictions.in("dealInfo.id", dealIds));
+		if (configAgentBoundDealInfoDao.find(dc).size()>0) {
+			return configAgentBoundDealInfoDao.find(dc).size();
+		}else{
+			return 0;
+			
+		}
+	}
+	
+	
+	
+	
+	
 	
 	@Transactional(readOnly = false)
 	public Integer findByAgentIdDealInfoType(Long agentId , Integer dealInfoType) {

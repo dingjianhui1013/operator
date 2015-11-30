@@ -500,14 +500,6 @@ public class WorkDealInfoAuditController extends BaseController {
 			addMessage(redirectAttributes, "请到" + workDealInfo.getCreateBy().getOffice().getName() + "网点进行退费！");
 			return "redirect:" + Global.getAdminPath() + "/work/workDealInfo/";
 		}
-		// WorkPayInfo nowPayInfo = workDealInfo.getWorkPayInfo();
-		// if (nowPayInfo != null) {
-		// if (nowPayInfo.getMethodContract() || nowPayInfo.getMethodGov()) {
-		// addMessage(redirectAttributes, "当前业务信息不允许进行退费操作");
-		// return "redirect:" + Global.getAdminPath()
-		// + "/work/workDealInfo";
-		// }
-		// }
 		List<String[]> payInfos = new ArrayList<String[]>();
 		WorkPayInfo payInfo = workDealInfo.getWorkPayInfo();
 		if (payInfo != null) {
@@ -943,11 +935,18 @@ public class WorkDealInfoAuditController extends BaseController {
 				Double oldAdd = 0d;
 				Double newAdd = 0d;
 				if (dealInfo.getDealInfoType() != null) {
-					if (dealInfo.getDealInfoType().equals(0)) {// 新增
+					if (dealInfo.getDealInfoType().equals(0)) {
+						
+						//开户费
+						oldAdd += configChargeAgentDetailService.getChargeMoney(dealInfo.getConfigChargeAgentId(),4, 0);
+						newAdd += configChargeAgentDetailService.getChargeMoney(agentDetailId, 4,0);
+						
+						// 新增
 						oldAdd += configChargeAgentDetailService.getChargeMoney(dealInfo.getConfigChargeAgentId(),
 								dealInfo.getDealInfoType(), dealInfo.getYear());
 						newAdd += configChargeAgentDetailService.getChargeMoney(agentDetailId,
 								dealInfo.getDealInfoType(), dealInfo.getYear());
+						
 						workPayInfo.setLostReplaceCert(configChargeAgentDetailService.getChargeMoney(agentDetailId,
 								dealInfo.getDealInfoType(), dealInfo.getYear()));
 					} else if (dealInfo.getDealInfoType().equals(1)) {// 更新
@@ -1226,6 +1225,11 @@ public class WorkDealInfoAuditController extends BaseController {
 			Double newAdd = 0d;
 			if (dealInfo.getDealInfoType() != null) {
 				if (dealInfo.getDealInfoType().equals(0)) {// 新增
+					
+					//开户费
+					oldAdd += configChargeAgentDetailService.getChargeMoney(dealInfo.getConfigChargeAgentId(),4, 0);
+					newAdd += configChargeAgentDetailService.getChargeMoney(newAgentId, 4,0);
+					//新增费
 					oldAdd += configChargeAgentDetailService.getChargeMoney(dealInfo.getConfigChargeAgentId(),
 							dealInfo.getDealInfoType(), dealInfo.getYear());
 					newAdd += configChargeAgentDetailService.getChargeMoney(newAgentId, dealInfo.getDealInfoType(),
