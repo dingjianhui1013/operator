@@ -95,6 +95,7 @@ import com.itrus.ca.modules.profile.entity.ConfigApp;
 import com.itrus.ca.modules.profile.entity.ConfigChargeAgent;
 import com.itrus.ca.modules.profile.entity.ConfigAppOfficeRelation;
 import com.itrus.ca.modules.profile.entity.ConfigChargeAgentBoundConfigProduct;
+import com.itrus.ca.modules.profile.entity.ConfigChargeAgentDetail;
 import com.itrus.ca.modules.profile.entity.ConfigCommercialAgent;
 import com.itrus.ca.modules.profile.entity.ConfigProduct;
 import com.itrus.ca.modules.profile.entity.ConfigRaAccountExtendInfo;
@@ -4748,7 +4749,10 @@ public class WorkDealInfoController extends BaseController {
 			String[] dealInfos = dealInfoIds.split(",");
 			List<Long> dealIdList = new ArrayList<Long>();
 			for (int i = 0; i < dealInfos.length; i++) {
-				dealIdList.add(Long.parseLong(dealInfos[i]));
+				if (!dealInfos[i].equals("")) {
+					dealIdList.add(Long.parseLong(dealInfos[i]));
+				}
+				
 			}
 			String html = "";
 			List<String> companyNames = new ArrayList<>();
@@ -4764,25 +4768,27 @@ public class WorkDealInfoController extends BaseController {
 				Long certAfterLong = certAfter.getTime();
 				String tip = "";
 				if ((certAfterLong - nowLong) > (1000 * 60 * 60 * 24 * 60L)) {
-					tip = dealInfo.getWorkCompany().getCompanyName()+"单位的证书未在更新范围内！";
+					tip = "'"+dealInfo.getWorkCompany().getCompanyName()+"'单位的证书未在更新范围内！";
+					companyNames.add(tip);
 				}else{
 					ConfigChargeAgent configChargeAgent = configChargeAgentService.get(dealInfo.getConfigChargeAgentId());
 					
 					Integer agentSize = configAgentBoundDealInfoService.findByAgentIdDealIds(configChargeAgent.getId(), dealIdList);
 					
 					if (configChargeAgent.getSurplusUpdateNum()<agentSize) {
-							tip = configChargeAgent.getTempName()+"缴费模板剩余更新数量不足！";
+							tip = "'" + dealInfo.getWorkCompany().getCompanyName() + "'单位绑定'" + configChargeAgent.getTempName()+"'缴费模板剩余更新数量不足！";
+							companyNames.add(tip);
 					}
 					
 				}
-				companyNames.add(tip);
+				
 			}
 			
 			for (int i = 0; i < companyNames.size(); i++) {
 				
 				html += companyNames.get(i);
 				if (i<(companyNames.size()-1)) {
-					html+=",<br>&nbsp;&nbsp;&nbsp;&nbsp;";
+					html+="<br>&nbsp;&nbsp;&nbsp;&nbsp;";
 				}
 			}
 			if (html.equals("")) {
@@ -4800,6 +4806,49 @@ public class WorkDealInfoController extends BaseController {
 		return json.toString();
 	}
 	
+	@RequestMapping(value = "checkYears")
+	@ResponseBody
+	public String checkYears(String dealInfoIds,String year) throws JSONException {
+		JSONObject json = new JSONObject();
+		try {
+			String[] dealInfos = dealInfoIds.split(",");
+			String html = "";
+			List<String> companyNames = new ArrayList<>();
+			for (int i = 0; i < dealInfos.length; i++) {
+				if (dealInfos[i].equals("1")||dealInfos[i].equals("")) {
+					continue;
+				}
+				Long dealInfoId = Long.parseLong(dealInfos[i]);
+				WorkDealInfo dealInfo = workDealInfoService.get(dealInfoId);
+				ConfigChargeAgentDetail detail =  configChargeAgentDetailService.getAgentDetail(dealInfo.getConfigChargeAgentId(), 1, Integer.parseInt(year));
+				String tip = "";
+				if (detail==null) {
+					ConfigChargeAgent configChargeAgent = configChargeAgentService.get(dealInfo.getConfigChargeAgentId());
+					tip = "'" + dealInfo.getWorkCompany().getCompanyName() + "'单位绑定'" + configChargeAgent.getTempName()+"'缴费模板没有"+year+"年更新配置！";
+					companyNames.add(tip);
+				}
+			}
+			for (int i = 0; i < companyNames.size(); i++) {
+				
+				html += companyNames.get(i);
+				if (i<(companyNames.size()-1)) {
+					html+="<br>&nbsp;&nbsp;&nbsp;&nbsp;";
+				}
+			}
+			if (html.equals("")) {
+				json.put("isYes", 1);
+			} else {
+				json.put("isYes", 0);
+				json.put("html", html);
+			}
+			json.put("status", 1);
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			json.put("status", 0);
+		}
+		return json.toString();
+	}
 	
 	
 	

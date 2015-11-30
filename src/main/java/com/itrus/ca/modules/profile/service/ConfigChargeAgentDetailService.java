@@ -190,4 +190,29 @@ public class ConfigChargeAgentDetailService extends BaseService {
 		return money;
 	}
 	
+	
+	/**
+	 *	获得产品绑定的计费策略 对应年限的金额
+	 * @param chargeAgentId 模板id
+	 * @param workType	业务类型
+	 * @param chargeYear 缴费年限 可为空
+	 * @return
+	 */
+	@Transactional(readOnly = true)
+	public ConfigChargeAgentDetail getAgentDetail(Long chargeAgentId, Integer workType, Integer chargeYear){
+		DetachedCriteria dc = configChargeAgentDetailDao.createDetachedCriteria();
+		dc.add(Restrictions.eq("configChargeAgent.id",chargeAgentId));
+		dc.add(Restrictions.eq("workType",workType));
+		dc.add(Restrictions.eq("chargeYear",chargeYear));
+		List<ConfigChargeAgentDetail> list  = configChargeAgentDetailDao.find(dc);
+		if (list.size()>0) {
+			return list.get(0);
+		}else{
+			return null;
+		}
+		
+	}
+	
+	
+	
 }

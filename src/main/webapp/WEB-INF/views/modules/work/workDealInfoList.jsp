@@ -233,20 +233,37 @@
 				if (data.status==1){
 					if (data.isUpdate==0) {
 						
-						var info = "单位名称为:<br>&nbsp;&nbsp;&nbsp;&nbsp;"+data.html+"<br>的证书未在更新范围内，不允许更新这些证书 ！";
+						var info = "错误信息为:<br>&nbsp;&nbsp;&nbsp;&nbsp;"+data.html;
 						top.$.jBox.info(info);
 					}else{
 						
 						var html = "<div style='padding:10px;'><input type='radio' value='1' name='year' checked='checked'>1年<br><input type='radio' value='2' name='year'>2年<br><input type='radio' value='4' name='year'>4年<br><input type='radio' value='5' name='year'>5年</div>";
 						var submit = function(v, h, f) {
-							if (f.yourname == '') {
-								$.jBox.tip("请选择退费方式。", 'error', {
+							if (f.year == '') {
+								$.jBox.tip("请选择更新年限！", 'error', {
 									focusId : "year"
 								}); // 关闭设置 yourname 为焦点
 								return false;
 							}
 							/* window.location.href = "${ctx}/work/workDealInfoAudit/backMoneyFrom?id="
 									+ obj + "&type=" + f.yourname; */
+							var url = "${ctx}/work/workDealInfo/checkYears?dealInfoIds="+checkIds + "&year=" + f.year + "&_="+new Date().getTime();	
+							alert(url);
+							$.getJSON(url,function(data){
+								if (data.status==1){
+									if (data.isYes==0) {
+										var info = "错误信息为:<br>&nbsp;&nbsp;&nbsp;&nbsp;"+data.html;
+										top.$.jBox.info(info);
+									}else{
+										
+										alert("可以更新啦。。哈啊哈");
+									}
+									
+								}else{
+									top.$.jBox.tip("系统异常");
+								}
+								
+							});
 							alert(f.year);
 							return true;
 						};
