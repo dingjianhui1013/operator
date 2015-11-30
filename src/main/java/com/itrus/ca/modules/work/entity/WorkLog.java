@@ -48,7 +48,7 @@ public class WorkLog extends DataEntity implements java.io.Serializable {
 	private String ywxt;//业务系统
 	private String ywzx;//业务咨询
 	private String appName;//应用项目名称
-	private String distinguish;//区分添加出 1为客服处添加0位咨询处添加
+	private String distinguish;//区分添加出 1为工作记录处添加0位咨询处添加2为模糊记录
 	private String tel;//联系方式
 	// Constructors
 
