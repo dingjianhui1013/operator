@@ -174,7 +174,6 @@
 				if (data.status==0) {
 					var html = "";
 					var iseq = 0;
-					alert(parseFloat(data.oldAdd)+"||||||||"+parseFloat(data.newAdd));
 					if(parseFloat(data.oldAdd)>parseFloat(data.newAdd)){
 						var money = data.oldAdd-data.newAdd;
 						html = "变更此缴费方式需要退回"+money+"元！您确定继续变更缴费方式么？";
@@ -425,6 +424,7 @@
 									<select id="agentId" name="agentId"  >
 										<option value="0">请选择</option>
 									</select>
+									<br>
 									计费策略模版：
 									<select id="agentDetailId" name="agentDetailId">
 										<option value="0">请选择</option>
