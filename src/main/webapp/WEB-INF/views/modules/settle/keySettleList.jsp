@@ -16,14 +16,23 @@
 		function dca()
 		{	
 			
+			if ($("#startTime").val() == ""&&$("#endTime").val()=="") {
+				top.$.jBox.tip("请选择时间");
+				return false;
+			}else if($("#supplierId").val()==""){
+				top.$.jBox.tip("请选择厂商");
+				return false;
+			}else if($("#keyId").val()==""){
+				top.$.jBox.tip("请选择类型");
+				return false;
+			}else{
 			var supplierId = $("#supplierId").val();
 			var keyId = $("#keyId").val();
-			
 			var startTime = $("#startTime").val();
 			var endTime = $("#endTime").val();
-			alert(supplierId+":"+keyId+":"+startTime+":"+endTime);
 			window.location.href="${ctx }/settle/keySettle/export?supplierId="+supplierId+"&keyId="+keyId+"&startTime="+startTime+"&endTime="+endTime;
-		}
+			}
+			}
 		function addGene() {
 			var supplierId = $("#supplierId").prop('value');
 			var url = "${ctx}/key/keyGeneralInfo/addGeneralInfo?supplierId=";
@@ -87,7 +96,7 @@
 				</c:forEach>
 			</select>
 			<label>KEY编码：</label>
-			<input type="text"  name="keySn"  id="keySn" value="${keySn }"/>
+			<input type="text"  name="keySn"  id="keySn" value="${keySn}"/>
 		</div>
 		<br />
 		<label>入库时间：</label> 
@@ -102,7 +111,7 @@
 				value="<fmt:formatDate value="${endTime}" pattern="yyyy-MM-dd"/>" />
 		<input id="btnSubmit" class="btn btn-primary" type="submit" value="查询" />
 		&nbsp;&nbsp;&nbsp;&nbsp;
-<!-- 		<a href="javascript:dca()" class="btn btn-primary">导出</a> -->
+
 		<a href="javascript:dca()" class="btn btn-primary">导出</a>
 	</form:form>
 	<tags:message content="${message}"/>
