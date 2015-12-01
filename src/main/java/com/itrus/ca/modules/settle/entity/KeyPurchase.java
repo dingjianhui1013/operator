@@ -4,13 +4,19 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.itrus.ca.common.persistence.DataEntity;
+import com.itrus.ca.modules.key.entity.KeyGeneralInfo;
+import com.itrus.ca.modules.profile.entity.ConfigSupplier;
 
 /**
  * SettleKey entity. @author MyEclipse Persistence Tools
@@ -29,13 +35,16 @@ public class KeyPurchase extends DataEntity implements java.io.Serializable{
 		private Integer count; // 数量
 		private Double money; // 价格
 		private Integer status; // 1为已付0为未付
-		
+		private ConfigSupplier configSupplier;
+		private KeyGeneralInfo keyGeneralInfo; 
+		private String keySn;
 		public KeyPurchase(Long id)
 		{
 			this.id=id;
 		}
-		public KeyPurchase(String appName, Date storageDate, Long startCode, Long endCode, Integer count,
-				Double money, Integer status) {
+		
+		public KeyPurchase(String appName, Date storageDate, Long startCode, Long endCode, Integer count, Double money,
+				Integer status, ConfigSupplier configSupplier, KeyGeneralInfo keyGeneralInfo,String keySn) {
 			this.appName = appName;
 			this.storageDate = storageDate;
 			this.startCode = startCode;
@@ -43,7 +52,11 @@ public class KeyPurchase extends DataEntity implements java.io.Serializable{
 			this.count = count;
 			this.money = money;
 			this.status = status;
+			this.configSupplier = configSupplier;
+			this.keyGeneralInfo = keyGeneralInfo;
+			this.keySn=keySn;
 		}
+
 		public KeyPurchase(){
 		}
 
@@ -106,4 +119,31 @@ public class KeyPurchase extends DataEntity implements java.io.Serializable{
 		public void setStatus(Integer status) {
 			this.status = status;
 		}
+		@ManyToOne(fetch = FetchType.LAZY)
+		@JoinColumn(name = "supplier_id")
+		public ConfigSupplier getConfigSupplier() {
+			return configSupplier;
+		}
+
+		public void setConfigSupplier(ConfigSupplier configSupplier) {
+			this.configSupplier = configSupplier;
+		}
+		@ManyToOne(fetch = FetchType.LAZY)
+		@JoinColumn(name = "general_id")
+		public KeyGeneralInfo getKeyGeneralInfo() {
+			return keyGeneralInfo;
+		}
+
+		public void setKeyGeneralInfo(KeyGeneralInfo keyGeneralInfo) {
+			this.keyGeneralInfo = keyGeneralInfo;
+		}
+		@Transient
+		public String getKeySn() {
+			return keySn;
+		}
+
+		public void setKeySn(String keySn) {
+			this.keySn = keySn;
+		}
+		
 }
