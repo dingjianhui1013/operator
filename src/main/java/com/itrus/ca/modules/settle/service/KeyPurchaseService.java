@@ -3,6 +3,7 @@
  */
 package com.itrus.ca.modules.settle.service;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.itrus.ca.common.persistence.Page;
 import com.itrus.ca.common.service.BaseService;
 import com.itrus.ca.modules.settle.entity.KeyPurchase;
+import com.itrus.ca.modules.settle.entity.SettleVTN;
 import com.itrus.ca.modules.profile.entity.ConfigSupplier;
 import com.itrus.ca.modules.settle.dao.KeyPurchaseDao;
 
@@ -112,6 +114,60 @@ public class KeyPurchaseService extends BaseService {
 	{
 		return keyPurchaseDao.findOne(id);
 	}
+	public Page<KeyPurchase> find11(Page<KeyPurchase> page, KeyPurchase keyPurchase,String supplierName,String keyName,String keySn,Date startDate,Date endDate)
+	{
+		DetachedCriteria dc=keyPurchaseDao.createDetachedCriteria();
+		if(keyPurchase.getAppName()!=null && !"".equals(keyPurchase.getAppName()))
+		{
+			dc.add(Restrictions.eq("appName", keyPurchase.getAppName()));
+		}
+		if(supplierName!=null){
+			//System.out.println(supplierName);
+			dc.add(Restrictions.like("appName", "%"+supplierName+"%"));
+		}
+		if(keyPurchase.getKeySn()!=null && !"".equals(keyPurchase.getKeySn())){
+			dc.add(Restrictions.ge("startCode", keyPurchase.getKeySn()));
+			dc.add(Restrictions.le("endCode", keyPurchase.getKeySn()));
+		}
+		if(keyName !=null){
+			dc.add(Restrictions.like("appName", "%"+keyName+"%"));
+		}
+		if (startDate != null && endDate != null) {
+			dc.add(Restrictions.ge("storageDate", startDate));
+			dc.add(Restrictions.le("storageDate", endDate));
+		}
+		dc.add(Restrictions.eq(KeyPurchase.DEL_FLAG, KeyPurchase.DEL_FLAG_NORMAL));
+		dc.addOrder(Order.desc("id"));
+		return keyPurchaseDao.find(page,dc);
+	}
+	
+	public List<KeyPurchase> find12(KeyPurchase keyPurchase,String supplierName,String keyName,String keySn,Date startDate,Date endDate)
+	{
+		DetachedCriteria dc=keyPurchaseDao.createDetachedCriteria();
+		if(keyPurchase.getAppName()!=null && !"".equals(keyPurchase.getAppName()))
+		{
+			dc.add(Restrictions.eq("appName", keyPurchase.getAppName()));
+		}
+		if(supplierName!=null){
+			//System.out.println(supplierName);
+			dc.add(Restrictions.like("appName", "%"+supplierName+"%"));
+		}
+		if(keyPurchase.getKeySn()!=null && !"".equals(keyPurchase.getKeySn())){
+			dc.add(Restrictions.ge("startCode", keyPurchase.getKeySn()));
+			dc.add(Restrictions.le("endCode", keyPurchase.getKeySn()));
+		}
+		if(keyName !=null){
+			dc.add(Restrictions.like("appName", "%"+keyName+"%"));
+		}
+		if (startDate != null && endDate != null) {
+			dc.add(Restrictions.ge("storageDate", startDate));
+			dc.add(Restrictions.le("storageDate", endDate));
+		}
+		dc.add(Restrictions.eq(KeyPurchase.DEL_FLAG, KeyPurchase.DEL_FLAG_NORMAL));
+		dc.addOrder(Order.desc("id"));
+		return keyPurchaseDao.find(dc);
+	}
+	
 	
 	@Transactional(readOnly = false)
 	public void save(KeyPurchase keyPurchase) {
