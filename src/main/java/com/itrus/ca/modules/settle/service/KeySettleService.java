@@ -1,4 +1,5 @@
 package com.itrus.ca.modules.settle.service;
+import java.util.Date;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.criterion.DetachedCriteria;
@@ -68,7 +69,27 @@ public class KeySettleService extends BaseService {
 		dc.addOrder(Order.desc("id"));
 		return keySettleDao.find(dc);
 	}
-	
+	public Page<KeySettle> find(Page<KeySettle> page, KeySettle KeySettle,KeyPurchase keyPurchase,Long supplierId,Long keyId,Date startTime,Date endTime) {
+		DetachedCriteria dc = keySettleDao.createDetachedCriteria();
+		
+		if (startTime!=null) {
+			dc.add(Restrictions.ge("createTime", startTime));
+		}
+		if (endTime!=null) {
+			dc.add(Restrictions.le("createTime", endTime));
+		}
+		if (supplierId!=null) {
+			dc.add(Restrictions.le("supplierId", KeySettle.getConfigSupplier()));
+		}
+		if (keyId!=null) {
+			dc.add(Restrictions.le("keyId", KeySettle.getKeyGeneralInfo()));
+		}
+		
+		
+		dc.add(Restrictions.eq(KeySettle.DEL_FLAG, KeySettle.DEL_FLAG_NORMAL));
+		dc.addOrder(Order.desc("id"));
+		return keySettleDao.find(page, dc);
+	}
 	@Transactional(readOnly = false)
 	public void save(KeySettle keySettle) {
 		keySettleDao.save(keySettle);
