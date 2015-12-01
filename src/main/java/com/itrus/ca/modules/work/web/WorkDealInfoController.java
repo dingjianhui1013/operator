@@ -79,6 +79,7 @@ import com.itrus.ca.common.persistence.DataEntity;
 import com.itrus.ca.common.persistence.Page;
 import com.itrus.ca.common.utils.AdminPinEncKey;
 import com.itrus.ca.common.utils.HttpRequest;
+import com.itrus.ca.common.utils.PayinfoUtil;
 import com.itrus.ca.common.utils.RaAccountUtil;
 import com.itrus.ca.common.utils.excel.ExportExcel;
 import com.itrus.ca.common.web.BaseController;
@@ -99,6 +100,7 @@ import com.itrus.ca.modules.profile.entity.ConfigChargeAgentBoundConfigProduct;
 import com.itrus.ca.modules.profile.entity.ConfigChargeAgentDetail;
 import com.itrus.ca.modules.profile.entity.ConfigCommercialAgent;
 import com.itrus.ca.modules.profile.entity.ConfigProduct;
+import com.itrus.ca.modules.profile.entity.ConfigRaAccount;
 import com.itrus.ca.modules.profile.entity.ConfigRaAccountExtendInfo;
 import com.itrus.ca.modules.profile.entity.ProductTypeObj;
 import com.itrus.ca.modules.profile.service.ConfigAgentAppRelationService;
@@ -111,10 +113,13 @@ import com.itrus.ca.modules.profile.service.ConfigChargeAgentDetailService;
 import com.itrus.ca.modules.profile.service.ConfigChargeAgentService;
 import com.itrus.ca.modules.profile.service.ConfigProductService;
 import com.itrus.ca.modules.profile.service.ConfigRaAccountExtendInfoService;
+import com.itrus.ca.modules.profile.service.ConfigRaAccountService;
 import com.itrus.ca.modules.receipt.entity.ReceiptDepotInfo;
 import com.itrus.ca.modules.receipt.entity.ReceiptEnterInfo;
+import com.itrus.ca.modules.receipt.entity.ReceiptInvoice;
 import com.itrus.ca.modules.receipt.service.ReceiptDepotInfoService;
 import com.itrus.ca.modules.receipt.service.ReceiptEnterInfoService;
+import com.itrus.ca.modules.receipt.service.ReceiptInvoiceService;
 import com.itrus.ca.modules.service.ItrustProxyUtil;
 import com.itrus.ca.modules.sys.entity.Office;
 import com.itrus.ca.modules.sys.entity.User;
@@ -242,7 +247,11 @@ public class WorkDealInfoController extends BaseController {
 	@Autowired
 	private ReceiptEnterInfoService receiptEnterInfoService;
 
+	@Autowired
+	private ConfigRaAccountService raAccountService;
 	
+	@Autowired
+	private ReceiptInvoiceService receiptInvoiceService;
 	
 	@Value(value = "${ixin.url}")
 	private String ixinUrl;
@@ -4978,8 +4987,8 @@ public class WorkDealInfoController extends BaseController {
 		return "redirect:" + Global.getAdminPath() + "/work/workDealInfo/";
 	}
 	
-	
-	public String updateDealInfos(String dealInfoIds){
+	@RequestMapping(value = "updateDealInfos")
+	public String updateDealInfos(String dealInfoIds,Integer year){
 		String[] infoIds = dealInfoIds.split(",");
 		for (int i = 0; i < infoIds.length; i++) {
 			try {
@@ -4995,7 +5004,7 @@ public class WorkDealInfoController extends BaseController {
 				WorkUserHis userHis = workUserService.change(workUser, companyHis);
 				workUserHisService.save(userHis);
 
-					//变更业务保存单位信息
+				//变更业务保存单位信息
 				WorkCompany workCompany = workDealInfo1.getWorkCompany();
 				companyHis = workCompanyService.change(workCompany);
 				workCompanyHisService.save(companyHis);
@@ -5011,141 +5020,142 @@ public class WorkDealInfoController extends BaseController {
 					workDealInfo.setCommercialAgent(configAgentOfficeRelations.get(0).getConfigCommercialAgent());//劳务关系外键
 				}
 				
+				workDealInfo.setPayType(workDealInfo1.getPayType());
+				ConfigChargeAgent agent = configChargeAgentService.get(workDealInfo1.getConfigChargeAgentId());
+				Integer reseUpdateNum = agent.getReserveUpdateNum();
+				Integer surUpdateNum = agent.getSurplusUpdateNum();
+				agent.setReserveUpdateNum(reseUpdateNum+1);
+				agent.setSurplusUpdateNum(surUpdateNum-1);
+				configChargeAgentService.save(agent);
+				workDealInfo.setConfigChargeAgentId(agent.getId());
+				workDealInfo.setWorkUser(workUser);
+				workDealInfo.setWorkCompany(workCompany);
+				workDealInfo.setWorkUserHis(userHis);
+				workDealInfo.setWorkCompanyHis(companyHis);
+				workDealInfo.setConfigProduct(workDealInfo1.getConfigProduct());	
+				workDealInfo.setYear(year);
+				workDealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_ENTRY_SUCCESS);
+				workDealInfo.setDealInfoType(WorkDealInfoType.TYPE_UPDATE_CERT);
+				workDealInfo.setCreateBy(UserUtils.getUser());
+				workDealInfo.setCreateDate(new Date());
+				workDealInfo.setClassifying(workDealInfo1.getClassifying());
+				workDealInfo.setSvn(workDealInfoService.getSVN(0));
+				workDealInfo.setPrevId(workDealInfo1.getId());
+				if (workDealInfo1.getWorkCertInfo().getNotafter().after(new Date())) {
+					int day = getLastCertDay(workDealInfo1.getWorkCertInfo()
+							.getNotafter());
+					workDealInfo.setLastDays(day);
+				} else {
+					workDealInfo.setLastDays(0);
+				}
+				WorkCertApplyInfo workCertApplyInfo = workDealInfo1.getWorkCertInfo().getWorkCertApplyInfo();
+				workCertApplyInfoService.save(workCertApplyInfo);
+				WorkCertInfo oldCertInfo = workDealInfo1.getWorkCertInfo();
+				WorkCertInfo workCertInfo = new WorkCertInfo();
+				workCertInfo.setWorkCertApplyInfo(workCertApplyInfo);
+				workCertInfo.setRenewalPrevId(oldCertInfo.getId());
+				workCertInfo.setCreateDate( workCertInfoService.getCreateDate(oldCertInfo.getId()));
+				workCertInfoService.save(workCertInfo);
+				// 给上张证书存nextId
+				oldCertInfo.setRenewalNextId(workCertInfo.getId());
+				workCertInfoService.save(oldCertInfo);
+				workDealInfo.setWorkCertInfo(workCertInfo);
+				workDealInfoService.delete(workDealInfo1.getId());
+				
+				workDealInfo.setInputUser(UserUtils.getUser());
+				workDealInfo.setInputUserDate(new Date());
+				workDealInfoService.save(workDealInfo);
+				
+				ConfigAgentBoundDealInfo dealInfoBound = new ConfigAgentBoundDealInfo();
+				dealInfoBound.setDealInfo(workDealInfo);
+				dealInfoBound.setAgent(agent);
+				configAgentBoundDealInfoService.save(dealInfoBound);
+				logUtil.saveSysLog("计费策略模版", "计费策略模版："+agent.getId()+"--业务编号："+workDealInfo.getId()+"--关联成功!", "");
+				
+				// 保存日志信息
+				WorkLog workLog = new WorkLog();
+				workLog.setRecordContent("批量更新");
+				workLog.setWorkDealInfo(workDealInfo);
+				workLog.setCreateDate(new Date());
+				workLog.setCreateBy(UserUtils.getUser());
+				workLog.setConfigApp(workDealInfo.getConfigApp());
+				workLog.setWorkCompany(workDealInfo.getWorkCompany());
+				workLog.setOffice(UserUtils.getUser().getOffice());
+				workLogService.save(workLog);			
+			
+				
+				WorkPayInfo workPayInfo = new WorkPayInfo();
+				workPayInfo.setOpenAccountMoney(0d);
+				workPayInfo.setAddCert(0d);
+				
+				Double money = configChargeAgentDetailService.getChargeMoney(workDealInfo.getConfigChargeAgentId(), 1, year);
+				
+				workPayInfo.setUpdateCert(money);
+				workPayInfo.setErrorReplaceCert(0d);
+				workPayInfo.setLostReplaceCert(0d);
+				workPayInfo.setInfoChange(0d);
+				workPayInfo.setElectron(0d);
+				workPayInfo.setOldOpenAccountMoney(0d);
+				workPayInfo.setOldAddCert(0d);
+				workPayInfo.setOldUpdateCert(0d);
+				workPayInfo.setOldErrorReplaceCert(0d);
+				workPayInfo.setOldLostReplaceCert(0d);
+				workPayInfo.setOldInfoChange(0d);
+				workPayInfo.setOldElectron(0d);
 
-//				
-//				ConfigChargeAgentBoundConfigProduct bound =  configChargeAgentBoundConfigProductService.get(agentDetailId);
-//				workDealInfo.setPayType(workDealInfo1.getPayType());
-//				
-//				
-//				ConfigChargeAgent agent = bound.getAgent();
-//				
-//				Integer reseUpdateNum = agent.getReserveUpdateNum();
-//				Integer surUpdateNum = agent.getSurplusUpdateNum();
-//				agent.setReserveUpdateNum(reseUpdateNum+1);
-//				agent.setSurplusUpdateNum(surUpdateNum-1);
-//				configChargeAgentService.save(agent);
-//				
-//				
-//				workDealInfo.setConfigChargeAgentId(bound.getAgent().getId());
-//				
-//				
-//				
-//				
-//				workDealInfo.setWorkUser(workUser);
-//				workDealInfo.setWorkCompany(workCompany);
-//				workDealInfo.setWorkUserHis(userHis);
-//				workDealInfo.setWorkCompanyHis(companyHis);
-//				workDealInfo.setConfigProduct(workDealInfo1.getConfigProduct());
-//			
-//				if (year == null) {
-//					workDealInfo.setYear(0);
-//				} else {
-//					workDealInfo.setYear(year);
-//				}
-//			
-//				workDealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_ENTRY_SUCCESS);
-//				
-//				if (dealInfoType != null) {
-//					workDealInfo.setDealInfoType(WorkDealInfoType.TYPE_UPDATE_CERT);
-//				}
-//				if (dealInfoType1 != null) {
-//					if (dealInfoType1 == 1) {
-//						workDealInfo.setDealInfoType1(WorkDealInfoType.TYPE_LOST_CHILD);
-//					} 
-//					if (dealInfoType1 == 2) {
-//						workDealInfo.setDealInfoType1(WorkDealInfoType.TYPE_DAMAGED_REPLACED);
-//					}
-//				}
-//				if (dealInfoType2 != null) {
-//					workDealInfo.setDealInfoType2(WorkDealInfoType.TYPE_INFORMATION_REROUTE);
-//				}
-//
-//				if (manMadeDamage!=null) {
-//					workDealInfo.setManMadeDamage(manMadeDamage);
-//				}
-//				workDealInfo.setCreateBy(UserUtils.getUser());
-//				workDealInfo.setCreateDate(new Date());
-//				workDealInfo.setClassifying(workDealInfo1.getClassifying());
-//				workDealInfo.setSvn(workDealInfoService.getSVN(0));
-//				workDealInfo.setPrevId(workDealInfo1.getId());
-//				if (workDealInfo1.getWorkCertInfo().getNotafter().after(new Date())) {
-//					int day = getLastCertDay(workDealInfo1.getWorkCertInfo()
-//							.getNotafter());
-//					workDealInfo.setLastDays(day);
-//				} else {
-//					workDealInfo.setLastDays(0);
-//				}
-//				WorkCertApplyInfo workCertApplyInfo = workDealInfo1.getWorkCertInfo().getWorkCertApplyInfo();
-//				
-//				
-//				if (pName!=null && !pName.equals("")) {
-//					workCertApplyInfo.setName(pName);
-//				}
-//				if (pEmail!=null && !pEmail.equals("")) {
-//					workCertApplyInfo.setEmail(pEmail);
-//				}
-//				if (pIDCard!=null && !pIDCard.equals("")) {
-//					workCertApplyInfo.setIdCard(pIDCard);
-//				}
-//				
-//				
-//				
-//				workCertApplyInfo.setProvince(workCompany.getProvince());
-//				workCertApplyInfo.setCity(workCompany.getCity());
-//				workCertApplyInfoService.save(workCertApplyInfo);
-//				
-//				
-//				
-//				WorkCertInfo oldCertInfo = workDealInfo1.getWorkCertInfo();
-//				WorkCertInfo workCertInfo = new WorkCertInfo();
-//				workCertInfo.setWorkCertApplyInfo(workCertApplyInfo);
-//				workCertInfo.setRenewalPrevId(oldCertInfo.getId());
-//				workCertInfo.setCreateDate( workCertInfoService.getCreateDate(oldCertInfo.getId()));
-//				workCertInfoService.save(workCertInfo);
-//				// 给上张证书存nextId
-//				oldCertInfo.setRenewalNextId(workCertInfo.getId());
-//				workCertInfoService.save(oldCertInfo);
-//				workDealInfo.setWorkCertInfo(workCertInfo);
-//				workDealInfoService.delete(workDealInfo1.getId());
-//				//workDealInfo.setPayType(workDealInfo1.getPayType());
-//				//workDealInfo.setConfigChargeAgentId(workDealInfo1.getConfigChargeAgentId());
-//				
-//				workDealInfo.setInputUser(UserUtils.getUser());
-//				workDealInfo.setInputUserDate(new Date());
-//				workDealInfoService.save(workDealInfo);
-//				
-//				ConfigAgentBoundDealInfo dealInfoBound = new ConfigAgentBoundDealInfo();
-//				dealInfoBound.setDealInfo(workDealInfo);
-//				dealInfoBound.setAgent(agent);
-//				configAgentBoundDealInfoService.save(dealInfoBound);
-//				logUtil.saveSysLog("计费策略模版", "计费策略模版："+agent.getId()+"--业务编号："+workDealInfo.getId()+"--关联成功!", "");
-//				
-//				// 保存日志信息
-//				WorkLog workLog = new WorkLog();
-//				workLog.setRecordContent(recordContent);
-//				workLog.setWorkDealInfo(workDealInfo);
-//				workLog.setCreateDate(new Date());
-//				workLog.setCreateBy(UserUtils.getUser());
-//				workLog.setConfigApp(workDealInfo.getConfigApp());
-//				workLog.setWorkCompany(workDealInfo.getWorkCompany());
-//				workLog.setOffice(UserUtils.getUser().getOffice());
-//				workLogService.save(workLog);
-//				
+				double bindMoney = money;
+				workPayInfo.setMoney(bindMoney);
 				
 				
 				
+				workPayInfo.setWorkTotalMoney(money);
+				workPayInfo.setWorkPayedMoney(money);
+				workPayInfo.setWorkReceivaMoney(money);
+				workPayInfo.setUserReceipt(true);
+				workPayInfo.setReceiptAmount(money);
+				workPayInfo.setSn(PayinfoUtil.getPayInfoNo());
+				workPayInfoService.save(workPayInfo);
 				
 				
+				workDealInfo.setWorkPayInfo(workPayInfo);
+				
+				workDealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_CERT_WAIT);
+								
+				workDealInfoService.checkWorkDealInfoNeedSettle(workDealInfo);
 				
 				
-				
-				
-				
+				if(workDealInfo.getDealInfoType().equals(1)){
+					ConfigChargeAgent agentAfter =  configChargeAgentService.get(workDealInfo.getConfigChargeAgentId());
+					agent.setAvailableUpdateNum(agentAfter.getAvailableUpdateNum()+1);//已用数量
+					agent.setReserveUpdateNum(agentAfter.getReserveUpdateNum()-1);//预留数量
+					configChargeAgentService.save(agent);
+					logUtil.saveSysLog("计费策略模版", "更改剩余数量和使用数量成功!", "");
+				}
+			
+				workDealInfo.setPayUser(UserUtils.getUser());
+				workDealInfo.setPayUserDate(new Date());
+				workDealInfoService.save(workDealInfo);
+				ConfigRaAccount raAccount = raAccountService.get(workDealInfo.getConfigProduct().getRaAccountId());
+				List<String []> list = RaAccountUtil.outPageLine(workDealInfo, raAccount.getConfigRaAccountExtendInfo());
+			
+				logUtil.saveSysLog("业务中心", "业务维护：编号"+workDealInfo.getId()+"缴费"+money+"元", "");
+				ReceiptInvoice receiptInvoice = new ReceiptInvoice();
+				Office office = workDealInfo.getCreateBy().getOffice();
+				List<ReceiptDepotInfo> depotInfos =receiptDepotInfoService.findDepotByOffice(office);
+				receiptInvoice.setReceiptDepotInfo(depotInfos.get(0));
+				receiptInvoice.setCompanyName(workDealInfo.getWorkCompany().getCompanyName());
+				receiptInvoice.setReceiptMoney(workDealInfo.getWorkPayInfo().getReceiptAmount());
+				receiptInvoice.setReceiptType(0);//销售出库
+				receiptInvoice.setDealInfoId(workDealInfo.getId());
+				receiptInvoiceService.save(receiptInvoice);
+				ReceiptDepotInfo receiptDepotInfo = depotInfos.get(0);
+				receiptDepotInfo.setReceiptResidue(receiptDepotInfo.getReceiptResidue()-workDealInfo.getWorkPayInfo().getReceiptAmount());
+				receiptDepotInfo.setReceiptOut(receiptDepotInfo.getReceiptOut()+workDealInfo.getWorkPayInfo().getReceiptAmount());
+				receiptDepotInfoService.save(receiptDepotInfo);
 			} catch (Exception e) {
 				// TODO: handle exception
 				e.printStackTrace();
 			}
-			
 		}
 		return "redirect:" + Global.getAdminPath() + "/work/workDealInfo/";
 	} 
