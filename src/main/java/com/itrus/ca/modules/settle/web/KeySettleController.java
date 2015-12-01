@@ -92,7 +92,9 @@ public class KeySettleController extends BaseController {
 	public String list(KeySettle keySettle, KeyPurchase keypurchase,
 			@RequestParam(value = "supplierId", required = false) Long supplierId,
 			@RequestParam(value = "keyId", required = false) Long keyId,
-//			@RequestParam(value = "purchaseId", required = false) Long purchaseId,
+			@RequestParam(value = "keySn", required = false) String keySn,
+			@RequestParam(value = "startTime", required = false) Date startTime,
+			@RequestParam(value = "endTime", required = false) Date endTime,
 			@RequestParam(value = "KeySubtotal", required = false) Double keySubtotal,
 			@RequestParam(value = "KeyTotalQuantity", required = false) Long keyTotalQuantity,
 			@RequestParam(value = "KeyTotalAmount", required = false) Double keyTotalAmount,
@@ -106,25 +108,41 @@ public class KeySettleController extends BaseController {
 			}
 			List<ConfigSupplier> suppliers = configSupplierService.findByKey();
 			model.addAttribute("configSupplierId", supplierId);
-	    	model.addAttribute("keyId", keyId);
 			model.addAttribute("suppliers",suppliers);
+			String supplierName=null;
+			String keyName=null;
 			if (supplierId!=null) {
-				 List<KeyGeneralInfo>  keys = keyGeneralInfoService.findBySupplierId(supplierId);
-			        model.addAttribute("keys", keys);
+				  
+			       
+				ConfigSupplier configsuppler=configSupplierService.findByOneSupplierId(supplierId);
+				supplierName=configsuppler.getSupplierName();
+				List<KeyGeneralInfo> keys=keyGeneralInfoService.findBySupplierId(supplierId);
+				model.addAttribute("keyId", keyId);
+				model.addAttribute("keys",keys);
+				if(keyId!=null){
+				KeyGeneralInfo keyss = keyGeneralInfoService.findByOneKeyId(keyId);
+				keyName=keyss.getName();
+				}
 			}
-//	    	List<KeyPurchase> keyPurchase =keyPurchaseService.findByKey();
-//	    	System.out.println(keyPurchase);
-//	    	model.addAttribute("keyPurchase", keyPurchase);
-			Page<KeyPurchase> page=keyPurchaseService.findByKey(new Page<KeyPurchase>(request, response), keypurchase);
+			//Page<KeySettle> page=keySettleService.find(new Page<KeySettle>(request, response),keySettle, keypurchase, supplierId, keyId, startTime, endTime);
+			//Page<KeyPurchase> page=keyPurchaseService.findByKey(new Page<KeyPurchase>(request, response), keypurchase);
+			Page<KeyPurchase> page=keyPurchaseService.find11(new Page<KeyPurchase>(request, response), keypurchase,supplierName, keyName,keySn,startTime, endTime);
 			model.addAttribute("page", page);
+			model.addAttribute("keySn", keySn);
+			model.addAttribute("startTime", startTime);
+			model.addAttribute("endTime", endTime);
 			model.addAttribute("zs", page.getList().size());
 		 return "modules/settle/keySettleList";
 	}
 	@RequestMapping(value = "export")
 	public void export(HttpServletRequest request,
-			HttpServletResponse response,Long supplierId,Long keyId,Date startTime,Date endTime)
+			HttpServletResponse response,@RequestParam(value = "supplierId", required = false) Long supplierId,
+			@RequestParam(value = "keyId", required = false) Long keyId,
+			@RequestParam(value = "keySn", required = false) String keySn,
+			@RequestParam(value = "startTime", required = false) Date startTime,
+			@RequestParam(value = "endTime", required = false) Date endTime)
 	{
-		System.out.println("lailemei ");
+		
 		try {
 			HSSFWorkbook wb=new HSSFWorkbook();
 			HSSFSheet sheet=wb.createSheet("key结算统计");
@@ -153,8 +171,23 @@ public class KeySettleController extends BaseController {
 			row1.createCell(7).setCellValue("状态");
 			row1.createCell(8).setCellValue("备注");
 			KeyPurchase keyPurchase=new KeyPurchase();
+			List<ConfigSupplier> suppliers = configSupplierService.findByKey();
 			
-			List<KeyPurchase> list = keyPurchaseService.find(keyPurchase);
+			String supplierName=null;
+			String keyName=null;
+			if (supplierId!=null) {
+				  
+			       
+				ConfigSupplier configsuppler=configSupplierService.findByOneSupplierId(supplierId);
+				supplierName=configsuppler.getSupplierName();
+				//List<KeyGeneralInfo> keys=keyGeneralInfoService.findBySupplierId(supplierId);
+				
+				if(keyId!=null){
+				KeyGeneralInfo keyss = keyGeneralInfoService.findByOneKeyId(keyId);
+				keyName=keyss.getName();
+				}
+			}
+			List<KeyPurchase> list = keyPurchaseService.find12(keyPurchase, supplierName, keyName, keySn, startTime, endTime);
 			int last=0;
 			int zj=0;
 			for(int i=0;i<list.size();i++)
@@ -165,12 +198,24 @@ public class KeySettleController extends BaseController {
 				rown.createCell(2).setCellValue(list.get(i).getStartCode()+"");
 				rown.createCell(3).setCellValue(list.get(i).getEndCode()+"");
 				rown.createCell(4).setCellValue(list.get(i).getCount());
+				if(list.get(i).getMoney()==null){
+					
+					rown.createCell(5).setCellValue("");
+					rown.createCell(6).setCellValue("0");
+					zj+=0;
+				}else{
 				rown.createCell(5).setCellValue(list.get(i).getMoney());
 				rown.createCell(6).setCellValue(list.get(i).getCount()*list.get(i).getMoney());
-				rown.createCell(7).setCellValue(list.get(i).getStatus());
+				zj+=(list.get(i).getCount()*list.get(i).getMoney());
+				}
+				if(list.get(i).getStatus()==1){
+				rown.createCell(7).setCellValue("已付");
+				}else{
+					rown.createCell(7).setCellValue("未付");
+					
+				}
 				rown.createCell(8).setCellValue(list.get(i).getRemarks());
 				last = i+2;
-				zj+=(list.get(i).getCount()*list.get(i).getMoney());
 			}
 			HSSFRow  cell1=sheet.createRow(last+1);
 			HSSFCell cell2=cell1.createCell(7);
@@ -180,7 +225,7 @@ public class KeySettleController extends BaseController {
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			response.setContentType(response.getContentType());
 			response.setHeader("Content-disposition",
-					"attachment; filename=keyPurchaseRecord.xls");
+					"attachment; filename=keySettleRecord.xls");
 			wb.write(baos);
 			byte[] bytes = baos.toByteArray();
 			response.setHeader("Content-Length", String.valueOf(bytes.length));
