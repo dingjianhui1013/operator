@@ -1359,6 +1359,40 @@ public class WorkDealInfoService extends BaseService {
 			{
 				dc.add(Restrictions.in("office.id", officeids));
 			}
+			dc.addOrder(Order.asc("workPayInfo.createDate"));
+			return workDealInfoDao.find(dc);
+		}else
+		{
+			return null;
+		}
+		
+	}
+	public List<WorkDealInfo> findByProjectPay(Date startTime,Date endTime,List<Long> officeids,List<Long> dealInfoByAreaIds,
+			Long appId) {
+		if(startTime!=null)
+		{
+			endTime.setHours(23);
+			endTime.setMinutes(59);
+			endTime.setSeconds(59);
+			DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
+			dc.createAlias("workPayInfo", "workPayInfo");
+			dc.createAlias("createBy", "createBy");
+			dc.createAlias("createBy.office", "office");
+			dc.add(Restrictions.isNotNull("workPayInfo"));
+			if (startTime != null) {
+				dc.add(Restrictions.ge("workPayInfo.createDate", startTime));
+				dc.add(Restrictions.le("workPayInfo.createDate", endTime));
+			}
+			if (dealInfoByAreaIds != null && dealInfoByAreaIds.size() > 0) {
+				dc.add(Restrictions.in("id", dealInfoByAreaIds));
+			}
+			if (appId != null) {
+				dc.add(Restrictions.eq("configApp.id", appId));
+			}
+			if(officeids!=null&& officeids.size() > 0)
+			{
+				dc.add(Restrictions.in("office.id", officeids));
+			}
 			dc.addOrder(Order.desc("id"));
 			return workDealInfoDao.find(dc);
 		}else

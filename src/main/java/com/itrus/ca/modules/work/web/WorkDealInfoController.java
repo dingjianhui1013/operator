@@ -23,6 +23,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -742,12 +743,13 @@ public class WorkDealInfoController extends BaseController {
 		{
 			List<WorkDate_MoneVo> w_m=new ArrayList<WorkDate_MoneVo>();
 			List<Workoffice_MoneyVo> o_m=new ArrayList<Workoffice_MoneyVo>();
-			Set<String> month= new HashSet<String>();
+			Set<String> month= new LinkedHashSet<String>();
 			for(int i=0;i<list.size();i++)
 			{
 				String a=new SimpleDateFormat("yyyy-MM-dd").format(list.get(i).getWorkPayInfo().getCreateDate());
 				month.add(a);
 			}
+			
 			Object months[]=month.toArray();
 			for(int m=0;m<months.length;m++)
 			{
@@ -902,7 +904,7 @@ public class WorkDealInfoController extends BaseController {
 		{
 			List<WorkDate_MoneVo> w_m=new ArrayList<WorkDate_MoneVo>();
 			List<Workoffice_MoneyVo> o_m=new ArrayList<Workoffice_MoneyVo>();
-			Set<String> month= new HashSet<String>();
+			Set<String> month= new LinkedHashSet<String>();
 			for(int i=0;i<list.size();i++)
 			{
 				String a=new SimpleDateFormat("yyyy-MM").format(list.get(i).getWorkPayInfo().getCreateDate());
@@ -1005,6 +1007,7 @@ public class WorkDealInfoController extends BaseController {
 		return "modules/work/statisticalDealPayForm";
 	}
 
+	
 	@RequiresPermissions("work:workDealInfo:view")
 	@RequestMapping(value = "form")
 	public String form(WorkDealInfo workDealInfo, Model model) {
@@ -3397,7 +3400,7 @@ public class WorkDealInfoController extends BaseController {
 		if(list!=null)
 		{
 
-			Set<String> month= new HashSet<String>();
+			Set<String> month= new LinkedHashSet<String>();
 			for(int i=0;i<list.size();i++)
 			{
 				String a=new SimpleDateFormat("yyyy-MM").format(list.get(i).getWorkPayInfo().getCreateDate());
@@ -3550,7 +3553,7 @@ public class WorkDealInfoController extends BaseController {
 			HSSFRow row0=sheet.createRow(0);
 			row0.setHeightInPoints((short)20);
 			HSSFCell cell0= row0.createCell(0);
-			cell0.setCellValue("月回款统计表");
+			cell0.setCellValue(startTime+"至"+endTime+"月回款统计表");
 			cell0.setCellStyle(style);
 			HSSFRow row1=sheet.createRow(1);
 			row1.createCell(0).setCellValue("日期");
@@ -3731,7 +3734,7 @@ public class WorkDealInfoController extends BaseController {
 		List<WorkDealInfo> list=workDealInfoService.findByDayPay(startTime,endTime,officeids,dealInfoByAreaIds, appId);
 		if(list!=null)
 		{
-			Set<String> month= new HashSet<String>();
+			Set<String> month= new LinkedHashSet<String>();
 			for(int i=0;i<list.size();i++)
 			{
 				String a=new SimpleDateFormat("yyyy-MM-dd").format(list.get(i).getWorkPayInfo().getCreateDate());
@@ -3885,7 +3888,7 @@ public class WorkDealInfoController extends BaseController {
 			HSSFRow row0=sheet.createRow(0);
 			row0.setHeightInPoints((short)20);
 			HSSFCell cell0= row0.createCell(0);
-			cell0.setCellValue("日回款统计表");
+			cell0.setCellValue(new SimpleDateFormat("yyyy-MM-dd").format(startTime)+"至"+new SimpleDateFormat("yyyy-MM-dd").format(endTime)+"日回款统计表");
 			cell0.setCellStyle(style);
 			HSSFRow row1=sheet.createRow(1);
 			row1.createCell(0).setCellValue("日期");

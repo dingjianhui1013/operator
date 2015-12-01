@@ -35,12 +35,18 @@
 	}
 	function sub()
 	{
+		var area = $("#area").val();
 		var endTime=$("#endTime").val();
 		var appId=$("#appId").val();
 		var startTime=$("#startTime").val();
 		if(endTime=="")
 			{
 				$("#endTime").val(startTime);
+			}
+		if(area=="")
+			{
+				top.$.jBox.tip("请选择区域");
+				return false;
 			}
 		if(appId=="")
 			{
