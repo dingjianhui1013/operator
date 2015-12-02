@@ -21,6 +21,7 @@ import com.itrus.ca.common.utils.EscapeUtil;
 import com.itrus.ca.modules.key.entity.KeyGeneralInfo;
 import com.itrus.ca.modules.key.entity.KeyManufacturer;
 import com.itrus.ca.modules.key.entity.KeyUsbKey;
+import com.itrus.ca.modules.profile.entity.ConfigSupplier;
 import com.itrus.ca.modules.key.dao.KeyGeneralInfoDao;
 import com.itrus.ca.modules.settle.entity.KeyPurchase;
 
@@ -98,6 +99,10 @@ public class KeyGeneralInfoService extends BaseService {
 		return keyGeneralInfoDao.find(dc);
 	}
 	
+	public KeyGeneralInfo findByOneKeyId(Long keyId) {
+		return keyGeneralInfoDao.findOne(keyId);
+	}
+	
 	public List<KeyGeneralInfo> findByGeneIds(List<Long> geneIds) {
 		DetachedCriteria dc = keyGeneralInfoDao.createDetachedCriteria();
 		dc.setResultTransformer(dc.DISTINCT_ROOT_ENTITY);
@@ -106,8 +111,7 @@ public class KeyGeneralInfoService extends BaseService {
 		dc.addOrder(Order.desc("id"));
 		return keyGeneralInfoDao.find(dc);
 	}
-	
-	
+
 	
 	
 	
