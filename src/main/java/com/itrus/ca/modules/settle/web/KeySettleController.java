@@ -92,7 +92,7 @@ public class KeySettleController extends BaseController {
 	public String list(KeySettle keySettle, KeyPurchase keypurchase,
 			@RequestParam(value = "supplierId", required = false) Long supplierId,
 			@RequestParam(value = "keyId", required = false) Long keyId,
-			@RequestParam(value = "keySn", required = false) String keySn,
+			@RequestParam(value = "keySn", required = false) Long keySn,
 			@RequestParam(value = "startTime", required = false) Date startTime,
 			@RequestParam(value = "endTime", required = false) Date endTime,
 			@RequestParam(value = "KeySubtotal", required = false) Double keySubtotal,
@@ -138,7 +138,7 @@ public class KeySettleController extends BaseController {
 	public void export(HttpServletRequest request,
 			HttpServletResponse response,@RequestParam(value = "supplierId", required = false) Long supplierId,
 			@RequestParam(value = "keyId", required = false) Long keyId,
-			@RequestParam(value = "keySn", required = false) String keySn,
+			@RequestParam(value = "keySn", required = false) Long keySn,
 			@RequestParam(value = "startTime", required = false) Date startTime,
 			@RequestParam(value = "endTime", required = false) Date endTime)
 	{
