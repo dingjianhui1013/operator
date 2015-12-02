@@ -4292,8 +4292,10 @@ public class WorkDealInfoService extends BaseService {
 				}
 				workPayInfoService.save(workPayInfo);
 				workDealInfo.setWorkPayInfo(workPayInfo);
-				workDealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_ADD_USER);
 				this.checkWorkDealInfoNeedSettle(workDealInfo);
+				workDealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_APPROVE_WAIT);
+				workDealInfo.setAttestationUser(UserUtils.getUser());
+				workDealInfo.setAttestationUserDate(new Date());			
 				this.save(workDealInfo);
 			}
 			
