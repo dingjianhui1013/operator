@@ -114,8 +114,9 @@ public class KeyPurchaseService extends BaseService {
 	{
 		return keyPurchaseDao.findOne(id);
 	}
-	public Page<KeyPurchase> find11(Page<KeyPurchase> page, KeyPurchase keyPurchase,String supplierName,String keyName,String keySn,Date startDate,Date endDate)
+	public Page<KeyPurchase> find11(Page<KeyPurchase> page, KeyPurchase keyPurchase,String supplierName,String keyName,Long keySn,Date startDate,Date endDate)
 	{
+		
 		DetachedCriteria dc=keyPurchaseDao.createDetachedCriteria();
 		if(keyPurchase.getAppName()!=null && !"".equals(keyPurchase.getAppName()))
 		{
@@ -125,10 +126,17 @@ public class KeyPurchaseService extends BaseService {
 			//System.out.println(supplierName);
 			dc.add(Restrictions.like("appName", "%"+supplierName+"%"));
 		}
-		if(keyPurchase.getKeySn()!=null && !"".equals(keyPurchase.getKeySn())){
-			dc.add(Restrictions.ge("startCode", keyPurchase.getKeySn()));
-			dc.add(Restrictions.le("endCode", keyPurchase.getKeySn()));
+		if(keySn !=null){
+//			if(keySn>=keyPurchase.getStartCode()&&keySn<=keyPurchase.getEndCode()){
+//				
+//			}
+			dc.add(Restrictions.ge("startCode", keySn));
+			dc.add(Restrictions.le("endCode", keySn));
 		}
+//		if(keyPurchase.getKeySn()!=null && !"".equals(keyPurchase.getKeySn())){
+//			dc.add(Restrictions.ge("startCode", keyPurchase.getKeySn()));
+//			dc.add(Restrictions.le("endCode", keyPurchase.getKeySn()));
+//		}
 		if(keyName !=null){
 			dc.add(Restrictions.like("appName", "%"+keyName+"%"));
 		}
@@ -141,7 +149,7 @@ public class KeyPurchaseService extends BaseService {
 		return keyPurchaseDao.find(page,dc);
 	}
 	
-	public List<KeyPurchase> find12(KeyPurchase keyPurchase,String supplierName,String keyName,String keySn,Date startDate,Date endDate)
+	public List<KeyPurchase> find12(KeyPurchase keyPurchase,String supplierName,String keyName,Long keySn,Date startDate,Date endDate)
 	{
 		DetachedCriteria dc=keyPurchaseDao.createDetachedCriteria();
 		if(keyPurchase.getAppName()!=null && !"".equals(keyPurchase.getAppName()))
