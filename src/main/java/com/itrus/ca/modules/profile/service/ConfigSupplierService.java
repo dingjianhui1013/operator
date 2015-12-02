@@ -19,6 +19,7 @@ import com.itrus.ca.common.persistence.Page;
 import com.itrus.ca.common.service.BaseService;
 import com.itrus.ca.common.utils.EscapeUtil;
 import com.itrus.ca.modules.profile.entity.ConfigSupplier;
+import com.itrus.ca.modules.key.entity.KeyGeneralInfo;
 import com.itrus.ca.modules.profile.dao.ConfigSupplierDao;
 
 /**
@@ -88,6 +89,9 @@ public class ConfigSupplierService extends BaseService {
 		dc.add(Restrictions.eq("supplierType", 1));
 		dc.add(Restrictions.eq("delFlag", ConfigSupplier.DEL_FLAG_NORMAL));
 		return configSupplierDao.find(dc);
+	}
+	public ConfigSupplier findByOneSupplierId(Long supplierId) {
+		return configSupplierDao.findOne(supplierId);
 	}
 	
 	
