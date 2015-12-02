@@ -37,14 +37,14 @@ public class KeyPurchase extends DataEntity implements java.io.Serializable{
 		private Integer status; // 1为已付0为未付
 		private ConfigSupplier configSupplier;
 		private KeyGeneralInfo keyGeneralInfo; 
-		private String keySn;
+		private Long keySn;
 		public KeyPurchase(Long id)
 		{
 			this.id=id;
 		}
 		
 		public KeyPurchase(String appName, Date storageDate, Long startCode, Long endCode, Integer count, Double money,
-				Integer status, ConfigSupplier configSupplier, KeyGeneralInfo keyGeneralInfo,String keySn) {
+				Integer status, ConfigSupplier configSupplier, KeyGeneralInfo keyGeneralInfo,Long keySn) {
 			this.appName = appName;
 			this.storageDate = storageDate;
 			this.startCode = startCode;
@@ -138,11 +138,11 @@ public class KeyPurchase extends DataEntity implements java.io.Serializable{
 			this.keyGeneralInfo = keyGeneralInfo;
 		}
 		@Transient
-		public String getKeySn() {
+		public Long getKeySn() {
 			return keySn;
 		}
 
-		public void setKeySn(String keySn) {
+		public void setKeySn(Long keySn) {
 			this.keySn = keySn;
 		}
 		
