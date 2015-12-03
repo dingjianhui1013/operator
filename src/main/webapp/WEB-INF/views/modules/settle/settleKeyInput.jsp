@@ -35,22 +35,6 @@
 				success:function(data){
 					$("#unitPrice").val(data.money);
 					$("#unitPrice1").val(data.money);
-// 					if(data.money1!=null)
-// 						{
-// 							$("#unitPrice").append("一年期：<input type=\"text\" id=\"unitPrice1\" name=\"money1\" value=\""+data.money1+"\" disabled=\"disabled\"/> <input type=\"hidden\" id=\"unitPrice\" name=\"money\" value=\""+data.money1+"\" />");
-// 						}
-// 					if(data.money2!=null)
-// 					{
-// 						$("#unitPrice").append("二年期：<input type=\"text\" id=\"unitPrice1\" name=\"money1\" value=\""+data.money2+"\" disabled=\"disabled\"/> <input type=\"hidden\" id=\"unitPrice\" name=\"money\" value=\""+data.money1+"\" />");
-// 					}
-// 					if(data.money4!=null)
-// 					{
-// 						$("#unitPrice").append("四年期：<input type=\"text\" id=\"unitPrice1\" name=\"money1\" value=\""+data.money4+"\" disabled=\"disabled\"/> <input type=\"hidden\" id=\"unitPrice\" name=\"money\" value=\""+data.money1+"\" />");
-// 					}
-// 					if(data.money5!=null)
-// 					{
-// 						$("#unitPrice").append("五年期：<input type=\"text\" id=\"unitPrice1\" name=\"money1\" value=\""+data.money5+"\" disabled=\"disabled\"/> <input type=\"hidden\" id=\"unitPrice\" name=\"money\" value=\""+data.money1+"\" />");
-// 					}
 					if(data.endcode==0)
 						{
 							$("#startCode").val("");
@@ -70,9 +54,11 @@
 					top.$.jBox.tip("请填写起始码");
 				}else if(startCode > endCode){
 					top.$.jBox.tip("截止码小于起始码");
-				}else
+				}
+				
+				if(!isNaN(startCode)&&!isNaN(endCode))
 					{
-						$("#count").val(endCode-startCode);
+						$("#count").val((endCode-startCode)+1);
 					}
 			if(isNaN(endCode))
 				{
