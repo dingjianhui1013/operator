@@ -313,6 +313,56 @@ public class WorkDealInfoController extends BaseController {
 	}
 
 	
+	
+	@RequiresPermissions("work:workDealInfo:view")
+	@RequestMapping(value = "deleteList")
+	public String deleteList(WorkDealInfo workDealInfo, Date startTime, Date endTime,
+			HttpServletRequest request, HttpServletResponse response,
+			Model model, RedirectAttributes redirectAttributes,
+			@RequestParam(value = "checkIds", required = false) String checkIds,
+			@RequestParam(value = "alias", required = false) Long alias
+			) {
+		User user = UserUtils.getUser();
+		workDealInfo.setCreateBy(user.getCreateBy());
+		
+		List<ConfigApp> configAppList = configAppService.selectAll();
+		model.addAttribute("configAppList", configAppList);
+		model.addAttribute("alias",alias);
+		
+		Page<WorkDealInfo> page = workDealInfoService.find4Apply(
+				new Page<WorkDealInfo>(request, response), workDealInfo,
+				startTime, endTime , alias);
+
+		if (checkIds!=null) {
+    		String[] ids = checkIds.split(",");
+    		model.addAttribute("ids", ids);
+		}
+		model.addAttribute("checkIds", checkIds);
+		
+		List<WorkDealInfo> noIxinInfos = page.getList();
+		List<WorkDealInfo> isIxinInfos = workDealInfoService.find4ApplyIsIxin(
+				workDealInfo, startTime, endTime , alias);
+		noIxinInfos.addAll(isIxinInfos);
+
+		page.setList(noIxinInfos);
+
+		model.addAttribute("workType", workDealInfo.getDealInfoStatus());
+		
+		model.addAttribute("proType", ProductType.productTypeStrMap);
+		model.addAttribute("wdiType", WorkDealInfoType.WorkDealInfoTypeMap);
+		model.addAttribute("wdiStatus",
+				WorkDealInfoStatus.WorkDealInfoStatusMap);
+		model.addAttribute("page", page);
+		model.addAttribute("startTime", startTime);
+		model.addAttribute("endTime", endTime);
+		return "modules/work/workDealInfoDeleteList";
+	}
+
+	
+	
+	
+	
+	
 	// 批量导入
 		@RequestMapping("addAttach")
 		@ResponseBody

@@ -393,7 +393,6 @@ public class KeyUsbKeyInvoiceService extends BaseService {
 	// 根据keySn查询出DefaultSoPinType
 	@Transactional(readOnly = false)
 	public KeyGeneralInfo findDefaultSoPinTypeByKeysn(String keySn) {
-		User user = UserUtils.getUser();
 		List<KeyUsbKeyInvoice> invoices = this.findByKeysn(keySn);
 		if (invoices.size() > 0) {
 			KeyUsbKeyInvoice invoice = this.findByKeysn(keySn).get(0);

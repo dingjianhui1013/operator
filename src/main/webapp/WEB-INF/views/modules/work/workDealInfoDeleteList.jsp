@@ -349,10 +349,9 @@
 				<a target="_blank" href="${ctx}/enroll/downloadTemplate?fileName=batchImportDealInfo.xlsx&_=new Date().getTime()" class="btn btn-primary">批量新增模板下载</a>
 				&nbsp;&nbsp;&nbsp;&nbsp;
 				<a id="manyAdd" data-toggle="modal" href="#declareDiv" class="btn btn-primary">批量新增导入</a>
+				
 				&nbsp;&nbsp;&nbsp;&nbsp;
 				<a id="manyUpdate" data-toggle="modal" href="javaScript:updateCertOK();" class="btn btn-primary">批量更新证书</a>
-				&nbsp;&nbsp;&nbsp;&nbsp;
-				<a data-toggle="modal" href="${ctx}/work/workDealInfo/deleteList" class="btn btn-primary">删除批量新增信息</a>
 				<input type="hidden"  name="checkIds"  id="checkIds"  value="${checkIds }"/>
 		</div>
 	</form:form>
