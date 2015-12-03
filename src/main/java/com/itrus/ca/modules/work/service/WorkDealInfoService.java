@@ -275,17 +275,26 @@ public class WorkDealInfoService extends BaseService {
 		dc.addOrder(Order.desc("id"));
 		return workDealInfoDao.find(page, dc);
 	}
-	public Page<WorkDealInfo> find11(Page<WorkDealInfo> page,WorkDealInfo workDealInfo,Long apply,Integer workType,Integer wdiStatus){
+	public Page<WorkDealInfo> find11(Page<WorkDealInfo> page,WorkDealInfo workDealInfo,Long apply,Integer workType){
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("workUser", "workUser");
 		dc.createAlias("workCompany", "workCompany");
 		dc.createAlias("createBy", "createBy");
 		dc.createAlias("createBy.office", "office");
-		// dc.createAlias("workCertInfo", "workCertInfo");
+		dc.createAlias("configApp", "configApp");
 		dc.add(dataScopeFilter(UserUtils.getUser(), "office", "createBy"));
-
-		if (workDealInfo.getWorkCertInfo() != null) {
-			dc.add(Restrictions.isNotNull("notafter"));
+		if (apply != null) {
+			dc.add(Restrictions.eq("configApp.id", apply));
+		}
+		if (workType != null) {
+			dc.add(Restrictions.eq("dealInfoType", workType));
+		}
+		if (workDealInfo.getDealInfoStatus()!= null && !workDealInfo.getDealInfoStatus().equals("")) {
+			dc.add(Restrictions.eq("dealInfoStatus", workDealInfo.getDealInfoStatus()));
+		}
+		
+		if (workDealInfo.getStatus() != null) {
+			dc.add(Restrictions.eq("status", workDealInfo.getStatus()));
 		}
 		if (workDealInfo.getWorkCompany() != null) {
 			if (workDealInfo.getWorkCompany().getId() != null) {
@@ -296,51 +305,56 @@ public class WorkDealInfoService extends BaseService {
 				dc.add(Restrictions.like("workCompany.companyName",
 						"%" + EscapeUtil.escapeLike(workDealInfo.getWorkCompany().getCompanyName()) + "%"));
 			}
-		}
-		if (workDealInfo.getWorkUser() != null) {
-			if (workDealInfo.getWorkUser().getContactName() != null
-					&& !workDealInfo.getWorkUser().getContactName().equals("")) {
-				dc.add(Restrictions.like("workUser.contactName",
-						"%" + EscapeUtil.escapeLike(workDealInfo.getWorkUser().getContactName()) + "%"));
+			if (workDealInfo.getWorkCompany().getOrganizationNumber()!=null && !workDealInfo.getWorkCompany().getOrganizationNumber().equals("") ) {
+				dc.add(Restrictions.like("workCompany.organizationNumber",
+						EscapeUtil.escapeLike(workDealInfo.getWorkCompany().getOrganizationNumber())));
+				
 			}
-			if (workDealInfo.getWorkUser().getContactPhone() != null
-					&& !workDealInfo.getWorkUser().getContactPhone().equals("")) {
-				dc.add(Restrictions.like("workUser.contactPhone",
-						"%" + EscapeUtil.escapeLike(workDealInfo.getWorkUser().getContactPhone()) + "%"));
-			}
-			if (workDealInfo.getWorkUser().getContactTel() != null
-					&& !workDealInfo.getWorkUser().getContactTel().equals("")) {
-				dc.add(Restrictions.like("workUser.contactTel",
-						"%" + EscapeUtil.escapeLike(workDealInfo.getWorkUser().getContactTel()) + "%"));
-			}
-		}
-		if (workDealInfo.getDealInfoStatus() == null) {
-			dc.add(Restrictions.or(Restrictions.eq("dealInfoStatus", "12"), Restrictions.eq("dealInfoStatus", "0"),Restrictions.eq("dealInfoStatus", "13")));
-		} else {
-			if (workDealInfo.getDealInfoStatus().equals("-1")) {
-				dc.add(Restrictions.or(Restrictions.eq("dealInfoStatus", "12"),
-						Restrictions.eq("dealInfoStatus", "0"),Restrictions.eq("dealInfoStatus", "13")));
-			} else {
-				dc.add(Restrictions.eq("dealInfoStatus", workDealInfo.getDealInfoStatus()));
-			}
-		}
-
-		if (workDealInfo.getDealInfoType() != null) {
-			if (workDealInfo.getDealInfoType() != -1) {
-				dc.add(Restrictions.or(Restrictions.eq("dealInfoType", workDealInfo.getDealInfoType()),
-						Restrictions.eq("dealInfoType1", workDealInfo.getDealInfoType())));
-			}
-		}
-		if (StringUtils.isNotEmpty(workDealInfo.getKeySn())) {
-			dc.add(Restrictions.like("keySn", "%" + EscapeUtil.escapeLike(workDealInfo.getKeySn()) + "%"));
-		}
-		if (workDealInfo.getStatus() != null) {
-			dc.add(Restrictions.eq("status", workDealInfo.getStatus()));
 		}
 		dc.add(Restrictions.isNull("isIxin"));
 		dc.add(Restrictions.eq(WorkDealInfo.DEL_FLAG, WorkDealInfo.DEL_FLAG_NORMAL));
-		dc.addOrder(Order.desc("id"));
+		dc.addOrder(Order.desc("createDate"));
 		return workDealInfoDao.find(page, dc);
+	}	public List<WorkDealInfo> find12(WorkDealInfo workDealInfo,Long apply,Integer workType){
+		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
+		dc.createAlias("workUser", "workUser");
+		dc.createAlias("workCompany", "workCompany");
+		dc.createAlias("createBy", "createBy");
+		dc.createAlias("createBy.office", "office");
+		dc.createAlias("configApp", "configApp");
+		dc.add(dataScopeFilter(UserUtils.getUser(), "office", "createBy"));
+		if (apply != null) {
+			dc.add(Restrictions.eq("configApp.id", apply));
+		}
+		if (workType != null) {
+			dc.add(Restrictions.eq("dealInfoType", workType));
+		}
+		if (workDealInfo.getDealInfoStatus()!= null && !workDealInfo.getDealInfoStatus().equals("")) {
+			dc.add(Restrictions.eq("dealInfoStatus", workDealInfo.getDealInfoStatus()));
+		}
+		
+		if (workDealInfo.getStatus() != null) {
+			dc.add(Restrictions.eq("status", workDealInfo.getStatus()));
+		}
+		if (workDealInfo.getWorkCompany() != null) {
+			if (workDealInfo.getWorkCompany().getId() != null) {
+				dc.add(Restrictions.eq("workCompany", workDealInfo.getWorkCompany()));
+			}
+			if (workDealInfo.getWorkCompany().getCompanyName() != null
+					&& !workDealInfo.getWorkCompany().getCompanyName().equals("")) {
+				dc.add(Restrictions.like("workCompany.companyName",
+						"%" + EscapeUtil.escapeLike(workDealInfo.getWorkCompany().getCompanyName()) + "%"));
+			}
+			if (workDealInfo.getWorkCompany().getOrganizationNumber()!=null && !workDealInfo.getWorkCompany().getOrganizationNumber().equals("") ) {
+				dc.add(Restrictions.like("workCompany.organizationNumber",
+						EscapeUtil.escapeLike(workDealInfo.getWorkCompany().getOrganizationNumber())));
+				
+			}
+		}
+		dc.add(Restrictions.isNull("isIxin"));
+		dc.add(Restrictions.eq(WorkDealInfo.DEL_FLAG, WorkDealInfo.DEL_FLAG_NORMAL));
+		dc.addOrder(Order.desc("createDate"));
+		return workDealInfoDao.find(dc);
 	}
 	public Page<WorkDealInfo> find1(Page<WorkDealInfo> page, WorkDealInfo workDealInfo) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
