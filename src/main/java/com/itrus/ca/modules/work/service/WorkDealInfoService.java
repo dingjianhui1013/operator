@@ -1473,7 +1473,7 @@ public class WorkDealInfoService extends BaseService {
 			{
 				dc.add(Restrictions.in("office.id", officeids));
 			}
-			dc.addOrder(Order.desc("id"));
+			dc.addOrder(Order.asc("workPayInfo.createDate"));
 			return workDealInfoDao.find(dc);
 		}else
 		{

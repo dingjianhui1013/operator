@@ -137,125 +137,81 @@
 			
 	</form:form>
 	<tags:message content="${message}" />
-	<table id="contentTable"
+	<table id="contentTable" 
 		class="table table-striped table-bordered table-condensed">
 		<thead>
 			<tr>
-				<th>统计日期</th>
-				<th>项目名称</th>
-				<c:set var="post" value="0" />
-				<c:set var="bank" value="0" />
-				<c:set var="xj" value="0" />
-				<c:set var="alipay" value="0" />
-				<c:forEach items="${workDate_Mone}" var="workDate_Mone">
-						<c:if test="${workDate_Mone.countPostMoney>0}">
-							<c:set var="post" value="${post+1}" />
-						</c:if>
-						<c:if test="${workDate_Mone.countBankMoney>0}">
-							<c:set var="bank" value="${bank+1}" />
-						</c:if>
-						<c:if test="${workDate_Mone.countXjMoney>0}">
-							<c:set var="xj" value="${xj+1}" />
-						</c:if>
-						<c:if test="${workDate_Mone.countAlipayMoney>0}">
-							<c:set var="alipay" value="${alipay+1}" />
-						</c:if>
-				</c:forEach>
-				<c:if test="${post>0 }">
-					<th>Post付款</th>
-				</c:if>
-				<c:if test="${bank>0 }">
-					<th>银行转账付款</th>
-				</c:if>
-				<c:if test="${xj>0 }">
-					<th>现金付款</th>
-				</c:if>
-				<c:if test="${alipay>0 }">
-					<th>支付宝</th>
-				</c:if>
-				<c:forEach items="${office_Moneys}" var="officeMoneys">
-					<c:if test="${officeMoneys.value>0}">
-						<th>${officeMoneys.key}</th>
+				<th  rowspan="2" style="text-align:center;">统计日期</th>
+				<th  rowspan="2" style="text-align:center;">项目名称</th>
+				<c:forEach items="${office_payMethod}" var="office_payMethod">
+					<c:set var="index" value="0" />
+					<c:forEach items="${office_payMethod.value}">
+						<c:set var="index" value="${index+1}" />
+					</c:forEach>
+					<c:if test="${index==1}">
+						<th colspan="${index}" rowspan="2" style="text-align:center;">${office_payMethod.key}网点</th>
 					</c:if>
-					<c:if test="${officeMoneys.value==0}">
-						<c:set var="officename" value="${officeMoneys.key}" />
+					<c:if test="${index>1}">
+						<th colspan="${index}" style="text-align:center;">${office_payMethod.key}网点</th>
 					</c:if>
 				</c:forEach>
-				<th>合计</th>
-			</tr>  
+				<th rowspan="2" style="text-align:center;">合计</th>
+			</tr>
+			<tr>
+				<c:forEach items="${office_payMethod}" var="office_payMethod">
+					<c:set var="index" value="0" />
+					<c:forEach items="${office_payMethod.value}">
+						<c:set var="index" value="${index+1}" />
+					</c:forEach>
+					<c:if test="${index>1}">
+					<c:forEach items="${office_payMethod.value}" var="payMethod">
+						<th style="text-align:center;">${payMethod}</th>
+					</c:forEach>
+					</c:if>
+				</c:forEach>
+			</tr>
 		</thead>
 		<tbody>
-		<c:set var="postMoney" value="0" />
-		<c:set var="bankMoney" value="0" />
-		<c:set var="xjMoney" value="0" />
-		<c:set var="alipaymoney" value="0" />
-		<c:set var="zj" value="0" />
-		<c:forEach items="${workDate_Mone}" var="workDate_Mone">
-				<tr>
-				<td>${workDate_Mone.date}</td>
+		<c:forEach items="${dates}" var = "dates">
+			<tr>
+				<td>${dates}</td>
 				<td>${appName}</td>
-					<c:if test="${workDate_Mone.countPostMoney>0}">
-					<c:set var="postMoney" value="${postMoney+workDate_Mone.countPostMoney}"/>
-						<td>${workDate_Mone.countPostMoney}</td>
-					</c:if>
-					<c:if test="${workDate_Mone.countPostMoney==0&&post>0}">
-						<td>0.0</td>
-					</c:if>
-					<c:if test="${workDate_Mone.countBankMoney>0}">
-					<c:set var="bankMoney" value="${bankMoney+workDate_Mone.countBankMoney}"/>
-						<td>${workDate_Mone.countBankMoney}</td>
-					</c:if>
-					<c:if test="${workDate_Mone.countBankMoney==0&&bank>0}">
-						<td>0.0</td>
-					</c:if>
-					<c:if test="${workDate_Mone.countXjMoney>0}">
-					<c:set var="xjMoney" value="${xjMoney+workDate_Mone.countXjMoney}"/>
-						<td>${workDate_Mone.countXjMoney}</td>
-					</c:if>
-					<c:if test="${workDate_Mone.countXjMoney==0&&xj>0}">
-						<td>0.0</td>
-					</c:if>
-					<c:if test="${workDate_Mone.countAlipayMoney>0}">
-					<c:set var="alipayMoney" value="${alipayMoney+workDate_Mone.countAlipayMoney}"/>
-						<td>${workDate_Mone.countAlipayMoney}</td>
-					</c:if>
-					<c:if test="${workDate_Mone.countAlipayMoney==0&&alipay>0}">
-						<td>0.0</td>
-					</c:if>
-					<c:forEach items="${workoffice_MoneyVo}" var="workoffice_MoneyVo">
-						<c:if test="${workoffice_MoneyVo.date==workDate_Mone.date&&workoffice_MoneyVo.officeName!=officename}">
-							<td>${workoffice_MoneyVo.countMoney}</td>
+					<c:forEach items="${workoffice_MoneyVo}" var="workoffice_MoneyVo" >
+						<c:if test = "${workoffice_MoneyVo.date == dates}">
+							<c:if test="${workoffice_MoneyVo.postMoney}">
+									<td>${workoffice_MoneyVo.countPostMoney}</td>
+								</c:if>
+								<c:if test="${workoffice_MoneyVo.bankMoney}">
+									<td>${workoffice_MoneyVo.countBankMoney}</td>
+								</c:if>
+								<c:if test="${workoffice_MoneyVo.xjMoney}">
+									<td>${workoffice_MoneyVo.countXjMoney}</td>
+								</c:if>
+								<c:if test="${workoffice_MoneyVo.alipayMoney}">
+									<td>${workoffice_MoneyVo.countAlipayMoney}</td>
+								</c:if>
 						</c:if>
 					</c:forEach>
-					<td>
-						<c:set var="zj" value="${zj+workDate_Mone.countMoney }" />
-						${workDate_Mone.countMoney}
-					</td>
-				</tr>
+					<c:forEach items="${workDate_Mone}" var="workDate_Mone">
+						<c:if test="${workDate_Mone.date==dates}">
+							<td>${workDate_Mone.countMoney}</td>
+						</c:if>
+					</c:forEach>
+			<tr>
 		</c:forEach>
 		<tr>
-			<td>合计</td>	
+			<td>合计</td>
 			<td></td>
-			<c:if test="${postMoney>0}">
-				<td>${postMoney}</td>
+			<c:if test="${moneys==null}">
+				<td>0.0</td>
 			</c:if>
-			<c:if test="${bankMoney>0}">
-				<td>${bankMoney}</td>
+			<c:if test="${moneys!=null}">
+				<c:forEach items="${moneys}" var="moneys">
+					<td>${moneys}</td>
+				</c:forEach>
 			</c:if>
-			<c:if test="${xjMoney>0}">
-				<td>${xjMoney}</td>
-			</c:if>
-			<c:if test="${alipayMoney>0}">
-				<td>${alipayMoney}</td>
-			</c:if>
-			<c:forEach items="${office_Moneys}" var="officeMoneys">
-					<c:if test="${officeMoneys.value>0}">
-						<td>${officeMoneys.value}</td>
-					</c:if>
-			</c:forEach>
-			<td>${zj}</td>
 		</tr>
 		</tbody>
-		</table>
+	</table>
 </body>
 </html>
