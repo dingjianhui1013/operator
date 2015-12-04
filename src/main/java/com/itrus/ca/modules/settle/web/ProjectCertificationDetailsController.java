@@ -73,7 +73,7 @@ public class ProjectCertificationDetailsController extends BaseController {
 
 	@Autowired
 	private OfficeService officeService;
-	
+
 	@Autowired
 	private WorkCertInfoService workCertInfoService;
 
@@ -94,45 +94,47 @@ public class ProjectCertificationDetailsController extends BaseController {
 			@RequestParam(value = "startTime", required = false) Date startTime,
 			@RequestParam(value = "endTime", required = false) Date endTime, Model model) {
 		// 新增个人一年证书
-				int addPersonalYearCertificate = 0;
-				// 新增个人两年证书
-				int addPersonalTwoYearCertificate = 0;
-				// 新增个人四年证书
-				int addPersonalFourYearCertificate = 0;
-				// 新增企业一年证书
-				int addcompanyYearCertificate = 0;
-				// 新增企业两年证书
-				int addcompanyTwoYearCertificate = 0;
-				// 新增企业四年证书
-				int addcompanyFourYearCertificate = 0;
-				// 更新个人一年证书
-				int updatePersonalYearCertificate = 0;
-				// 更新个人两年证书
-				int updatePersonalTwoYearCertificate = 0;
-				// 更新个人四年证书
-				int updatePersonalFourYearCertificate = 0;
-				// 更新企业一年证书
-				int updatecompanyYearCertificate = 0;
-				// 更新企业两年证书
-				int updatecompanyTwoYearCertificate = 0;
-				// 更新企业四年证书
-				int updateFourYearCertificate = 0;
-				// 遗失补办证书
-				int lostCerate = 0;
-				// 损坏更换证书
-				int damageCertificate = 0;
+		int addPersonalYearCertificate = 0;
+		// 新增个人两年证书
+		int addPersonalTwoYearCertificate = 0;
+		// 新增个人四年证书
+		int addPersonalFourYearCertificate = 0;
+		// 新增企业一年证书
+		int addcompanyYearCertificate = 0;
+		// 新增企业两年证书
+		int addcompanyTwoYearCertificate = 0;
+		// 新增企业四年证书
+		int addcompanyFourYearCertificate = 0;
+		// 更新个人一年证书
+		int updatePersonalYearCertificate = 0;
+		// 更新个人两年证书
+		int updatePersonalTwoYearCertificate = 0;
+		// 更新个人四年证书
+		int updatePersonalFourYearCertificate = 0;
+		// 更新企业一年证书
+		int updatecompanyYearCertificate = 0;
+		// 更新企业两年证书
+		int updatecompanyTwoYearCertificate = 0;
+		// 更新企业四年证书
+		int updateFourYearCertificate = 0;
+		// 遗失补办证书
+		int lostCerate = 0;
+		// 损坏更换证书
+		int damageCertificate = 0;
 		User user = UserUtils.getUser();
 		workDealInfo.setCreateBy(user.getCreateBy());
 		List<ConfigApp> configAppList = configAppService.selectAll();
 		model.addAttribute("configAppList", configAppList);
 		model.addAttribute("alias", alias);
-		List<WorkCertInfo> certInfoList = new ArrayList<WorkCertInfo>() ;
-		if (startTime!=null&&endTime!=null) {
-			certInfoList =  workCertInfoService.findZhiZhengTime(startTime, endTime);
-		}	
+		List<WorkCertInfo> certInfoList = new ArrayList<WorkCertInfo>();
+		if (startTime != null && endTime != null) {
+			certInfoList = workCertInfoService.findZhiZhengTime(startTime, endTime);
+		}
 		Page<WorkDealInfo> page = workDealInfoService.find5Apply(new Page<WorkDealInfo>(request, response),
-				workDealInfo, alias,certInfoList);
-		List<WorkDealInfo> list = workDealInfoService.find5ApplyIsIxin(workDealInfo, alias,certInfoList);
+				workDealInfo, alias, certInfoList);
+		model.addAttribute("page", page);
+
+		List<WorkDealInfo> list = workDealInfoService.find5ApplyIsIxin(workDealInfo, alias, certInfoList);
 		for (int i = 0; i < list.size(); i++) {
 
 			if (list.get(i).getDealInfoType() != null) {
@@ -370,7 +372,7 @@ public class ProjectCertificationDetailsController extends BaseController {
 				damageCertificate++;
 			}
 		}
-		Projectcount projectcount =new Projectcount();
+		Projectcount projectcount = new Projectcount();
 		projectcount.setAddPersonalFourYearCertificate(addPersonalFourYearCertificate);
 		projectcount.setAddPersonalTwoYearCertificate(addPersonalTwoYearCertificate);
 		projectcount.setAddPersonalYearCertificate(addPersonalYearCertificate);
@@ -385,14 +387,13 @@ public class ProjectCertificationDetailsController extends BaseController {
 		projectcount.setUpdatePersonalFourYearCertificate(updatePersonalFourYearCertificate);
 		projectcount.setUpdatePersonalTwoYearCertificate(updatePersonalTwoYearCertificate);
 		projectcount.setUpdatePersonalYearCertificate(updatePersonalYearCertificate);
-		
-		
+
 		model.addAttribute("projectcount", projectcount);
 		model.addAttribute("workType", workDealInfo.getDealInfoStatus());
 		model.addAttribute("proType", ProductType.productTypeStrMap);
 		model.addAttribute("wdiType", WorkDealInfoType.WorkDealInfoTypeMap);
 		model.addAttribute("wdiStatus", WorkDealInfoStatus.WorkDealInfoStatusMap);
-		model.addAttribute("page", page);
+
 		model.addAttribute("startTime", startTime);
 		model.addAttribute("endTime", endTime);
 		return "modules/settle/projectCertificationDetailsList";
@@ -413,11 +414,11 @@ public class ProjectCertificationDetailsController extends BaseController {
 		WorkDealInfoType workDealInfoType = new WorkDealInfoType();
 		List<Office> officeList = officeService.getOfficeByType(UserUtils.getUser(), 2);
 		// try {
-		List<WorkCertInfo> certInfoList = new ArrayList<WorkCertInfo>() ;
-		if (startTime!=null&&endTime!=null) {
-			certInfoList =  workCertInfoService.findZhiZhengTime(startTime, endTime);
-		}	
-		List<WorkDealInfo> list = workDealInfoService.find5ApplyIsIxin(workDealInfo, alias,certInfoList);
+		List<WorkCertInfo> certInfoList = new ArrayList<WorkCertInfo>();
+		if (startTime != null && endTime != null) {
+			certInfoList = workCertInfoService.findZhiZhengTime(startTime, endTime);
+		}
+		List<WorkDealInfo> list = workDealInfoService.find5ApplyIsIxin(workDealInfo, alias, certInfoList);
 
 		final String fileName = "WorkDealInfos.csv";
 		final List<ProjectCertificationDetailsVo> ProjectCertificationDetailsVos = new ArrayList<ProjectCertificationDetailsVo>();
@@ -785,11 +786,11 @@ public class ProjectCertificationDetailsController extends BaseController {
 
 			HSSFRow rown = sheet.createRow(i + 8);
 			rown.createCell(0).setCellValue(i + 1);
-			if(list.get(i).getWorkCompany().getCompanyName()==null){
-				
+			if (list.get(i).getWorkCompany().getCompanyName() == null) {
+
 				rown.createCell(1).setCellValue("");
-			}else{
-			rown.createCell(1).setCellValue(list.get(i).getWorkCompany().getCompanyName());
+			} else {
+				rown.createCell(1).setCellValue(list.get(i).getWorkCompany().getCompanyName());
 			}
 			rown.createCell(2).setCellValue(
 					productType.getProductTypeName(Integer.parseInt(list.get(i).getConfigProduct().getProductName())));
