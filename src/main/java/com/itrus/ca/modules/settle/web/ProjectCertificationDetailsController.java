@@ -14,7 +14,6 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFRow;
@@ -22,13 +21,6 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.CellRangeAddress;
 import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.Font;
-import org.apache.poi.ss.usermodel.RichTextString;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.util.Region;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -41,27 +33,24 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.itrus.ca.common.config.Global;
 import com.itrus.ca.common.persistence.Page;
 import com.itrus.ca.common.utils.DateUtils;
-import com.itrus.ca.common.utils.excel.ExportExcel;
 import com.itrus.ca.common.web.BaseController;
-import com.itrus.ca.modules.sys.entity.Office;
-import com.itrus.ca.modules.sys.entity.User;
-import com.itrus.ca.modules.sys.service.OfficeService;
-import com.itrus.ca.modules.sys.utils.UserUtils;
-import com.itrus.ca.modules.work.entity.WorkDealInfo;
-import com.itrus.ca.modules.work.service.WorkDealInfoService;
-import com.itrus.ca.modules.work.vo.WorkDealInfoVo;
-import com.sun.org.apache.xalan.internal.xsltc.compiler.sym;
 import com.itrus.ca.modules.constant.ProductType;
 import com.itrus.ca.modules.constant.WorkDealInfoStatus;
 import com.itrus.ca.modules.constant.WorkDealInfoType;
 import com.itrus.ca.modules.profile.entity.ConfigApp;
 import com.itrus.ca.modules.profile.service.ConfigAppService;
-import com.itrus.ca.modules.profile.service.ConfigSupplierService;
-import com.itrus.ca.modules.settle.entity.KeyPurchase;
 import com.itrus.ca.modules.settle.entity.ProjectCertificationDetails;
 import com.itrus.ca.modules.settle.entity.Projectcount;
 import com.itrus.ca.modules.settle.service.ProjectCertificationDetailsService;
 import com.itrus.ca.modules.settle.vo.ProjectCertificationDetailsVo;
+import com.itrus.ca.modules.sys.entity.Office;
+import com.itrus.ca.modules.sys.entity.User;
+import com.itrus.ca.modules.sys.service.OfficeService;
+import com.itrus.ca.modules.sys.utils.UserUtils;
+import com.itrus.ca.modules.work.entity.WorkCertInfo;
+import com.itrus.ca.modules.work.entity.WorkDealInfo;
+import com.itrus.ca.modules.work.service.WorkCertInfoService;
+import com.itrus.ca.modules.work.service.WorkDealInfoService;
 
 /**
  * 项目发证明细Controller
@@ -84,6 +73,9 @@ public class ProjectCertificationDetailsController extends BaseController {
 
 	@Autowired
 	private OfficeService officeService;
+	
+	@Autowired
+	private WorkCertInfoService workCertInfoService;
 
 	@ModelAttribute
 	public ProjectCertificationDetails get(@RequestParam(required = false) Long id) {
@@ -134,10 +126,13 @@ public class ProjectCertificationDetailsController extends BaseController {
 		List<ConfigApp> configAppList = configAppService.selectAll();
 		model.addAttribute("configAppList", configAppList);
 		model.addAttribute("alias", alias);
-
-		Page<WorkDealInfo> page = workDealInfoService.find4Apply(new Page<WorkDealInfo>(request, response),
-				workDealInfo, startTime, endTime, alias);
-		List<WorkDealInfo> list = workDealInfoService.find4ApplyIsIxin(workDealInfo, startTime, endTime, alias);
+		List<WorkCertInfo> certInfoList = new ArrayList<WorkCertInfo>() ;
+		if (startTime!=null&&endTime!=null) {
+			certInfoList =  workCertInfoService.findZhiZhengTime(startTime, endTime);
+		}	
+		Page<WorkDealInfo> page = workDealInfoService.find5Apply(new Page<WorkDealInfo>(request, response),
+				workDealInfo, alias,certInfoList);
+		List<WorkDealInfo> list = workDealInfoService.find5ApplyIsIxin(workDealInfo, alias,certInfoList);
 		for (int i = 0; i < list.size(); i++) {
 
 			if (list.get(i).getDealInfoType() != null) {
@@ -418,7 +413,11 @@ public class ProjectCertificationDetailsController extends BaseController {
 		WorkDealInfoType workDealInfoType = new WorkDealInfoType();
 		List<Office> officeList = officeService.getOfficeByType(UserUtils.getUser(), 2);
 		// try {
-		List<WorkDealInfo> list = workDealInfoService.find4ApplyIsIxin(workDealInfo, startTime, endTime, alias);
+		List<WorkCertInfo> certInfoList = new ArrayList<WorkCertInfo>() ;
+		if (startTime!=null&&endTime!=null) {
+			certInfoList =  workCertInfoService.findZhiZhengTime(startTime, endTime);
+		}	
+		List<WorkDealInfo> list = workDealInfoService.find5ApplyIsIxin(workDealInfo, alias,certInfoList);
 
 		final String fileName = "WorkDealInfos.csv";
 		final List<ProjectCertificationDetailsVo> ProjectCertificationDetailsVos = new ArrayList<ProjectCertificationDetailsVo>();
@@ -786,7 +785,12 @@ public class ProjectCertificationDetailsController extends BaseController {
 
 			HSSFRow rown = sheet.createRow(i + 8);
 			rown.createCell(0).setCellValue(i + 1);
+			if(list.get(i).getWorkCompany().getCompanyName()==null){
+				
+				rown.createCell(1).setCellValue("");
+			}else{
 			rown.createCell(1).setCellValue(list.get(i).getWorkCompany().getCompanyName());
+			}
 			rown.createCell(2).setCellValue(
 					productType.getProductTypeName(Integer.parseInt(list.get(i).getConfigProduct().getProductName())));
 			if (list.get(i).getDealInfoType() != null) {
