@@ -3,27 +3,23 @@
  */
 package com.itrus.ca.modules.message.entity;
 
-import java.util.Date;
-
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.NotFound;
-import org.hibernate.annotations.NotFoundAction;
 import org.hibernate.validator.constraints.Length;
 
 import com.itrus.ca.common.persistence.DataEntity;
-import com.itrus.ca.modules.profile.entity.ConfigApp;
-import com.itrus.ca.modules.sys.entity.User;
+import com.itrus.ca.modules.work.entity.WorkCompany;
 import com.itrus.ca.modules.work.entity.WorkDealInfo;
+import com.itrus.ca.modules.work.entity.WorkUser;
 
 /**
  * 消息发送Entity
@@ -39,7 +35,8 @@ public class MessageSending extends DataEntity {
 	private Long id; 		// 编号
 	private String name; 	// 名称
 	private WorkDealInfo workDealInfo;
-	
+	private WorkCompany workCompany;
+	private WorkUser workUser;
 	public MessageSending() {
 		
 	}
@@ -49,6 +46,13 @@ public class MessageSending extends DataEntity {
 		this.id = id;
 	}
 	
+	public MessageSending(String name, WorkDealInfo workDealInfo, WorkCompany workCompany, WorkUser workUser) {
+		this.name = name;
+		this.workDealInfo = workDealInfo;
+		this.workCompany = workCompany;
+		this.workUser = workUser;
+	}
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	//@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_message_messageSending")
@@ -68,6 +72,31 @@ public class MessageSending extends DataEntity {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "WorkDealInfo_id")
+	public WorkDealInfo getWorkDealInfo() {
+		return workDealInfo;
+	}
+
+	public void setWorkDealInfo(WorkDealInfo workDealInfo) {
+		this.workDealInfo = workDealInfo;
+	}
+
+	public WorkCompany getWorkCompany() {
+		return workCompany;
+	}
+
+	public void setWorkCompany(WorkCompany workCompany) {
+		this.workCompany = workCompany;
+	}
+
+	public WorkUser getWorkUser() {
+		return workUser;
+	}
+
+	public void setWorkUser(WorkUser workUser) {
+		this.workUser = workUser;
 	}
 	
 }
