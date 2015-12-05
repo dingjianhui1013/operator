@@ -635,7 +635,17 @@ public class WorkDealInfoService extends BaseService {
 	
 	public Page<WorkDealInfo> findByBatchAdd(Page<WorkDealInfo> page, WorkDealInfo workDealInfo) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
+		dc.createAlias("createBy", "createBy");
+		dc.createAlias("createBy.office", "office");
+		dc.createAlias("workCompany", "workCompany");
 		dc.add(dataScopeFilter(UserUtils.getUser(), "office", "createBy"));
+		if (workDealInfo.getWorkCompany() != null) {
+			if (workDealInfo.getWorkCompany().getCompanyName() != null
+					&& !workDealInfo.getWorkCompany().getCompanyName().equals("")) {
+				dc.add(Restrictions.like("workCompany.companyName",
+						"%" + EscapeUtil.escapeLike(workDealInfo.getWorkCompany().getCompanyName()) + "%"));
+			}
+		}
 		dc.add(Restrictions.eq("isSJQY", 2));
 		dc.add(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_APPROVE_WAIT));
 		dc.add(Restrictions.isNull("isIxin"));

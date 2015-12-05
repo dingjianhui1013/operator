@@ -150,6 +150,7 @@ import com.itrus.ca.modules.work.service.WorkUserService;
 import com.itrus.ca.modules.work.vo.WorkDate_MoneVo;
 import com.itrus.ca.modules.work.vo.WorkDealInfoVo;
 import com.itrus.ca.modules.work.vo.Workoffice_MoneyVo;
+import com.opensymphony.module.sitemesh.Config;
 import com.sun.org.apache.xalan.internal.xsltc.compiler.sym;
 import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
 
@@ -336,13 +337,6 @@ public class WorkDealInfoController extends BaseController {
     		model.addAttribute("ids", ids);
 		}
 		model.addAttribute("checkIds", checkIds);
-		
-		List<WorkDealInfo> noIxinInfos = page.getList();
-		List<WorkDealInfo> isIxinInfos = workDealInfoService.find4ApplyIsIxin(
-				workDealInfo, startTime, endTime , alias);
-		noIxinInfos.addAll(isIxinInfos);
-
-		page.setList(noIxinInfos);
 
 		model.addAttribute("workType", workDealInfo.getDealInfoStatus());
 		
@@ -356,7 +350,25 @@ public class WorkDealInfoController extends BaseController {
 		return "modules/work/workDealInfoDeleteList";
 	}
 
-	
+	@RequiresPermissions("work:workDealInfo:view")
+	@RequestMapping(value = "deleteByDealInfoId")
+	public String deleteList(Long dealInfoId,Model model, RedirectAttributes redirectAttributes) {
+		
+		WorkDealInfo workDealInfo = workDealInfoService.get(dealInfoId);
+		ConfigChargeAgent agent = configChargeAgentService.get(workDealInfo.getConfigChargeAgentId());
+		agent.setSurplusNum(agent.getSurplusNum() + 1);
+		agent.setReserveNum(agent.getReserveNum() - 1);
+		configChargeAgentService.save(agent);
+		ConfigAgentBoundDealInfo bound = configAgentBoundDealInfoService.findByAgentIdDealId(agent.getId(), dealInfoId);
+		if (bound != null) {
+			configAgentBoundDealInfoService.deleteById(bound.getId());
+		}
+		
+		workDealInfoService.delete(dealInfoId);
+		addMessage(redirectAttributes, "删除成功");
+		return "redirect:" + Global.getAdminPath()
+		+ "/work/workDealInfo/deleteList";
+	}
 	
 	
 	
@@ -5251,7 +5263,6 @@ public class WorkDealInfoController extends BaseController {
 				if (!dealInfos[i].equals("")) {
 					dealIdList.add(Long.parseLong(dealInfos[i]));
 				}
-				
 			}
 			String html = "";
 			List<String> companyNames = new ArrayList<>();
@@ -5304,6 +5315,44 @@ public class WorkDealInfoController extends BaseController {
 		}
 		return json.toString();
 	}
+	
+	
+	@RequestMapping(value = "deleteDealInfoIds")
+	@ResponseBody
+	public String deleteDealInfoIds(String dealInfoIds) throws JSONException {
+		JSONObject json = new JSONObject();
+		try {
+			String[] dealInfos = dealInfoIds.split(",");
+			List<Long> dealIdList = new ArrayList<Long>();
+			for (int i = 0; i < dealInfos.length; i++) {
+				if (!dealInfos[i].equals("")) {
+					dealIdList.add(Long.parseLong(dealInfos[i]));
+				}
+			}
+			for (int i = 0; i < dealIdList.size(); i++) {
+				WorkDealInfo workDealInfo = workDealInfoService.get(dealIdList.get(i));
+				ConfigChargeAgent agent = configChargeAgentService.get(workDealInfo.getConfigChargeAgentId());
+				agent.setSurplusNum(agent.getSurplusNum() + 1);
+				agent.setReserveNum(agent.getReserveNum() - 1);
+				configChargeAgentService.save(agent);
+				ConfigAgentBoundDealInfo bound = configAgentBoundDealInfoService.findByAgentIdDealId(agent.getId(), dealIdList.get(i));
+				if (bound != null) {
+					configAgentBoundDealInfoService.deleteById(bound.getId());
+				}
+				workDealInfoService.delete(dealIdList.get(i));
+			}
+			json.put("status", 1);
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			json.put("status", 0);
+		}
+		return json.toString();
+	}
+	
+	
+	
+	
 	
 	@RequestMapping(value = "checkYears")
 	@ResponseBody

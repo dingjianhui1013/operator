@@ -20,13 +20,13 @@
 		var check = $($("#contentTable").find("#checkAll"));
 		var checkIds = $("#checkIds").val();
 		var xz = $("#contentTable").find("[name='oneDealCheck']");
-		if (check.is(":checked") == true) {
+		if (check.is(":checked") == true ) {
 			$('input:checkbox').each(function() {
 		        $(this).attr('checked', true);
 			});
 			for (var a = 0; a <xz.length; a++) {
 				var check = $($("#contentTable").find("[name='oneDealCheck']")[a]);
-				if (check.is(":checked") == true) {
+				if (check.is(":checked") == true && check.val()!=${page.pageNo}) {
 					var checkOne = check.val();
 					if (checkIds.indexOf(checkOne)<0) {
 						if(checkIds==''){
@@ -49,7 +49,7 @@
 			});
 			for (var a = 0; a <xz.length; a++) {
 				var check = $($("#contentTable").find("[name='oneDealCheck']")[a]);
-				if (check.is(":checked") == false) {
+				if (check.is(":checked") == false && check.val()!=${page.pageNo}) {
 					checkIds = checkIds.replace(check.val(), "");
 					checkIds = checkIds.replace(",,", ",");
 				}
@@ -90,6 +90,28 @@
 		}
 	}
 	
+	function deleteDealInfoIds(){
+		var checkIds = $("#checkIds").val();
+		if(checkIds==null||checkIds==""){
+			top.$.jBox.tip("请选择您要删除的业务！");
+		}else{
+			top.$.jBox.tip("正在删除批量导入新增数据...", 'loading');
+			var url = "${ctx}/work/workDealInfo/deleteDealInfoIds?dealInfoIds="+checkIds+"&_="+new Date().getTime();
+			$.getJSON(url,function(data){
+				if (data.status==1){
+					
+					top.$.jBox.tip("删除成功！");
+					window.location.reload();
+				}else{
+					top.$.jBox.tip("系统异常！");
+				}
+			});
+		}
+		
+		
+		
+		
+	}
 	
 </script>
 
@@ -102,64 +124,27 @@
 		</shiro:hasPermission>
 	</ul>
 	<form:form id="searchForm" modelAttribute="workDealInfo"
-		action="${ctx}/work/workDealInfo/list" method="post"
+		action="${ctx}/work/workDealInfo/deleteList" method="post"
 		class="breadcrumb form-search">
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}" />
 		<input id="pageSize" name="pageSize" type="hidden"
 			value="${page.pageSize}" />
 		<input id="dealId" type="hidden" value="${workDealInfo.id}" />
 		<div>
-			<label>&nbsp;&nbsp;别名（代办应用） ：&nbsp;&nbsp;</label>
-			<select name="alias"
-				id="alias">
-				<option value="">请选择应用</option>
-				<c:forEach items="${configAppList}" var="app">
-					<option value="${app.id}"
-						<c:if test="${app.id==alias}">
-					selected="selected"
-					</c:if>>${app.alias}</option>
-				</c:forEach>
-			</select>
+			
 			&nbsp;&nbsp; <label>单位名称：</label>
 			<form:input path="workCompany.companyName" htmlEscape="false"
 				maxlength="50" class="input-medium" />
-			&nbsp;&nbsp; <label>组代码号：</label>
-			<form:input path="workCompany.organizationNumber" htmlEscape="false"
-				maxlength="50" class="input-medium" />
-			<br>
-		</div>
-		<div style="margin-top: 8px">
-			&nbsp;&nbsp;<label>证书持有人姓名：</label>
-			<form:input path="workUser.contactName" htmlEscape="false"
-				maxlength="50" class="input-medium" />
-		&nbsp;&nbsp;<label>&nbsp;&nbsp;KEY编码 ：&nbsp;&nbsp;</label>
-			<form:input path="keySn" htmlEscape="false" maxlength="50"
-				class="input-medium" />
-		&nbsp;&nbsp;<label>&nbsp;&nbsp;业务状态 ：&nbsp;&nbsp;</label>
-			<select name="dealInfoStatus" id="dealInfoStatus">
-				<option value="">请选择业务类型</option>
-				<c:forEach items="${wdiStatus}" var="type">
-					<option value="${type.key}"
-						<c:if test="${type.key==workType}">
-					selected="selected"
-					</c:if>>${type.value}</option>
-				</c:forEach>
-			</select> 			
-		</div>
-		<div style="margin-top: 8px">
-			&nbsp;&nbsp;<label>到期日期：</label> <input class="input-medium Wdate" type="text"
-				required="required" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});"
-				value="<fmt:formatDate value="${startTime}" pattern="yyyy-MM-dd"/>" maxlength="20" readonly="readonly"
-				name="startTime" id="startTime"/> 至 <input class="input-medium Wdate" type="text"
-				required="required" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'startTime\')}'});"
-				value="<fmt:formatDate value="${endTime}" pattern="yyyy-MM-dd"/>" maxlength="20" readonly="readonly"
-				name="endTime" /> &nbsp;&nbsp;&nbsp;&nbsp;<input id="btnSubmit"
+			&nbsp;&nbsp;&nbsp;&nbsp;
+			<input id="btnSubmit"
 				class="btn btn-primary" type="submit" value="查询" />
 				&nbsp;&nbsp;&nbsp;&nbsp;
 				
+				<a id="manyUpdate" data-toggle="modal" href="javaScript:deleteDealInfoIds();" class="btn btn-primary">批量删除</a>
 				
 				
-				<input type="text"  name="checkIds"  id="checkIds"  value="${checkIds }"/>
+				
+				<input type="hidden"  name="checkIds"  id="checkIds"  value="${checkIds }"/>
 		</div>
 	</form:form>
 	<tags:message content="${message}" />
@@ -226,7 +211,7 @@
 				
 					<td>${wdiStatus[workDealInfo.dealInfoStatus]}</td>
 					<td>
-							<a href="${ctx}/work/workDealInfo/delete?id=${workDealInfo.id}"
+							<a href="${ctx}/work/workDealInfo/deleteByDealInfoId?dealInfoId=${workDealInfo.id}"
 								onclick="return confirmx('确认要删除该信息吗？', this.href)">删除</a>&nbsp;&nbsp;
 					</td>
 				</tr>
