@@ -630,6 +630,22 @@ public class WorkDealInfoService extends BaseService {
 		dc.addOrder(Order.desc("createDate"));
 		return workDealInfoDao.find(dc);
 	}
+	
+	
+	
+	public Page<WorkDealInfo> findByBatchAdd(Page<WorkDealInfo> page, WorkDealInfo workDealInfo) {
+		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
+		dc.add(dataScopeFilter(UserUtils.getUser(), "office", "createBy"));
+		dc.add(Restrictions.eq("isSJQY", 2));
+		dc.add(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_APPROVE_WAIT));
+		dc.add(Restrictions.isNull("isIxin"));
+		dc.add(Restrictions.eq(WorkDealInfo.DEL_FLAG, WorkDealInfo.DEL_FLAG_NORMAL));
+		dc.addOrder(Order.desc("createDate"));
+		return workDealInfoDao.find(page, dc);
+	}
+	
+	
+	
 	public Page<WorkDealInfo> find5Apply(Page<WorkDealInfo> page, WorkDealInfo workDealInfo,
 			 Long apply,List<WorkCertInfo> certInfoList ) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();

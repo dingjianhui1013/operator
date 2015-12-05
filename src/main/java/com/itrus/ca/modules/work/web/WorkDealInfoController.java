@@ -329,10 +329,8 @@ public class WorkDealInfoController extends BaseController {
 		model.addAttribute("configAppList", configAppList);
 		model.addAttribute("alias",alias);
 		
-		Page<WorkDealInfo> page = workDealInfoService.find4Apply(
-				new Page<WorkDealInfo>(request, response), workDealInfo,
-				startTime, endTime , alias);
-
+		Page<WorkDealInfo> page = workDealInfoService.findByBatchAdd(
+				new Page<WorkDealInfo>(request, response), workDealInfo);
 		if (checkIds!=null) {
     		String[] ids = checkIds.split(",");
     		model.addAttribute("ids", ids);
