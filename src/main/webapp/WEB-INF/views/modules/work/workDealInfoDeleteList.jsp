@@ -26,7 +26,7 @@
 			});
 			for (var a = 0; a <xz.length; a++) {
 				var check = $($("#contentTable").find("[name='oneDealCheck']")[a]);
-				if (check.is(":checked") == true && check.val()!=${page.pageNo}) {
+				if (check.is(":checked") == true && check.val()!="${page.pageNo}") {
 					var checkOne = check.val();
 					if (checkIds.indexOf(checkOne)<0) {
 						if(checkIds==''){
@@ -49,7 +49,7 @@
 			});
 			for (var a = 0; a <xz.length; a++) {
 				var check = $($("#contentTable").find("[name='oneDealCheck']")[a]);
-				if (check.is(":checked") == false && check.val()!=${page.pageNo}) {
+				if (check.is(":checked") == false && check.val()!="${page.pageNo}") {
 					checkIds = checkIds.replace(check.val(), "");
 					checkIds = checkIds.replace(",,", ",");
 				}
@@ -101,7 +101,9 @@
 				if (data.status==1){
 					
 					top.$.jBox.tip("删除成功！");
-					window.location.reload();
+					  setTimeout(function (){
+	            			window.location.href="${ctx}/work/workDealInfo/deleteList";
+	            		   }, 1500); 
 				}else{
 					top.$.jBox.tip("系统异常！");
 				}

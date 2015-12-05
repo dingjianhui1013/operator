@@ -171,6 +171,15 @@
 		</div>
 		
 		<div class="control-group">
+			<label class="control-label"><span style="color:red;">*</span>结算年限:</label>
+			<div class="controls">
+				<form:input path="settlementPeriod"  htmlEscape="false" maxlength="1" class="required" 
+				onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))" onkeyup="value=value.replace(/[^\d]/g,'')" 
+				/>
+			</div>
+		</div>
+		
+		<div class="control-group">
 			<label class="control-label">备注:</label>
 			<div class="controls">
 				<form:textarea path="agentRemark" htmlEscape="false" rows="3" maxlength="200" class="input-xlarge"/>

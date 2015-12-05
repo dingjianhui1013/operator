@@ -39,6 +39,11 @@ public class ConfigCommercialAgent implements java.io.Serializable {
 	private Timestamp agentContractEnd;
 	private String agentRemark;
 	private Integer del_flag;
+	/**
+	 * 结算年限
+	 */
+	private Integer settlementPeriod;
+	
 	private Set<ConfigAgentOfficeRelation> configAgentOfficeRelations = new HashSet<ConfigAgentOfficeRelation>(
 			0);
 	private Set<ConfigAgentAppRelation> configAgentAppRelations = new HashSet<ConfigAgentAppRelation>(
@@ -60,7 +65,7 @@ public class ConfigCommercialAgent implements java.io.Serializable {
 			Boolean agentType2, String agentCommUserName,
 			String agentCommMobile, String agentAddress,
 			Timestamp agentContractStart, Timestamp agentContractEnd,
-			String agentRemark,
+			String agentRemark, Integer settlementPeriod,
 			Set<ConfigAgentOfficeRelation> configAgentOfficeRelations,
 			Set<ConfigAgentAppRelation> configAgentAppRelations) {
 		this.id = id;
@@ -75,6 +80,7 @@ public class ConfigCommercialAgent implements java.io.Serializable {
 		this.agentRemark = agentRemark;
 		this.configAgentOfficeRelations = configAgentOfficeRelations;
 		this.configAgentAppRelations = configAgentAppRelations;
+		this.settlementPeriod = settlementPeriod;
 	}
 
 	// Property accessors
@@ -198,4 +204,20 @@ public class ConfigCommercialAgent implements java.io.Serializable {
 	public void setDel_flag(Integer del_flag) {
 		this.del_flag = del_flag;
 	}
+
+	@Column(name = "settlement_period")
+	public Integer getSettlementPeriod() {
+		return settlementPeriod;
+	}
+
+	public void setSettlementPeriod(Integer settlementPeriod) {
+		this.settlementPeriod = settlementPeriod;
+	}
+	
+	
+	
+	
+	
+	
+	
 }
