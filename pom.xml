@@ -35,8 +35,9 @@
 		<dozer.version>5.4.0</dozer.version>
 		<poi.version>3.9</poi.version>
 		<freemarker.version>2.3.19</freemarker.version>
-<!-- 		<activiti.version>5.12.1</activiti.version>
- -->
+		<velocity.version>1.7</velocity.version>
+		<axis.version>1.6.3</axis.version>
+		<!-- <activiti.version>5.12.1</activiti.version> -->
 		<!-- mysql driver setting -->
 		<jdbc.driver.groupId>mysql</jdbc.driver.groupId>
 		<jdbc.driver.artifactId>mysql-connector-java</jdbc.driver.artifactId>
@@ -100,7 +101,7 @@
 			</snapshots>
 		</repository>
 
-		
+
 		<repository>
 			<id>thinkgem-repos</id>
 			<name>ThinkGem Repository</name><!-- <url>https://raw.github.com/thinkgem/repository/master</url> -->
@@ -147,13 +148,9 @@
 			<artifactId>commons-httpclient</artifactId>
 			<version>${commons-httpclient.version}</version>
 		</dependency>
-		<!-- <dependency>
-			<groupId>com.itrus.API</groupId>
-			<artifactId>javaAPI</artifactId>
-			<version>3.0.0</version>
-			<scope>system</scope>
-			<systemPath>${basedir}/src/main/webapp/WEB-INF/lib/javaCertAPI-3.0.0.jar</systemPath>
-		</dependency> -->
+		<!-- <dependency> <groupId>com.itrus.API</groupId> <artifactId>javaAPI</artifactId> 
+			<version>3.0.0</version> <scope>system</scope> <systemPath>${basedir}/src/main/webapp/WEB-INF/lib/javaCertAPI-3.0.0.jar</systemPath> 
+			</dependency> -->
 		<dependency>
 			<groupId>com.itrus.raapi</groupId>
 			<artifactId>javaAPI</artifactId>
@@ -406,16 +403,10 @@
 		<!-- SECURITY end -->
 
 		<!-- Activiti -->
-		<!-- <dependency>
-			<groupId>org.activiti</groupId>
-			<artifactId>activiti-engine</artifactId>
-			<version>${activiti.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.activiti</groupId>
-			<artifactId>activiti-spring</artifactId>
-			<version>${activiti.version}</version>
-		</dependency> -->
+		<!-- <dependency> <groupId>org.activiti</groupId> <artifactId>activiti-engine</artifactId> 
+			<version>${activiti.version}</version> </dependency> <dependency> <groupId>org.activiti</groupId> 
+			<artifactId>activiti-spring</artifactId> <version>${activiti.version}</version> 
+			</dependency> -->
 
 		<!-- LOGGING begin -->
 		<dependency>
@@ -588,13 +579,132 @@
 			<artifactId>junit</artifactId>
 			<version>4.11</version>
 		</dependency>
+		<!-- axis2 -->
+		<dependency>
+			<groupId>org.apache.axis2</groupId>
+			<artifactId>axis2-adb</artifactId>
+			<version>${axis.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.axis2</groupId>
+			<artifactId>axis2-adb-codegen</artifactId>
+			<version>${axis.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.axis2</groupId>
+			<artifactId>axis2-clustering</artifactId>
+			<version>${axis.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.axis2</groupId>
+			<artifactId>axis2-codegen</artifactId>
+			<version>${axis.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.axis2</groupId>
+			<artifactId>axis2-corba</artifactId>
+			<version>${axis.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.axis2</groupId>
+			<artifactId>axis2-fastinfoset</artifactId>
+			<version>${axis.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.axis2</groupId>
+			<artifactId>axis2-java2wsdl</artifactId>
+			<version>${axis.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.axis2</groupId>
+			<artifactId>axis2-jaxbri</artifactId>
+			<version>${axis.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.axis2</groupId>
+			<artifactId>axis2-jaxws</artifactId>
+			<version>${axis.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.axis2</groupId>
+			<artifactId>axis2-jibx</artifactId>
+			<version>${axis.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.axis2</groupId>
+			<artifactId>axis2-json</artifactId>
+			<version>${axis.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.axis2</groupId>
+			<artifactId>axis2-kernel</artifactId>
+			<version>${axis.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.axis2</groupId>
+			<artifactId>axis2-metadata</artifactId>
+			<version>${axis.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.axis2</groupId>
+			<artifactId>axis2-mtompolicy</artifactId>
+			<version>${axis.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.axis2</groupId>
+			<artifactId>axis2-saaj</artifactId>
+			<version>${axis.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.axis2</groupId>
+			<artifactId>axis2-soapmonitor-servlet</artifactId>
+			<version>${axis.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.axis2</groupId>
+			<artifactId>axis2-spring</artifactId>
+			<version>${axis.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.axis2</groupId>
+			<artifactId>axis2-transport-http</artifactId>
+			<version>${axis.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.axis2</groupId>
+			<artifactId>axis2-transport-local</artifactId>
+			<version>${axis.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.axis2</groupId>
+			<artifactId>axis2-xmlbeans</artifactId>
+			<version>${axis.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.axis2</groupId>
+			<artifactId>axis2-wsdl2code-maven-plugin</artifactId>
+			<version>${axis.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.xml.bind</groupId>
+			<artifactId>jaxb-xjc</artifactId>
+			<version>2.2.7-b41</version>
+		</dependency>
+		<!-- velocity -->
+		<dependency>
+			<groupId>org.apache.velocity</groupId>
+			<artifactId>velocity</artifactId>
+			<version>${velocity.version}</version>
+		</dependency>
+
+
+		<!-- axis2 -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
 			<version>${spring.version}</version>
 		</dependency>
 		<!-- TEST end -->
-
 	</dependencies>
 
 	<build>
@@ -734,6 +844,24 @@
 			<build>
 				<plugins>
 					<plugin>
+						<groupId>org.apache.axis2</groupId>
+						<artifactId>axis2-wsdl2code-maven-plugin</artifactId>
+						<version>${axis.version}</version>
+						<executions>
+							<execution>
+								<goals>
+									<goal>wsdl2code</goal>
+								</goals>
+								<configuration>
+									<packageName>com.itrus.ca.sms.client.service</packageName>
+									<wsdlFile>src/main/resources/smswebservice.wsdl</wsdlFile>
+									<databindingName>xmlbeans</databindingName>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+
+					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-antrun-plugin</artifactId>
 						<version>1.7</version>
@@ -804,6 +932,7 @@
 			</build>
 		</profile>
 	</profiles>
+
 
 	<!-- 开发者信息 -->
 	<developers>
