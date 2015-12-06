@@ -1,0 +1,503 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://tempuri.org/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">短信上下行接口</wsdl:documentation>
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://tempuri.org/">
+      <s:element name="getMoMessage">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="uid" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="upass" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="getMoMessageResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="getMoMessageResult" type="tns:ArrayOfString" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfString">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="string" nillable="true" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="getMoMessage1">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="uid" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="upass" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="smId" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="count" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="getMoMessage1Response">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="getMoMessage1Result" type="tns:ArrayOfString" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="getMoMessageSubport">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="uid" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="upass" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="count" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="getMoMessageSubportResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="getMoMessageSubportResult" type="tns:ArrayOfString" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SubPortSendMessage">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="uid" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="upass" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="subport" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="messid" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="pid" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="phone" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="message" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SubPortSendMessageResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SubPortSendMessageResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="sendMessage">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="uid" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="upass" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="messid" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="pid" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="phone" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="message" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="sendMessageResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="sendMessageResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="mutilSendMessage">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="uid" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="upass" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="pid" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="messageFile" type="tns:ArrayOfString" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="mutilSendMessageResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="mutilSendMessageResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="WBname">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="tel" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="getkind" type="tns:GetKind" />
+            <s:element minOccurs="0" maxOccurs="1" name="uid" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="pass" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:simpleType name="GetKind">
+        <s:restriction base="s:string">
+          <s:enumeration value="inname" />
+          <s:enumeration value="outname" />
+        </s:restriction>
+      </s:simpleType>
+      <s:element name="WBnameResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="WBnameResult" type="tns:ResultsKind" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:simpleType name="ResultsKind">
+        <s:restriction base="s:string">
+          <s:enumeration value="Ok" />
+          <s:enumeration value="wrong" />
+        </s:restriction>
+      </s:simpleType>
+      <s:element name="WBname1">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="tel" type="tns:ArrayOfString" />
+            <s:element minOccurs="1" maxOccurs="1" name="getkind" type="tns:GetKind" />
+            <s:element minOccurs="0" maxOccurs="1" name="uid" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="pass" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="WBname1Response">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="WBname1Result" type="tns:ResultsKind" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Editpass">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="oldpass" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="newpass" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="scpid" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="EditpassResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="EditpassResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetSubmitErrorlist">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="uid" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="pass" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="begtime" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="endtime" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetSubmitErrorlistResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetSubmitErrorlistResult" type="tns:ArrayOfString" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="getMoMessageSoapIn">
+    <wsdl:part name="parameters" element="tns:getMoMessage" />
+  </wsdl:message>
+  <wsdl:message name="getMoMessageSoapOut">
+    <wsdl:part name="parameters" element="tns:getMoMessageResponse" />
+  </wsdl:message>
+  <wsdl:message name="getMoMessage1SoapIn">
+    <wsdl:part name="parameters" element="tns:getMoMessage1" />
+  </wsdl:message>
+  <wsdl:message name="getMoMessage1SoapOut">
+    <wsdl:part name="parameters" element="tns:getMoMessage1Response" />
+  </wsdl:message>
+  <wsdl:message name="getMoMessageSubportSoapIn">
+    <wsdl:part name="parameters" element="tns:getMoMessageSubport" />
+  </wsdl:message>
+  <wsdl:message name="getMoMessageSubportSoapOut">
+    <wsdl:part name="parameters" element="tns:getMoMessageSubportResponse" />
+  </wsdl:message>
+  <wsdl:message name="SubPortSendMessageSoapIn">
+    <wsdl:part name="parameters" element="tns:SubPortSendMessage" />
+  </wsdl:message>
+  <wsdl:message name="SubPortSendMessageSoapOut">
+    <wsdl:part name="parameters" element="tns:SubPortSendMessageResponse" />
+  </wsdl:message>
+  <wsdl:message name="sendMessageSoapIn">
+    <wsdl:part name="parameters" element="tns:sendMessage" />
+  </wsdl:message>
+  <wsdl:message name="sendMessageSoapOut">
+    <wsdl:part name="parameters" element="tns:sendMessageResponse" />
+  </wsdl:message>
+  <wsdl:message name="mutilSendMessageSoapIn">
+    <wsdl:part name="parameters" element="tns:mutilSendMessage" />
+  </wsdl:message>
+  <wsdl:message name="mutilSendMessageSoapOut">
+    <wsdl:part name="parameters" element="tns:mutilSendMessageResponse" />
+  </wsdl:message>
+  <wsdl:message name="WBnameSoapIn">
+    <wsdl:part name="parameters" element="tns:WBname" />
+  </wsdl:message>
+  <wsdl:message name="WBnameSoapOut">
+    <wsdl:part name="parameters" element="tns:WBnameResponse" />
+  </wsdl:message>
+  <wsdl:message name="WBname1SoapIn">
+    <wsdl:part name="parameters" element="tns:WBname1" />
+  </wsdl:message>
+  <wsdl:message name="WBname1SoapOut">
+    <wsdl:part name="parameters" element="tns:WBname1Response" />
+  </wsdl:message>
+  <wsdl:message name="EditpassSoapIn">
+    <wsdl:part name="parameters" element="tns:Editpass" />
+  </wsdl:message>
+  <wsdl:message name="EditpassSoapOut">
+    <wsdl:part name="parameters" element="tns:EditpassResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetSubmitErrorlistSoapIn">
+    <wsdl:part name="parameters" element="tns:GetSubmitErrorlist" />
+  </wsdl:message>
+  <wsdl:message name="GetSubmitErrorlistSoapOut">
+    <wsdl:part name="parameters" element="tns:GetSubmitErrorlistResponse" />
+  </wsdl:message>
+  <wsdl:portType name="ServiceSoap">
+    <wsdl:operation name="getMoMessage">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">获取所有新的上行短信</wsdl:documentation>
+      <wsdl:input message="tns:getMoMessageSoapIn" />
+      <wsdl:output message="tns:getMoMessageSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="getMoMessage1">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">根据smId(唯一标识)，数量取上行短信</wsdl:documentation>
+      <wsdl:input message="tns:getMoMessage1SoapIn" />
+      <wsdl:output message="tns:getMoMessage1SoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="getMoMessageSubport">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">通过子端口获取指定数量的上行短信</wsdl:documentation>
+      <wsdl:input message="tns:getMoMessageSubportSoapIn" />
+      <wsdl:output message="tns:getMoMessageSubportSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SubPortSendMessage">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">带子端口的短信发送</wsdl:documentation>
+      <wsdl:input message="tns:SubPortSendMessageSoapIn" />
+      <wsdl:output message="tns:SubPortSendMessageSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="sendMessage">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">下行单发</wsdl:documentation>
+      <wsdl:input message="tns:sendMessageSoapIn" />
+      <wsdl:output message="tns:sendMessageSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="mutilSendMessage">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">下行群发</wsdl:documentation>
+      <wsdl:input message="tns:mutilSendMessageSoapIn" />
+      <wsdl:output message="tns:mutilSendMessageSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="WBname">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">黑白名单管理单一</wsdl:documentation>
+      <wsdl:input message="tns:WBnameSoapIn" />
+      <wsdl:output message="tns:WBnameSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="WBname1">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">黑白名单管理群添加</wsdl:documentation>
+      <wsdl:input message="tns:WBname1SoapIn" />
+      <wsdl:output message="tns:WBname1SoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Editpass">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">登陆密码修改</wsdl:documentation>
+      <wsdl:input message="tns:EditpassSoapIn" />
+      <wsdl:output message="tns:EditpassSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetSubmitErrorlist">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">查询发送错误的短信信息</wsdl:documentation>
+      <wsdl:input message="tns:GetSubmitErrorlistSoapIn" />
+      <wsdl:output message="tns:GetSubmitErrorlistSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ServiceSoap" type="tns:ServiceSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="getMoMessage">
+      <soap:operation soapAction="http://tempuri.org/getMoMessage" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getMoMessage1">
+      <soap:operation soapAction="http://tempuri.org/getMoMessage1" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getMoMessageSubport">
+      <soap:operation soapAction="http://tempuri.org/getMoMessageSubport" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SubPortSendMessage">
+      <soap:operation soapAction="http://tempuri.org/SubPortSendMessage" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="sendMessage">
+      <soap:operation soapAction="http://tempuri.org/sendMessage" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="mutilSendMessage">
+      <soap:operation soapAction="http://tempuri.org/mutilSendMessage" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WBname">
+      <soap:operation soapAction="http://tempuri.org/WBname" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WBname1">
+      <soap:operation soapAction="http://tempuri.org/WBname1" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Editpass">
+      <soap:operation soapAction="http://tempuri.org/Editpass" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSubmitErrorlist">
+      <soap:operation soapAction="http://tempuri.org/GetSubmitErrorlist" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="ServiceSoap12" type="tns:ServiceSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="getMoMessage">
+      <soap12:operation soapAction="http://tempuri.org/getMoMessage" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getMoMessage1">
+      <soap12:operation soapAction="http://tempuri.org/getMoMessage1" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getMoMessageSubport">
+      <soap12:operation soapAction="http://tempuri.org/getMoMessageSubport" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SubPortSendMessage">
+      <soap12:operation soapAction="http://tempuri.org/SubPortSendMessage" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="sendMessage">
+      <soap12:operation soapAction="http://tempuri.org/sendMessage" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="mutilSendMessage">
+      <soap12:operation soapAction="http://tempuri.org/mutilSendMessage" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WBname">
+      <soap12:operation soapAction="http://tempuri.org/WBname" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WBname1">
+      <soap12:operation soapAction="http://tempuri.org/WBname1" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Editpass">
+      <soap12:operation soapAction="http://tempuri.org/Editpass" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSubmitErrorlist">
+      <soap12:operation soapAction="http://tempuri.org/GetSubmitErrorlist" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="Service">
+    <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">短信上下行接口</wsdl:documentation>
+    <wsdl:port name="ServiceSoap" binding="tns:ServiceSoap">
+      <soap:address location="http://221.237.182.5:8068/Service.asmx" />
+    </wsdl:port>
+    <wsdl:port name="ServiceSoap12" binding="tns:ServiceSoap12">
+      <soap12:address location="http://221.237.182.5:8068/Service.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
