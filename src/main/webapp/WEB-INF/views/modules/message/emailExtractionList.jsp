@@ -69,9 +69,10 @@
 						</c:if>>${app.appName}</option>
 					</c:forEach>
 				</select>
-			<label>单位名称：</label>
+			<label>单位名称  ：</label>
 			<form:input path="workCompany.companyName" htmlEscape="false"
 				maxlength="50" class="input-medium" id="companyName"/>
+				<br>
 				<br>
 				<label>业务类型：</label> <select name="workType" id="workType">
 				<option value="">请选择业务类型</option>
@@ -82,7 +83,7 @@
 					</c:if>>${type.name}</option>
 				</c:forEach>
 			</select> 
-				<label>&nbsp;&nbsp;业务状态 ：&nbsp;&nbsp;</label>
+				<label>业务状态 ：</label>
 			<select name="dealInfoStatus" id="dealInfoStatus">
 				<option value="">请选择业务类型</option>
 				<c:forEach items="${wdiStatus}" var="type">
