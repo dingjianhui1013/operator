@@ -220,7 +220,7 @@ public class ProjectCertificationDetailsController extends BaseController {
 
 						if (Integer.parseInt(list.get(i).getConfigProduct().getProductName()) == 1) {
 
-							if (list.get(i).getAddCertDays() == null) {
+							if (list.get(i).getAddCertDays() != null) {
 
 								if ((list.get(i).getYear()) * 365 + list.get(i).getLastDays() > 0
 										&& (list.get(i).getYear()) * 365 + list.get(i).getLastDays() < 730) {
@@ -233,27 +233,12 @@ public class ProjectCertificationDetailsController extends BaseController {
 									updateFourYearCertificate++;
 								}
 							} else {
-								if (list.get(i).getYear() * 365 + list.get(i).getLastDays()
-										+ list.get(i).getAddCertDays() > 0
-										&& list.get(i).getYear() * 365 + list.get(i).getLastDays()
-												+ list.get(i).getAddCertDays() < 730) {
-									updatecompanyYearCertificate++;
-								} else if (list.get(i).getYear() * 365 + list.get(i).getLastDays()
-										+ list.get(i).getAddCertDays() >= 730
-										&& list.get(i).getYear() * 365 + list.get(i).getLastDays()
-												+ list.get(i).getAddCertDays() < 1095) {
-									updatecompanyTwoYearCertificate++;
-								} else if (list.get(i).getYear() * 365 + list.get(i).getLastDays()
-										+ list.get(i).getAddCertDays() >= 1460
-										&& list.get(i).getYear() * 365 + list.get(i).getLastDays()
-												+ list.get(i).getAddCertDays() < 1825) {
-									updateFourYearCertificate++;
-								}
+								
 							}
 						} // 个人版
 						else if (Integer.parseInt(list.get(i).getConfigProduct().getProductName()) == 2) {
 
-							if (list.get(i).getAddCertDays() == null) {
+							if (list.get(i).getAddCertDays() != null) {
 
 								if ((list.get(i).getYear()) * 365 + list.get(i).getLastDays() > 0
 										&& (list.get(i).getYear()) * 365 + list.get(i).getLastDays() < 730) {
@@ -266,22 +251,7 @@ public class ProjectCertificationDetailsController extends BaseController {
 									updatePersonalFourYearCertificate++;
 								}
 							} else {
-								if (list.get(i).getYear() * 365 + list.get(i).getLastDays()
-										+ list.get(i).getAddCertDays() > 0
-										&& list.get(i).getYear() * 365 + list.get(i).getLastDays()
-												+ list.get(i).getAddCertDays() < 730) {
-									updatePersonalYearCertificate++;
-								} else if (list.get(i).getYear() * 365 + list.get(i).getLastDays()
-										+ list.get(i).getAddCertDays() >= 730
-										&& list.get(i).getYear() * 365 + list.get(i).getLastDays()
-												+ list.get(i).getAddCertDays() < 1095) {
-									updatePersonalTwoYearCertificate++;
-								} else if (list.get(i).getYear() * 365 + list.get(i).getLastDays()
-										+ list.get(i).getAddCertDays() >= 1460
-										&& list.get(i).getYear() * 365 + list.get(i).getLastDays()
-												+ list.get(i).getAddCertDays() < 1825) {
-									updatePersonalFourYearCertificate++;
-								}
+								
 							}
 
 						}
