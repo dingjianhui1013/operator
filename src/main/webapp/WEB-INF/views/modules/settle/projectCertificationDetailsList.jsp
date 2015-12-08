@@ -67,7 +67,7 @@
 					<option value="${app.id}"
 						<c:if test="${app.id==alias}">
 					selected="selected"
-					</c:if>>${app.alias}</option>
+					</c:if>>${app.appName}</option>
 				</c:forEach>
 			</select>
 			<label>项目时间 ：</label> 
