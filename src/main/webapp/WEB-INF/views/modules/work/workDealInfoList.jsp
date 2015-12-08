@@ -445,7 +445,11 @@
 							test="${workDealInfo.dealInfoStatus==8||workDealInfo.dealInfoStatus==5 }">
 							<a href="${ctx}/work/workDealInfo/delete?id=${workDealInfo.id}"
 								onclick="return confirmx('确认要删除该信息吗？', this.href)">删除</a>&nbsp;&nbsp;
-					</c:if></td>
+					</c:if>
+					<c:if test="${workDealInfo.dealInfoStatus == 13}">
+						<a href="${ctx}/work/workDealInfoAudit/makeDealInfo?id=${workDealInfo.id}">制证</a>
+					</c:if>
+					</td>
 				</tr>
 			</c:forEach>
 		</tbody>
