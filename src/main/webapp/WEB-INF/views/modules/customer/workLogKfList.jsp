@@ -20,9 +20,9 @@
 <body>
 	<ul class="nav nav-tabs">
 		<li class="active"><a href="${ctx}/work/workLog/">客服记录</a></li>
-		<li><a href="${ctx}/work/customer/insertUser">添加咨询类用户</a></li>
-		<li><a href="${ctx}/work/customer/insertFuzzy">添加模糊记录</a></li>
-		<li><a href="#">添加项目记录</a></li>
+<%-- 		<li><a href="${ctx}/work/customer/insertUser">添加咨询类用户</a></li> --%>
+<%-- 		<li><a href="${ctx}/work/customer/insertFuzzy">添加模糊记录</a></li> --%>
+<!-- 		<li><a href="#">添加项目记录</a></li> -->
 	</ul>
 	<form:form id="searchForm" modelAttribute="workLog" action="${ctx}/work/workLog/kflist" method="post" class="breadcrumb form-search">
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
@@ -49,14 +49,14 @@
 			<form:option value="回访">回访</form:option>
 			<form:option value="培训">培训</form:option>
 		</form:select>
-		<label>记录方式 ：</label>
-		<form:select path="distinguish"  class="input-medium">
-			<form:option value="">请选择记录方式：</form:option>
-			<form:option value="0">工作记录</form:option>
-			<form:option value="1">咨询记录</form:option>
-			<form:option value="2">模糊记录</form:option>
-			<form:option value="3">项目记录</form:option>
-		</form:select>
+<!-- 		<label>记录方式 ：</label> -->
+<%-- 		<form:select path="distinguish"  class="input-medium"> --%>
+<%-- 			<form:option value="">请选择记录方式：</form:option> --%>
+<%-- 			<form:option value="0">工作记录</form:option> --%>
+<%-- 			<form:option value="1">咨询记录</form:option> --%>
+<%-- 			<form:option value="2">模糊记录</form:option> --%>
+<%-- 			<form:option value="3">项目记录</form:option> --%>
+<%-- 		</form:select> --%>
 		&nbsp;<input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/>
 	</form:form>
 	
@@ -74,7 +74,7 @@
 				<th>完成状态</th>
 				<th>记录人员</th>
 				<th>记录时间</th>
-				<th>记录方式</th>
+<!-- 				<th>记录方式</th> -->
 				<th>操作</th>
 			</tr>
 		</thead>
@@ -96,13 +96,13 @@
 				<td>
 				<fmt:formatDate value="${workLog.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
 				</td>
-				<td>
-					<c:choose> 
-						<c:when test="${workLog.distinguish==1}">咨询记录添加</c:when>
-						<c:when test="${workLog.distinguish==0}">工作记录添加</c:when>
-						<c:when test="${workLog.distinguish==2}">模糊记录添加</c:when>
-					</c:choose>
-				</td>
+<!-- 				<td> -->
+<%-- 					<c:choose>  --%>
+<%-- 						<c:when test="${workLog.distinguish==1}">咨询记录添加</c:when> --%>
+<%-- 						<c:when test="${workLog.distinguish==0}">工作记录添加</c:when> --%>
+<%-- 						<c:when test="${workLog.distinguish==2}">模糊记录添加</c:when> --%>
+<%-- 					</c:choose> --%>
+<!-- 				</td> -->
 				<td>
 					<c:if test="${workLog.completeType==1 }"><a href="${ctx}/work/workLog/updateFromK?id=${workLog.id}">编辑</a></c:if> 
     				<a href="${ctx}/work/workLog/form?id=${workLog.id}">查看</a>

@@ -257,7 +257,7 @@ public class WorkCustomerController extends BaseController {
 		}
 		workLogService.save(workLog);
 		logUtil.saveSysLog("客服管理", detail + workLog.getId(), "");
-		return "redirect:" + Global.getAdminPath() + "/work/workLog/kflist";
+		return "redirect:" + Global.getAdminPath() + "/work/workDealInfoFiling/flist?distinguish=2";
 	}
 	@RequestMapping("insertUserFrom")
 	public String insertUserFrom(WorkDealInfo workDealInfo,
@@ -386,7 +386,7 @@ public class WorkCustomerController extends BaseController {
 		workLogService.save(workLog);
 		logUtil.saveSysLog("客服管理", detail + workLog.getId(), "");
 		return "redirect:" + Global.getAdminPath()
-				+ "/work/workLog/kflist";
+				+ "/work/workDealInfoFiling/ulist?distinguish=1";
 	}
 
 	/**

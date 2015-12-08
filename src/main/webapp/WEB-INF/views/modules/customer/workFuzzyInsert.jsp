@@ -35,8 +35,8 @@
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li ><a href="${ctx}/work/customer/list">业务记录</a></li>
-		<li class="active"><a href="${ctx}/work/customer/insertFuzzy">新增模糊记录</a></li>
+<%-- 		<li ><a href="${ctx}/work/customer/list">业务记录</a></li> --%>
+		<li class="active"><a href="${ctx}/work/customer/insertFuzzy">模糊记录</a></li>
 	</ul><br/>
 	<form name = "customerInsert" id = "inputForm" action ="${ctx}/work/customer/insertFuzzyj" method="post" class="form-horizontal">
 		<tags:message content="${message}"/>

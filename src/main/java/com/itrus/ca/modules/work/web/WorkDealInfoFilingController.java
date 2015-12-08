@@ -194,7 +194,15 @@ public class WorkDealInfoFilingController extends BaseController {
 		model.addAttribute("page", page);
 		return "modules/work/workDealInfoFilingListT";
 	}
-
+	@RequiresPermissions("work:workDealInfo:view")
+	@RequestMapping(value = { "flist" })
+	public String flist(WorkLog workLog, HttpServletRequest request,
+			HttpServletResponse response, Model model) {
+		Page<WorkLog> page = workLogService.findKfList(new Page<WorkLog>(
+				request, response), workLog);
+		model.addAttribute("page", page);
+		return "modules/work/workDealInfoFilingListFuzzy";
+	}
 	@RequiresPermissions("work:workDealInfo:view")
 	@RequestMapping(value = "formF")
 	public String form(Long uid, WorkDealInfo workDealInfo, Model model) {

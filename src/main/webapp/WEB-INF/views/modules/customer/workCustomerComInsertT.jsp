@@ -29,7 +29,7 @@
 <body>
 	<ul class="nav nav-tabs">
 <%-- 		<li ><a href="${ctx}/work/workDealInfoFiling/ulist">咨询类用户</a></li> --%>
-		<li  class="active"><a href="${ctx}/work/customer/insertUser?id=${workDealInfo.id}">客服记录</a></li>
+		<li  class="active"><a href="${ctx}/work/customer/insertUser?id=${workDealInfo.id}">咨询记录</a></li>
 	</ul><br/>
 	<form name = "customerInsert" id = "inputForm" action ="${ctx}/work/customer/insertComCustomerT"  method="post" class="form-horizontal">
 		<tags:message content="${message}"/>
@@ -156,7 +156,7 @@
 		<div class="control-group">
 			<label class="control-label">&nbsp;记录人员:</label>
 			<div class="controls">
-			${user.name }
+				${user.name }
 			</div>
 		</div>
 		<div class="control-group">
