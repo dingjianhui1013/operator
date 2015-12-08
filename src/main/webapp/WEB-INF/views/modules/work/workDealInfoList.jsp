@@ -182,7 +182,7 @@
 			});
 			for (var a = 0; a <xz.length; a++) {
 				var check = $($("#contentTable").find("[name='oneDealCheck']")[a]);
-				if (check.is(":checked") == false) {
+				if (check.is(":checked") == false && check.val()!="${page.pageNo}") {
 					checkIds = checkIds.replace(check.val(), "");
 					checkIds = checkIds.replace(",,", ",");
 				}
@@ -202,9 +202,10 @@
 		if(checkIds.indexOf($(obj).val())>-1){
 			checkIds = checkIds.replace($(obj).val(), "");
 		}
+		
 		for (var a = 0; a <xz.length; a++) {
 			var check = $($("#contentTable").find("[name='oneDealCheck']")[a]);
-			if (check.is(":checked") == true) {
+			if (check.is(":checked") == true && check.val()!="${page.pageNo}") {
 				var checkOne = check.val();
 				if (checkIds.indexOf(checkOne)<0) {
 					if(checkIds==''){
@@ -252,7 +253,7 @@
 										var info = "错误信息为:<br>&nbsp;&nbsp;&nbsp;&nbsp;"+data.html;
 										top.$.jBox.info(info);
 									}else{
-										
+										 top.$.jBox.tip("正在批量更新业务...", 'loading');
 										window.location.href = "${ctx}/work/workDealInfo/updateDealInfos?dealInfoIds="
 										+ checkIds + "&year=" + f.year;
 									}
@@ -385,7 +386,7 @@
 				<tr>
 					<td>
 					
-					<c:if test="${workDealInfo.dealInfoStatus!=6}">
+					<c:if test="${workDealInfo.dealInfoStatus==7}">
 						<input type="checkbox" name="oneDealCheck" value = "${workDealInfo.id}" 
 						<c:forEach items="${ids }" var="id">
 							<c:if test="${id==workDealInfo.id }"> checked="checked"</c:if>
