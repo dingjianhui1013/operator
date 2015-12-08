@@ -515,28 +515,83 @@ var selected = false;
 	rel="stylesheet" />
 <script type="text/javascript">
 	function os(obj) {
-		if(onSubmitOS()){
-			if (obj == "one") {
-				$("#inputForm")
-				.attr("action", "${ctx}/work/workDealInfo/temporarySave");
-				$("#inputForm").submit();
+		var productLength = $("#productTdId").find("[name='product']").length;
+		for (var a = 0; a <productLength; a++) {
+			var radioIndex = $($("#productTdId").find("[name='product']")[a]);
+			if(radioIndex.is(":checked")){
+				selected = true;
 			}
-			if (obj == "many") {
-				$.ajax({
-					type:"POST", //表单提交类型
-					url:"${ctx}/work/workDealInfo/manySave", //表单提交目标
-					data:$("#inputForm").serialize(), //表单数据
-					dataType:"json",
-					success:function(msg){
-							if(msg.status == 1){//msg 是后台调用action时，你穿过来的参数
-								top.$.jBox.tip("录入成功，可再次录入"); 
-							}else{
-								top.$.jBox.tip("录入失败，请重新编辑"); 
-							}
+		}
+		if(!selected){
+			top.$.jBox.tip("请选择要办理的产品!");
+			return false;
+		}
+		if($("#tt").val()!="" && !checkDwmc($("#tt"))){
+			top.$.jBox.tip("单位名称格式有误!");
+			return false;
+		}
+		if($("#contactName").val()!="" && !checkJbrxm($("#contactName"))){
+			top.$.jBox.tip("经办人姓名格式有误!");
+			return false;
+		}
+		
+		if($("#pName").val()!="" &&!checkSqr($("#pName"))){
+			top.$.jBox.tip("申请人姓名格式有误!");
+			return false;
+		}
+		if($("#appId").val()=="") {
+			$("#app").val("");
+			top.$.jBox.tip("该应用不存在!"); 
+			$("#app").focus(); //让手机文本框获得焦点 
+			return false;
+		} else if ($("input[name='year']").val() == null || $("input[name='year']").val() == ""){
+			top.$.jBox.tip("请选择申请年限!"); 
+			$("input[name='year']").focus(); //让手机文本框获得焦点 
+			return false;
+		} 
+		else if($("#agentDetailId").val()==0){
+			top.$.jBox.tip("请配置计费策略"); 
+			$("#agentDetailId").focus(); 
+			return false;
+		}else if($("#agentDetailId").val()!=0  && $("#agentId").val()!=1){
+			if($("#surplusNum").val()==0){
+				top.$.jBox.tip("此计费策略模版剩余数量为零，不能进行业务办理！"); 
+				return false;
+			}else{
+				var boundId = $("#agentDetailId").val();
+				var url = "${ctx}/profile/configChargeAgent/checkAgentIsZero?agentDetailId="+boundId+"&_="+new Date().getTime();
+				$.getJSON(url,function(data){
+					if(data.status==0){
+						top.$.jBox.tip("此计费策略模版剩余数量为零，不能进行业务办理！"); 
+						return false;
+					}else{
+						if (obj == "one") {
+							$("#inputForm")
+							.attr("action", "${ctx}/work/workDealInfo/temporarySave");
+							$("#inputForm").submit();
 						}
-					});
+						if (obj == "many") {
+							$.ajax({
+								type:"POST", //表单提交类型
+								url:"${ctx}/work/workDealInfo/manySave", //表单提交目标
+								data:$("#inputForm").serialize(), //表单数据
+								dataType:"json",
+								success:function(msg){
+										if(msg.status == 1){//msg 是后台调用action时，你穿过来的参数
+											top.$.jBox.tip("录入成功，可再次录入"); 
+										}else{
+											top.$.jBox.tip("录入失败，请重新编辑"); 
+										}
+									}
+								});
+						}
+					}
+				});
 			}
-			
+		}else {
+			$("#lable0").removeAttr("disabled");
+			$("#lable1").removeAttr("disabled");
+			return true;
 		}
 		
 	}
@@ -593,10 +648,11 @@ var selected = false;
 						top.$.jBox.tip("此计费策略模版剩余数量为零，不能进行业务办理！"); 
 						return false;
 					}else{
+						isOnSubmitOS = "yes";
+						alert(isOnSubmitOS);
 						return true;
 					}
 				});
-				return false;
 			}
 		}else {
 			$("#lable0").removeAttr("disabled");
