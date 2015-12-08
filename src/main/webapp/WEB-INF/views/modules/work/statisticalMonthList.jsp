@@ -66,6 +66,7 @@
 		var appId = $("#appId").val();
 		var startTime = $("#startTime").val();
 		var endTime = $("#endTime").val();
+		var office= $("#office").val();
 		if(endTime=="")
 		{
 			$("#endTime").val(startTime);
@@ -83,7 +84,7 @@
 			top.$.jBox.tip("请选择统计时间");
 		}else
 			{
-				window.location.href="${ctx}/work/workDealInfo/exportMonthPayment?area="+area+"&appId="+appId+"&startTime="+startTime+"&endTime="+endTime;
+				window.location.href="${ctx}/work/workDealInfo/exportMonthPayment?area="+area+"&appId="+appId+"&startTime="+startTime+"&endTime="+endTime+"&office="+office;
 			}
 	}
 </script>
@@ -98,7 +99,17 @@
 		action="${ctx}/work/workDealInfo/statisticalMonthList" method="post"
 		class="breadcrumb form-search">
 		<div style="margin-top: 9px">
-		<label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;选择区域 ：</label>
+		<label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;项目名称：</label>
+		<select name="appId" id="appId">
+				<option value="">请选择</option>
+			<c:forEach items="${appList}" var="app">
+				<option value="${app.id}"
+					<c:if test="${app.id==appId}">
+					selected="selected"
+					</c:if>>${app.appName}</option>
+			</c:forEach>
+		</select>
+		<label>选择区域 ：</label>
 		<select name="area" id="area" onchange="addOffice()">
 			<option value="">请选择</option>
 			<c:forEach items="${offsList}" var="off">
@@ -108,15 +119,12 @@
 					</c:if>>${off.name}</option>
 			</c:forEach>
 		</select>
-		<label>项目名称：</label>
-		<select name="appId" id="appId">
-				<option value="">请选择</option>
-			<c:forEach items="${appList}" var="app">
-				<option value="${app.id}"
-					<c:if test="${app.id==appId}">
-					selected="selected"
-					</c:if>>${app.appName}</option>
-			</c:forEach>
+		<label>选择网点 ：</label>
+		<select name="office" id="office">
+			<option value="">请选择</option>
+			<c:if test="${offId!=null}">
+				<option value="${offId}" selected="selected">${offName}</option>
+			</c:if>
 		</select>
 		</div>
 		<div style="margin-top: 9px">
