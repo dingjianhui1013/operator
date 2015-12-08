@@ -46,6 +46,20 @@
 				</select>
 			</div>
 		</div>
+		<div class="control-group">
+			<label class="control-label">客服接入:</label>
+			<div class="controls">
+				<select name = "access">
+					<option value = "电话">电话</option>
+					<option value = "QQ" selected="selected">QQ</option>
+					<option value = "QQ远程">QQ远程</option>
+					<option value = "在线工具">在线工具</option>
+					<option value = "邮件">邮件</option>
+					<option value = "短信">短信</option>
+					<option value = "其他">其他</option>
+				</select>
+			</div>
+		</div>
 <!-- 		<div class="control-group"> -->
 <!-- 			<lable class="control-label">应用项目名称：</lable> -->
 <!-- 			<div class="controls"> -->
