@@ -527,7 +527,7 @@ public class WorkPayInfoController extends BaseController {
 	
 		workDealInfo.setPayUser(UserUtils.getUser());
 		workDealInfo.setPayUserDate(new Date());
-		if (workDealInfo.getIsIxin()) {
+		if (workDealInfo.getIsIxin()!=null && workDealInfo.getIsIxin()) {
 			workDealInfo.setCreateBy(UserUtils.getUser());
 			workDealInfo.setUpdateBy(UserUtils.getUser());
 		}
