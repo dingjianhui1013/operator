@@ -17,21 +17,21 @@
 		function dca() {
 			if ($("#apply").val() == "") {
 				top.$.jBox.tip("请选择项目");
-				return false;
+				
 			} else {
 				if ($("#workType").val() == "") {
 					top.$.jBox.tip("请选择业务类型");
-					return false;
+					
 				} else 
 				 if($('#dealInfoStatus').val()==""){
 					 top.$.jBox.tip("请选择业务状态");
-					 return false;
+					 
 				 }else{
 					var apply = $("#apply").val();
 					var workType = $("#workType").val();
 					var wdiStatus = $("#dealInfoStatus").val();
 					var companyName=$("#companyName").val();
-					alert(apply+workType+wdiStatus);
+					
 					window.location.href = "${ctx }/message/emailExtraction/export?apply="
 							+ apply
 							+ "&workType="
