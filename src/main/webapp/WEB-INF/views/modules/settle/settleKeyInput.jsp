@@ -107,7 +107,7 @@
 		<div class="control-group">
 			<label class="control-label">KEY码(起始码)：</label>
 			<div class="controls">
-				<input type="text"  name=startCode value="" id="startCode" class="required"/>
+				<input type="text"  name=startCode value="" id="startCode" class="required" onblur="changeCount()"/>
 			</div>
 		</div>
 		<div class="control-group">
