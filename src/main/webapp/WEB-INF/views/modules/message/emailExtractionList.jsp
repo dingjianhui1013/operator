@@ -48,7 +48,7 @@
 <body>
 	<ul class="nav nav-tabs">
 		<li><a href="${ctx}/message/smsConfiguration/">短信配置列表</a></li>
-		<li><a href="${ctx}/message/smsConfiguration/form">短信配置添加</a></li>
+		
 		<li><a href="${ctx}/message/messageSending/list">消息发送</a></li>
 		<li class="active"><a href="${ctx}/message/emailExtraction/list">邮箱提取列表</a></li>
 	</ul>
