@@ -58,7 +58,11 @@
 				
 				if(!isNaN(startCode)&&!isNaN(endCode))
 					{
-						$("#count").val((endCode-startCode)+1);
+					 var count=(endCode-startCode)+1;
+					 if(count>=0)
+						 {
+							$("#count").val(count);
+						 }
 					}
 			if(isNaN(endCode))
 				{
