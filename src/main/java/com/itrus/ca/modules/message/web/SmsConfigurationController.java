@@ -3,30 +3,43 @@
  */
 package com.itrus.ca.modules.message.web;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.ConstraintViolationException;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.itrus.ca.common.beanvalidator.BeanValidators;
 import com.itrus.ca.common.config.Global;
 import com.itrus.ca.common.persistence.Page;
+import com.itrus.ca.common.utils.DateUtils;
+import com.itrus.ca.common.utils.excel.ImportExcel;
 import com.itrus.ca.common.web.BaseController;
 import com.itrus.ca.modules.sys.entity.Office;
 import com.itrus.ca.modules.sys.entity.User;
 import com.itrus.ca.modules.sys.service.OfficeService;
+import com.itrus.ca.modules.sys.service.SystemService;
 import com.itrus.ca.modules.sys.utils.UserUtils;
 import com.itrus.ca.modules.work.entity.WorkCompany;
 import com.itrus.ca.modules.work.entity.WorkDealInfo;
@@ -71,6 +84,8 @@ public class SmsConfigurationController extends BaseController {
 	@Autowired
 	private WorkDealInfoService workDealInfoService;
 	
+
+	private String realPath;
 	private LogUtil logUtil = new LogUtil();
 	@ModelAttribute
 	public SmsConfiguration get(@RequestParam(required=false) Long id) {
@@ -146,46 +161,58 @@ public class SmsConfigurationController extends BaseController {
 		return "redirect:" + Global.getAdminPath()
 				+ "/message/smsConfiguration";}
 	
-	@RequestMapping(value="checkMessage")
-	@ResponseBody
-	public String checkMessage(Long id ,HttpServletRequest request, HttpServletResponse response ){
-		JSONObject jsonObject = new JSONObject();
-		try{
-			String messageName = request.getParameter("messageName");
-			List<SmsConfiguration> list = smsConfigurationService.findByRaName(messageName);
-			if(list.size() != 0 ){
-				if(id == null ){
-					jsonObject.put("status","0");
-					jsonObject.put("msg","RA模板名称已存在,添加失败");
-					return jsonObject.toString();
-				}else{
-					SmsConfiguration smsConfiguration = list.get(0);
-					if(id.longValue() != smsConfiguration.getId().longValue()){//更新重名
-						jsonObject.put("status","0");
-						jsonObject.put("msg","RA模板名称已存在,更新失败");
-						return jsonObject.toString();
-					}else{
-						jsonObject.put("status","2");
-						return jsonObject.toString();
 
-					}
-//					if(configRaAccountService.checkUsed(raId)){
-//						jsonObject.put("status","1");
-//						jsonObject.put("msg","该RA模版已被使用，是否继续进行修改？");
-//						return jsonObject.toString();
-//					}
-				}
-			}else{
-				jsonObject.put("status","2");
-				return jsonObject.toString();
-			}
-
-		}catch(Exception e){
-
-			e.printStackTrace();
-		}
-
-		return null;
+	
+	@RequestMapping(value = "import", method = RequestMethod.POST)
+	public String importFile(@RequestParam("file") MultipartFile file,
+			HttpServletRequest request,Model model	)throws IllegalStateException, IOException, JSONException {
+	
+			String path =null;
+			String fileName=null;
+			String newFileName=null;
+		 try {
+		       path = request.getSession().getServletContext().getRealPath("/");// 文件保存目录，也可自定为绝对路径
+		       fileName = file.getOriginalFilename();// getOriginalFilename和getName是不一样的哦
+		      String extensionName = fileName
+	                    .substring(fileName.lastIndexOf(".") + 1);
+		      newFileName = String.valueOf(DateUtils.formatDate(new Date(),"yyyy-MM-dd HH:mm:ss")+fileName) ;
+	                  
+		      System.out.println(path);
+		      System.out.println(newFileName);
+		      File targetFile = new File(path, newFileName);
+		      if (!targetFile.exists()) {
+		        targetFile.mkdirs();
+		      }
+		      file.transferTo(targetFile);
+		    model.addAttribute("upload.message", request.getContextPath() + "/upload/" + newFileName);
+		    
+		    } catch (Exception e) {
+		      e.printStackTrace();
+		    }
+//		if(!file.isEmpty()){
+//	        System.out.println((file.getName()));
+//	        
+//	        byte[] bs;
+//			try {
+//				bs = file.getBytes();
+//				System.out.println(new String(bs));
+//			} catch (IOException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//	    }
+		 SmsConfiguration smsConfiguration= new SmsConfiguration();
+		 smsConfiguration.setMessageName(newFileName);
+		 smsConfiguration.setMessageAddress(path);
+		 smsConfigurationService.save(smsConfiguration);
+		return "redirect:"+Global.getAdminPath()+"/message/smsConfiguration/?repage";
 	}
 
+	public String getRealPath() {
+		return realPath;
+	}
+	@Value(value = "${uploadFile.path}")
+	public void setRealPath(String realPath) {
+		this.realPath = realPath;
+	}
 }
