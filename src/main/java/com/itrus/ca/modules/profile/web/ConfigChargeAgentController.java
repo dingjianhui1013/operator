@@ -1032,10 +1032,10 @@ public class ConfigChargeAgentController extends BaseController {
 			ConfigChargeAgentBoundConfigProduct bound =  configChargeAgentBoundConfigProductService.get(agentDetailId);
 			ConfigChargeAgent agent =  bound.getAgent();
 			if(agent.getSurplusNum()<1){
-				json.put("status","0");
+				json.put("status",0);
 				json.put("agentId",agent.getId());
 			}else{
-				json.put("status","1");
+				json.put("status",1);
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
