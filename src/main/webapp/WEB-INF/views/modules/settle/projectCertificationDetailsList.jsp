@@ -18,7 +18,7 @@
 		function dca() {
 			if ($("#alias").val() == "") {
 				top.$.jBox.tip("请选择项目");
-				return false;
+				
 			} else {
 				if ($("#startTime").val() == "" || $("#endTime").val() == "") {
 					top.$.jBox.tip("请选定时间范围");
