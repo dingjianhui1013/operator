@@ -1136,6 +1136,7 @@ public class WorkDealInfoService extends BaseService {
 					"%" + workDealInfo.getWorkUser().getConCertNumber() + "%"));
 		}
 
+
 		if (office != null) {
 			dc.add(Restrictions.eq("office.id", office));
 		} else if (area != null) {
