@@ -42,16 +42,8 @@ public class SmsConfiguration extends DataEntity {
 	private static final long serialVersionUID = 1L;
 	private Long id; // 编号
 	private String messageName; // 名称
-	private String jgmc;
-	private String jgdm;
-	private String frdb;
-	private String zcdm;
-	private String keySn;
-	private String jgdz;
-	private String jbrxm;
-	private String zszt;
-	private String xmmc;
-	private Date zsdqr;
+	private String messageContent;
+	private String messageAddress;
 
 	public SmsConfiguration() {
 
@@ -61,20 +53,13 @@ public class SmsConfiguration extends DataEntity {
 		this.id = id;
 	}
 
-	public SmsConfiguration(String messageName, String jgmc, String jgdm, String frdb, String zcdm, String keySn,
-			String jgdz, String jbrxm, String zszt, String xmmc, Date zsdqr) {
+	
+
+	public SmsConfiguration(String messageName, String messageContent,String messageAddress) {
 		
 		this.messageName = messageName;
-		this.jgmc = jgmc;
-		this.jgdm = jgdm;
-		this.frdb = frdb;
-		this.zcdm = zcdm;
-		this.keySn = keySn;
-		this.jgdz = jgdz;
-		this.jbrxm = jbrxm;
-		this.zszt = zszt;
-		this.xmmc = xmmc;
-		this.zsdqr = zsdqr;
+		this.messageContent = messageContent;
+		this.messageAddress =messageAddress;
 	}
 
 	@Id
@@ -100,84 +85,21 @@ public class SmsConfiguration extends DataEntity {
 		this.messageName = name;
 	}
 
-	public String getJgmc() {
-		return jgmc;
+	public String getMessageContent() {
+		return messageContent;
 	}
 
-	public void setJgmc(String jgmc) {
-		this.jgmc = jgmc;
+	public void setMessageContent(String messageContent) {
+		this.messageContent = messageContent;
 	}
 
-	public String getJgdm() {
-		return jgdm;
+	public String getMessageAddress() {
+		return messageAddress;
 	}
 
-	public void setJgdm(String jgdm) {
-		this.jgdm = jgdm;
+	public void setMessageAddress(String messageAddress) {
+		this.messageAddress = messageAddress;
 	}
-
-	public String getFrdb() {
-		return frdb;
-	}
-
-	public void setFrdb(String frdb) {
-		this.frdb = frdb;
-	}
-
-	public String getZcdm() {
-		return zcdm;
-	}
-
-	public void setZcdm(String zcdm) {
-		this.zcdm = zcdm;
-	}
-
-	public String getKeySn() {
-		return keySn;
-	}
-
-	public void setKeySn(String keySn) {
-		this.keySn = keySn;
-	}
-
-	public String getJgdz() {
-		return jgdz;
-	}
-
-	public void setJgdz(String jgdz) {
-		this.jgdz = jgdz;
-	}
-
-	public String getJbrxm() {
-		return jbrxm;
-	}
-
-	public void setJbrxm(String jbrxm) {
-		this.jbrxm = jbrxm;
-	}
-
-	public String getZszt() {
-		return zszt;
-	}
-
-	public void setZszt(String zszt) {
-		this.zszt = zszt;
-	}
-
-	public String getXmmc() {
-		return xmmc;
-	}
-
-	public void setXmmc(String xmmc) {
-		this.xmmc = xmmc;
-	}
-
-	public Date getZsdqr() {
-		return zsdqr;
-	}
-
-	public void setZsdqr(Date zsdqr) {
-		this.zsdqr = zsdqr;
-	}
-
+	
+	
 }
