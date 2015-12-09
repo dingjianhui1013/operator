@@ -347,7 +347,7 @@
 				name="endTime" /> &nbsp;&nbsp;&nbsp;&nbsp;<input id="btnSubmit"
 				class="btn btn-primary" type="submit" value="查询" />
 				&nbsp;&nbsp;&nbsp;&nbsp;
-				<a target="_blank" href="${ctx}/enroll/downloadTemplate?fileName=batchImportDealInfo.xlsx&_=new Date().getTime()" class="btn btn-primary">批量新增模板下载</a>
+				<a target="_blank" href="${ctx}/template/xls/batchImportDealInfo.xlsx" class="btn btn-primary">批量新增模板下载</a>
 				&nbsp;&nbsp;&nbsp;&nbsp;
 				<a id="manyAdd" data-toggle="modal" href="#declareDiv" class="btn btn-primary">批量新增导入</a>
 				&nbsp;&nbsp;&nbsp;&nbsp;
