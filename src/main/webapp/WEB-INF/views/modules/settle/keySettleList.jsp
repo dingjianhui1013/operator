@@ -18,13 +18,13 @@
 			
 			if ($("#startTime").val() == ""&&$("#endTime").val()=="") {
 				top.$.jBox.tip("请选择时间");
-				return false;
+				
 			}else if($("#supplierId").val()==""){
 				top.$.jBox.tip("请选择厂商");
-				return false;
+				
 			}else if($("#keyId").val()==""){
 				top.$.jBox.tip("请选择类型");
-				return false;
+				
 			}else{
 			var supplierId = $("#supplierId").val();
 			var keyId = $("#keyId").val();
@@ -160,8 +160,10 @@
 				</td></shiro:hasPermission>
 				<tr>	
 					<td></td>
-					<td colspan="7">总计：${zs}个</td>
-					<td>总金额：${zje}元</td>
+					<td colspan="6">总计：${zs}个</td>
+					<td >${zje}元</td>
+					<td></td>
+					<td></td>
 			</tr>
 		</tbody>
 	</table>
