@@ -3615,9 +3615,9 @@ public class WorkDealInfoService extends BaseService {
 		// // 新增、置换时才有key
 		 dc.add(Restrictions.or(Restrictions.eq("dealInfoType",
 		 WorkDealInfoType.TYPE_ADD_CERT), Restrictions.eq(
-		 "dealInfoType", WorkDealInfoType.TYPE_DAMAGED_REPLACED),
+		 "dealInfoType1", WorkDealInfoType.TYPE_DAMAGED_REPLACED),
 		 Restrictions.eq("dealInfoType1",
-		 WorkDealInfoType.TYPE_DAMAGED_REPLACED)));
+		 WorkDealInfoType.TYPE_LOST_CHILD)));
 		dc.add(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED));
 		dc.add(Restrictions.ge("updateDate", date));
 		dc.add(Restrictions.lt("updateDate", calendar.getTime()));
