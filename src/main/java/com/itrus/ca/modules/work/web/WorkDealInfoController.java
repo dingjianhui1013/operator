@@ -136,6 +136,7 @@ import com.itrus.ca.modules.work.vo.WorkDate_MoneVo;
 import com.itrus.ca.modules.work.vo.WorkDealInfoVo;
 import com.itrus.ca.modules.work.vo.Workoffice_MoneyVo;
 import com.itrus.ca.modules.work.vo.Workoffice_district_MoneyVo;
+import com.itrus.ca.modules.work.vo.WorkpaymentInfo_dealinfoVo;
 
 /**
  ************************************************************** 
@@ -1558,6 +1559,174 @@ public class WorkDealInfoController extends BaseController {
 			model.addAttribute("appList", appList);
 			return "modules/work/statisticalProjectList";
 	}
+	@RequiresPermissions("work:workDealInfo:view")
+	@RequestMapping(value = "statisticalAdjustment")
+	public String statisticalAdjustment(FinancePaymentInfo financePaymentInfo,
+			Date dkstartTime, Date dkendTime, Date zzstartTime, Date zzendTime,HttpServletRequest request,
+			String companyName,
+			HttpServletResponse response, Model model) throws ParseException
+	{
+		if(dkendTime!=null)
+		{
+			dkendTime.setHours(23);
+			dkendTime.setMinutes(59);
+			dkendTime.setSeconds(59);
+		}
+		if(zzendTime!=null)
+		{
+			zzendTime.setHours(23);
+			zzendTime.setSeconds(59);
+			zzendTime.setMinutes(59);
+		}
+		List<FinancePaymentInfo> list = financePaymentInfoService.findAdjustment(
+				financePaymentInfo);
+		List<WorkpaymentInfo_dealinfoVo> p_d=Lists.newArrayList();
+		for(int i=0;i<list.size();i++)
+		{
+			List<WorkFinancePayInfoRelation> financePay = workFinancePayInfoRelationService
+					.findByFinance(list.get(i).getId());
+			if(financePay.size()==0)
+			{
+				WorkpaymentInfo_dealinfoVo workpaymentInfo_dealinfoVo=new WorkpaymentInfo_dealinfoVo();
+				workpaymentInfo_dealinfoVo.setId(list.get(i).getId());
+				workpaymentInfo_dealinfoVo.setDealPayDate(list.get(i).getPayDate());
+				workpaymentInfo_dealinfoVo.setPayMoney(list.get(i).getPaymentMoney());
+				workpaymentInfo_dealinfoVo.setCompanyName(list.get(i).getCompany());
+				workpaymentInfo_dealinfoVo.setRemarks(list.get(i).getRemark());
+				p_d.add(workpaymentInfo_dealinfoVo);
+			}else
+			{
+				List<Long> idList = Lists.newArrayList();
+				if (financePay.size() > 0) {
+					for (int f = 0; f < financePay.size(); f++) {
+						idList.add(financePay.get(f).getWorkPayInfo()
+								.getId());
+					}
+				}
+				List<WorkDealInfo> workDealInfos=workDealInfoService.findByFinanceId(idList);
+				for(int w=0;w<workDealInfos.size();w++)
+				{
+					WorkpaymentInfo_dealinfoVo workpaymentInfo_dealinfoVo=new WorkpaymentInfo_dealinfoVo();
+					workpaymentInfo_dealinfoVo.setId(list.get(i).getId());
+					workpaymentInfo_dealinfoVo.setDealPayDate(list.get(i).getPayDate());
+					workpaymentInfo_dealinfoVo.setPayMoney(list.get(i).getPaymentMoney());
+					workpaymentInfo_dealinfoVo.setCompanyName(list.get(i).getCompany());
+					workpaymentInfo_dealinfoVo.setRemarks(list.get(i).getRemark());
+					workpaymentInfo_dealinfoVo.setAliasName(workDealInfos.get(w).getWorkCompany().getCompanyName());
+					workpaymentInfo_dealinfoVo.setSignDate(workDealInfos.get(w).getWorkCertInfo().getSignDate());
+					p_d.add(workpaymentInfo_dealinfoVo);
+				}
+			}
+		}
+		List<WorkpaymentInfo_dealinfoVo> p_ds=Lists.newArrayList();
+		
+		for(int i=0;i<p_d.size();i++)
+		{
+			if(dkstartTime!=null && dkendTime!=null&&zzstartTime==null&&zzendTime==null&&"".equals(companyName)&&"".equals(financePaymentInfo.getCompany()))
+			{
+				if(p_d.get(i).getDealPayDate().getTime()>=dkstartTime.getTime()&&p_d.get(i).getDealPayDate().getTime()<=dkendTime.getTime())
+				{
+					p_ds.add(p_d.get(i));
+				}
+					
+			}else if(dkstartTime!=null&&dkendTime!=null&&zzstartTime!=null&&zzendTime!=null&&"".equals(companyName)&&"".equals(financePaymentInfo.getCompany()))
+			{
+				if(p_d.get(i).getDealPayDate().getTime()>=dkstartTime.getTime()&&p_d.get(i).getDealPayDate().getTime()<=dkendTime.getTime())
+				{
+					if(p_d.get(i).getSignDate()!=null)
+					{
+						if(p_d.get(i).getSignDate().getTime()>=zzstartTime.getTime()
+								&&p_d.get(i).getSignDate().getTime()<=zzendTime.getTime())
+						{
+							p_ds.add(p_d.get(i));
+						}
+					}
+				}
+			}else if(dkstartTime!=null&&dkendTime!=null&&zzstartTime!=null&&zzendTime!=null&&!"".equals(companyName)&&"".equals(financePaymentInfo.getCompany()))
+			{
+				if(p_d.get(i).getDealPayDate().getTime()>=dkstartTime.getTime()&&p_d.get(i).getDealPayDate().getTime()<=dkendTime.getTime())
+				{
+					if(p_d.get(i).getSignDate()!=null)
+					{
+						if(p_d.get(i).getSignDate().getTime()>=zzstartTime.getTime()
+								&&p_d.get(i).getSignDate().getTime()<=zzendTime.getTime())
+						{
+							if(p_d.get(i).getAliasName()!=null)
+							{
+								if(p_d.get(i).getAliasName().equals(companyName))
+									{
+										p_ds.add(p_d.get(i));
+									}
+							}
+						}
+					}
+				}
+			}else if(dkstartTime!=null&&dkendTime!=null&&zzstartTime!=null&&zzendTime!=null&&"".equals(companyName)&&!"".equals(financePaymentInfo.getCompany()))
+			{
+				if(p_d.get(i).getDealPayDate().getTime()>=dkstartTime.getTime()&&p_d.get(i).getDealPayDate().getTime()<=dkendTime.getTime())
+				{
+					if(p_d.get(i).getSignDate()!=null)
+					{
+						if(p_d.get(i).getSignDate().getTime()>=zzstartTime.getTime()
+								&&p_d.get(i).getSignDate().getTime()<=zzendTime.getTime())
+						{
+							if(p_d.get(i).getCompanyName()!=null)
+							{
+								if(p_d.get(i).getCompanyName().equals(financePaymentInfo.getCompany()))
+								{
+									p_ds.add(p_d.get(i));
+								}
+							}
+						}
+					}
+				}
+			}else if(dkstartTime==null&&dkendTime==null&&zzstartTime==null&&zzendTime==null&&"".equals(companyName)&&!"".equals(financePaymentInfo.getCompany()))
+			{
+				if(p_d.get(i).getCompanyName()!=null)
+				{
+					if(p_d.get(i).getCompanyName().equals(financePaymentInfo.getCompany()))
+					{
+						p_ds.add(p_d.get(i));
+					}
+				}
+			}else if(dkstartTime==null&&dkendTime==null&&zzstartTime==null&&zzendTime==null&&!"".equals(companyName)&&"".equals(financePaymentInfo.getCompany()))
+			{
+				if(p_d.get(i).getAliasName()!=null)
+				{
+					if(p_d.get(i).getAliasName().equals(companyName))
+					{
+						p_ds.add(p_d.get(i));
+					}
+				}
+			}
+			else
+			{
+				String start=new SimpleDateFormat("yyyy-MM").format(new Date())+"-01";
+				String end=new SimpleDateFormat("yyyy-MM").format(new Date())+"-31";
+				Date dkstartTime_ = new SimpleDateFormat("yyyy-MM-dd").parse(start);
+				Date dkendTime_ = new SimpleDateFormat("yyyy-MM-dd").parse(end);
+				dkendTime_.setHours(23);
+				dkendTime_.setMinutes(59);
+				dkendTime_.setSeconds(59);
+				if(p_d.get(i).getDealPayDate().getTime()>=dkstartTime_.getTime()&&p_d.get(i).getDealPayDate().getTime()<=dkendTime_.getTime())
+				{
+					p_ds.add(p_d.get(i));
+				}
+			}
+		}
+//		Page<WorkpaymentInfo_dealinfoVo> page=new Page<WorkpaymentInfo_dealinfoVo>(request, response);
+//		page.setCount(p_ds.size());
+//		page.setList(p_ds);
+//		model.addAttribute("page", page);
+		model.addAttribute("workpaymentInfo_dealinfoVo", p_ds);
+		model.addAttribute("dkstartTime", dkstartTime);
+		model.addAttribute("dkendTime", dkendTime);
+		model.addAttribute("zzstartTime", zzstartTime);
+		model.addAttribute("zzendTime", zzendTime);
+		model.addAttribute("companyName", companyName);
+		return "modules/work/statisticalAdjustmentList";
+	}
+	
 	
 	@RequestMapping(value = "statisticalDealPayListShow")
 	public String statisticalReportShow(Long dealInfoId, Model model) {
@@ -4733,9 +4902,8 @@ public class WorkDealInfoController extends BaseController {
 				{
 					for(int i=0;i<list.size();i++)
 					{
-						if(list.get(i).getCreateBy().getOffice().getId()==offs[o] && list.get(i).getWorkCompany().getDistrict()==districts[d])
+						if(list.get(i).getCreateBy().getOffice().getId().equals(offs[o]) && list.get(i).getWorkCompany().getDistrict()==districts[d])
 							{
-								
 								dis.add((String)districts[d]);
 							}
 					}
@@ -4907,11 +5075,15 @@ public class WorkDealInfoController extends BaseController {
 
 		Iterator<Map.Entry<String, Set<String>>> off_dis=office_District.entrySet().iterator();
 		int zcount=0;
+		int qnum[]=new int[office_District.size()];
+		int qnumIndex=0;
 		int index=0;
 		while(off_dis.hasNext())
 		{
+			
 			int count=0;
 			Entry<String, Set<String>> entry = off_dis.next();
+			
 			if(entry.getValue().size()==1)
 			{
 //				row1.createCell(1+1+zcount).setCellValue(entry.getKey());
@@ -4938,10 +5110,12 @@ public class WorkDealInfoController extends BaseController {
 							}
 							if(dp.getValue().size()>1)
 							{
+								System.out.println(index);
+								sheet.addMergedRegion(new Region(2,(short)(2+index), 2,(short)(1+index+count+dp.getValue().size())));
+								row2.createCell(1+index+1).setCellValue((String)districts[d]);
 								for(int dpi=0;dpi<dp.getValue().size();dpi++)
 								{
-//									sheet.addMergedRegion(new Region(2,(short)(1+index+1+count), 2,(short)(1+index+count+dp.getValue().size())));
-//									row2.createCell(1+index+1).setCellValue((String)districts[d]);
+//									sheet.addMergedRegion(new Region(2,(short)(1+index), 2,(short)(index+count+dp.getValue().size())));
 //									count++;
 									index++;
 									zcount++;
@@ -4950,10 +5124,26 @@ public class WorkDealInfoController extends BaseController {
 						}
 					}
 				}
-				sheet.addMergedRegion(new Region(1,(short)(1+count+1), 1,(short)(1+zcount)));
+//				sheet.addMergedRegion(new Region(1,(short)(1+count+1), 1,(short)(1+zcount)));
 //				row1.createCell(1+index+1).setCellValue(entry.getKey());
 			}
+			qnum[qnumIndex]=index;
+			if(qnumIndex==0){
+				if(qnum[qnumIndex]!=1){
+					sheet.addMergedRegion(new Region(1,(short)(2), 1,(short)(1+qnum[qnumIndex])));				
+				}else{
+					
+				}
+			}else{
+				if(qnum[qnumIndex]-qnum[qnumIndex-1]!=1){
+					sheet.addMergedRegion(new Region(1,(short)(2+qnum[qnumIndex-1]), 1,(short)(1+qnum[qnumIndex])));
+				}
+				
+			}
+			qnumIndex++;
+		
 		}
+		
 		sheet.addMergedRegion(new Region(0,(short)0, 0,(short)(1+zcount+1)));
 		row1.createCell(1+zcount+1).setCellValue("合计");
 		Object months[]=month.toArray();
@@ -5046,6 +5236,257 @@ public class WorkDealInfoController extends BaseController {
 		bos.close();
 		baos.close();
 		
+	}
+	@RequestMapping(value = "exportAdjustment")
+	public void exportAdjustment(FinancePaymentInfo financePaymentInfo,
+			Date dkstartTime, Date dkendTime, Date zzstartTime, Date zzendTime,HttpServletRequest request,
+			String companyName,
+			HttpServletResponse response, Model model) throws ParseException, IOException
+	{
+		if(dkendTime!=null)
+		{
+			dkendTime.setHours(23);
+			dkendTime.setMinutes(59);
+			dkendTime.setSeconds(59);
+		}
+		if(zzendTime!=null)
+		{
+			zzendTime.setHours(23);
+			zzendTime.setSeconds(59);
+			zzendTime.setMinutes(59);
+		}
+		List<FinancePaymentInfo> list = financePaymentInfoService.findAdjustment(
+				financePaymentInfo);
+		List<WorkpaymentInfo_dealinfoVo> p_d=Lists.newArrayList();
+		for(int i=0;i<list.size();i++)
+		{
+			List<WorkFinancePayInfoRelation> financePay = workFinancePayInfoRelationService
+					.findByFinance(list.get(i).getId());
+			if(financePay.size()==0)
+			{
+				WorkpaymentInfo_dealinfoVo workpaymentInfo_dealinfoVo=new WorkpaymentInfo_dealinfoVo();
+				workpaymentInfo_dealinfoVo.setId(list.get(i).getId());
+				workpaymentInfo_dealinfoVo.setDealPayDate(list.get(i).getPayDate());
+				workpaymentInfo_dealinfoVo.setPayMoney(list.get(i).getPaymentMoney());
+				workpaymentInfo_dealinfoVo.setCompanyName(list.get(i).getCompany());
+				workpaymentInfo_dealinfoVo.setRemarks(list.get(i).getRemark());
+				p_d.add(workpaymentInfo_dealinfoVo);
+			}else
+			{
+				List<Long> idList = Lists.newArrayList();
+				if (financePay.size() > 0) {
+					for (int f = 0; f < financePay.size(); f++) {
+						idList.add(financePay.get(f).getWorkPayInfo()
+								.getId());
+					}
+				}
+				List<WorkDealInfo> workDealInfos=workDealInfoService.findByFinanceId(idList);
+				for(int w=0;w<workDealInfos.size();w++)
+				{
+					WorkpaymentInfo_dealinfoVo workpaymentInfo_dealinfoVo=new WorkpaymentInfo_dealinfoVo();
+					workpaymentInfo_dealinfoVo.setId(list.get(i).getId());
+					workpaymentInfo_dealinfoVo.setDealPayDate(list.get(i).getPayDate());
+					workpaymentInfo_dealinfoVo.setPayMoney(list.get(i).getPaymentMoney());
+					workpaymentInfo_dealinfoVo.setCompanyName(list.get(i).getCompany());
+					workpaymentInfo_dealinfoVo.setRemarks(list.get(i).getRemark());
+					workpaymentInfo_dealinfoVo.setAliasName(workDealInfos.get(w).getWorkCompany().getCompanyName());
+					workpaymentInfo_dealinfoVo.setSignDate(workDealInfos.get(w).getWorkCertInfo().getSignDate());
+					p_d.add(workpaymentInfo_dealinfoVo);
+				}
+			}
+		}
+		List<WorkpaymentInfo_dealinfoVo> p_ds=Lists.newArrayList();
+		for(int i=0;i<p_d.size();i++)
+		{
+			if(dkstartTime!=null && dkendTime!=null&&zzstartTime==null&&zzendTime==null&&"".equals(companyName)&&"".equals(financePaymentInfo.getCompany()))
+			{
+				if(p_d.get(i).getDealPayDate().getTime()>=dkstartTime.getTime()&&p_d.get(i).getDealPayDate().getTime()<=dkendTime.getTime())
+				{
+					p_ds.add(p_d.get(i));
+				}
+					
+			}else if(dkstartTime!=null&&dkendTime!=null&&zzstartTime!=null&&zzendTime!=null&&"".equals(companyName)&&"".equals(financePaymentInfo.getCompany()))
+			{
+				if(p_d.get(i).getDealPayDate().getTime()>=dkstartTime.getTime()&&p_d.get(i).getDealPayDate().getTime()<=dkendTime.getTime())
+				{
+					if(p_d.get(i).getSignDate()!=null)
+					{
+						if(p_d.get(i).getSignDate().getTime()>=zzstartTime.getTime()
+								&&p_d.get(i).getSignDate().getTime()<=zzendTime.getTime())
+						{
+							p_ds.add(p_d.get(i));
+						}
+					}
+				}
+			}else if(dkstartTime!=null&&dkendTime!=null&&zzstartTime!=null&&zzendTime!=null&&!"".equals(companyName)&&"".equals(financePaymentInfo.getCompany()))
+			{
+				if(p_d.get(i).getDealPayDate().getTime()>=dkstartTime.getTime()&&p_d.get(i).getDealPayDate().getTime()<=dkendTime.getTime())
+				{
+					if(p_d.get(i).getSignDate()!=null)
+					{
+						if(p_d.get(i).getSignDate().getTime()>=zzstartTime.getTime()
+								&&p_d.get(i).getSignDate().getTime()<=zzendTime.getTime())
+						{
+							if(p_d.get(i).getAliasName()!=null)
+							{
+								if(p_d.get(i).getAliasName().equals(companyName))
+									{
+										p_ds.add(p_d.get(i));
+									}
+							}
+						}
+					}
+				}
+			}else if(dkstartTime!=null&&dkendTime!=null&&zzstartTime!=null&&zzendTime!=null&&"".equals(companyName)&&!"".equals(financePaymentInfo.getCompany()))
+			{
+				if(p_d.get(i).getDealPayDate().getTime()>=dkstartTime.getTime()&&p_d.get(i).getDealPayDate().getTime()<=dkendTime.getTime())
+				{
+					if(p_d.get(i).getSignDate()!=null)
+					{
+						if(p_d.get(i).getSignDate().getTime()>=zzstartTime.getTime()
+								&&p_d.get(i).getSignDate().getTime()<=zzendTime.getTime())
+						{
+							if(p_d.get(i).getCompanyName()!=null)
+							{
+								if(p_d.get(i).getCompanyName().equals(financePaymentInfo.getCompany()))
+								{
+									p_ds.add(p_d.get(i));
+								}
+							}
+						}
+					}
+				}
+			}else if(dkstartTime==null&&dkendTime==null&&zzstartTime==null&&zzendTime==null&&"".equals(companyName)&&!"".equals(financePaymentInfo.getCompany()))
+			{
+				if(p_d.get(i).getCompanyName()!=null)
+				{
+					if(p_d.get(i).getCompanyName().equals(financePaymentInfo.getCompany()))
+					{
+						p_ds.add(p_d.get(i));
+					}
+				}
+			}else if(dkstartTime==null&&dkendTime==null&&zzstartTime==null&&zzendTime==null&&!"".equals(companyName)&&"".equals(financePaymentInfo.getCompany()))
+			{
+				if(p_d.get(i).getAliasName()!=null)
+				{
+					if(p_d.get(i).getAliasName().equals(companyName))
+					{
+						p_ds.add(p_d.get(i));
+					}
+				}
+			}
+			else
+			{
+				String start=new SimpleDateFormat("yyyy-MM").format(new Date())+"-01";
+				String end=new SimpleDateFormat("yyyy-MM").format(new Date())+"-31";
+				Date dkstartTime_ = new SimpleDateFormat("yyyy-MM-dd").parse(start);
+				Date dkendTime_ = new SimpleDateFormat("yyyy-MM-dd").parse(end);
+				dkendTime_.setHours(23);
+				dkendTime_.setMinutes(59);
+				dkendTime_.setSeconds(59);
+				if(p_d.get(i).getDealPayDate().getTime()>=dkstartTime_.getTime()&&p_d.get(i).getDealPayDate().getTime()<=dkendTime_.getTime())
+				{
+					p_ds.add(p_d.get(i));
+				}
+			}
+		}
+		HSSFWorkbook wb=new HSSFWorkbook();
+		HSSFSheet sheet = wb.createSheet("项目调整统计表");
+		HSSFCellStyle style=wb.createCellStyle();
+		style.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+		style.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+		HSSFFont font=wb.createFont();
+		font.setFontName("宋体");
+		font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+		font.setFontHeightInPoints((short)12);
+		style.setFont(font);
+		sheet.addMergedRegion(new Region(0, (short)0, 0, (short)5));
+		HSSFRow row0=sheet.createRow(0);
+		HSSFCell cell0=row0.createCell(0);
+		row0.setHeightInPoints((short)25);
+		if(dkstartTime!=null&& zzstartTime==null)
+		{
+			cell0.setCellValue("到款日期"+new SimpleDateFormat("yyyy-Mm-dd").format(dkstartTime)+"至"+new SimpleDateFormat("yyyy-MM-dd").format(dkendTime)+"日项目调整统计表");
+		}else if(dkstartTime!=null && zzstartTime!=null){
+			cell0.setCellValue("到款日期"+new SimpleDateFormat("yyyy-Mm-dd").format(dkstartTime)+"至"+new SimpleDateFormat("yyyy-MM-dd").format(dkendTime)+" 制证日期"
+					+new SimpleDateFormat("yyyy-Mm-dd").format(zzstartTime)+"至"+new SimpleDateFormat("yyyy-MM-dd").format(zzendTime)
+					+"日项目调整统计表");
+		}else if(dkstartTime==null && zzstartTime!=null){
+			cell0.setCellValue("制证日期"+new SimpleDateFormat("yyyy-Mm-dd").format(zzstartTime)+"至"+new SimpleDateFormat("yyyy-MM-dd").format(zzendTime)
+					+"日项目调整统计表");
+		}else
+		{
+			cell0.setCellValue("本月项目调整统计表");
+		}
+		cell0.setCellStyle(style);
+		HSSFRow row1=sheet.createRow(1);
+		row1.createCell(0).setCellValue("支付款项录入时间");
+		row1.createCell(1).setCellValue("业务使用款项");
+		row1.createCell(2).setCellValue("单位名称");
+		row1.createCell(3).setCellValue("应用名称");
+		row1.createCell(4).setCellValue("业务制证时间");
+		row1.createCell(5).setCellValue("备注");
+		for(int i=0;i<p_ds.size();i++)
+		{
+			HSSFRow rown=sheet.createRow(i+1);
+			if(p_ds.get(i).getDealPayDate()==null)
+			{
+				rown.createCell(0).setCellValue("");
+			}else
+			{
+				rown.createCell(0).setCellValue(p_ds.get(i).getDealPayDate()+"");
+			}
+			if(p_ds.get(i).getPayMoney()==null)
+			{
+				rown.createCell(1).setCellValue("");
+			}else
+			{
+				rown.createCell(1).setCellValue(p_ds.get(i).getPayMoney()+"");
+			}
+			if(p_ds.get(i).getCompanyName()==null)
+			{
+				rown.createCell(2).setCellValue("");
+			}else
+			{
+				rown.createCell(2).setCellValue(p_ds.get(i).getCompanyName());
+			}
+			if(p_ds.get(i).getSignDate()==null)
+			{
+				rown.createCell(3).setCellValue("");
+			}else
+			{
+				rown.createCell(3).setCellValue(p_ds.get(i).getAliasName());
+			}
+			if(p_ds.get(i).getSignDate()==null)
+			{
+				rown.createCell(4).setCellValue("");
+
+			}else{
+				
+				rown.createCell(4).setCellValue(p_ds.get(i).getSignDate()+"");
+			}
+			if(p_ds.get(i).getRemarks()==null)
+			{
+				rown.createCell(5).setCellValue("");
+			}else
+			{
+				
+				rown.createCell(5).setCellValue(p_ds.get(i).getRemarks());
+			}
+			
+		}
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		response.setContentType(response.getContentType());
+		response.setHeader("Content-disposition",
+				"attachment; filename=projectSchedule.xls");
+		wb.write(baos);
+		byte[] bytes = baos.toByteArray();
+		response.setHeader("Content-Length", String.valueOf(bytes.length));
+		BufferedOutputStream bos = null;
+		bos = new BufferedOutputStream(response.getOutputStream());
+		bos.write(bytes);
+		bos.close();
+		baos.close();
 	}
 	@RequiresPermissions("work:workDealInfo:view")
 	@RequestMapping(value = "certCount")
