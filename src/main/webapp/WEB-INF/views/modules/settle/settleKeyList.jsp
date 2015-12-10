@@ -60,12 +60,12 @@
 			var startTime = $("#startBackTime").val();
 			var endTime = $("#endBackTime").val();
 			if (startTime==null||startTime=='') {
-				top.$.jBox.tip("请选择到货开始时间！");
+				top.$.jBox.tip("请选择返修开始时间！");
 				$("#modal-container-432382").hide();
 				return ;
 			}
 			if (endTime==null||endTime=='') {
-				top.$.jBox.tip("请选择到货结束时间！");
+				top.$.jBox.tip("请选择返修结束时间！");
 				$("#modal-container-432382").hide();
 				return;
 			}
