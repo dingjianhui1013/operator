@@ -14,6 +14,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFRow;
@@ -88,8 +89,7 @@ public class ProjectCertificationDetailsController extends BaseController {
 
 	@RequiresPermissions("settle:projectCertificationDetails:view")
 	@RequestMapping(value = { "list", "" })
-	public String list(ProjectCertificationDetails projectCertificationDetails, WorkDealInfo workDealInfo,
-			HttpServletRequest request, HttpServletResponse response,
+	public String list(	HttpServletRequest request, HttpServletResponse response,
 			@RequestParam(value = "alias", required = false) Long alias,
 			@RequestParam(value = "startTime", required = false) Date startTime,
 			@RequestParam(value = "endTime", required = false) Date endTime, Model model) {
@@ -121,20 +121,31 @@ public class ProjectCertificationDetailsController extends BaseController {
 		int lostCerate = 0;
 		// 损坏更换证书
 		int damageCertificate = 0;
-		User user = UserUtils.getUser();
-		workDealInfo.setCreateBy(user.getCreateBy());
+//		User user = UserUtils.getUser();
 		List<ConfigApp> configAppList = configAppService.selectAll();
 		model.addAttribute("configAppList", configAppList);
 		model.addAttribute("alias", alias);
 		List<WorkCertInfo> certInfoList = new ArrayList<WorkCertInfo>();
 		if (startTime != null && endTime != null) {
 			certInfoList = workCertInfoService.findZhiZhengTime(startTime, endTime);
+		} else {
+			if (startTime == null) {
+				startTime = DateUtils.firstDayOfMonth(new Date());
+			}
+			if (endTime == null) {
+				endTime = new Date();
+			}
 		}
-		Page<WorkDealInfo> page = workDealInfoService.find5Apply(new Page<WorkDealInfo>(request, response),
-				workDealInfo, alias, certInfoList);
+		model.addAttribute("startTime", startTime);
+		model.addAttribute("endTime", endTime);
+		if (alias == null) { // 没有选择应用，直接返回查询条件输入页面
+			return "modules/settle/projectCertificationDetailsList";
+		}
+		
+		Page<WorkDealInfo> page = workDealInfoService.findPage4CertList(new Page<WorkDealInfo>(request, response), alias, certInfoList);
 		model.addAttribute("page", page);
 
-		List<WorkDealInfo> list = workDealInfoService.find5ApplyIsIxin(workDealInfo, alias, certInfoList);
+		List<WorkDealInfo> list = workDealInfoService.find4CertList(alias, certInfoList);
 		for (int i = 0; i < list.size(); i++) {
 
 			if (list.get(i).getDealInfoType() != null) {
@@ -233,7 +244,7 @@ public class ProjectCertificationDetailsController extends BaseController {
 									updateFourYearCertificate++;
 								}
 							} else {
-								
+
 							}
 						} // 个人版
 						else if (Integer.parseInt(list.get(i).getConfigProduct().getProductName()) == 2) {
@@ -251,7 +262,7 @@ public class ProjectCertificationDetailsController extends BaseController {
 									updatePersonalFourYearCertificate++;
 								}
 							} else {
-								
+
 							}
 
 						}
@@ -359,13 +370,10 @@ public class ProjectCertificationDetailsController extends BaseController {
 		projectcount.setUpdatePersonalYearCertificate(updatePersonalYearCertificate);
 
 		model.addAttribute("projectcount", projectcount);
-		model.addAttribute("workType", workDealInfo.getDealInfoStatus());
 		model.addAttribute("proType", ProductType.productTypeStrMap);
 		model.addAttribute("wdiType", WorkDealInfoType.WorkDealInfoTypeMap);
 		model.addAttribute("wdiStatus", WorkDealInfoStatus.WorkDealInfoStatusMap);
-
-		model.addAttribute("startTime", startTime);
-		model.addAttribute("endTime", endTime);
+		
 		return "modules/settle/projectCertificationDetailsList";
 	}
 
@@ -377,9 +385,7 @@ public class ProjectCertificationDetailsController extends BaseController {
 			HttpServletRequest request, HttpServletResponse response) {
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 		SimpleDateFormat dfm = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		WorkDealInfo workDealInfo = new WorkDealInfo();
 		User user = UserUtils.getUser();
-		workDealInfo.setCreateBy(user.getCreateBy());
 		ProductType productType = new ProductType();
 		WorkDealInfoType workDealInfoType = new WorkDealInfoType();
 		List<Office> officeList = officeService.getOfficeByType(UserUtils.getUser(), 2);
@@ -388,7 +394,7 @@ public class ProjectCertificationDetailsController extends BaseController {
 		if (startTime != null && endTime != null) {
 			certInfoList = workCertInfoService.findZhiZhengTime(startTime, endTime);
 		}
-		List<WorkDealInfo> list = workDealInfoService.find5ApplyIsIxin(workDealInfo, alias, certInfoList);
+		List<WorkDealInfo> list = workDealInfoService.find4CertList(alias, certInfoList);
 
 		final String fileName = "WorkDealInfos.csv";
 		final List<ProjectCertificationDetailsVo> ProjectCertificationDetailsVos = new ArrayList<ProjectCertificationDetailsVo>();
@@ -424,9 +430,7 @@ public class ProjectCertificationDetailsController extends BaseController {
 		// 遗失补办证书
 		int lostCerate = 0;
 		// 损坏更换证书
-		int damageCertificate = 0;
-
-		workDealInfo.setId(alias);
+		int damageCertificate = 0;	
 		ConfigApp configApp = configAppService.get(alias);
 		// System.out.println(configApp.getAppName());
 		for (int i = 0; i < list.size(); i++) {

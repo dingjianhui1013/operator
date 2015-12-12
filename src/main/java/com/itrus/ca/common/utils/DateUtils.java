@@ -6,6 +6,7 @@
 package com.itrus.ca.common.utils;
 
 import java.text.ParseException;
+import java.util.Calendar;
 import java.util.Date;
 
 import org.apache.commons.lang.time.DateFormatUtils;
@@ -114,6 +115,20 @@ public class DateUtils extends org.apache.commons.lang.time.DateUtils {
 		long t = new Date().getTime()-date.getTime();
 		return t/(24*60*60*1000);
 	}
+	
+	/*
+	 * 获取当月第一天 
+	 * @param  Date date
+	 * @return Date
+	 */
+	public static Date firstDayOfMonth(Date date){
+		Calendar c = Calendar.getInstance(); 
+		c.setTime(date);       
+        c.set(Calendar.DAY_OF_MONTH,1);//设置为1号,当前日期既为本月第一天 
+        return c.getTime();   
+		
+	}
+	
 	
 	/**
 	 * @param args
