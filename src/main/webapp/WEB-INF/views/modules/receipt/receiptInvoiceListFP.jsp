@@ -32,6 +32,12 @@
 	<table id="contentTable" class="table table-striped table-bordered table-condensed">
 		<thead>
 			<tr>
+				<th>发票出库总量</th>
+				<th>${count}元</th>
+				<th>当天发票出库总量</th>
+				<th colspan="8" align="left">${now}元</th>
+			</tr>
+			<tr>
 				<th>编号</th>
 				<th>库房名称</th>
 				<th>发票类型/元</th>

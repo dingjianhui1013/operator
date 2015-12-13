@@ -89,13 +89,14 @@
 	
 
 	function buttonFrom(){
-		if ('${bgType}'){
+		alert("123123");
+		/* if ('${bgType}'){
 			var type = 0;//政府
 			if($("#contract").prop("checked")){
 				type = 1;
 			}
 			window.location.href="${ctx}/work/workDealInfoAudit/backMoney?id=${workDealInfo.id}&method="+type+"&receiptAmount="+$("#tfpVal").val();
-		} else {
+		} else { */
 			var keySn = "";
 			var revoke = 1;//不吊销
 			if($("#revoke").prop("checked")){
@@ -103,6 +104,7 @@
 			}
 			
 			if($("#tKey").prop("checked")){
+				alert("----------");
 				var same = $("#isSame").val();
 				if(same=="buyiyang"){
 					alert("当前KEY与办理业务使用的KEY不一致！无法进行退费操作！");
@@ -111,10 +113,11 @@
 					window.location.href="${ctx}/work/workDealInfoAudit/backMoney1?id=${workDealInfo.id}&revoke="+revoke+"&keySn="+keySn+"&receiptAmount="+$("#tfpVal").val();
 				}
 			}else{
+				alert("++++++++++++");
 				keySn = $("#keySn").val();
 				window.location.href="${ctx}/work/workDealInfoAudit/backMoney1?id=${workDealInfo.id}&revoke="+revoke+"&keySn="+keySn+"&receiptAmount="+$("#tfpVal").val();
 			}
-		} 
+		
 	}
 	
 	function selectKeyNum() {

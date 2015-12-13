@@ -78,6 +78,20 @@ public class ReceiptInvoiceService extends BaseService {
 	}
 	
 	
+	public List<ReceiptInvoice> findAllReceiptInvoice(ReceiptDepotInfo receiptDepotInfo) {
+		DetachedCriteria dc = receiptInvoiceDao.createDetachedCriteria();
+		dc.add(Restrictions.eq(ReceiptInvoice.DEL_FLAG, ReceiptInvoice.DEL_FLAG_NORMAL));
+		dc.createAlias("receiptDepotInfo", "receiptDepotInfo");
+		dc.add(Restrictions.eq("receiptDepotInfo", receiptDepotInfo));
+		dc.addOrder(Order.desc("id"));
+		return receiptInvoiceDao.find(dc);
+	}
+	
+	
+	
+	
+	
+	
 	public Page<ReceiptInvoice> findByDepotInfo(Page<ReceiptInvoice> page, ReceiptInvoice receiptInvoice,Date staDate,Date endDate) {
 		DetachedCriteria dc = receiptInvoiceDao.createDetachedCriteria();
 		dc.add(Restrictions.eq(ReceiptInvoice.DEL_FLAG, ReceiptInvoice.DEL_FLAG_NORMAL));

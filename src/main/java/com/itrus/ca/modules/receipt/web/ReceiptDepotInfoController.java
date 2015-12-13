@@ -235,6 +235,23 @@ public class ReceiptDepotInfoController extends BaseController {
         model.addAttribute("page", page);
         model.addAttribute("zkid", KeyDepotId.RECEIPT_DEPOT_ID);
         model.addAttribute("recriptId", receiptDepotInfo.getId());
+        
+        
+        List<ReceiptInvoice> invoices =  receiptInvoiceService.findAllReceiptInvoice(receiptDepotInfo);
+        Double count = 0d;
+        Double now = 0d;
+        for (int i = 0; i < invoices.size(); i++) {
+        	count += invoices.get(i).getReceiptMoney();
+        	String oldDate=new SimpleDateFormat("yyyy-MM-dd").format(invoices.get(i).getCreateDate());
+			String newDate=new SimpleDateFormat("yyyy-MM-dd").format(new Date()).toString();
+			if(oldDate.indexOf(newDate)>-1){
+				now += invoices.get(i).getReceiptMoney();
+			}
+		}
+        
+        model.addAttribute("count", count);
+        model.addAttribute("now", now);
+        
 		return "modules/receipt/receiptInvoiceListFP";
 	}
 	

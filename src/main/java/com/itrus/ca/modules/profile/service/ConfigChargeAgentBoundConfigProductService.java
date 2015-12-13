@@ -3,20 +3,16 @@
  */
 package com.itrus.ca.modules.profile.service;
 
+import java.util.Date;
 import java.util.List;
-
-import org.apache.commons.lang3.StringUtils;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.itrus.ca.common.persistence.Page;
 import com.itrus.ca.common.service.BaseService;
 import com.itrus.ca.modules.profile.entity.ConfigChargeAgentBoundConfigProduct;
@@ -79,6 +75,12 @@ public class ConfigChargeAgentBoundConfigProductService extends BaseService {
 		DetachedCriteria dc = configChargeAgentBoundConfigProductDao.createDetachedCriteria();
 		dc.add(Restrictions.eq("product.id", proId));
 		dc.createAlias("agent", "agent");
+		dc.add(Restrictions.or(
+				Restrictions.le("agent.htStartTime", new Date()),
+				Restrictions.isNull("agent.htStartTime")));
+		dc.add(Restrictions.or(
+				Restrictions.ge("agent.htEndTime", new Date()),
+				Restrictions.isNull("agent.htEndTime")));
 		dc.addOrder(Order.desc("agent.tempStyle"));
 		return configChargeAgentBoundConfigProductDao.find(dc);
 	}
