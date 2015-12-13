@@ -1435,6 +1435,20 @@ public class WorkDealInfoService extends BaseService {
 			// dc.add(Restrictions.eq("workPayInfo.methodContract", true));
 			// }
 			// }
+//			if (startTime != null) {
+//				dc.add(Restrictions.ge("workPayInfo.createDate", startTime));
+//				dc.add(Restrictions.le("workPayInfo.createDate", endTime));
+//			}
+//			if (dealInfoByAreaIds != null && dealInfoByAreaIds.size() > 0) {
+//				dc.add(Restrictions.in("id", dealInfoByAreaIds));
+//			}
+//			if (appId != null) {
+//				dc.add(Restrictions.eq("configApp.id", appId));
+//			}
+//			if(officeids!=null)
+//			{
+//				dc.add(Restrictions.in("office.id", officeids));
+//			}
 			if (startTime != null) {
 				dc.add(Restrictions.ge("workPayInfo.createDate", startTime));
 				dc.add(Restrictions.le("workPayInfo.createDate", endTime));
@@ -1445,7 +1459,10 @@ public class WorkDealInfoService extends BaseService {
 			if (appId != null) {
 				dc.add(Restrictions.eq("configApp.id", appId));
 			}
-			if (officeids != null) {
+
+			if(officeids!=null&&officeids.size() > 0)
+			{
+
 				dc.add(Restrictions.in("office.id", officeids));
 			}
 			dc.addOrder(Order.asc("workPayInfo.createDate"));
@@ -1491,6 +1508,20 @@ public class WorkDealInfoService extends BaseService {
 			// dc.add(Restrictions.eq("workPayInfo.methodContract", true));
 			// }
 			// }
+//			if (startTime != null) {
+//				dc.add(Restrictions.ge("workPayInfo.createDate", startTime));
+//				dc.add(Restrictions.le("workPayInfo.createDate", endTime));
+//			}
+//			if (dealInfoByAreaIds != null && dealInfoByAreaIds.size() > 0) {
+//				dc.add(Restrictions.in("id", dealInfoByAreaIds));
+//			}
+//			if (appId != null) {
+//				dc.add(Restrictions.eq("configApp.id", appId));
+//			}
+//			if(officeids!=null)
+//			{
+//				dc.add(Restrictions.in("office.id", officeids));
+//			}
 			if (startTime != null) {
 				dc.add(Restrictions.ge("workPayInfo.createDate", startTime));
 				dc.add(Restrictions.le("workPayInfo.createDate", endTime));
@@ -1501,7 +1532,10 @@ public class WorkDealInfoService extends BaseService {
 			if (appId != null) {
 				dc.add(Restrictions.eq("configApp.id", appId));
 			}
-			if (officeids != null) {
+
+			if(officeids!=null&&officeids.size() > 0)
+			{
+
 				dc.add(Restrictions.in("office.id", officeids));
 			}
 			dc.addOrder(Order.asc("workPayInfo.createDate"));
@@ -1544,9 +1578,41 @@ public class WorkDealInfoService extends BaseService {
 
 	}
 
-	public List<WorkDealInfo> findByProjectPay(Date startTime, Date endTime, List<Long> officeids,
-			List<Long> dealInfoByAreaIds, Long appId) {
-		if (startTime != null) {
+	
+	public List<WorkDealInfo> findByProjectYear(Date startTime,Date endTime,List<Long> dealInfoByAreaIds,
+			Long appId) {
+		if(startTime!=null)
+		{
+			endTime.setHours(23);
+			endTime.setMinutes(59);
+			endTime.setSeconds(59);
+			DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
+			dc.createAlias("workPayInfo", "workPayInfo");
+			dc.createAlias("createBy", "createBy");
+			dc.createAlias("createBy.office", "office");
+			dc.add(Restrictions.isNotNull("workPayInfo"));
+			if (startTime != null) {
+				dc.add(Restrictions.ge("workPayInfo.createDate", startTime));
+				dc.add(Restrictions.le("workPayInfo.createDate", endTime));
+			}
+			if (dealInfoByAreaIds != null && dealInfoByAreaIds.size() > 0) {
+				dc.add(Restrictions.in("id", dealInfoByAreaIds));
+			}
+			if (appId != null) {
+				dc.add(Restrictions.eq("configApp.id", appId));
+			}
+			dc.addOrder(Order.asc("workPayInfo.createDate"));
+			return workDealInfoDao.find(dc);
+		}else
+		{
+			return null;
+		}
+		
+	}
+	public List<WorkDealInfo> findByProjectPay(Date startTime,Date endTime,List<Long> officeids,List<Long> dealInfoByAreaIds,
+			Long appId) {
+		if(startTime!=null)
+		{
 			endTime.setHours(23);
 			endTime.setMinutes(59);
 			endTime.setSeconds(59);
@@ -3119,7 +3185,7 @@ public class WorkDealInfoService extends BaseService {
 
 	public void exportExcelData(HttpServletRequest request, HttpServletResponse response) {
 		String[] title = { "付款单位名称", "付款金额/元", "联系人", "联系方式", "付款时间", "付款方式", "区域", "网点", "记录人员" };
-		String sheetName = "业务款项统计.xlsx";
+		String sheetName = "dealpaylist.xls";
 		try {
 			response.setContentType("application/octet-stream");
 			response.setHeader("Content-Type", "application/force-download");
