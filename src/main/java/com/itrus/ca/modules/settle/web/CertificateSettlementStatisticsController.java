@@ -23,6 +23,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.itrus.ca.common.config.Global;
 import com.itrus.ca.common.persistence.Page;
+import com.itrus.ca.common.utils.DateUtils;
 import com.itrus.ca.common.web.BaseController;
 import com.itrus.ca.modules.sys.entity.Office;
 import com.itrus.ca.modules.sys.entity.User;
@@ -43,6 +44,7 @@ import com.itrus.ca.modules.statistic.entity.StatisticCertData;
 
 /**
  * 证书结算统计表Controller
+ * 
  * @author qt
  * @version 2015-11-22
  */
@@ -52,10 +54,10 @@ public class CertificateSettlementStatisticsController extends BaseController {
 
 	@Autowired
 	private CertificateSettlementStatisticsService certificateSettlementStatisticsService;
-	
+
 	@Autowired
 	private OfficeService officeService;
-	
+
 	@Autowired
 	private ConfigAppService configAppService;
 	@Autowired
@@ -63,36 +65,27 @@ public class CertificateSettlementStatisticsController extends BaseController {
 
 	private ConfigAppOfficeRelationService configAppOfficeRelationService;
 
-
-	
 	@ModelAttribute
-	public CertificateSettlementStatistics get(@RequestParam(required=false) Long id) {
-		if (id != null){
+	public CertificateSettlementStatistics get(@RequestParam(required = false) Long id) {
+		if (id != null) {
 			return certificateSettlementStatisticsService.get(id);
-		}else{
+		} else {
 			return new CertificateSettlementStatistics();
 		}
 	}
-	
+
 	@RequiresPermissions("settle:certificateSettlementStatistics:view")
-	@RequestMapping(value = {"list", ""})
-	public String list(
-			CertificateSettlementStatistics certificateSettlementStatistics,
-			WorkDealInfo workDealInfo,
-			Long areaId,
-			Long officeId,
-			String startDate,
-			String endDate,
+	@RequestMapping(value = { "list", "" })
+	public String list(Long areaId, Long officeId, Date startTime, Date endTime, Long[] payType,
 			HttpServletRequest request, HttpServletResponse response,
 			@RequestParam(value = "applyId", required = false) Long applyId,
-			@RequestParam(value = "proList", required = false) String productType,
-			@RequestParam(value = "workTypes", required = false) Integer workType,
-			
+			@RequestParam(value = "proList", required = false) String[] productType,
+			@RequestParam(value = "workTypes", required = false) Integer[] workType,
+
 			Model model) {
-		
+
 		WorkDealInfoType workDealInfoType = new WorkDealInfoType();
-		List<Office> offsList = officeService.getOfficeByType(
-				UserUtils.getUser(), 1);
+		List<Office> offsList = officeService.getOfficeByType(UserUtils.getUser(), 1);
 		for (int i = 0; i < offsList.size();) {
 			Office office = offsList.get(i);
 			if (office.getType().equals("2")) {
@@ -112,72 +105,70 @@ public class CertificateSettlementStatisticsController extends BaseController {
 		model.addAttribute("configAppList", configAppList);
 		model.addAttribute("proList", ProductType.getProductTypeAutoTask());
 
-		String product = "";
-		if (productType != null && !"-1".equals(productType.toString())) {
-			product = ProductType.getProductTypeName(Integer
-					.parseInt(productType));
+		String[] product = new String[] { "0" };
+		if (productType != null && productType.length > 0) {
+			product = new String[productType.length];
+			for (int i = 0; i < productType.length; i++) {
+				product[i] = ProductType.getProductTypeName(Integer.parseInt(productType[i]));
+			}
 		}
 		// 如果应用为空并且产品为空，则显示全部应用全部产品
-		if (applyId == null
-				&& (productType == null || "-1".equals(productType.toString()))) {
+		if (applyId == null && (productType == null || productType.length ==0)) {
 			String yingyong = "全部应用全部产品";
 			model.addAttribute("yingyong", yingyong);
 		}
 		// 如果应用不为空，产品也不为空，则显示XX应用XX产品
-		if (applyId != null
-				&& (productType == null || !"-1".equals(productType.toString()))) {
+		if (applyId != null && (productType == null || !"-1".equals(productType.toString()))) {
 			ConfigApp appName = configAppService.get(applyId);// 获取应用名称
 			model.addAttribute("applyId", appName.getId());
 			String yingyong = appName.getAppName() + "应用" + product + "产品";
 			model.addAttribute("yingyong", yingyong);
 		}
 		// 如果应用不为空，产品为空 则显示 XX应用全部产品
-		if (applyId != null
-				&& (productType == null || "-1".equals(productType.toString()))) {
+		if (applyId != null && (productType == null || "-1".equals(productType.toString()))) {
 			ConfigApp appName = configAppService.get(applyId);// 获取应用名称
 			model.addAttribute("applyId", appName.getId());
 			String yingyong = appName.getAppName() + "全部产品";
 			model.addAttribute("yingyong", yingyong);
 		}
 		// 如果应用为空，产品不为空，则显示全部应用XX产品
-		if (applyId == null
-				&& (productType != null && !"-1".equals(productType.toString()))) {
+		if (applyId == null && (productType != null && !"-1".equals(productType.toString()))) {
 			String yingyong = "全部应用" + product + "产品";
 			model.addAttribute("yingyong", yingyong);
 		}
 		model.addAttribute("proType", ProductType.productTypeStrMap);
 		model.addAttribute("wdiType", WorkDealInfoType.WorkDealInfoTypeMap);
 		model.addAttribute("workTypes", workDealInfoType.getProductTypeListNew());
-		model.addAttribute("workType", workDealInfo.getDealInfoStatus());
+		// model.addAttribute("workType", workDealInfo.getDealInfoStatus());
 		model.addAttribute("productId", productType);
 		model.addAttribute("offsList", offsList);
 		model.addAttribute("areaId", areaId);
-		model.addAttribute("startDate", startDate);
-		model.addAttribute("endDate", endDate);
+	
 		model.addAttribute("officeId", officeId);
 
-		if (startDate == null && endDate == null) {
+		if (startTime == null && endTime == null) {
+			model.addAttribute("startTime", DateUtils.firstDayOfMonth(new Date()));
+			model.addAttribute("endTime", new Date());
 			return "modules/settle/certificateSettlementStatisticsList";
+		}else{
+			model.addAttribute("startTime", startTime);
+			model.addAttribute("endTime", endTime);
 		}
 		Office office = officeService.get(officeId);
-		List<String> monthList = getMonthList(startDate, endDate);
-		model.addAttribute("monthList", getMoList(startDate, endDate));
+		List<String> monthList = getMonthList(startTime, endTime);
+		model.addAttribute("monthList", getMoList(startTime, endTime));
 		List<StaticCertDateMonth> sumList = new ArrayList<StaticCertDateMonth>();
 
 		// 如果应用不为空，产品为空则根据应用+查询条件查询
 		// 判断这个应用是否属于这个网点
 		List<ConfigApp> configApps = null;
-		if (applyId != null
-				&& "-1".equals(productType.toString())
-				|| (applyId != null && (productType == null || !"-1"
-						.equals(productType.toString())))) {
+		if (applyId != null && "-1".equals(productType.toString())
+				|| (applyId != null && (productType == null || !"-1".equals(productType.toString())))) {
 			configApps = configAppService.findById(applyId);
 		}
 		// 如果应用和产品都为空，则查询所有
-		if (applyId == null
-				&& (productType == null || "-1".equals(productType.toString()))
-				|| (applyId == null && (productType == null || !"-1"
-						.equals(productType.toString())))) {
+		if (applyId == null && (productType == null || "-1".equals(productType.toString()))
+				|| (applyId == null && (productType == null || !"-1".equals(productType.toString())))) {
 			configApps = configAppService.selectAll();
 		}
 
@@ -209,8 +200,7 @@ public class CertificateSettlementStatisticsController extends BaseController {
 					// statisticCertDataService.getSum(configApp, office, start,
 					// end, 0);
 					List<CertificateSettlementStatistics> zList = certificateSettlementStatisticsService
-							.getSum1(configApp, Integer.parseInt(productType),
-									office, start, end, 0);
+							.getSum1(configApp, Integer.parseInt(productType[0]), office, start, end, 0);
 					for (CertificateSettlementStatistics CertificateSettlementStatistics2 : zList) {
 						oneAdd1 += CertificateSettlementStatistics2.getAdd1();
 						oneAdd2 += CertificateSettlementStatistics2.getAdd2();
@@ -242,8 +232,7 @@ public class CertificateSettlementStatisticsController extends BaseController {
 					// statisticCertDataService.getSum(configApp, office, start,
 					// end, 2);
 					List<CertificateSettlementStatistics> hList = certificateSettlementStatisticsService
-							.getSum1(configApp, Integer.parseInt(productType),
-									office, start, end, 2);
+							.getSum1(configApp, Integer.parseInt(productType[0]), office, start, end, 2);
 					for (CertificateSettlementStatistics scd : hList) {
 						twoAdd1 += scd.getAdd1();
 						twoAdd2 += scd.getAdd2();
@@ -275,8 +264,7 @@ public class CertificateSettlementStatisticsController extends BaseController {
 					// statisticCertDataService.getSum(configApp, office, start,
 					// end, 1);
 					List<CertificateSettlementStatistics> zfList = certificateSettlementStatisticsService
-							.getSum1(configApp, Integer.parseInt(productType),
-									office, start, end, 1);
+							.getSum1(configApp, Integer.parseInt(productType[0]), office, start, end, 1);
 					for (CertificateSettlementStatistics scd1 : zfList) {
 						fourAdd1 += scd1.getAdd1();
 						fourAdd2 += scd1.getAdd2();
@@ -308,44 +296,45 @@ public class CertificateSettlementStatisticsController extends BaseController {
 		for (int i = 0; i < sumList.size(); i++) {
 			int totalLocation = 0;
 			for (int j = 0; j < sumList.get(i).getCertMonths().size(); j++) {
-				 StaticCertMonth certMonth = sumList.get(i).getCertMonths().get(j);
-				 
-				 Integer totaladd = certMonth.getOneAdd1()+certMonth.getOneAdd2()+certMonth.getOneAdd4()+certMonth.getOneAdd5()
-						 +certMonth.getTwoAdd1()+certMonth.getTwoAdd2()+certMonth.getTwoAdd4()+certMonth.getTwoAdd5()
-						 +certMonth.getFourAdd1()+certMonth.getFourAdd2()+certMonth.getFourAdd4()+certMonth.getFourAdd4();
-		
-				 if (totalListNum.size()>totalLocation) {
-					 totalListNum.set(totalLocation, totalListNum.get(totalLocation)+totaladd);
-					 
-				 }else{
-					 totalListNum.add(totalLocation,totaladd);
-				 }
-				 totalLocation++;
-				 
-				 Integer totalupdate = certMonth.getOneRenew1()+certMonth.getOneRenew2()+certMonth.getOneRenew4()+certMonth.getOneRenew5()
-						 +certMonth.getTwoRenew1()+certMonth.getTwoRenew2()+certMonth.getTwoRenew4()+certMonth.getTwoRenew5()
-						 +certMonth.getFourRenew1()+certMonth.getFourRenew2()+certMonth.getFourRenew4()+certMonth.getFourRenew5();
-			
-				 if (totalListNum.size()>totalLocation) {
-					 totalListNum.set(totalLocation, totalListNum.get(totalLocation)+totalupdate);
-				 }else{
-					 totalListNum.add(totalLocation, totalupdate);
-				 }				
-				 totalLocation++;
+				StaticCertMonth certMonth = sumList.get(i).getCertMonths().get(j);
+
+				Integer totaladd = certMonth.getOneAdd1() + certMonth.getOneAdd2() + certMonth.getOneAdd4()
+						+ certMonth.getOneAdd5() + certMonth.getTwoAdd1() + certMonth.getTwoAdd2()
+						+ certMonth.getTwoAdd4() + certMonth.getTwoAdd5() + certMonth.getFourAdd1()
+						+ certMonth.getFourAdd2() + certMonth.getFourAdd4() + certMonth.getFourAdd4();
+
+				if (totalListNum.size() > totalLocation) {
+					totalListNum.set(totalLocation, totalListNum.get(totalLocation) + totaladd);
+
+				} else {
+					totalListNum.add(totalLocation, totaladd);
+				}
+				totalLocation++;
+
+				Integer totalupdate = certMonth.getOneRenew1() + certMonth.getOneRenew2() + certMonth.getOneRenew4()
+						+ certMonth.getOneRenew5() + certMonth.getTwoRenew1() + certMonth.getTwoRenew2()
+						+ certMonth.getTwoRenew4() + certMonth.getTwoRenew5() + certMonth.getFourRenew1()
+						+ certMonth.getFourRenew2() + certMonth.getFourRenew4() + certMonth.getFourRenew5();
+
+				if (totalListNum.size() > totalLocation) {
+					totalListNum.set(totalLocation, totalListNum.get(totalLocation) + totalupdate);
+				} else {
+					totalListNum.add(totalLocation, totalupdate);
+				}
+				totalLocation++;
 			}
 		}
 		model.addAttribute("totalListNum", totalListNum);
 		return "modules/settle/certificateSettlementStatisticsList";
 	}
-	
-	public List<String> getMonthList(String beginTime, String endTime) {
+
+	public List<String> getMonthList(Date begin, Date end) {
 		List<String> monthList = new ArrayList<String>();
 		SimpleDateFormat monthFormat = new SimpleDateFormat("yyyy-MM-dd");
 		try {
-			Date begin = monthFormat.parse(beginTime);
-			Date end = monthFormat.parse(endTime);
-			int months = (end.getYear() - begin.getYear()) * 12
-					+ (end.getMonth() - begin.getMonth());
+//			Date begin = monthFormat.parse(beginTime);
+//			Date end = monthFormat.parse(endTime);
+			int months = (end.getYear() - begin.getYear()) * 12 + (end.getMonth() - begin.getMonth());
 			Calendar calen = Calendar.getInstance();
 			calen.setTime(end);
 			calen.add(Calendar.DATE, 1);
@@ -354,7 +343,7 @@ public class CertificateSettlementStatisticsController extends BaseController {
 				calendar.setTime(begin);
 				calendar.add(Calendar.MONTH, i);
 				if (i == 0) {
-					monthList.add(beginTime);
+					monthList.add(monthFormat.format(begin));
 				} else {
 					calendar.set(Calendar.DAY_OF_MONTH, 1);
 					monthList.add(monthFormat.format(calendar.getTime()));
@@ -370,14 +359,13 @@ public class CertificateSettlementStatisticsController extends BaseController {
 		return monthList;
 	}
 
-	public List<String> getMoList(String beginTime, String endTime) {
+	public List<String> getMoList(Date begin, Date end) {
 		List<String> monthList = new ArrayList<String>();
 		SimpleDateFormat monthFormat = new SimpleDateFormat("yyyy-MM");
 		try {
-			Date begin = monthFormat.parse(beginTime);
-			Date end = monthFormat.parse(endTime);
-			int months = (end.getYear() - begin.getYear()) * 12
-					+ (end.getMonth() - begin.getMonth());
+//			Date begin = monthFormat.parse(beginTime);
+//			Date end = monthFormat.parse(endTime);
+			int months = (end.getYear() - begin.getYear()) * 12 + (end.getMonth() - begin.getMonth());
 			for (int i = 0; i <= months; i++) {
 				Calendar calendar = Calendar.getInstance();
 				calendar.setTime(begin);
@@ -391,26 +379,27 @@ public class CertificateSettlementStatisticsController extends BaseController {
 
 		return monthList;
 	}
-	
-	
 
 	@RequiresPermissions("settle:certificateSettlementStatistics:edit")
 	@RequestMapping(value = "save")
-	public String save(CertificateSettlementStatistics certificateSettlementStatistics, Model model, RedirectAttributes redirectAttributes) {
-		/*if (!beanValidator(model, certificateSettlementStatistics)){
-			return form(certificateSettlementStatistics, model);
-		}*/
+	public String save(CertificateSettlementStatistics certificateSettlementStatistics, Model model,
+			RedirectAttributes redirectAttributes) {
+		/*
+		 * if (!beanValidator(model, certificateSettlementStatistics)){ return
+		 * form(certificateSettlementStatistics, model); }
+		 */
 		certificateSettlementStatisticsService.save(certificateSettlementStatistics);
-		//addMessage(redirectAttributes, "保存证书结算统计表'" + certificateSettlementStatistics.getName() + "'成功");
-		return "redirect:"+Global.getAdminPath()+"/modules/settle/certificateSettlementStatistics/?repage";
+		// addMessage(redirectAttributes, "保存证书结算统计表'" +
+		// certificateSettlementStatistics.getName() + "'成功");
+		return "redirect:" + Global.getAdminPath() + "/modules/settle/certificateSettlementStatistics/?repage";
 	}
-	
+
 	@RequiresPermissions("settle:certificateSettlementStatistics:edit")
 	@RequestMapping(value = "delete")
 	public String delete(Long id, RedirectAttributes redirectAttributes) {
 		certificateSettlementStatisticsService.delete(id);
 		addMessage(redirectAttributes, "删除证书结算统计表成功");
-		return "redirect:"+Global.getAdminPath()+"/modules/settle/certificateSettlementStatistics/?repage";
+		return "redirect:" + Global.getAdminPath() + "/modules/settle/certificateSettlementStatistics/?repage";
 	}
 
 }

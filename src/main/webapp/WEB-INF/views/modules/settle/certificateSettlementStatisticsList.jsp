@@ -80,7 +80,7 @@
 			</select>
 		<label>产品名称 ：</label>
 	 <c:forEach items="${proList }" var="pro">
-				<input type="checkbox" name="proList" value="${pro.name}">${pro.name}
+				<input type="checkbox" name="proList" value="${pro.id}">${pro.name}
 			</c:forEach>
 		</div>
 		 
@@ -116,7 +116,8 @@
 		 <div>
 		<label>业务类型：</label> 
 				<c:forEach items="${workTypes}" var="type">
-					<input type="checkbox" name="workTypes" value="${type.name}">${type.name}
+					<input type="checkbox" name="workTypes" value="${type.id}">					
+					${type.name}
 				</c:forEach>
 		</div>
 			<div style="margin-top: 8px">
@@ -124,14 +125,14 @@
 		<input id="startTime" name="startDate" type="text" readonly="readonly"
 			maxlength="20" class="Wdate required"
 			onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"
-			value="${startDate}"/>&nbsp;-&nbsp;
+			value="<fmt:formatDate value="${startTime}" pattern="yyyy-MM-dd"/>"/>&nbsp;-&nbsp;
 				<input id="endTime" name="endDate" type="text" readonly="readonly"
 			maxlength="20" class="Wdate required"
 			onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false,minDate:'#F{$dp.$D(\'startTime\')}'});"
-			value="${endDate}" />
+			value="<fmt:formatDate value="${endTime}" pattern="yyyy-MM-dd"/>" />
 			<label>支持模式：</label>
-			<input type="checkbox" name="tongyong" value=""/>通用
-			<input type="checkbox" name="zhuanyong" value="">专用
+			<input type="checkbox" name="tongyong" value="0"/>通用
+			<input type="checkbox" name="zhuanyong" value="1">专用
 		&nbsp;&nbsp;
 			
 		<input id="btnSubmit" class="btn btn-primary" onclick="return onSubmit();" type="submit" value="查询"/>
