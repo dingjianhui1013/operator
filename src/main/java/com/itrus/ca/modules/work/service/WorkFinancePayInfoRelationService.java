@@ -96,6 +96,25 @@ public class WorkFinancePayInfoRelationService extends BaseService {
 		dc.addOrder(Order.desc("id"));
 		return workFinancePayInfoRelationDao.find(page, dc);
 	}
+	public List<WorkFinancePayInfoRelation> findByFinance(
+			 Long idd) {
+		
+		DetachedCriteria dc = workFinancePayInfoRelationDao.createDetachedCriteria();
+		dc.createAlias("financePaymentInfo", "financePaymentInfo");
+		dc.createAlias("workPayInfo", "workPayInfo");
+		
+		dc.add(Restrictions.eq("financePaymentInfo.id", idd));
+//		if(startTime!=null)
+//		{
+//			dc.add(Restrictions.ge("workPayInfo.createDate", startTime));
+//		}
+//		if(endTime!=null)
+//		{
+//			dc.add(Restrictions.le("workPayInfo.createDate", endTime));
+//		}
+		dc.addOrder(Order.desc("id"));
+		return workFinancePayInfoRelationDao.find(dc);
+	}
 	
 	public List<WorkFinancePayInfoRelation> findByFinancePay(
 			 Long financeInfo,Long payInfo) {
