@@ -97,7 +97,46 @@ public class FinancePaymentInfoService extends BaseService {
 		dc.addOrder(Order.desc("id"));
 		return financePaymentInfoDao.find(page, dc);
 	}
-	
+	public Page<FinancePaymentInfo> findAdjustment(Page<FinancePaymentInfo> page, FinancePaymentInfo financePaymentInfo, Date startTime, Date endTime) {
+		DetachedCriteria dc = financePaymentInfoDao.createDetachedCriteria();
+		dc.createAlias("createBy", "createBy");
+		dc.createAlias("createBy.office", "office");
+		dc.add(dataScopeFilter(UserUtils.getUser(),"office", "createBy"));
+		if (financePaymentInfo.getCompany()!=null) {
+			if (StringUtils.isNotEmpty(financePaymentInfo.getCompany())){
+				dc.add(Restrictions.like("company", "%"+EscapeUtil.escapeLike(financePaymentInfo.getCompany())+"%"));
+			}
+		}
+		if (StringUtils.isNotEmpty(financePaymentInfo.getCommUserName())) {
+			dc.add(Restrictions.like("commUserName", "%"+EscapeUtil.escapeLike(financePaymentInfo.getCommUserName())+"%"));
+		}
+		if (startTime!=null&&endTime!=null) {
+			dc.add(Restrictions.ge("payDate", startTime));
+			dc.add(Restrictions.le("payDate", endTime));
+		}
+		dc.add(Restrictions.not(Restrictions.eq("quitMoneyStatus", 1)));
+		dc.add(Restrictions.eq(FinancePaymentInfo.DEL_FLAG, FinancePaymentInfo.DEL_FLAG_NORMAL));
+		dc.addOrder(Order.desc("id"));
+		return financePaymentInfoDao.find(page, dc);
+	}
+	public List<FinancePaymentInfo> findAdjustment(FinancePaymentInfo financePaymentInfo) {
+		DetachedCriteria dc = financePaymentInfoDao.createDetachedCriteria();
+		dc.createAlias("createBy", "createBy");
+		dc.createAlias("createBy.office", "office");
+		dc.add(dataScopeFilter(UserUtils.getUser(),"office", "createBy"));
+		if (financePaymentInfo.getCompany()!=null) {
+			if (StringUtils.isNotEmpty(financePaymentInfo.getCompany())){
+				dc.add(Restrictions.like("company", "%"+EscapeUtil.escapeLike(financePaymentInfo.getCompany())+"%"));
+			}
+		}
+		if (StringUtils.isNotEmpty(financePaymentInfo.getCommUserName())) {
+			dc.add(Restrictions.like("commUserName", "%"+EscapeUtil.escapeLike(financePaymentInfo.getCommUserName())+"%"));
+		}
+		dc.add(Restrictions.not(Restrictions.eq("quitMoneyStatus", 1)));
+		dc.add(Restrictions.eq(FinancePaymentInfo.DEL_FLAG, FinancePaymentInfo.DEL_FLAG_NORMAL));
+		dc.addOrder(Order.desc("id"));
+		return financePaymentInfoDao.find(dc);
+	}
 	public Page<FinancePaymentInfo> find1(Page<FinancePaymentInfo> page, FinancePaymentInfo financePaymentInfo, Date startTime, Date endTime, List<Long> ids) {
 		DetachedCriteria dc = financePaymentInfoDao.createDetachedCriteria();
 		dc.createAlias("createBy", "createBy");
