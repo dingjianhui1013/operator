@@ -558,6 +558,7 @@ public class WorkDealInfoAuditController extends BaseController {
 
 		model.addAttribute("fpir", list);
 		model.addAttribute("infos", payInfos);
+		model.addAttribute("signSerialNumber", workDealInfo.getWorkCertInfo().getSerialnumber().toLowerCase());
 		return "modules/work/workDealInfoAuditBack";
 	}
 

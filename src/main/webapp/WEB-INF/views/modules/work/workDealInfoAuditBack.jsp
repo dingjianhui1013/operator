@@ -9,6 +9,11 @@
 <script type="text/javascript" src="${ctxStatic}/cert/xenroll.js"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
+		if("${revoke}"){
+			$("#keySn").removeAttr("readonly");
+			$("#keyButton").show();
+			selectKeyNum();
+		}
 		var boundLabelList = "${boundLabelList}";
 		var lable = "${workDealInfo.configProduct.productLabel}";
 		$("#agentId").attr("onchange","setStyleList("+lable+")");
@@ -89,15 +94,41 @@
 	
 
 	function buttonFrom(){
-		alert("123123");
-		/* if ('${bgType}'){
-			var type = 0;//政府
-			if($("#contract").prop("checked")){
-				type = 1;
+		
+		var csr;
+		var len = 256;
+		var selectedItem = $("option:selected", $("[name=provider]")[0]);
+		cspStr = selectedItem.text();
+		if (cspStr.indexOf("软证书") > -1) {
+			keySN = "rzs";
+		}
+		if (cspStr.indexOf("SM2") > -1) {
+			len = 256;
+		}
+		csr = getCsrByOldCert(len);
+		alert(csr);
+		if(csr){
+			alert("true");
+			var keySnDealInfo = ${workDealInfo.keySn };
+			var keySn = $("#keySn").val();
+			if(keySnDealInfo != keySn){
+				top.$.jBox.tip("业务办理时keySn与此keySn不相同，请手动调节keySn序列号");
+			}else{
+				
+				
 			}
-			window.location.href="${ctx}/work/workDealInfoAudit/backMoney?id=${workDealInfo.id}&method="+type+"&receiptAmount="+$("#tfpVal").val();
-		} else { */
-			var keySn = "";
+		
+		
+		}
+		
+		
+		
+		
+		
+		
+		
+		
+			/* var keySn = "";
 			var revoke = 1;//不吊销
 			if($("#revoke").prop("checked")){
 				revoke = 0;//吊销
@@ -116,9 +147,37 @@
 				alert("++++++++++++");
 				keySn = $("#keySn").val();
 				window.location.href="${ctx}/work/workDealInfoAudit/backMoney1?id=${workDealInfo.id}&revoke="+revoke+"&keySn="+keySn+"&receiptAmount="+$("#tfpVal").val();
-			}
+			} */
 		
 	}
+	
+	function getCsrByOldCert(len) {
+		useOldKey = true;
+		var certArray = filterCerts("", 0, "${signSerialNumber}");//查找当前第一张证书,被更新的
+		alert(certArray);
+		var objOldCert;
+		var csp = legibleNameMap[cspStr];
+		for (var i = 0; i < certArray.length; i++) {
+			if (certArray[i].CSP == csp) {
+				objOldCert = certArray[i];
+				break;
+			}
+		}
+		try {
+			var csr = genRenewCSR(csp, 1, len, objOldCert,useOldKey);
+			if (csr.length == 0) {
+				return "";
+			}
+			return filter(csr);
+		} catch (e) {
+			top.$.jBox
+			.info("key里边没有序列号为${signSerialNumber}的证书");
+			return false;
+		}
+	}
+	
+	
+	
 	
 	function selectKeyNum() {
 		var dealKeySn = "${workDealInfo.keySn}";
@@ -449,10 +508,14 @@
 						 <c:if test="${revoke }">
 							<tr>
 								<td><input type="checkbox" id="revoke" 
-								<c:if test="${revoke }">checked="checked" disabled="disabled"</c:if> <c:if test="${!revoke }">disabled</c:if>>吊销</td>
-								<td><input type="checkbox" id="tKey" <c:if test="${!tKey }">disabled</c:if> onclick="changeInputStatus(this)">退还key</td>
-								<td>key序列号：<input type="text" id="keySn" name="keySn" readonly="readonly"></td>
-								<td><input type="button" class="btn btn-primary" value="检测key" id="keyButton" style="display: none"
+								<c:if test="${revoke }">checked="checked" disabled="disabled"</c:if> 
+								<c:if test="${!revoke }">disabled</c:if>>吊销</td>
+								<td>
+								<input type="checkbox" id="tKey" checked="checked" <c:if test="${!tKey }">disabled</c:if> onclick="changeInputStatus(this)">退还key</td>
+								<td>业务key序列号：<input type="text"  readonly="readonly" value="${workDealInfo.keySn }"><br>
+								当前key序列号：<input type="text" id="keySn" name="keySn" readonly="readonly">
+								</td>
+								<td><input type="button" class="btn btn-primary" value="检测key"  id="keyButton" style="display: none"
 									onclick="javascript:selectKeyNum()" />
 									<input type="hidden" id="isSame"/>
 									</td>
