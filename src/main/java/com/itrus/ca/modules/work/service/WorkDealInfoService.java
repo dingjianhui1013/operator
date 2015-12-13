@@ -678,7 +678,7 @@ public class WorkDealInfoService extends BaseService {
 		//i信和非i信都统计
 //		dc.add(Restrictions.isNull("isIxin"));  
 //		更新和更新之前的新增都要统计，因为更新把新增的业务链给标志delete了，所以去掉这个约束条件，统一由 WorkDealInfoStatus.STATUS_CERT_OBTAINED来判断
-//		dc.add(Restrictions.eq(WorkDealInfo.DEL_FLAG, WorkDealInfo.DEL_FLAG_NORMAL));
+		dc.add(Restrictions.in(WorkDealInfo.DEL_FLAG, new String[]{ WorkDealInfo.DEL_FLAG_NORMAL,WorkDealInfo.DEL_FLAG_DELETE}));
 		dc.addOrder(Order.desc("createDate"));
 		return workDealInfoDao.find(page, dc);
 	}
@@ -706,7 +706,7 @@ public class WorkDealInfoService extends BaseService {
 		//i信和非i信都统计
 //		dc.add(Restrictions.isNotNull("isIxin"));
 		//更新和更新之前的新增都要统计，因为更新把新增的业务链给标志delete了，所以去掉这个约束条件，统一由 WorkDealInfoStatus.STATUS_CERT_OBTAINED来判断
-//		dc.add(Restrictions.eq(WorkDealInfo.DEL_FLAG, WorkDealInfo.DEL_FLAG_NORMAL));
+		dc.add(Restrictions.in(WorkDealInfo.DEL_FLAG, new String[]{ WorkDealInfo.DEL_FLAG_NORMAL,WorkDealInfo.DEL_FLAG_DELETE}));
 		dc.addOrder(Order.desc("createDate"));
 		return workDealInfoDao.find(dc);
 	}
