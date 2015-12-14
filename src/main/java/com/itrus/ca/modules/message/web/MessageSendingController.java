@@ -226,24 +226,28 @@ public class MessageSendingController extends BaseController {
 			orange.put("date", new Date());
 			String content = VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, messageName, "UTF-8", orange);
 			System.out.println(content);
-			int messId=(int) System.currentTimeMillis();
+			long mess= System.currentTimeMillis();
+			String messId=""+mess;
+			System.out.println(messId);
 			Date smsSendDate=new Date();
 			//SmsService smsService=new SmsService();
 			String returnStatus=null;
 			if(phone!=null){
-				 returnStatus= smsService.sendSms( "messId",  phone, content);
+				 returnStatus= smsService.sendSms( messId,  phone, content);
 			}
 			MessageSending messageSending=new MessageSending();
-			messageSending.setMessId("messId");
+			messageSending.setMessId(messId);
+			messageSending.setpId(4);
 			messageSending.setPhone(phone);
 			messageSending.setMessageContext(content);
 			messageSending.setSmsSendDate(smsSendDate);
 			messageSending.setReturnStatus(returnStatus);
+			messageSending.setWorkDealInfo(dealInfo);
 			
 			messageSendingService.save(messageSending);
 			
 		}
-		return"redirect:" + Global.getAdminPath() + "/modules/message/messageSending/?repage";
+		return "modules/message/messageSendingList";
 	}
 
 	@RequiresPermissions("message:messageSending:edit")
