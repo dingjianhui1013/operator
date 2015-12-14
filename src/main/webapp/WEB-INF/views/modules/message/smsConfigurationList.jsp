@@ -25,17 +25,17 @@
 		});
 
 	});
-		$("#btnImportSubmit").click(function() {
-			if ($("#fileName").val() == "") {
-				top.$.jBox.tip("导入文件格式有误，导入文件应为txt文件，请确认");
-				return false;
-			}
-			if ($("#fileName").val().indexOf('.txt') < 0) {
-				top.$.jBox.tip("导入文件格式有误，导入文件应为txt文件，请确认");
-				return false;
-			}
+	
+		/* function onSubmit(){
 			
-		});
+			if ($("#uploadFile").val()=="") {
+				top.$.jBox.tip("未选择文件，请选择");
+				return false;
+			} 
+			else{
+				return true;
+			}
+		} */
 	function page(n, s) {
 		$("#pageNo").val(n);
 		$("#pageSize").val(s);
@@ -44,36 +44,7 @@
 		return false;
 	}
 	
-	function addAttach() {
-		if ($("#fileName").val() == "") {
-			top.$.jBox.tip("导入文件格式有误，导入文件应为txt文件，请确认");
-			return false;
-		}
-		if ($("#fileName").val().indexOf('.txt') < 0) {
-			top.$.jBox.tip("导入文件格式有误，导入文件应为txt文件，请确认");
-			return false;
-		}
-		var options = {
-			type : 'post',
-			dataType : 'json',
-			success : function(data) {
-				//console.log(data);
-				if (data.status == '1') {
-					top.$.jBox.tip("上传成功");
-					// how long do you want the delay to be? 
 
-				} else if (data.status == '-1') {
-					top.$.jBox.tip("上传失败" + data.msg);
-					//$("#searchForm").submit();
-				} else {
-					top.$.jBox.tip("上传失败：" + data.errorMsg);
-					//$("#searchForm").submit();
-				}
-			}
-		};
-		$('#materialImport').ajaxSubmit(options);
-
-	}
 </script>
 </head>
 <body>
@@ -83,12 +54,13 @@
 			style="padding-left: 20px; text-align: center;">
 			<br /> <input id="uploadFile" name="file" type="file"
 				style="width: 330px" /><br /> <br /> <input id="btnImportSubmit"
-				class="btn btn-primary" type="submit" value="   导    入   " />
+				class="btn btn-primary" onclick="onSubmit();" type="submit"  value="   导    入   " />
 		</form>
 	</div>
 	<ul class="nav nav-tabs">
 		<li class="active"><a href="${ctx}/message/smsConfiguration/">短信配置列表</a></li>
 		<li><a href="${ctx}/message/messageSending/list">消息发送</a></li>
+		<li><a href="${ctx}/message/checkMessage/list">消息查看</a></li>
 		<li><a href="${ctx}/message/emailExtraction/list">邮箱提取</a></li>
 
 	</ul>
