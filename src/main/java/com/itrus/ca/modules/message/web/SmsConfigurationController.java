@@ -146,7 +146,7 @@ public class SmsConfigurationController extends BaseController {
 		logUtil.saveSysLog("短信模板配置", "删除id为" + id + "短信模板配置成功", null);
 		addMessage(redirectAttributes, "删除短信配置成功");
 		return "redirect:" + Global.getAdminPath() + "/message/smsConfiguration";
-	}
+	}			
 
 	@RequestMapping(value = "import", method = RequestMethod.POST)
 	public String importFile(@RequestParam("file") MultipartFile file, HttpServletRequest request, Model model)
