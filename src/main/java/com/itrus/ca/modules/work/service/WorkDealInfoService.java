@@ -1486,6 +1486,8 @@ public class WorkDealInfoService extends BaseService {
 			dc.createAlias("createBy", "createBy");
 			dc.createAlias("createBy.office", "office");
 			dc.add(Restrictions.isNotNull("workPayInfo"));
+			dc.add(Restrictions.eq("workPayInfo.delFlag", WorkPayInfo.DEL_FLAG_NORMAL));
+			dc.add(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED));
 			// dc.add(Restrictions.eq("workPayInfo.delFlag",
 			// WorkPayInfo.DEL_FLAG_NORMAL));
 			// dc.add(Restrictions.eq("dealInfoStatus",
@@ -1559,6 +1561,8 @@ public class WorkDealInfoService extends BaseService {
 			dc.createAlias("createBy", "createBy");
 			dc.createAlias("createBy.office", "office");
 			dc.add(Restrictions.isNotNull("workPayInfo"));
+			dc.add(Restrictions.eq("workPayInfo.delFlag", WorkPayInfo.DEL_FLAG_NORMAL));
+			dc.add(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED));
 			// dc.add(Restrictions.eq("workPayInfo.delFlag",
 			// WorkPayInfo.DEL_FLAG_NORMAL));
 			// dc.add(Restrictions.eq("dealInfoStatus",
@@ -1632,6 +1636,8 @@ public class WorkDealInfoService extends BaseService {
 			dc.createAlias("createBy", "createBy");
 			dc.createAlias("createBy.office", "office");
 			dc.add(Restrictions.isNotNull("workPayInfo"));
+			dc.add(Restrictions.eq("workPayInfo.delFlag", WorkPayInfo.DEL_FLAG_NORMAL));
+			dc.add(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED));
 			if (startTime != null) {
 				dc.add(Restrictions.ge("workPayInfo.createDate", startTime));
 				dc.add(Restrictions.le("workPayInfo.createDate", endTime));
@@ -1656,16 +1662,18 @@ public class WorkDealInfoService extends BaseService {
 	
 	public List<WorkDealInfo> findByProjectYear(Date startTime,Date endTime,List<Long> dealInfoByAreaIds,
 			Long appId) {
+		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
+		dc.createAlias("workPayInfo", "workPayInfo");
+		dc.add(Restrictions.isNotNull("workPayInfo"));
+		dc.add(Restrictions.eq("workPayInfo.delFlag", WorkPayInfo.DEL_FLAG_NORMAL));
+		dc.add(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED));
 		if(startTime!=null)
 		{
 			endTime.setHours(23);
 			endTime.setMinutes(59);
 			endTime.setSeconds(59);
-			DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
-			dc.createAlias("workPayInfo", "workPayInfo");
 			dc.createAlias("createBy", "createBy");
 			dc.createAlias("createBy.office", "office");
-			dc.add(Restrictions.isNotNull("workPayInfo"));
 			if (startTime != null) {
 				dc.add(Restrictions.ge("workPayInfo.createDate", startTime));
 				dc.add(Restrictions.le("workPayInfo.createDate", endTime));
@@ -1696,6 +1704,8 @@ public class WorkDealInfoService extends BaseService {
 			dc.createAlias("createBy", "createBy");
 			dc.createAlias("createBy.office", "office");
 			dc.add(Restrictions.isNotNull("workPayInfo"));
+			dc.add(Restrictions.eq("workPayInfo.delFlag", WorkPayInfo.DEL_FLAG_NORMAL));
+			dc.add(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED));
 			if (startTime != null) {
 				dc.add(Restrictions.ge("workPayInfo.createDate", startTime));
 				dc.add(Restrictions.le("workPayInfo.createDate", endTime));

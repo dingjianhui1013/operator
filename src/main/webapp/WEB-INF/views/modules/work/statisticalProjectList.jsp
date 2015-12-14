@@ -111,9 +111,12 @@
 		<label>选择网点 ：</label>
 		<select name="office" id="office">
 			<option value="">请选择</option>
-			<c:if test="${offId!=null}">
-				<option value="${offId}" selected="selected">${offName}</option>
-			</c:if>
+			<c:forEach items="${offices}" var="off">
+					<option value="${off.id}"
+						<c:if test="${off.id==officeId}">
+						selected="selected"
+						</c:if>>${off.name}</option>
+				</c:forEach>
 		</select>
 		<div style="margin-top: 9px">
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
