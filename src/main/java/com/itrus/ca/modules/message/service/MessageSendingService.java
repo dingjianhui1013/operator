@@ -3,6 +3,8 @@
  */
 package com.itrus.ca.modules.message.service;
 
+import java.util.Date;
+
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
@@ -46,7 +48,27 @@ public class MessageSendingService extends BaseService {
 		dc.addOrder(Order.desc("id"));
 		return messageSendingDao.find(page, dc);
 	}
-	
+	public Page<MessageSending> find(Page<MessageSending> page, MessageSending messageSending,Long apply,Date StartDate,Date endDate){
+		DetachedCriteria dc = messageSendingDao.createDetachedCriteria();
+		dc.createAlias("workCompany", "workCompany");
+		dc.createAlias("workUser", "workUser");
+		dc.createAlias("configApp", "configApp");
+		if(messageSending.getWorkCompany()!=null&& StringUtils.isNotEmpty(messageSending.getWorkCompany().getCompanyName())){
+			dc.add(Restrictions.like("workCompany.companyName",
+					"%" + messageSending.getWorkCompany().getCompanyName() + "%"));
+		}
+		if (messageSending.getWorkUser() != null && StringUtils.isNotEmpty(messageSending.getWorkUser().getContactName())) {
+			dc.add(Restrictions.like("workUser.contactName", "%" + messageSending.getWorkUser().getContactName() + "%"));
+		}
+		if (apply != null) {
+			dc.add(Restrictions.eq("configApp.id", apply));
+		}
+		if (messageSending.getReturnStatus()!= null && !messageSending.getReturnStatus().equals("")) {
+			dc.add(Restrictions.eq("dealInfoStatus", messageSending.getReturnStatus()));
+		}
+		return messageSendingDao.find(page, dc);
+		
+	}
 	@Transactional(readOnly = false)
 	public void save(MessageSending messageSending) {
 		messageSendingDao.save(messageSending);
