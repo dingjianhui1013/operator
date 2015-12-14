@@ -79,7 +79,7 @@ public class ConfigAppService extends BaseService {
 		}
 		return configAppDao.find(dc);
 	}
-	public List<ConfigApp> findByconfigProjectType(
+	public List<ConfigApp> findByconfigProjectTypes(
 			List<Long> configProjectTypeIds) {
 		DetachedCriteria dc = configAppDao.createDetachedCriteria();
 		dc.add(Restrictions.eq(ConfigApp.DEL_FLAG, ConfigApp.DEL_FLAG_NORMAL));
