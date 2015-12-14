@@ -176,7 +176,7 @@ public class EmailExtractionController extends BaseController {
 					rown.createCell(2).setCellValue("");
 				}
 				if(list.get(i).getWorkCertInfo().getWorkCertApplyInfo().getEmail()!=null){
-					rown.createCell(3).setCellValue(list.get(i).getWorkCertInfo().getWorkCertApplyInfo().getEmail());
+					rown.createCell(3).setCellValue(list.get(i).getWorkCertInfo().getWorkCertApplyInfo().getEmail()+";");
 				}else{
 					rown.createCell(3).setCellValue("");
 				}
@@ -186,7 +186,7 @@ public class EmailExtractionController extends BaseController {
 					rown.createCell(4).setCellValue("");
 				}
 				if(list.get(i).getWorkUser().getContactEmail()!=null){
-					rown.createCell(5).setCellValue(list.get(i).getWorkUser().getContactEmail());
+					rown.createCell(5).setCellValue(list.get(i).getWorkUser().getContactEmail()+";");
 				}else{
 					rown.createCell(5).setCellValue("");
 				}
