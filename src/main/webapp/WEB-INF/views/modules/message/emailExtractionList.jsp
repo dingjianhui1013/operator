@@ -15,18 +15,8 @@
         	return false;
         }
 		function dca() {
-			if ($("#apply").val() == "") {
-				top.$.jBox.tip("请选择项目");
+			
 				
-			} else {
-				if ($("#workType").val() == "") {
-					top.$.jBox.tip("请选择业务类型");
-					
-				} else 
-				 if($('#dealInfoStatus').val()==""){
-					 top.$.jBox.tip("请选择业务状态");
-					 
-				 }else{
 					var apply = $("#apply").val();
 					var workType = $("#workType").val();
 					var wdiStatus = $("#dealInfoStatus").val();
@@ -41,8 +31,8 @@
 							+"companyName="
 							+companyName;
 				}
-			}
-		}
+			
+		
 	</script>
 </head>
 <body>
