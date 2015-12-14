@@ -42,7 +42,7 @@ public class MessageSending extends DataEntity {
 	private SmsConfiguration smsConfiguration;
 	private Date smsSendDate;
 	private String  messId;
-	
+	private int pId;
 	private String phone;
 	private String messageContext;
 	private String returnStatus;//1 ,成功 ；0，失败
@@ -136,12 +136,14 @@ public class MessageSending extends DataEntity {
 		this.smsSendDate = smsSendDate;
 	}
 
-	public String getPid() {
-		return messId;
+	
+
+	public int getpId() {
+		return pId;
 	}
 
-	public void setPid(String messId) {
-		this.messId = messId;
+	public void setpId(int pId) {
+		this.pId = pId;
 	}
 
 	public String getMessId() {
