@@ -1042,6 +1042,7 @@ public class WorkDealInfoService extends BaseService {
 		dc.createAlias("workPayInfo", "workPayInfo");
 		dc.createAlias("workCompany", "workCompany");
 		dc.createAlias("workUser", "workUser");
+		dc.createAlias("createBy", "createBy");
 		dc.createAlias("createBy.office", "office");
 		dc.createAlias("configApp", "configApp");
 		dc.createAlias("configProduct", "configProduct");
@@ -1065,11 +1066,16 @@ public class WorkDealInfoService extends BaseService {
 					"%" + workDealInfo.getWorkUser().getConCertNumber() + "%"));
 		}
 
+
+		if (workDealInfo.getDealInfoStatus()!= null && !workDealInfo.getDealInfoStatus().equals("")) {
+			dc.add(Restrictions.eq("dealInfoStatus", workDealInfo.getDealInfoStatus()));
+		}
+
 		if (office != null) {
 			dc.add(Restrictions.eq("office.id", office));
 		} else if (area != null) {
 
-			dc.add(Restrictions.eq("company.id", area));
+			dc.add(Restrictions.eq("workCompany.id", area));
 		}
 
 		if (apply != null) {
@@ -1079,13 +1085,80 @@ public class WorkDealInfoService extends BaseService {
 		if (workType != null) {
 			dc.add(Restrictions.eq("dealInfoType", workType));
 		}
-
-		dc.add(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED));
+		if (workDealInfo.getStatus() != null) {
+			dc.add(Restrictions.eq("status", workDealInfo.getStatus()));
+		}
+		//dc.add(Restrictions.isNotNull("isIxin"));
+		//dc.add(Restrictions.eq(WorkDealInfo.DEL_FLAG, WorkDealInfo.DEL_FLAG_NORMAL));
+		//dc.add(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED));
 		// ProjectionList projectionList1 = Projections.projectionList();
 		// projectionList1.add(Projections.sqlGroupProjection("dealInfoType",
 		// "dealInfoType", null, null));
 
 		return workDealInfoDao.find(page, dc);
+
+	}
+
+	public List<WorkDealInfo> find14A( WorkDealInfo workDealInfo, Long area, Long office,
+			Long apply,  Integer workType, 	List<WorkCertInfo> certInfoList
+
+	) {
+		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
+		dc.createAlias("workPayInfo", "workPayInfo");
+		dc.createAlias("workCompany", "workCompany");
+		dc.createAlias("workUser", "workUser");
+		dc.createAlias("createBy.office", "office");
+		dc.createAlias("configApp", "configApp");
+		dc.createAlias("configProduct", "configProduct");
+		
+		
+		if (workDealInfo.getWorkCompany() != null
+				&& StringUtils.isNotEmpty(workDealInfo.getWorkCompany().getCompanyName())) {
+			dc.add(Restrictions.like("workCompany.companyName",
+					"%" + workDealInfo.getWorkCompany().getCompanyName() + "%"));
+		}
+		if (workDealInfo.getWorkCompany() != null
+				&& StringUtils.isNotEmpty(workDealInfo.getWorkCompany().getOrganizationNumber())) {
+			dc.add(Restrictions.like("workCompany.organizationNumber",
+					"%" + workDealInfo.getWorkCompany().getOrganizationNumber() + "%"));
+		}
+		if (workDealInfo.getWorkUser() != null && StringUtils.isNotEmpty(workDealInfo.getWorkUser().getContactName())) {
+			dc.add(Restrictions.like("workUser.contactName", "%" + workDealInfo.getWorkUser().getContactName() + "%"));
+		}
+		if (workDealInfo.getWorkUser() != null
+				&& StringUtils.isNotEmpty(workDealInfo.getWorkUser().getConCertNumber())) {
+			dc.add(Restrictions.like("workUser.conCertNumber",
+					"%" + workDealInfo.getWorkUser().getConCertNumber() + "%"));
+		}
+
+		if (workDealInfo.getDealInfoStatus()!= null && !workDealInfo.getDealInfoStatus().equals("")) {
+			dc.add(Restrictions.eq("dealInfoStatus", workDealInfo.getDealInfoStatus()));
+		}
+		if (office != null) {
+			dc.add(Restrictions.eq("office.id", office));
+		} else if (area != null) {
+
+			dc.add(Restrictions.eq("workCompany.id", area));
+		}
+
+		if (apply != null) {
+			dc.add(Restrictions.eq("configApp.id", apply));
+		}
+
+		if (workType != null) {
+			dc.add(Restrictions.eq("dealInfoType", workType));
+		}
+		if (workDealInfo.getStatus() != null) {
+			dc.add(Restrictions.eq("status", workDealInfo.getStatus()));
+		}
+		//dc.add(Restrictions.isNotNull("isIxin"));
+		//dc.add(Restrictions.eq(WorkDealInfo.DEL_FLAG, WorkDealInfo.DEL_FLAG_NORMAL));
+		//dc.add(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED));
+		// ProjectionList projectionList1 = Projections.projectionList();
+		// projectionList1.add(Projections.sqlGroupProjection("dealInfoType",
+		// "dealInfoType", null, null));
+
+		return workDealInfoDao.find(dc);
 
 	}
 
