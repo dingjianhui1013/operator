@@ -19,7 +19,7 @@
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li class="active"><a href="${ctx}/work/workDealInfoFiling/ulist">咨询类用户</a></li>
+		<li class="active"><a href="${ctx}/work/workDealInfoFiling/ulist?distinguish=1">咨询类用户</a></li>
 		<li><a href="${ctx}/work/customer/insertUser">新增用户</a></li>
 	</ul>
 <%-- 	<form:form id="searchForm" modelAttribute="workDealInfo" action="${ctx}/work/workDealInfoFiling/ulist" method="post" class="breadcrumb form-search"> --%>
