@@ -10,11 +10,11 @@
 	cursor: pointer;
 }
 </style>
-<%@include file="/WEB-INF/views/include/dialog.jsp" %>
+<%@include file="/WEB-INF/views/include/dialog.jsp"%>
 <script type="text/javascript">
 	$(document).ready(function() {
 		$("#btnImport").click(function() {
-				
+
 			$.jBox($("#importBox").html(), {
 				title : "导入数据",
 				buttons : {
@@ -25,17 +25,17 @@
 		});
 
 	});
-	
-		/* function onSubmit(){
-			
-			if ($("#uploadFile").val()=="") {
-				top.$.jBox.tip("未选择文件，请选择");
-				return false;
-			} 
-			else{
-				return true;
-			}
-		} */
+
+	function onSubmit() {
+		var file = $("#file").val();
+		alert(file);
+		if ($("#uploadFile").val() == "") {
+			top.$.jBox.tip("未选择文件，请选择");
+			return false;
+		} else {
+			return true;
+		}
+	}
 	function page(n, s) {
 		$("#pageNo").val(n);
 		$("#pageSize").val(s);
@@ -43,8 +43,10 @@
 
 		return false;
 	}
-	
-
+	function cc(){
+		var file=$("#file").val();
+		alert(file);
+	}
 </script>
 </head>
 <body>
@@ -52,11 +54,12 @@
 		<form id="" action="${ctx}/message/smsConfiguration/import"
 			method="post" enctype="multipart/form-data"
 			style="padding-left: 20px; text-align: center;">
-			<br /> <input id="uploadFile" name="file" type="file"
-				style="width: 330px" /><br /> <br /> <input id="btnImportSubmit"
-				class="btn btn-primary" onclick="onSubmit();" type="submit"  value="   导    入   " />
+			<br /> <input id="file" name="file" type="file" style="width: 330px" /><br />
+			<br /> <input id="btnImportSubmit" class="btn btn-primary"
+				onclick="onSubmit();" type="submit" value="   导    入   " />
 		</form>
 	</div>
+		
 	<ul class="nav nav-tabs">
 		<li class="active"><a href="${ctx}/message/smsConfiguration/">短信配置列表</a></li>
 		<li><a href="${ctx}/message/messageSending/list">消息发送</a></li>
@@ -75,8 +78,8 @@
 			class="input-medium" />
 		&nbsp;<input id="btnSubmit" class="btn btn-primary" type="submit"
 			value="查询" />
-			&nbsp;&nbsp;&nbsp;<input id="btnImport" class="btn btn-primary" type="button"
-				value="导入短信模板" />
+			&nbsp;&nbsp;&nbsp;<input id="btnImport" class="btn btn-primary"
+			type="button" value="导入短信模板" />
 
 		</div>
 	</form:form>
@@ -110,5 +113,7 @@
 		</tbody>
 	</table>
 	<div class="pagination">${page}</div>
+	<input id="file" type="file">
+		<input id="tt" onclick="cc();" type="submit" value="haha">
 </body>
 </html>
