@@ -181,8 +181,8 @@
 				</c:forEach>
 			</select>
 		</div>
-
-		<label>选择区域 ：</label>
+	<br>
+		<label>选择区域：</label>
 		<select name="areaId" id="areaId" onchange="addOffice()">
 			<option value="">请选择</option>
 			<c:forEach items="${offsList}" var="off">
@@ -204,7 +204,8 @@
 			</select>
 			</div>
 		<br>
-		<label>短信模板选择：</label> <select name="smsId" id="smsId">
+		<br>
+		<label>短信模板：</label> <select name="smsId" id="smsId">
 				<option value="">请选择</option>
 				<c:forEach items="${smsConfigurationList}" var="sms">
 					<option value="${sms.id}"
@@ -213,8 +214,10 @@
 					</c:if>>${sms.messageName}</option>
 				</c:forEach>
 			</select>
-		&nbsp;<input id="btnSubmit" class="btn btn-primary" type="submit"
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<input id="btnSubmit" class="btn btn-primary" type="submit"
 			value="查询" />
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			<a href="javascript:send()" class="btn btn-primary">发送</a>
 			<input type="hidden"  name="checkIds"  id="checkIds"  value="${checkIds }"/>
 	</form:form>
