@@ -92,13 +92,6 @@
 	<table id="contentTable"
 		class="table table-striped table-bordered table-condensed">
 		<thead>
-			<tr>
-				<th><input type="checkbox" id="checkAll" name="oneDealCheck" value="${page.pageNo}" 
-				<c:forEach items="${ids }" var="id">
-					<c:if test="${id==page.pageNo}"> checked="checked"</c:if>
-				</c:forEach>
-				onchange="checkAll(this)"
-				/> </th>
 			
 				<th>单位名称</th>
 				<th>应用名称</th>
@@ -111,12 +104,7 @@
 		<tbody>
 			<c:forEach items="${page.list}" var="workDealInfo">
 				<tr>
-					<td><input type="checkbox" name="oneDealCheck" value = "${workDealInfo.id}" 
-					<c:forEach items="${ids }" var="id">
-						<c:if test="${id==workDealInfo.id }"> checked="checked"</c:if>
-					</c:forEach>
-					onchange="changeCheck(this)"
-					 /> </td>
+					
 					
 					<td>${workDealInfo.workCompany.companyName}</td>
 					<td>${workDealInfo.configApp.alias}</td>
