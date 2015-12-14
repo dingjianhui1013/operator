@@ -73,6 +73,11 @@ public class SettleKeyService extends BaseService {
 	
 	public Page<SettleKey> find(Page<SettleKey> page, SettleKey settleKey, Long configSupplierId, Long generalId, String keySn,Date startTime,Date endTime,Date startBackTime,Date endBackTime) {
 		DetachedCriteria dc = settleKeyDao.createDetachedCriteria();
+		
+		dc.createAlias("sysUser", "sysUser");
+		dc.createAlias("sysUser.office", "office");
+		dc.add(dataScopeFilter(UserUtils.getUser(), "office", "sysUser"));
+		
 		if (configSupplierId!=null) {
 			dc.add(Restrictions.eq("configSupplier.id", configSupplierId));
 		}
