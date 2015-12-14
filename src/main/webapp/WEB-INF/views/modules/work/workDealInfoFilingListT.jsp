@@ -81,8 +81,8 @@
 		<label>完成状态 ：</label>
 		<form:select path="completeType"  class="input-medium">
 			<form:option value="">请选择状态</form:option>
-			<form:option value="0">未完成</form:option>
-			<form:option value="1">已完成</form:option>
+			<form:option value="1">未完成</form:option>
+			<form:option value="0">已完成</form:option>
 		</form:select>
 		<label>接入方式：</label>
 		<form:select path="access"  class="input-medium">
@@ -132,8 +132,8 @@
 					${workLog.leftoverProblem}
 				</td>
 				<td>
-					<c:if test="${workLog.completeType==1 }"><a href="${ctx}/work/workLog/updateFromK?id=${workLog.id}">编辑</a></c:if> 
-    				<a href="${ctx}/work/workLog/form?id=${workLog.id}">查看</a>
+					<c:if test="${workLog.completeType==1 }"><a href="${ctx}/work/workLog/updateFromFi?id=${workLog.id}">编辑</a></c:if> 
+    				<a href="${ctx}/work/workLog/formFiling?id=${workLog.id}">查看</a>
 				</td>
 			</tr>
 		</c:forEach>

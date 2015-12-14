@@ -249,13 +249,17 @@ public class WorkLogService extends BaseService {
 		{
 			dc.add(Restrictions.eq("distinguish", workLog.getDistinguish()));
 		}
-		if(workLog.getAppName()!=null&&!"".equals(workLog.getAppName()))
-		{
-			dc.add(Restrictions.eq("appName",workLog.getAppName()));
-		}
+//		if(workLog.getAppName()!=null&&!"".equals(workLog.getAppName()))
+//		{
+//			dc.add(Restrictions.eq("appName",workLog.getAppName()));
+//		}
 		if(workLog.getCompleteType()!=null&&!"".equals(workLog.getCompleteType()))
 		{
 			dc.add(Restrictions.eq("completeType",workLog.getCompleteType()));
+		}
+		if(workLog.getConfigApp()!=null)
+		{
+			dc.add(Restrictions.eq("configApp.id",workLog.getConfigApp().getId()));
 		}
 		dc.add(Restrictions.eq("state",1));
 		dc.addOrder(Order.desc("id"));

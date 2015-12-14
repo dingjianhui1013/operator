@@ -76,8 +76,14 @@
 <form:form id="searchForm" modelAttribute="workLog" action="${ctx}/work/workDealInfoFiling/flist?distinguish=2" method="post" class="breadcrumb form-search">
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
 		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
-		<label>应用项目名称 ：</label><form:input path="appName" htmlEscape="false" maxlength="50" class="input-medium"/>
+		<label>应用项目名称 ：</label>
+<%-- 		<form:input path="appName" htmlEscape="false" maxlength="50" class="input-medium"/> --%>
 <%-- 		<label>服务主题 ：</label><form:input path="serTitle" htmlEscape="false" maxlength="50" class="input-medium"/> --%>
+		<select name="configApp.id">
+					<c:forEach items="${configApp}" var="configApp">
+						<option value="${configApp.id}">${configApp.appName}</option>
+					</c:forEach>
+		</select>
 		<label>客服接入 ：</label>
 		<form:select path="access"  class="input-medium">
 			<form:option value="">请选择接入方式</form:option>
@@ -120,7 +126,7 @@
 		<tbody>
 		<c:forEach items="${page.list}" var="workLog">
 			<tr>
-				<td>${workLog.appName}</td>
+				<td>${workLog.configApp.appName}</td>
 				<td>${workLog.access }</td>
 				<td>${workLog.serType }</td>
 				<td>${workLog.ywcz }</td>
@@ -142,7 +148,7 @@
 <%-- 					</c:choose> --%>
 <!-- 				</td> -->
 				<td>
-					<c:if test="${workLog.completeType==1 }"><a href="${ctx}/work/workLog/updateFromK?id=${workLog.id}">编辑</a></c:if> 
+					<c:if test="${workLog.completeType==1 }"><a href="${ctx}/work/workLog/updateFromF?id=${workLog.id}">编辑</a></c:if> 
     				<a href="${ctx}/work/workLog/form?id=${workLog.id}">查看</a>
 				</td>
 			</tr>

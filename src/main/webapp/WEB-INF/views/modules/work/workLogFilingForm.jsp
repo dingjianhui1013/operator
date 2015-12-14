@@ -31,17 +31,17 @@
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li class="active"><a href="${ctx}/work/workLog/form?id=${workLog.id}">工作记录<shiro:hasPermission name="work:workLog:edit">${not empty workLog.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="work:workLog:edit">查看</shiro:lacksPermission></a></li>
+		<li class="active"><a href="${ctx}/work/workLog/form?id=${workLog.id}">咨询记录<shiro:hasPermission name="work:workLog:edit">${not empty workLog.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="work:workLog:edit">查看</shiro:lacksPermission></a></li>
 	</ul><br/>
 	<form name = "customerInsert" id = "inputForm" action ="${ctx}/work/customer/insertCustomer"  class="form-horizontal">
 		<tags:message content="${message}"/>
 		<input type = "hidden" name = "dealInfoId" value = "${workLog.id}"/>
-		<div class="control-group">
-			<label class="control-label">应用项目名称:</label>
-			<div class="controls">
-				${workLog.configApp.appName}
-			</div>
-		</div>
+<!-- 		<div class="control-group"> -->
+<!-- 			<label class="control-label">应用项目名称:</label> -->
+<!-- 			<div class="controls"> -->
+<%-- 				${workLog.appName } --%>
+<!-- 			</div> -->
+<!-- 		</div> -->
 <!-- 		<div class="control-group"> -->
 <!-- 			<label class="control-label">应用名称:</label> -->
 <!-- 			<div class="controls"> -->

@@ -27,6 +27,8 @@ import com.itrus.ca.modules.constant.ProductType;
 import com.itrus.ca.modules.constant.WorkDealInfoStatus;
 import com.itrus.ca.modules.constant.WorkDealInfoType;
 import com.itrus.ca.modules.log.service.LogUtil;
+import com.itrus.ca.modules.profile.entity.ConfigApp;
+import com.itrus.ca.modules.profile.service.ConfigAppService;
 import com.itrus.ca.modules.sys.entity.User;
 import com.itrus.ca.modules.sys.utils.UserUtils;
 import com.itrus.ca.modules.work.entity.WorkCompany;
@@ -69,7 +71,8 @@ public class WorkDealInfoFilingController extends BaseController {
 
 	@Autowired
 	private WorkPayInfoService workPayInfoService;
-
+	@Autowired
+	private ConfigAppService configAppService;
 	private LogUtil logUtil = new LogUtil();
 
 	@ModelAttribute
@@ -201,7 +204,20 @@ public class WorkDealInfoFilingController extends BaseController {
 		Page<WorkLog> page = workLogService.findKfList(new Page<WorkLog>(
 				request, response), workLog);
 		model.addAttribute("page", page);
+		List<ConfigApp> configApp= configAppService.findAllConfigApp();
+		model.addAttribute("configApp", configApp);
 		return "modules/work/workDealInfoFilingListFuzzy";
+	}
+	@RequiresPermissions("work:workDealInfo:view")
+	@RequestMapping(value = { "plist" })
+	public String plist(WorkLog workLog, HttpServletRequest request,
+			HttpServletResponse response, Model model) {
+		Page<WorkLog> page = workLogService.findKfList(new Page<WorkLog>(
+				request, response), workLog);
+		model.addAttribute("page", page);
+		List<ConfigApp> configApp= configAppService.findAllConfigApp();
+		model.addAttribute("configApp", configApp);
+		return "modules/work/workDealInfoFilingListProject";
 	}
 	@RequiresPermissions("work:workDealInfo:view")
 	@RequestMapping(value = "formF")

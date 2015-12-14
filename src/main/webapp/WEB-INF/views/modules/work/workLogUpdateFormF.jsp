@@ -38,22 +38,21 @@
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li class="active"><a href="${ctx}/work/workLog/form?id=${workLog.id}">修改客服记录</a></li>
+		<li class="active"><a href="${ctx}/work/workLog/form?id=${workLog.id}">修改模糊记录</a></li>
 	</ul><br/>
-	<form name = "customerInsert" id = "inputForm" action ="${ctx}/work/workLog/saveK"  class="form-horizontal" method="post">
+	<form name = "customerInsert" id = "inputForm" action ="${ctx}/work/workLog/saveF"  class="form-horizontal" method="post">
 		<tags:message content="${message}"/>
-		<input type = "hidden" name = "dealInfoId" value = "${workLog.workDealInfo.id}"/>
+<%-- 		<input type = "hidden" name = "dealInfoId" value = "${workLog.workDealInfo.id}"/> --%>
 		<input type = "hidden" name = "id" value = "${workLog.id}"/>
-		<div class="control-group">
-			<label class="control-label">单位名称:</label>
-			<div class="controls">
-				${workLog.workCompany.companyName}
-			</div>
-		</div>
 		<div class="control-group">
 			<label class="control-label">应用名称:</label>
 			<div class="controls">
-				${workLog.configApp.appName }
+				<select name="appid">
+					<option value=""> </option>
+						<c:forEach items="${configApp}" var="config">
+							<option value="${config.id}"<c:if test="${config.id==workLog.configApp.id}">selected="selected"</c:if>>${config.appName}</option>
+						</c:forEach>
+				</select>
 			</div>
 		</div>
 		<div class="control-group">
@@ -82,7 +81,6 @@
 				</select>
 			</div>
 		</div>
-		
 		<div class="control-group">
 			<label class="control-label">业务咨询</label>
 			<br>

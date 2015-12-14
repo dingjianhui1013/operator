@@ -48,8 +48,10 @@ public class WorkLog extends DataEntity implements java.io.Serializable {
 	private String ywxt;//业务系统
 	private String ywzx;//业务咨询
 	private String appName;//应用项目名称
-	private String distinguish;//区分添加出 1为工作记录处添加0位咨询处添加2为模糊记录
+	private String distinguish;//区分添加出 1为工作记录处添加0位咨询处添加2为模糊记录3为项目记录
 	private String tel;//联系方式
+	private Long count;//数量
+	private Long versionNumber;//版本号
 	// Constructors
 
 	/** default constructor */
@@ -238,11 +240,11 @@ public class WorkLog extends DataEntity implements java.io.Serializable {
 	public void setYwzx(String ywzx) {
 		this.ywzx = ywzx;
 	}
-
+	@Column(name = "appname")
 	public String getAppName() {
 		return appName;
 	}
-	@Column(name = "appname")
+	
 	public void setAppName(String appName) {
 		this.appName = appName;
 	}
@@ -254,13 +256,30 @@ public class WorkLog extends DataEntity implements java.io.Serializable {
 	public void setDistinguish(String distinguish) {
 		this.distinguish = distinguish;
 	}
-
+	@Column(name = "tel")
 	public String getTel() {
 		return tel;
 	}
-	@Column(name = "tel")
+	
 	public void setTel(String tel) {
 		this.tel = tel;
+	}
+
+	@Column(name = "count")
+	public Long getCount() {
+		return count;
+	}
+
+	public void setCount(Long count) {
+		this.count = count;
+	}
+	@Column(name = "version_number")
+	public Long getVersionNumber() {
+		return versionNumber;
+	}
+
+	public void setVersionNumber(Long versionNumber) {
+		this.versionNumber = versionNumber;
 	}
 	
 	
