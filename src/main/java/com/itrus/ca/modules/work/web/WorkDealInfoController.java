@@ -2999,62 +2999,17 @@ public class WorkDealInfoController extends BaseController {
 		workUserHisService.save(workUserHis);
 		workDealInfo.setWorkUserHis(workUserHis);
 		// 保存申请人信息
-		WorkCertApplyInfo workCertApplyInfo = null;
-		WorkCertInfo workCertInfo = null;
-		if (workDealInfo.getConfigProduct().getProductName().equals("2")
-				|| workDealInfo.getConfigProduct().getProductName().equals("3")) {
-
-			if (workDealInfo.getWorkCertInfo() != null) {
-				workCertApplyInfo = workDealInfo.getWorkCertInfo()
-						.getWorkCertApplyInfo();
-			} else {
-				workCertApplyInfo = new WorkCertApplyInfo();
-			}
-
-			workCertApplyInfo.setName(pName);
-			workCertApplyInfo.setEmail(pEmail);
-			workCertApplyInfo.setIdCard(pIDCard);
-			workCertApplyInfo.setProvince(workCompany.getProvince());
-			workCertApplyInfo.setCity(workCompany.getCity());
-
-			workCertApplyInfoService.save(workCertApplyInfo);
-			// 保存work_cert_info
-			if (workDealInfo.getWorkCertInfo() != null) {
-				workCertInfo = workDealInfo.getWorkCertInfo();
-			} else {
-				workCertInfo = new WorkCertInfo();
-			}
-			workCertInfo.setWorkCertApplyInfo(workCertApplyInfo);
-			workCertInfoService.save(workCertInfo);
-			workDealInfo.setWorkCertInfo(workCertInfo);
-		} else {
-			if (workDealInfo.getWorkCertInfo() != null) {
-				workCertApplyInfo = workDealInfo.getWorkCertInfo()
-						.getWorkCertApplyInfo();
-			} else {
-				workCertApplyInfo = new WorkCertApplyInfo();
-			}
-			workCertApplyInfo.setName(workCompany.getCompanyName());
-			workCertApplyInfo.setEmail(workUser.getContactEmail());
-			workCertApplyInfo.setMobilePhone(workCompany.getCompanyMobile());
-			workCertApplyInfo.setProvince(workCompany.getProvince());
-			workCertApplyInfo.setCity(workCompany.getCity());
-			workCertApplyInfoService.save(workCertApplyInfo);
-			if (workDealInfo.getWorkCertInfo() != null) {
-				workCertInfo = workDealInfo.getWorkCertInfo();
-			} else {
-				workCertInfo = new WorkCertInfo();
-			}
-
-			workCertInfo.setWorkCertApplyInfo(workCertApplyInfo);
-			workCertInfoService.save(workCertInfo);
-			workDealInfo.setWorkCertInfo(workCertInfo);
-		}
-		// List<ConfigAgentOfficeRelation> lis =
-		// configAgentOfficeRelationService.findByOffice(UserUtils.getUser().getOffice());
-		// if (lis.size()>0) {
-		// workDealInfo.setCommercialAgent(lis.get(0).getConfigCommercialAgent());
-		// }
+		WorkCertApplyInfo workCertApplyInfo  = new WorkCertApplyInfo();
+		WorkCertInfo workCertInfo =  new WorkCertInfo();;
+		workCertApplyInfo.setName(pName);
+		workCertApplyInfo.setEmail(pEmail);
+		workCertApplyInfo.setIdCard(pIDCard);
+		workCertApplyInfo.setProvince(workCompany.getProvince());
+		workCertApplyInfo.setCity(workCompany.getCity());
+		workCertApplyInfoService.save(workCertApplyInfo);
+		workCertInfo.setWorkCertApplyInfo(workCertApplyInfo);
+		workCertInfoService.save(workCertInfo);
+		workDealInfo.setWorkCertInfo(workCertInfo);
 		workDealInfoService.save(workDealInfo);
 		// 录入人日志保存
 		WorkLog workLog = new WorkLog();
