@@ -99,7 +99,6 @@
 			var url = "${ctx}/work/workDealInfo/deleteDealInfoIds?dealInfoIds="+checkIds+"&_="+new Date().getTime();
 			$.getJSON(url,function(data){
 				if (data.status==1){
-					
 					top.$.jBox.tip("删除成功！");
 					  setTimeout(function (){
 	            			window.location.href="${ctx}/work/workDealInfo/deleteList";
