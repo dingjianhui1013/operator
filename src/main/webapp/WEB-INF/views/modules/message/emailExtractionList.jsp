@@ -48,8 +48,8 @@
 <body>
 	<ul class="nav nav-tabs">
 		<li><a href="${ctx}/message/smsConfiguration/">短信配置列表</a></li>
-		
 		<li><a href="${ctx}/message/messageSending/list">消息发送</a></li>
+		<li><a href="${ctx}/message/checkMessage/list">消息查看</a></li>
 		<li class="active"><a href="${ctx}/message/emailExtraction/list">邮箱提取列表</a></li>
 	</ul>
 	<form:form id="searchForm" modelAttribute="emailExtraction" action="${ctx}/message/emailExtraction/" method="post" class="breadcrumb form-search">
