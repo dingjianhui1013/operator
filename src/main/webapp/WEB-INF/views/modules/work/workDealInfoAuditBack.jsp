@@ -12,7 +12,8 @@
 	var cspStr;
 	var ukeyadmin = null;
 	$(document).ready(function() {
-		if("${revoke}"){
+		var revoke = '${revoke}';
+		if(revoke=="true"){
 			$("#keySn").removeAttr("readonly");
 			$("#keyButton").show();
 			var urlArray = new Array();
@@ -26,54 +27,55 @@
 				$("#provider").append("<option value='1'>" + idx + "</option>");
 			});
 			
-		}
-		
-		var lable = "${workDealInfo.configProduct.productLabel}";
-		$("#agentId").attr("onchange","setStyleList("+lable+")");
-		var agentHtml="";
-		$.each("${boundLabelList}", function(i, item){
-			 if(item==1){
-				if (item=="${workDealInfo.payType}") {
-					agentHtml+="<option selected='selected' value='"+item+"'>标准</option>";
-				}else{
-					agentHtml+="<option value='"+item+"'>标准</option>";
-				}
-				
-			}else if(item==2){
-				if (item=="${workDealInfo.payType}") {
-					agentHtml+="<option selected='selected' value='"+item+"'>政府统一采购</option>";
-				}else{
-					agentHtml+="<option value='"+item+"'>政府统一采购</option>";
-				}
-			}else if(item==3){
-				if (item=="${workDealInfo.payType}") {
-					agentHtml+="<option selected='selected' value='"+item+"'>合同采购</option>";
-				}else{
-					agentHtml+="<option value='"+item+"'>合同采购</option>";
-				}
-			} 
-		}); 
-		$("#agentId").html(agentHtml);
-		
-		var productName = ${workDealInfo.configProduct.productName}; 
-		var app = ${workDealInfo.configApp.id};
-		
-		var agentId = $("#agentId").val();
-		if (agentId!=0) {
-			var url = "${ctx}/work/workDealInfo/setStyleList?lable="+lable+"&productName="+productName+"&app="+app+"&infoType=1&style="+agentId+"&_="+new Date().getTime();
-			$.getJSON(url,function(data){
-				var styleList = data.array;
-				var styleHtml="";
-				$.each(styleList,function(i,item){
-					if(item.agentId=="${workDealInfo.configChargeAgentId}"){
-						styleHtml +="<option selected='selected'  value='"+item.agentId+"'>" + item.name + "</option>";
-						$("#boundId").val(item.id);
+		}else{
+			var boundLabelList = "${boundLabelList}";
+			var lable = "${workDealInfo.configProduct.productLabel}";
+			$("#agentId").attr("onchange","setStyleList("+lable+")");
+			var agentHtml="";
+			var obj= $.parseJSON(boundLabelList);
+			$.each(obj, function(i, item){
+				 if(item==1){
+					if (item=="${workDealInfo.payType}") {
+						agentHtml+="<option selected='selected' value='"+item+"'>标准</option>";
 					}else{
-						styleHtml +="<option value='"+item.agentId+"'>" + item.name + "</option>";
+						agentHtml+="<option value='"+item+"'>标准</option>";
 					}
+					
+				}else if(item==2){
+					if (item=="${workDealInfo.payType}") {
+						agentHtml+="<option selected='selected' value='"+item+"'>政府统一采购</option>";
+					}else{
+						agentHtml+="<option value='"+item+"'>政府统一采购</option>";
+					}
+				}else if(item==3){
+					if (item=="${workDealInfo.payType}") {
+						agentHtml+="<option selected='selected' value='"+item+"'>合同采购</option>";
+					}else{
+						agentHtml+="<option value='"+item+"'>合同采购</option>";
+					}
+				} 
+			}); 
+			$("#agentId").html(agentHtml);
+			var productName = ${workDealInfo.configProduct.productName}; 
+			var app = ${workDealInfo.configApp.id};
+			
+			var agentId = $("#agentId").val();
+			if (agentId!=0) {
+				var url = "${ctx}/work/workDealInfo/setStyleList?lable="+lable+"&productName="+productName+"&app="+app+"&infoType=1&style="+agentId+"&_="+new Date().getTime();
+				$.getJSON(url,function(data){
+					var styleList = data.array;
+					var styleHtml="";
+					$.each(styleList,function(i,item){
+						if(item.agentId=="${workDealInfo.configChargeAgentId}"){
+							styleHtml +="<option selected='selected'  value='"+item.agentId+"'>" + item.name + "</option>";
+							$("#boundId").val(item.id);
+						}else{
+							styleHtml +="<option value='"+item.agentId+"'>" + item.name + "</option>";
+						}
+					});
+					$("#agentDetailId").html(styleHtml);
 				});
-				$("#agentDetailId").html(styleHtml);
-			});
+			}
 		}
 	});
 	
