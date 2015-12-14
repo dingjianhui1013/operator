@@ -3,6 +3,8 @@
  */
 package com.itrus.ca.modules.message.entity;
 
+import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -37,6 +39,13 @@ public class MessageSending extends DataEntity {
 	private WorkDealInfo workDealInfo;
 	private WorkCompany workCompany;
 	private WorkUser workUser;
+	private SmsConfiguration smsConfiguration;
+	private Date smsSendDate;
+	private String  messId;
+	
+	private String phone;
+	private String messageContext;
+	private String returnStatus;//1 ,成功 ；0，失败
 	public MessageSending() {
 		
 	}
@@ -46,11 +55,23 @@ public class MessageSending extends DataEntity {
 		this.id = id;
 	}
 	
-	public MessageSending(String name, WorkDealInfo workDealInfo, WorkCompany workCompany, WorkUser workUser) {
+	
+
+	
+
+	public MessageSending(String name, WorkDealInfo workDealInfo, WorkCompany workCompany, WorkUser workUser,
+			SmsConfiguration smsConfiguration, Date smsSendDate, String messId, String phone, String messageContext,String returnStatus) {
+		
 		this.name = name;
 		this.workDealInfo = workDealInfo;
 		this.workCompany = workCompany;
 		this.workUser = workUser;
+		this.smsConfiguration = smsConfiguration;
+		this.smsSendDate = smsSendDate;
+		this.messId = messId;
+		this.phone = phone;
+		this.messageContext = messageContext;
+		this.returnStatus=returnStatus;
 	}
 
 	@Id
@@ -97,6 +118,62 @@ public class MessageSending extends DataEntity {
 
 	public void setWorkUser(WorkUser workUser) {
 		this.workUser = workUser;
+	}
+
+	public SmsConfiguration getSmsConfiguration() {
+		return smsConfiguration;
+	}
+
+	public void setSmsConfiguration(SmsConfiguration smsConfiguration) {
+		this.smsConfiguration = smsConfiguration;
+	}
+
+	public Date getSmsSendDate() {
+		return smsSendDate;
+	}
+
+	public void setSmsSendDate(Date smsSendDate) {
+		this.smsSendDate = smsSendDate;
+	}
+
+	public String getPid() {
+		return messId;
+	}
+
+	public void setPid(String messId) {
+		this.messId = messId;
+	}
+
+	public String getMessId() {
+		return messId;
+	}
+
+	public void setMessId(String messId) {
+		this.messId = messId;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public String getMessageContext() {
+		return messageContext;
+	}
+
+	public void setMessageContext(String messageContext) {
+		this.messageContext = messageContext;
+	}
+
+	public String getReturnStatus() {
+		return returnStatus;
+	}
+
+	public void setReturnStatus(String returnStatus) {
+		this.returnStatus = returnStatus;
 	}
 	
 }
