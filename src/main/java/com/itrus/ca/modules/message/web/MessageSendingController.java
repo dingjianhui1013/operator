@@ -243,7 +243,7 @@ public class MessageSendingController extends BaseController {
 			messageSendingService.save(messageSending);
 			
 		}
-		return "modules/message/messageSendingForm";
+		return"redirect:" + Global.getAdminPath() + "/modules/message/messageSending/?repage";
 	}
 
 	@RequiresPermissions("message:messageSending:edit")
