@@ -214,10 +214,12 @@ public class StatisticCertDataProductController extends BaseController {
 	public void exportZS(Long officeId, String startDate, String endDate,
 			HttpServletRequest request, HttpServletResponse response)
 	{
+
 		Office office = null;
 		if (officeId!=null) {
 			office = officeService.get(officeId);
 		}
+		
 		if (startDate==null||startDate.equals("")) {
 			startDate = "2013-01";
 		}
@@ -228,9 +230,10 @@ public class StatisticCertDataProductController extends BaseController {
 		List<String> monthList = getMonthList(startDate+"-01", endDate+"-01");
 		List<String> monthList1 = getMoList(startDate, endDate);
 		List<StaticProductMonth> sumList = new ArrayList<StaticProductMonth>();
-		for (int i = 1; i < ProductType.productTypeMap.size()+1; i++) {
+		//for (int i = 1; i < ProductType.productTypeMap.size()+1; i++) {
+		for (Entry<Integer, String> entry : ProductType.productTypeMap.entrySet()) {     	
 			StaticProductMonth month = new StaticProductMonth();
-			month.setProductType(i);
+			month.setProductType(entry.getKey());
 			List<StaticMonth> smList = new ArrayList<StaticMonth>();
 			for (String s : monthList) {
 				StaticMonth sm = new StaticMonth();
@@ -241,7 +244,7 @@ public class StatisticCertDataProductController extends BaseController {
 					rightNow.setTime(start);
 					rightNow.add(Calendar.MONTH, 1);
 					Date end = rightNow.getTime();
-					List<StatisticCertDataProduct> list = statisticCertDataProductService.getSum(i, office, start, end);
+					List<StatisticCertDataProduct> list = statisticCertDataProductService.getSum(entry.getKey(), office, start, end);
 					sm.setMonth(start);
 					Integer oneSum = 0;
 					Integer twoSum = 0;
@@ -258,22 +261,22 @@ public class StatisticCertDataProductController extends BaseController {
 					sm.setCount2(twoSum);
 					sm.setCount4(fourSum);
 					sm.setCount5(fiveSum);
-					if (i==1) {
+					if (entry.getKey()==1) {
 						sm.setPro1Sum(oneSum+twoSum+fourSum+fiveSum);
 					}
-					if (i==2) {
+					if (entry.getKey()==2) {
 						sm.setPro2Sum(oneSum+twoSum+fourSum+fiveSum);
 					}
-					if (i==3) {
+					if (entry.getKey()==3) {
 						sm.setPro3Sum(oneSum+twoSum+fourSum+fiveSum);
 					}
-					if (i==4) {
+					if (entry.getKey()==4) {
 						sm.setPro4Sum(oneSum+twoSum+fourSum+fiveSum);
 					}
-					if (i==5) {
-						sm.setPro5Sum(oneSum+twoSum+fourSum+fiveSum);
-					}
-					if (i==6) {
+//					if (i==5) {
+//						sm.setPro5Sum(oneSum+twoSum+fourSum+fiveSum);
+//					}
+					if (entry.getKey()==6) {
 						sm.setPro6Sum(oneSum+twoSum+fourSum+fiveSum);
 					}
 					smList.add(sm);
@@ -284,7 +287,6 @@ public class StatisticCertDataProductController extends BaseController {
 			month.setMonths(smList);
 			sumList.add(month);
 		}
-		
 		HSSFWorkbook wb=new HSSFWorkbook();
 		HSSFSheet sheet=wb.createSheet("证书发放统计");
 		//首行样式
