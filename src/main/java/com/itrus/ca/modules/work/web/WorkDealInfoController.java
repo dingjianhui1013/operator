@@ -1535,6 +1535,7 @@ public class WorkDealInfoController extends BaseController {
 		List<WorkpaymentInfo_dealinfoVo> p_ds = Lists.newArrayList();
 
 		for (int i = 0; i < p_d.size(); i++) {
+			
 			if (dkstartTime != null && dkendTime != null && zzstartTime == null && zzendTime == null
 					&& "".equals(companyName) && "".equals(financePaymentInfo.getCompany())) {
 				if (p_d.get(i).getDealPayDate().getTime() >= dkstartTime.getTime()
@@ -1597,7 +1598,18 @@ public class WorkDealInfoController extends BaseController {
 						p_ds.add(p_d.get(i));
 					}
 				}
-			} else {
+			} else if(dkstartTime == null && dkendTime == null && zzstartTime != null && zzendTime != null
+					&& "".equals(companyName) && "".equals(financePaymentInfo.getCompany()))
+			{
+				if (p_d.get(i).getSignDate() != null) {
+					if (p_d.get(i).getSignDate().getTime() >= zzstartTime.getTime()
+							&& p_d.get(i).getSignDate().getTime() <= zzendTime.getTime()) {
+								p_ds.add(p_d.get(i));
+					}
+				}
+			}
+			else
+			{
 				String start = new SimpleDateFormat("yyyy-MM").format(new Date()) + "-01";
 				String end = new SimpleDateFormat("yyyy-MM").format(new Date()) + "-31";
 				Date dkstartTime_ = new SimpleDateFormat("yyyy-MM-dd").parse(start);
