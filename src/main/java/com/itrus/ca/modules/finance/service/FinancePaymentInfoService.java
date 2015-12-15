@@ -164,6 +164,39 @@ public class FinancePaymentInfoService extends BaseService {
 		dc.addOrder(Order.desc("id"));
 		return financePaymentInfoDao.find(page, dc);
 	}
+	
+	
+	public List<FinancePaymentInfo> findList(FinancePaymentInfo financePaymentInfo, Date startTime, Date endTime, List<Long> ids) {
+		DetachedCriteria dc = financePaymentInfoDao.createDetachedCriteria();
+		dc.createAlias("createBy", "createBy");
+		dc.createAlias("createBy.office", "office");
+		dc.add(dataScopeFilter(UserUtils.getUser(),"office", "createBy"));
+		if (financePaymentInfo.getCompany()!=null) {
+			if (StringUtils.isNotEmpty(financePaymentInfo.getCompany())){
+				dc.add(Restrictions.like("company", "%"+EscapeUtil.escapeLike(financePaymentInfo.getCompany())+"%"));
+			}
+		}
+		if (financePaymentInfo.getPaymentMethod()!=null) {
+			dc.add(Restrictions.eq("paymentMethod", financePaymentInfo.getPaymentMethod()));
+		}
+		if (startTime!=null&&endTime!=null) {
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(endTime);
+			calendar.add(Calendar.DATE,1);
+			dc.add(Restrictions.ge("createDate", startTime));
+			dc.add(Restrictions.le("createDate", calendar.getTime()));
+		}
+		if (ids.size()>0) {
+			dc.add(Restrictions.in("office.id", ids));
+		}
+		dc.add(Restrictions.eq(FinancePaymentInfo.DEL_FLAG, FinancePaymentInfo.DEL_FLAG_NORMAL));
+		dc.addOrder(Order.desc("id"));
+		return financePaymentInfoDao.find(dc);
+	}
+	
+	
+	
+	
 	public List<FinancePaymentInfo> find1list(FinancePaymentInfo financePaymentInfo, Date startTime, Date endTime, List<Long> ids) {
 		DetachedCriteria dc = financePaymentInfoDao.createDetachedCriteria();
 		dc.createAlias("createBy", "createBy");
@@ -191,6 +224,7 @@ public class FinancePaymentInfoService extends BaseService {
 		dc.addOrder(Order.desc("id"));
 		return financePaymentInfoDao.find(dc);
 	}
+
 	//根据应用名称查询出支付信息
 	public List<FinancePaymentInfo> findByAppName(String appName) {
 		DetachedCriteria dc = financePaymentInfoDao.createDetachedCriteria();

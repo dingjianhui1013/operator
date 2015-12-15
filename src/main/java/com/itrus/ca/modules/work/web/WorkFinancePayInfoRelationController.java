@@ -268,7 +268,7 @@ public class WorkFinancePayInfoRelationController extends BaseController {
 				}
 			}
 		}        
-	  List<FinancePaymentInfo>  list=financePaymentInfoService.findAll(financePaymentInfo);
+	  List<FinancePaymentInfo>  list=financePaymentInfoService.findList( financePaymentInfo, startTime, endTime, ids);
 	  int count=0;
 	  int money=0;
 	  int moneyIsNull=0;
