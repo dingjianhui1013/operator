@@ -3,6 +3,9 @@
  */
 package com.itrus.ca.modules.work.web;
 
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
@@ -13,6 +16,14 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFCreationHelper;
+import org.apache.poi.hssf.usermodel.HSSFFont;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.util.Region;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.jboss.logging.Param;
 import org.json.JSONException;
@@ -208,6 +219,7 @@ public class WorkFinancePayInfoRelationController extends BaseController {
 //			}
 //		}
 //		
+		
 		List<Office> offsList =  officeService.getOfficeByType(user, 1);
 //    	
 //		
@@ -325,6 +337,140 @@ public class WorkFinancePayInfoRelationController extends BaseController {
 		addMessage(redirectAttributes, "删除支付信息统计报表成功");
 		return "redirect:" + Global.getAdminPath()
 				+ "/modules/work/workFinancePayInfoRelation/?repage";
+	}
+	
+	
+	
+	@RequestMapping(value = "exportDatalist")
+	public void exportDatalist(WorkFinancePayInfoRelation workFinancePayInfoRelation,
+			HttpServletRequest request,
+			HttpServletResponse response,
+			@RequestParam(value = "startTime", required = false) Date startTime,
+			@RequestParam(value = "endTime", required = false) Date endTime,
+			@RequestParam(value = "payMethod", required = false) Integer payMethod,
+			@RequestParam(value = "area", required = false) Long area,
+			@RequestParam(value = "office", required = false) Long office) throws IOException
+	{
+		
+		User user = UserUtils.getUser();
+		List<Office> offsList =  officeService.getOfficeByType(user, 1);
+    	List<Long> ids = new ArrayList<Long>();
+    	if (office!=null) {
+			ids.add(office);
+		}
+    	if (office==null&&area!=null) {
+    		List<Office> offs = officeService.findByParentId(area);
+    		for (Office office2 : offs) {
+    			ids.add(office2.getId());
+			}
+		}
+		FinancePaymentInfo financePaymentInfo = new FinancePaymentInfo();
+		financePaymentInfo.setCreateBy(user);
+		financePaymentInfo.setPaymentMethod(payMethod);
+	    List<FinancePaymentInfo> listpay = financePaymentInfoService.find1list(financePaymentInfo, startTime, endTime, ids); 
+	    if (listpay.size()>0) {
+			for (int i = 0; i < listpay.size(); i++) {
+				int methode = listpay.get(i).getPaymentMethod();
+				switch (methode) {
+				case 1: listpay.get(i).setPaymentMethodName("现金"); break;
+				case 2: listpay.get(i).setPaymentMethodName("POS收款"); break;
+				case 3: listpay.get(i).setPaymentMethodName("银行转账"); break;
+				case 4: listpay.get(i).setPaymentMethodName("支付宝转账"); break;
+				default:listpay.get(i).setPaymentMethodName("您没有选择付款方式"); break;
+				}
+			}
+		}        
+	  List<FinancePaymentInfo>  list=financePaymentInfoService.findAll(financePaymentInfo);
+	  int count=0;
+	  int money=0;
+	  int moneyIsNull=0;
+	  for(int i=0;i<list.size();i++)
+	  {
+		 if(list.get(i).getDistinguish()==null)
+		 {
+			 count+=1;
+		 }
+		 if(list.get(i).getResidueMoney()>0)
+		 {
+			 money+=1;
+		 }
+		 if(list.get(i).getResidueMoney()==0)
+		 {
+			 moneyIsNull+=1;
+		 }
+	  }
+	  HSSFWorkbook wb = new HSSFWorkbook();
+		HSSFSheet sheet = wb.createSheet("支付款项统计");
+		HSSFCellStyle style = wb.createCellStyle();
+		style.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+		style.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+		HSSFFont font = wb.createFont();
+		font.setFontName("宋体");
+		font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+		font.setFontHeightInPoints((short) 14);
+		style.setFont(font);
+		sheet.addMergedRegion(new Region(0,(short)0, 0, (short)9));
+		HSSFRow row0=sheet.createRow(0);
+		HSSFCell cell0=row0.createCell(0);
+		cell0.setCellStyle(style);
+		cell0.setCellValue("支付款项统计表");
+		HSSFRow row1=sheet.createRow(1);
+		row1.createCell(0).setCellValue("付款单位名称");
+		row1.createCell(1).setCellValue("付款金额/元");
+		row1.createCell(2).setCellValue("未确认付款项/元");
+		row1.createCell(3).setCellValue("联系人");
+		row1.createCell(4).setCellValue("联系方式");
+		row1.createCell(5).setCellValue("付款时间");
+		row1.createCell(6).setCellValue("付款方式");
+		row1.createCell(7).setCellValue("记录方式");
+		row1.createCell(8).setCellValue("记录人员");
+		row1.createCell(9).setCellValue("记录是时间");
+		for(int i=0;i<listpay.size();i++)
+		{
+			HSSFRow rown=sheet.createRow(i+2);
+			rown.createCell(0).setCellValue(listpay.get(i).getCompany());
+			rown.createCell(1).setCellValue(listpay.get(i).getPaymentMoney()-listpay.get(i).getResidueMoney());
+			rown.createCell(2).setCellValue(listpay.get(i).getResidueMoney());
+			rown.createCell(3).setCellValue(listpay.get(i).getCommUserName());
+			rown.createCell(4).setCellValue(listpay.get(i).getCommMobile());
+			rown.createCell(5).setCellValue(listpay.get(i).getCreateDate()+"");
+			if(listpay.get(i).getPaymentMethod()==1)
+			{
+				rown.createCell(6).setCellValue("现金");
+			}
+			if(listpay.get(i).getPaymentMethod()==2)
+			{
+				rown.createCell(6).setCellValue("POS付款");
+			}
+			if(listpay.get(i).getPaymentMethod()==3)
+			{
+				rown.createCell(6).setCellValue("银行转账");
+			}
+			if(listpay.get(i).getPaymentMethod()==4)
+			{
+				rown.createCell(6).setCellValue("支付宝转账");
+			}
+			if(listpay.get(i).getDistinguish()!=null)
+			{
+				rown.createCell(7).setCellValue("手动添加");
+			}else
+			{
+				rown.createCell(7).setCellValue("批量导入");
+			}
+			rown.createCell(8).setCellValue(listpay.get(i).getCreateBy().getName());
+			rown.createCell(9).setCellValue(listpay.get(i).getCreateBy().getCreateDate()+"");
+		}
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		response.setContentType(response.getContentType());
+		response.setHeader("Content-disposition", "attachment; filename=paymentMoney.xls");
+		wb.write(baos);
+		byte[] bytes = baos.toByteArray();
+		response.setHeader("Content-Length", String.valueOf(bytes.length));
+		BufferedOutputStream bos = null;
+		bos = new BufferedOutputStream(response.getOutputStream());
+		bos.write(bytes);
+		bos.close();
+		baos.close();
 	}
 	
 	/*

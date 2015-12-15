@@ -47,6 +47,16 @@
 			top.$.jBox.tip(data.msg);
 		});
 	}
+	function dc()
+	{
+		var area=$("#area").val();
+		var office=$("#office").val();
+		var payMethod=$("#payMethod").val();
+		var startTime=$("#startTime").val();
+		var endTime=$("#endTime").val();
+		window.location.href="${ctx}/work/workFinancePayInfoRelation/exportDatalist?area="+area+"&office="+office+"&payMethod="+payMethod+"&startTime="+startTime+"&endTime="+endTime;
+		
+	}
 </script>
 </head>
 <body>
@@ -120,7 +130,8 @@
 			
 		&nbsp;<input id="btnSubmit" class="btn btn-primary" type="submit" onclick="return onSubmit()"
 			value="查询" />
-			&nbsp;<a href="${ctx }/work/workFinancePayInfoRelation/exportData" class="btn btn-primary">导出</a>
+			&nbsp;
+			<a href="javascript:dc()" class="btn btn-primary">导出</a>
 			</div>
 	</form:form>
 	<tags:message content="${message}" />
