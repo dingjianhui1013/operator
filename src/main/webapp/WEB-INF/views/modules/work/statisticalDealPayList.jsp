@@ -33,7 +33,16 @@
 		});
 
 	}
-	
+	function dc()
+	{
+		var area=$("#area").val();
+		var office=$("#office").val();
+		var appId=$("#appId").val();
+		var payMethod=$("#payMethod").val();
+		var startTime=$("#startTime").val();
+		var endTime=$("#endTime").val();
+		window.location.href="${ctx}/work/workDealInfo/exportDealPayList?area="+area+"&office="+office+"&appId="+appId+"&payMethod="+payMethod+"&startTime="+startTime+"&endTime="+endTime;
+	}
 </script>
 </head>
 <body>
@@ -117,7 +126,7 @@
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 		<input id="btnSubmit" class="btn btn-primary" type="submit"
 			value="查询" />
-			<a href="${ctx}/work/workDealInfo/exportExcel" class="btn btn-primary">导出</a>
+			<a href="javascript:dc()" class="btn btn-primary">导出</a>
 			</div>
 	</form:form>
 	<tags:message content="${message}" />
