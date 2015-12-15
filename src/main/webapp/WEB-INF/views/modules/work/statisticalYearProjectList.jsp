@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>项目调整统计</title>
+<title>年项目统计</title>
 <meta name="decorator" content="default" />
 <script type="text/javascript">
 	$(document).ready(function() {
@@ -50,7 +50,7 @@
 <body>
 	<ul class="nav nav-tabs">
 		<li class="active"><a
-			href="${ctx}/work/workDealInfo/statisticalYearProjectList">项目调整统计表</a></li>
+			href="${ctx}/work/workDealInfo/statisticalYearProjectList">年项目统计表</a></li>
 	</ul>
 	<form:form id="searchForm" modelAttribute="configProjectType"
 		action="${ctx}/work/workDealInfo/statisticalYearProjectList" method="post"
