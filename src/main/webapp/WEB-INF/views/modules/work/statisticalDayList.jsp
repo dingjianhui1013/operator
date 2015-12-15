@@ -163,10 +163,10 @@
 						<c:set var="index" value="${index+1}" />
 					</c:forEach>
 					<c:if test="${index==1}">
-						<th colspan="${index}" rowspan="2" style="text-align:center;">${office_payMethod.key}网点</th>
+						<th colspan="${index}" rowspan="2" style="text-align:center;">${office_payMethod.key}</th>
 					</c:if>
 					<c:if test="${index>1}">
-						<th colspan="${index}" style="text-align:center;">${office_payMethod.key}网点</th>
+						<th colspan="${index}" style="text-align:center;">${office_payMethod.key}</th>
 					</c:if>
 				</c:forEach>
 				<th rowspan="2" style="text-align:center;">合计</th>
