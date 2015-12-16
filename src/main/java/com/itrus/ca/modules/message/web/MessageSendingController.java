@@ -40,6 +40,7 @@ import com.itrus.ca.common.web.BaseController;
 import com.itrus.ca.modules.constant.ProductType;
 import com.itrus.ca.modules.constant.WorkDealInfoStatus;
 import com.itrus.ca.modules.constant.WorkDealInfoType;
+import com.itrus.ca.modules.message.entity.CheckMessage;
 import com.itrus.ca.modules.message.entity.MessageSending;
 import com.itrus.ca.modules.message.entity.SmsConfiguration;
 import com.itrus.ca.modules.message.entity.readFileByChars;
@@ -55,7 +56,9 @@ import com.itrus.ca.modules.sys.entity.User;
 import com.itrus.ca.modules.sys.service.OfficeService;
 import com.itrus.ca.modules.sys.utils.UserUtils;
 import com.itrus.ca.modules.work.entity.WorkCertInfo;
+import com.itrus.ca.modules.work.entity.WorkCompany;
 import com.itrus.ca.modules.work.entity.WorkDealInfo;
+import com.itrus.ca.modules.work.entity.WorkUser;
 import com.itrus.ca.modules.work.service.WorkDealInfoService;
 
 /**
@@ -176,7 +179,8 @@ public class MessageSendingController extends BaseController {
 				HttpServletResponse response) {
 		//List<WorkCertInfo> certInfoList = new ArrayList<WorkCertInfo>();
 		//String messageAddress=smsConfigurationService.get(smsId).getMessageAddress();
-		String messageName=smsConfigurationService.get(smsId).getMessageName();
+		SmsConfiguration smsConfiguration=smsConfigurationService.get(smsId);
+		String messageName=smsConfiguration.getMessageName();
 		//System.out.println(messageAddress);
 		String messageAddress = SmsConfigurationController.class.getResource("/").toString().replace("file:", "")
 				.replace("%20", " ");
@@ -201,14 +205,33 @@ public class MessageSendingController extends BaseController {
 			}
 			Long dealInfoId =id;
 			WorkDealInfo dealInfo = workDealInfoService.get(dealInfoId);
-			String company= dealInfo.getWorkCompany().getCompanyName();
-			System.out.println(company);
-			String jbr=dealInfo.getWorkCertInfo().getWorkCertApplyInfo().getName();
-			System.out.println(jbr);
+			WorkCompany company =dealInfo.getWorkCompany();
+			WorkUser workUser=dealInfo.getWorkUser();
+			ConfigApp configApp=dealInfo.getConfigApp();
+			WorkCertInfo workCertInfo =dealInfo.getWorkCertInfo();
+			//组织机构代码
+			String companyCode=dealInfo.getWorkCompany().getOrganizationNumber();
+			//机构名称
+			String companyName= dealInfo.getWorkCompany().getCompanyName();
+			System.out.println(companyName);
+			//法人姓名
+			String legalName=dealInfo.getWorkCompany().getLegalName();
+			//key编码
+			String keySn=dealInfo.getKeySn();
+			//机构地址
+			String organizationAddress=dealInfo.getWorkCompany().getProvince()+dealInfo.getWorkCompany().getCity()+dealInfo.getWorkCompany().getDistrict()+dealInfo.getWorkCompany().getAddress();
+			//经办人姓名
+			String consigner=dealInfo.getWorkCertInfo().getWorkCertApplyInfo().getName();
+			System.out.println(consigner);
+			//业务状态
+			String businessStatus =dealInfo.getDealInfoStatus();
+			//项目名称
 			String alias=dealInfo.getConfigApp().getAlias();
 			System.out.println(alias);
+			//证书到期时间
 			Date endDate=dealInfo.getNotafter();
 			System.out.println(endDate);
+			//证书持有人电话
 			String phone =dealInfo.getWorkUser().getContactPhone();
 			System.out.println(phone);
 			Properties p = new Properties();
@@ -219,10 +242,15 @@ public class MessageSendingController extends BaseController {
 			VelocityEngine velocityEngine = new VelocityEngine();
 			velocityEngine.init(p);
 			Map<String, Object>  orange = new HashMap<>();
-			orange.put("company", company);
-			orange.put("jbr", jbr);
+			orange.put("companyCode", companyCode);
+			orange.put("companyName", companyName);
+			orange.put("legalName", legalName);
+			orange.put("keySn", keySn);
+			orange.put("organizationAddress", organizationAddress);
+			orange.put("consigner", consigner);
+			orange.put("businessStatus", businessStatus);
 			orange.put("alias", alias);
-			orange.put("endDate", endDate);
+			orange.put("endDate",endDate);
 			orange.put("date", new Date());
 			String content = VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, messageName, "UTF-8", orange);
 			System.out.println(content);
@@ -243,7 +271,11 @@ public class MessageSendingController extends BaseController {
 			messageSending.setSmsSendDate(smsSendDate);
 			messageSending.setReturnStatus(returnStatus);
 			messageSending.setWorkDealInfo(dealInfo);
-			
+			messageSending.setSmsConfiguration(smsConfiguration);
+			messageSending.setWorkCompany(company);
+			messageSending.setWorkUser(workUser);
+			messageSending.setConfigApp(configApp);
+			messageSending.setWorkCertInfo(workCertInfo);
 			messageSendingService.save(messageSending);
 			
 		}
@@ -268,5 +300,30 @@ public class MessageSendingController extends BaseController {
 		addMessage(redirectAttributes, "删除消息发送成功");
 		return "redirect:" + Global.getAdminPath() + "/modules/message/messageSending/?repage";
 	}
-
+	@RequiresPermissions("message:messageSending:view")
+	@RequestMapping(value = "search")
+	public String search(
+			MessageSending messageSending,
+			@RequestParam(value = "apply", required = false) Long apply,
+			@RequestParam(value = "startTime", required = false) Date startTime,
+			@RequestParam(value = "endTime", required = false) Date endTime,
+			HttpServletRequest request, HttpServletResponse response, Model model) {
+		User user = UserUtils.getUser();
+		if (!user.isAdmin()){
+			messageSending.setCreateBy(user);
+		}
+		List<ConfigApp> configAppList=configAppService.findall();
+		model.addAttribute("configAppList", configAppList);
+		Page<MessageSending> page=messageSendingService.find(new Page<MessageSending>(request, response), messageSending, apply, startTime, endTime);
+		
+		//Page<MessageSending> page=messageSendingService.find(new Page<MessageSending>(request, response), messageSending, apply, StartDate, endDate);
+       // Page<CheckMessage> page = checkMessageService.find(new Page<CheckMessage>(request, response), checkMessage); 
+        model.addAttribute("page", page);
+        model.addAttribute("startTime", startTime);
+        model.addAttribute("endTime", endTime);
+        model.addAttribute("apply", apply);
+        
+        
+		return "modules/message/checkMessageList";
+	}
 }
