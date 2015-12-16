@@ -40,7 +40,6 @@ import com.itrus.ca.common.web.BaseController;
 import com.itrus.ca.modules.constant.ProductType;
 import com.itrus.ca.modules.constant.WorkDealInfoStatus;
 import com.itrus.ca.modules.constant.WorkDealInfoType;
-import com.itrus.ca.modules.message.entity.CheckMessage;
 import com.itrus.ca.modules.message.entity.MessageSending;
 import com.itrus.ca.modules.message.entity.SmsConfiguration;
 import com.itrus.ca.modules.message.entity.readFileByChars;
