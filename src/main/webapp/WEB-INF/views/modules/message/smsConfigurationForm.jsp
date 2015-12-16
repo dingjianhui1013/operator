@@ -10,12 +10,12 @@
 <script type="text/javascript">
 	$(document).ready(function() {
 	
-			$("#btnImport").click(function(){
+			/* $("#btnImport").click(function(){
 				$.jBox($("#importBox").html(), {title:"导入数据", buttons:{"关闭":true}, 
 					bottomText:"导入文件不能超过5M，仅允许导入“txt”格式文件！"});
-			});
+			}); */
 		});
-	function addAttach() {
+	/* function addAttach() {
 		if($("#fileName").val() == ""){
 			top.$.jBox.tip("导入文件格式有误，导入文件应为txt文件，请确认");
         	return false;
@@ -46,8 +46,8 @@
 				}
 			}
 		};
-		$('#importBox').ajaxSubmit(options);
-	}
+		$('#importBox').ajaxSubmit(options); 
+	}*/
 </script>
 </head>
 <body>
@@ -83,16 +83,14 @@
 					class="required" />
 			</div>
 			<br> 
-			<input id="btnImport" class="btn btn-primary" type="button"
-				value="导入模板" />
+			
 			</div>
 		</div>
 
 
 
 		<div class="form-actions">
-			<input id="btnSubmit" class="btn btn-primary" type="button"
-				value="保 存" onclick="checkRa();" />&nbsp; <input id="btnCancel"
+			<input id="btnSubmit" class="btn btn-primary" type="submit" value="保 存"/>&nbsp; <input id="btnCancel"
 				class="btn" type="button" value="返 回" onclick="history.go(-1)" />
 		</div>
 	</form:form>
