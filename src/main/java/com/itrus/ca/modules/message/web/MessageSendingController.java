@@ -191,18 +191,15 @@ public class MessageSendingController extends BaseController {
 		String newMessageAddress=messageAddress+messageName;
 		System.out.println(messageAddress);
 		String[] dealInfos = checkIds.split(",");
-		List<Long> dealIdList = new ArrayList<Long>();
-		for (int i = 0; i < dealInfos.length; i++) {
-			if (!dealInfos[i].equals("")) {
-				dealIdList.add(Long.parseLong(dealInfos[i]));
-			}
+		short s[]=new short[dealInfos.length];
+		for(int i=0;i<dealInfos.length;i++){
+			System.out.println(dealInfos[i]);
 			
-		}
-		for (Long id : dealIdList) {
-			if (id.equals("1")||id.equals("")) {
-				continue;
-			}
-			Long dealInfoId =id;
+			// s[i]=Short.parseShort(dealInfos[i]);
+			 //System.out.println(s[i]);
+		
+		
+			long dealInfoId = Long.parseLong(dealInfos[i]);
 			WorkDealInfo dealInfo = workDealInfoService.get(dealInfoId);
 			WorkCompany company =dealInfo.getWorkCompany();
 			WorkUser workUser=dealInfo.getWorkUser();
@@ -260,8 +257,7 @@ public class MessageSendingController extends BaseController {
 			//SmsService smsService=new SmsService();
 			String returnStatus=null;
 			if(phone!=null){
-				 returnStatus= smsService.sendSms( messId,  phone, content);
-			}
+			returnStatus= smsService.sendSms( messId,  phone, content);
 			MessageSending messageSending=new MessageSending();
 			messageSending.setMessId(messId);
 			messageSending.setpId(4);
@@ -276,8 +272,9 @@ public class MessageSendingController extends BaseController {
 			messageSending.setConfigApp(configApp);
 			messageSending.setWorkCertInfo(workCertInfo);
 			messageSendingService.save(messageSending);
-			
-		}
+			}
+		}	
+		
 		return "modules/message/messageSendingList";
 	}
 

@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -196,5 +197,49 @@ public class SmsConfigurationController extends BaseController {
 		smsConfigurationService.save(smsConfiguration);
 		return "redirect:" + Global.getAdminPath() + "/message/smsConfiguration/?repage";
 	}
-
+	@RequestMapping("test")
+	@ResponseBody
+	public String importFile(@RequestParam(value = "fileName", required = true) MultipartFile file)
+			throws IllegalStateException, IOException, JSONException {
+		String newFileName=null;
+		JSONObject json = new JSONObject();
+		try {
+		
+		String path = SmsConfigurationController.class.getResource("/").toString().replace("file:", "")
+				.replace("%20", " ");
+		if (StringUtils.contains(path, "/WEB-INF")) {
+			path = path.substring(0, StringUtils.indexOf(path, "/WEB-INF"));
+		}
+		;
+		path += "/WEB-INF/template/";// 文件保存目录，也可自定为绝对路径
+		String fileName = file.getOriginalFilename();// getOriginalFilename和getName是不一样的哦
+		// String extensionName = fileName
+		// .substring(fileName.lastIndexOf(".") + 1); 获取文件本质
+		//newFileName = String.valueOf(DateUtils.formatDate(new Date(), "yyyy-MM-dd"));
+		 newFileName=fileName.substring(0,fileName.lastIndexOf("."));
+		List<SmsConfiguration> list=smsConfigurationService.findAll();
+		for(int i=0;i<list.size();i++){
+		if(newFileName.equals(list.get(i).getMessageName())){
+			json.put("status", -1);
+			json.put("msg", "模板名称已存在，请改正");
+			return json.toString();
+		}}
+		File targetFile = new File(path,newFileName);
+		if (!targetFile.exists()) {
+			targetFile.mkdirs();
+		}
+		
+			file.transferTo(targetFile);
+			json.put("status", 1);
+			json.put("msg", "上传成功");
+		} catch (Exception e) {
+			e.printStackTrace();
+			
+		}
+		SmsConfiguration smsConfiguration = new SmsConfiguration();
+		smsConfiguration.setMessageName(newFileName);
+		smsConfigurationService.save(smsConfiguration);
+		return json.toString();
+		
+	}
 }

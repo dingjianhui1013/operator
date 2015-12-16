@@ -43,9 +43,49 @@
 
 		return false;
 	}
-	function cc(){
-		var file=$("#file").val();
+	function cc() {
+		var file = $("#file").val();
 		alert(file);
+	}
+	function addAttach() {
+		if($("#fileName").val() == ""){
+			top.$.jBox.tip("请确认导入文件！");
+        	return false;
+        }
+        if($("#fileName").val().indexOf('.txt')<0) {
+        	top.$.jBox.tip("导入文件格式有误，导入文件应为txt文件，请确认");
+            return false;
+        }
+        top.$.jBox.tip("正在上传文件...", 'loading');
+		var options = {
+			type : 'post',
+			dataType : 'json',
+			success : function(data) {
+				//console.log(data);
+				if(data.status=='1'){
+					top.$.jBox.tip("上传成功");
+					  setTimeout(function (){
+	            		    //something you want delayed
+	            		    	$("#searchForm").submit();
+	            		//	window.location.reload();
+	            		   }, 1500); // how long do you want the delay to be? 
+	            
+				}else if(data.status=='-1'){
+					top.$.jBox.tip("上传失败!");
+					var info = "失败信息:<br>"+data.msg;
+					top.$.jBox.info(info);
+					//top.$.jBox.tip("上传失败"+data.msg);
+					//$("#searchForm").submit();
+				}else{
+					top.$.jBox.tip("上传失败!");
+					var info = "失败信息:<br>"+data.msg;
+					top.$.jBox.info(info);
+					//top.$.jBox.tip("上传失败："+data.errorMsg);
+					//$("#searchForm").submit();
+				}
+			}
+		};
+		$('#materialImport').ajaxSubmit(options);
 	}
 </script>
 </head>
@@ -59,7 +99,7 @@
 				onclick="onSubmit();" type="submit" value="   导    入   " />
 		</form>
 	</div>
-		
+
 	<ul class="nav nav-tabs">
 		<li class="active"><a href="${ctx}/message/smsConfiguration/">短信配置列表</a></li>
 		<li><a href="${ctx}/message/messageSending/list">消息发送</a></li>
@@ -80,7 +120,8 @@
 			value="查询" />
 			&nbsp;&nbsp;&nbsp;<input id="btnImport" class="btn btn-primary"
 			type="button" value="导入短信模板" />
-
+		<a id="manyAdd" data-toggle="modal" href="#declareDiv"
+			class="btn btn-primary">批量新增导入</a>
 		</div>
 	</form:form>
 	<tags:message content="${message}" />
@@ -113,7 +154,22 @@
 		</tbody>
 	</table>
 	<div class="pagination">${page}</div>
-	<input id="file" type="file">
-		<input id="tt" onclick="cc();" type="submit" value="haha">
+	<div id="declareDiv" class="modal hide fade">
+		<div class="modal-header">
+			<h3>批量导入</h3>
+		</div>
+		<div class="modal-body">
+			<form id="materialImport" action="${ctx}/message/smsConfiguration/test"
+				enctype="multipart/form-data">
+				<input id="fileName" name="fileName" type="file" multiple="multiple" />
+			</form>
+		</div>
+		<div class="modal-footer">
+			<a href="javascript:void(0)" data-dismiss="modal"
+				onclick="hidenUpload()" class="btn">取消</a> <a
+				href="javascript:void(0)" data-dismiss="modal" onclick="addAttach()"
+				class="btn btn-primary">导入</a>
+		</div>
+	</div>
 </body>
 </html>
