@@ -38,6 +38,7 @@ $(document).ready(
 			var url = "${ctx}/profile/configRaAccountExtendInfo/checkRepeat";
 			$.ajax({
 					url:url,
+					type:'POST',
 					data:{certName:name,extendId:extendId,_:new Date().getTime()},
 					dataType:'json',
 					success:function(data)
