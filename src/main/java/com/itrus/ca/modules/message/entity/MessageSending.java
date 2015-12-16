@@ -19,6 +19,8 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.validator.constraints.Length;
 
 import com.itrus.ca.common.persistence.DataEntity;
+import com.itrus.ca.modules.profile.entity.ConfigApp;
+import com.itrus.ca.modules.work.entity.WorkCertInfo;
 import com.itrus.ca.modules.work.entity.WorkCompany;
 import com.itrus.ca.modules.work.entity.WorkDealInfo;
 import com.itrus.ca.modules.work.entity.WorkUser;
@@ -36,9 +38,11 @@ public class MessageSending extends DataEntity {
 	private static final long serialVersionUID = 1L;
 	private Long id; 		// 编号
 	private String name; 	// 名称
+	private ConfigApp configApp;
 	private WorkDealInfo workDealInfo;
 	private WorkCompany workCompany;
 	private WorkUser workUser;
+	private WorkCertInfo workCertInfo;
 	private SmsConfiguration smsConfiguration;
 	private Date smsSendDate;
 	private String  messId;
@@ -59,19 +63,24 @@ public class MessageSending extends DataEntity {
 
 	
 
-	public MessageSending(String name, WorkDealInfo workDealInfo, WorkCompany workCompany, WorkUser workUser,
-			SmsConfiguration smsConfiguration, Date smsSendDate, String messId, String phone, String messageContext,String returnStatus) {
+	
+	public MessageSending(String name, ConfigApp configApp, WorkDealInfo workDealInfo, WorkCompany workCompany,
+			WorkUser workUser, WorkCertInfo workCertInfo, SmsConfiguration smsConfiguration, Date smsSendDate,
+			String messId, int pId, String phone, String messageContext, String returnStatus) {
 		
 		this.name = name;
+		this.configApp = configApp;
 		this.workDealInfo = workDealInfo;
 		this.workCompany = workCompany;
 		this.workUser = workUser;
+		this.workCertInfo = workCertInfo;
 		this.smsConfiguration = smsConfiguration;
 		this.smsSendDate = smsSendDate;
 		this.messId = messId;
+		this.pId = pId;
 		this.phone = phone;
 		this.messageContext = messageContext;
-		this.returnStatus=returnStatus;
+		this.returnStatus = returnStatus;
 	}
 
 	@Id
@@ -103,7 +112,8 @@ public class MessageSending extends DataEntity {
 	public void setWorkDealInfo(WorkDealInfo workDealInfo) {
 		this.workDealInfo = workDealInfo;
 	}
-
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "WorkCompany_id")
 	public WorkCompany getWorkCompany() {
 		return workCompany;
 	}
@@ -111,7 +121,8 @@ public class MessageSending extends DataEntity {
 	public void setWorkCompany(WorkCompany workCompany) {
 		this.workCompany = workCompany;
 	}
-
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "workUser_id")
 	public WorkUser getWorkUser() {
 		return workUser;
 	}
@@ -119,13 +130,32 @@ public class MessageSending extends DataEntity {
 	public void setWorkUser(WorkUser workUser) {
 		this.workUser = workUser;
 	}
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "app_id")
+	public ConfigApp getConfigApp() {
+		return configApp;
+	}
 
+	public void setConfigApp(ConfigApp configApp) {
+		this.configApp = configApp;
+	}
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "SmsConfiguration_id")
 	public SmsConfiguration getSmsConfiguration() {
 		return smsConfiguration;
 	}
 
 	public void setSmsConfiguration(SmsConfiguration smsConfiguration) {
 		this.smsConfiguration = smsConfiguration;
+	}
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "WorkCertInfo_id")
+	public WorkCertInfo getWorkCertInfo() {
+		return workCertInfo;
+	}
+
+	public void setWorkCertInfo(WorkCertInfo workCertInfo) {
+		this.workCertInfo = workCertInfo;
 	}
 
 	public Date getSmsSendDate() {
