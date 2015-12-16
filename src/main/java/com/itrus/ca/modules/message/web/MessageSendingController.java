@@ -308,7 +308,7 @@ public class MessageSendingController extends BaseController {
 		if (!user.isAdmin()){
 			messageSending.setCreateBy(user);
 		}
-		List<ConfigApp> configAppList=configAppService.findall();
+		List<ConfigApp> configAppList = configAppService.selectAll();
 		model.addAttribute("configAppList", configAppList);
 		Page<MessageSending> page=messageSendingService.find(new Page<MessageSending>(request, response), messageSending, apply, startTime, endTime);
 		
