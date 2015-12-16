@@ -164,7 +164,9 @@ public class SmsConfigurationController extends BaseController {
 			String fileName = file.getOriginalFilename();// getOriginalFilename和getName是不一样的哦
 			// String extensionName = fileName
 			// .substring(fileName.lastIndexOf(".") + 1); 获取文件本质
-			newFileName = String.valueOf(DateUtils.formatDate(new Date(), "yyyy-MM-dd"));
+			//newFileName = String.valueOf(DateUtils.formatDate(new Date(), "yyyy-MM-dd"));
+			newFileName=fileName.substring(0,fileName.lastIndexOf("."));
+			System.out.println(newFileName);
 			File targetFile = new File(path,newFileName);
 			if (!targetFile.exists()) {
 				targetFile.mkdirs();
