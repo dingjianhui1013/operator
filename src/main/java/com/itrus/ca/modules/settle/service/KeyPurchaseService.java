@@ -127,15 +127,17 @@ public class KeyPurchaseService extends BaseService {
 			dc.add(Restrictions.like("appName", "%"+supplierName+"%"));
 		}
 		if(keySn !=null){
-			if(keyPurchase.getStartCode()!=null &&keyPurchase.getEndCode()!=null){
-			if(keySn>=keyPurchase.getStartCode()&&keySn<=keyPurchase.getEndCode()){
-				
-				dc.add(Restrictions.ge("startCode", keySn));
-			}
-			}
+//			if(keyPurchase.getStartCode()!=null &&keyPurchase.getEndCode()!=null){
+//			if(keySn>=keyPurchase.getStartCode()&&keySn<=keyPurchase.getEndCode()){
+//				
+//				dc.add(Restrictions.ge("startCode", keySn));
+//			}
+//			}
 			//dc.add(Restrictions.eq("keySn", keyPurchase.getStartCode()));
 			//dc.add(Restrictions.eq("keySn", keyPurchase.getEndCode()));
 			//dc.add(Restrictions.le("endCode", keySn));
+			dc.add(Restrictions.le("startCode",keySn));
+			dc.add(Restrictions.ge("endCode",keySn));
 		}
 
 		if(keyName !=null){
