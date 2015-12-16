@@ -250,14 +250,14 @@
 				<tr>
 				<td>
 					
-					<c:if test="${messageSend.dealInfoStatus!=6}">
+					
 						<input type="checkbox" name="oneDealCheck" value = "${messageSend.id}" 
 						<c:forEach items="${ids }" var="id">
 							<c:if test="${id==messageSend.id }"> checked="checked"</c:if>
 						</c:forEach>
 						onchange="changeCheck(this)" id="oneDealCheck"
 						 /> 
-					 </c:if>
+					 
 					 
 					 </td>
 				<td>${status.index+1 }</td>
