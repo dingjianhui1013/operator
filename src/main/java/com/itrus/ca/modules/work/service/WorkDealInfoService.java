@@ -182,7 +182,10 @@ public class WorkDealInfoService extends BaseService {
 	public WorkDealInfo get(Long id) {
 		return workDealInfoDao.findOne(id);
 	}
-
+	/*public List<WorkDealInfo> getList(Iterable<Long> ids){
+		
+		return (List<WorkDealInfo>) workDealInfoDao.findAll(ids);
+	}*/
 	public Page<WorkDealInfo> findAppList(Page<WorkDealInfo> page, WorkDealInfo workDealInfo) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("workCompany", "workCompany");
