@@ -106,7 +106,7 @@
 	}
 	function send(){
 		var checkIds = $("#checkIds").val();
-		alert(checkIds);
+		
 		if(checkIds==null || checkIds==""){
 			top.$.jBox.tip("请选择需要发送信息的公司！");
 		}else if($("#smsId").val()==null||$("#smsId").val()==""){
@@ -132,7 +132,7 @@
 	<ul class="nav nav-tabs">
 		<li><a href="${ctx}/message/smsConfiguration/">短信配置列表</a></li>
 		<li class="active"><a href="${ctx}/message/messageSending/list">消息发送</a></li>
-		<li><a href="${ctx}/message/checkMessage/list">消息查看</a></li>
+		<li><a href="${ctx}/message/messageSending/search">消息查看</a></li>
 		<li><a href="${ctx}/message/emailExtraction/list">邮箱提取</a></li>
 	</ul>
 	<form:form id="searchForm" modelAttribute="messageSending"
@@ -151,11 +151,11 @@
 					selected="selected"
 					</c:if>>${app.appName}</option>
 				</c:forEach>
-			</select> <label>单位名称 ：</label>
+			</select> <label>单位名称：</label>
 			<form:input path="workCompany.companyName" htmlEscape="false"
 				maxlength="50" class="input-medium" id="companyName"/>
 
-			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			<label>证书持有人：</label>
 			<form:input path="workUser.contactName" htmlEscape="false"
 				maxlength="16" class="input-medium" id="contactName"/>
@@ -170,19 +170,8 @@
 					selected="selected"
 					</c:if>>${type.name}</option>
 				</c:forEach>
-			</select> <label>业务状态 ：</label> <select
-				name="dealInfoStatus" id="dealInfoStatus">
-				<option value="">请选择业务类型</option>
-				<c:forEach items="${wdiStatus}" var="type">
-					<option value="${type.key}"
-						<c:if test="${type.key==dealInfoStatus}">
-					selected="selected"
-					</c:if>>${type.value}</option>
-				</c:forEach>
-			</select>
-		</div>
-	<br>
-		<label>选择区域：</label>
+			</select> 
+			<label>选择区域：</label>
 		<select name="areaId" id="areaId" onchange="addOffice()">
 			<option value="">请选择</option>
 			<c:forEach items="${offsList}" var="off">
@@ -202,9 +191,21 @@
 						</c:if>>${off.name}</option>
 				</c:forEach>
 			</select>
-			</div>
-		<br>
-		<br>
+		</div>
+	<br>
+		
+			<label>业务状态：</label> <select
+				name="dealInfoStatus" id="dealInfoStatus">
+				<option value="">请选择业务类型</option>
+				<c:forEach items="${wdiStatus}" var="type">
+					<option value="${type.key}"
+						<c:if test="${type.key==dealInfoStatus}">
+					selected="selected"
+					</c:if>>${type.value}</option>
+				</c:forEach>
+			</select>
+			
+		
 		<label>短信模板：</label> <select name="smsId" id="smsId">
 				<option value="">请选择</option>
 				<c:forEach items="${smsConfigurationList}" var="sms">
@@ -220,6 +221,7 @@
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			<a href="javascript:send()" class="btn btn-primary">发送</a>
 			<input type="hidden"  name="checkIds"  id="checkIds"  value="${checkIds }"/>
+		</div>
 	</form:form>
 	<tags:message content="${message}" />
 	<table id="contentTable" class="table table-striped table-bordered table-condensed">
