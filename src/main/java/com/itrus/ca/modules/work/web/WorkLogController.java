@@ -6,8 +6,13 @@ package com.itrus.ca.modules.work.web;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.google.common.collect.Lists;
 import com.itrus.ca.common.config.Global;
 import com.itrus.ca.common.persistence.Page;
 import com.itrus.ca.common.utils.StringUtils;
@@ -100,33 +106,179 @@ public class WorkLogController extends BaseController {
 		return "modules/customer/workLogCustomerList";
 	}
 
+//	@RequiresPermissions("work:workLog:view")
+//	@RequestMapping(value = { "rclist" })
+//	public String rclist(
+//			WorkLog workLog,String name,
+//			@RequestParam(value = "startTime", required = false) String startTime,
+//			@RequestParam(value = "endTime", required = false) String endTime,
+//			@RequestParam(value ="appId" , required=false) Long appId,
+//			HttpServletRequest request, HttpServletResponse response,
+//			Model model) {
+//		// Page<WorkLog> page = workLogService.find(new Page<WorkLog>(request,
+//		// response), workLog);
+//		// model.addAttribute("page", page);
+//		String names = workLogService.findName(name);
+//		List<Office> offices = officeService.getOfficeByType(
+//				UserUtils.getUser(), 2);
+//		if("true".equals(names)){
+//		List<Map<String, Object>> list = workLogService.findRctj(offices,name,
+//				startTime, endTime,appId);
+//		model.addAttribute("logList", list);
+//		}
+//		model.addAttribute("apps", configAppService.findall());
+//		model.addAttribute("startTime", getDateByString(startTime));
+//		model.addAttribute("endTime", getDateByString(endTime));
+//		model.addAttribute("name",name);
+//		return "modules/customer/workRCCustomerList";
+//	}
 	@RequiresPermissions("work:workLog:view")
 	@RequestMapping(value = { "rclist" })
 	public String rclist(
 			WorkLog workLog,String name,
-			@RequestParam(value = "startTime", required = false) String startTime,
-			@RequestParam(value = "endTime", required = false) String endTime,
+			@RequestParam(value = "startTime", required = false) Date startTime,
+			@RequestParam(value = "endTime", required = false) Date endTime,
 			@RequestParam(value ="appId" , required=false) Long appId,
 			HttpServletRequest request, HttpServletResponse response,
 			Model model) {
 		// Page<WorkLog> page = workLogService.find(new Page<WorkLog>(request,
 		// response), workLog);
 		// model.addAttribute("page", page);
+		Map<String, List<Integer>> access_count=new HashMap<String, List<Integer>>();
 		String names = workLogService.findName(name);
 		List<Office> offices = officeService.getOfficeByType(
 				UserUtils.getUser(), 2);
 		if("true".equals(names)){
-		List<Map<String, Object>> list = workLogService.findRctj(offices,name,
-				startTime, endTime,appId);
-		model.addAttribute("logList", list);
+//		List<Map<String, Object>> list = workLogService.findRctj(offices,name,
+//				startTime, endTime,appId);
+//		model.addAttribute("logList", list);
+			List<WorkLog> workLogs=workLogService.findworkLogs(name, startTime, endTime,appId);
+			model.addAttribute("li", workLogs);
+			Set<String> Access=new LinkedHashSet<String>();
+			for(int i=0;i<workLogs.size();i++)
+			{
+				Access.add(workLogs.get(i).getAccess());
+			}
+			Object Accesss[]=Access.toArray();
+			
+			for(int a=0;a<Accesss.length;a++)
+			{
+				List<Integer> count=Lists.newArrayList();
+				int xz=0;
+				int gx=0;
+				int js=0;
+				int bg=0;
+				int	bb=0;
+				int yt=0;
+				int mm=0;
+				int sq=0;
+				int hz=0;
+				int ywxt=0;
+				int ywcz=0;
+				int qt=0;
+				for(int w=0;w<workLogs.size();w++)
+				{
+					if(workLogs.get(w).getAccess().equals(Accesss[a]))
+					{
+						if(workLogs.get(w).getYwzx()!=null)
+						{
+							
+							if(workLogs.get(w).getYwzx().indexOf("新增")!=-1)
+							{
+								xz++;
+							}else
+							if(workLogs.get(w).getYwzx().indexOf("更新")!=-1)
+							{
+								gx++;
+							}else
+							if(workLogs.get(w).getYwzx().indexOf("解锁")!=-1)
+							{
+								js++;
+							}else
+							if(workLogs.get(w).getYwzx().indexOf("变更")!=-1)
+							{
+								xz++;
+							}else
+							if(workLogs.get(w).getYwzx().indexOf("补办")!=-1)
+							{
+								xz++;
+							}else
+							if(workLogs.get(w).getYwzx().indexOf("用途")!=-1)
+							{
+								xz++;
+							}else
+							if(workLogs.get(w).getYwzx().indexOf("密码")!=-1)
+							{
+								xz++;
+							}else
+							if(workLogs.get(w).getYwzx().indexOf("授权")!=-1)
+							{
+								xz++;
+							}else
+							if(workLogs.get(w).getYwzx().indexOf("合作")!=-1)
+							{
+								xz++;
+							}
+							if(workLogs.get(w).getProbleType()!=null)
+							{
+								qt++;
+							}
+						}
+						if(workLogs.get(w).getYwxt()!=null)
+						{
+							ywxt+=workLogs.get(w).getYwxt().split(",").length;
+						}
+						if(workLogs.get(w).getYwcz()!=null)
+						{
+							ywcz+=workLogs.get(w).getYwcz().split(",").length;
+						}
+					}
+				}
+				count.add(xz);
+				count.add(gx);
+				count.add(js);
+				count.add(bg);
+				count.add(bb);
+				count.add(yt);
+				count.add(mm);
+				count.add(sq);
+				count.add(hz);
+				count.add(ywxt);
+				count.add(ywcz);
+				count.add(qt);
+				access_count.put((String)Accesss[a], count);
+			}
 		}
+		int index=0;
+		Iterator<Map.Entry<String, List<Integer>>> itt=access_count.entrySet().iterator();
+		while(itt.hasNext())
+		{
+			index=itt.next().getValue().size();
+		}
+		List<Integer> zj=Lists.newArrayList();
+		for(int c=0;c<index;c++)
+		{
+			int count=0;
+			Iterator<Map.Entry<String, List<Integer>>> it=access_count.entrySet().iterator();
+			while(it.hasNext())
+			{
+				Entry<String, List<Integer>> entry=it.next();
+				count+=entry.getValue().get(c);
+			}
+			zj.add(count);
+		}
+		model.addAttribute("zj", zj);
+		model.addAttribute("access_count", access_count);
 		model.addAttribute("apps", configAppService.findall());
-		model.addAttribute("startTime", getDateByString(startTime));
-		model.addAttribute("endTime", getDateByString(endTime));
+		model.addAttribute("startTime", startTime);
+		model.addAttribute("endTime",endTime);
 		model.addAttribute("name",name);
+		if(appId!=null)
+		{
+			model.addAttribute("appId", appId);
+		}
 		return "modules/customer/workRCCustomerList";
 	}
-
 	@RequiresPermissions("work:workLog:view")
 	@RequestMapping("kflist")
 	public String kflist(WorkLog workLog, HttpServletRequest request,

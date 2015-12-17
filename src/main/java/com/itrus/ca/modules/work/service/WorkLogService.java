@@ -71,7 +71,29 @@ public class WorkLogService extends BaseService {
 		}
 		return retu;
 	}
-	
+	public List<WorkLog> findworkLogs(String name,Date staDate,Date endDate,Long appId)
+	{
+		DetachedCriteria dc = workLogDao.createDetachedCriteria();
+		dc.createAlias("createBy", "createBy");
+		if(name!=null&&!"".equals(name))
+		{
+			dc.add(Restrictions.like("createBy.name", "%"+name+"%"));
+		}
+		if(staDate!=null&&!"".equals(staDate))
+		{
+			dc.add(Restrictions.ge("createDate",staDate));
+		}
+		if(endDate!=null&&!"".equals(endDate))
+		{
+			dc.add(Restrictions.le("createDate",endDate));
+		}
+		if(appId!=null&&!"".equals(appId))
+		{
+			dc.add(Restrictions.le("configApp.id",appId));
+		}
+		dc.add(Restrictions.ne("distinguish","1"));
+		return workLogDao.find(dc);
+	}
 	public List<Map<String, Object>> findtj(List<Office> offices,String name,String staDate,String endDate){
 		String sqlOffice ="";
 		if(name!=null && "".equals(name)){
@@ -130,7 +152,6 @@ public class WorkLogService extends BaseService {
 		}
 		return mapList;
 	}
-	
 	public List<Map<String, Object>> findRctj(List<Office> offices,String name,String staDate,String endDate,Long appId){
 		String sqlOffice ="";
 		name = name==null?"":name;

@@ -39,7 +39,7 @@ public class WorkLog extends DataEntity implements java.io.Serializable {
 	private Integer completeType;
 	private String leftoverProblem;
 	private Date creatTime;
-	private String probleType;//问题类型
+	private String probleType;//问题类型  包括其他
 	private String access;//客服接入
 	private Integer status; //服务类型状态 1为日常客服 0为普通客服
 	private Integer state; //状态 1为客服记录Null为工作记录

@@ -30,7 +30,8 @@
 		<select name="appId" id="appId">
 			<option value="" >请选择</option>
 			<c:forEach items="${apps}" var="app">
-				<option value="${app.id }">${app.appName }</option>
+				<option value="${app.id}" <c:if test="${app.id==appId }">selected="selected"</c:if>>${app.appName }</option>
+				
 			</c:forEach>
 		</select>
 		</div>
@@ -52,61 +53,38 @@
 	<table id="contentTable" class="table table-striped table-bordered table-condensed">
 		<thead>
 			<tr>
-				<th>客服接入</th>
-				<th>业务咨询</th>
-				<th>环境</th>
-				<th>驱动</th>
-				<th>key</th>
-				<th>网络</th>
-				<th>更新操作</th>
-				<th>解锁</th>
-				<th>业务系统</th>
-				<th>业务操作</th>
-				<th>其他</th>
+				<th rowspan="2" style="text-align:center">客服接入</th>
+				<th colspan="9" style="text-align:center">业务咨询</th>
+				<th rowspan="2" style="text-align:center">业务系统</th>
+				<th rowspan="2" style="text-align:center">业务操作</th>
+				<th rowspan="2" style="text-align:center">其他</th>
+			</tr>
+			<tr>
+				<th style="text-align:center">新办</th>
+				<th style="text-align:center">更新</th>
+				<th style="text-align:center">解锁</th>
+				<th style="text-align:center">变更</th>
+				<th style="text-align:center">补办</th>
+				<th style="text-align:center">用途</th>
+				<th style="text-align:center">密码</th>
+				<th style="text-align:center">授权</th>
+				<th style="text-align:center">合作</th>
 			</tr>
 		</thead>
 		<tbody>
-		<c:forEach items="${logList}" var="log">
+		<c:forEach items="${access_count}" var="access_count">
 			<tr>
-				<td>${log.CUSTOMER_SERVICE_ACCESS}</td>
-				<td>${log.ZX}</td>
-				<td>${log.HJ}</td>
-				<td>${log.QD}</td>
-				<td>${log.KY}</td>
-				<td>${log.WL}</td>
-				<td>${log.GX}</td>
-				<td>${log.JS}</td>
-				<td>${log.XT}</td>
-				<td>${log.CZ}</td>
-				<td>${log.QT}</td>
+				<td style="text-align:center">${access_count.key}</td>
+				<c:forEach items="${access_count.value}" var="acv">
+				<td style="text-align:center">${acv}</td>
+				</c:forEach>
 			</tr>
 		</c:forEach>
 		<tr>
-			<td>总计</td>
-			<td>
-				<c:forEach items="${logList}" var="log">
-					<c:set var="zxsum" value="${zxsum+log.ZX }"></c:set>	
-					<c:set var="hjsum" value="${hjsum+log.HJ }"></c:set>	
-					<c:set var="qdsum" value="${qdsum+log.QD }"></c:set>	
-					<c:set var="kysum" value="${kysum+log.KY }"></c:set>	
-					<c:set var="wlsum" value="${wlsum+log.WL }"></c:set>	
-					<c:set var="gxsum" value="${gxsum+log.GX }"></c:set>	
-					<c:set var="jssum" value="${jssum+log.JS }"></c:set>	
-					<c:set var="xtsum" value="${xtsum+log.XT }"></c:set>	
-					<c:set var="czsum" value="${czsum+log.CZ }"></c:set>	
-					<c:set var="qtsum" value="${qtsum+log.QT }"></c:set>	
-				</c:forEach>
-				${zxsum }
-			</td>
-			<td>${hjsum }</td>
-			<td>${qdsum }</td>
-			<td>${kysum }</td>
-			<td>${wlsum }</td>
-			<td>${gxsum }</td>
-			<td>${jssum }</td>
-			<td>${xtsum }</td>
-			<td>${czsum }</td>
-			<td>${qtsum }</td>
+			<td style="text-align:center">总计</td>
+			<c:forEach items="${zj }" var="zj">
+					<td style="text-align:center">${zj}</td>
+			</c:forEach>
 		</tr>
 		</tbody>
 	</table>

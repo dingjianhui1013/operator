@@ -152,7 +152,7 @@
 		<div class="control-group">
 			<label class="control-label">其他</label>
 			<div class="controls">
-				<input type="text" name="qita"/>
+				<input type="text" name="probleType"/>
 			</div>
 		</div>
 		<div class="control-group">
