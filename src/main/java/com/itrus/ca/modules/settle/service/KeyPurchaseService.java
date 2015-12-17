@@ -163,9 +163,13 @@ public class KeyPurchaseService extends BaseService {
 			//System.out.println(supplierName);
 			dc.add(Restrictions.like("appName", "%"+supplierName+"%"));
 		}
-		if(keyPurchase.getKeySn()!=null && !"".equals(keyPurchase.getKeySn())){
+	/*	if(keyPurchase.getKeySn()!=null && !"".equals(keyPurchase.getKeySn())){
 			dc.add(Restrictions.ge("startCode", keyPurchase.getKeySn()));
 			dc.add(Restrictions.le("endCode", keyPurchase.getKeySn()));
+		}*/
+		if(keySn !=null){
+			dc.add(Restrictions.le("startCode",keySn));
+			dc.add(Restrictions.ge("endCode",keySn));
 		}
 		if(keyName !=null){
 			dc.add(Restrictions.like("appName", "%"+keyName+"%"));
