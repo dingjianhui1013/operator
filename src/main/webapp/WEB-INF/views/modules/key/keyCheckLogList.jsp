@@ -106,7 +106,7 @@
 					<td>${depot.depotName}</td>
 					<td>${depot.office.parent.name}</td>
 					<td>${depot.office.name}</td>
-					<td>${depot.createBy.name}</td>
+					<td>${depot.linkmanName}</td>
 					<td>${depot.linkmanMobilePhone}</td>
 					<td><shiro:hasPermission name="key:keyCheckLog:edit">
 							<input type="hidden" id="depotId" value="${depot.id}">
