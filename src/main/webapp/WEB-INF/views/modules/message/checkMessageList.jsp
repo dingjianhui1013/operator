@@ -19,7 +19,7 @@
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li><a href="${ctx}/message/smsConfiguration/">短信配置列表</a></li>
+		<li><a href="${ctx}/message/smsConfiguration/">短信配置</a></li>
 		<li><a href="${ctx}/message/messageSending/list">消息发送</a></li>
 		<li class="active"><a href="${ctx}/message/messageSending/search">消息查看</a></li>
 		<li><a href="${ctx}/message/emailExtraction/list">邮箱提取列表</a></li>
@@ -55,12 +55,12 @@
 				<input id="startTime" name="startTime"
 				type="text" readonly="readonly" maxlength="20"
 				class="required Wdate"
-				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"
-				value="<fmt:formatDate value="${startTime}" pattern="yyyy-MM-dd"/>" />
+				onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"
+				value="<fmt:formatDate value="${startTime}" pattern="yyyy-MM-dd HH:mm:ss"/>" />
 			&nbsp;-&nbsp;<input id="endTime" name="endTime" type="text"
 				readonly="readonly" maxlength="20" class="Wdate required"
-				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false,minDate:'#F{$dp.$D(\'startTime\')}'});"
-				value="<fmt:formatDate value="${endTime}" pattern="yyyy-MM-dd"/>" />
+				onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false,minDate:'#F{$dp.$D(\'startTime\')}'});"
+				value="<fmt:formatDate value="${endTime}" pattern="yyyy-MM-dd HH:mm:ss"/>" />
 				
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 		<input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/>

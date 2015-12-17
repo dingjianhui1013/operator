@@ -10,44 +10,8 @@
 <script type="text/javascript">
 	$(document).ready(function() {
 	
-			/* $("#btnImport").click(function(){
-				$.jBox($("#importBox").html(), {title:"导入数据", buttons:{"关闭":true}, 
-					bottomText:"导入文件不能超过5M，仅允许导入“txt”格式文件！"});
-			}); */
 		});
-	/* function addAttach() {
-		if($("#fileName").val() == ""){
-			top.$.jBox.tip("导入文件格式有误，导入文件应为txt文件，请确认");
-        	return false;
-        }
-        if($("#fileName").val().indexOf('.txt')<0) {
-        	top.$.jBox.tip("导入文件格式有误，导入文件应为txt文件，请确认");
-            return false;
-        }
-		var options = {
-			type : 'post',
-			dataType : 'json',
-			success : function(data) {
-				//console.log(data);
-				if(data.status=='1'){
-					top.$.jBox.tip("上传成功");
-					  setTimeout(function (){
-	            		    //something you want delayed
-	            		    	$("#searchForm").submit();
-	            		//	window.location.reload();
-	            		   }, 3000); // how long do you want the delay to be? 
-	            
-				}else if(data.status=='-1'){
-					top.$.jBox.tip("上传失败"+data.msg);
-					//$("#searchForm").submit();
-				}else{
-					top.$.jBox.tip("上传失败："+data.errorMsg);
-					//$("#searchForm").submit();
-				}
-			}
-		};
-		$('#importBox').ajaxSubmit(options); 
-	}*/
+	
 </script>
 </head>
 <body>
@@ -61,7 +25,7 @@
 		</form>
 	</div>
 	<ul class="nav nav-tabs">
-		<li><a href="${ctx}/message/smsConfiguration/">短信配置列表</a></li>
+		<li><a href="${ctx}/message/smsConfiguration/">短信配置</a></li>
 		<li class="active"><a
 			href="${ctx}/message/smsConfiguration/form?id=${smsConfiguration.id}">短信配置<shiro:hasPermission
 					name="message:smsConfiguration:edit">${not empty smsConfiguration.id?'修改':'添加'}</shiro:hasPermission>

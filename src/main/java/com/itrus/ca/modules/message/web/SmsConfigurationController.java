@@ -142,10 +142,10 @@ public class SmsConfigurationController extends BaseController {
 
 	@RequiresPermissions("message:smsConfiguration:edit")
 	@RequestMapping(value = "delete")
-	public String delete(Long id, RedirectAttributes redirectAttributes) {
+	public String delete(Long id,String messageName, RedirectAttributes redirectAttributes) {
 		smsConfigurationService.delete(id);
 		logUtil.saveSysLog("短信模板配置", "删除id为" + id + "短信模板配置成功", null);
-		addMessage(redirectAttributes, "删除短信配置成功");
+		addMessage(redirectAttributes, "删除模板名称为'"+messageName+"'模版成功");
 		return "redirect:" + Global.getAdminPath() + "/message/smsConfiguration";
 	}			
 

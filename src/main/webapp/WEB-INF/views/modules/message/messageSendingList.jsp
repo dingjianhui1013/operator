@@ -130,7 +130,7 @@
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li><a href="${ctx}/message/smsConfiguration/">短信配置列表</a></li>
+		<li><a href="${ctx}/message/smsConfiguration/">短信配置</a></li>
 		<li class="active"><a href="${ctx}/message/messageSending/list">消息发送</a></li>
 		<li><a href="${ctx}/message/messageSending/search">消息查看</a></li>
 		<li><a href="${ctx}/message/emailExtraction/list">邮箱提取</a></li>

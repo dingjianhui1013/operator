@@ -63,6 +63,7 @@ public class SmsConfigurationService extends BaseService {
 	public List<SmsConfiguration> findAll(){
 		DetachedCriteria dc = smsConfigurationDao.createDetachedCriteria();
 		dc.addOrder(Order.asc("id"));
+		dc.add(Restrictions.eq(SmsConfiguration.DEL_FLAG, SmsConfiguration.DEL_FLAG_NORMAL));
 		return smsConfigurationDao.find(dc);
 	}
 	

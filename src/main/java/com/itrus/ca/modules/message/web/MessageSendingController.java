@@ -9,6 +9,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringWriter;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -176,6 +179,7 @@ public class MessageSendingController extends BaseController {
 			@RequestParam(value = "smsId", required = false) Long smsId,
 			 HttpServletRequest request,
 				HttpServletResponse response) {
+		DateFormat format=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		//List<WorkCertInfo> certInfoList = new ArrayList<WorkCertInfo>();
 		//String messageAddress=smsConfigurationService.get(smsId).getMessageAddress();
 		SmsConfiguration smsConfiguration=smsConfigurationService.get(smsId);
@@ -253,7 +257,16 @@ public class MessageSendingController extends BaseController {
 			long mess= System.currentTimeMillis();
 			String messId=""+mess;
 			System.out.println(messId);
-			Date smsSendDate=new Date();
+			String smsSendDate1=format.format(new Date());
+		
+			Date smsSendDate=null;
+			try {
+				smsSendDate = format.parse(smsSendDate1);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			System.out.println(smsSendDate);
 			//SmsService smsService=new SmsService();
 			String returnStatus=null;
 			if(phone!=null){
