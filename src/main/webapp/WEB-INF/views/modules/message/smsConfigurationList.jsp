@@ -48,37 +48,38 @@
 		alert(file);
 	}
 	function addAttach() {
-		if($("#fileName").val() == ""){
+		
+		if ($("#fileName").val() == "") {
 			top.$.jBox.tip("请确认导入文件！");
-        	return false;
-        }
-        if($("#fileName").val().indexOf('.txt')<0) {
-        	top.$.jBox.tip("导入文件格式有误，导入文件应为txt文件，请确认");
-            return false;
-        }
-        top.$.jBox.tip("正在上传文件...", 'loading');
+			return false;
+		}
+		if ($("#fileName").val().indexOf('.txt') < 0) {
+			top.$.jBox.tip("导入文件格式有误，导入文件应为txt文件，请确认");
+			return false;
+		}
+		top.$.jBox.tip("正在上传文件...", 'loading');
 		var options = {
 			type : 'post',
 			dataType : 'json',
 			success : function(data) {
 				//console.log(data);
-				if(data.status=='1'){
+				if (data.status == '1') {
 					top.$.jBox.tip("上传成功");
-					  setTimeout(function (){
-	            		    //something you want delayed
-	            		    	$("#searchForm").submit();
-	            		//	window.location.reload();
-	            		   }, 1500); // how long do you want the delay to be? 
-	            
-				}else if(data.status=='-1'){
+					setTimeout(function() {
+						//something you want delayed
+						$("#searchForm").submit();
+						//	window.location.reload();
+					}, 1500); // how long do you want the delay to be? 
+
+				} else if (data.status == '-1') {
 					top.$.jBox.tip("上传失败!");
-					var info = "失败信息:<br>"+data.msg;
+					var info = "失败信息:<br>" + data.msg;
 					top.$.jBox.info(info);
 					//top.$.jBox.tip("上传失败"+data.msg);
 					//$("#searchForm").submit();
-				}else{
+				} else {
 					top.$.jBox.tip("上传失败!");
-					var info = "失败信息:<br>"+data.msg;
+					var info = "失败信息:<br>" + data.msg;
 					top.$.jBox.info(info);
 					//top.$.jBox.tip("上传失败："+data.errorMsg);
 					//$("#searchForm").submit();
@@ -86,9 +87,6 @@
 			}
 		};
 		$('#materialImport').ajaxSubmit(options);
-	}
-	function delete(){
-		
 	}
 </script>
 </head>
@@ -159,10 +157,11 @@
 	<div class="pagination">${page}</div>
 	<div id="declareDiv" class="modal hide fade">
 		<div class="modal-header">
-			<h3>批量导入</h3>
+			<h3>导入模板</h3>
 		</div>
 		<div class="modal-body">
-			<form id="materialImport" action="${ctx}/message/smsConfiguration/test"
+			<form id="materialImport"
+				action="${ctx}/message/smsConfiguration/test"
 				enctype="multipart/form-data">
 				<input id="fileName" name="fileName" type="file" multiple="multiple" />
 			</form>
