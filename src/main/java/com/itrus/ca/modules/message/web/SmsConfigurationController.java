@@ -6,17 +6,22 @@ package com.itrus.ca.modules.message.web;
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.velocity.app.Velocity;
+import org.apache.velocity.app.VelocityEngine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-
+import org.springframework.ui.velocity.VelocityEngineUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -34,6 +39,7 @@ import com.itrus.ca.common.web.BaseController;
 import com.itrus.ca.modules.log.service.LogUtil;
 import com.itrus.ca.modules.message.entity.SmsConfiguration;
 import com.itrus.ca.modules.message.service.SmsConfigurationService;
+import com.itrus.ca.modules.message.vo.Read;
 import com.itrus.ca.modules.profile.service.ConfigAppService;
 import com.itrus.ca.modules.sys.entity.User;
 import com.itrus.ca.modules.sys.service.OfficeService;
@@ -178,18 +184,6 @@ public class SmsConfigurationController extends BaseController {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			// if(!file.isEmpty()){
-			// System.out.println((file.getName()));
-			//
-			// byte[] bs;
-			// try {
-			// bs = file.getBytes();
-			// System.out.println(new String(bs));
-			// } catch (IOException e) {
-			// // TODO Auto-generated catch block
-			// e.printStackTrace();
-			// }
-			// }
 		}
 		SmsConfiguration smsConfiguration = new SmsConfiguration();
 		smsConfiguration.setMessageName(newFileName);
@@ -203,16 +197,18 @@ public class SmsConfigurationController extends BaseController {
 			throws IllegalStateException, IOException, JSONException {
 		String newFileName=null;
 		JSONObject json = new JSONObject();
+		String path=null;
+		String fileName=null;
 		try {
 		
-		String path = SmsConfigurationController.class.getResource("/").toString().replace("file:", "")
+		 path = SmsConfigurationController.class.getResource("/").toString().replace("file:", "")
 				.replace("%20", " ");
 		if (StringUtils.contains(path, "/WEB-INF")) {
 			path = path.substring(0, StringUtils.indexOf(path, "/WEB-INF"));
 		}
 		;
 		path += "/WEB-INF/template/";// 文件保存目录，也可自定为绝对路径
-		String fileName = file.getOriginalFilename();// getOriginalFilename和getName是不一样的哦
+		 fileName = file.getOriginalFilename();// getOriginalFilename和getName是不一样的哦
 		// String extensionName = fileName
 		// .substring(fileName.lastIndexOf(".") + 1); 获取文件本质
 		//newFileName = String.valueOf(DateUtils.formatDate(new Date(), "yyyy-MM-dd"));
@@ -236,8 +232,22 @@ public class SmsConfigurationController extends BaseController {
 			e.printStackTrace();
 			
 		}
+//		Read read=new Read();
+//		String messageContent=read.readFile(path);
+//		System.out.println(messageContent);
+		Properties p = new Properties();
+		p.setProperty(Velocity.INPUT_ENCODING, "UTF-8");
+		p.setProperty(Velocity.OUTPUT_ENCODING, "UTF-8");
+		p.setProperty(Velocity.FILE_RESOURCE_LOADER_PATH, path);
+		System.out.println(p);
+		VelocityEngine velocityEngine = new VelocityEngine();
+		velocityEngine.init(p);
+		Map<String, Object>  orange = new HashMap<>();
+		String content = VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, newFileName, "UTF-8", orange);
+		System.out.println(content);
 		SmsConfiguration smsConfiguration = new SmsConfiguration();
 		smsConfiguration.setMessageName(newFileName);
+		smsConfiguration.setMessageContent(content);
 		smsConfigurationService.save(smsConfiguration);
 		return json.toString();
 		
