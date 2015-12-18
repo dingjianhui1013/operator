@@ -128,6 +128,9 @@ public class SettleKeyService extends BaseService {
 	
 	public List<SettleKey> exportSettle(Long configSupplierId, Long generalId, String keySn,Date startTime,Date endTime) {
 		DetachedCriteria dc = settleKeyDao.createDetachedCriteria();
+		dc.createAlias("sysUser", "sysUser");
+		dc.createAlias("sysUser.office", "office");
+		dc.add(dataScopeFilter(UserUtils.getUser(), "office", "sysUser"));
 		if (configSupplierId!=null) {
 			dc.add(Restrictions.eq("configSupplier.id", configSupplierId));
 		}
