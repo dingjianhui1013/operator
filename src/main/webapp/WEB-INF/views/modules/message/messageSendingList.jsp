@@ -158,7 +158,7 @@
 			success : function(data) {
 				//console.log(data);
 				if (data.status == '1') {
-					top.$.jBox.tip("发送成功");
+					top.$.jBox.tip("发送完成");
 					setTimeout(function() {
 						//something you want delayed
 						$("#searchForm").submit();
