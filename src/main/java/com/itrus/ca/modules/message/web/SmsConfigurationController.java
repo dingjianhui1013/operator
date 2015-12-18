@@ -39,7 +39,7 @@ import com.itrus.ca.common.web.BaseController;
 import com.itrus.ca.modules.log.service.LogUtil;
 import com.itrus.ca.modules.message.entity.SmsConfiguration;
 import com.itrus.ca.modules.message.service.SmsConfigurationService;
-import com.itrus.ca.modules.message.vo.Read;
+
 import com.itrus.ca.modules.profile.service.ConfigAppService;
 import com.itrus.ca.modules.sys.entity.User;
 import com.itrus.ca.modules.sys.service.OfficeService;
