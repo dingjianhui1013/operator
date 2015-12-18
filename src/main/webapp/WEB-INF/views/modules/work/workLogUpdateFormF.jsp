@@ -119,6 +119,13 @@
 				<input type="checkbox"  <c:if test="${fn:contains(workLog.ywxt,'系统出错')==true}"> checked="checked"</c:if> value="系统出错" name="ywxt">系统出错
 			</div>
 		</div>
+		
+		<div class="control-group">
+			<label class="control-label">其他:</label>
+			<div class="controls">
+				<input type="text" name="probleType" value="${workLog.probleType}">
+			</div>
+		</div>
 		<div class="control-group">
 			<label class="control-label">记录人员:</label>
 			<div class="controls">

@@ -821,12 +821,12 @@ public class WorkDealInfoController extends BaseController {
 			for (int m = 0; m < months.length; m++) {
 				WorkDate_MoneVo workDate_MoneVo = new WorkDate_MoneVo();
 				double countMoneys = 0L;
-				double countPostMoney = 0L;
-				double countBankMoney = 0L;
-				double countXjMoney = 0L;
-				double countAlipayMoney = 0L;
-				double countMoney = 0L;
 				for (int o = 0; o < offs.length; o++) {
+					double countPostMoney = 0L;
+					double countBankMoney = 0L;
+					double countXjMoney = 0L;
+					double countAlipayMoney = 0L;
+					double countMoney = 0L;
 					double postMoney = 0L;
 					double bankMoney = 0L;
 					double xjMoney = 0L;
@@ -1081,12 +1081,12 @@ public class WorkDealInfoController extends BaseController {
 			for (int m = 0; m < months.length; m++) {
 				WorkDate_MoneVo workDate_MoneVo = new WorkDate_MoneVo();
 				double countMoneys = 0L;
-				double countPostMoney = 0L;
-				double countBankMoney = 0L;
-				double countXjMoney = 0L;
-				double countAlipayMoney = 0L;
-				double countMoney = 0L;
 				for (int o = 0; o < offs.length; o++) {
+					double countPostMoney = 0L;
+					double countBankMoney = 0L;
+					double countXjMoney = 0L;
+					double countAlipayMoney = 0L;
+					double countMoney = 0L;
 					double postMoney = 0L;
 					double bankMoney = 0L;
 					double xjMoney = 0L;
@@ -4369,12 +4369,12 @@ public class WorkDealInfoController extends BaseController {
 			for (int m = 0; m < months.length; m++) {
 				WorkDate_MoneVo workDate_MoneVo = new WorkDate_MoneVo();
 				double countMoneys = 0L;
-				double countPostMoney = 0L;
-				double countBankMoney = 0L;
-				double countXjMoney = 0L;
-				double countAlipayMoney = 0L;
-				double countMoney = 0L;
 				for (int o = 0; o < offs.length; o++) {
+					double countPostMoney = 0L;
+					double countBankMoney = 0L;
+					double countXjMoney = 0L;
+					double countAlipayMoney = 0L;
+					double countMoney = 0L;
 					double postMoney = 0L;
 					double bankMoney = 0L;
 					double xjMoney = 0L;
@@ -4522,8 +4522,8 @@ public class WorkDealInfoController extends BaseController {
 			Entry<String, List<String>> entry = itt.next();
 			if (entry.getValue().size() == 1) {
 				index += (entry.getValue().size());
-				row1.createCell(1 + index).setCellValue(entry.getKey());
-				sheet.addMergedRegion(new Region(1, (short) (1 + index), 2, (short) (1 + index)));
+				sheet.addMergedRegion(new Region(1, (short) (1 + count+1), 2, (short) (1 + count+1)));
+				row1.createCell(1 + count+1).setCellValue(entry.getKey());
 				count ++;
 			}
 			if (entry.getValue().size() > 1) {
@@ -4545,7 +4545,10 @@ public class WorkDealInfoController extends BaseController {
 			rown.createCell(0).setCellValue(ms[m] + "");
 			rown.createCell(1).setCellValue(configApp.getAppName());
 			for (int om = 0; om < o_m.size(); om++) {
-				if (o_m.get(om).getDate() == ms[m]) {
+				Iterator<Map.Entry<String, List<String>>> its = office_payMethod.entrySet().iterator();
+				while (its.hasNext()) {
+					Entry<String, List<String>> entry = its.next();
+				if (o_m.get(om).getDate().equals(ms[m]) && o_m.get(om).getOfficeName().equals(entry.getKey())) {
 					if (o_m.get(om).getPostMoney()) {
 						rown.createCell(2 + a).setCellValue(o_m.get(om).getCountPostMoney());
 						a++;
@@ -4562,6 +4565,7 @@ public class WorkDealInfoController extends BaseController {
 						rown.createCell(2 + a).setCellValue(o_m.get(om).getCountAlipayMoney());
 						a++;
 					}
+				}
 				}
 			}
 			for (int wm = 0; wm < w_m.size(); wm++) {
@@ -4900,12 +4904,12 @@ public class WorkDealInfoController extends BaseController {
 			for (int m = 0; m < months.length; m++) {
 				WorkDate_MoneVo workDate_MoneVo = new WorkDate_MoneVo();
 				double countMoneys = 0L;
-				double countPostMoney = 0L;
-				double countBankMoney = 0L;
-				double countXjMoney = 0L;
-				double countAlipayMoney = 0L;
-				double countMoney = 0L;
 				for (int o = 0; o < offs.length; o++) {
+					double countPostMoney = 0L;
+					double countBankMoney = 0L;
+					double countXjMoney = 0L;
+					double countAlipayMoney = 0L;
+					double countMoney = 0L;
 					double postMoney = 0L;
 					double bankMoney = 0L;
 					double xjMoney = 0L;
@@ -5052,9 +5056,9 @@ public class WorkDealInfoController extends BaseController {
 		while (itt.hasNext()) {
 			Entry<String, List<String>> entry = itt.next();
 			if (entry.getValue().size() == 1) {
-				index += (entry.getValue().size());
-				row1.createCell(1 + index).setCellValue(entry.getKey());
-				sheet.addMergedRegion(new Region(1, (short) (1 + index), 2, (short) (1 + index)));
+				index ++;
+				sheet.addMergedRegion(new Region(1, (short) (1 + count+1), 2, (short) (1 + count+1)));
+				row1.createCell(1 + count+1).setCellValue(entry.getKey());
 				count ++;
 			}
 			if (entry.getValue().size() > 1) {
@@ -5067,6 +5071,14 @@ public class WorkDealInfoController extends BaseController {
 				}
 			}
 		}
+//		Iterator<Map.Entry<String, List<String>>> itt = office_payMethod.entrySet().iterator();
+//		while (itt.hasNext()) {
+//			Entry<String, List<String>> entry = itt.next();
+//			if(entry.getValue().size()==1)
+//			{
+//				
+//			}
+//		}
 		sheet.addMergedRegion(new Region(1, (short) (2 + count), 2, (short) (2 + count)));
 		row1.createCell(2 + count).setCellValue("合计");
 		Object ms[] = month.toArray();
@@ -5076,7 +5088,10 @@ public class WorkDealInfoController extends BaseController {
 			rown.createCell(0).setCellValue(ms[m] + "");
 			rown.createCell(1).setCellValue(configApp.getAppName());
 			for (int om = 0; om < o_m.size(); om++) {
-				if (o_m.get(om).getDate() == ms[m]) {
+				Iterator<Map.Entry<String, List<String>>> its = office_payMethod.entrySet().iterator();
+				while (its.hasNext()) {
+					Entry<String, List<String>> entry = its.next();
+				if (o_m.get(om).getDate().equals(ms[m]) && o_m.get(om).getOfficeName().equals(entry.getKey())) {
 					if (o_m.get(om).getPostMoney()) {
 						rown.createCell(2 + a).setCellValue(o_m.get(om).getCountPostMoney());
 						a++;
@@ -5094,6 +5109,7 @@ public class WorkDealInfoController extends BaseController {
 						a++;
 					}
 				}
+			}
 			}
 			for (int wm = 0; wm < w_m.size(); wm++) {
 				if (w_m.get(wm).getDate() == ms[m]) {

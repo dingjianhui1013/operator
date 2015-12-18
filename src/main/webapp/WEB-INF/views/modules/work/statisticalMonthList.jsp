@@ -214,7 +214,9 @@
 				<td>${dates}</td>
 				<td>${appName}</td>
 					<c:forEach items="${workoffice_MoneyVo}" var="workoffice_MoneyVo" >
-						<c:if test = "${workoffice_MoneyVo.date == dates}">
+						<c:forEach items="${office_payMethod }" var="office_payMethod">
+						
+						<c:if test = "${workoffice_MoneyVo.date == dates &&workoffice_MoneyVo.officeName==office_payMethod.key}">
 							<c:if test="${workoffice_MoneyVo.postMoney}">
 								<c:set var="postMoney" value="${postMoney+workoffice_MoneyVo.countPostMoney}"/>
 									<td>${workoffice_MoneyVo.countPostMoney}</td>
@@ -232,6 +234,7 @@
 									<td>${workoffice_MoneyVo.countAlipayMoney}</td>
 								</c:if>
 						</c:if>
+						</c:forEach>
 					</c:forEach>
 					<c:forEach items="${workDate_Mone}" var="workDate_Mone">
 						<c:if test="${workDate_Mone.date==dates}">

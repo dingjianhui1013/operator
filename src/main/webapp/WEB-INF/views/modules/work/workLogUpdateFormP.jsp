@@ -18,21 +18,27 @@
 				}
 			});
 			$("#name").focus();
-			$("#inputForm").validate({
-				submitHandler: function(form){
-					loading('正在提交，请稍等...');
-					form.submit();
-				},
-				errorContainer: "#messageBox",
-				errorPlacement: function(error, element) {
-					$("#messageBox").text("输入有误，请先更正。");
-					if (element.is(":checkbox")||element.is(":radio")||element.parent().is(".input-append")){
-						error.appendTo(element.parent().parent());
-					} else {
-						error.insertAfter(element);
-					}
-				}
-			});
+			$("#inputForm")
+			.validate(
+					{
+						submitHandler : function(form) {
+							loading('正在提交，请稍等...');
+							form.submit();
+						},
+						errorContainer : "#messageBox",
+						errorPlacement : function(error, element) {
+							$("#messageBox").text("输入有误，请先更正。");
+							if (element.is(":checkbox")
+									|| element.is(":radio")
+									|| element.parent().is(
+											".input-append")) {
+								error.appendTo(element.parent()
+										.parent());
+							} else {
+								error.insertAfter(element);
+							}
+						}
+					});
 		});
 	</script>
 </head>
@@ -90,9 +96,15 @@
 		<div class="control-group">
 			<label class="control-label">版本号:</label>
 			<div class="controls">
-				<input type = "text"   value = "${workLog.versionNumber }" name="versionNumber"/>
+				<input type = "text" value = "${workLog.versionNumber }" name="versionNumber" />
 			</div>
 		</div>		
+		<div class="control-group">
+			<label class="control-label">其他:</label>
+			<div class="controls">
+				<input type="text" name="probleType" id="probleType" value="${workLog.probleType}">
+			</div>
+		</div>
 		<div class="control-group">
 			<label class="control-label">记录人员:</label>
 			<div class="controls">

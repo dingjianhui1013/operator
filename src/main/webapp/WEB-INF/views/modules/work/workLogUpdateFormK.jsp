@@ -122,6 +122,12 @@
 			</div>
 		</div>
 		<div class="control-group">
+			<label class="control-label">其他:</label>
+			<div class="controls">
+				<input type="text" name="probleType" value="${workLog.probleType}">
+			</div>
+		</div>
+		<div class="control-group">
 			<label class="control-label">记录人员:</label>
 			<div class="controls">
 				${userName}
