@@ -14,118 +14,174 @@
 		$("#searchForm").submit();
 		return false;
 	}
-	function addOffice(){
+	function addOffice() {
 		var areaId = $("#areaId").prop('value');
 		var url = "${ctx}/sys/office/addOffices?areaId=";
-		 $.getJSON(url+areaId+"&_="+new Date().getTime(),function(data){
+		$.getJSON(url + areaId + "&_=" + new Date().getTime(), function(data) {
 			var html = "";
 			//console.log(data);
 			html += "<option value=\""+""+"\">请选择</ooption>";
-			$.each(data,function(idx,ele){
+			$.each(data, function(idx, ele) {
 				//console.log(idx);
 				//console.log(ele);
-				html += "<option value=\""+ele.id+"\">"+ele.name	+"</ooption>"
+				html += "<option value=\""+ele.id+"\">" + ele.name
+						+ "</ooption>"
 			});
-			
+
 			$("#officeId").html(html);
 		});
-		
-	 }
-	function checkAll(obj){
+
+	}
+	function checkAll(obj) {
 		var check = $($("#contentTable").find("#checkAll"));
 		var checkIds = $("#checkIds").val();
 		var xz = $("#contentTable").find("[name='oneDealCheck']");
 		if (check.is(":checked") == true) {
 			$('input:checkbox').each(function() {
-		        $(this).attr('checked', true);
+				$(this).attr('checked', true);
 			});
-			for (var a = 0; a <xz.length; a++) {
+			for (var a = 0; a < xz.length; a++) {
 				var check = $($("#contentTable").find("[name='oneDealCheck']")[a]);
 				if (check.is(":checked") == true) {
 					var checkOne = check.val();
-					if (checkIds.indexOf(checkOne)<0) {
-						if(checkIds==''){
-							checkIds+=check.val();
-						}else{
-							checkIds+=","+check.val();
+					if (checkIds.indexOf(checkOne) < 0) {
+						if (checkIds == '') {
+							checkIds += check.val();
+						} else {
+							checkIds += "," + check.val();
 						}
 					}
 				}
 			}
 			checkIds = checkIds.replace(",,", ",");
-			if (checkIds==",") {
+			if (checkIds == ",") {
 				$("#checkIds").val("");
-			}else{
+			} else {
 				$("#checkIds").val(checkIds);
 			}
-		}else{
-			$('input:checkbox').each(function () {
-		        $(this).attr('checked',false);
+		} else {
+			$('input:checkbox').each(function() {
+				$(this).attr('checked', false);
 			});
-			for (var a = 0; a <xz.length; a++) {
+			for (var a = 0; a < xz.length; a++) {
 				var check = $($("#contentTable").find("[name='oneDealCheck']")[a]);
 				if (check.is(":checked") == false) {
 					checkIds = checkIds.replace(check.val(), "");
 					checkIds = checkIds.replace(",,", ",");
 				}
 			}
-			if (checkIds==",") {
+			if (checkIds == ",") {
 				$("#checkIds").val("");
-			}else{
+			} else {
 				$("#checkIds").val(checkIds);
 			}
 		}
 	}
-	
-	
-	function changeCheck(obj){
+
+	function changeCheck(obj) {
 		var checkIds = $("#checkIds").val();
 		var xz = $("#contentTable").find("[name='oneDealCheck']");
-		if(checkIds.indexOf($(obj).val())>-1){
+		if (checkIds.indexOf($(obj).val()) > -1) {
 			checkIds = checkIds.replace($(obj).val(), "");
 		}
-		for (var a = 0; a <xz.length; a++) {
+		for (var a = 0; a < xz.length; a++) {
 			var check = $($("#contentTable").find("[name='oneDealCheck']")[a]);
 			if (check.is(":checked") == true) {
 				var checkOne = check.val();
-				if (checkIds.indexOf(checkOne)<0) {
-					if(checkIds==''){
-						checkIds+=check.val();
-					}else{
-						checkIds+=","+check.val();
+				if (checkIds.indexOf(checkOne) < 0) {
+					if (checkIds == '') {
+						checkIds += check.val();
+					} else {
+						checkIds += "," + check.val();
 					}
 				}
 			}
 		}
 		checkIds = checkIds.replace(",,", ",");
-		if (checkIds==",") {
+		if (checkIds == ",") {
 			$("#checkIds").val("");
-		}else{
+		} else {
 			$("#checkIds").val(checkIds);
 		}
 	}
-	function send(){
+	function send() {
 		var checkIds = $("#checkIds").val();
-		
-		if(checkIds==null || checkIds==""){
+		var apply = $("#apply").val();
+		var companyName = $("#companyName").val();
+
+		var contactName = $("#contactName").val();
+		var workType = $("#workType").val();
+		var dealInfoStatus = $("#dealInfoStatus").val();
+		var areaId = $("#areaId").val();
+		var officeId = $("#officeId").val();
+		var smsId = $("#smsId").val();
+
+		if (checkIds == null || checkIds == "") {
 			top.$.jBox.tip("请选择需要发送信息的公司！");
-		}else if($("#smsId").val()==null||$("#smsId").val()==""){
-			top.$.jBox.tip("请选择短信模板！");
-		}else{
-			
-			 var apply = $("#apply").val();
-			var companyName = $("#companyName").val();
-			
-			var contactName = $("#contactName").val();
-			var workType = $("#workType").val();
-			var dealInfoStatus = $("#dealInfoStatus").val();
-			var areaId = $("#areaId").val();
-			var officeId = $("#officeId").val();
-			var smsId = $("#smsId").val();
-			window.location.href="${ctx }/message/messageSending/send?checkIds="+checkIds+"&apply="+apply+"&companyName="+companyName+"&contactName="+contactName
-					+"&workType="+workType+"&dealInfoStatus="+dealInfoStatus+"&areaId="+areaId+"&officeId="+officeId+"&smsId="+smsId; 
 		}
-	}		
+		if ($("#smsId").val() == null || $("#smsId").val() == "") {
+			top.$.jBox.tip("请选择短信模板！");
+		}
+		top.$.jBox.tip("正在发送中....", 'loading');
+		/* window.location.href = "${ctx }/message/messageSending/send?checkIds="
+				+ checkIds
+				+ "&apply="
+				+ apply
+				+ "&companyName="
+				+ companyName
+				+ "&contactName="
+				+ contactName
+				+ "&workType="
+				+ workType
+				+ "&dealInfoStatus="
+				+ dealInfoStatus
+				+ "&areaId="
+				+ areaId
+				+ "&officeId="
+				+ officeId + "&smsId=" + smsId; */
+	$.ajax ({
+				
+			url : "${ctx}/message/messageSending/send?checkIds=" + checkIds
+					+ "&_=" + new Date().getTime(),
+			type : 'post',
+			dataType : 'json',
+			data : {
+				apply : apply,
+				companyName : companyName,
+				contactName : contactName,
+				workType : workType,
+				dealInfoStatus : dealInfoStatus,
+				areaId : areaId,
+				officeId : officeId,
+				smsId : smsId
+			},
+			success : function(data) {
+				//console.log(data);
+				if (data.status == '1') {
+					top.$.jBox.tip("发送成功");
+					setTimeout(function() {
+						//something you want delayed
+						$("#searchForm").submit();
+						//	window.location.reload();
+					}, 1500); // how long do you want the delay to be? 
+
+				} else if (data.status == '-1') {
+					top.$.jBox.tip("发送失败!");
+					var info = "失败信息:<br>" + data.msg;
+					top.$.jBox.info(info);
+					//top.$.jBox.tip("上传失败"+data.msg);
+					//$("#searchForm").submit();
+				} else {
+					top.$.jBox.tip("上传失败!");
+					var info = "失败信息:<br>" + data.msg;
+					top.$.jBox.info(info);
+					//top.$.jBox.tip("上传失败："+data.errorMsg);
+					//$("#searchForm").submit();
+				}
+			}
+		});
+
+	}
 </script>
 </head>
 <body>
@@ -153,12 +209,11 @@
 				</c:forEach>
 			</select> <label>单位名称：</label>
 			<form:input path="workCompany.companyName" htmlEscape="false"
-				maxlength="50" class="input-medium" id="companyName"/>
+				maxlength="50" class="input-medium" id="companyName" />
 
-			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			<label>证书持有人：</label>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <label>证书持有人：</label>
 			<form:input path="workUser.contactName" htmlEscape="false"
-				maxlength="16" class="input-medium" id="contactName"/>
+				maxlength="16" class="input-medium" id="contactName" />
 		</div>
 		<br>
 		<div>
@@ -170,19 +225,16 @@
 					selected="selected"
 					</c:if>>${type.name}</option>
 				</c:forEach>
-			</select> 
-			<label>选择区域：</label>
-		<select name="areaId" id="areaId" onchange="addOffice()">
-			<option value="">请选择</option>
-			<c:forEach items="${offsList}" var="off">
-				<option value="${off.id}"
-					<c:if test="${off.id==areaId}">
+			</select> <label>选择区域：</label> <select name="areaId" id="areaId"
+				onchange="addOffice()">
+				<option value="">请选择</option>
+				<c:forEach items="${offsList}" var="off">
+					<option value="${off.id}"
+						<c:if test="${off.id==areaId}">
 					selected="selected"
 					</c:if>>${off.name}</option>
-			</c:forEach>
-		</select>
-		<label>选择网点 ：</label>
-			<select name="officeId" id="officeId">
+				</c:forEach>
+			</select> <label>选择网点 ：</label> <select name="officeId" id="officeId">
 				<option value="">请选择</option>
 				<c:forEach items="${offices}" var="off">
 					<option value="${off.id}"
@@ -192,47 +244,49 @@
 				</c:forEach>
 			</select>
 		</div>
-	<br>
-		
-			<label>业务状态：</label> <select
-				name="dealInfoStatus" id="dealInfoStatus">
-				<option value="">请选择业务类型</option>
-				<c:forEach items="${wdiStatus}" var="type">
-					<option value="${type.key}"
-						<c:if test="${type.key==dealInfoStatus}">
+		<br>
+
+		<label>业务状态：</label>
+		<select name="dealInfoStatus" id="dealInfoStatus">
+			<option value="">请选择业务类型</option>
+			<c:forEach items="${wdiStatus}" var="type">
+				<option value="${type.key}"
+					<c:if test="${type.key==dealInfoStatus}">
 					selected="selected"
 					</c:if>>${type.value}</option>
-				</c:forEach>
-			</select>
-			
-		
-		<label>短信模板：</label> <select name="smsId" id="smsId">
-				<option value="">请选择</option>
-				<c:forEach items="${smsConfigurationList}" var="sms">
-					<option value="${sms.id}"
-						<c:if test="${sms.id==smsId}">
+			</c:forEach>
+		</select>
+
+
+		<label>短信模板：</label>
+		<select name="smsId" id="smsId">
+			<option value="">请选择</option>
+			<c:forEach items="${smsConfigurationList}" var="sms">
+				<option value="${sms.id}"
+					<c:if test="${sms.id==smsId}">
 					selected="selected"
 					</c:if>>${sms.messageName}</option>
-				</c:forEach>
-			</select>
+			</c:forEach>
+		</select>
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		<input id="btnSubmit" class="btn btn-primary" type="submit"
-			value="查询" />
+		<input id="btnSubmit" class="btn btn-primary" type="submit" value="查询" />
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			<a href="javascript:send()" class="btn btn-primary">发送</a>
-			<input type="hidden"  name="checkIds"  id="checkIds"  value="${checkIds }"/>
+		<input type="hidden" name="checkIds" id="checkIds"
+			value="${checkIds }" />
 		</div>
 	</form:form>
 	<tags:message content="${message}" />
-	<table id="contentTable" class="table table-striped table-bordered table-condensed">
+	<table id="contentTable"
+		class="table table-striped table-bordered table-condensed">
 		<thead>
 			<tr>
-				<th><input type="checkbox" id="checkAll" name="oneDealCheck" value="${page.pageNo}" 
-				<c:forEach items="${ids }" var="id">
+				<th><input type="checkbox" id="checkAll" name="oneDealCheck"
+					value="${page.pageNo}"
+					<c:forEach items="${ids }" var="id">
 					<c:if test="${id==page.pageNo}"> checked="checked"</c:if>
 				</c:forEach>
-				onchange="checkAll(this)"
-				/> </th>
+					onchange="checkAll(this)" /></th>
 				<th>序号</th>
 				<th>应用名称</th>
 				<th>单位名称</th>
@@ -240,39 +294,38 @@
 				<th>证书持有人电话</th>
 				<th>经办人邮箱</th>
 				<th>到期时间</th>
-				
+
 			</tr>
 		</thead>
 		<tbody>
-		 <c:set var="zje"  value="0"/>  
+			<c:set var="zje" value="0" />
 			<c:forEach items="${page.list}" var="messageSend" varStatus="status">
-			
+
 				<tr>
-				<td>
-					
-					
-						<input type="checkbox" name="oneDealCheck" value = "${messageSend.id}" 
-						<c:forEach items="${ids }" var="id">
+					<td><c:if test="${messageSend.workUser.contactPhone!=null}">
+							<input type="checkbox" name="oneDealCheck"
+								value="${messageSend.id}"
+								<c:forEach items="${ids }" var="id">
 							<c:if test="${id==messageSend.id }"> checked="checked"</c:if>
 						</c:forEach>
-						onchange="changeCheck(this)" id="oneDealCheck"
-						 /> 
-					 
-					 
-					 </td>
-				<td>${status.index+1 }</td>
-				<td>${messageSend.configApp.alias}</td>
-				<td>${messageSend.workCompany.companyName}</td>
-				<td>${messageSend.workCertInfo.workCertApplyInfo.name}</td>
-				<td>${messageSend.workUser.contactPhone}</td>
-				<td>${messageSend.workCertInfo.workCertApplyInfo.email}</td>
-				<td><fmt:formatDate value="${messageSend.notafter }" pattern="yyyy-MM-dd" /> </td>
+								onchange="changeCheck(this)" id="oneDealCheck" />
+						</c:if></td>
+
+					<td>${status.index+1 }</td>
+					<td>${messageSend.configApp.alias}</td>
+					<td>${messageSend.workCompany.companyName}</td>
+					<td>${messageSend.workCertInfo.workCertApplyInfo.name}</td>
+					<td>${messageSend.workUser.contactPhone}</td>
+					<td>${messageSend.workCertInfo.workCertApplyInfo.email}</td>
+					<td><fmt:formatDate value="${messageSend.notafter }"
+							pattern="yyyy-MM-dd" /></td>
 				</tr>
-				
+
 			</c:forEach>
-				<shiro:hasPermission name="settle:settleKey:edit"><td>
-				</td></shiro:hasPermission>
-				
+			<shiro:hasPermission name="settle:settleKey:edit">
+				<td></td>
+			</shiro:hasPermission>
+
 		</tbody>
 	</table>
 

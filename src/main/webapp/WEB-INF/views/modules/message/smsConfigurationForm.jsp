@@ -51,7 +51,7 @@
 				<div class="control-group">
 			<label class="control-label"><span style="color:red;">*</span>&nbsp;短信模板内容:</label>
 			<div class="controls">
-				<form:textarea path="messageContent"  cols="4" rows="4" maxlength="200" style="resize: none;"  readonly="true"></form:textarea>
+				<form:textarea path="messageContent"  cols="20" rows="15" maxlength="150" style="resize: none;"  readonly="true"></form:textarea>
 			</div>
 		</div>
 				
