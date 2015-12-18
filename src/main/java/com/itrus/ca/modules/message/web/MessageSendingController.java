@@ -35,8 +35,11 @@ import org.springframework.ui.velocity.VelocityEngineUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.alibaba.fastjson.JSONException;
+import com.alibaba.fastjson.JSONObject;
 import com.itrus.ca.common.config.Global;
 import com.itrus.ca.common.persistence.Page;
 import com.itrus.ca.common.web.BaseController;
@@ -84,12 +87,13 @@ public class MessageSendingController extends BaseController {
 
 	@Autowired
 	private ConfigAppService configAppService;
-	
+
 	@Autowired
 	private SmsConfigurationService smsConfigurationService;
-	
+
 	@Autowired
 	private SmsService smsService;
+
 	@ModelAttribute
 	public MessageSending get(@RequestParam(required = false) Long id) {
 		if (id != null) {
@@ -107,14 +111,12 @@ public class MessageSendingController extends BaseController {
 			@RequestParam(value = "officeId", required = false) Long officeId,
 			@RequestParam(value = "apply", required = false) Long apply,
 			@RequestParam(value = "workType", required = false) Integer workType,
-			@RequestParam(value = "smsId", required = false) Long smsId,
-			 HttpServletRequest request,
+			@RequestParam(value = "smsId", required = false) Long smsId, HttpServletRequest request,
 			HttpServletResponse response, Model model) {
-		List<SmsConfiguration> smsConfigurationList  =smsConfigurationService.findAll();
+		List<SmsConfiguration> smsConfigurationList = smsConfigurationService.findAll();
 		model.addAttribute("smsConfigurationList", smsConfigurationList);
 		WorkDealInfoType workDealInfoType = new WorkDealInfoType();
-		List<Office> offsList = officeService.getOfficeByType(
-				UserUtils.getUser(), 1);
+		List<Office> offsList = officeService.getOfficeByType(UserUtils.getUser(), 1);
 		for (int i = 0; i < offsList.size();) {
 			Office office = offsList.get(i);
 			if (office.getType().equals("2")) {
@@ -123,13 +125,13 @@ public class MessageSendingController extends BaseController {
 				i++;
 			}
 		}
-		
+
 		if (areaId != null) {
 			model.addAttribute("areaId", areaId);
 			List<Office> offices = officeService.findByParentId(areaId);
 			model.addAttribute("offices", offices);
-			if (officeId!=null) {
-				model.addAttribute("officeId",officeId);
+			if (officeId != null) {
+				model.addAttribute("officeId", officeId);
 			}
 		}
 		List<WorkCertInfo> certInfoList = new ArrayList<WorkCertInfo>();
@@ -137,24 +139,25 @@ public class MessageSendingController extends BaseController {
 		if (!user.isAdmin()) {
 			messageSending.setCreateBy(user);
 		}
-		
+
 		Page<WorkDealInfo> page = workDealInfoService.find14(new Page<WorkDealInfo>(request, response), workDealInfo,
 				areaId, officeId, apply, workType, certInfoList);
-		if (checkIds!=null) {
-    		String[] ids = checkIds.split(",");
-    		model.addAttribute("ids", ids);
+		if (checkIds != null) {
+			String[] ids = checkIds.split(",");
+			model.addAttribute("ids", ids);
 		}
 		model.addAttribute("checkIds", checkIds);
-//		List<WorkDealInfo> noIxinInfos = page.getList();
-//		List<WorkDealInfo> isIxinInfos = workDealInfoService.find14A(workDealInfo, areaId, officeId, apply, workType, certInfoList);
-//		noIxinInfos.addAll(isIxinInfos);
-//
-//		page.setList(noIxinInfos);
+		// List<WorkDealInfo> noIxinInfos = page.getList();
+		// List<WorkDealInfo> isIxinInfos =
+		// workDealInfoService.find14A(workDealInfo, areaId, officeId, apply,
+		// workType, certInfoList);
+		// noIxinInfos.addAll(isIxinInfos);
+		//
+		// page.setList(noIxinInfos);
 		model.addAttribute("dealInfoStatus", workDealInfo.getDealInfoStatus());
 		model.addAttribute("proType", ProductType.productTypeStrMap);
 		model.addAttribute("wdiType", WorkDealInfoType.WorkDealInfoTypeMap);
-		model.addAttribute("wdiStatus",
-				WorkDealInfoStatus.WorkDealInfoStatusMap);
+		model.addAttribute("wdiStatus", WorkDealInfoStatus.WorkDealInfoStatusMap);
 		model.addAttribute("workTypes", workDealInfoType.getProductTypeListNew());
 		model.addAttribute("page", page);
 
@@ -162,29 +165,31 @@ public class MessageSendingController extends BaseController {
 		List<ConfigApp> configAppList = configAppService.selectAll();
 		model.addAttribute("configAppList", configAppList);
 		model.addAttribute("apply", apply);
-		model.addAttribute("workType", workType); 
-		model.addAttribute("smsId", smsId); 
-		
+		model.addAttribute("workType", workType);
+		model.addAttribute("smsId", smsId);
+
 		return "modules/message/messageSendingList";
 	}
 
 	@RequiresPermissions("message:messageSending:view")
 	@RequestMapping(value = "send")
-	public String form( Model model,WorkDealInfo workDealInfo,
+	@ResponseBody
+	public String form(Model model, WorkDealInfo workDealInfo,
 			@RequestParam(value = "checkIds", required = false) String checkIds,
 			@RequestParam(value = "areaId", required = false) Long areaId,
 			@RequestParam(value = "officeId", required = false) Long officeId,
 			@RequestParam(value = "apply", required = false) Long apply,
 			@RequestParam(value = "workType", required = false) Integer workType,
-			@RequestParam(value = "smsId", required = false) Long smsId,
-			 HttpServletRequest request,
-				HttpServletResponse response) {
-		DateFormat format=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		//List<WorkCertInfo> certInfoList = new ArrayList<WorkCertInfo>();
-		//String messageAddress=smsConfigurationService.get(smsId).getMessageAddress();
-		SmsConfiguration smsConfiguration=smsConfigurationService.get(smsId);
-		String messageName=smsConfiguration.getMessageName();
-		//System.out.println(messageAddress);
+			@RequestParam(value = "smsId", required = false) Long smsId, HttpServletRequest request,
+			HttpServletResponse response) throws JSONException {
+		JSONObject json = new JSONObject();
+		DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		// List<WorkCertInfo> certInfoList = new ArrayList<WorkCertInfo>();
+		// String
+		// messageAddress=smsConfigurationService.get(smsId).getMessageAddress();
+		SmsConfiguration smsConfiguration = smsConfigurationService.get(smsId);
+		String messageName = smsConfiguration.getMessageName();
+		// System.out.println(messageAddress);
 		String messageAddress = SmsConfigurationController.class.getResource("/").toString().replace("file:", "")
 				.replace("%20", " ");
 		if (StringUtils.contains(messageAddress, "/WEB-INF")) {
@@ -192,47 +197,47 @@ public class MessageSendingController extends BaseController {
 		}
 		;
 		messageAddress += "/WEB-INF/template/";
-		String newMessageAddress=messageAddress+messageName;
+		String newMessageAddress = messageAddress + messageName;
 		System.out.println(messageAddress);
 		String[] dealInfos = checkIds.split(",");
-		short s[]=new short[dealInfos.length];
-		for(int i=0;i<dealInfos.length;i++){
+		short s[] = new short[dealInfos.length];
+		for (int i = 0; i < dealInfos.length; i++) {
 			System.out.println(dealInfos[i]);
-			
+
 			// s[i]=Short.parseShort(dealInfos[i]);
-			 //System.out.println(s[i]);
-		
-		
+			// System.out.println(s[i]);
+
 			long dealInfoId = Long.parseLong(dealInfos[i]);
 			WorkDealInfo dealInfo = workDealInfoService.get(dealInfoId);
-			WorkCompany company =dealInfo.getWorkCompany();
-			WorkUser workUser=dealInfo.getWorkUser();
-			ConfigApp configApp=dealInfo.getConfigApp();
-			WorkCertInfo workCertInfo =dealInfo.getWorkCertInfo();
-			//组织机构代码
-			String companyCode=dealInfo.getWorkCompany().getOrganizationNumber();
-			//机构名称
-			String companyName= dealInfo.getWorkCompany().getCompanyName();
+			WorkCompany company = dealInfo.getWorkCompany();
+			WorkUser workUser = dealInfo.getWorkUser();
+			ConfigApp configApp = dealInfo.getConfigApp();
+			WorkCertInfo workCertInfo = dealInfo.getWorkCertInfo();
+			// 组织机构代码
+			String companyCode = dealInfo.getWorkCompany().getOrganizationNumber();
+			// 机构名称
+			String companyName = dealInfo.getWorkCompany().getCompanyName();
 			System.out.println(companyName);
-			//法人姓名
-			String legalName=dealInfo.getWorkCompany().getLegalName();
-			//key编码
-			String keySn=dealInfo.getKeySn();
-			//机构地址
-			String organizationAddress=dealInfo.getWorkCompany().getProvince()+dealInfo.getWorkCompany().getCity()+dealInfo.getWorkCompany().getDistrict()+dealInfo.getWorkCompany().getAddress();
-			//经办人姓名
-			String consigner=dealInfo.getWorkCertInfo().getWorkCertApplyInfo().getName();
+			// 法人姓名
+			String legalName = dealInfo.getWorkCompany().getLegalName();
+			// key编码
+			String keySn = dealInfo.getKeySn();
+			// 机构地址
+			String organizationAddress = dealInfo.getWorkCompany().getProvince() + dealInfo.getWorkCompany().getCity()
+					+ dealInfo.getWorkCompany().getDistrict() + dealInfo.getWorkCompany().getAddress();
+			// 经办人姓名
+			String consigner = dealInfo.getWorkCertInfo().getWorkCertApplyInfo().getName();
 			System.out.println(consigner);
-			//业务状态
-			String businessStatus =dealInfo.getDealInfoStatus();
-			//项目名称
-			String alias=dealInfo.getConfigApp().getAlias();
+			// 业务状态
+			String businessStatus = dealInfo.getDealInfoStatus();
+			// 项目名称
+			String alias = dealInfo.getConfigApp().getAlias();
 			System.out.println(alias);
-			//证书到期时间
-			Date endDate=dealInfo.getNotafter();
+			// 证书到期时间
+			Date endDate = dealInfo.getNotafter();
 			System.out.println(endDate);
-			//证书持有人电话
-			String phone =dealInfo.getWorkUser().getContactPhone();
+			// 证书持有人电话
+			String phone = dealInfo.getWorkUser().getContactPhone();
 			System.out.println(phone);
 			Properties p = new Properties();
 			p.setProperty(Velocity.INPUT_ENCODING, "UTF-8");
@@ -241,7 +246,7 @@ public class MessageSendingController extends BaseController {
 			System.out.println(p);
 			VelocityEngine velocityEngine = new VelocityEngine();
 			velocityEngine.init(p);
-			Map<String, Object>  orange = new HashMap<>();
+			Map<String, Object> orange = new HashMap<>();
 			orange.put("companyCode", companyCode);
 			orange.put("companyName", companyName);
 			orange.put("legalName", legalName);
@@ -250,52 +255,63 @@ public class MessageSendingController extends BaseController {
 			orange.put("consigner", consigner);
 			orange.put("businessStatus", businessStatus);
 			orange.put("alias", alias);
-			orange.put("endDate",endDate);
+			orange.put("endDate", endDate);
 			orange.put("date", new Date());
 			String content = VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, messageName, "UTF-8", orange);
 			System.out.println(content);
-			long mess= System.currentTimeMillis();
-			String messId=""+mess;
+			long mess = System.currentTimeMillis();
+			String messId = "" + mess;
 			System.out.println(messId);
-			String smsSendDate1=format.format(new Date());
-		
-			Date smsSendDate=null;
+			String smsSendDate1 = format.format(new Date());
+
+			Date smsSendDate = null;
 			try {
 				smsSendDate = format.parse(smsSendDate1);
 			} catch (ParseException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
 			System.out.println(smsSendDate);
-			//SmsService smsService=new SmsService();
-			String returnStatus=null;
-			if(phone!=null){
-			returnStatus= smsService.sendSms( messId,  phone, content);
-			MessageSending messageSending=new MessageSending();
-			messageSending.setMessId(messId);
-			messageSending.setpId(4);
-			messageSending.setPhone(phone);
-			messageSending.setMessageContext(content);
-			messageSending.setSmsSendDate(smsSendDate);
-			messageSending.setReturnStatus(returnStatus);
-			messageSending.setWorkDealInfo(dealInfo);
-			messageSending.setSmsConfiguration(smsConfiguration);
-			messageSending.setWorkCompany(company);
-			messageSending.setWorkUser(workUser);
-			messageSending.setConfigApp(configApp);
-			messageSending.setWorkCertInfo(workCertInfo);
-			messageSendingService.save(messageSending);
+			// SmsService smsService=new SmsService();
+			String returnStatus = null;
+			if (phone != null) {
+
+				returnStatus = smsService.sendSms(messId, phone, content);
+				if (returnStatus.equals("0")) {
+					json.put("status", -1);
+					json.put("msg", "发送失败");
+					return json.toString();
+				} 
+					json.put("status", 1);
+					json.put("msg", "发送完成");
+					MessageSending messageSending = new MessageSending();
+					messageSending.setMessId(messId);
+					messageSending.setpId(4);
+					messageSending.setPhone(phone);
+					messageSending.setMessageContext(content);
+					messageSending.setSmsSendDate(smsSendDate);
+					messageSending.setReturnStatus(returnStatus);
+					messageSending.setWorkDealInfo(dealInfo);
+					messageSending.setSmsConfiguration(smsConfiguration);
+					messageSending.setWorkCompany(company);
+					messageSending.setWorkUser(workUser);
+					messageSending.setConfigApp(configApp);
+					messageSending.setWorkCertInfo(workCertInfo);
+					messageSendingService.save(messageSending);
+					
+				
 			}
-		}	
-		
-		return "modules/message/messageSendingList";
+		}
+		return json.toString();
+		// return "redirect:" + Global.getAdminPath() +
+		// "/modules/message/messageSending/search";
 	}
 
 	@RequiresPermissions("message:messageSending:edit")
 	@RequestMapping(value = "save")
 	public String save(MessageSending messageSending, Model model, RedirectAttributes redirectAttributes) {
 		if (!beanValidator(model, messageSending)) {
-			
+
 		}
 		messageSendingService.save(messageSending);
 		addMessage(redirectAttributes, "保存消息发送'" + messageSending.getName() + "'成功");
@@ -309,30 +325,32 @@ public class MessageSendingController extends BaseController {
 		addMessage(redirectAttributes, "删除消息发送成功");
 		return "redirect:" + Global.getAdminPath() + "/modules/message/messageSending/?repage";
 	}
+
 	@RequiresPermissions("message:messageSending:view")
 	@RequestMapping(value = "search")
-	public String search(
-			MessageSending messageSending,
-			@RequestParam(value = "apply", required = false) Long apply,
+	public String search(MessageSending messageSending, @RequestParam(value = "apply", required = false) Long apply,
 			@RequestParam(value = "startTime", required = false) Date startTime,
-			@RequestParam(value = "endTime", required = false) Date endTime,
-			HttpServletRequest request, HttpServletResponse response, Model model) {
+			@RequestParam(value = "endTime", required = false) Date endTime, HttpServletRequest request,
+			HttpServletResponse response, Model model) {
 		User user = UserUtils.getUser();
-		if (!user.isAdmin()){
+		if (!user.isAdmin()) {
 			messageSending.setCreateBy(user);
 		}
 		List<ConfigApp> configAppList = configAppService.selectAll();
 		model.addAttribute("configAppList", configAppList);
-		Page<MessageSending> page=messageSendingService.find(new Page<MessageSending>(request, response), messageSending, apply, startTime, endTime);
-		
-		//Page<MessageSending> page=messageSendingService.find(new Page<MessageSending>(request, response), messageSending, apply, StartDate, endDate);
-       // Page<CheckMessage> page = checkMessageService.find(new Page<CheckMessage>(request, response), checkMessage); 
-        model.addAttribute("page", page);
-        model.addAttribute("startTime", startTime);
-        model.addAttribute("endTime", endTime);
-        model.addAttribute("apply", apply);
-        
-        
+		Page<MessageSending> page = messageSendingService.find(new Page<MessageSending>(request, response),
+				messageSending, apply, startTime, endTime);
+
+		// Page<MessageSending> page=messageSendingService.find(new
+		// Page<MessageSending>(request, response), messageSending, apply,
+		// StartDate, endDate);
+		// Page<CheckMessage> page = checkMessageService.find(new
+		// Page<CheckMessage>(request, response), checkMessage);
+		model.addAttribute("page", page);
+		model.addAttribute("startTime", startTime);
+		model.addAttribute("endTime", endTime);
+		model.addAttribute("apply", apply);
+
 		return "modules/message/checkMessageList";
 	}
 }
