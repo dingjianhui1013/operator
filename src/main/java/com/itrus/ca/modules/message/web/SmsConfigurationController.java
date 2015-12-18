@@ -29,7 +29,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 import com.itrus.ca.common.config.Global;
@@ -39,7 +38,6 @@ import com.itrus.ca.common.web.BaseController;
 import com.itrus.ca.modules.log.service.LogUtil;
 import com.itrus.ca.modules.message.entity.SmsConfiguration;
 import com.itrus.ca.modules.message.service.SmsConfigurationService;
-
 import com.itrus.ca.modules.profile.service.ConfigAppService;
 import com.itrus.ca.modules.sys.entity.User;
 import com.itrus.ca.modules.sys.service.OfficeService;
