@@ -3984,8 +3984,9 @@ public class WorkDealInfoService extends BaseService {
 		}
 
 		try {
-			Integer a = 0;
+			
 			for (int i = 0; i < rows; i++) {
+				Integer a = 0;
 				if (i == 0 || i == 1) {
 					continue;
 				}
@@ -4230,7 +4231,7 @@ public class WorkDealInfoService extends BaseService {
 				}
 
 				if (a == 1) {
-					return ifErr(-1, ifErr.toString());
+					continue;
 				}
 
 				String appName = row.getCell(0).toString().replace(" ", "");
@@ -4646,7 +4647,7 @@ public class WorkDealInfoService extends BaseService {
 				this.save(workDealInfo);
 			}
 
-			if (a == 1) {
+			if (ifErr!=null && !"".equals(ifErr)) {
 				return ifErr(-1, ifErr.toString());
 			}
 
