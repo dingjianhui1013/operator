@@ -94,6 +94,9 @@ $(document)
 							if ($("#year4").prop("checked") == true) {
 								saveYear = $("#year4").val();
 							}
+							if ($("#year5").prop("checked") == true) {
+								saveYear = $("#year5").val();
+							}
 							if (saveYear == 0) {
 								$("#mmsg").html("请选择更新年限");
 								$("#mssg").html("请选择更新年限");
@@ -120,6 +123,9 @@ $(document)
 				}
 				if ($("#year4").prop("checked") == true) {
 					saveYear = $("#year4").val();
+				}
+				if ($("#year5").prop("checked") == true) {
+					saveYear = $("#year5").val();
 				}
 				if (saveYear == 0) {
 					$("#mmsg").html("请选择更新年限");
