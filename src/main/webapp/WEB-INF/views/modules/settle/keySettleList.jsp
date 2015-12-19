@@ -144,6 +144,7 @@
 				<td>${keyPurchase.startCode }</td>
 				<td>${keyPurchase.endCode }</td>
 				<td id="count">${keyPurchase.count}</td>
+				<c:set var="zgs" value="${zgs+keyPurchase.count}"></c:set>
 				<td id="money">${keyPurchase.money}</td>
 				<td id="keySubtotal">${keyPurchase.count*keyPurchase.money}</td>
 				<c:set var="zje"  value="${zje+keyPurchase.count*keyPurchase.money}"/> 
@@ -160,8 +161,10 @@
 				</td></shiro:hasPermission>
 				<tr>	
 					<td></td>
-					<td colspan="6">总计：${zs}个</td>
-					<td >${zje}元</td>
+					<td colspan="4">总计：${zs}条</td>
+					<td>总计：${zgs} 个</td>
+					<td></td>
+					<td >总计：${zje}元</td>
 					<td></td>
 					<td></td>
 			</tr>

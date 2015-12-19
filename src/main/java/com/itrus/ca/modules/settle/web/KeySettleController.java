@@ -190,6 +190,7 @@ public class KeySettleController extends BaseController {
 			List<KeyPurchase> list = keyPurchaseService.find12(keyPurchase, supplierName, keyName, keySn, startTime, endTime);
 			int last=0;
 			int zj=0;
+			int zgs=0;
 			for(int i=0;i<list.size();i++)
 			{
 				HSSFRow rown=sheet.createRow(i+2);
@@ -198,6 +199,7 @@ public class KeySettleController extends BaseController {
 				rown.createCell(2).setCellValue(list.get(i).getStartCode()+"");
 				rown.createCell(3).setCellValue(list.get(i).getEndCode()+"");
 				rown.createCell(4).setCellValue(list.get(i).getCount());
+				zgs+=(list.get(i).getCount());
 				if(list.get(i).getMoney()==null){
 					
 					rown.createCell(5).setCellValue("");
@@ -218,10 +220,8 @@ public class KeySettleController extends BaseController {
 				last = i+2;
 			}
 			HSSFRow  cell1=sheet.createRow(last+1);
-			HSSFCell cell2=cell1.createCell(7);
-			cell2.setCellValue("总计："+list.size()+"个"+"总金额："+zj+"元");
-			
-			
+			HSSFCell cell2=cell1.createCell(0);
+			cell2.setCellValue("总计："+list.size()+"条"+"总个数："+zgs+"个"+"总金额："+zj+"元");
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			response.setContentType(response.getContentType());
 			response.setHeader("Content-disposition",
