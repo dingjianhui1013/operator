@@ -4119,7 +4119,7 @@ public class WorkDealInfoController extends BaseController {
 		WorkCompany company = new WorkCompany();
 		company.setOrganizationNumber(organizationNumber);
 		
-		companyName = URLDecoder.decode(companyName, "UTF-8");
+		companyName = new String(companyName.getBytes(), "UTF-8");  
 		
 		company.setCompanyName(companyName);
 		company.setCity(city);
