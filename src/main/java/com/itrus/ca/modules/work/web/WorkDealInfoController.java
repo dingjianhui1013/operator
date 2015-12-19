@@ -4118,9 +4118,6 @@ public class WorkDealInfoController extends BaseController {
 		WorkDealInfo workDealInfo = new WorkDealInfo();
 		WorkCompany company = new WorkCompany();
 		company.setOrganizationNumber(organizationNumber);
-		
-		companyName = new String(companyName.getBytes(), "UTF-8");  
-		
 		company.setCompanyName(companyName);
 		company.setCity(city);
 		company.setDistrict(county);
