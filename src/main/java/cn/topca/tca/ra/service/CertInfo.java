@@ -176,7 +176,6 @@ public class CertInfo {
     protected String certReqPublickey;
     protected String certReqPublickeyHashMd5;
     protected String certIdRandom;
-    protected Long certInfoId;
     
 
     /**
@@ -1322,13 +1321,4 @@ public class CertInfo {
     public void setCertIdRandom(String value) {
         this.certIdRandom = value;
     }
-
-	public Long getCertInfoId() {
-		return certInfoId;
-	}
-
-	public void setCertInfoId(Long certInfoId) {
-		this.certInfoId = certInfoId;
-	}
-
 }

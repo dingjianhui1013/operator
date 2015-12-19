@@ -5,6 +5,8 @@ import static cn.topca.security.bc.openssl.OpenSslUtil.decodePEMPrivateKey;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.security.PrivateKey;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
@@ -16,6 +18,8 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang.time.DateUtils;
 import org.apache.log4j.Logger;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
 import com.itrus.ca.modules.connection.CaConnectionPoolProvider;
@@ -38,6 +42,9 @@ import cn.topca.tca.client.CertificateRequest;
 import cn.topca.tca.client.CertificateResponse;
 import cn.topca.tca.client.RevokeRequest;
 import cn.topca.tca.client.RevokeResponse;
+import cn.topca.tca.ra.service.RaServiceUnavailable_Exception;
+import cn.topca.tca.ra.service.UserAPIService;
+import cn.topca.tca.ra.service.UserAPIServicePortType;
 
 /**
  * 链接CA服务的service
@@ -131,7 +138,7 @@ public class CaService {
 			}finally{
 				
 			}
-		}else{
+		}else if (raAccount.getRaProtocol().equals("ICA")){
 			String certSignBufP7 = null; //自动获取模式
 			UserInfo userInfo = new UserInfo();
 			userInfo.setUserName(certificateRequest.getUserName());
@@ -200,6 +207,45 @@ public class CaService {
 					}
 				}
 			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}else{
+			cn.topca.tca.ra.service.UserInfo userInfo = new cn.topca.tca.ra.service.UserInfo();
+			userInfo.setUserName(certificateRequest.getUserName());
+			userInfo.setUserEmail(certificateRequest.getUserEmail());
+			userInfo.setUserSurname(certificateRequest.getUserSurname());
+			userInfo.setUserCountry("CN");
+			userInfo.setUserOrganization(certificateRequest.getUserOrganization());
+			userInfo.setUserOrgunit(certificateRequest.getUserOrgunit());
+			userInfo.setUserTitle(certificateRequest.getUserTitle());
+			userInfo.setUserIp(certificateRequest.getUserIp());
+			userInfo.setUserDns(certificateRequest.getUserDns());
+			userInfo.setUserAdditionalField1(certificateRequest.getUserAdditionalField1());
+			userInfo.setUserAdditionalField2(certificateRequest.getUserAdditionalField2());
+			userInfo.setUserAdditionalField3(certificateRequest.getUserAdditionalField3());
+			userInfo.setUserAdditionalField4(certificateRequest.getUserAdditionalField4());
+			userInfo.setUserAdditionalField5(certificateRequest.getUserAdditionalField5());
+			userInfo.setUserAdditionalField6(certificateRequest.getUserAdditionalField6());
+			userInfo.setUserAdditionalField7(certificateRequest.getUserAdditionalField7());
+			userInfo.setUserAdditionalField8(certificateRequest.getUserAdditionalField8());
+			userInfo.setUserAdditionalField9(certificateRequest.getUserAdditionalField9());
+			userInfo.setUserAdditionalField10(certificateRequest.getUserAdditionalField10());
+			
+			try {
+				JSONObject json = new JSONObject();
+				json.put("certValidity",validityDays+"");
+				
+				UserAPIService ss = new UserAPIService(new URL(raAccount.getServiceUrl()));
+				cn.topca.tca.ra.service.CertInfo certInfo = ss.getUserAPIServicePort().enrollCertAA(userInfo, reqBuf, raAccount.getAccountHash(), raAccount.getAaPassword(), null, json.toString());
+				certificateResponse = transCertInfoToResp(certInfo, reqBuf, validityDays.toString());
+			} catch (MalformedURLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (RaServiceUnavailable_Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -286,6 +332,51 @@ public class CaService {
 		System.out.println("signBuf:"+response.getCertSignBuf());
 		System.out.println("加密证书序列号（双证时存在）:"+result.getCertSerialNumberKmc());
 //		response.setInstallMode(result.getcert);
+		
+		return response;
+	}
+	
+	public CertificateResponse transCertInfoToResp(cn.topca.tca.ra.service.CertInfo certInfo,String csr,String day){
+		String serialNum = certInfo.getCertSerialNumber();
+		String serialNumKmc = certInfo.getCertSerialnumberKmc();
+		if (serialNum!=null) {
+			serialNum = getIEValidSerialNumber(serialNum).toUpperCase();
+		}
+		if (serialNumKmc!=null) {
+			serialNumKmc = getIEValidSerialNumber(serialNumKmc).toUpperCase();
+		}
+		certInfo.setCertSerialNumber(serialNum);
+		certInfo.setCertSerialnumberKmc(serialNumKmc);
+		
+		CertificateResponse response = new CertificateResponse();
+		response.setCertApproveDate(certInfo.getCertApproveDate());
+		response.setCertIssuerDn(certInfo.getCertIssuerDn());
+		response.setCertIssuerHashMd5(certInfo.getCertIssuerHashMd5());
+		response.setCertNotAfter(certInfo.getCertNotAfter());
+		response.setCertNotBefore(certInfo.getCertNotBefore());
+		response.setCertReqBuf(csr);
+		response.setCertReqDate(certInfo.getCertReqDate());
+		response.setCertReqOverrideValidity(day);
+		response.setCertSerialNumber(certInfo.getCertSerialNumber());
+		response.setCertSignBuf(certInfo.getCertSignBuf());
+		response.setCertSignBufP7(certInfo.getCertSignBufP7());
+		response.setCertSignDate(certInfo.getCertSignDate());
+		response.setCertSubjectDn(certInfo.getCertSubjectDn());
+		response.setCertSubjectHashMd5(certInfo.getCertSubjectHashMd5());
+		//双证
+		response.setCertKmcRep1(certInfo.getCertKmcRep1());
+		response.setCertKmcRep2(certInfo.getCertKmcRep2());
+		response.setCertKmcRep3(certInfo.getCertKmcRep3());
+		response.setCertSignBufKmc(certInfo.getCertKmcRep2());
+		response.setInstallMode("");//ICA使用installCertKmc 第二种方式
+		response.setCertSerialnumberKmc(certInfo.getCertSerialnumberKmc());
+		
+		System.out.println("证书序列号:"+response.getCertSerialNumber());
+		System.out.println("证书有效期:"+response.getCertNotBefore()+"===="+response.getCertNotAfter());
+		System.out.println("subjectdn"+response.getCertSubjectDn());
+		System.out.println("issuerDn"+response.getCertIssuerDn());
+		System.out.println("signBuf:"+response.getCertSignBuf());
+		System.out.println("加密证书序列号（双证时存在）:"+certInfo.getCertSerialnumberKmc());
 		
 		return response;
 	}
