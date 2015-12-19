@@ -6,6 +6,7 @@ package com.itrus.ca.modules.work.web;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
@@ -4111,12 +4112,15 @@ public class WorkDealInfoController extends BaseController {
 			@RequestParam(value = "jianzhengStartTime", required = false) Date jianzhengStartTime,
 			@RequestParam(value = "jianzhengEndTime", required = false) Date jianzhengEndTime,
 			@RequestParam(value = "zhizhengStartTime", required = false) Date zhizhengStartTime,
-			@RequestParam(value = "zhizhengEndTime", required = false) Date zhizhengEndTime) {
+			@RequestParam(value = "zhizhengEndTime", required = false) Date zhizhengEndTime) throws UnsupportedEncodingException {
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 		SimpleDateFormat dfm = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		WorkDealInfo workDealInfo = new WorkDealInfo();
 		WorkCompany company = new WorkCompany();
 		company.setOrganizationNumber(organizationNumber);
+		
+		companyName = URLDecoder.decode(companyName, "UTF-8");
+		
 		company.setCompanyName(companyName);
 		company.setCity(city);
 		company.setDistrict(county);
