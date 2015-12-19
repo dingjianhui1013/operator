@@ -1136,6 +1136,11 @@ public class WorkDealInfoAuditController extends BaseController {
 	public String delete(Long id, RedirectAttributes redirectAttributes) {
 		workDealInfoService.delete(id);
 		WorkDealInfo workDealInfo = workDealInfoService.get(id);
+		
+		Long prevId = workDealInfo.getPrevId();
+		if (prevId != null) {
+			workDealInfoService.deleteReturnById(prevId);
+		}
 		Long agentId = workDealInfo.getConfigChargeAgentId();
 		ConfigChargeAgent agent = configChargeAgentService.get(agentId);
 		agent.setSurplusNum(agent.getSurplusNum() + 1);
