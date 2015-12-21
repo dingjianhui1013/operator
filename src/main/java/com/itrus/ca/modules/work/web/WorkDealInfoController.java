@@ -1322,7 +1322,10 @@ public class WorkDealInfoController extends BaseController {
 			}
 			Set<String> district = new LinkedHashSet<String>();
 			for (int i = 0; i < list.size(); i++) {
-				district.add(list.get(i).getWorkCompany().getDistrict());
+				if(list.get(i).getWorkCompany().getDistrict()!=null)
+				{
+					district.add(list.get(i).getWorkCompany().getDistrict());
+				}
 			}
 			Object offs[] = offices.toArray();
 			Object months[] = month.toArray();
@@ -1331,10 +1334,13 @@ public class WorkDealInfoController extends BaseController {
 				Set<String> dis = new LinkedHashSet<String>();
 				for (int d = 0; d < districts.length; d++) {
 					for (int i = 0; i < list.size(); i++) {
-						if (list.get(i).getCreateBy().getOffice().getId() == offs[o]
-								&& list.get(i).getWorkCompany().getDistrict() == districts[d]) {
-
-							dis.add((String) districts[d]);
+						if(list.get(i).getWorkCompany().getDistrict()!=null)
+						{
+							if (list.get(i).getCreateBy().getOffice().getId() == offs[o]
+									&& list.get(i).getWorkCompany().getDistrict() == districts[d]) {
+								
+								dis.add((String) districts[d]);
+							}
 						}
 					}
 				}
@@ -1356,17 +1362,20 @@ public class WorkDealInfoController extends BaseController {
 					for (int i = 0; i < list.size(); i++) {
 						String mo = new SimpleDateFormat("yyyy-MM-dd")
 								.format(list.get(i).getWorkPayInfo().getCreateDate());
-						if (((String) months[m]).indexOf(mo) != -1
-								&& list.get(i).getWorkCompany().getDistrict().equals((String) districts[d])) {
-							postMoney = list.get(i).getWorkPayInfo().getPosMoney();
-							bankMoney = list.get(i).getWorkPayInfo().getBankMoney();
-							xjMoney = list.get(i).getWorkPayInfo().getMoney();
-							alipayMoney = list.get(i).getWorkPayInfo().getAlipayMoney();
-							countPostMoney += postMoney;
-							countBankMoney += bankMoney;
-							countXjMoney += xjMoney;
-							countAlipayMoney += alipayMoney;
-							// countMoney+=(countPostMoney+countBankMoney+countXjMoney+countAlipayMoney);
+						if(list.get(i).getWorkCompany().getDistrict()!=null)
+						{
+							if (((String) months[m]).indexOf(mo) != -1
+									&& list.get(i).getWorkCompany().getDistrict().equals((String) districts[d])) {
+								postMoney = list.get(i).getWorkPayInfo().getPosMoney();
+								bankMoney = list.get(i).getWorkPayInfo().getBankMoney();
+								xjMoney = list.get(i).getWorkPayInfo().getMoney();
+								alipayMoney = list.get(i).getWorkPayInfo().getAlipayMoney();
+								countPostMoney += postMoney;
+								countBankMoney += bankMoney;
+								countXjMoney += xjMoney;
+								countAlipayMoney += alipayMoney;
+								// countMoney+=(countPostMoney+countBankMoney+countXjMoney+countAlipayMoney);
+							}
 						}
 					}
 					Workoffice_district_MoneyVo dm = new Workoffice_district_MoneyVo();
@@ -5237,7 +5246,10 @@ public class WorkDealInfoController extends BaseController {
 			}
 
 			for (int i = 0; i < list.size(); i++) {
-				district.add(list.get(i).getWorkCompany().getDistrict());
+				if(list.get(i).getWorkCompany().getDistrict()!=null)
+				{
+					district.add(list.get(i).getWorkCompany().getDistrict());
+				}
 			}
 			Object offs[] = offices.toArray();
 			Object months[] = month.toArray();
@@ -5246,9 +5258,12 @@ public class WorkDealInfoController extends BaseController {
 				Set<String> dis = new LinkedHashSet<String>();
 				for (int d = 0; d < districts.length; d++) {
 					for (int i = 0; i < list.size(); i++) {
-						if (list.get(i).getCreateBy().getOffice().getId().equals(offs[o])
-								&& list.get(i).getWorkCompany().getDistrict() == districts[d]) {
-							dis.add((String) districts[d]);
+						if(list.get(i).getWorkCompany().getDistrict()!=null)
+						{
+							if (list.get(i).getCreateBy().getOffice().getId().equals(offs[o])
+									&& list.get(i).getWorkCompany().getDistrict() == districts[d]) {
+								dis.add((String) districts[d]);
+							}
 						}
 					}
 				}
@@ -5270,16 +5285,19 @@ public class WorkDealInfoController extends BaseController {
 					for (int i = 0; i < list.size(); i++) {
 						String mo = new SimpleDateFormat("yyyy-MM-dd")
 								.format(list.get(i).getWorkPayInfo().getCreateDate());
-						if (((String) months[m]).indexOf(mo) != -1
-								&& list.get(i).getWorkCompany().getDistrict().equals((String) districts[d])) {
-							postMoney = list.get(i).getWorkPayInfo().getPosMoney();
-							bankMoney = list.get(i).getWorkPayInfo().getBankMoney();
-							xjMoney = list.get(i).getWorkPayInfo().getMoney();
-							alipayMoney = list.get(i).getWorkPayInfo().getAlipayMoney();
-							countPostMoney += postMoney;
-							countBankMoney += bankMoney;
-							countXjMoney += xjMoney;
-							countAlipayMoney += alipayMoney;
+						if(list.get(i).getWorkCompany().getDistrict()!=null)
+						{
+							if (((String) months[m]).indexOf(mo) != -1
+									&& list.get(i).getWorkCompany().getDistrict().equals((String) districts[d])) {
+								postMoney = list.get(i).getWorkPayInfo().getPosMoney();
+								bankMoney = list.get(i).getWorkPayInfo().getBankMoney();
+								xjMoney = list.get(i).getWorkPayInfo().getMoney();
+								alipayMoney = list.get(i).getWorkPayInfo().getAlipayMoney();
+								countPostMoney += postMoney;
+								countBankMoney += bankMoney;
+								countXjMoney += xjMoney;
+								countAlipayMoney += alipayMoney;
+							}
 						}
 					}
 					Workoffice_district_MoneyVo dm = new Workoffice_district_MoneyVo();
@@ -5426,7 +5444,6 @@ public class WorkDealInfoController extends BaseController {
 								zcount++;
 							}
 							if (dp.getValue().size() > 1) {
-								System.out.println(index);
 								sheet.addMergedRegion(new Region(2, (short) (2 + index), 2,
 										(short) (1 + index + count + dp.getValue().size())));
 								row2.createCell(1 + index + 1).setCellValue((String) districts[d]);
@@ -5446,21 +5463,21 @@ public class WorkDealInfoController extends BaseController {
 				// 1,(short)(1+zcount)));
 				// row1.createCell(1+index+1).setCellValue(entry.getKey());
 			}
-			qnum[qnumIndex] = index;
-			if (qnumIndex == 0) {
-				if (qnum[qnumIndex] != 1) {
-					sheet.addMergedRegion(new Region(1, (short) (2), 1, (short) (1 + qnum[qnumIndex])));
-				} else {
-
-				}
-			} else {
-				if (qnum[qnumIndex] - qnum[qnumIndex - 1] != 1) {
-					sheet.addMergedRegion(
-							new Region(1, (short) (2 + qnum[qnumIndex - 1]), 1, (short) (1 + qnum[qnumIndex])));
-				}
-
-			}
-			qnumIndex++;
+//			qnum[qnumIndex] = index;
+//			if (qnumIndex == 0) {
+//				if (qnum[qnumIndex] != 1) {
+//					sheet.addMergedRegion(new Region(1, (short) (2), 1, (short) (1 + qnum[qnumIndex])));
+//				} else {
+//
+//				}
+//			} else {
+//				if (qnum[qnumIndex] - qnum[qnumIndex - 1] != 1) {
+//					sheet.addMergedRegion(
+//							new Region(1, (short) (2 + qnum[qnumIndex - 1]), 1, (short) (1 + qnum[qnumIndex])));
+//				}
+//
+//			}
+//			qnumIndex++;
 
 		}
 
