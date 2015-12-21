@@ -331,77 +331,30 @@ public class ProjectCertificationDetailsController extends BaseController {
 					if (list.get(i).getConfigProduct().getProductName() != null) {
 						// 企业版
 						if (Integer.parseInt(list.get(i).getConfigProduct().getProductName()) == 1) {
-							// 有效期为空
-							if (list.get(i).getAddCertDays() == null) {
-								// 新增企业有效期1年
-								if ((list.get(i).getYear()) * 365 + list.get(i).getLastDays() > 0
-										&& (list.get(i).getYear()) * 365 + list.get(i).getLastDays() < 730) {
-									addcompanyYearCertificate++;
-								} // 新增企业有效期2年
-								else if ((list.get(i).getYear()) * 365 + list.get(i).getLastDays() >= 730
-										&& (list.get(i).getYear()) * 365 + list.get(i).getLastDays() < 1095) {
-									addcompanyTwoYearCertificate++;
-								} // 新增企业有效期4年
-								else if ((list.get(i).getYear()) * 365 + list.get(i).getLastDays() >= 1460
-										&& (list.get(i).getYear()) * 365 + list.get(i).getLastDays() < 1825) {
-									addcompanyFourYearCertificate++;
-								}
-							} // 有效期不为空
-							else {
-								if (list.get(i).getYear() * 365 + list.get(i).getLastDays()
-										+ list.get(i).getAddCertDays() > 0
-										&& list.get(i).getYear() * 365 + list.get(i).getLastDays()
-												+ list.get(i).getAddCertDays() < 730) {
-									addcompanyYearCertificate++;
-								} else if (list.get(i).getYear() * 365 + list.get(i).getLastDays()
-										+ list.get(i).getAddCertDays() >= 730
-										&& list.get(i).getYear() * 365 + list.get(i).getLastDays()
-												+ list.get(i).getAddCertDays() < 1095) {
-									addcompanyTwoYearCertificate++;
-								} else if (list.get(i).getYear() * 365 + list.get(i).getLastDays()
-										+ list.get(i).getAddCertDays() >= 1460
-										&& list.get(i).getYear() * 365 + list.get(i).getLastDays()
-												+ list.get(i).getAddCertDays() < 1825) {
-									addcompanyFourYearCertificate++;
-								}
+							//
+							// 新增企业有效期1年
+							if (list.get(i).getYear() == 1) {
+								addcompanyYearCertificate++;
+							} // 新增企业有效期2年
+							else if (list.get(i).getYear() == 2) {
+								addcompanyTwoYearCertificate++;
+							} // 新增企业有效期4年
+							else if (list.get(i).getYear() == 4) {
+								addcompanyFourYearCertificate++;
 							}
-						} // 个人版
-						else if (Integer.parseInt(list.get(i).getConfigProduct().getProductName()) == 2) {
-							// 有效期为空
-							if (list.get(i).getAddCertDays() == null) {
-								// 新增个人有效期1年
-								if ((list.get(i).getYear()) * 365 + list.get(i).getLastDays() > 0
-										&& (list.get(i).getYear()) * 365 + list.get(i).getLastDays() < 730) {
-									addPersonalYearCertificate++;
-								} // 新增个人有效期2年
-								else if ((list.get(i).getYear()) * 365 + list.get(i).getLastDays() >= 730
-										&& (list.get(i).getYear()) * 365 + list.get(i).getLastDays() < 1095) {
-									addPersonalTwoYearCertificate++;
-								} // 新增个人有效期4年
-								else if ((list.get(i).getYear()) * 365 + list.get(i).getLastDays() >= 1460
-										&& (list.get(i).getYear()) * 365 + list.get(i).getLastDays() < 1825) {
-									addPersonalFourYearCertificate++;
-								}
-							} // 有效期不为空
-							else {
-								if (list.get(i).getYear() * 365 + list.get(i).getLastDays()
-										+ list.get(i).getAddCertDays() > 0
-										&& list.get(i).getYear() * 365 + list.get(i).getLastDays()
-												+ list.get(i).getAddCertDays() < 730) {
-									addPersonalYearCertificate++;
-								} else if (list.get(i).getYear() * 365 + list.get(i).getLastDays()
-										+ list.get(i).getAddCertDays() >= 730
-										&& list.get(i).getYear() * 365 + list.get(i).getLastDays()
-												+ list.get(i).getAddCertDays() < 1095) {
-									addPersonalTwoYearCertificate++;
-								} else if (list.get(i).getYear() * 365 + list.get(i).getLastDays()
-										+ list.get(i).getAddCertDays() >= 1460
-										&& list.get(i).getYear() * 365 + list.get(i).getLastDays()
-												+ list.get(i).getAddCertDays() < 1825) {
-									addPersonalFourYearCertificate++;
-								}
+							//
+						} else if (Integer.parseInt(list.get(i).getConfigProduct().getProductName()) == 2) {
+							//
+							// 新增个人有效期1年
+							if (list.get(i).getYear() == 1) {
+								addPersonalYearCertificate++;
+							} // 新增个人有效期2年
+							else if (list.get(i).getYear() == 2) {
+								addPersonalTwoYearCertificate++;
+							} // 新增个人有效期4年
+							else if (list.get(i).getYear() == 4) {
+								addPersonalFourYearCertificate++;
 							}
-
 						}
 					}
 				} else if ((WorkDealInfoType.getDealInfoTypeName(list.get(i).getDealInfoType())).contains("更新")) {
@@ -409,70 +362,24 @@ public class ProjectCertificationDetailsController extends BaseController {
 
 						if (Integer.parseInt(list.get(i).getConfigProduct().getProductName()) == 1) {
 
-							if (list.get(i).getAddCertDays() == null) {
-
-								if ((list.get(i).getYear()) * 365 + list.get(i).getLastDays() > 0
-										&& (list.get(i).getYear()) * 365 + list.get(i).getLastDays() < 730) {
-									updatecompanyYearCertificate++;
-								} else if ((list.get(i).getYear()) * 365 + list.get(i).getLastDays() >= 730
-										&& (list.get(i).getYear()) * 365 + list.get(i).getLastDays() < 1095) {
-									updatecompanyTwoYearCertificate++;
-								} else if ((list.get(i).getYear()) * 365 + list.get(i).getLastDays() >= 1460
-										&& (list.get(i).getYear()) * 365 + list.get(i).getLastDays() < 1825) {
-									updateFourYearCertificate++;
-								}
-							} else {
-								if (list.get(i).getYear() * 365 + list.get(i).getLastDays()
-										+ list.get(i).getAddCertDays() > 0
-										&& list.get(i).getYear() * 365 + list.get(i).getLastDays()
-												+ list.get(i).getAddCertDays() < 730) {
-									updatecompanyYearCertificate++;
-								} else if (list.get(i).getYear() * 365 + list.get(i).getLastDays()
-										+ list.get(i).getAddCertDays() >= 730
-										&& list.get(i).getYear() * 365 + list.get(i).getLastDays()
-												+ list.get(i).getAddCertDays() < 1095) {
-									updatecompanyTwoYearCertificate++;
-								} else if (list.get(i).getYear() * 365 + list.get(i).getLastDays()
-										+ list.get(i).getAddCertDays() >= 1460
-										&& list.get(i).getYear() * 365 + list.get(i).getLastDays()
-												+ list.get(i).getAddCertDays() < 1825) {
-									updateFourYearCertificate++;
-								}
+							if (list.get(i).getYear() == 1) {
+								updatecompanyYearCertificate++;
+							} else if (list.get(i).getYear() == 2) {
+								updatecompanyTwoYearCertificate++;
+							} else if (list.get(i).getYear() == 4) {
+								updateFourYearCertificate++;
 							}
+
 						} // 个人版
 						else if (Integer.parseInt(list.get(i).getConfigProduct().getProductName()) == 2) {
 
-							if (list.get(i).getAddCertDays() == null) {
-
-								if ((list.get(i).getYear()) * 365 + list.get(i).getLastDays() > 0
-										&& (list.get(i).getYear()) * 365 + list.get(i).getLastDays() < 730) {
-									updatePersonalYearCertificate++;
-								} else if ((list.get(i).getYear()) * 365 + list.get(i).getLastDays() >= 730
-										&& (list.get(i).getYear()) * 365 + list.get(i).getLastDays() < 1095) {
-									updatePersonalTwoYearCertificate++;
-								} else if ((list.get(i).getYear()) * 365 + list.get(i).getLastDays() >= 1460
-										&& (list.get(i).getYear()) * 365 + list.get(i).getLastDays() < 1825) {
-									updatePersonalFourYearCertificate++;
-								}
-							} else {
-								if (list.get(i).getYear() * 365 + list.get(i).getLastDays()
-										+ list.get(i).getAddCertDays() > 0
-										&& list.get(i).getYear() * 365 + list.get(i).getLastDays()
-												+ list.get(i).getAddCertDays() < 730) {
-									updatePersonalYearCertificate++;
-								} else if (list.get(i).getYear() * 365 + list.get(i).getLastDays()
-										+ list.get(i).getAddCertDays() >= 730
-										&& list.get(i).getYear() * 365 + list.get(i).getLastDays()
-												+ list.get(i).getAddCertDays() < 1095) {
-									updatePersonalTwoYearCertificate++;
-								} else if (list.get(i).getYear() * 365 + list.get(i).getLastDays()
-										+ list.get(i).getAddCertDays() >= 1460
-										&& list.get(i).getYear() * 365 + list.get(i).getLastDays()
-												+ list.get(i).getAddCertDays() < 1825) {
-									updatePersonalFourYearCertificate++;
-								}
+							if (list.get(i).getYear() == 1) {
+								updatePersonalYearCertificate++;
+							} else if (list.get(i).getYear() == 2) {
+								updatePersonalTwoYearCertificate++;
+							} else if (list.get(i).getYear() == 4) {
+								updatePersonalFourYearCertificate++;
 							}
-
 						}
 					}
 
@@ -485,73 +392,26 @@ public class ProjectCertificationDetailsController extends BaseController {
 					lostCerate++;
 				} else if ((WorkDealInfoType.getDealInfoTypeName(list.get(i).getDealInfoType2())).contains("更新")) {
 					if (list.get(i).getConfigProduct().getProductName() != null) {
-
 						if (Integer.parseInt(list.get(i).getConfigProduct().getProductName()) == 1) {
 
-							if (list.get(i).getAddCertDays() == null) {
-
-								if ((list.get(i).getYear()) * 365 + list.get(i).getLastDays() > 0
-										&& (list.get(i).getYear()) * 365 + list.get(i).getLastDays() < 730) {
-									updatecompanyYearCertificate++;
-								} else if ((list.get(i).getYear()) * 365 + list.get(i).getLastDays() >= 730
-										&& (list.get(i).getYear()) * 365 + list.get(i).getLastDays() < 1095) {
-									updatecompanyTwoYearCertificate++;
-								} else if ((list.get(i).getYear()) * 365 + list.get(i).getLastDays() >= 1460
-										&& (list.get(i).getYear()) * 365 + list.get(i).getLastDays() < 1825) {
-									updateFourYearCertificate++;
-								}
-							} else {
-								if (list.get(i).getYear() * 365 + list.get(i).getLastDays()
-										+ list.get(i).getAddCertDays() > 0
-										&& list.get(i).getYear() * 365 + list.get(i).getLastDays()
-												+ list.get(i).getAddCertDays() < 730) {
-									updatecompanyYearCertificate++;
-								} else if (list.get(i).getYear() * 365 + list.get(i).getLastDays()
-										+ list.get(i).getAddCertDays() >= 730
-										&& list.get(i).getYear() * 365 + list.get(i).getLastDays()
-												+ list.get(i).getAddCertDays() < 1095) {
-									updatecompanyTwoYearCertificate++;
-								} else if (list.get(i).getYear() * 365 + list.get(i).getLastDays()
-										+ list.get(i).getAddCertDays() >= 1460
-										&& list.get(i).getYear() * 365 + list.get(i).getLastDays()
-												+ list.get(i).getAddCertDays() < 1825) {
-									updateFourYearCertificate++;
-								}
+							if (list.get(i).getYear() == 1) {
+								updatecompanyYearCertificate++;
+							} else if (list.get(i).getYear() == 2) {
+								updatecompanyTwoYearCertificate++;
+							} else if (list.get(i).getYear() == 4) {
+								updateFourYearCertificate++;
 							}
+
 						} // 个人版
 						else if (Integer.parseInt(list.get(i).getConfigProduct().getProductName()) == 2) {
 
-							if (list.get(i).getAddCertDays() == null) {
-
-								if ((list.get(i).getYear()) * 365 + list.get(i).getLastDays() > 0
-										&& (list.get(i).getYear()) * 365 + list.get(i).getLastDays() < 730) {
-									updatePersonalYearCertificate++;
-								} else if ((list.get(i).getYear()) * 365 + list.get(i).getLastDays() >= 730
-										&& (list.get(i).getYear()) * 365 + list.get(i).getLastDays() < 1095) {
-									updatePersonalTwoYearCertificate++;
-								} else if ((list.get(i).getYear()) * 365 + list.get(i).getLastDays() >= 1460
-										&& (list.get(i).getYear()) * 365 + list.get(i).getLastDays() < 1825) {
-									updatePersonalFourYearCertificate++;
-								}
-							} else {
-								if (list.get(i).getYear() * 365 + list.get(i).getLastDays()
-										+ list.get(i).getAddCertDays() > 0
-										&& list.get(i).getYear() * 365 + list.get(i).getLastDays()
-												+ list.get(i).getAddCertDays() < 730) {
-									updatePersonalYearCertificate++;
-								} else if (list.get(i).getYear() * 365 + list.get(i).getLastDays()
-										+ list.get(i).getAddCertDays() >= 730
-										&& list.get(i).getYear() * 365 + list.get(i).getLastDays()
-												+ list.get(i).getAddCertDays() < 1095) {
-									updatePersonalTwoYearCertificate++;
-								} else if (list.get(i).getYear() * 365 + list.get(i).getLastDays()
-										+ list.get(i).getAddCertDays() >= 1460
-										&& list.get(i).getYear() * 365 + list.get(i).getLastDays()
-												+ list.get(i).getAddCertDays() < 1825) {
-									updatePersonalFourYearCertificate++;
-								}
+							if (list.get(i).getYear() == 1) {
+								updatePersonalYearCertificate++;
+							} else if (list.get(i).getYear() == 2) {
+								updatePersonalTwoYearCertificate++;
+							} else if (list.get(i).getYear() == 4) {
+								updatePersonalFourYearCertificate++;
 							}
-
 						}
 					}
 				}
@@ -706,7 +566,7 @@ public class ProjectCertificationDetailsController extends BaseController {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			System.out.println("+++++++++++++");
+			
 		}
 	}
 
