@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -665,10 +666,15 @@ public class WorkDealInfoService extends BaseService {
 		dc.createAlias("createBy", "createBy");
 		dc.createAlias("createBy.office", "office");
 		dc.createAlias("configApp", "configApp");
+	
+		//dc.createAlias("dealInfoType"," dealInfoType");
+		dc.add(Restrictions.ne("dealInfoType", WorkDealInfoType.TYPE_UNLOCK_CERT));
+		dc.add(Restrictions.ne("dealInfoType", WorkDealInfoType.TYPE_PAY_REPLACED));
+		
 
 		dc.add(dataScopeFilter(UserUtils.getUser(), "office", "createBy"));
 		dc.add(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED));
-
+		//dc.add(Restrictions.eq("dealInfoType", WorkDealInfoType.WorkDealInfoTypeMapReplaced));
 		if (apply != null) {
 			dc.add(Restrictions.eq("configApp.id", apply));
 		}
