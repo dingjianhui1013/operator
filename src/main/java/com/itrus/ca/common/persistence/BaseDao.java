@@ -234,4 +234,40 @@ public interface BaseDao<T> {
 	 * @param fields 字段名
 	 */
 	public List<T> keywordsHighlight(BooleanQuery query, List<T> list, int subLength, String... fields);
+	
+	/**
+	 * 
+	 * 注意，普通的多表联查不能用此方法<br>
+	 * 因为hibernate本身BUG：<br>
+	 * 多表存在同名列时,用原生SQL查询返回的结果集将与sql在DB里查询的不符<br>
+	 * 而原生SQL的外链接查询则没此情况发生...<br>
+	 * 
+	 * @param page
+	 * @param sqlString
+	 * @param resultClass
+	 * @param returnVO
+	 *            - 指定返回的VO对象，自动映射查找所包含的属性类里,<br>
+	 *            - 是否有与传入的resultClass想对应的，如果有则直接赋值<br>
+	 * @return
+	 */
+	public <E> Page<E> findBySqlString(Page<E> page, String sqlString,
+			Class[] resultClass, Class returnVO);
+	
+	/**
+	 * 注意，普通的多表联查不能用此方法<br>
+	 * 因为hibernate本身BUG：<br>
+	 * 多表存在同名列时,用原生SQL查询返回的结果集将与sql在DB里查询的不符<br>
+	 * 而原生SQL的外链接查询则没此情况发生...<br>
+	 * 
+	 * @param page
+	 * @param sqlString
+	 * @param parameter
+	 * @param resultClass
+	 * @param returnVO
+	 *            - 指定返回的VO对象，自动映射查找所包含的属性类里,<br>
+	 *            - 是否有与传入的resultClass想对应的，如果有则直接赋值<br>
+	 * @return
+	 */
+	public <E> Page<E> findBySqlStringParameter(Page<E> page, String sqlString,
+			Parameter parameter, Class[] resultClass, Class returnVO);
 }
