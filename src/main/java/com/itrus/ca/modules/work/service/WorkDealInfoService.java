@@ -4798,17 +4798,46 @@ public class WorkDealInfoService extends BaseService {
 	
 	
 	
-	public Page<WorkDealInfo> findDealInfo(Page<WorkDealInfo> page, Long appId, Long[] productIds) {
+	public List<WorkDealInfo> findDealInfo(Long appId,List<Long> appIds,List<Long>  productIds ,Date start , Date end) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("configApp", "configApp");
-		dc.createAlias("configProduct", "configProduct");
-		dc.add(Restrictions.eq("configApp.id", appId));
-		dc.add(Restrictions.in("configProduct.id", productIds));
+		if (appId!=null) {
+			
+			dc.add(Restrictions.eq("configApp.id", appId));
+		}
+		if(appIds.size()>0){
+			dc.add(Restrictions.in("configApp.id", appIds));
+		}
+		if (productIds.size()>0) {
+			dc.createAlias("configProduct", "configProduct");
+			dc.add(Restrictions.in("configProduct.id", productIds));
+		}
+		if (start!=null) {
+			dc.add(Restrictions.ge("businessCardUserDate", start));
+		}
+		if (end!=null) {
+			dc.add(Restrictions.le("businessCardUserDate", end));
+		}
 		dc.add(Restrictions.eq("dealInfoType", 0));
 		dc.addOrder(Order.desc("id"));
 		dc.add(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED));
-		return workDealInfoDao.find(page, dc);
+		return workDealInfoDao.find(dc);
 	}
 	
 
+
+	public WorkDealInfo findDealInfo(Long prvedId) {
+		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
+		dc.add(Restrictions.eq("prevId", prvedId));
+		if(workDealInfoDao.find(dc).size()>0){
+			return workDealInfoDao.find(dc).get(0);
+		}else{
+			return null;
+		}
+		
+	}
+	
+
+	
+	
 }

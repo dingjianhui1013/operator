@@ -3,6 +3,7 @@ package com.itrus.ca.modules.work.entity;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -31,6 +32,7 @@ import com.itrus.ca.modules.profile.entity.ConfigApp;
 import com.itrus.ca.modules.profile.entity.ConfigChargeAgent;
 import com.itrus.ca.modules.profile.entity.ConfigCommercialAgent;
 import com.itrus.ca.modules.profile.entity.ConfigProduct;
+import com.itrus.ca.modules.settle.vo.PayableDetailVo;
 import com.itrus.ca.modules.sys.entity.User;
 
 /**
@@ -106,6 +108,7 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 	private Date attestationUserDate;//鉴证人时间
 	private Date businessCardUserDate;//制证人时间
 	
+	private List<PayableDetailVo> detailList;
 	
 
 	/** default constructor */
@@ -700,6 +703,20 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 	public void setBusinessCardUserDate(Date businessCardUserDate) {
 		this.businessCardUserDate = businessCardUserDate;
 	}
+
+	@Transient
+	public List<PayableDetailVo> getDetailList() {
+		return detailList;
+	}
+
+	public void setDetailList(List<PayableDetailVo> detailList) {
+		this.detailList = detailList;
+	}
+	
+	
+	
+	
+	
 	
 	
 }

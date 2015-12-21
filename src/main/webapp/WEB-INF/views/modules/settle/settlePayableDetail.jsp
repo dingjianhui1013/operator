@@ -59,7 +59,7 @@
 			value="${page.pageSize}" />
 		<div class="control-group">
 			<label><font color="red" >*</font>代理商 ：</label>
-			<select onchange="setApp(this)" name="comAgent" >
+			<select onchange="setApp(this)" name="comAgentId" >
 				<option value="0">请选择</option>
 				<c:forEach items="${comAgents }" var="comAgent" >
 					<option value="${comAgent.id }">${comAgent.agentName }</option>
@@ -92,6 +92,65 @@
 	</form:form>
 	<tags:message content="${message}" />	
 	<div class="form-horizontal" >
+		<table id="contentTable"
+					class="table table-striped table-bordered table-condensed" style="width: 60%">
+					<tr>
+						<th colspan="${7+lenth*4 }" >统计周期：<fmt:formatDate pattern="yyyy-MM-dd" value="${startTime}"/>&nbsp;-&nbsp;<fmt:formatDate pattern="yyyy-MM-dd" value="${endTime}"/></th>
+					</tr>
+					<tr>
+						<th colspan="${7+lenth*4 }">本期结算证书年限：（本次结算年数总数）</th>
+					</tr>
+					<tr>
+						<th rowspan="2">序号</th>
+						<th rowspan="2">单位名称</th>
+						<th rowspan="2">经办人姓名</th>
+						<th rowspan="2">产品名称</th>
+						<c:forEach var="a" begin="1" end="${lenth}">
+						
+						<th colspan="4">第${a}次结算</th>
+						</c:forEach>
+						
+						<th colspan="3">结算年限统计</th>
+					</tr>
+					<tr>
+						
+						<c:forEach begin="1" end="${lenth}">
+						<th>起始时间</th>
+						<th>结束时间</th>
+						<th>业务类型</th>
+						<th>结算(年)</th>
+						</c:forEach>
+						<th>已结算（年）</th>
+						<th>本期结算（年）</th>
+						<th>剩余结算（年）</th>
+					</tr>
+					<c:forEach items="${dealInfos }" var="dealInfo" varStatus="status">
+						<tr>
+							<td>${status.index + 1}</td>
+							<td>${dealInfo.workCompany.companyName}</td>
+							<td>${dealInfo.workCertInfo.workCertApplyInfo.name}</td>
+							<td>${dealInfo.configProduct.productName}</td>
+							<c:forEach items="${dealInfo.detailList }" var="detail">
+								<td><fmt:formatDate	value="${detail.startDate }" pattern="yyyy-MM-dd" /></td>
+								<td><fmt:formatDate value="${detail.endDate }" pattern="yyyy-MM-dd" /></td>
+								<td>${detail.dealInfoType }</td>
+								<td>${detail.settleYear }</td>
+							</c:forEach>
+							<c:forEach begin="1" end="${lenth - dealInfo.detailList.size() }">
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</c:forEach>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+					</c:forEach>
+				</table>
+		
+	
+	
 		
 	</div>
 </body>
