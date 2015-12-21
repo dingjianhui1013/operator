@@ -7,7 +7,8 @@
 <meta name="decorator" content="default" />
 <script type="text/javascript">
 	$(document).ready(function() {
-		
+		var windowH=$(window).height();
+		$('.windowHeight').height(windowH);
 	});
 	function page(n, s) {
 		$("#pageNo").val(n);
@@ -80,6 +81,7 @@
 </script>
 </head>
 <body>
+
 	<ul class="nav nav-tabs">
 		<li class="active"><a
 			href="${ctx}/work/workDealInfo/StatisticalDayList">项目回款统计</a></li>
@@ -137,6 +139,7 @@
 			</div>
 			
 	</form:form>
+	<div style="overflow-x:auto;" class="windowHeight">
 	<tags:message content="${message}" />
 	<table id="contentTable" 
 		class="table table-striped table-bordered table-condensed">
@@ -158,10 +161,10 @@
 						</c:forEach>
 					</c:forEach>
 					<c:if test="${index==1}">
-						<th colspan="${index}" rowspan="3" style="text-align:center;">${office_District.key}网点</th>
+						<th colspan="${index}" rowspan="3" style="text-align:center;">${office_District.key}</th>
 					</c:if>
 					<c:if test="${index>1}">
-						<th colspan="${count}" style="text-align:center;">${office_District.key}网点</th>
+						<th colspan="${count}" style="text-align:center;">${office_District.key}</th>
 					</c:if>
 				</c:forEach>
 				<th rowspan="3" style="text-align:center;">合计</th>
@@ -269,5 +272,6 @@
 		</tr>
 		</tbody>
 	</table>
+	</div>
 </body>
 </html>
