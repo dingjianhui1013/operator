@@ -241,7 +241,13 @@ public class ConfigProductService extends BaseService {
 		return products.get(0);
 	}
 	
-	
+	//根据产品ID和应用ID来查询数据
+	public List<ConfigProduct> findByAppId(Long appId){
+		DetachedCriteria dc = configProductDao.createDetachedCriteria();
+		dc.createAlias("configApp", "configApp");
+		dc.add(Restrictions.eq("configApp.id", appId));
+		return configProductDao.find(dc);
+	}
 	
 
 	/*public List<ConfigProduct> findProductId(Long applyId) {

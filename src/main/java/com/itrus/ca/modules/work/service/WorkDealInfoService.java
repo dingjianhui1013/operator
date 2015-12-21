@@ -4789,5 +4789,20 @@ public class WorkDealInfoService extends BaseService {
 			return false;
 		return true;
 	}
+	
+	
+	
+	public Page<WorkDealInfo> findDealInfo(Page<WorkDealInfo> page, Long appId, Long[] productIds) {
+		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
+		dc.createAlias("configApp", "configApp");
+		dc.createAlias("configProduct", "configProduct");
+		dc.add(Restrictions.eq("configApp.id", appId));
+		dc.add(Restrictions.in("configProduct.id", productIds));
+		dc.add(Restrictions.eq("dealInfoType", 0));
+		dc.addOrder(Order.desc("id"));
+		dc.add(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED));
+		return workDealInfoDao.find(page, dc);
+	}
+	
 
 }
