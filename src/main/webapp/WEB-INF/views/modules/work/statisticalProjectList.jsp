@@ -9,6 +9,13 @@
 	$(document).ready(function() {
 		var windowH=$(window).height();
 		$('.windowHeight').height(windowH);
+		$("#scrollBar").scroll(function(){
+			var leftWidth=$("#scrollBar").scrollLeft();
+			$("#searchForm").css("margin-left",leftWidth);
+			$("#ulId").css("margin-left",leftWidth);
+		});
+		
+		
 	});
 	function page(n, s) {
 		$("#pageNo").val(n);
@@ -78,18 +85,22 @@
 				window.location.href="${ctx}/work/workDealInfo/exportProjectPayment?area="+area+"&appId="+appId+"&startTime="+startTime+"&endTime="+endTime+"&office="+office;
 			}
 	}
+	
+	
+	
 </script>
+
 </head>
 <body>
-
-	<ul class="nav nav-tabs">
+	<div style="overflow:auto;" class="windowHeight" id="scrollBar" >
+	<ul class="nav nav-tabs" id="ulId" style="width:100%;">
 		<li class="active"><a
 			href="${ctx}/work/workDealInfo/StatisticalDayList">项目回款统计</a></li>
 	</ul>
 	<form:form id="searchForm" modelAttribute="workDealInfo"
 		action="${ctx}/work/workDealInfo/StatisticalProjectList"
-		method="post" class="breadcrumb form-search">
-		<div style="margin-top: 9px">
+		method="post" class="breadcrumb form-search" style="width:100%;">
+		<div style="margin-top: 9px;" >
 		<label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;项目名称：</label>
 		<select name="appId" id="appId">
 				<option value="">请选择</option>
@@ -137,12 +148,9 @@
 			<a href="javascript:dc()" class="btn btn-primary">导出</a>
 		</div>
 			</div>
-			
 	</form:form>
-	<div style="overflow-x:auto;" class="windowHeight">
 	<tags:message content="${message}" />
-	<table id="contentTable" 
-		class="table table-striped table-bordered table-condensed">
+	<table id="contentTable" class="table table-striped table-bordered table-condensed">
 		<thead>
 			<tr>
 				<th  rowspan="3" style="text-align:center;">统计日期</th>
