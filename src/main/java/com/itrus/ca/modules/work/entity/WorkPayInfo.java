@@ -44,10 +44,10 @@ public class WorkPayInfo extends DataEntity implements java.io.Serializable {
 	private Boolean methodAlipay;
 	private Boolean methodGov;
 	private Boolean methodContract;
-	private Double posMoney;
-	private Double money;
-	private Double bankMoney;
-	private Double alipayMoney;
+	private Double posMoney;//pos付款
+	private Double money;//现金付款
+	private Double bankMoney;//银行付款
+	private Double alipayMoney;//支付宝付款
 	private Double workTotalMoney;
 	private Double workPayedMoney;
 	private Double workReceivaMoney;
