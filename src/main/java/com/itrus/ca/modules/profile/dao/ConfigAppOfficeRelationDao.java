@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import com.itrus.ca.common.persistence.BaseDao;
 import com.itrus.ca.common.persistence.BaseDaoImpl;
 import com.itrus.ca.modules.profile.entity.ConfigAppOfficeRelation;
+import com.itrus.ca.modules.sys.entity.Area;
 import com.itrus.ca.modules.sys.entity.Office;
 
 /**
@@ -33,6 +34,12 @@ public interface ConfigAppOfficeRelationDao extends ConfigAppOfficeRelationDaoCu
 	@Modifying
 	@Query("delete from ConfigAppOfficeRelation where sysOffice in ?1")
 	public int deleteByoffices(List<Office> offices);
+	
+	@Query("select distinct a from ConfigAppOfficeRelation c , Office o, Office a where c.office.id = o.id and o.parent.id = a.id and a.type=1 and c.configApp.id =  ?1")
+	public List<Office> findAreaByAppId(Long appId);
+	
+//	@Query("select distinct o from ConfigAppOfficeRelation c , Office o where c.office.id = o.id and o.parent.id = ?2 and o.type=2 and c.configApp.id =  ?1")
+//	public List<Office> findOfficeByAppIdAreaId(Long appId,Long parentId);
 	
 }
 

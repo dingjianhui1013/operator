@@ -36,6 +36,9 @@ public interface OfficeDao extends OfficeDaoCustom, CrudRepository<Office, Long>
 	@Modifying
 	@Query("Select a from Office a,ConfigAgentOfficeRelation c where a.id=c.office.id AND c.configCommercialAgent.id= ?1 ")
 	public List<Office> findByAgentId(Long id);
+	
+	@Query("Select a.id from Office a where a.delFlag=0 AND a.parent.id= ?1 ")
+	public List<Long>  findOfficeIdsByParentId(Long id);
 
 	@Modifying
 	@Query("FROM Office o where o.id NOT IN (SELECT c.office.id from ConfigAgentOfficeRelation c where c.configCommercialAgent.id!=?1)  and o.delFlag=0")

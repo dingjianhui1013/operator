@@ -56,6 +56,7 @@ import com.itrus.ca.common.utils.ReflectHelper;
 import com.itrus.ca.common.utils.Reflections;
 import com.itrus.ca.common.utils.StringHelper;
 import com.itrus.ca.common.utils.StringUtils;
+import com.itrus.ca.modules.settle.vo.CertificateSettlementStatisticsVO;
 
 /**
  * DAO支持类实现
@@ -319,7 +320,8 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 			} else if (resultClass == List.class) {
 				query.setResultTransformer(Transformers.TO_LIST);
 			} else {
-				query.addEntity(resultClass);
+				query.setResultTransformer(Transformers.aliasToBean(resultClass)); 
+//				query.addEntity(resultClass);
 			}
 		}
 	}

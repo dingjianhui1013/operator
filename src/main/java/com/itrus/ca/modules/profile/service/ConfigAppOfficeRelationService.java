@@ -6,7 +6,6 @@ package com.itrus.ca.modules.profile.service;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.hssf.record.DConRefRecord;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
@@ -18,9 +17,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.itrus.ca.common.persistence.Page;
 import com.itrus.ca.common.service.BaseService;
-import com.itrus.ca.modules.profile.entity.ConfigAppOfficeRelation;
-import com.itrus.ca.modules.profile.entity.ConfigRaAccount;
 import com.itrus.ca.modules.profile.dao.ConfigAppOfficeRelationDao;
+import com.itrus.ca.modules.profile.entity.ConfigAppOfficeRelation;
+import com.itrus.ca.modules.sys.entity.Area;
 import com.itrus.ca.modules.sys.entity.Office;
 
 /**
@@ -54,7 +53,7 @@ public class ConfigAppOfficeRelationService extends BaseService {
 	*/
 	
 	
-	public List<ConfigAppOfficeRelation> findByArea(Page<ConfigAppOfficeRelation> page, Long areaId,Long officeId) {
+	public List<ConfigAppOfficeRelation> findByArea(Long areaId,Long officeId) {
 		DetachedCriteria dc = configAppOfficeRelationDao.createDetachedCriteria();
 		dc.createAlias("office", "office");
 		dc.createAlias("office.parent", "parent");
@@ -133,6 +132,10 @@ public class ConfigAppOfficeRelationService extends BaseService {
 		}
 		dc.addOrder(Order.desc("id"));
 		return configAppOfficeRelationDao.find(dc);
+	}
+	
+	public List<Office> findAreaByAppId(Long appId) {
+		return configAppOfficeRelationDao.findAreaByAppId(appId);
 	}
 	
 	/**

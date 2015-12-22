@@ -178,6 +178,10 @@ public class OfficeService extends BaseService {
 		dc.addOrder(Order.desc("id"));
 		return officeDao.find(dc);
 	}
+	public List<Long> findOfficeIdsByParentId(Long areaId) {		
+		return officeDao.findOfficeIdsByParentId(areaId);
+	}
+	
 	/**
 	 * 查询该区域下所有网点包括被禁用的
 	* @Title: findOfficesByParentId

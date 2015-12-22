@@ -109,8 +109,7 @@ public class ConfigAppController extends BaseController {
 		
 		List<ConfigAppOfficeRelation> page2 =Lists.newArrayList();
 		if (area!=null) {
-			 page2 = configAppOfficeRelationService.findByArea(new Page<ConfigAppOfficeRelation>(
-					request, response), area,office); // 获取应用信息
+			 page2 = configAppOfficeRelationService.findByArea(area,office); // 获取应用信息
 		}
 		
 		List<Long> appIdList =Lists.newArrayList();
@@ -276,6 +275,32 @@ public class ConfigAppController extends BaseController {
 		}
 		return json.toString();
 	}
+	
+//	@RequestMapping("addAttach")
+//	@ResponseBody
+//	public String findAreaByAppId(Long appId) {
+//		
+//		JSONObject json = new org.json.JSONObject();
+//		JSONArray array = new JSONArray();
+//		try {
+//			List<Area> offids = officeService.findByParentId(areaId);
+//			for (Office office : offids) {
+//				if (office.getType().equals("1")) {
+//					continue;
+//				}
+//				json = new JSONObject();
+//				json.put("id", office.getId());
+//				json.put("name", office.getName());
+//				array.put(json);
+//			}
+//			// 检查是否有权限操作
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			json.put("status", "0");
+//		}
+//		return array.toString();
+//		
+//	}
 
 	public String getRealPath() {
 		return realPath;

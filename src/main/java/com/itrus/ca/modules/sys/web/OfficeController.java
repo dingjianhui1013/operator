@@ -238,7 +238,7 @@ public class OfficeController extends BaseController {
 	// 通过AJAX查询区域下的所有网店
 	@RequestMapping(value = "addOffices")
 	@ResponseBody
-	public String delete(Long areaId) throws JSONException {
+	public String getOffices(Long areaId) throws JSONException {
 		JSONObject json = new org.json.JSONObject();
 		JSONArray array = new JSONArray();
 		try {

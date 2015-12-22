@@ -49,8 +49,8 @@
 				top.$.jBox.tip("请选定时间范围");
 				return false;
 			} else {
-				if ($("#officeId").val()==""){
-					top.$.jBox.tip("请选定网点");
+				if ($("#applyId").val()==""){
+					top.$.jBox.tip("请选择应用");
 					return false;
 				} else {
 					return true;
@@ -125,11 +125,11 @@
 		<input id="startTime" name="startDate" type="text" readonly="readonly"
 			maxlength="20" class="Wdate required"
 			onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"
-			value="<fmt:formatDate value="${startTime}" pattern="yyyy-MM-dd"/>"/>&nbsp;-&nbsp;
+			value="<fmt:formatDate value="${startDate}" pattern="yyyy-MM-dd"/>"/>&nbsp;-&nbsp;
 				<input id="endTime" name="endDate" type="text" readonly="readonly"
 			maxlength="20" class="Wdate required"
 			onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false,minDate:'#F{$dp.$D(\'startTime\')}'});"
-			value="<fmt:formatDate value="${endTime}" pattern="yyyy-MM-dd"/>" />
+			value="<fmt:formatDate value="${endDate}" pattern="yyyy-MM-dd"/>" />
 			<label>支持模式：</label>
 			<input type="checkbox" name="tongyong" value="0"/>通用
 			<input type="checkbox" name="zhuanyong" value="1">专用
@@ -154,7 +154,7 @@
 					<th>应用</th>
 					<th>费用归属</th>
 					<th>证书年限</th>
-					<c:forEach items="${monthList }" var="month">
+					<c:forEach items="${monthList}" var="month">
 						<th colspan="2"><a href="javascript:showDays('${applyId }','${productId }','${startDate }','${endDate }','${month }','${officeId }')">${month }</a></th>
 					</c:forEach>
 					<th></th>
@@ -173,127 +173,120 @@
 			
 			<c:forEach items="${sumList }" var="sum">
 			<tr>
-				<td rowspan="12">${sum.configApp.appName }</td>
+				<td rowspan="12">${sum.key }</td>
 				<td rowspan="4">自费企业</td>
 				<td>一年期</td>
 				<c:set value="0" var="subtotal" /> 
-				<c:forEach items="${sum.certMonths }" var="oneSm1">
+				<c:set value="${sum.value}" var="oneSm1"/>
 					<td>${oneSm1.oneAdd1 }</td>
 					<td>${oneSm1.oneRenew1 }</td>					
 					<c:set value="${subtotal +oneSm1.oneAdd1+oneSm1.oneRenew1 }" var="subtotal" /> 
-				</c:forEach>
+				
 				<td>${subtotal}</td>
 			</tr>
 			<tr>
 				<td>两年期</td>
 				<c:set value="0" var="subtotal" />
-				<c:forEach items="${sum.certMonths }" var="oneSm2">
+				<c:set value="${sum.value}" var="oneSm2"/>
 					<td>${oneSm2.oneAdd2 }</td>
 					<td>${oneSm2.oneRenew2 }</td>					
-					<c:set value="${subtotal +oneSm2.oneAdd2+oneSm2.oneRenew2 }" var="subtotal" /> 
-				</c:forEach>
+					<c:set value="${subtotal +oneSm2.oneAdd2+oneSm2.oneRenew2 }" var="subtotal" />
+				
 				<td>${subtotal}</td>
 			</tr>
 			<tr>
 				<td>四年期</td>
 				<c:set value="0" var="subtotal" />
-				<c:forEach items="${sum.certMonths }" var="oneSm4">
+				<c:set value="${sum.value}" var="oneSm4"/>
 					<td>${oneSm4.oneAdd4 }</td>
 					<td>${oneSm4.oneRenew4 }</td>					
 					<c:set value="${subtotal +oneSm4.oneAdd4+oneSm4.oneRenew4 }" var="subtotal" /> 
-				</c:forEach>
+				
 				<td>${subtotal}</td>
 			</tr>
 			<tr>
 				<td>五年期</td>
 				<c:set value="0" var="subtotal" />
-				<c:forEach items="${sum.certMonths }" var="oneSm5">
+				<c:set value="${sum.value}" var="oneSm5"/>
 					<td>${oneSm5.oneAdd5 }</td>
 					<td>${oneSm5.oneRenew5 }</td>					
 					<c:set value="${subtotal +oneSm5.oneAdd5+oneSm5.oneRenew5 }" var="subtotal" /> 
-				</c:forEach>
 				<td>${subtotal}</td>
 			</tr>
 			<tr>
 				<td rowspan="4">合同企业</td>
 				<td>一年期</td>
 				<c:set value="0" var="subtotal" />
-				<c:forEach items="${sum.certMonths }" var="twoSm1">
+				<c:set value="${sum.value}" var="twoSm1"/>
 					<td>${twoSm1.twoAdd1 }</td>
 					<td>${twoSm1.twoRenew1 }</td>					
 					<c:set value="${subtotal +twoSm1.twoAdd1+twoSm1.twoRenew1 }" var="subtotal" /> 
-				</c:forEach>
 				<td>${subtotal}</td>
 			</tr>
 			<tr>
 				<td>两年期</td>
 				<c:set value="0" var="subtotal" />
-				<c:forEach items="${sum.certMonths }" var="twoSm2">
+				<c:set value="${sum.value}" var="twoSm2"/>
 					<td>${twoSm2.twoAdd2 }</td>
 					<td>${twoSm2.twoRenew2 }</td>
 					<c:set value="${subtotal +twoSm2.twoAdd2+twoSm2.twoRenew2  }" var="subtotal" /> 
-				</c:forEach>
+				
 				<td>${subtotal}</td>
 			</tr>
 			<tr>
 				<td>四年期</td>
 				<c:set value="0" var="subtotal" />
-				<c:forEach items="${sum.certMonths }" var="twoSm4">
+				<c:set value="${sum.value}" var="twoSm4"/>
 					<td>${twoSm4.twoAdd4 }</td>
 					<td>${twoSm4.twoRenew4 }</td>
 					<c:set value="${subtotal +twoSm4.twoAdd4+twoSm4.twoRenew4 }" var="subtotal" /> 
-				</c:forEach>
+				
 				<td>${subtotal}</td>
 			</tr>
 			<tr>
 				<td>五年期</td>
 				<c:set value="0" var="subtotal" />
-				<c:forEach items="${sum.certMonths }" var="twoSm5">
+				<c:set value="${sum.value}" var="twoSm5"/>
 					<td>${twoSm5.twoAdd5 }</td>
 					<td>${twoSm5.twoRenew5 }</td>
 					<c:set value="${subtotal +twoSm5.twoAdd5+twoSm5.twoRenew5}" var="subtotal" /> 
-				</c:forEach>
 				<td>${subtotal}</td>
 			</tr>
 			<tr>
 				<td rowspan="4">政府统一采购</td>
 				<td>一年期</td>
 				<c:set value="0" var="subtotal" />
-				<c:forEach items="${sum.certMonths }" var="fourSm1">
+				<c:set value="${sum.value}" var="fourSm1"/>
 					<td>${fourSm1.fourAdd1 }</td>
 					<td>${fourSm1.fourRenew1 }</td>
-					<c:set value="${subtotal +fourSm1.fourAdd1+fourSm1.fourRenew1 }" var="subtotal" /> 
-				</c:forEach>
+					<c:set value="${subtotal +fourSm1.fourAdd1+fourSm1.fourRenew1 }" var="subtotal" /> 				
 				<td>${subtotal}</td>
 			</tr>
 			<tr>
 				<td>两年期</td>
 				<c:set value="0" var="subtotal" />
-				<c:forEach items="${sum.certMonths }" var="fourSm2">
+				<c:set value="${sum.value}" var="fourSm2"/>
 					<td>${fourSm2.fourAdd2 }</td>
 					<td>${fourSm2.fourRenew2 }</td>					
-					<c:set value="${subtotal +fourSm2.fourAdd2+fourSm2.fourRenew2 }" var="subtotal" /> 
-				</c:forEach>
+					<c:set value="${subtotal +fourSm2.fourAdd2+fourSm2.fourRenew2 }" var="subtotal" /> 				
 				<td>${subtotal}</td>
 			</tr>
 			<tr>
 				<td>四年期</td>
 				<c:set value="0" var="subtotal" />
-				<c:forEach items="${sum.certMonths }" var="fourSm4">
+				<c:set value="${sum.value}" var="fourSm4"/>
 					<td>${fourSm4.fourAdd4 }</td>
 					<td>${fourSm4.fourRenew4 }</td>
-					<c:set value="${subtotal +fourSm4.fourAdd4+fourSm4.fourRenew4 }" var="subtotal" /> 
-				</c:forEach>
+					<c:set value="${subtotal +fourSm4.fourAdd4+fourSm4.fourRenew4 }" var="subtotal" /> 				
 				<td>${subtotal}</td>
 			</tr>
 			<tr>
 				<td>五年期</td>
 				<c:set value="0" var="subtotal" />
-				<c:forEach items="${sum.certMonths }" var="fourSm5">
+				<c:set value="${sum.value}" var="fourSm5"/>
 					<td>${fourSm5.fourAdd5 }</td>
 					<td>${fourSm5.fourRenew5 }</td>
-					<c:set value="${subtotal +fourSm5.fourAdd5+fourSm5.fourRenew5 }" var="subtotal" /> 
-				</c:forEach>
+					<c:set value="${subtotal +fourSm5.fourAdd5+fourSm5.fourRenew5 }" var="subtotal" /> 				
 				<td>${subtotal}</td>
 			</tr>
 			</c:forEach>
