@@ -19,16 +19,16 @@
 				
 					var apply = $("#apply").val();
 					var workType = $("#workType").val();
-					var wdiStatus = $("#dealInfoStatus").val();
+					var dealInfoStatus = $("#dealInfoStatus").val();
 					var companyName=$("#companyName").val();
-					
+					alert(apply+"   "+workType+"       "+dealInfoStatus+"        "+companyName);
 					window.location.href = "${ctx }/message/emailExtraction/export?apply="
 							+ apply
 							+ "&workType="
 							+ workType
-							+ "&wdiStatus="
-							+ wdiStatus
-							+"companyName="
+							+ "&dealInfoStatus="
+							+ dealInfoStatus
+							+"&companyName="
 							+companyName;
 				}
 			
