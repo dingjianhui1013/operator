@@ -9,7 +9,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -27,13 +26,14 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.itrus.ca.common.config.Global;
 import com.itrus.ca.common.utils.DateUtils;
 import com.itrus.ca.common.web.BaseController;
-import com.itrus.ca.modules.bean.StaticCertDateMonth;
 import com.itrus.ca.modules.bean.StaticCertMonth;
 import com.itrus.ca.modules.constant.ProductType;
 import com.itrus.ca.modules.constant.WorkDealInfoType;
 import com.itrus.ca.modules.profile.entity.ConfigApp;
+import com.itrus.ca.modules.profile.entity.ConfigChargeAgent;
 import com.itrus.ca.modules.profile.service.ConfigAppOfficeRelationService;
 import com.itrus.ca.modules.profile.service.ConfigAppService;
+import com.itrus.ca.modules.profile.service.ConfigChargeAgentService;
 import com.itrus.ca.modules.profile.service.ConfigProductService;
 import com.itrus.ca.modules.settle.entity.CertificateSettlementStatistics;
 import com.itrus.ca.modules.settle.service.CertificateSettlementStatisticsService;
@@ -70,6 +70,9 @@ public class CertificateSettlementStatisticsController extends BaseController {
 
 	@Autowired
 	private ConfigAppOfficeRelationService configAppOfficeRelationService;
+	
+	@Autowired
+	private ConfigChargeAgentService configChargeAgentService;
 
 	@ModelAttribute
 	public CertificateSettlementStatistics get(@RequestParam(required = false) Long id) {
@@ -98,7 +101,8 @@ public class CertificateSettlementStatisticsController extends BaseController {
 				i++;
 			}
 		}
-
+		List<ConfigChargeAgent> agentList=configChargeAgentService.selectAll();
+		model.addAttribute("agentList",agentList);
 		if (areaId != null) {
 			List<Office> offices = officeService.findByParentId(areaId);
 			model.addAttribute("offices", offices);
