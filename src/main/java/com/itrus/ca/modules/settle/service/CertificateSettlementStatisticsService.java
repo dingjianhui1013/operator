@@ -8,7 +8,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import org.apache.http.impl.cookie.DateUtils;
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
@@ -126,9 +126,9 @@ public class CertificateSettlementStatisticsService extends BaseService {
 				+ " order by to_char(t.create_date,'YYYY-MM') asc,t.deal_info_type,p.product_name,t.year";
 		List<CertificateSettlementStatisticsVO> resultList = new ArrayList<CertificateSettlementStatisticsVO>();
 
-		resultList = certificateSettlementStatisticsDao.findBySql(sql, CertificateSettlementStatisticsVO.class,
-				DateUtils.formatDate(startDate, "yyyy-MM-dd") + " 00:00:00",
-				DateUtils.formatDate(endDate, "yyyy-MM-dd") + " 23:59:59");
+		resultList = certificateSettlementStatisticsDao.findBySql(sql, CertificateSettlementStatisticsVO.class,			
+				DateFormatUtils.format(startDate, "yyyy-MM-dd") + " 00:00:00",
+				DateFormatUtils.format(endDate, "yyyy-MM-dd") + " 23:59:59");
 
 		return resultList;
 	}
