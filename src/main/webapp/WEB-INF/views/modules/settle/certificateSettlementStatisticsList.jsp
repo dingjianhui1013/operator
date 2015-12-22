@@ -33,8 +33,9 @@
 		});
 
 	}
-	function addTempName() {
-		var agenId = $("#agenId").prop('value');
+	function changeAgentId() {
+		var tempStyle = $("#tempStyle").prop('value');
+		
 		var url = "";
 		$.getJson(url + agenId + "&_=" + new Date().getTime(), function(data) {
 			var html = "";
@@ -128,7 +129,7 @@
 
 		<div style="margin-top: 10px">
 			<label>计费策略类型：</label> 
-			<select name="tempStyle" id="tempStyle" onchange="changeAgentId">
+			<select name="tempStyle" id="tempStyle" onchange="changeAgentId()">
 				<option value="0">请选择</option>
 				<option value="1">标准</option>
 				<option value="2">政府统一采购</option>
