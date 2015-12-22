@@ -33,6 +33,23 @@
 		});
 
 	}
+	function addTempName() {
+		var agenId = $("#agenId").prop('value');
+		var url = "";
+		$.getJson(url + agenId + "&_=" + new Date().getTime(), function(data) {
+			var html = "";
+			//console.log(data);
+			html += "<option value=\""+""+"\">请选择</ooption>";
+			$.each(data, function(idx, ele) {
+				//console.log(idx);
+				//console.log(ele);
+				html += "<option value=\""+ele.id+"\">" + ele.name
+						+ "</ooption>"
+			});
+			$("#officeId").html(html);
+		});
+	}
+
 	function showDays(applyId, productId, startDate, endDate, month, officeId) {
 		var url = "${ctx}/statistic/statisticCertData/showDays?applyId="
 				+ applyId + "&productId=" + productId + "&startDate="
@@ -89,14 +106,7 @@
 					selected="selected"
 					</c:if>>${app.appName}</option>
 				</c:forEach>
-			</select> <label>产品名称 ：</label>
-			<c:forEach items="${proList }" var="pro">
-				<input type="checkbox" name="proList" value="${pro.id}">${pro.name}
-			</c:forEach>
-		</div>
-
-		<div style="margin-top: 10px">
-			<label>选择区域：</label> <select name="areaId" id="areaId"
+			</select> <label>选择区域：</label> <select name="areaId" id="areaId"
 				onchange="addOffice()">
 				<option value="">请选择</option>
 				<c:forEach items="${offsList}" var="off">
@@ -113,21 +123,30 @@
 						selected="selected"
 						</c:if>>${off.name}</option>
 				</c:forEach>
-			</select> <label>计费策略类型：</label>
-			<form:select path="payType">
-				<form:option value="0">请选择</form:option>
-				<form:option value="1">标准</form:option>
-				<form:option value="2">政府统一采购</form:option>
-				<form:option value="3">合同采购</form:option>
-			</form:select>
+			</select>
 		</div>
-		<div>
-			<label>业务类型：</label>
-			<c:forEach items="${workTypes}" var="type">
-				<input type="checkbox" name="workTypes" value="${type.id}">					
-					${type.name}
+
+		<div style="margin-top: 10px">
+			<label>计费策略类型：</label> 
+			<select name="tempStyle" id="tempStyle" onchange="changeAgentId">
+				<option value="0">请选择</option>
+				<option value="1">标准</option>
+				<option value="2">政府统一采购</option>
+				<option value="3">合同采购</option>
+			</select>
+				
+			<label>计费策略名称 ：</label>
+			<select name="agentId" id="agentId">
+			<option value="">请选择</option>
+				<c:forEach items="${agentList}" var="agen">
+					<option value="${agen.id}"
+						<c:if test="${agen.id==agenId}">
+					selected="selected"
+					</c:if>>${agen.tempName}</option>
 				</c:forEach>
+			</select>
 		</div>
+		<div></div>
 		<div style="margin-top: 8px">
 			<label>统计时间 ：</label> <input id="startTime" name="startDate"
 				type="text" readonly="readonly" maxlength="20"
@@ -138,6 +157,17 @@
 				maxlength="20" class="Wdate required"
 				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false,minDate:'#F{$dp.$D(\'startTime\')}'});"
 				value="<fmt:formatDate value="${endDate}" pattern="yyyy-MM-dd"/>" />
+			<div>
+				<label>业务类型：</label>
+				<c:forEach items="${workTypes}" var="type">
+					<input type="checkbox" name="workTypes" value="${type.id}">					
+					${type.name}
+				</c:forEach>
+			</div>
+			<label>产品名称 ：</label>
+			<c:forEach items="${proList }" var="pro">
+				<input type="checkbox" name="proList" value="${pro.id}">${pro.name}
+			</c:forEach>
 			<label>支持模式：</label> <input type="checkbox" name="tongyong" value="0" />通用
 			<input type="checkbox" name="zhuanyong" value="1">专用
 			&nbsp;&nbsp; <input id="btnSubmit" class="btn btn-primary"
@@ -187,7 +217,7 @@
 					<td>${sum.value.oneRenew2 }</td>
 					<td>${sum.value.oneRenew4 }</td>
 					<td>${sum.value.oneRenew5 }</td>
-					
+
 					<td>${sum.value.twoAdd1 + sum.value.fourAdd1 }</td>
 					<td>${sum.value.twoAdd2 + sum.value.fourAdd2  }</td>
 					<td>${sum.value.twoAdd4 + sum.value.fourAdd4 }</td>
@@ -204,7 +234,7 @@
 				<td></td>
 				<td></td>
 				<c:set var="allCountNew" value="0" />
-				
+
 				<td>${allCountNew}</td>
 			</tr>
 		</table>
