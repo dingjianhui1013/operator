@@ -1,7 +1,5 @@
 package com.itrus.ca.modules.settle.web;
 
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -17,12 +15,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.alibaba.druid.sql.visitor.functions.If;
-import com.itrus.ca.common.persistence.Page;
+import com.itrus.ca.common.utils.DateUtils;
 import com.itrus.ca.common.web.BaseController;
 import com.itrus.ca.modules.constant.ProductType;
 import com.itrus.ca.modules.constant.WorkDealInfoType;
@@ -35,8 +33,6 @@ import com.itrus.ca.modules.profile.service.ConfigProductService;
 import com.itrus.ca.modules.settle.vo.PayableDetailVo;
 import com.itrus.ca.modules.work.entity.WorkDealInfo;
 import com.itrus.ca.modules.work.service.WorkDealInfoService;
-
-import sun.java2d.pipe.SpanShapeRenderer.Simple;
 
 /**
  * 年限结算表
@@ -60,7 +56,17 @@ public class SettlePayableDetailController extends BaseController {
 	private ConfigProductService configProductService;
 	
 	@RequiresPermissions("work:settlePayableDetail:view")
-	@RequestMapping(value = "list")
+	@RequestMapping(value = "list", method = RequestMethod.GET)
+	public String settlePayableDetailList(Model model){
+		List<ConfigCommercialAgent> comAgents = configCommercialAgentService.findAllNameByType(1);
+		model.addAttribute("comAgents", comAgents);
+		model.addAttribute("startTime", DateUtils.firstDayOfMonth(new Date()));
+		model.addAttribute("endTime", new Date());
+		return "modules/settle/settlePayableDetail";
+	}
+	
+	@RequiresPermissions("work:settlePayableDetail:view")
+	@RequestMapping(value = "list",method = RequestMethod.POST)
 	public String settlePayableDetailList(
 			HttpServletRequest request,
 			HttpServletResponse response, 
