@@ -44,7 +44,18 @@
 		<form:input path="company" htmlEscape="false"
 			maxlength="50" class="input-medium" id="company"/>
 		<label>应用名称 ：</label>
-		<input type="text" value="${companyName}" name="companyName" class="input-medium" id="companyName"/>
+		<select name="companyName" id="companyName">
+				<option value="">请选择</option>
+			<c:forEach items="${companys}" var="companys">
+			<c:if test="${companys.companyName!=null}">
+				<option value="${companys.companyName}"
+					<c:if test="${companys.companyName==companyName}">
+						selected="selected"
+					</c:if>>${companys.companyName}</option>
+			</c:if>
+			</c:forEach>
+		</select>
+<%-- 		<input type="text" value="${companyName}" name="companyName" class="input-medium" id="companyName"/> --%>
 		<label>到款日期 ：</label>
 		<input id="dkstartTime" class="input-medium Wdate" type="text" required="required" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});"
 								value="<fmt:formatDate value="${dkstartTime}" pattern="yyyy-MM-dd"/>"
@@ -73,7 +84,7 @@
 			<tr>
 				<th style="width: 200px">支付款项录入时间</th>
 				<th>业务使用款项</th>
-				<th>单位名称</th>
+				<th>支付款项单位名称</th>
 				<th>应用名称</th>
 				<th style="width: 200px">业务制证时间</th>
 				<th>备注</th>

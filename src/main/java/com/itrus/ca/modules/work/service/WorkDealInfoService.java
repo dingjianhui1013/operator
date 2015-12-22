@@ -691,7 +691,33 @@ public class WorkDealInfoService extends BaseService {
 		dc.addOrder(Order.desc("createDate"));
 		return workDealInfoDao.find(page, dc);
 	}
+	public List<WorkDealInfo> findPage4CertListAll( Long apply, List<WorkCertInfo> certInfoList) {
+		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
+//		dc.createAlias("workUser", "workUser");
+//		dc.createAlias("workCompany", "workCompany");
+		dc.createAlias("createBy", "createBy");
+		dc.createAlias("createBy.office", "office");
+		dc.createAlias("configApp", "configApp");
 
+		dc.add(dataScopeFilter(UserUtils.getUser(), "office", "createBy"));
+		dc.add(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED));
+
+		if (apply != null) {
+			dc.add(Restrictions.eq("configApp.id", apply));
+		}
+
+		if (certInfoList.size() > 0) {
+			dc.add(Restrictions.in("workCertInfo", certInfoList));
+		} else {
+			dc.add(Restrictions.eq("id",-1L)); // 其实取回来时空，为了过滤数据范围
+		}
+		//i信和非i信都统计
+//		dc.add(Restrictions.isNull("isIxin"));  
+//		更新和更新之前的新增都要统计，因为更新把新增的业务链给标志delete了，所以去掉这个约束条件，统一由 WorkDealInfoStatus.STATUS_CERT_OBTAINED来判断
+		dc.add(Restrictions.in(WorkDealInfo.DEL_FLAG, new String[]{ WorkDealInfo.DEL_FLAG_NORMAL,WorkDealInfo.DEL_FLAG_DELETE}));
+		dc.addOrder(Order.desc("createDate"));
+		return workDealInfoDao.find(dc);
+	}
 	public List<WorkDealInfo> find4CertList(Long apply, List<WorkCertInfo> certInfoList) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 //		dc.createAlias("workUser", "workUser");
@@ -1761,7 +1787,7 @@ public class WorkDealInfoService extends BaseService {
 
 	
 	public List<WorkDealInfo> findByProjectYear(Date startTime,Date endTime,List<Long> dealInfoByAreaIds,
-			Long appId) {
+			Long appId,List<Long> offices) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("workPayInfo", "workPayInfo");
 		dc.createAlias("createBy", "createBy");
@@ -1769,6 +1795,7 @@ public class WorkDealInfoService extends BaseService {
 		dc.add(Restrictions.isNotNull("workPayInfo"));
 		dc.add(Restrictions.eq("workPayInfo.delFlag", WorkPayInfo.DEL_FLAG_NORMAL));
 		dc.add(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED));
+//		dc.add(Restrictions.eq("", ""));
 		if(startTime!=null)
 		{
 			endTime.setHours(23);
@@ -1783,6 +1810,10 @@ public class WorkDealInfoService extends BaseService {
 			}
 			if (appId != null) {
 				dc.add(Restrictions.eq("configApp.id", appId));
+			}
+			if(offices.size()>0&&!"".equals(offices))
+			{
+				dc.add(Restrictions.in("office.id", offices));
 			}
 			dc.addOrder(Order.asc("workPayInfo.createDate"));
 			return workDealInfoDao.find(dc);

@@ -159,7 +159,25 @@ public class OfficeService extends BaseService {
 		dc.addOrder(Order.desc("id"));
 		return officeDao.find(dc);
 	}
-	
+	public List<Office> findByParentIds(List<Long> areaIds) {
+		DetachedCriteria dc = officeDao.createDetachedCriteria();
+		if(areaIds==null){
+			return null;
+		}
+		if (areaIds!=null) {
+			
+			if (StringUtils.isNotEmpty(areaIds.toString())){
+				dc.add(Restrictions.in("parent.id",areaIds));
+			}else{
+				return null;
+			}
+		}
+		dc.add(Restrictions.neOrIsNotNull("type", "1"));
+		dc.add(Restrictions.eq("delFlag", Office.DEL_FLAG_NORMAL));
+		dc.addOrder(Order.asc("code"));
+		dc.addOrder(Order.desc("id"));
+		return officeDao.find(dc);
+	}
 	/**
 	 * 查询该区域下所有网点包括被禁用的
 	* @Title: findOfficesByParentId

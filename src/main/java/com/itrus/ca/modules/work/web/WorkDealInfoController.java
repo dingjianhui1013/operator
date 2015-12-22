@@ -79,6 +79,7 @@ import com.itrus.ca.modules.key.entity.KeyGeneralInfo;
 import com.itrus.ca.modules.key.service.KeyGeneralInfoService;
 import com.itrus.ca.modules.log.entity.SysOperateLog;
 import com.itrus.ca.modules.log.service.LogUtil;
+import com.itrus.ca.modules.profile.dao.ConfigAppDao;
 import com.itrus.ca.modules.profile.entity.ConfigAgentBoundDealInfo;
 import com.itrus.ca.modules.profile.entity.ConfigAgentOfficeRelation;
 import com.itrus.ca.modules.profile.entity.ConfigApp;
@@ -791,6 +792,29 @@ public class WorkDealInfoController extends BaseController {
 				}
 			}
 		} else {
+			List<Office> offsList = officeService.getOfficeByType(user, 1);
+			List<Long> areas=Lists.newArrayList();
+			if(offsList.size()>0)
+			{
+				for(int i=0;i<offsList.size();i++)
+				{
+					areas.add(offsList.get(i).getId());
+				}
+			}else
+			{
+				areas.add(-1l);
+			}
+			List<Office> offices = officeService.findByParentIds(areas);// 根据区域id获取网点id
+			if(offices.size()>0)
+			{
+				if (offices.size() > 0) {
+					for (int i = 0; i < offices.size(); i++) {
+						officeids.add(offices.get(i).getId());
+					}
+				} else {
+					officeids.add(-1l);
+				}
+			}
 			List<WorkDealInfo> deals = workDealInfoService.findByAppId(appId);// 根据应用id获取dealInfo信息
 			if (deals.size() < 1) {
 				dealInfoByAreaIds.add(-1l);
@@ -1049,6 +1073,29 @@ public class WorkDealInfoController extends BaseController {
 				}
 			}
 		} else {
+			List<Office> offsList = officeService.getOfficeByType(user, 1);
+			List<Long> areas=Lists.newArrayList();
+			if(offsList.size()>0)
+			{
+				for(int i=0;i<offsList.size();i++)
+				{
+					areas.add(offsList.get(i).getId());
+				}
+			}else
+			{
+				areas.add(-1l);
+			}
+			List<Office> offices = officeService.findByParentIds(areas);// 根据区域id获取网点id
+			if(offices.size()>0)
+			{
+				if (offices.size() > 0) {
+					for (int i = 0; i < offices.size(); i++) {
+						officeids.add(offices.get(i).getId());
+					}
+				} else {
+					officeids.add(-1l);
+				}
+			}
 			List<WorkDealInfo> deals = workDealInfoService.findByAppId(appId);// 根据应用id获取dealInfo信息
 			if (deals.size() < 1) {
 				dealInfoByAreaIds.add(-1l);
@@ -1287,6 +1334,29 @@ public class WorkDealInfoController extends BaseController {
 				}
 			}
 		} else {
+			List<Office> offsList = officeService.getOfficeByType(user, 1);
+			List<Long> areas=Lists.newArrayList();
+			if(offsList.size()>0)
+			{
+				for(int i=0;i<offsList.size();i++)
+				{
+					areas.add(offsList.get(i).getId());
+				}
+			}else
+			{
+				areas.add(-1l);
+			}
+			List<Office> offices = officeService.findByParentIds(areas);// 根据区域id获取网点id
+			if(offices.size()>0)
+			{
+				if (offices.size() > 0) {
+					for (int i = 0; i < offices.size(); i++) {
+						officeids.add(offices.get(i).getId());
+					}
+				} else {
+					officeids.add(-1l);
+				}
+			}
 			List<WorkDealInfo> deals = workDealInfoService.findByAppId(appId);// 根据应用id获取dealInfo信息
 			if (deals.size() < 1) {
 				dealInfoByAreaIds.add(-1l);
@@ -1298,14 +1368,7 @@ public class WorkDealInfoController extends BaseController {
 		}
 		List<WorkDealInfo> list = workDealInfoService.findByProjectPay(startTime, endTime, officeids, dealInfoByAreaIds,
 				appId);
-		// Page<WorkDealInfo> page=workDealInfoService.findByProjectPay(new
-		// Page<WorkDealInfo>(request,
-		// response),startTime,endTime,officeids,dealInfoByAreaIds, appId);
 		if (list != null) {
-
-			// List<WorkDealInfo>
-			// list=workDealInfoService.findByProjectPay(startTime,endTime,officeids,dealInfoByAreaIds,
-			// appId);
 			List<WorkDate_MoneVo> w_m = new ArrayList<WorkDate_MoneVo>();
 			List<Workoffice_MoneyVo> o_m = new ArrayList<Workoffice_MoneyVo>();
 			List<Workoffice_district_MoneyVo> odms = new ArrayList<Workoffice_district_MoneyVo>();
@@ -1336,9 +1399,8 @@ public class WorkDealInfoController extends BaseController {
 					for (int i = 0; i < list.size(); i++) {
 						if(list.get(i).getWorkCompany().getDistrict()!=null)
 						{
-							if (list.get(i).getCreateBy().getOffice().getId() == offs[o]
-									&& list.get(i).getWorkCompany().getDistrict() == districts[d]) {
-								
+							if (list.get(i).getCreateBy().getOffice().getId().equals(offs[o])
+									&& list.get(i).getWorkCompany().getDistrict().equals(districts[d])) {
 								dis.add((String) districts[d]);
 							}
 						}
@@ -1643,6 +1705,8 @@ public class WorkDealInfoController extends BaseController {
 		model.addAttribute("zzstartTime", zzstartTime);
 		model.addAttribute("zzendTime", zzendTime);
 		model.addAttribute("companyName", companyName);
+		List<WorkCompany> companys=workCompanyService.findAll();
+		model.addAttribute("companys", companys);
 		return "modules/work/statisticalAdjustmentList";
 	}
 
@@ -1650,6 +1714,7 @@ public class WorkDealInfoController extends BaseController {
 	@RequestMapping(value = "statisticalYearProjectList")
 	public String statisticalYearProjectList(String startTime, String endTime, Model model, Long configProjectTypeId,
 			Long appId) throws ParseException {
+		User user=UserUtils.getUser();
 		List<Long> dealInfoByAreaIds = Lists.newArrayList();
 		if (startTime == null || "".equals(startTime)) {
 			startTime = new SimpleDateFormat("yyyy").format(new Date());
@@ -1732,8 +1797,32 @@ public class WorkDealInfoController extends BaseController {
 				}
 			}
 		}
+		List<Long> officeids=Lists.newArrayList();
+		List<Office> offsList = officeService.getOfficeByType(user, 1);
+		List<Long> areas=Lists.newArrayList();
+		if(offsList.size()>0)
+		{
+			for(int i=0;i<offsList.size();i++)
+			{
+				areas.add(offsList.get(i).getId());
+			}
+		}else
+		{
+			areas.add(-1l);
+		}
+		List<Office> offices = officeService.findByParentIds(areas);// 根据区域id获取网点id
+		if(offices.size()>0)
+		{
+			if (offices.size() > 0) {
+				for (int i = 0; i < offices.size(); i++) {
+					officeids.add(offices.get(i).getId());
+				}
+			} else {
+				officeids.add(-1l);
+			}
+		}
 		Map<WorkDealInfo, List<Double>> w_months = new HashMap<>();
-		List<WorkDealInfo> list = workDealInfoService.findByProjectYear(startT, endT, dealInfoByAreaIds, appId);
+		List<WorkDealInfo> list = workDealInfoService.findByProjectYear(startT, endT, dealInfoByAreaIds, appId,officeids);
 		if (list != null) {
 			for (int c = 0; c < configappids.size(); c++) {
 				double zmoney = 0;
@@ -4341,6 +4430,29 @@ public class WorkDealInfoController extends BaseController {
 				}
 			}
 		} else {
+			List<Office> offsList = officeService.getOfficeByType(user, 1);
+			List<Long> areas=Lists.newArrayList();
+			if(offsList.size()>0)
+			{
+				for(int i=0;i<offsList.size();i++)
+				{
+					areas.add(offsList.get(i).getId());
+				}
+			}else
+			{
+				areas.add(-1l);
+			}
+			List<Office> offices = officeService.findByParentIds(areas);// 根据区域id获取网点id
+			if(offices.size()>0)
+			{
+				if (offices.size() > 0) {
+					for (int i = 0; i < offices.size(); i++) {
+						officeids.add(offices.get(i).getId());
+					}
+				} else {
+					officeids.add(-1l);
+				}
+			}
 			List<WorkDealInfo> deals = workDealInfoService.findByAppId(appId);// 根据应用id获取dealInfo信息
 			if (deals.size() < 1) {
 				dealInfoByAreaIds.add(-1l);
@@ -4613,214 +4725,6 @@ public class WorkDealInfoController extends BaseController {
 			@RequestParam(value = "appId", required = false) Long appId,
 			@RequestParam(value = "office", required = false) Long office, HttpServletRequest request,
 			HttpServletResponse response, Model model) throws IOException {
-//		User user = UserUtils.getUser();
-//		List<Long> dealInfoByAreaIds = Lists.newArrayList();
-//		List<Long> officeids = Lists.newArrayList();
-//		// List<String> payMethod = Lists.newArrayList();
-//		// List<Double> money = Lists.newArrayList();
-//		Map<String, List<String>> office_payMethod = new HashMap<>();
-//		Map<String, List<Double>> office_money = new HashMap<>();
-//		if (area != null && office == null) {
-//			List<Long> appids = Lists.newArrayList();
-//			List<Office> offices = officeService.findByParentId(area);// 根据区域id获取网点id
-//			model.addAttribute("wangdian", offices);
-//			if (offices.size() > 0) {
-//				for (int i = 0; i < offices.size(); i++) {
-//					officeids.add(offices.get(i).getId());
-//				}
-//			} else {
-//				officeids.add(-1l);
-//			}
-//			List<ConfigAppOfficeRelation> appOffices = configAppOfficeRelationService.findAllByOfficeId(officeids);// 根据网点id获取应用id
-//			if (appOffices.size() > 0) {
-//				for (int i = 0; i < appOffices.size(); i++) {
-//					appids.add(appOffices.get(i).getConfigApp().getId());
-//				}
-//			} else {
-//				appids.add(-1l);
-//			}
-//
-//			List<WorkDealInfo> deals = workDealInfoService.findByAppId(appids);// 根据应用id获取dealInfo信息
-//			if (deals.size() < 1) {
-//				dealInfoByAreaIds.add(-1l);
-//			} else {
-//				for (int i = 0; i < deals.size(); i++) {
-//					dealInfoByAreaIds.add(deals.get(i).getId());
-//				}
-//			}
-//		} else if (area != null && office != null) {
-//			officeids.add(office);
-//			List<Long> appids = Lists.newArrayList();
-//			List<ConfigAppOfficeRelation> appOffices = configAppOfficeRelationService.findAllByOfficeId(officeids);// 根据网点id获取应用id
-//			if (appOffices.size() > 0) {
-//				for (int i = 0; i < appOffices.size(); i++) {
-//					appids.add(appOffices.get(i).getConfigApp().getId());
-//				}
-//			} else {
-//				appids.add(-1l);
-//			}
-//
-//			List<WorkDealInfo> deals = workDealInfoService.findByAppId(appids);// 根据应用id获取dealInfo信息
-//			if (deals.size() < 1) {
-//				dealInfoByAreaIds.add(-1l);
-//			} else {
-//				for (int i = 0; i < deals.size(); i++) {
-//					dealInfoByAreaIds.add(deals.get(i).getId());
-//				}
-//			}
-//		}else {
-//			List<WorkDealInfo> deals = workDealInfoService.findByAppId(appId);// 根据应用id获取dealInfo信息
-//			if (deals.size() < 1) {
-//				dealInfoByAreaIds.add(-1l);
-//			} else {
-//				for (int i = 0; i < deals.size(); i++) {
-//					dealInfoByAreaIds.add(deals.get(i).getId());
-//				}
-//			}
-//		}
-//		ConfigApp configApp = configAppService.findByAppId(appId);
-//		Set<String> month = new LinkedHashSet<String>();
-//		List<WorkDate_MoneVo> w_m = new ArrayList<WorkDate_MoneVo>();
-//		List<Workoffice_MoneyVo> o_m = new ArrayList<Workoffice_MoneyVo>();
-//		List<Double> payMethodMoneys = Lists.newArrayList();
-//		List<WorkDealInfo> list = workDealInfoService.findByDayPay(startTime, endTime, officeids, dealInfoByAreaIds,
-//				appId);
-//		if (list != null) {
-//			for (int i = 0; i < list.size(); i++) {
-//				String a = new SimpleDateFormat("yyyy-MM-dd").format(list.get(i).getWorkPayInfo().getCreateDate());
-//				month.add(a);
-//			}
-//			Object months[] = month.toArray();
-//			for (int m = 0; m < months.length; m++) {
-//				WorkDate_MoneVo workDate_MoneVo = new WorkDate_MoneVo();
-//				double countMoneys = 0L;
-//				double countPostMoney = 0L;
-//				double countBankMoney = 0L;
-//				double countXjMoney = 0L;
-//				double countAlipayMoney = 0L;
-//				double countMoney = 0L;
-//				double countPostMoneys = 0L;
-//				double countBankMoneys = 0L;
-//				double countXjMoneys = 0L;
-//				double countAlipayMoneys = 0L;
-//				for (int o = 0; o < officeids.size(); o++) {
-//					double postMoney = 0L;
-//					double bankMoney = 0L;
-//					double xjMoney = 0L;
-//					double alipayMoney = 0L;
-//					for (int i = 0; i < list.size(); i++) {
-//						String mo = new SimpleDateFormat("yyyy-MM-dd")
-//								.format(list.get(i).getWorkPayInfo().getCreateDate());
-//						if (list.get(i).getCreateBy().getOffice().getId().equals(officeids.get(o))
-//								&& ((String) months[m]).indexOf(mo) != -1) {
-//							postMoney = list.get(i).getWorkPayInfo().getPosMoney();
-//							bankMoney = list.get(i).getWorkPayInfo().getBankMoney();
-//							xjMoney = list.get(i).getWorkPayInfo().getMoney();
-//							alipayMoney = list.get(i).getWorkPayInfo().getAlipayMoney();
-//							countPostMoney += postMoney;
-//							countBankMoney += bankMoney;
-//							countXjMoney += xjMoney;
-//							countAlipayMoney += alipayMoney;
-//							countMoney += (postMoney + bankMoney + xjMoney + alipayMoney);
-//						}
-//					}
-//					String officeName = (officeService.findById(officeids.get(o))).getName();
-//					Workoffice_MoneyVo workoffice_MoneyVo = new Workoffice_MoneyVo();
-//					workoffice_MoneyVo.setOfficeName(officeName);
-//					workoffice_MoneyVo.setDate((String) months[m]);
-//					workoffice_MoneyVo.setCountPostMoney(countPostMoney);
-//					workoffice_MoneyVo.setCountBankMoney(countBankMoney);
-//					workoffice_MoneyVo.setCountXjMoney(countXjMoney);
-//					workoffice_MoneyVo.setCountAlipayMoney(countAlipayMoney);
-//					workoffice_MoneyVo.setCountMoney(countMoney);
-//					o_m.add(workoffice_MoneyVo);
-//					countMoneys += countMoney;
-//					countPostMoneys += countPostMoney;
-//					countBankMoneys += countBankMoney;
-//					countXjMoneys += countXjMoney;
-//					countAlipayMoneys += countAlipayMoney;
-//				}
-//				workDate_MoneVo.setDate((String) months[m]);
-//				workDate_MoneVo.setCountMoney(countMoneys);
-//				w_m.add(workDate_MoneVo);
-//			}
-//
-//			double moneys = 0L;
-//			for (int ofs = 0; ofs < officeids.size(); ofs++) {
-//				int post = 0;
-//				int bank = 0;
-//				int xj = 0;
-//				int alipay = 0;
-//				for (int of = 0; of < o_m.size(); of++) {
-//					if (o_m.get(of).getOfficeName().equals(officeService.findById(officeids.get(ofs)).getName())) {
-//						if (o_m.get(of).getCountPostMoney() > 0) {
-//							post++;
-//						}
-//						if (o_m.get(of).getCountBankMoney() > 0) {
-//							bank++;
-//						}
-//						if (o_m.get(of).getCountXjMoney() > 0) {
-//							xj++;
-//						}
-//						if (o_m.get(of).getCountAlipayMoney() > 0) {
-//							alipay++;
-//						}
-//					}
-//				}
-//				List<String> payMethods = Lists.newArrayList();
-//				if (post > 0) {
-//					double postMoney = 0L;
-//					for (int of = 0; of < o_m.size(); of++) {
-//						if (o_m.get(of).getOfficeName().equals(officeService.findById(officeids.get(ofs)).getName())) {
-//							o_m.get(of).setPostMoney(true);
-//							postMoney += o_m.get(of).getCountPostMoney();
-//						}
-//					}
-//					moneys += postMoney;
-//					payMethodMoneys.add(postMoney);
-//					payMethods.add("pos付款");
-//				}
-//				if (bank > 0) {
-//					double bankMoney = 0L;
-//					for (int of = 0; of < o_m.size(); of++) {
-//						if (o_m.get(of).getOfficeName().equals(officeService.findById(officeids.get(ofs)).getName())) {
-//							o_m.get(of).setBankMoney(true);
-//							bankMoney += o_m.get(of).getCountBankMoney();
-//						}
-//					}
-//					moneys += bankMoney;
-//					payMethodMoneys.add(bankMoney);
-//					payMethods.add("银行转账");
-//				}
-//				if (xj > 0) {
-//					double xjMoneys = 0L;
-//					for (int of = 0; of < o_m.size(); of++) {
-//						if (o_m.get(of).getOfficeName().equals(officeService.findById(officeids.get(ofs)).getName())) {
-//							o_m.get(of).setXjMoney(true);
-//							xjMoneys += o_m.get(of).getCountXjMoney();
-//						}
-//					}
-//					moneys += xjMoneys;
-//					payMethodMoneys.add(xjMoneys);
-//					payMethods.add("现金付款");
-//				}
-//				if (alipay > 0) {
-//					double alipayMoneys = 0L;
-//					for (int of = 0; of < o_m.size(); of++) {
-//						if (o_m.get(of).getOfficeName().equals(officeService.findById(officeids.get(ofs)).getName())) {
-//							o_m.get(of).setAlipayMoney(true);
-//							alipayMoneys += o_m.get(of).getCountAlipayMoney();
-//						}
-//					}
-//					moneys += alipayMoneys;
-//					payMethodMoneys.add(alipayMoneys);
-//					payMethods.add("支付宝");
-//				}
-//				office_payMethod.put(officeService.findById(officeids.get(ofs)).getName(), payMethods);
-//			}
-//			payMethodMoneys.add(moneys);
-//		}
-		
 		User user = UserUtils.getUser();
 		List<Long> dealInfoByAreaIds = Lists.newArrayList();
 		List<Long> officeids = Lists.newArrayList();
@@ -4879,6 +4783,29 @@ public class WorkDealInfoController extends BaseController {
 				}
 			}
 		} else {
+			List<Office> offsList = officeService.getOfficeByType(user, 1);
+			List<Long> areas=Lists.newArrayList();
+			if(offsList.size()>0)
+			{
+				for(int i=0;i<offsList.size();i++)
+				{
+					areas.add(offsList.get(i).getId());
+				}
+			}else
+			{
+				areas.add(-1l);
+			}
+			List<Office> offices = officeService.findByParentIds(areas);// 根据区域id获取网点id
+			if(offices.size()>0)
+			{
+				if (offices.size() > 0) {
+					for (int i = 0; i < offices.size(); i++) {
+						officeids.add(offices.get(i).getId());
+					}
+				} else {
+					officeids.add(-1l);
+				}
+			}
 			List<WorkDealInfo> deals = workDealInfoService.findByAppId(appId);// 根据应用id获取dealInfo信息
 			if (deals.size() < 1) {
 				dealInfoByAreaIds.add(-1l);
@@ -5081,14 +5008,6 @@ public class WorkDealInfoController extends BaseController {
 				}
 			}
 		}
-//		Iterator<Map.Entry<String, List<String>>> itt = office_payMethod.entrySet().iterator();
-//		while (itt.hasNext()) {
-//			Entry<String, List<String>> entry = itt.next();
-//			if(entry.getValue().size()==1)
-//			{
-//				
-//			}
-//		}
 		sheet.addMergedRegion(new Region(1, (short) (2 + count), 2, (short) (2 + count)));
 		row1.createCell(2 + count).setCellValue("合计");
 		Object ms[] = month.toArray();
@@ -5131,8 +5050,10 @@ public class WorkDealInfoController extends BaseController {
 		HSSFRow rowz = sheet.createRow(2 + ms.length + 1);
 		rowz.createCell(0).setCellValue("合计");
 		rowz.createCell(1).setCellValue(" ");
+		int i=0;
 		for (int pm = 0; pm < payMethodMoneys.size(); pm++) {
-			rowz.createCell(2 + pm).setCellValue(payMethodMoneys.get(pm));
+			rowz.createCell(2 + i).setCellValue(payMethodMoneys.get(pm));
+			i++;
 		}
 
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -5211,6 +5132,29 @@ public class WorkDealInfoController extends BaseController {
 				}
 			}
 		} else {
+			List<Office> offsList = officeService.getOfficeByType(user, 1);
+			List<Long> areas=Lists.newArrayList();
+			if(offsList.size()>0)
+			{
+				for(int i=0;i<offsList.size();i++)
+				{
+					areas.add(offsList.get(i).getId());
+				}
+			}else
+			{
+				areas.add(-1l);
+			}
+			List<Office> offices = officeService.findByParentIds(areas);// 根据区域id获取网点id
+			if(offices.size()>0)
+			{
+				if (offices.size() > 0) {
+					for (int i = 0; i < offices.size(); i++) {
+						officeids.add(offices.get(i).getId());
+					}
+				} else {
+					officeids.add(-1l);
+				}
+			}
 			List<WorkDealInfo> deals = workDealInfoService.findByAppId(appId);// 根据应用id获取dealInfo信息
 			if (deals.size() < 1) {
 				dealInfoByAreaIds.add(-1l);
@@ -5230,9 +5174,6 @@ public class WorkDealInfoController extends BaseController {
 				appId);
 		if (list != null) {
 
-			// List<WorkDealInfo>
-			// list=workDealInfoService.findByProjectPay(startTime,endTime,officeids,dealInfoByAreaIds,
-			// appId);
 			List<Workoffice_MoneyVo> o_m = new ArrayList<Workoffice_MoneyVo>();
 			for (int i = 0; i < list.size(); i++) {
 				String a = new SimpleDateFormat("yyyy-MM-dd").format(list.get(i).getWorkPayInfo().getCreateDate());
@@ -5261,7 +5202,7 @@ public class WorkDealInfoController extends BaseController {
 						if(list.get(i).getWorkCompany().getDistrict()!=null)
 						{
 							if (list.get(i).getCreateBy().getOffice().getId().equals(offs[o])
-									&& list.get(i).getWorkCompany().getDistrict() == districts[d]) {
+									&& list.get(i).getWorkCompany().getDistrict().equals(districts[d])) {
 								dis.add((String) districts[d]);
 							}
 						}
@@ -5420,15 +5361,17 @@ public class WorkDealInfoController extends BaseController {
 		int qnum[] = new int[office_District.size()];
 		int qnumIndex = 0;
 		int index = 0;
+		int count=2+index-1;
+		int count1=2;
+		int count11=0;
 		while (off_dis.hasNext()) {
-
-			int count = 0;
+			count1=count11;
 			Entry<String, Set<String>> entry = off_dis.next();
-
 			if (entry.getValue().size() == 1) {
-				// row1.createCell(1+1+zcount).setCellValue(entry.getKey());
 				index++;
+				count11++;
 				zcount++;
+				row1.createCell(count1+2).setCellValue(entry.getKey());
 			}
 			if (entry.getValue().size() > 1) {
 				Object districts[] = entry.getValue().toArray();
@@ -5438,47 +5381,31 @@ public class WorkDealInfoController extends BaseController {
 						Entry<String, List<String>> dp = dis_payM.next();
 						if (districts[d].equals(dp.getKey())) {
 							if (dp.getValue().size() == 1) {
-								// row2.createCell(1+index+1).setCellValue((String)districts[d]);
-								// count++;
+								count=2+index;
 								index++;
 								zcount++;
+								count11++;
+								row2.createCell(count).setCellValue((String)districts[d]);
 							}
 							if (dp.getValue().size() > 1) {
-								sheet.addMergedRegion(new Region(2, (short) (2 + index), 2,
-										(short) (1 + index + count + dp.getValue().size())));
-								row2.createCell(1 + index + 1).setCellValue((String) districts[d]);
+								
+								count=2+index;
+								index+=dp.getValue().size();
+								sheet.addMergedRegion(new Region(2, (short)count, 2,
+										(short)(2+index-1)));
+								row2.createCell(count).setCellValue((String) districts[d]);
 								for (int dpi = 0; dpi < dp.getValue().size(); dpi++) {
-									// sheet.addMergedRegion(new
-									// Region(2,(short)(1+index),
-									// 2,(short)(index+count+dp.getValue().size())));
-									// count++;
-									index++;
+									row3.createCell(count+dpi).setCellValue(dp.getValue().get(dpi));
 									zcount++;
+									count11++;
 								}
 							}
 						}
 					}
 				}
-				// sheet.addMergedRegion(new Region(1,(short)(1+count+1),
-				// 1,(short)(1+zcount)));
-				// row1.createCell(1+index+1).setCellValue(entry.getKey());
+				 sheet.addMergedRegion(new Region(1,(short)(count1+2),1,(short)(count11)));
+				 row1.createCell(count1+2).setCellValue(entry.getKey());
 			}
-//			qnum[qnumIndex] = index;
-//			if (qnumIndex == 0) {
-//				if (qnum[qnumIndex] != 1) {
-//					sheet.addMergedRegion(new Region(1, (short) (2), 1, (short) (1 + qnum[qnumIndex])));
-//				} else {
-//
-//				}
-//			} else {
-//				if (qnum[qnumIndex] - qnum[qnumIndex - 1] != 1) {
-//					sheet.addMergedRegion(
-//							new Region(1, (short) (2 + qnum[qnumIndex - 1]), 1, (short) (1 + qnum[qnumIndex])));
-//				}
-//
-//			}
-//			qnumIndex++;
-
 		}
 
 		sheet.addMergedRegion(new Region(0, (short) 0, 0, (short) (1 + zcount + 1)));
@@ -5538,8 +5465,8 @@ public class WorkDealInfoController extends BaseController {
 					if (dm.getKey().equals(districts[d])) {
 						for (int m = 0; m < dm.getValue().size(); m++) {
 							rowz.createCell(2 + a).setCellValue(dm.getValue().get(m));
+							a++;
 						}
-						a++;
 					}
 
 				}
@@ -5775,6 +5702,7 @@ public class WorkDealInfoController extends BaseController {
 	@RequestMapping(value = "exportYearProjectList")
 	public void exportYearProjectList(String startTime, String endTime, Model model, Long configProjectTypeId,
 			Long appId, HttpServletRequest request, HttpServletResponse response) throws ParseException, IOException {
+		User user=UserUtils.getUser();
 		List<Long> dealInfoByAreaIds = Lists.newArrayList();
 		if (startTime == null || "".equals(startTime)) {
 			startTime = new SimpleDateFormat("yyyy").format(new Date());
@@ -5857,8 +5785,32 @@ public class WorkDealInfoController extends BaseController {
 				}
 			}
 		}
+		List<Long> officeids=Lists.newArrayList();
+		List<Office> offsList = officeService.getOfficeByType(user, 1);
+		List<Long> areas=Lists.newArrayList();
+		if(offsList.size()>0)
+		{
+			for(int i=0;i<offsList.size();i++)
+			{
+				areas.add(offsList.get(i).getId());
+			}
+		}else
+		{
+			areas.add(-1l);
+		}
+		List<Office> offices = officeService.findByParentIds(areas);// 根据区域id获取网点id
+		if(offices.size()>0)
+		{
+			if (offices.size() > 0) {
+				for (int i = 0; i < offices.size(); i++) {
+					officeids.add(offices.get(i).getId());
+				}
+			} else {
+				officeids.add(-1l);
+			}
+		}
 		Map<WorkDealInfo, List<Double>> w_months = new HashMap<>();
-		List<WorkDealInfo> list = workDealInfoService.findByProjectYear(startT, endT, dealInfoByAreaIds, appId);
+		List<WorkDealInfo> list = workDealInfoService.findByProjectYear(startT, endT, dealInfoByAreaIds, appId,officeids);
 		if (list != null) {
 			for (int c = 0; c < configappids.size(); c++) {
 				double zmoney = 0;
