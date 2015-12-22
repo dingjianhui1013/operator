@@ -1,6 +1,7 @@
 package com.itrus.ca.modules.settle.web;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -132,6 +133,7 @@ public class SettlePayableDetailController extends BaseController {
 		Integer lenth = 0;
 		for (int i = 0; i < dealInfos.size(); i++) {
 			WorkDealInfo dealInfo = dealInfos.get(i);
+			int totalAgentYear = comAgent.getSettlementPeriod();
 			List<WorkDealInfo> infos = new ArrayList<WorkDealInfo>();
 			infos.add(dealInfo);
 			WorkDealInfo info = workDealInfoService.findDealInfo(dealInfo.getId());
@@ -145,20 +147,69 @@ public class SettlePayableDetailController extends BaseController {
 				}
 			}
 			List<PayableDetailVo> detailList = new ArrayList<PayableDetailVo>();
+			
+			Date endLastDate = new Date();
+			Calendar calendar = Calendar.getInstance();
+	        
+	        calendar.setTime(dealInfo.getBusinessCardUserDate());
+	        calendar.add(Calendar.YEAR, totalAgentYear);
+	        endLastDate = calendar.getTime();
+			
+			int yjNum = 0;
+			
 			for (int j = 0; j < infos.size(); j++) {
+				WorkDealInfo prvedDealInfo = infos.get(j);
+				if (prvedDealInfo.getPayType()==null) {
+					continue;
+				}
+				if (!prvedDealInfo.getPayType().equals(1)) {
+					continue;
+				}
 				PayableDetailVo detailVo = new PayableDetailVo();
 				if (infos.get(j).getDealInfoType()!=null) {
 					if (infos.get(j).getDealInfoType().equals(1)||infos.get(j).getDealInfoType().equals(0)) {
-						detailVo.setStartDate(infos.get(j).getBusinessCardUserDate());
-						detailVo.setEndDate(infos.get(j).getNotafter());
-						detailVo.setDealInfoType(WorkDealInfoType.WorkDealInfoTypeMapNew.get(infos.get(j).getDealInfoType()));
-						detailVo.setSettleYear(infos.get(j).getYear().toString());
-						detailList.add(detailVo);
+						if (infos.get(j).getBusinessCardUserDate().getTime()>endLastDate.getTime()) {
+							break;
+						}else if (infos.get(j).getNotafter().getTime()<endLastDate.getTime()) {
+							yjNum += infos.get(j).getYear();
+							detailVo.setStartDate(infos.get(j).getBusinessCardUserDate());
+							detailVo.setEndDate(infos.get(j).getNotafter());
+							detailVo.setDealInfoType(WorkDealInfoType.WorkDealInfoTypeMapNew.get(infos.get(j).getDealInfoType()));
+							detailVo.setSettleYear(infos.get(j).getYear().toString());
+							detailList.add(detailVo);
+						}else if (infos.get(j).getBusinessCardUserDate().getTime()<endLastDate.getTime()&&infos.get(j).getNotafter().getTime()>endLastDate.getTime()) {
+							
+							
+//							infos.get(j).getBusinessCardUserDate().setHours(23);
+//							infos.get(j).getBusinessCardUserDate().setMinutes(59);
+//							infos.get(j).getBusinessCardUserDate().setSeconds(59);
+							long between = endLastDate.getTime()-infos.get(j).getBusinessCardUserDate().getTime();
+							
+							
+							long a  = between/31536000000L; 
+							
+							
+							
+							
+							int yy = (int) Math.ceil(a);
+							
+							
+							
+							yjNum += yy;
+							detailVo.setStartDate(infos.get(j).getBusinessCardUserDate());
+							detailVo.setEndDate(infos.get(j).getNotafter());
+							detailVo.setDealInfoType(WorkDealInfoType.WorkDealInfoTypeMapNew.get(infos.get(j).getDealInfoType()));
+							detailVo.setSettleYear(yy+"");
+							detailList.add(detailVo);
+						}
+						
+						
 					}
 				}
 				
 			}
-			
+			dealInfos.get(i).setYyNum(yjNum);
+			dealInfos.get(i).setTotalNum(totalAgentYear);
 			dealInfos.get(i).setDetailList(detailList);
 			if (detailList.size()>lenth) {
 				lenth = detailList.size();
@@ -208,5 +259,18 @@ public class SettlePayableDetailController extends BaseController {
 		}
 		return array.toString();
 	}
+	
+	
+	 public static void main(String[] args)
+	    {
+	        Calendar calendar = Calendar.getInstance();
+	        Date date = new Date(System.currentTimeMillis());
+	        calendar.setTime(date);
+//	        calendar.add(Calendar.WEEK_OF_YEAR, -1);
+	        calendar.add(Calendar.YEAR, 5);
+	        date = calendar.getTime();
+	        System.out.println(date);
+	    }
+	
 
 }

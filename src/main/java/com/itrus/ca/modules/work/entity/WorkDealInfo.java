@@ -110,7 +110,9 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 	
 	private List<PayableDetailVo> detailList;
 	
-
+	private Integer yyNum;
+	private Integer totalNum;
+	
 	/** default constructor */
 	public WorkDealInfo() {
 	}
@@ -711,6 +713,24 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 
 	public void setDetailList(List<PayableDetailVo> detailList) {
 		this.detailList = detailList;
+	}
+
+	@Transient
+	public Integer getYyNum() {
+		return yyNum;
+	}
+
+	public void setYyNum(Integer yyNum) {
+		this.yyNum = yyNum;
+	}
+
+	@Transient
+	public Integer getTotalNum() {
+		return totalNum;
+	}
+
+	public void setTotalNum(Integer totalNum) {
+		this.totalNum = totalNum;
 	}
 	
 	

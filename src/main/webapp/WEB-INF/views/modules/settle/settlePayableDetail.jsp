@@ -142,9 +142,9 @@
 								<td></td>
 								<td></td>
 							</c:forEach>
-							<td></td>
-							<td></td>
-							<td></td>
+							<td>${dealInfo.yyNum}</td>
+							<td>${dealInfo.yyNum}</td>
+							<td>${dealInfo.totalNum-dealInfo.yyNum}</td>
 						</tr>
 					</c:forEach>
 				</table>
