@@ -509,7 +509,9 @@ public class WorkDealInfoController extends BaseController {
 
 		List<Long> dealInfoByOfficeAreaIds = Lists.newArrayList();
 		List<Long> dealInfoByAreaIds = Lists.newArrayList();
+		List<Long> officeids = Lists.newArrayList();
 		if (officeId != null && officeId != 0) {
+			officeids.add(officeId);
 			List<Long> appids = Lists.newArrayList();
 			List<ConfigAppOfficeRelation> appOffices = configAppOfficeRelationService.findAllByOfficeId(officeId);// 通过网店获取引用的id
 			if (appOffices.size() > 0) {
@@ -530,7 +532,7 @@ public class WorkDealInfoController extends BaseController {
 		} else {
 			if (area != null) {
 				List<Long> appids = Lists.newArrayList();
-				List<Long> officeids = Lists.newArrayList();
+//				List<Long> officeids = Lists.newArrayList();
 				List<Office> offices = officeService.findByParentId(area);// 根据区域id获取网店id
 				if (offices.size() > 0) {
 					for (int i = 0; i < offices.size(); i++) {
@@ -576,7 +578,7 @@ public class WorkDealInfoController extends BaseController {
 		// }
 
 		Page<WorkDealInfo> page = workDealInfoService.findByDealPay(new Page<WorkDealInfo>(request, response),
-				workDealInfo, startTime, endTime, idList, dealInfoByAreaIds, dealInfoByOfficeAreaIds, appId);
+				workDealInfo, startTime, endTime, idList, dealInfoByAreaIds, dealInfoByOfficeAreaIds, appId,officeids);
 		// 除去合同采购和统一采购的信息
 		// for (int i = 0; i < page.getList().size(); i++) {
 		// if (page.getList().get(i).getWorkPayInfo().getMethodGov() != null) {
