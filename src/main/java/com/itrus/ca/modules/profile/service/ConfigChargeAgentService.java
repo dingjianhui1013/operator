@@ -192,5 +192,9 @@ public class ConfigChargeAgentService extends BaseService {
 		List<ConfigChargeAgent> list = configChargeAgentDao.find(detachedCriteria);
 		return list;
 	}
+	public List<ConfigChargeAgent> selectAll(){
+		return configChargeAgentDao.selectAll();
+	}
 
+	
 }
