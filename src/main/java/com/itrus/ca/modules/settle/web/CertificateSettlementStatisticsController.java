@@ -88,7 +88,7 @@ public class CertificateSettlementStatisticsController extends BaseController {
 	public String list(Long areaId, Long officeId, Date startDate, Date endDate, Long payType,
 			HttpServletRequest request, HttpServletResponse response,
 			@RequestParam(value = "applyId", required = false) Long applyId,
-			@RequestParam(value = "proList", required = false) String[] productType,
+			@RequestParam(value = "proList", required = false) List<String> productType,
 			@RequestParam(value = "workTypes", required = false) Integer[] workType, Model model) {
 
 		WorkDealInfoType workDealInfoType = new WorkDealInfoType();
@@ -114,22 +114,22 @@ public class CertificateSettlementStatisticsController extends BaseController {
 		model.addAttribute("proList", ProductType.getProductTypeAutoTask());
 
 		String product = "";
-		if (productType != null && productType.length > 0) {
-			for (int i = 0; i < productType.length; i++) {
-				product += ProductType.getProductTypeName(Integer.parseInt(productType[i])) + ",";
+		if (productType != null && productType.size() > 0) {
+			for (int i = 0; i < productType.size(); i++) {
+				product += ProductType.getProductTypeName(Integer.parseInt(productType.get(i))) + ",";
 			}
 			StringUtils.removeEnd(product, ",");
 		}
 
 		// 如果应用不为空，产品也不为空，则显示XX应用XX产品
-		if (applyId != null && (productType != null && productType.length > 0)) {
+		if (applyId != null && (productType != null && productType.size() > 0)) {
 			ConfigApp appName = configAppService.get(applyId);// 获取应用名称
 			model.addAttribute("applyId", appName.getId());
 			String yingyong = appName.getAppName() + "应用[" + product + "]产品";
 			model.addAttribute("yingyong", yingyong);
 		}
 		// 如果应用不为空，产品为空 则显示 XX应用全部产品
-		if (applyId != null && (productType == null || productType.length == 0)) {
+		if (applyId != null && (productType == null || productType.size() == 0)) {
 			ConfigApp appName = configAppService.get(applyId);// 获取应用名称
 			model.addAttribute("applyId", appName.getId());
 			String yingyong = appName.getAppName() + "全部产品";
@@ -168,7 +168,7 @@ public class CertificateSettlementStatisticsController extends BaseController {
 		}
 
 		List<CertificateSettlementStatisticsVO> findWorkList = certificateSettlementStatisticsService
-				.findWorkList(applyId, officeIdList, startDate, endDate);
+				.findWorkList(applyId,productType,officeIdList, startDate, endDate);
 
 		HashMap<String, StaticCertMonth> monthMap = certificateSettlementStatisticsService.getStaticMap(findWorkList);
 

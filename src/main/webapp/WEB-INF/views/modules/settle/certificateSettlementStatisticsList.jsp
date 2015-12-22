@@ -208,14 +208,6 @@
 					<c:set var="oneA4" value="${oneA4+sum.value.oneAdd4}"></c:set>
 					<td>${sum.value.oneAdd5 }</td>
 					<c:set var="oneA5" value="${oneA5+sum.value.oneAdd5}"></c:set>
-					<td>${oneR1+sum.value.oneRenew1}</td>
-					<c:set var="oneR1" value="${oneR1+sum.value.oneRenew1}"></c:set>
-					<td>${oneR2+sum.value.oneRenew2}</td>
-					<c:set var="oneR2" value="${oneR2+sum.value.oneRenew2}"></c:set>
-					<td>${oneR4+sum.value.oneRenew4}</td>
-					<c:set var="oneR4" value="${oneR4+sum.value.oneRenew4}"></c:set>
-					<td>${oneR5+sum.value.oneRenew5}</td>
-					<c:set var="oneR5" value="${oneR5+sum.value.oneRenew5}"></c:set>
 					<td>${twoA1+sum.value.twoAdd1 + sum.value.fourAdd1 }</td>
 					<c:set var="twoA1"
 						value="${twoA1+sum.value.twoAdd1 + sum.value.fourAdd1 }"></c:set>
@@ -228,6 +220,16 @@
 					<td>${sum.value.twoAdd5 + sum.value.fourAdd5 }</td>
 					<c:set var="twoA5"
 						value="${twoA5+sum.value.twoAdd5 + sum.value.fourAdd5}"></c:set>
+					
+					<td>${sum.value.oneRenew1}</td>
+					<c:set var="oneR1" value="${oneR1+sum.value.oneRenew1}"></c:set>
+					<td>${sum.value.oneRenew2}</td>
+					<c:set var="oneR2" value="${oneR2+sum.value.oneRenew2}"></c:set>
+					<td>${sum.value.oneRenew4}</td>
+					<c:set var="oneR4" value="${oneR4+sum.value.oneRenew4}"></c:set>
+					<td>${sum.value.oneRenew5}</td>
+					<c:set var="oneR5" value="${oneR5+sum.value.oneRenew5}"></c:set>
+					
 					<td>${sum.value.twoRenew1 +sum.value.twoRenew1 }</td>
 					<c:set var="twoR1"
 						value="${twoR1+sum.value.twoRenew1 +sum.value.twoRenew1 }"></c:set>
@@ -249,14 +251,14 @@
 				<td>${oneA2}</td>
 				<td>${oneA4}</td>
 				<td>${oneA5}</td>
-				<td>${oneR1}</td>
-				<td>${oneR2}</td>
-				<td>${oneR4}</td>
-				<td>${oneR5}</td>
 				<td>${twoA1}</td>
 				<td>${twoA2}</td>
 				<td>${twoA4}</td>
 				<td>${twoA5}</td>
+				<td>${oneR1}</td>
+				<td>${oneR2}</td>
+				<td>${oneR4}</td>
+				<td>${oneR5}</td>				
 				<td>${twoR1}</td>
 				<td>${twoR2}</td>
 				<td>${twoR4}</td>

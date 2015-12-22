@@ -111,7 +111,7 @@ public class CertificateSettlementStatisticsService extends BaseService {
 
 	}
 
-	public List<CertificateSettlementStatisticsVO> findWorkList(Long apply, List<Long> officeIdsList, Date startDate,
+	public List<CertificateSettlementStatisticsVO> findWorkList(Long apply,List<String> productType, List<Long> officeIdsList, Date startDate,
 			Date endDate) {
 
 		String sql = "select to_char(t.create_date,'YYYY-MM') as month, t.deal_info_type as dealInfoType ,p.product_name productName,t.year year,count(t.id) workCount "
@@ -121,6 +121,9 @@ public class CertificateSettlementStatisticsService extends BaseService {
 				+ " and t.create_date <= to_date(? ,'yyyy-MM-dd HH24:mi:ss')";
 		if (officeIdsList != null && officeIdsList.size() > 0) {
 			sql = sql + " and  u.office_id in(" + StringUtils.collectionToCommaDelimitedString(officeIdsList) + ")";
+		}
+		if (productType != null && productType.size() > 0) {
+			sql = sql + " and  p.product_name in(" + StringUtils.collectionToCommaDelimitedString(productType) + ")";
 		}
 		sql = sql + " group by  to_char(t.create_date,'YYYY-MM'),t.deal_info_type,p.product_name,t.year"
 				+ " order by to_char(t.create_date,'YYYY-MM') asc,t.deal_info_type,p.product_name,t.year";
@@ -141,9 +144,9 @@ public class CertificateSettlementStatisticsService extends BaseService {
 			if (scm == null) {
 				scm = new StaticCertMonth();
 			}
-			if (cssv.getDealInfoType() == 0) {
+			if (cssv.getDealInfoType() == 0) { //新增
 				switch (cssv.getProductName()) {
-				case "1":
+				case "1": //企业证书
 					switch (cssv.getYear()) {
 					case 1:
 						scm.setOneAdd1(cssv.getWorkCount().intValue());
@@ -159,7 +162,7 @@ public class CertificateSettlementStatisticsService extends BaseService {
 						break;
 					}
 					break;
-				case "2":
+				case "2": //个人证书（企业）
 					switch (cssv.getYear()) {
 					case 1:
 						scm.setTwoAdd1(cssv.getWorkCount().intValue());
@@ -175,7 +178,7 @@ public class CertificateSettlementStatisticsService extends BaseService {
 						break;
 					}
 					break;
-				case "6":
+				case "6"://个人证书（个人）
 					switch (cssv.getYear()) {
 					case 1:
 						scm.setFourAdd1(cssv.getWorkCount().intValue());
@@ -193,7 +196,7 @@ public class CertificateSettlementStatisticsService extends BaseService {
 					break;
 
 				}
-			} else if (cssv.getDealInfoType() == 1) {
+			} else if (cssv.getDealInfoType() == 1) {  //更新
 				switch (cssv.getProductName()) {
 				case "1":
 					switch (cssv.getYear()) {
