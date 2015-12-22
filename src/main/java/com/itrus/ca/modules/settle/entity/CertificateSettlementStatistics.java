@@ -14,19 +14,14 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.NotFound;
-import org.hibernate.annotations.NotFoundAction;
-import org.hibernate.validator.constraints.Length;
 
-import com.itrus.ca.common.persistence.DataEntity;
 import com.itrus.ca.modules.profile.entity.ConfigApp;
+import com.itrus.ca.modules.profile.entity.ConfigChargeAgent;
 import com.itrus.ca.modules.profile.entity.ConfigProduct;
 import com.itrus.ca.modules.sys.entity.Office;
-import com.itrus.ca.modules.sys.entity.User;
 
 /**
  * 证书结算统计表Entity
@@ -63,7 +58,7 @@ public class CertificateSettlementStatistics implements java.io.Serializable {
 	private Integer year2;
 	private Integer year4;
 	private Integer year5;
-	
+	private ConfigChargeAgent configChargeAgent;
 	
 	public CertificateSettlementStatistics() {
 		
@@ -80,7 +75,7 @@ public class CertificateSettlementStatistics implements java.io.Serializable {
 
 	public CertificateSettlementStatistics(Integer add1, Integer add2, Integer add4, Integer add5, Integer renew1,
 			Integer renew2, Integer renew4, Integer renew5, Date countDate, Integer payType, ConfigApp app,
-			Office office,
+			Office office,ConfigChargeAgent configChargeAgent,
 			ConfigProduct product, Integer productType, Long pconfigChargeAgentId, Integer dealInfoType,
 			Integer dealInfoType1, Integer dealInfoType2, Integer dealInfoType3, Integer year1, Integer year2,
 			Integer year4, Integer year5) {
@@ -365,6 +360,17 @@ public class CertificateSettlementStatistics implements java.io.Serializable {
 		this.office = office;
 	}
 
+	@ManyToOne
+	@JoinColumn(name = "configChargeAgent_id")
+	public ConfigChargeAgent getConfigChargeAgent() {
+		return configChargeAgent;
+	}
+
+
+	public void setConfigChargeAgent(ConfigChargeAgent configChargeAgent) {
+		this.configChargeAgent = configChargeAgent;
+	}
+	
 	
 }
 
