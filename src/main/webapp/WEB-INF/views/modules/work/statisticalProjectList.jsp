@@ -239,16 +239,16 @@
 						<c:forEach items="${odms}" var="odms" >
 							<c:if test = "${odms.date == dates&&odms.districtName==odv}">
 								<c:if test="${odms.postMoney}">
-										<td>${odms.countPostMoney}</td>
+										<td>${0.0+odms.countPostMoney}</td>
 									</c:if>
 									<c:if test="${odms.bankMoney}">
-										<td>${odms.countBankMoney}</td>
+										<td>${0.0+odms.countBankMoney}</td>
 									</c:if>
 									<c:if test="${odms.xjMoney}">
-										<td>${odms.countXjMoney}</td>
+										<td>${0.0+odms.countXjMoney}</td>
 									</c:if>
 									<c:if test="${odms.alipayMoney}">
-										<td>${odms.countAlipayMoney}</td>
+										<td>${0.0+odms.countAlipayMoney}</td>
 									</c:if>
 							</c:if>
 						</c:forEach>
@@ -257,7 +257,7 @@
 				</c:forEach>
 					<c:forEach items="${workDate_Mone}" var="workDate_Mone">
 						<c:if test="${workDate_Mone.date==dates}">
-							<td>${workDate_Mone.countMoney}</td>
+							<td>${0.0+workDate_Mone.countMoney}</td>
 						</c:if>
 					</c:forEach>
 			<tr>
