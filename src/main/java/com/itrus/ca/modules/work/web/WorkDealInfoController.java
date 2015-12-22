@@ -1596,8 +1596,8 @@ public class WorkDealInfoController extends BaseController {
 					workpaymentInfo_dealinfoVo.setDealPayDate(list.get(i).getPayDate());
 					workpaymentInfo_dealinfoVo.setPayMoney(list.get(i).getPaymentMoney());
 					workpaymentInfo_dealinfoVo.setCompanyName(list.get(i).getCompany());
-					workpaymentInfo_dealinfoVo.setRemarks(list.get(i).getRemark());
-					workpaymentInfo_dealinfoVo.setAliasName(workDealInfos.get(w).getWorkCompany().getCompanyName());
+					workpaymentInfo_dealinfoVo.setRemarks(list.get(i).getRemarks());
+					workpaymentInfo_dealinfoVo.setAliasName(workDealInfos.get(w).getConfigApp().getAppName());
 					workpaymentInfo_dealinfoVo.setSignDate(workDealInfos.get(w).getWorkCertInfo().getSignDate());
 					p_d.add(workpaymentInfo_dealinfoVo);
 				}
@@ -1705,8 +1705,8 @@ public class WorkDealInfoController extends BaseController {
 		model.addAttribute("zzstartTime", zzstartTime);
 		model.addAttribute("zzendTime", zzendTime);
 		model.addAttribute("companyName", companyName);
-		List<WorkCompany> companys=workCompanyService.findAll();
-		model.addAttribute("companys", companys);
+		List<ConfigApp> configApps=configAppService.findAllConfigApp();
+		model.addAttribute("companys", configApps);
 		return "modules/work/statisticalAdjustmentList";
 	}
 

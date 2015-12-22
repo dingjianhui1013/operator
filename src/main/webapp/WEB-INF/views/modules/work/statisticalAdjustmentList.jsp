@@ -47,12 +47,10 @@
 		<select name="companyName" id="companyName">
 				<option value="">请选择</option>
 			<c:forEach items="${companys}" var="companys">
-			<c:if test="${companys.companyName!=null}">
-				<option value="${companys.companyName}"
-					<c:if test="${companys.companyName==companyName}">
+				<option value="${companys.appName}"
+					<c:if test="${companys.appName==companyName}">
 						selected="selected"
-					</c:if>>${companys.companyName}</option>
-			</c:if>
+					</c:if>>${companys.appName}</option>
 			</c:forEach>
 		</select>
 <%-- 		<input type="text" value="${companyName}" name="companyName" class="input-medium" id="companyName"/> --%>
