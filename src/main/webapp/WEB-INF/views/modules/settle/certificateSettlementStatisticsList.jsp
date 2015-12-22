@@ -210,33 +210,67 @@
 			<c:forEach items="${sumList }" var="sum">
 				<tr>
 					<td>${sum.key }</td>
-					<td>${sum.value.oneAdd1 }</td>
+					<td>
+						<c:if test="${sum.value.oneAdd1 ==""}">0</c:if>
+						<c:if test="${sum.value.oneAdd1 ==""}">${sum.value.oneAdd1</c:if>
+					</td>
+					<c:set var="oneA1" value="${oneA1+sum.value.oneAdd1}"></c:set>
 					<td>${sum.value.oneAdd2 }</td>
+					<c:set var="oneA2" value="${oneA2+sum.value.oneAdd2}"></c:set>
 					<td>${sum.value.oneAdd4 }</td>
-					<td>${sum.value.oneAdd4 }</td>
+					<c:set var="oneA4" value="${oneA4+sum.value.oneAdd4}"></c:set>
+					<td>${sum.value.oneAdd5 }</td>
+					<c:set var="oneA5" value="${oneA5+sum.value.oneAdd5}"></c:set>
 					<td>${sum.value.oneRenew1 }</td>
+					<c:set var="oneR1" value="${oneR1+sum.value.oneRenew1}"></c:set>
 					<td>${sum.value.oneRenew2 }</td>
+					<c:set var="oneR2" value="${oneR2+sum.value.oneRenew2}"></c:set>
 					<td>${sum.value.oneRenew4 }</td>
+					<c:set var="oneR4" value="${oneR4+sum.value.oneRenew4}"></c:set>
 					<td>${sum.value.oneRenew5 }</td>
+					<c:set var="oneR5" value="${oneR5+sum.value.oneRenew5}"></c:set>
 
 					<td>${sum.value.twoAdd1 + sum.value.fourAdd1 }</td>
+					<c:set var="twoA1" value="${twoA1+sum.value.twoAdd1 + sum.value.fourAdd1 }"></c:set>
 					<td>${sum.value.twoAdd2 + sum.value.fourAdd2  }</td>
+					<c:set var="twoA2" value="${twoA2+sum.value.twoAdd2 + sum.value.fourAdd2 }"></c:set>
 					<td>${sum.value.twoAdd4 + sum.value.fourAdd4 }</td>
+					<c:set var="twoA4" value="${twoA4+sum.value.twoAdd4 + sum.value.fourAdd4}"></c:set>
 					<td>${sum.value.twoAdd5 + sum.value.fourAdd5 }</td>
-					<td>${sum.value.twoRenew1 +sum.value.fourRenew1 }</td>
+					<c:set var="twoA5" value="${twoA5+sum.value.twoAdd5 + sum.value.fourAdd5}"></c:set>
+					<td>${sum.value.twoRenew1 +sum.value.twoRenew1 }</td>
+					<c:set var="twoR1" value="${twoR1+sum.value.twoRenew1 +sum.value.twoRenew1 }"></c:set>
 					<td>${sum.value.twoRenew2 +sum.value.fourRenew2  }</td>
+					<c:set var="twoR2" value="${twoR2+sum.value.twoRenew2 +sum.value.fourRenew2 }"></c:set>
 					<td>${sum.value.twoRenew4 +sum.value.fourRenew4  }</td>
+					<c:set var="twoR4" value="${twoR4+sum.value.twoRenew4 +sum.value.fourRenew4 }"></c:set>
 					<td>${sum.value.twoRenew5 +sum.value.fourRenew5  }</td>
+					<c:set var="twoR5" value="${twoR5+sum.value.twoRenew5 +sum.value.fourRenew5}"></c:set>
 
 				</tr>
 			</c:forEach>
 			<tr>
 				<td>总计</td>
-				<td></td>
-				<td></td>
-				<c:set var="allCountNew" value="0" />
+				<td>${oneA1}</td>
+				<td>${oneA2}</td>
+				<td>${oneA4}</td>
+				<td>${oneA5}</td>
+				<td>${oneR1}</td>
+				<td>${oneR2}</td>
+				<td>${oneR4}</td>
+				<td>${oneR5}</td>
+				<td>${twoA1}</td>
+				<td>${twoA2}</td>
+				<td>${twoA4}</td>
+				<td>${twoA5}</td>
+				<td>${twoR1}</td>
+				<td>${twoR2}</td>
+				<td>${twoR4}</td>
+				<td>${twoR5}</td>
+				
+				
 
-				<td>${allCountNew}</td>
+				
 			</tr>
 		</table>
 	</div>
