@@ -76,7 +76,8 @@
 					selected="selected"
 					</c:if>>${off.name}</option>
 				</c:forEach>
-			</select> <label>选择网点 ：</label> <select name="office" id="office">
+			</select> <label>选择网点 ：</label> 
+			<select name="officeId" id="office">
 				<option value="">请选择</option>
 				<c:forEach items="${offices}" var="off">
 					<option value="${off.id}"
