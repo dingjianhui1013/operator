@@ -116,7 +116,7 @@ public class CertificateSettlementStatisticsService extends BaseService {
 
 		String sql = "select to_char(t.create_date,'YYYY-MM') as month, t.deal_info_type as dealInfoType ,p.product_name productName,t.year year,count(t.id) workCount "
 				+ " from WORK_DEAL_INFO t, CONFIG_PRODUCT p,SYS_USER u "
-				+ " where t.product_id = p.id and t.deal_info_type in(0,1) and t.deal_info_status  in(7,9) "
+				+ " where t.product_id = p.id and t.app_id =? and t.deal_info_type in(0,1) and t.deal_info_status  in(7,9) "
 				+ " and t.create_by = u.id " + " and t.create_date > to_date(? ,'yyyy-MM-dd HH24:mi:ss')"
 				+ " and t.create_date <= to_date(? ,'yyyy-MM-dd HH24:mi:ss')";
 		if (officeIdsList != null && officeIdsList.size() > 0) {
@@ -127,7 +127,7 @@ public class CertificateSettlementStatisticsService extends BaseService {
 		List<CertificateSettlementStatisticsVO> resultList = new ArrayList<CertificateSettlementStatisticsVO>();
 
 		resultList = certificateSettlementStatisticsDao.findBySql(sql, CertificateSettlementStatisticsVO.class,			
-				DateFormatUtils.format(startDate, "yyyy-MM-dd") + " 00:00:00",
+				apply,DateFormatUtils.format(startDate, "yyyy-MM-dd") + " 00:00:00",
 				DateFormatUtils.format(endDate, "yyyy-MM-dd") + " 23:59:59");
 
 		return resultList;
