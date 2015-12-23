@@ -45,11 +45,21 @@
 	}
 	
 
+	function searchForm(){
+		var comAgentId = $("#comAgentId").val();
+		if(comAgentId==0){
+			top.$.jBox.tip("代理商不能为空！");
+		}else{
+			$("#searchForm").submit();
+		}
+	}
+	
+	
 </script>
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li class="active"><a href="${ctx}/settle/agentSettle/list">年限结算表</a></li>
+		<li class="active"><a href="${ctx}/settle/settlePayableDetail/list">年限结算表</a></li>
 	</ul>
 	<form:form id="searchForm" modelAttribute="workDealInfo"
 		action="${ctx}/settle/settlePayableDetail/list" method="post"
@@ -59,10 +69,12 @@
 			value="${page.pageSize}" />
 		<div class="control-group">
 			<label><font color="red" >*</font>代理商 ：</label>
-			<select onchange="setApp(this)" name="comAgentId" >
+			<select onchange="setApp(this)" name="comAgentId" id="comAgentId" class="required" >
 				<option value="0">请选择</option>
 				<c:forEach items="${comAgents }" var="comAgent" >
-					<option value="${comAgent.id }">${comAgent.agentName }</option>
+					<option value="${comAgent.id }" <c:if test="${comAgent.id == comAgentId}">
+					selected="selected"
+					</c:if> >${comAgent.agentName }</option>
 				</c:forEach>
 			</select>
 			
@@ -83,6 +95,10 @@
 				name="endTime" />
 		  	<input id="btnSubmit" class="btn btn-primary"
 				type="submit" value="查询" />
+				
+				<input id="btnExport" class="btn btn-primary" onclick="searchForm()"
+				type="button" value="查询" />
+				
 				&nbsp; <input id="btnExport" class="btn btn-primary"
 				type="button" value="导出" />
 		</div>

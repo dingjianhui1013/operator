@@ -89,6 +89,9 @@ public class SettlePayableDetailController extends BaseController {
 		model.addAttribute("productIds", productIds);
 		model.addAttribute("startTime", startTime);
 		model.addAttribute("endTime", endTime);
+		model.addAttribute("comAgentId", comAgentId);
+		
+		
 			
 		ConfigCommercialAgent comAgent = configCommercialAgentService.get(comAgentId);
 		List<Long> appIds = new ArrayList<Long>();
