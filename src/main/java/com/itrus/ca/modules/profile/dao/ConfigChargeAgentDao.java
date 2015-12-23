@@ -25,7 +25,9 @@ public interface ConfigChargeAgentDao extends ConfigChargeAgentDaoCustom, CrudRe
 	@Modifying
 	@Query("delete ConfigChargeAgent where id = ?1")
 	public int deleteById(Long id);
-
+	
+	@Query("FROM ConfigChargeAgent")
+	public List<ConfigChargeAgent> selectAll();
 }
 
 /**
