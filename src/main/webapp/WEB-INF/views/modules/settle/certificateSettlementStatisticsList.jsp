@@ -85,17 +85,23 @@
 		var officeId = $("#officeId").val();
 		//var proList = $("#proList").val();
 		//var workTypes = $("#workTypes").val();
-		var startTime = $("#startTime").val();
-		var endTime = $("#endTime").val();
+		var startDate = $("#startTime").val();
+		var endDate = $("#endTime").val();
 		if (applyId == null || applyId == "") {
 			top.$.jBox.tip("请选择应用");
 			return false;
 		}
-		/*  var checks = $("input[name=proList]:checked");
+ 		var proList;
+		  var checks = $("input[name=proList]:checked");
 		$.each(checks,function(idx,ele){
-			
-			var proList=$(ele).val();
-		}); */
+			if(proList ==null){
+				
+			 proList=$(ele).val();
+			}else{
+				proList = proList + "," + $(ele).val();
+			}
+			alert(proList);
+		}); 
 		var workTypes;
 		var checks1 = $("input[name=workTypes]:checked");
 		$.each(checks1, function(idx, ele) {
@@ -106,20 +112,20 @@
 			}
 			alert(workTypes);
 
-		});
+		}); 
 		window.location.href = "${ctx }/settle/certificateSettlementStatistics/export?applyId="
 				+ applyId
 				+ "&areaId="
 				+ areaId
 				+ "&officeId="
 				+ officeId
-				/* + "&proList="
-				+ proList */
+				  + "&proList="
+				+ proList 
 				+ "&workTypes="
-				+ workTypes
-				+ "&startTime="
-				+ startTime
-				+ "&endTime=" + endTime;
+				+ workTypes 
+				+ "&startDate="
+				+ startDate
+				+ "&endDate=" + endDate;
 	}
 	/* function dcZS() {
 
@@ -282,7 +288,7 @@
 					<td>${sum.value.oneRenew5}</td>
 					<c:set var="oneR5" value="${oneR5+sum.value.oneRenew5}"></c:set>
 
-					<td>${sum.value.twoRenew1 +sum.value.twoRenew1 }</td>
+					<td>${sum.value.twoRenew1 +sum.value.fourRenew1 }</td>
 					<c:set var="twoR1"
 						value="${twoR1+sum.value.twoRenew1 +sum.value.twoRenew1 }"></c:set>
 					<td>${sum.value.twoRenew2 +sum.value.fourRenew2  }</td>
