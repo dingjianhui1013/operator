@@ -27,6 +27,7 @@
 		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
 		<label>应用项目名称 ：</label>
 		<select name="configApp.id">
+		<option value="">请选择</option>
 					<c:forEach items="${configApp}" var="configApp">
 						<option value="${configApp.id}">${configApp.appName}</option>
 					</c:forEach>
