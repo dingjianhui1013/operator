@@ -268,44 +268,167 @@ public class CertificateSettlementStatisticsController extends BaseController {
 	}
 
 	@RequestMapping(value = "export")
-	public void export(Long areaId, Long officeId, Date startDate, Date endDate, Long payType,
+	public void export(Long areaId, Long officeId, Date startDate, Date endDate, String agentId,
 			HttpServletRequest request, HttpServletResponse response,
 			@RequestParam(value = "applyId", required = false) Long applyId,
 			@RequestParam(value = "proList", required = false) List<String> productType,
-			@RequestParam(value = "workTypes", required = false) Integer[] workType, Model model) {
-
+			@RequestParam(value = "workTypes", required = false) List<String> workType,Model model)
+	{
 		try {
-			HSSFWorkbook wb = new HSSFWorkbook();
-			HSSFSheet sheet = wb.createSheet("key结算统计");
-			HSSFCellStyle style = wb.createCellStyle();
-			HSSFFont font = wb.createFont();
+			String product = "";
+			if (productType != null && productType.size() > 0) {
+				for (int i = 0; i < productType.size(); i++) {
+					product += ProductType.getProductTypeName(Integer.parseInt(productType.get(i))) + ",";
+				}
+				StringUtils.removeEnd(product, ",");
+			}
+			String yingyong="";
+			// 如果应用不为空，产品也不为空，则显示XX应用XX产品
+			if (applyId != null && (productType != null && productType.size() > 0)) {
+				ConfigApp appName = configAppService.get(applyId);// 获取应用名称
+				model.addAttribute("applyId", appName.getId());
+				 yingyong = appName.getAppName() + "应用[" + product + "]产品";
+				
+			}
+			// 如果应用不为空，产品为空 则显示 XX应用全部产品
+			if (applyId != null && (productType == null || productType.size() == 0)) {
+				ConfigApp appName = configAppService.get(applyId);// 获取应用名称
+				model.addAttribute("applyId", appName.getId());
+				 yingyong = appName.getAppName() + "全部产品";
+				
+			}
+			System.out.println(yingyong+"88888888888888888888888888888888888888");
+			HSSFWorkbook wb=new HSSFWorkbook();
+			HSSFSheet sheet=wb.createSheet("证书结算统计表");
+			HSSFCellStyle style=wb.createCellStyle();
+			HSSFFont font=wb.createFont();
 			font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
 			font.setFontName("宋体");
-			font.setFontHeightInPoints((short) 18);
+			font.setFontHeightInPoints((short)14);
 			style.setFont(font);
 			style.setAlignment(HSSFCellStyle.ALIGN_CENTER);
 			style.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
-			sheet.addMergedRegion(new Region(0, (short) 0, 0, (short) 7));
-			HSSFRow row = sheet.createRow(0);
-			row.setHeightInPoints((short) 20);
-			HSSFCell cell = row.createCell(0);
-			cell.setCellStyle(style);
-			cell.setCellValue("key结算统计");
+			sheet.addMergedRegion(new Region(0, (short)0, 0, (short)7));
+			sheet.addMergedRegion(new Region(1, (short) 0, 2, (short) 0));
+			
+			HSSFRow row0 = sheet.createRow(0);
+			HSSFCell cell0 = row0.createCell(0);
+			cell0.setCellValue("项目："+yingyong);
+			cell0.setCellStyle(style);
 			HSSFRow row1 = sheet.createRow(1);
-			row1.createCell(0).setCellValue("入库时间");
-			;
-			row1.createCell(1).setCellValue("产品名称");
-			row1.createCell(2).setCellValue("key起始码");
-			row1.createCell(3).setCellValue("key截止码");
-			row1.createCell(4).setCellValue("数量");
-			row1.createCell(5).setCellValue("单价");
-			row1.createCell(6).setCellValue("小计/元");
-			row1.createCell(7).setCellValue("状态");
-			row1.createCell(8).setCellValue("备注");
+			HSSFRow row2 = sheet.createRow(2);
+			row1.createCell(0).setCellValue("月份");
+			row1.createCell(1).setCellValue("新增（企业专用）");
+			row1.createCell(5).setCellValue("新增（个人专用）");
+			row1.createCell(9).setCellValue("更新（企业专用）");
+			row1.createCell(13).setCellValue("更新（个人专用）");
+			row2.createCell(1).setCellValue("一年");
+			row2.createCell(2).setCellValue("二年");
+			row2.createCell(3).setCellValue("四年");
+			row2.createCell(4).setCellValue("五年");
+			row2.createCell(5).setCellValue("一年");
+			row2.createCell(6).setCellValue("二年");
+			row2.createCell(7).setCellValue("四年");
+			row2.createCell(8).setCellValue("五年");
+			row2.createCell(9).setCellValue("一年");
+			row2.createCell(10).setCellValue("二年");
+			row2.createCell(11).setCellValue("四年");
+			row2.createCell(12).setCellValue("五年");
+			row2.createCell(13).setCellValue("一年");
+			row2.createCell(14).setCellValue("二年");
+			row2.createCell(15).setCellValue("四年");
+			row2.createCell(16).setCellValue("五年");
+			
+			List<Long> officeIdList = new ArrayList<Long>();
+			
+			if (officeId != null) {
+				officeIdList.add(officeId);
+			} else if (areaId != null) {
+				officeIdList = officeService.findOfficeIdsByParentId(areaId);
+			}
+			List<CertificateSettlementStatisticsVO> findWorkList = certificateSettlementStatisticsService.findWorkList(
+					applyId, org.springframework.util.StringUtils.collectionToCommaDelimitedString(productType),
+					org.springframework.util.StringUtils.collectionToCommaDelimitedString(workType),
+					org.springframework.util.StringUtils.collectionToCommaDelimitedString(officeIdList), agentId, startDate,
+					endDate);
 
+			HashMap<String, StaticCertMonth> monthMap = certificateSettlementStatisticsService.getStaticMap(findWorkList);
+			int k=3;
+			int oneA1=0;
+			int oneA2=0;
+			int oneA4=0;
+			int oneA5=0;
+			int twoA1=0;
+			int twoA2=0;
+			int twoA4=0;
+			int twoA5=0;
+			int oneR1=0;
+			int oneR2=0;
+			int oneR4=0;
+			int oneR5=0;
+			int twoR1=0;
+			int twoR2=0;
+			int twoR4=0;
+			int twoR5=0;
+			for (String key : monthMap.keySet()){
+				HSSFRow rown = sheet.createRow(k++);
+				rown.createCell(0).setCellValue(key);
+				rown.createCell(1).setCellValue(monthMap.get(key).getOneAdd1());
+				oneA1+=(monthMap.get(key).getOneAdd1());
+				rown.createCell(2).setCellValue(monthMap.get(key).getOneAdd2());
+				oneA2+=(monthMap.get(key).getOneAdd2());
+				rown.createCell(3).setCellValue(monthMap.get(key).getOneAdd4());
+				oneA4+=(monthMap.get(key).getOneAdd4());
+				rown.createCell(4).setCellValue(monthMap.get(key).getOneAdd5());
+				oneA5+=(monthMap.get(key).getOneAdd5());
+				rown.createCell(5).setCellValue(monthMap.get(key).getTwoAdd1()+monthMap.get(key).getFourAdd1());
+				twoA1+=(monthMap.get(key).getTwoAdd1()+monthMap.get(key).getFourAdd1());
+				rown.createCell(6).setCellValue(monthMap.get(key).getTwoAdd2()+monthMap.get(key).getFourAdd2());
+				twoA2+=(monthMap.get(key).getTwoAdd2()+monthMap.get(key).getFourAdd2());
+				rown.createCell(7).setCellValue(monthMap.get(key).getTwoAdd4()+monthMap.get(key).getFourAdd4());
+				twoA4+=(monthMap.get(key).getTwoAdd4()+monthMap.get(key).getFourAdd4());
+				rown.createCell(8).setCellValue(monthMap.get(key).getTwoAdd5()+monthMap.get(key).getFourAdd5());
+				twoA5+=(monthMap.get(key).getTwoAdd5()+monthMap.get(key).getFourAdd5());
+				rown.createCell(9).setCellValue(monthMap.get(key).getOneRenew1());
+				oneR1+=(monthMap.get(key).getOneRenew1());
+				rown.createCell(10).setCellValue(monthMap.get(key).getOneRenew2());
+				oneR2+=(monthMap.get(key).getOneRenew2());
+				rown.createCell(11).setCellValue(monthMap.get(key).getOneRenew4());
+				oneR4+=(monthMap.get(key).getOneRenew4());
+				rown.createCell(12).setCellValue(monthMap.get(key).getOneRenew5());
+				oneR5+=(monthMap.get(key).getOneRenew5());
+				rown.createCell(13).setCellValue(monthMap.get(key).getTwoRenew1()+monthMap.get(key).getFourRenew1());
+				twoR1+=(monthMap.get(key).getTwoRenew1()+monthMap.get(key).getFourRenew1());
+				rown.createCell(14).setCellValue(monthMap.get(key).getTwoRenew2()+monthMap.get(key).getFourRenew2());
+				twoR2+=(monthMap.get(key).getTwoRenew2()+monthMap.get(key).getFourRenew2());
+				rown.createCell(15).setCellValue(monthMap.get(key).getTwoRenew4()+monthMap.get(key).getFourRenew4());
+				twoR4+=(monthMap.get(key).getTwoRenew4()+monthMap.get(key).getFourRenew4());
+				rown.createCell(16).setCellValue(monthMap.get(key).getTwoRenew5()+monthMap.get(key).getFourRenew5());
+				twoR5+=(monthMap.get(key).getTwoRenew5()+monthMap.get(key).getFourRenew5());
+			}
+			HSSFRow rowi = sheet.createRow(k++);
+			rowi.createCell(0).setCellValue("总计");
+			rowi.createCell(1).setCellValue(oneA1);
+			rowi.createCell(2).setCellValue(oneA2);
+			rowi.createCell(3).setCellValue(oneA4);
+			rowi.createCell(4).setCellValue(oneA5);
+			rowi.createCell(5).setCellValue(twoA1);
+			rowi.createCell(6).setCellValue(twoA2);
+			rowi.createCell(7).setCellValue(twoA4);
+			rowi.createCell(8).setCellValue(twoA5);
+			rowi.createCell(9).setCellValue(oneR1);
+			rowi.createCell(10).setCellValue(oneR2);
+			rowi.createCell(11).setCellValue(oneR4);
+			rowi.createCell(12).setCellValue(oneR5);
+			rowi.createCell(13).setCellValue(twoR1);
+			rowi.createCell(14).setCellValue(twoR2);
+			rowi.createCell(15).setCellValue(twoR4);
+			rowi.createCell(16).setCellValue(twoR5);
+			
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			response.setContentType(response.getContentType());
-			response.setHeader("Content-disposition", "attachment; filename=keySettleRecord.xls");
+			response.setHeader("Content-disposition",
+					"attachment; filename=certificateSettlementStatistics.xls");
 			wb.write(baos);
 			byte[] bytes = baos.toByteArray();
 			response.setHeader("Content-Length", String.valueOf(bytes.length));
@@ -319,5 +442,4 @@ public class CertificateSettlementStatisticsController extends BaseController {
 			e.printStackTrace();
 		}
 	}
-
 }
