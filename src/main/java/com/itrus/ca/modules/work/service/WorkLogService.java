@@ -73,6 +73,7 @@ public class WorkLogService extends BaseService {
 	}
 	public List<WorkLog> findworkLogs(String name,Date staDate,Date endDate,Long appId)
 	{
+		
 		DetachedCriteria dc = workLogDao.createDetachedCriteria();
 		dc.createAlias("createBy", "createBy");
 		if(name!=null&&!"".equals(name))
@@ -85,11 +86,14 @@ public class WorkLogService extends BaseService {
 		}
 		if(endDate!=null&&!"".equals(endDate))
 		{
+			endDate.setHours(23);
+			endDate.setMinutes(59);
+			endDate.setSeconds(59);
 			dc.add(Restrictions.le("createDate",endDate));
 		}
 		if(appId!=null&&!"".equals(appId))
 		{
-			dc.add(Restrictions.le("configApp.id",appId));
+			dc.add(Restrictions.eq("configApp.id",appId));
 		}
 		dc.add(Restrictions.ne("distinguish","1"));
 		return workLogDao.find(dc);
