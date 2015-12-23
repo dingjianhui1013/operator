@@ -29,7 +29,7 @@ public class WorkDealInfoType {
 	
 	public static HashMap<Integer,String> WorkDealInfoTypeMap = new HashMap<Integer, String>();
 	public static HashMap<Integer,String> WorkDealInfoTypeMapNew = new HashMap<Integer, String>();
-	
+	public static HashMap<Integer,String> WorkDealInfoTypeMapLess=new HashMap<Integer,String>();
 	static{
 		WorkDealInfoTypeMap.put(TYPE_ADD_CERT,"新增证书");
 		WorkDealInfoTypeMap.put(TYPE_UPDATE_CERT, "更新证书");
@@ -55,6 +55,13 @@ public class WorkDealInfoType {
 		WorkDealInfoTypeMapNew.put(TYPE_TRUST_MOBILE, "可信移动设备");
 		WorkDealInfoTypeMapNew.put(TYPE_UNLOCK_CERT, "key解锁");
 		WorkDealInfoTypeMapNew.put(TYPE_PAY_REPLACED, "变更缴费方式");
+		
+		WorkDealInfoTypeMapLess.put(TYPE_ADD_CERT,"新增证书");
+		WorkDealInfoTypeMapLess.put(TYPE_UPDATE_CERT, "更新证书");
+		WorkDealInfoTypeMapLess.put(TYPE_LOST_CHILD, "遗失补办");
+		WorkDealInfoTypeMapLess.put(TYPE_DAMAGED_REPLACED, "损坏更换");
+		WorkDealInfoTypeMapLess.put(TYPE_INFORMATION_REROUTE, "信息变更");
+		
 	}
 	
 	public static String getDealInfoTypeName(Integer id){
@@ -112,6 +119,13 @@ public class WorkDealInfoType {
 		}
 		return list;
 	} 
-	
+	public List<WorkDealInfoTypeObj> getProductTypeListLess(){
+		List<WorkDealInfoTypeObj> list = new ArrayList<WorkDealInfoTypeObj>();
+		for (Integer id: WorkDealInfoTypeMapLess.keySet()) {
+			WorkDealInfoTypeObj obj = new WorkDealInfoTypeObj(id, WorkDealInfoTypeMapLess.get(id));
+			list.add(obj);
+		}
+		return list;
+	} 
 	
 }

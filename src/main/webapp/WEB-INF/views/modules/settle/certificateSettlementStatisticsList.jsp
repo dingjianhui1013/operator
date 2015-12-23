@@ -80,31 +80,55 @@
 		}
 	}
 	function dcZS() {
-		
 		var applyId = $("#applyId").val();
 		var areaId = $("#areaId").val();
 		var officeId = $("#officeId").val();
-		var proList = $("#proList").val();
-		var workTypes = $("#workTypes").val();
+		//var proList = $("#proList").val();
+		//var workTypes = $("#workTypes").val();
 		var startTime = $("#startTime").val();
 		var endTime = $("#endTime").val();
-		
-		if(applyId==null||applyId==""){
+		if (applyId == null || applyId == "") {
 			top.$.jBox.tip("请选择应用");
-        	return false;
+			return false;
 		}
+		/*  var checks = $("input[name=proList]:checked");
+		$.each(checks,function(idx,ele){
+			
+			var proList=$(ele).val();
+		}); */
+		var workTypes;
+		var checks1 = $("input[name=workTypes]:checked");
+		$.each(checks1, function(idx, ele) {
+			if (workTypes == null) {
+				workTypes = $(ele).val();
+			} else {
+				workTypes = workTypes + "," + $(ele).val();
+			}
+			alert(workTypes);
+
+		});
 		window.location.href = "${ctx }/settle/certificateSettlementStatistics/export?applyId="
 				+ applyId
 				+ "&areaId="
 				+ areaId
 				+ "&officeId="
 				+ officeId
-				+ "&proList="
-				+ proList
+				/* + "&proList="
+				+ proList */
 				+ "&workTypes="
 				+ workTypes
-				+ "&startTime=" + startTime + "&endTime=" + endTime;
+				+ "&startTime="
+				+ startTime
+				+ "&endTime=" + endTime;
 	}
+	/* function dcZS() {
+
+		var form = $("#searchForm");
+
+		form.action = "${ctx }/settle/certificateSettlementStatistics/export";
+
+		form.submit();
+	} */
 </script>
 </head>
 <body>
@@ -124,7 +148,7 @@
 		<input id="pageSize" name="pageSize" type="hidden"
 			value="${page.pageSize}" />
 		<div>
-			<label>应&nbsp; &nbsp; &nbsp; 用：</label> <select name="applyId"
+			<label>应&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 用：</label> <select name="applyId"
 				id="applyId">
 				<option value="">请选择应用</option>
 				<c:forEach items="${configAppList}" var="app">
@@ -133,7 +157,7 @@
 					selected="selected"
 					</c:if>>${app.appName}</option>
 				</c:forEach>
-			</select> <label>选择区域：</label> <select name="areaId" id="areaId"
+			</select> <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;选择区域：</label> <select name="areaId" id="areaId"
 				onchange="addOffice()">
 				<option value="">请选择</option>
 				<c:forEach items="${offsList}" var="off">
@@ -169,10 +193,16 @@
 					</c:if>>${agen.tempName}</option>
 				</c:forEach>
 			</select>
+			<label>业务类型：</label>
+				<c:forEach items="${workTypes}" var="type">
+					<input type="checkbox" name="workTypes" id="workTypes"
+						value="${type.id}">					
+					${type.name}
+				</c:forEach>
 		</div>
 		<div></div>
 		<div style="margin-top: 8px">
-			<label>统计时间 ：</label> <input id="startTime" name="startDate"
+			<label>统&nbsp;&nbsp;计&nbsp;&nbsp;时&nbsp;&nbsp;间 ：</label> <input id="startTime" name="startDate"
 				type="text" readonly="readonly" maxlength="20"
 				class="Wdate required"
 				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"
@@ -181,24 +211,19 @@
 				maxlength="20" class="Wdate required"
 				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false,minDate:'#F{$dp.$D(\'startTime\')}'});"
 				value="<fmt:formatDate value="${endDate}" pattern="yyyy-MM-dd"/>" />
-			<div>
-				<label>业务类型：</label>
-				<c:forEach items="${workTypes}" var="type">
-					<input type="checkbox" name="workTypes" id="workTypes"
-						value="${type.id}">					
-					${type.name}
-				</c:forEach>
-			</div>
-			<label>产品名称 ：</label>
+			
+				<label>产品名称 ：</label>
 			<c:forEach items="${proList }" var="pro">
 				<input type="checkbox" name="proList" id="proList" value="${pro.id}">${pro.name}
 			</c:forEach>
-			<label>支持模式：</label> <input type="checkbox" name="tongyong" value="0" />通用
-			<input type="checkbox" name="zhuanyong" value="1">专用
 			&nbsp;&nbsp; <input id="btnSubmit" class="btn btn-primary"
 				onclick="return onSubmit();" type="submit" value="查询" /> <input
 				id="exportZS" class="btn btn-primary" onclick="dcZS()" type="button"
 				value="导出" />
+			</div>
+			
+			
+			
 	</form:form>
 	<tags:message content="${message}" />
 	<div class="form-horizontal">
