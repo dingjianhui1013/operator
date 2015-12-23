@@ -209,6 +209,7 @@ public class MessageSendingController extends BaseController {
 
 			long dealInfoId = Long.parseLong(dealInfos[i]);
 			WorkDealInfo dealInfo = workDealInfoService.get(dealInfoId);
+			if(dealInfo!=null){
 			WorkCompany company = dealInfo.getWorkCompany();
 			WorkUser workUser = dealInfo.getWorkUser();
 			ConfigApp configApp = dealInfo.getConfigApp();
@@ -301,6 +302,7 @@ public class MessageSendingController extends BaseController {
 					
 				
 			}
+		}
 		}
 		return json.toString();
 		// return "redirect:" + Global.getAdminPath() +
