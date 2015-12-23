@@ -3,6 +3,9 @@
  */
 package com.itrus.ca.modules.settle.web;
 
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -14,6 +17,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFFont;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.util.Region;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -29,13 +39,16 @@ import com.itrus.ca.common.web.BaseController;
 import com.itrus.ca.modules.bean.StaticCertMonth;
 import com.itrus.ca.modules.constant.ProductType;
 import com.itrus.ca.modules.constant.WorkDealInfoType;
+import com.itrus.ca.modules.key.entity.KeyGeneralInfo;
 import com.itrus.ca.modules.profile.entity.ConfigApp;
 import com.itrus.ca.modules.profile.entity.ConfigChargeAgent;
+import com.itrus.ca.modules.profile.entity.ConfigSupplier;
 import com.itrus.ca.modules.profile.service.ConfigAppOfficeRelationService;
 import com.itrus.ca.modules.profile.service.ConfigAppService;
 import com.itrus.ca.modules.profile.service.ConfigChargeAgentService;
 import com.itrus.ca.modules.profile.service.ConfigProductService;
 import com.itrus.ca.modules.settle.entity.CertificateSettlementStatistics;
+import com.itrus.ca.modules.settle.entity.KeyPurchase;
 import com.itrus.ca.modules.settle.service.CertificateSettlementStatisticsService;
 import com.itrus.ca.modules.settle.vo.CertificateSettlementStatisticsVO;
 import com.itrus.ca.modules.sys.entity.Office;
@@ -250,5 +263,60 @@ public class CertificateSettlementStatisticsController extends BaseController {
 		addMessage(redirectAttributes, "删除证书结算统计表成功");
 		return "redirect:" + Global.getAdminPath() + "/modules/settle/certificateSettlementStatistics/?repage";
 	}
-
+	@RequestMapping(value = "export")
+	public void export(Long areaId, Long officeId, Date startDate, Date endDate, Long payType,
+			HttpServletRequest request, HttpServletResponse response,
+			@RequestParam(value = "applyId", required = false) Long applyId,
+			@RequestParam(value = "proList", required = false) List<String> productType,
+			@RequestParam(value = "workTypes", required = false) Integer[] workType,Model model)
+	{
+		
+		try {
+			HSSFWorkbook wb=new HSSFWorkbook();
+			HSSFSheet sheet=wb.createSheet("key结算统计");
+			HSSFCellStyle style=wb.createCellStyle();
+			HSSFFont font=wb.createFont();
+			font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+			font.setFontName("宋体");
+			font.setFontHeightInPoints((short)18);
+			style.setFont(font);
+			style.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+			style.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+			sheet.addMergedRegion(new Region(0, (short)0, 0, (short)7));
+			HSSFRow   row=sheet.createRow(0);
+			row.setHeightInPoints((short)20);
+			HSSFCell cell=row.createCell(0);
+			cell.setCellStyle(style);
+			cell.setCellValue("key结算统计");
+			HSSFRow   row1=sheet.createRow(1);
+			row1.createCell(0).setCellValue("入库时间");;
+			row1.createCell(1).setCellValue("产品名称");
+			row1.createCell(2).setCellValue("key起始码");
+			row1.createCell(3).setCellValue("key截止码");
+			row1.createCell(4).setCellValue("数量");
+			row1.createCell(5).setCellValue("单价");
+			row1.createCell(6).setCellValue("小计/元");
+			row1.createCell(7).setCellValue("状态");
+			row1.createCell(8).setCellValue("备注");
+			
+			
+			
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			response.setContentType(response.getContentType());
+			response.setHeader("Content-disposition",
+					"attachment; filename=keySettleRecord.xls");
+			wb.write(baos);
+			byte[] bytes = baos.toByteArray();
+			response.setHeader("Content-Length", String.valueOf(bytes.length));
+			BufferedOutputStream bos = null;
+			bos = new BufferedOutputStream(response.getOutputStream());
+			bos.write(bytes);
+			bos.close();
+			baos.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 }
