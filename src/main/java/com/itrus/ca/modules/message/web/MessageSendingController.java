@@ -187,6 +187,11 @@ public class MessageSendingController extends BaseController {
 		// List<WorkCertInfo> certInfoList = new ArrayList<WorkCertInfo>();
 		// String
 		// messageAddress=smsConfigurationService.get(smsId).getMessageAddress();
+		if(smsId==null){
+			json.put("status", -1);
+			json.put("msg", "请选择模板");
+			return json.toString();
+		}
 		SmsConfiguration smsConfiguration = smsConfigurationService.get(smsId);
 		String messageName = smsConfiguration.getMessageName();
 		// System.out.println(messageAddress);
@@ -199,6 +204,11 @@ public class MessageSendingController extends BaseController {
 		messageAddress += "/WEB-INF/template/";
 		String newMessageAddress = messageAddress + messageName;
 		System.out.println(messageAddress);
+		if(checkIds==""||checkIds.equals("")||checkIds==null){
+			json.put("status", -1);
+			json.put("msg", "请选择需要发送的公司");
+			return json.toString();
+		}
 		String[] dealInfos = checkIds.split(",");
 		short s[] = new short[dealInfos.length];
 		for (int i = 0; i < dealInfos.length; i++) {
