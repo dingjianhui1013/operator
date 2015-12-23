@@ -79,6 +79,32 @@
 			}
 		}
 	}
+	function dcZS() {
+		
+		var applyId = $("#applyId").val();
+		var areaId = $("#areaId").val();
+		var officeId = $("#officeId").val();
+		var proList = $("#proList").val();
+		var workTypes = $("#workTypes").val();
+		var startTime = $("#startTime").val();
+		var endTime = $("#endTime").val();
+		
+		if(applyId==null||applyId==""){
+			top.$.jBox.tip("请选择应用");
+        	return false;
+		}
+		window.location.href = "${ctx }/settle/certificateSettlementStatistics/export?applyId="
+				+ applyId
+				+ "&areaId="
+				+ areaId
+				+ "&officeId="
+				+ officeId
+				+ "&proList="
+				+ proList
+				+ "&workTypes="
+				+ workTypes
+				+ "&startTime=" + startTime + "&endTime=" + endTime;
+	}
 </script>
 </head>
 <body>
@@ -158,13 +184,14 @@
 			<div>
 				<label>业务类型：</label>
 				<c:forEach items="${workTypes}" var="type">
-					<input type="checkbox" name="workTypes" value="${type.id}">					
+					<input type="checkbox" name="workTypes" id="workTypes"
+						value="${type.id}">					
 					${type.name}
 				</c:forEach>
 			</div>
 			<label>产品名称 ：</label>
 			<c:forEach items="${proList }" var="pro">
-				<input type="checkbox" name="proList" value="${pro.id}">${pro.name}
+				<input type="checkbox" name="proList" id="proList" value="${pro.id}">${pro.name}
 			</c:forEach>
 			<label>支持模式：</label> <input type="checkbox" name="tongyong" value="0" />通用
 			<input type="checkbox" name="zhuanyong" value="1">专用
@@ -220,7 +247,7 @@
 					<td>${sum.value.twoAdd5 + sum.value.fourAdd5 }</td>
 					<c:set var="twoA5"
 						value="${twoA5+sum.value.twoAdd5 + sum.value.fourAdd5}"></c:set>
-					
+
 					<td>${sum.value.oneRenew1}</td>
 					<c:set var="oneR1" value="${oneR1+sum.value.oneRenew1}"></c:set>
 					<td>${sum.value.oneRenew2}</td>
@@ -229,7 +256,7 @@
 					<c:set var="oneR4" value="${oneR4+sum.value.oneRenew4}"></c:set>
 					<td>${sum.value.oneRenew5}</td>
 					<c:set var="oneR5" value="${oneR5+sum.value.oneRenew5}"></c:set>
-					
+
 					<td>${sum.value.twoRenew1 +sum.value.twoRenew1 }</td>
 					<c:set var="twoR1"
 						value="${twoR1+sum.value.twoRenew1 +sum.value.twoRenew1 }"></c:set>
@@ -258,7 +285,7 @@
 				<td>${oneR1}</td>
 				<td>${oneR2}</td>
 				<td>${oneR4}</td>
-				<td>${oneR5}</td>				
+				<td>${oneR5}</td>
 				<td>${twoR1}</td>
 				<td>${twoR2}</td>
 				<td>${twoR4}</td>
