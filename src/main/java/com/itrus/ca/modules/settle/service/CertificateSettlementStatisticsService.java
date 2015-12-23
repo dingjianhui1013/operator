@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
@@ -17,7 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
+
 
 import com.itrus.ca.common.persistence.Page;
 import com.itrus.ca.common.service.BaseService;
@@ -111,19 +112,27 @@ public class CertificateSettlementStatisticsService extends BaseService {
 
 	}
 
-	public List<CertificateSettlementStatisticsVO> findWorkList(Long apply,List<String> productType, List<Long> officeIdsList, Date startDate,
+	public List<CertificateSettlementStatisticsVO> findWorkList(Long apply,String productType,String workTypes, String officeIdsList,String agentId, Date startDate,
 			Date endDate) {
 
 		String sql = "select to_char(t.create_date,'YYYY-MM') as month, t.deal_info_type as dealInfoType ,p.product_name productName,t.year year,count(t.id) workCount "
-				+ " from WORK_DEAL_INFO t, CONFIG_PRODUCT p,SYS_USER u "
-				+ " where t.product_id = p.id and t.app_id =? and t.deal_info_type in(0,1) and t.deal_info_status  in(7,9) "
+				+ " from WORK_DEAL_INFO t, CONFIG_PRODUCT p,SYS_USER u ,config_agent_bound_deal_info b "
+				+ " where t.product_id = p.id and t.app_id =?  and t.deal_info_status  in(7,9) and b.deal_info = t.id "
 				+ " and t.create_by = u.id " + " and t.create_date > to_date(? ,'yyyy-MM-dd HH24:mi:ss')"
 				+ " and t.create_date <= to_date(? ,'yyyy-MM-dd HH24:mi:ss')";
-		if (officeIdsList != null && officeIdsList.size() > 0) {
-			sql = sql + " and  u.office_id in(" + StringUtils.collectionToCommaDelimitedString(officeIdsList) + ")";
+		if (StringUtils.isNotBlank(officeIdsList)) {
+			sql = sql + " and  u.office_id in(" + officeIdsList + ")";
 		}
-		if (productType != null && productType.size() > 0) {
-			sql = sql + " and  p.product_name in(" + StringUtils.collectionToCommaDelimitedString(productType) + ")";
+		if (StringUtils.isNotBlank(productType)) {
+			sql = sql + " and  p.product_name in(" +productType + ")";
+		}
+		if (StringUtils.isNotBlank(agentId)) {
+			sql = sql + " and  b.agent_id = " +agentId ;
+		}
+		if (StringUtils.isNotBlank(workTypes)) {
+		   sql = sql + "and t.deal_info_type in("+workTypes+")";
+		}else{ // 默认只查 新增和更新
+			sql = sql + "and t.deal_info_type in(0,1)";
 		}
 		sql = sql + " group by  to_char(t.create_date,'YYYY-MM'),t.deal_info_type,p.product_name,t.year"
 				+ " order by to_char(t.create_date,'YYYY-MM') asc,t.deal_info_type,p.product_name,t.year";

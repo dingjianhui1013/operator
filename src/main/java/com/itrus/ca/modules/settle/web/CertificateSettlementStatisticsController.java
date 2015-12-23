@@ -83,7 +83,7 @@ public class CertificateSettlementStatisticsController extends BaseController {
 
 	@Autowired
 	private ConfigAppOfficeRelationService configAppOfficeRelationService;
-	
+
 	@Autowired
 	private ConfigChargeAgentService configChargeAgentService;
 
@@ -98,11 +98,11 @@ public class CertificateSettlementStatisticsController extends BaseController {
 
 	@RequiresPermissions("settle:certificateSettlementStatistics:view")
 	@RequestMapping(value = { "list", "" })
-	public String list(Long areaId, Long officeId, Date startDate, Date endDate, Long payType,
+	public String list(Long areaId, Long officeId, Date startDate, Date endDate, String agentId,
 			HttpServletRequest request, HttpServletResponse response,
 			@RequestParam(value = "applyId", required = false) Long applyId,
 			@RequestParam(value = "proList", required = false) List<String> productType,
-			@RequestParam(value = "workTypes", required = false) Integer[] workType, Model model) {
+			@RequestParam(value = "workTypes", required = false) List<String> workType, Model model) {
 
 		WorkDealInfoType workDealInfoType = new WorkDealInfoType();
 		List<Office> offsList = officeService.getOfficeByType(UserUtils.getUser(), 1);
@@ -114,8 +114,8 @@ public class CertificateSettlementStatisticsController extends BaseController {
 				i++;
 			}
 		}
-		List<ConfigChargeAgent> agentList=configChargeAgentService.selectAll();
-		model.addAttribute("agentList",agentList);
+		List<ConfigChargeAgent> agentList = configChargeAgentService.selectAll();
+		model.addAttribute("agentList", agentList);
 		if (areaId != null) {
 			List<Office> offices = officeService.findByParentId(areaId);
 			model.addAttribute("offices", offices);
@@ -180,8 +180,11 @@ public class CertificateSettlementStatisticsController extends BaseController {
 			officeIdList = officeService.findOfficeIdsByParentId(areaId);
 		}
 
-		List<CertificateSettlementStatisticsVO> findWorkList = certificateSettlementStatisticsService
-				.findWorkList(applyId,productType,officeIdList, startDate, endDate);
+		List<CertificateSettlementStatisticsVO> findWorkList = certificateSettlementStatisticsService.findWorkList(
+				applyId, org.springframework.util.StringUtils.collectionToCommaDelimitedString(productType),
+				org.springframework.util.StringUtils.collectionToCommaDelimitedString(workType),
+				org.springframework.util.StringUtils.collectionToCommaDelimitedString(officeIdList), agentId, startDate,
+				endDate);
 
 		HashMap<String, StaticCertMonth> monthMap = certificateSettlementStatisticsService.getStaticMap(findWorkList);
 
@@ -263,33 +266,34 @@ public class CertificateSettlementStatisticsController extends BaseController {
 		addMessage(redirectAttributes, "删除证书结算统计表成功");
 		return "redirect:" + Global.getAdminPath() + "/modules/settle/certificateSettlementStatistics/?repage";
 	}
+
 	@RequestMapping(value = "export")
 	public void export(Long areaId, Long officeId, Date startDate, Date endDate, Long payType,
 			HttpServletRequest request, HttpServletResponse response,
 			@RequestParam(value = "applyId", required = false) Long applyId,
 			@RequestParam(value = "proList", required = false) List<String> productType,
-			@RequestParam(value = "workTypes", required = false) Integer[] workType,Model model)
-	{
-		
+			@RequestParam(value = "workTypes", required = false) Integer[] workType, Model model) {
+
 		try {
-			HSSFWorkbook wb=new HSSFWorkbook();
-			HSSFSheet sheet=wb.createSheet("key结算统计");
-			HSSFCellStyle style=wb.createCellStyle();
-			HSSFFont font=wb.createFont();
+			HSSFWorkbook wb = new HSSFWorkbook();
+			HSSFSheet sheet = wb.createSheet("key结算统计");
+			HSSFCellStyle style = wb.createCellStyle();
+			HSSFFont font = wb.createFont();
 			font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
 			font.setFontName("宋体");
-			font.setFontHeightInPoints((short)18);
+			font.setFontHeightInPoints((short) 18);
 			style.setFont(font);
 			style.setAlignment(HSSFCellStyle.ALIGN_CENTER);
 			style.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
-			sheet.addMergedRegion(new Region(0, (short)0, 0, (short)7));
-			HSSFRow   row=sheet.createRow(0);
-			row.setHeightInPoints((short)20);
-			HSSFCell cell=row.createCell(0);
+			sheet.addMergedRegion(new Region(0, (short) 0, 0, (short) 7));
+			HSSFRow row = sheet.createRow(0);
+			row.setHeightInPoints((short) 20);
+			HSSFCell cell = row.createCell(0);
 			cell.setCellStyle(style);
 			cell.setCellValue("key结算统计");
-			HSSFRow   row1=sheet.createRow(1);
-			row1.createCell(0).setCellValue("入库时间");;
+			HSSFRow row1 = sheet.createRow(1);
+			row1.createCell(0).setCellValue("入库时间");
+			;
 			row1.createCell(1).setCellValue("产品名称");
 			row1.createCell(2).setCellValue("key起始码");
 			row1.createCell(3).setCellValue("key截止码");
@@ -298,13 +302,10 @@ public class CertificateSettlementStatisticsController extends BaseController {
 			row1.createCell(6).setCellValue("小计/元");
 			row1.createCell(7).setCellValue("状态");
 			row1.createCell(8).setCellValue("备注");
-			
-			
-			
+
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			response.setContentType(response.getContentType());
-			response.setHeader("Content-disposition",
-					"attachment; filename=keySettleRecord.xls");
+			response.setHeader("Content-disposition", "attachment; filename=keySettleRecord.xls");
 			wb.write(baos);
 			byte[] bytes = baos.toByteArray();
 			response.setHeader("Content-Length", String.valueOf(bytes.length));
@@ -318,5 +319,5 @@ public class CertificateSettlementStatisticsController extends BaseController {
 			e.printStackTrace();
 		}
 	}
-	
+
 }
