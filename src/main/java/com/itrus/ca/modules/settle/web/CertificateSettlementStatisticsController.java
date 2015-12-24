@@ -98,7 +98,7 @@ public class CertificateSettlementStatisticsController extends BaseController {
 
 	@RequiresPermissions("settle:certificateSettlementStatistics:view")
 	@RequestMapping(value = { "list", "" })
-	public String list(Long areaId, Long officeId, Date startDate, Date endDate, String agentId,
+	public String list(Long areaId, Long officeId, Date startDate, Date endDate, String tempStyle,String agentId,
 			HttpServletRequest request, HttpServletResponse response,
 			@RequestParam(value = "applyId", required = false) Long applyId,
 			@RequestParam(value = "proList", required = false) List<String> productType,
@@ -114,13 +114,16 @@ public class CertificateSettlementStatisticsController extends BaseController {
 				i++;
 			}
 		}
-		List<ConfigChargeAgent> agentList = configChargeAgentService.selectAll();
-		model.addAttribute("agentList", agentList);
+		//List<ConfigChargeAgent> agentList = configChargeAgentService.selectAll();
+		//model.addAttribute("agentList", agentList);
 		if (areaId != null) {
 			List<Office> offices = officeService.findByParentId(areaId);
 			model.addAttribute("offices", offices);
 		}
-
+		if(tempStyle !=null){
+			List<ConfigChargeAgent> agentList=configChargeAgentService.findByStyle(tempStyle);
+			model.addAttribute("agentList", agentList);
+		}
 		/* 应用查询列表显示 */
 		List<ConfigApp> configAppList = configAppService.selectAll();
 		model.addAttribute("configAppList", configAppList);
@@ -156,7 +159,7 @@ public class CertificateSettlementStatisticsController extends BaseController {
 		// }
 		model.addAttribute("proType", ProductType.productTypeStrMap);
 		model.addAttribute("wdiType", WorkDealInfoType.WorkDealInfoTypeMap);
-		model.addAttribute("workTypes", workDealInfoType.getProductTypeListNew());
+		model.addAttribute("workTypes", workDealInfoType.getProductTypeListLess());
 		// model.addAttribute("workType", workDealInfo.getDealInfoStatus());
 		model.addAttribute("productId", productType);
 		model.addAttribute("offsList", offsList);
@@ -297,7 +300,7 @@ public class CertificateSettlementStatisticsController extends BaseController {
 				 yingyong = appName.getAppName() + "全部产品";
 				
 			}
-			System.out.println(yingyong+"88888888888888888888888888888888888888");
+			
 			HSSFWorkbook wb=new HSSFWorkbook();
 			HSSFSheet sheet=wb.createSheet("证书结算统计表");
 			HSSFCellStyle style=wb.createCellStyle();

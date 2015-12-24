@@ -25,6 +25,7 @@
 			$.each(data, function(idx, ele) {
 				//console.log(idx);
 				//console.log(ele);
+				
 				html += "<option value=\""+ele.id+"\">" + ele.name
 						+ "</ooption>"
 			});
@@ -35,19 +36,19 @@
 	}
 	function changeAgentId() {
 		var tempStyle = $("#tempStyle").prop('value');
-
-		var url = "";
-		$.getJson(url + agenId + "&_=" + new Date().getTime(), function(data) {
+		var url = "${ctx}/profile/configChargeAgent/changeAgentId?tempStyle=";
+		$.getJSON(url + tempStyle + "&_=" + new Date().getTime(), function(data) {
 			var html = "";
 			//console.log(data);
 			html += "<option value=\""+""+"\">请选择</ooption>";
 			$.each(data, function(idx, ele) {
 				//console.log(idx);
 				//console.log(ele);
+				alert(ele.name);
 				html += "<option value=\""+ele.id+"\">" + ele.name
 						+ "</ooption>"
 			});
-			$("#officeId").html(html);
+			$("#agentId").html(html);
 		});
 	}
 
@@ -100,7 +101,7 @@
 			}else{
 				proList = proList + "," + $(ele).val();
 			}
-			alert(proList);
+			
 		}); 
 		var workTypes;
 		var checks1 = $("input[name=workTypes]:checked");
@@ -110,7 +111,7 @@
 			} else {
 				workTypes = workTypes + "," + $(ele).val();
 			}
-			alert(workTypes);
+			
 
 		}); 
 		window.location.href = "${ctx }/settle/certificateSettlementStatistics/export?applyId="

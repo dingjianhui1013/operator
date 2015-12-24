@@ -196,5 +196,10 @@ public class ConfigChargeAgentService extends BaseService {
 		return configChargeAgentDao.selectAll();
 	}
 
-	
+	public List<ConfigChargeAgent> findByStyle(String tempStyle){
+		DetachedCriteria detachedCriteria = configChargeAgentDao.createDetachedCriteria();
+		detachedCriteria.add(Restrictions.eq("tempStyle",tempStyle));
+		List<ConfigChargeAgent> list = configChargeAgentDao.find(detachedCriteria);
+		return list;
+	}
 }

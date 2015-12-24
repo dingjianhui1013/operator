@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -1045,7 +1046,26 @@ public class ConfigChargeAgentController extends BaseController {
 		return json.toString();
 	}
 	
-	
+	@RequestMapping(value = "changeAgentId")
+	@ResponseBody
+	public String changeAgentId(String tempStyle) throws JSONException {
+		JSONObject	 json = new JSONObject();
+		JSONArray array = new JSONArray();
+		try {
+			List<ConfigChargeAgent> list = configChargeAgentService.findByStyle(tempStyle);
+			for (ConfigChargeAgent configChargeAgent:list) {
+				json = new JSONObject();
+				json.put("id", configChargeAgent.getId());
+				json.put("name", configChargeAgent.getTempName());
+				array.put(json);
+			
+		}
+		} catch (Exception e) {
+			e.printStackTrace();
+			json.put("status", "0");
+		}
+		return array.toString();
+	}
 	
 
 }
