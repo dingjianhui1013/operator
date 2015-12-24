@@ -21,7 +21,6 @@
 			var appName=$("#appName").val();
 			var storageDate=$("#storageDate").val();
 			var status=$("#status").val();
-			alert(appName+":"+storageDate+":"+status);
 			window.location.href="${ctx}/settle/keyPurchase/export?appName="+appName+"&storageDate="+storageDate+"&status="+status;
 		}
 		function fk(id)
@@ -113,8 +112,9 @@
 					<c:if test="${keyPurchase.status==null}">状态位置</c:if>
 					</td>
 					<td>${keyPurchase.remarks}</td>
-					<td><c:if test="${keyPurchase.status==0}"><a href="javascript:fk(${keyPurchase.id})">确认付款</c:if></td>
+					<td><shiro:hasPermission name="settle:keyPurchase:Confirm"><c:if test="${keyPurchase.status==0}"><a href="javascript:fk(${keyPurchase.id})">确认付款</a></c:if></shiro:hasPermission></td>
 				</tr>
+
 			</c:forEach>
 		</tbody>
 	</table>
