@@ -21,7 +21,7 @@
 					var workType = $("#workType").val();
 					var dealInfoStatus = $("#dealInfoStatus").val();
 					var companyName=$("#companyName").val();
-					alert(apply+"   "+workType+"       "+dealInfoStatus+"        "+companyName);
+					
 					window.location.href = "${ctx }/message/emailExtraction/export?apply="
 							+ apply
 							+ "&workType="
