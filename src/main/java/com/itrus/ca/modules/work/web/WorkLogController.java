@@ -153,6 +153,9 @@ public class WorkLogController extends BaseController {
 //				startTime, endTime,appId);
 //		model.addAttribute("logList", list);
 			List<WorkLog> workLogs=workLogService.findworkLogs(name, startTime, endTime,appId);
+			for (WorkLog workLog2 : workLogs) {
+				System.out.println(workLog2.getId());
+			}
 			model.addAttribute("li", workLogs);
 			Set<String> Access=new LinkedHashSet<String>();
 			for(int i=0;i<workLogs.size();i++)
@@ -183,46 +186,46 @@ public class WorkLogController extends BaseController {
 						if(workLogs.get(w).getYwzx()!=null)
 						{
 							
-							if(workLogs.get(w).getYwzx().indexOf("新增")!=-1)
+							if(workLogs.get(w).getYwzx().indexOf("新办")!=-1)
 							{
 								xz++;
-							}else
+							}
 							if(workLogs.get(w).getYwzx().indexOf("更新")!=-1)
 							{
 								gx++;
-							}else
+							}
 							if(workLogs.get(w).getYwzx().indexOf("解锁")!=-1)
 							{
 								js++;
-							}else
+							}
 							if(workLogs.get(w).getYwzx().indexOf("变更")!=-1)
 							{
 								xz++;
-							}else
+							}
 							if(workLogs.get(w).getYwzx().indexOf("补办")!=-1)
 							{
 								xz++;
-							}else
+							}
 							if(workLogs.get(w).getYwzx().indexOf("用途")!=-1)
 							{
 								xz++;
-							}else
+							}
 							if(workLogs.get(w).getYwzx().indexOf("密码")!=-1)
 							{
 								xz++;
-							}else
+							}
 							if(workLogs.get(w).getYwzx().indexOf("授权")!=-1)
 							{
 								xz++;
-							}else
+							}
 							if(workLogs.get(w).getYwzx().indexOf("合作")!=-1)
 							{
 								xz++;
 							}
-							if(workLogs.get(w).getProbleType()!=null)
-							{
-								qt++;
-							}
+						}
+						if(workLogs.get(w).getProbleType()!=null)
+						{
+							qt++;
 						}
 						if(workLogs.get(w).getYwxt()!=null)
 						{
@@ -269,7 +272,7 @@ public class WorkLogController extends BaseController {
 		}
 		model.addAttribute("zj", zj);
 		model.addAttribute("access_count", access_count);
-		model.addAttribute("apps", configAppService.findall());
+		model.addAttribute("apps", configAppService.findAllConfigApp());
 		model.addAttribute("startTime", startTime);
 		model.addAttribute("endTime",endTime);
 		model.addAttribute("name",name);
