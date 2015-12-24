@@ -311,8 +311,9 @@ public class CertificateSettlementStatisticsController extends BaseController {
 			style.setFont(font);
 			style.setAlignment(HSSFCellStyle.ALIGN_CENTER);
 			style.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
-			sheet.addMergedRegion(new Region(0, (short)0, 0, (short)7));
+			sheet.addMergedRegion(new Region(0, (short)0, 0, (short)19));
 			sheet.addMergedRegion(new Region(1, (short) 0, 2, (short) 0));
+			
 			
 			HSSFRow row0 = sheet.createRow(0);
 			HSSFCell cell0 = row0.createCell(0);
