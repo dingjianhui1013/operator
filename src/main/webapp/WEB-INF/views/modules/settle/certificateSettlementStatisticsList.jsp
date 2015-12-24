@@ -291,7 +291,7 @@
 
 					<td>${sum.value.twoRenew1 +sum.value.fourRenew1 }</td>
 					<c:set var="twoR1"
-						value="${twoR1+sum.value.twoRenew1 +sum.value.twoRenew1 }"></c:set>
+						value="${twoR1+sum.value.twoRenew1 +sum.value.fourRenew1 }"></c:set>
 					<td>${sum.value.twoRenew2 +sum.value.fourRenew2  }</td>
 					<c:set var="twoR2"
 						value="${twoR2+sum.value.twoRenew2 +sum.value.fourRenew2 }"></c:set>
