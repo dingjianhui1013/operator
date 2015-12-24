@@ -92,7 +92,7 @@
 			top.$.jBox.tip("请选择应用");
 			return false;
 		}
- 		var proList;
+ 		var proList="";
 		  var checks = $("input[name=proList]:checked");
 		$.each(checks,function(idx,ele){
 			if(proList ==null){
@@ -103,7 +103,7 @@
 			}
 			
 		}); 
-		var workTypes;
+		var workTypes="";
 		var checks1 = $("input[name=workTypes]:checked");
 		$.each(checks1, function(idx, ele) {
 			if (workTypes == null) {
