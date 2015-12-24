@@ -94,10 +94,10 @@ public class SettleKeyService extends BaseService {
 			dc.add(Restrictions.le("comeDate", endTime));
 		}
 		if (startBackTime!=null) {
-			dc.add(Restrictions.ge("backDate", startTime));
+			dc.add(Restrictions.ge("backDate", startBackTime));
 		}
 		if (endBackTime!=null) {
-			dc.add(Restrictions.le("backDate", endTime));
+			dc.add(Restrictions.le("backDate", endBackTime));
 		}
 		dc.addOrder(Order.desc("id"));
 		return settleKeyDao.find(page, dc);

@@ -283,11 +283,11 @@
 				type="text" readonly="readonly" maxlength="20"
 				class="required Wdate"
 				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"
-				value="" />
+				value="<fmt:formatDate value="${startBackTime}" pattern="yyyy-MM-dd"/>" />
 			&nbsp;-&nbsp;<input id="endBackTime" name="endBackTime" type="text"
 				readonly="readonly" maxlength="20" class="Wdate required"
 				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false,minDate:'#F{$dp.$D(\'startTime\')}'});"
-				value="" />
+				value="<fmt:formatDate value="${endBackTime}" pattern="yyyy-MM-dd"/>" />
 				&nbsp; &nbsp; &nbsp; &nbsp;
 				<br/><br/>
 				&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;
