@@ -105,7 +105,13 @@ public class SmsConfigurationController extends BaseController {
 
 		return "modules/message/smsConfigurationForm";
 	}
+	@RequiresPermissions("message:smsConfiguration:view")
+	@RequestMapping(value = "form1")
+	public String form1(SmsConfiguration smsConfiguration, Model model) {
+		model.addAttribute("smsConfiguration", smsConfiguration);
 
+		return "modules/message/smsConfigurationFormC";
+	}
 	@RequiresPermissions("message:smsConfiguration:edit")
 	@RequestMapping(value = "save")
 	public String save(SmsConfiguration smsConfiguration, Model model, RedirectAttributes redirectAttributes,

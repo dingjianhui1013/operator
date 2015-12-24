@@ -145,7 +145,7 @@
 						href="${ctx}/message/smsConfiguration/form?id=${smsConfiguration.id}">${smsConfiguration.messageName}</a></td>
 					<shiro:hasPermission name="message:smsConfiguration:edit">
 						<td>
-							<a href="${ctx}/message/smsConfiguration/form?id=${smsConfiguration.id}">查看</a>
+							<a href="${ctx}/message/smsConfiguration/form1?id=${smsConfiguration.id}">查看</a>
 						<a
 							href="${ctx}/message/smsConfiguration/form?id=${smsConfiguration.id}">修改</a>
 							<a
