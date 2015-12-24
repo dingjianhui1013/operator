@@ -43,7 +43,8 @@ public class MessageSendingService extends BaseService {
 	}
 	public List<MessageSending> findByDepotId(Long checkMessageId) {
 		DetachedCriteria dc = messageSendingDao.createDetachedCriteria();
-		dc.add(Restrictions.eq("messageSending.id", checkMessageId));
+		//dc.createAlias("messageSending", "messageSending");
+		dc.add(Restrictions.eq("id", checkMessageId));
 	//	dc.add(Restrictions.eq(KeyUsbKey.DEL_FLAG, KeyUsbKey.DEL_FLAG_NORMAL));
 		dc.addOrder(Order.desc("id"));
 		return messageSendingDao.find(dc);

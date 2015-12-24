@@ -14,7 +14,15 @@
 			$("#searchForm").submit();
         	return false;
         }
-		
+		function alarmValue(checkMessageId){
+			
+			var url = "${ctx}/message/messageSending/showWorkDeal?checkMessageId="+checkMessageId;
+			top.$.jBox.open("iframe:"+url, "查看", 800, 200, {
+					buttons:{"关闭":true}, submit:function(v, h, f){
+						
+					}
+			});
+		}
 	</script>
 </head>
 <body>
@@ -76,7 +84,7 @@
 				<th>发送时间</th>
 				<th>模板名称</th>
 				<th>消息状态</th>
-				<th>短信内容</th>
+				<th>操作</th>
 			
 			</tr>	
 		</thead>
@@ -94,8 +102,8 @@
 					<c:if test="${checkMessage.returnStatus==1}">成功</c:if>
 					<c:if test="${checkMessage.returnStatus==0}">失败 ；原因：${checkMessage.returnStatus}</c:if>
 					</td>
-					<td >${checkMessage.messageContext}</td>
 					
+					<td><a href="javaScript:alarmValue( ${checkMessage.id} )">查看 </a></td>
 				</tr>
 		</c:forEach>
 		</tbody>

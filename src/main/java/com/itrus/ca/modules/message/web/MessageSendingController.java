@@ -365,4 +365,12 @@ public class MessageSendingController extends BaseController {
 
 		return "modules/message/checkMessageList";
 	}
+	@RequestMapping(value = "showWorkDeal")
+	public String showWorkDeal(Long checkMessageId, Model model, HttpServletRequest request, HttpServletResponse response) {
+
+		List<MessageSending> page = messageSendingService.findByDepotId(checkMessageId);
+		System.out.println("   ");
+		model.addAttribute("dealInfo", page.get(0));
+		return "modules/message/checkMessageListF";
+	}
 }
