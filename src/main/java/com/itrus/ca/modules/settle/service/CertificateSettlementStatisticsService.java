@@ -257,6 +257,12 @@ public class CertificateSettlementStatisticsService extends BaseService {
 					break;
 
 				}
+			}else if(cssv.getDealInfoType() == 2){//遗失补办
+				scm.setReplacementLosted(cssv.getWorkCount().intValue()+scm.getReplacementLosted());				
+			}else if(cssv.getDealInfoType() == 3){//损坏更换
+				scm.setReplacementDamaged(cssv.getWorkCount().intValue()+scm.getReplacementDamaged());
+			}else if(cssv.getDealInfoType() == 4){//信息变更
+				scm.setAlterInfomation(cssv.getWorkCount().intValue()+scm.getAlterInfomation());
 			}
 			monthMap.put(cssv.getMonth(), scm);
 

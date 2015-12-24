@@ -39,6 +39,10 @@ public class StaticCertMonth {
 	private Integer fiveRenew4;
 	private Integer fiveRenew5;
 	
+	private Integer replacementLosted;  //丢失补办
+	private Integer replacementDamaged; //损坏更换
+	private Integer alterInfomation;  //信息变更
+	
 	
 	
 	
@@ -235,4 +239,24 @@ public class StaticCertMonth {
 	public void setFourRenew4(Integer fourRenew4) {
 		this.fourRenew4 = fourRenew4;
 	}
+	public Integer getReplacementLosted() {
+		return replacementLosted==null?0:replacementLosted;
+	}
+	public void setReplacementLosted(Integer replacementLosted) {
+		this.replacementLosted = replacementLosted;
+	}
+	public Integer getReplacementDamaged() {
+		return replacementDamaged==null?0:replacementDamaged;
+	}
+	public void setReplacementDamaged(Integer replacementDamaged) {
+		this.replacementDamaged = replacementDamaged;
+	}
+	public Integer getAlterInfomation() {
+		return alterInfomation ==null?0:alterInfomation;
+	}
+	public void setAlterInfomation(Integer alterInfomation) {
+		this.alterInfomation = alterInfomation;
+	}
+	
+	
 }
