@@ -245,6 +245,9 @@
 					<th colspan=4>新增（个人专用）</th>
 					<th colspan=4>更新（企业专用）</th>
 					<th colspan=4>更新（个人专用）</th>
+					<th rowspan="2">遗失补办</th>
+					<th rowspan="2">损坏更换</th>
+					<th rowspan="2">信息变更</th>
 				</tr>
 				<tr>
 					<c:forEach var="i" begin="1" end="4">
@@ -301,7 +304,12 @@
 					<td>${sum.value.twoRenew5 +sum.value.fourRenew5  }</td>
 					<c:set var="twoR5"
 						value="${twoR5+sum.value.twoRenew5 +sum.value.fourRenew5}"></c:set>
-
+					<td>${sum.value.replacementLosted}</td>
+					<c:set var="replacementLosted" value="${replacementLosted+sum.value.replacementLosted}"></c:set>
+					<td>${sum.value.replacementDamaged}</td>
+					<c:set var="replacementDamaged" value="${replacementDamaged+sum.value.replacementDamaged}"></c:set>
+					<td>${sum.value.alterInfomation}</td>
+					<c:set var="alterInfomation" value="${alterInfomation+sum.value.alterInfomation}"></c:set>
 				</tr>
 			</c:forEach>
 			<tr>
@@ -322,6 +330,9 @@
 				<td>${twoR2}</td>
 				<td>${twoR4}</td>
 				<td>${twoR5}</td>
+				<td>${replacementLosted}</td>
+				<td>${replacementDamaged}</td>
+				<td>${alterInfomation}</td>
 
 
 

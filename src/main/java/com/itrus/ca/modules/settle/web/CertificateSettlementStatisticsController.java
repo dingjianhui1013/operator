@@ -341,7 +341,9 @@ public class CertificateSettlementStatisticsController extends BaseController {
 			row2.createCell(14).setCellValue("二年");
 			row2.createCell(15).setCellValue("四年");
 			row2.createCell(16).setCellValue("五年");
-			
+			row1.createCell(17).setCellValue("遗失补办");
+			row1.createCell(18).setCellValue("损坏更换");
+			row1.createCell(19).setCellValue("信息变更");
 			List<Long> officeIdList = new ArrayList<Long>();
 			
 			if (officeId != null) {
@@ -373,6 +375,9 @@ public class CertificateSettlementStatisticsController extends BaseController {
 			int twoR2=0;
 			int twoR4=0;
 			int twoR5=0;
+			int replacementLosted=0;
+			int replacementDamaged=0;
+			int alterInfomation=0;
 			for (String key : monthMap.keySet()){
 				HSSFRow rown = sheet.createRow(k++);
 				rown.createCell(0).setCellValue(key);
@@ -408,6 +413,12 @@ public class CertificateSettlementStatisticsController extends BaseController {
 				twoR4+=(monthMap.get(key).getTwoRenew4()+monthMap.get(key).getFourRenew4());
 				rown.createCell(16).setCellValue(monthMap.get(key).getTwoRenew5()+monthMap.get(key).getFourRenew5());
 				twoR5+=(monthMap.get(key).getTwoRenew5()+monthMap.get(key).getFourRenew5());
+				rown.createCell(17).setCellValue(monthMap.get(key).getReplacementLosted());
+				replacementLosted+=(monthMap.get(key).getReplacementLosted());
+				rown.createCell(18).setCellValue(monthMap.get(key).getReplacementDamaged());
+				replacementDamaged+=(monthMap.get(key).getReplacementDamaged());
+				rown.createCell(19).setCellValue(monthMap.get(key).getAlterInfomation());
+				alterInfomation+=(monthMap.get(key).getAlterInfomation());
 			}
 			HSSFRow rowi = sheet.createRow(k++);
 			rowi.createCell(0).setCellValue("总计");
@@ -427,6 +438,9 @@ public class CertificateSettlementStatisticsController extends BaseController {
 			rowi.createCell(14).setCellValue(twoR2);
 			rowi.createCell(15).setCellValue(twoR4);
 			rowi.createCell(16).setCellValue(twoR5);
+			rowi.createCell(17).setCellValue(replacementLosted);
+			rowi.createCell(18).setCellValue(replacementDamaged);
+			rowi.createCell(19).setCellValue(alterInfomation);
 			
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			response.setContentType(response.getContentType());
