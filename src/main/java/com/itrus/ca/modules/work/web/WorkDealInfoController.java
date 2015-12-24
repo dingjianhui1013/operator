@@ -6321,23 +6321,117 @@ public class WorkDealInfoController extends BaseController {
 							if (list.get(i).getCreateDate().getTime() >= months.get(m).getTime()
 									&& list.get(i).getCreateDate().getTime() < months.get(m + 1).getTime()
 									&& list.get(i).getConfigApp().getId().equals(configappids.get(c))) {
-								double posMoney = list.get(i).getWorkPayInfo().getPosMoney();
-								double bankMoney = list.get(i).getWorkPayInfo().getBankMoney();
-								double alipayMoney = list.get(i).getWorkPayInfo().getAlipayMoney();
-								double xjMoney = list.get(i).getWorkPayInfo().getMoney();
-								moneys += (posMoney + bankMoney + alipayMoney + xjMoney);
-							} else {
-								moneys += 0;
+								double postMoney = 0.0;
+								double bankMoney =0.0;
+								double alipayMoney = 0.0;
+								double xjMoney = 0.0;
+//								double posMoney = list.get(i).getWorkPayInfo().getPosMoney();
+//								double bankMoney = list.get(i).getWorkPayInfo().getBankMoney();
+//								double alipayMoney = list.get(i).getWorkPayInfo().getAlipayMoney();
+//								double xjMoney = list.get(i).getWorkPayInfo().getMoney();
+//								moneys += (posMoney + bankMoney + alipayMoney + xjMoney);
+								if(list.get(i).getWorkPayInfo().getRelationMethod()==null)
+								{
+									if(list.get(i).getWorkPayInfo().getMethodPos()==true&&list.get(i).getWorkPayInfo().getPosMoney()>=0)
+									{
+										postMoney = list.get(i).getWorkPayInfo().getPosMoney();
+									}
+									if(list.get(i).getWorkPayInfo().getMethodBank()==true&&list.get(i).getWorkPayInfo().getBankMoney()>=0)
+									{
+										bankMoney = list.get(i).getWorkPayInfo().getBankMoney();
+									}
+									if(list.get(i).getWorkPayInfo().getMethodMoney()==true&&list.get(i).getWorkPayInfo().getMoney()>=0)
+									{
+										xjMoney = list.get(i).getWorkPayInfo().getMoney();
+									}
+									if(list.get(i).getWorkPayInfo().getMethodAlipay()==true&&list.get(i).getWorkPayInfo().getAlipayMoney()>=0)
+									{
+										alipayMoney = list.get(i).getWorkPayInfo().getAlipayMoney();
+									}
+								}else
+								{
+									List<WorkFinancePayInfoRelation> workfinancePayinfos=workFinancePayInfoRelationService.findByPayInfoId(list.get(i).getWorkPayInfo().getId());
+									for(int w=0;w<workfinancePayinfos.size();w++)
+									{
+										if(workfinancePayinfos.get(w).getMoney()>=0)
+										{
+											if(workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod()==1)
+											{
+												xjMoney=workfinancePayinfos.get(w).getMoney();
+											}
+											if(workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod()==2)
+											{
+												postMoney=workfinancePayinfos.get(w).getMoney();
+											}
+											if(workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod()==3)
+											{
+												bankMoney=workfinancePayinfos.get(w).getMoney();
+											}
+											if(workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod()==4)
+											{
+												alipayMoney=workfinancePayinfos.get(w).getMoney();
+											}
+										}
+									}
+								}
+								moneys += (postMoney + bankMoney + alipayMoney + xjMoney);
 							}
 						} else if (m == months.size() - 1) {
-							if (list.get(i).getCreateDate().getTime() >= months.get(m).getTime()) {
-								double posMoney = list.get(i).getWorkPayInfo().getPosMoney();
-								double bankMoney = list.get(i).getWorkPayInfo().getBankMoney();
-								double alipayMoney = list.get(i).getWorkPayInfo().getAlipayMoney();
-								double xjMoney = list.get(i).getWorkPayInfo().getMoney();
-								moneys += (posMoney + bankMoney + alipayMoney + xjMoney);
-							} else {
-								moneys += 0;
+							if (list.get(i).getCreateDate().getTime() >= months.get(m).getTime()&& list.get(i).getConfigApp().getId().equals(configappids.get(c))) {
+								double postMoney = 0.0;
+								double bankMoney =0.0;
+								double alipayMoney = 0.0;
+								double xjMoney = 0.0;
+//								double posMoney = list.get(i).getWorkPayInfo().getPosMoney();
+//								double bankMoney = list.get(i).getWorkPayInfo().getBankMoney();
+//								double alipayMoney = list.get(i).getWorkPayInfo().getAlipayMoney();
+//								double xjMoney = list.get(i).getWorkPayInfo().getMoney();
+//								moneys += (posMoney + bankMoney + alipayMoney + xjMoney);
+								if(list.get(i).getWorkPayInfo().getRelationMethod()==null)
+								{
+									if(list.get(i).getWorkPayInfo().getMethodPos()==true&&list.get(i).getWorkPayInfo().getPosMoney()>=0)
+									{
+										postMoney = list.get(i).getWorkPayInfo().getPosMoney();
+									}
+									if(list.get(i).getWorkPayInfo().getMethodBank()==true&&list.get(i).getWorkPayInfo().getBankMoney()>=0)
+									{
+										bankMoney = list.get(i).getWorkPayInfo().getBankMoney();
+									}
+									if(list.get(i).getWorkPayInfo().getMethodMoney()==true&&list.get(i).getWorkPayInfo().getMoney()>=0)
+									{
+										xjMoney = list.get(i).getWorkPayInfo().getMoney();
+									}
+									if(list.get(i).getWorkPayInfo().getMethodAlipay()==true&&list.get(i).getWorkPayInfo().getAlipayMoney()>=0)
+									{
+										alipayMoney = list.get(i).getWorkPayInfo().getAlipayMoney();
+									}
+								}else
+								{
+									List<WorkFinancePayInfoRelation> workfinancePayinfos=workFinancePayInfoRelationService.findByPayInfoId(list.get(i).getWorkPayInfo().getId());
+									for(int w=0;w<workfinancePayinfos.size();w++)
+									{
+										if(workfinancePayinfos.get(w).getMoney()>=0)
+										{
+											if(workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod()==1)
+											{
+												xjMoney=workfinancePayinfos.get(w).getMoney();
+											}
+											if(workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod()==2)
+											{
+												postMoney=workfinancePayinfos.get(w).getMoney();
+											}
+											if(workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod()==3)
+											{
+												bankMoney=workfinancePayinfos.get(w).getMoney();
+											}
+											if(workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod()==4)
+											{
+												alipayMoney=workfinancePayinfos.get(w).getMoney();
+											}
+										}
+									}
+								}
+								moneys += (postMoney + bankMoney + alipayMoney + xjMoney);
 							}
 						}
 					}

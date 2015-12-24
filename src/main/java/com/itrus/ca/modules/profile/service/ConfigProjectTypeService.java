@@ -53,7 +53,7 @@ public class ConfigProjectTypeService extends BaseService {
 	public List<ConfigProjectType> findProjectTypeList() {
 		DetachedCriteria dc = configProjectTypeDao.createDetachedCriteria();
 		dc.add(Restrictions.eq(ConfigProjectType.DEL_FLAG, ConfigProjectType.DEL_FLAG_NORMAL));
-		dc.addOrder(Order.desc("id"));
+		dc.addOrder(Order.desc("projectName"));
 		return configProjectTypeDao.find(dc);
 	}
 	
