@@ -44,7 +44,7 @@
 			$.each(data, function(idx, ele) {
 				//console.log(idx);
 				//console.log(ele);
-				alert(ele.name);
+				
 				html += "<option value=\""+ele.id+"\">" + ele.name
 						+ "</ooption>"
 			});
