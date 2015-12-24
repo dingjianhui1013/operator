@@ -1885,7 +1885,10 @@ public class WorkDealInfoService extends BaseService {
 		dc.createAlias("createBy.office", "office");
 		dc.add(Restrictions.isNotNull("workPayInfo"));
 		dc.add(Restrictions.eq("workPayInfo.delFlag", WorkPayInfo.DEL_FLAG_NORMAL));
-		dc.add(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED));
+		List<String> status=Lists.newArrayList();
+		status.add(WorkDealInfoStatus.STATUS_CERT_OBTAINED);
+		status.add(WorkDealInfoStatus.STATUS_CERT_WAIT);
+		dc.add(Restrictions.in("dealInfoStatus", status));
 //		dc.add(Restrictions.eq("", ""));
 		if(startTime!=null)
 		{
