@@ -39,7 +39,7 @@
 		<form:input path="workUser.contactEmail" htmlEscape="false"
 			maxlength="30" cssClass="input-medium email" />
 		<label>单位电话:</label>
-		<form:input path="workUser.contactTel" htmlEscape="false"
+		<form:input path="workCompany.companyMobile" htmlEscape="false"
 			maxlength="12" class="input-medium" />
 		</div>
 		<div style="margin-top: 8px">

@@ -1221,6 +1221,10 @@ public class WorkDealInfoService extends BaseService {
 				dc.add(Restrictions.like("workCompany.companyName",
 						"%" + EscapeUtil.escapeLike(workDealInfo.getWorkCompany().getCompanyName()) + "%"));
 			}
+			if(workDealInfo.getWorkCompany().getCompanyMobile()!=null &&!workDealInfo.getWorkCompany().getCompanyMobile().equals("")){
+				dc.add(Restrictions.like("workCompany.companyMobile",
+						"%" + EscapeUtil.escapeLike(workDealInfo.getWorkCompany().getCompanyMobile()) + "%"));
+			}
 		}
 		if (workDealInfo.getConfigApp() != null) {
 			if (workDealInfo.getConfigApp().getAppName() != null
