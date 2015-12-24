@@ -1749,15 +1749,20 @@ public class WorkDealInfoService extends BaseService {
 
 	}
 
-	public List<WorkDealInfo> findByDayPay(Date startTime, Date endTime, List<Long> officeids,
-			List<Long> dealInfoByAreaIds, Long appId) {
+	public List<WorkDealInfo> findByDayPay(Date startTime, Date endTime, List<Long> officeids,List<Long> dealInfoByAreaIds,
+			 Long appId) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("workPayInfo", "workPayInfo");
 		dc.add(Restrictions.isNotNull("workPayInfo"));
 		dc.createAlias("createBy", "createBy");
 		dc.createAlias("createBy.office", "office");
 		dc.add(Restrictions.eq("workPayInfo.delFlag", WorkPayInfo.DEL_FLAG_NORMAL));
-		dc.add(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED));
+		List<String> status=Lists.newArrayList();
+		status.add(WorkDealInfoStatus.STATUS_CERT_OBTAINED);
+		status.add(WorkDealInfoStatus.STATUS_CERT_WAIT);
+		dc.add(Restrictions.in("dealInfoStatus", status));
+//		dc.add(Restrictions.and("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED));
+//		dc.add(Restrictions.and("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_WAIT));
 		if (startTime != null) {
 			endTime.setHours(23);
 			endTime.setMinutes(59);
@@ -1820,7 +1825,6 @@ public class WorkDealInfoService extends BaseService {
 
 			if(officeids!=null&&officeids.size() > 0)
 			{
-
 				dc.add(Restrictions.in("office.id", officeids));
 			}
 			dc.addOrder(Order.asc("workPayInfo.createDate"));
@@ -1918,7 +1922,10 @@ public class WorkDealInfoService extends BaseService {
 		dc.createAlias("createBy", "createBy");
 		dc.createAlias("createBy.office", "office");
 		dc.add(Restrictions.eq("workPayInfo.delFlag", WorkPayInfo.DEL_FLAG_NORMAL));
-		dc.add(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED));
+		List<String> status=Lists.newArrayList();
+		status.add(WorkDealInfoStatus.STATUS_CERT_OBTAINED);
+		status.add(WorkDealInfoStatus.STATUS_CERT_WAIT);
+		dc.add(Restrictions.in("dealInfoStatus", status));
 		if(startTime!=null)
 		{
 			endTime.setHours(23);

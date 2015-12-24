@@ -190,8 +190,8 @@
 			<tr>
 				<td>${dates}</td>
 				<td>${appName}</td>
+				<c:forEach items="${office_payMethod }" var="office_payMethod">
 					<c:forEach items="${workoffice_MoneyVo}" var="workoffice_MoneyVo" >
-						<c:forEach items="${office_payMethod }" var="office_payMethod">
 						<c:if test = "${workoffice_MoneyVo.date == dates&&workoffice_MoneyVo.officeName==office_payMethod.key}">
 							<c:if test="${workoffice_MoneyVo.postMoney}">
 									<td>${workoffice_MoneyVo.countPostMoney}</td>
