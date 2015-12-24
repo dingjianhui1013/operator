@@ -95,7 +95,7 @@
  		var proList="";
 		  var checks = $("input[name=proList]:checked");
 		$.each(checks,function(idx,ele){
-			if(proList ==null){
+			if(proList ==""){
 				
 			 proList=$(ele).val();
 			}else{
@@ -106,7 +106,7 @@
 		var workTypes="";
 		var checks1 = $("input[name=workTypes]:checked");
 		$.each(checks1, function(idx, ele) {
-			if (workTypes == null) {
+			if (workTypes == "") {
 				workTypes = $(ele).val();
 			} else {
 				workTypes = workTypes + "," + $(ele).val();
