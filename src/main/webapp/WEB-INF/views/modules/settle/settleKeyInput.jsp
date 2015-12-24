@@ -7,6 +7,26 @@
 	<meta name="decorator" content="default"/>
 	<script type="text/javascript">
 		$(document).ready(function() {
+			
+			var moneyType=$("#provider").find("option:selected").val();
+			var url="${ctx}/settle/keyPurchase/changeKey";
+			$.ajax({
+				url:url,
+				data:{"moneyType":moneyType,_:new Date().getTime()},
+				dataType:'json',
+				success:function(data){
+					$("#unitPrice").val(data.money);
+					$("#unitPrice1").val(data.money);
+					if(data.endcode==0)
+						{
+							$("#startCode").val("");
+						}else
+							{
+								$("#startCode").val(data.endcode+1);
+							}
+				}
+			});	
+			
 			$("#inputForm").validate({
 				focusInvalid: false,
 				submitHandler: function(form){
