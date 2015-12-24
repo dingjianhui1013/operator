@@ -130,7 +130,7 @@ public class CertificateSettlementStatisticsService extends BaseService {
 			sql = sql + " and  b.agent_id = " +agentId ;
 		}
 		if (StringUtils.isNotBlank(workTypes)) {
-		   sql = sql + "and t.deal_info_type in("+workTypes+")";
+		   sql = sql + "and (t.deal_info_type in("+workTypes+") or t.deal_info_type1 in("+workTypes+") or t.deal_info_type2 in("+workTypes+"))";
 		}else{ // 默认只查 新增和更新
 			sql = sql + "and t.deal_info_type in(0,1)";
 		}
