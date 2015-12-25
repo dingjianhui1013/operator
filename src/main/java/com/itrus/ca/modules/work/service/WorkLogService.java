@@ -261,9 +261,23 @@ public class WorkLogService extends BaseService {
 			dc.createAlias("workCompany","workCompany");
 			dc.add(Restrictions.like("workCompany.companyName", "%"+EscapeUtil.escapeLike(workLog.getWorkCompany().getCompanyName())+"%"));
 		}
-		if(workLog.getSerTitle()!=null&&!workLog.getSerTitle().equals("")){
-			dc.add(Restrictions.like("serTitle","%"+EscapeUtil.escapeLike(workLog.getSerTitle())+"%"));
+		if(workLog.getAccess()!=null&&!workLog.getAccess().equals("")){
+			dc.add(Restrictions.eq("access", workLog.getAccess()));
 		}
+		if(workLog.getDistinguish()!=null&&!workLog.getDistinguish().equals(""))
+		{
+			dc.add(Restrictions.eq("distinguish", workLog.getDistinguish()));
+		}
+		if(workLog.getCompleteType()!=null&&!"".equals(workLog.getCompleteType()))
+		{
+			dc.add(Restrictions.eq("completeType",workLog.getCompleteType()));
+		}
+		dc.add(Restrictions.eq("state",1));
+		dc.addOrder(Order.desc("id"));
+		return workLogDao.find(page,dc);
+	}
+	public Page<WorkLog> findKpList(Page<WorkLog> page, WorkLog workLog) {
+		DetachedCriteria dc = workLogDao.createDetachedCriteria();
 		if(workLog.getAccess()!=null&&!workLog.getAccess().equals("")){
 			dc.add(Restrictions.eq("access", workLog.getAccess()));
 		}
@@ -274,17 +288,12 @@ public class WorkLogService extends BaseService {
 		{
 			dc.add(Restrictions.eq("distinguish", workLog.getDistinguish()));
 		}
-//		if(workLog.getAppName()!=null&&!"".equals(workLog.getAppName()))
-//		{
-//			dc.add(Restrictions.eq("appName",workLog.getAppName()));
-//		}
-		if(workLog.getCompleteType()!=null&&!"".equals(workLog.getCompleteType()))
-		{
-			dc.add(Restrictions.eq("completeType",workLog.getCompleteType()));
-		}
 		if(workLog.getConfigApp()!=null)
 		{
-			dc.add(Restrictions.eq("configApp.id",workLog.getConfigApp().getId()));
+			if(workLog.getConfigApp().getId()!=null)
+			{
+				dc.add(Restrictions.eq("configApp.id",workLog.getConfigApp().getId()));
+			}
 		}
 		dc.add(Restrictions.eq("state",1));
 		dc.addOrder(Order.desc("id"));
