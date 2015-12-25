@@ -79,7 +79,7 @@
 				&nbsp;&nbsp;&nbsp;&nbsp;
 		<input type="hidden" value="<fmt:formatDate value="${endTime}" pattern="yyyy"/> " name="endTime" id="endTime"/>
 		<input id="btnSubmit" class="btn btn-primary" type="submit" value="查询" />
-		&nbsp;&nbsp;&nbsp;&nbsp;<input id="exportYP" style="text-align:center" class="btn btn-info" onclick="dc()" type="button" value="导出">
+		&nbsp;&nbsp;&nbsp;&nbsp;<input id="exportYP" style="text-align:center" class="btn btn-primary" onclick="dc()" type="button" value="导出">
 		</div>
 	</form:form>
 	<tags:message content="${message}" />
