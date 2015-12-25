@@ -121,8 +121,10 @@ public class CertificateSettlementStatisticsController extends BaseController {
 			model.addAttribute("offices", offices);
 		}
 		if(tempStyle !=null){
-			List<ConfigChargeAgent> agentList=configChargeAgentService.findByStyle(tempStyle);
+			List<ConfigChargeAgent> agentList=configChargeAgentService.findByStyle(tempStyle.toString());
 			model.addAttribute("agentList", agentList);
+			model.addAttribute("tempStyle", tempStyle);
+			model.addAttribute("agentId", agentId);
 		}
 		/* 应用查询列表显示 */
 		List<ConfigApp> configAppList = configAppService.selectAll();
@@ -162,8 +164,10 @@ public class CertificateSettlementStatisticsController extends BaseController {
 		model.addAttribute("workTypes", workDealInfoType.getProductTypeListLess());
 		// model.addAttribute("workType", workDealInfo.getDealInfoStatus());
 		model.addAttribute("productId", productType);
+		model.addAttribute("workType", workType);
 		model.addAttribute("offsList", offsList);
 		model.addAttribute("areaId", areaId);
+		
 
 		model.addAttribute("officeId", officeId);
 		// 开始日期，结束日期，应用必须选择
@@ -190,7 +194,6 @@ public class CertificateSettlementStatisticsController extends BaseController {
 				endDate);
 
 		HashMap<String, StaticCertMonth> monthMap = certificateSettlementStatisticsService.getStaticMap(findWorkList);
-
 		model.addAttribute("monthList", new ArrayList<String>(monthMap.keySet()));
 		model.addAttribute("sumList", monthMap);
 		return "modules/settle/certificateSettlementStatisticsList";

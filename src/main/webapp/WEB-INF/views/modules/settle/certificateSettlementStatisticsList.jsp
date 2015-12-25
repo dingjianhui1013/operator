@@ -188,14 +188,14 @@
 			<label>计费策略类型：</label> <select name="tempStyle" id="tempStyle"
 				onchange="changeAgentId()">
 				<option value="0">请选择</option>
-				<option value="1">标准</option>
-				<option value="2">政府统一采购</option>
-				<option value="3">合同采购</option>
+				<option value="1" <c:if test="${tempStyle==1}"> selected="selected"</c:if>>标准</option>
+				<option value="2" <c:if test="${tempStyle==2}"> selected="selected"</c:if>>政府统一采购</option>
+				<option value="3" <c:if test="${tempStyle==3}"> selected="selected"</c:if>>合同采购</option>
 			</select> <label>计费策略名称 ：</label> <select name="agentId" id="agentId">
 				<option value="">请选择</option>
 				<c:forEach items="${agentList}" var="agen">
 					<option value="${agen.id}"
-						<c:if test="${agen.id==agenId}">
+						<c:if test="${agen.id==agentId}">
 					selected="selected"
 					</c:if>>${agen.tempName}</option>
 				</c:forEach>
@@ -203,7 +203,9 @@
 			<label>业务类型：</label>
 				<c:forEach items="${workTypes}" var="type">
 					<input type="checkbox" name="workTypes" id="workTypes"
-						value="${type.id}">					
+						value="${type.id}" <c:forEach items="${workType}" var="workType">
+						<c:if test="${workType==type.id}">checked="checked"</c:if> 
+					</c:forEach>>					
 					${type.name}
 				</c:forEach>
 		</div>
@@ -220,9 +222,16 @@
 				value="<fmt:formatDate value="${endDate}" pattern="yyyy-MM-dd"/>" />
 			
 				<label>产品名称 ：</label>
-			<c:forEach items="${proList }" var="pro">
+				<c:forEach items="${proList}" var="pro">
+					<input type="checkbox" name="proList" id="proList"
+						value="${pro.id}" <c:forEach items="${productId}" var="productId">
+						<c:if test="${productId==pro.id}">checked="checked"</c:if> 
+					</c:forEach>>					
+					${pro.name}
+				</c:forEach>
+			<%-- <c:forEach items="${proList }" var="pro">
 				<input type="checkbox" name="proList" id="proList" value="${pro.id}">${pro.name}
-			</c:forEach>
+			</c:forEach> --%>
 			&nbsp;&nbsp; <input id="btnSubmit" class="btn btn-primary"
 				onclick="return onSubmit();" type="submit" value="查询" /> <input
 				id="exportZS" class="btn btn-primary" onclick="dcZS()" type="button"
