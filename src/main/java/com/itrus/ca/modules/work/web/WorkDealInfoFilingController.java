@@ -198,10 +198,10 @@ public class WorkDealInfoFilingController extends BaseController {
 		return "modules/work/workDealInfoFilingListT";
 	}
 	@RequiresPermissions("work:workDealInfo:view")
-	@RequestMapping(value = { "flist" })
+	@RequestMapping(value = {"flist"})
 	public String flist(WorkLog workLog, HttpServletRequest request,
 			HttpServletResponse response, Model model) {
-		Page<WorkLog> page = workLogService.findKfList(new Page<WorkLog>(
+		Page<WorkLog> page = workLogService.findKpList(new Page<WorkLog>(
 				request, response), workLog);
 		model.addAttribute("page", page);
 		List<ConfigApp> configApp= configAppService.findAllConfigApp();
@@ -212,7 +212,7 @@ public class WorkDealInfoFilingController extends BaseController {
 	@RequestMapping(value = { "plist" })
 	public String plist(WorkLog workLog, HttpServletRequest request,
 			HttpServletResponse response, Model model) {
-		Page<WorkLog> page = workLogService.findKfList(new Page<WorkLog>(
+		Page<WorkLog> page = workLogService.findKpList(new Page<WorkLog>(
 				request, response), workLog);
 		model.addAttribute("page", page);
 		List<ConfigApp> configApp= configAppService.findAllConfigApp();
