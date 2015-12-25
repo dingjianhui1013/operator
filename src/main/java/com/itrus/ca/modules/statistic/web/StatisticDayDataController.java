@@ -578,7 +578,7 @@ public class StatisticDayDataController extends BaseController {
 				serow0.setHeightInPoints((short)20);
 				HSSFCell cellse1=serow0.createCell(1);
 				cellse1.setCellStyle(style);
-				cellse1.setCellValue(appDatas.get(j).get(j).getApp().getAppName());
+				cellse1.setCellValue(appDatas.get(j).get(a).getApp().getAppName());
 				HSSFRow serow1=sheet.createRow((j+1)*(5+appDatas.get(j).size())+1);
 				serow1.createCell(1).setCellValue("业务办理");
 				serow1.createCell(34).setCellValue("小计");
@@ -638,7 +638,7 @@ public class StatisticDayDataController extends BaseController {
 				if(appDatas.get(j).get(i).getCertTotal()==0)
 				{
 					sheet.addMergedRegion(new Region((j+1)*(5+appDatas.get(j).size())+(4+i), (short)1, (j+1)*(5+appDatas.get(j).size())+(4+i), (short)36));
-					serow4.createCell(1).setCellValue(appDatas.get(j).get(j).getApp().getAppName()+"应用当天没办理数据");
+					serow4.createCell(1).setCellValue(appDatas.get(j).get(i).getApp().getAppName()+"应用当天没办理数据");
 				}else if(appDatas.get(j).get(i).getCertTotal()!=0)
 				{
 					serow4.createCell(1).setCellValue(appDatas.get(j).get(i).getAdd1());
