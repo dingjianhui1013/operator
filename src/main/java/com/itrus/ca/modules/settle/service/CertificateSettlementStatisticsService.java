@@ -115,7 +115,7 @@ public class CertificateSettlementStatisticsService extends BaseService {
 	public List<CertificateSettlementStatisticsVO> findWorkList(Long apply,String productType,String workTypes, String officeIdsList,String agentId, Date startDate,
 			Date endDate) {
 
-		String sql = "select to_char(t.create_date,'YYYY-MM') as month, t.deal_info_type as dealInfoType ,p.product_name productName,t.year year,count(t.id) workCount "
+		String sql = "select to_char(t.create_date,'YYYY-MM') as month, greatest(NVL(t.deal_info_type,-1) , NVL(t.deal_info_type1,-1) , NVL(t.deal_info_type2,-1 )) as dealInfoType ,p.product_name productName,t.year year,count(t.id) workCount "
 				+ " from WORK_DEAL_INFO t, CONFIG_PRODUCT p,SYS_USER u ,config_agent_bound_deal_info b "
 				+ " where t.product_id = p.id and t.app_id =?  and t.deal_info_status  in(7,9) and b.deal_info = t.id "
 				+ " and t.create_by = u.id " + " and t.create_date > to_date(? ,'yyyy-MM-dd HH24:mi:ss')"
@@ -134,8 +134,8 @@ public class CertificateSettlementStatisticsService extends BaseService {
 		}else{ // 默认只查 新增和更新
 			sql = sql + "and t.deal_info_type in(0,1)";
 		}
-		sql = sql + " group by  to_char(t.create_date,'YYYY-MM'),t.deal_info_type,p.product_name,t.year"
-				+ " order by to_char(t.create_date,'YYYY-MM') asc,t.deal_info_type,p.product_name,t.year";
+		sql = sql + " group by  to_char(t.create_date,'YYYY-MM'),greatest(NVL(t.deal_info_type,-1) , NVL(t.deal_info_type1,-1) , NVL(t.deal_info_type2,-1 )) ,p.product_name,t.year"
+				+ " order by to_char(t.create_date,'YYYY-MM') asc,greatest(NVL(t.deal_info_type,-1) , NVL(t.deal_info_type1,-1) , NVL(t.deal_info_type2,-1 )) ,p.product_name,t.year";
 		List<CertificateSettlementStatisticsVO> resultList = new ArrayList<CertificateSettlementStatisticsVO>();
 
 		resultList = certificateSettlementStatisticsDao.findBySql(sql, CertificateSettlementStatisticsVO.class,			
