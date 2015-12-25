@@ -26,15 +26,13 @@
 <form:form id="searchForm" modelAttribute="workLog" action="${ctx}/work/workDealInfoFiling/flist?distinguish=2" method="post" class="breadcrumb form-search">
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
 		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
-		<label>应用项目名称 ：</label>
-<%-- 		<form:input path="appName" htmlEscape="false" maxlength="50" class="input-medium"/> --%>
-<%-- 		<label>服务主题 ：</label><form:input path="serTitle" htmlEscape="false" maxlength="50" class="input-medium"/> --%>
-		<select name="configApp.id">
-		<option>请选择</option>
+		<label>应用名称 ：</label>
+		<form:select path="configApp.id"  class="input-medium">
+					<form:option value="">请选择</form:option>
 					<c:forEach items="${configApp}" var="configApp">
-						<option value="${configApp.id}">${configApp.appName}</option>
+						<form:option value="${configApp.id}">${configApp.appName}</form:option>
 					</c:forEach>
-		</select>
+		</form:select>
 		<label>客服接入 ：</label>
 		<form:select path="access"  class="input-medium">
 			<form:option value="">请选择接入方式</form:option>
