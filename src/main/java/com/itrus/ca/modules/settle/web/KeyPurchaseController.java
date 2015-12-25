@@ -222,7 +222,13 @@ public class KeyPurchaseController extends BaseController {
 				rown.createCell(2).setCellValue(list.get(i).getStartCode()+"");
 				rown.createCell(3).setCellValue(list.get(i).getEndCode()+"");
 				rown.createCell(4).setCellValue(list.get(i).getCount());
-				rown.createCell(5).setCellValue(list.get(i).getMoney());
+				if(list.get(i).getMoney()==null)
+				{
+					rown.createCell(5).setCellValue("");
+				}else
+				{
+					rown.createCell(5).setCellValue(list.get(i).getMoney());
+				}
 				rown.createCell(6).setCellValue(list.get(i).getStatus());
 				rown.createCell(7).setCellValue(list.get(i).getRemarks());
 			}
