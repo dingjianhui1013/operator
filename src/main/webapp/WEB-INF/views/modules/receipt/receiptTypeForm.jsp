@@ -37,6 +37,18 @@
 		if(!$(obj).val().match(regu)){
 			top.$.jBox.tip("类型输入错误");
 		}
+		
+	}
+	function onSubmit() {
+		
+		if ($("#typeName").val() == "") {
+			top.$.jBox.tip("请填入发票金额");
+			return false;
+		} 
+			
+			return true;
+			
+		
 	}
 </script>
 </head>
@@ -58,7 +70,7 @@
 			<label class="control-label">发票类型:</label>
 			<div class="controls">
 				<form:input path="typeName" htmlEscape="false" onkeyup="value=value.match(/^[0-9]+$/,'')" 
-				maxlength="3"/>元&nbsp;&nbsp;<label>例如：2元、10元、100元</label>
+				maxlength="3" id="typeName"/>元&nbsp;&nbsp;<label>例如：2元、10元、100元</label>
 			</div>
 		</div>
 		<div class="control-group">
@@ -69,7 +81,7 @@
 		</div>
 		<div class="form-actions">
 			<shiro:hasPermission name="receipt:receiptType:edit">
-				<input id="btnSubmit" class="btn btn-primary" type="submit"
+				<input id="btnSubmit" class="btn btn-primary" type="submit"onclick="return onSubmit();"
 					value="保 存" />&nbsp;</shiro:hasPermission>
 			<input id="btnCancel" class="btn" type="button" value="返 回"
 				onclick="history.go(-1)" />
