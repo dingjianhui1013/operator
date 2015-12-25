@@ -427,7 +427,9 @@
 								<a href="javascript:hisgoMoney(${workDealInfo.id})">退费</a>
 							</c:if>
 						</c:if> <c:if test="${workDealInfo.dealInfoStatus==5 }">
-							<a href="${ctx}/work/workDealInfo/pay?id=${workDealInfo.id}">缴费</a>&nbsp;&nbsp;
+						<shiro:hasPermission name="work:workDealInfo:jiaofei">
+							<a href="${ctx}/work/workDealInfo/pay?id=${workDealInfo.id}">缴费</a>
+							</shiro:hasPermission>&nbsp;&nbsp;
 					</c:if> <c:if test="${workDealInfo.dealInfoStatus==8 }">
 							<a href="${ctx}/work/workDealInfo/form?id=${workDealInfo.id}">继续编辑</a>&nbsp;&nbsp;
 					</c:if>
@@ -436,8 +438,8 @@
 							<a href="javascript:returnDealInfo(${workDealInfo.id})">编辑基本信息</a>&nbsp;&nbsp;
 					</c:if> 					
 					<c:if test="${workDealInfo.dealInfoStatus==9 }">
-							<a
-								href="${ctx}/work/workDealInfoOperation/make?id=${workDealInfo.id}">制证</a>&nbsp;&nbsp;
+							<shiro:hasPermission name="work:workDealInfo:makezheng"><a
+								href="${ctx}/work/workDealInfoOperation/make?id=${workDealInfo.id}">制证</a></shiro:hasPermission>&nbsp;&nbsp;
 					</c:if> <c:if test="${workDealInfo.dealInfoStatus==4 }">
 							<a
 								href="${ctx}/work/workDealInfoOperation/errorForm?id=${workDealInfo.id}">再次编辑</a>&nbsp;&nbsp;
@@ -447,7 +449,9 @@
 								onclick="return confirmx('确认要删除该信息吗？', this.href)">删除</a>&nbsp;&nbsp;
 					</c:if>
 					<c:if test="${workDealInfo.dealInfoStatus == 13}">
+						<shiro:hasPermission name="work:workDealInfo:makezheng">
 						<a href="${ctx}/work/workDealInfoAudit/makeDealInfo?id=${workDealInfo.id}">制证</a>
+						</shiro:hasPermission>
 					</c:if>
 					</td>
 				</tr>

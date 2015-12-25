@@ -65,8 +65,9 @@
 				<td>${wdiStatus[workDealInfo.dealInfoStatus]}</td>
 				<td>
 					<a href="${ctx}/work/workDealInfo/form?id=${workDealInfo.id}">编辑</a>
+					<shiro:hasPermission name="work:workDealInfo:makezheng">
 					<a href="${ctx}/work/workDealInfoOperation/make?id=${workDealInfo.id}">制证</a>
-
+					</shiro:hasPermission>
 				
 
 					<a href="${ctx}/work/workDealInfoAudit/delete?id=${workDealInfo.id}" onclick="return confirmx('确认要删除该异常业务信息吗？', this.href)">删除</a>
