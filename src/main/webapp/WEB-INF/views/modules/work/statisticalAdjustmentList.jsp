@@ -72,7 +72,7 @@
 								maxlength="20" readonly="readonly" name="zzendTime" />
 		&nbsp;&nbsp;&nbsp;&nbsp;<input id="btnSubmit" class="btn btn-primary" type="submit"
 			value="查询" />
-			&nbsp;&nbsp;&nbsp;&nbsp;<input id="exportZS" style="text-align:center" class="btn btn-info" onclick="dc()" type="button" value="导出">
+			&nbsp;&nbsp;&nbsp;&nbsp;<input id="exportZS" style="text-align:center" class="btn btn-primary" onclick="dc()" type="button" value="导出">
 		</div>
 	</form:form>
 	<tags:message content="${message}" />

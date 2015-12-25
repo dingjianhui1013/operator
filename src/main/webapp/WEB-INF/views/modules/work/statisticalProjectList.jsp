@@ -131,6 +131,7 @@
 						</c:if>>${off.name}</option>
 				</c:forEach>
 		</select>
+		</div>
 		<div style="margin-top: 9px">
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 		<label>统计时间：</label>
@@ -147,7 +148,6 @@
 			value="查询" />
 			<a href="javascript:dc()" class="btn btn-primary">导出</a>
 		</div>
-			</div>
 	</form:form>
 	<tags:message content="${message}" />
 	<table id="contentTable" class="table table-striped table-bordered table-condensed">
