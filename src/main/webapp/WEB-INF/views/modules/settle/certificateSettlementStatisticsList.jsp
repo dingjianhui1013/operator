@@ -182,6 +182,7 @@
 						</c:if>>${off.name}</option>
 				</c:forEach>
 			</select>
+			<label>组合业务：</label><input type="checkbox" name="multiType" id="multiType" value="true" <c:if test="${multiType}">"checked"</c:if>>
 		</div>
 
 		<div style="margin-top: 10px">
