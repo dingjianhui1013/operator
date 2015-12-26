@@ -112,7 +112,9 @@ public class CertificateSettlementStatisticsService extends BaseService {
 	}
 
 	public List<CertificateSettlementStatisticsVO> findWorkList(Long apply, String productType, String workTypes,
-			String officeIdsList, String agentId, Date startDate, Date endDate) {
+			String officeIdsList, String agentId, Date startDate, Date endDate, boolean multiType) {
+		if (multiType)
+			return findMulitWorkList(apply, productType, workTypes, officeIdsList, agentId, startDate, endDate);
 
 		String sql = "select to_char(t.create_date,'YYYY-MM') as month, greatest(NVL(t.deal_info_type,-1) , NVL(t.deal_info_type1,-1) , NVL(t.deal_info_type2,-1 )) as dealInfoType ,p.product_name productName,t.year year,count(t.id) workCount "
 				+ " from WORK_DEAL_INFO t, CONFIG_PRODUCT p,SYS_USER u ,config_agent_bound_deal_info b "
@@ -130,17 +132,54 @@ public class CertificateSettlementStatisticsService extends BaseService {
 		}
 		if (StringUtils.isNotBlank(workTypes)) {
 			sql = sql + "and ((t.deal_info_type in(" + workTypes
-					+ ") and t.deal_info_type1 is null and t.deal_info_type2 is null ) "
-					+ "or (t.deal_info_type1 in("
+					+ ") and t.deal_info_type1 is null and t.deal_info_type2 is null ) " + "or (t.deal_info_type1 in("
 					+ workTypes + ") and t.deal_info_type is null and t.deal_info_type2 is null) "
-							+ "or (t.deal_info_type2 in(" + workTypes + ")"
-							+ " and t.deal_info_type is null and t.deal_info_type1 is null))";
+					+ "or (t.deal_info_type2 in(" + workTypes + ")"
+					+ " and t.deal_info_type is null and t.deal_info_type1 is null))";
 		} else { // 默认只查 新增和更新
-			sql = sql + "and t.deal_info_type in(0,1)";
+			sql = sql + "and t.deal_info_type in(0,1) and t.deal_info_type1 is null and t.deal_info_type2 is null";
 		}
 		sql = sql
 				+ " group by  to_char(t.create_date,'YYYY-MM'),greatest(NVL(t.deal_info_type,-1) , NVL(t.deal_info_type1,-1) , NVL(t.deal_info_type2,-1 )) ,p.product_name,t.year"
 				+ " order by to_char(t.create_date,'YYYY-MM') asc,greatest(NVL(t.deal_info_type,-1) , NVL(t.deal_info_type1,-1) , NVL(t.deal_info_type2,-1 )) ,p.product_name,t.year";
+		List<CertificateSettlementStatisticsVO> resultList = new ArrayList<CertificateSettlementStatisticsVO>();
+
+		resultList = certificateSettlementStatisticsDao.findBySql(sql, CertificateSettlementStatisticsVO.class, apply,
+				DateFormatUtils.format(startDate, "yyyy-MM-dd") + " 00:00:00",
+				DateFormatUtils.format(endDate, "yyyy-MM-dd") + " 23:59:59");
+
+		return resultList;
+	}
+
+	public List<CertificateSettlementStatisticsVO> findMulitWorkList(Long apply, String productType, String workTypes,
+			String officeIdsList, String agentId, Date startDate, Date endDate) {
+
+		String sql = "select to_char(t.create_date,'YYYY-MM') as month, (NVL(t.deal_info_type,0)*100+ NVL(t.deal_info_type1,0)*10+ NVL(t.deal_info_type2,0 )) as dealInfoType ,p.product_name productName,t.year year,count(t.id) workCount "
+				+ " from WORK_DEAL_INFO t, CONFIG_PRODUCT p,SYS_USER u ,config_agent_bound_deal_info b "
+				+ " where t.product_id = p.id and t.app_id =?  and t.deal_info_status  in(7,9) and b.deal_info = t.id "
+				+ " and t.create_by = u.id " + " and t.create_date > to_date(? ,'yyyy-MM-dd HH24:mi:ss')"
+				+ " and t.create_date <= to_date(? ,'yyyy-MM-dd HH24:mi:ss')";
+		if (StringUtils.isNotBlank(officeIdsList)) {
+			sql = sql + " and  u.office_id in(" + officeIdsList + ")";
+		}
+		if (StringUtils.isNotBlank(productType)) {
+			sql = sql + " and  p.product_name in(" + productType + ")";
+		}
+		if (StringUtils.isNotBlank(agentId)) {
+			sql = sql + " and  b.agent_id = " + agentId;
+		}
+		if (StringUtils.isNotBlank(workTypes)) {
+			sql = sql + "and ((t.deal_info_type in(" + workTypes
+					+ ") and (t.deal_info_type1 is not null or t.deal_info_type2 is not null) ) " + "or (t.deal_info_type1 in("
+					+ workTypes + ") and (t.deal_info_type is not null or t.deal_info_type2 is not null)) "
+					+ "or (t.deal_info_type2 in(" + workTypes + ")"
+					+ " and ( t.deal_info_type is not null or t.deal_info_type1 is not null)))";
+		} else { // 默认只查 新增和更新
+			sql = sql + "and t.deal_info_type in(0,1) and (t.deal_info_type1 is not null or t.deal_info_type2 is not null)";
+		}
+		sql = sql
+				+ " group by  to_char(t.create_date,'YYYY-MM'),(NVL(t.deal_info_type,0)*100+ NVL(t.deal_info_type1,0)*10+ NVL(t.deal_info_type2,0 )) ,p.product_name,t.year"
+				+ " order by to_char(t.create_date,'YYYY-MM') asc,(NVL(t.deal_info_type,0)*100+ NVL(t.deal_info_type1,0)*10+ NVL(t.deal_info_type2,0 )) ,p.product_name,t.year";
 		List<CertificateSettlementStatisticsVO> resultList = new ArrayList<CertificateSettlementStatisticsVO>();
 
 		resultList = certificateSettlementStatisticsDao.findBySql(sql, CertificateSettlementStatisticsVO.class, apply,
@@ -268,6 +307,12 @@ public class CertificateSettlementStatisticsService extends BaseService {
 				scm.setReplacementDamaged(cssv.getWorkCount().intValue() + scm.getReplacementDamaged());
 			} else if (cssv.getDealInfoType() == 4) {// 信息变更
 				scm.setAlterInfomation(cssv.getWorkCount().intValue() + scm.getAlterInfomation());
+			} else if (cssv.getDealInfoType() == 124 ||cssv.getDealInfoType() == 134) {//组合业务，更新+补办（遗失或损坏）+信息更新 
+				scm.setAlterInfomation(cssv.getWorkCount().intValue() + scm.getAlterInfomation());
+			}else if (cssv.getDealInfoType() == 120) {// 组合业务：更新+遗失补办
+				scm.setReplacementLosted(cssv.getWorkCount().intValue() + scm.getReplacementLosted());
+			} else if (cssv.getDealInfoType() == 130) {// 组合业务：更新+损坏更换
+				scm.setReplacementDamaged(cssv.getWorkCount().intValue() + scm.getReplacementDamaged());
 			}
 			monthMap.put(cssv.getMonth(), scm);
 

@@ -99,6 +99,7 @@ public class CertificateSettlementStatisticsController extends BaseController {
 	@RequiresPermissions("settle:certificateSettlementStatistics:view")
 	@RequestMapping(value = { "list", "" })
 	public String list(Long areaId, Long officeId, Date startDate, Date endDate, String tempStyle,String agentId,
+			boolean multiType,
 			HttpServletRequest request, HttpServletResponse response,
 			@RequestParam(value = "applyId", required = false) Long applyId,
 			@RequestParam(value = "proList", required = false) List<String> productType,
@@ -164,6 +165,7 @@ public class CertificateSettlementStatisticsController extends BaseController {
 		model.addAttribute("workTypes", workDealInfoType.getProductTypeListLess());
 		// model.addAttribute("workType", workDealInfo.getDealInfoStatus());
 		model.addAttribute("productId", productType);
+		model.addAttribute("multiType",multiType);
 		model.addAttribute("workType", workType);
 		model.addAttribute("offsList", offsList);
 		model.addAttribute("areaId", areaId);
@@ -191,7 +193,7 @@ public class CertificateSettlementStatisticsController extends BaseController {
 				applyId, org.springframework.util.StringUtils.collectionToCommaDelimitedString(productType),
 				org.springframework.util.StringUtils.collectionToCommaDelimitedString(workType),
 				org.springframework.util.StringUtils.collectionToCommaDelimitedString(officeIdList), agentId, startDate,
-				endDate);
+				endDate,multiType);
 
 		HashMap<String, StaticCertMonth> monthMap = certificateSettlementStatisticsService.getStaticMap(findWorkList);
 		model.addAttribute("monthList", new ArrayList<String>(monthMap.keySet()));
@@ -275,6 +277,7 @@ public class CertificateSettlementStatisticsController extends BaseController {
 
 	@RequestMapping(value = "export")
 	public void export(Long areaId, Long officeId, Date startDate, Date endDate, String agentId,
+			boolean multiType,
 			HttpServletRequest request, HttpServletResponse response,
 			@RequestParam(value = "applyId", required = false) Long applyId,
 			@RequestParam(value = "proList", required = false) List<String> productType,
@@ -359,7 +362,7 @@ public class CertificateSettlementStatisticsController extends BaseController {
 					applyId, org.springframework.util.StringUtils.collectionToCommaDelimitedString(productType),
 					org.springframework.util.StringUtils.collectionToCommaDelimitedString(workType),
 					org.springframework.util.StringUtils.collectionToCommaDelimitedString(officeIdList), agentId, startDate,
-					endDate);
+					endDate, multiType);
 
 			HashMap<String, StaticCertMonth> monthMap = certificateSettlementStatisticsService.getStaticMap(findWorkList);
 			int k=3;
