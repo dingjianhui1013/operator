@@ -121,8 +121,10 @@
 			value="查询" />
 			&nbsp;&nbsp;&nbsp;<!-- <input id="btnImport" class="btn btn-primary"
 			type="button" value="导入短信模板" /> -->
-		<a id="manyAdd" data-toggle="modal" href="#declareDiv"
-			class="btn btn-primary">导入短信模板</a>
+		<!-- <a id="manyAdd" data-toggle="modal" href="#declareDiv"
+			class="btn btn-primary">导入短信模板</a> -->
+				<a id="manyAdd" data-toggle="modal" href="${ctx}/message/smsConfiguration/form2"
+			class="btn btn-primary">添加短信模板</a>
 		</div>
 	</form:form>
 	<tags:message content="${message}" />

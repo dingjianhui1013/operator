@@ -29,6 +29,7 @@ import com.itrus.ca.common.persistence.Page;
 import com.itrus.ca.common.service.BaseService;
 import com.itrus.ca.modules.message.entity.SmsConfiguration;
 import com.itrus.ca.modules.profile.entity.ConfigRaAccount;
+import com.itrus.ca.modules.profile.entity.ConfigRaAccountExtendInfo;
 import com.itrus.ca.modules.finance.entity.FinancePaymentInfo;
 import com.itrus.ca.modules.message.dao.SmsConfigurationDao;
 
@@ -83,5 +84,14 @@ public class SmsConfigurationService extends BaseService {
 		List<SmsConfiguration> list = smsConfigurationDao.find(dc);
 		return list;
 	}
-	
+	public SmsConfiguration findByMessageName(String messageName){
+		DetachedCriteria dc = smsConfigurationDao.createDetachedCriteria();
+		dc.add(Restrictions.eq("messageName", messageName));
+		
+		if (smsConfigurationDao.find(dc).size()>0) {
+			return smsConfigurationDao.find(dc).get(0);
+		}else {
+			return null;
+		}
+	}
 }

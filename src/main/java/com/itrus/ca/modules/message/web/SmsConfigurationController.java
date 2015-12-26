@@ -38,6 +38,7 @@ import com.itrus.ca.common.web.BaseController;
 import com.itrus.ca.modules.log.service.LogUtil;
 import com.itrus.ca.modules.message.entity.SmsConfiguration;
 import com.itrus.ca.modules.message.service.SmsConfigurationService;
+import com.itrus.ca.modules.profile.entity.ConfigRaAccountExtendInfo;
 import com.itrus.ca.modules.profile.service.ConfigAppService;
 import com.itrus.ca.modules.sys.entity.User;
 import com.itrus.ca.modules.sys.service.OfficeService;
@@ -112,6 +113,33 @@ public class SmsConfigurationController extends BaseController {
 
 		return "modules/message/smsConfigurationFormC";
 	}
+	@RequestMapping(value = "form2")
+	public String form2(SmsConfiguration smsConfiguration, Model model) {
+		model.addAttribute("smsConfiguration", smsConfiguration);
+
+		return "modules/message/smsConfigurationFormD";
+	}
+	@RequestMapping(value="checkRepeat")
+	@ResponseBody
+	public String checkRepeat(String messageName) throws JSONException{
+		JSONObject json = new JSONObject();
+		try {
+			SmsConfiguration sms =  smsConfigurationService.findByMessageName(messageName);
+			if (sms!=null) {
+				json.put("type", 1);
+			}else {
+				json.put("type", 0);
+			}
+			json.put("status", 0);
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			json.put("status", 1);
+		}
+		
+		return json.toString();
+	};
+	
 	@RequiresPermissions("message:smsConfiguration:edit")
 	@RequestMapping(value = "save")
 	public String save(SmsConfiguration smsConfiguration, Model model, RedirectAttributes redirectAttributes,
@@ -195,65 +223,65 @@ public class SmsConfigurationController extends BaseController {
 		smsConfigurationService.save(smsConfiguration);
 		return "redirect:" + Global.getAdminPath() + "/message/smsConfiguration/?repage";
 	}
-	@RequestMapping("test")
-	@ResponseBody
-	public String importFile(@RequestParam(value = "fileName", required = true) MultipartFile file)
-			throws IllegalStateException, IOException, JSONException {
-		String newFileName=null;
-		JSONObject json = new JSONObject();
-		String path=null;
-		String fileName=null;
-		try {
-		
-		 path = SmsConfigurationController.class.getResource("/").toString().replace("file:", "")
-				.replace("%20", " ");
-		if (StringUtils.contains(path, "/WEB-INF")) {
-			path = path.substring(0, StringUtils.indexOf(path, "/WEB-INF"));
-		}
-		;
-		path += "/WEB-INF/template/";// 文件保存目录，也可自定为绝对路径
-		 fileName = file.getOriginalFilename();// getOriginalFilename和getName是不一样的哦
-		// String extensionName = fileName
-		// .substring(fileName.lastIndexOf(".") + 1); 获取文件本质
-		//newFileName = String.valueOf(DateUtils.formatDate(new Date(), "yyyy-MM-dd"));
-		 newFileName=fileName.substring(0,fileName.lastIndexOf("."));
-		List<SmsConfiguration> list=smsConfigurationService.findAll();
-		for(int i=0;i<list.size();i++){
-		if(newFileName.equals(list.get(i).getMessageName())){
-			json.put("status", -1);
-			json.put("msg", "模板名称已存在，请改正");
-			return json.toString();
-		}}
-		File targetFile = new File(path,newFileName);
-		if (!targetFile.exists()) {
-			targetFile.mkdirs();
-		}
-		
-			file.transferTo(targetFile);
-			json.put("status", 1);
-			json.put("msg", "上传成功");
-		} catch (Exception e) {
-			e.printStackTrace();
-			
-		}
-//		Read read=new Read();
-//		String messageContent=read.readFile(path);
-//		System.out.println(messageContent);
-		Properties p = new Properties();
-		p.setProperty(Velocity.INPUT_ENCODING, "UTF-8");
-		p.setProperty(Velocity.OUTPUT_ENCODING, "UTF-8");
-		p.setProperty(Velocity.FILE_RESOURCE_LOADER_PATH, path);
-		System.out.println(p);
-		VelocityEngine velocityEngine = new VelocityEngine();
-		velocityEngine.init(p);
-		Map<String, Object>  orange = new HashMap<>();
-		String content = VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, newFileName, "UTF-8", orange);
-		System.out.println(content);
-		SmsConfiguration smsConfiguration = new SmsConfiguration();
-		smsConfiguration.setMessageName(newFileName);
-		smsConfiguration.setMessageContent(content);
-		smsConfigurationService.save(smsConfiguration);
-		return json.toString();
-		
-	}
+//	@RequestMapping("test")
+//	@ResponseBody
+//	public String importFile(@RequestParam(value = "fileName", required = true) MultipartFile file)
+//			throws IllegalStateException, IOException, JSONException {
+//		String newFileName=null;
+//		JSONObject json = new JSONObject();
+//		String path=null;
+//		String fileName=null;
+//		try {
+//		
+//		 path = SmsConfigurationController.class.getResource("/").toString().replace("file:", "")
+//				.replace("%20", " ");
+//		if (StringUtils.contains(path, "/WEB-INF")) {
+//			path = path.substring(0, StringUtils.indexOf(path, "/WEB-INF"));
+//		}
+//		;
+//		path += "/WEB-INF/template/";// 文件保存目录，也可自定为绝对路径
+//		 fileName = file.getOriginalFilename();// getOriginalFilename和getName是不一样的哦
+//		// String extensionName = fileName
+//		// .substring(fileName.lastIndexOf(".") + 1); 获取文件本质
+//		//newFileName = String.valueOf(DateUtils.formatDate(new Date(), "yyyy-MM-dd"));
+//		 newFileName=fileName.substring(0,fileName.lastIndexOf("."));
+//		List<SmsConfiguration> list=smsConfigurationService.findAll();
+//		for(int i=0;i<list.size();i++){
+//		if(newFileName.equals(list.get(i).getMessageName())){
+//			json.put("status", -1);
+//			json.put("msg", "模板名称已存在，请改正");
+//			return json.toString();
+//		}}
+//		File targetFile = new File(path,newFileName);
+//		if (!targetFile.exists()) {
+//			targetFile.mkdirs();
+//		}
+//		
+//			file.transferTo(targetFile);
+//			json.put("status", 1);
+//			json.put("msg", "上传成功");
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			
+//		}
+////		Read read=new Read();
+////		String messageContent=read.readFile(path);
+////		System.out.println(messageContent);
+//		Properties p = new Properties();
+//		p.setProperty(Velocity.INPUT_ENCODING, "UTF-8");
+//		p.setProperty(Velocity.OUTPUT_ENCODING, "UTF-8");
+//		p.setProperty(Velocity.FILE_RESOURCE_LOADER_PATH, path);
+//		System.out.println(p);
+//		VelocityEngine velocityEngine = new VelocityEngine();
+//		velocityEngine.init(p);
+//		Map<String, Object>  orange = new HashMap<>();
+//		String content = VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, newFileName, "UTF-8", orange);
+//		System.out.println(content);
+//		SmsConfiguration smsConfiguration = new SmsConfiguration();
+//		smsConfiguration.setMessageName(newFileName);
+//		smsConfiguration.setMessageContent(content);
+//		smsConfigurationService.save(smsConfiguration);
+//		return json.toString();
+//		
+//	}
 }

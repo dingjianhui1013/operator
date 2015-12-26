@@ -197,6 +197,7 @@ public class MessageSendingController extends BaseController {
 		// System.out.println(messageAddress);
 		String messageAddress = SmsConfigurationController.class.getResource("/").toString().replace("file:", "")
 				.replace("%20", " ");
+		String messageContent =smsConfiguration.getMessageContent();
 		if (StringUtils.contains(messageAddress, "/WEB-INF")) {
 			messageAddress = messageAddress.substring(0, StringUtils.indexOf(messageAddress, "/WEB-INF"));
 		}
@@ -212,7 +213,7 @@ public class MessageSendingController extends BaseController {
 		String[] dealInfos = checkIds.split(",");
 		short s[] = new short[dealInfos.length];
 		for (int i = 0; i < dealInfos.length; i++) {
-			System.out.println(dealInfos[i]);
+			//System.out.println(dealInfos[i]);
 
 			// s[i]=Short.parseShort(dealInfos[i]);
 			// System.out.println(s[i]);
@@ -228,7 +229,7 @@ public class MessageSendingController extends BaseController {
 			String companyCode = dealInfo.getWorkCompany().getOrganizationNumber();
 			// 机构名称
 			String companyName = dealInfo.getWorkCompany().getCompanyName();
-			System.out.println(companyName);
+			//System.out.println(companyName);
 			// 法人姓名
 			String legalName = dealInfo.getWorkCompany().getLegalName();
 			// key编码
@@ -238,56 +239,86 @@ public class MessageSendingController extends BaseController {
 					+ dealInfo.getWorkCompany().getDistrict() + dealInfo.getWorkCompany().getAddress();
 			// 经办人姓名
 			String consigner = dealInfo.getWorkCertInfo().getWorkCertApplyInfo().getName();
-			System.out.println(consigner);
+			//System.out.println(consigner);
 			// 业务状态
-			String businessStatus = dealInfo.getDealInfoStatus();
+			WorkDealInfoStatus workDealInfoStatus = new WorkDealInfoStatus();
+			String businessStatus = workDealInfoStatus.WorkDealInfoStatusMap.get(dealInfo.getDealInfoStatus());
 			// 项目名称
 			String alias = dealInfo.getConfigApp().getAlias();
-			System.out.println(alias);
+			//System.out.println(alias);
 			// 证书到期时间
 			Date endDate = dealInfo.getNotafter();
-			System.out.println(endDate);
+			//System.out.println(endDate);
 			// 证书持有人电话
 			String phone = dealInfo.getWorkUser().getContactPhone();
-			System.out.println(phone);
-			Properties p = new Properties();
-			p.setProperty(Velocity.INPUT_ENCODING, "UTF-8");
-			p.setProperty(Velocity.OUTPUT_ENCODING, "UTF-8");
-			p.setProperty(Velocity.FILE_RESOURCE_LOADER_PATH, messageAddress);
-			System.out.println(p);
-			VelocityEngine velocityEngine = new VelocityEngine();
-			velocityEngine.init(p);
-			Map<String, Object> orange = new HashMap<>();
-			orange.put("companyCode", companyCode);
-			orange.put("companyName", companyName);
-			orange.put("legalName", legalName);
-			orange.put("keySn", keySn);
-			orange.put("organizationAddress", organizationAddress);
-			orange.put("consigner", consigner);
-			orange.put("businessStatus", businessStatus);
-			orange.put("alias", alias);
-			orange.put("endDate", endDate);
-			orange.put("date", new Date());
-			String content = VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, messageName, "UTF-8", orange);
-			System.out.println(content);
-			long mess = System.currentTimeMillis();
-			String messId = "" + mess;
-			System.out.println(messId);
-			String smsSendDate1 = format.format(new Date());
-
-			Date smsSendDate = null;
-			try {
-				smsSendDate = format.parse(smsSendDate1);
-			} catch (ParseException e) {
-				
-				e.printStackTrace();
-			}
-			System.out.println(smsSendDate);
+			//System.out.println(phone);
+//			Properties p = new Properties();
+//			p.setProperty(Velocity.INPUT_ENCODING, "UTF-8");
+//			p.setProperty(Velocity.OUTPUT_ENCODING, "UTF-8");
+//			p.setProperty(Velocity.FILE_RESOURCE_LOADER_PATH, messageAddress);
+//			System.out.println(p);
+//			VelocityEngine velocityEngine = new VelocityEngine();
+//			velocityEngine.init(p);
+//			Map<String, Object> orange = new HashMap<>();
+//			orange.put("companyCode", companyCode);
+//			orange.put("companyName", companyName);
+//			orange.put("legalName", legalName);
+//			orange.put("keySn", keySn);
+//			orange.put("organizationAddress", organizationAddress);
+//			orange.put("consigner", consigner);
+//			orange.put("businessStatus", businessStatus);
+//			orange.put("alias", alias);
+//			orange.put("endDate", endDate);
+//			orange.put("date", new Date());
+//			String content = VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, messageName, "UTF-8", orange);
+//			System.out.println(content);
+//			long mess = System.currentTimeMillis();
+//			String messId = "" + mess;
+//			System.out.println(messId);
+//			String smsSendDate1 = format.format(new Date());
+//
+//			Date smsSendDate = null;
+//			try {
+//				smsSendDate = format.parse(smsSendDate1);
+//			} catch (ParseException e) {
+//				
+//				e.printStackTrace();
+//			}
+//			System.out.println(smsSendDate);
 			// SmsService smsService=new SmsService();
+			VelocityEngine ve = new VelocityEngine();
+			   ve.init();
+			   String content = messageContent;
+			   VelocityContext context = new VelocityContext();
+			   context.put("companyCode", companyCode);
+			   context.put("companyName", companyName);
+			   context.put("legalName", legalName);
+			   context.put("keySn", keySn);
+			   context.put("organizationAddress", organizationAddress);
+			   context.put("consigner", consigner);
+			   context.put("businessStatus", businessStatus);
+			   context.put("alias", alias);
+			   context.put("endDate", endDate);
+			   context.put("date", new Date());
+			   StringWriter writer = new StringWriter();
+			   ve.evaluate(context, writer, "", content); 
+			 
+			   long mess = System.currentTimeMillis();
+			String smsSendDate1 = format.format(new Date());
+			String messId = "" + mess;
+			Date smsSendDate = null;
+				try {
+					smsSendDate = format.parse(smsSendDate1);
+				} catch (ParseException e) {
+					
+					e.printStackTrace();
+				}
+				System.out.println(smsSendDate);
+				// SmsService smsService=new SmsService();
 			String returnStatus = null;
 			if (phone != null) {
 
-				returnStatus = smsService.sendSms(messId, phone, content);
+				returnStatus = smsService.sendSms(messId, phone, writer.toString());
 				if (returnStatus.equals("0")) {
 					json.put("status", -1);
 					json.put("msg", "发送失败");
@@ -299,7 +330,7 @@ public class MessageSendingController extends BaseController {
 					messageSending.setMessId(messId);
 					messageSending.setpId(4);
 					messageSending.setPhone(phone);
-					messageSending.setMessageContext(content);
+					messageSending.setMessageContext(writer.toString());
 					messageSending.setSmsSendDate(smsSendDate);
 					messageSending.setReturnStatus(returnStatus);
 					messageSending.setWorkDealInfo(dealInfo);
@@ -369,7 +400,7 @@ public class MessageSendingController extends BaseController {
 	public String showWorkDeal(Long checkMessageId, Model model, HttpServletRequest request, HttpServletResponse response) {
 
 		List<MessageSending> page = messageSendingService.findByDepotId(checkMessageId);
-		System.out.println("   ");
+		
 		model.addAttribute("dealInfo", page.get(0));
 		return "modules/message/checkMessageListF";
 	}
