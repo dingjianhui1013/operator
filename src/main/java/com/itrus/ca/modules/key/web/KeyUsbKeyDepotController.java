@@ -425,6 +425,9 @@ public class KeyUsbKeyDepotController extends BaseController {
 	public String checkKey(String deneName) throws JSONException{
 		JSONObject json = new JSONObject();
 		try {
+			if(deneName.contains("软证书")){
+				json.put("status", "3");
+			}
 			if(deneName.indexOf("软证书")==-1)
 			{
 				
