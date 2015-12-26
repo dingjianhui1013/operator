@@ -222,12 +222,14 @@
 			} else {
 				
 				var keySn = $("#keySn").val();
-				
+				var providerName=$("#provider").find("option:selected").text();
+				if(providerName.indexOf("软证书")==-1)
+					{
 				if(keySn==''){
 					top.$.jBox.tip("请您先检测KEY！");
 					return false;
 				}
-				
+					}
 				sn = keySn;
 				$("#keySn").attr("value", keySn);
 				$("#keySn").css("color", "red");

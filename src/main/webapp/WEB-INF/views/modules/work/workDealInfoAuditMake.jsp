@@ -211,15 +211,18 @@
 	
 		try {
 			var keys = ukeyadmin.refresh(); //检测KEY
+			var providerName=$("#provider").find("option:selected").text();
 			if (keys == 0) {
 				alert("没有检测到UKEY");
 			} else {
 				var keySn = $("#keySn").val();
-				
-				if(keySn==''){
-					top.$.jBox.tip("请您先检测KEY！");
-					return false;
-				}
+				if(providerName.indexOf("软证书")==-1)
+					{
+						if(keySn==''){
+							top.$.jBox.tip("请您先检测KEY！");
+							return false;
+						}
+					}
 				
 				sn = keySn;
 				$("#keySn").attr("value", keySn);
