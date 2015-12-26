@@ -412,15 +412,15 @@ public class KeyUsbKeyInvoiceService extends BaseService {
 		DetachedCriteria dc = keyUsbKeyInvoiceDao.createDetachedCriteria();
 		dc.add(Restrictions.ge("createDate", date));
 		dc.add(Restrictions.lt("createDate", endDate));
-		dc.createAlias("createBy", "createBy");
 		dc.createAlias("keyUsbKeyDepot", "keyUsbKeyDepot");
 		dc.createAlias("keyUsbKeyDepot.office", "office");
 		dc.add(Restrictions.eq("office.id", officeId));
-		dc.add(Restrictions.eq(KeyUsbKeyInvoice.DEL_FLAG, KeyUsbKeyInvoice.DEL_FLAG_NORMAL));
+		//dc.add(Restrictions.eq(KeyUsbKeyInvoice.DEL_FLAG, KeyUsbKeyInvoice.DEL_FLAG_NORMAL));
 		dc.addOrder(Order.desc("id"));
 		return keyUsbKeyInvoiceDao.find(dc);
 	}
 
+	
 	/**
 	 *  获得统计日前一天到统计日当天的key出库信息
 	 * @param countDate

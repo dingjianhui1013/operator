@@ -108,7 +108,13 @@ public class ConfigChargeAgentBoundConfigProductService extends BaseService {
 		dc.add(Restrictions.eq("product.id", proId));
 		dc.createAlias("agent", "agent");
 		dc.add(Restrictions.eq("agent.tempStyle", style));
-		dc.addOrder(Order.desc("id"));
+		dc.add(Restrictions.or(
+				Restrictions.le("agent.htStartTime", new Date()),
+				Restrictions.isNull("agent.htStartTime")));
+		dc.add(Restrictions.or(
+				Restrictions.ge("agent.htEndTime", new Date()),
+				Restrictions.isNull("agent.htEndTime")));
+		dc.addOrder(Order.desc("agent.tempStyle"));
 		return configChargeAgentBoundConfigProductDao.find(dc);
 	}
 	

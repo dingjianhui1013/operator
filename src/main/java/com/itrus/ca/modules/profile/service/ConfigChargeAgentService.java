@@ -193,7 +193,8 @@ public class ConfigChargeAgentService extends BaseService {
 		return list;
 	}
 	public List<ConfigChargeAgent> selectAll(){
-		return configChargeAgentDao.selectAll();
+	//	return configChargeAgentDao.selectAll();
+		return null;
 	}
 
 	public List<ConfigChargeAgent> findByStyle(String tempStyle){

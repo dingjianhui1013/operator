@@ -169,7 +169,7 @@
 		}
 		csr = getCsrByOldCert(len);
 		if(csr){
-			var keySnDealInfo = ${workDealInfo.keySn };
+			var keySnDealInfo = "${workDealInfo.keySn }";
 			var keySn = $("#keySn").val();
 			if(keySnDealInfo != keySn){
 				top.$.jBox.tip("业务办理时keySn与此keySn不相同，请手动调节keySn序列号");

@@ -3869,7 +3869,7 @@ public class WorkDealInfoService extends BaseService {
 		dc.add(Restrictions.eq("createBy.office.id", officeId));
 		List<String> statusIntegers = new ArrayList<String>();
 		statusIntegers.add(WorkDealInfoStatus.STATUS_CERT_OBTAINED);
-		statusIntegers.add(WorkDealInfoStatus.STATUS_CERT_REVOKE);
+		//statusIntegers.add(WorkDealInfoStatus.STATUS_CERT_REVOKE);
 		dc.add(Restrictions.in("dealInfoStatus", statusIntegers));
 		dc.add(Restrictions.ge("updateDate", countDate));
 		Calendar calendar = Calendar.getInstance();
