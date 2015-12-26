@@ -521,8 +521,6 @@ public class StatisticDayDataController extends BaseController {
 			}
 
 		}
-		
-		
 		for(int i=0;i<list.size();i++)
 		{
 			HSSFRow rown=sheet.createRow(i+3);
@@ -538,29 +536,28 @@ public class StatisticDayDataController extends BaseController {
 			rown.createCell(9).setCellValue(list.get(i).getReceiptStoreTotal());
 		}
 		
+		int appDataIndex=0;
 		for(int j=0;j<appDatas.size();j++)
 		{
-			for(int a=0;a<appDatas.get(j).size();a++)
-			{
-				sheet.addMergedRegion(new Region((j+1)*(5+appDatas.get(j).size()),(short)0,(j+1)*(5+appDatas.get(j).size())+3,(short)0));
-				sheet.addMergedRegion(new Region((j+1)*(5+appDatas.get(j).size()),(short)1,(j+1)*(5+appDatas.get(j).size()),(short)37));
-				sheet.addMergedRegion(new Region((j+1)*(5+appDatas.get(j).size())+1, (short)1, (j+1)*(5+appDatas.get(j).size())+1, (short)33));
-				sheet.addMergedRegion(new Region((j+1)*(5+appDatas.get(j).size())+1, (short)34, (j+1)*(5+appDatas.get(j).size())+1, (short)36));
-				sheet.addMergedRegion(new Region((j+1)*(5+appDatas.get(j).size())+2, (short)1, (j+1)*(5+appDatas.get(j).size())+2, (short)4));
-				sheet.addMergedRegion(new Region((j+1)*(5+appDatas.get(j).size())+2, (short)5, (j+1)*(5+appDatas.get(j).size())+2, (short)8));
-				sheet.addMergedRegion(new Region((j+1)*(5+appDatas.get(j).size())+2, (short)9, (j+1)*(5+appDatas.get(j).size())+2+1, (short)9));
-				sheet.addMergedRegion(new Region((j+1)*(5+appDatas.get(j).size())+2, (short)10, (j+1)*(5+appDatas.get(j).size())+2+1, (short)10));
-				sheet.addMergedRegion(new Region((j+1)*(5+appDatas.get(j).size())+2, (short)11, (j+1)*(5+appDatas.get(j).size())+2+1, (short)11));
-				sheet.addMergedRegion(new Region((j+1)*(5+appDatas.get(j).size())+2, (short)12, (j+1)*(5+appDatas.get(j).size())+2, (short)15));
-				sheet.addMergedRegion(new Region((j+1)*(5+appDatas.get(j).size())+2, (short)16, (j+1)*(5+appDatas.get(j).size())+2, (short)19));
-				sheet.addMergedRegion(new Region((j+1)*(5+appDatas.get(j).size())+2, (short)20, (j+1)*(5+appDatas.get(j).size())+2, (short)23));
-				sheet.addMergedRegion(new Region((j+1)*(5+appDatas.get(j).size())+2, (short)24, (j+1)*(5+appDatas.get(j).size())+2+1, (short)24));
-				sheet.addMergedRegion(new Region((j+1)*(5+appDatas.get(j).size())+2, (short)25,(j+1)*(5+appDatas.get(j).size())+2+1, (short)25));
-				sheet.addMergedRegion(new Region((j+1)*(5+appDatas.get(j).size())+2, (short)26, (j+1)*(5+appDatas.get(j).size())+2, (short)29));
-				sheet.addMergedRegion(new Region((j+1)*(5+appDatas.get(j).size())+2, (short)30, (j+1)*(5+appDatas.get(j).size())+2, (short)33));
-				sheet.addMergedRegion(new Region((j+1)*(5+appDatas.get(j).size())+2, (short)34, (j+1)*(5+appDatas.get(j).size())+2+1, (short)34));
-				sheet.addMergedRegion(new Region((j+1)*(5+appDatas.get(j).size())+2, (short)35, (j+1)*(5+appDatas.get(j).size())+2+1, (short)35));
-				sheet.addMergedRegion(new Region((j+1)*(5+appDatas.get(j).size())+2, (short)36, (j+1)*(5+appDatas.get(j).size())+2+1, (short)36));
+				sheet.addMergedRegion(new Region((j*6)+(5+list.size()+appDataIndex),(short)0,(j*6)+(5+list.size()+appDataIndex)+3,(short)0));
+				sheet.addMergedRegion(new Region((j*6)+(5+list.size()+appDataIndex),(short)1,(j*6)+(5+list.size()+appDataIndex),(short)37));
+				sheet.addMergedRegion(new Region((j*6)+(5+list.size()+appDataIndex)+1, (short)1, (j*6)+(5+list.size()+appDataIndex)+1, (short)33));
+				sheet.addMergedRegion(new Region((j*6)+(5+list.size()+appDataIndex)+1, (short)34, (j*6)+(5+list.size()+appDataIndex)+1, (short)36));
+				sheet.addMergedRegion(new Region((j*6)+(5+list.size()+appDataIndex)+2, (short)1, (j*6)+(5+list.size()+appDataIndex)+2, (short)4));
+				sheet.addMergedRegion(new Region((j*6)+(5+list.size()+appDataIndex)+2, (short)5, (j*6)+(5+list.size()+appDataIndex)+2, (short)8));
+				sheet.addMergedRegion(new Region((j*6)+(5+list.size()+appDataIndex)+2, (short)9, (j*6)+(5+list.size()+appDataIndex)+2+1, (short)9));
+				sheet.addMergedRegion(new Region((j*6)+(5+list.size()+appDataIndex)+2, (short)10, (j*6)+(5+list.size()+appDataIndex)+2+1, (short)10));
+				sheet.addMergedRegion(new Region((j*6)+(5+list.size()+appDataIndex)+2, (short)11, (j*6)+(5+list.size()+appDataIndex)+2+1, (short)11));
+				sheet.addMergedRegion(new Region((j*6)+(5+list.size()+appDataIndex)+2, (short)12, (j*6)+(5+list.size()+appDataIndex)+2, (short)15));
+				sheet.addMergedRegion(new Region((j*6)+(5+list.size()+appDataIndex)+2, (short)16, (j*6)+(5+list.size()+appDataIndex)+2, (short)19));
+				sheet.addMergedRegion(new Region((j*6)+(5+list.size()+appDataIndex)+2, (short)20, (j*6)+(5+list.size()+appDataIndex)+2, (short)23));
+				sheet.addMergedRegion(new Region((j*6)+(5+list.size()+appDataIndex)+2, (short)24, (j*6)+(5+list.size()+appDataIndex)+2+1, (short)24));
+				sheet.addMergedRegion(new Region((j*6)+(5+list.size()+appDataIndex)+2, (short)25,(j*6)+(5+list.size()+appDataIndex)+2+1, (short)25));
+				sheet.addMergedRegion(new Region((j*6)+(5+list.size()+appDataIndex)+2, (short)26, (j*6)+(5+list.size()+appDataIndex)+2, (short)29));
+				sheet.addMergedRegion(new Region((j*6)+(5+list.size()+appDataIndex)+2, (short)30, (j*6)+(5+list.size()+appDataIndex)+2, (short)33));
+				sheet.addMergedRegion(new Region((j*6)+(5+list.size()+appDataIndex)+2, (short)34, (j*6)+(5+list.size()+appDataIndex)+2+1, (short)34));
+				sheet.addMergedRegion(new Region((j*6)+(5+list.size()+appDataIndex)+2, (short)35, (j*6)+(5+list.size()+appDataIndex)+2+1, (short)35));
+				sheet.addMergedRegion(new Region((j*6)+(5+list.size()+appDataIndex)+2, (short)36, (j*6)+(5+list.size()+appDataIndex)+2+1, (short)36));
 				
 				HSSFCellStyle stylese=wb.createCellStyle();
 				stylese.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
@@ -571,18 +568,18 @@ public class StatisticDayDataController extends BaseController {
 				fontse.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
 				stylese.setFont(fontse);
 				
-				HSSFRow serow0=sheet.createRow((j+1)*(5+appDatas.get(j).size()));
+				HSSFRow serow0=sheet.createRow((j*6)+(5+list.size()+appDataIndex));
 				HSSFCell cellse0=serow0.createCell(0);
 				cellse0.setCellStyle(stylese);
 				cellse0.setCellValue("日期");
 				serow0.setHeightInPoints((short)20);
 				HSSFCell cellse1=serow0.createCell(1);
 				cellse1.setCellStyle(style);
-				cellse1.setCellValue(appDatas.get(j).get(a).getApp().getAppName());
-				HSSFRow serow1=sheet.createRow((j+1)*(5+appDatas.get(j).size())+1);
+				cellse1.setCellValue(appDatas.get(j).get(0).getApp().getAppName());
+				HSSFRow serow1=sheet.createRow((j*6)+(5+list.size()+appDataIndex)+1);
 				serow1.createCell(1).setCellValue("业务办理");
 				serow1.createCell(34).setCellValue("小计");
-				HSSFRow serow2=sheet.createRow((j+1)*(5+appDatas.get(j).size())+2);
+				HSSFRow serow2=sheet.createRow((j*6)+(5+list.size()+appDataIndex)+2);
 				serow2.createCell(1).setCellValue("新增");
 				serow2.createCell(5).setCellValue("更新");
 				serow2.createCell(9).setCellValue("变更");
@@ -598,7 +595,7 @@ public class StatisticDayDataController extends BaseController {
 				serow2.createCell(34).setCellValue("证书");
 				serow2.createCell(35).setCellValue("KEY");
 				serow2.createCell(36).setCellValue("发票");
-				HSSFRow serow3=sheet.createRow((j+1)*(5+appDatas.get(j).size())+3);
+				HSSFRow serow3=sheet.createRow((j*6)+(5+list.size()+appDataIndex)+3);
 				serow3.createCell(1).setCellValue("1年");
 				serow3.createCell(2).setCellValue("2年");
 				serow3.createCell(3).setCellValue("4年");
@@ -628,69 +625,63 @@ public class StatisticDayDataController extends BaseController {
 				serow3.createCell(31).setCellValue("2年");
 				serow3.createCell(32).setCellValue("4年");
 				serow3.createCell(33).setCellValue("5年");
-			}
-			
-			
-			for(int i=0;i<appDatas.get(j).size();i++)
-			{
-				HSSFRow serow4=sheet.createRow((j+1)*(5+appDatas.get(j).size())+(4+i));
-				serow4.createCell(0).setCellValue((appDatas.get(j).get(i).getStatisticDate()).toString());
-				if(appDatas.get(j).get(i).getCertTotal()==0)
+				
+				for(int i=0;i<appDatas.get(j).size();i++)
 				{
-					sheet.addMergedRegion(new Region((j+1)*(5+appDatas.get(j).size())+(4+i), (short)1, (j+1)*(5+appDatas.get(j).size())+(4+i), (short)36));
-					serow4.createCell(1).setCellValue(appDatas.get(j).get(i).getApp().getAppName()+"应用当天没办理数据");
-				}else if(appDatas.get(j).get(i).getCertTotal()!=0)
-				{
-					serow4.createCell(1).setCellValue(appDatas.get(j).get(i).getAdd1());
-					serow4.createCell(2).setCellValue(appDatas.get(j).get(i).getAdd2());
-					serow4.createCell(3).setCellValue(appDatas.get(j).get(i).getAdd4());
-					serow4.createCell(4).setCellValue(appDatas.get(j).get(i).getAdd5());
-					serow4.createCell(5).setCellValue(appDatas.get(j).get(i).getRenew1());
-					serow4.createCell(6).setCellValue(appDatas.get(j).get(i).getRenew2());
-					serow4.createCell(7).setCellValue(appDatas.get(j).get(i).getRenew4());
-					serow4.createCell(8).setCellValue(appDatas.get(j).get(i).getRenew5());
-					serow4.createCell(9).setCellValue(appDatas.get(j).get(i).getModifyNum());
-					serow4.createCell(10).setCellValue(appDatas.get(j).get(i).getReissueNum());
-					
-					serow4.createCell(11).setCellValue(appDatas.get(j).get(i).getLostReplaceNum());
-					
-					serow4.createCell(12).setCellValue(appDatas.get(j).get(i).getUpdateChangeNum());
-					serow4.createCell(13).setCellValue(appDatas.get(j).get(i).getUpdateChangeNum2());
-					serow4.createCell(14).setCellValue(appDatas.get(j).get(i).getUpdateChangeNum4());
-					serow4.createCell(15).setCellValue(appDatas.get(j).get(i).getUpdateChangeNum5());
-					
-					serow4.createCell(16).setCellValue(appDatas.get(j).get(i).getUpdateLostNum());
-					serow4.createCell(17).setCellValue(appDatas.get(j).get(i).getUpdateLostNum2());
-					serow4.createCell(18).setCellValue(appDatas.get(j).get(i).getUpdateLostNum4());
-					serow4.createCell(19).setCellValue(appDatas.get(j).get(i).getUpdateLostNum5());
-					
-					serow4.createCell(20).setCellValue(appDatas.get(j).get(i).getUpdateReplaceNum());
-					serow4.createCell(21).setCellValue(appDatas.get(j).get(i).getUpdateReplaceNum2());
-					serow4.createCell(22).setCellValue(appDatas.get(j).get(i).getUpdateReplaceNum4());
-					serow4.createCell(23).setCellValue(appDatas.get(j).get(i).getUpdateReplaceNum5());
-					
-					serow4.createCell(24).setCellValue(appDatas.get(j).get(i).getChangeLostNum());
-					serow4.createCell(25).setCellValue(appDatas.get(j).get(i).getChangeReplaceNum());
-					serow4.createCell(26).setCellValue(appDatas.get(j).get(i).getChangeUpdateLostNum());
-					serow4.createCell(27).setCellValue(appDatas.get(j).get(i).getChangeUpdateLostNum2());
-					serow4.createCell(28).setCellValue(appDatas.get(j).get(i).getChangeUpdateLostNum4());
-					serow4.createCell(29).setCellValue(appDatas.get(j).get(i).getChangeUpdateLostNum5());
-					serow4.createCell(30).setCellValue(appDatas.get(j).get(i).getChangeUpdateReplaceNum());
-					serow4.createCell(31).setCellValue(appDatas.get(j).get(i).getChangeUpdateReplaceNum2());
-					serow4.createCell(32).setCellValue(appDatas.get(j).get(i).getChangeUpdateReplaceNum4());
-					serow4.createCell(33).setCellValue(appDatas.get(j).get(i).getChangeUpdateReplaceNum5());
-					
-					serow4.createCell(34).setCellValue(appDatas.get(j).get(i).getCertTotal());
-					serow4.createCell(35).setCellValue(appDatas.get(j).get(i).getKeyTotal());
-					serow4.createCell(36).setCellValue(appDatas.get(j).get(i).getReceiptTotal());
+					HSSFRow serow4=sheet.createRow((j*6)+(5+list.size()+appDataIndex)+(4+i));
+					serow4.createCell(0).setCellValue((appDatas.get(j).get(i).getStatisticDate()).toString());
+					if(appDatas.get(j).get(i).getCertTotal()==0)
+					{
+						sheet.addMergedRegion(new Region((j*6)+(5+list.size()+appDataIndex)+(4+i), (short)1, (j*6)+(5+list.size()+appDataIndex)+(4+i), (short)36));
+						serow4.createCell(1).setCellValue(appDatas.get(j).get(i).getApp().getAppName()+"应用当天没办理数据");
+					}else if(appDatas.get(j).get(i).getCertTotal()!=0)
+					{
+						serow4.createCell(1).setCellValue(appDatas.get(j).get(i).getAdd1());
+						serow4.createCell(2).setCellValue(appDatas.get(j).get(i).getAdd2());
+						serow4.createCell(3).setCellValue(appDatas.get(j).get(i).getAdd4());
+						serow4.createCell(4).setCellValue(appDatas.get(j).get(i).getAdd5());
+						serow4.createCell(5).setCellValue(appDatas.get(j).get(i).getRenew1());
+						serow4.createCell(6).setCellValue(appDatas.get(j).get(i).getRenew2());
+						serow4.createCell(7).setCellValue(appDatas.get(j).get(i).getRenew4());
+						serow4.createCell(8).setCellValue(appDatas.get(j).get(i).getRenew5());
+						serow4.createCell(9).setCellValue(appDatas.get(j).get(i).getModifyNum());
+						serow4.createCell(10).setCellValue(appDatas.get(j).get(i).getReissueNum());
+						
+						serow4.createCell(11).setCellValue(appDatas.get(j).get(i).getLostReplaceNum());
+						
+						serow4.createCell(12).setCellValue(appDatas.get(j).get(i).getUpdateChangeNum());
+						serow4.createCell(13).setCellValue(appDatas.get(j).get(i).getUpdateChangeNum2());
+						serow4.createCell(14).setCellValue(appDatas.get(j).get(i).getUpdateChangeNum4());
+						serow4.createCell(15).setCellValue(appDatas.get(j).get(i).getUpdateChangeNum5());
+						
+						serow4.createCell(16).setCellValue(appDatas.get(j).get(i).getUpdateLostNum());
+						serow4.createCell(17).setCellValue(appDatas.get(j).get(i).getUpdateLostNum2());
+						serow4.createCell(18).setCellValue(appDatas.get(j).get(i).getUpdateLostNum4());
+						serow4.createCell(19).setCellValue(appDatas.get(j).get(i).getUpdateLostNum5());
+						
+						serow4.createCell(20).setCellValue(appDatas.get(j).get(i).getUpdateReplaceNum());
+						serow4.createCell(21).setCellValue(appDatas.get(j).get(i).getUpdateReplaceNum2());
+						serow4.createCell(22).setCellValue(appDatas.get(j).get(i).getUpdateReplaceNum4());
+						serow4.createCell(23).setCellValue(appDatas.get(j).get(i).getUpdateReplaceNum5());
+						
+						serow4.createCell(24).setCellValue(appDatas.get(j).get(i).getChangeLostNum());
+						serow4.createCell(25).setCellValue(appDatas.get(j).get(i).getChangeReplaceNum());
+						serow4.createCell(26).setCellValue(appDatas.get(j).get(i).getChangeUpdateLostNum());
+						serow4.createCell(27).setCellValue(appDatas.get(j).get(i).getChangeUpdateLostNum2());
+						serow4.createCell(28).setCellValue(appDatas.get(j).get(i).getChangeUpdateLostNum4());
+						serow4.createCell(29).setCellValue(appDatas.get(j).get(i).getChangeUpdateLostNum5());
+						serow4.createCell(30).setCellValue(appDatas.get(j).get(i).getChangeUpdateReplaceNum());
+						serow4.createCell(31).setCellValue(appDatas.get(j).get(i).getChangeUpdateReplaceNum2());
+						serow4.createCell(32).setCellValue(appDatas.get(j).get(i).getChangeUpdateReplaceNum4());
+						serow4.createCell(33).setCellValue(appDatas.get(j).get(i).getChangeUpdateReplaceNum5());
+						
+						serow4.createCell(34).setCellValue(appDatas.get(j).get(i).getCertTotal());
+						serow4.createCell(35).setCellValue(appDatas.get(j).get(i).getKeyTotal());
+						serow4.createCell(36).setCellValue(appDatas.get(j).get(i).getReceiptTotal());
+					}
 				}
-				
-
-				
-			}
-			
+				appDataIndex+=appDatas.get(j).size();
 		}
-		
 		
 		try {
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -978,31 +969,28 @@ public class StatisticDayDataController extends BaseController {
 			rown.createCell(8).setCellValue(sumList.get(i).getKeyStoreTotal());
 			rown.createCell(9).setCellValue(sumList.get(i).getReceiptStoreTotal());
 		}
-		
+		int appDataIndex=0;
 		for(int j=0;j<appSumList.size();j++)
 		{
-			for(int a=0;a<appSumList.get(j).size();a++)
-			{
-				
-				sheet.addMergedRegion(new Region((j+1)*(5+appSumList.get(j).size()),(short)0,(j+1)*(5+appSumList.get(j).size())+3,(short)0));
-				sheet.addMergedRegion(new Region((j+1)*(5+appSumList.get(j).size()),(short)1,(j+1)*(5+appSumList.get(j).size()),(short)37));
-				sheet.addMergedRegion(new Region((j+1)*(5+appSumList.get(j).size())+1, (short)1, (j+1)*(5+appSumList.get(j).size())+1, (short)33));
-				sheet.addMergedRegion(new Region((j+1)*(5+appSumList.get(j).size())+1, (short)34, (j+1)*(5+appSumList.get(j).size())+1, (short)36));
-				sheet.addMergedRegion(new Region((j+1)*(5+appSumList.get(j).size())+2, (short)1, (j+1)*(5+appSumList.get(j).size())+2, (short)4));
-				sheet.addMergedRegion(new Region((j+1)*(5+appSumList.get(j).size())+2, (short)5, (j+1)*(5+appSumList.get(j).size())+2, (short)8));
-				sheet.addMergedRegion(new Region((j+1)*(5+appSumList.get(j).size())+2, (short)9, (j+1)*(5+appSumList.get(j).size())+2+1, (short)9));
-				sheet.addMergedRegion(new Region((j+1)*(5+appSumList.get(j).size())+2, (short)10, (j+1)*(5+appSumList.get(j).size())+2+1, (short)10));
-				sheet.addMergedRegion(new Region((j+1)*(5+appSumList.get(j).size())+2, (short)11, (j+1)*(5+appSumList.get(j).size())+2+1, (short)11));
-				sheet.addMergedRegion(new Region((j+1)*(5+appSumList.get(j).size())+2, (short)12, (j+1)*(5+appSumList.get(j).size())+2, (short)15));
-				sheet.addMergedRegion(new Region((j+1)*(5+appSumList.get(j).size())+2, (short)16, (j+1)*(5+appSumList.get(j).size())+2, (short)19));
-				sheet.addMergedRegion(new Region((j+1)*(5+appSumList.get(j).size())+2, (short)20, (j+1)*(5+appSumList.get(j).size())+2, (short)23));
-				sheet.addMergedRegion(new Region((j+1)*(5+appSumList.get(j).size())+2, (short)24, (j+1)*(5+appSumList.get(j).size())+2+1, (short)24));
-				sheet.addMergedRegion(new Region((j+1)*(5+appSumList.get(j).size())+2, (short)25,(j+1)*(5+appSumList.get(j).size())+2+1, (short)25));
-				sheet.addMergedRegion(new Region((j+1)*(5+appSumList.get(j).size())+2, (short)26, (j+1)*(5+appSumList.get(j).size())+2, (short)29));
-				sheet.addMergedRegion(new Region((j+1)*(5+appSumList.get(j).size())+2, (short)30, (j+1)*(5+appSumList.get(j).size())+2, (short)33));
-				sheet.addMergedRegion(new Region((j+1)*(5+appSumList.get(j).size())+2, (short)34, (j+1)*(5+appSumList.get(j).size())+2+1, (short)34));
-				sheet.addMergedRegion(new Region((j+1)*(5+appSumList.get(j).size())+2, (short)35, (j+1)*(5+appSumList.get(j).size())+2+1, (short)35));
-				sheet.addMergedRegion(new Region((j+1)*(5+appSumList.get(j).size())+2, (short)36, (j+1)*(5+appSumList.get(j).size())+2+1, (short)36));
+				sheet.addMergedRegion(new Region((j*6)+(5+sumList.size()+appDataIndex),(short)0,(j*6)+(5+sumList.size()+appDataIndex)+3,(short)0));
+				sheet.addMergedRegion(new Region((j*6)+(5+sumList.size()+appDataIndex),(short)1,(j*6)+(5+sumList.size()+appDataIndex),(short)37));
+				sheet.addMergedRegion(new Region((j*6)+(5+sumList.size()+appDataIndex)+1, (short)1, (j*6)+(5+sumList.size()+appDataIndex)+1, (short)33));
+				sheet.addMergedRegion(new Region((j*6)+(5+sumList.size()+appDataIndex)+1, (short)34, (j*6)+(5+sumList.size()+appDataIndex)+1, (short)36));
+				sheet.addMergedRegion(new Region((j*6)+(5+sumList.size()+appDataIndex)+2, (short)1, (j*6)+(5+sumList.size()+appDataIndex)+2, (short)4));
+				sheet.addMergedRegion(new Region((j*6)+(5+sumList.size()+appDataIndex)+2, (short)5, (j*6)+(5+sumList.size()+appDataIndex)+2, (short)8));
+				sheet.addMergedRegion(new Region((j*6)+(5+sumList.size()+appDataIndex)+2, (short)9, (j*6)+(5+sumList.size()+appDataIndex)+2+1, (short)9));
+				sheet.addMergedRegion(new Region((j*6)+(5+sumList.size()+appDataIndex)+2, (short)10, (j*6)+(5+sumList.size()+appDataIndex)+2+1, (short)10));
+				sheet.addMergedRegion(new Region((j*6)+(5+sumList.size()+appDataIndex)+2, (short)11, (j*6)+(5+sumList.size()+appDataIndex)+2+1, (short)11));
+				sheet.addMergedRegion(new Region((j*6)+(5+sumList.size()+appDataIndex)+2, (short)12, (j*6)+(5+sumList.size()+appDataIndex)+2, (short)15));
+				sheet.addMergedRegion(new Region((j*6)+(5+sumList.size()+appDataIndex)+2, (short)16, (j*6)+(5+sumList.size()+appDataIndex)+2, (short)19));
+				sheet.addMergedRegion(new Region((j*6)+(5+sumList.size()+appDataIndex)+2, (short)20, (j*6)+(5+sumList.size()+appDataIndex)+2, (short)23));
+				sheet.addMergedRegion(new Region((j*6)+(5+sumList.size()+appDataIndex)+2, (short)24, (j*6)+(5+sumList.size()+appDataIndex)+2+1, (short)24));
+				sheet.addMergedRegion(new Region((j*6)+(5+sumList.size()+appDataIndex)+2, (short)25,(j*6)+(5+sumList.size()+appDataIndex)+2+1, (short)25));
+				sheet.addMergedRegion(new Region((j*6)+(5+sumList.size()+appDataIndex)+2, (short)26, (j*6)+(5+sumList.size()+appDataIndex)+2, (short)29));
+				sheet.addMergedRegion(new Region((j*6)+(5+sumList.size()+appDataIndex)+2, (short)30, (j*6)+(5+sumList.size()+appDataIndex)+2, (short)33));
+				sheet.addMergedRegion(new Region((j*6)+(5+sumList.size()+appDataIndex)+2, (short)34, (j*6)+(5+sumList.size()+appDataIndex)+2+1, (short)34));
+				sheet.addMergedRegion(new Region((j*6)+(5+sumList.size()+appDataIndex)+2, (short)35, (j*6)+(5+sumList.size()+appDataIndex)+2+1, (short)35));
+				sheet.addMergedRegion(new Region((j*6)+(5+sumList.size()+appDataIndex)+2, (short)36, (j*6)+(5+sumList.size()+appDataIndex)+2+1, (short)36));
 				
 				HSSFCellStyle stylese=wb.createCellStyle();
 				stylese.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
@@ -1013,18 +1001,18 @@ public class StatisticDayDataController extends BaseController {
 				fontse.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
 				stylese.setFont(fontse);
 				
-				HSSFRow serow0=sheet.createRow((j+1)*(5+appSumList.get(j).size()));
+				HSSFRow serow0=sheet.createRow((j*6)+(5+sumList.size()+appDataIndex));
 				HSSFCell cellse0=serow0.createCell(0);
 				cellse0.setCellStyle(stylese);
 				cellse0.setCellValue("日期");
 				serow0.setHeightInPoints((short)20);
 				HSSFCell cellse1=serow0.createCell(1);
 				cellse1.setCellStyle(style);
-				cellse1.setCellValue(appSumList.get(j).get(j).getApp().getAppName());
-				HSSFRow serow1=sheet.createRow((j+1)*(5+appSumList.get(j).size())+1);
+				cellse1.setCellValue(appSumList.get(j).get(0).getApp().getAppName());
+				HSSFRow serow1=sheet.createRow((j*6)+(5+sumList.size()+appDataIndex)+1);
 				serow1.createCell(1).setCellValue("业务办理");
 				serow1.createCell(34).setCellValue("小计");
-				HSSFRow serow2=sheet.createRow((j+1)*(5+appSumList.get(j).size())+2);
+				HSSFRow serow2=sheet.createRow((j*6)+(5+sumList.size()+appDataIndex)+2);
 				serow2.createCell(1).setCellValue("新增");
 				serow2.createCell(5).setCellValue("更新");
 				serow2.createCell(9).setCellValue("变更");
@@ -1040,7 +1028,7 @@ public class StatisticDayDataController extends BaseController {
 				serow2.createCell(34).setCellValue("证书");
 				serow2.createCell(35).setCellValue("KEY");
 				serow2.createCell(36).setCellValue("发票");
-				HSSFRow serow3=sheet.createRow((j+1)*(5+appSumList.get(j).size())+3);
+				HSSFRow serow3=sheet.createRow((j*6)+(5+sumList.size()+appDataIndex)+3);
 				serow3.createCell(1).setCellValue("1年");
 				serow3.createCell(2).setCellValue("2年");
 				serow3.createCell(3).setCellValue("4年");
@@ -1070,70 +1058,219 @@ public class StatisticDayDataController extends BaseController {
 				serow3.createCell(31).setCellValue("2年");
 				serow3.createCell(32).setCellValue("4年");
 				serow3.createCell(33).setCellValue("5年");
-			}
-			
-			
-			for(int i=0;i<appSumList.get(j).size();i++)
-			{
-				SimpleDateFormat simple=new SimpleDateFormat("yyyy-MM-dd");
-				String date=simple.format(appSumList.get(j).get(i).getStatisticDate());
-				HSSFRow serow4=sheet.createRow((j+1)*(5+appSumList.get(j).size())+(4+i));
-				serow4.createCell(0).setCellValue(date.toString());
-				if(appSumList.get(j).get(i).getCertTotal()==0)
+				
+				for(int i=0;i<appSumList.get(j).size();i++)
 				{
-					sheet.addMergedRegion(new Region((j+1)*(5+appSumList.get(j).size())+(4+i), (short)1, (j+1)*(5+appSumList.get(j).size())+(4+i), (short)36));
-					serow4.createCell(1).setCellValue(appSumList.get(j).get(j).getApp().getAppName()+"应用当月没办理数据");
-				}else if(appSumList.get(j).get(i).getCertTotal()!=0)
-				{
-					serow4.createCell(1).setCellValue(appSumList.get(j).get(i).getAdd1());
-					serow4.createCell(2).setCellValue(appSumList.get(j).get(i).getAdd2());
-					serow4.createCell(3).setCellValue(appSumList.get(j).get(i).getAdd4());
-					serow4.createCell(4).setCellValue(appSumList.get(j).get(i).getAdd5());
-					serow4.createCell(5).setCellValue(appSumList.get(j).get(i).getRenew1());
-					serow4.createCell(6).setCellValue(appSumList.get(j).get(i).getRenew2());
-					serow4.createCell(7).setCellValue(appSumList.get(j).get(i).getRenew4());
-					serow4.createCell(8).setCellValue(appSumList.get(j).get(i).getRenew5());
-					serow4.createCell(9).setCellValue(appSumList.get(j).get(i).getModifyNum());
-					serow4.createCell(10).setCellValue(appSumList.get(j).get(i).getReissueNum());
-					
-					serow4.createCell(11).setCellValue(appSumList.get(j).get(i).getLostReplaceNum());
-					
-					serow4.createCell(12).setCellValue(appSumList.get(j).get(i).getUpdateChangeNum());
-					serow4.createCell(13).setCellValue(appSumList.get(j).get(i).getUpdateChangeNum2());
-					serow4.createCell(14).setCellValue(appSumList.get(j).get(i).getUpdateChangeNum4());
-					serow4.createCell(15).setCellValue(appSumList.get(j).get(i).getUpdateChangeNum5());
-					
-					serow4.createCell(16).setCellValue(appSumList.get(j).get(i).getUpdateLostNum());
-					serow4.createCell(17).setCellValue(appSumList.get(j).get(i).getUpdateLostNum2());
-					serow4.createCell(18).setCellValue(appSumList.get(j).get(i).getUpdateLostNum4());
-					serow4.createCell(19).setCellValue(appSumList.get(j).get(i).getUpdateLostNum5());
-					
-					serow4.createCell(20).setCellValue(appSumList.get(j).get(i).getUpdateReplaceNum());
-					serow4.createCell(21).setCellValue(appSumList.get(j).get(i).getUpdateReplaceNum2());
-					serow4.createCell(22).setCellValue(appSumList.get(j).get(i).getUpdateReplaceNum4());
-					serow4.createCell(23).setCellValue(appSumList.get(j).get(i).getUpdateReplaceNum5());
-					
-					serow4.createCell(24).setCellValue(appSumList.get(j).get(i).getChangeLostNum());
-					serow4.createCell(25).setCellValue(appSumList.get(j).get(i).getChangeReplaceNum());
-					serow4.createCell(26).setCellValue(appSumList.get(j).get(i).getChangeUpdateLostNum());
-					serow4.createCell(27).setCellValue(appSumList.get(j).get(i).getChangeUpdateLostNum2());
-					serow4.createCell(28).setCellValue(appSumList.get(j).get(i).getChangeUpdateLostNum4());
-					serow4.createCell(29).setCellValue(appSumList.get(j).get(i).getChangeUpdateLostNum5());
-					serow4.createCell(30).setCellValue(appSumList.get(j).get(i).getChangeUpdateReplaceNum());
-					serow4.createCell(31).setCellValue(appSumList.get(j).get(i).getChangeUpdateReplaceNum2());
-					serow4.createCell(32).setCellValue(appSumList.get(j).get(i).getChangeUpdateReplaceNum4());
-					serow4.createCell(33).setCellValue(appSumList.get(j).get(i).getChangeUpdateReplaceNum5());
-					
-					serow4.createCell(34).setCellValue(appSumList.get(j).get(i).getCertTotal());
-					serow4.createCell(35).setCellValue(appSumList.get(j).get(i).getKeyTotal());
-					serow4.createCell(36).setCellValue(appSumList.get(j).get(i).getReceiptTotal());
+					HSSFRow serow4=sheet.createRow((j*6)+(5+sumList.size()+appDataIndex)+(4+i));
+					serow4.createCell(0).setCellValue((new SimpleDateFormat("yyyy-MM-dd").format(appSumList.get(j).get(i).getStatisticDate())));
+					if(appSumList.get(j).get(i).getCertTotal()==0)
+					{
+						sheet.addMergedRegion(new Region((j*6)+(5+sumList.size()+appDataIndex)+(4+i), (short)1, (j*6)+(5+sumList.size()+appDataIndex)+(4+i), (short)36));
+						serow4.createCell(1).setCellValue(appSumList.get(j).get(i).getApp().getAppName()+"应用当月没办理数据");
+					}else if(appSumList.get(j).get(i).getCertTotal()!=0)
+					{
+						serow4.createCell(1).setCellValue(appSumList.get(j).get(i).getAdd1());
+						serow4.createCell(2).setCellValue(appSumList.get(j).get(i).getAdd2());
+						serow4.createCell(3).setCellValue(appSumList.get(j).get(i).getAdd4());
+						serow4.createCell(4).setCellValue(appSumList.get(j).get(i).getAdd5());
+						serow4.createCell(5).setCellValue(appSumList.get(j).get(i).getRenew1());
+						serow4.createCell(6).setCellValue(appSumList.get(j).get(i).getRenew2());
+						serow4.createCell(7).setCellValue(appSumList.get(j).get(i).getRenew4());
+						serow4.createCell(8).setCellValue(appSumList.get(j).get(i).getRenew5());
+						serow4.createCell(9).setCellValue(appSumList.get(j).get(i).getModifyNum());
+						serow4.createCell(10).setCellValue(appSumList.get(j).get(i).getReissueNum());
+						
+						serow4.createCell(11).setCellValue(appSumList.get(j).get(i).getLostReplaceNum());
+						
+						serow4.createCell(12).setCellValue(appSumList.get(j).get(i).getUpdateChangeNum());
+						serow4.createCell(13).setCellValue(appSumList.get(j).get(i).getUpdateChangeNum2());
+						serow4.createCell(14).setCellValue(appSumList.get(j).get(i).getUpdateChangeNum4());
+						serow4.createCell(15).setCellValue(appSumList.get(j).get(i).getUpdateChangeNum5());
+						
+						serow4.createCell(16).setCellValue(appSumList.get(j).get(i).getUpdateLostNum());
+						serow4.createCell(17).setCellValue(appSumList.get(j).get(i).getUpdateLostNum2());
+						serow4.createCell(18).setCellValue(appSumList.get(j).get(i).getUpdateLostNum4());
+						serow4.createCell(19).setCellValue(appSumList.get(j).get(i).getUpdateLostNum5());
+						
+						serow4.createCell(20).setCellValue(appSumList.get(j).get(i).getUpdateReplaceNum());
+						serow4.createCell(21).setCellValue(appSumList.get(j).get(i).getUpdateReplaceNum2());
+						serow4.createCell(22).setCellValue(appSumList.get(j).get(i).getUpdateReplaceNum4());
+						serow4.createCell(23).setCellValue(appSumList.get(j).get(i).getUpdateReplaceNum5());
+						
+						serow4.createCell(24).setCellValue(appSumList.get(j).get(i).getChangeLostNum());
+						serow4.createCell(25).setCellValue(appSumList.get(j).get(i).getChangeReplaceNum());
+						serow4.createCell(26).setCellValue(appSumList.get(j).get(i).getChangeUpdateLostNum());
+						serow4.createCell(27).setCellValue(appSumList.get(j).get(i).getChangeUpdateLostNum2());
+						serow4.createCell(28).setCellValue(appSumList.get(j).get(i).getChangeUpdateLostNum4());
+						serow4.createCell(29).setCellValue(appSumList.get(j).get(i).getChangeUpdateLostNum5());
+						serow4.createCell(30).setCellValue(appSumList.get(j).get(i).getChangeUpdateReplaceNum());
+						serow4.createCell(31).setCellValue(appSumList.get(j).get(i).getChangeUpdateReplaceNum2());
+						serow4.createCell(32).setCellValue(appSumList.get(j).get(i).getChangeUpdateReplaceNum4());
+						serow4.createCell(33).setCellValue(appSumList.get(j).get(i).getChangeUpdateReplaceNum5());
+						
+						serow4.createCell(34).setCellValue(appSumList.get(j).get(i).getCertTotal());
+						serow4.createCell(35).setCellValue(appSumList.get(j).get(i).getKeyTotal());
+						serow4.createCell(36).setCellValue(appSumList.get(j).get(i).getReceiptTotal());
+					}
 				}
-				
-
-				
-			}
-			
+				appDataIndex+=appSumList.get(j).size();
 		}
+		
+//		for(int j=0;j<appSumList.size();j++)
+//		{
+//			for(int a=0;a<appSumList.get(j).size();a++)
+//			{
+//				
+//				sheet.addMergedRegion(new Region((j+1)*(5+appSumList.get(j).size()),(short)0,(j+1)*(5+appSumList.get(j).size())+3,(short)0));
+//				sheet.addMergedRegion(new Region((j+1)*(5+appSumList.get(j).size()),(short)1,(j+1)*(5+appSumList.get(j).size()),(short)37));
+//				sheet.addMergedRegion(new Region((j+1)*(5+appSumList.get(j).size())+1, (short)1, (j+1)*(5+appSumList.get(j).size())+1, (short)33));
+//				sheet.addMergedRegion(new Region((j+1)*(5+appSumList.get(j).size())+1, (short)34, (j+1)*(5+appSumList.get(j).size())+1, (short)36));
+//				sheet.addMergedRegion(new Region((j+1)*(5+appSumList.get(j).size())+2, (short)1, (j+1)*(5+appSumList.get(j).size())+2, (short)4));
+//				sheet.addMergedRegion(new Region((j+1)*(5+appSumList.get(j).size())+2, (short)5, (j+1)*(5+appSumList.get(j).size())+2, (short)8));
+//				sheet.addMergedRegion(new Region((j+1)*(5+appSumList.get(j).size())+2, (short)9, (j+1)*(5+appSumList.get(j).size())+2+1, (short)9));
+//				sheet.addMergedRegion(new Region((j+1)*(5+appSumList.get(j).size())+2, (short)10, (j+1)*(5+appSumList.get(j).size())+2+1, (short)10));
+//				sheet.addMergedRegion(new Region((j+1)*(5+appSumList.get(j).size())+2, (short)11, (j+1)*(5+appSumList.get(j).size())+2+1, (short)11));
+//				sheet.addMergedRegion(new Region((j+1)*(5+appSumList.get(j).size())+2, (short)12, (j+1)*(5+appSumList.get(j).size())+2, (short)15));
+//				sheet.addMergedRegion(new Region((j+1)*(5+appSumList.get(j).size())+2, (short)16, (j+1)*(5+appSumList.get(j).size())+2, (short)19));
+//				sheet.addMergedRegion(new Region((j+1)*(5+appSumList.get(j).size())+2, (short)20, (j+1)*(5+appSumList.get(j).size())+2, (short)23));
+//				sheet.addMergedRegion(new Region((j+1)*(5+appSumList.get(j).size())+2, (short)24, (j+1)*(5+appSumList.get(j).size())+2+1, (short)24));
+//				sheet.addMergedRegion(new Region((j+1)*(5+appSumList.get(j).size())+2, (short)25,(j+1)*(5+appSumList.get(j).size())+2+1, (short)25));
+//				sheet.addMergedRegion(new Region((j+1)*(5+appSumList.get(j).size())+2, (short)26, (j+1)*(5+appSumList.get(j).size())+2, (short)29));
+//				sheet.addMergedRegion(new Region((j+1)*(5+appSumList.get(j).size())+2, (short)30, (j+1)*(5+appSumList.get(j).size())+2, (short)33));
+//				sheet.addMergedRegion(new Region((j+1)*(5+appSumList.get(j).size())+2, (short)34, (j+1)*(5+appSumList.get(j).size())+2+1, (short)34));
+//				sheet.addMergedRegion(new Region((j+1)*(5+appSumList.get(j).size())+2, (short)35, (j+1)*(5+appSumList.get(j).size())+2+1, (short)35));
+//				sheet.addMergedRegion(new Region((j+1)*(5+appSumList.get(j).size())+2, (short)36, (j+1)*(5+appSumList.get(j).size())+2+1, (short)36));
+//				
+//				HSSFCellStyle stylese=wb.createCellStyle();
+//				stylese.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+//				stylese.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+//				HSSFFont fontse=wb.createFont();
+//				fontse.setFontHeightInPoints((short)10);
+//				fontse.setFontName("宋体");
+//				fontse.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+//				stylese.setFont(fontse);
+//				
+//				HSSFRow serow0=sheet.createRow((j+1)*(5+appSumList.get(j).size()));
+//				HSSFCell cellse0=serow0.createCell(0);
+//				cellse0.setCellStyle(stylese);
+//				cellse0.setCellValue("日期");
+//				serow0.setHeightInPoints((short)20);
+//				HSSFCell cellse1=serow0.createCell(1);
+//				cellse1.setCellStyle(style);
+//				cellse1.setCellValue(appSumList.get(j).get(j).getApp().getAppName());
+//				HSSFRow serow1=sheet.createRow((j+1)*(5+appSumList.get(j).size())+1);
+//				serow1.createCell(1).setCellValue("业务办理");
+//				serow1.createCell(34).setCellValue("小计");
+//				HSSFRow serow2=sheet.createRow((j+1)*(5+appSumList.get(j).size())+2);
+//				serow2.createCell(1).setCellValue("新增");
+//				serow2.createCell(5).setCellValue("更新");
+//				serow2.createCell(9).setCellValue("变更");
+//				serow2.createCell(10).setCellValue("损坏更换");
+//				serow2.createCell(11).setCellValue("遗失补办");
+//				serow2.createCell(12).setCellValue("更新+变更");
+//				serow2.createCell(16).setCellValue("更新+遗失补办");
+//				serow2.createCell(20).setCellValue("更新+遗损坏更换");
+//				serow2.createCell(24).setCellValue("变更+遗失补办");
+//				serow2.createCell(25).setCellValue("变更+遗损坏更换");
+//				serow2.createCell(26).setCellValue("变更+遗失补办");
+//				serow2.createCell(30).setCellValue("变更+遗损坏更换");
+//				serow2.createCell(34).setCellValue("证书");
+//				serow2.createCell(35).setCellValue("KEY");
+//				serow2.createCell(36).setCellValue("发票");
+//				HSSFRow serow3=sheet.createRow((j+1)*(5+appSumList.get(j).size())+3);
+//				serow3.createCell(1).setCellValue("1年");
+//				serow3.createCell(2).setCellValue("2年");
+//				serow3.createCell(3).setCellValue("4年");
+//				serow3.createCell(4).setCellValue("5年");
+//				serow3.createCell(5).setCellValue("1年");
+//				serow3.createCell(6).setCellValue("2年");
+//				serow3.createCell(7).setCellValue("4年");
+//				serow3.createCell(8).setCellValue("5年");
+//				
+//				serow3.createCell(12).setCellValue("1年");
+//				serow3.createCell(13).setCellValue("2年");
+//				serow3.createCell(14).setCellValue("4年");
+//				serow3.createCell(15).setCellValue("5年");
+//				serow3.createCell(16).setCellValue("1年");
+//				serow3.createCell(17).setCellValue("2年");
+//				serow3.createCell(18).setCellValue("4年");
+//				serow3.createCell(19).setCellValue("5年");
+//				serow3.createCell(20).setCellValue("1年");
+//				serow3.createCell(21).setCellValue("2年");
+//				serow3.createCell(22).setCellValue("4年");
+//				serow3.createCell(23).setCellValue("5年");
+//				serow3.createCell(26).setCellValue("1年");
+//				serow3.createCell(27).setCellValue("2年");
+//				serow3.createCell(28).setCellValue("4年");
+//				serow3.createCell(29).setCellValue("5年");
+//				serow3.createCell(30).setCellValue("1年");
+//				serow3.createCell(31).setCellValue("2年");
+//				serow3.createCell(32).setCellValue("4年");
+//				serow3.createCell(33).setCellValue("5年");
+//			}
+//			
+//			
+//			for(int i=0;i<appSumList.get(j).size();i++)
+//			{
+//				SimpleDateFormat simple=new SimpleDateFormat("yyyy-MM-dd");
+//				String date=simple.format(appSumList.get(j).get(i).getStatisticDate());
+//				HSSFRow serow4=sheet.createRow((j+1)*(5+appSumList.get(j).size())+(4+i));
+//				serow4.createCell(0).setCellValue(date.toString());
+//				if(appSumList.get(j).get(i).getCertTotal()==0)
+//				{
+//					sheet.addMergedRegion(new Region((j+1)*(5+appSumList.get(j).size())+(4+i), (short)1, (j+1)*(5+appSumList.get(j).size())+(4+i), (short)36));
+//					serow4.createCell(1).setCellValue(appSumList.get(j).get(j).getApp().getAppName()+"应用当月没办理数据");
+//				}else if(appSumList.get(j).get(i).getCertTotal()!=0)
+//				{
+//					serow4.createCell(1).setCellValue(appSumList.get(j).get(i).getAdd1());
+//					serow4.createCell(2).setCellValue(appSumList.get(j).get(i).getAdd2());
+//					serow4.createCell(3).setCellValue(appSumList.get(j).get(i).getAdd4());
+//					serow4.createCell(4).setCellValue(appSumList.get(j).get(i).getAdd5());
+//					serow4.createCell(5).setCellValue(appSumList.get(j).get(i).getRenew1());
+//					serow4.createCell(6).setCellValue(appSumList.get(j).get(i).getRenew2());
+//					serow4.createCell(7).setCellValue(appSumList.get(j).get(i).getRenew4());
+//					serow4.createCell(8).setCellValue(appSumList.get(j).get(i).getRenew5());
+//					serow4.createCell(9).setCellValue(appSumList.get(j).get(i).getModifyNum());
+//					serow4.createCell(10).setCellValue(appSumList.get(j).get(i).getReissueNum());
+//					
+//					serow4.createCell(11).setCellValue(appSumList.get(j).get(i).getLostReplaceNum());
+//					
+//					serow4.createCell(12).setCellValue(appSumList.get(j).get(i).getUpdateChangeNum());
+//					serow4.createCell(13).setCellValue(appSumList.get(j).get(i).getUpdateChangeNum2());
+//					serow4.createCell(14).setCellValue(appSumList.get(j).get(i).getUpdateChangeNum4());
+//					serow4.createCell(15).setCellValue(appSumList.get(j).get(i).getUpdateChangeNum5());
+//					
+//					serow4.createCell(16).setCellValue(appSumList.get(j).get(i).getUpdateLostNum());
+//					serow4.createCell(17).setCellValue(appSumList.get(j).get(i).getUpdateLostNum2());
+//					serow4.createCell(18).setCellValue(appSumList.get(j).get(i).getUpdateLostNum4());
+//					serow4.createCell(19).setCellValue(appSumList.get(j).get(i).getUpdateLostNum5());
+//					
+//					serow4.createCell(20).setCellValue(appSumList.get(j).get(i).getUpdateReplaceNum());
+//					serow4.createCell(21).setCellValue(appSumList.get(j).get(i).getUpdateReplaceNum2());
+//					serow4.createCell(22).setCellValue(appSumList.get(j).get(i).getUpdateReplaceNum4());
+//					serow4.createCell(23).setCellValue(appSumList.get(j).get(i).getUpdateReplaceNum5());
+//					
+//					serow4.createCell(24).setCellValue(appSumList.get(j).get(i).getChangeLostNum());
+//					serow4.createCell(25).setCellValue(appSumList.get(j).get(i).getChangeReplaceNum());
+//					serow4.createCell(26).setCellValue(appSumList.get(j).get(i).getChangeUpdateLostNum());
+//					serow4.createCell(27).setCellValue(appSumList.get(j).get(i).getChangeUpdateLostNum2());
+//					serow4.createCell(28).setCellValue(appSumList.get(j).get(i).getChangeUpdateLostNum4());
+//					serow4.createCell(29).setCellValue(appSumList.get(j).get(i).getChangeUpdateLostNum5());
+//					serow4.createCell(30).setCellValue(appSumList.get(j).get(i).getChangeUpdateReplaceNum());
+//					serow4.createCell(31).setCellValue(appSumList.get(j).get(i).getChangeUpdateReplaceNum2());
+//					serow4.createCell(32).setCellValue(appSumList.get(j).get(i).getChangeUpdateReplaceNum4());
+//					serow4.createCell(33).setCellValue(appSumList.get(j).get(i).getChangeUpdateReplaceNum5());
+//					
+//					serow4.createCell(34).setCellValue(appSumList.get(j).get(i).getCertTotal());
+//					serow4.createCell(35).setCellValue(appSumList.get(j).get(i).getKeyTotal());
+//					serow4.createCell(36).setCellValue(appSumList.get(j).get(i).getReceiptTotal());
+//				}
+//				
+//
+//				
+//			}
+//			
+//		}
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
