@@ -64,7 +64,7 @@
 	<ul class="nav nav-tabs">
 		<li><a href="${ctx}/message/smsConfiguration/">短信配置</a></li>
 		<li class="active"><a
-			href="${ctx}/message/smsConfiguration/form?id=${smsConfiguration.id}">短信配置<shiro:hasPermission
+			href="${ctx}/message/smsConfiguration/form2?id=${smsConfiguration.id}">短信配置<shiro:hasPermission
 					name="message:smsConfiguration:edit">${not empty smsConfiguration.id?'修改':'添加'}</shiro:hasPermission>
 				<shiro:lacksPermission name="message:smsConfiguration:edit">查看</shiro:lacksPermission></a></li>
 	</ul>
