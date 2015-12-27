@@ -4567,7 +4567,7 @@ public class WorkDealInfoController extends BaseController {
 			rowi2.createCell(5).setCellValue(dealCountSta.getAlipayCount());
 			rowi2.createCell(6).setCellValue(dealCountSta.getGovCount());
 			rowi2.createCell(7).setCellValue(dealCountSta.getContractCount());
-			sheet.addMergedRegion(new Region(0, (short)0, 0,(short)9));
+			sheet.addMergedRegion(new Region(2, (short)0, 2,(short)7));
 			HSSFRow rowi3=sheet.createRow(2);
 			rowi3.createCell(0).setCellValue(dealMsg);
 		}

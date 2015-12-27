@@ -42,7 +42,7 @@
 		var endTime = $("#endTime").val();
 		window.location.href = "${ctx}/work/workDealInfo/exportDealPayList?area="
 				+ area
-				+ "&office="
+				+ "&officeId="
 				+ office
 				+ "&appId="
 				+ appId
