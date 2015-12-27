@@ -182,7 +182,7 @@
 						</c:if>>${off.name}</option>
 				</c:forEach>
 			</select>
-			<label>组合业务：</label><input type="checkbox" name="multiType" id="multiType" value="true" <c:if test="${multiType}">"checked"</c:if>>
+			<label>组合业务：</label><input type="checkbox" name="multiType" id="multiType" value="true" <c:if test="${multiType}">checked="checked"</c:if>>
 		</div>
 
 		<div style="margin-top: 10px">
@@ -251,13 +251,20 @@
 				</tr>
 				<tr>
 					<th rowspan="2">月份</th>
-					<th colspan=4>新增（企业专用）</th>
-					<th colspan=4>新增（个人专用）</th>
-					<th colspan=4>更新（企业专用）</th>
-					<th colspan=4>更新（个人专用）</th>
+					<th colspan=4>新增（企业）</th>
+					<th colspan=4>新增（个人）</th>
+					<th colspan=4>更新（企业）</th>
+					<th colspan=4>更新（个人）</th>
+					<c:if test="${multiType==false}">
 					<th rowspan="2">遗失补办</th>
 					<th rowspan="2">损坏更换</th>
 					<th rowspan="2">信息变更</th>
+					</c:if>
+					<c:if test="${multiType}">
+					<th rowspan="2">更新+遗失补办</th>
+					<th rowspan="2">更新+损坏更换</th>
+					<th rowspan="2">更新+更换/补办+信息变更</th>
+					</c:if>
 				</tr>
 				<tr>
 					<c:forEach var="i" begin="1" end="4">
