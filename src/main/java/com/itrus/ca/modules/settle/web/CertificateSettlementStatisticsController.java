@@ -348,9 +348,16 @@ public class CertificateSettlementStatisticsController extends BaseController {
 			row2.createCell(14).setCellValue("二年");
 			row2.createCell(15).setCellValue("四年");
 			row2.createCell(16).setCellValue("五年");
-			row1.createCell(17).setCellValue("遗失补办");
-			row1.createCell(18).setCellValue("损坏更换");
-			row1.createCell(19).setCellValue("信息变更");
+			if(multiType==false){
+				row1.createCell(17).setCellValue("遗失补办");
+				row1.createCell(18).setCellValue("损坏更换");
+				row1.createCell(19).setCellValue("信息变更");
+			}else{
+				row1.createCell(17).setCellValue("更新+遗失补办");
+				row1.createCell(18).setCellValue("更新+损坏更换");
+				row1.createCell(19).setCellValue("更新+更换/补办+信息变更");
+			}
+			
 			List<Long> officeIdList = new ArrayList<Long>();
 			
 			if (officeId != null) {

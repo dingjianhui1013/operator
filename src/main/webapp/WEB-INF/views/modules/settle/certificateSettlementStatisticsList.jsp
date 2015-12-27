@@ -25,7 +25,7 @@
 			$.each(data, function(idx, ele) {
 				//console.log(idx);
 				//console.log(ele);
-				
+
 				html += "<option value=\""+ele.id+"\">" + ele.name
 						+ "</ooption>"
 			});
@@ -37,19 +37,20 @@
 	function changeAgentId() {
 		var tempStyle = $("#tempStyle").prop('value');
 		var url = "${ctx}/profile/configChargeAgent/changeAgentId?tempStyle=";
-		$.getJSON(url + tempStyle + "&_=" + new Date().getTime(), function(data) {
-			var html = "";
-			//console.log(data);
-			html += "<option value=\""+""+"\">请选择</ooption>";
-			$.each(data, function(idx, ele) {
-				//console.log(idx);
-				//console.log(ele);
-				
-				html += "<option value=\""+ele.id+"\">" + ele.name
-						+ "</ooption>"
-			});
-			$("#agentId").html(html);
-		});
+		$.getJSON(url + tempStyle + "&_=" + new Date().getTime(),
+				function(data) {
+					var html = "";
+					//console.log(data);
+					html += "<option value=\""+""+"\">请选择</ooption>";
+					$.each(data, function(idx, ele) {
+						//console.log(idx);
+						//console.log(ele);
+
+						html += "<option value=\""+ele.id+"\">" + ele.name
+								+ "</ooption>"
+					});
+					$("#agentId").html(html);
+				});
 	}
 
 	function showDays(applyId, productId, startDate, endDate, month, officeId) {
@@ -92,18 +93,18 @@
 			top.$.jBox.tip("请选择应用");
 			return false;
 		}
- 		var proList="";
-		  var checks = $("input[name=proList]:checked");
-		$.each(checks,function(idx,ele){
-			if(proList ==""){
-				
-			 proList=$(ele).val();
-			}else{
+		var proList = "";
+		var checks = $("input[name=proList]:checked");
+		$.each(checks, function(idx, ele) {
+			if (proList == "") {
+
+				proList = $(ele).val();
+			} else {
 				proList = proList + "," + $(ele).val();
 			}
-			
-		}); 
-		var workTypes="";
+
+		});
+		var workTypes = "";
 		var checks1 = $("input[name=workTypes]:checked");
 		$.each(checks1, function(idx, ele) {
 			if (workTypes == "") {
@@ -111,22 +112,26 @@
 			} else {
 				workTypes = workTypes + "," + $(ele).val();
 			}
-			
 
-		}); 
+		});
+
+		var multiType = $("input[name=multiType]").is(':checked')
+
 		window.location.href = "${ctx }/settle/certificateSettlementStatistics/export?applyId="
 				+ applyId
 				+ "&areaId="
 				+ areaId
 				+ "&officeId="
 				+ officeId
-				  + "&proList="
-				+ proList 
+				+ "&proList="
+				+ proList
 				+ "&workTypes="
-				+ workTypes 
+				+ workTypes
 				+ "&startDate="
 				+ startDate
-				+ "&endDate=" + endDate;
+				+ "&endDate="
+				+ endDate
+				+ "&multiType=" + multiType;
 	}
 	/* function dcZS() {
 
@@ -155,8 +160,9 @@
 		<input id="pageSize" name="pageSize" type="hidden"
 			value="${page.pageSize}" />
 		<div>
-			<label>应&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 用：</label> <select name="applyId"
-				id="applyId">
+			<label>应&nbsp; &nbsp;
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 用：</label> <select
+				name="applyId" id="applyId">
 				<option value="">请选择应用</option>
 				<c:forEach items="${configAppList}" var="app">
 					<option value="${app.id}"
@@ -164,8 +170,8 @@
 					selected="selected"
 					</c:if>>${app.appName}</option>
 				</c:forEach>
-			</select> <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;选择区域：</label> <select name="areaId" id="areaId"
-				onchange="addOffice()">
+			</select> <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;选择区域：</label>
+			<select name="areaId" id="areaId" onchange="addOffice()">
 				<option value="">请选择</option>
 				<c:forEach items="${offsList}" var="off">
 					<option value="${off.id}"
@@ -181,17 +187,21 @@
 						selected="selected"
 						</c:if>>${off.name}</option>
 				</c:forEach>
-			</select>
-			<label>组合业务：</label><input type="checkbox" name="multiType" id="multiType" value="true" <c:if test="${multiType}">checked="checked"</c:if>>
+			</select> <label>组合业务：</label><input type="checkbox" name="multiType"
+				id="multiType" value="true"
+				<c:if test="${multiType}">checked="checked"</c:if>>
 		</div>
 
 		<div style="margin-top: 10px">
 			<label>计费策略类型：</label> <select name="tempStyle" id="tempStyle"
 				onchange="changeAgentId()">
 				<option value="0">请选择</option>
-				<option value="1" <c:if test="${tempStyle==1}"> selected="selected"</c:if>>标准</option>
-				<option value="2" <c:if test="${tempStyle==2}"> selected="selected"</c:if>>政府统一采购</option>
-				<option value="3" <c:if test="${tempStyle==3}"> selected="selected"</c:if>>合同采购</option>
+				<option value="1"
+					<c:if test="${tempStyle==1}"> selected="selected"</c:if>>标准</option>
+				<option value="2"
+					<c:if test="${tempStyle==2}"> selected="selected"</c:if>>政府统一采购</option>
+				<option value="3"
+					<c:if test="${tempStyle==3}"> selected="selected"</c:if>>合同采购</option>
 			</select> <label>计费策略名称 ：</label> <select name="agentId" id="agentId">
 				<option value="">请选择</option>
 				<c:forEach items="${agentList}" var="agen">
@@ -200,11 +210,11 @@
 					selected="selected"
 					</c:if>>${agen.tempName}</option>
 				</c:forEach>
-			</select>
-			<label>业务类型：</label>
-				<c:forEach items="${workTypes}" var="type">
-					<input type="checkbox" name="workTypes" id="workTypes"
-						value="${type.id}" <c:forEach items="${workType}" var="workType">
+			</select> <label>业务类型：</label>
+			<c:forEach items="${workTypes}" var="type">
+				<input type="checkbox" name="workTypes" id="workTypes"
+					value="${type.id}"
+					<c:forEach items="${workType}" var="workType">
 						<c:if test="${workType==type.id}">checked="checked"</c:if> 
 					</c:forEach>>					
 					${type.name}
@@ -212,20 +222,20 @@
 		</div>
 		<div></div>
 		<div style="margin-top: 8px">
-			<label>统&nbsp;&nbsp;计&nbsp;&nbsp;时&nbsp;&nbsp;间 ：</label> <input id="startTime" name="startDate"
-				type="text" readonly="readonly" maxlength="20"
-				class="Wdate required"
+			<label>统&nbsp;&nbsp;计&nbsp;&nbsp;时&nbsp;&nbsp;间 ：</label> <input
+				id="startTime" name="startDate" type="text" readonly="readonly"
+				maxlength="20" class="Wdate required"
 				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"
 				value="<fmt:formatDate value="${startDate}" pattern="yyyy-MM-dd"/>" />&nbsp;-&nbsp;
 			<input id="endTime" name="endDate" type="text" readonly="readonly"
 				maxlength="20" class="Wdate required"
 				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false,minDate:'#F{$dp.$D(\'startTime\')}'});"
 				value="<fmt:formatDate value="${endDate}" pattern="yyyy-MM-dd"/>" />
-			
-				<label>产品名称 ：</label>
-				<c:forEach items="${proList}" var="pro">
-					<input type="checkbox" name="proList" id="proList"
-						value="${pro.id}" <c:forEach items="${productId}" var="productId">
+
+			<label>产品名称 ：</label>
+			<c:forEach items="${proList}" var="pro">
+				<input type="checkbox" name="proList" id="proList" value="${pro.id}"
+					<c:forEach items="${productId}" var="productId">
 						<c:if test="${productId==pro.id}">checked="checked"</c:if> 
 					</c:forEach>>					
 					${pro.name}
@@ -237,10 +247,10 @@
 				onclick="return onSubmit();" type="submit" value="查询" /> <input
 				id="exportZS" class="btn btn-primary" onclick="dcZS()" type="button"
 				value="导出" />
-			</div>
-			
-			
-			
+		</div>
+
+
+
 	</form:form>
 	<tags:message content="${message}" />
 	<div class="form-horizontal">
@@ -256,14 +266,14 @@
 					<th colspan=4>更新（企业）</th>
 					<th colspan=4>更新（个人）</th>
 					<c:if test="${multiType==false}">
-					<th rowspan="2">遗失补办</th>
-					<th rowspan="2">损坏更换</th>
-					<th rowspan="2">信息变更</th>
+						<th rowspan="2">遗失补办</th>
+						<th rowspan="2">损坏更换</th>
+						<th rowspan="2">信息变更</th>
 					</c:if>
 					<c:if test="${multiType}">
-					<th rowspan="2">更新+遗失补办</th>
-					<th rowspan="2">更新+损坏更换</th>
-					<th rowspan="2">更新+更换/补办+信息变更</th>
+						<th rowspan="2">更新+遗失补办</th>
+						<th rowspan="2">更新+损坏更换</th>
+						<th rowspan="2">更新+更换/补办+信息变更</th>
 					</c:if>
 				</tr>
 				<tr>
@@ -322,11 +332,14 @@
 					<c:set var="twoR5"
 						value="${twoR5+sum.value.twoRenew5 +sum.value.fourRenew5}"></c:set>
 					<td>${sum.value.replacementLosted}</td>
-					<c:set var="replacementLosted" value="${replacementLosted+sum.value.replacementLosted}"></c:set>
+					<c:set var="replacementLosted"
+						value="${replacementLosted+sum.value.replacementLosted}"></c:set>
 					<td>${sum.value.replacementDamaged}</td>
-					<c:set var="replacementDamaged" value="${replacementDamaged+sum.value.replacementDamaged}"></c:set>
+					<c:set var="replacementDamaged"
+						value="${replacementDamaged+sum.value.replacementDamaged}"></c:set>
 					<td>${sum.value.alterInfomation}</td>
-					<c:set var="alterInfomation" value="${alterInfomation+sum.value.alterInfomation}"></c:set>
+					<c:set var="alterInfomation"
+						value="${alterInfomation+sum.value.alterInfomation}"></c:set>
 				</tr>
 			</c:forEach>
 			<tr>
