@@ -150,6 +150,7 @@
 		} catch (e) {
 			top.$.jBox
 			.info("key里边没有序列号为${signSerialNumber}的证书");
+			$("#tf").attr("onclick","buttonFrom()");
 			return false;
 		} 
 	}
@@ -157,6 +158,8 @@
 	
 
 	function buttonFrom(){
+		$("#tf").removeAttr("onclick"); 
+		top.$.jBox.tip("正在进行退费...", 'loading');
 		var csr;
 		var len = 1024;
 		var selectedItem = $("option:selected", $("[name=provider]")[0]);
@@ -172,13 +175,16 @@
 			var keySnDealInfo = "${workDealInfo.keySn }";
 			var keySn = $("#keySn").val();
 			if(keySnDealInfo != keySn){
+				
+				$("#tf").attr("onclick","buttonFrom()");
+				
 				top.$.jBox.tip("业务办理时keySn与此keySn不相同，请手动调节keySn序列号");
 			}else{
 				var revoke = 1;//不吊销
 				if($("#revoke").prop("checked")){
 					revoke = 0;//吊销
 				}
-					window.location.href="${ctx}/work/workDealInfoAudit/backMoney1?id=${workDealInfo.id}&revoke="+revoke+"&keySn="+keySn+"&receiptAmount="+$("#tfpVal").val();
+				window.location.href="${ctx}/work/workDealInfoAudit/backMoney1?id=${workDealInfo.id}&revoke="+revoke+"&keySn="+keySn+"&receiptAmount="+$("#tfpVal").val();
 			}
 		}
 	}
@@ -535,7 +541,7 @@
 				
 				
 				<c:if test="${revoke }">
-					<input class="btn btn-primary" type="button" value="退费" onclick="javascript:buttonFrom();"/>&nbsp;
+					<input class="btn btn-primary" type="button" id="tf" value="退费" onclick="javascript:buttonFrom();"/>&nbsp;
 				</c:if>
 				
 				<c:if test="${!revoke}">
