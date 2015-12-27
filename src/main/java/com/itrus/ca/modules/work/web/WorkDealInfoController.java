@@ -510,6 +510,7 @@ public class WorkDealInfoController extends BaseController {
 		List<Long> dealInfoByOfficeAreaIds = Lists.newArrayList();
 		List<Long> dealInfoByAreaIds = Lists.newArrayList();
 		List<Long> officeids = Lists.newArrayList();
+		Map<Long, Set<String>> Id_paymethod=new HashMap<Long,Set<String>>();
 		if (officeId != null && officeId != 0) {
 			officeids.add(officeId);
 			List<Long> appids = Lists.newArrayList();
@@ -597,7 +598,36 @@ public class WorkDealInfoController extends BaseController {
 		// }
 		//
 		// }
-
+//		Map<Long, Set<String>> Id_paymethod=new HashMap<Long,Set<String>>();
+		if (page.getList().size() > 0) {
+			for (int i = 0; i < page.getList().size(); i++) {
+				if(page.getList().get(i).getWorkPayInfo().getRelationMethod()!=null)
+				{
+					List<WorkFinancePayInfoRelation> workfinancePayinfos=workFinancePayInfoRelationService.findByPayInfoId(page.getList().get(i).getWorkPayInfo().getId());
+					Set<String> payMethods=new LinkedHashSet<String>();
+					for(int w=0;w<workfinancePayinfos.size();w++)
+					{
+							if(workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod()==1)
+							{
+								payMethods.add("现金付款  ");
+							}
+							if(workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod()==2)
+							{
+								payMethods.add("POS付款  ");
+							}
+							if(workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod()==3)
+							{
+								payMethods.add("银行转账  ");
+							}
+							if(workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod()==4)
+							{
+								payMethods.add("支付宝付款  ");
+							}
+						}
+					Id_paymethod.put(page.getList().get(i).getId(), payMethods);
+				}
+			}
+		}
 		if (area != null && officeId != null) {
 			WorkDealCountStatistics dealCountSta = new WorkDealCountStatistics();
 
@@ -615,49 +645,94 @@ public class WorkDealInfoController extends BaseController {
 			double moneyCountMoney = 0L;
 			double bankCountMoney = 0L;
 			double alipayCountMoney = 0L;
+			
+			
 			if (page.getList().size() > 0) {
 				for (int i = 0; i < page.getList().size(); i++) {
-					if (page.getList().get(i).getWorkPayInfo().getMethodPos() != null) {
-						if (page.getList().get(i).getWorkPayInfo().getMethodPos() == true) {
+					if(page.getList().get(i).getWorkPayInfo().getRelationMethod()==null)
+					{
+						if(page.getList().get(i).getWorkPayInfo().getMethodPos()==true)
+						{
 							posCount += 1;
 							if (page.getList().get(i).getWorkPayInfo().getPosMoney() != null) {
 								posCountMoney += page.getList().get(i).getWorkPayInfo().getPosMoney();
 							}
 						}
-					}
-					if (page.getList().get(i).getWorkPayInfo().getMethodMoney() != null) {
-						if (page.getList().get(i).getWorkPayInfo().getMethodMoney() == true) {
-							moneyCount += 1;
-							if (page.getList().get(i).getWorkPayInfo().getMoney() != null) {
-								moneyCountMoney += page.getList().get(i).getWorkPayInfo().getMoney();
-							}
-						}
-					}
-					if (page.getList().get(i).getWorkPayInfo().getMethodBank() != null) {
-						if (page.getList().get(i).getWorkPayInfo().getMethodBank() == true) {
+						if(page.getList().get(i).getWorkPayInfo().getMethodBank()==true)
+						{
 							bankCount += 1;
 							if (page.getList().get(i).getWorkPayInfo().getBankMoney() != null) {
 								bankCountMoney += page.getList().get(i).getWorkPayInfo().getBankMoney();
 							}
 						}
-					}
-					if (page.getList().get(i).getWorkPayInfo().getMethodAlipay() != null) {
-						if (page.getList().get(i).getWorkPayInfo().getMethodAlipay() == true) {
+						if(page.getList().get(i).getWorkPayInfo().getMethodMoney()==true)
+						{
+							moneyCount += 1;
+							if (page.getList().get(i).getWorkPayInfo().getMoney() != null) {
+								moneyCountMoney += page.getList().get(i).getWorkPayInfo().getMoney();
+							}
+						}
+						if(page.getList().get(i).getWorkPayInfo().getMethodAlipay()==true)
+						{
 							alipayCount += 1;
 							if (page.getList().get(i).getWorkPayInfo().getAlipayMoney() != null) {
 								alipayCountMoney += page.getList().get(i).getWorkPayInfo().getAlipayMoney();
 							}
 						}
-					}
-					if (page.getList().get(i).getWorkPayInfo().getMethodGov() != null) {
-						if (page.getList().get(i).getWorkPayInfo().getMethodGov() == true) {
-							alipayCount += 1;
+						if (page.getList().get(i).getWorkPayInfo().getMethodGov() != null) {
+							if (page.getList().get(i).getWorkPayInfo().getMethodGov() == true) {
+								alipayCount += 1;
+							}
 						}
-					}
-					if (page.getList().get(i).getWorkPayInfo().getMethodContract() != null) {
-						if (page.getList().get(i).getWorkPayInfo().getMethodContract() == true) {
-							contractCount += 1;
+						if (page.getList().get(i).getWorkPayInfo().getMethodContract() != null) {
+							if (page.getList().get(i).getWorkPayInfo().getMethodContract() == true) {
+								contractCount += 1;
+							}
 						}
+					}else
+					{
+						List<WorkFinancePayInfoRelation> workfinancePayinfos=workFinancePayInfoRelationService.findByPayInfoId(page.getList().get(i).getWorkPayInfo().getId());
+						Set<String> payMethods=new LinkedHashSet<String>();
+						for(int w=0;w<workfinancePayinfos.size();w++)
+						{
+								if(workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod()==1)
+								{
+									payMethods.add("现金付款  ");
+									moneyCount += 1;
+									if(workfinancePayinfos.get(w).getMoney()!=null)
+									{
+										moneyCountMoney += workfinancePayinfos.get(w).getMoney();
+									}
+								}
+								if(workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod()==2)
+								{
+									payMethods.add("POS付款  ");
+									posCount += 1;
+									if(workfinancePayinfos.get(w).getMoney()!=null)
+									{
+										posCountMoney += workfinancePayinfos.get(w).getMoney();
+									}
+								}
+								if(workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod()==3)
+								{
+									payMethods.add("银行转账  ");
+									bankCount += 1;
+									if(workfinancePayinfos.get(w).getMoney()!=null)
+									{
+										bankCountMoney += workfinancePayinfos.get(w).getMoney();
+									}
+								}
+								if(workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod()==4)
+								{
+									payMethods.add("支付宝付款  ");
+									alipayCount += 1;
+									if(workfinancePayinfos.get(w).getMoney()!=null)
+									{
+										alipayCountMoney += workfinancePayinfos.get(w).getMoney();
+									}
+								}
+							}
+						Id_paymethod.put(page.getList().get(i).getId(), payMethods);
 					}
 				}
 			}
@@ -671,9 +746,10 @@ public class WorkDealInfoController extends BaseController {
 			model.addAttribute("dealCountSta", dealCountSta);
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 			String dealMsg = (startTime != null && endTime != null ? sdf.format(startTime) + "至" + sdf.format(endTime)
-					: "本次统计") + areaOffice.getName() + "区域" + offOffice.getName() + "网点" + moneyCountMoney + "元，POS收款"
+					: "本次统计") + areaOffice.getName() + "区域" + offOffice.getName() + "现金" + moneyCountMoney + "元，POS收款"
 					+ posCountMoney + "元，银行转账" + bankCountMoney + "元，支付宝转账" + alipayCountMoney + "元";
 			model.addAttribute("dealMsg", dealMsg);
+			model.addAttribute("Id_paymethod", Id_paymethod);
 
 		}
 
@@ -715,6 +791,7 @@ public class WorkDealInfoController extends BaseController {
 		model.addAttribute("endTime", endTime);
 		model.addAttribute("payMethod", payMethod);
 		model.addAttribute("page", page);
+		model.addAttribute("Id_paymethod",Id_paymethod);
 		return "modules/work/statisticalDealPayList";
 	}
 
@@ -4183,6 +4260,16 @@ public class WorkDealInfoController extends BaseController {
 			@RequestParam(value = "officeId", required = false) Long officeId,
 			@RequestParam(value = "appId", required = false) Long appId) throws IOException {
 		User user = UserUtils.getUser();
+		HSSFWorkbook wb = new HSSFWorkbook();
+		HSSFSheet sheet = wb.createSheet("业务款项统计");
+		HSSFCellStyle style = wb.createCellStyle();
+		style.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+		style.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+		HSSFFont font = wb.createFont();
+		font.setFontName("宋体");
+		font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+		font.setFontHeightInPoints((short) 14);
+		style.setFont(font);
 		// 获取前台的付款方式
 		// List<Long> method = Lists.newArrayList();
 		if (payMethod != null) {
@@ -4224,6 +4311,8 @@ public class WorkDealInfoController extends BaseController {
 
 		List<Long> dealInfoByOfficeAreaIds = Lists.newArrayList();
 		List<Long> dealInfoByAreaIds = Lists.newArrayList();
+		Map<Long, Set<String>> Id_paymethod=new HashMap<Long,Set<String>>();
+		int index=0;
 		if (officeId != null && officeId != 0) {
 			List<Long> appids = Lists.newArrayList();
 			List<ConfigAppOfficeRelation> appOffices = configAppOfficeRelationService.findAllByOfficeId(officeId);// 通过网店获取引用的id
@@ -4310,100 +4399,185 @@ public class WorkDealInfoController extends BaseController {
 		//
 		// }
 
-//		if (area != null && officeId != null) {
-//			WorkDealCountStatistics dealCountSta = new WorkDealCountStatistics();
-//
-//			Office areaOffice = officeService.get(area);
-//			dealCountSta.setAreaName(areaOffice.getName());
-//			Office offOffice = officeService.get(officeId);
-//			dealCountSta.setOfficeName(offOffice.getName());
-//			int posCount = 0;
-//			int moneyCount = 0;
-//			int bankCount = 0;
-//			int alipayCount = 0;
-//			int govCount = 0;
-//			int contractCount = 0;
-//			double posCountMoney = 0L;
-//			double moneyCountMoney = 0L;
-//			double bankCountMoney = 0L;
-//			double alipayCountMoney = 0L;
-//			if (page.getList().size() > 0) {
-//				for (int i = 0; i < page.getList().size(); i++) {
-//					if (page.getList().get(i).getWorkPayInfo().getMethodPos() != null) {
-//						if (page.getList().get(i).getWorkPayInfo().getMethodPos() == true) {
-//							posCount += 1;
-//							if (page.getList().get(i).getWorkPayInfo().getPosMoney() != null) {
-//								posCountMoney += page.getList().get(i).getWorkPayInfo().getPosMoney();
-//							}
-//						}
-//					}
-//					if (page.getList().get(i).getWorkPayInfo().getMethodMoney() != null) {
-//						if (page.getList().get(i).getWorkPayInfo().getMethodMoney() == true) {
-//							moneyCount += 1;
-//							if (page.getList().get(i).getWorkPayInfo().getMoney() != null) {
-//								moneyCountMoney += page.getList().get(i).getWorkPayInfo().getMoney();
-//							}
-//						}
-//					}
-//					if (page.getList().get(i).getWorkPayInfo().getMethodBank() != null) {
-//						if (page.getList().get(i).getWorkPayInfo().getMethodBank() == true) {
-//							bankCount += 1;
-//							if (page.getList().get(i).getWorkPayInfo().getBankMoney() != null) {
-//								bankCountMoney += page.getList().get(i).getWorkPayInfo().getBankMoney();
-//							}
-//						}
-//					}
-//					if (page.getList().get(i).getWorkPayInfo().getMethodAlipay() != null) {
-//						if (page.getList().get(i).getWorkPayInfo().getMethodAlipay() == true) {
-//							alipayCount += 1;
-//							if (page.getList().get(i).getWorkPayInfo().getAlipayMoney() != null) {
-//								alipayCountMoney += page.getList().get(i).getWorkPayInfo().getAlipayMoney();
-//							}
-//						}
-//					}
-//					if (page.getList().get(i).getWorkPayInfo().getMethodGov() != null) {
-//						if (page.getList().get(i).getWorkPayInfo().getMethodGov() == true) {
-//							alipayCount += 1;
-//						}
-//					}
-//					if (page.getList().get(i).getWorkPayInfo().getMethodContract() != null) {
-//						if (page.getList().get(i).getWorkPayInfo().getMethodContract() == true) {
-//							contractCount += 1;
-//						}
-//					}
-//				}
-//			}
-//			dealCountSta.setAlipayCount(alipayCount);
-//			dealCountSta.setMoneyCount(moneyCount);
-//			dealCountSta.setPosCount(posCount);
-//			dealCountSta.setBankCount(bankCount);
-//			dealCountSta.setGovCount(govCount);
-//			dealCountSta.setContractCount(contractCount);
-//
-//			// model.addAttribute("dealCountSta", dealCountSta);
-//			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-//			String dealMsg = (startTime != null && endTime != null ? sdf.format(startTime) + "至" + sdf.format(endTime)
-//					: "本次统计") + areaOffice.getName() + "区域" + offOffice.getName() + "网点" + moneyCountMoney + "元，POS收款"
-//					+ posCountMoney + "元，银行转账" + bankCountMoney + "元，支付宝转账" + alipayCountMoney + "元";
-//			// model.addAttribute("dealMsg", dealMsg);
-//
-//		}
-		HSSFWorkbook wb = new HSSFWorkbook();
-		HSSFSheet sheet = wb.createSheet("业务款项统计");
-		HSSFCellStyle style = wb.createCellStyle();
-		style.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
-		style.setAlignment(HSSFCellStyle.ALIGN_CENTER);
-		HSSFFont font = wb.createFont();
-		font.setFontName("宋体");
-		font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
-		font.setFontHeightInPoints((short) 14);
-		style.setFont(font);
-		sheet.addMergedRegion(new Region(0,  (short)0, 0,(short)9));
-		HSSFRow row0=sheet.createRow(0);
+		if (list.size() > 0) {
+			for (int i = 0; i < list.size(); i++) {
+				if(list.get(i).getWorkPayInfo().getRelationMethod()!=null)
+				{
+					List<WorkFinancePayInfoRelation> workfinancePayinfos=workFinancePayInfoRelationService.findByPayInfoId(list.get(i).getWorkPayInfo().getId());
+					Set<String> payMethods=new LinkedHashSet<String>();
+					for(int w=0;w<workfinancePayinfos.size();w++)
+					{
+							if(workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod()==1)
+							{
+								payMethods.add("现金付款  ");
+							}
+							if(workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod()==2)
+							{
+								payMethods.add("POS付款  ");
+							}
+							if(workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod()==3)
+							{
+								payMethods.add("银行转账  ");
+							}
+							if(workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod()==4)
+							{
+								payMethods.add("支付宝付款  ");
+							}
+						}
+					Id_paymethod.put(list.get(i).getId(), payMethods);
+				}
+			}
+		}
+		
+		if (area != null && officeId != null) {
+			WorkDealCountStatistics dealCountSta = new WorkDealCountStatistics();
+			Office areaOffice = officeService.get(area);
+			dealCountSta.setAreaName(areaOffice.getName());
+			Office offOffice = officeService.get(officeId);
+			dealCountSta.setOfficeName(offOffice.getName());
+			int posCount = 0;
+			int moneyCount = 0;
+			int bankCount = 0;
+			int alipayCount = 0;
+			int govCount = 0;
+			int contractCount = 0;
+			double posCountMoney = 0L;
+			double moneyCountMoney = 0L;
+			double bankCountMoney = 0L;
+			double alipayCountMoney = 0L;
+			index=5;
+			if (list.size() > 0) {
+				for (int i = 0; i < list.size(); i++) {
+					if(list.get(i).getWorkPayInfo().getRelationMethod()==null)
+					{
+						if(list.get(i).getWorkPayInfo().getMethodPos()==true)
+						{
+							posCount += 1;
+							if (list.get(i).getWorkPayInfo().getPosMoney() != null) {
+								posCountMoney += list.get(i).getWorkPayInfo().getPosMoney();
+							}
+						}
+						if(list.get(i).getWorkPayInfo().getMethodBank()==true)
+						{
+							bankCount += 1;
+							if (list.get(i).getWorkPayInfo().getBankMoney() != null) {
+								bankCountMoney += list.get(i).getWorkPayInfo().getBankMoney();
+							}
+						}
+						if(list.get(i).getWorkPayInfo().getMethodMoney()==true)
+						{
+							moneyCount += 1;
+							if (list.get(i).getWorkPayInfo().getMoney() != null) {
+								moneyCountMoney += list.get(i).getWorkPayInfo().getMoney();
+							}
+						}
+						if(list.get(i).getWorkPayInfo().getMethodAlipay()==true)
+						{
+							alipayCount += 1;
+							if (list.get(i).getWorkPayInfo().getAlipayMoney() != null) {
+								alipayCountMoney += list.get(i).getWorkPayInfo().getAlipayMoney();
+							}
+						}
+						if (list.get(i).getWorkPayInfo().getMethodGov() != null) {
+							if (list.get(i).getWorkPayInfo().getMethodGov() == true) {
+								alipayCount += 1;
+							}
+						}
+						if (list.get(i).getWorkPayInfo().getMethodContract() != null) {
+							if (list.get(i).getWorkPayInfo().getMethodContract() == true) {
+								contractCount += 1;
+							}
+						}
+					}else
+					{
+						List<WorkFinancePayInfoRelation> workfinancePayinfos=workFinancePayInfoRelationService.findByPayInfoId(list.get(i).getWorkPayInfo().getId());
+						Set<String> payMethods=new LinkedHashSet<String>();
+						for(int w=0;w<workfinancePayinfos.size();w++)
+						{
+								if(workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod()==1)
+								{
+									payMethods.add("现金付款  ");
+									moneyCount += 1;
+									if(workfinancePayinfos.get(w).getMoney()!=null)
+									{
+										moneyCountMoney += workfinancePayinfos.get(w).getMoney();
+									}
+								}
+								if(workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod()==2)
+								{
+									payMethods.add("POS付款  ");
+									posCount += 1;
+									if(workfinancePayinfos.get(w).getMoney()!=null)
+									{
+										posCountMoney += workfinancePayinfos.get(w).getMoney();
+									}
+								}
+								if(workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod()==3)
+								{
+									payMethods.add("银行转账  ");
+									bankCount += 1;
+									if(workfinancePayinfos.get(w).getMoney()!=null)
+									{
+										bankCountMoney += workfinancePayinfos.get(w).getMoney();
+									}
+								}
+								if(workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod()==4)
+								{
+									payMethods.add("支付宝付款  ");
+									alipayCount += 1;
+									if(workfinancePayinfos.get(w).getMoney()!=null)
+									{
+										alipayCountMoney += workfinancePayinfos.get(w).getMoney();
+									}
+								}
+							}
+						Id_paymethod.put(list.get(i).getId(), payMethods);
+					}
+				}
+			}
+			dealCountSta.setAlipayCount(alipayCount);
+			dealCountSta.setMoneyCount(moneyCount);
+			dealCountSta.setPosCount(posCount);
+			dealCountSta.setBankCount(bankCount);
+			dealCountSta.setGovCount(govCount);
+			dealCountSta.setContractCount(contractCount);
+
+			// model.addAttribute("dealCountSta", dealCountSta);
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			String dealMsg = (startTime != null && endTime != null ? sdf.format(startTime) + "至" + sdf.format(endTime)
+					: "本次统计") + areaOffice.getName() + "区域" + offOffice.getName() + "网点" + moneyCountMoney + "元，POS收款"
+					+ posCountMoney + "元，银行转账" + bankCountMoney + "元，支付宝转账" + alipayCountMoney + "元";
+			// model.addAttribute("dealMsg", dealMsg);
+			
+			HSSFRow rowi1=sheet.createRow(0);
+			rowi1.createCell(0).setCellValue("区域名称");
+			rowi1.createCell(1).setCellValue("网点名称");
+			rowi1.createCell(2).setCellValue("现金支付数量");
+			rowi1.createCell(3).setCellValue("pos付款数量");
+			rowi1.createCell(4).setCellValue("银行付款数量");
+			rowi1.createCell(5).setCellValue("支付宝付款数量");
+			rowi1.createCell(6).setCellValue("政府统一采购数量");
+			rowi1.createCell(7).setCellValue("合同采购付款数量");
+			HSSFRow rowi2=sheet.createRow(1);
+			rowi2.createCell(0).setCellValue(dealCountSta.getAreaName());
+			rowi2.createCell(1).setCellValue(dealCountSta.getOfficeName());
+			rowi2.createCell(2).setCellValue(dealCountSta.getMoneyCount());
+			rowi2.createCell(3).setCellValue(dealCountSta.getPosCount());
+			rowi2.createCell(4).setCellValue(dealCountSta.getBankCount());
+			rowi2.createCell(5).setCellValue(dealCountSta.getAlipayCount());
+			rowi2.createCell(6).setCellValue(dealCountSta.getGovCount());
+			rowi2.createCell(7).setCellValue(dealCountSta.getContractCount());
+			sheet.addMergedRegion(new Region(0, (short)0, 0,(short)9));
+			HSSFRow rowi3=sheet.createRow(2);
+			rowi3.createCell(0).setCellValue(dealMsg);
+		}
+		
+		sheet.addMergedRegion(new Region(index, (short)0, index,(short)9));
+		HSSFRow row0=sheet.createRow(index);
 		HSSFCell cell0=row0.createCell(0);
 		cell0.setCellValue("业务款项统计");
 		cell0.setCellStyle(style);
-		HSSFRow row1=sheet.createRow(1);
+		HSSFRow row1=sheet.createRow(1+index);
 		row1.createCell(0).setCellValue("付款单位名称");
 		row1.createCell(1).setCellValue("付款金额/元");
 		row1.createCell(2).setCellValue("应用名称");
@@ -4416,7 +4590,7 @@ public class WorkDealInfoController extends BaseController {
 		row1.createCell(9).setCellValue("记录人员");
 		for(int i=0;i<list.size();i++)
 		{
-			HSSFRow rown=sheet.createRow(2+i);
+			HSSFRow rown=sheet.createRow(2+i+index);
 			rown.createCell(0).setCellValue(list.get(i).getWorkCompany().getCompanyName());
 			rown.createCell(1).setCellValue(list.get(i).getWorkPayInfo().getWorkPayedMoney());
 			rown.createCell(2).setCellValue(list.get(i).getConfigApp().getAppName());
@@ -4438,6 +4612,29 @@ public class WorkDealInfoController extends BaseController {
 			if(list.get(i).getWorkPayInfo().getMethodAlipay())
 			{
 				rown.createCell(6).setCellValue("支付宝");
+			}else if(list.get(i).getWorkPayInfo().getMethodGov())
+			{
+				rown.createCell(6).setCellValue("政府统一采购");
+			}
+			else if(list.get(i).getWorkPayInfo().getMethodContract())
+			{
+				rown.createCell(6).setCellValue("合同统一采购");
+			}
+			else if(list.get(i).getWorkPayInfo().getRelationMethod()!=null)
+			{
+				if(list.get(i).getWorkPayInfo().getRelationMethod()>0)
+				{
+					Iterator<Map.Entry<Long, Set<String>>> it=Id_paymethod.entrySet().iterator();
+					while(it.hasNext())
+					{
+						Entry<Long, Set<String>> entry=it.next();
+						if(entry.getKey().equals(list.get(i).getId()))
+						{
+							rown.createCell(6).setCellValue(entry.getValue().toString());
+						}
+					}
+				}
+				
 			}else
 			{
 				rown.createCell(6).setCellValue("其他付款方式");

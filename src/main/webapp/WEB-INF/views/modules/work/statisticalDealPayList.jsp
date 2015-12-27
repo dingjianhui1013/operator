@@ -221,17 +221,14 @@
 						</c:when>
 							<c:otherwise>
 								<c:choose>
-									<c:when test="${configDealPay.workPayInfo.relationMethod==0}">
-									现金
-								</c:when>
-									<c:when test="${configDealPay.workPayInfo.relationMethod==1}">
-									POS收款
-								</c:when>
-									<c:when test="${configDealPay.workPayInfo.relationMethod==2}">
-									银行转账
-								</c:when>
-									<c:when test="${configDealPay.workPayInfo.relationMethod==3}">
-									支付宝
+									<c:when test="${configDealPay.workPayInfo.relationMethod>0}">
+										<c:forEach items="${Id_paymethod}" var="Id_paymethod">
+											<c:if test="${Id_paymethod.key==configDealPay.id}">
+												<c:forEach items="${Id_paymethod.value}" var="payMethod">
+													${payMethod}
+												</c:forEach>
+											</c:if>
+										</c:forEach>
 								</c:when>
 									<c:otherwise>
 									未知付款方式
