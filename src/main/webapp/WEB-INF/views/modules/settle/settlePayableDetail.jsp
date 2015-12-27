@@ -81,8 +81,31 @@
 			<label>应用名称 ：</label> 
 			<select id="appId" name ="appId" onchange="setProduct(this)">
 				<option value="0">请选择</option>
+				<c:forEach items="${relationByComAgentId }" var="app" >
+					<option value="${app.configApp.id }" <c:if test="${app.configApp.id == appId}">
+					selected="selected"
+					</c:if> >${app.configApp.appName }</option>
+				</c:forEach>
 			</select>
-			<label>产品名称 ：</label><label id="productId"></label>
+			<label>产品名称 ：</label><label id="productId">
+			
+			<c:forEach items="${products }" var="product" >
+					
+					<input name="productIds" type="checkbox" 
+					
+						<c:forEach items="${productIdList }" var="a" >
+							<c:if test="${a == product.id}">
+								checked="checked"
+							</c:if>
+						</c:forEach>
+					
+					 value="${product.id }">${proType[product.productName ]}
+				</c:forEach>
+			
+			
+			
+			
+			</label>
 		</div>
 		<div style="width: 800px">                 
 			<label>业务办理时间：</label>	    
@@ -158,8 +181,8 @@
 								<td></td>
 								<td></td>
 							</c:forEach>
-							<td>${dealInfo.yyNum}</td>
-							<td>${dealInfo.yyNum}</td>
+							<td>${dealInfo.yyNum-dealInfo.lastNum}</td>
+							<td>${dealInfo.lastNum}</td>
 							<td>${dealInfo.totalNum-dealInfo.yyNum}</td>
 						</tr>
 					</c:forEach>

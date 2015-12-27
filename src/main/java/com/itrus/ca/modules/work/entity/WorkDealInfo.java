@@ -112,6 +112,7 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 	
 	private Integer yyNum;
 	private Integer totalNum;
+	private Integer lastNum;
 	
 	/** default constructor */
 	public WorkDealInfo() {
@@ -732,11 +733,14 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 	public void setTotalNum(Integer totalNum) {
 		this.totalNum = totalNum;
 	}
-	
-	
-	
-	
-	
-	
+
+	@Transient
+	public Integer getLastNum() {
+		return lastNum;
+	}
+
+	public void setLastNum(Integer lastNum) {
+		this.lastNum = lastNum;
+	}
 	
 }

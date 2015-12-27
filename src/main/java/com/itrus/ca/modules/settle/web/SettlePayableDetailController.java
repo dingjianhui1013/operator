@@ -26,6 +26,7 @@ import com.itrus.ca.common.web.BaseController;
 import com.itrus.ca.modules.constant.ProductType;
 import com.itrus.ca.modules.constant.WorkDealInfoType;
 import com.itrus.ca.modules.profile.entity.ConfigAgentAppRelation;
+import com.itrus.ca.modules.profile.entity.ConfigApp;
 import com.itrus.ca.modules.profile.entity.ConfigCommercialAgent;
 import com.itrus.ca.modules.profile.entity.ConfigProduct;
 import com.itrus.ca.modules.profile.service.ConfigAgentAppRelationService;
@@ -90,6 +91,15 @@ public class SettlePayableDetailController extends BaseController {
 		model.addAttribute("startTime", startTime);
 		model.addAttribute("endTime", endTime);
 		model.addAttribute("comAgentId", comAgentId);
+		model.addAttribute("proType", ProductType.productTypeStrMap);
+		
+		List<ConfigAgentAppRelation> relationByComAgentId =  configAgentAppRelationService.findByComAgentId(comAgentId);
+		model.addAttribute("relationByComAgentId", relationByComAgentId);
+		
+		if (appId!=null) {
+			List<ConfigProduct> products = configProductService.findByAppId(appId);
+			model.addAttribute("products", products);
+		}
 		
 		
 			
@@ -108,7 +118,7 @@ public class SettlePayableDetailController extends BaseController {
 				productIdList.add(Long.parseLong(products[i].toString()));
 			}
 		}
-		
+		model.addAttribute("productIdList", productIdList);
 		Date start = new Date();
 		Date end = new Date();
 		if (startTime!=null && !startTime.equals("")) {
@@ -159,49 +169,67 @@ public class SettlePayableDetailController extends BaseController {
 	        endLastDate = calendar.getTime();
 			
 			int yjNum = 0;
+			int lastNum = 0;
 			
 			for (int j = 0; j < infos.size(); j++) {
 				WorkDealInfo prvedDealInfo = infos.get(j);
+				PayableDetailVo detailVo = new PayableDetailVo();
+				String dealInfoType ="";
+				if (infos.get(j).getDealInfoType()!=null) {
+					dealInfoType= WorkDealInfoType.WorkDealInfoTypeMapNew.get(infos.get(j).getDealInfoType()) +" ";
+				}
+				if (infos.get(j).getDealInfoType1()!=null) {
+					dealInfoType += WorkDealInfoType.WorkDealInfoTypeMapNew.get(infos.get(j).getDealInfoType1()) +" ";
+				}
+				if (infos.get(j).getDealInfoType2()!=null) {
+					dealInfoType += WorkDealInfoType.WorkDealInfoTypeMapNew.get(infos.get(j).getDealInfoType2()) +" ";				
+				}
+				if (infos.get(j).getDealInfoType3()!=null) {
+					dealInfoType += WorkDealInfoType.WorkDealInfoTypeMapNew.get(infos.get(j).getDealInfoType3());	
+				}
+						
 				if (prvedDealInfo.getPayType()==null) {
+					detailVo.setStartDate(infos.get(j).getBusinessCardUserDate());
+					detailVo.setEndDate(infos.get(j).getNotafter());
+					detailVo.setDealInfoType(dealInfoType);
+					detailVo.setSettleYear("0");
+					detailList.add(detailVo);
 					continue;
 				}
 				if (!prvedDealInfo.getPayType().equals(1)) {
+					detailVo.setStartDate(infos.get(j).getBusinessCardUserDate());
+					detailVo.setEndDate(infos.get(j).getNotafter());
+					detailVo.setDealInfoType(dealInfoType);
+					detailVo.setSettleYear("0");
+					detailList.add(detailVo);
 					continue;
 				}
-				PayableDetailVo detailVo = new PayableDetailVo();
+				
 				if (infos.get(j).getDealInfoType()!=null) {
 					if (infos.get(j).getDealInfoType().equals(1)||infos.get(j).getDealInfoType().equals(0)) {
 						if (infos.get(j).getBusinessCardUserDate().getTime()>endLastDate.getTime()) {
-							break;
-						}else if (infos.get(j).getNotafter().getTime()<endLastDate.getTime()) {
-							yjNum += infos.get(j).getYear();
 							detailVo.setStartDate(infos.get(j).getBusinessCardUserDate());
 							detailVo.setEndDate(infos.get(j).getNotafter());
-							detailVo.setDealInfoType(WorkDealInfoType.WorkDealInfoTypeMapNew.get(infos.get(j).getDealInfoType()));
+							detailVo.setDealInfoType(dealInfoType);
+							detailVo.setSettleYear("0");
+							detailList.add(detailVo);
+						}else if (infos.get(j).getNotafter().getTime()<endLastDate.getTime()) {
+							yjNum += infos.get(j).getYear();
+							lastNum = infos.get(j).getYear();
+							detailVo.setStartDate(infos.get(j).getBusinessCardUserDate());
+							detailVo.setEndDate(infos.get(j).getNotafter());
+							detailVo.setDealInfoType(dealInfoType);
 							detailVo.setSettleYear(infos.get(j).getYear().toString());
 							detailList.add(detailVo);
 						}else if (infos.get(j).getBusinessCardUserDate().getTime()<endLastDate.getTime()&&infos.get(j).getNotafter().getTime()>endLastDate.getTime()) {
-							
-							
-//							infos.get(j).getBusinessCardUserDate().setHours(23);
-//							infos.get(j).getBusinessCardUserDate().setMinutes(59);
-//							infos.get(j).getBusinessCardUserDate().setSeconds(59);
 							long between = endLastDate.getTime()-infos.get(j).getBusinessCardUserDate().getTime();
-							
-							
 							long a  = between/31536000000L; 
-							
-							
-							
-							
 							int yy = (int) Math.ceil(a);
-							
-							
-							
 							yjNum += yy;
+							lastNum = yy;
 							detailVo.setStartDate(infos.get(j).getBusinessCardUserDate());
 							detailVo.setEndDate(infos.get(j).getNotafter());
-							detailVo.setDealInfoType(WorkDealInfoType.WorkDealInfoTypeMapNew.get(infos.get(j).getDealInfoType()));
+							detailVo.setDealInfoType(dealInfoType);
 							detailVo.setSettleYear(yy+"");
 							detailList.add(detailVo);
 						}
@@ -214,16 +242,12 @@ public class SettlePayableDetailController extends BaseController {
 			dealInfos.get(i).setYyNum(yjNum);
 			dealInfos.get(i).setTotalNum(totalAgentYear);
 			dealInfos.get(i).setDetailList(detailList);
+			dealInfos.get(i).setLastNum(lastNum);
 			if (detailList.size()>lenth) {
 				lenth = detailList.size();
 			}
 		}
 		
-//		List<String> = 
-//		for (int i = 0; i < lenth; i++) {
-//			
-//		}
-//		
 		
 		model.addAttribute("dealInfos", dealInfos);
 		model.addAttribute("lenth", lenth);
