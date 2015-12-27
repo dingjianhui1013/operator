@@ -260,7 +260,7 @@
 					}
 					var submit = function (v, h, f) {
 					    if (v == 'ok') {
-					      
+					       
 					    	window.location.href="${ctx}/work/workDealInfoAudit/backMoney?id=${workDealInfo.id}&agentDetailId="+agentDetailId+"&iseq="+iseq;
 					    	
 					    }

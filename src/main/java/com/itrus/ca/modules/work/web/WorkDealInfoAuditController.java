@@ -883,55 +883,14 @@ public class WorkDealInfoAuditController extends BaseController {
 	public String backMoney(Long id, HttpServletRequest request, HttpServletResponse response, Long agentDetailId,
 			Integer iseq, Model model) {
 		WorkDealInfo dealInfo = workDealInfoService.get(id);
-		// 修改状态为退费 0为新建 1为异常
-		// workDealInfo.setDealInfoStatus("2");
-		// workDealInfoService.save(workDealInfo);
-		// 查询当前业务完成时间
-		if ("1".equals(dealInfo.getDelFlag())) {// 判断是否进行过退费，防止浏览器回退再次退费
-			return "redirect:" + Global.getAdminPath() + "/work/workDealInfo/list";
-
-		}
+		Long prvedAgentId = dealInfo.getConfigChargeAgentId();
+		dealInfo.setDealInfoType3(WorkDealInfoType.TYPE_PAY_REPLACED);
+		
 		WorkPayInfo payInfo = dealInfo.getWorkPayInfo();
+		Long prvedPayId = dealInfo.getWorkPayInfo().getId();
 		try {
-			// 生成新的业务，类型为退费,保存原来的payInfo
-			WorkDealInfo workDealInfo = new WorkDealInfo();
-			workDealInfo.setDealInfoType(WorkDealInfoType.TYPE_PAY_REPLACED);
-			workDealInfo.setYear(dealInfo.getYear());
-			workDealInfo.setConfigApp(dealInfo.getConfigApp());
-			ConfigCommercialAgent commercialAgent = configAgentAppRelationService
-					.findAgentByApp(workDealInfo.getConfigApp());
-			workDealInfo.setConfigCommercialAgent(commercialAgent);
-			workDealInfo.setConfigCommercialAgent(dealInfo.getConfigCommercialAgent());
-			List<ConfigAgentOfficeRelation> configAgentOfficeRelations = configAgentOfficeRelationService
-					.findByOffice(UserUtils.getUser().getOffice());
-			if (configAgentOfficeRelations.size() > 0) {
-				workDealInfo.setCommercialAgent(configAgentOfficeRelations.get(0).getConfigCommercialAgent());// 劳务关系外键
-			}
-			// 取上次业务多证书编号
-			workDealInfo.setCertSort(dealInfo.getCertSort());
-			workDealInfo.setWorkUser(dealInfo.getWorkUser());
-			workDealInfo.setWorkCompany(dealInfo.getWorkCompany());
-			workDealInfo.setWorkUserHis(dealInfo.getWorkUserHis());
-			workDealInfo.setWorkCompanyHis(dealInfo.getWorkCompanyHis());
-			workDealInfo.setConfigProduct(dealInfo.getConfigProduct());
-			workDealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_CERT_OBTAINED);
-			workDealInfo.setCreateBy(UserUtils.getUser());
-			workDealInfo.setCreateDate(new Date());
-			// workDealInfo.setSvn(workDealInfoService.getSVN(0));
-			workDealInfo.setSvn(dealInfo.getSvn());
-			workDealInfo.setPrevId(dealInfo.getId());
-			// 证书获取时间
-			workDealInfo.setObtainedDate(new Date());
-			// workcertinfo继承上次业务的
-			WorkCertInfo workCertInfo = workCertInfoService.get(dealInfo.getWorkCertInfo().getId());
-			workDealInfo.setKeySn(dealInfo.getKeySn());
-			workDealInfo.setNotafter(dealInfo.getNotafter());
-			workDealInfo.setWorkCertInfo(workCertInfo);
-
 			// 新建payInfo保存原来的payInfo数据
-
 			WorkPayInfo workPayInfo = new WorkPayInfo();
-
 			if (iseq.equals(1) || iseq.equals(2)) {
 				Double oldAdd = 0d;
 				Double newAdd = 0d;
@@ -1021,10 +980,10 @@ public class WorkDealInfoAuditController extends BaseController {
 					Office office = dealInfo.getCreateBy().getOffice();
 					List<ReceiptDepotInfo> depotInfos = receiptDepotInfoService.findDepotByOffice(office);
 					receiptInvoice.setReceiptDepotInfo(depotInfos.get(0));
-					receiptInvoice.setCompanyName(workDealInfo.getWorkCompany().getCompanyName());
+					receiptInvoice.setCompanyName(dealInfo.getWorkCompany().getCompanyName());
 					receiptInvoice.setReceiptMoney(newAdd - oldAdd);
 					receiptInvoice.setReceiptType(0);// 销售出库
-					receiptInvoice.setDealInfoId(workDealInfo.getId());
+					receiptInvoice.setDealInfoId(dealInfo.getId());
 					receiptInvoiceService.save(receiptInvoice);
 					ReceiptDepotInfo receiptDepotInfo = depotInfos.get(0);
 					receiptDepotInfo.setReceiptResidue(receiptDepotInfo.getReceiptResidue() - (newAdd - oldAdd));
@@ -1036,10 +995,9 @@ public class WorkDealInfoAuditController extends BaseController {
 					quitMoney.setQuitDate(new Date());
 					quitMoney.setQuitWindow(UserUtils.getUser().getOffice().getName());
 					quitMoney.setQuitReason("现金退费");
-					quitMoney.setWorkDealInfo(workDealInfo);
+					quitMoney.setWorkDealInfo(dealInfo);
 					quitMoney.setStatus("1");
 					financeQuitMoneyService.save(quitMoney);
-
 				}
 
 			} else if (iseq.equals(3)) {
@@ -1075,22 +1033,25 @@ public class WorkDealInfoAuditController extends BaseController {
 				workPayInfo.setMethodPos(false);
 				workPayInfoService.save(workPayInfo);
 			}
-			workDealInfo.setWorkPayInfo(workPayInfo);
-			workDealInfo.setLastDays(dealInfo.getLastDays());
+			dealInfo.setWorkPayInfo(workPayInfo);
 
+			workPayInfoService.delete(prvedPayId);
+			
 			ConfigChargeAgent agent = chargeAgentService.get(agentDetailId);
 
-			workDealInfo.setPayType(Integer.parseInt(agent.getTempStyle()));
-			workDealInfo.setConfigChargeAgentId(agentDetailId);
-
-			workDealInfoService.save(workDealInfo);
-
-			workDealInfoService.delete(dealInfo.getId());
+			dealInfo.setPayType(Integer.parseInt(agent.getTempStyle()));
+			dealInfo.setConfigChargeAgentId(agentDetailId);
+			workDealInfoService.save(dealInfo);
 
 			ConfigAgentBoundDealInfo dealInfoBound = new ConfigAgentBoundDealInfo();
-			dealInfoBound.setDealInfo(workDealInfo);
+			dealInfoBound.setDealInfo(dealInfo);
 			dealInfoBound.setAgent(agent);
 			configAgentBoundDealInfoService.save(dealInfoBound);
+			
+			ConfigAgentBoundDealInfo bound = configAgentBoundDealInfoService.findByAgentIdDealId(prvedAgentId, id);
+			if (bound != null) {
+				configAgentBoundDealInfoService.deleteById(bound.getId());
+			}
 			logUtil.saveSysLog("计费策略模版", "计费策略模版：" + dealInfo.getId() + "--业务编号：" + dealInfo.getId() + "--关联成功!", "");
 
 		} catch (Exception e) {

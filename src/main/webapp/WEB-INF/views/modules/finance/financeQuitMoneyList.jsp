@@ -20,17 +20,13 @@
 		var url = "${ctx}/finance/financeQuitMoney/quitMoneyWorkDealInfo?quitMoneyId=" + id;
 		var html = "<div style='padding:30px;'>" 
 					+ "<span style='font-weight:bold;'>退费金额：</span>" + residueMoney + "</br>" + "</br>"
-					+ "<span style='font-weight:bold;'>退费原因：</span><input type='text' id='quitReason' name='quitReason' /></div>";
+					+ "<span style='font-weight:bold;'>退费原因：</span>变更缴费类型操作记录</div>";
 		var quitReason;
 		var submit = function(v, h, f){
 			if(v=="close"){
 				return true;
 			}
-			if(f.quitReason == ""){
-				top.$.jBox.tip("请填写退费原因！");
-				return false;
-			}
-			quitReason = f.quitReason;
+			quitReason = "变更缴费类型操作记录";
 			if(v == "ok"){
 				top.$.jBox.confirm("是否确认退费",'系统提示',function(v,h,f){
 					if(v=='ok'){
