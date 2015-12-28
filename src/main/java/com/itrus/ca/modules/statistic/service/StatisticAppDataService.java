@@ -92,7 +92,15 @@ public class StatisticAppDataService extends BaseService {
 		dc.addOrder(Order.desc("id"));
 		return statisticAppDataDao.find(dc);
 	}
-
+	public List<StatisticAppData> findByMonth(Long office) {
+		DetachedCriteria dc = statisticAppDataDao.createDetachedCriteria();
+		if (office != null) {
+			dc.createAlias("office", "office");
+			dc.add(Restrictions.eq("office.id", office));
+		}
+		dc.addOrder(Order.desc("id"));
+		return statisticAppDataDao.find(dc);
+	}
 	@Transactional(readOnly = false)
 	public void save(StatisticAppData statisticAppData) {
 		statisticAppDataDao.save(statisticAppData);

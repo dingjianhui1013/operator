@@ -9,7 +9,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -294,11 +296,33 @@ public class StatisticDayDataController extends BaseController {
 
 		try {
 			List<List<StatisticAppMonthData>> appSumList = new ArrayList<List<StatisticAppMonthData>>();
-			List<ConfigApp> configApps = configAppService.selectAll();
+			Set<ConfigApp> configApps= new LinkedHashSet<ConfigApp>();
+			for (String s : monthList) {
+				StatisticMonthData smd = new StatisticMonthData();
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+				Date start = sdf.parse(s);
+				Calendar rightNow = Calendar.getInstance();
+				rightNow.setTime(start);
+				rightNow.add(Calendar.MONTH, 1);
+				rightNow.add(Calendar.DATE, -1);
+				
+				Date end = rightNow.getTime();
+				end.setHours(23);
+				end.setSeconds(59);
+				end.setMinutes(59);
+				List<StatisticAppData> listMonth = statisticAppDataService
+						.findByMonth(office);
+				if(listMonth.size()>0)
+				{
+					for (StatisticAppData configApp : listMonth) {
+						configApps.add(configApp.getApp());
+					}
+				}
+			}
+			
 			for (ConfigApp configApp : configApps) {
 				List<StatisticAppMonthData> statisticAppMonthDatas = new ArrayList<StatisticAppMonthData>();
 				for (String s : monthList) {
-
 					StatisticAppMonthData samd = new StatisticAppMonthData();
 					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 					Date start = sdf.parse(s);
@@ -348,55 +372,44 @@ public class StatisticDayDataController extends BaseController {
 					Integer changeUpdateReplaceNum2 = 0;
 					Integer changeUpdateReplaceNum4 = 0;
 					Integer changeUpdateReplaceNum5 = 0;
-					
-					
-					
-					
-
 					List<StatisticAppData> listMonth = statisticAppDataService
 							.findByMonth(configApp, office, start, end);
 					for (StatisticAppData sad : listMonth) {
-						add1 += sad.getAdd1();
-						add2 += sad.getAdd2();
-						add4 += sad.getAdd4();
-						add5 += sad.getAdd5();
-						renew1 += sad.getRenew1();
-						renew2 += sad.getRenew2();
-						renew4 += sad.getRenew4();
-						renew5 += sad.getRenew5();
-						modifyNum += sad.getModifyNum();
-						reissueNum += sad.getReissueNum();
-						certTotal += sad.getCertTotal();
-						keyTotal += sad.getKeyTotal();
-						receiptTotal += sad.getReceiptTotal();
-						lostReplaceNum += sad.getLostReplaceNum();
-						updateChangeNum += sad.getUpdateChangeNum();
-						updateChangeNum2 += sad.getUpdateChangeNum2();
-						updateChangeNum4 += sad.getUpdateChangeNum4();
-						updateChangeNum5 += sad.getUpdateChangeNum5();
-						updateLostNum += sad.getUpdateLostNum();
-						updateLostNum2 += sad.getUpdateLostNum2();
-						updateLostNum4 += sad.getUpdateLostNum4();
-						updateLostNum5 += sad.getUpdateLostNum5();
-						updateReplaceNum += sad.getUpdateReplaceNum();
-						updateReplaceNum2 += sad.getUpdateReplaceNum2();
-						updateReplaceNum4 += sad.getUpdateReplaceNum4();
-						updateReplaceNum5 += sad.getUpdateReplaceNum5();
-						changeLostNum += sad.getChangeLostNum();
-						changeReplaceNum += sad.getChangeReplaceNum();
-						changeUpdateLostNum += sad.getChangeUpdateLostNum();
-						changeUpdateLostNum2 += sad.getChangeUpdateLostNum2();
-						changeUpdateLostNum4 += sad.getChangeUpdateLostNum4();
-						changeUpdateLostNum5 += sad.getChangeUpdateLostNum5();
-						changeUpdateReplaceNum += sad.getChangeUpdateReplaceNum();
-						changeUpdateReplaceNum2 += sad.getChangeUpdateReplaceNum2();
-						changeUpdateReplaceNum4 += sad.getChangeUpdateReplaceNum4();
-						changeUpdateReplaceNum5 += sad.getChangeUpdateReplaceNum5();
-						
-						
-						
-						
-
+								add2 += sad.getAdd2();
+								add4 += sad.getAdd4();
+								add5 += sad.getAdd5();
+								renew1 += sad.getRenew1();
+								renew2 += sad.getRenew2();
+								renew4 += sad.getRenew4();
+								renew5 += sad.getRenew5();
+								modifyNum += sad.getModifyNum();
+								reissueNum += sad.getReissueNum();
+								certTotal += sad.getCertTotal();
+								keyTotal += sad.getKeyTotal();
+								receiptTotal += sad.getReceiptTotal();
+								lostReplaceNum += sad.getLostReplaceNum();
+								updateChangeNum += sad.getUpdateChangeNum();
+								updateChangeNum2 += sad.getUpdateChangeNum2();
+								updateChangeNum4 += sad.getUpdateChangeNum4();
+								updateChangeNum5 += sad.getUpdateChangeNum5();
+								updateLostNum += sad.getUpdateLostNum();
+								updateLostNum2 += sad.getUpdateLostNum2();
+								updateLostNum4 += sad.getUpdateLostNum4();
+								updateLostNum5 += sad.getUpdateLostNum5();
+								updateReplaceNum += sad.getUpdateReplaceNum();
+								updateReplaceNum2 += sad.getUpdateReplaceNum2();
+								updateReplaceNum4 += sad.getUpdateReplaceNum4();
+								updateReplaceNum5 += sad.getUpdateReplaceNum5();
+								changeLostNum += sad.getChangeLostNum();
+								changeReplaceNum += sad.getChangeReplaceNum();
+								changeUpdateLostNum += sad.getChangeUpdateLostNum();
+								changeUpdateLostNum2 += sad.getChangeUpdateLostNum2();
+								changeUpdateLostNum4 += sad.getChangeUpdateLostNum4();
+								changeUpdateLostNum5 += sad.getChangeUpdateLostNum5();
+								changeUpdateReplaceNum += sad.getChangeUpdateReplaceNum();
+								changeUpdateReplaceNum2 += sad.getChangeUpdateReplaceNum2();
+								changeUpdateReplaceNum4 += sad.getChangeUpdateReplaceNum4();
+								changeUpdateReplaceNum5 += sad.getChangeUpdateReplaceNum5();
 					}
 					samd.setAdd1(add1);
 					samd.setAdd2(add2);
@@ -750,7 +763,71 @@ public class StatisticDayDataController extends BaseController {
 		List<String> monthList = getMonthList(startTime + "-01", endTime
 				+ "-01");
 		List<StatisticMonthData> sumList = new ArrayList<StatisticMonthData>();
+			try {
+				for (String s : monthList) {
+					StatisticMonthData smd = new StatisticMonthData();
+					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+					Date start = sdf.parse(s);
+					Calendar rightNow = Calendar.getInstance();
+					rightNow.setTime(start);
+					rightNow.add(Calendar.MONTH, 1);
+					rightNow.add(Calendar.DATE, -1);
+					
+					Date end = rightNow.getTime();
+					end.setHours(23);
+					end.setSeconds(59);
+					end.setMinutes(59);
+
+					Integer keyIn = 0;
+					Integer keyOver = 0;
+					Integer keyStoreTotal = 0;
+					Double receiptIn = 0d;
+					Double receiptOver = 0d;
+					Double receiptStoreTotal = 0d;
+					Integer certTotal = 0;
+					Integer keyTotal = 0;
+					Double receiptTotal = 0d;
+					Double certMoneyTotal = 0d;
+
+					List<StatisticDayData> ListMonth = statisticDayDataService
+							.findByMonth(office, start, end);
+					for (StatisticDayData sdd : ListMonth) {
+						keyIn += sdd.getKeyIn();
+						receiptIn += sdd.getReceiptIn();
+						
+						certTotal += sdd.getCertTotal();
+						keyOver += sdd.getKeyOver();
+						certMoneyTotal += sdd.getCertMoneyTotal();
+						
+						
+					}
+					if (ListMonth.size()>0) {
+						receiptTotal = ListMonth.get(0).getReceiptTotal();
+						keyTotal = ListMonth.get(0).getKeyTotal();
+					}
+					keyStoreTotal =  keyIn - keyOver ;
+					receiptStoreTotal = receiptIn - certMoneyTotal ;
+					smd.setKeyIn(keyIn);
+					smd.setKeyOver(keyOver);
+					smd.setKeyStoreTotal(keyStoreTotal);
+					smd.setReceiptIn(receiptIn);
+					// smd.setReceiptOver(receiptOver);
+					smd.setReceiptStoreTotal(receiptStoreTotal);
+					smd.setCertTotal(certTotal);
+					smd.setKeyTotal(keyTotal);
+					smd.setReceiptTotal(receiptTotal);
+					smd.setCertMoneyTotal(certMoneyTotal);
+					smd.setCreateDate(start);
+					sumList.add(smd);
+				}
+
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		try {
+			List<List<StatisticAppMonthData>> appSumList = new ArrayList<List<StatisticAppMonthData>>();
+			Set<ConfigApp> configApps= new LinkedHashSet<ConfigApp>();
 			for (String s : monthList) {
 				StatisticMonthData smd = new StatisticMonthData();
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -758,53 +835,21 @@ public class StatisticDayDataController extends BaseController {
 				Calendar rightNow = Calendar.getInstance();
 				rightNow.setTime(start);
 				rightNow.add(Calendar.MONTH, 1);
+				rightNow.add(Calendar.DATE, -1);
+				
 				Date end = rightNow.getTime();
-
-				Integer keyIn = 0;
-				Integer keyOver = 0;
-				Integer keyStoreTotal = 0;
-				Double receiptIn = 0d;
-				Double receiptOver = 0d;
-				Double receiptStoreTotal = 0d;
-				Integer certTotal = 0;
-				Integer keyTotal = 0;
-				Double receiptTotal = 0d;
-				Double certMoneyTotal = 0d;
-
-				List<StatisticDayData> ListMonth = statisticDayDataService
-						.findByMonth(office, start, end);
-				for (StatisticDayData sdd : ListMonth) {
-					keyIn += sdd.getKeyIn();
-					keyOver += sdd.getKeyOver();
-					keyStoreTotal += sdd.getKeyStoreTotal();
-					receiptIn += sdd.getReceiptIn();
-					// receiptOver += sdd.getReceiptOver();
-					receiptStoreTotal += sdd.getReceiptStoreTotal();
-					certTotal += sdd.getCertTotal();
-					keyTotal += sdd.getKeyTotal();
-					receiptTotal += sdd.getReceiptTotal();
-					certMoneyTotal += sdd.getCertMoneyTotal();
+				end.setHours(23);
+				end.setSeconds(59);
+				end.setMinutes(59);
+				List<StatisticAppData> listMonth = statisticAppDataService
+						.findByMonth(office);
+				if(listMonth.size()>0)
+				{
+					for (StatisticAppData configApp : listMonth) {
+						configApps.add(configApp.getApp());
+					}
 				}
-				smd.setKeyIn(keyIn);
-				smd.setKeyOver(keyOver);
-				smd.setKeyStoreTotal(keyStoreTotal);
-				smd.setReceiptIn(receiptIn);
-				// smd.setReceiptOver(receiptOver);
-				smd.setReceiptStoreTotal(receiptStoreTotal);
-				smd.setCertTotal(certTotal);
-				smd.setKeyTotal(keyTotal);
-				smd.setReceiptTotal(receiptTotal);
-				smd.setCertMoneyTotal(certMoneyTotal);
-				smd.setCreateDate(start);
-				sumList.add(smd);
 			}
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		try {
-			List<List<StatisticAppMonthData>> appSumList = new ArrayList<List<StatisticAppMonthData>>();
-			List<ConfigApp> configApps = configAppService.selectAll();
 			for (ConfigApp configApp : configApps) {
 				List<StatisticAppMonthData> statisticAppMonthDatas = new ArrayList<StatisticAppMonthData>();
 				for (String s : monthList) {
