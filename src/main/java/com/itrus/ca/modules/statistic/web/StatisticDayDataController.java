@@ -1596,7 +1596,8 @@ public class StatisticDayDataController extends BaseController {
 				.getCertPublishCount(countDate, officeId);
 		// 金额总量
 		paymentTotal = workDealInfoService.getWorkPayMoneyCount(countDate,
-				countDate, officeId);
+				countDate, officeId) + workDealInfoService.getWorkPayMoneyCountByUpdate(countDate,
+						countDate, officeId);
 		// key余量
 
 		statisticDayData.setCertMoneyTotal(paymentTotal);
@@ -1643,9 +1644,6 @@ public class StatisticDayDataController extends BaseController {
 			
 			certData.setRenew1(workDealInfoService.getCertAppYearInfoCountOneDeal(countDate, officeId, 1, app.getId(),
 					WorkDealInfoType.TYPE_UPDATE_CERT));
-			
-			
-			
 			certData.setRenew2(workDealInfoService.getCertAppYearInfoCountOneDeal(
 					countDate, officeId, 2, app.getId(),
 					WorkDealInfoType.TYPE_UPDATE_CERT));

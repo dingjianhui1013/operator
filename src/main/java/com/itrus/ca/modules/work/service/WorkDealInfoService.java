@@ -2766,12 +2766,14 @@ public class WorkDealInfoService extends BaseService {
 		statusIntegers.add(WorkDealInfoStatus.STATUS_CERT_OBTAINED);
 		statusIntegers.add(WorkDealInfoStatus.STATUS_CERT_REVOKE);
 		dc.add(Restrictions.in("dealInfoStatus", statusIntegers));
-		dc.add(Restrictions.ge("updateDate", date));
+		dc.add(Restrictions.ge("workPayInfo.updateDate", date));
 		dc.add(Restrictions.or(Restrictions.ne("isSJQY", 1), Restrictions.isNull("isSJQY")));
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
 		calendar.add(Calendar.DATE, 1);
-		dc.add(Restrictions.lt("updateDate", calendar.getTime()));
+
+		dc.createAlias("workPayInfo", "workPayInfo");
+		dc.add(Restrictions.lt("workPayInfo.updateDate", calendar.getTime()));
 		List<WorkDealInfo> dealinfos = workDealInfoDao.find(dc);
 		int createCount = 0;
 		for (int i = 0; i < dealinfos.size(); i++) {
@@ -2946,8 +2948,9 @@ public class WorkDealInfoService extends BaseService {
 		dc.createAlias("configApp", "configApp");
 		dc.add(Restrictions.eq("office.id", officeId));
 		dc.add(Restrictions.eq("configApp.id", appId));
-		dc.add(Restrictions.ge("updateDate", date));
-		dc.add(Restrictions.lt("updateDate", calendar.getTime()));
+		dc.createAlias("workPayInfo", "workPayInfo");
+		dc.add(Restrictions.ge("workPayInfo.updateDate", date));
+		dc.add(Restrictions.lt("workPayInfo.updateDate", calendar.getTime()));
 		List<String> statusIntegers = new ArrayList<String>();
 		if (dealInfoType.equals(1)) {
 			dc.add(Restrictions.eq("dealInfoType", dealInfoType));
@@ -2988,8 +2991,9 @@ public class WorkDealInfoService extends BaseService {
 		dc.createAlias("configApp", "configApp");
 		dc.add(Restrictions.eq("office.id", officeId));
 		dc.add(Restrictions.eq("configApp.id", appId));
-		dc.add(Restrictions.ge("updateDate", date));
-		dc.add(Restrictions.lt("updateDate", calendar.getTime()));
+		dc.createAlias("workPayInfo", "workPayInfo");
+		dc.add(Restrictions.ge("workPayInfo.updateDate", date));
+		dc.add(Restrictions.lt("workPayInfo.updateDate", calendar.getTime()));
 
 		dc.add(Restrictions.eq("dealInfoType", dealInfoTypeUpdate));
 		dc.add(Restrictions.isNull("dealInfoType1"));
@@ -3019,8 +3023,9 @@ public class WorkDealInfoService extends BaseService {
 		dc.createAlias("configApp", "configApp");
 		dc.add(Restrictions.eq("office.id", officeId));
 		dc.add(Restrictions.eq("configApp.id", appId));
-		dc.add(Restrictions.ge("updateDate", date));
-		dc.add(Restrictions.lt("updateDate", calendar.getTime()));
+		dc.createAlias("workPayInfo", "workPayInfo");
+		dc.add(Restrictions.ge("workPayInfo.updateDate", date));
+		dc.add(Restrictions.lt("workPayInfo.updateDate", calendar.getTime()));
 
 		dc.add(Restrictions.eq("dealInfoType", dealInfoTypeUpdate));
 		dc.add(Restrictions.eq("dealInfoType1", dealInfoTypeLost));
@@ -3080,6 +3085,9 @@ public class WorkDealInfoService extends BaseService {
 		dc.createAlias("configApp", "configApp");
 		dc.add(Restrictions.eq("office.id", officeId));
 		dc.add(Restrictions.eq("configApp.id", appId));
+		dc.createAlias("workPayInfo", "workPayInfo");
+		dc.add(Restrictions.ge("workPayInfo.updateDate", date));
+		dc.add(Restrictions.lt("workPayInfo.updateDate", calendar.getTime()));
 		dc.add(Restrictions.ge("updateDate", date));
 		dc.add(Restrictions.lt("updateDate", calendar.getTime()));
 		dc.add(Restrictions.eq("dealInfoType", dealInfoTypeUpdate));
@@ -3362,12 +3370,11 @@ public class WorkDealInfoService extends BaseService {
 		dc.add(Restrictions.eq("office.id", officeId));
 		dc.createAlias("configApp", "configApp");
 		dc.add(Restrictions.eq("configApp.id", appId));
-		dc.add(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED));
 		dc.add(Restrictions.or(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED),
 				Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_WAIT)));
-		dc.add(Restrictions.gt("updateDate", date));
-		dc.add(Restrictions.lt("updateDate", calendar.getTime()));
 		dc.createAlias("workPayInfo", "workPayInfo");
+		dc.add(Restrictions.gt("workPayInfo.updateDate", date));
+		dc.add(Restrictions.lt("workPayInfo.updateDate", calendar.getTime()));
 		dc.add(Restrictions.eq("workPayInfo.userReceipt", true));
 
 		List<WorkDealInfo> dealInfos = workDealInfoDao.find(dc);
@@ -3877,7 +3884,9 @@ public class WorkDealInfoService extends BaseService {
 		statusIntegers.add(WorkDealInfoStatus.STATUS_CERT_OBTAINED);
 		//statusIntegers.add(WorkDealInfoStatus.STATUS_CERT_REVOKE);
 		dc.add(Restrictions.in("dealInfoStatus", statusIntegers));
-		dc.add(Restrictions.ge("updateDate", countDate));
+		
+		dc.createAlias("workPayInfo", "workPayInfo");
+		dc.add(Restrictions.ge("workPayInfo.updateDate", countDate));
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(countDate);
 		calendar.add(Calendar.DATE, 1);
@@ -3911,6 +3920,33 @@ public class WorkDealInfoService extends BaseService {
 		}
 		return totalMoney;
 	}
+	
+	
+	public double getWorkPayMoneyCountByUpdate(Date yesterDay, Date countDate, Long officeId) {
+		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
+		dc.createAlias("createBy", "createBy");
+		dc.createAlias("createBy.office", "office");
+		dc.add(Restrictions.eq("createBy.office.id", officeId));
+		List<String> statusIntegers = new ArrayList<String>();
+		statusIntegers.add(WorkDealInfoStatus.STATUS_CERT_WAIT);
+		dc.add(Restrictions.in("dealInfoStatus", statusIntegers));
+		dc.add(Restrictions.ge("updateDate", countDate));
+		dc.add(Restrictions.eq("dealInfoType", WorkDealInfoType.TYPE_UPDATE_CERT));
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(countDate);
+		calendar.add(Calendar.DATE, 1);
+		countDate = calendar.getTime();
+		dc.add(Restrictions.lt("updateDate", countDate));
+		List<WorkDealInfo> dealInfos = workDealInfoDao.find(dc);
+		double totalMoney = 0d;
+		for (WorkDealInfo dealInfo : dealInfos) {
+			totalMoney += dealInfo.getWorkPayInfo().getWorkTotalMoney();
+		}
+		return totalMoney;
+	}
+	
+	
+	
 
 	public int getKeyPublishTimesCount(Date date, Long officeId, Long appId) {
 		Calendar calendar = Calendar.getInstance();

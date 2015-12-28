@@ -24,6 +24,7 @@
 	<form:form id="searchForm" modelAttribute="configRaAccount" action="${ctx}/profile/configRaAccount/bindList" method="post" class="breadcrumb form-search">
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
 		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
+		<input id="configProductId" name="configProductId" type="hidden" value="${configProductId}"/>
 		<label>RA模板名称 ：</label><form:input path="raName" htmlEscape="false" maxlength="50" class="input-medium"/>
 		&nbsp;<input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/>
 	</form:form>
@@ -37,6 +38,7 @@
 				<td>${configRaAccount.raName}</td>
 				<shiro:hasPermission name="profile:configProduct:edit"><td>
 				<a href="${ctx}/profile/configProduct/bindSave?productId=${configProductId}&raAccountId=${configRaAccount.id}">绑定RA模板</a>
+				
 				</td></shiro:hasPermission>
 			</tr>
 		</c:forEach>

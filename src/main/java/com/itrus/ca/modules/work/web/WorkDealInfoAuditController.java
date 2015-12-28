@@ -891,6 +891,7 @@ public class WorkDealInfoAuditController extends BaseController {
 		try {
 			// 新建payInfo保存原来的payInfo数据
 			WorkPayInfo workPayInfo = new WorkPayInfo();
+			workPayInfo.setUserReceipt(true);
 			if (iseq.equals(1) || iseq.equals(2)) {
 				Double oldAdd = 0d;
 				Double newAdd = 0d;
@@ -972,7 +973,8 @@ public class WorkDealInfoAuditController extends BaseController {
 				workPayInfo.setMethodBank(payInfo.getMethodBank());
 				workPayInfo.setMethodContract(payInfo.getMethodContract());
 				workPayInfo.setMethodGov(payInfo.getMethodGov());
-				workPayInfo.setMethodPos(false);
+				workPayInfo.setMethodPos(payInfo.getMethodPos());
+				
 				workPayInfoService.save(workPayInfo);
 
 				if (newAdd > oldAdd) {
@@ -1030,7 +1032,7 @@ public class WorkDealInfoAuditController extends BaseController {
 				workPayInfo.setMethodBank(payInfo.getMethodBank());
 				workPayInfo.setMethodContract(payInfo.getMethodContract());
 				workPayInfo.setMethodGov(payInfo.getMethodGov());
-				workPayInfo.setMethodPos(false);
+				workPayInfo.setMethodPos(payInfo.getMethodPos());
 				workPayInfoService.save(workPayInfo);
 			}
 			dealInfo.setWorkPayInfo(workPayInfo);
