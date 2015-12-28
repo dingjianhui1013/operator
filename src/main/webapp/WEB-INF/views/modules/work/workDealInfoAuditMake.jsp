@@ -186,7 +186,7 @@
 															+ "</div></div>";
 													var submit = function(v, h,
 															f) {
-														window.location.href = "${ctx}/work/workDealInfoAudit/list";
+														window.location.href = "${ctx}/work/workDealInfo/list";
 														return true;
 													};
 													top.$.jBox(html, {
