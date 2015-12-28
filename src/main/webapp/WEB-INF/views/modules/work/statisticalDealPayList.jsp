@@ -200,7 +200,36 @@
 					<td><fmt:formatDate
 							value="${configDealPay.workPayInfo.createDate}"
 							pattern="yyyy-MM-dd HH:mm:ss" /></td>
-					<td><c:choose>
+					<td>
+<%-- 					<c:if test="${configDealPay.workPayInfo.methodPos==true}">POS收款</c:if> --%>
+						<c:if test="${configDealPay.workPayInfo.methodPos==true}">
+							POS收款
+						</c:if>
+							<c:if test="${configDealPay.workPayInfo.methodMoney==true}">
+							现金
+						</c:if>
+							<c:if test="${configDealPay.workPayInfo.methodBank==true}">
+							银行转账
+						</c:if>
+							<c:if test="${configDealPay.workPayInfo.methodAlipay==true}">
+							支付宝
+						</c:if>
+							<c:if test="${configDealPay.workPayInfo.methodContract==true}">
+							合同采购
+						</c:if>
+							<c:if test="${configDealPay.workPayInfo.methodGov==true}">
+							政府统一采购
+						</c:if>
+						<c:if test="${configDealPay.workPayInfo.relationMethod>0}">
+										<c:forEach items="${Id_paymethod}" var="Id_paymethod">
+											<c:if test="${Id_paymethod.key==configDealPay.id}">
+												<c:forEach items="${Id_paymethod.value}" var="payMethod">
+													${payMethod}
+												</c:forEach>
+											</c:if>
+										</c:forEach>
+						</c:if>
+				<%-- 	<c:choose>
 							<c:when test="${configDealPay.workPayInfo.methodPos==true}">
 							POS收款
 						</c:when>
@@ -235,7 +264,8 @@
 								</c:otherwise>
 								</c:choose>
 							</c:otherwise>
-						</c:choose></td>
+						</c:choose> --%>
+						</td>
 					<td>${configDealPay.createBy.office.areaName}</td>
 					<td>${configDealPay.createBy.office.name}</td>
 					<td>${configDealPay.workPayInfo.createBy.name}</td>

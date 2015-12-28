@@ -1591,10 +1591,12 @@ public class WorkDealInfoService extends BaseService {
 	}
 	public List<WorkDealInfo> findByDealPay(WorkDealInfo workDealInfo, Date startTime,
 			Date endTime, List<Long> idList, List<Long> dealInfoByAreaIds, List<Long> dealInfoByOfficeAreaIds,
-			Long appId) {
+			Long appId,List<Long> officeIds) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("workPayInfo", "workPayInfo");
 		dc.add(Restrictions.isNotNull("workPayInfo"));
+		dc.createAlias("createBy", "createBy");
+		dc.createAlias("createBy.office", "office");
 		dc.add(Restrictions.eq("workPayInfo.delFlag", WorkPayInfo.DEL_FLAG_NORMAL));
 		dc.add(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED));
 		if (workDealInfo.getWorkPayInfo() != null) {
@@ -1615,6 +1617,10 @@ public class WorkDealInfoService extends BaseService {
 			}
 			if (workDealInfo.getWorkPayInfo().getMethodContract() == true) {
 				dc.add(Restrictions.eq("workPayInfo.methodContract", true));
+			}
+			if(officeIds!=null&&officeIds.size()>0)
+			{
+				dc.add(Restrictions.in("office.id", officeIds));
 			}
 		}
 
