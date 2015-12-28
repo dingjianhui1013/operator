@@ -130,9 +130,9 @@
 		
 	</form:form>
 	<tags:message content="${message}" />	
-	<div class="form-horizontal" >
+	<div class="form-horizontal" style="overflow-x:auto; height:420px">
 		<table id="contentTable"
-					class="table table-striped table-bordered table-condensed" style="width: 60%">
+					class="table table-striped table-bordered table-condensed" style="width: 60%" >
 					<tr>
 						<th colspan="${7+lenth*4 }" >统计周期：<fmt:formatDate pattern="yyyy-MM-dd" value="${startTime}"/>&nbsp;-&nbsp;<fmt:formatDate pattern="yyyy-MM-dd" value="${endTime}"/></th>
 					</tr>
