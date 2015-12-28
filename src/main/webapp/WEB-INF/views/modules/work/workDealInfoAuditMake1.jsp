@@ -133,18 +133,35 @@
 	}
 
 	function makeCert() {
-		selectKeyNum();
-		var selectedItem = $("option:selected", $("[name=provider]")[0]);
-		var cspStr = encodeURI(encodeURI(selectedItem.text()));
-		var url = "${ctx}/ca/validateCspIsValid?csp="+cspStr+"&_=" + new Date().getTime();
-		$.getJSON(url,
-				function(data){
-			if (data.status==1) {
-				quick(sn);
-			} else {
-				top.$.jBox.tip("库存中没有该Key类型");
+		var providerName=$("#provider").find("option:selected").text();
+		if(providerName.indexOf("软证书")>=0)
+		{
+			var selectedItem = $("option:selected", $("[name=provider]")[0]);
+			var cspStr = encodeURI(encodeURI(selectedItem.text()));
+			var url = "${ctx}/ca/validateCspIsValid?csp="+cspStr+"&_=" + new Date().getTime();
+			$.getJSON(url,
+					function(data){
+				if (data.status==1) {
+					quick(sn);
+				} else {
+					top.$.jBox.tip("库存中没有该Key类型");
+				}
+			});
+		}else
+			{
+				selectKeyNum();
+				var selectedItem = $("option:selected", $("[name=provider]")[0]);
+				var cspStr = encodeURI(encodeURI(selectedItem.text()));
+				var url = "${ctx}/ca/validateCspIsValid?csp="+cspStr+"&_=" + new Date().getTime();
+				$.getJSON(url,
+						function(data){
+					if (data.status==1) {
+						quick(sn);
+					} else {
+						top.$.jBox.tip("库存中没有该Key类型");
+					}
+				});
 			}
-		});
 		
 	}
 

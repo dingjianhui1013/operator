@@ -195,8 +195,9 @@
 
 	function makeCert() {
 		try {
+			var providerName=$("#provider").find("option:selected").text();
 			var keys = ukeyadmin.refresh(); //检测KEY
-			if (keys == 0) {
+			if (keys == 0 && providerName.indexOf("软证书")==-1) {
 				alert("没有检测到UKEY");
 			} else {
 				var keySn = $("#keySn").val();

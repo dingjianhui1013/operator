@@ -216,19 +216,19 @@
 	
 	function makeCert() {
 		try {
+			var providerName=$("#provider").find("option:selected").text();
 			var keys = ukeyadmin.refresh(); //检测KEY
-			if (keys == 0) {
+			if (keys == 0 && providerName.indexOf("软证书")==-1) {
 				alert("没有检测到UKEY");
 			} else {
-				
 				var keySn = $("#keySn").val();
 				var providerName=$("#provider").find("option:selected").text();
 				if(providerName.indexOf("软证书")==-1)
 					{
-				if(keySn==''){
-					top.$.jBox.tip("请您先检测KEY！");
-					return false;
-				}
+						if(keySn==''){
+							top.$.jBox.tip("请您先检测KEY！");
+							return false;
+						}
 					}
 				sn = keySn;
 				$("#keySn").attr("value", keySn);
@@ -281,6 +281,7 @@
 				}
 			}
 		} catch (e) {
+			alert(3);
 			alert("没有检测到UKEY");
 		}
 		
@@ -425,7 +426,7 @@
 			</thead>
 			<tr>
 				<td>证书有效期</td>
-				<td>${workDealInfo.year*365+workDealInfo.lastDays }&nbsp;赠送<input type="text"
+				<td>${workDealInfo.year*365+workDealInfo.lastDays }&nbsp;赠送mian<input type="text"
 					style="width: 100px" id="addCertDays" class="num required"  onblur="addCertDaysCheck()" 
 					value="0">天
 				</td>
