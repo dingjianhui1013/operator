@@ -61,7 +61,7 @@
 			value="${page.pageSize}" />
 	</form:form>
 	<tags:message content="${message}" />
-	<div style="overflow: auto;height: 400px"> 
+	<div style="overflow: auto;height: 420px"> 
 	<table id="contentTable"
 		class="table table-striped table-bordered table-condensed">
 		<thead>
