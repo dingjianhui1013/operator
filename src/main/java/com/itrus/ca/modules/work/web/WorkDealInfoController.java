@@ -6099,61 +6099,84 @@ public class WorkDealInfoController extends BaseController {
 		row1.createCell(1).setCellValue("项目名称");
 		HSSFRow row2 = sheet.createRow(2);
 		HSSFRow row3 = sheet.createRow(3);
-
+		
+		int i=2;
+		int aa=0;
+		int i1=2;
 		Iterator<Map.Entry<String, Set<String>>> off_dis = office_District.entrySet().iterator();
-		int zcount = 0;
-		int qnum[] = new int[office_District.size()];
-		int qnumIndex = 0;
-		int index = 0;
-		int count=2+index-1;
-		int count1=2;
-		int count11=0;
 		while (off_dis.hasNext()) {
-			count1=count11;
-			Entry<String, Set<String>> entry = off_dis.next();
-			if (entry.getValue().size() == 1) {
-				index++;
-				count11++;
-				zcount++;
-				row1.createCell(count1+2).setCellValue(entry.getKey());
-			}
-			if (entry.getValue().size() > 1) {
-				Object districts[] = entry.getValue().toArray();
-				for (int d = 0; d < districts.length; d++) {
-					Iterator<Map.Entry<String, List<String>>> dis_payM = district_payMethod.entrySet().iterator();
-					while (dis_payM.hasNext()) {
-						Entry<String, List<String>> dp = dis_payM.next();
-						if (districts[d].equals(dp.getKey())) {
-							if (dp.getValue().size() == 1) {
-								count=2+index;
-								index++;
-								zcount++;
-								count11++;
-								row2.createCell(count).setCellValue((String)districts[d]);
-							}
-							if (dp.getValue().size() > 1) {
-								
-								count=2+index;
-								index+=dp.getValue().size();
-								sheet.addMergedRegion(new Region(2, (short)count, 2,
-										(short)(2+index-1)));
-								row2.createCell(count).setCellValue((String) districts[d]);
-								for (int dpi = 0; dpi < dp.getValue().size(); dpi++) {
-									row3.createCell(count+dpi).setCellValue(dp.getValue().get(dpi));
-									zcount++;
-									count11++;
-								}
-							}
+			int index=0;
+			int qu=0;
+			int count=0;
+			Entry<String, Set<String>> off = off_dis.next();
+			qu=off.getValue().size();
+			for(int o=0;o<off.getValue().size();o++)
+			{
+				int index1=0;
+				Object districts[]= off.getValue().toArray();
+				Iterator<Map.Entry<String, List<String>>> dis_payM = district_payMethod.entrySet().iterator();
+				while (dis_payM.hasNext()) {
+					Entry<String, List<String>> dp = dis_payM.next();
+					if(dp.getKey().equals(districts[o]))
+					{
+						index+=dp.getValue().size();	
+						index1+=dp.getValue().size();
+						for(int d=0;d<dp.getValue().size();d++)
+						{
+							row3.createCell(aa+2).setCellValue(dp.getValue().get(d));
+							aa++;
 						}
 					}
 				}
-				 sheet.addMergedRegion(new Region(1,(short)(count1+2),1,(short)(count11)));
-				 row1.createCell(count1+2).setCellValue(entry.getKey());
+				if(index1==1)
+				{
+					row2.createCell(i1).setCellValue(districts[o]+"");
+					i1++;
+				}
+				if(index1>1)
+				{
+					sheet.addMergedRegion(new Region(2, (short)i1, 2, (short)(i1+index1-1)));
+					row2.createCell(i1).setCellValue(districts[o]+"");
+					i1=i1+index1;
+				}
 			}
+				if(index==1)
+				{
+					if(qu==1)
+					{
+						row1.createCell(i).setCellValue(off.getKey());
+						
+					}
+					if(qu>1)
+					{
+						row1.createCell(i).setCellValue(off.getKey());
+						sheet.addMergedRegion(new Region(1, (short)i, 1, (short)(i+qu-1)));
+						i=i+qu;
+					}
+				}
+				if(index>1)
+				{
+					for(int o1=0;o1<off.getValue().size();o1++)
+					{
+						Object districts[]= off.getValue().toArray();
+						Iterator<Map.Entry<String, List<String>>> dis_payM1 = district_payMethod.entrySet().iterator();
+						while (dis_payM1.hasNext()) {
+							Entry<String, List<String>> dp = dis_payM1.next();
+							if(dp.getKey().equals(districts[o1]))
+							{
+								count+=dp.getValue().size();
+							
+							}
+						}
+					}
+					sheet.addMergedRegion(new Region(1, (short)i, 1, (short)(i+count-1)));
+					row1.createCell(i).setCellValue(off.getKey());
+					i=i+count;
+				}
 		}
-
-		sheet.addMergedRegion(new Region(0, (short) 0, 0, (short) (1 + zcount + 1)));
-		row1.createCell(1 + zcount + 1).setCellValue("合计");
+		sheet.addMergedRegion(new Region(0, (short) 0, 0, (short) (i)));
+		row1.createCell(i).setCellValue("合计");
+		sheet.addMergedRegion(new Region(1, (short)i, 3, (short)i));
 		Object months[] = month.toArray();
 		for (int m = 0; m < months.length; m++) {
 			int a = 0;// 使单元格恢复为零
@@ -6191,7 +6214,7 @@ public class WorkDealInfoController extends BaseController {
 			}
 			for (int w = 0; w < w_m.size(); w++) {
 				if (w_m.get(w).getDate().equals(months[m])) {
-					rown.createCell(1 + zcount + 1).setCellValue(w_m.get(w).getCountMoney());
+					rown.createCell(i).setCellValue(w_m.get(w).getCountMoney());
 				}
 			}
 		}
@@ -6216,7 +6239,7 @@ public class WorkDealInfoController extends BaseController {
 				}
 			}
 		}
-		rowz.createCell(2 + zcount).setCellValue(moneys);
+		rowz.createCell(i).setCellValue(moneys);
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		response.setContentType(response.getContentType());
 		response.setHeader("Content-disposition", "attachment; filename=projectPayment.xls");

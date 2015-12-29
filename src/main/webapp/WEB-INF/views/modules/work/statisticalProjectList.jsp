@@ -157,22 +157,42 @@
 				<th  rowspan="3" style="text-align:center;">项目名称</th>
 				<c:forEach items="${office_District}" var="office_District">
 					<c:set var="index" value="0" />
-					<c:set var="count" value="0" />
+					<c:set var="qu" value="0" />
 					<c:forEach items="${office_District.value}" var="district">
-						<c:set var="index" value="${index+1}" />
+						<c:set var="qu" value="${qu+1}" />
 						<c:forEach items="${district_payMethod}" var="district_payMethod">
 								<c:if test="${district_payMethod.key==district}">
 									<c:forEach items="${district_payMethod.value}" var="dpv">
-										<c:set var="count" value="${count+1}" />
+										<c:set var="index" value="${index+1}" />
 									</c:forEach>
 								</c:if>
 						</c:forEach>
 					</c:forEach>
 					<c:if test="${index==1}">
-						<th colspan="${index}" rowspan="3" style="text-align:center;">${office_District.key}</th>
+						<c:if test="${qu==1}">
+							<th rowspan="2" style="text-align:center;">${office_District.key}</th>
+						</c:if>
+						<c:if test="${qu>1}">
+							<th colspan="${qu}" style="text-align:center;">${office_District.key}</th>
+						</c:if>
 					</c:if>
 					<c:if test="${index>1}">
-						<th colspan="${count}" style="text-align:center;">${office_District.key}</th>
+					<c:set var="pays" value="0"/>
+						<c:forEach items="${office_District.value}" var="district">
+							<c:forEach items="${district_payMethod}" var="district_payMethod">
+								<c:if test="${district_payMethod.key==district}">
+								<c:if test="${fn:length(district_payMethod.value)==1}">
+									<c:set var="pays" value="${pays+1}" />
+								</c:if>
+									<c:if test="${fn:length(district_payMethod.value)>1}">
+										<c:forEach items="${district_payMethod.value}" var="dpvs">
+											<c:set var="pays" value="${pays+1}" />
+										</c:forEach>
+									</c:if>
+								</c:if>
+							</c:forEach>
+						</c:forEach>
+						<th colspan="${pays}" style="text-align:center;">${office_District.key}</th>
 					</c:if>
 				</c:forEach>
 				<th rowspan="3" style="text-align:center;">合计</th>
@@ -180,9 +200,22 @@
 			<tr>
 				<c:forEach items="${office_District}" var="office_District">
 					<c:set var="index" value="0" />
-					<c:forEach items="${office_District.value}">
-						<c:set var="index" value="${index+1}" />
+					<c:set var="qu" value="0" />
+					<c:forEach items="${office_District.value}" var="district">
+					<c:set var="qu" value="${qu+1}" />
+						<c:forEach items="${district_payMethod}" var="district_payMethod">
+								<c:if test="${district_payMethod.key==district}">
+									<c:forEach items="${district_payMethod.value}" var="dpv">
+										<c:set var="index" value="${index+1}" />
+									</c:forEach>
+								</c:if>
+						</c:forEach>
 					</c:forEach>
+					<c:if test="${index==1}">
+						<c:if test="${qu>1}">
+								<th style="text-align:center;">${district}</th>
+						</c:if>
+					</c:if>
 					<c:if test="${index>1}">
 					<c:forEach items="${office_District.value}" var="district">
 					<c:set var="count" value="0" />
@@ -194,7 +227,7 @@
 								</c:if>
 						</c:forEach>
 						<c:if test="${count==1}">
-							<th style="text-align:center;" rowspan="2">${district}</th>
+							<th style="text-align:center;">${district}</th>
 						</c:if>
 						<c:if test="${count>1}">
 							<th style="text-align:center;" colspan="${count}">${district}</th>
@@ -203,29 +236,17 @@
 					</c:if>
 				</c:forEach>
 			</tr>
-			 <tr>
+			<tr>
 				<c:forEach items="${office_District}" var="office_District">
-					<c:set var="index" value="0" />
-					<c:forEach items="${office_District.value}">
-						<c:set var="index" value="${index+1}" />
-					</c:forEach>
-					<c:if test="${index>1}">
 					<c:forEach items="${office_District.value}" var="district">
-							<c:forEach items="${district_payMethod}" var="district_payMethod">
-								<c:set var="i" value="0"/>
+						<c:forEach items="${district_payMethod}" var="district_payMethod">
 								<c:if test="${district_payMethod.key==district}">
-									<c:forEach items="${district_payMethod.value}">
-										<c:set var="i" value="${i+1}"/>
+									<c:forEach items="${district_payMethod.value}" var="dpv">
+										<th>${dpv}</th>
 									</c:forEach>
-										<c:if test="${i>1}">
-										<c:forEach items="${district_payMethod.value}" var="dpv">
-											<th style="text-align:center;">${dpv}</th>
-										</c:forEach>
-										</c:if>
 								</c:if>
-							</c:forEach>
+						</c:forEach>
 					</c:forEach>
-					</c:if>
 				</c:forEach>
 			</tr> 
 		</thead>
