@@ -511,6 +511,7 @@ var selected = false;
 <script type="text/javascript"
 	src="${ctxStatic}/jquery/jquery.bigautocomplete.js"></script>
 <script type="text/javascript" src="${ctxStatic}/jquery/city.js"></script>
+<script src="http://ie7-js.googlecode.com/svn/version/2.1(beta4)/IE9.js"></script>
 <link href="${ctxStatic}/jquery/jquery.bigautocomplete.css"
 	rel="stylesheet" />
 <script type="text/javascript">
@@ -1000,12 +1001,12 @@ var selected = false;
 		<li class="active"><a
 			href="${ctx}/work/workDealInfo/form?id=${workDealInfo.id}">业务新增</a></li>
 	</ul>
-	<form:form id="inputForm" action="${ctx}/work/workDealInfo/save" 
+	<form:form id="inputForm" action="${ctx}/work/workDealInfo/save"
 		method="POST" class="form-horizontal">
 		<tags:message content="${message}" />
 		<div class="row-fluid">
 			<div class="span12">
-				<table class="table table-striped table-bordered table-condensed" >
+				<table class="table table-striped table-bordered table-condensed">
 					<tbody>
 						<tr>
 							<th colspan="6" style="font-size: 20px;"><span
@@ -1053,9 +1054,8 @@ var selected = false;
 								onchange="setYearByBoundId()" id="agentDetailId"
 								name="agentDetailId">
 									<option value="0">请选择</option>
-							</select>&nbsp;<label id="agentMes" style="color: red;display: none;">不可用</label>
-							<input type="hidden" id="surplusNum" />
-							<!-- 		计费策略类型：
+							</select>&nbsp;<label id="agentMes" style="color: red; display: none;">不可用</label>
+								<input type="hidden" id="surplusNum" /> <!-- 		计费策略类型：
 							<select id="agentId" name="agentId" >
 								<option value="0">请选择</option>
 							</select>
@@ -1120,7 +1120,11 @@ var selected = false;
 							<td><input type="text" name="organizationNumber"
 								onkeyup="value=value.replace(/[^\w\.\/]/ig,'')"
 								value="${workCompany.organizationNumber }" maxlength="20"
-								id="organizationNumber"   oninput="count('organizationNumber','zdcount')" onblur="qxCount('zdcount')" onfocus="hqcount('organizationNumber','zdcount')"/><span id="zdcount" style="color: red; margin-left: 10px"></span></td>
+								id="organizationNumber"
+								oninput="count('organizationNumber','zdcount')"
+								onblur="qxCount('zdcount')"
+								onfocus="hqcount('organizationNumber','zdcount')" /><span
+								id="zdcount" style="color: red; margin-left: 10px"></span></td>
 							<th><span class="prompt" style="color: red; display: none;">*</span>组织机构代码有效期：</th>
 							<td><input class="input-medium Wdate"
 								value="<fmt:formatDate value="${workCompany.orgExpirationTime }" pattern="yyyy-MM-dd"/>"
@@ -1153,7 +1157,11 @@ var selected = false;
 							<th><span class="prompt" style="color: red; display: none;">*</span>证件号：</th>
 							<td><input type="text" name="comCertficateNumber"
 								value="${workCompany.comCertficateNumber }" maxlength="18"
-								id="comCertficateNumber" oninput="count('comCertficateNumber','zjcount')" onblur="qxCount('zjcount')" onfocus="hqcount('comCertficateNumber','zjcount')"/><span id="zjcount" style="color: red; margin-left: 10px"></span></td>
+								id="comCertficateNumber"
+								oninput="count('comCertficateNumber','zjcount')"
+								onblur="qxCount('zjcount')"
+								onfocus="hqcount('comCertficateNumber','zjcount')" /><span
+								id="zjcount" style="color: red; margin-left: 10px"></span></td>
 							<th><span class="prompt" style="color: red; display: none;">*</span>单位证照有效期：</th>
 							<td><input class="input-medium Wdate" type="text"
 								value="<fmt:formatDate value="${workCompany.comCertficateTime }"  pattern="yyyy-MM-dd"/>"
@@ -1189,7 +1197,10 @@ var selected = false;
 							<th><span class="prompt" style="color: red; display: none;">*</span>单位联系电话：</th>
 							<td><input type="text" name="companyMobile" maxlength="11"
 								id="companyMobile" value="${workCompany.companyMobile }"
-								class="number" oninput="count('companyMobile','dwcount')" onblur="qxCount('dwcount')" onfocus="hqcount('companyMobile','dwcount')"/><span id="dwcount" style="color: red; margin-left: 10px"></span></td>
+								class="number" oninput="count('companyMobile','dwcount')"
+								onblur="qxCount('dwcount')"
+								onfocus="hqcount('companyMobile','dwcount')" /><span
+								id="dwcount" style="color: red; margin-left: 10px"></span></td>
 
 						</tr>
 						<tr>
@@ -1228,7 +1239,11 @@ var selected = false;
 							<td><input type="text" name="conCertNumber" maxlength="18"
 								id="conCertNumber" value="${workUser.conCertNumber }"
 								onkeyup="value=value.replace(/[^\w\.\/]/ig,'')"
-								onchange="numberFill()" oninput="count('conCertNumber','zjhcount')" onblur="qxCount('zjhcount')" onfocus="hqcount('conCertNumber','zjhcount')"/><span id="zjhcount" style="color: red; margin-left: 10px"></span></td>
+								onchange="numberFill()"
+								oninput="count('conCertNumber','zjhcount')"
+								onblur="qxCount('zjhcount')"
+								onfocus="hqcount('conCertNumber','zjhcount')" /><span
+								id="zjhcount" style="color: red; margin-left: 10px"></span></td>
 							<th><span class="prompt" style="color: red; display: none;">*</span>证书持有人电子邮件:</th>
 							<td><input type="text" name="contacEmail" id="contacEmail"
 								maxlength="30" value="${workUser.contactEmail }"
@@ -1238,10 +1253,17 @@ var selected = false;
 							<th><span class="prompt" style="color: red; display: none;">*</span>证书持有人手机号:</th>
 							<td><input type="text" name="contactPhone" id="contactPhone"
 								maxlength="11" value="${workUser.contactPhone }"
-								onblur="checkMobile(this,'zjmcount')" oninput="count('contactPhone','zjmcount')" onfocus="hqcount('contactPhone','zjmcount')"/><span id="zjmcount" style="color: red; margin-left: 10px"></span></td>
+								onblur="checkMobile(this,'zjmcount')"
+								oninput="count('contactPhone','zjmcount')"
+								onfocus="hqcount('contactPhone','zjmcount')" /><span
+								id="zjmcount" style="color: red; margin-left: 10px"></span></td>
 							<th><span class="prompt" style="color: red; display: none;">*</span>业务系统UID:</th>
 							<td><input type="text" name="contactTel" id="contactTel"
-								maxlength="20" value="${workUser.contactTel }" oninput="count('contactTel','ywidcount')" onblur="qxCount('ywidcount')" onfocus="hqcount('contactTel','ywidcount')"/><span id="ywidcount" style="color: red; margin-left: 10px"></span></td>
+								maxlength="20" value="${workUser.contactTel }"
+								oninput="count('contactTel','ywidcount')"
+								onblur="qxCount('ywidcount')"
+								onfocus="hqcount('contactTel','ywidcount')" /><span
+								id="ywidcount" style="color: red; margin-left: 10px"></span></td>
 						</tr>
 						<tr>
 							<th><span class="prompt" style="color: red; display: none;">*</span>证书持有人性别:</th>
@@ -1273,7 +1295,10 @@ var selected = false;
 						<tr>
 							<th><span class="prompt" style="color: red;">*</span>身份证号:</th>
 							<td><input type="text" name="pIDCard" id="pIDCard"
-								maxlength="18" value="${workCertApplyInfo.idCard }" oninput="count('pIDCard','IDcount')" onblur="qxCount('IDcount')" onfocus="hqcount('pIDCard','IDcount')"/><span id="IDcount" style="color: red; margin-left: 10px"></span></td>
+								maxlength="18" value="${workCertApplyInfo.idCard }"
+								oninput="count('pIDCard','IDcount')" onblur="qxCount('IDcount')"
+								onfocus="hqcount('pIDCard','IDcount')" /><span id="IDcount"
+								style="color: red; margin-left: 10px"></span></td>
 						</tr>
 						<tr>
 							<th><span class="prompt" style="color: red; display: none;">*</span>经办人邮箱:</th>
