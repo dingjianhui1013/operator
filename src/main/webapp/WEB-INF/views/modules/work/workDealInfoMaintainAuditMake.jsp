@@ -215,14 +215,14 @@
 	}
 	
 	function makeCert() {
+		var providerName=$("#provider").find("option:selected").text();
 		try {
-			var providerName=$("#provider").find("option:selected").text();
 			var keys = ukeyadmin.refresh(); //检测KEY
 			if (keys == 0 && providerName.indexOf("软证书")==-1) {
 				alert("没有检测到UKEY");
 			} else {
 				var keySn = $("#keySn").val();
-				var providerName=$("#provider").find("option:selected").text();
+// 				var providerName=$("#provider").find("option:selected").text();
 				if(providerName.indexOf("软证书")==-1)
 					{
 						if(keySn==''){
@@ -281,8 +281,10 @@
 				}
 			}
 		} catch (e) {
-			alert(3);
-			alert("没有检测到UKEY");
+			if(providerName.indexOf("软证书")==-1)
+			{
+				alert("没有检测到UKEY");
+			}
 		}
 		
 		
