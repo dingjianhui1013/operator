@@ -426,7 +426,7 @@
 			</thead>
 			<tr>
 				<td>证书有效期</td>
-				<td>${workDealInfo.year*365+workDealInfo.lastDays }&nbsp;赠送mian<input type="text"
+				<td>${workDealInfo.year*365+workDealInfo.lastDays }&nbsp;赠送<input type="text"
 					style="width: 100px" id="addCertDays" class="num required"  onblur="addCertDaysCheck()" 
 					value="0">天
 				</td>
