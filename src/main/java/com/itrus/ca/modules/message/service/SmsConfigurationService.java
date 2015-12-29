@@ -84,10 +84,13 @@ public class SmsConfigurationService extends BaseService {
 		List<SmsConfiguration> list = smsConfigurationDao.find(dc);
 		return list;
 	}
-	public SmsConfiguration findByMessageName(String messageName){
+	public SmsConfiguration findByMessageName(String messageName, Long RaId){
 		DetachedCriteria dc = smsConfigurationDao.createDetachedCriteria();
 		dc.add(Restrictions.eq("messageName", messageName));
-		
+		dc.add(Restrictions.eq(SmsConfiguration.DEL_FLAG, SmsConfiguration.DEL_FLAG_NORMAL));
+		if (RaId!=null) {
+			dc.add(Restrictions.ne("id", RaId));
+		}
 		if (smsConfigurationDao.find(dc).size()>0) {
 			return smsConfigurationDao.find(dc).get(0);
 		}else {

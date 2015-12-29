@@ -121,10 +121,10 @@ public class SmsConfigurationController extends BaseController {
 	}
 	@RequestMapping(value="checkRepeat")
 	@ResponseBody
-	public String checkRepeat(String messageName) throws JSONException{
+	public String checkRepeat(String messageName,Long RaId) throws JSONException{
 		JSONObject json = new JSONObject();
 		try {
-			SmsConfiguration sms =  smsConfigurationService.findByMessageName(messageName);
+			SmsConfiguration sms =  smsConfigurationService.findByMessageName(messageName,RaId);
 			if (sms!=null) {
 				json.put("type", 1);
 			}else {
