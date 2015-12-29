@@ -6,7 +6,13 @@
 <meta name="decorator" content="default" />
 <script type="text/javascript">
 	$(document).ready(function() {
-
+		var windowH=$(window).height();
+		$('.windowHeight').height(windowH);
+		$("#scrollBar").scroll(function(){
+			var leftWidth=$("#scrollBar").scrollLeft();
+			$("#searchForm").css("margin-left",leftWidth);
+			$("#ulId").css("margin-left",leftWidth);
+		});
 	});
 	function page(n, s) {
 		$("#pageNo").val(n);
@@ -17,14 +23,15 @@
 </script>
 </head>
 <body>
-	<ul class="nav nav-tabs">
+	<div style="overflow:auto;" class="windowHeight" id="scrollBar" >
+	<ul class="nav nav-tabs" id="ulId" style="width:100%;">
 		<li><a href="${ctx}/profile/configChargeAgent/getChargeAgentList">计费策略模板列表</a></li>
 		<li class="active"><a
 			href="${ctx}/profile/configChargeAgent/changeChargeAgentInfoList?agentHisId=${agentHisId }">修改记录</a></li>
 	</ul>
 	<form:form id="searchForm" modelAttribute="configChargeAgentHistory"
 		action="${ctx}/profile/configChargeAgent/changeChargeAgentInfoList?agentHisId=${agentHisId }"
-		method="post" class="breadcrumb form-search">
+		method="post" class="breadcrumb form-search" style="width:100%;">
 		
 		
 		<div class="control-group">
@@ -61,7 +68,7 @@
 			value="${page.pageSize}" />
 	</form:form>
 	<tags:message content="${message}" />
-	<div style="overflow: auto;height: 420px"> 
+	
 	<table id="contentTable"
 		class="table table-striped table-bordered table-condensed">
 		<thead>

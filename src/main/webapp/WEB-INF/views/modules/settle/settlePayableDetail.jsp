@@ -7,7 +7,13 @@
 <meta name="decorator" content="default" />
 <script type="text/javascript">
 	$(document).ready(function() {
-
+		var windowH=$(window).height();
+		$('.windowHeight').height(windowH);
+		$("#scrollBar").scroll(function(){
+			var leftWidth=$("#scrollBar").scrollLeft();
+			$("#searchForm").css("margin-left",leftWidth);
+			$("#ulId").css("margin-left",leftWidth);
+		});
 	});
 	function page(n, s) {
 		$("#pageNo").val(n);
@@ -58,12 +64,13 @@
 </script>
 </head>
 <body>
-	<ul class="nav nav-tabs">
+<div style="overflow:auto;" class="windowHeight" id="scrollBar" >
+	<ul class="nav nav-tabs" id="ulId" style="width:100%;">
 		<li class="active"><a href="${ctx}/settle/settlePayableDetail/list">年限结算表</a></li>
 	</ul>
 	<form:form id="searchForm" modelAttribute="workDealInfo"
 		action="${ctx}/settle/settlePayableDetail/list" method="post"
-		class="breadcrumb form-search">
+		class="breadcrumb form-search" style="width:100%;">
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}" />
 		<input id="pageSize" name="pageSize" type="hidden"
 			value="${page.pageSize}" />
@@ -130,7 +137,7 @@
 		
 	</form:form>
 	<tags:message content="${message}" />	
-	<div class="form-horizontal" style="overflow-x:auto; height:420px">
+	<div class="form-horizontal" >
 		<table id="contentTable"
 					class="table table-striped table-bordered table-condensed" style="width: 60%" >
 					<tr>
@@ -191,6 +198,7 @@
 	
 	
 		
+	</div>
 	</div>
 </body>
 </html>
