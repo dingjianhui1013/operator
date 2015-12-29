@@ -93,6 +93,44 @@
 			</div>
 		</div>
 		<div class="control-group">
+			<label class="control-label">业务咨询</label>
+			<br>
+			<div class="controls">
+				<input type="checkbox" value="新办" name="ywzx">新办
+				<input type="checkbox" value="更新 " name="ywzx">更新 
+				<input type="checkbox" value="解锁 " name="ywzx">解锁 
+				<input type="checkbox" value="变更 " name="ywzx">变更 
+				<input type="checkbox" value="补办" name="ywzx">补办
+				<input type="checkbox" value="用途 " name="ywzx">用途 
+				<input type="checkbox" value="密码" name="ywzx">密码 
+				<input type="checkbox" value="授权 " name="ywzx">授权 
+				<input type="checkbox" value="合作" name="ywzx">合作
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">业务操作</label>
+			<br>	
+			<div class="controls">
+				<input type="checkbox" value="驱动" name="ywcz">驱动
+				<input type="checkbox" value="更新 " name="ywcz">更新 
+				<input type="checkbox" value="解锁 " name="ywcz">解锁 
+				<input type="checkbox" value="网络 " name="ywcz">网络 
+				<input type="checkbox" value="key" name="ywcz">key
+				<input type="checkbox" value="控件  " name="ywcz">控件 
+				<input type="checkbox" value="浏览器 " name="ywcz">浏览器 
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">业务系统</label>
+			<br>
+			<div class="controls">
+				<input type="checkbox" value="业务咨询" name="ywxt">业务咨询
+				<input type="checkbox" value="操作咨询 " name="ywxt">操作咨询
+				<input type="checkbox" value="绑定操作 " name="ywxt">绑定操作
+				<input type="checkbox" value="系统出错 " name="ywxt">系统出错
+			</div>
+		</div>
+		<div class="control-group">
 			<label class="control-label">其他</label>
 			<div class="controls">
 				<input type="text" name="probleType"/>

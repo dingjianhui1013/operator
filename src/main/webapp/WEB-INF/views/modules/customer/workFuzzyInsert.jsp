@@ -45,8 +45,8 @@
 		<div class="control-group">
 			<label class="control-label">应用项目名称:</label>
 			<div class="controls">
-				<select name="configApp.id">
-				<option value=""> </option>
+				<select name="configAppId">
+				<option value="">  </option>
 					<c:forEach items="${configApp}" var="configApp">
 						<option value="${configApp.id}" <c:if test="${configApp.appName==workDealInfo.configApp.appName}">selected="selected"</c:if>>${configApp.appName}</option>
 					</c:forEach>

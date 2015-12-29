@@ -153,9 +153,6 @@ public class WorkLogController extends BaseController {
 //				startTime, endTime,appId);
 //		model.addAttribute("logList", list);
 			List<WorkLog> workLogs=workLogService.findworkLogs(name, startTime, endTime,appId);
-			for (WorkLog workLog2 : workLogs) {
-				System.out.println(workLog2.getId());
-			}
 			model.addAttribute("li", workLogs);
 			Set<String> Access=new LinkedHashSet<String>();
 			for(int i=0;i<workLogs.size();i++)

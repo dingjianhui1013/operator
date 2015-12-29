@@ -98,6 +98,44 @@
 			<div class="controls">
 				<input type = "text" value = "${workLog.versionNumber }" name="versionNumber" />
 			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">业务咨询</label>
+			<br>
+			<div class="controls">
+				<input type="checkbox"  <c:if test="${fn:contains(workLog.ywzx,'新办')==true}"> checked="checked"</c:if> value="新办" name="ywzx">新办
+				<input type="checkbox"  <c:if test="${fn:contains(workLog.ywzx,'更新')==true}"> checked="checked"</c:if> value="更新" name="ywzx">更新 
+				<input type="checkbox"  <c:if test="${fn:contains(workLog.ywzx,'解锁')==true}"> checked="checked"</c:if> value="解锁" name="ywzx">解锁 
+				<input type="checkbox"  <c:if test="${fn:contains(workLog.ywzx,'变更')==true}"> checked="checked"</c:if> value="变更" name="ywzx">变更 
+				<input type="checkbox"  <c:if test="${fn:contains(workLog.ywzx,'补办')==true}"> checked="checked"</c:if> value="补办" name="ywzx">补办
+				<input type="checkbox"  <c:if test="${fn:contains(workLog.ywzx,'用途')==true}"> checked="checked"</c:if> value="用途" name="ywzx">用途 
+				<input type="checkbox"  <c:if test="${fn:contains(workLog.ywzx,'密码')==true}"> checked="checked"</c:if> value="密码" name="ywzx">密码 
+				<input type="checkbox"  <c:if test="${fn:contains(workLog.ywzx,'授权')==true}"> checked="checked"</c:if> value="授权" name="ywzx">授权 
+				<input type="checkbox"  <c:if test="${fn:contains(workLog.ywzx,'合作')==true}"> checked="checked"</c:if> value="合作" name="ywzx">合作
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">业务操作</label>
+			<br>	
+			<div class="controls">
+				<input type="checkbox"  <c:if test="${fn:contains(workLog.ywcz,'驱动')==true}"> checked="checked"</c:if> value="驱动" name="ywcz">驱动
+				<input type="checkbox"  <c:if test="${fn:contains(workLog.ywcz,'更新')==true}"> checked="checked"</c:if> value="更新" name="ywcz">更新 
+				<input type="checkbox"  <c:if test="${fn:contains(workLog.ywcz,'解锁')==true}"> checked="checked"</c:if> value="解锁" name="ywcz">解锁 
+				<input type="checkbox"  <c:if test="${fn:contains(workLog.ywcz,'网络')==true}"> checked="checked"</c:if> value="网络" name="ywcz">网络 
+				<input type="checkbox"  <c:if test="${fn:contains(workLog.ywcz,'key')==true}"> checked="checked"</c:if> value="key" name="ywcz">key
+				<input type="checkbox"  <c:if test="${fn:contains(workLog.ywcz,'控件')==true}"> checked="checked"</c:if> value="控件" name="ywcz">控件 
+				<input type="checkbox"  <c:if test="${fn:contains(workLog.ywcz,'浏览器')==true}"> checked="checked"</c:if> value="浏览器" name="ywcz">浏览器 
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">业务系统</label>
+			<br>
+			<div class="controls">
+				<input type="checkbox"  <c:if test="${fn:contains(workLog.ywxt,'业务咨询')==true}"> checked="checked"</c:if> value="业务咨询" name="ywxt">业务咨询
+				<input type="checkbox"  <c:if test="${fn:contains(workLog.ywxt,'操作咨询')==true}"> checked="checked"</c:if> value="操作咨询" name="ywxt">操作咨询
+				<input type="checkbox"  <c:if test="${fn:contains(workLog.ywxt,'绑定操作')==true}"> checked="checked"</c:if> value="绑定操作" name="ywxt">绑定操作
+				<input type="checkbox"  <c:if test="${fn:contains(workLog.ywxt,'系统出错')==true}"> checked="checked"</c:if> value="系统出错" name="ywxt">系统出错
+			</div>
 		</div>		
 		<div class="control-group">
 			<label class="control-label">其他:</label>

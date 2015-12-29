@@ -230,7 +230,7 @@ public class WorkCustomerController extends BaseController {
 	@RequestMapping("insertFuzzyj")
 	public String insertFuzzyj(WorkLog workLog,
 			HttpServletRequest request, HttpServletResponse response,
-			Model model,String ywzx,String ywcz,String ywxt,String distinguish) {
+			Model model,String ywzx,String ywcz,String ywxt,String distinguish,Long configAppId) {
 		if(ywzx!=null)
 		{
 			String ywzxs=ywzx.replace(","," ");
@@ -245,6 +245,10 @@ public class WorkCustomerController extends BaseController {
 		{
 			String ywxts=ywxt.replace(","," ");
 			workLog.setYwxt(ywxts);
+		}
+		if(configAppId!=null&&!"".equals(configAppId))
+		{
+			workLog.setConfigApp(configAppService.findByAppId(configAppId));
 		}
 //		WorkDealInfo workDealInfo = workDealInfoService.get(dealInfoId);
 //		workLog.setWorkDealInfo(workDealInfo);
@@ -276,7 +280,22 @@ public class WorkCustomerController extends BaseController {
 	@RequestMapping("insertProjectl")
 	public String insertProjectl(WorkLog workLog,
 			HttpServletRequest request, HttpServletResponse response,
-			Model model,String distinguish) {
+			Model model,String ywzx,String ywcz,String ywxt,String distinguish) {
+		if(ywzx!=null)
+		{
+			String ywzxs=ywzx.replace(","," ");
+			workLog.setYwzx(ywzxs);
+		}
+		if(ywcz!=null)
+		{
+			String ywczs=ywcz.replace(","," ");
+			workLog.setYwcz(ywczs);
+		}
+		if(ywxt!=null)
+		{
+			String ywxts=ywxt.replace(","," ");
+			workLog.setYwxt(ywxts);
+		}
 //		WorkDealInfo workDealInfo = workDealInfoService.get(dealInfoId);
 //		workLog.setWorkDealInfo(workDealInfo);
 //		workLog.setWorkCompany(workDealInfo.getWorkCompany());

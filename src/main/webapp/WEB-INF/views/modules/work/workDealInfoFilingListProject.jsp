@@ -65,6 +65,9 @@
 				<th>服务类型</th>
 				<th>数量</th>
 				<th>版本号</th>
+				<th>业务操作</th>
+				<th>业务咨询</th>
+				<th>业务系统</th>
 				<th>完成状态</th>
 				<th>记录人员</th>
 				<th>记录时间</th>
@@ -80,6 +83,9 @@
 				<td>${workLog.serType }</td>
 				<td>${workLog.count}</td>
 				<td>${workLog.versionNumber }</td>
+				<td>${workLog.ywcz }</td>
+				<td>${workLog.ywzx }</td>
+				<td>${workLog.ywxt }</td>
 				<td>
 					<c:if test="${workLog.completeType==1 }">未完成</c:if>
 					<c:if test="${workLog.completeType==0 }">已完成</c:if>
