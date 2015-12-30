@@ -109,60 +109,8 @@
 			  }
 			}
 		} catch (e) {
-			var providerName=$("#provider").find("option:selected").text();
-			if(providerName.indexOf("软证书")==-1)
-			{
-				alert("没有检测到UKEY");
-				return false;
-			}else
-				{
-				var keySn = $("#keySn").val();
-				if(${workDealInfo.dealInfoType==0||workDealInfo.dealInfoType1==2 ||workDealInfo.dealInfoType1==3}){
-					var url = "${ctx}/work/workDealInfo/findByKeySn?keySn="+keySn+"&dealId="+${workDealInfo.id}+"&_="+new Date().getTime();
-					$.getJSON(url,function(data){
-						if (data.status==1) {
-							if (data.isUser==1) {
-								top.$.jBox.info("KEY序列号"+keySn+"已经使用，请更换一只新KEY！");
-								return false;
-							}else{
-								if(data.isOK==1){
-									top.$.jBox.info("此业务已经办理完成！");
-									return false;
-								}else{
-
-									var selectedItem = $("option:selected", $("[name=provider]")[0]);
-									var cspStr = encodeURI(encodeURI(selectedItem.text()));
-									var url = "${ctx}/ca/validateCspIsValid?csp="+cspStr+"&_=" + new Date().getTime();
-									$.getJSON(url,
-											function(data){
-											quick(sn);
-									});
-									
-									
-								}
-							}
-						}else{
-							top.$.jBox.info("系统异常！");
-						}
-					});
-				}else{
-					var selectedItem = $("option:selected", $("[name=provider]")[0]);
-					var cspStr = encodeURI(encodeURI(selectedItem.text()));
-					var url = "${ctx}/ca/validateCspIsValid?csp="+cspStr+"&_=" + new Date().getTime();
-					$.getJSON(url,
-							function(data){
-						if (data.status==1) {
-							if (data.isLastOne==1) {
-								top.$.jBox.info("KEY序列号与新增时的KEY序列号不同，请使用同一个KEY办理业务！");	
-							}else{
-								quick(sn);
-							}
-						} else {
-							top.$.jBox.tip("库存中没有该Key类型");
-						}
-					});
-				}
-			}
+			alert("没有检测到UKEY");
+			return false;
 		}
 	}
 
@@ -321,60 +269,8 @@
 				
 			}
 		} catch (e) {
-			var providerName=$("#provider").find("option:selected").text();
-			if(providerName.indexOf("软证书")==-1)
-			{
-				alert("没有检测到UKEY");
-				return false;
-			}else
-				{
-				var keySn = $("#keySn").val();
-				if(${workDealInfo.dealInfoType==0||workDealInfo.dealInfoType1==2 ||workDealInfo.dealInfoType1==3}){
-					var url = "${ctx}/work/workDealInfo/findByKeySn?keySn="+keySn+"&dealId="+${workDealInfo.id}+"&_="+new Date().getTime();
-					$.getJSON(url,function(data){
-						if (data.status==1) {
-							if (data.isUser==1) {
-								top.$.jBox.info("KEY序列号"+keySn+"已经使用，请更换一只新KEY！");
-								return false;
-							}else{
-								if(data.isOK==1){
-									top.$.jBox.info("此业务已经办理完成！");
-									return false;
-								}else{
-
-									var selectedItem = $("option:selected", $("[name=provider]")[0]);
-									var cspStr = encodeURI(encodeURI(selectedItem.text()));
-									var url = "${ctx}/ca/validateCspIsValid?csp="+cspStr+"&_=" + new Date().getTime();
-									$.getJSON(url,
-											function(data){
-											quick(sn);
-									});
-									
-									
-								}
-							}
-						}else{
-							top.$.jBox.info("系统异常！");
-						}
-					});
-				}else{
-					var selectedItem = $("option:selected", $("[name=provider]")[0]);
-					var cspStr = encodeURI(encodeURI(selectedItem.text()));
-					var url = "${ctx}/ca/validateCspIsValid?csp="+cspStr+"&_=" + new Date().getTime();
-					$.getJSON(url,
-							function(data){
-						if (data.status==1) {
-							if (data.isLastOne==1) {
-								top.$.jBox.info("KEY序列号与新增时的KEY序列号不同，请使用同一个KEY办理业务！");	
-							}else{
-								quick(sn);
-							}
-						} else {
-							top.$.jBox.tip("库存中没有该Key类型");
-						}
-					});
-				}
-			}
+			alert("没有检测到UKEY");
+			return false;
 		}
 		
 		
