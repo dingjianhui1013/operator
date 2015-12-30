@@ -69,6 +69,7 @@
 				<th>业务咨询</th>
 				<th>业务系统</th>
 				<th>完成状态</th>
+				<th>其他</th>
 				<th>记录人员</th>
 				<th>记录时间</th>
 <!-- 				<th>记录方式</th> -->
@@ -90,6 +91,7 @@
 					<c:if test="${workLog.completeType==1 }">未完成</c:if>
 					<c:if test="${workLog.completeType==0 }">已完成</c:if>
 				</td>
+				<td>${workLog.probleType}</td>
 				<td>${workLog.createBy.name}</td>
 				<td>
 				<fmt:formatDate value="${workLog.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/>

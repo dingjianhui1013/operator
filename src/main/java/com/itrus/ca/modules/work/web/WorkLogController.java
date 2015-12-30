@@ -347,7 +347,22 @@ public class WorkLogController extends BaseController {
 	}
 	@RequestMapping(value = "saveK")
 	public String saveK(Long dealInfoId, WorkLog workLog, Model model,
-			RedirectAttributes redirectAttributes) {
+			RedirectAttributes redirectAttributes,String ywzx,String ywcz,String ywxt) {
+		if(ywzx!=null)
+		{
+			String ywzxs=ywzx.replace(","," ");
+			workLog.setYwzx(ywzxs);
+		}
+		if(ywcz!=null)
+		{
+			String ywczs=ywcz.replace(","," ");
+			workLog.setYwcz(ywczs);
+		}
+		if(ywxt!=null)
+		{
+			String ywxts=ywxt.replace(","," ");
+			workLog.setYwxt(ywxts);
+		}
 		if (!beanValidator(model, workLog)) {
 			return form(workLog, model);
 		}
@@ -358,7 +373,7 @@ public class WorkLogController extends BaseController {
 			workLog.setConfigApp(workDealInfo.getConfigApp());
 		}
 		if (workLog.getSerType().equals("日常客服")) {
-			workLog.setProbleType(null);
+//			workLog.setProbleType(null);
 			workLog.setStatus(1);
 		} else {
 			workLog.setStatus(0);
@@ -372,7 +387,22 @@ public class WorkLogController extends BaseController {
 	}
 	@RequestMapping(value = "saveP")
 	public String saveP(Long dealInfoId, WorkLog workLog, Model model,
-			RedirectAttributes redirectAttributes,Long appid) {
+			RedirectAttributes redirectAttributes,Long appid,String ywzx,String ywcz,String ywxt) {
+		if(ywzx!=null)
+		{
+			String ywzxs=ywzx.replace(","," ");
+			workLog.setYwzx(ywzxs);
+		}
+		if(ywcz!=null)
+		{
+			String ywczs=ywcz.replace(","," ");
+			workLog.setYwcz(ywczs);
+		}
+		if(ywxt!=null)
+		{
+			String ywxts=ywxt.replace(","," ");
+			workLog.setYwxt(ywxts);
+		}
 		if (!beanValidator(model, workLog)) {
 			return form(workLog, model);
 		}
@@ -383,8 +413,8 @@ public class WorkLogController extends BaseController {
 			workLog.setConfigApp(workDealInfo.getConfigApp());
 		}
 		if (workLog.getSerType().equals("日常客服")) {
-			workLog.setProbleType(null);
 			workLog.setStatus(1);
+//			workLog.setProbleType(null);
 		} else {
 			workLog.setStatus(0);
 		}
@@ -399,8 +429,22 @@ public class WorkLogController extends BaseController {
 	}
 	@RequestMapping(value = "saveF")
 	public String saveF(Long dealInfoId, WorkLog workLog, Model model,
-			RedirectAttributes redirectAttributes,Long appid) {
-		
+			RedirectAttributes redirectAttributes,Long appid,String ywzx,String ywcz,String ywxt) {
+		if(ywzx!=null)
+		{
+			String ywzxs=ywzx.replace(","," ");
+			workLog.setYwzx(ywzxs);
+		}
+		if(ywcz!=null)
+		{
+			String ywczs=ywcz.replace(","," ");
+			workLog.setYwcz(ywczs);
+		}
+		if(ywxt!=null)
+		{
+			String ywxts=ywxt.replace(","," ");
+			workLog.setYwxt(ywxts);
+		}
 		if (!beanValidator(model, workLog)) {
 			return form(workLog, model);
 		}
@@ -411,7 +455,7 @@ public class WorkLogController extends BaseController {
 			workLog.setConfigApp(workDealInfo.getConfigApp());
 		}
 		if (workLog.getSerType().equals("日常客服")) {
-			workLog.setProbleType(null);
+//			workLog.setProbleType(null);
 			workLog.setStatus(1);
 		} else {
 			workLog.setStatus(0);
@@ -472,7 +516,7 @@ public class WorkLogController extends BaseController {
 			workLog.setConfigApp(workDealInfo.getConfigApp());
 		}
 		if (workLog.getSerType().equals("日常客服")) {
-			workLog.setProbleType(null);
+//			workLog.setProbleType(null);
 			workLog.setStatus(1);
 		} else {
 			workLog.setStatus(0);

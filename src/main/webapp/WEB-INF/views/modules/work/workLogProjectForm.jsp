@@ -125,6 +125,12 @@
 			</div>
 		</div>
 		<div class="control-group">
+			<label class="control-label">其他:</label>
+			<div class="controls">
+				<input type = "text"  disabled="disabled" value = "${workLog.probleType}" class="required" onkeyup="value=this.value.search(/^[a-zA-Z\u4e00-\u9fa5]+$/)?'':value"/>
+			</div>
+		</div>
+		<div class="control-group">
 			<label class="control-label">记录人员:</label>
 			<div class="controls">
 				<input type = "text"  disabled="disabled" value = "${workLog.createBy.name }" class="required" onkeyup="value=this.value.search(/^[a-zA-Z\u4e00-\u9fa5]+$/)?'':value"/>

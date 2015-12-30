@@ -140,7 +140,7 @@
 		<div class="control-group">
 			<label class="control-label">其他:</label>
 			<div class="controls">
-				<input type="text" name="probleType" id="probleType" value="${workLog.probleType}">
+				<input type="text" name="probleType" value="${workLog.probleType}">
 			</div>
 		</div>
 		<div class="control-group">
