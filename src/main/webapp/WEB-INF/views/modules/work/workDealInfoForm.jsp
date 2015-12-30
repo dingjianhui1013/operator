@@ -391,7 +391,9 @@ var selected = false;
 		}
 	}
 	function numberFill(){
-		$("#pIDCard").val($("#conCertNumber").val());
+		var temp  = document.all["conCertNumber"].value.replace(/[^\w\.\/]/ig,'');
+		document.all["conCertNumber"].value = temp;
+		document.all["pIDCard"].value=document.all["conCertNumber"].value;
 	}
 	function onSubmit(){
 		//if($("#appId").val()==null) {
@@ -1238,8 +1240,7 @@ var selected = false;
 							<th><span class="prompt" style="color: red; display: none;">*</span>证件号码:</th>
 							<td><input type="text" name="conCertNumber" maxlength="18"
 								id="conCertNumber" value="${workUser.conCertNumber }"
-								onkeyup="value=value.replace(/[^\w\.\/]/ig,'')"
-								onchange="numberFill()"
+								onkeyup="numberFill()" 
 								oninput="count('conCertNumber','zjhcount')"
 								onblur="qxCount('zjhcount')"
 								onfocus="hqcount('conCertNumber','zjhcount')" /><span
