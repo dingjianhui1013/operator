@@ -511,7 +511,7 @@ var selected = false;
 <script type="text/javascript"
 	src="${ctxStatic}/jquery/jquery.bigautocomplete.js"></script>
 <script type="text/javascript" src="${ctxStatic}/jquery/city.js"></script>
-<script src="http://ie7-js.googlecode.com/svn/version/2.1(beta4)/IE9.js"></script>
+<!--  <script src="http://ie7-js.googlecode.com/svn/version/2.1(beta4)/IE9.js"></script>-->
 <link href="${ctxStatic}/jquery/jquery.bigautocomplete.css"
 	rel="stylesheet" />
 <script type="text/javascript">
