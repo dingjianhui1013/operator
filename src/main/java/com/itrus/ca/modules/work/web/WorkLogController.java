@@ -182,7 +182,6 @@ public class WorkLogController extends BaseController {
 					{
 						if(workLogs.get(w).getYwzx()!=null)
 						{
-							
 							if(workLogs.get(w).getYwzx().indexOf("新办")!=-1)
 							{
 								xz++;
@@ -197,27 +196,27 @@ public class WorkLogController extends BaseController {
 							}
 							if(workLogs.get(w).getYwzx().indexOf("变更")!=-1)
 							{
-								xz++;
+								bg++;
 							}
 							if(workLogs.get(w).getYwzx().indexOf("补办")!=-1)
 							{
-								xz++;
+								bb++;
 							}
 							if(workLogs.get(w).getYwzx().indexOf("用途")!=-1)
 							{
-								xz++;
+								yt++;
 							}
 							if(workLogs.get(w).getYwzx().indexOf("密码")!=-1)
 							{
-								xz++;
+								mm++;
 							}
 							if(workLogs.get(w).getYwzx().indexOf("授权")!=-1)
 							{
-								xz++;
+								sq++;
 							}
 							if(workLogs.get(w).getYwzx().indexOf("合作")!=-1)
 							{
-								xz++;
+								hz++;
 							}
 						}
 						if(workLogs.get(w).getProbleType()!=null)
@@ -226,11 +225,11 @@ public class WorkLogController extends BaseController {
 						}
 						if(workLogs.get(w).getYwxt()!=null)
 						{
-							ywxt+=workLogs.get(w).getYwxt().split(",").length;
+							ywxt++;
 						}
 						if(workLogs.get(w).getYwcz()!=null)
 						{
-							ywcz+=workLogs.get(w).getYwcz().split(",").length;
+							ywcz++;
 						}
 					}
 				}
