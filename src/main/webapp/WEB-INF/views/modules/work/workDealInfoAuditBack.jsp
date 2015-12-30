@@ -391,7 +391,6 @@
 						<tr>
 							<td></td>
 							<td align="center">${workDealInfo.workPayInfo.openAccountMoney==null?0:workDealInfo.workPayInfo.openAccountMoney }</td>
-
 							<td align="center">${workDealInfo.workPayInfo.addCert==null?0:workDealInfo.workPayInfo.addCert }</td>
 							<td align="center">${workDealInfo.workPayInfo.updateCert==null?0:workDealInfo.workPayInfo.updateCert }</td>
 							<td align="center">${workDealInfo.workPayInfo.errorReplaceCert==null?0:workDealInfo.workPayInfo.errorReplaceCert }</td>

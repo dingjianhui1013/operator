@@ -16,7 +16,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.codehaus.jackson.impl.JsonGeneratorBase;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Restrictions;
 import org.json.JSONException;
@@ -69,7 +68,6 @@ import com.itrus.ca.modules.receipt.service.ReceiptEnterInfoService;
 import com.itrus.ca.modules.receipt.service.ReceiptInvoiceService;
 import com.itrus.ca.modules.service.CaService;
 import com.itrus.ca.modules.settle.web.UpdateQuantityStatistics;
-import com.itrus.ca.modules.statistic.entity.StatisticCertData;
 import com.itrus.ca.modules.statistic.service.StatisticCertDataService;
 import com.itrus.ca.modules.sys.entity.Office;
 import com.itrus.ca.modules.sys.utils.UserUtils;
@@ -91,8 +89,6 @@ import com.itrus.ca.modules.work.service.WorkLogService;
 import com.itrus.ca.modules.work.service.WorkPayInfoService;
 import com.itrus.ca.modules.work.service.WorkUserHisService;
 import com.itrus.ca.modules.work.service.WorkUserService;
-
-import antlr.Utils;
 
 /**
  * 业务审批Controller
@@ -879,7 +875,7 @@ public class WorkDealInfoAuditController extends BaseController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping("backMoney")
+/*	@RequestMapping("backMoney")
 	public String backMoney(Long id, HttpServletRequest request, HttpServletResponse response, Long agentDetailId,
 			Integer iseq, Model model) {
 		WorkDealInfo dealInfo = workDealInfoService.get(id);
@@ -1061,8 +1057,225 @@ public class WorkDealInfoAuditController extends BaseController {
 		}
 		logUtil.saveSysLog("业务办理", "变更缴费方式：编号" + dealInfo.getId(), "");
 		return "redirect:" + Global.getAdminPath() + "/work/workDealInfo/list";
-	}
+	}*/
 
+	
+	@RequestMapping("backMoney")
+	public String backMoney(Long id, HttpServletRequest request, HttpServletResponse response, Long agentDetailId,
+			Integer iseq, Model model) {
+		WorkDealInfo dealInfo = workDealInfoService.get(id);
+		WorkPayInfo payInfo = dealInfo.getWorkPayInfo();
+		try {
+			// 新建payInfo保存原来的payInfo数据
+			WorkDealInfo workDealInfo = new WorkDealInfo();
+			
+			workDealInfo.setDealInfoType(dealInfo.getDealInfoType());
+			workDealInfo.setDealInfoType1(dealInfo.getDealInfoType1());
+			workDealInfo.setDealInfoType2(dealInfo.getDealInfoType2());
+			workDealInfo.setDealInfoType3(WorkDealInfoType.TYPE_PAY_REPLACED);
+			
+			workDealInfo.setYear(dealInfo.getYear());
+			workDealInfo.setConfigApp(dealInfo.getConfigApp());
+			ConfigCommercialAgent commercialAgent = configAgentAppRelationService
+					.findAgentByApp(workDealInfo.getConfigApp());
+			workDealInfo.setConfigCommercialAgent(commercialAgent);
+			workDealInfo.setConfigCommercialAgent(dealInfo.getConfigCommercialAgent());
+			List<ConfigAgentOfficeRelation> configAgentOfficeRelations = configAgentOfficeRelationService
+					.findByOffice(UserUtils.getUser().getOffice());
+			if (configAgentOfficeRelations.size() > 0) {
+				workDealInfo.setCommercialAgent(configAgentOfficeRelations.get(0).getConfigCommercialAgent());// 鍔冲姟鍏崇郴澶栭敭
+			}
+			
+			workDealInfo.setCertSort(dealInfo.getCertSort());
+			workDealInfo.setWorkUser(dealInfo.getWorkUser());
+			workDealInfo.setWorkCompany(dealInfo.getWorkCompany());
+			workDealInfo.setWorkUserHis(dealInfo.getWorkUserHis());
+			workDealInfo.setWorkCompanyHis(dealInfo.getWorkCompanyHis());
+			workDealInfo.setConfigProduct(dealInfo.getConfigProduct());
+			workDealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_CERT_OBTAINED);
+			workDealInfo.setCreateBy(UserUtils.getUser());
+			workDealInfo.setCreateDate(new Date());
+			workDealInfo.setSvn(dealInfo.getSvn());
+			workDealInfo.setPrevId(dealInfo.getId());
+			workDealInfo.setObtainedDate(new Date());
+			workDealInfo.setKeySn(dealInfo.getKeySn());
+			workDealInfo.setNotafter(dealInfo.getNotafter());
+			workDealInfo.setWorkCertInfo(dealInfo.getWorkCertInfo());
+
+			// 鏂板缓payInfo淇濆瓨鍘熸潵鐨刾ayInfo鏁版嵁
+
+			WorkPayInfo workPayInfo = new WorkPayInfo();
+
+			if (iseq.equals(1) || iseq.equals(2)) {
+				Double oldAdd = 0d;
+				Double newAdd = 0d;
+				if (dealInfo.getDealInfoType() != null) {
+					if (dealInfo.getDealInfoType().equals(0)) {
+						
+						newAdd += configChargeAgentDetailService.getChargeMoney(agentDetailId, 4,0);
+						oldAdd += configChargeAgentDetailService.getChargeMoney(dealInfo.getConfigChargeAgentId(),
+								4, null);
+						
+						oldAdd += configChargeAgentDetailService.getChargeMoney(dealInfo.getConfigChargeAgentId(),
+								dealInfo.getDealInfoType(), dealInfo.getYear());
+						newAdd += configChargeAgentDetailService.getChargeMoney(agentDetailId,
+								dealInfo.getDealInfoType(), dealInfo.getYear());
+						workPayInfo.setOpenAccountMoney(configChargeAgentDetailService.getChargeMoney(agentDetailId,
+								4, null));
+						workPayInfo.setAddCert(configChargeAgentDetailService.getChargeMoney(agentDetailId,
+								dealInfo.getDealInfoType(), dealInfo.getYear()));
+					} else if (dealInfo.getDealInfoType().equals(1)) {
+						oldAdd += configChargeAgentDetailService.getChargeMoney(dealInfo.getConfigChargeAgentId(),
+								dealInfo.getDealInfoType(), dealInfo.getYear());
+						newAdd += configChargeAgentDetailService.getChargeMoney(agentDetailId,
+								dealInfo.getDealInfoType(), dealInfo.getYear());
+						workPayInfo.setUpdateCert(configChargeAgentDetailService.getChargeMoney(agentDetailId,
+								dealInfo.getDealInfoType(), dealInfo.getYear()));
+					}
+				}
+				if (dealInfo.getDealInfoType1() != null) {
+					if (dealInfo.getDealInfoType1().equals(2)) {
+						oldAdd += configChargeAgentDetailService.getChargeMoney(dealInfo.getConfigChargeAgentId(),
+								dealInfo.getDealInfoType1(), null);
+						newAdd += configChargeAgentDetailService.getChargeMoney(agentDetailId,
+								dealInfo.getDealInfoType1(), null);
+						workPayInfo.setErrorReplaceCert(configChargeAgentDetailService.getChargeMoney(agentDetailId,
+								dealInfo.getDealInfoType1(), null));
+
+					} else if (dealInfo.getDealInfoType1().equals(3)) {
+						oldAdd += configChargeAgentDetailService.getChargeMoney(dealInfo.getConfigChargeAgentId(),
+								dealInfo.getDealInfoType1(), null);
+						newAdd += configChargeAgentDetailService.getChargeMoney(agentDetailId,
+								dealInfo.getDealInfoType1(), null);
+
+						workPayInfo.setErrorReplaceCert(configChargeAgentDetailService.getChargeMoney(agentDetailId,
+								dealInfo.getDealInfoType1(), null));
+					}
+
+				}
+				if (dealInfo.getDealInfoType2() != null) {
+					if (dealInfo.getDealInfoType2().equals(4)) {
+						oldAdd += configChargeAgentDetailService.getChargeMoney(dealInfo.getConfigChargeAgentId(),
+								dealInfo.getDealInfoType2(), null);
+						newAdd += configChargeAgentDetailService.getChargeMoney(agentDetailId,
+								dealInfo.getDealInfoType2(), null);
+						workPayInfo.setInfoChange(configChargeAgentDetailService.getChargeMoney(agentDetailId,
+								dealInfo.getDealInfoType2(), null));
+					}
+				}
+				
+				workPayInfo.setElectron(payInfo.getElectron());
+				
+				if (newAdd > oldAdd) {
+					workPayInfo.setMoney(newAdd - oldAdd);
+				}else{
+					workPayInfo.setMoney(oldAdd - newAdd);
+				}
+				workPayInfo.setAlipayMoney(0d);
+				workPayInfo.setPosMoney(0d);
+				workPayInfo.setBankMoney(0d);
+				workPayInfo.setSn(PayinfoUtil.getPayInfoNo());
+				workPayInfo.setWorkTotalMoney(newAdd);
+				workPayInfo.setWorkPayedMoney(0d);
+				workPayInfo.setWorkReceivaMoney(payInfo.getWorkReceivaMoney());
+				workPayInfo.setReceiptAmount(newAdd);
+				workPayInfo.setMethodMoney(true);
+				workPayInfo.setMethodAlipay(false);
+				workPayInfo.setMethodBank(false);
+				workPayInfo.setMethodContract(payInfo.getMethodContract());
+				workPayInfo.setMethodGov(payInfo.getMethodGov());
+				workPayInfo.setMethodPos(false);
+				workPayInfoService.save(workPayInfo);
+
+				if (newAdd > oldAdd) {
+					ReceiptInvoice receiptInvoice = new ReceiptInvoice();
+					Office office = dealInfo.getCreateBy().getOffice();
+					List<ReceiptDepotInfo> depotInfos = receiptDepotInfoService.findDepotByOffice(office);
+					receiptInvoice.setReceiptDepotInfo(depotInfos.get(0));
+					receiptInvoice.setCompanyName(workDealInfo.getWorkCompany().getCompanyName());
+					receiptInvoice.setReceiptMoney(newAdd - oldAdd);
+					receiptInvoice.setReceiptType(0);
+					receiptInvoice.setDealInfoId(workDealInfo.getId());
+					receiptInvoiceService.save(receiptInvoice);
+					ReceiptDepotInfo receiptDepotInfo = depotInfos.get(0);
+					receiptDepotInfo.setReceiptResidue(receiptDepotInfo.getReceiptResidue() - (newAdd - oldAdd));
+					receiptDepotInfo.setReceiptOut(receiptDepotInfo.getReceiptOut() + (newAdd - oldAdd));
+					receiptDepotInfoService.save(receiptDepotInfo);
+				} else if (newAdd < oldAdd) {
+					FinanceQuitMoney quitMoney = new FinanceQuitMoney();
+					quitMoney.setQuitMoney(oldAdd - newAdd);
+					quitMoney.setQuitDate(new Date());
+					quitMoney.setQuitWindow(UserUtils.getUser().getOffice().getName());
+					quitMoney.setQuitReason("现金退费");
+					quitMoney.setWorkDealInfo(dealInfo);
+					quitMoney.setStatus("1");
+					financeQuitMoneyService.save(quitMoney);
+				}
+			} else if (iseq.equals(3)) {
+				workPayInfo.setOpenAccountMoney(payInfo.getOpenAccountMoney());
+				workPayInfo.setAddCert(payInfo.getAddCert());
+				workPayInfo.setUpdateCert(payInfo.getUpdateCert());
+				workPayInfo.setErrorReplaceCert(payInfo.getErrorReplaceCert());
+				workPayInfo.setLostReplaceCert(payInfo.getLostReplaceCert());
+				workPayInfo.setInfoChange(payInfo.getInfoChange());
+				workPayInfo.setElectron(payInfo.getElectron());
+				if (payInfo.getMoney() > 0d) {
+					workPayInfo.setMoney(payInfo.getMoney());
+				}
+				if (payInfo.getAlipayMoney() > 0d) {
+					workPayInfo.setAlipayMoney(payInfo.getAlipayMoney());
+				}
+				if (payInfo.getPosMoney() > 0d) {
+					workPayInfo.setPosMoney(payInfo.getPosMoney());
+				}
+				if (payInfo.getBankMoney() > 0d) {
+					workPayInfo.setBankMoney(payInfo.getBankMoney());
+				}
+				workPayInfo.setSn(PayinfoUtil.getPayInfoNo());
+				workPayInfo.setWorkTotalMoney(payInfo.getWorkTotalMoney());
+				workPayInfo.setWorkPayedMoney(0d);
+				workPayInfo.setWorkReceivaMoney(payInfo.getWorkReceivaMoney());
+				workPayInfo.setReceiptAmount(payInfo.getReceiptAmount());
+				workPayInfo.setMethodMoney(payInfo.getMethodMoney());
+				workPayInfo.setMethodAlipay(payInfo.getMethodAlipay());
+				workPayInfo.setMethodBank(payInfo.getMethodBank());
+				workPayInfo.setMethodContract(payInfo.getMethodContract());
+				workPayInfo.setMethodGov(payInfo.getMethodGov());
+				workPayInfo.setMethodPos(payInfo.getMethodPos());
+				workPayInfoService.save(workPayInfo);
+			}
+			workDealInfo.setWorkPayInfo(workPayInfo);
+			workDealInfo.setLastDays(dealInfo.getLastDays());
+
+			ConfigChargeAgent agent = chargeAgentService.get(agentDetailId);
+
+			workDealInfo.setPayType(Integer.parseInt(agent.getTempStyle()));
+			workDealInfo.setConfigChargeAgentId(agentDetailId);
+
+			workDealInfoService.save(workDealInfo);
+
+			workDealInfoService.delete(dealInfo.getId());
+
+			ConfigAgentBoundDealInfo dealInfoBound = new ConfigAgentBoundDealInfo();
+			dealInfoBound.setDealInfo(workDealInfo);
+			dealInfoBound.setAgent(agent);
+			configAgentBoundDealInfoService.save(dealInfoBound);
+			logUtil.saveSysLog("计费策略模版", "计费策略模版：" + dealInfo.getId() + "--业务编号：" + dealInfo.getId() + "--关联成功!", "");
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		logUtil.saveSysLog("业务办理", "变更缴费方式：编号" + dealInfo.getId(), "");
+		return "redirect:" + Global.getAdminPath() + "/work/workDealInfo/list";
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 	/**
 	 * 制作证书
 	 * 
