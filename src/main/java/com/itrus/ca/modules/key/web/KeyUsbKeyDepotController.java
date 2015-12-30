@@ -425,9 +425,6 @@ public class KeyUsbKeyDepotController extends BaseController {
 	public String checkKey(String deneName) throws JSONException{
 		JSONObject json = new JSONObject();
 		try {
-			if(deneName.contains("软证书")){
-				json.put("status", "3");
-			}
 			if(deneName.indexOf("软证书")==-1)
 			{
 				
@@ -490,6 +487,9 @@ public class KeyUsbKeyDepotController extends BaseController {
 					if (typeIsNull) {
 						json.put("status", "2");
 						json.put("msg", "当前网点库房中没有此KYE类型标识！");
+					}else
+					{
+						json.put("status", "3");
 					}
 				}else{
 					json.put("status","1");
