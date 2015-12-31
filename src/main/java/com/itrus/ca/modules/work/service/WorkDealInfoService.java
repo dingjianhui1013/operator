@@ -1923,6 +1923,39 @@ public class WorkDealInfoService extends BaseService {
 		}
 		
 	}
+	
+	public List<WorkDealInfo> findByProjectYear(Date startTime,Date endTime,
+			List<Long> appIds) {
+		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
+		dc.createAlias("workPayInfo", "workPayInfo");
+		dc.createAlias("createBy", "createBy");
+		dc.add(Restrictions.isNotNull("workPayInfo"));
+		dc.add(Restrictions.eq("workPayInfo.delFlag", WorkPayInfo.DEL_FLAG_NORMAL));
+		List<String> status=Lists.newArrayList();
+		status.add(WorkDealInfoStatus.STATUS_CERT_OBTAINED);
+		status.add(WorkDealInfoStatus.STATUS_CERT_WAIT);
+		dc.add(Restrictions.in("dealInfoStatus", status));
+//		dc.add(Restrictions.eq("", ""));
+		if(startTime!=null)
+		{
+			endTime.setHours(23);
+			endTime.setMinutes(59);
+			endTime.setSeconds(59);
+			if (startTime != null) {
+				dc.add(Restrictions.ge("workPayInfo.createDate", startTime));
+				dc.add(Restrictions.le("workPayInfo.createDate", endTime));
+			}
+			if (appIds != null&& appIds.size()>1) {
+				dc.add(Restrictions.in("configApp.id", appIds));
+			}
+			dc.addOrder(Order.asc("workPayInfo.createDate"));
+			return workDealInfoDao.find(dc);
+		}else
+		{
+			return null;
+		}
+		
+	}
 	public List<WorkDealInfo> findByProjectPay(Date startTime,Date endTime,List<Long> officeids,List<Long> dealInfoByAreaIds,
 			Long appId) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();

@@ -1950,18 +1950,19 @@ public class WorkDealInfoController extends BaseController {
 
 	@RequiresPermissions("work:workDealInfo:view")
 	@RequestMapping(value = "statisticalYearProjectList")
-	public String statisticalYearProjectList(String startTime, String endTime, Model model, Long configProjectTypeId,
+	public String statisticalYearProjectList(String startTime,  Model model, Long configProjectTypeId,
 			Long appId) throws ParseException {
 		User user=UserUtils.getUser();
 		List<Long> dealInfoByAreaIds = Lists.newArrayList();
 		if (startTime == null || "".equals(startTime)) {
-			startTime = new SimpleDateFormat("yyyy").format(new Date());
-			endTime = new SimpleDateFormat("yyyy").format(new Date());
+			startTime = new SimpleDateFormat("yyyy").format(new Date());			
 		}
+		
 		String start = startTime + "-01-01";
-		String end = endTime + "-12-30";
+		String end = startTime + "-12-31";
 		Date startT = new SimpleDateFormat("yyyy-MM-dd").parse(start);
 		Date endT = new SimpleDateFormat("yyyy-MM-dd").parse(end);
+		model.addAttribute("startTime", startT);	
 		int month = 0;
 		List<Date> months = Lists.newArrayList();
 		if (startT.getYear() == new Date().getYear()) {
@@ -1973,6 +1974,13 @@ public class WorkDealInfoController extends BaseController {
 			String m = startTime + "-" + (i + 1) + "-1";
 			Date mo = new SimpleDateFormat("yyyy-MM-dd").parse(m);
 			months.add(mo);
+		}
+		List<ConfigProjectType> configProjectTypes = configProjectTypeService.findProjectTypeList();
+		model.addAttribute("configProjectTypes", configProjectTypes);
+		if (configProjectTypeId == null) {
+			List<ConfigApp> configApps = configAppService.findByconfigProjectType(configProjectTypeId);
+			model.addAttribute("appList", configApps);
+			return "modules/work/statisticalYearProjectList";
 		}
 		List<Long> configappids = Lists.newArrayList();
 		if (configProjectTypeId != null && appId == null) {
@@ -1986,81 +1994,15 @@ public class WorkDealInfoController extends BaseController {
 			} else {
 				appids.add(-1L);
 			}
-
-			List<WorkDealInfo> deals = workDealInfoService.findByAppId(appids);// 根据应用id获取dealInfo信息
-			if (deals.size() < 1) {
-				dealInfoByAreaIds.add(-1l);
-			} else {
-				for (int i = 0; i < deals.size(); i++) {
-					dealInfoByAreaIds.add(deals.get(i).getId());
-				}
-			}
+			
 		} else if (configProjectTypeId != null && appId != null) {
-			configappids.add(appId);
-			List<WorkDealInfo> deals = workDealInfoService.findByAppId(appId);// 根据应用id获取dealInfo信息
-			if (deals.size() < 1) {
-				dealInfoByAreaIds.add(-1l);
-			} else {
-				for (int i = 0; i < deals.size(); i++) {
-					dealInfoByAreaIds.add(deals.get(i).getId());
-				}
-			}
+			configappids.add(appId);			
 		} else {
-
-			List<Long> configProjectTypeIds = Lists.newArrayList();
-			List<ConfigProjectType> configProjectTypes = configProjectTypeService.findProjectTypeList();
-			if (configProjectTypes != null) {
-				for (int c = 0; c < configProjectTypes.size(); c++) {
-					configProjectTypeIds.add(configProjectTypes.get(c).getId());
-				}
-			} else {
-				configProjectTypeIds.add(-1l);
-			}
-			List<Long> appids = Lists.newArrayList();
-			List<ConfigApp> configApps = configAppService.findByconfigProjectTypes(configProjectTypeIds);
-			if (configApps != null) {
-				for (int a = 0; a < configApps.size(); a++) {
-					appids.add(configApps.get(a).getId());
-					configappids.add(configApps.get(a).getId());
-				}
-			} else {
-				appids.add(-1L);
-			}
-			List<WorkDealInfo> deals = workDealInfoService.findByAppId(appids);// 根据应用id获取dealInfo信息
-			if (deals.size() < 1) {
-				dealInfoByAreaIds.add(-1l);
-			} else {
-				for (int i = 0; i < deals.size(); i++) {
-					dealInfoByAreaIds.add(deals.get(i).getId());
-				}
-			}
+			configappids.clear();
 		}
-		List<Long> officeids=Lists.newArrayList();
-		List<Office> offsList = officeService.getOfficeByType(user, 1);
-		List<Long> areas=Lists.newArrayList();
-		if(offsList.size()>0)
-		{
-			for(int i=0;i<offsList.size();i++)
-			{
-				areas.add(offsList.get(i).getId());
-			}
-		}else
-		{
-			areas.add(-1l);
-		}
-		List<Office> offices = officeService.findByParentIds(areas);// 根据区域id获取网点id
-		if(offices.size()>0)
-		{
-			if (offices.size() > 0) {
-				for (int i = 0; i < offices.size(); i++) {
-					officeids.add(offices.get(i).getId());
-				}
-			} else {
-				officeids.add(-1l);
-			}
-		}
+		
 		Map<WorkDealInfo, List<Double>> w_months = new HashMap<>();
-		List<WorkDealInfo> list = workDealInfoService.findByProjectYear(startT, endT, dealInfoByAreaIds, appId,officeids);
+		List<WorkDealInfo> list = workDealInfoService.findByProjectYear(startT, endT,configappids);
 		if (list != null) {
 			for (int c = 0; c < configappids.size(); c++) {
 				double zmoney = 0;
@@ -2224,21 +2166,13 @@ public class WorkDealInfoController extends BaseController {
 			}
 			zj.add(aa);
 		}
-		List<ConfigProjectType> configProjectTypes = configProjectTypeService.findProjectTypeList();
-		model.addAttribute("configProjectTypes", configProjectTypes);
-		if (configProjectTypeId != null) {
-			List<ConfigApp> configApps = configAppService.findByconfigProjectType(configProjectTypeId);
-			model.addAttribute("appList", configApps);
-		}
+		
 		model.addAttribute("zj", zj);
 		model.addAttribute("w_months", w_months);
 		model.addAttribute("months", months);
 		model.addAttribute("appid", appId);
 		model.addAttribute("configProjectTypeId", configProjectTypeId);
-		if (startTime != null) {
-			model.addAttribute("startTime", new SimpleDateFormat("yyyy").parse(startTime));
-			model.addAttribute("endTime", new SimpleDateFormat("yyyy").parse(endTime));
-		}
+		
 		return "modules/work/statisticalYearProjectList";
 	}
 
