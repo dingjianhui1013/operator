@@ -1967,6 +1967,48 @@ public class WorkDealInfoService extends BaseService {
 		}
 
 	}
+	
+	public List<WorkDealInfo> findByProjectPay(Date startTime,Date endTime, List<Long> officeIds,
+			Long appId) {
+		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
+		dc.createAlias("workPayInfo", "workPayInfo");
+		dc.add(Restrictions.isNotNull("workPayInfo"));
+		dc.createAlias("createBy", "createBy");
+		dc.createAlias("createBy.office", "office");
+		dc.add(Restrictions.eq("workPayInfo.delFlag", WorkPayInfo.DEL_FLAG_NORMAL));
+		List<String> status=Lists.newArrayList();
+		status.add(WorkDealInfoStatus.STATUS_CERT_OBTAINED);
+		status.add(WorkDealInfoStatus.STATUS_CERT_WAIT);
+		dc.add(Restrictions.in("dealInfoStatus", status));
+		if(startTime!=null)
+		{
+			endTime.setHours(23);
+			endTime.setMinutes(59);
+			endTime.setSeconds(59);
+//			DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
+//			dc.createAlias("workPayInfo", "workPayInfo");
+//			dc.createAlias("createBy", "createBy");
+//			dc.createAlias("createBy.office", "office");
+//			dc.add(Restrictions.isNotNull("workPayInfo"));
+//			dc.add(Restrictions.eq("workPayInfo.delFlag", WorkPayInfo.DEL_FLAG_NORMAL));
+//			dc.add(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED));
+			if (startTime != null) {
+				dc.add(Restrictions.ge("workPayInfo.createDate", startTime));
+				dc.add(Restrictions.le("workPayInfo.createDate", endTime));
+			}			
+			if (appId != null) {
+				dc.add(Restrictions.eq("configApp.id", appId));
+			}
+			if (officeIds != null && officeIds.size() > 0) {
+				dc.add(Restrictions.in("office.id", officeIds));
+			}
+			dc.addOrder(Order.asc("workPayInfo.createDate"));
+			return workDealInfoDao.find(dc);
+		} else {
+			return null;
+		}
+
+	}
 
 	public WorkDealInfo findDealPayShow(Long dealInfoId) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
