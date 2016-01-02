@@ -77,7 +77,7 @@
 			<input id="startTime" name="startTime" class="input-medium Wdate" type="text" required="required" onclick="WdatePicker({dateFmt:'yyyy'});"
 				value="<fmt:formatDate value="${startTime}" pattern="yyyy"/>" maxlength="20" readonly="readonly" onblur="changeEndTime()"/>
 				&nbsp;&nbsp;&nbsp;&nbsp;
-		<input type="hidden" value="<fmt:formatDate value="${endTime}" pattern="yyyy"/> " name="endTime" id="endTime"/>
+		<input type="hidden" value="<fmt:formatDate value="${startTime}" pattern="yyyy"/> " name="endTime" id="endTime"/>
 		<input id="btnSubmit" class="btn btn-primary" type="submit" value="查询" />
 		&nbsp;&nbsp;&nbsp;&nbsp;<input id="exportYP" style="text-align:center" class="btn btn-primary" onclick="dc()" type="button" value="导出">
 		</div>
@@ -116,6 +116,9 @@
 			<c:forEach items="${zj}" var="zjmoney">
 				<td>${zjmoney}</td>
 			</c:forEach>
+			<c:if test="${fn:length(zj)==0}">
+				<td>0.0</td>
+			</c:if>
 		</tr>
 		</tbody>
 	</table>

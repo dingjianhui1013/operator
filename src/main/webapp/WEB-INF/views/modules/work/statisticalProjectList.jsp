@@ -159,15 +159,18 @@
 					<c:set var="index" value="0" />
 					<c:set var="qu" value="0" />
 					<c:forEach items="${office_District.value}" var="district">
-						<c:set var="qu" value="${qu+1}" />
 						<c:forEach items="${district_payMethod}" var="district_payMethod">
 								<c:if test="${district_payMethod.key==district}">
 									<c:forEach items="${district_payMethod.value}" var="dpv">
+										<c:set var="qu" value="${qu+1}" />
 										<c:set var="index" value="${index+1}" />
 									</c:forEach>
 								</c:if>
 						</c:forEach>
 					</c:forEach>
+<%-- 					<c:forEach items="${district_payMethod}" var="district_payMethod"> --%>
+<%-- 						<c:set var="qu" value="${qu+1}" /> --%>
+<%-- 					</c:forEach> --%>
 					<c:if test="${index==1}">
 						<c:if test="${qu==1}">
 							<th rowspan="2" style="text-align:center;">${office_District.key}</th>
@@ -202,15 +205,18 @@
 					<c:set var="index" value="0" />
 					<c:set var="qu" value="0" />
 					<c:forEach items="${office_District.value}" var="district">
-					<c:set var="qu" value="${qu+1}" />
 						<c:forEach items="${district_payMethod}" var="district_payMethod">
 								<c:if test="${district_payMethod.key==district}">
 									<c:forEach items="${district_payMethod.value}" var="dpv">
 										<c:set var="index" value="${index+1}" />
+										<c:set var="qu" value="${qu+1}" /> 
 									</c:forEach>
 								</c:if>
 						</c:forEach>
 					</c:forEach>
+<%-- 					<c:forEach items="${district_payMethod}" var="district_payMethod"> --%>
+<%-- 						<c:set var="qu" value="${qu+1}" /> --%>
+<%-- 					</c:forEach> --%>
 					<c:if test="${index==1}">
 						<c:if test="${qu>1}">
 								<th style="text-align:center;">${district}</th>
