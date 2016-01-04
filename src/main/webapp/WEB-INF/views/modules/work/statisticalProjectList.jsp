@@ -258,6 +258,7 @@
 		</thead>
 		<tbody>
 		<c:forEach items="${dates}" var = "dates">
+		<c:set var="countMoneys" value="0"/>
 			<tr>
 				<td>${dates}</td>
 				<td>${appName}</td>
@@ -266,44 +267,51 @@
 						<c:forEach items="${odms}" var="odms" >
 							<c:if test = "${odms.date == dates&&odms.districtName==odv}">
 								<c:if test="${odms.postMoney}">
-										<td>${0.0+odms.countPostMoney}</td>
+										<td>${odms.countPostMoney}</td>
+										<c:set var="countMoneys" value="${countMoneys+odms.countPostMoney}"/>
 									</c:if>
 									<c:if test="${odms.bankMoney}">
-										<td>${0.0+odms.countBankMoney}</td>
+										<td>${odms.countBankMoney}</td>
+										<c:set var="countMoneys" value="${countMoneys+odms.countBankMoney}"/>
 									</c:if>
 									<c:if test="${odms.xjMoney}">
-										<td>${0.0+odms.countXjMoney}</td>
+										<td>${odms.countXjMoney}</td>
+										<c:set var="countMoneys" value="${countMoneys+odms.countXjMoney}"/>
 									</c:if>
 									<c:if test="${odms.alipayMoney}">
-										<td>${0.0+odms.countAlipayMoney}</td>
+										<td>${odms.countAlipayMoney}</td>
+										<c:set var="countMoneys" value="${countMoneys+odms.countAlipayMoney}"/>
 									</c:if>
 							</c:if>
 						</c:forEach>
 					
 					</c:forEach>
 				</c:forEach>
-					<c:forEach items="${workDate_Mone}" var="workDate_Mone">
-						<c:if test="${workDate_Mone.date==dates}">
-							<td>${0.0+workDate_Mone.countMoney}</td>
-						</c:if>
-					</c:forEach>
+<%-- 				<c:forEach items="${workDate_Mone}" var="workDate_Mone"> --%>
+<%-- 						<c:if test="${workDate_Mone.date==dates}"> --%>
+<%-- 							<td>${workDate_Mone.countMoney}</td> --%>
+<%-- 						</c:if> --%>
+<%-- 				</c:forEach> --%>
+					<td>${countMoneys}</td>
 			<tr>
 		</c:forEach>
 		<tr>
 		<td>合计</td>
 		<td></td>
+		<c:set var="money" value="0"/>
 		<c:forEach items="${office_District}" var="office_District">
 			<c:forEach items="${office_District.value}" var="odv">
 				<c:forEach items="${district_Moneys}" var="district_Moneys">
 					<c:if test="${district_Moneys.key==odv}">
 					<c:forEach items="${district_Moneys.value}" var="dmv">
 						<td>${dmv}</td>
+						<c:set var="money" value="${money+dmv}"/>
 					</c:forEach>
 					</c:if>
 			</c:forEach>
 		</c:forEach>
 		</c:forEach>
-		<td>${moneys}</td>
+		<td>${money}</td>
 		</tr>
 		</tbody>
 	</table>

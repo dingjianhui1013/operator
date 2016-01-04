@@ -1598,8 +1598,8 @@ public class WorkDealInfoController extends BaseController {
 				office_District.put((officeService.findById((Long) offs[o])).getName(), dis);
 			}
 			for (int m = 0; m < months.length; m++) {
-				double countMoneys = 0L;
-				WorkDate_MoneVo workDate_MoneVo = new WorkDate_MoneVo();
+//				double countMoneys = 0L;
+//				WorkDate_MoneVo workDate_MoneVo = new WorkDate_MoneVo();
 				for (int d = 0; d < districts.length; d++) {
 					double countPostMoney = 0L;
 					double countBankMoney = 0L;
@@ -1682,14 +1682,13 @@ public class WorkDealInfoController extends BaseController {
 					dm.setCountXjMoney(countXjMoney);
 					dm.setCountAlipayMoney(countAlipayMoney);
 					odms.add(dm);
-					countMoneys += (countPostMoney + countBankMoney + countXjMoney + countAlipayMoney);
-					// countMoneys+=countMoney;
+//					countMoneys += (countPostMoney + countBankMoney + countXjMoney + countAlipayMoney);
 				}
-				workDate_MoneVo.setDate((String) months[m]);
-				workDate_MoneVo.setCountMoney(countMoneys);
-				w_m.add(workDate_MoneVo);
+//				workDate_MoneVo.setDate((String)months[m]);
+//				workDate_MoneVo.setCountMoney(countMoneys);
+//				w_m.add(workDate_MoneVo);
 			}
-			List<Double> payMethodMoneys = Lists.newArrayList();
+//			List<Double> payMethodMoneys = Lists.newArrayList();
 			double moneys = 0L;
 			for (int d = 0; d < districts.length; d++) {
 				int post = 0;
@@ -5996,6 +5995,7 @@ public class WorkDealInfoController extends BaseController {
 		sheet.addMergedRegion(new Region(1, (short)i, 3, (short)i));
 		Object months[] = month.toArray();
 		for (int m = 0; m < months.length; m++) {
+			double countMoneys=0L;
 			int a = 0;// 使单元格恢复为零
 			HSSFRow rown = sheet.createRow(m + 4);
 			rown.createCell(0).setCellValue((String) months[m]);
@@ -6010,18 +6010,22 @@ public class WorkDealInfoController extends BaseController {
 								&& odms.get(od).getDistrictName().equals(districts[d])) {
 							if (odms.get(od).getPostMoney()) {
 								rown.createCell(2 + a).setCellValue(odms.get(od).getCountPostMoney());
+								countMoneys+=odms.get(od).getCountPostMoney();
 								a++;
 							}
 							if (odms.get(od).getBankMoney()) {
 								rown.createCell(2 + a).setCellValue(odms.get(od).getCountBankMoney());
+								countMoneys+=odms.get(od).getCountBankMoney();
 								a++;
 							}
 							if (odms.get(od).getXjMoney()) {
 								rown.createCell(2 + a).setCellValue(odms.get(od).getCountXjMoney());
+								countMoneys+=odms.get(od).getCountXjMoney();
 								a++;
 							}
 							if (odms.get(od).getAlipayMoney()) {
 								rown.createCell(2 + a).setCellValue(odms.get(od).getCountAlipayMoney());
+								countMoneys+=odms.get(od).getCountAlipayMoney();
 								a++;
 							}
 						}
@@ -6029,16 +6033,18 @@ public class WorkDealInfoController extends BaseController {
 					}
 				}
 			}
-			for (int w = 0; w < w_m.size(); w++) {
-				if (w_m.get(w).getDate().equals(months[m])) {
-					rown.createCell(i).setCellValue(w_m.get(w).getCountMoney());
-				}
-			}
+//			for (int w = 0; w < w_m.size(); w++) {
+//				if (w_m.get(w).getDate().equals(months[m])) {
+//					rown.createCell(i).setCellValue(w_m.get(w).getCountMoney());
+//				}
+//			}
+			rown.createCell(i).setCellValue(countMoneys);
 		}
 		HSSFRow rowz = sheet.createRow(3 + 1 + month.size());
 		rowz.createCell(0).setCellValue("合计");
 		Iterator<Map.Entry<String, Set<String>>> f_ds = office_District.entrySet().iterator();
 		int a = 0;
+		double money=0L;
 		while (f_ds.hasNext()) {
 			Entry<String, Set<String>> entry = f_ds.next();
 			Object districts[] = entry.getValue().toArray();
@@ -6049,6 +6055,7 @@ public class WorkDealInfoController extends BaseController {
 					if (dm.getKey().equals(districts[d])) {
 						for (int m = 0; m < dm.getValue().size(); m++) {
 							rowz.createCell(2 + a).setCellValue(dm.getValue().get(m));
+							money+=dm.getValue().get(m);
 							a++;
 						}
 					}
@@ -6056,7 +6063,7 @@ public class WorkDealInfoController extends BaseController {
 				}
 			}
 		}
-		rowz.createCell(i).setCellValue(moneys);
+		rowz.createCell(i).setCellValue(money);
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		response.setContentType(response.getContentType());
 		response.setHeader("Content-disposition", "attachment; filename=projectPayment.xls");
