@@ -5,6 +5,7 @@
  */
 package com.itrus.ca.modules.sys.entity;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -54,6 +55,9 @@ public class Role extends DataEntity {
 	private String enname;	//英文名称
 	private String roleType;//权限类型
 	private String dataScope; // 数据范围
+	private Date startTime;//开始时间；
+	private Date endTime;//结束时间；
+	private Long days;//有限期天数；
 
 	private List<User> userList = Lists.newArrayList(); // 拥有用户列表
 	private List<Menu> menuList = Lists.newArrayList(); // 拥有菜单列表
@@ -99,6 +103,30 @@ public class Role extends DataEntity {
 
 	public void setOffice(Office office) {
 		this.office = office;
+	}
+	
+	public Date getStartTime() {
+		return startTime;
+	}
+
+	public void setStartTime(Date startTime) {
+		this.startTime = startTime;
+	}
+
+	public Date getEndTime() {
+		return endTime;
+	}
+
+	public void setEndTime(Date endTime) {
+		this.endTime = endTime;
+	}
+	
+	public Long getDays() {
+		return days;
+	}
+
+	public void setDays(Long days) {
+		this.days = days;
 	}
 
 	@Length(min=1, max=100)
