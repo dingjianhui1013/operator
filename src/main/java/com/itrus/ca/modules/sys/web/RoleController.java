@@ -112,7 +112,7 @@ public class RoleController extends BaseController {
 				return form(role, model);
 			}
 		}
-		if (role.getStartTime() != null && role.getEndTime() != null) {
+		/*if (role.getStartTime() != null && role.getEndTime() != null) {
 			try {
 				Date startTime = role.getStartTime();
 				Date endTime = role.getEndTime();
@@ -124,7 +124,7 @@ public class RoleController extends BaseController {
 			} catch (Exception e) {
 
 			}
-		}
+		}*/
 		/*
 		 * if (role.getDataScope().equals(Role.DATA_SCOPE_CUSTOM)) {//按明细设置 if
 		 * (role.getOfficeIds()==null||role.getOfficeIds().length()==0) {

@@ -55,10 +55,10 @@ public class Role extends DataEntity {
 	private String enname;	//英文名称
 	private String roleType;//权限类型
 	private String dataScope; // 数据范围
-	private Date startTime;//开始时间；
+/*	private Date startTime;//开始时间；
 	private Date endTime;//结束时间；
 	private Long days;//有限期天数；
-
+*/
 	private List<User> userList = Lists.newArrayList(); // 拥有用户列表
 	private List<Menu> menuList = Lists.newArrayList(); // 拥有菜单列表
 	private List<Office> officeList = Lists.newArrayList(); // 按明细设置数据范围
@@ -105,7 +105,7 @@ public class Role extends DataEntity {
 		this.office = office;
 	}
 	
-	public Date getStartTime() {
+/*	public Date getStartTime() {
 		return startTime;
 	}
 
@@ -127,7 +127,7 @@ public class Role extends DataEntity {
 
 	public void setDays(Long days) {
 		this.days = days;
-	}
+	}*/
 
 	@Length(min=1, max=100)
 	public String getName() {

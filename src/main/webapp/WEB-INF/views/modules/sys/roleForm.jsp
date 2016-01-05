@@ -122,7 +122,7 @@
 			</div>
 		</div>
 		<div>
-			<label class="control-label">角色有效期:</label>
+			<%-- <label class="control-label">角色有效期:</label>
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="startTime" name="startTime" type="text" readonly="readonly"
 					maxlength="20" class="required Wdate"
 						onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"
@@ -132,8 +132,8 @@
 				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false,minDate:'#F{$dp.$D(\'startTime\')}'});"
 				value="<fmt:formatDate value="${role.endTime}" pattern="yyyy-MM-dd"/>" />
 			
-		</div>
-		<br>
+		</div> --%>
+		
 		<%-- <div class="control-group">
 			<label class="control-label">英文名称:</label>
 			<div class="controls">
