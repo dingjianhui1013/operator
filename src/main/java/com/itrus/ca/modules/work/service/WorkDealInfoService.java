@@ -1755,7 +1755,7 @@ public class WorkDealInfoService extends BaseService {
 
 	}
 
-	public List<WorkDealInfo> findByDayPay(Date startTime, Date endTime, List<Long> officeids,List<Long> dealInfoByAreaIds,
+	public List<WorkDealInfo> findByDayPay(Date startTime, Date endTime, List<Long> officeids,
 			 Long appId) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("workPayInfo", "workPayInfo");
@@ -1822,9 +1822,9 @@ public class WorkDealInfoService extends BaseService {
 				dc.add(Restrictions.ge("workPayInfo.createDate", startTime));
 				dc.add(Restrictions.le("workPayInfo.createDate", endTime));
 			}
-			if (dealInfoByAreaIds != null && dealInfoByAreaIds.size() > 0) {
-				dc.add(Restrictions.in("id", dealInfoByAreaIds));
-			}
+//			if (dealInfoByAreaIds != null && dealInfoByAreaIds.size() > 0) {
+//				dc.add(Restrictions.in("id", dealInfoByAreaIds));
+//			}
 			if (appId != null) {
 				dc.add(Restrictions.eq("configApp.id", appId));
 			}
