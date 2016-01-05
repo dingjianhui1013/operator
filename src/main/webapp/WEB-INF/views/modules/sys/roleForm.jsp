@@ -121,6 +121,19 @@
 				<form:input path="name" htmlEscape="false" maxlength="50" class="required"/>
 			</div>
 		</div>
+		<div>
+			<label class="control-label">角色有效期:</label>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="startTime" name="startTime" type="text" readonly="readonly"
+					maxlength="20" class="required Wdate"
+						onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"
+				value="<fmt:formatDate value="${role.startTime}" pattern="yyyy-MM-dd"/>" />
+					&nbsp;-&nbsp;<input id="endTime" name="endTime" type="text"
+				readonly="readonly" maxlength="20" class="Wdate required"
+				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false,minDate:'#F{$dp.$D(\'startTime\')}'});"
+				value="<fmt:formatDate value="${role.endTime}" pattern="yyyy-MM-dd"/>" />
+			
+		</div>
+		<br>
 		<%-- <div class="control-group">
 			<label class="control-label">英文名称:</label>
 			<div class="controls">

@@ -33,6 +33,7 @@
 			
 			$("#roleDiv").find("span").append("<br/>");
 		});
+		
 	</script>
 </head>
 <body>
