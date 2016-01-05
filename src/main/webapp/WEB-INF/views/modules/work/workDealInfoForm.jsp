@@ -1197,7 +1197,7 @@ var selected = false;
 							<td><input type="text" name="address" id="address"
 								value="${workCompany.address }" maxlength="50"></td>
 							<th><span class="prompt" style="color: red; display: none;">*</span>单位联系电话：</th>
-							<td><input type="text" name="companyMobile" maxlength="11"
+							<td><input type="text" name="companyMobile"
 								id="companyMobile" value="${workCompany.companyMobile }"
 								class="number" oninput="count('companyMobile','dwcount')"
 								onblur="qxCount('dwcount')"
