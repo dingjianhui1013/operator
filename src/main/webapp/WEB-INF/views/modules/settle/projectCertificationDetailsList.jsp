@@ -133,6 +133,7 @@
 				<th>证书类型</th>
 				<th>证书有效期</th>
 				<th>制证时间</th>
+				<th>所属区域</th>
 				<th>操作</th>
 			</tr>
 		</thead>
@@ -155,6 +156,9 @@
 							${empty workDealInfo.addCertDays?workDealInfo.year*365+workDealInfo.lastDays:workDealInfo.year*365+workDealInfo.lastDays+workDealInfo.addCertDays}（天）
 					</c:if></td>
 				<td><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${workDealInfo.workCertInfo.signDate}"/></td>
+				<td>
+					<c:if test="${workDealInfo.workCompany.district!=null}">${workDealInfo.workCompany.district}</c:if>
+				</td>
 				<td><a href="javaScript:alarmValue( ${workDealInfo.id} )">查看 </a></td>
 				</tr>
 				

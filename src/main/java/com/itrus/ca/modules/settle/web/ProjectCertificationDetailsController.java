@@ -438,6 +438,8 @@ public class ProjectCertificationDetailsController extends BaseController {
 		HSSFCellStyle style0 = wb.createCellStyle();
 		font0.setFontHeightInPoints((short) 18);
 		style0.setFont(font0);
+		style0.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+		style0.setAlignment(HSSFCellStyle.ALIGN_CENTER);
 		cell.setCellStyle(style0);
 		cell.setCellValue(configApp.getAppName() + "项目发证明细");
 		// 第二行数据
@@ -506,7 +508,7 @@ public class ProjectCertificationDetailsController extends BaseController {
 		row7.createCell(3).setCellValue("证书类型");
 		row7.createCell(4).setCellValue("证书有效期/天");
 		row7.createCell(5).setCellValue("制证时间");
-
+		row7.createCell(6).setCellValue("所属区域");
 		for (int i = 0; i < list.size(); i++) {
 
 			HSSFRow rown = sheet.createRow(i + 8);
@@ -542,19 +544,24 @@ public class ProjectCertificationDetailsController extends BaseController {
 					rown.createCell(4).setCellValue(EXPDate);
 				}
 			}
-			// 制证时间
+			// 所属区域
 			if (list.get(i).getWorkCertInfo().getSignDate() != null) {
 				rown.createCell(5).setCellValue(
 						DateUtils.formatDate(list.get(i).getWorkCertInfo().getSignDate(), "yyyy-MM-dd HH:mm:ss"));
 			} else {
 				rown.createCell(5).setCellValue(" ");
 			}
+			if (list.get(i).getWorkCompany().getDistrict() != null) {
+				rown.createCell(6).setCellValue(list.get(i).getWorkCompany().getDistrict());
+			} else {
+				rown.createCell(6).setCellValue(" ");
+			}
 		}
 
 		try {
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			response.setContentType(response.getContentType());
-			response.setHeader("Content-disposition", "attachment; filename=keyPurchaseRecord.xls");
+			response.setHeader("Content-disposition", "attachment; filename=projectCertificationDetails.xls");
 			wb.write(baos);
 			byte[] bytes = baos.toByteArray();
 			response.setHeader("Content-Length", String.valueOf(bytes.length));
