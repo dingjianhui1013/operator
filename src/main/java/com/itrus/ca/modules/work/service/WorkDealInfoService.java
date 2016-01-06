@@ -224,7 +224,6 @@ public class WorkDealInfoService extends BaseService {
 
 	public Page<WorkDealInfo> find(Page<WorkDealInfo> page, WorkDealInfo workDealInfo) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
-
 		dc.createAlias("createBy", "createBy");
 		dc.createAlias("createBy.office", "office");
 		// dc.createAlias("workCertInfo", "workCertInfo");
@@ -1101,7 +1100,18 @@ public class WorkDealInfoService extends BaseService {
 					"%" + workDealInfo.getWorkUser().getConCertNumber() + "%"));
 		}
 
-
+		if (workDealInfo.getWorkCompany() != null && StringUtils.isNotEmpty(workDealInfo.getWorkCompany().getProvince())
+				&& !workDealInfo.getWorkCompany().getProvince().equals("省份")) {
+			dc.add(Restrictions.eq("workCompany.province", workDealInfo.getWorkCompany().getProvince()));
+		}
+		if (workDealInfo.getWorkCompany() != null && StringUtils.isNotEmpty(workDealInfo.getWorkCompany().getCity())
+				&& !workDealInfo.getWorkCompany().getCity().equals("地级市")) {
+			dc.add(Restrictions.eq("workCompany.city", workDealInfo.getWorkCompany().getCity()));
+		}
+		if (workDealInfo.getWorkCompany() != null && StringUtils.isNotEmpty(workDealInfo.getWorkCompany().getDistrict())
+				&& !workDealInfo.getWorkCompany().getDistrict().equals("市、县级市")) {
+			dc.add(Restrictions.eq("workCompany.district", workDealInfo.getWorkCompany().getDistrict()));
+		}
 		if (workDealInfo.getDealInfoStatus()!= null && !workDealInfo.getDealInfoStatus().equals("")) {
 			dc.add(Restrictions.eq("dealInfoStatus", workDealInfo.getDealInfoStatus()));
 		}

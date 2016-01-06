@@ -170,7 +170,112 @@ public class MessageSendingController extends BaseController {
 
 		return "modules/message/messageSendingList";
 	}
+	@RequiresPermissions("message:messageSending:view")
+	@RequestMapping(value = "checkone")
+	@ResponseBody
+	public String checkone(Model model, WorkDealInfo workDealInfo,
+			@RequestParam(value = "checkIds", required = false) String checkIds,
+			@RequestParam(value = "areaId", required = false) Long areaId,
+			@RequestParam(value = "officeId", required = false) Long officeId,
+			@RequestParam(value = "apply", required = false) Long apply,
+			@RequestParam(value = "workType", required = false) Integer workType,
+			@RequestParam(value = "smsId", required = false) Long smsId, HttpServletRequest request,
+			HttpServletResponse response) throws JSONException {
+			JSONObject json = new JSONObject();
+			DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		// List<WorkCertInfo> certInfoList = new ArrayList<WorkCertInfo>();
+		// String
+		// messageAddress=smsConfigurationService.get(smsId).getMessageAddress();
+		if(smsId==null){
+			json.put("status", -1);
+			json.put("msg", "请选择模板");
+			return json.toString();
+		}
+		SmsConfiguration smsConfiguration = smsConfigurationService.get(smsId);
+		String messageName = smsConfiguration.getMessageName();
+		// System.out.println(messageAddress);
+		String messageAddress = SmsConfigurationController.class.getResource("/").toString().replace("file:", "")
+				.replace("%20", " ");
+		String messageContent =smsConfiguration.getMessageContent();
+		if (StringUtils.contains(messageAddress, "/WEB-INF")) {
+			messageAddress = messageAddress.substring(0, StringUtils.indexOf(messageAddress, "/WEB-INF"));
+		}
+		;
+		messageAddress += "/WEB-INF/template/";
+		String newMessageAddress = messageAddress + messageName;
+		System.out.println(messageAddress);
+		if(checkIds==""||checkIds.equals("")||checkIds==null){
+			json.put("status", -1);
+			json.put("msg", "请选择需要发送的公司");
+			return json.toString();
+		}
+		String[] dealInfos = checkIds.split(",");
+		short s[] = new short[dealInfos.length];
+		for (int i = 0; i < dealInfos.length; i++) {
+			//System.out.println(dealInfos[i]);
 
+			// s[i]=Short.parseShort(dealInfos[i]);
+			// System.out.println(s[i]);
+			long size= dealInfos.length;
+			long dealInfoId = Long.parseLong(dealInfos[i]);
+			WorkDealInfo dealInfo = workDealInfoService.get(dealInfoId);
+			if(dealInfo!=null){
+			WorkCompany company = dealInfo.getWorkCompany();
+			WorkUser workUser = dealInfo.getWorkUser();
+			ConfigApp configApp = dealInfo.getConfigApp();
+			WorkCertInfo workCertInfo = dealInfo.getWorkCertInfo();
+			// 组织机构代码
+			String companyCode = dealInfo.getWorkCompany().getOrganizationNumber();
+			// 机构名称
+			String companyName = dealInfo.getWorkCompany().getCompanyName();
+			//System.out.println(companyName);
+			// 法人姓名
+			String legalName = dealInfo.getWorkCompany().getLegalName();
+			// key编码
+			String keySn = dealInfo.getKeySn();
+			// 机构地址
+			String organizationAddress = dealInfo.getWorkCompany().getProvince() + dealInfo.getWorkCompany().getCity()
+					+ dealInfo.getWorkCompany().getDistrict() + dealInfo.getWorkCompany().getAddress();
+			// 经办人姓名
+			String consigner = dealInfo.getWorkCertInfo().getWorkCertApplyInfo().getName();
+			//System.out.println(consigner);
+			// 业务状态
+			WorkDealInfoStatus workDealInfoStatus = new WorkDealInfoStatus();
+			String businessStatus = workDealInfoStatus.WorkDealInfoStatusMap.get(dealInfo.getDealInfoStatus());
+			// 项目名称
+			String alias = dealInfo.getConfigApp().getAlias();
+			//System.out.println(alias);
+			// 证书到期时间
+			Date endDate = dealInfo.getNotafter();
+			//System.out.println(endDate);
+			// 证书持有人电话
+			String phone = dealInfo.getWorkUser().getContactPhone();
+		
+			VelocityEngine ve = new VelocityEngine();
+			   ve.init();
+			   String content = messageContent;
+			   VelocityContext context = new VelocityContext();
+			   context.put("companyCode", companyCode);
+			   context.put("companyName", companyName);
+			   context.put("legalName", legalName);
+			   context.put("keySn", keySn);
+			   context.put("organizationAddress", organizationAddress);
+			   context.put("consigner", consigner);
+			   context.put("businessStatus", businessStatus);
+			   context.put("alias", alias);
+			   context.put("endDate", endDate);
+			   context.put("date", new Date());
+			   StringWriter writer = new StringWriter();
+			   ve.evaluate(context, writer, "", content); 
+			   json.put("status", 1);
+			   json.put("size", size);
+			   json.put("content", writer.toString());
+			   }
+		}
+		return json.toString();
+		// return "redirect:" + Global.getAdminPath() +
+		// "/modules/message/messageSending/search";
+	}
 	@RequiresPermissions("message:messageSending:view")
 	@RequestMapping(value = "send")
 	@ResponseBody

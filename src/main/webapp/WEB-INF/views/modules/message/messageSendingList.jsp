@@ -4,9 +4,9 @@
 <head>
 <title>消息发送管理</title>
 <meta name="decorator" content="default" />
+
 <script type="text/javascript">
 	$(document).ready(function() {
-
 	});
 	function page(n, s) {
 		$("#pageNo").val(n);
@@ -117,72 +117,89 @@
 		var smsId = $("#smsId").val();
 
 		if (checkIds == null || checkIds == "") {
-			top.$.jBox.tip("请选择需要发送信息的公司！");
+			$.jBox.tip("请选择需要发送信息的公司！");
 		}
 		if ($("#smsId").val() == null || $("#smsId").val() == "") {
-			top.$.jBox.tip("请选择短信模板！");
+			$.jBox.tip("请选择短信模板！");
 		}
-		top.$.jBox.tip("正在发送中....", 'loading');
-		/* window.location.href = "${ctx }/message/messageSending/send?checkIds="
-				+ checkIds
-				+ "&apply="
-				+ apply
-				+ "&companyName="
-				+ companyName
-				+ "&contactName="
-				+ contactName
-				+ "&workType="
-				+ workType
-				+ "&dealInfoStatus="
-				+ dealInfoStatus
-				+ "&areaId="
-				+ areaId
-				+ "&officeId="
-				+ officeId + "&smsId=" + smsId; */
-	$.ajax ({
-				
-			url : "${ctx}/message/messageSending/send?checkIds=" + checkIds
-					+ "&_=" + new Date().getTime(),
-			type : 'post',
-			dataType : 'json',
-			data : {
-				apply : apply,
-				companyName : companyName,
-				contactName : contactName,
-				workType : workType,
-				dealInfoStatus : dealInfoStatus,
-				areaId : areaId,
-				officeId : officeId,
-				smsId : smsId
-			},
-			success : function(data) {
-				//console.log(data);
-				if (data.status == '1') {
-					top.$.jBox.tip("发送完成");
-					setTimeout(function() {
-						//something you want delayed
-						$("#searchForm").submit();
-						//	window.location.reload();
-					}, 1500); // how long do you want the delay to be? 
+		var url = "${ctx}/message/messageSending/checkone?checkIds=" + checkIds
+				+ "&apply=" + apply + "&companyName=" + companyName
+				+ "&contactName=" + contactName + "&workType=" + workType
+				+ "&dealInfoStatus=" + dealInfoStatus + "&areaId=" + areaId
+				+ "&officeId=" + officeId + "&smsId=" + smsId + "&_="
+				+ new Date().getTime()
+		var submit = function(v, h, f) {
+			if (v == true) {
+			
+				/* 	$.jBox.tip("正在发送，请稍后.....");
 
-				} else if (data.status == '-1') {
-					top.$.jBox.tip("发送失败!");
-					var info = "失败信息:<br>" + data.msg;
-					top.$.jBox.info(info);
-					//top.$.jBox.tip("上传失败"+data.msg);
-					//$("#searchForm").submit();
-				} else {
-					top.$.jBox.tip("上传失败!");
-					var info = "失败信息:<br>" + data.msg;
-					top.$.jBox.info(info);
-					//top.$.jBox.tip("上传失败："+data.errorMsg);
-					//$("#searchForm").submit();
-				}
+				$.getJSON(url, function(data) {
+					if (data.status == '1') {
+						top.$.jBox.tip("发送完成");
+						setTimeout(function() {
+							//something you want delayed
+							$("#searchForm").submit();
+							//	window.location.reload();
+						}, 1500); // how long do you want the delay to be? 
+
+					} else if (data.status == '-1') {
+						top.$.jBox.tip("发送失败!");
+						var info = "失败信息:<br>" + data.msg;
+						top.$.jBox.info(info);
+						//top.$.jBox.tip("上传失败"+data.msg);
+						//$("#searchForm").submit();
+					} else {
+						top.$.jBox.tip("上传失败!");
+						var info = "失败信息:<br>" + data.msg;
+						top.$.jBox.info(info);
+						//top.$.jBox.tip("上传失败："+data.errorMsg);
+						//$("#searchForm").submit();
+					}
+
+				}); */
+
 			}
-		});
 
+		};
+		var updateUrl = "${ctx}/message/messageSending/checkone?checkIds="
+				+ checkIds + "&apply=" + apply + "&companyName=" + companyName
+				+ "&contactName=" + contactName + "&workType=" + workType
+				+ "&dealInfoStatus=" + dealInfoStatus + "&areaId=" + areaId
+				+ "&officeId=" + officeId + "&smsId=" + smsId + "&_="
+				+ new Date().getTime()
+
+		$
+				.getJSON(
+						updateUrl,
+						function(data) {
+
+							var html = "未查询到相关证书信息";
+							if (data.status == 1)		 {
+
+								html = "<div class='container-fluid'><div class='row-fluid'><div class='span6'><div class='control-group'><label class='control-label'>总共条数:</label><div class='controls'>"
+										+ data.size + "</div></div>";
+								html += "<div class='control-group'><label class='control-label'>短信内容:</label><div class='controls'>"
+										+ data.content + "</div></div>";
+
+							}
+							hh(html);
+							
+							
+							//$.jBox(html, { title: "短信内容",buttons:{"确认发送":"ok","关闭":true} });
+							//top.$.jBox.confirm(html, "短信内容", submit, { buttons: { '确认发送': true, '返回': false} });
+						});
+						
+	}
+	function hh(html){
+		var aa=function(v,h,f){
+			if (v == "ok") {
+				alert(1);
+			}
+		}
+		top.$.jBox(html, { title: "确定付款？",buttons:{"确定":"ok","关闭":true}, submit: aa });
 	}
 </script>
+<script type="text/javascript" src="${ctxStatic}/jquery/city.js"></script>
 </head>
 <body>
 	<ul class="nav nav-tabs">
@@ -268,12 +285,39 @@
 					</c:if>>${sms.messageName}</option>
 			</c:forEach>
 		</select>
-		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		<input id="btnSubmit" class="btn btn-primary" type="submit" value="查询" />
+		<label>行政所属区：</label>
+		<select id="s_province" name="workCompany.province"
+			style="width: 100px;">
+		</select>
+								
+								&nbsp;&nbsp; 
+								<select id="s_city" name="workCompany.city"
+			style="width: 100px;">
+		</select>&nbsp;&nbsp; <select id="s_county" name="workCompany.district"
+			style="width: 100px;">
+		</select>
+		<script type="text/javascript">
+			_init_area();
+			$("#s_province")
+					.append(
+							'<option value="${workDealInfo.workCompany.province}" selected="selected">${workDealInfo.workCompany.province}</option>');
+			$("#s_city")
+					.append(
+							'<option value="${workDealInfo.workCompany.city}" selected="selected">${workDealInfo.workCompany.city}</option>');
+			$("#s_county")
+					.append(
+							'<option value="${workDealInfo.workCompany.district}" selected="selected">${workDealInfo.workCompany.district}</option>');
+		</script>
+		</div>
+		<br>
+		<br>
+		<div>
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			<a href="javascript:send()" class="btn btn-primary">发送</a>
-		<input type="hidden" name="checkIds" id="checkIds"
-			value="${checkIds }" />
+			<input id="btnSubmit" class="btn btn-primary" type="submit"
+				value="查询" />
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<a href="javascript:send()" class="btn btn-primary">发送</a> <input
+				type="hidden" name="checkIds" id="checkIds" value="${checkIds }" />
 		</div>
 	</form:form>
 	<tags:message content="${message}" />
