@@ -145,15 +145,17 @@ public class MessageSendingController extends BaseController {
 		if (checkIds != null) {
 			String[] ids = checkIds.split(",");
 			model.addAttribute("ids", ids);
+			int index=0;
+			for(int i=0;i<ids.length;i++)
+			{
+				if("".equals(ids[i]))
+				{
+					index+=1;
+				}
+			}
+			model.addAttribute("count", ids.length-index);
 		}
 		model.addAttribute("checkIds", checkIds);
-		// List<WorkDealInfo> noIxinInfos = page.getList();
-		// List<WorkDealInfo> isIxinInfos =
-		// workDealInfoService.find14A(workDealInfo, areaId, officeId, apply,
-		// workType, certInfoList);
-		// noIxinInfos.addAll(isIxinInfos);
-		//
-		// page.setList(noIxinInfos);
 		model.addAttribute("dealInfoStatus", workDealInfo.getDealInfoStatus());
 		model.addAttribute("proType", ProductType.productTypeStrMap);
 		model.addAttribute("wdiType", WorkDealInfoType.WorkDealInfoTypeMap);
@@ -357,40 +359,6 @@ public class MessageSendingController extends BaseController {
 			// 证书持有人电话
 			String phone = dealInfo.getWorkUser().getContactPhone();
 			//System.out.println(phone);
-//			Properties p = new Properties();
-//			p.setProperty(Velocity.INPUT_ENCODING, "UTF-8");
-//			p.setProperty(Velocity.OUTPUT_ENCODING, "UTF-8");
-//			p.setProperty(Velocity.FILE_RESOURCE_LOADER_PATH, messageAddress);
-//			System.out.println(p);
-//			VelocityEngine velocityEngine = new VelocityEngine();
-//			velocityEngine.init(p);
-//			Map<String, Object> orange = new HashMap<>();
-//			orange.put("companyCode", companyCode);
-//			orange.put("companyName", companyName);
-//			orange.put("legalName", legalName);
-//			orange.put("keySn", keySn);
-//			orange.put("organizationAddress", organizationAddress);
-//			orange.put("consigner", consigner);
-//			orange.put("businessStatus", businessStatus);
-//			orange.put("alias", alias);
-//			orange.put("endDate", endDate);
-//			orange.put("date", new Date());
-//			String content = VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, messageName, "UTF-8", orange);
-//			System.out.println(content);
-//			long mess = System.currentTimeMillis();
-//			String messId = "" + mess;
-//			System.out.println(messId);
-//			String smsSendDate1 = format.format(new Date());
-//
-//			Date smsSendDate = null;
-//			try {
-//				smsSendDate = format.parse(smsSendDate1);
-//			} catch (ParseException e) {
-//				
-//				e.printStackTrace();
-//			}
-//			System.out.println(smsSendDate);
-			// SmsService smsService=new SmsService();
 			VelocityEngine ve = new VelocityEngine();
 			   ve.init();
 			   String content = messageContent;

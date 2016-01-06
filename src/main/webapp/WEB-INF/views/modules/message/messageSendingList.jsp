@@ -4,7 +4,7 @@
 <head>
 <title>消息发送管理</title>
 <meta name="decorator" content="default" />
-
+<%@include file="/WEB-INF/views/include/dialog.jsp"%>
 <script type="text/javascript">
 	$(document).ready(function() {
 	});
@@ -116,13 +116,16 @@
 		var officeId = $("#officeId").val();
 		var smsId = $("#smsId").val();
 
-		if (checkIds == null || checkIds == "") {
+		 if (checkIds == null || checkIds == "") {
 			$.jBox.tip("请选择需要发送信息的公司！");
-		}
-		if ($("#smsId").val() == null || $("#smsId").val() == "") {
+				
+			if ($("#smsId").val() == null || $("#smsId").val() == "") {
 			$.jBox.tip("请选择短信模板！");
+				
+			}
 		}
-		var url = "${ctx}/message/messageSending/checkone?checkIds=" + checkIds
+		else{ 
+		var url = "${ctx}/message/messageSending/send?checkIds=" + checkIds
 				+ "&apply=" + apply + "&companyName=" + companyName
 				+ "&contactName=" + contactName + "&workType=" + workType
 				+ "&dealInfoStatus=" + dealInfoStatus + "&areaId=" + areaId
@@ -130,9 +133,6 @@
 				+ new Date().getTime()
 		var submit = function(v, h, f) {
 			if (v == true) {
-			
-				/* 	$.jBox.tip("正在发送，请稍后.....");
-
 				$.getJSON(url, function(data) {
 					if (data.status == '1') {
 						top.$.jBox.tip("发送完成");
@@ -156,7 +156,7 @@
 						//$("#searchForm").submit();
 					}
 
-				}); */
+				});
 
 			}
 
@@ -174,29 +174,23 @@
 						function(data) {
 
 							var html = "未查询到相关证书信息";
-							if (data.status == 1)		 {
+							if (data.status == 1) {
 
-								html = "<div class='container-fluid'><div class='row-fluid'><div class='span6'><div class='control-group'><label class='control-label'>总共条数:</label><div class='controls'>"
-										+ data.size + "</div></div>";
-								html += "<div class='control-group'><label class='control-label'>短信内容:</label><div class='controls'>"
-										+ data.content + "</div></div>";
+								html = "<label class='control-label'>总共条数:</label><div class='controls'>"
+										+ data.size + "</div>";
+								html += "<label class='control-label'>短信内容:</label><div class='controls'>"
+										+ data.content + "</div>";
 
 							}
-							hh(html);
-							
-							
-							//$.jBox(html, { title: "短信内容",buttons:{"确认发送":"ok","关闭":true} });
-							//top.$.jBox.confirm(html, "短信内容", submit, { buttons: { '确认发送': true, '返回': false} });
+
+							top.$.jBox.confirm(html, "短信内容", submit, {
+								buttons : {
+									'确认发送' : true,
+									'返回' : false
+								}
+							});
 						});
-						
-	}
-	function hh(html){
-		var aa=function(v,h,f){
-			if (v == "ok") {
-				alert(1);
-			}
 		}
-		top.$.jBox(html, { title: "确定付款？",buttons:{"确定":"ok","关闭":true}, submit: aa });
 	}
 </script>
 <script type="text/javascript" src="${ctxStatic}/jquery/city.js"></script>
@@ -326,10 +320,10 @@
 		<thead>
 			<tr>
 				<th><input type="checkbox" id="checkAll" name="oneDealCheck"
-					value="${page.pageNo}"
-					<c:forEach items="${ids }" var="id">
+					value=""
+					<%-- 	<c:forEach items="${ids }" var="id">
 					<c:if test="${id==page.pageNo}"> checked="checked"</c:if>
-				</c:forEach>
+				</c:forEach> --%>
 					onchange="checkAll(this)" /></th>
 				<th>序号</th>
 				<th>应用名称</th>
