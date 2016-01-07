@@ -1015,7 +1015,7 @@ var selected = false;
 								class="prompt" style="color: red; display: none;">*</span>基本信息</th>
 						</tr>
 						<tr>
-							<th><span class="prompt" style="color: red; display: none;">*</span>代办应用：</th>
+							<th><span class="prompt" style="color: red; display: none;">*</span>应用名称：</th>
 							<td colspan="3"><input type="text" name="configApp"
 								value="${workDealInfo.configApp.appName }" id="app" /></td>
 							<th><span class="prompt" style="color: red; display: none;">*</span>选择产品：</th>

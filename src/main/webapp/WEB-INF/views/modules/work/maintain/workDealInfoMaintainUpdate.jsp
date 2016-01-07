@@ -519,7 +519,7 @@
 							<th colspan="6" style="font-size: 20px;">基本信息</th>
 						</tr>
 						<tr>
-							<th><span class="prompt" style="color: red; display: none;">*</span>代办应用：</th>
+							<th><span class="prompt" style="color: red; display: none;">*</span>应用名称：</th>
 							<td colspan="3"><input type="text" name="configApp" disabled="disabled"
 								value="${workDealInfo.configApp.appName }" id="4" />
 								
