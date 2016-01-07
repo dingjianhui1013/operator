@@ -4676,7 +4676,60 @@ public class WorkDealInfoController extends BaseController {
 			// }
 			workDealInfo.setWorkPayInfo(workPayInfo);
 		}
+		List<Long> dealInfoByOfficeAreaIds = Lists.newArrayList();
+		List<Long> dealInfoByAreaIds = Lists.newArrayList();
+		List<Long> officeids = Lists.newArrayList();
+		if (officeId != null && officeId != 0) {
+			officeids.add(officeId);
+			List<Long> appids = Lists.newArrayList();
+			List<ConfigAppOfficeRelation> appOffices = configAppOfficeRelationService.findAllByOfficeId(officeId);// 通过网店获取引用的id
+			if (appOffices.size() > 0) {
+				for (int i = 0; i < appOffices.size(); i++) {
+					appids.add(appOffices.get(i).getConfigApp().getId());
+				}
+			} else {
+				appids.add(-1l);
+			}
+			List<WorkDealInfo> deals = workDealInfoService.findByAppId(appids);// 根据应用id获取dealInfo信息
+			if (deals.size() < 1) {
+				dealInfoByOfficeAreaIds.add(-1l);
+			} else {
+				for (int i = 0; i < deals.size(); i++) {
+					dealInfoByOfficeAreaIds.add(deals.get(i).getId());
+				}
+			}
+		} else {
+			if (area != null) {
+				List<Long> appids = Lists.newArrayList();
+//				List<Long> officeids = Lists.newArrayList();
+				List<Office> offices = officeService.findByParentId(area);// 根据区域id获取网店id
+				if (offices.size() > 0) {
+					for (int i = 0; i < offices.size(); i++) {
+						officeids.add(offices.get(i).getId());
+					}
+				} else {
+					officeids.add(-1l);
+				}
 
+				List<ConfigAppOfficeRelation> appOffices = configAppOfficeRelationService.findAllByOfficeId(officeids);// 根据网店id获取应用id
+				if (appOffices.size() > 0) {
+					for (int i = 0; i < appOffices.size(); i++) {
+						appids.add(appOffices.get(i).getConfigApp().getId());
+					}
+				} else {
+					appids.add(-1l);
+				}
+
+				List<WorkDealInfo> deals = workDealInfoService.findByAppId(appids);// 根据应用id获取dealInfo信息
+				if (deals.size() < 1) {
+					dealInfoByAreaIds.add(-1l);
+				} else {
+					for (int i = 0; i < deals.size(); i++) {
+						dealInfoByAreaIds.add(deals.get(i).getId());
+					}
+				}
+			}
+		}
 		ProductType productType = new ProductType();
 		WorkDealInfoType workDealInfoType = new WorkDealInfoType();
 		WorkDealInfoStatus workDealInfoStatus = new WorkDealInfoStatus();
@@ -4687,7 +4740,7 @@ public class WorkDealInfoController extends BaseController {
 			if (zhizhengStartTime != null && zhizhengEndTime != null) {
 				certInfoList = workCertInfoService.findZhiZhengTime(zhizhengStartTime, zhizhengEndTime);
 			}
-			final List<WorkDealInfo> list = workDealInfoService.find(workDealInfo, area, officeId, apply, certType,
+			final List<WorkDealInfo> list = workDealInfoService.find(workDealInfo, dealInfoByOfficeAreaIds,dealInfoByAreaIds,officeids, apply, certType,
 					workType, year, luruStartTime, luruEndTime, officeList, daoqiStartTime, daoqiEndTime,
 					jianzhengStartTime, jianzhengEndTime, certInfoList);
 			final String fileName = "WorkDealInfos.csv";
