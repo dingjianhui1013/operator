@@ -102,16 +102,6 @@
 		"&jianzhengStartTime="+jianzhengStartTime+"&jianzhengEndTime="+jianzhengEndTime+"&zhizhengStartTime="+zhizhengStartTime+"&zhizhengEndTime="+zhizhengEndTime+
 		"&daoqiStartTime="+daoqiStartTime+"&daoqiEndTime="+daoqiEndTime+"&luruEndTime="+luruEndTime+"&payMethod="+payMethod+"&year="+year);
 	}
-	function onSubmit(){
-		var area = document.getElementById("area").value;
-		var officeId = document.getElementById("officeId").value;
-			if (area!=""&&officeId==""){
-				top.$.jBox.tip("请选择网点");
-				return false;
-			} else {
-				return true;
-			}
-	}
 	
 	function resetAll(){
 		$("#companyName").val("");

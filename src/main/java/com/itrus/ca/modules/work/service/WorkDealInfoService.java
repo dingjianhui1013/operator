@@ -745,8 +745,8 @@ public class WorkDealInfoService extends BaseService {
 		return workDealInfoDao.find(dc);
 	}
 
-	public Page<WorkDealInfo> find(Page<WorkDealInfo> page, WorkDealInfo workDealInfo, Long area, Long office,
-			Long apply, String certType, Integer workType, Integer year, Date luruStartTime, Date luruEndTime,
+	public Page<WorkDealInfo> find(Page<WorkDealInfo> page, WorkDealInfo workDealInfo, List<Long> dealInfoByAreaIds, List<Long> dealInfoByOfficeAreaIds,
+			List<Long> officeIds,Long apply, String certType, Integer workType, Integer year, Date luruStartTime, Date luruEndTime,
 			List<Office> offices, Date daoqiStartTime, Date daoqiEndTime, Date jianzhengStartTime,
 			Date jianzhengEndTime, List<WorkCertInfo> certInfoList
 
@@ -881,13 +881,17 @@ public class WorkDealInfoService extends BaseService {
 		if (certInfoList.size() > 0) {
 			dc.add(Restrictions.in("workCertInfo", certInfoList));
 		}
-
-		if (office != null) {
-			dc.add(Restrictions.eq("office.id", office));
-		} else if (area != null) {
-
-			dc.add(Restrictions.eq("company.id", area));
+		if (dealInfoByAreaIds != null && dealInfoByAreaIds.size() > 0) {
+			dc.add(Restrictions.in("id", dealInfoByAreaIds));
 		}
+		if (dealInfoByOfficeAreaIds != null && dealInfoByOfficeAreaIds.size() > 0) {
+			dc.add(Restrictions.in("id", dealInfoByOfficeAreaIds));
+		}
+		if(officeIds!=null&&officeIds.size()>0)
+		{
+			dc.add(Restrictions.in("office.id", officeIds));
+		}
+		
 
 		if (apply != null) {
 			dc.add(Restrictions.eq("configApp.id", apply));
@@ -1516,6 +1520,7 @@ public class WorkDealInfoService extends BaseService {
 //		dc.addOrder(Order.desc("id"));
 //		return workDealInfoDao.find(page, dc);
 //	}
+	
 	public Page<WorkDealInfo> findByDealPay(Page<WorkDealInfo> page, WorkDealInfo workDealInfo, Date startTime,
 			Date endTime, List<Long> idList, List<Long> dealInfoByAreaIds, List<Long> dealInfoByOfficeAreaIds,
 			Long appId,List<Long> officeIds) {
