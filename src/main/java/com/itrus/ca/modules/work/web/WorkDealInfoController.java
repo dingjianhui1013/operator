@@ -7158,7 +7158,11 @@ public class WorkDealInfoController extends BaseController {
 					Integer agentSize = configAgentBoundDealInfoService.findByAgentIdDealIds(configChargeAgent.getId(),
 							dealIdList);
 
-					if (configChargeAgent.getSurplusUpdateNum() < agentSize) {
+					if (configChargeAgent.getSurplusUpdateNum()==null) {
+						tip = "'" + dealInfo.getWorkCompany().getCompanyName() + "'单位绑定'"
+								+ configChargeAgent.getTempName() + "'缴费模板剩余更新数量为空！";
+						companyNames.add(tip);
+					}else if (configChargeAgent.getSurplusUpdateNum() < agentSize) {
 						tip = "'" + dealInfo.getWorkCompany().getCompanyName() + "'单位绑定'"
 								+ configChargeAgent.getTempName() + "'缴费模板剩余更新数量不足！";
 						companyNames.add(tip);
