@@ -22,7 +22,7 @@
 		$.getJSON(url + areaId+"&_="+new Date().getTime(), function(data) {
 			var html = "";
 			//console.log(data);
-			html += "<option value=\""+0+"\">请选择</ooption>";
+			html += "<option value=\""+""+"\">请选择</ooption>";
 			$.each(data, function(idx, ele) {
 				//console.log(idx);
 				//console.log(ele);
@@ -203,8 +203,8 @@
 			<label>身份证号：</label> 
 			<form:input path="workUser.conCertNumber" htmlEscape="false"
 				maxlength="18" class="input-medium" id="conCertNumber"/>
-			<input id="btnSubmit" class="btn btn-primary" onclick="return onSubmit()" type="submit"
-				value="查询" />
+				 <input id="btnSubmit" class="btn btn-primary"
+				onclick="return onSubmit();" type="submit" value="查询" />
 				<input id="resetTOP" type="button" class="btn btn-primary" onclick="javascript:resetAll()" value="重置"/>
 				<input id="gjcx" style="text-align:center" class="btn btn-info" onclick="show()" type="button" value="高级">
 				<input id="exportZS" style="text-align:center" class="btn btn-info" onclick="dcZS()" type="button" value="导出">
@@ -219,8 +219,7 @@
 		<div>
 			<label>按受理信息查询：</label><br>
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			<label>受理区域：</label><select name="area" id="area"
-				onchange="addOffice()">
+			<label>受理区域：</label><select name="area" id="area" onchange="addOffice()">
 				<option value="">请选择</option>
 				<c:forEach items="${offsList}" var="off">
 					<option value="${off.id}"
@@ -228,14 +227,14 @@
 					selected="selected"
 					</c:if>>${off.name}</option>
 				</c:forEach>
-			</select> 
+			</select>
 			<label>受理网点：</label>  <select name="officeId" id="officeId">
 				<option value="">请选择</option>
 				<c:forEach items="${offices}" var="off">
 					<option value="${off.id}"
 						<c:if test="${off.id==officeId}">
-					selected="selected"
-					</c:if>>${off.name}</option>
+						selected="selected"
+						</c:if>>${off.name}</option>
 				</c:forEach>
 			</select>
 			<label>产品名称：</label> <select name="certType" id="certType">
