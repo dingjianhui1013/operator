@@ -24,13 +24,56 @@
 				errorPlacement: function(error, element) {
 					$("#messageBox").text("输入有误，请先更正。");
 					if (element.is(":checkbox")||element.is(":radio")||element.parent().is(".input-append")){
-						error.appendTo(element.parent().parent());
+						//alert(element[0].tagName);
+						(element.parent().find(' label:last-child')).after(error);
 					} else {
+						//alert(element[0].tagName);
 						error.insertAfter(element);
 					}
-				}
+				},
+				rules: {
+					 completeType: {
+							required :true
+					}
+			 },
+				   messages: {
+					   completeType: {
+						   required: "请选择"
+					}
+				   }
 			});
 		});
+		function sub()
+		{
+			var ywcz=0;;  
+	        $("input[name=ywcz]").each(function() {  
+	            if ($(this).attr("checked")) {  
+	            	ywcz ++;  
+	            }  
+	        }); 
+	        var ywzx=0;;  
+	        $("input[name=ywzx]").each(function() {  
+	            if ($(this).attr("checked")) {  
+	            	ywzx ++;  
+	            }  
+	        });
+	        var ywxt=0;;  
+	        $("input[name=ywxt]").each(function() {  
+	            if ($(this).attr("checked")) {  
+	            	ywxt ++;  
+	            }  
+	        });
+	        if(ywcz==0&&ywzx==0&&ywxt==0)
+				{
+					$("#errorMessage").html("请选择一项");
+					$("#errorMessage").addClass("controls");
+					return false;
+				}else{
+					$("#errorMessage").html("");
+					$("#errorMessage").removeClass("controls");
+					return true;
+				}
+		}
 	</script>
 </head>
 <body>
@@ -80,22 +123,22 @@
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">业务咨询</label>
+			<label class="control-label"><span style="color: red;">*</span>&nbsp;&nbsp;&nbsp;&nbsp;业务咨询</label>
 			<br>
 			<div class="controls">
 				<input type="checkbox" value="新办" name="ywzx">新办
-				<input type="checkbox" value="更新 " name="ywzx">更新 
-				<input type="checkbox" value="解锁 " name="ywzx">解锁 
-				<input type="checkbox" value="变更 " name="ywzx">变更 
+				<input type="checkbox" value="更新 " name="ywzx">更新
+				<input type="checkbox" value="解锁 " name="ywzx">解锁
+				<input type="checkbox" value="变更 " name="ywzx">变更
 				<input type="checkbox" value="补办" name="ywzx">补办
 				<input type="checkbox" value="用途 " name="ywzx">用途 
-				<input type="checkbox" value="密码" name="ywzx">密码 
+				<input type="checkbox" value="密码" name="ywzx">密码
 				<input type="checkbox" value="授权 " name="ywzx">授权 
-				<input type="checkbox" value="合作" name="ywzx">合作
+				<label><input type="checkbox" value="合作" name="ywzx">合作</label>
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">业务操作</label>
+			<label class="control-label"><span style="color: red;">*</span>&nbsp;&nbsp;&nbsp;&nbsp;业务操作</label>
 			<br>	
 			<div class="controls">
 				<input type="checkbox" value="驱动" name="ywcz">驱动
@@ -104,18 +147,21 @@
 				<input type="checkbox" value="网络 " name="ywcz">网络 
 				<input type="checkbox" value="key" name="ywcz">key
 				<input type="checkbox" value="控件  " name="ywcz">控件 
-				<input type="checkbox" value="浏览器 " name="ywcz">浏览器 
+				<label><input type="checkbox" value="浏览器 " name="ywcz">浏览器 </label>
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">业务系统</label>
+			<label class="control-label"><span style="color: red;">*</span>&nbsp;&nbsp;&nbsp;&nbsp;业务系统</label>
 			<br>
 			<div class="controls">
 				<input type="checkbox" value="业务咨询" name="ywxt">业务咨询
 				<input type="checkbox" value="操作咨询 " name="ywxt">操作咨询
 				<input type="checkbox" value="绑定操作 " name="ywxt">绑定操作
-				<input type="checkbox" value="系统出错 " name="ywxt">系统出错
+				<label><input type="checkbox" value="系统出错 " name="ywxt">系统出错</label>
 			</div>
+		</div>
+		<div class="control-group">
+			<span style="color: red;font-weight: bold;" id="errorMessage"></span>
 		</div>
 		<div class="control-group">
 			<label class="control-label">其他</label>
@@ -136,10 +182,10 @@
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">是否完成:</label>
+			<label class="control-label"><span style="color: red;">*</span>&nbsp;&nbsp;&nbsp;&nbsp;是否完成:</label>
 			<div class="controls">
 				<input type="radio" value = "0" name = "completeType" />是
-				<input type="radio" value = "1" name = "completeType" />否
+				<label><input type="radio" value = "1" name = "completeType" />否</label>
 			</div>
 		</div>
 		<div class="control-group">
@@ -150,7 +196,7 @@
 		</div>
 		<input type="hidden"  name="distinguish" value="2"/>
 		<div class="form-actions">
-			<input id="btnSubmit" class="btn btn-primary" type="submit" value="保存"/>&nbsp;&nbsp;
+			<input id="btnSubmit" class="btn btn-primary" type="submit" onclick="return sub()" value="保存"/>&nbsp;&nbsp;
 			<input id="btnCancel" class="btn" type="button" value="返 回" onclick="history.go(-1)"/>
 		</div>
 	</form>

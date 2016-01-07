@@ -27,11 +27,23 @@
 				errorPlacement: function(error, element) {
 					$("#messageBox").text("输入有误，请先更正。");
 					if (element.is(":checkbox")||element.is(":radio")||element.parent().is(".input-append")){
-						error.appendTo(element.parent().parent());
+						//alert(element[0].tagName);
+						(element.parent().find(' label:last-child')).after(error);
 					} else {
+						//alert(element[0].tagName);
 						error.insertAfter(element);
 					}
-				}
+				},
+				rules: {
+					 completeType: {
+							required :true
+					}
+			 },
+				   messages: {
+					   completeType: {
+						   required: "请选择"
+					}
+				   }
 			});
 		});
 	</script>
@@ -70,7 +82,7 @@
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">服务主题:</label>
+			<label class="control-label"><span style="color : red">*</span>&nbsp;服务主题:</label>
 			<div class="controls">
 				<input type = "text" name = "serTitle" class="required" value = "${workLog.serTitle }" />
 			</div>
@@ -100,10 +112,10 @@
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">是否完成:</label>
+			<label class="control-label"><span style="color: red;">*</span>&nbsp;&nbsp;&nbsp;&nbsp;是否完成:</label>
 			<div class="controls">
 				<input <c:if test="${workLog.completeType==0 }">checked="checked"</c:if> type="radio" value = "0" name = "completeType" />是
-				<input <c:if test="${workLog.completeType==1 }">checked="checked"</c:if> type="radio" value = "1" name = "completeType" />否
+				<label><input <c:if test="${workLog.completeType==1 }">checked="checked"</c:if> type="radio" value = "1" name = "completeType" />否</label>
 			</div>
 		</div>
 		<div class="control-group">
