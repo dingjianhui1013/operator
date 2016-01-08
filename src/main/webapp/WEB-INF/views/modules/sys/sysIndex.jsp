@@ -56,9 +56,11 @@
 		var url = "${ctx}/sys/user/verfyIP";
 		$.getJSON(url,function(data) {
 			if(data.newIP != null){
-				var info = "<br />上次登录IP："+data.oldIP+"<br />上次登陆时间："+data.loginDate+"<br /><br />";
-				info += "<span style='color:red;size:10px'>您此次登录的IP与上次不同，请妥善保管您的帐号密码！</span>";
-				$.jBox.info(info,"<font color='red'>登录异常</font>");
+				var info = "上次登录IP："+data.oldIP+"<br /><br />上次登陆时间："+data.loginDate+"<br /><br />";
+				info += "<span style='color:red;size:10px'>您此次登录的IP与上次不同，请妥善保管您的帐号密码！</span><br /><br />";
+				info += "<span style='color:red;size:10px;'>管理员所属网点:<span style='color:red;font-weight:blod;font-size:18px;'>&nbsp;&nbsp;"+data.officeName+"</span></span><br /><br />";
+				info += "<span style='color:red;size:10px'>如需更换请调整配置</span>";
+				$.jBox.info(info,"<font color='red'>登录异常</font>",{width:360});
 			}
 		});
 	});

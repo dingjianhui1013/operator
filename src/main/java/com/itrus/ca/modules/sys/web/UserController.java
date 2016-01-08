@@ -339,6 +339,7 @@ public class UserController extends BaseController {
 				json.put("newIP", newIP);
 				json.put("oldIP", user.getLoginIp());
 				json.put("loginDate", user.getLoginDate());
+				json.put("officeName", user.getOffice().getName());
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
