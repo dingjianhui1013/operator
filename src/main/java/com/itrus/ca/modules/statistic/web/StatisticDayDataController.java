@@ -34,6 +34,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONObject;
+import com.google.common.collect.Lists;
 import com.itrus.ca.common.persistence.Page;
 import com.itrus.ca.common.utils.DateUtils;
 import com.itrus.ca.common.utils.SpringContextHolder;
@@ -159,8 +160,20 @@ public class StatisticDayDataController extends BaseController {
 		Page<StatisticDayData> page = statisticDayDataService.findByDay(
 				new Page<StatisticDayData>(request, response),
 				statisticDayData, office, startTime, endTime);
+		List<ConfigAppOfficeRelation> configApps=configAppOfficeRelationService.findAllByOfficeId(office);
+		List<Long> appIds=Lists.newArrayList();
+		if(configApps.size()>0)
+		{
+			for(int i=0;i<configApps.size();i++)
+			{
+				appIds.add(configApps.get(i).getConfigApp().getId());
+			}
+		}else
+		{
+			appIds.clear();
+		}
 		List<StatisticAppData> certDatas = statisticAppDataService
-				.findByCreateDateAndOffice(office, startTime, endTime);
+				.findByCreateDateAndOffice(office, startTime, endTime,appIds);
 		List<List<StatisticAppData>> appDatas = new ArrayList<List<StatisticAppData>>();
 		List<ConfigApp> apps = configAppService.selectAll();
 		for (int i = 0; i < apps.size(); i++) {
@@ -310,8 +323,20 @@ public class StatisticDayDataController extends BaseController {
 				end.setHours(23);
 				end.setSeconds(59);
 				end.setMinutes(59);
+				List<ConfigAppOfficeRelation> configAppOfficeRelations=configAppOfficeRelationService.findAllByOfficeId(office);
+				List<Long> appIds=Lists.newArrayList();
+				if(configAppOfficeRelations.size()>0)
+				{
+					for(int i=0;i<configAppOfficeRelations.size();i++)
+					{
+						appIds.add(configAppOfficeRelations.get(i).getConfigApp().getId());
+					}
+				}else
+				{
+					appIds.clear();
+				}
 				List<StatisticAppData> listMonth = statisticAppDataService
-						.findByMonth(office);
+						.findByMonth(office,appIds);
 				if(listMonth.size()>0)
 				{
 					for (StatisticAppData configApp : listMonth) {
