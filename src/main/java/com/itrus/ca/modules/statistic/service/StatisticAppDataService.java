@@ -67,7 +67,31 @@ public class StatisticAppDataService extends BaseService {
 		dc.addOrder(Order.desc("statisticDate"));
 		return statisticAppDataDao.find(dc);
 	}
+	public List<StatisticAppData> findByCreateDateAndOffice(Long office,
+			Date startTime, Date endTime,List<Long> appIds) {
+		DetachedCriteria dc = statisticAppDataDao.createDetachedCriteria();
 
+		if (office != null) {
+			dc.createAlias("office", "office");
+			dc.add(Restrictions.eq("office.id", office));
+		}
+		Calendar startCal = Calendar.getInstance();
+		startCal.setTime(endTime);
+		startCal.add(Calendar.DATE,1);
+		if (startTime != null) {
+			dc.add(Restrictions.ge("statisticDate", startTime));
+		}
+		if (endTime != null) {
+			dc.add(Restrictions.lt("statisticDate", startCal.getTime()));
+		}
+		if(appIds.size()>0&&appIds!=null)
+		{
+			dc.add(Restrictions.in("app.id", appIds));
+		}
+		//dc.addOrder(Order.desc("id"));
+		dc.addOrder(Order.desc("statisticDate"));
+		return statisticAppDataDao.find(dc);
+	}
 	public List<StatisticAppData> findByMonth(ConfigApp configApp, Long office,
 			Date startTime, Date endTime) {
 		DetachedCriteria dc = statisticAppDataDao.createDetachedCriteria();
@@ -97,6 +121,19 @@ public class StatisticAppDataService extends BaseService {
 		if (office != null) {
 			dc.createAlias("office", "office");
 			dc.add(Restrictions.eq("office.id", office));
+		}
+		dc.addOrder(Order.desc("id"));
+		return statisticAppDataDao.find(dc);
+	}
+	public List<StatisticAppData> findByMonth(Long office,List<Long> appIds) {
+		DetachedCriteria dc = statisticAppDataDao.createDetachedCriteria();
+		if (office != null) {
+			dc.createAlias("office", "office");
+			dc.add(Restrictions.eq("office.id", office));
+		}
+		if(appIds.size()>0&&appIds!=null)
+		{
+			dc.add(Restrictions.in("app.id", appIds));
 		}
 		dc.addOrder(Order.desc("id"));
 		return statisticAppDataDao.find(dc);
