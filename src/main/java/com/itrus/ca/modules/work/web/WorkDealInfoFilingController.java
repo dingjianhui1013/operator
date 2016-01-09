@@ -90,7 +90,7 @@ public class WorkDealInfoFilingController extends BaseController {
 			HttpServletResponse response, Model model,
 			@RequestParam(value = "checkIds", required = false) String checkIds) {
 		String url = "modules/work/workDealInfoFilingListF";
-		Page<WorkDealInfo> page = workDealInfoService.find(
+		Page<WorkDealInfo> page = workDealInfoService.findByGuiDang(
 				new Page<WorkDealInfo>(request, response), workDealInfo);
 		model.addAttribute("proType", ProductType.productTypeStrMap);
 		model.addAttribute("wdiType", WorkDealInfoType.WorkDealInfoTypeMap);
