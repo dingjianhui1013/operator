@@ -1348,7 +1348,7 @@ public class WorkDealInfoOperationController extends BaseController {
 		workDealInfo.setWorkCompanyHis(companyHis);
 		workDealInfo.setConfigProduct(workDealInfo1.getConfigProduct());
 	
-			workDealInfo.setYear(0);
+		workDealInfo.setYear(0);
 		
 	
 		
