@@ -53,28 +53,6 @@ public class WorkDealInfoSedController extends BaseController {
 	@Autowired
 	private ConfigRaAccountExtendInfoService configRaAccountExtendInfoService;
 	
-	
-	@RequestMapping(value = "type")
-	@ResponseBody
-	public String type(String name, Long appId, HttpServletRequest request, HttpServletResponse response) {
-		JSONObject json = new JSONObject();
-		try {
-			List<ConfigProduct> list = configProductService.findByName(name, appId);
-	
-			for (ConfigProduct configProduct : list) {
-				if (configProduct.getProductLabel() == 0) {
-					json.put("type0", true);
-				}
-				if (configProduct.getProductLabel() == 1) {
-					json.put("type1", true);
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return json.toString();
-	}
-
 	@RequestMapping(value = "showAgentProduct")
 	@ResponseBody
 	public String showAgentProduct(Long app, String productName, Integer lable, Integer infoType) {

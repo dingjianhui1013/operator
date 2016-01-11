@@ -64,25 +64,10 @@ $(document)
 					$("#agentDetailId").html(styleHtml);
 				});
 			}
-			productLabel();
+			showAgent();
 		});
-
-
-	function productLabel() {
-		var data=$("#product").val();
-		var appId = $("#appId").val();
-		var url = "${ctx}/work/workDealInfoSed/type?name=" + data + "&appId="
-				+ appId+"&_="+new Date().getTime();
-		$.getJSON(url, function(da) {
-			if (da.type1) {
-				showAgent(1);
-			}else if (da.type0) {
-				showAgent(0);
-			}
-		});
-	}
-	function showAgent(obj){
-		var lable = obj;
+	function showAgent(){
+		var lable=$('input[name="lable"]:checked ').val();
 		var productName = $("#product").val();
 		var url = "${ctx}/work/workDealInfoSed/showAgentProduct?lable="+lable+"&productName="+productName+"&app="+$("#appId").val()+"&infoType=0&_="+new Date().getTime();
 		$.getJSON(url,function(data){
@@ -90,7 +75,7 @@ $(document)
 				var styleList = data.boundStyleList;
 				$.each(styleList, function(i, item2){
 					if(i==0){
-						showz(item2.id);
+						showz(item2.id);//页面boundId 没有赋上值，这里重新赋值
 					}
 				});
 			}
