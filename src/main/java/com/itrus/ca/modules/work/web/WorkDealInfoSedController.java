@@ -54,7 +54,6 @@ public class WorkDealInfoSedController extends BaseController {
 	private ConfigRaAccountExtendInfoService configRaAccountExtendInfoService;
 	
 	
-	@RequiresPermissions("work:workDealInfoSed:edit")
 	@RequestMapping(value = "type")
 	@ResponseBody
 	public String type(String name, Long appId, HttpServletRequest request, HttpServletResponse response) {
@@ -76,7 +75,6 @@ public class WorkDealInfoSedController extends BaseController {
 		return json.toString();
 	}
 
-	@RequiresPermissions("work:workDealInfoSed:view")
 	@RequestMapping(value = "showAgentProduct")
 	@ResponseBody
 	public String showAgentProduct(Long app, String productName, Integer lable, Integer infoType) {
@@ -145,7 +143,6 @@ public class WorkDealInfoSedController extends BaseController {
 		}
 		return json.toString();
 	}
-	@RequiresPermissions("work:workDealInfoSed:view")
 	@RequestMapping(value = "showYearNew")
 	@ResponseBody
 	public String showYearNew(Long boundId, Integer infoType) {
