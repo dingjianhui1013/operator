@@ -1,4 +1,5 @@
 /**
+
  * There are <a href="https://github.com/thinkgem/jeesite">JeeSite</a> code generation
  */
 package com.itrus.ca.modules.work.web;
@@ -408,8 +409,8 @@ public class WorkDealInfoAuditController extends BaseController {
 		if (payInfo != null) {
 			SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			String companyName = workDealInfo.getWorkCompany().getCompanyName();
-			String userName = workDealInfo.getCreateBy().getName();
-			String officeName = workDealInfo.getCreateBy().getOffice().getName();
+			String userName = workDealInfo.getPayUser().getName();
+			String officeName = workDealInfo.getPayUser().getOffice().getName();
 			String date = sdf1.format(workDealInfo.getCreateDate());
 			if (payInfo.getMethodMoney() && payInfo.getMoney() > 0L) {
 				String[] s = new String[] { payInfo.getSn(), companyName, payInfo.getMoney().toString(), officeName,
