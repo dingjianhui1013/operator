@@ -159,13 +159,11 @@
 
 	function buttonFrom(){
 		$("#tf").removeAttr("onclick"); 
-		alert("11111");
 		var keys = ukeyadmin.refresh(); //检测KEY
-		alert(keys);
 		if (keys == 0) {
 			alert("没有检测到key");
+			$("#tf").attr("onclick", "buttonFrom()");
 		}else{
-			top.$.jBox.tip("正在进行退费...", 'loading');
 			var csr;
 			var len = 1024;
 			var selectedItem = $("option:selected", $("[name=provider]")[0]);
@@ -178,32 +176,32 @@
 			}
 			csr = getCsrByOldCert(len);
 			if (csr) {
-				var keySnDealInfo = "${workDealInfo.keySn }";
-				var keySn = $("#keySn").val();
-				if (keySnDealInfo != keySn) {
-
-					$("#tf").attr("onclick", "buttonFrom()");
-
-					top.$.jBox.tip("业务办理时keySn与此keySn不相同，请手动调节keySn序列号");
-				} else {
-					var revoke = 1;//不吊销
-					if ($("#revoke").prop("checked")) {
-						revoke = 0;//吊销
-					}
-					
-					
-					if ($('#tKey').is(':checked')) {
-						
+				top.$.jBox.tip("正在进行退费...", 'loading');
+				var revoke = 1;//不吊销
+				if ($("#revoke").prop("checked")) {
+					revoke = 0;//吊销
+				}
+				if ($('#tKey').is(':checked')) {
+					var keySnDealInfo = "${workDealInfo.keySn }";
+					var keySn = $("#keySn").val();
+					if (keySnDealInfo != keySn) {
+	
+						$("#tf").attr("onclick", "buttonFrom()");
+	
+						top.$.jBox.tip("业务办理时keySn与此keySn不相同，请手动调节keySn序列号");
+					} else {
 						window.location.href = "${ctx}/work/workDealInfoAudit/backMoney1?id=${workDealInfo.id}&revoke="
 							+ revoke
 							+ "&keySn="
 							+ keySn
 							+ "&receiptAmount=" + $("#tfpVal").val();
-					}else {
-						window.location.href = "${ctx}/work/workDealInfoAudit/backMoney1?id=${workDealInfo.id}&revoke="
-								+ revoke + "&receiptAmount=" + $("#tfpVal").val();
 					}
+				}else{
+					alert(revoke);
+					window.location.href = "${ctx}/work/workDealInfoAudit/backMoney1?id=${workDealInfo.id}&revoke="
+						+ revoke + "&receiptAmount=" + $("#tfpVal").val();
 				}
+				
 			}
 		}
 	}

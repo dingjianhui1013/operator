@@ -626,7 +626,9 @@ public class WorkDealInfoAuditController extends BaseController {
 	 */
 	@RequestMapping("backMoney1")
 	public String backMoney1(Long id, HttpServletRequest request, HttpServletResponse response, String receiptAmount,
-			Model model, Integer revoke, String keySn) {
+			Model model, Integer revoke, 
+			@RequestParam(required = false)String keySn
+			) {
 		WorkDealInfo dealInfo = workDealInfoService.get(id);
 		if ("1".equals(dealInfo.getDelFlag())) {// 判断是否进行过退费，防止浏览器回退再次退费
 			return "redirect:" + Global.getAdminPath() + "/work/workDealInfo/list";

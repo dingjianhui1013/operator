@@ -292,6 +292,8 @@ public class WorkDealInfoController extends BaseController {
 		page.setList(noIxinInfos);
 
 		model.addAttribute("workType", workDealInfo.getDealInfoStatus());
+		
+		model.addAttribute("proList", ProductType.getProductTypeList());
 
 		model.addAttribute("proType", ProductType.productTypeStrMap);
 		model.addAttribute("wdiType", WorkDealInfoType.WorkDealInfoTypeMap);
@@ -7153,22 +7155,29 @@ public class WorkDealInfoController extends BaseController {
 					tip = "'" + dealInfo.getWorkCompany().getCompanyName() + "'单位的证书未在更新范围内！";
 					companyNames.add(tip);
 				} else {
-					ConfigChargeAgent configChargeAgent = configChargeAgentService
-							.get(dealInfo.getConfigChargeAgentId());
-
-					Integer agentSize = configAgentBoundDealInfoService.findByAgentIdDealIds(configChargeAgent.getId(),
-							dealIdList);
-
-					if (configChargeAgent.getSurplusUpdateNum()==null) {
-						tip = "'" + dealInfo.getWorkCompany().getCompanyName() + "'单位绑定'"
-								+ configChargeAgent.getTempName() + "'缴费模板剩余更新数量为空！";
+					if(dealInfo.getConfigChargeAgentId()==null){
+						tip = "'" + dealInfo.getWorkCompany().getCompanyName() + "'单位未绑定计费策略模板!";
 						companyNames.add(tip);
-					}else if (configChargeAgent.getSurplusUpdateNum() < agentSize) {
-						tip = "'" + dealInfo.getWorkCompany().getCompanyName() + "'单位绑定'"
-								+ configChargeAgent.getTempName() + "'缴费模板剩余更新数量不足！";
-						companyNames.add(tip);
+						continue;
+					}else{
+						ConfigChargeAgent configChargeAgent = configChargeAgentService
+								.get(dealInfo.getConfigChargeAgentId());
+	
+						Integer agentSize = configAgentBoundDealInfoService.findByAgentIdDealIds(configChargeAgent.getId(),
+								dealIdList);
+						
+						if (!configChargeAgent.getTempStyle().equals("1")) {
+							if (configChargeAgent.getSurplusUpdateNum()==null) {
+								tip = "'" + dealInfo.getWorkCompany().getCompanyName() + "'单位绑定'"
+										+ configChargeAgent.getTempName() + "'缴费模板剩余更新数量为空！";
+								companyNames.add(tip);
+							}else if (configChargeAgent.getSurplusUpdateNum() < agentSize) {
+								tip = "'" + dealInfo.getWorkCompany().getCompanyName() + "'单位绑定'"
+										+ configChargeAgent.getTempName() + "'缴费模板剩余更新数量不足！";
+								companyNames.add(tip);
+							}
+						}
 					}
-
 				}
 
 			}
