@@ -16,8 +16,11 @@
 	$(document).ready(function() {
 		
 		//itrusukeyadmin.CAB,检测KEY序列号
+		
 		var urlArray = new Array();
+		
 		urlArray = window.location.toString().split('/');
+		
 	    var base = urlArray[0]+'//' + window.location.host + '/' + urlArray[3];	    
 	    var objStr = "<object id='ukeyadmin2' codebase='"+base+"/download/itrusukeyadmin.cab#version=3,1,15,1012' classid='clsid:05395F06-244C-4599-A359-5F442B857C28'></object>";
 	    ukeyadmin = $(objStr).appendTo(document.body)[0];
@@ -246,14 +249,40 @@
 									top.$.jBox.info("此业务已经办理完成！");
 									return false;
 								}else{
-
 									var selectedItem = $("option:selected", $("[name=provider]")[0]);
 									var cspStr = encodeURI(encodeURI(selectedItem.text()));
 									var url = "${ctx}/ca/validateCspIsValid?csp="+cspStr+"&_=" + new Date().getTime();
-									$.getJSON(url,
-											function(data){
-											quick(sn);
+									var submit = function (v, h, f) {
+										if(v==true){
+											$.getJSON(url,
+													function(data){
+													quick(sn);
+											});
+										}
+									};
+									var updateUrl = "${ctx}/ca/installResult?dealInfoId=${workDealInfo.id}&result="+t+"&_="+new Date().getTime();
+
+									$.getJSON(updateUrl,function(res) {
+										if (res.status == 1) {
+											var html = "<div class='control-group'><label class='control-label'>证书序列号:</label><div class='controls'>"+data.sn+"</div></div>";
+											html += "<div class='control-group'><label class='control-label'>颁发者:</label><div class='controls'>"+data.issuer+"</div></div>";
+											html += "<div class='control-group'><label class='control-label'>主题:</label><div class='controls'>"+data.subject+"</div></div>";
+											html += "<div class='control-group'><label class='control-label'>有效起止日期:</label><div class='controls'>"+data.notbefore+"至"+data.notafter+"</div></div>";
+											
+											top.$.jBox.confirm(html, "证书信息", submit, {
+												buttons : {
+													'确认制证' : true,
+													'返回' : false
+												}
+											});
+										} else {
+											top.$.jBox
+													.tip("出库失败，请检查是否有该类型库存");
+											window.location.href = "${ctx}/work/workDealInfo/list";
+										}
 									});
+									
+									
 									
 									
 								}
@@ -286,7 +315,7 @@
 				alert("没有检测到UKEY");
 			}
 		}
-		
+		 
 		
 	}
 

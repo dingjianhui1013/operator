@@ -2,6 +2,7 @@ package com.itrus.ca.modules.work.web;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -66,120 +67,118 @@ import com.itrus.ca.modules.work.service.WorkLogService;
 public class CertController extends BaseController {
 	@Autowired
 	SystemService systemService;
-	
+
 	@Autowired
 	WorkDealInfoService workDealInfoService;
-	
+
 	@Autowired
 	ConfigRaAccountService raAccountService;
-	
+
 	@Autowired
 	ConfigRaAccountExtendInfoService configRaAccountExtendInfoService;
-	
+
 	@Autowired
 	CaService caService;
-	
+
 	@Autowired
 	private WorkCertInfoService workCertInfoService;
 	@Autowired
 	ReceiptInvoiceService receiptInvoiceService;
-	
+
 	@Autowired
 	KeyUsbKeyInvoiceService keyInvoiceService;
-	
+
 	@Autowired
 	UpdateQuantityStatistics updateQuantityStatistics;
-	
+
 	private LogUtil logUtil = new LogUtil();
-	
+
 	@Autowired
 	ConfigSupplierProductRelationDao configSupplierProductRelationDao;
-	
+
 	@Autowired
 	WorkLogService workLogService;
-	
+
 	@Autowired
 	private ConfigAgentBoundDealInfoService configAgentBoundDealInfoService;
-	
+
 	@Autowired
 	private ConfigChargeAgentService configChargeAgentService;
-	
+
 	private static String dzsBH = new PropertiesUtil("application.properties").readValue("dzsUrl");
-	
+
 	/**
 	 * 制证前判断是否入库
+	 * 
 	 * @param csp
 	 * @return
-	 * @throws JSONException 
+	 * @throws JSONException
 	 */
-	@RequestMapping(value="validateCspIsValid")
+	@RequestMapping(value = "validateCspIsValid")
 	@ResponseBody
-	public String validateCspValid(String csp) throws JSONException{
+	public String validateCspValid(String csp) throws JSONException {
 		JSONObject json = new JSONObject();
 		try {
 			json.put("status", -1);
 			csp = URLDecoder.decode(csp, "UTF-8");
-			boolean result =  keyInvoiceService.validateCSPvalid(csp);
-			json.put("status", result? 1:-1);
+			boolean result = keyInvoiceService.validateCSPvalid(csp);
+			json.put("status", result ? 1 : -1);
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return json.toString();
 	}
-	
-	@RequestMapping(value="validateCspIsValidNew")
+
+	@RequestMapping(value = "validateCspIsValidNew")
 	@ResponseBody
-	public String validateCspIsValidNew(String csp, Long dealId, String keySn) throws JSONException{
+	public String validateCspIsValidNew(String csp, Long dealId, String keySn) throws JSONException {
 		JSONObject json = new JSONObject();
 		try {
 			json.put("status", -1);
 			csp = URLDecoder.decode(csp, "UTF-8");
-			boolean result =  keyInvoiceService.validateCSPvalid(csp);
-			json.put("status", result? 1:-1);
-			
-			
+			boolean result = keyInvoiceService.validateCSPvalid(csp);
+			json.put("status", result ? 1 : -1);
+
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return json.toString();
 	}
-	
-	
-	
-	
-	
-	@RequestMapping(value = "makeCert")
+
+	@RequestMapping(value = "checkZhengShu")
 	@ResponseBody
-	public String makeCert(Long dealInfoId,String reqOverrideValidity, String addCertDays,
-			String certProvider,String csr,String keySn) throws JSONException {
+	public String checkZhengShu(Long dealInfoId, String day, String addCertDays, String certProvider, String csr,
+			String keySn) throws JSONException {
 		JSONObject json = new JSONObject();
+
+		if(dealInfoId!=null){
 		WorkDealInfo dealInfo = workDealInfoService.get(dealInfoId);
+		
 		try {
+			WorkCertInfo caCert = dealInfo.getWorkCertInfo();
 			certProvider = URLDecoder.decode(certProvider, "UTF-8");
-			if (certProvider.length()!=0) {
-				boolean inStore =  keyInvoiceService.validateCSPvalid(certProvider);
+			if (certProvider.length() != 0) {
+				boolean inStore = keyInvoiceService.validateCSPvalid(certProvider);
 				if (!inStore) {
 					json.put("status", -1);
-					json.put("msg", "当前网点无"+certProvider+"库存，申请证书失败！");
+					json.put("msg", "当前网点无" + certProvider + "库存，申请证书失败！");
 					return json.toString();
 				}
 			}
-			WorkCertInfo caCert = dealInfo.getWorkCertInfo();
+			
 			WorkCertApplyInfo applyInfo = caCert.getWorkCertApplyInfo();
-			if (reqOverrideValidity != null) {
-				reqOverrideValidity = reqOverrideValidity.replace(",", "");
-				caCert.setReqOverrideValidity(Integer
-						.valueOf(reqOverrideValidity) + Integer.valueOf(addCertDays));
+			if (day != null) {
+				day = day.replace(",", "");
+				caCert.setReqOverrideValidity(Integer.valueOf(day) + Integer.valueOf(addCertDays));
 			} else {
 				caCert.setReqOverrideValidity(365);
 			}
 			caCert.setProvider(certProvider);
 			json.put("status", -1);
 			if (caCert.getReqBuf() == null) {
-				String result = java.net.URLDecoder.decode(
-						csr, "UTF-8");
+				String result = java.net.URLDecoder.decode(csr, "UTF-8");
 				caCert.setReqBuf(csr);
 			}
 			Calendar cal = Calendar.getInstance();
@@ -189,153 +188,157 @@ public class CertController extends BaseController {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
 			Integer sort = 1;
 			Integer amount = 1;
-			if (caCert.getSignBuf()==null||caCert.getSignBuf().length()==0) {//异常业务安装证书可能不需要再次申请
+			if (caCert.getSignBuf() == null || caCert.getSignBuf().length() == 0) {// 异常业务安装证书可能不需要再次申请
 				try {
-					if (dealInfo.getPrevId()==null) {
-						//个人证书
+					if (dealInfo.getPrevId() == null) {
+						// 个人证书
 						if (dealInfo.getConfigProduct().getProductName().equals("1")) {
-							
+
 							String orgNum = dealInfo.getWorkCompany().getOrganizationNumber();
-							
+
 							Integer certSortInteger = workDealInfoService.getCertSortByOrganizationNumber(orgNum, 1);
-//							String url = dzsBH;
-//							Map<String, String> params = new HashMap<String, String>();
-//							params.put("param1", "按单位组织机构代码(含企业和机构证书)查单位证书");
-//							params.put("param2", orgNum);
+							// String url = dzsBH;
+							// Map<String, String> params = new HashMap<String,
+							// String>();
+							// params.put("param1", "按单位组织机构代码(含企业和机构证书)查单位证书");
+							// params.put("param2", orgNum);
 							Integer certSortIntegerSC = 0;
-//							String res =HttpClientUtil.post(url, params);
-//							if (!res.equals("")) {
-//
-//								JSONObject jsonReturn = new JSONObject(res); 
-//								
-//								String status = jsonReturn.getString("status");
-//								if (status.equals("success")) {
-//									certSortIntegerSC = jsonReturn.getInt("certsInSccA");
-//								}
-//							}
-							if (certSortInteger>certSortIntegerSC) {
-								dealInfo.setCertSort(certSortInteger+1);
-							}else{
-								dealInfo.setCertSort(certSortIntegerSC+1);
+							// String res =HttpClientUtil.post(url, params);
+							// if (!res.equals("")) {
+							//
+							// JSONObject jsonReturn = new JSONObject(res);
+							//
+							// String status = jsonReturn.getString("status");
+							// if (status.equals("success")) {
+							// certSortIntegerSC =
+							// jsonReturn.getInt("certsInSccA");
+							// }
+							// }
+							if (certSortInteger > certSortIntegerSC) {
+								dealInfo.setCertSort(certSortInteger + 1);
+							} else {
+								dealInfo.setCertSort(certSortIntegerSC + 1);
 							}
-							
-						}else if(dealInfo.getConfigProduct().getProductName().equals("2") || dealInfo.getConfigProduct().getProductName().equals("6")){
-							
-							String conName =  dealInfo.getWorkUser().getContactName();
+
+						} else if (dealInfo.getConfigProduct().getProductName().equals("2")
+								|| dealInfo.getConfigProduct().getProductName().equals("6")) {
+
+							String conName = dealInfo.getWorkUser().getContactName();
 							String conCertNumber = dealInfo.getWorkUser().getConCertNumber();
 							Integer certSortIntegerSC = 0;
 							Integer certSortInteger = 0;
-							if (conCertNumber!=null && !conCertNumber.equals("")) {
+							if (conCertNumber != null && !conCertNumber.equals("")) {
 								certSortInteger = workDealInfoService.getCertSortByConCertNumber(conCertNumber);
 								String url = dzsBH;
 								Map<String, String> params = new HashMap<String, String>();
 								params.put("param1", "按个人证件号(含企业和机构个人)查个人证书");
 								params.put("param2", conCertNumber);
-								String res =HttpClientUtil.post(url, params);
+								String res = HttpClientUtil.post(url, params);
 								if (!res.equals("")) {
-									JSONObject jsonReturn = new JSONObject(res); 
+									JSONObject jsonReturn = new JSONObject(res);
 									String status = jsonReturn.getString("status");
 									if (status.equals("success")) {
 										certSortIntegerSC = jsonReturn.getInt("certsInSccA");
 									}
 								}
-							}else if (conName!=null && !conName.equals("")) {
+							} else if (conName != null && !conName.equals("")) {
 								certSortInteger = workDealInfoService.getCertSortByContactName(conName);
 								String url = dzsBH;
 								Map<String, String> params = new HashMap<String, String>();
 								params.put("param1", "按个人姓名(含企业和机构个人)号查个人证书");
 								params.put("param2", conName);
-								String res =HttpClientUtil.post(url, params);
+								String res = HttpClientUtil.post(url, params);
 								if (!res.equals("")) {
-									JSONObject jsonReturn = new JSONObject(res); 
+									JSONObject jsonReturn = new JSONObject(res);
 									String status = jsonReturn.getString("status");
 									if (status.equals("success")) {
 										certSortIntegerSC = jsonReturn.getInt("certsInSccA");
 									}
 								}
 							}
-							
-							if (certSortInteger>certSortIntegerSC) {
-								dealInfo.setCertSort(certSortInteger+1);
-							}else{
-								dealInfo.setCertSort(certSortIntegerSC+1);
+
+							if (certSortInteger > certSortIntegerSC) {
+								dealInfo.setCertSort(certSortInteger + 1);
+							} else {
+								dealInfo.setCertSort(certSortIntegerSC + 1);
 							}
-							
-							
-						}else if(dealInfo.getConfigProduct().getProductName().equals("3")){
-							
+
+						} else if (dealInfo.getConfigProduct().getProductName().equals("3")) {
+
 							String orgNum = dealInfo.getWorkCompany().getOrganizationNumber();
 							String comPanyName = dealInfo.getWorkCompany().getCompanyName();
-							
+
 							Integer certSortIntegerSC = 0;
 							Integer certSortInteger = 0;
-							
-							if(orgNum!=null && !orgNum.equals("")) {
-								certSortInteger = workDealInfoService.getCertSortByOrganizationNumber(orgNum,3);
-							
+
+							if (orgNum != null && !orgNum.equals("")) {
+								certSortInteger = workDealInfoService.getCertSortByOrganizationNumber(orgNum, 3);
+
 								String url = dzsBH;
 								Map<String, String> params = new HashMap<String, String>();
 								params.put("param1", "按单位组织机构代码(含企业和机构证书)查单位证书");
 								params.put("param2", orgNum);
-								String res =HttpClientUtil.post(url, params);
+								String res = HttpClientUtil.post(url, params);
 								if (!res.equals("")) {
-									JSONObject jsonReturn = new JSONObject(res); 
+									JSONObject jsonReturn = new JSONObject(res);
 									String status = jsonReturn.getString("status");
 									if (status.equals("success")) {
 										certSortIntegerSC = jsonReturn.getInt("certsInSccA");
 									}
 								}
-							}else if(comPanyName!=null && !comPanyName.equals("")){
-								certSortInteger = workDealInfoService.getCertSortByCompanyName(comPanyName,3);
+							} else if (comPanyName != null && !comPanyName.equals("")) {
+								certSortInteger = workDealInfoService.getCertSortByCompanyName(comPanyName, 3);
 								String url = dzsBH;
 								Map<String, String> params = new HashMap<String, String>();
 								params.put("param1", "按单位名称(含企业和机构证书)查单位证书 ");
 								params.put("param2", comPanyName);
-								String res =HttpClientUtil.post(url, params);
+								String res = HttpClientUtil.post(url, params);
 								if (!res.equals("")) {
-									JSONObject jsonReturn = new JSONObject(res); 
+									JSONObject jsonReturn = new JSONObject(res);
 									String status = jsonReturn.getString("status");
 									if (status.equals("success")) {
 										certSortIntegerSC = jsonReturn.getInt("certsInSccA");
 									}
 								}
 							}
-							if (certSortInteger>certSortIntegerSC) {
-								dealInfo.setCertSort(certSortInteger+1);
-							}else{
-								dealInfo.setCertSort(certSortIntegerSC+1);
+							if (certSortInteger > certSortIntegerSC) {
+								dealInfo.setCertSort(certSortInteger + 1);
+							} else {
+								dealInfo.setCertSort(certSortIntegerSC + 1);
 							}
-						}else {
+						} else {
 							dealInfo.setCertSort(sort);
 						}
-					}else {
+					} else {
 						dealInfo.setCertSort(workDealInfoService.get(dealInfo.getPrevId()).getCertSort());
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				//取RA配置
+				// 取RA配置
 				ConfigRaAccount raAccount = raAccountService.get(dealInfo.getConfigProduct().getRaAccountId());
-				//取RA配置模版项
-				ConfigRaAccountExtendInfo extendInfo = configRaAccountExtendInfoService.get(dealInfo.getConfigProduct().getRaAccountExtedId());
-				if (raAccount==null||extendInfo==null) {
+				// 取RA配置模版项
+				ConfigRaAccountExtendInfo extendInfo = configRaAccountExtendInfoService
+						.get(dealInfo.getConfigProduct().getRaAccountExtedId());
+				if (raAccount == null || extendInfo == null) {
 					json.put("status", -1);
 					json.put("msg", "CA配置错误：无证书注册项模板");
 					return json.toString();
 				}
-//				if (raAccount==null||raAccount.getConfigRaAccountExtendInfo()==null||raAccount.getConfigRaAccountExtendInfo().getId()==null) {
-//					json.put("status", -1);
-//					json.put("msg", "CA配置错误：无证书注册项模板");
-//					return json.toJSONString();
-//				}
-				
+				// if
+				// (raAccount==null||raAccount.getConfigRaAccountExtendInfo()==null||raAccount.getConfigRaAccountExtendInfo().getId()==null)
+				// {
+				// json.put("status", -1);
+				// json.put("msg", "CA配置错误：无证书注册项模板");
+				// return json.toJSONString();
+				// }
+
 				CertificateRequest request = RaAccountUtil.outRequest(dealInfo, extendInfo);
 				System.out.println("==========");
 				System.out.println(caCert.getReqBuf());
-				
-				CertificateResponse certificateResponse = caService.getCaCert(
-						request, caCert.getReqBuf(),
-						Integer.valueOf(reqOverrideValidity) + Integer.valueOf(addCertDays), raAccount);
+
+				CertificateResponse certificateResponse = caService.getCaCertOne(request, caCert.getReqBuf(),
+						Integer.valueOf(day) + Integer.valueOf(addCertDays), raAccount);
 
 				caCert.setType(certificateResponse.getCertType());
 				caCert.setSignBuf(certificateResponse.getCertSignBuf());
@@ -343,21 +346,18 @@ public class CertController extends BaseController {
 				caCert.setIssuerDn(certificateResponse.getCertIssuerDn());
 				caCert.setIssuerHashMd5(certificateResponse.getCertIssuerHashMd5());
 				caCert.setNotafter(sdf.parse(certificateResponse.getCertNotAfter()));
-				caCert.setNotbefore(sdf.parse(certificateResponse
-						.getCertNotBefore()));
+				caCert.setNotbefore(sdf.parse(certificateResponse.getCertNotBefore()));
 				caCert.setReqBuf(certificateResponse.getCertReqBuf());
 				caCert.setReqBufType(certificateResponse.getCertReqBufType());
-				caCert.setReqOverrideValidity(Integer.valueOf(certificateResponse
-						.getCertReqOverrideValidity()));
-				caCert.setSignDate(new Date());				
+				caCert.setReqOverrideValidity(Integer.valueOf(certificateResponse.getCertReqOverrideValidity()));
+				caCert.setSignDate(new Date());
 				caCert.setSubjectDn(certificateResponse.getCertSubjectDn());
-				caCert.setSubjectHashMd5(certificateResponse
-						.getCertSubjectHashMd5());
+				caCert.setSubjectHashMd5(certificateResponse.getCertSubjectHashMd5());
 				caCert.setSignBufP7(certificateResponse.getCertSignBufP7());
 				caCert.setObtained(false);
 				caCert.setTrustDeviceCount(1);
 				caCert.setTrustDeviceDate(caCert.getNotafter());
-				//支持双证
+				// 支持双证
 				caCert.setCertKmcRep1(certificateResponse.getCertKmcRep1());
 				caCert.setCertKmcRep2(certificateResponse.getCertKmcRep2());
 				caCert.setCertKmcRep3(certificateResponse.getCertKmcRep3());
@@ -367,10 +367,273 @@ public class CertController extends BaseController {
 				caCert.setCertReqBufTypeKmc(certificateResponse.getCertReqBufTypeKmc());
 				caCert.setCertSerialnumberKmc(certificateResponse.getCertSerialnumberKmc());
 				caCert.setInstallMode(certificateResponse.getInstallMode());
-				if (caCert.getCertSignBufKmc()!=null) {
+				
+				//workCertInfoService.save(caCert);
+				caCert.setCreateDate(workCertInfoService.getCreateDate(caCert.getId()));
+				//workCertInfoService.save(caCert);
+				dealInfo.setCertSn(caCert.getSerialnumber());
+				dealInfo.setKeySn(keySn);
+				dealInfo.setBusinessCardUser(UserUtils.getUser());
+				dealInfo.setBusinessCardUserDate(new Date());
+				dealInfo.setNotafter(caCert.getNotafter());
+				dealInfo.setAddCertDays(Integer.parseInt(addCertDays));
+				
+			}
+
+			SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			json.put("status", 1);
+			json.put("sn", caCert.getSerialnumber());// 序列号
+			json.put("signBufP7",caCert.getSignBufP7());
+			json.put("signBuf", caCert.getSignBuf());
+			json.put("msg", "申请成功");
+			json.put("notbefore", sdf1.format(caCert.getNotbefore()));
+			json.put("notafter", sdf1.format(caCert.getNotafter()));// 有效期
+			json.put("issuer", caCert.getIssuerDn());// 颁发者
+			json.put("subject", caCert.getSubjectDn());// 主题
+			json.put("certKmcBuf", caCert.getCertSignBufKmc());
+			json.put("certKmcRep1", caCert.getCertKmcRep1());
+			json.put("certKmcRep2", caCert.getCertKmcRep2());
+			json.put("installMode", caCert.getInstallMode());
+			json.put("sort", dealInfo.getCertSort());
+		} catch (Exception e) {
+			e.printStackTrace();
+			json.put("status", -1);
+			json.put("msg", "申请证书失败");
+			// 异常业务
+			dealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_ABNORMAL_USER);// 异常业务
+			workDealInfoService.save(dealInfo);
+		}
+		}
+		logUtil.saveSysLog("业务中心", "检查证书：编号" + dealInfoId, "");
+		return json.toString();
+		
+	}
+
+		
+	
+		
+
+	
+	@RequestMapping(value = "makeCert")
+	@ResponseBody
+	public String makeCert(Long dealInfoId, String reqOverrideValidity, String addCertDays, String certProvider,
+			String csr, String keySn) throws JSONException {
+		JSONObject json = new JSONObject();
+		WorkDealInfo dealInfo = workDealInfoService.get(dealInfoId);
+		try {
+			certProvider = URLDecoder.decode(certProvider, "UTF-8");
+			if (certProvider.length() != 0) {
+				boolean inStore = keyInvoiceService.validateCSPvalid(certProvider);
+				if (!inStore) {
+					json.put("status", -1);
+					json.put("msg", "当前网点无" + certProvider + "库存，申请证书失败！");
+					return json.toString();
+				}
+			}
+			WorkCertInfo caCert = dealInfo.getWorkCertInfo();
+			WorkCertApplyInfo applyInfo = caCert.getWorkCertApplyInfo();
+			if (reqOverrideValidity != null) {
+				reqOverrideValidity = reqOverrideValidity.replace(",", "");
+				caCert.setReqOverrideValidity(Integer.valueOf(reqOverrideValidity) + Integer.valueOf(addCertDays));
+			} else {
+				caCert.setReqOverrideValidity(365);
+			}
+			caCert.setProvider(certProvider);
+			json.put("status", -1);
+			if (caCert.getReqBuf() == null) {
+				String result = java.net.URLDecoder.decode(csr, "UTF-8");
+				caCert.setReqBuf(csr);
+			}
+			Calendar cal = Calendar.getInstance();
+			// cal.add(Calendar.DAY_OF_MONTH, caCert.getReqOverrideValidity());
+			Date da = cal.getTime();
+			// caCert.setNotafter(da);
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+			Integer sort = 1;
+			Integer amount = 1;
+			if (caCert.getSignBuf() == null || caCert.getSignBuf().length() == 0) {// 异常业务安装证书可能不需要再次申请
+				try {
+					if (dealInfo.getPrevId() == null) {
+						// 个人证书
+						if (dealInfo.getConfigProduct().getProductName().equals("1")) {
+
+							String orgNum = dealInfo.getWorkCompany().getOrganizationNumber();
+
+							Integer certSortInteger = workDealInfoService.getCertSortByOrganizationNumber(orgNum, 1);
+							// String url = dzsBH;
+							// Map<String, String> params = new HashMap<String,
+							// String>();
+							// params.put("param1", "按单位组织机构代码(含企业和机构证书)查单位证书");
+							// params.put("param2", orgNum);
+							Integer certSortIntegerSC = 0;
+							// String res =HttpClientUtil.post(url, params);
+							// if (!res.equals("")) {
+							//
+							// JSONObject jsonReturn = new JSONObject(res);
+							//
+							// String status = jsonReturn.getString("status");
+							// if (status.equals("success")) {
+							// certSortIntegerSC =
+							// jsonReturn.getInt("certsInSccA");
+							// }
+							// }
+							if (certSortInteger > certSortIntegerSC) {
+								dealInfo.setCertSort(certSortInteger + 1);
+							} else {
+								dealInfo.setCertSort(certSortIntegerSC + 1);
+							}
+
+						} else if (dealInfo.getConfigProduct().getProductName().equals("2")
+								|| dealInfo.getConfigProduct().getProductName().equals("6")) {
+
+							String conName = dealInfo.getWorkUser().getContactName();
+							String conCertNumber = dealInfo.getWorkUser().getConCertNumber();
+							Integer certSortIntegerSC = 0;
+							Integer certSortInteger = 0;
+							if (conCertNumber != null && !conCertNumber.equals("")) {
+								certSortInteger = workDealInfoService.getCertSortByConCertNumber(conCertNumber);
+								String url = dzsBH;
+								Map<String, String> params = new HashMap<String, String>();
+								params.put("param1", "按个人证件号(含企业和机构个人)查个人证书");
+								params.put("param2", conCertNumber);
+								String res = HttpClientUtil.post(url, params);
+								if (!res.equals("")) {
+									JSONObject jsonReturn = new JSONObject(res);
+									String status = jsonReturn.getString("status");
+									if (status.equals("success")) {
+										certSortIntegerSC = jsonReturn.getInt("certsInSccA");
+									}
+								}
+							} else if (conName != null && !conName.equals("")) {
+								certSortInteger = workDealInfoService.getCertSortByContactName(conName);
+								String url = dzsBH;
+								Map<String, String> params = new HashMap<String, String>();
+								params.put("param1", "按个人姓名(含企业和机构个人)号查个人证书");
+								params.put("param2", conName);
+								String res = HttpClientUtil.post(url, params);
+								if (!res.equals("")) {
+									JSONObject jsonReturn = new JSONObject(res);
+									String status = jsonReturn.getString("status");
+									if (status.equals("success")) {
+										certSortIntegerSC = jsonReturn.getInt("certsInSccA");
+									}
+								}
+							}
+
+							if (certSortInteger > certSortIntegerSC) {
+								dealInfo.setCertSort(certSortInteger + 1);
+							} else {
+								dealInfo.setCertSort(certSortIntegerSC + 1);
+							}
+
+						} else if (dealInfo.getConfigProduct().getProductName().equals("3")) {
+
+							String orgNum = dealInfo.getWorkCompany().getOrganizationNumber();
+							String comPanyName = dealInfo.getWorkCompany().getCompanyName();
+
+							Integer certSortIntegerSC = 0;
+							Integer certSortInteger = 0;
+
+							if (orgNum != null && !orgNum.equals("")) {
+								certSortInteger = workDealInfoService.getCertSortByOrganizationNumber(orgNum, 3);
+
+								String url = dzsBH;
+								Map<String, String> params = new HashMap<String, String>();
+								params.put("param1", "按单位组织机构代码(含企业和机构证书)查单位证书");
+								params.put("param2", orgNum);
+								String res = HttpClientUtil.post(url, params);
+								if (!res.equals("")) {
+									JSONObject jsonReturn = new JSONObject(res);
+									String status = jsonReturn.getString("status");
+									if (status.equals("success")) {
+										certSortIntegerSC = jsonReturn.getInt("certsInSccA");
+									}
+								}
+							} else if (comPanyName != null && !comPanyName.equals("")) {
+								certSortInteger = workDealInfoService.getCertSortByCompanyName(comPanyName, 3);
+								String url = dzsBH;
+								Map<String, String> params = new HashMap<String, String>();
+								params.put("param1", "按单位名称(含企业和机构证书)查单位证书 ");
+								params.put("param2", comPanyName);
+								String res = HttpClientUtil.post(url, params);
+								if (!res.equals("")) {
+									JSONObject jsonReturn = new JSONObject(res);
+									String status = jsonReturn.getString("status");
+									if (status.equals("success")) {
+										certSortIntegerSC = jsonReturn.getInt("certsInSccA");
+									}
+								}
+							}
+							if (certSortInteger > certSortIntegerSC) {
+								dealInfo.setCertSort(certSortInteger + 1);
+							} else {
+								dealInfo.setCertSort(certSortIntegerSC + 1);
+							}
+						} else {
+							dealInfo.setCertSort(sort);
+						}
+					} else {
+						dealInfo.setCertSort(workDealInfoService.get(dealInfo.getPrevId()).getCertSort());
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				// 取RA配置
+				ConfigRaAccount raAccount = raAccountService.get(dealInfo.getConfigProduct().getRaAccountId());
+				// 取RA配置模版项
+				ConfigRaAccountExtendInfo extendInfo = configRaAccountExtendInfoService
+						.get(dealInfo.getConfigProduct().getRaAccountExtedId());
+				if (raAccount == null || extendInfo == null) {
+					json.put("status", -1);
+					json.put("msg", "CA配置错误：无证书注册项模板");
+					return json.toString();
+				}
+				// if
+				// (raAccount==null||raAccount.getConfigRaAccountExtendInfo()==null||raAccount.getConfigRaAccountExtendInfo().getId()==null)
+				// {
+				// json.put("status", -1);
+				// json.put("msg", "CA配置错误：无证书注册项模板");
+				// return json.toJSONString();
+				// }
+
+				CertificateRequest request = RaAccountUtil.outRequest(dealInfo, extendInfo);
+				System.out.println("==========");
+				System.out.println(caCert.getReqBuf());
+
+				CertificateResponse certificateResponse = caService.getCaCert(request, caCert.getReqBuf(),
+						Integer.valueOf(reqOverrideValidity) + Integer.valueOf(addCertDays), raAccount);
+
+				caCert.setType(certificateResponse.getCertType());
+				caCert.setSignBuf(certificateResponse.getCertSignBuf());
+				caCert.setSerialnumber(certificateResponse.getCertSerialNumber());
+				caCert.setIssuerDn(certificateResponse.getCertIssuerDn());
+				caCert.setIssuerHashMd5(certificateResponse.getCertIssuerHashMd5());
+				caCert.setNotafter(sdf.parse(certificateResponse.getCertNotAfter()));
+				caCert.setNotbefore(sdf.parse(certificateResponse.getCertNotBefore()));
+				caCert.setReqBuf(certificateResponse.getCertReqBuf());
+				caCert.setReqBufType(certificateResponse.getCertReqBufType());
+				caCert.setReqOverrideValidity(Integer.valueOf(certificateResponse.getCertReqOverrideValidity()));
+				caCert.setSignDate(new Date());
+				caCert.setSubjectDn(certificateResponse.getCertSubjectDn());
+				caCert.setSubjectHashMd5(certificateResponse.getCertSubjectHashMd5());
+				caCert.setSignBufP7(certificateResponse.getCertSignBufP7());
+				caCert.setObtained(false);
+				caCert.setTrustDeviceCount(1);
+				caCert.setTrustDeviceDate(caCert.getNotafter());
+				// 支持双证
+				caCert.setCertKmcRep1(certificateResponse.getCertKmcRep1());
+				caCert.setCertKmcRep2(certificateResponse.getCertKmcRep2());
+				caCert.setCertKmcRep3(certificateResponse.getCertKmcRep3());
+				caCert.setCertSignBufKmc(certificateResponse.getCertSignBufKmc());
+				caCert.setCertTypeKmc(certificateResponse.getCertTypeKmc());
+				caCert.setCertReqBufKmc(certificateResponse.getCertReqBufKmc());
+				caCert.setCertReqBufTypeKmc(certificateResponse.getCertReqBufTypeKmc());
+				caCert.setCertSerialnumberKmc(certificateResponse.getCertSerialnumberKmc());
+				caCert.setInstallMode(certificateResponse.getInstallMode());
+				if (caCert.getCertSignBufKmc() != null) {
 					amount = 2;
 					json.put("kmcvalid", 1);
-				}else {
+				} else {
 					json.put("kmcvalid", 0);
 				}
 				workCertInfoService.save(caCert);
@@ -382,81 +645,79 @@ public class CertController extends BaseController {
 				dealInfo.setBusinessCardUserDate(new Date());
 				dealInfo.setNotafter(caCert.getNotafter());
 				dealInfo.setAddCertDays(Integer.parseInt(addCertDays));
-				if (!WorkDealInfoType.TYPE_RETURN_MONEY.equals(dealInfo.getDealInfoType()) ) {
+				if (!WorkDealInfoType.TYPE_RETURN_MONEY.equals(dealInfo.getDealInfoType())) {
 					Integer type = getDealInfoAddType(dealInfo);
 					if (raAccount.getIsTest()) {
 						type = 3;
 					}
-					ConfigSupplier	supplier = getSupplier(Integer.valueOf(dealInfo.getConfigProduct().getProductName()));
+					ConfigSupplier supplier = getSupplier(
+							Integer.valueOf(dealInfo.getConfigProduct().getProductName()));
 					if (supplier != null) {
-						updateQuantityStatistics.updateOUSettleInfo(raAccount.getAccountOrgUnit(), Integer.valueOf(dealInfo.getConfigProduct().getProductName()), type,amount,dealInfo.getYear(),supplier);
+						updateQuantityStatistics.updateOUSettleInfo(raAccount.getAccountOrgUnit(),
+								Integer.valueOf(dealInfo.getConfigProduct().getProductName()), type, amount,
+								dealInfo.getYear(), supplier);
 					}
 				} else {
 					dealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_CERT_OBTAINED);
 				}
 				workDealInfoService.save(dealInfo);
 			}
-			
+
 			SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			json.put("status", 1);
 			json.put("signBufP7", caCert.getSignBufP7());
 			json.put("signBuf", caCert.getSignBuf());
 			json.put("msg", "申请成功");
 			json.put("sort", dealInfo.getCertSort());
-			json.put("sn", caCert.getSerialnumber());//序列号
+			json.put("sn", caCert.getSerialnumber());// 序列号
 			json.put("notbefore", sdf1.format(caCert.getNotbefore()));
-			json.put("notafter", sdf1.format(caCert.getNotafter()));//有效期
-			json.put("issuer", caCert.getIssuerDn());//颁发者
-			json.put("subject", caCert.getSubjectDn());//主题
+			json.put("notafter", sdf1.format(caCert.getNotafter()));// 有效期
+			json.put("issuer", caCert.getIssuerDn());// 颁发者
+			json.put("subject", caCert.getSubjectDn());// 主题
 			json.put("certKmcBuf", caCert.getCertSignBufKmc());
 			json.put("certKmcRep1", caCert.getCertKmcRep1());
 			json.put("certKmcRep2", caCert.getCertKmcRep2());
 			json.put("installMode", caCert.getInstallMode());
-			
-			
-			
-			if(dealInfo.getDealInfoType()==null){
-				
+
+			if (dealInfo.getDealInfoType() == null) {
+
 				ConfigAgentBoundDealInfo dealInfoBound = new ConfigAgentBoundDealInfo();
 				dealInfoBound.setDealInfo(dealInfo);
-				ConfigChargeAgent agentBound =  configChargeAgentService.get(dealInfo.getConfigChargeAgentId());
+				ConfigChargeAgent agentBound = configChargeAgentService.get(dealInfo.getConfigChargeAgentId());
 				dealInfoBound.setAgent(agentBound);
 				configAgentBoundDealInfoService.save(dealInfoBound);
-				logUtil.saveSysLog("计费策略模版", "计费策略模版："+dealInfo.getId()+"--业务编号："+dealInfo.getId()+"--关联成功!", "");
-				
+				logUtil.saveSysLog("计费策略模版", "计费策略模版：" + dealInfo.getId() + "--业务编号：" + dealInfo.getId() + "--关联成功!",
+						"");
+
 			}
-				
-			
-			
-			
-			
-			if(dealInfo.getDealInfoType()!=null && dealInfo.getDealInfoType().equals(0)){
-				
-				ConfigChargeAgent agent =  configChargeAgentService.get(dealInfo.getConfigChargeAgentId());
-				Integer avaiNum = agent.getAvailableNum();//已用数量
-				Integer reseNum = agent.getReserveNum();//预留数量
-				agent.setAvailableNum(avaiNum+1);//已用数量
-				agent.setReserveNum(reseNum-1);//预留数量
+
+			if (dealInfo.getDealInfoType() != null && dealInfo.getDealInfoType().equals(0)) {
+
+				ConfigChargeAgent agent = configChargeAgentService.get(dealInfo.getConfigChargeAgentId());
+				Integer avaiNum = agent.getAvailableNum();// 已用数量
+				Integer reseNum = agent.getReserveNum();// 预留数量
+				agent.setAvailableNum(avaiNum + 1);// 已用数量
+				agent.setReserveNum(reseNum - 1);// 预留数量
 				configChargeAgentService.save(agent);
 				logUtil.saveSysLog("计费策略模版", "更改剩余数量和使用数量成功!", "");
 			}
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			json.put("status", -1);
 			json.put("msg", "申请证书失败");
-			//异常业务
-			dealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_ABNORMAL_USER);//异常业务
+			// 异常业务
+			dealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_ABNORMAL_USER);// 异常业务
 			workDealInfoService.save(dealInfo);
 		}
-		logUtil.saveSysLog("业务中心", "制证：编号"+dealInfoId, "");
+		logUtil.saveSysLog("业务中心", "制证：编号" + dealInfoId, "");
 		return json.toString();
 	}
-	
+
 	@RequestMapping(value = "enrollMakeCert")
 	@ResponseBody
-	public String enrollMakeCert(Long dealInfoId,String reqOverrideValidity,
-			String certProvider,String csr,String keySn) throws JSONException {
+	public String enrollMakeCert(Long dealInfoId, String reqOverrideValidity, String certProvider, String csr,
+			String keySn) throws JSONException {
 		JSONObject json = new JSONObject();
 		WorkDealInfo dealInfo = workDealInfoService.get(dealInfoId);
 		try {
@@ -465,16 +726,14 @@ public class CertController extends BaseController {
 			WorkCertApplyInfo applyInfo = caCert.getWorkCertApplyInfo();
 			if (reqOverrideValidity != null) {
 				reqOverrideValidity = reqOverrideValidity.replace(",", "");
-				caCert.setReqOverrideValidity(Integer
-						.valueOf(reqOverrideValidity));
+				caCert.setReqOverrideValidity(Integer.valueOf(reqOverrideValidity));
 			} else {
 				caCert.setReqOverrideValidity(365);
 			}
 			caCert.setProvider(certProvider);
 			json.put("status", -1);
 			if (caCert.getReqBuf() == null) {
-				String result = java.net.URLDecoder.decode(
-						csr, "UTF-8");
+				String result = java.net.URLDecoder.decode(csr, "UTF-8");
 				caCert.setReqBuf(csr);
 			}
 			Calendar cal = Calendar.getInstance();
@@ -484,13 +743,14 @@ public class CertController extends BaseController {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
 			Integer sort = 1;
 			Integer amount = 1;
-			if (caCert.getSignBuf()==null||caCert.getSignBuf().length()==0) {//异常业务安装证书可能不需要再次申请
+			if (caCert.getSignBuf() == null || caCert.getSignBuf().length() == 0) {// 异常业务安装证书可能不需要再次申请
 				try {
-					if (dealInfo.getCertSort()==null) {
-						//个人证书
-						if (dealInfo.getConfigProduct().getProductName().equals("2")||dealInfo.getConfigProduct().getProductName().equals("6")) {
+					if (dealInfo.getCertSort() == null) {
+						// 个人证书
+						if (dealInfo.getConfigProduct().getProductName().equals("2")
+								|| dealInfo.getConfigProduct().getProductName().equals("6")) {
 							sort = workDealInfoService.getMultiNumByWorkUser(dealInfo.getWorkUser().getId());
-						}else {
+						} else {
 							sort = workDealInfoService.getMultiNumByWorkCompany(dealInfo.getWorkCompany().getId());
 						}
 						dealInfo.setCertSort(sort);
@@ -498,24 +758,26 @@ public class CertController extends BaseController {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				//取RA配置
+				// 取RA配置
 				ConfigRaAccount raAccount = raAccountService.get(dealInfo.getConfigProduct().getRaAccountId());
-				//取RA配置模版项
-				ConfigRaAccountExtendInfo extendInfo = configRaAccountExtendInfoService.get(dealInfo.getConfigProduct().getRaAccountExtedId());
-				if (raAccount==null||extendInfo==null) {
+				// 取RA配置模版项
+				ConfigRaAccountExtendInfo extendInfo = configRaAccountExtendInfoService
+						.get(dealInfo.getConfigProduct().getRaAccountExtedId());
+				if (raAccount == null || extendInfo == null) {
 					json.put("status", -1);
 					json.put("msg", "CA配置错误：无证书注册项模板");
 					return json.toString();
 				}
-//				if (raAccount==null||raAccount.getConfigRaAccountExtendInfo()==null||raAccount.getConfigRaAccountExtendInfo().getId()==null) {
-//					json.put("status", -1);
-//					json.put("msg", "CA配置错误：无证书注册项模板");
-//					return json.toJSONString();
-//				}
-				
+				// if
+				// (raAccount==null||raAccount.getConfigRaAccountExtendInfo()==null||raAccount.getConfigRaAccountExtendInfo().getId()==null)
+				// {
+				// json.put("status", -1);
+				// json.put("msg", "CA配置错误：无证书注册项模板");
+				// return json.toJSONString();
+				// }
+
 				CertificateRequest request = RaAccountUtil.outRequest(dealInfo, extendInfo);
-				CertificateResponse certificateResponse = caService.getCaCert(
-						request, caCert.getReqBuf(),
+				CertificateResponse certificateResponse = caService.getCaCert(request, caCert.getReqBuf(),
 						Integer.valueOf(reqOverrideValidity), raAccount);
 
 				caCert.setType(certificateResponse.getCertType());
@@ -524,21 +786,18 @@ public class CertController extends BaseController {
 				caCert.setIssuerDn(certificateResponse.getCertIssuerDn());
 				caCert.setIssuerHashMd5(certificateResponse.getCertIssuerHashMd5());
 				caCert.setNotafter(sdf.parse(certificateResponse.getCertNotAfter()));
-				caCert.setNotbefore(sdf.parse(certificateResponse
-						.getCertNotBefore()));
+				caCert.setNotbefore(sdf.parse(certificateResponse.getCertNotBefore()));
 				caCert.setReqBuf(certificateResponse.getCertReqBuf());
 				caCert.setReqBufType(certificateResponse.getCertReqBufType());
-				caCert.setReqOverrideValidity(Integer.valueOf(certificateResponse
-						.getCertReqOverrideValidity()));
-				caCert.setSignDate(new Date());				
+				caCert.setReqOverrideValidity(Integer.valueOf(certificateResponse.getCertReqOverrideValidity()));
+				caCert.setSignDate(new Date());
 				caCert.setSubjectDn(certificateResponse.getCertSubjectDn());
-				caCert.setSubjectHashMd5(certificateResponse
-						.getCertSubjectHashMd5());
+				caCert.setSubjectHashMd5(certificateResponse.getCertSubjectHashMd5());
 				caCert.setSignBufP7(certificateResponse.getCertSignBufP7());
 				caCert.setObtained(false);
 				caCert.setTrustDeviceCount(1);
 				caCert.setTrustDeviceDate(caCert.getNotafter());
-				//支持双证
+				// 支持双证
 				caCert.setCertKmcRep1(certificateResponse.getCertKmcRep1());
 				caCert.setCertKmcRep2(certificateResponse.getCertKmcRep2());
 				caCert.setCertKmcRep3(certificateResponse.getCertKmcRep3());
@@ -548,18 +807,17 @@ public class CertController extends BaseController {
 				caCert.setCertReqBufTypeKmc(certificateResponse.getCertReqBufTypeKmc());
 				caCert.setCertSerialnumberKmc(certificateResponse.getCertSerialnumberKmc());
 				caCert.setInstallMode(certificateResponse.getInstallMode());
-				if (caCert.getCertSignBufKmc()!=null) {
+				if (caCert.getCertSignBufKmc() != null) {
 					amount = 2;
 					json.put("kmcvalid", 1);
-				}else {
+				} else {
 					json.put("kmcvalid", 0);
 				}
 				workCertInfoService.save(caCert);
 				caCert.setCreateDate(workCertInfoService.getCreateDate(caCert.getId()));
 				workCertInfoService.save(caCert);
 				SimpleDateFormat sss = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-				String date = new String(sss.format(caCert.getNotbefore()) + "至"
-						+ sss.format(caCert.getNotafter()));
+				String date = new String(sss.format(caCert.getNotbefore()) + "至" + sss.format(caCert.getNotafter()));
 				dealInfo.setCertSn(caCert.getSerialnumber());
 				dealInfo.setKeySn(keySn);
 				dealInfo.setNotafter(caCert.getNotafter());
@@ -568,22 +826,24 @@ public class CertController extends BaseController {
 				if (raAccount.getIsTest()) {
 					type = 3;
 				}
-				ConfigSupplier	supplier = getSupplier(Integer.valueOf(dealInfo.getConfigProduct().getProductName()));
-				
-				updateQuantityStatistics.updateOUSettleInfo(raAccount.getAccountOrgUnit(), Integer.valueOf(dealInfo.getConfigProduct().getProductName()), type,amount,dealInfo.getYear(),supplier);
+				ConfigSupplier supplier = getSupplier(Integer.valueOf(dealInfo.getConfigProduct().getProductName()));
+
+				updateQuantityStatistics.updateOUSettleInfo(raAccount.getAccountOrgUnit(),
+						Integer.valueOf(dealInfo.getConfigProduct().getProductName()), type, amount, dealInfo.getYear(),
+						supplier);
 			}
-			
+
 			SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			json.put("status", 1);
 			json.put("signBufP7", caCert.getSignBufP7());
 			json.put("signBuf", caCert.getSignBuf());
 			json.put("msg", "申请成功");
 			json.put("sort", dealInfo.getCertSort());
-			json.put("sn", caCert.getSerialnumber());//序列号
+			json.put("sn", caCert.getSerialnumber());// 序列号
 			json.put("notbefore", sdf1.format(caCert.getNotbefore()));
-			json.put("notafter", sdf1.format(caCert.getNotafter()));//有效期
-			json.put("issuer", caCert.getIssuerDn());//颁发者
-			json.put("subject", caCert.getSubjectDn());//主题
+			json.put("notafter", sdf1.format(caCert.getNotafter()));// 有效期
+			json.put("issuer", caCert.getIssuerDn());// 颁发者
+			json.put("subject", caCert.getSubjectDn());// 主题
 			json.put("certKmcBuf", caCert.getCertSignBufKmc());
 			json.put("certKmcRep1", caCert.getCertKmcRep1());
 			json.put("certKmcRep2", caCert.getCertKmcRep2());
@@ -592,76 +852,81 @@ public class CertController extends BaseController {
 			e.printStackTrace();
 			json.put("status", -1);
 			json.put("msg", "申请证书失败");
-			//异常业务
-			dealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_ABNORMAL_USER);//异常业务
+			// 异常业务
+			dealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_ABNORMAL_USER);// 异常业务
 			workDealInfoService.save(dealInfo);
 		}
-//		try {
-//			//发票出库
-//			//前台服务发票出库
-//			if (dealInfo.getWorkPayInfo().getUserReceipt()) {
-//				boolean r = receiptInvoiceService.receiptIncoiceI(dealInfo.getWorkPayInfo().getReceiptAmount(),UserUtils.getUser().getOffice(),dealInfo.getWorkCompany().getCompanyName());				//key出库
-//			}
-//		} catch (Exception e) {
-//			// TODO: handle exception
-//		}
+		// try {
+		// //发票出库
+		// //前台服务发票出库
+		// if (dealInfo.getWorkPayInfo().getUserReceipt()) {
+		// boolean r =
+		// receiptInvoiceService.receiptIncoiceI(dealInfo.getWorkPayInfo().getReceiptAmount(),UserUtils.getUser().getOffice(),dealInfo.getWorkCompany().getCompanyName());
+		// //key出库
+		// }
+		// } catch (Exception e) {
+		// // TODO: handle exception
+		// }
 		return json.toString();
 	}
-	
-	
+
 	/**
 	 * 证书安装完后调用
+	 * 
 	 * @param dealInfoId
 	 * @param result
 	 * @return
-	 * @throws JSONException 
+	 * @throws JSONException
 	 */
-	@RequestMapping(value="installResult")
+	@RequestMapping(value = "installResult")
 	@ResponseBody
-	public String installCertResult(Long dealInfoId,Integer result) throws JSONException{
+	public String installCertResult(Long dealInfoId, Integer result) throws JSONException {
 		WorkDealInfo dealInfo = workDealInfoService.get(dealInfoId);
 		JSONObject json = new JSONObject();
 		try {
-			if (result==1) {//安装成功
+			if (result == 1) {// 安装成功
 				WorkCertInfo workCertInfo = dealInfo.getWorkCertInfo();
 				workCertInfo.setObtained(true);
 				workCertInfoService.save(workCertInfo);
-				dealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_CERT_OBTAINED);//审核通过
+				dealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_CERT_OBTAINED);// 审核通过
 				dealInfo.setObtainedDate(new Date());
-				if (dealInfo.getWorkPayInfo().getMethodGov()||dealInfo.getWorkPayInfo().getMethodContract()) {
+				if (dealInfo.getWorkPayInfo().getMethodGov() || dealInfo.getWorkPayInfo().getMethodContract()) {
 					dealInfo.setUserSn(getHTSn(dealInfo));
-				}else {
+				} else {
 					dealInfo.setUserSn(getZFSn(dealInfo));
 				}
-				dealInfo.setStatus(0);//待归档
+				dealInfo.setStatus(0);// 待归档
 				workDealInfoService.save(dealInfo);
-				//发票出库
+				// 发票出库
 				if (dealInfo.getWorkPayInfo().getUserReceipt()) {
-					receiptInvoiceService.receiptIncoiceI(dealInfo.getWorkPayInfo().getReceiptAmount(),UserUtils.getUser().getOffice(),dealInfo.getWorkCompany().getCompanyName(),dealInfoId);				//key出库
+					receiptInvoiceService.receiptIncoiceI(dealInfo.getWorkPayInfo().getReceiptAmount(),
+							UserUtils.getUser().getOffice(), dealInfo.getWorkCompany().getCompanyName(), dealInfoId); // key出库
 				}
-				if (dealInfo.getDealInfoType()!=null && dealInfo.getDealInfoType().equals(0) ) {
-					//新增key出库
-					keyInvoiceService.saveInvoice(dealInfo.getWorkCertInfo().getProvider(), dealInfo.getKeySn(),dealInfo.getWorkCompany().getCompanyName());
-				}else if(dealInfo.getDealInfoType1()!=null){
-					if (dealInfo.getDealInfoType1().equals(2)||dealInfo.getDealInfoType1().equals(3)) {
-						//遗失补办损坏更换key出库
-						keyInvoiceService.saveInvoice(dealInfo.getWorkCertInfo().getProvider(), dealInfo.getKeySn(),dealInfo.getWorkCompany().getCompanyName());
-					
+				if (dealInfo.getDealInfoType() != null && dealInfo.getDealInfoType().equals(0)) {
+					// 新增key出库
+					keyInvoiceService.saveInvoice(dealInfo.getWorkCertInfo().getProvider(), dealInfo.getKeySn(),
+							dealInfo.getWorkCompany().getCompanyName());
+				} else if (dealInfo.getDealInfoType1() != null) {
+					if (dealInfo.getDealInfoType1().equals(2) || dealInfo.getDealInfoType1().equals(3)) {
+						// 遗失补办损坏更换key出库
+						keyInvoiceService.saveInvoice(dealInfo.getWorkCertInfo().getProvider(), dealInfo.getKeySn(),
+								dealInfo.getWorkCompany().getCompanyName());
+
 					}
-					
+
 				}
 				List<Integer> revokeList = new ArrayList<Integer>();
 				revokeList.add(WorkDealInfoType.TYPE_LOST_CHILD);
 				revokeList.add(WorkDealInfoType.TYPE_DAMAGED_REPLACED);
-				//吊销证书
-				if (dealInfo.getPrevId()!=null&&revokeList.contains(dealInfo.getDealInfoType())) {
+				// 吊销证书
+				if (dealInfo.getPrevId() != null && revokeList.contains(dealInfo.getDealInfoType())) {
 					WorkDealInfo old = workDealInfoService.get(dealInfo.getPrevId());
 					revokeOldCert(old.getId());
 					old.setDealInfoStatus(WorkDealInfoStatus.STATUS_CERT_REVOKE);
 					workDealInfoService.save(old);
 				}
-			}else {
-				dealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_ABNORMAL_USER);//异常业务
+			} else {
+				dealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_ABNORMAL_USER);// 异常业务
 				workDealInfoService.save(dealInfo);
 			}
 			json.put("status", 1);
@@ -671,49 +936,53 @@ public class CertController extends BaseController {
 		}
 		return json.toString();
 	}
-	
-	
+
 	/**
 	 * 证书安装完后调用
+	 * 
 	 * @param dealInfoId
 	 * @param result
 	 * @return
-	 * @throws JSONException 
+	 * @throws JSONException
 	 */
-	@RequestMapping(value="installResult4Enroll")
+	@RequestMapping(value = "installResult4Enroll")
 	@ResponseBody
-	public String installResult4Enroll(Long dealInfoId,Integer result) throws JSONException{
+	public String installResult4Enroll(Long dealInfoId, Integer result) throws JSONException {
 		WorkDealInfo dealInfo = workDealInfoService.get(dealInfoId);
 		JSONObject json = new JSONObject();
 		try {
-			if (result==1) {//安装成功
+			if (result == 1) {// 安装成功
 				WorkCertInfo workCertInfo = dealInfo.getWorkCertInfo();
 				workCertInfo.setObtained(true);
 				workCertInfoService.save(workCertInfo);
-				dealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_CERT_OBTAINED);//审核通过
+				dealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_CERT_OBTAINED);// 审核通过
 				dealInfo.setObtainedDate(new Date());
-				if (dealInfo.getWorkPayInfo().getMethodGov()||dealInfo.getWorkPayInfo().getMethodContract()) {
+				if (dealInfo.getWorkPayInfo().getMethodGov() || dealInfo.getWorkPayInfo().getMethodContract()) {
 					dealInfo.setUserSn(getHSn(dealInfo));
-				}else {
+				} else {
 					dealInfo.setUserSn(getZSn(dealInfo));
 				}
-				dealInfo.setStatus(0);//待归档
+				dealInfo.setStatus(0);// 待归档
 				workDealInfoService.save(dealInfo);
-//				//key出库
-//				keyInvoiceService.saveInvoice(dealInfo.getWorkCertInfo().getProvider(), dealInfo.getKeySn());
-//				List<Integer> revokeList = new ArrayList<Integer>();
-//				revokeList.add(WorkDealInfoType.TYPE_LOST_CHILD);
-//				revokeList.add(WorkDealInfoType.TYPE_DAMAGED_REPLACED);
-//				revokeList.add(WorkDealInfoType.TYPE_INFORMATION_REROUTE);
-//				//吊销证书
-//				if (dealInfo.getPrevId()!=null&&revokeList.contains(dealInfo.getDealInfoType())) {
-//					WorkDealInfo old = workDealInfoService.get(dealInfo.getPrevId());
-//					revokeOldCert(old.getId());
-//					old.setDealInfoStatus(WorkDealInfoStatus.STATUS_CERT_UNABLE);
-//					workDealInfoService.save(old);
-//				}
-			}else {
-				dealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_ABNORMAL_USER);//异常业务
+				// //key出库
+				// keyInvoiceService.saveInvoice(dealInfo.getWorkCertInfo().getProvider(),
+				// dealInfo.getKeySn());
+				// List<Integer> revokeList = new ArrayList<Integer>();
+				// revokeList.add(WorkDealInfoType.TYPE_LOST_CHILD);
+				// revokeList.add(WorkDealInfoType.TYPE_DAMAGED_REPLACED);
+				// revokeList.add(WorkDealInfoType.TYPE_INFORMATION_REROUTE);
+				// //吊销证书
+				// if
+				// (dealInfo.getPrevId()!=null&&revokeList.contains(dealInfo.getDealInfoType()))
+				// {
+				// WorkDealInfo old =
+				// workDealInfoService.get(dealInfo.getPrevId());
+				// revokeOldCert(old.getId());
+				// old.setDealInfoStatus(WorkDealInfoStatus.STATUS_CERT_UNABLE);
+				// workDealInfoService.save(old);
+				// }
+			} else {
+				dealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_ABNORMAL_USER);// 异常业务
 				workDealInfoService.save(dealInfo);
 			}
 			json.put("status", 1);
@@ -723,29 +992,30 @@ public class CertController extends BaseController {
 		}
 		return json.toString();
 	}
-	
+
 	/**
 	 * 吊销业务对应的证书
+	 * 
 	 * @param dealInfoId
 	 * @return
-	 * @throws JSONException 
+	 * @throws JSONException
 	 */
-	@RequestMapping(value="revokeCert")
+	@RequestMapping(value = "revokeCert")
 	@ResponseBody
-	public String revokeCert(Long dealInfoId) throws JSONException{
+	public String revokeCert(Long dealInfoId) throws JSONException {
 		WorkDealInfo dealInfo = workDealInfoService.get(dealInfoId);
 		JSONObject json = new JSONObject();
 		try {
 			ConfigRaAccount raAccount = raAccountService.get(dealInfo.getConfigProduct().getRaAccountId());
 			caService.revokeCaCert(dealInfo.getCertSn(), "", raAccount);
-			
+
 			dealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_CERT_REVOKE);
 			WorkCertInfo certInfo = dealInfo.getWorkCertInfo();
 			certInfo.setStatus(3);
 			certInfo.setRevokeDate(new Date());
 			workCertInfoService.save(certInfo);
 			workDealInfoService.save(dealInfo);
-			//保存日志信息
+			// 保存日志信息
 			WorkLog workLog = new WorkLog();
 			workLog.setRecordContent("吊销成功");
 			workLog.setWorkDealInfo(dealInfo);
@@ -755,25 +1025,28 @@ public class CertController extends BaseController {
 			workLog.setConfigApp(dealInfo.getConfigApp());
 			workLog.setWorkCompany(dealInfo.getWorkCompany());
 			workLogService.save(workLog);
-			
+
 			json.put("status", 1);
-			
+
 			if (!raAccount.getIsTest()) {
-				ConfigSupplier	supplier = getSupplier(Integer.valueOf(dealInfo.getConfigProduct().getProductName()));
-				updateQuantityStatistics.updateOUSettleInfo(raAccount.getAccountOrgUnit(), Integer.valueOf(dealInfo.getConfigProduct().getProductName()), 2,1,dealInfo.getYear(),supplier);
+				ConfigSupplier supplier = getSupplier(Integer.valueOf(dealInfo.getConfigProduct().getProductName()));
+				updateQuantityStatistics.updateOUSettleInfo(raAccount.getAccountOrgUnit(),
+						Integer.valueOf(dealInfo.getConfigProduct().getProductName()), 2, 1, dealInfo.getYear(),
+						supplier);
 			}
 		} catch (Exception e) {
 			json.put("status", -1);
 		}
-		logUtil.saveSysLog("业务中心", "吊销证书：编号"+dealInfoId, "");
+		logUtil.saveSysLog("业务中心", "吊销证书：编号" + dealInfoId, "");
 		return json.toString();
 	}
-	
+
 	/**
 	 * 只吊销证书 不改变业务状态
+	 * 
 	 * @param dealInfoId
 	 */
-	private void revokeOldCert(Long dealInfoId){
+	private void revokeOldCert(Long dealInfoId) {
 		WorkDealInfo dealInfo = workDealInfoService.get(dealInfoId);
 		try {
 			ConfigRaAccount raAccount = raAccountService.get(dealInfo.getConfigProduct().getRaAccountId());
@@ -782,51 +1055,52 @@ public class CertController extends BaseController {
 			certInfo.setStatus(3);
 			certInfo.setRevokeDate(new Date());
 			workCertInfoService.save(certInfo);
-		}catch(Exception e){
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
-//	private CertificateRequest transCaUserToRequest(WorkCertApplyInfo applyInfo){
-//		CertificateRequest re = new CertificateRequest();
-//		re.setUserAdditionalField1(applyInfo.getAddtionalField1());
-//		re.setUserAdditionalField2(applyInfo.getAddtionalField2());
-//		re.setUserAdditionalField3(applyInfo.getAddtionalField3());
-//		re.setUserAdditionalField4(applyInfo.getAddtionalField4());
-//		re.setUserAdditionalField5(applyInfo.getAddtionalField5());
-//		re.setUserAdditionalField6(applyInfo.getAddtionalField6());
-//		re.setUserAdditionalField7(applyInfo.getAddtionalField7());
-//		re.setUserAdditionalField8(applyInfo.getAddtionalField8());
-//		re.setUserAdditionalField9(applyInfo.getAddtionalField9());
-//		re.setUserAdditionalField10(applyInfo.getAddtionalField10());
-//		re.setUserCountry(applyInfo.getCountry());
-//		re.setUserDescription(applyInfo.getDescription());
-//		re.setUserDns(applyInfo.getDns());
-//		re.setUserEmail(applyInfo.getEmail());
-//		re.setUserIp(applyInfo.getIp());
-//		re.setUserLocality(applyInfo.getLocality());
-//		re.setUserMobilePhone(applyInfo.getMobilePhone());
-//		re.setUserName(applyInfo.getName());
-//		re.setUserOrganization(applyInfo.getOrganization());
-//		re.setUserOrgunit(applyInfo.getOrgunit());
-//		re.setUserStreet(applyInfo.getStreet());
-//		re.setUserSurname(applyInfo.getSurname());
-//		re.setUserTitle(applyInfo.getTitle());
-//		return re;
-//	}
-	
-	private Integer getDealInfoAddType(WorkDealInfo dealInfo){
+
+	// private CertificateRequest transCaUserToRequest(WorkCertApplyInfo
+	// applyInfo){
+	// CertificateRequest re = new CertificateRequest();
+	// re.setUserAdditionalField1(applyInfo.getAddtionalField1());
+	// re.setUserAdditionalField2(applyInfo.getAddtionalField2());
+	// re.setUserAdditionalField3(applyInfo.getAddtionalField3());
+	// re.setUserAdditionalField4(applyInfo.getAddtionalField4());
+	// re.setUserAdditionalField5(applyInfo.getAddtionalField5());
+	// re.setUserAdditionalField6(applyInfo.getAddtionalField6());
+	// re.setUserAdditionalField7(applyInfo.getAddtionalField7());
+	// re.setUserAdditionalField8(applyInfo.getAddtionalField8());
+	// re.setUserAdditionalField9(applyInfo.getAddtionalField9());
+	// re.setUserAdditionalField10(applyInfo.getAddtionalField10());
+	// re.setUserCountry(applyInfo.getCountry());
+	// re.setUserDescription(applyInfo.getDescription());
+	// re.setUserDns(applyInfo.getDns());
+	// re.setUserEmail(applyInfo.getEmail());
+	// re.setUserIp(applyInfo.getIp());
+	// re.setUserLocality(applyInfo.getLocality());
+	// re.setUserMobilePhone(applyInfo.getMobilePhone());
+	// re.setUserName(applyInfo.getName());
+	// re.setUserOrganization(applyInfo.getOrganization());
+	// re.setUserOrgunit(applyInfo.getOrgunit());
+	// re.setUserStreet(applyInfo.getStreet());
+	// re.setUserSurname(applyInfo.getSurname());
+	// re.setUserTitle(applyInfo.getTitle());
+	// return re;
+	// }
+
+	private Integer getDealInfoAddType(WorkDealInfo dealInfo) {
 		List<Integer> allTypes = new ArrayList<Integer>();
 		allTypes.add(dealInfo.getDealInfoType());
 		allTypes.add(dealInfo.getDealInfoType1());
 		allTypes.add(dealInfo.getDealInfoType2());
 		allTypes.add(dealInfo.getDealInfoType3());
-		
+
 		if (allTypes.contains(WorkDealInfoType.TYPE_UPDATE_CERT)) {
 			return 1;
 		}
 		if (allTypes.contains(WorkDealInfoType.TYPE_DAMAGED_REPLACED)) {
-			return dealInfo.getManMadeDamage()? 5:4;
+			return dealInfo.getManMadeDamage() ? 5 : 4;
 		}
 		if (allTypes.contains(WorkDealInfoType.TYPE_LOST_CHILD)) {
 			return 5;
@@ -839,12 +1113,14 @@ public class CertController extends BaseController {
 		}
 		return -1;
 	}
+
 	/**
 	 * 根据类型查询供应商
+	 * 
 	 * @param productType
 	 * @return
 	 */
-	private ConfigSupplier getSupplier(Integer productType){
+	private ConfigSupplier getSupplier(Integer productType) {
 		try {
 			DetachedCriteria dc = configSupplierProductRelationDao.createDetachedCriteria();
 			dc.createAlias("configSupplier", "configSupplier");
@@ -856,7 +1132,7 @@ public class CertController extends BaseController {
 			return null;
 		}
 	}
-	
+
 	/**
 	 * 按照合同生成归档编码
 	 * 
@@ -870,7 +1146,7 @@ public class CertController extends BaseController {
 		User user = UserUtils.getUser();
 		user.getOffice().getName();
 		String sn = sdf.format(date).toString().substring(2);
-		List<WorkDealInfo> list = workDealInfoService.findNum(workDealInfo, "%"+sn+"%");
+		List<WorkDealInfo> list = workDealInfoService.findNum(workDealInfo, "%" + sn + "%");
 		int num = list.size() + 1;
 		String numstr = "";
 		if (num > 0 && num < 10) {
@@ -880,8 +1156,8 @@ public class CertController extends BaseController {
 		} else {
 			numstr = "" + num;
 		}
-		String archiveSn = "SCCA-JZ-" + user.getOffice().getName() + "-"
-				+ workDealInfo.getConfigApp().getAppName() + "-" + sn + numstr;
+		String archiveSn = "SCCA-JZ-" + user.getOffice().getName() + "-" + workDealInfo.getConfigApp().getAppName()
+				+ "-" + sn + numstr;
 		return archiveSn;
 	}
 
@@ -898,7 +1174,7 @@ public class CertController extends BaseController {
 		User user = UserUtils.getUser();
 		user.getOffice().getName();
 		String sn = sdf.format(date).toString().substring(2);
-		List<WorkDealInfo> list = workDealInfoService.findNum(workDealInfo, "%"+sn+"%");
+		List<WorkDealInfo> list = workDealInfoService.findNum(workDealInfo, "%" + sn + "%");
 		int num = list.size() + 1;
 		String numstr = "";
 		if (num > 0 && num < 10) {
@@ -908,11 +1184,10 @@ public class CertController extends BaseController {
 		} else {
 			numstr = "" + num;
 		}
-		String archiveSn = "SCCA-JZ-" + user.getOffice().getName() + "-" + sn
-				+ numstr;
+		String archiveSn = "SCCA-JZ-" + user.getOffice().getName() + "-" + sn + numstr;
 		return archiveSn;
 	}
-	
+
 	/**
 	 * 按照合同生成归档编码
 	 * 
@@ -925,7 +1200,7 @@ public class CertController extends BaseController {
 		workDealInfo.setStatus(0);
 		User user = systemService.getUser(1L);
 		String sn = sdf.format(date).toString().substring(2);
-		List<WorkDealInfo> list = workDealInfoService.findNum(workDealInfo, "%"+sn+"%");
+		List<WorkDealInfo> list = workDealInfoService.findNum(workDealInfo, "%" + sn + "%");
 		int num = list.size() + 1;
 		String numstr = "";
 		if (num > 0 && num < 10) {
@@ -935,8 +1210,8 @@ public class CertController extends BaseController {
 		} else {
 			numstr = "" + num;
 		}
-		String archiveSn = "SCCA-JZ-" + user.getOffice().getName() + "-"
-				+ workDealInfo.getConfigApp().getAppName() + "-" + sn + numstr;
+		String archiveSn = "SCCA-JZ-" + user.getOffice().getName() + "-" + workDealInfo.getConfigApp().getAppName()
+				+ "-" + sn + numstr;
 		return archiveSn;
 	}
 
@@ -952,7 +1227,7 @@ public class CertController extends BaseController {
 		workDealInfo.setStatus(0);
 		User user = systemService.getUser(1L);
 		String sn = sdf.format(date).toString().substring(2);
-		List<WorkDealInfo> list = workDealInfoService.findNum(workDealInfo, "%"+sn+"%");
+		List<WorkDealInfo> list = workDealInfoService.findNum(workDealInfo, "%" + sn + "%");
 		int num = list.size() + 1;
 		String numstr = "";
 		if (num > 0 && num < 10) {
@@ -962,8 +1237,7 @@ public class CertController extends BaseController {
 		} else {
 			numstr = "" + num;
 		}
-		String archiveSn = "SCCA-JZ-" + user.getOffice().getName() + "-" + sn
-				+ numstr;
+		String archiveSn = "SCCA-JZ-" + user.getOffice().getName() + "-" + sn + numstr;
 		return archiveSn;
 	}
 }
