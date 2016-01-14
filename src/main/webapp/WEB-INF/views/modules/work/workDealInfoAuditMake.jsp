@@ -163,8 +163,7 @@
 							if (result) {
 								t = 1;
 							}
-							var updateUrl = "${ctx}/ca/installResult1?day=" + day
-							+ "&dealInfoId=${workDealInfo.id}&addCertDays="+$("#addCertDays").val()+"&_="+new Date().getTime();
+							var updateUrl = "${ctx}/ca/installResult?dealInfoId=${workDealInfo.id}&result="+t+"&_="+new Date().getTime();
 							$
 									.getJSON(
 											updateUrl+"&_="+new Date().getTime(),
