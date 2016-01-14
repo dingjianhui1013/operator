@@ -3406,6 +3406,21 @@ public class WorkDealInfoController extends BaseController {
 	 * @return
 	 */
 	@RequiresPermissions("work:workDealInfo:edit")
+	@RequestMapping(value = "completeCompanyName")
+	@ResponseBody
+	public String completeCompanyName(HttpServletRequest request, HttpServletResponse response,String companyname) {
+		JSONObject json = new JSONObject();
+		try {
+			WorkCompany workCompany = workCompanyService.findCompanyId(companyname);
+			json.put("Id", workCompany.getId());
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+
+		return json.toString();
+	}
+	@RequiresPermissions("work:workDealInfo:edit")
 	@RequestMapping(value = "tt")
 	@ResponseBody
 	public String tt(HttpServletRequest request, HttpServletResponse response) {
@@ -3427,7 +3442,7 @@ public class WorkDealInfoController extends BaseController {
 
 		return json.toString();
 	}
-
+	
 	/**
 	 * 根据单位名称带回
 	 * 

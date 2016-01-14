@@ -150,178 +150,178 @@ var selected = false;
 															});
 										});
 
-						var url = "${ctx}/work/workDealInfo/tt?_="+new Date().getTime();
-						$
-								.getJSON(
-										url,
-										function(da) {
-											$("#tt")
-													.bigAutocomplete(
-															{
-																data : da.lis,
-																callback : function(
-																		data) {
-																	var url1 = "${ctx}/work/workDealInfo/cert?id=";
-																	$
-																			.getJSON(
-																					url1
-																							+ data.result+"&_="+new Date().getTime(),
-																					function(
-																							d) {
-																						$("#companyId")
-																								.val(
-																										d.companyId);
-																						$(
-																								"#companyName")
-																								.val(
-																										d.companyName);
-																						if (d.workCompany.companyType == 1) {
-																							$("#companyType1").attr("selected","selected");
-																						}
-																						if (d.companyType == 2) {
-																							$("#companyType2").attr("selected","selected");
-																						}
-																						if (d.companyType == 3) {
-																							$("#companyType3").attr("selected","selected");
-																						}
-																						if (d.companyType == 4) {
-																							$("#companyType4").attr("selected","selected");
-																						}
-																						if (d.companyType == 5) {
-																							$("#companyType5").attr("selected","selected");
-																						}
-																						$(
-																								"#organizationNumber")
-																								.val(
-																										d.organizationNumber);
-																						$(
-																								"#orgExpirationTime")
-																								.val(
-																										d.orgExpirationTime);
-																						if (d.selectLv==0) {
-																							$("#selectLv0").attr("selected","selected");
-																						}
-																						if (d.selectLv==1) {
-																							$("#selectLv1").attr("selected","selected");
-																						}
-																						if (d.comCertificateType == 0) {
-																							$(
-																									"#comCertificateType0")
-																									.attr("selected","selected");
-																						}
-																						if (d.comCertificateType == 1) {
-																							$(
-																									"#comCertificateType1")
-																									.attr("selected","selected");
-																						}
-																						if (d.comCertificateType == 2) {
-																							$(
-																									"#comCertificateType2")
-																									.attr("selected","selected");
-																						}
-																						if (d.comCertificateType == 3) {
-																							$(
-																									"#comCertificateType3")
-																									.attr("selected","selected");
-																						}
-																						if (d.comCertificateType == 4) {
-																							$(
-																									"#comCertificateType4")
-																									.attr("selected","selected");
-																						}
-																						$(
-																								"#comCertficateNumber")
-																								.val(
-																										d.comCertficateNumber);
-																						$(
-																								"#comCertficateTime")
-																								.val(
-																										d.comCertficateTime);
-																						$(
-																								"#legalName")
-																								.val(
-																										d.legalName);
-																						$(
-																								"#address")
-																								.val(
-																										d.address);
-																						$(
-																								"#companyMobile")
-																								.val(
-																										d.companyMobile);
-																						$(
-																								"#remarks")
-																								.val(
-																										d.remarks);
-																						$(
-																								"#s_province")
-																								.val(
-																										d.province);
-																						$(
-																								"#contactName")
-																								.val(
-																										d.contactName);
-																						if (d.conCertType == 0) {
-																							$(
-																									"#conCertType0")
-																									.attr("selected","selected");
-																						}
-																						if (d.conCertType == 1) {
-																							$(
-																									"#conCertType1")
-																									.attr("selected","selected");
-																						}
-																						if (d.conCertType == 2) {
-																							$(
-																									"#conCertType2")
-																									.attr("selected","selected");
-																						}
-																						if ('男' == d.conCertSex) {
-																							$(
-																									"#sex0")
-																									.attr("checked","checked");
-																						}
-																						if (d.conCertSex =='女') {
-																							$(
-																									"#sex1")
-																									.attr("checked","checked");
-																						}
-																						$(
-																								"#contacEmail")
-																								.val(
-																										d.contacEmail);
-																						$(
-																								"#contactPhone")
-																								.val(
-																										d.contactPhone);
-																						$(
-																								"#contactTel")
-																								.val(
-																										d.contactTel);
-																						$(
-																								"#workuserId")
-																								.val(
-																										d.workuserId);
-																						$(
-																								"#conCertNumber")
-																								.val(
-																										d.conCertNumber);
-																						$("#pName").val(d.contactName);
-																						if(d.conCertType==0){
-																							$("#pIDCard").val(d.conCertNumber);
-																						}
-																						$("#pEmail").val(d.contacEmail);
-																						if(d.province != null){
-																							$("#s_province").append('<option value="'+d.province+'" selected="selected">'+d.province+'</option>');
-																							$("#s_city").append('<option value="'+d.city+'" selected="selected">'+d.city+'</option>');
-																							$("#s_county").append('<option value="'+d.district+'" selected="selected">'+d.district+'</option>');
-																						}
+// 						var url = "${ctx}/work/workDealInfo/tt?_="+new Date().getTime();
+// 						$
+// 								.getJSON(
+// 										url,
+// 										function(da) {
+// 											$("#tt")
+// 													.bigAutocomplete(
+// 															{
+// 																data : da.lis,
+// 																callback : function(
+// 																		data) {
+// 																	var url1 = "${ctx}/work/workDealInfo/cert?id=";
+// 																	$
+// 																			.getJSON(
+// 																					url1
+// 																							+ data.result+"&_="+new Date().getTime(),
+// 																					function(
+// 																							d) {
+// 																						$("#companyId")
+// 																								.val(
+// 																										d.companyId);
+// 																						$(
+// 																								"#companyName")
+// 																								.val(
+// 																										d.companyName);
+// 																						if (d.workCompany.companyType == 1) {
+// 																							$("#companyType1").attr("selected","selected");
+// 																						}
+// 																						if (d.companyType == 2) {
+// 																							$("#companyType2").attr("selected","selected");
+// 																						}
+// 																						if (d.companyType == 3) {
+// 																							$("#companyType3").attr("selected","selected");
+// 																						}
+// 																						if (d.companyType == 4) {
+// 																							$("#companyType4").attr("selected","selected");
+// 																						}
+// 																						if (d.companyType == 5) {
+// 																							$("#companyType5").attr("selected","selected");
+// 																						}
+// 																						$(
+// 																								"#organizationNumber")
+// 																								.val(
+// 																										d.organizationNumber);
+// 																						$(
+// 																								"#orgExpirationTime")
+// 																								.val(
+// 																										d.orgExpirationTime);
+// 																						if (d.selectLv==0) {
+// 																							$("#selectLv0").attr("selected","selected");
+// 																						}
+// 																						if (d.selectLv==1) {
+// 																							$("#selectLv1").attr("selected","selected");
+// 																						}
+// 																						if (d.comCertificateType == 0) {
+// 																							$(
+// 																									"#comCertificateType0")
+// 																									.attr("selected","selected");
+// 																						}
+// 																						if (d.comCertificateType == 1) {
+// 																							$(
+// 																									"#comCertificateType1")
+// 																									.attr("selected","selected");
+// 																						}
+// 																						if (d.comCertificateType == 2) {
+// 																							$(
+// 																									"#comCertificateType2")
+// 																									.attr("selected","selected");
+// 																						}
+// 																						if (d.comCertificateType == 3) {
+// 																							$(
+// 																									"#comCertificateType3")
+// 																									.attr("selected","selected");
+// 																						}
+// 																						if (d.comCertificateType == 4) {
+// 																							$(
+// 																									"#comCertificateType4")
+// 																									.attr("selected","selected");
+// 																						}
+// 																						$(
+// 																								"#comCertficateNumber")
+// 																								.val(
+// 																										d.comCertficateNumber);
+// 																						$(
+// 																								"#comCertficateTime")
+// 																								.val(
+// 																										d.comCertficateTime);
+// 																						$(
+// 																								"#legalName")
+// 																								.val(
+// 																										d.legalName);
+// 																						$(
+// 																								"#address")
+// 																								.val(
+// 																										d.address);
+// 																						$(
+// 																								"#companyMobile")
+// 																								.val(
+// 																										d.companyMobile);
+// 																						$(
+// 																								"#remarks")
+// 																								.val(
+// 																										d.remarks);
+// 																						$(
+// 																								"#s_province")
+// 																								.val(
+// 																										d.province);
+// 																						$(
+// 																								"#contactName")
+// 																								.val(
+// 																										d.contactName);
+// 																						if (d.conCertType == 0) {
+// 																							$(
+// 																									"#conCertType0")
+// 																									.attr("selected","selected");
+// 																						}
+// 																						if (d.conCertType == 1) {
+// 																							$(
+// 																									"#conCertType1")
+// 																									.attr("selected","selected");
+// 																						}
+// 																						if (d.conCertType == 2) {
+// 																							$(
+// 																									"#conCertType2")
+// 																									.attr("selected","selected");
+// 																						}
+// 																						if ('男' == d.conCertSex) {
+// 																							$(
+// 																									"#sex0")
+// 																									.attr("checked","checked");
+// 																						}
+// 																						if (d.conCertSex =='女') {
+// 																							$(
+// 																									"#sex1")
+// 																									.attr("checked","checked");
+// 																						}
+// 																						$(
+// 																								"#contacEmail")
+// 																								.val(
+// 																										d.contacEmail);
+// 																						$(
+// 																								"#contactPhone")
+// 																								.val(
+// 																										d.contactPhone);
+// 																						$(
+// 																								"#contactTel")
+// 																								.val(
+// 																										d.contactTel);
+// 																						$(
+// 																								"#workuserId")
+// 																								.val(
+// 																										d.workuserId);
+// 																						$(
+// 																								"#conCertNumber")
+// 																								.val(
+// 																										d.conCertNumber);
+// 																						$("#pName").val(d.contactName);
+// 																						if(d.conCertType==0){
+// 																							$("#pIDCard").val(d.conCertNumber);
+// 																						}
+// 																						$("#pEmail").val(d.contacEmail);
+// 																						if(d.province != null){
+// 																							$("#s_province").append('<option value="'+d.province+'" selected="selected">'+d.province+'</option>');
+// 																							$("#s_city").append('<option value="'+d.city+'" selected="selected">'+d.city+'</option>');
+// 																							$("#s_county").append('<option value="'+d.district+'" selected="selected">'+d.district+'</option>');
+// 																						}
 																						
-																						showCert(d.companyId);
-																					});
-																}
-															});
-										});
+// 																						showCert(d.companyId);
+// 																					});
+// 																}
+// 															});
+// 										});
 						if("${workDealInfo.id}"!=null && "${workDealInfo.id}"!=""){
 							var boundLabelList = "${boundLabelList}";
 							var lable = "${workDealInfo.configProduct.productLabel}";
@@ -667,19 +667,61 @@ var selected = false;
 	
 	
 	
-	
-	
 	function showCert(companyId) {
 		var url = "${ctx}/work/workDealInfo/showCert?id=" + companyId;
+		
+// 		top.$.jBox("iframe:"+url, { 
+// 		    title: "百度一下", 
+// 		    width: 800, 
+// 		    height: 350, 
+// 		    buttons: {'确定':'ok', '关闭': true },
+// 		    submit : function(v, h, f) {
+// 				if(v=='ok')
+// 				{
+// 					var test=h.find('#companyid');
+// // 					var varid= test.find("#companyid");
+// // 					alert(test[0].html());
+// // 					alert(test.html());
+// // 					alert(varid.html());
+// 				alert($('#companyId').val());
+// 				}
+// 		    }
+// 		});
+		
+		
+		
 		top.$.jBox.open("iframe:" + url, "已有证书明细", 800, 420, {
 			buttons : {
 				"确定" : "ok",
 				"关闭" : true
 			},
 			submit : function(v, h, f) {
+				if(v=='ok')
+				{
+// 					alert($('#companyId').val());
+// 					alert($('#companyid').val());
+					
+// 					alert($("#companyid").val());
+// 				    if (companyId == '') {
+// 				        top.$.jBox.tip("请选择填充数据", 'error', { focusId: "companyId" });
+// 				        return false;
+// 				    }else
+// 				    	{
+				    		
+// 				    	}
+// 				    return true;
+					var iframeName = h.find('#jbox-iframe').find("#companyid");
+				       alert(iframeName);
+				        //var container = window.frames[iframeName].document
+				        //var elem = $("#companyid", container);
+				       // alert(elem.html());
+				       //var test=$(h.frames["jbox-iframe"].document).find("#companyid");
+				       
+			  
+							}
+						}
+				});
 			}
-		});
-	}
 	
 	function del(data){
 		
@@ -994,6 +1036,103 @@ var selected = false;
 		$("#"+c).show();
  		$("#"+c).html($("#"+o).val().length);
 	}
+	function obtainCompanyInformation()
+	{
+		var companyName=$("#tt").val();
+		var url = "${ctx}/work/workDealInfo/completeCompanyName";
+		$.ajax({
+			url:url,
+			data:{"companyname":companyName,_:new Date().getTime()},
+			dataType:'json',
+			success:function(data){
+				var url1 = "${ctx}/work/workDealInfo/cert?id=";
+					$.getJSON(
+							url1+ data.Id+"&_="+new Date().getTime(),
+							function(d) {
+								$("#companyId").val(d.companyId);
+								$("#companyName").val(d.companyName);
+								if (d.workCompany.companyType == 1) {
+									$("#companyType1").attr("selected","selected");
+								}
+								if (d.companyType == 2) {
+									$("#companyType2").attr("selected","selected");
+								}
+								if (d.companyType == 3) {
+									$("#companyType3").attr("selected","selected");
+								}
+								if (d.companyType == 4) {
+									$("#companyType4").attr("selected","selected");
+								}
+								if (d.companyType == 5) {
+									$("#companyType5").attr("selected","selected");
+								}
+								$("#organizationNumber").val(d.organizationNumber);
+								$("#orgExpirationTime").val(d.orgExpirationTime);
+								if (d.selectLv==0) {
+									$("#selectLv0").attr("selected","selected");
+								}
+								if (d.selectLv==1) {
+									$("#selectLv1").attr("selected","selected");
+								}
+								if (d.comCertificateType == 0) {
+									$("#comCertificateType0").attr("selected","selected");
+								}
+								if (d.comCertificateType == 1) {
+									$("#comCertificateType1").attr("selected","selected");
+								}
+								if (d.comCertificateType == 2) {
+									$("#comCertificateType2").attr("selected","selected");
+								}
+								if (d.comCertificateType == 3) {
+									$("#comCertificateType3").attr("selected","selected");
+								}
+								if (d.comCertificateType == 4) {
+									$("#comCertificateType4").attr("selected","selected");
+								}
+								$("#comCertficateNumber").val(d.comCertficateNumber);
+								$("#comCertficateTime").val(d.comCertficateTime);
+								$("#legalName").val(d.legalName);
+								$("#address").val(d.address);
+								$("#companyMobile").val(d.companyMobile);
+								$("#remarks").val(d.remarks);
+								$("#s_province").val(d.province);
+								$("#contactName").val(d.contactName);
+								if (d.conCertType == 0) {
+									$("#conCertType0").attr("selected","selected");
+								}
+								if (d.conCertType == 1) {
+									$("#conCertType1").attr("selected","selected");
+								}
+								if (d.conCertType == 2) {
+									$("#conCertType2").attr("selected","selected");
+								}
+								if ('男' == d.conCertSex) {
+									$("#sex0").attr("checked","checked");
+								}
+								if (d.conCertSex =='女') {
+									$("#sex1").attr("checked","checked");
+								}
+								$("#contacEmail").val(d.contacEmail);
+								$("#contactPhone").val(d.contactPhone);
+								$("#contactTel").val(d.contactTel);
+								$("#workuserId").val(d.workuserId);
+								$("#conCertNumber").val(d.conCertNumber);
+								$("#pName").val(d.contactName);
+								if(d.conCertType==0){
+									$("#pIDCard").val(d.conCertNumber);
+								}
+								$("#pEmail").val(d.contacEmail);
+								if(d.province != null){
+									$("#s_province").append('<option value="'+d.province+'" selected="selected">'+d.province+'</option>');
+									$("#s_city").append('<option value="'+d.city+'" selected="selected">'+d.city+'</option>');
+									$("#s_county").append('<option value="'+d.district+'" selected="selected">'+d.district+'</option>');
+								}
+									showCert(d.companyId);
+							});
+			}
+		});	
+		
+	}
 </script>
 
 </head>
@@ -1101,7 +1240,7 @@ var selected = false;
 							<th><span class="prompt" style="color: red; display: none;">*</span>单位名称：</th>
 							<td><input type="text" name="companyName" maxlength="50"
 								value="${workCompany.companyName }" id="tt"
-								onchange="checkDwmc(this)"> <input type="hidden"
+								onchange="checkDwmc(this)" onblur="obtainCompanyInformation()"> <input type="hidden"
 								name="companyId" value="${workCompany.id }" id="companyId"></td>
 							<th><span class="prompt" style="color: red; display: none;">*</span>单位类型：</th>
 							<td><select name="companyType">

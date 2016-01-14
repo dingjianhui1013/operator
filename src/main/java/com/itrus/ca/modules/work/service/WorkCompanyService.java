@@ -46,6 +46,16 @@ public class WorkCompanyService extends BaseService {
 		return workCompanyDao.findById(id);
 	}
 	
+//	public List<WorkCompany> getIds(List<Long> id) {
+//		DetachedCriteria dc = workCompanyDao.createDetachedCriteria();
+//		if(id.size()>0&&id!=null)
+//		{	
+//			dc.add(Restrictions.in("id", id));
+//		}
+//		dc.addOrder(Order.desc("id"));
+//		return workCompanyDao.find(dc);
+//	}
+	
 	public Page<WorkCompany> find(Page<WorkCompany> page, WorkCompany workCompany) {
 		DetachedCriteria dc = workCompanyDao.createDetachedCriteria();
 		if (StringUtils.isNotEmpty(workCompany.getCompanyName())){
@@ -79,6 +89,19 @@ public class WorkCompanyService extends BaseService {
 		}
 		dc.addOrder(Order.desc("id"));	
 		return workCompanyDao.find(dc);
+	}
+	public WorkCompany findCompanyId(String companyName) {
+		DetachedCriteria dc = workCompanyDao.createDetachedCriteria();
+		if (StringUtils.isNotEmpty(companyName)){
+			dc.add(Restrictions.eq("companyName", companyName));
+		}
+		dc.addOrder(Order.desc("id"));	
+		List<WorkCompany> list = workCompanyDao.find(dc);
+		WorkCompany workCompany = new WorkCompany();
+		if (list.size()>0) {
+			workCompany = list.get(0);
+		}
+		return workCompany;
 	}
 	//通过公司名和组织机构代码查询
 	public WorkCompany finByNameAndNumber(String companyName, String organizationNumber){
@@ -115,7 +138,6 @@ public class WorkCompanyService extends BaseService {
 		dc.add(Restrictions.isNotNull("companyName"));
 		return workCompanyDao.find(dc);
 	}
-	
 	@Transactional(readOnly = false)
 	public void save(WorkCompany workCompany) {
 		workCompanyDao.save(workCompany);
