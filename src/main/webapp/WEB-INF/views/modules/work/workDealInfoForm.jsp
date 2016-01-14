@@ -9,6 +9,9 @@
 <script type="text/javascript">
 var appData;
 var selected = false;
+
+
+
 	$(document)
 			.ready(
 					function() {
@@ -688,36 +691,25 @@ var selected = false;
 // 		    }
 // 		});
 		
-		
+		//window.tempP = "123";
 		
 		top.$.jBox.open("iframe:" + url, "已有证书明细", 800, 420, {
 			buttons : {
 				"确定" : "ok",
 				"关闭" : true
 			},
+			closed : function(){
+				
+				var cid = localStorage.getItem("cid");
+				if(cid){
+					$("#organizationNumber").val(cid);
+					localStorage.removeItem("cid");
+				}
+			},
 			submit : function(v, h, f) {
 				if(v=='ok')
 				{
-// 					alert($('#companyId').val());
-// 					alert($('#companyid').val());
-					
-// 					alert($("#companyid").val());
-// 				    if (companyId == '') {
-// 				        top.$.jBox.tip("请选择填充数据", 'error', { focusId: "companyId" });
-// 				        return false;
-// 				    }else
-// 				    	{
-				    		
-// 				    	}
-// 				    return true;
-					var iframeName = h.find('#jbox-iframe').find("#companyid");
-				       alert(iframeName);
-				        //var container = window.frames[iframeName].document
-				        //var elem = $("#companyid", container);
-				       // alert(elem.html());
-				       //var test=$(h.frames["jbox-iframe"].document).find("#companyid");
-				       
-			  
+						
 							}
 						}
 				});
