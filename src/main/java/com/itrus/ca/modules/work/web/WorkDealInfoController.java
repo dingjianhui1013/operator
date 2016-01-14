@@ -7145,6 +7145,9 @@ public class WorkDealInfoController extends BaseController {
 					continue;
 				}
 				Long dealInfoId = Long.parseLong(dealInfos[i]);
+				if (dealInfoId == null) {
+					continue;
+				}
 				WorkDealInfo dealInfo = workDealInfoService.get(dealInfoId);
 				Date now = new Date();
 				Date certAfter = dealInfo.getNotafter();
