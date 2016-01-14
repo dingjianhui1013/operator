@@ -7,7 +7,6 @@
 	<meta name="decorator" content="default"/>
 	<script type="text/javascript">
 		$(document).ready(function() {
-			
 		});
 		function page(n,s){
 			$("#pageNo").val(n);
@@ -22,10 +21,11 @@
 	            $(obj1).attr("checked",false);  
 	            $(obj1).val("0");  
 	            $("#companyid").val("");
-	              
+	            localStorage.setItem("cid","");
 	        }else{   
 	            $(obj1).val("1");  
 	            $("#companyid").val(obj);
+	            localStorage.setItem("cid",obj);
 	        }  
 // 			var test=$('#companyId', parent.parent.document);
 // 			alert(window.parent.$("#companyId").val());
