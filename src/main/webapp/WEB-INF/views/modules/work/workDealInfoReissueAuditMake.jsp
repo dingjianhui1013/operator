@@ -193,133 +193,136 @@
 	}
 
 
-	function makeCert() {
+function makeCert() {
+		
 		try {
 			var providerName=$("#provider").find("option:selected").text();
 			var keys = ukeyadmin.refresh(); //检测KEY
+			var providerName=$("#provider").find("option:selected").text();
 			if (keys == 0 && providerName.indexOf("软证书")==-1) {
 				alert("没有检测到UKEY");
 			} else {
 				var keySn = $("#keySn").val();
-				var providerName=$("#provider").find("option:selected").text();
 				if(providerName.indexOf("软证书")==-1)
 					{
-				if(keySn==''){
-					top.$.jBox.tip("请您先检测KEY！");
-					return false;
-				}
+						if(keySn==''){
+							top.$.jBox.tip("请您先检测KEY！");
+							return false;
+						}
 					}
+				
 				sn = keySn;
+			
 				$("#keySn").attr("value", keySn);
 				$("#keySn").css("color", "red");
 				
 				
-				
-				
 				if(${workDealInfo.dealInfoType==0||workDealInfo.dealInfoType1==2 ||workDealInfo.dealInfoType1==3}){
-					var url = "${ctx}/work/workDealInfo/findByKeySn?keySn="+keySn+"&dealId="+${workDealInfo.id}+"&_="+new Date().getTime();
-					$.getJSON(url,function(data){
-						if (data.status==1) {
-							if (data.isUser==1) {
-								top.$.jBox.info("KEY序列号"+keySn+"已经使用，请更换一只新KEY！");
+				var url = "${ctx}/work/workDealInfo/findByKeySn?keySn="+keySn+"&dealId="+${workDealInfo.id}+"&_="+new Date().getTime();
+				$.getJSON(url,function(data){
+					if (data.status==1) {
+						if (data.isUser==1) {
+							top.$.jBox.info("KEY序列号"+keySn+"已经使用，请更换一只新KEY！");
+							return false;
+						}else{
+							
+							if(data.isOK==1){
+								top.$.jBox.info("此业务已经办理完成！");
 								return false;
+								
 							}else{
-								if(data.isOK==1){
-									top.$.jBox.info("此业务已经办理完成！");
+								 var day = baseDay;
+								var csr;
+								var len = 1024;
+								var selectedItem = $("option:selected", $("[name=provider]")[0]);
+								var cspStr = selectedItem.text();
+								if (cspStr.indexOf("软证书") > -1) {
+									keySN = "rzs";
+								}
+								if (cspStr.indexOf("SM2") > -1) {
+									len = 256;
+								}
+								//新增的生成csr
+								  if ($("[name=provider]").val().length > 0) {
+									csr = genEnrollCSR($("[name=provider]")[0], len, 1);
+								}
+								//如果是更新的:
+								//csr = getCsrByOldCert(len);
+								csr = filter(csr);
+								if (csr == "") {//异常业务
 									return false;
-								}else{
-
-									 var day = baseDay;
-										var csr;
-										var len = 1024;
-										var selectedItem = $("option:selected", $("[name=provider]")[0]);
-										var cspStr = selectedItem.text();
-										if (cspStr.indexOf("软证书") > -1) {
-											keySN = "rzs";
-										}
-										if (cspStr.indexOf("SM2") > -1) {
-											len = 256;
-										}
-										//新增的生成csr
-										  if ($("[name=provider]").val().length > 0) {
-											csr = genEnrollCSR($("[name=provider]")[0], len, 1);
-										}
-										//如果是更新的:
-										//csr = getCsrByOldCert(len);
-										csr = filter(csr);
-										if (csr == "") {//异常业务
-											return false;
-										}  
-										cspStr = encodeURI(encodeURI(cspStr));
-										 
-										var submit = function (v, h, f) {
-											if(v==true){
-										var selectedItem = $("option:selected", $("[name=provider]")[0]);
-										var cspStr = encodeURI(encodeURI(selectedItem.text()));
-										var url = "${ctx}/ca/validateCspIsValid?csp="+cspStr+"&_=" + new Date().getTime();
-												$.getJSON(url,
-														function(data){
-														quick(sn);
-												});
-											}
-										};
+								}  
+								cspStr = encodeURI(encodeURI(cspStr));
+								 
+								var submit = function (v, h, f) {
+									if(v==true){
+								var selectedItem = $("option:selected", $("[name=provider]")[0]);
+								var cspStr = encodeURI(encodeURI(selectedItem.text()));
+								var url = "${ctx}/ca/validateCspIsValid?csp="+cspStr+"&_=" + new Date().getTime();
+										$.getJSON(url,
+												function(data){
+												quick(sn);
+										});
+									}
+								};
+							
+								var ueUrl = "${ctx}/ca/checkZhengShu?dealInfoId="+${workDealInfo.id}+"&addCertDays="+$("#addCertDays").val()+"&day="+day+"&keySn="+sn+ "&certProvider=" + cspStr+"&csr="+csr;
+								
+								$.getJSON(ueUrl,function(res) {
 									
-										var ueUrl = "${ctx}/ca/checkZhengShu?dealInfoId="+${workDealInfo.id}+"&addCertDays="+$("#addCertDays").val()+"&day="+day+"&keySn="+sn+ "&certProvider=" + cspStr+"&csr="+csr;
+									if (res.status == 1) {
+										var html = "<div class='control-group'><label class='control-label'>证书序列号:</label><div class='controls'>"+res.sn+"</div></div>";
+										html += "<div class='control-group'><label class='control-label'>颁发者:</label><div class='controls'>"+res.issuer+"</div></div>";
+										html += "<div class='control-group'><label class='control-label'>主题:</label><div class='controls'>"+res.subject+"</div></div>";
+										html += "<div class='control-group'><label class='control-label'>有效起止日期:</label><div class='controls'>"
+											+ res.notbefore
+											+ "至"
+											+ res.notafter
+											+ "</div></div>";
 										
-										$.getJSON(ueUrl,function(res) {
-											
-											if (res.status == 1) {
-												var html = "<div class='control-group'><label class='control-label'>证书序列号:</label><div class='controls'>"+res.sn+"</div></div>";
-												html += "<div class='control-group'><label class='control-label'>颁发者:</label><div class='controls'>"+res.issuer+"</div></div>";
-												html += "<div class='control-group'><label class='control-label'>主题:</label><div class='controls'>"+res.subject+"</div></div>";
-												html += "<div class='control-group'><label class='control-label'>有效起止日期:</label><div class='controls'>"
-													+ res.notbefore
-													+ "至"
-													+ res.notafter
-													+ "</div></div>";
-												
-												top.$.jBox.confirm(html, "证书信息", submit, {
-													buttons : {
-														'确认制证' : true,
-														'返回' : false
-													}
-												});
-											} else {
-												top.$.jBox
-														.tip("出库失败，请检查是否有该类型库存");
-												window.location.href = "${ctx}/work/workDealInfo/list";
+										top.$.jBox.confirm(html, "证书信息", submit, {
+											buttons : {
+												'确认制证' : true,
+												'返回' : false
 											}
 										});
-										
-									
-								}
+									} else {
+										top.$.jBox
+												.tip("出库失败，请检查是否有该类型库存");
+										window.location.href = "${ctx}/work/workDealInfo/list";
+									}
+								});
+								
+								
+								
+								
 							}
-						}else{
-							top.$.jBox.info("系统异常！");
+							
+							
+							
 						}
-					});
-				}else{
-					var selectedItem = $("option:selected", $("[name=provider]")[0]);
-					var cspStr = encodeURI(encodeURI(selectedItem.text()));
-					var url = "${ctx}/ca/validateCspIsValid?csp="+cspStr+"&_=" + new Date().getTime();
-					$.getJSON(url,
-							function(data){
-						if (data.status==1) {
-							quick(sn);
-						} else {
-							top.$.jBox.tip("库存中没有该Key类型");
-						}
-					});
-					
-					
-					
+					}else{
+						top.$.jBox.info("系统异常！");
+					}
+				});
+				
 				}
+				
 			}
 		} catch (e) {
 			alert("没有检测到UKEY");
+			return false;
 		}
+		
+		
+		
+		
+		
+		
+		
+		
+		
 	}
-
 	function getCsrByOldCert(len) {
 		useOldKey = true;
 		setOverlapPeriod(30);

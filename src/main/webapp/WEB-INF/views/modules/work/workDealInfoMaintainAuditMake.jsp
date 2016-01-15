@@ -249,38 +249,67 @@
 									top.$.jBox.info("此业务已经办理完成！");
 									return false;
 								}else{
-									var selectedItem = $("option:selected", $("[name=provider]")[0]);
-									var cspStr = encodeURI(encodeURI(selectedItem.text()));
-									var url = "${ctx}/ca/validateCspIsValid?csp="+cspStr+"&_=" + new Date().getTime();
-									var submit = function (v, h, f) {
-										if(v==true){
-											$.getJSON(url,
-													function(data){
-													quick(sn);
-											});
+									 var day = baseDay;
+										var csr;
+										var len = 1024;
+										var selectedItem = $("option:selected", $("[name=provider]")[0]);
+										var cspStr = selectedItem.text();
+										if (cspStr.indexOf("软证书") > -1) {
+											keySN = "rzs";
 										}
-									};
-									var updateUrl = "${ctx}/ca/installResult?dealInfoId=${workDealInfo.id}&result="+t+"&_="+new Date().getTime();
-
-									$.getJSON(updateUrl,function(res) {
-										if (res.status == 1) {
-											var html = "<div class='control-group'><label class='control-label'>证书序列号:</label><div class='controls'>"+data.sn+"</div></div>";
-											html += "<div class='control-group'><label class='control-label'>颁发者:</label><div class='controls'>"+data.issuer+"</div></div>";
-											html += "<div class='control-group'><label class='control-label'>主题:</label><div class='controls'>"+data.subject+"</div></div>";
-											html += "<div class='control-group'><label class='control-label'>有效起止日期:</label><div class='controls'>"+data.notbefore+"至"+data.notafter+"</div></div>";
+										if (cspStr.indexOf("SM2") > -1) {
+											len = 256;
+										}
+										//新增的生成csr
+										  if ($("[name=provider]").val().length > 0) {
+											csr = genEnrollCSR($("[name=provider]")[0], len, 1);
+										}
+										//如果是更新的:
+										//csr = getCsrByOldCert(len);
+										csr = filter(csr);
+										if (csr == "") {//异常业务
+											return false;
+										}  
+										cspStr = encodeURI(encodeURI(cspStr));
+										 
+										var submit = function (v, h, f) {
+											if(v==true){
+										var selectedItem = $("option:selected", $("[name=provider]")[0]);
+										var cspStr = encodeURI(encodeURI(selectedItem.text()));
+										var url = "${ctx}/ca/validateCspIsValid?csp="+cspStr+"&_=" + new Date().getTime();
+												$.getJSON(url,
+														function(data){
+														quick(sn);
+												});
+											}
+										};
+									
+										var ueUrl = "${ctx}/ca/checkZhengShu?dealInfoId="+${workDealInfo.id}+"&addCertDays="+$("#addCertDays").val()+"&day="+day+"&keySn="+sn+ "&certProvider=" + cspStr+"&csr="+csr;
+										
+										$.getJSON(ueUrl,function(res) {
 											
-											top.$.jBox.confirm(html, "证书信息", submit, {
-												buttons : {
-													'确认制证' : true,
-													'返回' : false
-												}
-											});
-										} else {
-											top.$.jBox
-													.tip("出库失败，请检查是否有该类型库存");
-											window.location.href = "${ctx}/work/workDealInfo/list";
-										}
-									});
+											if (res.status == 1) {
+												var html = "<div class='control-group'><label class='control-label'>证书序列号:</label><div class='controls'>"+res.sn+"</div></div>";
+												html += "<div class='control-group'><label class='control-label'>颁发者:</label><div class='controls'>"+res.issuer+"</div></div>";
+												html += "<div class='control-group'><label class='control-label'>主题:</label><div class='controls'>"+res.subject+"</div></div>";
+												html += "<div class='control-group'><label class='control-label'>有效起止日期:</label><div class='controls'>"
+													+ res.notbefore
+													+ "至"
+													+ res.notafter
+													+ "</div></div>";
+												
+												top.$.jBox.confirm(html, "证书信息", submit, {
+													buttons : {
+														'确认制证' : true,
+														'返回' : false
+													}
+												});
+											} else {
+												top.$.jBox
+														.tip("出库失败，请检查是否有该类型库存");
+												window.location.href = "${ctx}/work/workDealInfo/list";
+											}
+										});
 									
 									
 									
