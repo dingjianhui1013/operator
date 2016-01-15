@@ -36,9 +36,7 @@
 		<li class="active"></li>
 	</ul>
 	<tags:message content="${message}"/>
-	<form id="searchForm"  action="${ctx}/work/workDealInfo/showCertEnterprise" method="post" >
-		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
-		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
+	<form id="searchForm"  action="${ctx}/work/workDealInfo/showCertPersonal" method="post" >
 	<table id="contentTable" class="table table-striped table-bordered table-condensed">
 		<thead><tr>
 		<th>编号</th>
@@ -48,7 +46,7 @@
         <th>证书有效期</th>
         <th>操作</th>
 		<tbody>
-		<c:forEach items="${page.list}" var="cert">
+		<c:forEach items="${list}" var="cert">
 			<tr>
 				<td>${cert.id }</td>
 				<td>${cert.configApp.appName }</td>
@@ -65,9 +63,6 @@
 		</tbody>
 	</table>
 	<input type="hidden" value="" name="workdealinfoId" id="workdealinfoId"/>
-	<input type="hidden" value="${companyId}" name="companyIds" />
-	<input type="hidden" value="${productId}" name="productId" />
 	</form>
-	<div class="pagination">${page}</div>
 </body>
 </html>

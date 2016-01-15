@@ -432,7 +432,44 @@ public class WorkDealInfoService extends BaseService {
 		dc.addOrder(Order.desc("id"));
 		return workDealInfoDao.find(page, dc);
 	}
-
+	public Page<WorkDealInfo> findEnterprise(Page<WorkDealInfo> page, List<Long> companyIds,String productId) {
+		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
+		String dealInfoStatus=WorkDealInfoStatus.STATUS_CERT_OBTAINED;
+		if (companyIds!= null&&companyIds.size()>0) {
+			dc.createAlias("workCompany", "workCompany");
+			dc.add(Restrictions.in("workCompany.id", companyIds));
+		}
+		if(productId!=null)
+		{
+			dc.createAlias("configProduct", "configProduct");
+			dc.add(Restrictions.eq("configProduct.productName", productId));
+		}
+		if(dealInfoStatus!=null)
+		{
+			dc.add(Restrictions.eq("dealInfoStatus", dealInfoStatus));
+		}
+		dc.addOrder(Order.desc("id"));
+		return workDealInfoDao.find(page, dc);
+	}
+	public List<WorkDealInfo> findPersonal(List<Long> companyIds,String productId) {
+		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
+		String dealInfoStatus=WorkDealInfoStatus.STATUS_CERT_OBTAINED;
+		if (companyIds!= null&&companyIds.size()>0) {
+			dc.createAlias("workCompany", "workCompany");
+			dc.add(Restrictions.in("workCompany.id", companyIds));
+		}
+		if(productId!=null)
+		{
+			dc.createAlias("configProduct", "configProduct");
+			dc.add(Restrictions.eq("configProduct.productName", productId));
+		}
+		if(dealInfoStatus!=null)
+		{
+			dc.add(Restrictions.eq("dealInfoStatus", dealInfoStatus));
+		}
+		dc.addOrder(Order.desc("id"));
+		return workDealInfoDao.manyFind(dc, 10);
+	}
 	public Page<WorkDealInfo> findByStatus(Page<WorkDealInfo> page, WorkDealInfo workDealInfo) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("workUser", "workUser");

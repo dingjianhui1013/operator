@@ -393,6 +393,18 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 		return find(page, detachedCriteria, Criteria.DISTINCT_ROOT_ENTITY);
 	}
 
+	
+	
+	
+	@SuppressWarnings("unchecked")
+	public List<T> manyFind(DetachedCriteria detachedCriteria, ResultTransformer resultTransformer,int size) {
+		Criteria criteria = detachedCriteria.getExecutableCriteria(getSession());
+		criteria.setResultTransformer(resultTransformer);
+		criteria.setFirstResult(0);
+	    criteria.setMaxResults(size);
+		return criteria.list(); 
+	}
+	
 	/**
 	 * 使用检索标准对象分页查询
 	 * 
@@ -880,5 +892,9 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 			e.printStackTrace();
 		}
 
+	}
+
+	public List<T> manyFind(DetachedCriteria detachedCriteria,int size){
+		return manyFind(detachedCriteria, Criteria.DISTINCT_ROOT_ENTITY,size);
 	}
 }

@@ -3411,10 +3411,14 @@ public class WorkDealInfoController extends BaseController {
 	public String completeCompanyName(HttpServletRequest request, HttpServletResponse response,String companyname) {
 		JSONObject json = new JSONObject();
 		try {
-			WorkCompany workCompany = workCompanyService.findCompanyId(companyname);
-			json.put("Id", workCompany.getId());
+			List<WorkCompany> workCompany = workCompanyService.findByCompanyName(companyname);
+			ArrayList<Long> lis = new ArrayList<Long>();
+			for(int i=0;i<workCompany.size();i++)
+			{
+				lis.add(workCompany.get(i).getId());
+			}
+			json.put("Idlis", lis);
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
 		}
 
@@ -3500,7 +3504,82 @@ public class WorkDealInfoController extends BaseController {
 		}
 		return json.toString();
 	}
+//	@RequiresPermissions("work:workDealInfo:edit")
+//	@RequestMapping(value = "cert1")
+//	@ResponseBody
+//	public String cert(List<Long> id, HttpServletRequest request, HttpServletResponse response) {
+//		JSONObject json = new JSONObject();
+//		try {
+//			List<WorkCompany> workCompany = workCompanyService.getIds(id);
+//			if(workCompany.size()>0)
+//			{
+//				ArrayList<Long> arrayList=new ArrayList<Long>();
+//				for(int i=0;i<workCompany.size();i++)
+//				{
+//					arrayList.add(workCompany.get(i).getId());
+//				}
+//			}
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//		return json.toString();
+//	}
 
+	@RequiresPermissions("work:workDealInfo:edit")
+	@RequestMapping(value = "findCompanyInformation")
+	@ResponseBody
+	public String findCompanyInformation(Long id, HttpServletRequest request, HttpServletResponse response) {
+		JSONObject json = new JSONObject();
+		try {
+			WorkDealInfo workDealInfo= workDealInfoService.get(id);
+			if(workDealInfo.getWorkUser()!=null)
+			{
+				WorkUser workuser=workDealInfo.getWorkUser();
+				json.put("workuserId", workuser.getId());
+				json.put("contactName", workuser.getContactName());
+				json.put("contacEmail", workuser.getContactEmail());
+				json.put("contactPhone", workuser.getContactPhone());
+				json.put("contactTel", workuser.getContactTel());
+				json.put("conCertType", workuser.getConCertType());
+				json.put("conCertSex", workuser.getContactSex());
+				json.put("conCertNumber", workuser.getConCertNumber());
+			}
+			if(workDealInfo.getWorkCompany()!=null)
+			{
+				WorkCompany workCompany=workDealInfo.getWorkCompany();
+				
+				// 前台带回单位数据
+				SimpleDateFormat smd = new SimpleDateFormat("yyyy-MM-dd");
+
+				json.put("companyId", workCompany.getId());
+				json.put("organizationNumber", workCompany.getOrganizationNumber());
+				json.put("companyType", workCompany.getCompanyType());
+				json.put("selectLv", workCompany.getSelectLv());
+				json.put("comCertficateNumber", workCompany.getComCertficateNumber());
+				json.put("comCertificateType", workCompany.getComCertificateType());
+				json.put("legalName", workCompany.getLegalName());
+				json.put("address", workCompany.getAddress());
+				json.put("remarks", workCompany.getRemarks());
+				json.put("workCompany", workCompany);
+				json.put("city", workCompany.getCity());
+				json.put("province", workCompany.getProvince());
+				json.put("district", workCompany.getDistrict());
+				json.put("companyMobile", workCompany.getCompanyMobile());
+
+				if (workCompany.getOrgExpirationTime() != null) {
+					json.put("orgExpirationTime", smd.format(workCompany.getOrgExpirationTime()));
+				}
+				if (workCompany.getComCertficateTime() != null) {
+					json.put("comCertficateTime", smd.format(workCompany.getComCertficateTime()));
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return json.toString();
+	}
+
+	
 	@RequiresPermissions("work:workDealInfo:edit")
 	@RequestMapping(value = "type")
 	@ResponseBody
@@ -3641,7 +3720,66 @@ public class WorkDealInfoController extends BaseController {
 		model.addAttribute("pro", ProductType.productTypeStrMap);
 		return "modules/work/workDealInfoShow";
 	}
-
+	
+	@RequiresPermissions("work:workDealInfo:edit")
+	@RequestMapping(value = "showCertEnterprise")
+	public String showCertEnterprise(
+			Model model, HttpServletRequest request,
+			@RequestParam(value = "companyIds", required = false) List<Long> companyIds, 
+			HttpServletResponse response,String productId) {
+		Page<WorkDealInfo> page = workDealInfoService.findEnterprise(new Page<WorkDealInfo>(request, response), companyIds,productId);
+		model.addAttribute("page", page);
+		model.addAttribute("pro", ProductType.productTypeStrMap);
+		model.addAttribute("companyId", companyIds);
+		model.addAttribute("productId", productId);
+		return "modules/work/workDealInfoShow";
+	}
+	@RequiresPermissions("work:workDealInfo:edit")
+	@RequestMapping(value = "showCertPersonal")
+	public String showCertPersonal(
+			Model model, HttpServletRequest request,
+			@RequestParam(value = "companyIds", required = false) List<Long> companyIds, 
+			HttpServletResponse response,String productId) {
+		List<WorkDealInfo> list = workDealInfoService.findPersonal(companyIds,productId);
+		model.addAttribute("list", list);
+		model.addAttribute("pro", ProductType.productTypeStrMap);
+		model.addAttribute("companyId", companyIds);
+		model.addAttribute("productId", productId);
+		return "modules/work/workDealInfoShowPersonal";
+	}
+	
+	@RequestMapping(value = "ajaxEnterpriseCount")
+	@ResponseBody
+	public String ajaxEnterpriseCount(Model model, HttpServletRequest request,
+	@RequestParam(value = "companyIds", required = false) List<Long> companyIds, 
+	HttpServletResponse response,String productId) {
+		
+		JSONObject json = new JSONObject();
+		try {
+			Page<WorkDealInfo> page = workDealInfoService.findEnterprise(new Page<WorkDealInfo>(request, response), companyIds,productId);
+			json.put("index", page.getList().size());
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return json.toString();
+	}
+	@RequestMapping(value = "ajaxPersonalCount")
+	@ResponseBody
+	public String ajaxPersonalCount(Model model, HttpServletRequest request,
+	@RequestParam(value = "companyIds", required = false) List<Long> companyIds, 
+	HttpServletResponse response,String productId) {
+		
+		JSONObject json = new JSONObject();
+		try {
+			List<WorkDealInfo> list = workDealInfoService.findPersonal(companyIds,productId);
+			json.put("index", list.size());
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return json.toString();
+	}
 	@RequiresPermissions("work:workDealInfo:view")
 	@RequestMapping(value = "businessQuery")
 	public String businessQuery(WorkDealInfo workDealInfo, HttpServletRequest request, HttpServletResponse response,

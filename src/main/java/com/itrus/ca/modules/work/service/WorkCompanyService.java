@@ -56,6 +56,14 @@ public class WorkCompanyService extends BaseService {
 //		return workCompanyDao.find(dc);
 //	}
 	
+	public List<WorkCompany> getIds(List<Long> id) {
+		DetachedCriteria dc = workCompanyDao.createDetachedCriteria();
+		if(id.size()>0&&id!=null)
+		{
+			dc.add(Restrictions.in("id", id));
+		}
+		return workCompanyDao.find(dc);
+	}
 	public Page<WorkCompany> find(Page<WorkCompany> page, WorkCompany workCompany) {
 		DetachedCriteria dc = workCompanyDao.createDetachedCriteria();
 		if (StringUtils.isNotEmpty(workCompany.getCompanyName())){

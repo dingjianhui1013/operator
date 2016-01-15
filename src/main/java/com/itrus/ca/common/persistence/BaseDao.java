@@ -162,6 +162,16 @@ public interface BaseDao<T> {
 	 */
 	public Page<T> find(Page<T> page, DetachedCriteria detachedCriteria, ResultTransformer resultTransformer);
 
+	
+	/**
+	 * 使用检索标准对象查询
+	 * @param detachedCriteria
+	 * @return
+	 */
+	public List<T> manyFind(DetachedCriteria detachedCriteria,int size);
+	
+	
+	
 	/**
 	 * 使用检索标准对象查询
 	 * @param detachedCriteria
