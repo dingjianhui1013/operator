@@ -278,7 +278,7 @@ public class CaService {
 //			return sn;
 //		}
 //	}
-	//获取写入的证书信息，但不写入证书
+	/*//获取写入的证书信息，但不写入证书
 	public CertificateResponse getCaCertOne(CertificateRequest certificateRequest,String reqBuf,Integer validityDays,ConfigRaAccount raAccount) {
 		CertificateResponse certificateResponse = null;//证书数据
 		if (validityDays==null) {//更新证书时，如果不配ra的默认更新天数，并且未指定，则时间是原来证书的天数
@@ -295,15 +295,15 @@ public class CaService {
 			reqBuf = reqBuf.replace("%2B", "+");
 			reqBuf = reqBuf.replace("%26", "&");
 			log.info("请求CA申请证书");
-			/* init system */
-			/* init properties */
+			 init system 
+			 init properties 
 			String connection = "ConnectionPool"; // 按实际情况实现连接服务
 			Certificate recipientCertificate = decodePEMCert(CA_RECIPIENT_CERT);
 			PrivateKey nativePrivateKey = decodePEMPrivateKey(RA_NATIVE_PKEY,
 					"password".toCharArray());
 			Certificate nativeCertificate = decodePEMCert(RA_NATIVE_CERT);
 
-			/* setup ca client */
+			 setup ca client 
 			CAClient client = null;
 			try {
 				client = CAClient.getInstance(connection, raAccount.getServiceUrl());
@@ -313,7 +313,7 @@ public class CaService {
 			}
 			// 申请的证书序列号
 			String certSerialnumber = null;
-			/* request certificate action */
+			 request certificate action 
 			try {
 				String csr = reqBuf;
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
@@ -438,9 +438,9 @@ public class CaService {
 			userInfo.setUserAdditionalField10(certificateRequest.getUserAdditionalField10());
 		
 		}
-		/* revoke certificate action */
+		 revoke certificate action 
 		return certificateResponse;
-	}
+	}*/
 	
 	/**
 	 * ICA方式返回的结果转换成TCA方式的结果

@@ -147,7 +147,7 @@ public class CertController extends BaseController {
 		return json.toString();
 	}
 
-	@RequestMapping(value = "checkZhengShu")
+	/*@RequestMapping(value = "checkZhengShu")
 	@ResponseBody
 	public String checkZhengShu(Long dealInfoId, String day, String addCertDays, String certProvider, String csr,
 			String keySn) throws JSONException {
@@ -409,7 +409,7 @@ public class CertController extends BaseController {
 		
 	}
 
-		
+		*/
 	
 		
 

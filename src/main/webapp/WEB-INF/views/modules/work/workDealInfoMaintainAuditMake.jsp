@@ -249,31 +249,6 @@
 									top.$.jBox.info("此业务已经办理完成！");
 									return false;
 								}else{
-									 var day = baseDay;
-										var csr;
-										var len = 1024;
-										var selectedItem = $("option:selected", $("[name=provider]")[0]);
-										var cspStr = selectedItem.text();
-										if (cspStr.indexOf("软证书") > -1) {
-											keySN = "rzs";
-										}
-										if (cspStr.indexOf("SM2") > -1) {
-											len = 256;
-										}
-										//新增的生成csr
-										  if ($("[name=provider]").val().length > 0) {
-											csr = genEnrollCSR($("[name=provider]")[0], len, 1);
-										}
-										//如果是更新的:
-										//csr = getCsrByOldCert(len);
-										csr = filter(csr);
-										if (csr == "") {//异常业务
-											return false;
-										}  
-										cspStr = encodeURI(encodeURI(cspStr));
-										 
-										var submit = function (v, h, f) {
-											if(v==true){
 										var selectedItem = $("option:selected", $("[name=provider]")[0]);
 										var cspStr = encodeURI(encodeURI(selectedItem.text()));
 										var url = "${ctx}/ca/validateCspIsValid?csp="+cspStr+"&_=" + new Date().getTime();
@@ -281,39 +256,6 @@
 														function(data){
 														quick(sn);
 												});
-											}
-										};
-									
-										var ueUrl = "${ctx}/ca/checkZhengShu?dealInfoId="+${workDealInfo.id}+"&addCertDays="+$("#addCertDays").val()+"&day="+day+"&keySn="+sn+ "&certProvider=" + cspStr+"&csr="+csr;
-										
-										$.getJSON(ueUrl,function(res) {
-											
-											if (res.status == 1) {
-												var html = "<div class='control-group'><label class='control-label'>证书序列号:</label><div class='controls'>"+res.sn+"</div></div>";
-												html += "<div class='control-group'><label class='control-label'>颁发者:</label><div class='controls'>"+res.issuer+"</div></div>";
-												html += "<div class='control-group'><label class='control-label'>主题:</label><div class='controls'>"+res.subject+"</div></div>";
-												html += "<div class='control-group'><label class='control-label'>有效起止日期:</label><div class='controls'>"
-													+ res.notbefore
-													+ "至"
-													+ res.notafter
-													+ "</div></div>";
-												
-												top.$.jBox.confirm(html, "证书信息", submit, {
-													buttons : {
-														'确认制证' : true,
-														'返回' : false
-													}
-												});
-											} else {
-												top.$.jBox
-														.tip("出库失败，请检查是否有该类型库存");
-												window.location.href = "${ctx}/work/workDealInfo/list";
-											}
-										});
-									
-									
-									
-									
 								}
 							}
 						}else{
@@ -436,14 +378,16 @@
 </head>
 <body>
 	<div style="display: none">
-		<object id="ukeyadmin" codeBase="itrusukeyadmin.cab#version=3,1,15,1012" classid="clsid:05395F06-244C-4599-A359-5F442B857C28"></object>
+		<object id="ukeyadmin"
+			codeBase="itrusukeyadmin.cab#version=3,1,15,1012"
+			classid="clsid:05395F06-244C-4599-A359-5F442B857C28"></object>
 	</div>
 
 	<ul class="nav nav-tabs">
 	</ul>
 	<tags:message content="${message}" />
 	<div class="form-horizontal">
-<table id="contentTable"
+		<table id="contentTable"
 			class="table table-striped table-bordered table-condensed">
 			<thead>
 				<tr>
@@ -466,16 +410,47 @@
 			<thead>
 				<tr>
 					<th>模板项</th>
-					<th>证书申请时填入的值</th>
+					<th>选择项</th>
+					<th style="width: 50%">证书申请时填入的值</th>
 				</tr>
 			</thead>
+			<tr>
+				<td>证书CN</td>
+				<td>单位名称</td>
+				<td style="width: 50%">${workDealInfo.workCompany.companyName }</td>
+			</tr>
+			<tr>
+				<td>证书SN</td>
+				<td>组织机构代码</td>
+				<td style="width: 50%">${workDealInfo.workCompany.organizationNumber }</td>
+			</tr>
+			<tr>
+				<td>accountOrgunit</td>
+				<td>应用名称</td>
+				<td style="width: 50%">${workDealInfo.configApp.appName }</td>
+			</tr>
+			<tr>
+				<td>证书邮件</td>
+				<td>经办人邮箱</td>
+				<td style="width: 50%">${workDealInfo.workUser.contactEmail }</td>
+			</tr>
+			<tr>
+				<td>userAdditionalField4</td>
+				<td>工商营业执照注册号</td>
+				<td style="width: 50%">${workDealInfo.workCompany.comCertficateNumber }</td>
+			</tr>
+			<tr>
+				<td>userAdditionalField3</td>
+				<td>多证书编号(使用者编号)(SCEGB)</td>
+				<td id="sort" style="width: 50%">${workDealInfo.certSort }</td>
+			</tr>
 			<c:forEach items="${list }" var="lis">
 				<tr>
 					<c:forEach items="${lis }" var="li">
-						 <td>${li}</td>
+						<td>${li}</td>
 					</c:forEach>
-					</tr>
-				</c:forEach>
+				</tr>
+			</c:forEach>
 		</table>
 		<table id="contentTable"
 			class="table table-striped table-bordered table-condensed">
@@ -486,63 +461,57 @@
 			</thead>
 			<tr>
 				<td>证书有效期</td>
-				<td>${workDealInfo.year*365+workDealInfo.lastDays }&nbsp;赠送<input type="text"
-					style="width: 100px" id="addCertDays" class="num required"  onblur="addCertDaysCheck()" 
-					value="0">天
+				<td>${workDealInfo.year*365+workDealInfo.lastDays }&nbsp;赠送<input
+					type="text" style="width: 100px" id="addCertDays"
+					class="num required" onblur="addCertDaysCheck()" value="0">天
 				</td>
 			</tr>
 			<tr>
 				<td>CSP</td>
-				<td><select name="provider" id="provider" 
-				<c:if test="${(workDealInfo.dealInfoType==0 || workDealInfo.dealInfoType1==2 || workDealInfo.dealInfoType1==3)}">
+				<td><select name="provider" id="provider"
+					<c:if test="${(workDealInfo.dealInfoType==0 || workDealInfo.dealInfoType1==2 || workDealInfo.dealInfoType1==3)}">
 				onchange="checkKeyGene()" 
-				</c:if>
-				
-				>
-				</select>
-				
-				  
-				<input type="checkbox" <c:if test="${!(workDealInfo.dealInfoType==0 || workDealInfo.dealInfoType1==2 || workDealInfo.dealInfoType1==3)}"> style="display: none;" </c:if>
-				 name="keyStatus" onclick="newKey(this)" />
-				 
-				  <label <c:if test="${!(workDealInfo.dealInfoType==0 || workDealInfo.dealInfoType1==2 || workDealInfo.dealInfoType1==3)}"> style="display: none;" </c:if> >新Key制证</label>
-				
-							 
-				 
+				</c:if>>
+				</select> <input type="checkbox"
+					<c:if test="${!(workDealInfo.dealInfoType==0 || workDealInfo.dealInfoType1==2 || workDealInfo.dealInfoType1==3)}"> style="display: none;" </c:if>
+					name="keyStatus" onclick="newKey(this)" /> <label
+					<c:if test="${!(workDealInfo.dealInfoType==0 || workDealInfo.dealInfoType1==2 || workDealInfo.dealInfoType1==3)}"> style="display: none;" </c:if>>新Key制证</label>
+
+
+
 				</td>
-				
-				
-				
+
+
+
 			</tr>
 			<tr>
 				<td>key序列号</td>
-				<td><input type="text" id="keySn" /> <input
-					type="button" class="btn" value="检测key"
-					onclick="javascript:selectKeyNum();" />
-					
-					<input type="button"  style="display: none;" class="btn btn-inverse" value="初始化key" id="csh" onclick="keyInit()" />
-					
-					
-				</td>
+				<td><input type="text" id="keySn" /> <input type="button"
+					class="btn" value="检测key" onclick="javascript:selectKeyNum();" />
+
+					<input type="button" style="display: none;" class="btn btn-inverse"
+					value="初始化key" id="csh" onclick="keyInit()" /></td>
 			</tr>
 		</table>
 		<form>
 			<input type="hidden" value="" name="" /> <input type="hidden"
 				value="" name="" />
-			<div class="form-actions" style="text-align: center; width: 100%; border-top: none;">
-				<input class="btn btn-primary" type="button" id="makeCertButton" onclick="makeCert()"
-					value="制 证" />&nbsp;
-					
-					
+			<div class="form-actions"
+				style="text-align: center; width: 100%; border-top: none;">
+				<input class="btn btn-primary" type="button" id="makeCertButton"
+					onclick="makeCert()" value="制 证" />&nbsp;
+
+
 				<c:if test="${onlyUpdate=='onlyUpdate' }">
-				<input class="btn btn-primary" type="button" onclick="returnPayment()"
-				value="重新缴费" />
-				&nbsp;<a class="btn btn-primary" href="javascript:cancelMaintenance()">取消本次维护</a>
+					<input class="btn btn-primary" type="button"
+						onclick="returnPayment()" value="重新缴费" />
+				&nbsp;<a class="btn btn-primary"
+						href="javascript:cancelMaintenance()">取消本次维护</a>
 				</c:if>
-				<label id="msg" style="color: red;"></label>	
-					
-					
-					
+				<label id="msg" style="color: red;"></label>
+
+
+
 			</div>
 		</form>
 	</div>
