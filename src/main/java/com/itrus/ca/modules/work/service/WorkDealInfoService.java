@@ -5048,6 +5048,65 @@ public class WorkDealInfoService extends BaseService {
 		return ifErr(1, ifErr.toString());
 	}
 
+	
+	@Transactional(readOnly = false)
+	public JSONObject saveExcelDateSed(MultipartFile file, String ifExcel) {
+		StringBuffer ifErr = new StringBuffer();
+		/*
+		 * 创建临时路径
+		 */
+		StringBuffer tempPath = new StringBuffer("C:/temp/");
+		tempPath.append(System.currentTimeMillis()); // 获取系统以毫秒为单位的当前时间
+		tempPath.append(ifExcel);// 获取参数@Param file的路径
+
+		/*
+		 * 创建临时excel文件存储@Param file数据
+		 */
+		File tempFile = new File(tempPath.toString());
+		if (!tempFile.getParentFile().exists()) {
+			tempFile.getParentFile().mkdirs(); // 获取父目录，创建
+		}
+		try {
+			tempFile.createNewFile(); // 创建文件
+			file.transferTo(tempFile); // 收到文件传输到目标文件
+		} catch (IOException e) {
+			ifErr.append("本地目录  F:/temp/ 不存在<br>");
+			return ifErr(-1, ifErr.toString());
+		}
+
+		/*
+		 * 解析@Param file文件
+		 */
+		Workbook wb = null;
+		try {
+			wb = createWB(tempFile.getAbsolutePath());
+		} catch (Exception e) {
+			ifErr.append("模板创建失败<br>");
+			return ifErr(-1, ifErr.toString());
+		}
+		int rows = 0; // 总行数
+		int cells = 0; // 总列数
+		Sheet sheetAt0 = wb.getSheetAt(0); // 获取第一个工作表
+		Row row = null;
+		row = sheetAt0.getRow(1);
+		if (!validTitle(row)) {
+			ifErr.append("导入模板表头与下载模板不匹配，请确认！<br>");
+			return ifErr(-1, ifErr.toString());
+		}
+		rows = sheetAt0.getPhysicalNumberOfRows();
+		if (rows <= 2) {
+			ifErr.append("模板中数据为空！<br>");
+			return ifErr(-1, ifErr.toString());
+		}
+
+		
+		return ifErr(1, ifErr.toString());
+	}
+
+	
+	
+	
+	
 	/**
 	 * 创建workbook
 	 */

@@ -148,6 +148,45 @@
 		$('#materialImport').ajaxSubmit(options);
 	}
 	
+	function addAttachT() {
+		if($("#fileNameT").val() == ""){
+			top.$.jBox.tip("导入文件格式有误，导入文件应为Excel文件，请确认");
+        	return false;
+        }
+        if($("#fileNameT").val().indexOf('.xls')<0) {
+        	top.$.jBox.tip("导入文件格式有误，导入文件应为Excel文件，请确认");
+            return false;
+        }
+        top.$.jBox.tip("正在批量导入新增数据...", 'loading');
+		var options = {
+			dataType : 'json',
+			success : function(data) {
+				//console.log(data);
+				if(data.status=='1'){
+					top.$.jBox.tip("上传成功");
+					  setTimeout(function (){
+	            		    //something you want delayed
+	            		    	$("#searchForm").submit();
+	            		//	window.location.reload();
+	            		   }, 1500); // how long do you want the delay to be? 
+	            
+				}else if(data.status=='-1'){
+					top.$.jBox.tip("上传失败!");
+					var info = "失败信息:<br>"+data.msg;
+					top.$.jBox.info(info);
+					//top.$.jBox.tip("上传失败"+data.msg);
+					//$("#searchForm").submit();
+				}else{
+					top.$.jBox.tip("上传失败!");
+					var info = "失败信息:<br>"+data.msg;
+					top.$.jBox.info(info);
+					//top.$.jBox.tip("上传失败："+data.errorMsg);
+					//$("#searchForm").submit();
+				}
+			}
+		};
+		$('#materialImportT').ajaxSubmit(options);
+	}
 	
 	function checkAll(obj){
 		var check = $($("#contentTable").find("#checkAll"));
@@ -349,7 +388,8 @@
 				&nbsp;&nbsp;&nbsp;&nbsp;
 				<a target="_blank" href="${ctx}/template/xls/batchImportDealInfo.xlsx" class="btn btn-primary">批量新增模板下载</a>
 				&nbsp;&nbsp;&nbsp;&nbsp;
-				<a id="manyAdd" data-toggle="modal" href="#declareDiv" class="btn btn-primary">批量新增导入</a>
+				<a id="manyAdd" data-toggle="modal" href="#declareDiv" class="btn btn-primary">批量新增导入</a>&nbsp;&nbsp;&nbsp;&nbsp;
+				<a id="manyAddT" data-toggle="modal" href="#declareDivT" class="btn btn-primary">批量新增导入T</a>
 				&nbsp;&nbsp;&nbsp;&nbsp;
 				<a id="manyUpdate" data-toggle="modal" href="javaScript:updateCertOK();" class="btn btn-primary">批量更新证书</a>
 				&nbsp;&nbsp;&nbsp;&nbsp;
@@ -477,6 +517,25 @@
 				onclick="hidenUpload()" class="btn">取消</a> <a
 				href="javascript:void(0)" data-dismiss="modal" 
 				onclick="addAttach()" class="btn btn-primary">导入</a>
+		</div>
+	</div>
+	<div id="declareDivT" class="modal hide fade">
+		<div class="modal-header">
+			<h3>批量导入</h3>
+		</div>
+		<div class="modal-body">
+			<form id="materialImportT"
+				action="${ctx}/work/workDealInfo/addAttachT"
+				enctype="multipart/form-data">
+				<input id="fileNameT" name="fileNameT" type="file" multiple="multiple" />
+				<input type="text" id="appId" name="appId" />
+			</form>
+		</div>
+		<div class="modal-footer">
+			<a href="javascript:void(0)" data-dismiss="modal" 
+				onclick="hidenUpload()" class="btn">取消</a> <a
+				href="javascript:void(0)" data-dismiss="modal" 
+				onclick="addAttachT()" class="btn btn-primary">导入</a>
 		</div>
 	</div>
 </body>
