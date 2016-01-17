@@ -391,7 +391,15 @@ public class WorkDealInfoController extends BaseController {
 	// 批量导入
 	@RequestMapping("addAttach")
 	@ResponseBody
-	public String importFile(@RequestParam(value = "fileName", required = true) MultipartFile file)
+	public String importFile(
+			@RequestParam(value = "appId", required = true) Long appId,
+			@RequestParam(value = "dealInfoTypeT", required = true) String dealInfoType,
+			@RequestParam(value = "productT", required = true) String productT,
+			@RequestParam(value = "lableT", required = true) String lableT,
+			@RequestParam(value = "agentIdT", required = true) Integer agentIdT,
+			@RequestParam(value = "agentDetailIdT", required = true) Long agentDetailIdT,
+			@RequestParam(value = "yearT", required = true) Integer yearT,
+			@RequestParam(value = "fileName", required = true) MultipartFile file)
 			throws IllegalStateException, IOException, JSONException {
 		JSONObject json = new JSONObject();
 		String ifExcel = file.getOriginalFilename().substring(file.getOriginalFilename().indexOf("."));// 截取.xlsx或.xls
@@ -401,7 +409,7 @@ public class WorkDealInfoController extends BaseController {
 			return json.toString();
 		}
 		try {
-			json = workDealInfoService.saveExcelDate(file, ifExcel);// 解析存储excel文件
+			json = workDealInfoService.saveExcelDate(appId,dealInfoType,productT,lableT,agentIdT,agentDetailIdT,yearT,file, ifExcel);// 解析存储excel文件
 		} catch (Exception ex) {
 			json.put("status", -1);
 			json.put("msg", json.toString());
@@ -410,29 +418,7 @@ public class WorkDealInfoController extends BaseController {
 		return json.toString();
 	}
 	
-	// 批量导入
-		@RequestMapping("addAttachT")
-		@ResponseBody
-		public String importFileT(
-				@RequestParam(value = "appId", required = true) Long appId,
-				@RequestParam(value = "fileName", required = true) MultipartFile file)
-				throws IllegalStateException, IOException, JSONException {
-			JSONObject json = new JSONObject();
-			String ifExcel = file.getOriginalFilename().substring(file.getOriginalFilename().indexOf("."));// 截取.xlsx或.xls
-			if (!(ifExcel.equals(".xls") || ifExcel.equals(".xlsx"))) {
-				json.put("status", -1);
-				json.put("msg", "模板必须为Excel文件");
-				return json.toString();
-			}
-			try {
-				json = workDealInfoService.saveExcelDate(file, ifExcel);// 解析存储excel文件
-			} catch (Exception ex) {
-				json.put("status", -1);
-				json.put("msg", json.toString());
-				return json.toString();
-			}
-			return json.toString();
-		}
+
 
 	@RequiresPermissions("work:workDealInfo:view")
 	@RequestMapping(value = "financeList")

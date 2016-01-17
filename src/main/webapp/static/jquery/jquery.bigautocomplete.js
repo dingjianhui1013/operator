@@ -6,7 +6,7 @@
 		
 		//初始化插入自动补全div，并在document注册mousedown，点击非div区域隐藏div
 		this.init = function(){
-			$("body").append("<div id='bigAutocompleteContent' class='bigautocomplete-layout'></div>");
+			$("body").append("<div id='bigAutocompleteContent'  class='bigautocomplete-layout'></div>");
 			$(document).bind('mousedown',function(event){
 				var $target = $(event.target);
 				if((!($target.parents().andSelf().is('#bigAutocompleteContent'))) && (!$target.is(bigAutocomplete.currentInputText))){

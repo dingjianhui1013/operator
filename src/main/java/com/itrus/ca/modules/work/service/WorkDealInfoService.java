@@ -4322,8 +4322,36 @@ public class WorkDealInfoService extends BaseService {
 	}
 
 	@Transactional(readOnly = false)
-	public JSONObject saveExcelDate(MultipartFile file, String ifExcel) {
+	public JSONObject saveExcelDate(
+			Long appId,
+			String dealInfoType,
+			String productT,
+			String lableT,
+			Integer agentIdT,
+			Long agentDetailIdT,
+			Integer yearT,
+			MultipartFile file, String ifExcel) {
 		StringBuffer ifErr = new StringBuffer();
+		ConfigChargeAgentBoundConfigProduct bound = configChargeAgentBoundConfigProductService.get(agentDetailIdT);
+		ConfigChargeAgent agent = bound.getAgent();
+		int pos = 0;
+		int money = 0;
+		int bank = 0;
+		if(agent.getChargeMethodPos()){
+			pos = 1;
+		}
+		if (agent.getChargeMethodMoney()) {
+			money = 1;
+		}
+		if (agent.getChargeMethodBank()) {
+			bank = 1;
+		}
+		int total = pos + money + bank;
+		
+		if(total!=1){
+			ifErr.append("该应用计费策略模板配置缴费方式不为一种，请确认！");
+			return ifErr(-1, ifErr.toString());
+		}
 		/*
 		 * 创建临时路径
 		 */
@@ -4369,276 +4397,93 @@ public class WorkDealInfoService extends BaseService {
 		if (rows <= 2) {
 			ifErr.append("模板中数据为空！<br>");
 			return ifErr(-1, ifErr.toString());
+		}else{
+			int addNum = agent.getConfigureNum();
+			
+			if (addNum>(rows-2) && !agent.getTempStyle().equals("1")) {
+				ifErr.append("计费策略模板配置新增数量不足！<br>");
+				return ifErr(-1, ifErr.toString());
+			}
 		}
+		
+		ConfigApp configApp = configAppService.get(appId);
+		ConfigProduct configProduct = bound.getProduct();
+
+		
 
 		try {
-
 			for (int i = 0; i < rows; i++) {
-				Integer a = 0;
+				
 				if (i == 0 || i == 1) {
 					continue;
 				}
-
-				ConfigRaAccountExtendInfo configRaAccountExtendInfo = null;
-				ConfigChargeAgentBoundConfigProduct bound = null;
 				row = sheetAt0.getRow(i);
-				if (row == null) {
-					ifErr.append("第" + i + "行为空，导入失败，请重新导入数据！<br>");
-					a = 1;
-					return ifErr(-1, ifErr.toString());
-				} else {
-					if (row.getCell(0) != null && !row.getCell(0).toString().replace(" ", "").equals("")) {
-
-						String appName = row.getCell(0).toString().replace(" ", "");
-
-						ConfigApp app = configAppService.findByAppname(appName);
-						if (app != null) {
-							if (row.getCell(1) != null && !row.getCell(1).toString().replace(" ", "").equals("")) {
-								String productName = row.getCell(1).toString().replace(" ", "");
-								ConfigProduct configProduct = new ConfigProduct();
-								configProduct.setConfigApp(app);
-								List<ConfigProduct> list = configProductService.findByAppIdAndRa(configProduct);
-								Integer productLaber = ProductType.productTypeIdMap.get(productName);
-								if (productLaber == null) {
-									a = 1;
-									ifErr.append("第" + (i + 1) + "行第2列产品名称不存在！<br>");
-									continue;
-								} else {
-									configProduct = null;
-									int iconfig = 0;
-									ConfigProduct configProductForAgent = new ConfigProduct();
-									for (int j = 0; j < list.size(); j++) {
-										if (list.get(j).getProductName().equals(productLaber.toString())) {
-											configProduct = list.get(j);
-											iconfig++;
-										}
-										String supCom = row.getCell(2).toString().replace(" ", "");
-										Integer proLabel = 5;
-										if (supCom.equals("通用")) {
-											proLabel = 0;
-										} else if (supCom.equals("专用")) {
-											proLabel = 1;
-										}
-										if (list.get(j).getProductName().equals(productLaber.toString())
-												&& list.get(j).getProductLabel().equals(proLabel)) {
-											configProductForAgent = list.get(j);
-										}
-
-									}
-									if (configProduct == null) {
-										a = 1;
-										ifErr.append("第" + (i + 1) + "行第2列产品名称没有被产品名称配置！<br>");
-										continue;
-									} else {
-										if (row.getCell(2) != null
-												&& !row.getCell(2).toString().replace(" ", "").equals("")) {
-											String supCom = row.getCell(2).toString().replace(" ", "");
-											Boolean isHave = false;
-											if (iconfig == 2) {
-												if (supCom.equals("通用") || supCom.equals("专用")) {
-													isHave = true;
-												}
-											} else if (iconfig == 1) {
-												if (supCom.equals("专用")) {
-													isHave = true;
-												}
-											}
-											if (isHave) {
-												if (row.getCell(3) != null
-														&& !row.getCell(3).toString().replace(" ", "").equals("")) {
-													String agentName = row.getCell(3).toString().replace(" ", "");
-
-													bound = configChargeAgentBoundConfigProductService
-															.findByProIdAgentName(configProductForAgent.getId(),
-																	agentName);
-													if (bound != null) {
-														ConfigChargeAgent agent = bound.getAgent();
-														Boolean checkStyle = true;
-														if (agent.getTempStyle().equals("2")
-																|| agent.getTempStyle().equals("3")) {
-															if (agent.getSurplusNum() < rows - 1) {
-																checkStyle = false;
-															}
-														}
-														if (checkStyle) {
-															if (row.getCell(4) != null && !row.getCell(4).toString()
-																	.replace(" ", "").equals("")) {
-																String[] years = configChargeAgentDetailService
-																		.getChargeAgentYears(agent.getId(), 0);
-																configRaAccountExtendInfo = configRaAccountExtendInfoService
-																		.get(configProductForAgent
-																				.getRaAccountExtedId());
-																String year = row.getCell(4).toString().replace(" ",
-																		"");
-																Boolean checkYear = false;
-																for (int j = 0; j < years.length; j++) {
-																	if (years[j].equals(year)) {
-																		checkYear = true;
-																		break;
-																	}
-																}
-																if (!checkYear) {
-																	a = 1;
-																	ifErr.append(
-																			"第" + (i + 1) + "行计费策略模板没有配置该新增年份！<br>");
-																	continue;
-																}
-															} else {
-																a = 1;
-																ifErr.append("第" + (i + 1) + "行第5列申请年限不能为空！<br>");
-																continue;
-															}
-														} else {
-															a = 1;
-															ifErr.append("本次导入的新增数量小于模板剩余新增数量，请检查并配置！<br>");
-															continue;
-
-														}
-													} else {
-														a = 1;
-														ifErr.append("第" + (i + 1) + "行产品没有绑定该计费策略模板！<br>");
-														continue;
-													}
-
-												} else {
-													a = 1;
-													ifErr.append("第" + (i + 1) + "行第4列计费策略模板名称不能为空！<br>");
-													continue;
-												}
-											} else {
-												a = 1;
-												ifErr.append("第" + (i + 1) + "行第3列应用标识不存在或不支持通用类型！<br>");
-												continue;
-											}
-										} else {
-											a = 1;
-											ifErr.append("第" + (i + 1) + "行第3列应用标识不能为空！<br>");
-											continue;
-										}
-									}
-								}
-							} else {
-								a = 1;
-								ifErr.append("第" + (i + 1) + "行第2列产品名称不能为空！<br>");
-								continue;
-							}
-						} else {
-							a = 1;
-							ifErr.append("第" + (i + 1) + "行第1列应用名称不存在！<br>");
-							continue;
-						}
-					} else {
-						a = 1;
-						ifErr.append("第" + (i + 1) + "行第1列应用名称不能为空！<br>");
-						continue;
-					}
-				}
-				// fields.add("companyName");//单位名称
-				// fields.add("contactName");//证书持有人名称
-				// fields.add("pName");//经办人名称
-				// fields.add("organizationNumber");//组织机构代码
-				// fields.add("conCertNumber");//证书持有人身份证号
-				// fields.add("contacEmail");//证书持有人邮箱
-				// fields.add("pIDCard");//经办人身份证号
-				// fields.add("contactTel");//业务系统UID
-				// fields.add("comCertficateNumber");//证件号
+				ConfigRaAccountExtendInfo configRaAccountExtendInfo = configRaAccountExtendInfoService.get(configProduct.getRaAccountExtedId());
 				Set<String> extentInfos = RaAccountUtil.getExtendInfos(configRaAccountExtendInfo);
 				for (String info : extentInfos) {
 					if (info.equals("companyName")) {
-						if (row.getCell(5) == null || row.getCell(5).toString().replace(" ", "").equals("")) {
-							a = 1;
-							ifErr.append("第" + (i + 1) + "行第6列单位名称不能为空！<br>");
+						if (row.getCell(0) == null || row.getCell(0).toString().replace(" ", "").equals("")) {
+							ifErr.append("第" + (i + 1) + "行第1列单位名称不能为空！<br>");
 						}
 					} else if (info.equals("contactName")) {
-						if (row.getCell(21) == null || row.getCell(21).toString().replace(" ", "").equals("")) {
-							a = 1;
-							ifErr.append("第" + (i + 1) + "行第21列证书持有人名称不能为空！<br>");
+						if (row.getCell(16) == null || row.getCell(16).toString().replace(" ", "").equals("")) {
+							ifErr.append("第" + (i + 1) + "行第17列证书持有人名称不能为空！<br>");
 						}
 					} else if (info.equals("pName")) {
-						if (row.getCell(28) == null || row.getCell(28).toString().replace(" ", "").equals("")) {
-							a = 1;
-							ifErr.append("第" + (i + 1) + "行第29列经办人姓名不能为空！<br>");
+						if (row.getCell(23) == null || row.getCell(23).toString().replace(" ", "").equals("")) {
+							ifErr.append("第" + (i + 1) + "行第24列经办人姓名不能为空！<br>");
 						}
 					} else if (info.equals("organizationNumber")) {
-						if (row.getCell(7) == null || row.getCell(7).toString().replace(" ", "").equals("")) {
-							a = 1;
-							ifErr.append("第" + (i + 1) + "行第8列组织机构代码不能为空！<br>");
+						if (row.getCell(2) == null || row.getCell(2).toString().replace(" ", "").equals("")) {
+							ifErr.append("第" + (i + 1) + "行第3列组织机构代码不能为空！<br>");
 						}
 					} else if (info.equals("conCertNumber")) {
-						if (row.getCell(23) == null || row.getCell(23).toString().replace(" ", "").equals("")) {
-							a = 1;
-							ifErr.append("第" + (i + 1) + "行第24列证书持有人身份证号不能为空！<br>");
+						if (row.getCell(17) == null || row.getCell(17).toString().replace(" ", "").equals("")) {
+							ifErr.append("第" + (i + 1) + "行第18列证书持有人身份证号不能为空！<br>");
 						}
 					} else if (info.equals("contacEmail")) {
-						if (row.getCell(24) == null || row.getCell(24).toString().replace(" ", "").equals("")) {
-							a = 1;
-							ifErr.append("第" + (i + 1) + "行第25列证书持有人邮箱不能为空！<br>");
+						if (row.getCell(19) == null || row.getCell(19).toString().replace(" ", "").equals("")) {
+							ifErr.append("第" + (i + 1) + "行第20列证书持有人邮箱不能为空！<br>");
 						}
 					} else if (info.equals("pIDCard")) {
-						if (row.getCell(29) == null || row.getCell(29).toString().replace(" ", "").equals("")) {
-							a = 1;
-							ifErr.append("第" + (i + 1) + "行第30列经办人身份证号不能为空！<br>");
+						if (row.getCell(24) == null || row.getCell(24).toString().replace(" ", "").equals("")) {
+							ifErr.append("第" + (i + 1) + "行第25列经办人身份证号不能为空！<br>");
 						}
 					} else if (info.equals("contactTel")) {
-						if (row.getCell(24) == null || row.getCell(24).toString().replace(" ", "").equals("")) {
-							a = 1;
-							ifErr.append("第" + (i + 1) + "行第25列证书持有人邮箱不能为空！<br>");
+						if (row.getCell(21) == null || row.getCell(21).toString().replace(" ", "").equals("")) {
+							ifErr.append("第" + (i + 1) + "行第22列业务系统UID不能为空！<br>");
 						}
 					} else if (info.equals("comCertficateNumber")) {
-						if (row.getCell(11) == null || row.getCell(11).toString().replace(" ", "").equals("")) {
-							a = 1;
-							ifErr.append("第" + (i + 1) + "行第12列证件号不能为空！<br>");
+						if (row.getCell(6) == null || row.getCell(6).toString().replace(" ", "").equals("")) {
+							ifErr.append("第" + (i + 1) + "行第7列证件号不能为空！<br>");
 						}
 					}
 				}
-				if (row.getCell(31) != null || !row.getCell(31).toString().replace(" ", "").equals("")) {
-					String payType = row.getCell(31).toString().replace(" ", "");
-					if (payType.equals("现金") || payType.equals("POS付款") || payType.equals("财务支付")) {
-						if (payType.equals("财务支付")) {
-							if (row.getCell(32) != null || !row.getCell(32).toString().replace(" ", "").equals("")) {
-								String payCompanyName = row.getCell(32).toString().replace(" ", "");
-								List<FinancePaymentInfo> payMentInfo = financePaymentInfoService
-										.findByCompanyName(payCompanyName);
-								if (payMentInfo.size() < 1) {
-									a = 1;
-									ifErr.append("第" + (i + 1) + "行第33列付款单位名称的支付信息不存在！<br>");
-								}
-							} else {
-								a = 1;
-								ifErr.append("第" + (i + 1) + "行第33列付款单位名称不能为空！<br>");
-							}
-						}
-					} else {
-						a = 1;
-						ifErr.append("第" + (i + 1) + "行第32列支付类型不存在！<br>");
+			}
 
-					}
-				} else {
-					a = 1;
-					ifErr.append("第" + (i + 1) + "行第32列支付类型不能为空！<br>");
-				}
-
-				if (a == 1) {
+			if (ifErr.toString().length()>0) {
+				return ifErr(-1, ifErr.toString());
+			}
+			
+			
+			for (int i = 0; i < rows; i++) {
+				if (i == 0 || i == 1) {
 					continue;
 				}
-
-				String appName = row.getCell(0).toString().replace(" ", "");
-				ConfigApp configApp = configAppService.findByAppname(appName);
-				String companyName = row.getCell(5).toString().replace(" ", "");
+				row = sheetAt0.getRow(i);
+				
+				String companyName = row.getCell(0).toString().replace(" ", "");
 				String organizationNumber = "";
-				if (row.getCell(7) != null && !row.getCell(7).toString().replace(" ", "").equals("")) {
-					organizationNumber = row.getCell(7).toString().replace(" ", "");
+				if (row.getCell(2) != null && !row.getCell(2).toString().replace(" ", "").equals("")) {
+					organizationNumber = row.getCell(2).toString().replace(" ", "");
 				}
-
 				WorkCompany workCompany = workCompanyService.finByNameAndNumber(companyName, organizationNumber);
-
-				ConfigProduct configProduct = bound.getProduct();
 				if (companyName != null && !companyName.equals("")) {
 					workCompany.setCompanyName(companyName);
 				}
 				String companyType = "";
-				if (row.getCell(6) != null && !row.getCell(6).toString().replace(" ", "").equals("")) {
-					companyType = row.getCell(6).toString().replace(" ", "");
+				if (row.getCell(1) != null && !row.getCell(1).toString().replace(" ", "").equals("")) {
+					companyType = row.getCell(1).toString().replace(" ", "");
 				}
 				if (companyType != null && !companyType.equals("")) {
 					if (companyType.equals("企业")) {
@@ -4656,8 +4501,8 @@ public class WorkDealInfoService extends BaseService {
 					workCompany.setCompanyType("1");
 				}
 				String comCertificateType = "";
-				if (row.getCell(10) != null && !row.getCell(10).toString().replace(" ", "").equals("")) {
-					comCertificateType = row.getCell(10).toString().replace(" ", "");
+				if (row.getCell(5) != null && !row.getCell(5).toString().replace(" ", "").equals("")) {
+					comCertificateType = row.getCell(5).toString().replace(" ", "");
 				}
 				if (comCertificateType != null && !comCertificateType.equals("")) {
 					if (comCertificateType.equals("营业执照")) {
@@ -4673,10 +4518,9 @@ public class WorkDealInfoService extends BaseService {
 					workCompany.setComCertificateType("0");
 				}
 				SimpleDateFormat dnf = new SimpleDateFormat("yyyy-MM-dd");
-
 				String orgExpirationTime = ""; // 组织机构代码有效期：
-				if (row.getCell(8) != null && !row.getCell(8).toString().replace(" ", "").equals("")) {
-					orgExpirationTime = row.getCell(8).toString().replace(" ", "");
+				if (row.getCell(3) != null && !row.getCell(3).toString().replace(" ", "").equals("")) {
+					orgExpirationTime = row.getCell(3).toString().replace(" ", "");
 				}
 				if (orgExpirationTime != null && !orgExpirationTime.equals("")) {
 					Timestamp ts1 = new Timestamp(dnf.parse(orgExpirationTime).getTime());
@@ -4684,8 +4528,8 @@ public class WorkDealInfoService extends BaseService {
 				}
 
 				String comCertficateTime = ""; // 单位证照有效期：
-				if (row.getCell(12) != null && !row.getCell(12).toString().replace(" ", "").equals("")) {
-					comCertficateTime = row.getCell(12).toString().replace(" ", "");
+				if (row.getCell(7) != null && !row.getCell(7).toString().replace(" ", "").equals("")) {
+					comCertficateTime = row.getCell(7).toString().replace(" ", "");
 				}
 				if (comCertficateTime != null && !comCertficateTime.equals("")) {
 					Timestamp ts = new Timestamp(dnf.parse(comCertficateTime).getTime());
@@ -4693,16 +4537,15 @@ public class WorkDealInfoService extends BaseService {
 				}
 
 				String comCertficateNumber = ""; // 证件号
-				if (row.getCell(11) != null && !row.getCell(11).toString().replace(" ", "").equals("")) {
-					comCertficateNumber = row.getCell(11).toString().replace(" ", "");
+				if (row.getCell(6) != null && !row.getCell(6).toString().replace(" ", "").equals("")) {
+					comCertficateNumber = row.getCell(6).toString().replace(" ", "");
 				}
 				if (comCertficateNumber != null && !comCertficateNumber.equals("")) {
 					workCompany.setComCertficateNumber(comCertficateNumber);
 				}
-
 				String selectLv = ""; // 服务级别
-				if (row.getCell(9) != null && !row.getCell(9).toString().replace(" ", "").equals("")) {
-					selectLv = row.getCell(9).toString().replace(" ", "");
+				if (row.getCell(4) != null && !row.getCell(4).toString().replace(" ", "").equals("")) {
+					selectLv = row.getCell(4).toString().replace(" ", "");
 				}
 				if (selectLv != null && !selectLv.equals("")) {
 					if (selectLv.equals("普通客户")) {
@@ -4718,18 +4561,17 @@ public class WorkDealInfoService extends BaseService {
 				}
 
 				String s_province = ""; // 省
-				if (row.getCell(14) != null && !row.getCell(14).toString().replace(" ", "").equals("")) {
-					s_province = row.getCell(14).toString().replace(" ", "");
+				if (row.getCell(9) != null && !row.getCell(9).toString().replace(" ", "").equals("")) {
+					s_province = row.getCell(9).toString().replace(" ", "");
 				}
 				String s_city = ""; // 市
-				if (row.getCell(15) != null && !row.getCell(15).toString().replace(" ", "").equals("")) {
-					s_city = row.getCell(15).toString().replace(" ", "");
+				if (row.getCell(10) != null && !row.getCell(10).toString().replace(" ", "").equals("")) {
+					s_city = row.getCell(10).toString().replace(" ", "");
 				}
 				String s_county = ""; // 县
-				if (row.getCell(16) != null && !row.getCell(16).toString().replace(" ", "").equals("")) {
-					s_county = row.getCell(16).toString().replace(" ", "");
+				if (row.getCell(11) != null && !row.getCell(11).toString().replace(" ", "").equals("")) {
+					s_county = row.getCell(11).toString().replace(" ", "");
 				}
-
 				if (s_province != null && !s_province.equals("")) {
 					workCompany.setProvince(s_province);
 				}
@@ -4739,59 +4581,56 @@ public class WorkDealInfoService extends BaseService {
 				if (s_county != null && !s_county.equals("")) {
 					workCompany.setDistrict(s_county);
 				}
-
 				String areaRemark = ""; // 区域备注
-				if (row.getCell(17) != null && !row.getCell(17).toString().replace(" ", "").equals("")) {
-					areaRemark = row.getCell(17).toString().replace(" ", "");
+				if (row.getCell(12) != null && !row.getCell(12).toString().replace(" ", "").equals("")) {
+					areaRemark = row.getCell(12).toString().replace(" ", "");
 				}
 				if (areaRemark != null && !areaRemark.equals("")) {
 					workCompany.setAreaRemark(areaRemark);
 				}
 				String legalName = ""; // 法人姓名
-				if (row.getCell(13) != null && !row.getCell(13).toString().replace(" ", "").equals("")) {
-					legalName = row.getCell(13).toString().replace(" ", "");
+				if (row.getCell(8) != null && !row.getCell(8).toString().replace(" ", "").equals("")) {
+					legalName = row.getCell(8).toString().replace(" ", "");
 				}
 				if (legalName != null && !legalName.equals("")) {
 					workCompany.setLegalName(legalName);
 				}
 
 				String address = ""; // 街道地址：
-				if (row.getCell(18) != null && !row.getCell(18).toString().replace(" ", "").equals("")) {
+				if (row.getCell(13) != null && !row.getCell(13).toString().replace(" ", "").equals("")) {
 					address = row.getCell(18).toString().replace(" ", "");
 				}
 				if (address != null && !address.equals("")) {
 					workCompany.setAddress(address);
 				}
 				String companyMobile = ""; // 单位联系电话：
-				if (row.getCell(19) != null && !row.getCell(19).toString().replace(" ", "").equals("")) {
-					companyMobile = row.getCell(19).toString().replace(" ", "");
+				if (row.getCell(14) != null && !row.getCell(14).toString().replace(" ", "").equals("")) {
+					companyMobile = row.getCell(14).toString().replace(" ", "");
 				}
 				if (companyMobile != null && !companyMobile.equals("")) {
 					workCompany.setCompanyMobile(companyMobile);
 				}
 				String remarks = ""; // 备注信息
-				if (row.getCell(20) != null && !row.getCell(20).toString().replace(" ", "").equals("")) {
-					remarks = row.getCell(20).toString().replace(" ", "");
+				if (row.getCell(15) != null && !row.getCell(15).toString().replace(" ", "").equals("")) {
+					remarks = row.getCell(15).toString().replace(" ", "");
 				}
 				if (remarks != null && !remarks.equals("")) {
 					workCompany.setRemarks(remarks);
 				}
-
 				// 保存经办人信息
 				WorkUser workUser = new WorkUser();
 				workUser.setStatus(1);
 
 				String contactName = "";// 证书持有人姓名
-				if (row.getCell(21) != null && !row.getCell(21).toString().replace(" ", "").equals("")) {
-					contactName = row.getCell(21).toString().replace(" ", "");
+				if (row.getCell(16) != null && !row.getCell(16).toString().replace(" ", "").equals("")) {
+					contactName = row.getCell(16).toString().replace(" ", "");
 				}
 				if (contactName != null && !contactName.equals("")) {
 					workUser.setContactName(contactName);
 				}
-
 				String conCertType = "";// 证书持有人证件
-				if (row.getCell(22) != null && !row.getCell(22).toString().replace(" ", "").equals("")) {
-					conCertType = row.getCell(22).toString().replace(" ", "");
+				if (row.getCell(17) != null && !row.getCell(17).toString().replace(" ", "").equals("")) {
+					conCertType = row.getCell(17).toString().replace(" ", "");
 				}
 				if (conCertType != null && !conCertType.equals("")) {
 					if (conCertType.equals("身份证")) {
@@ -4806,32 +4645,32 @@ public class WorkDealInfoService extends BaseService {
 				}
 
 				String conCertNumber = ""; // 证件号码
-				if (row.getCell(23) != null && !row.getCell(23).toString().replace(" ", "").equals("")) {
-					conCertNumber = row.getCell(23).toString().replace(" ", "");
+				if (row.getCell(18) != null && !row.getCell(18).toString().replace(" ", "").equals("")) {
+					conCertNumber = row.getCell(18).toString().replace(" ", "");
 				}
 				if (conCertNumber != null && !conCertNumber.equals("")) {
 					workUser.setConCertNumber(conCertNumber);
 				}
 
 				String contacEmail = ""; // 证书持有人电子邮件
-				if (row.getCell(24) != null && !row.getCell(24).toString().replace(" ", "").equals("")) {
-					contacEmail = row.getCell(24).toString().replace(" ", "");
+				if (row.getCell(19) != null && !row.getCell(19).toString().replace(" ", "").equals("")) {
+					contacEmail = row.getCell(19).toString().replace(" ", "");
 				}
 				if (contacEmail != null && !contacEmail.equals("")) {
 					workUser.setContactEmail(contacEmail);
 				}
 
 				String contactPhone = ""; // 证书持有人手机号:
-				if (row.getCell(25) != null && !row.getCell(25).toString().replace(" ", "").equals("")) {
-					contactPhone = row.getCell(25).toString().replace(" ", "");
+				if (row.getCell(20) != null && !row.getCell(20).toString().replace(" ", "").equals("")) {
+					contactPhone = row.getCell(20).toString().replace(" ", "");
 				}
 				if (contactPhone != null && !contactPhone.equals("")) {
 					workUser.setContactPhone(contactPhone);
 				}
 
 				String contactTel = ""; // 业务系统UID:
-				if (row.getCell(26) != null && !row.getCell(26).toString().replace(" ", "").equals("")) {
-					contactTel = row.getCell(26).toString().replace(" ", "");
+				if (row.getCell(21) != null && !row.getCell(21).toString().replace(" ", "").equals("")) {
+					contactTel = row.getCell(21).toString().replace(" ", "");
 				}
 				if (contactTel != null && !contactTel.equals("")) {
 					workUser.setContactTel(contactTel);
@@ -4839,13 +4678,12 @@ public class WorkDealInfoService extends BaseService {
 				workUser.setWorkCompany(workCompany);
 
 				String contactSex = ""; // 证书持有人性别:
-				if (row.getCell(27) != null && !row.getCell(27).toString().replace(" ", "").equals("")) {
-					contactSex = row.getCell(27).toString().replace(" ", "");
+				if (row.getCell(22) != null && !row.getCell(22).toString().replace(" ", "").equals("")) {
+					contactSex = row.getCell(22).toString().replace(" ", "");
 				}
 				if (contactSex != null && !contactSex.equals("")) {
 					workUser.setContactSex(contactSex);
 				}
-
 				WorkDealInfo workDealInfo = new WorkDealInfo();
 
 				workDealInfo.setSvn(this.getSVN(0));
@@ -4865,25 +4703,19 @@ public class WorkDealInfoService extends BaseService {
 				workDealInfo.setWorkUser(workUser);
 				workDealInfo.setWorkCompany(workCompany);
 				workDealInfo.setConfigProduct(configProduct);
-
 				// 新增时扣减计费策略数量
-				ConfigChargeAgent agent = bound.getAgent();
 				Integer reseNum = agent.getReserveNum();
 				Integer surNum = agent.getSurplusNum();
 				agent.setReserveNum(reseNum + 1);
 				agent.setSurplusNum(surNum - 1);
 				configChargeAgentService.save(agent);
-
 				workDealInfo.setConfigChargeAgentId(bound.getAgent().getId());
 				workDealInfo.setDealInfoType(WorkDealInfoType.TYPE_ADD_CERT);
-
-				Integer year = Integer.parseInt(row.getCell(4).toString().replace(" ", ""));// 申请年限
-				workDealInfo.setYear(year);
+				workDealInfo.setYear(yearT);
 				workDealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_ENTRY_SUCCESS);
 				workDealInfo.setCreateBy(UserUtils.getUser());
 				workDealInfo.setCreateDate(new Date());
 				workDealInfo.setPayType(Integer.parseInt(agent.getTempStyle()));
-
 				WorkCompanyHis workCompanyHis = workCompanyService.change(workCompany);
 				workCompanyHisService.save(workCompanyHis);
 				workDealInfo.setWorkCompanyHis(workCompanyHis);
@@ -4892,30 +4724,28 @@ public class WorkDealInfoService extends BaseService {
 				workDealInfo.setWorkUserHis(workUserHis);
 				// 保存申请人信息
 				WorkCertApplyInfo workCertApplyInfo = new WorkCertApplyInfo();
-
 				String pName = ""; // 经办人姓名
-				if (row.getCell(28) != null && !row.getCell(28).toString().replace(" ", "").equals("")) {
-					pName = row.getCell(28).toString().replace(" ", "");
+				if (row.getCell(23) != null && !row.getCell(23).toString().replace(" ", "").equals("")) {
+					pName = row.getCell(23).toString().replace(" ", "");
 				}
 				if (pName != null && !pName.equals("")) {
 					workCertApplyInfo.setName(pName);
 				}
 				String pEmail = ""; // 身份证号
-				if (row.getCell(29) != null && !row.getCell(29).toString().replace(" ", "").equals("")) {
-					pEmail = row.getCell(29).toString().replace(" ", "");
+				if (row.getCell(24) != null && !row.getCell(24).toString().replace(" ", "").equals("")) {
+					pEmail = row.getCell(24).toString().replace(" ", "");
 				}
 				if (pEmail != null && !pEmail.equals("")) {
 					workCertApplyInfo.setEmail(pEmail);
 				}
 				String pIDCard = "";// 经办人邮箱
-				if (row.getCell(30) != null && !row.getCell(30).toString().replace(" ", "").equals("")) {
-					pIDCard = row.getCell(30).toString().replace(" ", "");
+				if (row.getCell(25) != null && !row.getCell(25).toString().replace(" ", "").equals("")) {
+					pIDCard = row.getCell(25).toString().replace(" ", "");
 				}
 				if (pIDCard != null && !pIDCard.equals("")) {
 					workCertApplyInfo.setIdCard(pIDCard);
 				}
 				workCertApplyInfoService.save(workCertApplyInfo);
-
 				WorkCertInfo workCertInfo = new WorkCertInfo();
 				workCertInfo.setWorkCertApplyInfo(workCertApplyInfo);
 				workCertInfoService.save(workCertInfo);
@@ -4931,7 +4761,6 @@ public class WorkDealInfoService extends BaseService {
 				configAgentBoundDealInfoService.save(dealInfoBound);
 				logUtil.saveSysLog("计费策略模版", "计费策略模版：" + agent.getId() + "--业务编号：" + workDealInfo.getId() + "--关联成功!",
 						"");
-
 				// 录入人日志保存
 				WorkLog workLog1 = new WorkLog();
 				workLog1.setRecordContent("录入完毕");
@@ -4963,82 +4792,34 @@ public class WorkDealInfoService extends BaseService {
 				workPayInfo.setOldErrorReplaceCert(0d);
 				workPayInfo.setOldLostReplaceCert(0d);
 				workPayInfo.setOldInfoChange(0d);
-
 				double bindMoney = openAccountMoney + addCert;// 开户加新增的费用
-				String payType = row.getCell(31).toString().replace(" ", "");
-				if (payType.equals("现金")) {
-					workPayInfo.setMethodMoney(true);
-					workPayInfo.setMoney(bindMoney);
-				} else if (payType.equals("POS付款")) {
+				if (agent.getChargeMethodPos()) {
 					workPayInfo.setMethodPos(true);
 					workPayInfo.setPosMoney(bindMoney);
+				}else if (agent.getChargeMethodMoney()) {
+					workPayInfo.setMethodMoney(true);
+					workPayInfo.setMoney(bindMoney);
+				}else if (agent.getChargeMethodBank()) {
+					workPayInfo.setMethodBank(true);
+					workPayInfo.setBankMoney(bindMoney);
 				}
-
 				if (workDealInfo.getPayType().equals(2)) {
 					workPayInfo.setMethodGov(true);
 				} else if (workDealInfo.getPayType().equals(3)) {
 					workPayInfo.setMethodContract(true);
 				}
-
 				workPayInfo.setWorkTotalMoney(bindMoney);
 				workPayInfo.setWorkPayedMoney(bindMoney);
 				workPayInfo.setUserReceipt(true);
 				workPayInfo.setReceiptAmount(bindMoney);
 				workPayInfo.setSn(PayinfoUtil.getPayInfoNo());
 				workPayInfoService.save(workPayInfo);
-
-				String payCompanyName = "";
-				if (row.getCell(32) != null && !row.getCell(32).toString().replace(" ", "").equals("")) {
-					payCompanyName = row.getCell(32).toString().replace(" ", "");
-				}
-
-				List<FinancePaymentInfo> payMentInfos = financePaymentInfoService.findByCompanyName(payCompanyName);
-
-				if (payType.equals("财务支付") && payCompanyName != null && !payCompanyName.equals("")) {
-					for (int y = 0; y < payMentInfos.size(); y++) {
-						if (bindMoney == 0d) {
-							break;
-						}
-						FinancePaymentInfo financePaymentInfo = payMentInfos.get(y);
-						WorkFinancePayInfoRelation financePayInfoRelation = new WorkFinancePayInfoRelation();
-						if (bindMoney > financePaymentInfo.getResidueMoney()) {
-							financePayInfoRelation.setMoney(financePaymentInfo.getResidueMoney());
-							bindMoney = bindMoney - financePaymentInfo.getResidueMoney();
-							financePaymentInfo.setResidueMoney((double) 0);
-						} else {
-							financePayInfoRelation.setMoney(bindMoney);
-							financePaymentInfo.setResidueMoney(financePaymentInfo.getResidueMoney() - bindMoney);
-							bindMoney = 0d;
-						}
-						if (financePaymentInfo.getBingdingTimes() == null) {
-							financePaymentInfo.setBingdingTimes(1);
-						} else {
-							financePaymentInfo.setBingdingTimes(financePaymentInfo.getBingdingTimes() + 1);
-						}
-						if (i == 0) {
-							workPayInfo.setRelationMethod(financePaymentInfo.getPaymentMethod());
-						}
-						financePaymentInfoService.save(financePaymentInfo);
-
-						financePayInfoRelation.setFinancePaymentInfo(financePaymentInfo);
-						financePayInfoRelation.setWorkPayInfo(workPayInfo);
-						financePayInfoRelation.setSn(PayinfoUtil.getPayInfoNo());
-						workFinancePayInfoRelationService.save(financePayInfoRelation);
-					}
-				}
-				workPayInfoService.save(workPayInfo);
-				workDealInfo.setWorkPayInfo(workPayInfo);
 				this.checkWorkDealInfoNeedSettle(workDealInfo);
 				workDealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_APPROVE_WAIT);
 				workDealInfo.setAttestationUser(UserUtils.getUser());
 				workDealInfo.setAttestationUserDate(new Date());
 				this.save(workDealInfo);
 			}
-
-			if (ifErr != null && !"".equals(ifErr)) {
-				return ifErr(-1, ifErr.toString());
-			}
-
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
@@ -5153,7 +4934,7 @@ public class WorkDealInfoService extends BaseService {
 		return wb;
 	}
 
-	private JSONObject ifErr(int status, String msg) {
+	public JSONObject ifErr(int status, String msg) {
 		JSONObject json = new JSONObject();
 		try {
 			json.put("status", status);
@@ -5168,71 +4949,57 @@ public class WorkDealInfoService extends BaseService {
 	 * 校验excle表头
 	 */
 	private boolean validTitle(Row row) {
-		if (!row.getCell(0).toString().replace(" ", "").equals("应用名称"))
+		if (!row.getCell(0).toString().replace(" ", "").equals("单位名称"))
 			return false;
-		if (!row.getCell(1).toString().replace(" ", "").equals("产品名称"))
+		if (!row.getCell(1).toString().replace(" ", "").equals("单位类型"))
 			return false;
-		if (!row.getCell(2).toString().replace(" ", "").equals("应用标识"))
+		if (!row.getCell(2).toString().replace(" ", "").equals("组织机构代码"))
 			return false;
-		if (!row.getCell(3).toString().replace(" ", "").equals("计费策略模板名称"))
+		if (!row.getCell(3).toString().replace(" ", "").equals("组织机构代码有效期"))
 			return false;
-		if (!row.getCell(4).toString().replace(" ", "").equals("申请年限"))
+		if (!row.getCell(4).toString().replace(" ", "").equals("服务级别"))
 			return false;
-		if (!row.getCell(5).toString().replace(" ", "").equals("单位名称"))
+		if (!row.getCell(5).toString().replace(" ", "").equals("单位证照"))
 			return false;
-		if (!row.getCell(6).toString().replace(" ", "").equals("单位类型"))
+		if (!row.getCell(6).toString().replace(" ", "").equals("证件号"))
 			return false;
-		if (!row.getCell(7).toString().replace(" ", "").equals("组织机构代码"))
+		if (!row.getCell(7).toString().replace(" ", "").equals("单位证照有效期"))
 			return false;
-		if (!row.getCell(8).toString().replace(" ", "").equals("组织机构代码有效期"))
+		if (!row.getCell(8).toString().replace(" ", "").equals("法人姓名"))
 			return false;
-		if (!row.getCell(9).toString().replace(" ", "").equals("服务级别"))
+		if (!row.getCell(9).toString().replace(" ", "").equals("省"))
 			return false;
-		if (!row.getCell(10).toString().replace(" ", "").equals("单位证照"))
+		if (!row.getCell(10).toString().replace(" ", "").equals("市"))
 			return false;
-		if (!row.getCell(11).toString().replace(" ", "").equals("证件号"))
+		if (!row.getCell(11).toString().replace(" ", "").equals("县"))
 			return false;
-		if (!row.getCell(12).toString().replace(" ", "").equals("单位证照有效期"))
+		if (!row.getCell(12).toString().replace(" ", "").equals("区域备注"))
 			return false;
-		if (!row.getCell(13).toString().replace(" ", "").equals("法人姓名"))
+		if (!row.getCell(13).toString().replace(" ", "").equals("街道地址"))
 			return false;
-		if (!row.getCell(14).toString().replace(" ", "").equals("省"))
+		if (!row.getCell(14).toString().replace(" ", "").equals("单位联系电话"))
 			return false;
-		if (!row.getCell(15).toString().replace(" ", "").equals("市"))
+		if (!row.getCell(15).toString().replace(" ", "").equals("备注信息"))
 			return false;
-		if (!row.getCell(16).toString().replace(" ", "").equals("县"))
+		if (!row.getCell(16).toString().replace(" ", "").equals("证书持有人姓名"))
 			return false;
-		if (!row.getCell(17).toString().replace(" ", "").equals("区域备注"))
+		if (!row.getCell(17).toString().replace(" ", "").equals("证书持有人证件"))
 			return false;
-		if (!row.getCell(18).toString().replace(" ", "").equals("街道地址"))
+		if (!row.getCell(18).toString().replace(" ", "").equals("证件号码"))
 			return false;
-		if (!row.getCell(19).toString().replace(" ", "").equals("单位联系电话"))
+		if (!row.getCell(19).toString().replace(" ", "").equals("证书持有人电子邮件"))
 			return false;
-		if (!row.getCell(20).toString().replace(" ", "").equals("备注信息"))
+		if (!row.getCell(20).toString().replace(" ", "").equals("证书持有人手机号"))
 			return false;
-		if (!row.getCell(21).toString().replace(" ", "").equals("证书持有人姓名"))
+		if (!row.getCell(21).toString().replace(" ", "").equals("业务系统UID"))
 			return false;
-		if (!row.getCell(22).toString().replace(" ", "").equals("证书持有人证件"))
+		if (!row.getCell(22).toString().replace(" ", "").equals("证书持有人性别"))
 			return false;
-		if (!row.getCell(23).toString().replace(" ", "").equals("证件号码"))
+		if (!row.getCell(23).toString().replace(" ", "").equals("经办人姓名"))
 			return false;
-		if (!row.getCell(24).toString().replace(" ", "").equals("证书持有人电子邮件"))
+		if (!row.getCell(24).toString().replace(" ", "").equals("身份证号"))
 			return false;
-		if (!row.getCell(25).toString().replace(" ", "").equals("证书持有人手机号"))
-			return false;
-		if (!row.getCell(26).toString().replace(" ", "").equals("业务系统UID"))
-			return false;
-		if (!row.getCell(27).toString().replace(" ", "").equals("证书持有人性别"))
-			return false;
-		if (!row.getCell(28).toString().replace(" ", "").equals("经办人姓名"))
-			return false;
-		if (!row.getCell(29).toString().replace(" ", "").equals("身份证号"))
-			return false;
-		if (!row.getCell(30).toString().replace(" ", "").equals("经办人邮箱"))
-			return false;
-		if (!row.getCell(31).toString().replace(" ", "").equals("支付类型(现金、POS付款、财务支付)"))
-			return false;
-		if (!row.getCell(32).toString().replace(" ", "").equals("付款单位名称(当选择财务支付时填写)"))
+		if (!row.getCell(25).toString().replace(" ", "").equals("经办人邮箱"))
 			return false;
 		return true;
 	}
