@@ -20,7 +20,7 @@
 <body>
 	<ul class="nav nav-tabs">
 		<li class="active"><a href="${ctx}/work/workDealInfoFiling/ulist?distinguish=1">咨询类用户</a></li>
-		<li><a href="${ctx}/work/customer/insertUser">新增用户</a></li>
+		<li><a href="${ctx}/work/customer/insertUser">添加咨询记录</a></li>
 	</ul>
 <form:form id="searchForm" modelAttribute="workLog" action="${ctx}/work/workDealInfoFiling/ulist?distinguish=1" method="post" class="breadcrumb form-search">
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>

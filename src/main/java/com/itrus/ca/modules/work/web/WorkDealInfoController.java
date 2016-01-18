@@ -1919,6 +1919,16 @@ public class WorkDealInfoController extends BaseController {
 			Long appId) throws ParseException {
 		User user=UserUtils.getUser();
 		List<Long> dealInfoByAreaIds = Lists.newArrayList();
+		
+		if (configProjectTypeId == null && startTime==null && appId==null) {
+//			List<ConfigApp> configApps = configAppService.findByconfigProjectType(configProjectTypeId);
+//			model.addAttribute("appList", configApps);
+			List<ConfigProjectType> configProjectTypes = configProjectTypeService.findProjectTypeList();
+			model.addAttribute("configProjectTypes", configProjectTypes);
+			model.addAttribute("startTime",new Date());
+			return "modules/work/statisticalYearProjectList";
+		}
+		
 		if (startTime == null || "".equals(startTime)) {
 			startTime = new SimpleDateFormat("yyyy").format(new Date());			
 		}
@@ -1942,11 +1952,7 @@ public class WorkDealInfoController extends BaseController {
 		}
 		List<ConfigProjectType> configProjectTypes = configProjectTypeService.findProjectTypeList();
 		model.addAttribute("configProjectTypes", configProjectTypes);
-		if (configProjectTypeId == null) {
-			List<ConfigApp> configApps = configAppService.findByconfigProjectType(configProjectTypeId);
-			model.addAttribute("appList", configApps);
-			return "modules/work/statisticalYearProjectList";
-		}
+		
 		List<Long> configappids = Lists.newArrayList();
 		if (configProjectTypeId != null && appId == null) {
 			List<Long> appids = Lists.newArrayList();
@@ -1966,7 +1972,21 @@ public class WorkDealInfoController extends BaseController {
 			model.addAttribute("appList", configApps);
 			model.addAttribute("appid", appId);
 			configappids.add(appId);			
-		} else {
+		} else if(configProjectTypeId == null && appId == null)
+		{
+			List<Long> appids = Lists.newArrayList();
+			List<ConfigApp> configApps = configAppService.findAllConfigApp();
+//			model.addAttribute("appList", configApps);
+			if (configApps != null) {
+				for (int a = 0; a < configApps.size(); a++) {
+					appids.add(configApps.get(a).getId());
+					configappids.add(configApps.get(a).getId());
+				}
+			} else {
+				appids.add(-1L);
+			}
+		}else
+		{
 			configappids.clear();
 		}
 		
@@ -2138,6 +2158,10 @@ public class WorkDealInfoController extends BaseController {
 		
 		model.addAttribute("zj", zj);
 		model.addAttribute("w_months", w_months);
+		if(w_months.size()==0)
+		{
+			model.addAttribute("message", "本次查询结果没有记录");
+		}
 		model.addAttribute("months", months);
 		model.addAttribute("appid", appId);
 		model.addAttribute("configProjectTypeId", configProjectTypeId);
