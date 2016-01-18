@@ -87,43 +87,133 @@
 			</div>
 	</form:form>
 	<tags:message content="${message}"/>
-			<c:if test="${projectcount!=null }">
+		
+		<c:if test="${projectcount!=null}">
 		<table id="projectcountTable"
 		class="table table-striped table-bordered table-condensed">
-		<thead>
-				<tr>
-					<td rowspan=2>新增：</td>
-					<td>个人证书 一年期证书${projectcount.addPersonalYearCertificate}张</td>
-					<td>个人证书 二年期证书 ${projectcount.addPersonalTwoYearCertificate}张</td>
-					<td>个人证书 四年期证书 ${projectcount.addPersonalFourYearCertificate}张</td>
+			
+<%-- 				<tr>
+					
+					<td>新增一年期证书${projectcount.add1}张</td>
+					<td> 新增二年期证书 ${projectcount.add2}张</td>
+					<td> 新增四年期证书 ${projectcount.add4}张</td>
+					<td> 新增五年期证书 ${projectcount.add5}张</td>
 				</tr>
+				
 				<tr>
 					
-					<td>企业证书 一年期证书${projectcount.addcompanyYearCertificate}张</td>
-					<td>企业证书 二年期证书 ${projectcount.addcompanyTwoYearCertificate}张</td>
-					<td>企业证书 四年期证书 ${projectcount.addcompanyFourYearCertificate}张</td>
+					<td>更新 一年期证书${projectcount.renew1}张</td>
+					<td> 更新二年期证书 ${projectcount.renew2}张</td>
+					<td>更新 四年期证书 ${projectcount.renew4}张</td>
+					<td> 更新五年期证书 ${projectcount.renew2}张</td>
+				</tr>
+				
+				<tr>
+					<td>遗失补办：证书${projectcount.lostCerate}张</td>
+					<td>损坏更换：证书${projectcount.damageCertificate}张</td>
+					<td>变更：证书</td>
+					<td>更新+变更：证书</td>
 				</tr>
 				<tr>
-					<td rowspan=2>更新：</td>
-					<td>个人证书 一年期证书${projectcount.updatePersonalYearCertificate}张</td>
-					<td>个人证书 二年期证书 ${projectcount.updatePersonalTwoYearCertificate}张</td>
-					<td>个人证书 四年期证书 ${projectcount.updatePersonalFourYearCertificate}张</td>
+					<td>更新+遗失补办：证书</td>
+					<td>更新+损坏更换：证书</td>
+					<td>变更+遗失补办：证书</td>
+					<td>变更+损坏更换：证书</td>
 				</tr>
+				<tr>
+					<td>更新+变更+遗失补办：证书</td>
+					<td>更新+变更+损坏更换：证书</td>
+					<td colspan="2">吊销：证书</td>
+				</tr> --%>
+			<thread>
 				<tr>
 					
-					<td>企业证书 一年期证书${projectcount.updatecompanyYearCertificate}张</td>
-					<td>企业证书 二年期证书 ${projectcount.updatecompanyTwoYearCertificate}张</td>
-					<td>企业证书 四年期证书 ${projectcount.updateFourYearCertificate}张</td>
+					
+					<th colspan=4>新增</th>
+					<th colspan=4>更新</th>
+					<th rowspan="2">遗失补办</th>
+					<th rowspan="2">损坏更换</th>
+					<th rowspan="2">信息变更</th>
+					<th colspan="4">更新+变更</th>
+					<th colspan="4">更新+遗失补办</th>
+					<th colspan="4">更新+损坏更换</th>
+					<th rowspan="2">变更+遗失补办</th>
+					<th rowspan="2">变更+损坏更换</th>
+					<th colspan="4">更新+变更+遗失补办</th>
+					<th colspan="4">更新+变更+损坏更换</th>
 				</tr>
 				<tr>
-					<td colspan=2>遗失补办：证书${projectcount.lostCerate}张</td>
-					<td colspan=2>损坏更换：证书${projectcount.damageCertificate}张</td>
-					
-				</tr>
-		</thead>
+				<td style="text-align:center; vertical-align: middle;">1年</td>
+				<td style="text-align:center; vertical-align: middle;">2年</td>
+				<td style="text-align:center; vertical-align: middle;">4年</td>
+				<td style="text-align:center; vertical-align: middle;">5年</td>
+				<td style="text-align:center; vertical-align: middle;">1年</td>
+				<td style="text-align:center; vertical-align: middle;">2年</td>
+				<td style="text-align:center; vertical-align: middle;">4年</td>
+				<td style="text-align:center; vertical-align: middle;">5年</td>
+				<td style="text-align:center; vertical-align: middle;">1年</td>
+				<td style="text-align:center; vertical-align: middle;">2年</td>
+				<td style="text-align:center; vertical-align: middle;">4年</td>
+				<td style="text-align:center; vertical-align: middle;">5年</td>
+				<td style="text-align:center; vertical-align: middle;">1年</td>
+				<td style="text-align:center; vertical-align: middle;">2年</td>
+				<td style="text-align:center; vertical-align: middle;">4年</td>
+				<td style="text-align:center; vertical-align: middle;">5年</td>
+				<td style="text-align:center; vertical-align: middle;">1年</td>
+				<td style="text-align:center; vertical-align: middle;">2年</td>
+				<td style="text-align:center; vertical-align: middle;">4年</td>
+				<td style="text-align:center; vertical-align: middle;">5年</td>
+				<td style="text-align:center; vertical-align: middle;">1年</td>
+				<td style="text-align:center; vertical-align: middle;">2年</td>
+				<td style="text-align:center; vertical-align: middle;">4年</td>
+				<td style="text-align:center; vertical-align: middle;">5年</td>
+				<td style="text-align:center; vertical-align: middle;">1年</td>
+				<td style="text-align:center; vertical-align: middle;">2年</td>
+				<td style="text-align:center; vertical-align: middle;">4年</td>
+				<td style="text-align:center; vertical-align: middle;">5年</td>
+				
+			</tr> 
+			</thread>
+			<tbody>
+				<td>${projectcount.add1}</td>
+				<td>${projectcount.add2}</td>
+				<td>${projectcount.add4}</td>
+				<td>${projectcount.add5}</td>
+				<td>${projectcount.renew1}</td>
+				<td>${projectcount.renew2}</td>
+				<td>${projectcount.renew4}</td>
+				<td>${projectcount.renew5}</td>
+				<td>${projectcount.lostCerate}</td>
+				<td>${projectcount.damageCertificate}</td>
+				<td>${projectcount.modifyNum}</td>
+				<td>${projectcount.updateChangeNum}</td>
+				<td>${projectcount.updateChangeNum2}</td>
+				<td>${projectcount.updateChangeNum4}</td>
+				<td>${projectcount.updateChangeNum5}</td>
+				<td>${projectcount.updateLostNum}</td>
+				<td>${projectcount.updateLostNum2}</td>
+				<td>${projectcount.updateLostNum4}</td>
+				<td>${projectcount.updateLostNum5}</td>
+				<td>${projectcount.updateReplaceNum}</td>
+				<td>${projectcount.updateReplaceNum2}</td>
+				<td>${projectcount.updateReplaceNum4}</td>
+				<td>${projectcount.updateReplaceNum5}</td>
+				<td>${projectcount.changeLostNum}</td>
+				<td>${projectcount.changeReplaceNum}</td>
+				<td>${projectcount.changeUpdateLostNum}</td>
+				<td>${projectcount.changeUpdateLostNum2}</td>
+				<td>${projectcount.changeUpdateLostNum4}</td>
+				<td>${projectcount.changeUpdateLostNum5}</td>
+				<td>${projectcount.changeUpdateReplaceNum}</td>
+				<td>${projectcount.changeUpdateReplaceNum2}</td>
+				<td>${projectcount.changeUpdateReplaceNum4}</td>
+				<td>${projectcount.changeUpdateReplaceNum5}</td>
+				
+			</tbody>
 		
 	</table>
 	</c:if>
+	
 	<table id="contentTable" class="table table-striped table-bordered table-condensed">
 		<thead>
 			<tr>
