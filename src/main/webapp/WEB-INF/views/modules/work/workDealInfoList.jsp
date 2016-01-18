@@ -318,6 +318,7 @@ $(document)
             return false;
         }
         top.$.jBox.tip("正在批量导入新增数据...", 'loading');
+       
 		var options = {
 			type : 'post',
 			dataType : 'json',
@@ -335,12 +336,14 @@ $(document)
 					top.$.jBox.tip("上传失败!");
 					var info = "失败信息:<br>"+data.msg;
 					top.$.jBox.info(info);
+					document.getElementById("declareDiv").style.display= "none";
 					//top.$.jBox.tip("上传失败"+data.msg);
 					//$("#searchForm").submit();
 				}else{
 					top.$.jBox.tip("上传失败!");
 					var info = "失败信息:<br>"+data.msg;
 					top.$.jBox.info(info);
+					document.getElementById("declareDiv").style.display= "none";
 					//top.$.jBox.tip("上传失败："+data.errorMsg);
 					//$("#searchForm").submit();
 				}

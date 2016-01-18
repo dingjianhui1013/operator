@@ -7274,7 +7274,7 @@ public class WorkDealInfoController extends BaseController {
 			if (dealInfo.getWorkCertInfo().getIssuerDn() != null
 					&& !dealInfo.getWorkCertInfo().getIssuerDn().equals("")) {
 
-				if (dealInfo.getDealInfoStatus().equals("1")) {
+				if (!dealInfo.getDealInfoStatus().equals("7")) {
 					json.put("isOK", 0);
 				} else {
 					json.put("isOK", 1);

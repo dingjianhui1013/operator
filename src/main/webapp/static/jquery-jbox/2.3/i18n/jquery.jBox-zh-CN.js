@@ -15,7 +15,7 @@ jBoxConfig.defaults = {
     draggable: true, /* 是否可以拖动窗口 */
     dragLimit: false, /* 在可以拖动窗口的情况下，是否限制在可视范围 */
     dragClone: false, /* 在可以拖动窗口的情况下，鼠标按下时窗口是否克隆窗口 */
-    persistent: true, /* 在显示隔离层的情况下，点击隔离层时，是否坚持窗口不关闭 */
+    persistent: false, /* 在显示隔离层的情况下，点击隔离层时，是否坚持窗口不关闭 */
     showScrolling: true, /* 是否显示浏览的滚动条 */
     ajaxData: {},  /* 在窗口内容使用get:或post:前缀标识的情况下，ajax post的数据，例如：{ id: 1 } 或 "id=1" */
     iframeScrolling: 'auto', /* 在窗口内容使用iframe:前缀标识的情况下，iframe的scrolling属性值，可选值有：'auto'、'yes'、'no' */

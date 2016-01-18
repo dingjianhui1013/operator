@@ -4436,9 +4436,9 @@ public class WorkDealInfoService extends BaseService {
 			ifErr.append("模板中数据为空！<br>");
 			return ifErr(-1, ifErr.toString());
 		}else{
-			int addNum = agent.getConfigureNum();
+			int addNum = agent.getSurplusNum();
 			
-			if (addNum>(rows-2) && !agent.getTempStyle().equals("1")) {
+			if (addNum<(rows-2) && !agent.getTempStyle().equals("1")) {
 				ifErr.append("计费策略模板配置新增数量不足！<br>");
 				return ifErr(-1, ifErr.toString());
 			}
