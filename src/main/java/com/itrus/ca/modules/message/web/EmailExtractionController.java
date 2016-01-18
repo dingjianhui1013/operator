@@ -103,6 +103,11 @@ public class EmailExtractionController extends BaseController {
 		model.addAttribute("wdiType", WorkDealInfoType.WorkDealInfoTypeMap);
 		model.addAttribute("wdiStatus",
 				WorkDealInfoStatus.WorkDealInfoStatusMap);
+		
+		if(apply==null&&workType==null){
+			
+			return "modules/message/emailExtractionList";
+		}
 		model.addAttribute("page", page);
 		
 		return "modules/message/emailExtractionList";

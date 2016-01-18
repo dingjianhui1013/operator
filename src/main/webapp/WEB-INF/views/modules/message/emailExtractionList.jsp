@@ -32,7 +32,16 @@
 							+companyName;
 				}
 			
-		
+		function onSubmit() {
+			
+				if ($("#apply").val() == "") {
+					top.$.jBox.tip("请选择应用");
+					return false;
+				} else {
+					return true;
+				}
+			
+		}
 	</script>
 </head>
 <body>
@@ -83,7 +92,7 @@
 					</c:if>>${type.value}</option>
 				</c:forEach>
 			</select> 			
-			&nbsp;<input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/>
+			&nbsp;<input id="btnSubmit" class="btn btn-primary" type="submit" onclick="return onSubmit();" value="查询"/>
 		&nbsp;&nbsp;&nbsp;&nbsp;
 		<a href="javascript:dca()" class="btn btn-primary">导出</a>
 		</div>
