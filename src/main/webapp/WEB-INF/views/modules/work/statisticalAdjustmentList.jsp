@@ -7,7 +7,23 @@
 <meta name="decorator" content="default" />
 <script type="text/javascript">
 	$(document).ready(function() {
-
+		$("#searchForm").validate({
+			submitHandler: function(form){
+				loading('正在提交，请稍等...');
+				form.submit();
+			},
+			errorContainer: "#messageBox",
+			errorPlacement: function(error, element) {
+				$("#messageBox").text("输入有误，请先更正。");
+				if (element.is(":checkbox")||element.is(":radio")||element.parent().is(".input-append")){
+					//alert(element[0].tagName);
+					(element.parent().find('label:last-child')).after(error);
+				} else {
+					//alert(element[0].tagName);
+					error.insertAfter(element);
+				}
+			}
+	});
 	});
 	function page(n, s) {
 		$("#pageNo").val(n);
@@ -55,19 +71,19 @@
 		</select>
 <%-- 		<input type="text" value="${companyName}" name="companyName" class="input-medium" id="companyName"/> --%>
 		<label>到款日期 ：</label>
-		<input id="dkstartTime" class="input-medium Wdate" type="text" required="required" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});"
+		<input id="dkstartTime" class="input-medium Wdate" type="text"  onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});"
 								value="<fmt:formatDate value="${dkstartTime}" pattern="yyyy-MM-dd"/>"
 								maxlength="20" readonly="readonly" name="dkstartTime" />至
-		<input id="dkendTime" class="input-medium Wdate" type="text" required="required" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'startTime\')}'});"
+		<input id="dkendTime" class="input-medium Wdate" type="text"  onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'startTime\')}'});"
 								value="<fmt:formatDate value="${dkendTime}" pattern="yyyy-MM-dd"/>"
 								maxlength="20" readonly="readonly" name="dkendTime" />
 		</div>
 		<div style="margin-top: 8px">
 		<label>制证日期 ：</label>
-		<input id="zzstartTime" class="input-medium Wdate" type="text" required="required" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});"
+		<input id="zzstartTime" class="input-medium Wdate" type="text" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});"
 								value="<fmt:formatDate value="${zzstartTime}" pattern="yyyy-MM-dd"/>"
 								maxlength="20" readonly="readonly" name="zzstartTime" />至
-		<input id="zzendTime" class="input-medium Wdate" type="text" required="required" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'startTime\')}'});"
+		<input id="zzendTime" class="input-medium Wdate" type="text"  onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'startTime\')}'});"
 								value="<fmt:formatDate value="${zzendTime}" pattern="yyyy-MM-dd"/>"
 								maxlength="20" readonly="readonly" name="zzendTime" />
 		&nbsp;&nbsp;&nbsp;&nbsp;<input id="btnSubmit" class="btn btn-primary" type="submit"

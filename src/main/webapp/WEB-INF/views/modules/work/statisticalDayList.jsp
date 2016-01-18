@@ -7,7 +7,23 @@
 <meta name="decorator" content="default" />
 <script type="text/javascript">
 	$(document).ready(function() {
-		
+		$("#searchForm").validate({
+			submitHandler: function(form){
+				loading('正在提交，请稍等...');
+				form.submit();
+			},
+			errorContainer: "#messageBox",
+			errorPlacement: function(error, element) {
+				$("#messageBox").text("输入有误，请先更正。");
+				if (element.is(":checkbox")||element.is(":radio")||element.parent().is(".input-append")){
+					//alert(element[0].tagName);
+					(element.parent().find('label:last-child')).after(error);
+				} else {
+					//alert(element[0].tagName);
+					error.insertAfter(element);
+				}
+			}
+	});
 	});
 	function page(n, s) {
 		$("#pageNo").val(n);

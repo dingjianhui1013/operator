@@ -1119,6 +1119,10 @@ public class WorkDealInfoController extends BaseController {
 			payMethodMoneys.add(moneys);
 			model.addAttribute("moneys", payMethodMoneys);
 			model.addAttribute("dates", months);
+			if(months.length==0)
+			{
+				model.addAttribute("message", "此查询条件没有数据");
+			}
 			model.addAttribute("office_payMethod", office_payMethod);
 			model.addAttribute("workoffice_MoneyVo", o_m);
 			model.addAttribute("workDate_Mone", w_m);
@@ -1436,6 +1440,10 @@ public class WorkDealInfoController extends BaseController {
 			payMethodMoneys.add(moneys);
 			model.addAttribute("moneys", payMethodMoneys);
 			model.addAttribute("dates", months);
+			if(months.length==0)
+			{
+				model.addAttribute("message", "此查询条件没有数据");
+			}
 			model.addAttribute("office_payMethod", office_payMethod);
 			model.addAttribute("workoffice_MoneyVo", o_m);
 			model.addAttribute("workDate_Mone", w_m);
@@ -1733,6 +1741,10 @@ public class WorkDealInfoController extends BaseController {
 			model.addAttribute("district_Moneys", district_Moneys);
 			model.addAttribute("moneys", moneys);
 			model.addAttribute("dates", months);
+			if(months.length==0)
+			{
+				model.addAttribute("message", "此查询条件没有数据");
+			}
 			model.addAttribute("office_District", office_District);
 			model.addAttribute("odms", odms);
 			model.addAttribute("district_payMethod", district_payMethod);
@@ -1758,6 +1770,12 @@ public class WorkDealInfoController extends BaseController {
 	public String statisticalAdjustment(FinancePaymentInfo financePaymentInfo, Date dkstartTime, Date dkendTime,
 			Date zzstartTime, Date zzendTime, HttpServletRequest request, String companyName,
 			HttpServletResponse response, Model model) throws ParseException {
+		if(dkstartTime==null&&dkstartTime==null&&companyName==null&&financePaymentInfo.getCompany()==null)
+		{
+			List<ConfigApp> configApps=configAppService.findAllConfigApp();
+			model.addAttribute("companys", configApps);
+			return "modules/work/statisticalAdjustmentList";
+		}
 		if (dkendTime != null) {
 			dkendTime.setHours(23);
 			dkendTime.setMinutes(59);
@@ -1903,6 +1921,10 @@ public class WorkDealInfoController extends BaseController {
 		// page.setList(p_ds);
 		// model.addAttribute("page", page);
 		model.addAttribute("workpaymentInfo_dealinfoVo", p_ds);
+		if(p_ds.size()==0)
+		{
+			model.addAttribute("message", "此查询条件没有数据");
+		}
 		model.addAttribute("dkstartTime", dkstartTime);
 		model.addAttribute("dkendTime", dkendTime);
 		model.addAttribute("zzstartTime", zzstartTime);
