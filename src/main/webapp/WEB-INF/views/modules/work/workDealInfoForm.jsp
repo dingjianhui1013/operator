@@ -675,6 +675,7 @@ var selected = false;
 					{
 						var urlajax = "${ctx}/work/workDealInfo/ajaxEnterpriseCount?companyIds=" + companyId+"&productId="+productId;
 						$.getJSON(urlajax,function(data){
+							
 							if(data.index>0)
 								{
 									var url = "${ctx}/work/workDealInfo/showCertEnterprise?companyIds=" + companyId+"&productId="+productId;
@@ -1221,7 +1222,10 @@ var selected = false;
 					data:{"companyname":companyName,_:new Date().getTime()},
 					dataType:'json',
 					success:function(data){
-						showCert(data.Idlis);
+						if(data.Idlis.length>0&&data.Idlis!=null)
+							{
+								showCert(data.Idlis);
+							}
 					}
 				});	
 			}
