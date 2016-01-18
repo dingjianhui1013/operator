@@ -358,7 +358,7 @@ public class WorkCustomerController extends BaseController {
 		 * }
 		 */
 		List<WorkCompany> list=workCompanyService.findAll();
-		List<ConfigApp> appNames=configAppService.findall();
+		List<ConfigApp> appNames=configAppService.findAllConfigApp();
 		Date oetDate = null;
 		SimpleDateFormat sim = new SimpleDateFormat("yyyy-MM-dd");
 		if(endTime!=null&&!endTime.equals("")){
@@ -427,15 +427,15 @@ public class WorkCustomerController extends BaseController {
 			String ywxts=ywxt.replace(","," ");
 			workLog.setYwxt(ywxts);
 		}
-		List<WorkCompany> com= workCompanyService.findByCompanyName(workLog.getWorkCompany().getCompanyName());
-		if(com.size()>0)
-		{
-			for(int i=0;i<com.size();i++)
-			{
-				workLog.setWorkCompany(com.get(i));
-			}
-			
-		}
+//		List<WorkCompany> com= workCompanyService.findByCompanyName(workLog.getWorkCompany().getCompanyName());
+//		if(com.size()>0)
+//		{
+//			for(int i=0;i<com.size();i++)
+//			{
+//				workLog.setWorkCompany(com.get(i));
+//			}
+//			
+//		}
 //		workLog.setWorkCompany(workCompanyService.get(workCompanyId));
 		workLog.setCreatTime(new Date());
 		workLog.setCreateBy(UserUtils.getUser());

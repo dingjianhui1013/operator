@@ -25,7 +25,16 @@
 <form:form id="searchForm" modelAttribute="workLog" action="${ctx}/work/workDealInfoFiling/ulist?distinguish=1" method="post" class="breadcrumb form-search">
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
 		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
-		<label>服务对象 ：</label><form:input path="workCompany.companyName" htmlEscape="false" maxlength="50" class="input-medium"/>
+		<label>服务对象 ：</label>
+		
+		<form:select path="configApp.id">
+			<form:option value="">请选择服务对象</form:option>
+			<c:forEach items="${appNames}" var="configApp">
+				<form:option value="${configApp.id}">${configApp.appName}</form:option>
+			</c:forEach>
+		</form:select>
+		
+<%-- 		<form:input path="configApp.appName" htmlEscape="false" maxlength="50" class="input-medium"/> --%>
 <%-- 		<label>服务主题 ：</label><form:input path="serTitle" htmlEscape="false" maxlength="50" class="input-medium"/> --%>
 		<label>完成状态 ：</label>
 		<form:select path="completeType"  class="input-medium">
@@ -66,11 +75,11 @@
 		<c:forEach items="${page.list}" var="workLog">
 			<tr>
 <%-- 				<td><a href="${ctx}/work/workDealInfoFiling/formF?id=${workLog.workDealInfo.id}">${workLog.workCompany.companyName}</a></td> --%>
-				<td>${workLog.workCompany.companyName}</td>
+				<td>${workLog.configApp.appName}</td>
 				<td>${workLog.serTitle}</td>
 				<td>${workLog.access}</td>
-				<td>${workLog.tel }</td>
-				<td>${workLog.recordContent }</td>
+				<td>${workLog.tel}</td>
+				<td>${workLog.recordContent}</td>
 				<td>
 					<c:if test="${workLog.completeType==1 }">未完成</c:if>
 					<c:if test="${workLog.completeType==0 }">已完成</c:if>

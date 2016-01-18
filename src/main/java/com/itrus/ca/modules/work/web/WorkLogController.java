@@ -298,6 +298,8 @@ public class WorkLogController extends BaseController {
 	@RequestMapping(value = "formFiling")
 	public String formFiling(WorkLog workLog, Model model) {
 		model.addAttribute("workLog", workLog);
+		List<ConfigApp> appNames=configAppService.findAllConfigApp();
+		model.addAttribute("appNames", appNames);
 		return "modules/work/workLogFilingForm";
 	}
 	@RequiresPermissions("work:workLog:view")
@@ -341,8 +343,10 @@ public class WorkLogController extends BaseController {
 	public String updateFromFi(WorkLog workLog, Model model) {
 		model.addAttribute("workLog", workLog);
 		model.addAttribute("userName", UserUtils.getUser().getName());
-		List<WorkCompany> list=workCompanyService.findAll();
-		model.addAttribute("list", list);
+//		List<WorkCompany> list=workCompanyService.findAll();
+//		model.addAttribute("list", list);
+		List<ConfigApp> appNames=configAppService.findAllConfigApp();
+		model.addAttribute("appNames", appNames);
 		return "modules/work/workLogUpdateFormFi";
 	}
 	@RequestMapping(value = "saveK")
@@ -471,19 +475,22 @@ public class WorkLogController extends BaseController {
 	}
 	@RequestMapping(value = "saveFi")
 	public String saveFi(Long dealInfoId, WorkLog workLog, Model model,
-			RedirectAttributes redirectAttributes) {
+			RedirectAttributes redirectAttributes,Long appid) {
 		if (!beanValidator(model, workLog)) {
 			return form(workLog, model);
 		}
 		if (dealInfoId != null && dealInfoId != 0) {
 			WorkDealInfo workDealInfo = workDealInfoService.get(dealInfoId);
 			workLog.setWorkDealInfo(workDealInfo);
-			workLog.setWorkCompany(workDealInfo.getWorkCompany());
+//			workLog.setWorkCompany(workDealInfo.getWorkCompany());
 			workLog.setConfigApp(workDealInfo.getConfigApp());
 		}
 		workLog.setCreatTime(new Date());
 		workLog.setCreateBy(UserUtils.getUser());
 		workLog.setOffice(UserUtils.getUser().getOffice());
+		ConfigApp config=configAppService.findByAppId(appid);
+		workLog.setConfigApp(config);
+//		workLog.setConfigApp(workLog.getConfigApp());
 		workLogService.save(workLog);
 		addMessage(redirectAttributes, "保存工作记录成功");
 		return "redirect:" + Global.getAdminPath() + "/work/workDealInfoFiling/ulist?distinguish=1";

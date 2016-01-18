@@ -59,10 +59,10 @@
 		<div class="control-group">
 			<label class="control-label">服务对象:</label>
 			<div class="controls">
-			<select name="workCompany.companyName">
-					<option value=""></option>
-					<c:forEach items="${list}" var="company">
-						<c:if test="${company.companyName!=null}"><option value="${company.companyName}" <c:if test="${workLog.workCompany.id==company.id}"> selected="selected" </c:if>>${company.companyName}</option></c:if>
+			<select name="appid">
+					<option></option>
+					<c:forEach items="${appNames}" var="configApp">
+						<option value="${configApp.id}" <c:if test="${configApp.id==workLog.configApp.id}"> selected="selected" </c:if>>${configApp.appName}</option>
 					</c:forEach>
 				</select>
 			</div>
@@ -96,7 +96,7 @@
 		<div class="control-group">
 			<label class="control-label">联系方式:</label>
 			<div class="controls">
-				<input type = "text" name = "tel" class="required" value = "${workLog.serTitle }" />
+				<input type = "text" name = "tel"  maxlength="11" class="required" value = "${workLog.tel}" />
 			</div>
 		</div>
 		<div class="control-group">

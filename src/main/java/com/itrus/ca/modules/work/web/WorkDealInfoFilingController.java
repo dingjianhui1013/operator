@@ -195,6 +195,8 @@ public class WorkDealInfoFilingController extends BaseController {
 		Page<WorkLog> page = workLogService.findKfList(new Page<WorkLog>(
 				request, response), workLog);
 		model.addAttribute("page", page);
+		List<ConfigApp> appNames=configAppService.findAllConfigApp();
+		model.addAttribute("appNames", appNames);
 		return "modules/work/workDealInfoFilingListT";
 	}
 	@RequiresPermissions("work:workDealInfo:view")
