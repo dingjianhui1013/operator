@@ -254,6 +254,9 @@
 						</c:if>>${off.name}</option>
 				</c:forEach>
 			</select>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<input id="btnSubmit" class="btn btn-primary" type="submit"
+				value="查询" />
 		</div>
 		<br>
 
@@ -302,17 +305,11 @@
 					.append(
 							'<option value="${workDealInfo.workCompany.district}" selected="selected">${workDealInfo.workCompany.district}</option>');
 		</script>
-		</div>
-		<br>
-		<br>
-		<div>
-			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			<input id="btnSubmit" class="btn btn-primary" type="submit"
-				value="查询" />
-			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			<a href="javascript:send()" class="btn btn-primary">发送</a> <input
 				type="hidden" name="checkIds" id="checkIds" value="${checkIds }" />
 		</div>
+	
 	</form:form>
 	<tags:message content="${message}" />
 	<table id="contentTable"

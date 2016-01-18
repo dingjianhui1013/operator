@@ -125,7 +125,7 @@ public class MessageSendingController extends BaseController {
 				i++;
 			}
 		}
-
+		
 		if (areaId != null) {
 			model.addAttribute("areaId", areaId);
 			List<Office> offices = officeService.findByParentId(areaId);
@@ -161,7 +161,6 @@ public class MessageSendingController extends BaseController {
 		model.addAttribute("wdiType", WorkDealInfoType.WorkDealInfoTypeMap);
 		model.addAttribute("wdiStatus", WorkDealInfoStatus.WorkDealInfoStatusMap);
 		model.addAttribute("workTypes", workDealInfoType.getProductTypeListNew());
-		model.addAttribute("page", page);
 
 		model.addAttribute("offsList", offsList);
 		List<ConfigApp> configAppList = configAppService.selectAll();
@@ -169,7 +168,10 @@ public class MessageSendingController extends BaseController {
 		model.addAttribute("apply", apply);
 		model.addAttribute("workType", workType);
 		model.addAttribute("smsId", smsId);
-
+		if(areaId==null&&officeId==null&&apply==null&&workType==null){
+			return "modules/message/messageSendingList";
+		}
+		model.addAttribute("page", page);
 		return "modules/message/messageSendingList";
 	}
 	@RequiresPermissions("message:messageSending:view")
