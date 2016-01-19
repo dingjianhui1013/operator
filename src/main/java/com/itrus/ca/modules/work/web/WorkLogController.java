@@ -178,58 +178,61 @@ public class WorkLogController extends BaseController {
 				int qt=0;
 				for(int w=0;w<workLogs.size();w++)
 				{
-					if(workLogs.get(w).getAccess().equals(Accesss[a]))
+					if(workLogs.get(w).getAccess()!=null)
 					{
-						if(workLogs.get(w).getYwzx()!=null)
+						if(workLogs.get(w).getAccess().equals(Accesss[a]))
 						{
-							if(workLogs.get(w).getYwzx().indexOf("新办")!=-1)
+							if(workLogs.get(w).getYwzx()!=null)
 							{
-								xz++;
+								if(workLogs.get(w).getYwzx().indexOf("新办")!=-1)
+								{
+									xz++;
+								}
+								if(workLogs.get(w).getYwzx().indexOf("更新")!=-1)
+								{
+									gx++;
+								}
+								if(workLogs.get(w).getYwzx().indexOf("解锁")!=-1)
+								{
+									js++;
+								}
+								if(workLogs.get(w).getYwzx().indexOf("变更")!=-1)
+								{
+									bg++;
+								}
+								if(workLogs.get(w).getYwzx().indexOf("补办")!=-1)
+								{
+									bb++;
+								}
+								if(workLogs.get(w).getYwzx().indexOf("用途")!=-1)
+								{
+									yt++;
+								}
+								if(workLogs.get(w).getYwzx().indexOf("密码")!=-1)
+								{
+									mm++;
+								}
+								if(workLogs.get(w).getYwzx().indexOf("授权")!=-1)
+								{
+									sq++;
+								}
+								if(workLogs.get(w).getYwzx().indexOf("合作")!=-1)
+								{
+									hz++;
+								}
 							}
-							if(workLogs.get(w).getYwzx().indexOf("更新")!=-1)
+							if(workLogs.get(w).getProbleType()!=null)
 							{
-								gx++;
+								qt++;
 							}
-							if(workLogs.get(w).getYwzx().indexOf("解锁")!=-1)
+							if(workLogs.get(w).getYwxt()!=null)
 							{
-								js++;
+								ywxt++;
 							}
-							if(workLogs.get(w).getYwzx().indexOf("变更")!=-1)
+							if(workLogs.get(w).getYwcz()!=null)
 							{
-								bg++;
+								ywcz++;
 							}
-							if(workLogs.get(w).getYwzx().indexOf("补办")!=-1)
-							{
-								bb++;
-							}
-							if(workLogs.get(w).getYwzx().indexOf("用途")!=-1)
-							{
-								yt++;
-							}
-							if(workLogs.get(w).getYwzx().indexOf("密码")!=-1)
-							{
-								mm++;
-							}
-							if(workLogs.get(w).getYwzx().indexOf("授权")!=-1)
-							{
-								sq++;
-							}
-							if(workLogs.get(w).getYwzx().indexOf("合作")!=-1)
-							{
-								hz++;
-							}
-						}
-						if(workLogs.get(w).getProbleType()!=null)
-						{
-							qt++;
-						}
-						if(workLogs.get(w).getYwxt()!=null)
-						{
-							ywxt++;
-						}
-						if(workLogs.get(w).getYwcz()!=null)
-						{
-							ywcz++;
 						}
 					}
 				}
@@ -573,4 +576,20 @@ public class WorkLogController extends BaseController {
 		}
 		return null;
 	}
+	
+	@RequiresPermissions("work:workLog:edit")
+	@RequestMapping(value = "achievements")
+	public String achievements(String name,Date startTime,Date endTime,Model model,HttpServletRequest request, HttpServletResponse response) {
+		if(name==null&&"".equals(name)&&startTime==null&&endTime==null)
+		{
+			return "modules/customer/workLogAchievements";
+		}
+		Page<WorkLog> page= workLogService.findworkLogAchievements(new Page<WorkLog>(request, response),name, startTime, endTime);
+		model.addAttribute("page", page);
+		model.addAttribute("startTime", startTime);
+		model.addAttribute("endTime", endTime);
+		model.addAttribute("name", name);
+		return "modules/customer/workLogAchievements";
+	}
+	
 }

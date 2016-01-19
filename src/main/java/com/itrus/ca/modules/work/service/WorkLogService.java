@@ -95,7 +95,7 @@ public class WorkLogService extends BaseService {
 		{
 			dc.add(Restrictions.eq("configApp.id",appId));
 		}
-		dc.add(Restrictions.ne("distinguish","1"));
+		dc.add(Restrictions.ne("distinguish","3"));
 		return workLogDao.find(dc);
 	}
 	public List<Map<String, Object>> findtj(List<Office> offices,String name,String staDate,String endDate){
@@ -349,5 +349,23 @@ public class WorkLogService extends BaseService {
 		Query off = workLogDao
 				.createSqlQuery("SELECT s.ID,s.NAME from SYS_USER s").setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
 		return off.list();
+	}
+	public Page<WorkLog> findworkLogAchievements(Page<WorkLog> page,String name, Date startTime, Date endTime){
+		DetachedCriteria dc=workLogDao.createDetachedCriteria();
+		dc.createAlias("createBy", "createBy");
+		if(name!=null&&!"".equals(name))
+		{
+			dc.add(Restrictions.eq("createBy.name", name));
+		}
+		if (startTime != null ) {
+			dc.add(Restrictions.ge("createDate", startTime));
+		}
+		if(endTime != null)
+		{
+			dc.add(Restrictions.le("createDate", endTime));
+		}
+		dc.add(Restrictions.isNotNull("distinguish"));
+		dc.addOrder(Order.desc("distinguish"));
+		return workLogDao.find(page,dc);
 	}
 }
