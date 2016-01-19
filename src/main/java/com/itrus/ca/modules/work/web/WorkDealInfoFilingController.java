@@ -192,11 +192,11 @@ public class WorkDealInfoFilingController extends BaseController {
 	@RequestMapping(value = { "ulist" })
 	public String ulist(WorkLog workLog, HttpServletRequest request,
 			HttpServletResponse response, Model model) {
-		Page<WorkLog> page = workLogService.findKfList(new Page<WorkLog>(
+		Page<WorkLog> page = workLogService.findKpList(new Page<WorkLog>(
 				request, response), workLog);
 		model.addAttribute("page", page);
 		List<ConfigApp> appNames=configAppService.findAllConfigApp();
-		model.addAttribute("appNames", appNames);
+		model.addAttribute("configApp", appNames);
 		return "modules/work/workDealInfoFilingListT";
 	}
 	@RequiresPermissions("work:workDealInfo:view")

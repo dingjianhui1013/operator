@@ -37,21 +37,22 @@
 		<tags:message content="${message}"/>
 		<input type = "hidden" name = "dealInfoId" value = "${workLog.id}"/>
 		<div class="control-group">
-			<label class="control-label">服务对象:</label>
+			<label class="control-label">应用项目名称:</label>
 			<div class="controls">
-			<select name="appid" disabled="disabled">
-					<option></option>
-					<c:forEach items="${appNames}" var="configApp">
-						<option value="${configApp.id}" <c:if test="${configApp.id==workLog.configApp.id}"> selected="selected" </c:if>>${configApp.appName}</option>
-					</c:forEach>
-				</select>
+				${workLog.configApp.appName}
 			</div>
 		</div>
+<!-- 		<div class="control-group"> -->
+<!-- 			<label class="control-label">应用名称:</label> -->
+<!-- 			<div class="controls"> -->
+<%-- 				${workLog.configApp.appName } --%>
+<!-- 			</div> -->
+<!-- 		</div> -->
 		<div class="control-group">
 			<label class="control-label">客服接入:</label>
 			<div class="controls">
 				<select name = "access" disabled="disabled">
-					<option <c:if test="${workLog.access=='电话' }">selected="selected"</c:if>  value = "电话">电话</option>
+					<option <c:if test="${workLog.access=='电话' }">selected="selected"</c:if>   value = "电话">电话</option>
 					<option <c:if test="${workLog.access=='QQ' }">selected="selected"</c:if>  value = "QQ">QQ</option>
 					<option <c:if test="${workLog.access=='QQ远程' }">selected="selected"</c:if> value = "QQ远程">QQ远程</option>
 					<option <c:if test="${workLog.access=='在线工具' }">selected="selected"</c:if> value = "在线工具">在线工具</option>
@@ -62,27 +63,89 @@
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label"><span style="color : red">*</span>&nbsp;服务主题:</label>
+			<label class="control-label">服务类型:</label>
 			<div class="controls">
-				<input type = "text" name = "serTitle" class="required" value = "${workLog.serTitle }" disabled="disabled"/>
+				<select id="serType" name = "serType" disabled="disabled">
+					<option <c:if test="${workLog.serType=='日常客服' }">selected="selected"</c:if> value = "日常客服">日常客服</option>
+					<option <c:if test="${workLog.serType=='温馨提示' }">selected="selected"</c:if> value = "温馨提示">温馨提示</option>
+					<option <c:if test="${workLog.serType=='更新提示' }">selected="selected"</c:if> value = "更新提示">更新提示</option>
+					<option <c:if test="${workLog.serType=='回访' }">selected="selected"</c:if> value = "回访">回访</option>
+					<option <c:if test="${workLog.serType=='提示' }">selected="selected"</c:if> value = "提示">提示</option>
+				</select>
+			</div>
+		</div>
+		
+<!-- 		<div id="wtlx" class="control-group"> -->
+<!-- 			<label class="control-label">问题类型:</label> -->
+<!-- 			<div class="controls"> -->
+<!-- 				<select name = "probleType" disabled="disabled"> -->
+<%-- 					<option <c:if test="${workLog.probleType=='业务咨询' }">selected="selected"</c:if> value = "业务咨询">业务咨询</option> --%>
+<%-- 					<option <c:if test="${workLog.probleType=='环境' }">selected="selected"</c:if> value = "环境">环境</option> --%>
+<%-- 					<option <c:if test="${workLog.probleType=='驱动' }">selected="selected"</c:if> value = "驱动">驱动</option> --%>
+<%-- 					<option <c:if test="${workLog.probleType=='key' }">selected="selected"</c:if> value = "key">key</option> --%>
+<%-- 					<option <c:if test="${workLog.probleType=='网络' }">selected="selected"</c:if> value = "网络">网络</option> --%>
+<%-- 					<option <c:if test="${workLog.probleType=='解锁' }">selected="selected"</c:if> value = "解锁">解锁</option> --%>
+<%-- 					<option <c:if test="${workLog.probleType=='更新操作' }">selected="selected"</c:if> value = "更新操作">更新操作</option> --%>
+<%-- 					<option <c:if test="${workLog.probleType=='业务系统' }">selected="selected"</c:if> value = "业务系统">业务系统</option> --%>
+<%-- 					<option <c:if test="${workLog.probleType=='业务操作' }">selected="selected"</c:if> value = "业务操作">业务操作</option> --%>
+<%-- 					<option <c:if test="${workLog.probleType=='其他' }">selected="selected"</c:if> value = "其他">其他</option> --%>
+<!-- 				</select> -->
+<!-- 			</div> -->
+<!-- 		</div> -->
+<!-- 		<div class="control-group"> -->
+<!-- 			<label class="control-label">服务主题:</label> -->
+<!-- 			<div class="controls"> -->
+<%-- 				<input type = "text" name = "serTitle"  disabled="disabled" class="required" value = "${workLog.serTitle }" onkeyup="value=this.value.search(/^[a-zA-Z0-9\u4e00-\u9fa5]+$/)?'':value"/> --%>
+<!-- 			</div> -->
+<!-- 		</div> -->
+<!-- 		<div class="control-group"> -->
+<!-- 			<label class="control-label">详细记录:</label> -->
+<!-- 			<div class="controls"> -->
+<%-- 				<textarea id="remarks"  disabled="disabled" class="valid" cols="4" rows="4" style="resize: none;" name="recordContent">${workLog.recordContent }</textarea> --%>
+<!-- 			</div> -->
+<!-- 		</div> -->
+		<div class="control-group">
+			<label class="control-label">业务咨询</label>
+			<br>
+			<div class="controls">
+				<input type="checkbox" disabled="disabled" <c:if test="${fn:contains(workLog.ywzx,'新办')==true}"> checked="checked"</c:if> name="ywzx">新办
+				<input type="checkbox" disabled="disabled" <c:if test="${fn:contains(workLog.ywzx,'更新')==true}"> checked="checked"</c:if> name="ywzx">更新 
+				<input type="checkbox" disabled="disabled" <c:if test="${fn:contains(workLog.ywzx,'解锁')==true}"> checked="checked"</c:if> name="ywzx">解锁 
+				<input type="checkbox" disabled="disabled" <c:if test="${fn:contains(workLog.ywzx,'变更')==true}"> checked="checked"</c:if> name="ywzx">变更 
+				<input type="checkbox" disabled="disabled" <c:if test="${fn:contains(workLog.ywzx,'补办')==true}"> checked="checked"</c:if> name="ywzx">补办
+				<input type="checkbox" disabled="disabled" <c:if test="${fn:contains(workLog.ywzx,'用途')==true}"> checked="checked"</c:if> name="ywzx">用途 
+				<input type="checkbox" disabled="disabled" <c:if test="${fn:contains(workLog.ywzx,'密码')==true}"> checked="checked"</c:if> name="ywzx">密码 
+				<input type="checkbox" disabled="disabled" <c:if test="${fn:contains(workLog.ywzx,'授权')==true}"> checked="checked"</c:if> name="ywzx">授权 
+				<input type="checkbox" disabled="disabled" <c:if test="${fn:contains(workLog.ywzx,'合作')==true}"> checked="checked"</c:if> name="ywzx">合作
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">详细记录:</label>
+			<label class="control-label">业务操作</label>
+			<br>	
 			<div class="controls">
-				<textarea class="valid" cols="4" rows="4" style="resize: none;" name="recordContent" disabled="disabled">${workLog.recordContent }</textarea>
+				<input type="checkbox" disabled="disabled" <c:if test="${fn:contains(workLog.ywcz,'驱动')==true}"> checked="checked"</c:if> name="ywcz">驱动
+				<input type="checkbox" disabled="disabled" <c:if test="${fn:contains(workLog.ywcz,'更新')==true}"> checked="checked"</c:if> name="ywcz">更新 
+				<input type="checkbox" disabled="disabled" <c:if test="${fn:contains(workLog.ywcz,'解锁')==true}"> checked="checked"</c:if> name="ywcz">解锁 
+				<input type="checkbox" disabled="disabled" <c:if test="${fn:contains(workLog.ywcz,'网络')==true}"> checked="checked"</c:if> name="ywcz">网络 
+				<input type="checkbox" disabled="disabled" <c:if test="${fn:contains(workLog.ywcz,'key')==true}"> checked="checked"</c:if> name="ywcz">key
+				<input type="checkbox" disabled="disabled" <c:if test="${fn:contains(workLog.ywcz,'控件')==true}"> checked="checked"</c:if> name="ywcz">控件 
+				<input type="checkbox" disabled="disabled" <c:if test="${fn:contains(workLog.ywcz,'浏览器')==true}"> checked="checked"</c:if> name="ywcz">浏览器 
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">联系方式:</label>
+			<label class="control-label">业务系统</label>
+			<br>
 			<div class="controls">
-				<input type = "text" name = "tel" class="required" value = "${workLog.tel }" disabled="disabled" />
+				<input type="checkbox" disabled="disabled" <c:if test="${fn:contains(workLog.ywxt,'业务咨询')==true}"> checked="checked"</c:if> name="ywxt">业务咨询
+				<input type="checkbox" disabled="disabled" <c:if test="${fn:contains(workLog.ywxt,'操作咨询')==true}"> checked="checked"</c:if> name="ywxt">操作咨询
+				<input type="checkbox" disabled="disabled" <c:if test="${fn:contains(workLog.ywxt,'绑定操作')==true}"> checked="checked"</c:if> name="ywxt">绑定操作
+				<input type="checkbox" disabled="disabled" <c:if test="${fn:contains(workLog.ywxt,'系统出错')==true}"> checked="checked"</c:if> name="ywxt">系统出错
 			</div>
 		</div>
 		<div class="control-group">
 			<label class="control-label">记录人员:</label>
 			<div class="controls">
-				${workLog.createBy.name }
+				<input type = "text"  disabled="disabled" value = "${workLog.createBy.name }" class="required" onkeyup="value=this.value.search(/^[a-zA-Z\u4e00-\u9fa5]+$/)?'':value"/>
 			</div>
 		</div>
 		<div class="control-group">
@@ -92,16 +155,16 @@
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label"><span style="color: red;">*</span>&nbsp;&nbsp;&nbsp;&nbsp;是否完成:</label>
+			<label class="control-label">是否完成:</label>
 			<div class="controls">
-				<input <c:if test="${workLog.completeType==0 }">checked="checked"</c:if> type="radio" value = "0" name = "completeType" disabled="disabled"/>是
-				<label><input <c:if test="${workLog.completeType==1 }">checked="checked"</c:if> type="radio" value = "1" name = "completeType" disabled="disabled"/>否</label>
+				<input <c:if test="${workLog.completeType==0 }">checked="checked"</c:if> type="radio" value = "0" name = "completeType" disabled="disabled" />是
+				<input <c:if test="${workLog.completeType==1 }">checked="checked"</c:if> type="radio" value = "1" name = "completeType"  disabled="disabled"/>否
 			</div>
 		</div>
 		<div class="control-group">
 			<label class="control-label">遗留问题:</label>
 			<div class="controls">
-				<textarea  class="valid" cols="4" rows="4" style="resize: none;" name="leftoverProblem">${workLog.leftoverProblem }</textarea>
+				<textarea disabled="disabled" id="remarks" class="valid" cols="4" rows="4" style="resize: none;" name="leftoverProblem">${workLog.leftoverProblem }</textarea>
 			</div>
 		</div>
 		<div class="form-actions">

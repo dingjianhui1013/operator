@@ -357,29 +357,29 @@ public class WorkCustomerController extends BaseController {
 		 * //判断公司是否存在业务 workDealInfoService.findByCompany(workCompany.getId());
 		 * }
 		 */
-		List<WorkCompany> list=workCompanyService.findAll();
+//		List<WorkCompany> list=workCompanyService.findAll();
 		List<ConfigApp> appNames=configAppService.findAllConfigApp();
-		Date oetDate = null;
-		SimpleDateFormat sim = new SimpleDateFormat("yyyy-MM-dd");
-		if(endTime!=null&&!endTime.equals("")){
-			try {
-				oetDate = sim.parse(endTime);
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
-		}
-		if(oetDate!=null){
-			workCompany.setOrgExpirationTime(new Timestamp(oetDate.getTime()));
-		}
-		workCompanyService.save(workCompany);
-		workUser.setWorkCompany(workCompany);
-		workUser.setStatus(2);
-		workUserService.save(workUser);
+//		Date oetDate = null;
+//		SimpleDateFormat sim = new SimpleDateFormat("yyyy-MM-dd");
+//		if(endTime!=null&&!endTime.equals("")){
+//			try {
+//				oetDate = sim.parse(endTime);
+//			} catch (ParseException e) {
+//				e.printStackTrace();
+//			}
+//		}
+//		if(oetDate!=null){
+//			workCompany.setOrgExpirationTime(new Timestamp(oetDate.getTime()));
+//		}
+//		workCompanyService.save(workCompany);
+//		workUser.setWorkCompany(workCompany);
+//		workUser.setStatus(2);
+//		workUserService.save(workUser);
 		model.addAttribute("configApp", appNames);
-		model.addAttribute("workCompany", workCompany);
+//		model.addAttribute("workCompany", workCompany);
 		model.addAttribute("nowDate", getDateString());
-		model.addAttribute("user", UserUtils.getUser());
-		model.addAttribute("list", list);
+		model.addAttribute("userName", UserUtils.getUser().getName());
+//		model.addAttribute("list", list);
 		logUtil.saveSysLog("客服管理", "添加单位信息 " + workCompany.getCompanyName()
 				+ " 成功", "");
 		
@@ -409,9 +409,9 @@ public class WorkCustomerController extends BaseController {
 
 	@RequiresPermissions("work:workDealInfo:view")
 	@RequestMapping("insertComCustomerT")
-	public String insertComCustomerT(Long workCompanyId, WorkLog workLog,
+	public String insertComCustomerT(WorkLog workLog,
 			HttpServletRequest request, HttpServletResponse response,
-			Model model,String ywzx,String ywcz,String ywxt) {
+			Model model,String ywzx,String ywcz,String ywxt,String distinguish,Long configAppId) {
 		if(ywzx!=null)
 		{
 			String ywzxs=ywzx.replace(","," ");
@@ -427,17 +427,25 @@ public class WorkCustomerController extends BaseController {
 			String ywxts=ywxt.replace(","," ");
 			workLog.setYwxt(ywxts);
 		}
-//		List<WorkCompany> com= workCompanyService.findByCompanyName(workLog.getWorkCompany().getCompanyName());
-//		if(com.size()>0)
-//		{
-//			for(int i=0;i<com.size();i++)
-//			{
-//				workLog.setWorkCompany(com.get(i));
-//			}
-//			
-//		}
-//		workLog.setWorkCompany(workCompanyService.get(workCompanyId));
+		if(configAppId!=null&&!"".equals(configAppId))
+		{
+			workLog.setConfigApp(configAppService.findByAppId(configAppId));
+		}
+//		WorkDealInfo workDealInfo = workDealInfoService.get(dealInfoId);
+//		workLog.setWorkDealInfo(workDealInfo);
+//		workLog.setWorkCompany(workDealInfo.getWorkCompany());
+//		workLog.setConfigApp(workDealInfo.getConfigApp());
 		workLog.setCreatTime(new Date());
+		workLog.setState(1);
+		workLog.setDistinguish(distinguish);
+		User user = UserUtils.getUser();
+		workLog.setOffice(UserUtils.getUser().getOffice());
+		if (!workLog.getSerType().equals("日常客服")) {
+			workLog.setProbleType(null);
+			workLog.setStatus(1);
+		} else {
+			workLog.setStatus(0);
+		}
 		workLog.setCreateBy(UserUtils.getUser());
 		String detail = "";
 		if (workLog.getId() != null) {
@@ -445,7 +453,6 @@ public class WorkCustomerController extends BaseController {
 		} else {
 			detail = "添加工作记录成功,id为";
 		}
-		workLog.setOffice(UserUtils.getUser().getOffice());
 		workLogService.save(workLog);
 		logUtil.saveSysLog("客服管理", detail + workLog.getId(), "");
 		return "redirect:" + Global.getAdminPath()
