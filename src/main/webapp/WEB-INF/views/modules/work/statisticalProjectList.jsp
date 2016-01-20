@@ -111,7 +111,7 @@
 	<div style="overflow:auto;" class="windowHeight" id="scrollBar" >
 	<ul class="nav nav-tabs" id="ulId" style="width:100%;">
 		<li class="active"><a
-			href="${ctx}/work/workDealInfo/StatisticalDayList">项目回款统计</a></li>
+			href="${ctx}/work/workDealInfo/StatisticalProjectList">项目回款统计</a></li>
 	</ul>
 	<form:form id="searchForm" modelAttribute="workDealInfo"
 		action="${ctx}/work/workDealInfo/StatisticalProjectList"
