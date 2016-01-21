@@ -539,7 +539,6 @@ var selected = false;
 			top.$.jBox.tip("经办人姓名格式有误!");
 			return false;
 		}
-		
 		if($("#pName").val()!="" &&!checkSqr($("#pName"))){
 			top.$.jBox.tip("申请人姓名格式有误!");
 			return false;
@@ -592,6 +591,27 @@ var selected = false;
 						}
 					}
 				});
+			}
+		}else if($("#agentDetailId").val()!=0  && $("#agentId").val()==1){
+			if (obj == "one") {
+				$("#inputForm")
+				.attr("action", "${ctx}/work/workDealInfo/temporarySave");
+				$("#inputForm").submit();
+			}
+			if (obj == "many") {
+				$.ajax({
+					type:"POST", //表单提交类型
+					url:"${ctx}/work/workDealInfo/manySave", //表单提交目标
+					data:$("#inputForm").serialize(), //表单数据
+					dataType:"json",
+					success:function(msg){
+							if(msg.status == 1){//msg 是后台调用action时，你穿过来的参数
+								top.$.jBox.tip("录入成功，可再次录入"); 
+							}else{
+								top.$.jBox.tip("录入失败，请重新编辑"); 
+							}
+						}
+					});
 			}
 		}else {
 			$("#lable0").removeAttr("disabled");

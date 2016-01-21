@@ -4791,6 +4791,8 @@ public class WorkDealInfoService extends BaseService {
 				workDealInfo.setInputUser(UserUtils.getUser());
 				workDealInfo.setPayUser(UserUtils.getUser());
 				workDealInfo.setIsSJQY(2);
+				workDealInfo.setAreaId(UserUtils.getUser().getOffice().getParent().getId());
+				workDealInfo.setOfficeId(UserUtils.getUser().getOffice().getId());
 				this.save(workDealInfo);
 				ConfigAgentBoundDealInfo dealInfoBound = new ConfigAgentBoundDealInfo();
 				dealInfoBound.setDealInfo(workDealInfo);

@@ -114,6 +114,11 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 	private Integer totalNum;
 	private Integer lastNum;
 	
+	
+	private Long officeId;
+	private Long areaId;
+	
+	
 	/** default constructor */
 	public WorkDealInfo() {
 	}
@@ -139,7 +144,9 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 			Date inputUserDate,
 			Date payUserDate,
 			Date attestationUserDate,
-			Date businessCardUserDate
+			Date businessCardUserDate,
+			Long officeId,
+			Long areaId
 			) {
 		this.configApp = configApp;
 		this.workCompany = workCompany;
@@ -163,6 +170,8 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 		this.payUserDate = payUserDate;
 		this.attestationUserDate = attestationUserDate;
 		this.businessCardUserDate = businessCardUserDate;
+		this.officeId = officeId;
+		this.areaId = areaId;
 		
 		
 	}
@@ -237,8 +246,6 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 	public void setDealInfoStatus(String dealInfoStatus) {
 		this.dealInfoStatus = dealInfoStatus;
 	}
-
-
 
 	@Column(name = "year")
 	public Integer getYear() {
@@ -742,5 +749,27 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 	public void setLastNum(Integer lastNum) {
 		this.lastNum = lastNum;
 	}
+
+	@Column(name = "office_id")
+	public Long getOfficeId() {
+		return officeId;
+	}
+
+	public void setOfficeId(Long officeId) {
+		this.officeId = officeId;
+	}
+
+	@Column(name = "area_id")
+	public Long getAreaId() {
+		return areaId;
+	}
+
+	public void setAreaId(Long areaId) {
+		this.areaId = areaId;
+	}
+	
+	
+	
+	
 	
 }
