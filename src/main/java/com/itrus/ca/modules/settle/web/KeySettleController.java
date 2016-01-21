@@ -124,6 +124,9 @@ public class KeySettleController extends BaseController {
 				keyName=keyss.getName();
 				}
 			}
+			if(supplierId==null&&startTime==null&&endTime==null){
+				return "modules/settle/keySettleList";
+			}
 			//Page<KeySettle> page=keySettleService.find(new Page<KeySettle>(request, response),keySettle, keypurchase, supplierId, keyId, startTime, endTime);
 			//Page<KeyPurchase> page=keyPurchaseService.findByKey(new Page<KeyPurchase>(request, response), keypurchase);
 			Page<KeyPurchase> page=keyPurchaseService.find11(new Page<KeyPurchase>(request, response), keypurchase,supplierName, keyName,keySn,startTime, endTime);
