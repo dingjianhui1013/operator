@@ -141,10 +141,10 @@
 		<table id="contentTable"
 					class="table table-striped table-bordered table-condensed" style="width: 60%" >
 					<tr>
-						<th colspan="${7+lenth*4 }" >统计周期：<fmt:formatDate pattern="yyyy-MM-dd" value="${startTime}"/>&nbsp;-&nbsp;<fmt:formatDate pattern="yyyy-MM-dd" value="${endTime}"/></th>
+						<th colspan="${7+lenth*5 }" >统计周期：<fmt:formatDate pattern="yyyy-MM-dd" value="${startTime}"/>&nbsp;-&nbsp;<fmt:formatDate pattern="yyyy-MM-dd" value="${endTime}"/></th>
 					</tr>
 					<tr>
-						<th colspan="${7+lenth*4 }">本期结算证书年限：（本次结算年数总数）</th>
+						<th colspan="${7+lenth*5 }">本期结算证书年限：（本次结算年数总数）</th>
 					</tr>
 					<tr>
 						<th rowspan="2">序号</th>
@@ -153,7 +153,7 @@
 						<th rowspan="2">产品名称</th>
 						<c:forEach var="a" begin="1" end="${lenth}">
 						
-						<th colspan="4">第${a}次结算</th>
+						<th colspan="5">第${a}次结算</th>
 						</c:forEach>
 						
 						<th colspan="3">结算年限统计</th>
@@ -161,6 +161,7 @@
 					<tr>
 						
 						<c:forEach begin="1" end="${lenth}">
+						<th>缴费类型</th>
 						<th>起始时间</th>
 						<th>结束时间</th>
 						<th>业务类型</th>
@@ -177,12 +178,23 @@
 							<td>${dealInfo.workCertInfo.workCertApplyInfo.name}</td>
 							<td>${dealInfo.configProduct.productName}</td>
 							<c:forEach items="${dealInfo.detailList }" var="detail">
+<%-- 								<c:if test="${dealInfo.workPayInfo.methodPos}"><td>Pos付款</td></c:if> --%>
+<%-- 								<c:if test="${dealInfo.workPayInfo.methodMoney}"><td>现金付款</td></c:if> --%>
+<%-- 								<c:if test="${dealInfo.workPayInfo.methodBank}"><td>银行付款</td></c:if> --%>
+<%-- 								<c:if test="${dealInfo.workPayInfo.methodAlipay}"><td>支付宝付款</td></c:if> --%>
+<%-- 								<c:if test="${dealInfo.workPayInfo.methodAlipay==false&&dealInfo.workPayInfo.methodMoney==false&&dealInfo.workPayInfo.methodPos==false&&dealInfo.workPayInfo.methodBank==false}"><td> </td></c:if> --%>
+								<td>
+									<c:forEach items="${detail.method}" var="method">
+										<c:if test="${fn:length(method)>0}">${method}</c:if>
+									</c:forEach>
+								</td>
 								<td><fmt:formatDate	value="${detail.startDate }" pattern="yyyy-MM-dd" /></td>
 								<td><fmt:formatDate value="${detail.endDate }" pattern="yyyy-MM-dd" /></td>
 								<td>${detail.dealInfoType }</td>
 								<td>${detail.settleYear }</td>
 							</c:forEach>
 							<c:forEach begin="1" end="${lenth - dealInfo.detailList.size() }">
+								<td></td>
 								<td></td>
 								<td></td>
 								<td></td>

@@ -1,13 +1,21 @@
 package com.itrus.ca.modules.settle.vo;
 
 import java.util.Date;
+import java.util.Set;
 
 public class PayableDetailVo {
-	
+	private Set<String> method;
 	private Date startDate;
 	private Date endDate;
 	private String dealInfoType;
 	private String settleYear;
+	
+	public Set<String> getMethod() {
+		return method;
+	}
+	public void setMethod(Set<String> payMethods) {
+		this.method = payMethods;
+	}
 	public Date getStartDate() {
 		return startDate;
 	}
