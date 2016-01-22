@@ -104,7 +104,8 @@
 		<thead>
 			<tr>
 				<th style="width: 20px">序号</th>
-				<th colspan="2">项目</th>
+				<th>项目类型</th>
+				<th>项目名称</th>
 					<c:set var="month" value="0"/>
 				<c:forEach items="${months}" var="months">
 					<c:set var="month" value="${month+1}"/>
