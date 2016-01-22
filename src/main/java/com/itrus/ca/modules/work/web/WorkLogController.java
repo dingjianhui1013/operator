@@ -580,7 +580,7 @@ public class WorkLogController extends BaseController {
 	@RequiresPermissions("work:workLog:edit")
 	@RequestMapping(value = "achievements")
 	public String achievements(String name,Date startTime,Date endTime,Model model,HttpServletRequest request, HttpServletResponse response) {
-		if(name==null&&"".equals(name)&&startTime==null&&endTime==null)
+		if(name==null&&startTime==null&&endTime==null)
 		{
 			return "modules/customer/workLogAchievements";
 		}
