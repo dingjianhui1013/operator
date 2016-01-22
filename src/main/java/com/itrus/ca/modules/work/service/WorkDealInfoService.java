@@ -72,6 +72,7 @@ import com.itrus.ca.modules.profile.service.ConfigChargeAgentDetailService;
 import com.itrus.ca.modules.profile.service.ConfigChargeAgentService;
 import com.itrus.ca.modules.profile.service.ConfigProductService;
 import com.itrus.ca.modules.profile.service.ConfigRaAccountExtendInfoService;
+import com.itrus.ca.modules.settle.entity.Projectcount;
 import com.itrus.ca.modules.sys.entity.Office;
 import com.itrus.ca.modules.sys.entity.User;
 import com.itrus.ca.modules.sys.utils.CreateExcelUtils;
@@ -5332,5 +5333,203 @@ public class WorkDealInfoService extends BaseService {
 		dc.add(Restrictions.in("dealInfoStatus", statusIntegers));
 		return (int) workDealInfoDao.count(dc);
 	}
+	/*public List<Projectcount> getCert(Date startTime, Date endTime,Long apply, Long officeId, Integer year, Long appId,
+			Integer dealInfoType) {
+		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
+		dc.createAlias("createBy", "createBy");
+		dc.createAlias("createBy.office", "office");
+		dc.createAlias("configApp", "configApp");
+		// dc.createAlias("workCertInfo", "workCertInfo");
+		// dc.add(Restrictions.eq("office.id", officeId));
+		dc.add(Restrictions.eq("configApp.id", appId));
+		dc.add(dataScopeFilter(UserUtils.getUser(), "office", "createBy"));
+		List<String> statusIntegers = new ArrayList<String>();
 
+		if (dealInfoType.equals(1)) {
+			dc.add(Restrictions.eq("dealInfoType", dealInfoType));
+			dc.add(Restrictions.isNull("dealInfoType1"));
+			dc.add(Restrictions.isNull("dealInfoType2"));
+			dc.add(Restrictions.isNull("dealInfoType3"));
+			statusIntegers.add(WorkDealInfoStatus.STATUS_CERT_OBTAINED);
+		} else if (dealInfoType.equals(4)) {
+			dc.add(Restrictions.eq("dealInfoType2", dealInfoType));
+			dc.add(Restrictions.isNull("dealInfoType"));
+			dc.add(Restrictions.isNull("dealInfoType1"));
+			dc.add(Restrictions.isNull("dealInfoType3"));
+			statusIntegers.add(WorkDealInfoStatus.STATUS_CERT_OBTAINED);
+		} else if (dealInfoType.equals(2) || dealInfoType.equals(3)) {
+			dc.add(Restrictions.eq("dealInfoType1", dealInfoType));
+			dc.add(Restrictions.isNull("dealInfoType"));
+			dc.add(Restrictions.isNull("dealInfoType2"));
+			dc.add(Restrictions.isNull("dealInfoType3"));
+		}
+		if (year != 0) {
+			dc.add(Restrictions.eq("year", year));
+		}
+		SimpleDateFormat formater = new SimpleDateFormat("yyyy/MM/dd");
+	    SimpleDateFormat formater2 = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		if (startTime != null && endTime != null) {
+			 try {
+				 startTime = formater2.parse(formater.format(startTime)+ " 00:00:00");
+				endTime = formater2.parse(formater.format(endTime)+ " 23:59:59");
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			dc.add(Restrictions.ge("createDate", startTime));
+			dc.add(Restrictions.le("createDate", endTime));
+		}
+		statusIntegers.add(WorkDealInfoStatus.STATUS_CERT_OBTAINED);
+		statusIntegers.add(WorkDealInfoStatus.STATUS_CERT_REVOKE);
+		dc.add(Restrictions.in("dealInfoStatus", statusIntegers));
+
+		return null;
+	}*/
+	/*public int getCertAppYearInfoCount11(List<String> monthList,Long area, Long officeId,String tempStyle,String agentId, Integer year,Integer paymethod, Long appId,
+			String dealInfoType) {
+		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
+		dc.createAlias("createBy", "createBy");
+		dc.createAlias("createBy.office", "office");
+		dc.createAlias("configApp", "configApp");
+		// dc.createAlias("workCertInfo", "workCertInfo");
+		// dc.add(Restrictions.eq("office.id", officeId));
+		dc.add(Restrictions.eq("configApp.id", appId));
+		dc.add(Restrictions.or(Restrictions.ne("isSJQY", 1), Restrictions.isNull("isSJQY")));
+		dc.add(dataScopeFilter(UserUtils.getUser(), "office", "createBy"));
+		if (year != 0) {
+			dc.add(Restrictions.eq("year", year));
+		}
+		SimpleDateFormat formater = new SimpleDateFormat("yyyy/MM/dd");
+	    SimpleDateFormat formater2 = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		if (startTime != null && endTime != null) {
+			 try {
+				 startTime = formater2.parse(formater.format(startTime)+ " 00:00:00");
+				endTime = formater2.parse(formater.format(endTime)+ " 23:59:59");
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			dc.add(Restrictions.ge("createDate", startTime));
+			dc.add(Restrictions.le("createDate", endTime));
+		}
+		dc.add(Restrictions.eq("dealInfoType", dealInfoType));
+		dc.add(Restrictions.isNull("dealInfoType1"));
+		dc.add(Restrictions.isNull("dealInfoType2"));
+		dc.add(Restrictions.isNull("dealInfoType3"));
+		
+		 * dc.add(Restrictions.or(Restrictions.eq("dealInfoType", dealInfoType),
+		 * Restrictions.eq("dealInfoType1", dealInfoType),
+		 * Restrictions.eq("dealInfoType2", dealInfoType),
+		 * Restrictions.eq("dealInfoType3", dealInfoType)));
+		 
+
+		List<String> statusIntegers = new ArrayList<String>();
+		statusIntegers.add(WorkDealInfoStatus.STATUS_CERT_OBTAINED);
+		statusIntegers.add(WorkDealInfoStatus.STATUS_CERT_REVOKE);
+		dc.add(Restrictions.in("dealInfoStatus", statusIntegers));
+
+		return (int) workDealInfoDao.count(dc);
+	}*/
+	/*public List<WorkDealInfo> getCert(Date stratTime,Date endTime, List<Long> officeId,String tempStyle,String agentId, Long appId,String product,List<String>workType) {
+		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
+		dc.createAlias("workPayInfo", "workPayInfo");
+		dc.add(Restrictions.isNotNull("workPayInfo"));
+		dc.createAlias("createBy", "createBy");
+		dc.createAlias("createBy.office", "office");
+		dc.createAlias("configProduct", "configProduct");
+		dc.createAlias("configApp", "configApp");
+		dc.add(Restrictions.eq("workPayInfo.delFlag", WorkPayInfo.DEL_FLAG_NORMAL));
+		List<String> status = Lists.newArrayList();
+		status.add(WorkDealInfoStatus.STATUS_CERT_OBTAINED);
+		status.add(WorkDealInfoStatus.STATUS_CERT_WAIT);
+		dc.add(Restrictions.in("dealInfoStatus", status));
+		SimpleDateFormat formater = new SimpleDateFormat("yyyy/MM/dd");
+	    SimpleDateFormat formater2 = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		if (stratTime != null && endTime != null) {
+			 try {
+				 stratTime = formater2.parse(formater.format(stratTime)+ " 00:00:00");
+				endTime = formater2.parse(formater.format(endTime)+ " 23:59:59");
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			dc.add(Restrictions.ge("createDate", stratTime));
+			dc.add(Restrictions.le("createDate", endTime));
+		
+			if (appId != null) {
+				dc.add(Restrictions.eq("configApp.id", appId));
+			}
+			if (officeId != null && officeId.size() > 0) {
+				dc.add(Restrictions.in("office.id", officeId));
+			}
+			if(agentId!=null){
+				dc.add(Restrictions.eq("configProduct.chargeAgentId", agentId));
+			}else if(tempStyle!=null){
+				dc.add(Restrictions.eq("tempStyle", tempStyle));
+			}
+			if(appId!=null){
+				dc.add(Restrictions.eq("configApp.id", appId));
+			}
+			if(product!=null){
+				dc.add(Restrictions.eq("configProduct.productName", product));
+			}
+			if(workType!=null&&workType.size()>0){
+				for(int i=0;i<workType.size();i++){
+					String value= workType.get(i);
+				}
+			}
+			return workDealInfoDao.find(dc);
+		} else {
+			return null;
+		}
+
+	}*/
+	public int getCert(Long appId,Date startTime, Date endTime, Long officeId, Integer year,Integer payType,List<Long> productIds,Integer dealInfoType
+			 ) {
+
+		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
+		dc.createAlias("createBy", "createBy");
+		dc.createAlias("createBy.office", "office");
+		dc.createAlias("configApp", "configApp");
+		dc.createAlias("workCertInfo", "workCertInfo");
+		dc.add(Restrictions.eq("office.id", officeId));
+		
+		
+		if(appId!=null){
+			dc.add(Restrictions.eq("configApp.id", appId));
+		}
+		if (year != 0) {
+			dc.add(Restrictions.eq("year", year));
+		}
+		if(payType!=0){
+			dc.add(Restrictions.eq("payType", payType));
+		}
+		if (productIds.size() > 0) {
+			dc.createAlias("configProduct", "configProduct");
+			dc.add(Restrictions.in("configProduct.id", productIds));
+		}
+		SimpleDateFormat formater = new SimpleDateFormat("yyyy/MM/dd");
+	    SimpleDateFormat formater2 = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		if (startTime != null && endTime != null) {
+			  try {
+				startTime = formater2.parse(formater.format(startTime)+ " 00:00:00");
+				endTime = formater2.parse(formater.format(endTime)+ " 23:59:59");
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			dc.add(Restrictions.ge("createDate", startTime));
+			dc.add(Restrictions.le("createDate", endTime));
+		}
+		dc.add(Restrictions.eq("dealInfoType", dealInfoType));
+		dc.add(Restrictions.isNull("dealInfoType1"));
+		dc.add(Restrictions.isNull("dealInfoType2"));
+		dc.add(Restrictions.isNull("dealInfoType3"));
+		List<String> statusIntegers = new ArrayList<String>();
+		statusIntegers.add(WorkDealInfoStatus.STATUS_CERT_OBTAINED);
+		statusIntegers.add(WorkDealInfoStatus.STATUS_CERT_REVOKE);
+		dc.add(Restrictions.in("dealInfoStatus", statusIntegers));
+		return (int) workDealInfoDao.count(dc);
+	}
+	
 }

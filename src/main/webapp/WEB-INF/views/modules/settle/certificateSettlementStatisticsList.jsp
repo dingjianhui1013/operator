@@ -458,8 +458,38 @@ $(document).ready(function() {
 				<td style="text-align:center; vertical-align: middle;">pos</td>
 			</tr>  -->
 				</thead>
+				<tr>
+					<td>${certificate.xzqyxjadd1}</td>
+					<td>${certificate.xzqypoadd1}</td>
+					<td>${certificate.xzqyxjadd2}</td>
+					<td>${certificate.xzqypoadd2}</td>
+					<td>${certificate.xzqyxjadd4}</td>
+					<td>${certificate.xzqypoadd4}</td>
+					<td>${certificate.xzqyxjadd5}</td>
+					<td>${certificate.xzqypoadd5}</td>
+					<td>${certificate.xzqypoadd5}</td>
+					<td>${certificate.xzqypoadd5}</td>
+					<td>${certificate.xzqypoadd5}</td>
+					<td>${certificate.xzqypoadd5}</td>
+					<td>${certificate.xzqypoadd5}</td>
+					<td>${certificate.xzqypoadd5}</td>
+					<td>${certificate.xzqypoadd5}</td>
+					<td>${certificate.xzqypoadd5}</td>
+					<td>${certificate.xzqypoadd5}</td>
+					<td>${certificate.xzqypoadd5}</td>
+					<td>${certificate.xzqypoadd5}</td>
+					<td>${certificate.xzqypoadd5}</td>
+					<td>${certificate.xzqypoadd5}</td>
+					<td>${certificate.xzqypoadd5}</td>
+					<td>${certificate.xzqypoadd5}</td>
+					<td>${certificate.xzqypoadd5}</td>
+					<td>${certificate.xzqypoadd5}</td>
+					<td>${certificate.xzqypoadd5}</td>
+					<td>${certificate.xzqypoadd5}</td>
+					<td>${certificate.xzqypoadd5}</td>
+				</tr>
 
-				<c:forEach items="${sumList }" var="sum">
+		<%-- 		<c:forEach items="${sumList }" var="sum">
 					<tr>
 						<td>${sum.key }</td>
 						<td>${sum.value.oneAdd1 }</td>
@@ -545,7 +575,7 @@ $(document).ready(function() {
 
 
 					</tr>
-				</c:forEach>
+				</c:forEach> --%>
 
 				<tr>
 					<td>总计</td>
