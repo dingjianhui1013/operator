@@ -283,7 +283,7 @@ $(document).ready(function() {
 		<tags:message content="${message}" />
 
 		<div class="form-horizontal">
-			<table class="table table-striped table-bordered table-condensed">
+			<table class="table table-striped table-bordered table-condensed" >
 				<thead>
 					<tr>
 						<th colspan="17" style="text-align: center;">项目:${yingyong}</th>
@@ -323,176 +323,134 @@ $(document).ready(function() {
 					</c:forEach>
 				</tr>
 				 --%>
+				 	
 					<tr>
 
 						<th rowspan="3">月份</th>
-						<th colspan=8>新增（企业）</th>
-						<th colspan=8>新增（个人）</th>
-						<th colspan=8>更新（企业）</th>
-						<th colspan=8>更新（个人）</th>
-						<th rowspan="2" colspan="2">遗失补办</th>
-						<th rowspan="2" colspan="2">损坏更换</th>
-						<th rowspan="2" colspan="2">信息变更</th>
-						<th colspan="8">更新+变更</th>
-						<th colspan="8">更新+遗失补办</th>
-						<th colspan="8">更新+损坏更换</th>
-						<th rowspan="2" colspan="2">变更+遗失补办</th>
-						<th rowspan="2" colspan="2">变更+损坏更换</th>
-						<th colspan="8">更新+变更+遗失补办</th>
-						<th colspan="8">更新+变更+损坏更换</th>
+						<th colspan="16" style="text-align: center">新增</th>
+						<th colspan="16" style="text-align: center">更新</th>
+						<th colspan="4" style="text-align: center">遗失补办</th>
+						<th colspan="4" style="text-align: center">损坏更换</th>
+						<th colspan="4" style="text-align: center">信息变更</th>
+						<th colspan="16" style="text-align: center">更新+变更</th>
+						<th colspan="16" style="text-align: center">更新+遗失补办</th>
+						<th colspan="16" style="text-align: center">更新+损坏更换</th>
+						<th colspan="4" style="text-align: center"">变更+遗失补办</th>
+						<th colspan="4" style="text-align: center">变更+损坏更换</th>
+						<th colspan="16" style="text-align: center">更新+变更+遗失补办</th>
+						<th colspan="16" style="text-align: center">更新+变更+损坏更换</th>
 					</tr>
-					<tr>
-						<c:forEach var="i" begin="1" end="4">
-							<th colspan="2">一年</th>
-							<th colspan="2">二年</th>
-							<th colspan="2">四年</th>
-							<th colspan="2">五年</th>
+						<tr>
+						<c:forEach var="i" begin="1" end="2">
+							<th colspan="4">企业证书</th>
+							<th colspan="4">个人证书（企业）</th>
+							<th colspan="4">个人证书（机构）</th>
+							<th colspan="4">机构证书</th>
 						</c:forEach>
-						<c:forEach var="i" begin="8" end="10">
-							<th colspan="2">一年</th>
-							<th colspan="2">二年</th>
-							<th colspan="2">四年</th>
-							<th colspan="2">五年</th>
+						<c:forEach var="i" begin="3" end="5">
+							<th  rowspan="2">企业证书</th>
+							<th  rowspan="2">个人证书（企业）</th>
+							<th  rowspan="2">个人证书（机构）</th>
+							<th  rowspan="2">机构证书</th>
 						</c:forEach>
-						<c:forEach var="i" begin="13" end="14">
-							<th colspan="2">一年</th>
-							<th colspan="2">二年</th>
-							<th colspan="2">四年</th>
-							<th colspan="2">五年</th>
+						<c:forEach var="i" begin="6" end="8">
+							<th colspan="4">企业证书</th>
+							<th colspan="4">个人证书（企业）</th>
+							<th colspan="4">个人证书（机构）</th>
+							<th colspan="4">机构证书</th>
 						</c:forEach>
-					</tr>
-					<tr>
-						<c:forEach var="i" begin="1" end="41">
-							<th>现金</th>
-							<th>pos</th>
-
+						<c:forEach var="i" begin="9" end="10">
+							<th  rowspan="2">企业证书</th>
+							<th  rowspan="2">个人证书（企业）</th>
+							<th  rowspan="2">个人证书（机构）</th>
+							<th  rowspan="2">机构证书</th>
 						</c:forEach>
-					</tr>
-					<!-- <tr>
-				<td style="text-align:center; vertical-align: middle;" colspan="2">1年</td>
-				<td style="text-align:center; vertical-align: middle;" colspan="2">2年</td>
-				<td style="text-align:center; vertical-align: middle;" colspan="2">4年</td>
-				<td style="text-align:center; vertical-align: middle;" colspan="2">5年</td>
-				<td style="text-align:center; vertical-align: middle;" colspan="2">1年</td>
-				<td style="text-align:center; vertical-align: middle;" colspan="2">2年</td>
-				<td style="text-align:center; vertical-align: middle;" colspan="2">4年</td>
-				<td style="text-align:center; vertical-align: middle;"colspan="2">5年</td>
-				<td style="text-align:center; vertical-align: middle;"colspan="2">1年</td>
-				<td style="text-align:center; vertical-align: middle;"colspan="2">2年</td>
-				<td style="text-align:center; vertical-align: middle;"colspan="2">4年</td>
-				<td style="text-align:center; vertical-align: middle;"colspan="2">5年</td>
-				<td style="text-align:center; vertical-align: middle;"colspan="2">1年</td>
-				<td style="text-align:center; vertical-align: middle;"colspan="2">2年</td>
-				<td style="text-align:center; vertical-align: middle;"colspan="2">4年</td>
-				<td style="text-align:center; vertical-align: middle;"colspan="2">5年</td>
-				<td style="text-align:center; vertical-align: middle;"colspan="2">1年</td>
-				<td style="text-align:center; vertical-align: middle;"colspan="2">2年</td>
-				<td style="text-align:center; vertical-align: middle;"colspan="2">4年</td>
-				<td style="text-align:center; vertical-align: middle;"colspan="2">5年</td>
-				<td style="text-align:center; vertical-align: middle;"colspan="2">1年</td>
-				<td style="text-align:center; vertical-align: middle;"colspan="2">2年</td>
-				<td style="text-align:center; vertical-align: middle;"colspan="2">4年</td>
-				<td style="text-align:center; vertical-align: middle;"colspan="2">5年</td>
-				<td style="text-align:center; vertical-align: middle;"colspan="2">1年</td>
-				<td style="text-align:center; vertical-align: middle;"colspan="2">2年</td>
-				<td style="text-align:center; vertical-align: middle;"colspan="2">4年</td>
-				<td style="text-align:center; vertical-align: middle;"colspan="2">5年</td>
-				
-			</tr>  -->
-					<!-- <tr>
-				<td style="text-align:center; vertical-align: middle;">现金</td>
-				<td style="text-align:center; vertical-align: middle;">pos</td>
-				<td style="text-align:center; vertical-align: middle;">现金</td>
-				<td style="text-align:center; vertical-align: middle;">pos</td>
-				<td style="text-align:center; vertical-align: middle;">现金</td>
-				<td style="text-align:center; vertical-align: middle;">pos</td>
-				<td style="text-align:center; vertical-align: middle;">现金</td>
-				<td style="text-align:center; vertical-align: middle;">pos</td>
-				<td style="text-align:center; vertical-align: middle;">现金</td>
-				<td style="text-align:center; vertical-align: middle;">pos</td>
-				<td style="text-align:center; vertical-align: middle;">现金</td>
-				<td style="text-align:center; vertical-align: middle;">pos</td>
-				<td style="text-align:center; vertical-align: middle;">现金</td>
-				<td style="text-align:center; vertical-align: middle;">pos</td>
-				<td style="text-align:center; vertical-align: middle;">现金</td>
-				<td style="text-align:center; vertical-align: middle;">pos</td>
-				<td style="text-align:center; vertical-align: middle;">现金</td>
-				<td style="text-align:center; vertical-align: middle;">pos</td>
-				<td style="text-align:center; vertical-align: middle;">现金</td>
-				<td style="text-align:center; vertical-align: middle;">pos</td>
-				<td style="text-align:center; vertical-align: middle;">现金</td>
-				<td style="text-align:center; vertical-align: middle;">pos</td>
-				<td style="text-align:center; vertical-align: middle;">现金</td>
-				<td style="text-align:center; vertical-align: middle;">pos</td>
-				<td style="text-align:center; vertical-align: middle;">现金</td>
-				<td style="text-align:center; vertical-align: middle;">pos</td>
-				<td style="text-align:center; vertical-align: middle;">现金</td>
-				<td style="text-align:center; vertical-align: middle;">pos</td>
-				<td style="text-align:center; vertical-align: middle;">现金</td>
-				<td style="text-align:center; vertical-align: middle;">pos</td>
-				<td style="text-align:center; vertical-align: middle;">现金</td>
-				<td style="text-align:center; vertical-align: middle;">pos</td>
-				<td style="text-align:center; vertical-align: middle;">现金</td>
-				<td style="text-align:center; vertical-align: middle;">pos</td>
-				<td style="text-align:center; vertical-align: middle;">现金</td>
-				<td style="text-align:center; vertical-align: middle;">pos</td>
-				<td style="text-align:center; vertical-align: middle;">现金</td>
-				<td style="text-align:center; vertical-align: middle;">pos</td>
-				<td style="text-align:center; vertical-align: middle;">现金</td>
-				<td style="text-align:center; vertical-align: middle;">pos</td>
-				<td style="text-align:center; vertical-align: middle;">现金</td>
-				<td style="text-align:center; vertical-align: middle;">pos</td>
-				<td style="text-align:center; vertical-align: middle;">现金</td>
-				<td style="text-align:center; vertical-align: middle;">pos</td>
-				<td style="text-align:center; vertical-align: middle;">现金</td>
-				<td style="text-align:center; vertical-align: middle;">pos</td>
-				<td style="text-align:center; vertical-align: middle;">现金</td>
-				<td style="text-align:center; vertical-align: middle;">pos</td>
-				<td style="text-align:center; vertical-align: middle;">现金</td>
-				<td style="text-align:center; vertical-align: middle;">pos</td>
-				<td style="text-align:center; vertical-align: middle;">现金</td>
-				<td style="text-align:center; vertical-align: middle;">pos</td>
-				<td style="text-align:center; vertical-align: middle;">现金</td>
-				<td style="text-align:center; vertical-align: middle;">pos</td>
-				<td style="text-align:center; vertical-align: middle;">现金</td>
-				<td style="text-align:center; vertical-align: middle;">pos</td>
-			</tr>  -->
+						<c:forEach var="i" begin="11" end="12">
+							<th colspan="4">企业证书</th>
+							<th colspan="4">个人证书（企业）</th>
+							<th colspan="4">个人证书（机构）</th>
+							<th colspan="4">机构证书</th>
+						</c:forEach>
+					</tr> 
+					
+						<c:forEach var="i" begin="1" end="28">
+							<th >一年</th>
+							<th >二年</th>
+							<th >四年</th>
+							<th >五年</th>
+						</c:forEach>
+						
+					</tr> 
+					
+		
 				</thead>
-				<tr>
-					<td>${certificate.xzqyxjadd1}</td>
-					<td>${certificate.xzqypoadd1}</td>
-					<td>${certificate.xzqyxjadd2}</td>
-					<td>${certificate.xzqypoadd2}</td>
-					<td>${certificate.xzqyxjadd4}</td>
-					<td>${certificate.xzqypoadd4}</td>
-					<td>${certificate.xzqyxjadd5}</td>
-					<td>${certificate.xzqypoadd5}</td>
-					<td>${certificate.xzqypoadd5}</td>
-					<td>${certificate.xzqypoadd5}</td>
-					<td>${certificate.xzqypoadd5}</td>
-					<td>${certificate.xzqypoadd5}</td>
-					<td>${certificate.xzqypoadd5}</td>
-					<td>${certificate.xzqypoadd5}</td>
-					<td>${certificate.xzqypoadd5}</td>
-					<td>${certificate.xzqypoadd5}</td>
-					<td>${certificate.xzqypoadd5}</td>
-					<td>${certificate.xzqypoadd5}</td>
-					<td>${certificate.xzqypoadd5}</td>
-					<td>${certificate.xzqypoadd5}</td>
-					<td>${certificate.xzqypoadd5}</td>
-					<td>${certificate.xzqypoadd5}</td>
-					<td>${certificate.xzqypoadd5}</td>
-					<td>${certificate.xzqypoadd5}</td>
-					<td>${certificate.xzqypoadd5}</td>
-					<td>${certificate.xzqypoadd5}</td>
-					<td>${certificate.xzqypoadd5}</td>
-					<td>${certificate.xzqypoadd5}</td>
-				</tr>
+				
 
-		<%-- 		<c:forEach items="${sumList }" var="sum">
+		 		<c:forEach items="${sumList}" var="sum">
 					<tr>
 						<td>${sum.key }</td>
-						<td>${sum.value.oneAdd1 }</td>
+						<td>${sum.value.xzqyadd1 }</td>
+						<td>${sum.value.xzqyadd2 }</td>
+						<td>${sum.value.xzqyadd4 }</td>
+						<td>${sum.value.xzqyadd5 }</td>
+						<td>${sum.value.xzgrQadd1 }</td>
+						<td>${sum.value.xzgrQadd2 }</td>
+						<td>${sum.value.xzgrQadd4 }</td>
+						<td>${sum.value.xzgrQadd5 }</td>
+						<td>${sum.value.xzgrGadd1 }</td>
+						<td>${sum.value.xzgrGadd2 }</td>
+						<td>${sum.value.xzgrGadd4 }</td>
+						<td>${sum.value.xzgrGadd5 }</td>
+						<td>${sum.value.xzjgadd1 }</td>
+						<td>${sum.value.xzjgadd2 }</td>
+						<td>${sum.value.xzjgadd4 }</td>
+						<td>${sum.value.xzjgadd5 }</td>
+						<td>${sum.value.gxqyadd1}</td>
+						<td>${sum.value.gxqyadd2}</td>
+						<td>${sum.value.gxqyadd4}</td>
+						<td>${sum.value.gxqyadd5}</td>
+						<td>${sum.value.gxgrQadd1}</td>
+						<td>${sum.value.gxgrQadd2}</td>
+						<td>${sum.value.gxgrQadd4}</td>
+						<td>${sum.value.gxgrQadd5}</td>
+						<td>${sum.value.gxgrGadd1}</td>
+						<td>${sum.value.gxgrGadd2}</td>
+						<td>${sum.value.gxgrGadd4}</td>
+						<td>${sum.value.gxgrGadd5}</td>
+						<td>${sum.value.gxjgadd1}</td>
+						<td>${sum.value.gxjgadd2}</td>
+						<td>${sum.value.gxjgadd4}</td>
+						<td>${sum.value.gxjgadd5}</td>
+						<td>${sum.value.lostCerateqy}</td>
+						<td>${sum.value.lostCerategrQ}</td>
+						<td>${sum.value.lostCerategrG}</td>
+						<td>${sum.value.lostCeratejg}</td>
+						<td>${sum.value.damageCertificateqy}</td>
+						<td>${sum.value.damageCertificategrQ}</td>
+						<td>${sum.value.damageCertificategrG}</td>
+						<td>${sum.value.damageCertificatejg}</td>
+						<td>${sum.value.modifyNumqy}</td>
+						<td>${sum.value.modifyNumgrQ}</td>
+						<td>${sum.value.modifyNumgrG}</td>
+						<td>${sum.value.modifyNumjg}</td>
+						<td>${sum.value.updateChangeqyNum}</td>
+						<td>${sum.value.updateChangeqyNum2}</td>
+						<td>${sum.value.updateChangeqyNum4}</td>
+						<td>${sum.value.updateChangeqyNum5}</td>
+						<td>${sum.value.updateChangegrQNum}</td>
+						<td>${sum.value.updateChangegrQNum2}</td>
+						<td>${sum.value.updateChangegrQNum4}</td>
+						<td>${sum.value.updateChangegrQNum5}</td>
+						<td>${sum.value.updateChangegrGNum}</td>
+						<td>${sum.value.updateChangegrGNum2}</td>
+						<td>${sum.value.updateChangegrGNum4}</td>
+						<td>${sum.value.updateChangegrGNum5}</td>
+						<td>${sum.value.updateChangejgNum}</td>
+						<td>${sum.value.updateChangejgNum2}</td>
+						<td>${sum.value.updateChangejgNum4}</td>
+						<td>${sum.value.updateChangejgNum5}</td>
+						
+						<%-- <td>${sum.value.oneAdd1 }</td>
 						<c:set var="oneA1" value="${oneA1+sum.value.oneAdd1}"></c:set>
 						<td>${sum.value.oneAdd2 }</td>
 						<c:set var="oneA2" value="${oneA2+sum.value.oneAdd2}"></c:set>
@@ -571,13 +529,13 @@ $(document).ready(function() {
 						<td>${sum.value.alterInfomation}</td>
 						<td>${sum.value.alterInfomation}</td>
 						<td>${sum.value.alterInfomation}</td>
-						<td>${sum.value.alterInfomation}</td>
+						<td>${sum.value.alterInfomation}</td> --%>
 
 
 					</tr>
-				</c:forEach> --%>
+				</c:forEach> 
 
-				<tr>
+				 <tr>
 					<td>总计</td>
 					<td>${oneA1}</td>
 					<td>${oneA2}</td>
@@ -637,7 +595,7 @@ $(document).ready(function() {
 
 
 
-				</tr>
+				</tr> 
 			</table>
 		</div>
 	</div>

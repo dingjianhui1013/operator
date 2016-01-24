@@ -102,7 +102,7 @@ public class ProductType {
 	public static List<ProductTypeObj> getProductTypeAutoTask(){
 		List<ProductTypeObj> list = new ArrayList<ProductTypeObj>();
 		for (Integer id: productTypeMap.keySet()) {
-			if(id==1 || id==2 || id==6){
+			if(id==1 || id==2 || id==6 ||id==3){
 			ProductTypeObj obj = new ProductTypeObj(id, productTypeMap.get(id));
 			list.add(obj);
 				continue;

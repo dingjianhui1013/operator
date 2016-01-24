@@ -49,6 +49,7 @@ import com.itrus.ca.modules.profile.service.ConfigProductService;
 import com.itrus.ca.modules.settle.entity.CertificateSettlementStatistics;
 import com.itrus.ca.modules.settle.service.CertificateSettlementStatisticsService;
 import com.itrus.ca.modules.settle.vo.Certificate;
+import com.itrus.ca.modules.settle.vo.CertificateF;
 import com.itrus.ca.modules.settle.vo.CertificateSettlementStatisticsVO;
 import com.itrus.ca.modules.sys.entity.Office;
 import com.itrus.ca.modules.sys.entity.User;
@@ -103,7 +104,7 @@ public class CertificateSettlementStatisticsController extends BaseController {
 			boolean multiType,
 			HttpServletRequest request, HttpServletResponse response,
 			@RequestParam(value = "applyId", required = false) Long applyId,
-			@RequestParam(value = "proList", required = false) String productType,
+			@RequestParam(value = "proList", required = false) List<String> productType,
 			@RequestParam(value = "workTypes", required = false) List<String> workType, Model model) {
 
 		WorkDealInfoType workDealInfoType = new WorkDealInfoType();
@@ -184,189 +185,14 @@ public class CertificateSettlementStatisticsController extends BaseController {
 		model.addAttribute("configAppList", configAppList);
 		model.addAttribute("proList", ProductType.getProductTypeAutoTask());
 		
-		List<Long> productIdList = new ArrayList<Long>();
+		/*List<Long> productIdList = new ArrayList<Long>();
 		if (productType!=null && !productType.equals("")) {
 			String[] products = productType.split(",");
 			for (int i = 0; i < products.length; i++) {
 				productIdList.add(Long.parseLong(products[i].toString()));
 			}
 		}
-		model.addAttribute("productIdList", productIdList);
-		/*String product = "";
-		if (productType != null && productType.size() > 0) {
-			for (int i = 0; i < productType.size(); i++) {
-				product += ProductType.getProductTypeName(Integer.parseInt(productType.get(i))) + ",";
-			}
-			StringUtils.removeEnd(product, ",");
-		}*/
-
-		/*// 如果应用不为空，产品也不为空，则显示XX应用XX产品
-		if (applyId != null && (productType != null && productType.size() > 0)) {
-			ConfigApp appName = configAppService.get(applyId);// 获取应用名称
-			model.addAttribute("applyId", appName.getId());
-			String yingyong = appName.getAppName() + "应用[" + product + "]产品";
-			model.addAttribute("yingyong", yingyong);
-		}
-		// 如果应用不为空，产品为空 则显示 XX应用全部产品
-		if (applyId != null && (productType == null || productType.size() == 0)) {
-			ConfigApp appName = configAppService.get(applyId);// 获取应用名称
-			model.addAttribute("applyId", appName.getId());
-			String yingyong = appName.getAppName() + "全部产品";
-			model.addAttribute("yingyong", yingyong);
-		}*/
-		// // 如果应用为空，产品不为空，则显示全部应用XX产品
-		// if (applyId == null && (productType != null && productType.length >
-		// 0)) {
-		// String yingyong = "全部应用" + product + "产品";
-		// model.addAttribute("yingyong", yingyong);
-		// }
-		model.addAttribute("proType", ProductType.productTypeStrMap);
-		model.addAttribute("wdiType", WorkDealInfoType.WorkDealInfoTypeMap);
-		model.addAttribute("workTypes", workDealInfoType.getProductTypeListLess());
-		// model.addAttribute("workType", workDealInfo.getDealInfoStatus());
-		model.addAttribute("productId", productType);
-		model.addAttribute("multiType",multiType);
-		model.addAttribute("workType", workType);
-		model.addAttribute("offsList", offsList);
-		model.addAttribute("areaId", areaId);
-		
-
-		model.addAttribute("officeId", officeId);
-		// 开始日期，结束日期，应用必须选择
-		if (startDate == null || endDate == null || applyId == null) {
-			model.addAttribute("startDate", DateUtils.firstDayOfMonth(new Date()));
-			model.addAttribute("endDate", new Date());
- 			return "modules/settle/certificateSettlementStatisticsList";
-		} else {
-			model.addAttribute("startDate", startDate);
-			model.addAttribute("endDate", endDate);
-		}
-		List<Long> officeIdList = new ArrayList<Long>();
-
-		if (officeId != null) {
-			officeIdList.add(officeId);
-		} else if (areaId != null) {
-			officeIdList = officeService.findOfficeIdsByParentId(areaId);
-		}
-		//List<Projectcount>workDealInfoService.getCert(startDate, endDate, officeId, year, appId, dealInfoType);
-		
-		Certificate certificate =new Certificate();
-		//workDealInfoService.getCert(startDate, endDate,  officeIdList, tempStyle, agentId, applyId,product,workType);
-		
-		if(workType.contains("0")){
-			
-			certificate.setXzqyxjadd1(workDealInfoService.getCert(applyId, startDate, endDate, officeId, 1, 1,productIdList, WorkDealInfoType.TYPE_ADD_CERT));
-			certificate.setXzqypoadd1(workDealInfoService.getCert(applyId, startDate, endDate, officeId, 1, 2,productIdList, WorkDealInfoType.TYPE_ADD_CERT));
-			certificate.setXzqyxjadd2(workDealInfoService.getCert(applyId, startDate, endDate, officeId, 2, 1,productIdList, WorkDealInfoType.TYPE_ADD_CERT));
-			certificate.setXzqypoadd2(workDealInfoService.getCert(applyId, startDate, endDate, officeId, 2, 2, productIdList,WorkDealInfoType.TYPE_ADD_CERT));
-			certificate.setXzqyxjadd4(workDealInfoService.getCert(applyId, startDate, endDate, officeId, 4, 1,productIdList, WorkDealInfoType.TYPE_ADD_CERT));
-			certificate.setXzqypoadd4(workDealInfoService.getCert(applyId, startDate, endDate, officeId, 4, 2, productIdList,WorkDealInfoType.TYPE_ADD_CERT));
-			certificate.setXzqyxjadd5(workDealInfoService.getCert(applyId, startDate, endDate, officeId, 5, 1,productIdList, WorkDealInfoType.TYPE_ADD_CERT));
-			certificate.setXzqypoadd5(workDealInfoService.getCert(applyId, startDate, endDate, officeId, 5, 2,productIdList, WorkDealInfoType.TYPE_ADD_CERT));
-		}
-		if(workType.contains(2)){
-			
-		}
-		/*List<CertificateSettlementStatisticsVO> findWorkList = certificateSettlementStatisticsService.findWorkList(
-				applyId, org.springframework.util.StringUtils.collectionToCommaDelimitedString(productType),
-				org.springframework.util.StringUtils.collectionToCommaDelimitedString(workType),
-				org.springframework.util.StringUtils.collectionToCommaDelimitedString(officeIdList), agentId, startDate,
-				endDate,multiType);
-
-		HashMap<String, StaticCertMonth> monthMap = certificateSettlementStatisticsService.getStaticMap(findWorkList);
-		model.addAttribute("monthList", new ArrayList<String>(monthMap.keySet()));
-	
-		model.addAttribute("sumList", monthMap);	*/
-		model.addAttribute("certificate", certificate);
-		return "modules/settle/certificateSettlementStatisticsList";
-	}
-	/*@RequiresPermissions("settle:certificateSettlementStatistics:view")
-	@RequestMapping(value = { "list1", "" })
-	public String list1(Long areaId, Long officeId, Date startDate, Date endDate, String tempStyle,String agentId,
-			boolean multiType,
-			HttpServletRequest request, HttpServletResponse response,
-			@RequestParam(value = "applyId", required = false) Long applyId,
-			@RequestParam(value = "proList", required = false) List<String> productType,
-			@RequestParam(value = "workTypes", required = false) List<String> workType, Model model) {
-
-		WorkDealInfoType workDealInfoType = new WorkDealInfoType();
-		//List<Long> officeids = Lists.newArrayList();
-		List<String> agentids = Lists.newArrayList();
-		User user = UserUtils.getUser();
-		List<Office> offsList = officeService.getOfficeByType(UserUtils.getUser(), 1);
-		for (int i = 0; i < offsList.size();) {
-			Office office = offsList.get(i);
-			if (office.getType().equals("2")) {
-				offsList.remove(i);
-			} else {
-				i++;
-			}
-		}
-		if (areaId != null && officeId != null) {
-			List<Office> offices = officeService.findByParentId(areaId);// 根据区域id获取网点id
-			model.addAttribute("offices", offices);
-			officeids.add(officeId);			
-		} else if (areaId != null && officeId == null) {
-			List<Office> offices = officeService.findByParentId(areaId);// 根据区域id获取网点id
-			model.addAttribute("offices", offices);
-			for(Office o :offices){
-				officeids.add(o.getId());
-			}
-			
-		} else { //		
-			List<Office> offsList = officeService.getOfficeByType(user, 1);
-			List<Long> areas=Lists.newArrayList();
-			if(offsList.size()>0)
-			{
-				for(int i=0;i<offsList.size();i++)
-				{
-					areas.add(offsList.get(i).getId());
-				}
-			}else
-			{
-				areas.add(-1l);
-			}
-			List<Office> offices = officeService.findByParentIds(areas);// 根据区域id获取网点id
-			if(offices.size()>0)
-			{
-				if (offices.size() > 0) {
-					for (int i = 0; i < offices.size(); i++) {
-						officeids.add(offices.get(i).getId());
-					}
-				} else {
-					officeids.add(-1l);
-				}
-			}
-		}
-		
-		if(tempStyle!=null &&agentId!=null){
-			List<ConfigChargeAgent> agents= configChargeAgentService.findByStyle(tempStyle);
-			model.addAttribute("agents", agents);
-			agentids.add(agentId);
-		}else if (tempStyle != null && agentId == null) {
-			List<ConfigChargeAgent> agents = configChargeAgentService.findByStyle(tempStyle);
-			model.addAttribute("agents", agents);
-			for(ConfigChargeAgent o :agents){
-				agentids.add(o.getTempStyle());
-			}
-		WorkPayInfo workPayInfo =new WorkPayInfo();
-		//List<ConfigChargeAgent> agentList = configChargeAgentService.selectAll();
-		//model.addAttribute("agentList", agentList);
-		if (areaId != null) {
-			List<Office> offices = officeService.findByParentId(areaId);
-			model.addAttribute("offices", offices);
-		}
-		if(tempStyle !=null){
-			List<ConfigChargeAgent> agentList=configChargeAgentService.findByStyle(tempStyle.toString());
-			model.addAttribute("agentList", agentList);
-			model.addAttribute("tempStyle", tempStyle);
-			model.addAttribute("agentId", agentId);
-		}
-		 应用查询列表显示 
-		List<ConfigApp> configAppList = configAppService.selectAll();
-		model.addAttribute("configAppList", configAppList);
-		model.addAttribute("proList", ProductType.getProductTypeAutoTask());
-
+		model.addAttribute("productIdList", productIdList);*/
 		String product = "";
 		if (productType != null && productType.size() > 0) {
 			for (int i = 0; i < productType.size(); i++) {
@@ -425,21 +251,45 @@ public class CertificateSettlementStatisticsController extends BaseController {
 		}
 		//List<Projectcount>workDealInfoService.getCert(startDate, endDate, officeId, year, appId, dealInfoType);
 		
-		Certificate certificate =new Certificate();
-		workDealInfoService.getCert(startDate, endDate,  officeIdList, tempStyle, agentId, applyId,product,workType);
+		/*Certificate certificate =new Certificate();
+		//workDealInfoService.getCert(startDate, endDate,  officeIdList, tempStyle, agentId, applyId,product,workType);
 		
-		
-		List<CertificateSettlementStatisticsVO> findWorkList = certificateSettlementStatisticsService.findWorkList(
+		if(workType.contains("0")){
+			
+			certificate.setXzqyxjadd1(workDealInfoService.getCert(applyId, startDate, endDate, officeId, 1, 1,productIdList, WorkDealInfoType.TYPE_ADD_CERT));
+			certificate.setXzqypoadd1(workDealInfoService.getCert(applyId, startDate, endDate, officeId, 1, 2,productIdList, WorkDealInfoType.TYPE_ADD_CERT));
+			certificate.setXzqyxjadd2(workDealInfoService.getCert(applyId, startDate, endDate, officeId, 2, 1,productIdList, WorkDealInfoType.TYPE_ADD_CERT));
+			certificate.setXzqypoadd2(workDealInfoService.getCert(applyId, startDate, endDate, officeId, 2, 2, productIdList,WorkDealInfoType.TYPE_ADD_CERT));
+			certificate.setXzqyxjadd4(workDealInfoService.getCert(applyId, startDate, endDate, officeId, 4, 1,productIdList, WorkDealInfoType.TYPE_ADD_CERT));
+			certificate.setXzqypoadd4(workDealInfoService.getCert(applyId, startDate, endDate, officeId, 4, 2, productIdList,WorkDealInfoType.TYPE_ADD_CERT));
+			certificate.setXzqyxjadd5(workDealInfoService.getCert(applyId, startDate, endDate, officeId, 5, 1,productIdList, WorkDealInfoType.TYPE_ADD_CERT));
+			certificate.setXzqypoadd5(workDealInfoService.getCert(applyId, startDate, endDate, officeId, 5, 2,productIdList, WorkDealInfoType.TYPE_ADD_CERT));
+		}
+		if(workType.contains(2)){
+			
+		}*/
+		/*List<CertificateSettlementStatisticsVO> findWorkList = certificateSettlementStatisticsService.findWorkList(
 				applyId, org.springframework.util.StringUtils.collectionToCommaDelimitedString(productType),
 				org.springframework.util.StringUtils.collectionToCommaDelimitedString(workType),
 				org.springframework.util.StringUtils.collectionToCommaDelimitedString(officeIdList), agentId, startDate,
 				endDate,multiType);
 
-		HashMap<String, StaticCertMonth> monthMap = certificateSettlementStatisticsService.getStaticMap(findWorkList);
-		model.addAttribute("monthList", new ArrayList<String>(monthMap.keySet()));
-		model.addAttribute("sumList", monthMap);
-		return "modules/settle/certificateSettlementStatisticsListF";
-	}*/
+		HashMap<String, StaticCertMonth> monthMap = certificateSettlementStatisticsService.getStaticMap(findWorkList);*/
+		
+		
+		List<CertificateSettlementStatisticsVO> findWorkList1 = certificateSettlementStatisticsService.findWorkList1(
+				applyId, org.springframework.util.StringUtils.collectionToCommaDelimitedString(productType),
+				org.springframework.util.StringUtils.collectionToCommaDelimitedString(workType),
+				org.springframework.util.StringUtils.collectionToCommaDelimitedString(officeIdList), agentId, startDate,
+				endDate,multiType);
+
+		HashMap<String, CertificateF> monthMap1 = certificateSettlementStatisticsService.getStaticMap1(findWorkList1);
+		model.addAttribute("monthList", new ArrayList<String>(monthMap1.keySet()));
+		model.addAttribute("sumList", monthMap1);	
+		//model.addAttribute("certificate", certificate);
+		return "modules/settle/certificateSettlementStatisticsList";
+	}
+	
 	public List<String> getMonthList(Date begin, Date end) {
 		List<String> monthList = new ArrayList<String>();
 		SimpleDateFormat monthFormat = new SimpleDateFormat("yyyy-MM-dd");

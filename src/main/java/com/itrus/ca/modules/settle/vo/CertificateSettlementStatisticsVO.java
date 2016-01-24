@@ -19,7 +19,8 @@ public class CertificateSettlementStatisticsVO implements java.io.Serializable {
 	private Integer year;
 	private Long workCount;
 	private Integer dealInfoType;
-
+	private Integer paymoney;
+	private Integer paypose;
 	public CertificateSettlementStatisticsVO() {
 
 	}
@@ -54,6 +55,24 @@ public class CertificateSettlementStatisticsVO implements java.io.Serializable {
 
 	public void setWorkCount(Long workCount) {
 		this.workCount = workCount;
+	}
+	
+	
+
+	public Integer getPaymoney() {
+		return paymoney;
+	}
+
+	public void setPaymoney(Integer paymoney) {
+		this.paymoney = paymoney;
+	}
+
+	public Integer getPaypose() {
+		return paypose;
+	}
+
+	public void setPaypose(Integer paypose) {
+		this.paypose = paypose;
 	}
 
 	public CertificateSettlementStatisticsVO(String month, String productName, Integer year, Long workCount,
@@ -114,6 +133,22 @@ public class CertificateSettlementStatisticsVO implements java.io.Serializable {
 	public void setWORKCOUNT(BigDecimal workCount) {
 		this.workCount = workCount.longValue();
 	}
+	public Integer getPAYMONEY() {
+		return paymoney;
+	}
 
+	public void setPAYMONEY(Integer paymoney) {
+		this.paymoney = paymoney;
+	}
+
+	public Integer getPAYPOSE() {
+		return paypose;
+	}
+
+	public void setPAYPOSE(Integer paypose) {
+		this.paypose = paypose;
+	}
+	
+	
 
 }
