@@ -1409,6 +1409,8 @@ public class WorkDealInfoOperationController extends BaseController {
 		
 		workDealInfo.setInputUser(UserUtils.getUser());
 		workDealInfo.setInputUserDate(new Date());
+		workDealInfo.setAreaId(UserUtils.getUser().getOffice().getParent().getId());
+		workDealInfo.setOfficeId(UserUtils.getUser().getOffice().getId());
 		
 		workDealInfoService.save(workDealInfo);
 		// 保存日志信息
@@ -1559,6 +1561,10 @@ public class WorkDealInfoOperationController extends BaseController {
 		
 		workDealInfo.setInputUser(UserUtils.getUser());
 		workDealInfo.setInputUserDate(new Date());
+		
+		workDealInfo.setAreaId(UserUtils.getUser().getOffice().getParent().getId());
+		workDealInfo.setOfficeId(UserUtils.getUser().getOffice().getId());
+		
 		workDealInfoService.save(workDealInfo);
 		// 保存日志信息
 		WorkLog workLog = new WorkLog();
@@ -1805,6 +1811,10 @@ public class WorkDealInfoOperationController extends BaseController {
 		
 		workDealInfo.setInputUser(UserUtils.getUser());
 		workDealInfo.setInputUserDate(new Date());
+		
+		workDealInfo.setAreaId(UserUtils.getUser().getOffice().getParent().getId());
+		workDealInfo.setOfficeId(UserUtils.getUser().getOffice().getId());
+		
 		workDealInfoService.save(workDealInfo);
 		
 		ConfigAgentBoundDealInfo dealInfoBound = new ConfigAgentBoundDealInfo();
