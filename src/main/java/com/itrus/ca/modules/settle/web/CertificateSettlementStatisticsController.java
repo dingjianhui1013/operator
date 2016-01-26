@@ -44,8 +44,6 @@ import com.itrus.ca.modules.settle.entity.CertificateSettlementStatistics;
 import com.itrus.ca.modules.settle.service.CertificateSettlementStatisticsService;
 import com.itrus.ca.modules.settle.vo.CertificateF;
 import com.itrus.ca.modules.settle.vo.CertificateSettlementStatisticsVO;
-import com.itrus.ca.modules.settle.vo.DealInfoType_ProductType_Year;
-import com.itrus.ca.modules.settle.vo.DealInfoType_Year;
 import com.itrus.ca.modules.sys.entity.Office;
 import com.itrus.ca.modules.sys.entity.User;
 import com.itrus.ca.modules.sys.service.OfficeService;
@@ -198,14 +196,16 @@ public class CertificateSettlementStatisticsController extends BaseController {
 
 		HashMap<String, CertificateF> monthMap1 = certificateSettlementStatisticsService.getStaticMap1(findWorkList1);
 		
-		 /*for (Map.Entry entry : monthMap1.entrySet()) {  
+		/* for (Map.Entry entry : monthMap1.entrySet()) {  
 
 		        Object key = entry.getValue(); 
 		        if(key!=null){
 		        	List<DealInfoType_Year> d_y = new ArrayList<DealInfoType_Year>();
 					List<DealInfoType_ProductType_Year> d_p_y = new ArrayList<DealInfoType_ProductType_Year>();
 					Set<Long> dealInfoType = new LinkedHashSet<Long>();
-					entry.getValue().getClass(CertificateF)
+					
+						
+					
 		        }
 		 }*/
 	/*	Set entries = monthMap1.entrySet( );
