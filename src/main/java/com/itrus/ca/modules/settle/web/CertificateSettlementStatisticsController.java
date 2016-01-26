@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -223,34 +224,53 @@ public class CertificateSettlementStatisticsController extends BaseController {
 				deal_pro.put(Integer.parseInt(String.valueOf(deals[j])), productTypes);
 				
 			}
+			Object months[]=month.toArray();
 			Iterator<Map.Entry<Integer, Set<String>>> it=deal_pro.entrySet().iterator();
 			while (it.hasNext()) {
 				Entry<Integer, Set<String>> productT = it.next();
 				Object productTypeas[]=productT.getValue().toArray();
+				
 				for(int i=0;i<productTypeas.length;i++)
 				{
 					DealInfoType_Year d_y=new DealInfoType_Year();
 					Set<Integer> years=new LinkedHashSet<Integer>();
-					Set<Long> count=new LinkedHashSet<Long>();
-					for(int CSVO=0;CSVO<findWorkList1.size();CSVO++)
+					List<Long> count=Lists.newArrayList();
+					for(int m=0;m<months.length;m++)
 					{
-						if(productTypeas[i].equals(findWorkList1.get(CSVO).getProductName())
-								&&findWorkList1.get(CSVO).getDealInfoType().equals(productT.getKey()))
+						for(int CSVO=0;CSVO<findWorkList1.size();CSVO++)
 						{
-							years.add(findWorkList1.get(CSVO).getYear());
-							count.add(findWorkList1.get(CSVO).getWorkCount());
+							if(productTypeas[i].equals(findWorkList1.get(CSVO).getProductName())
+									&&findWorkList1.get(CSVO).getDealInfoType().equals(productT.getKey())
+									&&months[m].equals(findWorkList1.get(CSVO).getMonth()))
+							{
+								years.add(findWorkList1.get(CSVO).getYear());
+							}
+							
 						}
-						
+						for(int CSVO=0;CSVO<findWorkList1.size();CSVO++)
+						{
+							Object yearss[]=years.toArray();
+							for(int y=0;y<yearss.length;y++)
+							{
+								if(productTypeas[i].equals(findWorkList1.get(CSVO).getProductName())
+										&&findWorkList1.get(CSVO).getDealInfoType().equals(productT.getKey())
+										&&yearss[y].equals(findWorkList1.get(CSVO).getYear())
+										&&months[m].equals(findWorkList1.get(CSVO).getMonth()))
+								{
+									count.add(findWorkList1.get(CSVO).getWorkCount());
+								}
+							}
+						}
+						d_y.setDate((String)months[m]);
+						d_y.setDeal(productT.getKey());
+						d_y.setProducType((String)productTypeas[i]);
+						d_y.setYear(years);
+						d_y.setWorkCount(count);
+						dealInfoType_Year.add(d_y);
 					}
-					d_y.setDeal(productT.getKey());
-					d_y.setProducType((String)productTypeas[i]);
-					d_y.setYear(years);
-					dealInfoType_Year.add(d_y);
 				}
 			}
-		
 		}
-		
 	/*	Set entries = monthMap1.entrySet( );
 
 		if(entries != null) {
@@ -269,6 +289,8 @@ public class CertificateSettlementStatisticsController extends BaseController {
 			
 		}
 		}*/
+		
+		
 		int index=0;
 		for (DealInfoType_Year d_y : dealInfoType_Year) {
 			index+=d_y.getYear().size();

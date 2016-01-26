@@ -324,7 +324,7 @@ $(document).ready(function() {
 					<c:forEach items="${dealInfoType_Year }" var="dealInfoType_Year">
 						<c:if test="${deal_pro.key==dealInfoType_Year.deal}">
 							<c:forEach items="${dealInfoType_Year.year}" var="dealInfoType_YearY">
-								<th>${dealInfoType_YearY} 年</th>
+								<th>${dealInfoType_YearY}年</th>
 							</c:forEach>
 						</c:if>
 					</c:forEach>
@@ -333,14 +333,17 @@ $(document).ready(function() {
 			<c:forEach items="${month}" var="month">
 				<tr>
 					<td>${month}</td>
-					<c:forEach items="${list}" var="list">
-						<c:if test="${list.month==month}">
-								
+					<c:forEach items="${deal_pro}" var="deal_pro">
+					<c:forEach items="${dealInfoType_Year }" var="dealInfoType_Year">
+						<c:if test="${deal_pro.key==dealInfoType_Year.deal&&dealInfoType_Year.date==month}">
+							<c:forEach items="${dealInfoType_Year.workCount}" var="dealInfoType_YearC">
+								<td>${dealInfoType_YearC}</td>
+							</c:forEach>
 						</c:if>
-					 </c:forEach>
+					</c:forEach>
+				</c:forEach>
 				</tr>
 			</c:forEach>
-				
 		</table>
 		</div>
 	</div>
