@@ -6,7 +6,6 @@ public class DealInfoType_Year {
 	private Integer deal;
 	private String producType;
 	private Set<Integer> year;
-	
 	public Integer getDeal() {
 		return deal;
 	}
@@ -25,6 +24,5 @@ public class DealInfoType_Year {
 	public void setYear(Set<Integer> year) {
 		this.year = year;
 	}
-	
 
 }
