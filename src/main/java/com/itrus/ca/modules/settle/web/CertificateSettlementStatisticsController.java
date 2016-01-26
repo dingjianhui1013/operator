@@ -44,8 +44,8 @@ import com.itrus.ca.modules.settle.entity.CertificateSettlementStatistics;
 import com.itrus.ca.modules.settle.service.CertificateSettlementStatisticsService;
 import com.itrus.ca.modules.settle.vo.CertificateF;
 import com.itrus.ca.modules.settle.vo.CertificateSettlementStatisticsVO;
+import com.itrus.ca.modules.settle.vo.DealInfoType_Year;
 import com.itrus.ca.modules.sys.entity.Office;
-import com.itrus.ca.modules.sys.entity.User;
 import com.itrus.ca.modules.sys.service.OfficeService;
 import com.itrus.ca.modules.sys.utils.UserUtils;
 import com.itrus.ca.modules.work.service.WorkDealInfoService;
@@ -196,18 +196,57 @@ public class CertificateSettlementStatisticsController extends BaseController {
 
 		HashMap<String, CertificateF> monthMap1 = certificateSettlementStatisticsService.getStaticMap1(findWorkList1);
 		
-		/* for (Map.Entry entry : monthMap1.entrySet()) {  
-
-		        Object key = entry.getValue(); 
-		        if(key!=null){
-		        	List<DealInfoType_Year> d_y = new ArrayList<DealInfoType_Year>();
-					List<DealInfoType_ProductType_Year> d_p_y = new ArrayList<DealInfoType_ProductType_Year>();
-					Set<Long> dealInfoType = new LinkedHashSet<Long>();
+		Map<Integer,Set<String>> deal_pro =new HashMap<Integer,Set<String>>();
+		Map<String, Set<Integer>> productType_year=new HashMap<String,Set<Integer>>();
+		List<DealInfoType_Year> dealInfoType_Year=Lists.newArrayList();
+		if(findWorkList1!=null){
+			Set<Integer> dealInfoTypes = new LinkedHashSet<Integer>();
+			for(int i=0;i<findWorkList1.size();i++){
+				dealInfoTypes.add(findWorkList1.get(i).getDealInfoType());
+			}
+			Object deals[] = dealInfoTypes.toArray();
+			
+			for(int j=0;j<deals.length;j++){
+				Set<String> productTypes =new LinkedHashSet<String>();
+				for(int CSVO=0;CSVO<findWorkList1.size();CSVO++)
+				{
+					if(deals[j]==findWorkList1.get(CSVO).getDealInfoType())
+					{
+						productTypes.add(findWorkList1.get(CSVO).getProductName());
+					}
 					
-						
-					
-		        }
-		 }*/
+				}
+				
+				
+				deal_pro.put(Integer.parseInt(String.valueOf(deals[j])), productTypes);
+				Iterator<Map.Entry<Integer, Set<String>>> it=deal_pro.entrySet().iterator();
+				while (it.hasNext()) {
+					DealInfoType_Year d_y=new DealInfoType_Year();
+					Entry<Integer, Set<String>> productT = it.next();
+					Object productTypeas[]=productT.getValue().toArray();
+					for(int i=0;i<productTypeas.length;i++)
+					{
+						Set<Integer> years=new LinkedHashSet<Integer>();
+						for(int CSVO=0;CSVO<findWorkList1.size();CSVO++)
+						{
+							if(productTypeas[i]==findWorkList1.get(CSVO).getProductName())
+							{
+								years.add(findWorkList1.get(CSVO).getYear());
+							}
+							
+						}
+						d_y.setDeal(productT.getKey());
+						d_y.setProducType((String)productTypeas[i]);
+						d_y.setYear(years);
+						dealInfoType_Year.add(d_y);
+					}
+					System.out.println(productT.getKey());
+				}
+			}
+			
+		
+		}
+		
 	/*	Set entries = monthMap1.entrySet( );
 
 		if(entries != null) {
@@ -226,6 +265,8 @@ public class CertificateSettlementStatisticsController extends BaseController {
 			
 		}
 		}*/
+		model.addAttribute("deal_pro", deal_pro);
+		model.addAttribute("dealInfoType_Year", dealInfoType_Year);
 		model.addAttribute("monthList", new ArrayList<String>(monthMap1.keySet()));
 		model.addAttribute("sumList", monthMap1);	
 		//model.addAttribute("certificate", certificate);
