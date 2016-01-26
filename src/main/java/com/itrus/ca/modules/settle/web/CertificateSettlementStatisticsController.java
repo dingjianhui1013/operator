@@ -3,27 +3,22 @@
  */
 package com.itrus.ca.modules.settle.web;
 
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
-import org.apache.poi.hssf.usermodel.HSSFFont;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.util.Region;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -37,7 +32,6 @@ import com.google.common.collect.Lists;
 import com.itrus.ca.common.config.Global;
 import com.itrus.ca.common.utils.DateUtils;
 import com.itrus.ca.common.web.BaseController;
-import com.itrus.ca.modules.bean.StaticCertMonth;
 import com.itrus.ca.modules.constant.ProductType;
 import com.itrus.ca.modules.constant.WorkDealInfoType;
 import com.itrus.ca.modules.profile.entity.ConfigApp;
@@ -48,14 +42,14 @@ import com.itrus.ca.modules.profile.service.ConfigChargeAgentService;
 import com.itrus.ca.modules.profile.service.ConfigProductService;
 import com.itrus.ca.modules.settle.entity.CertificateSettlementStatistics;
 import com.itrus.ca.modules.settle.service.CertificateSettlementStatisticsService;
-import com.itrus.ca.modules.settle.vo.Certificate;
 import com.itrus.ca.modules.settle.vo.CertificateF;
 import com.itrus.ca.modules.settle.vo.CertificateSettlementStatisticsVO;
+import com.itrus.ca.modules.settle.vo.DealInfoType_ProductType_Year;
+import com.itrus.ca.modules.settle.vo.DealInfoType_Year;
 import com.itrus.ca.modules.sys.entity.Office;
 import com.itrus.ca.modules.sys.entity.User;
 import com.itrus.ca.modules.sys.service.OfficeService;
 import com.itrus.ca.modules.sys.utils.UserUtils;
-import com.itrus.ca.modules.work.entity.WorkPayInfo;
 import com.itrus.ca.modules.work.service.WorkDealInfoService;
 
 /**
@@ -110,7 +104,10 @@ public class CertificateSettlementStatisticsController extends BaseController {
 		WorkDealInfoType workDealInfoType = new WorkDealInfoType();
 		//List<Long> officeids = Lists.newArrayList();
 		List<String> agentids = Lists.newArrayList();
-		User user = UserUtils.getUser();
+		/*User user = UserUtils.getUser();
+		Map<String, Set<String>> dealInfoType_productType = new HashMap<>();
+		Map<String, List<String>> productType_year = new HashMap<>();
+		Map<String, List<Double>> productType_number = new HashMap<>();*/
 		List<Office> offsList = officeService.getOfficeByType(UserUtils.getUser(), 1);
 		for (int i = 0; i < offsList.size();) {
 			Office office = offsList.get(i);
@@ -120,56 +117,7 @@ public class CertificateSettlementStatisticsController extends BaseController {
 				i++;
 			}
 		}
-		/*if (areaId != null && officeId != null) {
-			List<Office> offices = officeService.findByParentId(areaId);// 根据区域id获取网点id
-			model.addAttribute("offices", offices);
-			officeids.add(officeId);			
-		} else if (areaId != null && officeId == null) {
-			List<Office> offices = officeService.findByParentId(areaId);// 根据区域id获取网点id
-			model.addAttribute("offices", offices);
-			for(Office o :offices){
-				officeids.add(o.getId());
-			}
-			
-		} else { //		
-			List<Office> offsList = officeService.getOfficeByType(user, 1);
-			List<Long> areas=Lists.newArrayList();
-			if(offsList.size()>0)
-			{
-				for(int i=0;i<offsList.size();i++)
-				{
-					areas.add(offsList.get(i).getId());
-				}
-			}else
-			{
-				areas.add(-1l);
-			}
-			List<Office> offices = officeService.findByParentIds(areas);// 根据区域id获取网点id
-			if(offices.size()>0)
-			{
-				if (offices.size() > 0) {
-					for (int i = 0; i < offices.size(); i++) {
-						officeids.add(offices.get(i).getId());
-					}
-				} else {
-					officeids.add(-1l);
-				}
-			}
-		}*/
 		
-		/*if(tempStyle!=null &&agentId!=null){
-			List<ConfigChargeAgent> agents= configChargeAgentService.findByStyle(tempStyle);
-			model.addAttribute("agents", agents);
-			agentids.add(agentId);
-		}else if (tempStyle != null && agentId == null) {
-			List<ConfigChargeAgent> agents = configChargeAgentService.findByStyle(tempStyle);
-			model.addAttribute("agents", agents);
-			for(ConfigChargeAgent o :agents){
-				agentids.add(o.getTempStyle());
-			}*/
-		WorkPayInfo workPayInfo =new WorkPayInfo();
-		//List<ConfigChargeAgent> agentList = configChargeAgentService.selectAll();
-		//model.addAttribute("agentList", agentList);
 		if (areaId != null) {
 			List<Office> offices = officeService.findByParentId(areaId);
 			model.addAttribute("offices", offices);
@@ -185,14 +133,7 @@ public class CertificateSettlementStatisticsController extends BaseController {
 		model.addAttribute("configAppList", configAppList);
 		model.addAttribute("proList", ProductType.getProductTypeAutoTask());
 		
-		/*List<Long> productIdList = new ArrayList<Long>();
-		if (productType!=null && !productType.equals("")) {
-			String[] products = productType.split(",");
-			for (int i = 0; i < products.length; i++) {
-				productIdList.add(Long.parseLong(products[i].toString()));
-			}
-		}
-		model.addAttribute("productIdList", productIdList);*/
+		
 		String product = "";
 		if (productType != null && productType.size() > 0) {
 			for (int i = 0; i < productType.size(); i++) {
@@ -249,41 +190,42 @@ public class CertificateSettlementStatisticsController extends BaseController {
 		} else if (areaId != null) {
 			officeIdList = officeService.findOfficeIdsByParentId(areaId);
 		}
-		//List<Projectcount>workDealInfoService.getCert(startDate, endDate, officeId, year, appId, dealInfoType);
-		
-		/*Certificate certificate =new Certificate();
-		//workDealInfoService.getCert(startDate, endDate,  officeIdList, tempStyle, agentId, applyId,product,workType);
-		
-		if(workType.contains("0")){
-			
-			certificate.setXzqyxjadd1(workDealInfoService.getCert(applyId, startDate, endDate, officeId, 1, 1,productIdList, WorkDealInfoType.TYPE_ADD_CERT));
-			certificate.setXzqypoadd1(workDealInfoService.getCert(applyId, startDate, endDate, officeId, 1, 2,productIdList, WorkDealInfoType.TYPE_ADD_CERT));
-			certificate.setXzqyxjadd2(workDealInfoService.getCert(applyId, startDate, endDate, officeId, 2, 1,productIdList, WorkDealInfoType.TYPE_ADD_CERT));
-			certificate.setXzqypoadd2(workDealInfoService.getCert(applyId, startDate, endDate, officeId, 2, 2, productIdList,WorkDealInfoType.TYPE_ADD_CERT));
-			certificate.setXzqyxjadd4(workDealInfoService.getCert(applyId, startDate, endDate, officeId, 4, 1,productIdList, WorkDealInfoType.TYPE_ADD_CERT));
-			certificate.setXzqypoadd4(workDealInfoService.getCert(applyId, startDate, endDate, officeId, 4, 2, productIdList,WorkDealInfoType.TYPE_ADD_CERT));
-			certificate.setXzqyxjadd5(workDealInfoService.getCert(applyId, startDate, endDate, officeId, 5, 1,productIdList, WorkDealInfoType.TYPE_ADD_CERT));
-			certificate.setXzqypoadd5(workDealInfoService.getCert(applyId, startDate, endDate, officeId, 5, 2,productIdList, WorkDealInfoType.TYPE_ADD_CERT));
-		}
-		if(workType.contains(2)){
-			
-		}*/
-		/*List<CertificateSettlementStatisticsVO> findWorkList = certificateSettlementStatisticsService.findWorkList(
+		List<CertificateSettlementStatisticsVO> findWorkList1 = certificateSettlementStatisticsService.findMulitWorkList1(
 				applyId, org.springframework.util.StringUtils.collectionToCommaDelimitedString(productType),
 				org.springframework.util.StringUtils.collectionToCommaDelimitedString(workType),
 				org.springframework.util.StringUtils.collectionToCommaDelimitedString(officeIdList), agentId, startDate,
-				endDate,multiType);
-
-		HashMap<String, StaticCertMonth> monthMap = certificateSettlementStatisticsService.getStaticMap(findWorkList);*/
-		
-		
-		List<CertificateSettlementStatisticsVO> findWorkList1 = certificateSettlementStatisticsService.findWorkList1(
-				applyId, org.springframework.util.StringUtils.collectionToCommaDelimitedString(productType),
-				org.springframework.util.StringUtils.collectionToCommaDelimitedString(workType),
-				org.springframework.util.StringUtils.collectionToCommaDelimitedString(officeIdList), agentId, startDate,
-				endDate,multiType);
+				endDate);
 
 		HashMap<String, CertificateF> monthMap1 = certificateSettlementStatisticsService.getStaticMap1(findWorkList1);
+		
+		 /*for (Map.Entry entry : monthMap1.entrySet()) {  
+
+		        Object key = entry.getValue(); 
+		        if(key!=null){
+		        	List<DealInfoType_Year> d_y = new ArrayList<DealInfoType_Year>();
+					List<DealInfoType_ProductType_Year> d_p_y = new ArrayList<DealInfoType_ProductType_Year>();
+					Set<Long> dealInfoType = new LinkedHashSet<Long>();
+					entry.getValue().getClass(CertificateF)
+		        }
+		 }*/
+	/*	Set entries = monthMap1.entrySet( );
+
+		if(entries != null) {
+
+		Iterator iterator = entries.iterator( );
+
+		while(iterator.hasNext( )) {
+
+		Map.Entry entry =(Entry) iterator.next( );
+
+		Object key = entry.getKey( );
+
+		Object value = entry.getValue();
+		System.out.println(key);
+		System.out.println(value);
+			
+		}
+		}*/
 		model.addAttribute("monthList", new ArrayList<String>(monthMap1.keySet()));
 		model.addAttribute("sumList", monthMap1);	
 		//model.addAttribute("certificate", certificate);
@@ -357,7 +299,7 @@ public class CertificateSettlementStatisticsController extends BaseController {
 		return "redirect:" + Global.getAdminPath() + "/modules/settle/certificateSettlementStatistics/?repage";
 	}
 
-	@RequiresPermissions("settle:certificateSettlementStatistics:edit")
+	/*@RequiresPermissions("settle:certificateSettlementStatistics:edit")
 	@RequestMapping(value = "delete")
 	public String delete(Long id, RedirectAttributes redirectAttributes) {
 		certificateSettlementStatisticsService.delete(id);
@@ -562,5 +504,5 @@ public class CertificateSettlementStatisticsController extends BaseController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
+	}*/
 }

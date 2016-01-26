@@ -214,9 +214,9 @@ $(document).ready(function() {
 						selected="selected"
 						</c:if>>${off.name}</option>
 					</c:forEach>
-				</select> <label>组合业务：</label><input type="checkbox" name="multiType"
+				</select> <%-- <label>组合业务：</label><input type="checkbox" name="multiType"
 					id="multiType" value="true"
-					<c:if test="${multiType}">checked="checked"</c:if>>
+					<c:if test="${multiType}">checked="checked"</c:if>> --%>
 			</div>
 
 			<div style="margin-top: 10px">
@@ -449,6 +449,81 @@ $(document).ready(function() {
 						<td>${sum.value.updateChangejgNum2}</td>
 						<td>${sum.value.updateChangejgNum4}</td>
 						<td>${sum.value.updateChangejgNum5}</td>
+						<td>${sum.value.updateLostqyNum}</td>
+						<td>${sum.value.updateLostqyNum2}</td>
+						<td>${sum.value.updateLostqyNum4}</td>
+						<td>${sum.value.updateLostqyNum5}</td>
+						<td>${sum.value.updateLostgrQNum}</td>
+						<td>${sum.value.updateLostgrQNum2}</td>
+						<td>${sum.value.updateLostgrQNum4}</td>
+						<td>${sum.value.updateLostgrQNum5}</td>
+						<td>${sum.value.updateLostgrGNum}</td>
+						<td>${sum.value.updateLostgrGNum2}</td>
+						<td>${sum.value.updateLostgrGNum4}</td>
+						<td>${sum.value.updateLostgrGNum5}</td>
+						<td>${sum.value.updateLostjgNum}</td>
+						<td>${sum.value.updateLostjgNum2}</td>
+						<td>${sum.value.updateLostjgNum4}</td>
+						<td>${sum.value.updateLostjgNum5}</td>
+						<td>${sum.value.updateReplaceqyNum}</td>
+						<td>${sum.value.updateReplaceqyNum2}</td>
+						<td>${sum.value.updateReplaceqyNum4}</td>
+						<td>${sum.value.updateReplaceqyNum5}</td>
+						<td>${sum.value.updateReplacegrQNum}</td>
+						<td>${sum.value.updateReplacegrQNum2}</td>
+						<td>${sum.value.updateReplacegrQNum4}</td>
+						<td>${sum.value.updateReplacegrQNum5}</td>
+						<td>${sum.value.updateReplacegrGNum}</td>
+						<td>${sum.value.updateReplacegrGNum2}</td>
+						<td>${sum.value.updateReplacegrGNum4}</td>
+						<td>${sum.value.updateReplacegrGNum5}</td>
+						<td>${sum.value.updateReplacejgNum}</td>
+						<td>${sum.value.updateReplacejgNum2}</td>
+						<td>${sum.value.updateReplacejgNum4}</td>
+						<td>${sum.value.updateReplacejgNum5}</td>
+						<td>${sum.value.changeLostqyNum}</td>
+						<td>${sum.value.changeLostgrQNum}</td>
+						<td>${sum.value.changeLostgrGNum}</td>
+						<td>${sum.value.changeLostjgNum}</td>
+						<td>${sum.value.changeReplaceqyNum}</td>
+						<td>${sum.value.changeReplacegrQNum}</td>
+						<td>${sum.value.changeReplacegrGNum}</td>
+						<td>${sum.value.changeReplacejgNum}</td>
+						<td>${sum.value.changeUpdateLostqyNum}</td>
+						<td>${sum.value.changeUpdateLostqyNum2}</td>
+						<td>${sum.value.changeUpdateLostqyNum4}</td>
+						<td>${sum.value.changeUpdateLostqyNum5}</td>
+						<td>${sum.value.changeUpdateLostgrQNum}</td>
+						<td>${sum.value.changeUpdateLostgrQNum2}</td>
+						<td>${sum.value.changeUpdateLostgrQNum4}</td>
+						<td>${sum.value.changeUpdateLostgrQNum5}</td>
+						<td>${sum.value.changeUpdateLostgrGNum}</td>
+						<td>${sum.value.changeUpdateLostgrGNum2}</td>
+						<td>${sum.value.changeUpdateLostgrGNum4}</td>
+						<td>${sum.value.changeUpdateLostgrGNum5}</td>
+						<td>${sum.value.changeUpdateLostjgNum}</td>
+						<td>${sum.value.changeUpdateLostjgNum2}</td>
+						<td>${sum.value.changeUpdateLostjgNum4}</td>
+						<td>${sum.value.changeUpdateLostjgNum5}</td>
+						<td>${sum.value.changeUpdateReplaceqyNum}</td>
+						<td>${sum.value.changeUpdateReplaceqyNum2}</td>
+						<td>${sum.value.changeUpdateReplaceqyNum4}</td>
+						<td>${sum.value.changeUpdateReplaceqyNum5}</td>
+						<td>${sum.value.changeUpdateReplacegrQNum}</td>
+						<td>${sum.value.changeUpdateReplacegrQNum2}</td>
+						<td>${sum.value.changeUpdateReplacegrQNum4}</td>
+						<td>${sum.value.changeUpdateReplacegrQNum5}</td>
+						<td>${sum.value.changeUpdateReplacegrGNum}</td>
+						<td>${sum.value.changeUpdateReplacegrGNum2}</td>
+						<td>${sum.value.changeUpdateReplacegrGNum4}</td>
+						<td>${sum.value.changeUpdateReplacegrGNum5}</td>
+						<td>${sum.value.changeUpdateReplacejgNum}</td>
+						<td>${sum.value.changeUpdateReplacejgNum2}</td>
+						<td>${sum.value.changeUpdateReplacejgNum4}</td>
+						<td>${sum.value.changeUpdateReplacejgNum5}</td>
+						
+						
+						
 						
 						<%-- <td>${sum.value.oneAdd1 }</td>
 						<c:set var="oneA1" value="${oneA1+sum.value.oneAdd1}"></c:set>
