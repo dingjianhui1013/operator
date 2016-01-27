@@ -301,7 +301,43 @@ $(document).ready(function() {
 						</c:if>
 					</c:forEach>
 					<th colspan="${i}">
-						${deal_pro.key}
+						<c:if test="${deal_pro.key==0}">
+							新增
+						</c:if>
+						<c:if test="${deal_pro.key==100}">
+							更新
+						</c:if>
+						<c:if test="${deal_pro.key==3}">
+							损坏更换
+						</c:if>
+						<c:if test="${deal_pro.key==2}">
+							遗失补办
+						</c:if>
+						<c:if test="${deal_pro.key==4}">
+							变更
+						</c:if>
+						<c:if test="${deal_pro.key==024}">
+							变更+遗失补办
+						</c:if>
+						<c:if test="${deal_pro.key==034}">
+							变更+损坏更换
+						</c:if>
+						<c:if test="${deal_pro.key==120}">
+							更新+遗失补办
+						</c:if>
+						<c:if test="${deal_pro.key==130}">
+							更新+损坏更换
+						</c:if>
+						<c:if test="${deal_pro.key==104}">
+							更新+变更
+						</c:if>
+						<c:if test="${deal_pro.key==124}">
+							更新+损坏更换+变更
+						</c:if>
+						<c:if test="${deal_pro.key==134}">
+							更新+损坏更换+变更
+						</c:if>
+						
 					</th>
 				</c:if>
 			</c:forEach>				
@@ -314,7 +350,21 @@ $(document).ready(function() {
 							<c:forEach items="${dealInfoType_Year.year}" var="dealInfoType_YearY">
 								<c:set var="ii" value="${ii+1 }"/>
 							</c:forEach>
-							<th colspan="${ii}">${dealInfoType_Year.producType}</th>
+							<th colspan="${ii}">
+									<c:if test="${dealInfoType_Year.producType==1}">
+										企业证书
+									</c:if>
+									<c:if test="${dealInfoType_Year.producType==2}">
+										个人证书（企业）
+									</c:if>
+									<c:if test="${dealInfoType_Year.producType==3}">
+										机构证书
+									</c:if>
+									<c:if test="${dealInfoType_Year.producType==6}">
+										个人证书（机构）
+									</c:if>
+									
+							</th>
 						</c:if>
 					</c:forEach>
 				</c:forEach>
