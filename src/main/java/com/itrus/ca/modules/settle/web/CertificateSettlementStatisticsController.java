@@ -235,13 +235,10 @@ public class CertificateSettlementStatisticsController extends BaseController {
 					DealInfoType_Year d_y=new DealInfoType_Year();
 					Set<Integer> years=new LinkedHashSet<Integer>();
 					List<Long> count=Lists.newArrayList();
-					for(int m=0;m<months.length;m++)
-					{
 						for(int CSVO=0;CSVO<findWorkList1.size();CSVO++)
 						{
 							if(productTypeas[i].equals(findWorkList1.get(CSVO).getProductName())
-									&&findWorkList1.get(CSVO).getDealInfoType().equals(productT.getKey())
-									&&months[m].equals(findWorkList1.get(CSVO).getMonth()))
+									&&findWorkList1.get(CSVO).getDealInfoType().equals(productT.getKey()))
 							{
 								years.add(findWorkList1.get(CSVO).getYear());
 							}
@@ -254,23 +251,29 @@ public class CertificateSettlementStatisticsController extends BaseController {
 							{
 								if(productTypeas[i].equals(findWorkList1.get(CSVO).getProductName())
 										&&findWorkList1.get(CSVO).getDealInfoType().equals(productT.getKey())
-										&&yearss[y].equals(findWorkList1.get(CSVO).getYear())
-										&&months[m].equals(findWorkList1.get(CSVO).getMonth()))
+										&&yearss[y].equals(findWorkList1.get(CSVO).getYear()))
+										
 								{
 									count.add(findWorkList1.get(CSVO).getWorkCount());
 								}
 							}
 						}
-						d_y.setDate((String)months[m]);
+//						d_y.setDate((String)months[m]);
 						d_y.setDeal(productT.getKey());
 						d_y.setProducType((String)productTypeas[i]);
 						d_y.setYear(years);
-						d_y.setWorkCount(count);
+//						d_y.setWorkCount(count);
 						dealInfoType_Year.add(d_y);
-					}
 				}
 			}
+			
+//			for(int m=0;m<months.length;m++)
+//			{
+//				
+//			}
 		}
+		
+		
 	/*	Set entries = monthMap1.entrySet( );
 
 		if(entries != null) {
@@ -294,6 +297,7 @@ public class CertificateSettlementStatisticsController extends BaseController {
 		int index=0;
 		for (DealInfoType_Year d_y : dealInfoType_Year) {
 			index+=d_y.getYear().size();
+			System.out.println("日期"+d_y.getDate()+"业务类型"+d_y.getDeal()+"产品类型"+d_y.getProducType()+"年限"+d_y.getYear()+"数量"+d_y.getWorkCount());
 		}
 		model.addAttribute("list", findWorkList1);
 		model.addAttribute("month", month);

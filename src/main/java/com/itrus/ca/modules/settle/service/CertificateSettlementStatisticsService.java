@@ -330,6 +330,7 @@ public class CertificateSettlementStatisticsService extends BaseService {
 
 	public HashMap<String, CertificateF> getStaticMap1(List<CertificateSettlementStatisticsVO> findWorkList1) {
 		HashMap<String, CertificateF> monthMap = new HashMap<String, CertificateF>();
+		CertificateF total = new CertificateF();
 		for (int i = 0; i < findWorkList1.size(); i++) {
 			CertificateSettlementStatisticsVO cssv = findWorkList1.get(i);
 			CertificateF scm = monthMap.get(cssv.getMonth());
@@ -343,6 +344,7 @@ public class CertificateSettlementStatisticsService extends BaseService {
 					switch (cssv.getYear()) {
 					case 1:
 						scm.setXzqyadd1(cssv.getWorkCount().intValue());
+						total.setXzqyadd1(total.getXzqyadd1() +cssv.getWorkCount().intValue());
 						break;
 					case 2:
 						scm.setXzqyadd2(cssv.getWorkCount().intValue());
@@ -934,6 +936,7 @@ public class CertificateSettlementStatisticsService extends BaseService {
 
 			monthMap.put(cssv.getMonth(), scm);
 		}
+		monthMap.put("total", total);
 		return monthMap;
 	}
 }
