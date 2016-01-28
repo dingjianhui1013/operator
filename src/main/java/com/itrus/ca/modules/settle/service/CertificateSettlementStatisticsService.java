@@ -337,7 +337,7 @@ public class CertificateSettlementStatisticsService extends BaseService {
 			if (scm == null) {
 				scm = new CertificateF();
 			}
-			if (cssv.getDealInfoType() == 000)// 新增
+			if (cssv.getDealInfoType() == 0)// 新增
 			{
 				switch (cssv.getProductName()) {
 				case "1": // 企业证书
@@ -506,7 +506,7 @@ public class CertificateSettlementStatisticsService extends BaseService {
 					break;
 
 				}
-			} else if (cssv.getDealInfoType() == 020) {
+			} else if (cssv.getDealInfoType() == 20) {
 				switch (cssv.getProductName()) {
 				case "1": // 企业证书
 					scm.setLostCerateqy(cssv.getWorkCount().intValue());
@@ -532,7 +532,7 @@ public class CertificateSettlementStatisticsService extends BaseService {
 					break;
 
 				}
-			} else if (cssv.getDealInfoType() == 030) {
+			} else if (cssv.getDealInfoType() == 30) {
 				switch (cssv.getProductName()) {
 				case "1": // 企业证书
 					scm.setDamageCertificateqy(cssv.getWorkCount().intValue());
@@ -558,7 +558,7 @@ public class CertificateSettlementStatisticsService extends BaseService {
 					break;
 
 				}
-			} else if (cssv.getDealInfoType() == 040) {
+			} else if (cssv.getDealInfoType() == 004) {
 				switch (cssv.getProductName()) {
 				case "1": // 企业证书
 					scm.setModifyNumqy(cssv.getWorkCount().intValue());
@@ -584,7 +584,60 @@ public class CertificateSettlementStatisticsService extends BaseService {
 					break;
 
 				}
-			} else if (cssv.getDealInfoType() == 104)// 更新+变更
+			}else if (cssv.getDealInfoType() == 24) {
+				switch (cssv.getProductName()) {
+				case "1": // 企业证书
+					scm.setChangeLostqyNum(cssv.getWorkCount().intValue());
+					total.setChangeLostqyNum(total.getChangeLostqyNum()+cssv.getWorkCount().intValue());
+					break;
+
+				case "2": // 个人证书（企业）
+
+					scm.setChangeLostgrQNum(cssv.getWorkCount().intValue());
+					total.setChangeLostgrQNum(total.getChangeLostgrQNum()+cssv.getWorkCount().intValue());
+					break;
+
+				case "6":// 个人证书（机构）
+
+					scm.setChangeLostgrGNum(cssv.getWorkCount().intValue());
+					total.setChangeLostgrGNum(total.getChangeLostgrGNum()+cssv.getWorkCount().intValue());
+					break;
+
+				case "3":// 机构证书
+
+					scm.setChangeLostjgNum(cssv.getWorkCount().intValue());
+					total.setChangeLostjgNum(total.getChangeLostjgNum()+cssv.getWorkCount().intValue());
+					break;
+
+				}
+			} else if (cssv.getDealInfoType() == 34) {
+				switch (cssv.getProductName()) {
+				case "1": // 企业证书
+					scm.setChangeReplaceqyNum(cssv.getWorkCount().intValue());
+					total.setChangeReplaceqyNum(total.getChangeReplaceqyNum()+cssv.getWorkCount().intValue());
+					break;
+
+				case "2": // 个人证书（企业）
+
+					scm.setChangeReplacegrQNum(cssv.getWorkCount().intValue());
+					total.setChangeReplacegrQNum(total.getChangeReplacegrQNum()+cssv.getWorkCount().intValue());
+					break;
+
+				case "6":// 个人证书（机构）
+
+					scm.setChangeReplacegrGNum(cssv.getWorkCount().intValue());
+					total.setChangeReplacegrGNum(total.getChangeReplacegrGNum()+cssv.getWorkCount().intValue());
+					break;
+
+				case "3":// 机构证书
+
+					scm.setChangeReplacejgNum(cssv.getWorkCount().intValue());
+					total.setChangeReplacejgNum(total.getChangeReplacejgNum()+cssv.getWorkCount().intValue());
+					break;
+
+				}
+			}  
+			else if (cssv.getDealInfoType() == 104)// 更新+变更
 			{
 				switch (cssv.getProductName()) {
 				case "1": // 企业证书
