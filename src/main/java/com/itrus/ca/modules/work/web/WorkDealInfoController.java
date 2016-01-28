@@ -285,11 +285,10 @@ public class WorkDealInfoController extends BaseController {
 		}
 		model.addAttribute("checkIds", checkIds);
 
-		List<WorkDealInfo> noIxinInfos = page.getList();
-		List<WorkDealInfo> isIxinInfos = workDealInfoService.find4ApplyIsIxin(workDealInfo, startTime, endTime, alias);
-		noIxinInfos.addAll(isIxinInfos);
-
-		page.setList(noIxinInfos);
+//		List<WorkDealInfo> noIxinInfos = page.getList();
+//		List<WorkDealInfo> isIxinInfos = workDealInfoService.find4ApplyIsIxin(workDealInfo, startTime, endTime, alias);
+//		noIxinInfos.addAll(isIxinInfos);
+//		page.setList(noIxinInfos);
 
 		model.addAttribute("workType", workDealInfo.getDealInfoStatus());
 		

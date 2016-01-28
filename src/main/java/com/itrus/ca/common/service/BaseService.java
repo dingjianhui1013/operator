@@ -93,6 +93,64 @@ public abstract class BaseService {
 		return junction;
 	}
 	
+	protected static Junction dataScopeFilterByWorkDealInfo(User user ,String Alias, String office) {
+
+		// 进行权限过滤，多个角色权限范围之间为或者关系。
+		List<String> dataScope = Lists.newArrayList();
+		Junction junction = Restrictions.disjunction();
+		// 超级管理员，跳过权限过滤
+		if (!user.isAdmin()){
+			for (Role r : user.getRoleList()){
+				if (!dataScope.contains(r.getDataScope()) && StringUtils.isNotBlank(Alias)){
+					boolean isDataScopeAll = false;
+					if (Role.DATA_SCOPE_ALL.equals(r.getDataScope())){
+						isDataScopeAll = true;
+					}
+					else if (Role.DATA_SCOPE_COMPANY_AND_CHILD.equals(r.getDataScope())){
+						junction.add(Restrictions.eq(office, user.getCompany().getId()));
+						junction.add(Restrictions.like(Alias, user.getCompany().getParentIds()+user.getCompany().getId()+",%"));
+					}
+					else if (Role.DATA_SCOPE_COMPANY.equals(r.getDataScope())){
+						junction.add(Restrictions.eq(Alias, user.getCompany().getId()));
+//						junction.add(Restrictions.and(Restrictions.eq(Alias+".parent.id", user.getCompany().getId()),
+//								Restrictions.eq(Alias+".type", "2"))); // 包括本公司下的部门
+					}
+					else if (Role.DATA_SCOPE_OFFICE_AND_CHILD.equals(r.getDataScope())){
+						junction.add(Restrictions.eq(office, user.getOffice().getId()));
+						junction.add(Restrictions.like(Alias, user.getOffice().getParentIds()+user.getOffice().getId()+",%"));
+					}
+					else if (Role.DATA_SCOPE_OFFICE.equals(r.getDataScope())){
+						junction.add(Restrictions.eq(office, user.getOffice().getId()));
+					}
+					else if (Role.DATA_SCOPE_CUSTOM.equals(r.getDataScope())){
+						junction.add(Restrictions.in(office, r.getOfficeIdList()));
+					}
+					//else if (Role.DATA_SCOPE_SELF.equals(r.getDataScope())){
+					if (isDataScopeAll){
+						// 如果包含全部权限，则去掉之前添加的所有条件，并跳出循环。
+						junction = Restrictions.disjunction();
+						break;
+					}
+					dataScope.add(r.getDataScope());
+				}
+			}
+		}
+		return junction;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	/**
 	 * 数据范围过滤
 	 * @param user 当前用户对象，通过“UserUtils.getUser()”获取

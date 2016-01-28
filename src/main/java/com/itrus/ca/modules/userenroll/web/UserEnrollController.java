@@ -1008,6 +1008,9 @@ public class UserEnrollController extends BaseController {
 			
 			new_dealInfo.setConfigChargeAgentId(workDealInfo.getConfigChargeAgentId());
 			
+			new_dealInfo.setOfficeId(workDealInfo.getOfficeId());
+			new_dealInfo.setAreaId(workDealInfo.getAreaId());
+			
 			dealInfoService.save(new_dealInfo);
 
 			logUtil.saveTerminalLog(request.getRemoteHost(), "申请更新业务", StringUtils.getRemoteAddr(request),certSn, "申请更新");

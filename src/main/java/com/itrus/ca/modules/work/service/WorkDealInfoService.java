@@ -617,7 +617,9 @@ public class WorkDealInfoService extends BaseService {
 		dc.createAlias("createBy.office", "office");
 		dc.createAlias("configApp", "configApp");
 
-		dc.add(dataScopeFilter(UserUtils.getUser(), "office", "createBy"));
+		dc.add(Restrictions.or(Restrictions.isNotNull("isIxin"),dataScopeFilterByWorkDealInfo(UserUtils.getUser(), "areaId", "officeId")));
+		
+		//dc.add(dataScopeFilterByWorkDealInfo(UserUtils.getUser(), "areaId", "officeId"));
 		// dc.add(Restrictions.or(Restrictions.eq("dealInfoStatus",
 		// WorkDealInfoStatus.STATUS_CERT_OBTAINED), Restrictions.eq(
 		// "createBy", UserUtils.getUser())));
@@ -662,8 +664,6 @@ public class WorkDealInfoService extends BaseService {
 		if (workDealInfo.getStatus() != null) {
 			dc.add(Restrictions.eq("status", workDealInfo.getStatus()));
 		}
-
-		dc.add(Restrictions.isNull("isIxin"));
 		dc.add(Restrictions.eq(WorkDealInfo.DEL_FLAG, WorkDealInfo.DEL_FLAG_NORMAL));
 		dc.addOrder(Order.desc("createDate"));
 		return workDealInfoDao.find(page, dc);
