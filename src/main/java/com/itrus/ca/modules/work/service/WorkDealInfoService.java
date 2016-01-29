@@ -754,8 +754,8 @@ public class WorkDealInfoService extends BaseService {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		// dc.createAlias("workUser", "workUser");
 		// dc.createAlias("workCompany", "workCompany");
-		dc.createAlias("createBy", "createBy");
-		dc.createAlias("createBy.office", "office");
+//		dc.createAlias("createBy", "createBy");
+//		dc.createAlias("createBy.office", "office");
 		dc.createAlias("configApp", "configApp");
 		// dc.createAlias("workCertInfo", "workCertInfo");
 		// dc.createAlias("dealInfoType"," dealInfoType");
@@ -764,8 +764,8 @@ public class WorkDealInfoService extends BaseService {
 		// dc.add(Restrictions.ne("dealInfoType",
 		// WorkDealInfoType.TYPE_PAY_REPLACED));
 
-		dc.add(dataScopeFilter(UserUtils.getUser(), "office", "createBy"));
-
+//		dc.add(dataScopeFilter(UserUtils.getUser(), "office", "createBy"));
+		dc.add(dataScopeFilterByWorkDealInfo(UserUtils.getUser(), "areaId", "officeId"));
 		dc.add(Restrictions.in("dealInfoStatus",
 				new String[] { WorkDealInfoStatus.STATUS_CERT_REVOKE, WorkDealInfoStatus.STATUS_CERT_OBTAINED }));
 
@@ -893,13 +893,13 @@ public class WorkDealInfoService extends BaseService {
 		dc.createAlias("workPayInfo", "workPayInfo");
 		dc.createAlias("workCompany", "workCompany");
 		dc.createAlias("workUser", "workUser");
-		dc.createAlias("createBy", "createBy");
+//		dc.createAlias("createBy", "createBy");
 		dc.createAlias("updateBy", "updateBy");
-		dc.createAlias("createBy.office", "office");
+//		dc.createAlias("createBy.office", "office");
 		dc.createAlias("configApp", "configApp");
 		dc.createAlias("configProduct", "configProduct");
 		// workDealInfoDao.createDetachedCriteria();
-		dc.add(Restrictions.in("createBy.office", offices));
+		dc.add(Restrictions.in("officeId", offices));
 
 		// workUser.contactName
 		// workUser.conCertNumber
@@ -1673,8 +1673,8 @@ public class WorkDealInfoService extends BaseService {
 			Long appId, List<Long> officeIds) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("workPayInfo", "workPayInfo");
-		dc.createAlias("createBy", "createBy");
-		dc.createAlias("createBy.office", "office");
+//		dc.createAlias("createBy", "createBy");
+//		dc.createAlias("createBy.office", "office");
 		dc.add(Restrictions.isNotNull("workPayInfo"));
 		dc.add(Restrictions.eq("workPayInfo.delFlag", WorkPayInfo.DEL_FLAG_NORMAL));
 		dc.add(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED));
@@ -1745,7 +1745,7 @@ public class WorkDealInfoService extends BaseService {
 			dc.add(Restrictions.eq("configApp.id", appId));
 		}
 		if (officeIds != null && officeIds.size() > 0) {
-			dc.add(Restrictions.in("office.id", officeIds));
+			dc.add(Restrictions.in("officeId", officeIds));
 		}
 		dc.addOrder(Order.desc("id"));
 		return workDealInfoDao.find(page, dc);
@@ -1919,8 +1919,8 @@ public class WorkDealInfoService extends BaseService {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("workPayInfo", "workPayInfo");
 		dc.add(Restrictions.isNotNull("workPayInfo"));
-		dc.createAlias("createBy", "createBy");
-		dc.createAlias("createBy.office", "office");
+//		dc.createAlias("createBy", "createBy");
+//		dc.createAlias("createBy.office", "office");
 		dc.add(Restrictions.eq("workPayInfo.delFlag", WorkPayInfo.DEL_FLAG_NORMAL));
 		List<String> status = Lists.newArrayList();
 		status.add(WorkDealInfoStatus.STATUS_CERT_OBTAINED);
@@ -1993,7 +1993,7 @@ public class WorkDealInfoService extends BaseService {
 			}
 
 			if (officeids != null && officeids.size() > 0) {
-				dc.add(Restrictions.in("office.id", officeids));
+				dc.add(Restrictions.in("officeId", officeids));
 			}
 			dc.addOrder(Order.asc("workPayInfo.createDate"));
 			return workDealInfoDao.find(dc);
@@ -2164,8 +2164,8 @@ public class WorkDealInfoService extends BaseService {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("workPayInfo", "workPayInfo");
 		dc.add(Restrictions.isNotNull("workPayInfo"));
-		dc.createAlias("createBy", "createBy");
-		dc.createAlias("createBy.office", "office");
+//		dc.createAlias("createBy", "createBy");
+//		dc.createAlias("createBy.office", "office");
 		dc.add(Restrictions.eq("workPayInfo.delFlag", WorkPayInfo.DEL_FLAG_NORMAL));
 		List<String> status = Lists.newArrayList();
 		status.add(WorkDealInfoStatus.STATUS_CERT_OBTAINED);
@@ -2192,7 +2192,7 @@ public class WorkDealInfoService extends BaseService {
 				dc.add(Restrictions.eq("configApp.id", appId));
 			}
 			if (officeIds != null && officeIds.size() > 0) {
-				dc.add(Restrictions.in("office.id", officeIds));
+				dc.add(Restrictions.in("officeId", officeIds));
 			}
 			dc.addOrder(Order.asc("workPayInfo.createDate"));
 			return workDealInfoDao.find(dc);
@@ -2554,7 +2554,7 @@ public class WorkDealInfoService extends BaseService {
 				+ " WHERE D .CERT_ID = c.ID AND D .PAY_ID = P .ID  AND D.CREATE_BY = U.ID AND P.MONEY >0"; // 此版本不统计退费
 		sql += appId == null ? "" : " and d.app_id= " + appId;
 		sql += productId == null ? "" : " and d.PRODUCT_ID = " + productId;
-		sql += officeId == null ? "" : " and U.OFFICE_ID = " + officeId;
+		sql += officeId == null ? "" : " and d.OFFICE_ID = " + officeId;
 		sql += agentId == null ? "" : " and d.AGENT_ID =" + agentId;
 		sql += " and (d.DEAL_INFO_TYPE =" + workDealInfoType + " or d.DEAL_INFO_TYPE1 =" + workDealInfoType + ")";
 		sql += year == null ? "" : " and d.YEAR = " + year;
@@ -5092,7 +5092,8 @@ public class WorkDealInfoService extends BaseService {
 		// dc.add(Restrictions.eq("office.id", officeId));
 		dc.add(Restrictions.eq("configApp.id", appId));
 		dc.add(Restrictions.or(Restrictions.ne("isSJQY", 1), Restrictions.isNull("isSJQY")));
-		dc.add(dataScopeFilter(UserUtils.getUser(), "office", "createBy"));
+//		dc.add(dataScopeFilter(UserUtils.getUser(), "office", "createBy"));
+		dc.add(dataScopeFilterByWorkDealInfo(UserUtils.getUser(), "areaId", "officeId"));
 		if (year != 0) {
 			dc.add(Restrictions.eq("year", year));
 		}
@@ -5137,7 +5138,8 @@ public class WorkDealInfoService extends BaseService {
 		// dc.createAlias("workCertInfo", "workCertInfo");
 		// dc.add(Restrictions.eq("office.id", officeId));
 		dc.add(Restrictions.eq("configApp.id", appId));
-		dc.add(dataScopeFilter(UserUtils.getUser(), "office", "createBy"));
+//		dc.add(dataScopeFilter(UserUtils.getUser(), "office", "createBy"));
+		dc.add(dataScopeFilterByWorkDealInfo(UserUtils.getUser(), "areaId", "officeId"));
 		List<String> statusIntegers = new ArrayList<String>();
 
 		if (dealInfoType.equals(1)) {
@@ -5194,7 +5196,8 @@ public class WorkDealInfoService extends BaseService {
 		dc.add(Restrictions.isNull("dealInfoType1"));
 		dc.add(Restrictions.eq("dealInfoType2", dealInfoTypeChange));
 		dc.add(Restrictions.isNull("dealInfoType3"));
-		dc.add(dataScopeFilter(UserUtils.getUser(), "office", "createBy"));
+//		dc.add(dataScopeFilter(UserUtils.getUser(), "office", "createBy"));
+		dc.add(dataScopeFilterByWorkDealInfo(UserUtils.getUser(), "areaId", "officeId"));
 		if (year != 0) {
 			dc.add(Restrictions.eq("year", year));
 		}
@@ -5233,7 +5236,8 @@ public class WorkDealInfoService extends BaseService {
 		dc.add(Restrictions.eq("dealInfoType1", dealInfoTypeLost));
 		dc.add(Restrictions.isNull("dealInfoType2"));
 		dc.add(Restrictions.isNull("dealInfoType3"));
-		dc.add(dataScopeFilter(UserUtils.getUser(), "office", "createBy"));
+//		dc.add(dataScopeFilter(UserUtils.getUser(), "office", "createBy"));
+		dc.add(dataScopeFilterByWorkDealInfo(UserUtils.getUser(), "areaId", "officeId"));
 		if (year != 0) {
 			dc.add(Restrictions.eq("year", year));
 		}
@@ -5271,7 +5275,8 @@ public class WorkDealInfoService extends BaseService {
 		dc.add(Restrictions.eq("dealInfoType2", dealInfoTypeChange));
 		dc.add(Restrictions.isNull("dealInfoType"));
 		dc.add(Restrictions.isNull("dealInfoType3"));
-		dc.add(dataScopeFilter(UserUtils.getUser(), "office", "createBy"));
+//		dc.add(dataScopeFilter(UserUtils.getUser(), "office", "createBy"));
+		dc.add(dataScopeFilterByWorkDealInfo(UserUtils.getUser(), "areaId", "officeId"));
 		if (year != 0) {
 			dc.add(Restrictions.eq("year", year));
 		}

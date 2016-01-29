@@ -911,8 +911,11 @@ public class WorkDealInfoController extends BaseController {
 			Object months[] = month.toArray();
 			Set<Long> offices = new LinkedHashSet<Long>();
 			if (officeids != null) {
+//				for (int i = 0; i < list.size(); i++) {
+//					offices.add(list.get(i).getUpdateBy().getOffice().getId());
+//				}
 				for (int i = 0; i < list.size(); i++) {
-					offices.add(list.get(i).getUpdateBy().getOffice().getId());
+					offices.add(list.get(i).getOfficeId());
 				}
 			}
 			Object offs[] = offices.toArray();
@@ -932,7 +935,7 @@ public class WorkDealInfoController extends BaseController {
 					for (int i = 0; i < list.size(); i++) {
 						String mo = new SimpleDateFormat("yyyy-MM-dd")
 								.format(list.get(i).getWorkPayInfo().getCreateDate());
-						if (list.get(i).getUpdateBy().getOffice().getId().equals(offs[o])
+						if (list.get(i).getOfficeId().equals(offs[o])
 								&& ((String) months[m]).indexOf(mo) != -1) {
 							double postMoney = 0L;
 							double bankMoney = 0L;
@@ -1234,7 +1237,8 @@ public class WorkDealInfoController extends BaseController {
 			Set<Long> offices = new LinkedHashSet<Long>();
 			if (officeids != null) {
 				for (int i = 0; i < list.size(); i++) {
-					offices.add(list.get(i).getUpdateBy().getOffice().getId());
+//					offices.add(list.get(i).getUpdateBy().getOffice().getId());
+					offices.add(list.get(i).getOfficeId());
 				}
 			}
 			Object offs[] = offices.toArray();
@@ -1255,7 +1259,7 @@ public class WorkDealInfoController extends BaseController {
 					for (int i = 0; i < list.size(); i++) {
 						String mo = new SimpleDateFormat("yyyy-MM")
 								.format(list.get(i).getWorkPayInfo().getCreateDate());
-						if (list.get(i).getUpdateBy().getOffice().getId().equals(offs[o])
+						if (list.get(i).getOfficeId().equals(offs[o])
 								&& ((String) months[m]).indexOf(mo) != -1) {
 							double postMoney = 0L;
 							double bankMoney = 0L;
@@ -1535,8 +1539,11 @@ public class WorkDealInfoController extends BaseController {
 			}
 			Set<Long> offices = new LinkedHashSet<Long>();
 			if (officeids != null) {
+//				for (int i = 0; i < list.size(); i++) {
+//					offices.add(list.get(i).getUpdateBy().getOffice().getId());
+//				}
 				for (int i = 0; i < list.size(); i++) {
-					offices.add(list.get(i).getUpdateBy().getOffice().getId());
+					offices.add(list.get(i).getOfficeId());
 				}
 			}
 			Set<String> district = new LinkedHashSet<String>();
@@ -1555,7 +1562,11 @@ public class WorkDealInfoController extends BaseController {
 					for (int i = 0; i < list.size(); i++) {
 						if(list.get(i).getWorkCompany().getDistrict()!=null)
 						{
-							if (list.get(i).getUpdateBy().getOffice().getId().equals(offs[o])
+//							if (list.get(i).getUpdateBy().getOffice().getId().equals(offs[o])
+//									&& list.get(i).getWorkCompany().getDistrict().equals(districts[d])) {
+//								dis.add((String) districts[d]);
+//							}
+							if (list.get(i).getOfficeId().equals(offs[o])
 									&& list.get(i).getWorkCompany().getDistrict().equals(districts[d])) {
 								dis.add((String) districts[d]);
 							}
@@ -1889,13 +1900,9 @@ public class WorkDealInfoController extends BaseController {
 					&& "".equals(companyName) && "".equals(financePaymentInfo.getCompany()))
 			{
 				if (p_d.get(i).getSignDate() != null) {
-					System.out.println("sj"+p_d.get(i).getSignDate()+"crs"+zzstartTime+p_d.get(i).getSignDate().getTime()+":" +zzstartTime.getTime());
-					System.out.println("sj"+p_d.get(i).getSignDate()+"cre"+zzendTime+p_d.get(i).getSignDate().getTime() +":"+zzendTime.getTime());
-					System.out.println(p_d.get(i).getSignDate().getTime() >= zzstartTime.getTime()&& p_d.get(i).getSignDate().getTime() <= zzendTime.getTime());
 					if (p_d.get(i).getSignDate().getTime() >= zzstartTime.getTime()
 							&& p_d.get(i).getSignDate().getTime() <= zzendTime.getTime()) {
 								p_ds.add(p_d.get(i));
-								System.out.println("进入");
 					}
 				}
 			}
