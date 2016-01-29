@@ -893,13 +893,13 @@ public class WorkDealInfoService extends BaseService {
 		dc.createAlias("workPayInfo", "workPayInfo");
 		dc.createAlias("workCompany", "workCompany");
 		dc.createAlias("workUser", "workUser");
-//		dc.createAlias("createBy", "createBy");
+		dc.createAlias("createBy", "createBy");
 		dc.createAlias("updateBy", "updateBy");
 //		dc.createAlias("createBy.office", "office");
 		dc.createAlias("configApp", "configApp");
 		dc.createAlias("configProduct", "configProduct");
 		// workDealInfoDao.createDetachedCriteria();
-		dc.add(Restrictions.in("officeId", offices));
+		dc.add(Restrictions.in("createBy.office", offices));
 
 		// workUser.contactName
 		// workUser.conCertNumber
@@ -1026,7 +1026,7 @@ public class WorkDealInfoService extends BaseService {
 			dc.add(Restrictions.in("id", dealInfoByOfficeAreaIds));
 		}
 		if (officeIds != null && officeIds.size() > 0) {
-			dc.add(Restrictions.in("office.id", officeIds));
+			dc.add(Restrictions.in("officeId", officeIds));
 		}
 
 		if (apply != null) {
@@ -2555,6 +2555,7 @@ public class WorkDealInfoService extends BaseService {
 		sql += appId == null ? "" : " and d.app_id= " + appId;
 		sql += productId == null ? "" : " and d.PRODUCT_ID = " + productId;
 		sql += officeId == null ? "" : " and d.OFFICE_ID = " + officeId;
+		
 		sql += agentId == null ? "" : " and d.AGENT_ID =" + agentId;
 		sql += " and (d.DEAL_INFO_TYPE =" + workDealInfoType + " or d.DEAL_INFO_TYPE1 =" + workDealInfoType + ")";
 		sql += year == null ? "" : " and d.YEAR = " + year;
