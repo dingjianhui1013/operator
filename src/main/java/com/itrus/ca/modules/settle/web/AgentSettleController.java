@@ -711,7 +711,7 @@ public class AgentSettleController extends BaseController {
 				configApp = null;
 			}
 		}
-		model.addAttribute("listSum", listSum);
+		model.addAttribute("listSum", listSum); 
 		model.addAttribute("colspan", colspan);
 		model.addAttribute("oneYear", oneYear);
 		model.addAttribute("twoYear", twoYear);
