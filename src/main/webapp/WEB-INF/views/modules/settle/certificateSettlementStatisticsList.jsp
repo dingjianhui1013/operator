@@ -5,6 +5,11 @@
 <head>
 <title>证书结算统计表管理</title>
 <meta name="decorator" content="default" />
+<style type="text/css">
+	.table th,.table td{
+		text-align: center;
+		}
+</style>
 <script type="text/javascript">
 $(document).ready(function() {
 	var windowH=$(window).height();
@@ -114,6 +119,8 @@ $(document).ready(function() {
 		//var workTypes = $("#workTypes").val();
 		var startDate = $("#startTime").val();
 		var endDate = $("#endTime").val();
+		
+		
 		if (applyId == null || applyId == "") {
 			top.$.jBox.tip("请选择应用");
 			return false;
@@ -141,7 +148,7 @@ $(document).ready(function() {
 		});
 
 		var multiType = $("input[name=multiType]").is(':checked')
-
+		
 		window.location.href = "${ctx }/settle/certificateSettlementStatistics/export?applyId="
 				+ applyId
 				+ "&areaId="
@@ -214,9 +221,9 @@ $(document).ready(function() {
 						selected="selected"
 						</c:if>>${off.name}</option>
 					</c:forEach>
-				</select> <%-- <label>组合业务：</label><input type="checkbox" name="multiType"
+				</select>  <label>组合业务：</label><input type="checkbox" name="multiType"
 					id="multiType" value="true"
-					<c:if test="${multiType}">checked="checked"</c:if>> --%>
+					<c:if test="${multiType}">checked="checked"</c:if>>
 			</div>
 
 			<div style="margin-top: 10px">
@@ -487,26 +494,26 @@ $(document).ready(function() {
 						</c:if>
 						
 						<!--变更  -->
-						<c:set var="bx" value="0"/>
-						<c:set var="bxqy" value="0"/>
-						<c:set var="bxgeqy" value="0"/>
-						<c:set var="bxgejg" value="0"/>
-						<c:set var="bxjg" value="0"/>
+						<c:set var="bg" value="0"/>
+						<c:set var="bgqy" value="0"/>
+						<c:set var="bggeqy" value="0"/>
+						<c:set var="bggejg" value="0"/>
+						<c:set var="bgjg" value="0"/>
 						<c:if test="${sumList.total.modifyNumqy!=0}">
-							<c:set var="bx" value="${bx+1}"/>
-							<c:set var="bxqy" value="${bxqy+1}"/>
+							<c:set var="bg" value="${bg+1}"/>
+							<c:set var="bgqy" value="${bgqy+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.modifyNumgrQ!=0}">
-							<c:set var="bx" value="${bx+1}"/>
-							<c:set var="bxgeqy" value="${bxgeqy+1}"/>
+							<c:set var="bg" value="${bg+1}"/>
+							<c:set var="bggeqy" value="${bggeqy+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.modifyNumgrG!=0}">
-							<c:set var="bx" value="${bx+1}"/>
-							<c:set var="bxgejg" value="${bxgejg+1}"/>
+							<c:set var="bg" value="${bg+1}"/>
+							<c:set var="bggejg" value="${bggejg+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.modifyNumjg!=0}">
-							<c:set var="bx" value="${bx+1}"/>
-							<c:set var="bxjg" value="${bxjg+1}"/>
+							<c:set var="bg" value="${bg+1}"/>
+							<c:set var="bgjg" value="${bgjg+1}"/>
 						</c:if>
 					
 					<!--变更+遗失补办  -->
@@ -575,7 +582,7 @@ $(document).ready(function() {
 							<c:set var="gxysbbqy" value="${gxysbbqy+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.updateLostqyNum5!=0}">
-							<c:set var="gxysbbysbb" value="${gxysbbysbb+1}"/>
+							<c:set var="gxysbb" value="${gxysbb+1}"/>
 							<c:set var="gxysbbqy" value="${gxysbbqy+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.updateLostgrQNum!=0}">
@@ -934,42 +941,43 @@ $(document).ready(function() {
 					
 				<th rowspan="3">月份</th>
 			<c:if test="${xz >0}">
-				<th colspan="${xz}" style="text-align: center">新增</th>
+				<th colspan="${xz}">新增</th>
    			 </c:if>
    			 <c:if test="${gx >0}" >
-				<th colspan="${gx}" style="text-align: center">更新</th>
+				<th colspan="${gx}" >更新</th>
    			 </c:if>
    			 <c:if test="${ysbb >0}">
-				<th colspan="${ysbb}" style="text-align: center">遗失补办</th>
+				<th colspan="${ysbb}" >遗失补办</th>
    			 </c:if>
    			 <c:if test="${shgh >0}">
-				<th colspan="${shgh}" style="text-align: center"> 损坏更换</th>
+				<th colspan="${shgh}" > 损坏更换</th>
    			 </c:if>
    			 <c:if test="${bg >0}">
-				<th colspan="${bg}" style="text-align: center">变更</th>
+				<th colspan="${bg}" >变更</th>
    			 </c:if>
+   			 <c:if test="${multiType}">
    			 <c:if test="${bgysbb >0}">
-				<th colspan="${bgysbb}" style="text-align: center">变更+遗失补办</th>
+				<th colspan="${bgysbb}" >变更+遗失补办</th>
    			 </c:if>
    			 <c:if test="${bgshgh >0}">
-				<th colspan="${bgshgh}" style="text-align: center">变更+损坏更换</th>
+				<th colspan="${bgshgh}" >变更+损坏更换</th>
    			 </c:if>
    			 <c:if test="${gxysbb >0}">
-				<th colspan="${gxysbb}" style="text-align: center"> 更新+遗失补办</th>
+				<th colspan="${gxysbb}" > 更新+遗失补办</th>
    			 </c:if>
-   			 <c:if test="${gxshgh >0}">
-				<th colspan="${gxshgh}" style="text-align: center">更新+损坏更换</th>
+   			  <c:if test="${gxshgh >0}">
+				<th colspan="${gxshgh}" >更新+损坏更换</th>
    			 </c:if>
-   			 <c:if test="${gxbg >0}">
-				<th colspan="${gxbg}" style="text-align: center"> 更新+变更</th>
-   			 </c:if>
+   			  <c:if test="${gxbg >0}">
+				<th colspan="${gxbg}" > 更新+变更</th>
+   			 </c:if> 
    			  <c:if test="${gxbgysbb >0}">
-				<th colspan="${gxbgysbb}" style="text-align: center">更新+变更+遗失补办</th>
+				<th colspan="${gxbgysbb}" >更新+变更+遗失补办</th>
+   			 </c:if> 
+   		 	  <c:if test="${gxbgshgh >0}">
+				<th colspan="${gxbgshgh}" > 更新+变更+损坏更换</th>
+   			 </c:if> 
    			 </c:if>
-   			  <c:if test="${gxbgshgh >0}">
-				<th colspan="${gxbgshgh}" style="text-align: center"> 更新+变更+损坏更换</th>
-   			 </c:if>
-   			 
 				
 				
 			</tr>
@@ -1036,9 +1044,9 @@ $(document).ready(function() {
    			 <c:if test="${bgjg >0}">
 				<th colspan="${bgjg} " rowspan="2" style="text-align: center">机构证书</th>
    			 </c:if>
-   			 
+   			 	<c:if test="${multiType}">
 				 <c:if test="${bgysbbqy >0}">
-				<th colspan="${bgysbbqy}" rowspan="2" style="text-align: center">企业证书</th>
+				<th colspan="${bgysbbqy}" rowspan="2" style="text-align: center">企业证书${bgysbbqy}</th>
    			 </c:if>
    			  <c:if test="${bgysbbgeqy >0}">
 				<th colspan="${bgysbbgeqy}" rowspan="2" style="text-align: center">个人证书（企业）</th>
@@ -1074,7 +1082,7 @@ $(document).ready(function() {
    			  <c:if test="${gxysbbjg >0}">
 				<th colspan="${gxysbbjg}" style="text-align: center">机构证书</th>
    			 </c:if>
-   			  <c:if test="${gxshghqy >0}">
+   			   <c:if test="${gxshghqy >0}">
 				<th colspan="${gxshghqy}" style="text-align: center">企业证书</th>
    			 </c:if>
    			  <c:if test="${gxshghgeqy >0}">
@@ -1085,8 +1093,8 @@ $(document).ready(function() {
    			 </c:if>
    			  <c:if test="${gxshghjg >0}">
 				<th colspan="${gxshghjg}" style="text-align: center">机构证书</th>
-   			 </c:if>
-   			  <c:if test="${gxbgqy >0}">
+   			 </c:if> 
+   			   <c:if test="${gxbgqy >0}">
 				<th colspan="${gxbgqy}" style="text-align: center">企业证书</th>
    			 </c:if>
    			  <c:if test="${gxbggeqy >0}">
@@ -1097,9 +1105,9 @@ $(document).ready(function() {
    			 </c:if>
    			  <c:if test="${gxbgjg >0}">
 				<th colspan="${gxbgjg}" style="text-align: center">机构证书</th>
-   			 </c:if>
+   			 </c:if> 
    			 
-   			  <c:if test="${gxbgysbbqy >0}">
+   			   <c:if test="${gxbgysbbqy >0}">
 				<th colspan="${gxbgysbbqy}" style="text-align: center">企业证书</th>
    			 </c:if>
    			  <c:if test="${gxbgysbbgeqy >0}">
@@ -1110,9 +1118,9 @@ $(document).ready(function() {
    			 </c:if>
    			  <c:if test="${gxbgysbbjg >0}">
 				<th colspan="${gxbgysbbjg}" style="text-align: center">机构证书</th>
-   			 </c:if>
+   			 </c:if> 
    			 
-   			  <c:if test="${gxbgshghqy >0}">
+   			   <c:if test="${gxbgshghqy >0}">
 				<th colspan="${gxbgshghqy}" style="text-align: center">企业证书</th>
    			 </c:if>
    			  <c:if test="${gxbgshghgeqy >0}">
@@ -1123,6 +1131,7 @@ $(document).ready(function() {
    			 </c:if>
    			  <c:if test="${gxbgshghjg >0}">
 				<th colspan="${gxbgshghjg}" style="text-align: center">机构证书</th>
+   			 </c:if> 
    			 </c:if>
 			</tr>
 			<tr>
@@ -1160,7 +1169,7 @@ $(document).ready(function() {
 						<c:if test="${sumList.total.gxjgadd2!=0}"><th>二年</th></c:if>
 						<c:if test="${sumList.total.gxjgadd4!=0}"><th>四年</th></c:if>
 						<c:if test="${sumList.total.gxjgadd5!=0}"><th>五年</th></c:if>
-						
+						<c:if test="${multiType}">
 						<c:if test="${sumList.total.updateLostqyNum!=0}"><th>一年</th></c:if>
 						<c:if test="${sumList.total.updateLostqyNum2!=0}"><th>二年</th></c:if>
 						<c:if test="${sumList.total.updateLostqyNum4!=0}"><th>四年</th></c:if>
@@ -1178,7 +1187,7 @@ $(document).ready(function() {
 						<c:if test="${sumList.total.updateLostjgNum4!=0}"><th>四年</th></c:if>
 						<c:if test="${sumList.total.updateLostjgNum5!=0}"><th>五年</th></c:if>
 						
-						<c:if test="${sumList.total.updateReplaceqyNum!=0}"><th>一年</th></c:if>
+						 <c:if test="${sumList.total.updateReplaceqyNum!=0}"><th>一年</th></c:if>
 						<c:if test="${sumList.total.updateReplaceqyNum2!=0}"><th>二年</th></c:if>
 						<c:if test="${sumList.total.updateReplaceqyNum4!=0}"><th>四年</th></c:if>
 						<c:if test="${sumList.total.updateReplaceqyNum5!=0}"><th>五年</th></c:if>
@@ -1193,7 +1202,7 @@ $(document).ready(function() {
 						<c:if test="${sumList.total.updateReplacejgNum!=0}"><th>一年</th></c:if>
 						<c:if test="${sumList.total.updateReplacejgNum2!=0}"><th>二年</th></c:if>
 						<c:if test="${sumList.total.updateReplacejgNum4!=0}"><th>四年</th></c:if>
-						<c:if test="${sumList.total.updateReplacejgNum5!=0}"><th>五年</th></c:if>
+						<c:if test="${sumList.total.updateReplacejgNum5!=0}"><th>五年</th></c:if> 
 						
 						<c:if test="${sumList.total.updateChangeqyNum!=0}"><th>一年</th></c:if>
 						<c:if test="${sumList.total.updateChangeqyNum2!=0}"><th>二年</th></c:if>
@@ -1210,9 +1219,9 @@ $(document).ready(function() {
 						<c:if test="${sumList.total.updateChangejgNum!=0}"><th>一年</th></c:if>
 						<c:if test="${sumList.total.updateChangejgNum2!=0}"><th>二年</th></c:if>
 						<c:if test="${sumList.total.updateChangejgNum4!=0}"><th>四年</th></c:if>
-						<c:if test="${sumList.total.updateChangejgNum5!=0}"><th>五年</th></c:if>
+						<c:if test="${sumList.total.updateChangejgNum5!=0}"><th>五年</th></c:if> 
 						
-						<c:if test="${sumList.total.changeUpdateLostqyNum!=0}"><th>一年</th></c:if>
+						 <c:if test="${sumList.total.changeUpdateLostqyNum!=0}"><th>一年</th></c:if>
 						<c:if test="${sumList.total.changeUpdateLostqyNum2!=0}"><th>二年</th></c:if>
 						<c:if test="${sumList.total.changeUpdateLostqyNum4!=0}"><th>四年</th></c:if>
 						<c:if test="${sumList.total.changeUpdateLostqyNum5!=0}"><th>五年</th></c:if>
@@ -1227,9 +1236,9 @@ $(document).ready(function() {
 						<c:if test="${sumList.total.changeUpdateLostjgNum!=0}"><th>一年</th></c:if>
 						<c:if test="${sumList.total.changeUpdateLostjgNum2!=0}"><th>二年</th></c:if>
 						<c:if test="${sumList.total.changeUpdateLostjgNum4!=0}"><th>四年</th></c:if>
-						<c:if test="${sumList.total.changeUpdateLostjgNum5!=0}"><th>五年</th></c:if>
+						<c:if test="${sumList.total.changeUpdateLostjgNum5!=0}"><th>五年</th></c:if> 
 						
-						<c:if test="${sumList.total.changeUpdateReplaceqyNum!=0}"><th>一年</th></c:if>
+						 <c:if test="${sumList.total.changeUpdateReplaceqyNum!=0}"><th>一年</th></c:if>
 						<c:if test="${sumList.total.changeUpdateReplaceqyNum2!=0}"><th>二年</th></c:if>
 						<c:if test="${sumList.total.changeUpdateReplaceqyNum4!=0}"><th>四年</th></c:if>
 						<c:if test="${sumList.total.changeUpdateReplaceqyNum5!=0}"><th>五年</th></c:if>
@@ -1245,7 +1254,7 @@ $(document).ready(function() {
 						<c:if test="${sumList.total.changeUpdateReplacejgNum2!=0}"><th>二年</th></c:if>
 						<c:if test="${sumList.total.changeUpdateReplacejgNum4!=0}"><th>四年</th></c:if>
 						<c:if test="${sumList.total.changeUpdateReplacejgNum5!=0}"><th>五年</th></c:if>
-				
+				 		</c:if>
 	 		</tr>
 				
 				
@@ -1303,7 +1312,7 @@ $(document).ready(function() {
 						<c:if test="${sumList.total.modifyNumgrQ!=0}"><td>${sum.value.modifyNumgrQ}</td></c:if>
 						<c:if test="${sumList.total.modifyNumgrG!=0}"><td>${sum.value.modifyNumgrG}</td></c:if>
 						<c:if test="${sumList.total.modifyNumjg!=0}"><td>${sum.value.modifyNumjg}</td></c:if>
-						
+						<c:if test="${multiType}">
 						<c:if test="${sumList.total.changeLostqyNum!=0}"><td>${sum.value.changeLostqyNum}</td></c:if>
 						<c:if test="${sumList.total.changeLostgrQNum!=0}"><td>${sum.value.changeLostgrQNum}</td></c:if>
 						<c:if test="${sumList.total.changeLostgrGNum!=0}"><td>${sum.value.changeLostgrGNum}</td></c:if>
@@ -1331,7 +1340,7 @@ $(document).ready(function() {
 						<c:if test="${sumList.total.updateLostjgNum4!=0}"><td>${sum.value.updateLostjgNum4}</td></c:if>
 						<c:if test="${sumList.total.updateLostjgNum5!=0}"><td>${sum.value.updateLostjgNum5}</td></c:if>
 						
-						<c:if test="${sumList.total.updateReplaceqyNum!=0}"><td>${sum.value.updateReplaceqyNum}</td></c:if>
+						 <c:if test="${sumList.total.updateReplaceqyNum!=0}"><td>${sum.value.updateReplaceqyNum}</td></c:if>
 						<c:if test="${sumList.total.updateReplaceqyNum2!=0}"><td>${sum.value.updateReplaceqyNum2}</td></c:if>
 						<c:if test="${sumList.total.updateReplaceqyNum4!=0}"><td>${sum.value.updateReplaceqyNum4}</td></c:if>
 						<c:if test="${sumList.total.updateReplaceqyNum5!=0}"><td>${sum.value.updateReplaceqyNum5}</td></c:if>
@@ -1346,9 +1355,9 @@ $(document).ready(function() {
 						<c:if test="${sumList.total.updateReplacejgNum!=0}"><td>${sum.value.updateReplacejgNum}</td></c:if>
 						<c:if test="${sumList.total.updateReplacejgNum2!=0}"><td>${sum.value.updateReplacejgNum2}</td></c:if>
 						<c:if test="${sumList.total.updateReplacejgNum4!=0}"><td>${sum.value.updateReplacejgNum4}</td></c:if>
-						<c:if test="${sumList.total.updateReplacejgNum5!=0}"><td>${sum.value.updateReplacejgNum5}</td></c:if>
+						<c:if test="${sumList.total.updateReplacejgNum5!=0}"><td>${sum.value.updateReplacejgNum5}</td></c:if> 
 						
-						<c:if test="${sumList.total.updateChangeqyNum!=0}"><td>${sum.value.updateChangeqyNum}</td></c:if>
+						 <c:if test="${sumList.total.updateChangeqyNum!=0}"><td>${sum.value.updateChangeqyNum}</td></c:if>
 						<c:if test="${sumList.total.updateChangeqyNum2!=0}"><td>${sum.value.updateChangeqyNum2}</td></c:if>
 						<c:if test="${sumList.total.updateChangeqyNum4!=0}"><td>${sum.value.updateChangeqyNum4}</td></c:if>
 						<c:if test="${sumList.total.updateChangeqyNum5!=0}"><td>${sum.value.updateChangeqyNum5}</td></c:if>
@@ -1363,10 +1372,10 @@ $(document).ready(function() {
 						<c:if test="${sumList.total.updateChangejgNum!=0}"><td>${sum.value.updateChangejgNum}</td></c:if>
 						<c:if test="${sumList.total.updateChangejgNum2!=0}"><td>${sum.value.updateChangejgNum2}</td></c:if>
 						<c:if test="${sumList.total.updateChangejgNum4!=0}"><td>${sum.value.updateChangejgNum4}</td></c:if>
-						<c:if test="${sumList.total.updateChangejgNum5!=0}"><td>${sum.value.updateChangejgNum5}</td></c:if>
+						<c:if test="${sumList.total.updateChangejgNum5!=0}"><td>${sum.value.updateChangejgNum5}</td></c:if> 
 						
 						
-						<c:if test="${sumList.total.changeUpdateLostqyNum!=0}"><th>${sum.value.changeUpdateLostqyNum}</th></c:if>
+						 <c:if test="${sumList.total.changeUpdateLostqyNum!=0}"><th>${sum.value.changeUpdateLostqyNum}</th></c:if>
 						<c:if test="${sumList.total.changeUpdateLostqyNum2!=0}"><th>${sum.value.changeUpdateLostqyNum2}</th></c:if>
 						<c:if test="${sumList.total.changeUpdateLostqyNum4!=0}"><th>${sum.value.changeUpdateLostqyNum4}</th></c:if>
 						<c:if test="${sumList.total.changeUpdateLostqyNum5!=0}"><th>${sum.value.changeUpdateLostqyNum5}</th></c:if>
@@ -1381,9 +1390,9 @@ $(document).ready(function() {
 						<c:if test="${sumList.total.changeUpdateLostjgNum!=0}"><th>${sum.value.changeUpdateLostjgNum}</th></c:if>
 						<c:if test="${sumList.total.changeUpdateLostjgNum2!=0}"><th>${sum.value.changeUpdateLostjgNum2}</th></c:if>
 						<c:if test="${sumList.total.changeUpdateLostjgNum4!=0}"><th>${sum.value.changeUpdateLostjgNum4}</th></c:if>
-						<c:if test="${sumList.total.changeUpdateLostjgNum5!=0}"><th>${sum.value.changeUpdateLostjgNum5}</th></c:if>
+						<c:if test="${sumList.total.changeUpdateLostjgNum5!=0}"><th>${sum.value.changeUpdateLostjgNum5}</th></c:if> 
 						
-						<c:if test="${sumList.total.changeUpdateReplaceqyNum!=0}"><th>${sum.value.changeUpdateReplaceqyNum}</th></c:if>
+						 <c:if test="${sumList.total.changeUpdateReplaceqyNum!=0}"><th>${sum.value.changeUpdateReplaceqyNum}</th></c:if>
 						<c:if test="${sumList.total.changeUpdateReplaceqyNum2!=0}"><th>${sum.value.changeUpdateReplaceqyNum2}</th></c:if>
 						<c:if test="${sumList.total.changeUpdateReplaceqyNum4!=0}"><th>${sum.value.changeUpdateReplaceqyNum4}</th></c:if>
 						<c:if test="${sumList.total.changeUpdateReplaceqyNum5!=0}"><th>${sum.value.changeUpdateReplaceqyNum5}</th></c:if>
@@ -1398,7 +1407,8 @@ $(document).ready(function() {
 						<c:if test="${sumList.total.changeUpdateReplacejgNum!=0}"><th>${sum.value.changeUpdateReplacejgNum}</th></c:if>
 						<c:if test="${sumList.total.changeUpdateReplacejgNum2!=0}"><th>${sum.value.changeUpdateReplacejgNum2}</th></c:if>
 						<c:if test="${sumList.total.changeUpdateReplacejgNum4!=0}"><th>${sum.value.changeUpdateReplacejgNum4}</th></c:if>
-						<c:if test="${sumList.total.changeUpdateReplacejgNum5!=0}"><th>${sum.value.changeUpdateReplacejgNum5}</th></c:if>
+						<c:if test="${sumList.total.changeUpdateReplacejgNum5!=0}"><th>${sum.value.changeUpdateReplacejgNum5}</th></c:if> 
+						</c:if>
 						</tr>
 						</c:if>
 					
@@ -1457,7 +1467,7 @@ $(document).ready(function() {
 						<c:if test="${sumList.total.modifyNumgrQ!=0}"><td>${sumList.total.modifyNumgrQ}</td></c:if>
 						<c:if test="${sumList.total.modifyNumgrG!=0}"><td>${sumList.total.modifyNumgrG}</td></c:if>
 						<c:if test="${sumList.total.modifyNumjg!=0}"><td>${sumList.total.modifyNumjg}</td></c:if>
-						
+						<c:if test="${multiType}">
 						<c:if test="${sumList.total.changeLostqyNum!=0}"><td>${sumList.total.changeLostqyNum}</td></c:if>
 						<c:if test="${sumList.total.changeLostgrQNum!=0}"><td>${sumList.total.changeLostgrQNum}</td></c:if>
 						<c:if test="${sumList.total.changeLostgrGNum!=0}"><td>${sumList.total.changeLostgrGNum}</td></c:if>
@@ -1485,7 +1495,7 @@ $(document).ready(function() {
 						<c:if test="${sumList.total.updateLostjgNum4!=0}"><td>${sumList.total.updateLostjgNum4}</td></c:if>
 						<c:if test="${sumList.total.updateLostjgNum5!=0}"><td>${sumList.total.updateLostjgNum5}</td></c:if>
 						
-						<c:if test="${sumList.total.updateReplaceqyNum!=0}"><td>${sumList.total.updateReplaceqyNum}</td></c:if>
+						 <c:if test="${sumList.total.updateReplaceqyNum!=0}"><td>${sumList.total.updateReplaceqyNum}</td></c:if>
 						<c:if test="${sumList.total.updateReplaceqyNum2!=0}"><td>${sumList.total.updateReplaceqyNum2}</td></c:if>
 						<c:if test="${sumList.total.updateReplaceqyNum4!=0}"><td>${sumList.total.updateReplaceqyNum4}</td></c:if>
 						<c:if test="${sumList.total.updateReplaceqyNum5!=0}"><td>${sumList.total.updateReplaceqyNum5}</td></c:if>
@@ -1500,9 +1510,9 @@ $(document).ready(function() {
 						<c:if test="${sumList.total.updateReplacejgNum!=0}"><td>${sumList.total.updateReplacejgNum}</td></c:if>
 						<c:if test="${sumList.total.updateReplacejgNum2!=0}"><td>${sumList.total.updateReplacejgNum2}</td></c:if>
 						<c:if test="${sumList.total.updateReplacejgNum4!=0}"><td>${sumList.total.updateReplacejgNum4}</td></c:if>
-						<c:if test="${sumList.total.updateReplacejgNum5!=0}"><td>${sumList.total.updateReplacejgNum5}</td></c:if>
+						<c:if test="${sumList.total.updateReplacejgNum5!=0}"><td>${sumList.total.updateReplacejgNum5}</td></c:if> 
 						
-						<c:if test="${sumList.total.updateChangeqyNum!=0}"><td>${sumList.total.updateChangeqyNum}</td></c:if>
+						  <c:if test="${sumList.total.updateChangeqyNum!=0}"><td>${sumList.total.updateChangeqyNum}</td></c:if>
 						<c:if test="${sumList.total.updateChangeqyNum2!=0}"><td>${sumList.total.updateChangeqyNum2}</td></c:if>
 						<c:if test="${sumList.total.updateChangeqyNum4!=0}"><td>${sumList.total.updateChangeqyNum4}</td></c:if>
 						<c:if test="${sumList.total.updateChangeqyNum5!=0}"><td>${sumList.total.updateChangeqyNum5}</td></c:if>
@@ -1517,10 +1527,10 @@ $(document).ready(function() {
 						<c:if test="${sumList.total.updateChangejgNum!=0}"><td>${sumList.total.updateChangejgNum}</td></c:if>
 						<c:if test="${sumList.total.updateChangejgNum2!=0}"><td>${sumList.total.updateChangejgNum2}</td></c:if>
 						<c:if test="${sumList.total.updateChangejgNum4!=0}"><td>${sumList.total.updateChangejgNum4}</td></c:if>
-						<c:if test="${sumList.total.updateChangejgNum5!=0}"><td>${sumList.total.updateChangejgNum5}</td></c:if>
+						<c:if test="${sumList.total.updateChangejgNum5!=0}"><td>${sumList.total.updateChangejgNum5}</td></c:if>  
 						
 						
-						
+						 
 							<c:if test="${sumList.total.changeUpdateLostqyNum!=0}"><th>${sumList.total.changeUpdateLostqyNum}</th></c:if>
 						<c:if test="${sumList.total.changeUpdateLostqyNum2!=0}"><th>${sumList.total.changeUpdateLostqyNum2}</th></c:if>
 						<c:if test="${sumList.total.changeUpdateLostqyNum4!=0}"><th>${sumList.total.changeUpdateLostqyNum4}</th></c:if>
@@ -1536,9 +1546,9 @@ $(document).ready(function() {
 						<c:if test="${sumList.total.changeUpdateLostjgNum!=0}"><th>${sumList.total.changeUpdateLostjgNum}</th></c:if>
 						<c:if test="${sumList.total.changeUpdateLostjgNum2!=0}"><th>${sumList.total.changeUpdateLostjgNum2}</th></c:if>
 						<c:if test="${sumList.total.changeUpdateLostjgNum4!=0}"><th>${sumList.total.changeUpdateLostjgNum4}</th></c:if>
-						<c:if test="${sumList.total.changeUpdateLostjgNum5!=0}"><th>${sumList.total.changeUpdateLostjgNum5}</th></c:if>
+						<c:if test="${sumList.total.changeUpdateLostjgNum5!=0}"><th>${sumList.total.changeUpdateLostjgNum5}</th></c:if> 
 						
-						<c:if test="${sumList.total.changeUpdateReplaceqyNum!=0}"><th>${sumList.total.changeUpdateReplaceqyNum}</th></c:if>
+						 <c:if test="${sumList.total.changeUpdateReplaceqyNum!=0}"><th>${sumList.total.changeUpdateReplaceqyNum}</th></c:if>
 						<c:if test="${sumList.total.changeUpdateReplaceqyNum2!=0}"><th>${sumList.total.changeUpdateReplaceqyNum2}</th></c:if>
 						<c:if test="${sumList.total.changeUpdateReplaceqyNum4!=0}"><th>${sumList.total.changeUpdateReplaceqyNum4}</th></c:if>
 						<c:if test="${sumList.total.changeUpdateReplaceqyNum5!=0}"><th>${sumList.total.changeUpdateReplaceqyNum5}</th></c:if>
@@ -1553,7 +1563,8 @@ $(document).ready(function() {
 						<c:if test="${sumList.total.changeUpdateReplacejgNum!=0}"><th>${sumList.total.changeUpdateReplacejgNum}</th></c:if>
 						<c:if test="${sumList.total.changeUpdateReplacejgNum2!=0}"><th>${sumList.total.changeUpdateReplacejgNum2}</th></c:if>
 						<c:if test="${sumList.total.changeUpdateReplacejgNum4!=0}"><th>${sumList.total.changeUpdateReplacejgNum4}</th></c:if>
-						<c:if test="${sumList.total.changeUpdateReplacejgNum5!=0}"><th>${sumList.total.changeUpdateReplacejgNum5}</th></c:if>
+						<c:if test="${sumList.total.changeUpdateReplacejgNum5!=0}"><th>${sumList.total.changeUpdateReplacejgNum5}</th></c:if> 
+						</c:if>
 			</tr>
 		</table>
 		</div>
