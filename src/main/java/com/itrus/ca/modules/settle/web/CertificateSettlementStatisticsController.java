@@ -1382,7 +1382,7 @@ public class CertificateSettlementStatisticsController extends BaseController {
 				
 			}
 			row1.createCell(0).setCellValue("月份");
-			sheet.addMergedRegion(new Region(1, (short)3, 0, (short) 0));
+			
 			row1.createCell(1).setCellValue("新增");
 			sheet.addMergedRegion(new Region(1, (short)1, 1, (short) 16));
 			row1.createCell(17).setCellValue("更新");
@@ -1792,7 +1792,7 @@ public class CertificateSettlementStatisticsController extends BaseController {
 				rown.createCell(132).setCellValue(monthMap.get(key).getChangeUpdateReplacejgNum5());
 					  }
 			  }
-				HSSFRow rowi = sheet.createRow(k+monthMap.size()-1);
+				HSSFRow rowi = sheet.createRow(4+monthMap.size());
 				rowi.createCell(0).setCellValue("总计");
 				rowi.createCell(1).setCellValue(monthMap.get("total").getXzqyadd1());
 				rowi.createCell(2).setCellValue(monthMap.get("total").getXzqyadd2());
