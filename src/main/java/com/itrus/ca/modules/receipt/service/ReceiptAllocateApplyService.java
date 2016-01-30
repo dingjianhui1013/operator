@@ -49,7 +49,8 @@ public class ReceiptAllocateApplyService extends BaseService {
 		dc.createAlias("receiptDepotInfo", "receiptDepotInfo");
 		dc.createAlias("createBy.office", "office");
 		dc.createAlias("createBy", "createBy");
-		dc.add(dataScopeFilter(UserUtils.getUser(), "office", "createBy"));
+		dc.add(dataScopeFilterByWorkDealInfo(UserUtils.getUser(), "areaId", "officeId"));
+		
 		if(receiptAllocateApply.getReceiptDepotInfo()!=null){
 			if(receiptAllocateApply.getReceiptDepotInfo().getReceiptName()!=null&&!receiptAllocateApply.getReceiptDepotInfo().getReceiptName().equals("")){
 				dc.add(Restrictions.like("receiptDepotInfo.receiptName", "%"+EscapeUtil.escapeLike(receiptAllocateApply.getReceiptDepotInfo().getReceiptName())+"%"));
@@ -83,7 +84,7 @@ public class ReceiptAllocateApplyService extends BaseService {
 		}
 		if(receiptAllocateApply.getOffice()!=null){
 			if(receiptAllocateApply.getOffice().getId()!=null){
-				dc.add(Restrictions.eq("office.id", receiptAllocateApply.getOffice().getId()));
+				dc.add(Restrictions.eq("officeId", receiptAllocateApply.getOffice().getId()));
 			}
 		}
 		if (receiptAllocateApply.getState()!=null) {

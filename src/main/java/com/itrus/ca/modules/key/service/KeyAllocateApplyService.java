@@ -69,8 +69,7 @@ public class KeyAllocateApplyService extends BaseService {
 		DetachedCriteria dc = keyAllocateApplyDao.createDetachedCriteria();
 		dc.createAlias("createBy.office", "office");
 		dc.createAlias("createBy", "createBy");
-		dc.add(dataScopeFilter(UserUtils.getUser(), "office", "createBy"));
-		
+		dc.add(dataScopeFilterByWorkDealInfo(UserUtils.getUser(), "areaId", "officeId"));
 		dc.createAlias("keyUsbKeyDepot", "keyUsbKeyDepot");
 		
 		if (startTime!=null&&endTime!=null) {
@@ -95,7 +94,7 @@ public class KeyAllocateApplyService extends BaseService {
 		dc.createAlias("createBy.office", "office");
 		dc.createAlias("createBy", "createBy");
 		dc.createAlias("keyUsbKeyDepot", "keyUsbKeyDepot");
-		dc.add(dataScopeFilter(UserUtils.getUser(), "office", "createBy"));
+		dc.add(dataScopeFilterByWorkDealInfo(UserUtils.getUser(), "areaId", "officeId"));
 		if (startTime!=null&&endTime!=null) {
 			dc.add(Restrictions.ge("warehouseDate", startTime));
 			dc.add(Restrictions.le("warehouseDate", endTime));

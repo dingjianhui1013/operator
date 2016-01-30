@@ -3871,6 +3871,13 @@ public class WorkDealInfoController extends BaseController {
 		ProductType productType = new ProductType();
 		WorkDealInfoType workDealInfoType = new WorkDealInfoType();
 		List<Office> officeList = officeService.getOfficeByType(UserUtils.getUser(), 2);
+		
+		List<Long> officeIds = new ArrayList<Long>();
+		for (int i = 0; i < officeList.size(); i++) {
+			officeIds.add(officeList.get(i).getId());
+		}
+		
+		
 		Calendar calendar = Calendar.getInstance();
 		/*
 		 * if (endTime != null) { calendar.setTime(endTime);
@@ -3881,7 +3888,7 @@ public class WorkDealInfoController extends BaseController {
 			certInfoList = workCertInfoService.findZhiZhengTime(zhizhengStartTime, zhizhengEndTime);
 		}
 		Page<WorkDealInfo> page = workDealInfoService.find(new Page<WorkDealInfo>(request, response), workDealInfo,dealInfoByOfficeAreaIds,dealInfoByAreaIds,officeids
-				, apply, certType, workType, year, luruStartTime, luruEndTime, officeList, daoqiStartTime,
+				, apply, certType, workType, year, luruStartTime, luruEndTime, officeIds, daoqiStartTime,
 				daoqiEndTime, jianzhengStartTime, jianzhengEndTime, certInfoList);
 		model.addAttribute("proType", ProductType.productTypeStrMap);
 		model.addAttribute("wdiType", WorkDealInfoType.WorkDealInfoTypeMap);

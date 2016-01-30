@@ -883,7 +883,7 @@ public class WorkDealInfoService extends BaseService {
 
 	public Page<WorkDealInfo> find(Page<WorkDealInfo> page, WorkDealInfo workDealInfo, List<Long> dealInfoByAreaIds,
 			List<Long> dealInfoByOfficeAreaIds, List<Long> officeIds, Long apply, String certType, Integer workType,
-			Integer year, Date luruStartTime, Date luruEndTime, List<Office> offices, Date daoqiStartTime,
+			Integer year, Date luruStartTime, Date luruEndTime, List<Long> offices, Date daoqiStartTime,
 			Date daoqiEndTime, Date jianzhengStartTime, Date jianzhengEndTime, List<WorkCertInfo> certInfoList
 
 	) {
@@ -897,7 +897,7 @@ public class WorkDealInfoService extends BaseService {
 		dc.createAlias("configApp", "configApp");
 		dc.createAlias("configProduct", "configProduct");
 		// workDealInfoDao.createDetachedCriteria();
-		dc.add(Restrictions.in("createBy.office", offices));
+		dc.add(Restrictions.in("officeId", offices));
 
 		// workUser.contactName
 		// workUser.conCertNumber
@@ -3299,7 +3299,7 @@ public class WorkDealInfoService extends BaseService {
 		dc.createAlias("configApp", "configApp");
 		dc.createAlias("workPayInfo", "workPayInfo");
 		dc.createAlias("configProduct", "configProduct");
-		dc.add(Restrictions.eq("createBy.office.id", officeId));
+		dc.add(Restrictions.eq("officeId", officeId));
 		dc.add(Restrictions.ge("obtainedDate", date));
 		if (appId != null) {
 			dc.add(Restrictions.eq("configApp.id", appId));
@@ -3348,7 +3348,7 @@ public class WorkDealInfoService extends BaseService {
 		dc.createAlias("configApp", "configApp");
 		dc.createAlias("workPayInfo", "workPayInfo");
 		dc.createAlias("configProduct", "configProduct");
-		dc.add(Restrictions.eq("createBy.office.id", officeId));
+		dc.add(Restrictions.eq("officeId", officeId));
 		dc.add(Restrictions.ge("obtainedDate", date));
 		if (appId != null) {
 			dc.add(Restrictions.eq("configApp.id", appId));

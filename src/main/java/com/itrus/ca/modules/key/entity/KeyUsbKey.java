@@ -31,13 +31,11 @@ public class KeyUsbKey extends DataEntity implements java.io.Serializable {
 	private Long id;
 	private String description;
 	private KeyUsbKeyDepot keyUsbKeyDepot;
-
 	private KeyUsbKeyDepot fromkeyUsbKeyDepot;
 	private Integer count;
 	private int  inReason;
 	private KeyGeneralInfo keyGeneralInfo;
 	private String inReasonName;
-	
 	private Date startDate;
 	
 	// Constructors

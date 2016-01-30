@@ -51,10 +51,11 @@ public class KeyAllocateApply extends DataEntity implements java.io.Serializable
 	
 	private Integer state;
 	private String stateName;
-	
-	
-	
 	private String leavelName;
+	
+	private Long officeId;
+	private Long areaId;
+	
 	
 	
 	private List<KeyAllocateApplyDetailed> KeyApplyDetails; 	
@@ -71,14 +72,15 @@ public class KeyAllocateApply extends DataEntity implements java.io.Serializable
 	/** full constructor */
 	public KeyAllocateApply(Office sysOffice, KeyUsbKeyDepot keyUsbKeyDepot,
 			Integer applyType, Integer applyNewNum, KeyGeneralInfo keyGeneralInfo,
-			Timestamp warehouseDate, Integer leavel) {
+			Timestamp warehouseDate, Integer leavel,Long officeId, Long areaId) {
 		this.sysOffice = sysOffice;
 		this.keyUsbKeyDepot = keyUsbKeyDepot;
 		this.applyType = applyType;
 		
 		this.warehouseDate = warehouseDate;
 		this.leavel = leavel;
-		
+		this.officeId = officeId;
+		this.areaId = areaId;
 		
 //		this.keyDisplaceDetails = keyDisplaceDetails;
 	}
@@ -241,6 +243,24 @@ public class KeyAllocateApply extends DataEntity implements java.io.Serializable
 
 	public void setStateName(String stateName) {
 		this.stateName = stateName;
+	}
+	
+	@Column(name = "create_office_id")
+	public Long getOfficeId() {
+		return officeId;
+	}
+
+	public void setOfficeId(Long officeId) {
+		this.officeId = officeId;
+	}
+
+	@Column(name = "create_area_id")
+	public Long getAreaId() {
+		return areaId;
+	}
+
+	public void setAreaId(Long areaId) {
+		this.areaId = areaId;
 	}
 	
 	

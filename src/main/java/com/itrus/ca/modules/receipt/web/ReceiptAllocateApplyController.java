@@ -250,6 +250,9 @@ public class ReceiptAllocateApplyController extends BaseController {
 			receiptAllocateApply.setMoney(money);
 			receiptAllocateApply.setReceiptType(null);
 			
+			receiptAllocateApply.setAreaId(UserUtils.getUser().getOffice().getParent().getId());
+			receiptAllocateApply.setOfficeId(UserUtils.getUser().getOffice().getId());
+			
 			receiptAllocateApplyService.save(receiptAllocateApply);
 			logUtil.saveSysLog("发票管理","库房"+receiptDepotInfo.getReceiptName()+"添加调拨申请成功，申请金额为"+receiptAllocateApply.getMoney(), "");
 			

@@ -44,6 +44,13 @@ public class ReceiptAllocateApply extends DataEntity implements java.io.Serializ
 	private Integer receiptType;
 	private Double money;
 	
+	private Long officeId;
+	private Long areaId;
+	
+	
+	
+	
+	
 	private List<ReceiptAllocateApplyDetail> receiptApplyDetails; 	
 	// Constructors
 
@@ -55,7 +62,7 @@ public class ReceiptAllocateApply extends DataEntity implements java.io.Serializ
 	public ReceiptAllocateApply(Office sysOffice,
 			ReceiptDepotInfo receiptDepotInfo, Integer applyNewNum,
 			Timestamp warehouseDate, Integer leavel, Integer state,
-			Integer receiptType) {
+			Integer receiptType, Long officeId, Long areaId) {
 		this.sysOffice = sysOffice;
 		this.receiptDepotInfo = receiptDepotInfo;
 		this.applyNewNum = applyNewNum;
@@ -63,6 +70,8 @@ public class ReceiptAllocateApply extends DataEntity implements java.io.Serializ
 		this.leavel = leavel;
 		this.state = state;
 		this.receiptType = receiptType;
+		this.officeId = officeId;
+		this.areaId = areaId;
 	}
 
 	// Property accessors
@@ -162,6 +171,23 @@ public class ReceiptAllocateApply extends DataEntity implements java.io.Serializ
 	}
 	
 	
+	@Column(name = "create_office_id")
+	public Long getOfficeId() {
+		return officeId;
+	}
+
+	public void setOfficeId(Long officeId) {
+		this.officeId = officeId;
+	}
+
+	@Column(name = "create_area_id")
+	public Long getAreaId() {
+		return areaId;
+	}
+
+	public void setAreaId(Long areaId) {
+		this.areaId = areaId;
+	}
 	
 	
 	

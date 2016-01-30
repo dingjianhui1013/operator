@@ -611,6 +611,10 @@ public class KeyAllocateApplyController extends BaseController {
 		// keyAllocateApply.setKeyGeneralInfo(gene);
 
 		keyAllocateApply.setState(1);
+		
+		keyAllocateApply.setAreaId(UserUtils.getUser().getOffice().getParent().getId());
+		keyAllocateApply.setOfficeId(UserUtils.getUser().getOffice().getId());
+		
 		keyAllocateApplyService.save(keyAllocateApply);
 
 		
