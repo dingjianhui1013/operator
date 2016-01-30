@@ -70,15 +70,15 @@ public class KeyUnlockController extends BaseController {
 //			keyUnlock.setCreateBy(user);
 //		}
 		
-		List<WorkDealInfo> workDealInfos =  workDealInfoService.findByCompanyAttn(companyString,attnName);
-		List<String> certSns = new ArrayList<String>();
-		
-		if (workDealInfos.size()>0) {
-			for (int i = 0; i < workDealInfos.size(); i++) {
-				certSns.add(workDealInfos.get(i).getCertSn());
-			}
-		}
-        Page<KeyUnlock> page = keyUnlockService.find(new Page<KeyUnlock>(request, response), keyUnlock,certSns); 
+//		List<WorkDealInfo> workDealInfos =  workDealInfoService.findByCompanyAttn(companyString,attnName);
+//		List<String> certSns = new ArrayList<String>();
+//		
+//		if (workDealInfos.size()>0) {
+//			for (int i = 0; i < workDealInfos.size(); i++) {
+//				certSns.add(workDealInfos.get(i).getCertSn());
+//			}
+//		}
+        Page<KeyUnlock> page = keyUnlockService.find(new Page<KeyUnlock>(request, response), keyUnlock,companyString,attnName); 
         
         for (int i = 0; i < page.getList().size(); i++) {
         	 KeyUnlock unlock = keyUnlockService.get(page.getList().get(i).getId());
