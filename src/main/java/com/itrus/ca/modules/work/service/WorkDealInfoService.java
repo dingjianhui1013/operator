@@ -231,8 +231,8 @@ public class WorkDealInfoService extends BaseService {
 		dc.createAlias("createBy", "createBy");
 		dc.createAlias("createBy.office", "office");
 		// dc.createAlias("workCertInfo", "workCertInfo");
-		dc.add(dataScopeFilter(UserUtils.getUser(), "office", "createBy"));
-
+		dc.add(dataScopeFilterByWorkDealInfo(UserUtils.getUser(), "areaId", "officeId"));
+		
 		if (workDealInfo.getDealInfoStatus() != null) {
 			dc.add(Restrictions.eq("dealInfoStatus", workDealInfo.getDealInfoStatus()));
 		}
@@ -478,8 +478,7 @@ public class WorkDealInfoService extends BaseService {
 		dc.createAlias("createBy", "createBy");
 		dc.createAlias("createBy.office", "office");
 		// dc.createAlias("workCertInfo", "workCertInfo");
-		dc.add(dataScopeFilter(UserUtils.getUser(), "office", "createBy"));
-
+		dc.add(Restrictions.or(Restrictions.isNotNull("isIxin"),dataScopeFilterByWorkDealInfo(UserUtils.getUser(), "areaId", "officeId")));
 		if (workDealInfo.getWorkCertInfo() != null) {
 			dc.add(Restrictions.isNotNull("notafter"));
 		}
@@ -534,7 +533,6 @@ public class WorkDealInfoService extends BaseService {
 		if (workDealInfo.getStatus() != null) {
 			dc.add(Restrictions.eq("status", workDealInfo.getStatus()));
 		}
-		dc.add(Restrictions.isNull("isIxin"));
 		dc.add(Restrictions.eq(WorkDealInfo.DEL_FLAG, WorkDealInfo.DEL_FLAG_NORMAL));
 		dc.addOrder(Order.desc("id"));
 		return workDealInfoDao.find(page, dc);

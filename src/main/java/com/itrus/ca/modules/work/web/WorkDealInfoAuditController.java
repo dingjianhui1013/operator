@@ -219,10 +219,10 @@ public class WorkDealInfoAuditController extends BaseController {
 		workDealInfo.setDealInfoType(dealInfoType);
 		Page<WorkDealInfo> page = workDealInfoService.findByStatus(new Page<WorkDealInfo>(request, response),
 				workDealInfo);
-		List<WorkDealInfo> noIxInfos = page.getList();
-		List<WorkDealInfo> isIxInfos = workDealInfoService.findByIsIxin(workDealInfo);
-		noIxInfos.addAll(isIxInfos);
-		page.setList(noIxInfos);
+//		List<WorkDealInfo> noIxInfos = page.getList();
+//		List<WorkDealInfo> isIxInfos = workDealInfoService.findByIsIxin(workDealInfo);
+//		noIxInfos.addAll(isIxInfos);
+//		page.setList(noIxInfos);
 		model.addAttribute("page", page);
 		model.addAttribute("proType", ProductType.productTypeStrMap);
 		model.addAttribute("wdiType", WorkDealInfoType.WorkDealInfoTypeMap);
