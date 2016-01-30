@@ -57,7 +57,7 @@
 <body>
 	<ul class="nav nav-tabs">
 		<li class="active"><a
-			href="${ctx}/work/workDealInfo/StatisticalDealPayList">支付信息统计</a></li>
+			href="${ctx}/work/workDealInfo/StatisticalDealPayList">业务款项统计</a></li>
 	</ul>
 	<form:form id="searchForm" modelAttribute="workDealInfo"
 		action="${ctx}/work/workDealInfo/StatisticalDealPayList" method="post"

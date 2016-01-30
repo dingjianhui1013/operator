@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>支付信息统计</title>
+<title>支付款项统计</title>
 <meta name="decorator" content="default" />
 <script type="text/javascript">
 	$(document).ready(function() {
@@ -62,7 +62,7 @@
 <body>
 	<ul class="nav nav-tabs">
 		<li class="active"><a
-			href="${ctx}/work/workFinancePayInfoRelation/statisticalList">支付信息统计</a></li>
+			href="${ctx}/work/workFinancePayInfoRelation/statisticalList">支付款项统计</a></li>
 	</ul>
 	<form:form id="searchForm" modelAttribute="workPayInfo"
 		action="${ctx}/work/workFinancePayInfoRelation/statisticalList"

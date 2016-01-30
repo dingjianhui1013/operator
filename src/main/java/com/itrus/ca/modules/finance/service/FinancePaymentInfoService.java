@@ -67,19 +67,12 @@ public class FinancePaymentInfoService extends BaseService {
 	
 	public Page<FinancePaymentInfo> find(Page<FinancePaymentInfo> page, FinancePaymentInfo financePaymentInfo, Date startTime, Date endTime) {
 		DetachedCriteria dc = financePaymentInfoDao.createDetachedCriteria();
-//		dc.createAlias("workCompany", "workCompany");
-//		if (1>2) {
-//			SimpleExpression alipay = Restrictions.eq("alipayMethod", 1);
-//			SimpleExpression pos = Restrictions.eq("posMethod", 1);
-//			SimpleExpression alipay1 = Restrictions.eq("alipayMethod", 1);
-//			SimpleExpression pos2 = Restrictions.eq("posMethod", 1);
-//			List<Criterion> expressions = new ArrayList<Criterion>();
-//			expressions.add(alipay);
-//			dc.add(Restrictions.or((Criterion[]) expressions.toArray()));
-//		}
 		dc.createAlias("createBy", "createBy");
 		dc.createAlias("createBy.office", "office");
-		dc.add(dataScopeFilter(UserUtils.getUser(),"office", "createBy"));
+		//dc.add(dataScopeFilter(UserUtils.getUser(),"office", "createBy"));
+		dc.add(dataScopeFilterByWorkDealInfo(UserUtils.getUser(), "areaId", "officeId"));
+		
+		
 		if (financePaymentInfo.getCompany()!=null) {
 			if (StringUtils.isNotEmpty(financePaymentInfo.getCompany())){
 				dc.add(Restrictions.like("company", "%"+EscapeUtil.escapeLike(financePaymentInfo.getCompany())+"%"));
@@ -140,8 +133,7 @@ public class FinancePaymentInfoService extends BaseService {
 	public Page<FinancePaymentInfo> find1(Page<FinancePaymentInfo> page, FinancePaymentInfo financePaymentInfo, Date startTime, Date endTime, List<Long> ids) {
 		DetachedCriteria dc = financePaymentInfoDao.createDetachedCriteria();
 		dc.createAlias("createBy", "createBy");
-		dc.createAlias("createBy.office", "office");
-		dc.add(dataScopeFilter(UserUtils.getUser(),"office", "createBy"));
+		dc.add(dataScopeFilterByWorkDealInfo(UserUtils.getUser(), "areaId", "officeId"));
 		if (financePaymentInfo.getCompany()!=null) {
 			if (StringUtils.isNotEmpty(financePaymentInfo.getCompany())){
 				dc.add(Restrictions.like("company", "%"+EscapeUtil.escapeLike(financePaymentInfo.getCompany())+"%"));
@@ -158,7 +150,7 @@ public class FinancePaymentInfoService extends BaseService {
 			dc.add(Restrictions.le("createDate", calendar.getTime()));
 		}
 		if (ids.size()>0) {
-			dc.add(Restrictions.in("office.id", ids));
+			dc.add(Restrictions.in("officeId", ids));
 		}
 		dc.add(Restrictions.eq(FinancePaymentInfo.DEL_FLAG, FinancePaymentInfo.DEL_FLAG_NORMAL));
 		dc.addOrder(Order.desc("id"));
@@ -169,8 +161,7 @@ public class FinancePaymentInfoService extends BaseService {
 	public List<FinancePaymentInfo> findList(FinancePaymentInfo financePaymentInfo, Date startTime, Date endTime, List<Long> ids) {
 		DetachedCriteria dc = financePaymentInfoDao.createDetachedCriteria();
 		dc.createAlias("createBy", "createBy");
-		dc.createAlias("createBy.office", "office");
-		dc.add(dataScopeFilter(UserUtils.getUser(),"office", "createBy"));
+		dc.add(dataScopeFilterByWorkDealInfo(UserUtils.getUser(), "areaId", "officeId"));
 		if (financePaymentInfo.getCompany()!=null) {
 			if (StringUtils.isNotEmpty(financePaymentInfo.getCompany())){
 				dc.add(Restrictions.like("company", "%"+EscapeUtil.escapeLike(financePaymentInfo.getCompany())+"%"));
@@ -187,7 +178,7 @@ public class FinancePaymentInfoService extends BaseService {
 			dc.add(Restrictions.le("createDate", calendar.getTime()));
 		}
 		if (ids.size()>0) {
-			dc.add(Restrictions.in("office.id", ids));
+			dc.add(Restrictions.in("officeId", ids));
 		}
 		dc.add(Restrictions.eq(FinancePaymentInfo.DEL_FLAG, FinancePaymentInfo.DEL_FLAG_NORMAL));
 		dc.addOrder(Order.desc("id"));
@@ -547,6 +538,8 @@ public class FinancePaymentInfoService extends BaseService {
 					return ifErr(-1, ifErr.toString());
 				}
 			}
+			financePaymentInfo.setOfficeId(UserUtils.getUser().getOffice().getId());
+			financePaymentInfo.setAreaId(UserUtils.getUser().getOffice().getParent().getId());
 			listDate.add(financePaymentInfo);
 		}
 		saveList(listDate);

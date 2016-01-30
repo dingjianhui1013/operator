@@ -206,15 +206,9 @@ public class FinancePaymentInfoController extends BaseController {
 			financePaymentInfo
 					.setResidueMoney(financePaymentInfo.getResidueMoney());//更新 设置为当前记录的余额
 		}
-		// WorkCompany workCompany = new WorkCompany();
-		// workCompany.setId(companyId);
-//		if (configAppId!=null) {
-//			ConfigApp configApp = new ConfigApp();
-//			configApp.setId(configAppId);
-//			financePaymentInfo.setConfigApp(configApp);
-//		}
-		// financePaymentInfo.setWorkCompany(workCompany);
 
+		financePaymentInfo.setOfficeId(UserUtils.getUser().getOffice().getId());
+		financePaymentInfo.setAreaId(UserUtils.getUser().getOffice().getParent().getId());
 
 		financePaymentInfo.setCreateDate(new Date());//设置创建时间
 		String detail = "";

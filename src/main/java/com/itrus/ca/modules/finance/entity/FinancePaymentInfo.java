@@ -54,6 +54,11 @@ public class FinancePaymentInfo extends DataEntity implements java.io.Serializab
 	private String paymentBank;			//付款银行
 	private Integer quitMoneyStatus;		//退款状态      0：未退款      1：已退款
 	private String distinguish;			// 区别导入和手动添加  0为添加 null为导入
+	
+	private Long officeId;
+	private Long areaId;
+	
+	
 	// Constructors
 
 	/** default constructor */
@@ -66,7 +71,7 @@ public class FinancePaymentInfo extends DataEntity implements java.io.Serializab
 			Integer paymentMethod, String commUserName, String commMobile,
 			String remark, Timestamp createDate, String delFlag,
 			String remarks, Timestamp updateDate, Integer bingdingTimes,String company,Date payDate,String serialNum,
-			String paymentAccount,String paymentBank,String distinguish) {
+			String paymentAccount,String paymentBank,String distinguish,Long officeId,Long areaId) {
 		this.configApp = configApp;
 		this.paymentMoney = paymentMoney;
 		this.paymentMethod = paymentMethod;
@@ -84,6 +89,8 @@ public class FinancePaymentInfo extends DataEntity implements java.io.Serializab
 		this.paymentAccount = paymentAccount;
 		this.paymentBank = paymentBank;
 		this.distinguish = distinguish;
+		this.officeId = officeId;
+		this.areaId = areaId;
 	}
 
 	// Property accessors
@@ -245,5 +252,25 @@ public class FinancePaymentInfo extends DataEntity implements java.io.Serializab
 	public void setDistinguish(String distinguish) {
 		this.distinguish = distinguish;
 	}
+	
+	@Column(name = "office_id")
+	public Long getOfficeId() {
+		return officeId;
+	}
+
+	public void setOfficeId(Long officeId) {
+		this.officeId = officeId;
+	}
+
+	@Column(name = "area_id")
+	public Long getAreaId() {
+		return areaId;
+	}
+
+	public void setAreaId(Long areaId) {
+		this.areaId = areaId;
+	}
+	
+	
 	
 }

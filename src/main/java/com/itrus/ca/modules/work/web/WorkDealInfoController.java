@@ -577,41 +577,8 @@ public class WorkDealInfoController extends BaseController {
 		}
 
 		List<Long> idList = Lists.newArrayList();// 根据产品名称查询出支付信息
-		// if (appId != null) {
-		// List<WorkDealInfo> dealInfos = workDealInfoService
-		// .findByAppId(appId);
-		//
-		// if (dealInfos != null && dealInfos.size() > 0) {
-		// for (int i = 0; i < dealInfos.size(); i++) {
-		// idList.add(dealInfos.get(i).getId());
-		// }
-		// }
-		// if (dealInfos == null || dealInfos.size() < 1) {
-		// idList.add(-1l);
-		// }
-		// }
-
 		Page<WorkDealInfo> page = workDealInfoService.findByDealPay(new Page<WorkDealInfo>(request, response),
 				workDealInfo, startTime, endTime, idList, dealInfoByAreaIds, dealInfoByOfficeAreaIds, appId,officeids);
-		// 除去合同采购和统一采购的信息
-		// for (int i = 0; i < page.getList().size(); i++) {
-		// if (page.getList().get(i).getWorkPayInfo().getMethodGov() != null) {
-		// if (page.getList().get(i).getWorkPayInfo().getMethodGov() == true) {
-		// page.getList().remove(i);
-		// continue;
-		// }
-		// }
-		// if (page.getList().get(i).getWorkPayInfo().getMethodContract() !=
-		// null) {
-		// if (page.getList().get(i).getWorkPayInfo().getMethodContract() ==
-		// true) {
-		// page.getList().remove(i);
-		// continue;
-		// }
-		// }
-		//
-		// }
-//		Map<Long, Set<String>> Id_paymethod=new HashMap<Long,Set<String>>();
 		if (page.getList().size() > 0) {
 			for (int i = 0; i < page.getList().size(); i++) {
 				if(page.getList().get(i).getWorkPayInfo().getRelationMethod()!=null)
@@ -784,17 +751,6 @@ public class WorkDealInfoController extends BaseController {
 			model.addAttribute("Id_paymethod", Id_paymethod);
 
 		}
-
-		// List<Office> offsList = officeService.selectAreaList();
-		//
-		// if (area != null) {
-		// model.addAttribute("areaId", area);
-		// List<Office> offices = officeService.findByParentId(area);
-		// model.addAttribute("offices", offices);
-		// if (officeId != null) {
-		// model.addAttribute("officeId", officeId);
-		// }
-		// }
 
 		List<Office> offsList = officeService.getOfficeByType(user, 1);
 

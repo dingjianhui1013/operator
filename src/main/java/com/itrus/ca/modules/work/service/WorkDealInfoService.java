@@ -1671,8 +1671,6 @@ public class WorkDealInfoService extends BaseService {
 			Long appId, List<Long> officeIds) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("workPayInfo", "workPayInfo");
-//		dc.createAlias("createBy", "createBy");
-//		dc.createAlias("createBy.office", "office");
 		dc.add(Restrictions.isNotNull("workPayInfo"));
 		dc.add(Restrictions.eq("workPayInfo.delFlag", WorkPayInfo.DEL_FLAG_NORMAL));
 		dc.add(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED));
@@ -1697,30 +1695,6 @@ public class WorkDealInfoService extends BaseService {
 			}
 		}
 
-		// if(workDealInfo.getWorkPayInfo()!=null){
-		// List<Criterion> expressions = new ArrayList<Criterion>();
-		// SimpleExpression money = null;
-		// SimpleExpression pos = null;
-		// SimpleExpression bank = null;
-		// SimpleExpression alipay = null;
-		//
-		// if (workDealInfo.getWorkPayInfo().getMethodMoney()!=null) {
-		// money = Restrictions.eq("workPayInfo.methodMoney", true);
-		// }
-		// if (workDealInfo.getWorkPayInfo().getMethodPos()!=null) {
-		// pos = Restrictions.eq("workPayInfo.methodPos", true);
-		// }
-		// if (workDealInfo.getWorkPayInfo().getMethodBank()!=null) {
-		// bank = Restrictions.eq("workPayInfo.methodBank", true);
-		// }
-		// if (workDealInfo.getWorkPayInfo().getMethodAlipay()!=null) {
-		// alipay = Restrictions.eq("workPayInfo.methodAlipay", true);
-		// }
-		// dc.add(Restrictions.or(money==null? Restrictions.eq("id",-1l):money,
-		// pos==null? Restrictions.eq("id",-2l):pos,
-		// bank==null? Restrictions.eq("id",-3l):bank,
-		// alipay==null? Restrictions.eq("id",-4l):alipay));
-		// }
 		if (startTime != null) {
 			dc.add(Restrictions.ge("workPayInfo.createDate", startTime));
 		}
@@ -1917,68 +1891,15 @@ public class WorkDealInfoService extends BaseService {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("workPayInfo", "workPayInfo");
 		dc.add(Restrictions.isNotNull("workPayInfo"));
-//		dc.createAlias("createBy", "createBy");
-//		dc.createAlias("createBy.office", "office");
 		dc.add(Restrictions.eq("workPayInfo.delFlag", WorkPayInfo.DEL_FLAG_NORMAL));
 		List<String> status = Lists.newArrayList();
 		status.add(WorkDealInfoStatus.STATUS_CERT_OBTAINED);
 		status.add(WorkDealInfoStatus.STATUS_CERT_WAIT);
 		dc.add(Restrictions.in("dealInfoStatus", status));
-		// dc.add(Restrictions.and("dealInfoStatus",
-		// WorkDealInfoStatus.STATUS_CERT_OBTAINED));
-		// dc.add(Restrictions.and("dealInfoStatus",
-		// WorkDealInfoStatus.STATUS_CERT_WAIT));
 		if (startTime != null) {
 			endTime.setHours(23);
 			endTime.setMinutes(59);
 			endTime.setSeconds(59);
-			// DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
-			// dc.createAlias("workPayInfo", "workPayInfo");
-			// dc.createAlias("createBy", "createBy");
-			// dc.createAlias("createBy.office", "office");
-			// dc.add(Restrictions.isNotNull("workPayInfo"));
-			// dc.add(Restrictions.eq("workPayInfo.delFlag",
-			// WorkPayInfo.DEL_FLAG_NORMAL));
-			// dc.add(Restrictions.eq("dealInfoStatus",
-			// WorkDealInfoStatus.STATUS_CERT_OBTAINED));
-			// dc.add(Restrictions.eq("workPayInfo.delFlag",
-			// WorkPayInfo.DEL_FLAG_NORMAL));
-			// dc.add(Restrictions.eq("dealInfoStatus",
-			// WorkDealInfoStatus.STATUS_CERT_OBTAINED));
-			// if (workDealInfo.getWorkPayInfo() != null) {
-			// if (workDealInfo.getWorkPayInfo().getMethodMoney() == true) {
-			// dc.add(Restrictions.eq("workPayInfo.methodMoney", true));
-			// }
-			// if (workDealInfo.getWorkPayInfo().getMethodPos() == true) {
-			// dc.add(Restrictions.eq("workPayInfo.methodPos", true));
-			// }
-			// if (workDealInfo.getWorkPayInfo().getMethodBank() == true) {
-			// dc.add(Restrictions.eq("workPayInfo.methodBank", true));
-			// }
-			// if (workDealInfo.getWorkPayInfo().getMethodAlipay() == true) {
-			// dc.add(Restrictions.eq("workPayInfo.methodAlipay", true));
-			// }
-			// if (workDealInfo.getWorkPayInfo().getMethodGov() == true) {
-			// dc.add(Restrictions.eq("workPayInfo.methodGov", true));
-			// }
-			// if (workDealInfo.getWorkPayInfo().getMethodContract() == true) {
-			// dc.add(Restrictions.eq("workPayInfo.methodContract", true));
-			// }
-			// }
-			// if (startTime != null) {
-			// dc.add(Restrictions.ge("workPayInfo.createDate", startTime));
-			// dc.add(Restrictions.le("workPayInfo.createDate", endTime));
-			// }
-			// if (dealInfoByAreaIds != null && dealInfoByAreaIds.size() > 0) {
-			// dc.add(Restrictions.in("id", dealInfoByAreaIds));
-			// }
-			// if (appId != null) {
-			// dc.add(Restrictions.eq("configApp.id", appId));
-			// }
-			// if(officeids!=null)
-			// {
-			// dc.add(Restrictions.in("office.id", officeids));
-			// }
 			if (startTime != null) {
 				dc.add(Restrictions.ge("workPayInfo.createDate", startTime));
 				dc.add(Restrictions.le("workPayInfo.createDate", endTime));
