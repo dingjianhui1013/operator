@@ -780,6 +780,8 @@ public class WorkDealInfoController extends BaseController {
 		model.addAttribute("payMethod", payMethod);
 		model.addAttribute("page", page);
 		model.addAttribute("Id_paymethod",Id_paymethod);
+		List<Office> offs= officeService.findAll();
+		model.addAttribute("offs", offs);
 		return "modules/work/statisticalDealPayList";
 	}
 
@@ -4289,7 +4291,7 @@ public class WorkDealInfoController extends BaseController {
 		} catch (Exception ex) {
 		}
 	}
-
+	
 	@RequestMapping(value = "exportDealPayList")
 	public void exportDealPayList(WorkDealInfo workDealInfo, HttpServletRequest request, HttpServletResponse response,
 			@RequestParam(value = "startTime", required = false) Date startTime,
@@ -5050,7 +5052,7 @@ public class WorkDealInfoController extends BaseController {
 			Set<Long> offices = new LinkedHashSet<Long>();
 			if (officeids != null) {
 				for (int i = 0; i < list.size(); i++) {
-					offices.add(list.get(i).getUpdateBy().getOffice().getId());
+					offices.add(list.get(i).getOfficeId());
 				}
 			}
 			Object offs[] = offices.toArray();
@@ -5071,7 +5073,7 @@ public class WorkDealInfoController extends BaseController {
 					for (int i = 0; i < list.size(); i++) {
 						String mo = new SimpleDateFormat("yyyy-MM")
 								.format(list.get(i).getWorkPayInfo().getCreateDate());
-						if (list.get(i).getUpdateBy().getOffice().getId().equals(offs[o])
+						if (list.get(i).getOfficeId().equals(offs[o])
 								&& ((String) months[m]).indexOf(mo) != -1) {
 							double postMoney = 0L;
 							double bankMoney = 0L;
@@ -5431,7 +5433,7 @@ public class WorkDealInfoController extends BaseController {
 			Set<Long> offices = new LinkedHashSet<Long>();
 			if (officeids != null) {
 				for (int i = 0; i < list.size(); i++) {
-					offices.add(list.get(i).getUpdateBy().getOffice().getId());
+					offices.add(list.get(i).getOfficeId());
 				}
 			}
 			Object offs[] = offices.toArray();
@@ -5451,7 +5453,7 @@ public class WorkDealInfoController extends BaseController {
 					for (int i = 0; i < list.size(); i++) {
 						String mo = new SimpleDateFormat("yyyy-MM-dd")
 								.format(list.get(i).getWorkPayInfo().getCreateDate());
-						if (list.get(i).getUpdateBy().getOffice().getId().equals(offs[o])
+						if (list.get(i).getOfficeId().equals(offs[o])
 								&& ((String) months[m]).indexOf(mo) != -1) {
 							double postMoney = 0L;
 							double bankMoney = 0L;
@@ -5815,7 +5817,7 @@ public class WorkDealInfoController extends BaseController {
 			Set<Long> offices = new LinkedHashSet<Long>();
 			if (officeids != null) {
 				for (int i = 0; i < list.size(); i++) {
-					offices.add(list.get(i).getUpdateBy().getOffice().getId());
+					offices.add(list.get(i).getOfficeId());
 				}
 			}
 
@@ -5834,7 +5836,7 @@ public class WorkDealInfoController extends BaseController {
 					for (int i = 0; i < list.size(); i++) {
 						if(list.get(i).getWorkCompany().getDistrict()!=null)
 						{
-							if (list.get(i).getUpdateBy().getOffice().getId().equals(offs[o])
+							if (list.get(i).getOfficeId().equals(offs[o])
 									&& list.get(i).getWorkCompany().getDistrict().equals(districts[d])) {
 								dis.add((String) districts[d]);
 							}

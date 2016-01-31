@@ -67,8 +67,8 @@ public class FinancePaymentInfoService extends BaseService {
 	
 	public Page<FinancePaymentInfo> find(Page<FinancePaymentInfo> page, FinancePaymentInfo financePaymentInfo, Date startTime, Date endTime) {
 		DetachedCriteria dc = financePaymentInfoDao.createDetachedCriteria();
-		dc.createAlias("createBy", "createBy");
-		dc.createAlias("createBy.office", "office");
+//		dc.createAlias("createBy", "createBy");
+//		dc.createAlias("createBy.office", "office");
 		//dc.add(dataScopeFilter(UserUtils.getUser(),"office", "createBy"));
 		dc.add(dataScopeFilterByWorkDealInfo(UserUtils.getUser(), "areaId", "officeId"));
 		
@@ -114,9 +114,10 @@ public class FinancePaymentInfoService extends BaseService {
 	}
 	public List<FinancePaymentInfo> findAdjustment(FinancePaymentInfo financePaymentInfo) {
 		DetachedCriteria dc = financePaymentInfoDao.createDetachedCriteria();
-		dc.createAlias("createBy", "createBy");
-		dc.createAlias("createBy.office", "office");
-		dc.add(dataScopeFilter(UserUtils.getUser(),"office", "createBy"));
+//		dc.createAlias("createBy", "createBy");
+//		dc.createAlias("createBy.office", "office");
+//		dc.add(dataScopeFilter(UserUtils.getUser(),"office", "createBy")); 
+		dc.add(dataScopeFilterByWorkDealInfo(UserUtils.getUser(), "areaId", "officeId"));
 		if (financePaymentInfo.getCompany()!=null) {
 			if (StringUtils.isNotEmpty(financePaymentInfo.getCompany())){
 				dc.add(Restrictions.like("company", "%"+EscapeUtil.escapeLike(financePaymentInfo.getCompany())+"%"));
@@ -134,6 +135,7 @@ public class FinancePaymentInfoService extends BaseService {
 		DetachedCriteria dc = financePaymentInfoDao.createDetachedCriteria();
 		dc.createAlias("createBy", "createBy");
 		dc.add(dataScopeFilterByWorkDealInfo(UserUtils.getUser(), "areaId", "officeId"));
+//		dc.add(dataScopeFilterByWorkDealInfo(UserUtils.getUser(), "areaId", "officeId"));
 		if (financePaymentInfo.getCompany()!=null) {
 			if (StringUtils.isNotEmpty(financePaymentInfo.getCompany())){
 				dc.add(Restrictions.like("company", "%"+EscapeUtil.escapeLike(financePaymentInfo.getCompany())+"%"));

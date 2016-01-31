@@ -266,8 +266,18 @@
 							</c:otherwise>
 						</c:choose> --%>
 						</td>
-					<td>${configDealPay.createBy.office.areaName}</td>
-					<td>${configDealPay.createBy.office.name}</td>
+						<c:set var="index" value="0"/>
+						<c:set var="index1" value="0"/>
+						<c:forEach items="${offs }" var="offs">
+							<c:if test="${offs.id==configDealPay.areaId}"><c:set var="index" value="${index+1}"/><td>${offs.name }</td></c:if>
+						</c:forEach>
+						<c:if test="${index==0}"><td></td></c:if>
+						<c:forEach items="${offs }" var="offs">
+							<c:if test="${offs.id==configDealPay.officeId}"><c:set var="index1" value="${index1+1 }"/><td>${offs.name }</td></c:if>
+						</c:forEach>
+						<c:if test="${index1==0}"><td></td></c:if>
+<%-- 					<td>${configDealPay.areaId}</td> --%>
+<%-- 					<td>${configDealPay.officeId}</td> --%>
 					<td>${configDealPay.workPayInfo.createBy.name}</td>
 					<td><a
 						href="${ctx}/work/workDealInfo/statisticalDealPayListShow?dealInfoId=${configDealPay.id}">查看</a>
