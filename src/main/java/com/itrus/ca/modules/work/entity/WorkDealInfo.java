@@ -134,7 +134,7 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 	/** full constructor */
 	public WorkDealInfo(ConfigApp configApp, WorkCompany workCompany,
 			WorkUser workUser,
-			Integer dealInfoType, String dealInfoStatus, ConfigProduct configProduct,
+			Integer dealInfoType, String dealInfoStatus, ConfigProduct configProduct, WorkCertInfo workCertInfo,
 			Integer year, String certSn, String keySn, Integer certSort,Integer trustDeviceCount,
 			Set<WorkLog> workLogs,Long configChargeAgentId,Integer isSJQY,
 			User inputUser,
@@ -159,6 +159,7 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 		this.certSort = certSort;
 		this.workLogs = workLogs;
 		this.configProduct = configProduct;
+		this.workCertInfo = workCertInfo;
 		this.trustDeviceCount = trustDeviceCount;
 		this.configChargeAgentId = configChargeAgentId;
 		this.isSJQY = isSJQY;

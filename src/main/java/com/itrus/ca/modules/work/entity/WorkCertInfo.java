@@ -17,12 +17,14 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.itrus.ca.common.persistence.DataEntity;
+
 /**
  * WorkCertInfo entity. @author MyEclipse Persistence Tools
  */
 @Entity
 @Table(name = "work_cert_info")
-public class WorkCertInfo implements java.io.Serializable {
+public class WorkCertInfo  implements java.io.Serializable {
 
 	// Fields
 

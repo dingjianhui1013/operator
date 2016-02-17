@@ -746,7 +746,7 @@ $(document)
 			value="${page.pageSize}" />
 		<input id="dealId" type="hidden" value="${workDealInfo.id}" />
 		<div>
-			<label>&nbsp;&nbsp;应用名称 ：&nbsp;&nbsp;</label>
+			<label>&nbsp;&nbsp;项目名称 ：&nbsp;&nbsp;</label>
 			<select name="alias"
 				id="alias">
 				<option value="">请选择应用</option>
@@ -754,25 +754,37 @@ $(document)
 					<option value="${app.id}"
 						<c:if test="${app.id==alias}">
 					selected="selected"
-					</c:if>>${app.alias}</option>
+					</c:if>>${app.appName}</option>
 				</c:forEach>
 			</select>
-			&nbsp;&nbsp; <label>单位名称：</label>
-			<form:input path="workCompany.companyName" htmlEscape="false"
+			<label>&nbsp;&nbsp;产品名称 ：</label>
+			<select name="productName"
+				id="productName">
+				<option value="">请选择产品</option>
+				<option value="1"  <c:if test="${productName==1}">selected="selected"</c:if>>企业证书</option>
+				<option value="2" <c:if test="${productName==2}">selected="selected"</c:if>>个人证书(企业)</option>
+				<option value="3" <c:if test="${productName==3}">selected="selected"</c:if>>机构证书</option>
+				<option value="4" <c:if test="${productName==4}">selected="selected"</c:if>>可信移动设备</option>
+				<option value="5" <c:if test="${productName==5}">selected="selected"</c:if>>个人证书(机构)</option>
+			</select>
+			<br />
+			<br />
+			&nbsp;&nbsp;<label>单位名称：</label>
+			&nbsp;&nbsp; <form:input path="workCompany.companyName" htmlEscape="false"
 				maxlength="50" class="input-medium" />
-			&nbsp;&nbsp; <label>组代码号：</label>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label>组代码号：</label>
 			<form:input path="workCompany.organizationNumber" htmlEscape="false"
 				maxlength="50" class="input-medium" />
 			<br>
 		</div>
 		<div style="margin-top: 8px">
-			&nbsp;&nbsp;<label>证书持有人姓名：</label>
-			<form:input path="workUser.contactName" htmlEscape="false"
-				maxlength="50" class="input-medium" />
-		&nbsp;&nbsp;<label>&nbsp;&nbsp;KEY编码 ：&nbsp;&nbsp;</label>
-			<form:input path="keySn" htmlEscape="false" maxlength="50"
+<!-- 			&nbsp;&nbsp;<label>证书持有人姓名：</label> -->
+<%-- 			<form:input path="workUser.contactName" htmlEscape="false" --%>
+<%-- 				maxlength="50" class="input-medium" /> --%>
+		<label>&nbsp;&nbsp;KEY编码：&nbsp;&nbsp;</label>
+			&nbsp;<form:input path="keySn" htmlEscape="false" maxlength="50"
 				class="input-medium" />
-		&nbsp;&nbsp;<label>&nbsp;&nbsp;业务状态 ：&nbsp;&nbsp;</label>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label>业务状态：</label>
 			<select name="dealInfoStatus" id="dealInfoStatus">
 				<option value="">请选择业务类型</option>
 				<c:forEach items="${wdiStatus}" var="type">
@@ -784,13 +796,23 @@ $(document)
 			</select> 			
 		</div>
 		<div style="margin-top: 8px">
-			&nbsp;&nbsp;<label>到期日期：</label> <input class="input-medium Wdate" type="text"
+			&nbsp;&nbsp;<label>到期日期：&nbsp;</label> &nbsp;&nbsp;<input class="input-medium Wdate" type="text"
 				required="required" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});"
 				value="<fmt:formatDate value="${startTime}" pattern="yyyy-MM-dd"/>" maxlength="20" readonly="readonly"
 				name="startTime" id="startTime"/> 至 <input class="input-medium Wdate" type="text"
 				required="required" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'startTime\')}'});"
 				value="<fmt:formatDate value="${endTime}" pattern="yyyy-MM-dd"/>" maxlength="20" readonly="readonly"
-				name="endTime" /> &nbsp;&nbsp;&nbsp;&nbsp;<input id="btnSubmit"
+				name="endTime" /> 
+			&nbsp;&nbsp;<label>制证日期：</label> <input class="input-medium Wdate" type="text"
+				required="required" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});"
+				value="<fmt:formatDate value="${makeCertStartTime}" pattern="yyyy-MM-dd"/>" maxlength="20" readonly="readonly"
+				name="makeCertStartTime" id="makeCertStartTime"/> 至 <input class="input-medium Wdate" type="text"
+				required="required" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'startTime\')}'});"
+				value="<fmt:formatDate value="${makeCertEndTime}" pattern="yyyy-MM-dd"/>" maxlength="20" readonly="readonly"
+				name="makeCertEndTime" /> 
+				<br />
+				<br />
+				&nbsp;&nbsp;&nbsp;&nbsp;<input id="btnSubmit"
 				class="btn btn-primary" type="submit" value="查询" />
 				&nbsp;&nbsp;&nbsp;&nbsp;
 				<a target="_blank" href="${ctx}/template/xls/batchImportDealInfo.xlsx" class="btn btn-primary">批量新增模板下载</a>
@@ -815,12 +837,12 @@ $(document)
 				onchange="checkAll(this)"
 				/> </th>
 				<th>业务编号</th>
-				<th>应用名称</th>
+				<th>项目名称</th>
 				<th>单位名称</th>
-				<th>证书持有人</th>
+<!-- 				<th>证书持有人</th> -->
 				<th>经办人</th>
 				<th>产品名称</th>
-				<th>业务类型</th>
+				<th>证书类型</th>
 				<th>KEY编码</th>
 				<th>制证日期</th>
 				<th>有效期</th>
@@ -843,12 +865,12 @@ $(document)
 					 
 					 </td>
 					<td>${workDealInfo.svn}</td>
-					<td>${workDealInfo.configApp.alias}</td>
+					<td>${workDealInfo.configAppName}</td>
 					<td><a
-						href="${ctx}/work/workDealInfoFiling/formF?id=${workDealInfo.id}">${workDealInfo.workCompany.companyName}</a></td>
-					<td>${workDealInfo.workUser.contactName}</td>
-					<td>${workDealInfo.workCertInfo.workCertApplyInfo.name}</td>
-					<td>${proType[workDealInfo.configProduct.productName]}</td>
+						href="${ctx}/work/workDealInfoFiling/formF?id=${workDealInfo.id}">${workDealInfo.companyName}</a></td>
+<%-- 					<td>${workDealInfo.workUser.contactName}</td> --%>
+					<td>${workDealInfo.certApplyInfoName }</td>
+					<td>${proType[workDealInfo.productName]}</td>
 					<td>
 						<c:if test="${workDealInfo.dealInfoType!=null}">${wdiType[workDealInfo.dealInfoType]}</c:if>
 						<c:if test="${workDealInfo.dealInfoType1!=null}">${wdiType[workDealInfo.dealInfoType1]}</c:if>
@@ -856,9 +878,9 @@ $(document)
 						<c:if test="${workDealInfo.dealInfoType3!=null}">${wdiType[workDealInfo.dealInfoType3]}</c:if>
 					</td>
 					<td>${workDealInfo.keySn }</td>
-					<td><fmt:formatDate pattern="yyyy-MM-dd" value="${workDealInfo.workCertInfo.signDate}"/> </td>
+					<td><fmt:formatDate pattern="yyyy-MM-dd" value="${workDealInfo.signDate}"/></td>
 					<td><c:if
-							test="${not empty workDealInfo.workCertInfo.notafter && not empty workDealInfo.workCertInfo.notbefore}">
+							test="${not empty workDealInfo.notafter && not empty workDealInfo.notbefore}">
 							${empty workDealInfo.addCertDays?workDealInfo.year*365+workDealInfo.lastDays:workDealInfo.year*365+workDealInfo.lastDays+workDealInfo.addCertDays}（天）
 						</c:if></td>
 					<td><fmt:formatDate

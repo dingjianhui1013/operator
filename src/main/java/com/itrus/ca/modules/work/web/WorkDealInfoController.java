@@ -140,6 +140,7 @@ import com.itrus.ca.modules.work.service.WorkPayInfoService;
 import com.itrus.ca.modules.work.service.WorkUserHisService;
 import com.itrus.ca.modules.work.service.WorkUserService;
 import com.itrus.ca.modules.work.vo.WorkDate_MoneVo;
+import com.itrus.ca.modules.work.vo.WorkDealInfoListVo;
 import com.itrus.ca.modules.work.vo.WorkDealInfoVo;
 import com.itrus.ca.modules.work.vo.Workoffice_MoneyVo;
 import com.itrus.ca.modules.work.vo.Workoffice_district_MoneyVo;
@@ -265,10 +266,12 @@ public class WorkDealInfoController extends BaseController {
 
 	@RequiresPermissions("work:workDealInfo:view")
 	@RequestMapping(value = { "list", "" })
-	public String list(WorkDealInfo workDealInfo, Date startTime, Date endTime, HttpServletRequest request,
+	public String list(WorkDealInfo workDealInfo, Date startTime, Date endTime,Date makeCertStartTime,Date makeCertEndTime,HttpServletRequest request,
 			HttpServletResponse response, Model model, RedirectAttributes redirectAttributes,
 			@RequestParam(value = "checkIds", required = false) String checkIds,
-			@RequestParam(value = "alias", required = false) Long alias) {
+			@RequestParam(value = "alias", required = false) Long alias,
+			@RequestParam(value = "productName", required = false) String productName
+			) throws ParseException {
 		User user = UserUtils.getUser();
 		workDealInfo.setCreateBy(user.getCreateBy());
 
@@ -276,8 +279,8 @@ public class WorkDealInfoController extends BaseController {
 		model.addAttribute("configAppList", configAppList);
 		model.addAttribute("alias", alias);
 
-		Page<WorkDealInfo> page = workDealInfoService.find4Apply(new Page<WorkDealInfo>(request, response),
-				workDealInfo, startTime, endTime, alias);
+		Page<WorkDealInfoListVo> page = workDealInfoService.find4Apply(new Page<WorkDealInfoListVo>(request, response),
+				workDealInfo, startTime, endTime, alias,productName,makeCertStartTime,makeCertEndTime);
 
 		if (checkIds != null) {
 			String[] ids = checkIds.split(",");
@@ -300,6 +303,9 @@ public class WorkDealInfoController extends BaseController {
 		model.addAttribute("page", page);
 		model.addAttribute("startTime", startTime);
 		model.addAttribute("endTime", endTime);
+		model.addAttribute("productName", productName);
+		model.addAttribute("makeCertStartTime", makeCertStartTime);
+		model.addAttribute("makeCertEndTime", makeCertEndTime);
 		return "modules/work/workDealInfoList";
 	}
 

@@ -8,7 +8,10 @@ package com.itrus.ca.common.persistence;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -41,6 +44,7 @@ import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.internal.CriteriaImpl;
+import org.hibernate.jdbc.ReturningWork;
 import org.hibernate.search.FullTextQuery;
 import org.hibernate.search.FullTextSession;
 import org.hibernate.search.Search;
@@ -56,7 +60,6 @@ import com.itrus.ca.common.utils.ReflectHelper;
 import com.itrus.ca.common.utils.Reflections;
 import com.itrus.ca.common.utils.StringHelper;
 import com.itrus.ca.common.utils.StringUtils;
-import com.itrus.ca.modules.settle.vo.CertificateSettlementStatisticsVO;
 
 /**
  * DAO支持类实现
@@ -320,8 +323,9 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 			} else if (resultClass == List.class) {
 				query.setResultTransformer(Transformers.TO_LIST);
 			} else {
-				query.setResultTransformer(Transformers.aliasToBean(resultClass)); 
-//				query.addEntity(resultClass);
+				query.setResultTransformer(Transformers
+						.aliasToBean(resultClass));
+				// query.addEntity(resultClass);
 			}
 		}
 	}
@@ -393,18 +397,17 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 		return find(page, detachedCriteria, Criteria.DISTINCT_ROOT_ENTITY);
 	}
 
-	
-	
-	
 	@SuppressWarnings("unchecked")
-	public List<T> manyFind(DetachedCriteria detachedCriteria, ResultTransformer resultTransformer,int size) {
-		Criteria criteria = detachedCriteria.getExecutableCriteria(getSession());
+	public List<T> manyFind(DetachedCriteria detachedCriteria,
+			ResultTransformer resultTransformer, int size) {
+		Criteria criteria = detachedCriteria
+				.getExecutableCriteria(getSession());
 		criteria.setResultTransformer(resultTransformer);
 		criteria.setFirstResult(0);
-	    criteria.setMaxResults(size);
-		return criteria.list(); 
+		criteria.setMaxResults(size);
+		return criteria.list();
 	}
-	
+
 	/**
 	 * 使用检索标准对象分页查询
 	 * 
@@ -674,7 +677,7 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 	}
 
 	// ------------------- add
-	
+
 	/**
 	 * 
 	 * 注意，普通的多表联查不能用此方法<br>
@@ -715,9 +718,7 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 		return findBySqlString(page, sqlString, parameter, resultClass,
 				returnVO);
 	}
-	
-	
-	
+
 	/**
 	 * SQL 分页查询
 	 * 
@@ -732,7 +733,7 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 		return findBySqlString(page, sqlString, parameter,
 				new Class[] { resultClass }, null);
 	}
-	
+
 	public <E> Page<E> findBySqlString(Page<E> page, String sqlString,
 			Class[] resultClass) {
 		return findBySqlString(page, sqlString, null, resultClass, null);
@@ -746,7 +747,7 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 
 		}
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public <E> Page<E> findBySqlString(Page<E> page, String sqlString,
 			Parameter parameter, Class[] resultClass, Class returnVO) {
@@ -802,7 +803,7 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 
 		return page;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public <E> Page<E> find(Page<E> page, String qlString, Parameter parameter,
 			Class[] resultClass, Class returnVO) {
@@ -850,7 +851,7 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 			setResultReturnVO(returnVO, page);
 		return page;
 	}
-	
+
 	private void setResultReturnVO(Class returnVO, Page result) {
 		List<Class> lst = null;
 		List<Object[]> o = result.getList();
@@ -894,7 +895,35 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 
 	}
 
-	public List<T> manyFind(DetachedCriteria detachedCriteria,int size){
-		return manyFind(detachedCriteria, Criteria.DISTINCT_ROOT_ENTITY,size);
+	public List<T> manyFind(DetachedCriteria detachedCriteria, int size) {
+		return manyFind(detachedCriteria, Criteria.DISTINCT_ROOT_ENTITY, size);
 	}
+
+	
+	public List<Map> findBySQLListMap(final String sql, final int pageNo,
+			final int numPerPage) throws IllegalAccessException,
+			IllegalArgumentException, InvocationTargetException,
+			ClassNotFoundException, InstantiationException {
+
+		List<Map> l = findBySQL(sql, pageNo, numPerPage).setResultTransformer(
+				Transformers.ALIAS_TO_ENTITY_MAP).list();
+		return l;
+
+	}
+
+	public SQLQuery findBySQL(final String sql, final int pageNo,
+			final int numPerPage) {
+		return (SQLQuery) (T) getSession().doReturningWork(new ReturningWork() {
+			public SQLQuery execute(Connection connection) throws SQLException {
+				SQLQuery sqlQuery = getSession().createSQLQuery(sql);
+				if (pageNo > 0) {
+					sqlQuery.setFirstResult((pageNo - 1) * numPerPage);
+					sqlQuery.setMaxResults(numPerPage);
+				}
+
+				return sqlQuery;
+			}
+		});
+	}
+
 }

@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -13,9 +14,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -49,10 +50,8 @@ import com.itrus.ca.common.utils.DateUtils;
 import com.itrus.ca.common.utils.EscapeUtil;
 import com.itrus.ca.common.utils.PayinfoUtil;
 import com.itrus.ca.common.utils.RaAccountUtil;
-import com.itrus.ca.modules.constant.ProductType;
 import com.itrus.ca.modules.constant.WorkDealInfoStatus;
 import com.itrus.ca.modules.constant.WorkDealInfoType;
-import com.itrus.ca.modules.finance.entity.FinancePaymentInfo;
 import com.itrus.ca.modules.finance.service.FinancePaymentInfoService;
 import com.itrus.ca.modules.log.service.LogUtil;
 import com.itrus.ca.modules.profile.entity.ConfigAgentBoundDealInfo;
@@ -72,7 +71,6 @@ import com.itrus.ca.modules.profile.service.ConfigChargeAgentDetailService;
 import com.itrus.ca.modules.profile.service.ConfigChargeAgentService;
 import com.itrus.ca.modules.profile.service.ConfigProductService;
 import com.itrus.ca.modules.profile.service.ConfigRaAccountExtendInfoService;
-import com.itrus.ca.modules.settle.entity.Projectcount;
 import com.itrus.ca.modules.sys.entity.Office;
 import com.itrus.ca.modules.sys.entity.User;
 import com.itrus.ca.modules.sys.utils.CreateExcelUtils;
@@ -85,13 +83,11 @@ import com.itrus.ca.modules.work.entity.WorkCertInfo;
 import com.itrus.ca.modules.work.entity.WorkCompany;
 import com.itrus.ca.modules.work.entity.WorkCompanyHis;
 import com.itrus.ca.modules.work.entity.WorkDealInfo;
-import com.itrus.ca.modules.work.entity.WorkFinancePayInfoRelation;
 import com.itrus.ca.modules.work.entity.WorkLog;
 import com.itrus.ca.modules.work.entity.WorkPayInfo;
 import com.itrus.ca.modules.work.entity.WorkUser;
 import com.itrus.ca.modules.work.entity.WorkUserHis;
-
-import antlr.Utils;
+import com.itrus.ca.modules.work.vo.WorkDealInfoListVo;
 
 /**
  * 业务办理Service
@@ -101,7 +97,7 @@ import antlr.Utils;
  */
 /**
  * @author liumeng
- *
+ * 
  */
 @Component
 @Transactional(readOnly = true)
@@ -113,7 +109,8 @@ public class WorkDealInfoService extends BaseService {
 	private static final int CELL_NUM = 9;
 
 	@SuppressWarnings("unused")
-	private static Logger logger = LoggerFactory.getLogger(WorkDealInfoService.class);
+	private static Logger logger = LoggerFactory
+			.getLogger(WorkDealInfoService.class);
 
 	@Autowired
 	private WorkDealInfoDao workDealInfoDao;
@@ -191,141 +188,192 @@ public class WorkDealInfoService extends BaseService {
 	 * 
 	 * return (List<WorkDealInfo>) workDealInfoDao.findAll(ids); }
 	 */
-	public Page<WorkDealInfo> findAppList(Page<WorkDealInfo> page, WorkDealInfo workDealInfo) {
+	public Page<WorkDealInfo> findAppList(Page<WorkDealInfo> page,
+			WorkDealInfo workDealInfo) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("workCompany", "workCompany");
 		if (workDealInfo.getWorkCompany() != null) {
 			if (workDealInfo.getWorkCompany().getId() != null) {
-				dc.add(Restrictions.eq("workCompany", workDealInfo.getWorkCompany()));
+				dc.add(Restrictions.eq("workCompany",
+						workDealInfo.getWorkCompany()));
 			}
 		}
 		// dc.add(Restrictions.eq(WorkDealInfo.DEL_FLAG,
 		// WorkDealInfo.DEL_FLAG_NORMAL));
 		// dc.add(Restrictions.isNotNull("userSn"));
-		dc.add(Restrictions.or(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED),
-				Restrictions.eq("dealInfoType", WorkDealInfoType.TYPE_RETURN_MONEY),
-				Restrictions.eq("dealInfoType", WorkDealInfoType.TYPE_RETURN_WORK)));
+		dc.add(Restrictions.or(Restrictions.eq("dealInfoStatus",
+				WorkDealInfoStatus.STATUS_CERT_OBTAINED), Restrictions.eq(
+				"dealInfoType", WorkDealInfoType.TYPE_RETURN_MONEY),
+				Restrictions.eq("dealInfoType",
+						WorkDealInfoType.TYPE_RETURN_WORK)));
 		dc.addOrder(Order.desc("id"));
 		return workDealInfoDao.find(page, dc);
 	}
 
-	public Page<WorkDealInfo> findByIds(Page<WorkDealInfo> page, WorkDealInfo workDealInfo,
-			ArrayList<Long> dealInfoIds) {
+	public Page<WorkDealInfo> findByIds(Page<WorkDealInfo> page,
+			WorkDealInfo workDealInfo, ArrayList<Long> dealInfoIds) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("workCompany", "workCompany");
 		if (workDealInfo.getWorkCompany() != null) {
 			if (workDealInfo.getWorkCompany().getId() != null) {
-				dc.add(Restrictions.eq("workCompany", workDealInfo.getWorkCompany()));
+				dc.add(Restrictions.eq("workCompany",
+						workDealInfo.getWorkCompany()));
 			}
 		}
 		dc.add(Restrictions.in("id", dealInfoIds));
-		dc.add(Restrictions.or(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED),
-				Restrictions.eq("dealInfoType", WorkDealInfoType.TYPE_RETURN_MONEY),
-				Restrictions.eq("dealInfoType", WorkDealInfoType.TYPE_RETURN_WORK)));
+		dc.add(Restrictions.or(Restrictions.eq("dealInfoStatus",
+				WorkDealInfoStatus.STATUS_CERT_OBTAINED), Restrictions.eq(
+				"dealInfoType", WorkDealInfoType.TYPE_RETURN_MONEY),
+				Restrictions.eq("dealInfoType",
+						WorkDealInfoType.TYPE_RETURN_WORK)));
 		dc.addOrder(Order.desc("id"));
 		return workDealInfoDao.find(page, dc);
 	}
 
-	public Page<WorkDealInfo> find(Page<WorkDealInfo> page, WorkDealInfo workDealInfo) {
+	public Page<WorkDealInfo> find(Page<WorkDealInfo> page,
+			WorkDealInfo workDealInfo) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("createBy", "createBy");
 		dc.createAlias("createBy.office", "office");
 		// dc.createAlias("workCertInfo", "workCertInfo");
-		dc.add(dataScopeFilterByWorkDealInfo(UserUtils.getUser(), "areaId", "officeId"));
-		
+		dc.add(dataScopeFilterByWorkDealInfo(UserUtils.getUser(), "areaId",
+				"officeId"));
+
 		if (workDealInfo.getDealInfoStatus() != null) {
-			dc.add(Restrictions.eq("dealInfoStatus", workDealInfo.getDealInfoStatus()));
+			dc.add(Restrictions.eq("dealInfoStatus",
+					workDealInfo.getDealInfoStatus()));
 		}
 		if (workDealInfo.getWorkCompany() != null) {
 			dc.createAlias("workCompany", "workCompany");
 			if (workDealInfo.getWorkCompany().getId() != null) {
-				dc.add(Restrictions.eq("workCompany", workDealInfo.getWorkCompany()));
+				dc.add(Restrictions.eq("workCompany",
+						workDealInfo.getWorkCompany()));
 			}
 			if (workDealInfo.getWorkCompany().getCompanyName() != null
-					&& !workDealInfo.getWorkCompany().getCompanyName().equals("")) {
-				dc.add(Restrictions.like("workCompany.companyName",
-						"%" + EscapeUtil.escapeLike(workDealInfo.getWorkCompany().getCompanyName()) + "%"));
+					&& !workDealInfo.getWorkCompany().getCompanyName()
+							.equals("")) {
+				dc.add(Restrictions.like(
+						"workCompany.companyName",
+						"%"
+								+ EscapeUtil.escapeLike(workDealInfo
+										.getWorkCompany().getCompanyName())
+								+ "%"));
 			}
 		}
 		if (workDealInfo.getWorkUser() != null) {
 			dc.createAlias("workUser", "workUser");
 			if (workDealInfo.getWorkUser().getContactName() != null
 					&& !workDealInfo.getWorkUser().getContactName().equals("")) {
-				dc.add(Restrictions.like("workUser.contactName",
-						"%" + EscapeUtil.escapeLike(workDealInfo.getWorkUser().getContactName()) + "%"));
+				dc.add(Restrictions.like(
+						"workUser.contactName",
+						"%"
+								+ EscapeUtil.escapeLike(workDealInfo
+										.getWorkUser().getContactName()) + "%"));
 			}
 			if (workDealInfo.getWorkUser().getContactPhone() != null
 					&& !workDealInfo.getWorkUser().getContactPhone().equals("")) {
-				dc.add(Restrictions.like("workUser.contactPhone",
-						"%" + EscapeUtil.escapeLike(workDealInfo.getWorkUser().getContactPhone()) + "%"));
+				dc.add(Restrictions.like(
+						"workUser.contactPhone",
+						"%"
+								+ EscapeUtil.escapeLike(workDealInfo
+										.getWorkUser().getContactPhone()) + "%"));
 			}
 			if (workDealInfo.getWorkUser().getContactTel() != null
 					&& !workDealInfo.getWorkUser().getContactTel().equals("")) {
-				dc.add(Restrictions.like("workUser.contactTel",
-						"%" + EscapeUtil.escapeLike(workDealInfo.getWorkUser().getContactTel()) + "%"));
+				dc.add(Restrictions.like(
+						"workUser.contactTel",
+						"%"
+								+ EscapeUtil.escapeLike(workDealInfo
+										.getWorkUser().getContactTel()) + "%"));
 			}
 		}
 		if (workDealInfo.getDealInfoType() != null) {
-			dc.add(Restrictions.or(Restrictions.eq("dealInfoType", workDealInfo.getDealInfoType()),
-					Restrictions.eq("dealInfoType1", workDealInfo.getDealInfoType())));
+			dc.add(Restrictions.or(
+					Restrictions.eq("dealInfoType",
+							workDealInfo.getDealInfoType()),
+					Restrictions.eq("dealInfoType1",
+							workDealInfo.getDealInfoType())));
 		}
 		if (StringUtils.isNotEmpty(workDealInfo.getKeySn())) {
-			dc.add(Restrictions.like("keySn", "%" + EscapeUtil.escapeLike(workDealInfo.getKeySn()) + "%"));
+			dc.add(Restrictions.like("keySn",
+					"%" + EscapeUtil.escapeLike(workDealInfo.getKeySn()) + "%"));
 		}
 		if (workDealInfo.getStatus() != null) {
 			dc.add(Restrictions.eq("status", workDealInfo.getStatus()));
 		}
 		if (workDealInfo.getDelFlag() != null) {
-			dc.add(Restrictions.eq(WorkDealInfo.DEL_FLAG, WorkDealInfo.DEL_FLAG_NORMAL));
+			dc.add(Restrictions.eq(WorkDealInfo.DEL_FLAG,
+					WorkDealInfo.DEL_FLAG_NORMAL));
 		}
 		dc.addOrder(Order.desc("id"));
 		return workDealInfoDao.find(page, dc);
 	}
 
-	public Page<WorkDealInfo> findByGuiDang(Page<WorkDealInfo> page, WorkDealInfo workDealInfo) {
+	public Page<WorkDealInfo> findByGuiDang(Page<WorkDealInfo> page,
+			WorkDealInfo workDealInfo) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("createBy", "createBy");
 		dc.createAlias("createBy.office", "office");
 		dc.add(dataScopeFilter(UserUtils.getUser(), "office", "createBy"));
 
 		if (workDealInfo.getDealInfoStatus() != null) {
-			dc.add(Restrictions.eq("dealInfoStatus", workDealInfo.getDealInfoStatus()));
+			dc.add(Restrictions.eq("dealInfoStatus",
+					workDealInfo.getDealInfoStatus()));
 		}
 		if (workDealInfo.getWorkCompany() != null) {
 			dc.createAlias("workCompany", "workCompany");
 			if (workDealInfo.getWorkCompany().getId() != null) {
-				dc.add(Restrictions.eq("workCompany", workDealInfo.getWorkCompany()));
+				dc.add(Restrictions.eq("workCompany",
+						workDealInfo.getWorkCompany()));
 			}
 			if (workDealInfo.getWorkCompany().getCompanyName() != null
-					&& !workDealInfo.getWorkCompany().getCompanyName().equals("")) {
-				dc.add(Restrictions.like("workCompany.companyName",
-						"%" + EscapeUtil.escapeLike(workDealInfo.getWorkCompany().getCompanyName()) + "%"));
+					&& !workDealInfo.getWorkCompany().getCompanyName()
+							.equals("")) {
+				dc.add(Restrictions.like(
+						"workCompany.companyName",
+						"%"
+								+ EscapeUtil.escapeLike(workDealInfo
+										.getWorkCompany().getCompanyName())
+								+ "%"));
 			}
 		}
 		if (workDealInfo.getWorkUser() != null) {
 			dc.createAlias("workUser", "workUser");
 			if (workDealInfo.getWorkUser().getContactName() != null
 					&& !workDealInfo.getWorkUser().getContactName().equals("")) {
-				dc.add(Restrictions.like("workUser.contactName",
-						"%" + EscapeUtil.escapeLike(workDealInfo.getWorkUser().getContactName()) + "%"));
+				dc.add(Restrictions.like(
+						"workUser.contactName",
+						"%"
+								+ EscapeUtil.escapeLike(workDealInfo
+										.getWorkUser().getContactName()) + "%"));
 			}
 			if (workDealInfo.getWorkUser().getContactPhone() != null
 					&& !workDealInfo.getWorkUser().getContactPhone().equals("")) {
-				dc.add(Restrictions.like("workUser.contactPhone",
-						"%" + EscapeUtil.escapeLike(workDealInfo.getWorkUser().getContactPhone()) + "%"));
+				dc.add(Restrictions.like(
+						"workUser.contactPhone",
+						"%"
+								+ EscapeUtil.escapeLike(workDealInfo
+										.getWorkUser().getContactPhone()) + "%"));
 			}
 			if (workDealInfo.getWorkUser().getContactTel() != null
 					&& !workDealInfo.getWorkUser().getContactTel().equals("")) {
-				dc.add(Restrictions.like("workUser.contactTel",
-						"%" + EscapeUtil.escapeLike(workDealInfo.getWorkUser().getContactTel()) + "%"));
+				dc.add(Restrictions.like(
+						"workUser.contactTel",
+						"%"
+								+ EscapeUtil.escapeLike(workDealInfo
+										.getWorkUser().getContactTel()) + "%"));
 			}
 		}
 		if (workDealInfo.getDealInfoType() != null) {
-			dc.add(Restrictions.or(Restrictions.eq("dealInfoType", workDealInfo.getDealInfoType()),
-					Restrictions.eq("dealInfoType1", workDealInfo.getDealInfoType())));
+			dc.add(Restrictions.or(
+					Restrictions.eq("dealInfoType",
+							workDealInfo.getDealInfoType()),
+					Restrictions.eq("dealInfoType1",
+							workDealInfo.getDealInfoType())));
 		}
 		if (StringUtils.isNotEmpty(workDealInfo.getKeySn())) {
-			dc.add(Restrictions.like("keySn", "%" + EscapeUtil.escapeLike(workDealInfo.getKeySn()) + "%"));
+			dc.add(Restrictions.like("keySn",
+					"%" + EscapeUtil.escapeLike(workDealInfo.getKeySn()) + "%"));
 		}
 		if (workDealInfo.getStatus() != null) {
 			dc.add(Restrictions.eq("status", workDealInfo.getStatus()));
@@ -334,7 +382,8 @@ public class WorkDealInfoService extends BaseService {
 		return workDealInfoDao.find(page, dc);
 	}
 
-	public Page<WorkDealInfo> find11(Page<WorkDealInfo> page, WorkDealInfo workDealInfo, Long apply, Integer workType) {
+	public Page<WorkDealInfo> find11(Page<WorkDealInfo> page,
+			WorkDealInfo workDealInfo, Long apply, Integer workType) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("workUser", "workUser");
 		dc.createAlias("workCompany", "workCompany");
@@ -348,8 +397,10 @@ public class WorkDealInfoService extends BaseService {
 		if (workType != null) {
 			dc.add(Restrictions.eq("dealInfoType", workType));
 		}
-		if (workDealInfo.getDealInfoStatus() != null && !workDealInfo.getDealInfoStatus().equals("")) {
-			dc.add(Restrictions.eq("dealInfoStatus", workDealInfo.getDealInfoStatus()));
+		if (workDealInfo.getDealInfoStatus() != null
+				&& !workDealInfo.getDealInfoStatus().equals("")) {
+			dc.add(Restrictions.eq("dealInfoStatus",
+					workDealInfo.getDealInfoStatus()));
 		}
 
 		if (workDealInfo.getStatus() != null) {
@@ -357,27 +408,37 @@ public class WorkDealInfoService extends BaseService {
 		}
 		if (workDealInfo.getWorkCompany() != null) {
 			if (workDealInfo.getWorkCompany().getId() != null) {
-				dc.add(Restrictions.eq("workCompany", workDealInfo.getWorkCompany()));
+				dc.add(Restrictions.eq("workCompany",
+						workDealInfo.getWorkCompany()));
 			}
 			if (workDealInfo.getWorkCompany().getCompanyName() != null
-					&& !workDealInfo.getWorkCompany().getCompanyName().equals("")) {
-				dc.add(Restrictions.like("workCompany.companyName",
-						"%" + EscapeUtil.escapeLike(workDealInfo.getWorkCompany().getCompanyName()) + "%"));
+					&& !workDealInfo.getWorkCompany().getCompanyName()
+							.equals("")) {
+				dc.add(Restrictions.like(
+						"workCompany.companyName",
+						"%"
+								+ EscapeUtil.escapeLike(workDealInfo
+										.getWorkCompany().getCompanyName())
+								+ "%"));
 			}
 			if (workDealInfo.getWorkCompany().getOrganizationNumber() != null
-					&& !workDealInfo.getWorkCompany().getOrganizationNumber().equals("")) {
+					&& !workDealInfo.getWorkCompany().getOrganizationNumber()
+							.equals("")) {
 				dc.add(Restrictions.like("workCompany.organizationNumber",
-						EscapeUtil.escapeLike(workDealInfo.getWorkCompany().getOrganizationNumber())));
+						EscapeUtil.escapeLike(workDealInfo.getWorkCompany()
+								.getOrganizationNumber())));
 
 			}
 		}
 		dc.add(Restrictions.isNull("isIxin"));
-		dc.add(Restrictions.eq(WorkDealInfo.DEL_FLAG, WorkDealInfo.DEL_FLAG_NORMAL));
+		dc.add(Restrictions.eq(WorkDealInfo.DEL_FLAG,
+				WorkDealInfo.DEL_FLAG_NORMAL));
 		dc.addOrder(Order.desc("createDate"));
 		return workDealInfoDao.find(page, dc);
 	}
 
-	public List<WorkDealInfo> find12(WorkDealInfo workDealInfo, Long apply, Integer workType) {
+	public List<WorkDealInfo> find12(WorkDealInfo workDealInfo, Long apply,
+			Integer workType) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("workUser", "workUser");
 		dc.createAlias("workCompany", "workCompany");
@@ -391,8 +452,10 @@ public class WorkDealInfoService extends BaseService {
 		if (workType != null) {
 			dc.add(Restrictions.eq("dealInfoType", workType));
 		}
-		if (workDealInfo.getDealInfoStatus() != null && !workDealInfo.getDealInfoStatus().equals("")) {
-			dc.add(Restrictions.eq("dealInfoStatus", workDealInfo.getDealInfoStatus()));
+		if (workDealInfo.getDealInfoStatus() != null
+				&& !workDealInfo.getDealInfoStatus().equals("")) {
+			dc.add(Restrictions.eq("dealInfoStatus",
+					workDealInfo.getDealInfoStatus()));
 		}
 
 		if (workDealInfo.getStatus() != null) {
@@ -400,42 +463,55 @@ public class WorkDealInfoService extends BaseService {
 		}
 		if (workDealInfo.getWorkCompany() != null) {
 			if (workDealInfo.getWorkCompany().getId() != null) {
-				dc.add(Restrictions.eq("workCompany", workDealInfo.getWorkCompany()));
+				dc.add(Restrictions.eq("workCompany",
+						workDealInfo.getWorkCompany()));
 			}
 			if (workDealInfo.getWorkCompany().getCompanyName() != null
-					&& !workDealInfo.getWorkCompany().getCompanyName().equals("")) {
-				dc.add(Restrictions.like("workCompany.companyName",
-						"%" + EscapeUtil.escapeLike(workDealInfo.getWorkCompany().getCompanyName()) + "%"));
+					&& !workDealInfo.getWorkCompany().getCompanyName()
+							.equals("")) {
+				dc.add(Restrictions.like(
+						"workCompany.companyName",
+						"%"
+								+ EscapeUtil.escapeLike(workDealInfo
+										.getWorkCompany().getCompanyName())
+								+ "%"));
 			}
 			if (workDealInfo.getWorkCompany().getOrganizationNumber() != null
-					&& !workDealInfo.getWorkCompany().getOrganizationNumber().equals("")) {
+					&& !workDealInfo.getWorkCompany().getOrganizationNumber()
+							.equals("")) {
 				dc.add(Restrictions.like("workCompany.organizationNumber",
-						EscapeUtil.escapeLike(workDealInfo.getWorkCompany().getOrganizationNumber())));
+						EscapeUtil.escapeLike(workDealInfo.getWorkCompany()
+								.getOrganizationNumber())));
 
 			}
 		}
 		dc.add(Restrictions.isNull("isIxin"));
-		dc.add(Restrictions.eq(WorkDealInfo.DEL_FLAG, WorkDealInfo.DEL_FLAG_NORMAL));
+		dc.add(Restrictions.eq(WorkDealInfo.DEL_FLAG,
+				WorkDealInfo.DEL_FLAG_NORMAL));
 		dc.addOrder(Order.desc("createDate"));
 		return workDealInfoDao.find(dc);
 	}
 
-	public Page<WorkDealInfo> find1(Page<WorkDealInfo> page, WorkDealInfo workDealInfo) {
+	public Page<WorkDealInfo> find1(Page<WorkDealInfo> page,
+			WorkDealInfo workDealInfo) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		if (workDealInfo.getDealInfoStatus() != null) {
-			dc.add(Restrictions.eq("dealInfoStatus", workDealInfo.getDealInfoStatus()));
+			dc.add(Restrictions.eq("dealInfoStatus",
+					workDealInfo.getDealInfoStatus()));
 		}
 		if (workDealInfo.getWorkCompany() != null) {
 			dc.createAlias("workCompany", "workCompany");
 			if (workDealInfo.getWorkCompany().getId() != null) {
-				dc.add(Restrictions.eq("workCompany", workDealInfo.getWorkCompany()));
+				dc.add(Restrictions.eq("workCompany",
+						workDealInfo.getWorkCompany()));
 			}
 		}
 		dc.addOrder(Order.desc("id"));
 		return workDealInfoDao.find(page, dc);
 	}
 
-	public Page<WorkDealInfo> findEnterprise(Page<WorkDealInfo> page, List<Long> companyIds, String productId) {
+	public Page<WorkDealInfo> findEnterprise(Page<WorkDealInfo> page,
+			List<Long> companyIds, String productId) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		String dealInfoStatus = WorkDealInfoStatus.STATUS_CERT_OBTAINED;
 		if (companyIds != null && companyIds.size() > 0) {
@@ -453,7 +529,8 @@ public class WorkDealInfoService extends BaseService {
 		return workDealInfoDao.find(page, dc);
 	}
 
-	public List<WorkDealInfo> findPersonal(List<Long> companyIds, String productId) {
+	public List<WorkDealInfo> findPersonal(List<Long> companyIds,
+			String productId) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		String dealInfoStatus = WorkDealInfoStatus.STATUS_CERT_OBTAINED;
 		if (companyIds != null && companyIds.size() > 0) {
@@ -471,69 +548,96 @@ public class WorkDealInfoService extends BaseService {
 		return workDealInfoDao.manyFind(dc, 10);
 	}
 
-	public Page<WorkDealInfo> findByStatus(Page<WorkDealInfo> page, WorkDealInfo workDealInfo) {
+	public Page<WorkDealInfo> findByStatus(Page<WorkDealInfo> page,
+			WorkDealInfo workDealInfo) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("workUser", "workUser");
 		dc.createAlias("workCompany", "workCompany");
 		dc.createAlias("createBy", "createBy");
 		dc.createAlias("createBy.office", "office");
 		// dc.createAlias("workCertInfo", "workCertInfo");
-		dc.add(Restrictions.or(Restrictions.isNotNull("isIxin"),dataScopeFilterByWorkDealInfo(UserUtils.getUser(), "areaId", "officeId")));
+		dc.add(Restrictions.or(
+				Restrictions.isNotNull("isIxin"),
+				dataScopeFilterByWorkDealInfo(UserUtils.getUser(), "areaId",
+						"officeId")));
 		if (workDealInfo.getWorkCertInfo() != null) {
 			dc.add(Restrictions.isNotNull("notafter"));
 		}
 		if (workDealInfo.getWorkCompany() != null) {
 			if (workDealInfo.getWorkCompany().getId() != null) {
-				dc.add(Restrictions.eq("workCompany", workDealInfo.getWorkCompany()));
+				dc.add(Restrictions.eq("workCompany",
+						workDealInfo.getWorkCompany()));
 			}
 			if (workDealInfo.getWorkCompany().getCompanyName() != null
-					&& !workDealInfo.getWorkCompany().getCompanyName().equals("")) {
-				dc.add(Restrictions.like("workCompany.companyName",
-						"%" + EscapeUtil.escapeLike(workDealInfo.getWorkCompany().getCompanyName()) + "%"));
+					&& !workDealInfo.getWorkCompany().getCompanyName()
+							.equals("")) {
+				dc.add(Restrictions.like(
+						"workCompany.companyName",
+						"%"
+								+ EscapeUtil.escapeLike(workDealInfo
+										.getWorkCompany().getCompanyName())
+								+ "%"));
 			}
 		}
 		if (workDealInfo.getWorkUser() != null) {
 			if (workDealInfo.getWorkUser().getContactName() != null
 					&& !workDealInfo.getWorkUser().getContactName().equals("")) {
-				dc.add(Restrictions.like("workUser.contactName",
-						"%" + EscapeUtil.escapeLike(workDealInfo.getWorkUser().getContactName()) + "%"));
+				dc.add(Restrictions.like(
+						"workUser.contactName",
+						"%"
+								+ EscapeUtil.escapeLike(workDealInfo
+										.getWorkUser().getContactName()) + "%"));
 			}
 			if (workDealInfo.getWorkUser().getContactPhone() != null
 					&& !workDealInfo.getWorkUser().getContactPhone().equals("")) {
-				dc.add(Restrictions.like("workUser.contactPhone",
-						"%" + EscapeUtil.escapeLike(workDealInfo.getWorkUser().getContactPhone()) + "%"));
+				dc.add(Restrictions.like(
+						"workUser.contactPhone",
+						"%"
+								+ EscapeUtil.escapeLike(workDealInfo
+										.getWorkUser().getContactPhone()) + "%"));
 			}
 			if (workDealInfo.getWorkUser().getContactTel() != null
 					&& !workDealInfo.getWorkUser().getContactTel().equals("")) {
-				dc.add(Restrictions.like("workUser.contactTel",
-						"%" + EscapeUtil.escapeLike(workDealInfo.getWorkUser().getContactTel()) + "%"));
+				dc.add(Restrictions.like(
+						"workUser.contactTel",
+						"%"
+								+ EscapeUtil.escapeLike(workDealInfo
+										.getWorkUser().getContactTel()) + "%"));
 			}
 		}
 		if (workDealInfo.getDealInfoStatus() == null) {
-			dc.add(Restrictions.or(Restrictions.eq("dealInfoStatus", "12"), Restrictions.eq("dealInfoStatus", "0"),
+			dc.add(Restrictions.or(Restrictions.eq("dealInfoStatus", "12"),
+					Restrictions.eq("dealInfoStatus", "0"),
 					Restrictions.eq("dealInfoStatus", "13")));
 		} else {
 			if (workDealInfo.getDealInfoStatus().equals("-1")) {
-				dc.add(Restrictions.or(Restrictions.eq("dealInfoStatus", "12"), Restrictions.eq("dealInfoStatus", "0"),
+				dc.add(Restrictions.or(Restrictions.eq("dealInfoStatus", "12"),
+						Restrictions.eq("dealInfoStatus", "0"),
 						Restrictions.eq("dealInfoStatus", "13")));
 			} else {
-				dc.add(Restrictions.eq("dealInfoStatus", workDealInfo.getDealInfoStatus()));
+				dc.add(Restrictions.eq("dealInfoStatus",
+						workDealInfo.getDealInfoStatus()));
 			}
 		}
 
 		if (workDealInfo.getDealInfoType() != null) {
 			if (workDealInfo.getDealInfoType() != -1) {
-				dc.add(Restrictions.or(Restrictions.eq("dealInfoType", workDealInfo.getDealInfoType()),
-						Restrictions.eq("dealInfoType1", workDealInfo.getDealInfoType())));
+				dc.add(Restrictions.or(
+						Restrictions.eq("dealInfoType",
+								workDealInfo.getDealInfoType()),
+						Restrictions.eq("dealInfoType1",
+								workDealInfo.getDealInfoType())));
 			}
 		}
 		if (StringUtils.isNotEmpty(workDealInfo.getKeySn())) {
-			dc.add(Restrictions.like("keySn", "%" + EscapeUtil.escapeLike(workDealInfo.getKeySn()) + "%"));
+			dc.add(Restrictions.like("keySn",
+					"%" + EscapeUtil.escapeLike(workDealInfo.getKeySn()) + "%"));
 		}
 		if (workDealInfo.getStatus() != null) {
 			dc.add(Restrictions.eq("status", workDealInfo.getStatus()));
 		}
-		dc.add(Restrictions.eq(WorkDealInfo.DEL_FLAG, WorkDealInfo.DEL_FLAG_NORMAL));
+		dc.add(Restrictions.eq(WorkDealInfo.DEL_FLAG,
+				WorkDealInfo.DEL_FLAG_NORMAL));
 		dc.addOrder(Order.desc("id"));
 		return workDealInfoDao.find(page, dc);
 	}
@@ -552,122 +656,296 @@ public class WorkDealInfoService extends BaseService {
 		}
 		if (workDealInfo.getWorkCompany() != null) {
 			if (workDealInfo.getWorkCompany().getId() != null) {
-				dc.add(Restrictions.eq("workCompany", workDealInfo.getWorkCompany()));
+				dc.add(Restrictions.eq("workCompany",
+						workDealInfo.getWorkCompany()));
 			}
 			if (workDealInfo.getWorkCompany().getCompanyName() != null
-					&& !workDealInfo.getWorkCompany().getCompanyName().equals("")) {
-				dc.add(Restrictions.like("workCompany.companyName",
-						"%" + EscapeUtil.escapeLike(workDealInfo.getWorkCompany().getCompanyName()) + "%"));
+					&& !workDealInfo.getWorkCompany().getCompanyName()
+							.equals("")) {
+				dc.add(Restrictions.like(
+						"workCompany.companyName",
+						"%"
+								+ EscapeUtil.escapeLike(workDealInfo
+										.getWorkCompany().getCompanyName())
+								+ "%"));
 			}
 		}
 		if (workDealInfo.getWorkUser() != null) {
 			if (workDealInfo.getWorkUser().getContactName() != null
 					&& !workDealInfo.getWorkUser().getContactName().equals("")) {
-				dc.add(Restrictions.like("workUser.contactName",
-						"%" + EscapeUtil.escapeLike(workDealInfo.getWorkUser().getContactName()) + "%"));
+				dc.add(Restrictions.like(
+						"workUser.contactName",
+						"%"
+								+ EscapeUtil.escapeLike(workDealInfo
+										.getWorkUser().getContactName()) + "%"));
 			}
 			if (workDealInfo.getWorkUser().getContactPhone() != null
 					&& !workDealInfo.getWorkUser().getContactPhone().equals("")) {
-				dc.add(Restrictions.like("workUser.contactPhone",
-						"%" + EscapeUtil.escapeLike(workDealInfo.getWorkUser().getContactPhone()) + "%"));
+				dc.add(Restrictions.like(
+						"workUser.contactPhone",
+						"%"
+								+ EscapeUtil.escapeLike(workDealInfo
+										.getWorkUser().getContactPhone()) + "%"));
 			}
 			if (workDealInfo.getWorkUser().getContactTel() != null
 					&& !workDealInfo.getWorkUser().getContactTel().equals("")) {
-				dc.add(Restrictions.like("workUser.contactTel",
-						"%" + EscapeUtil.escapeLike(workDealInfo.getWorkUser().getContactTel()) + "%"));
+				dc.add(Restrictions.like(
+						"workUser.contactTel",
+						"%"
+								+ EscapeUtil.escapeLike(workDealInfo
+										.getWorkUser().getContactTel()) + "%"));
 			}
 		}
 		if (workDealInfo.getDealInfoStatus() == null) {
-			dc.add(Restrictions.or(Restrictions.eq("dealInfoStatus", "12"), Restrictions.eq("dealInfoStatus", "0")));
+			dc.add(Restrictions.or(Restrictions.eq("dealInfoStatus", "12"),
+					Restrictions.eq("dealInfoStatus", "0")));
 		} else {
 			if (workDealInfo.getDealInfoStatus().equals("-1")) {
-				dc.add(Restrictions.or(Restrictions.eq("dealInfoStatus", "12"), Restrictions.eq("dealInfoStatus", "0"),
+				dc.add(Restrictions.or(Restrictions.eq("dealInfoStatus", "12"),
+						Restrictions.eq("dealInfoStatus", "0"),
 						Restrictions.eq("dealInfoStatus", "13")));
 			} else {
-				dc.add(Restrictions.eq("dealInfoStatus", workDealInfo.getDealInfoStatus()));
+				dc.add(Restrictions.eq("dealInfoStatus",
+						workDealInfo.getDealInfoStatus()));
 			}
 		}
 
 		if (workDealInfo.getDealInfoType() != null) {
 			if (workDealInfo.getDealInfoType() != -1) {
-				dc.add(Restrictions.or(Restrictions.eq("dealInfoType", workDealInfo.getDealInfoType()),
-						Restrictions.eq("dealInfoType1", workDealInfo.getDealInfoType())));
+				dc.add(Restrictions.or(
+						Restrictions.eq("dealInfoType",
+								workDealInfo.getDealInfoType()),
+						Restrictions.eq("dealInfoType1",
+								workDealInfo.getDealInfoType())));
 			}
 		}
 		if (StringUtils.isNotEmpty(workDealInfo.getKeySn())) {
-			dc.add(Restrictions.like("keySn", "%" + EscapeUtil.escapeLike(workDealInfo.getKeySn()) + "%"));
+			dc.add(Restrictions.like("keySn",
+					"%" + EscapeUtil.escapeLike(workDealInfo.getKeySn()) + "%"));
 		}
 		if (workDealInfo.getStatus() != null) {
 			dc.add(Restrictions.eq("status", workDealInfo.getStatus()));
 		}
 		dc.add(Restrictions.isNotNull("isIxin"));
-		dc.add(Restrictions.eq(WorkDealInfo.DEL_FLAG, WorkDealInfo.DEL_FLAG_NORMAL));
+		dc.add(Restrictions.eq(WorkDealInfo.DEL_FLAG,
+				WorkDealInfo.DEL_FLAG_NORMAL));
 		dc.addOrder(Order.desc("id"));
 		return workDealInfoDao.find(dc);
 	}
 
-	public Page<WorkDealInfo> find4Apply(Page<WorkDealInfo> page, WorkDealInfo workDealInfo, Date startTime,
-			Date endTime, Long apply) {
-		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
-		dc.createAlias("workUser", "workUser");
-		dc.createAlias("workCompany", "workCompany");
-		dc.createAlias("createBy", "createBy");
-		dc.createAlias("createBy.office", "office");
-		dc.createAlias("configApp", "configApp");
+	public Page<WorkDealInfoListVo> find4Apply(Page<WorkDealInfoListVo> page,
+			WorkDealInfo workDealInfo, Date startTime, Date endTime,
+			Long apply, String productName, Date makeCertStartTime,
+			Date makeCertEndTime) throws ParseException {
 
-		dc.add(Restrictions.or(Restrictions.isNotNull("isIxin"),dataScopeFilterByWorkDealInfo(UserUtils.getUser(), "areaId", "officeId")));
-		
-		//dc.add(dataScopeFilterByWorkDealInfo(UserUtils.getUser(), "areaId", "officeId"));
-		// dc.add(Restrictions.or(Restrictions.eq("dealInfoStatus",
-		// WorkDealInfoStatus.STATUS_CERT_OBTAINED), Restrictions.eq(
-		// "createBy", UserUtils.getUser())));
+		// String sql = getFind4ApplySql(page, workDealInfo, startTime, endTime,
+		// apply, productName, makeCertStartTime, makeCertEndTime);
 
-		if (apply != null) {
-			dc.add(Restrictions.eq("configApp.id", apply));
+		String sql = "select * "
+				+ getFind4ApplySql(page, workDealInfo, startTime, endTime,
+						apply, productName, makeCertStartTime, makeCertEndTime);
+
+		String sqlCount = "select count(*) as ct "
+				+ getFind4ApplySql(page, workDealInfo, startTime, endTime,
+						apply, productName, makeCertStartTime, makeCertEndTime);
+
+		Page<WorkDealInfoListVo> res = new Page<WorkDealInfoListVo>(page.getPageNo(),
+				page.getPageSize());
+		List<Map> lst = null;
+		List<Map> ct = null;
+		try {
+			lst = workDealInfoDao.findBySQLListMap(sql,
+					page.getPageNo(), page.getPageSize());
+			ct = workDealInfoDao.findBySQLListMap(sqlCount, 1, 1);
+		} catch (IllegalAccessException | IllegalArgumentException
+				| InvocationTargetException | ClassNotFoundException
+				| InstantiationException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
+		int count = new Integer(ct.get(0).get("CT").toString());
+		res.setCount(count);
+		List<WorkDealInfoListVo> resLst = new ArrayList<WorkDealInfoListVo>();
+		for (Map e : lst) {
+			WorkDealInfoListVo vo = new WorkDealInfoListVo();
+			Iterator<String> it = e.keySet().iterator();
+			while (it.hasNext()) {
+				String k = it.next();
+				if (k.equals("ID")) {
+					if (e.get("ID") != null)
+						vo.setId(new Long(e.get("ID").toString()));
 
-		if (startTime != null && endTime != null) {
-			dc.add(Restrictions.ge("notafter", startTime));
-			dc.add(Restrictions.ge("notafter", endTime));
+				}
+				if (k.equals("COMPANYNAME")) {
+					if (e.get("COMPANYNAME") != null)
+						vo.setCompanyName(e.get("COMPANYNAME").toString());
+				}
+				if (k.equals("CERTAPPLYINFONAME")) {
+					if (e.get("CERTAPPLYINFONAME") != null)
+						vo.setCertApplyInfoName(e.get("CERTAPPLYINFONAME").toString());
+				}
+				
+				if (k.equals("CONFIGAPPNAME")) {
+					if (e.get("CONFIGAPPNAME") != null)
+						vo.setConfigAppName(e.get("CONFIGAPPNAME").toString());
+				}
+				if (k.equals("PRODUCTNAME")) {
+					if (e.get("PRODUCTNAME") != null)
+						vo.setProductName(e.get("PRODUCTNAME").toString());
+				}
+				if (k.equals("DEALINFOTYPE")) {
+					if (e.get("DEALINFOTYPE") != null)
+						vo.setDealInfoType(new Integer(e.get("DEALINFOTYPE").toString()));
+				}
+				if (k.equals("DEALINFOTYPE2")) {
+					if (e.get("DEALINFOTYPE2") != null)
+						vo.setDealInfoType2(new Integer(e.get("DEALINFOTYPE2").toString()));
+				}
+				if (k.equals("DEALINFOTYPE3")) {
+					if (e.get("DEALINFOTYPE3") != null)
+						vo.setDealInfoType3(new Integer(e.get("DEALINFOTYPE3").toString()));
+				}
+				if (k.equals("DEALINFOTYPE1")) {
+					if (e.get("DEALINFOTYPE1") != null)
+						vo.setDealInfoType1(new Integer(e.get("DEALINFOTYPE1").toString()));
+				}
+				if (k.equals("NOTAFTER")) {
+					if (e.get("NOTAFTER") != null)
+						vo.setNotafter(new SimpleDateFormat("yyyy-MM-dd").parse(e.get("NOTAFTER").toString()));
+				}
+				if (k.equals("NOTBEFORE")) {
+					if (e.get("NOTBEFORE") != null)
+						vo.setNotbefore(new SimpleDateFormat("yyyy-MM-dd").parse(e.get("NOTBEFORE").toString()));
+				}
+				if (k.equals("KEYSN")) {
+					if (e.get("KEYSN") != null)
+						vo.setKeySn(e.get("KEYSN").toString());
+				}
+				if (k.equals("SIGNDATE")) {
+					if (e.get("SIGNDATE") != null)
+						vo.setSignDate(new SimpleDateFormat("yyyy-MM-dd").parse(e.get("SIGNDATE").toString()));
+				}
+				if (k.equals("ADDCERTDAYS")) {
+					if (e.get("ADDCERTDAYS") != null)
+						vo.setAddCertDays(new Integer(e.get("ADDCERTDAYS").toString()));
+				}
+				if (k.equals("LASTDAYS")) {
+					if (e.get("LASTDAYS") != null)
+						vo.setLastDays(new Integer(e.get("LASTDAYS").toString()));
+				}
+				if (k.equals("SVN")) {
+					if (e.get("SVN") != null)
+						vo.setSvn(e.get("SVN").toString());
+				}
+				if (k.equals("YEAR")) {
+					if (e.get("YEAR") != null)
+						vo.setYear(new Integer(e.get("YEAR").toString()));
+				}
+				if (k.equals("DEALINFOSTATUS")) {
+					if (e.get("DEALINFOSTATUS") != null)
+						vo.setDealInfoStatus(e.get("DEALINFOSTATUS").toString());
+				}
+				if (k.equals("NAME")) {
+					if (e.get("NAME") != null)
+						vo.setCertApplyInfoName(e.get("NAME").toString());
+				}
+			}
+			resLst.add(vo);
+		}
+		res.setList(resLst);
+		return res;
+	}
+
+	private String getFind4ApplySql(Page<WorkDealInfoListVo> page,
+			WorkDealInfo workDealInfo, Date startTime, Date endTime,
+			Long apply, String productName, Date makeCertStartTime,
+			Date makeCertEndTime) {
+		StringBuffer sql = new StringBuffer();
+		sql.append(" from(select this_.id as id," + "this_.svn as svn,"
+				+ "configapp5_.app_name as configAppName,"
+				+ "workcompan2_.company_name as companyName," + "configprod7_.product_name as productName,"
+				+ "this_.deal_info_type as dealInfoType," + "this_.deal_info_type1 as dealInfoType1,"
+				+ "this_.deal_info_type2 as dealInfoType2," + "this_.deal_info_type3 as dealInfoType3,"
+				+ "workcertin6_.notafter as notafter," + "workcertin6_.notbefore as notbefore,"
+				+ "this_.key_sn as keySn," + "workcertin6_.sign_date as signDate,"
+				+ "this_.add_cert_days as addCertDays," + "this_.year as year ," + "this_.last_days as lastDays,"
+				+ "this_.deal_info_status as dealInfoStatus,"
+				+ "workCertApplyInfo7_.name as certApplyInfoName  "
+				);
+		sql.append("  from work_deal_info this_ ");
+//		sql.append(" inner join sys_user createby3_ on this_.create_by=createby3_.id  left outer join sys_office office10_ on createby3_.company_id=office10_.id ");
+//		sql.append("left outer join sys_area area11_ on office10_.area_id=area11_.id ");
+//		sql.append("inner join sys_office office4_ on createby3_.office_id=office4_.id ");
+		sql.append("inner join config_app configapp5_ on this_.app_id=configapp5_.id ");
+		sql.append("left outer join config_project_type configproj14_ on configapp5_.config_product_type=configproj14_.id ");
+		sql.append("inner join config_product configprod7_ on this_.product_id=configprod7_.id ");
+		sql.append("left outer join config_app configapp16_ on configprod7_.app_id=configapp16_.id ");
+		sql.append("inner join work_cert_info workcertin6_ on this_.cert_id=workcertin6_.id ");
+		sql.append("inner join work_cert_apply_info workCertApplyInfo7_ on workcertin6_.apply_info=workCertApplyInfo7_.id " );
+		sql.append(" inner join work_company workcompan2_ on this_.work_company_id=workcompan2_.id ");
+		sql.append("left outer join work_pay_info workpayinf19_ on this_.pay_id=workpayinf19_.id ");
+		sql.append("inner join work_user workuser1_ on this_.work_user_id=workuser1_.id ");
+		sql.append("where (this_.is_ixin is not null or 1=1) and this_.del_flag=0 and this_.office_id="+UserUtils.getUser().getOffice().getId());
+		
+		if(apply!=null)
+		{
+			sql.append(" and configapp5_.id = "+apply);
+		}
+		if(startTime != null && endTime != null)
+		{
+			sql.append(" and workcertin6_.notafter >= TO_DATE('"
+				+ DateUtils.formatDate(startTime, "yyyyMMdd")
+				+ "', 'yyyymmdd')");
+			sql.append(" and workcertin6_.notbefore <= TO_DATE ('"
+				+ DateUtils.formatDate(endTime, "yyyyMMdd") + "', 'yyyymmdd')");
 		}
 		if (workDealInfo.getWorkCompany() != null) {
 			if (workDealInfo.getWorkCompany().getId() != null) {
-				dc.add(Restrictions.eq("workCompany", workDealInfo.getWorkCompany()));
+				sql.append(" and workcompan2_.id="+workDealInfo.getWorkCompany().getId());
 			}
 			if (workDealInfo.getWorkCompany().getCompanyName() != null
 					&& !workDealInfo.getWorkCompany().getCompanyName().equals("")) {
-				dc.add(Restrictions.like("workCompany.companyName",
-						"%" + EscapeUtil.escapeLike(workDealInfo.getWorkCompany().getCompanyName()) + "%"));
+				sql.append(" and workcompan2_.company_name like '%"+workDealInfo.getWorkCompany().getCompanyName()+"%'");
 			}
 			if (workDealInfo.getWorkCompany().getOrganizationNumber() != null
 					&& !workDealInfo.getWorkCompany().getOrganizationNumber().equals("")) {
-				dc.add(Restrictions.like("workCompany.organizationNumber",
-						EscapeUtil.escapeLike(workDealInfo.getWorkCompany().getOrganizationNumber())));
-
+				sql.append(" and workcompan2_.organization_number = "+EscapeUtil.escapeLike(workDealInfo.getWorkCompany().getOrganizationNumber()));
 			}
 		}
+		
 		if (workDealInfo.getWorkUser() != null) {
 			if (workDealInfo.getWorkUser().getContactName() != null
 					&& !workDealInfo.getWorkUser().getContactName().equals("")) {
-				dc.add(Restrictions.like("workUser.contactName",
-						"%" + EscapeUtil.escapeLike(workDealInfo.getWorkUser().getContactName()) + "%"));
+				sql.append(" and workuser1_.contact_name like '%"+EscapeUtil.escapeLike(workDealInfo.getWorkUser().getContactName())+"%'");
 			}
 		}
 		if (workDealInfo.getDealInfoStatus() != null && !workDealInfo.getDealInfoStatus().equals("")) {
-			dc.add(Restrictions.eq("dealInfoStatus", workDealInfo.getDealInfoStatus()));
+			sql.append(" and this_.deal_info_status = "+workDealInfo.getDealInfoStatus());
 		}
 		if (StringUtils.isNotEmpty(workDealInfo.getKeySn())) {
-			dc.add(Restrictions.like("keySn", "%" + EscapeUtil.escapeLike(workDealInfo.getKeySn()) + "%"));
+			sql.append(" and this_.key_sn like '% "+EscapeUtil.escapeLike(workDealInfo.getKeySn())+"%'");
 		}
 		if (workDealInfo.getStatus() != null) {
-			dc.add(Restrictions.eq("status", workDealInfo.getStatus()));
+			sql.append(" and this_.status = "+workDealInfo.getStatus());
 		}
-		dc.add(Restrictions.eq(WorkDealInfo.DEL_FLAG, WorkDealInfo.DEL_FLAG_NORMAL));
-		dc.addOrder(Order.desc("createDate"));
-		return workDealInfoDao.find(page, dc);
+		if(productName!=null&&!"".equals(productName))
+		{
+			sql.append(" and configprod7_.product_name = "+productName);
+		}
+		if(makeCertStartTime!=null && makeCertEndTime!=null)
+		{
+			sql.append(" and workcertin6_.sign_date >= TO_DATE('"
+					+ DateUtils.formatDate(makeCertStartTime, "yyyyMMdd")
+					+ "', 'yyyymmdd')");
+			sql.append(" and workcertin6_.sign_date <= TO_DATE ('"
+				+ DateUtils.formatDate(makeCertEndTime, "yyyyMMdd") + "', 'yyyymmdd')");
+		}
+		sql.append("order by this_.create_date desc)");
+		return sql.toString();
 	}
 
-	public List<WorkDealInfo> find4ApplyIsIxin(WorkDealInfo workDealInfo, Date startTime, Date endTime, Long apply) {
+	public List<WorkDealInfo> find4ApplyIsIxin(WorkDealInfo workDealInfo,
+			Date startTime, Date endTime, Long apply) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("workUser", "workUser");
 		dc.createAlias("workCompany", "workCompany");
@@ -690,44 +968,59 @@ public class WorkDealInfoService extends BaseService {
 		}
 		if (workDealInfo.getWorkCompany() != null) {
 			if (workDealInfo.getWorkCompany().getId() != null) {
-				dc.add(Restrictions.eq("workCompany", workDealInfo.getWorkCompany()));
+				dc.add(Restrictions.eq("workCompany",
+						workDealInfo.getWorkCompany()));
 			}
 			if (workDealInfo.getWorkCompany().getCompanyName() != null
-					&& !workDealInfo.getWorkCompany().getCompanyName().equals("")) {
-				dc.add(Restrictions.like("workCompany.companyName",
-						"%" + EscapeUtil.escapeLike(workDealInfo.getWorkCompany().getCompanyName()) + "%"));
+					&& !workDealInfo.getWorkCompany().getCompanyName()
+							.equals("")) {
+				dc.add(Restrictions.like(
+						"workCompany.companyName",
+						"%"
+								+ EscapeUtil.escapeLike(workDealInfo
+										.getWorkCompany().getCompanyName())
+								+ "%"));
 			}
 			if (workDealInfo.getWorkCompany().getOrganizationNumber() != null
-					&& !workDealInfo.getWorkCompany().getOrganizationNumber().equals("")) {
+					&& !workDealInfo.getWorkCompany().getOrganizationNumber()
+							.equals("")) {
 				dc.add(Restrictions.like("workCompany.organizationNumber",
-						EscapeUtil.escapeLike(workDealInfo.getWorkCompany().getOrganizationNumber())));
+						EscapeUtil.escapeLike(workDealInfo.getWorkCompany()
+								.getOrganizationNumber())));
 
 			}
-		}
-		if (workDealInfo.getWorkUser() != null) {
+		}		if (workDealInfo.getWorkUser() != null) {
 			if (workDealInfo.getWorkUser().getContactName() != null
 					&& !workDealInfo.getWorkUser().getContactName().equals("")) {
-				dc.add(Restrictions.like("workUser.contactName",
-						"%" + EscapeUtil.escapeLike(workDealInfo.getWorkUser().getContactName()) + "%"));
+				dc.add(Restrictions.like(
+						"workUser.contactName",
+						"%"
+								+ EscapeUtil.escapeLike(workDealInfo
+										.getWorkUser().getContactName()) + "%"));
 			}
 		}
-		if (workDealInfo.getDealInfoStatus() != null && !workDealInfo.getDealInfoStatus().equals("")) {
-			dc.add(Restrictions.eq("dealInfoStatus", workDealInfo.getDealInfoStatus()));
+		if (workDealInfo.getDealInfoStatus() != null
+				&& !workDealInfo.getDealInfoStatus().equals("")) {
+			dc.add(Restrictions.eq("dealInfoStatus",
+					workDealInfo.getDealInfoStatus()));
 		}
 		if (StringUtils.isNotEmpty(workDealInfo.getKeySn())) {
-			dc.add(Restrictions.like("keySn", "%" + EscapeUtil.escapeLike(workDealInfo.getKeySn()) + "%"));
+			dc.add(Restrictions.like("keySn",
+					"%" + EscapeUtil.escapeLike(workDealInfo.getKeySn()) + "%"));
 		}
 		if (workDealInfo.getStatus() != null) {
 			dc.add(Restrictions.eq("status", workDealInfo.getStatus()));
 		}
 
 		dc.add(Restrictions.isNotNull("isIxin"));
-		dc.add(Restrictions.eq(WorkDealInfo.DEL_FLAG, WorkDealInfo.DEL_FLAG_NORMAL));
+		dc.add(Restrictions.eq(WorkDealInfo.DEL_FLAG,
+				WorkDealInfo.DEL_FLAG_NORMAL));
 		dc.addOrder(Order.desc("createDate"));
 		return workDealInfoDao.find(dc);
 	}
 
-	public Page<WorkDealInfo> findByBatchAdd(Page<WorkDealInfo> page, WorkDealInfo workDealInfo) {
+	public Page<WorkDealInfo> findByBatchAdd(Page<WorkDealInfo> page,
+			WorkDealInfo workDealInfo) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("createBy", "createBy");
 		dc.createAlias("createBy.office", "office");
@@ -735,25 +1028,33 @@ public class WorkDealInfoService extends BaseService {
 		dc.add(dataScopeFilter(UserUtils.getUser(), "office", "createBy"));
 		if (workDealInfo.getWorkCompany() != null) {
 			if (workDealInfo.getWorkCompany().getCompanyName() != null
-					&& !workDealInfo.getWorkCompany().getCompanyName().equals("")) {
-				dc.add(Restrictions.like("workCompany.companyName",
-						"%" + EscapeUtil.escapeLike(workDealInfo.getWorkCompany().getCompanyName()) + "%"));
+					&& !workDealInfo.getWorkCompany().getCompanyName()
+							.equals("")) {
+				dc.add(Restrictions.like(
+						"workCompany.companyName",
+						"%"
+								+ EscapeUtil.escapeLike(workDealInfo
+										.getWorkCompany().getCompanyName())
+								+ "%"));
 			}
 		}
 		dc.add(Restrictions.eq("isSJQY", 2));
-		dc.add(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_APPROVE_WAIT));
+		dc.add(Restrictions.eq("dealInfoStatus",
+				WorkDealInfoStatus.STATUS_APPROVE_WAIT));
 		dc.add(Restrictions.isNull("isIxin"));
-		dc.add(Restrictions.eq(WorkDealInfo.DEL_FLAG, WorkDealInfo.DEL_FLAG_NORMAL));
+		dc.add(Restrictions.eq(WorkDealInfo.DEL_FLAG,
+				WorkDealInfo.DEL_FLAG_NORMAL));
 		dc.addOrder(Order.desc("createDate"));
 		return workDealInfoDao.find(page, dc);
 	}
 
-	public Page<WorkDealInfo> findPage4CertList(Page<WorkDealInfo> page, Long apply, Date startTime, Date endTime) {
+	public Page<WorkDealInfo> findPage4CertList(Page<WorkDealInfo> page,
+			Long apply, Date startTime, Date endTime) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		// dc.createAlias("workUser", "workUser");
 		// dc.createAlias("workCompany", "workCompany");
-//		dc.createAlias("createBy", "createBy");
-//		dc.createAlias("createBy.office", "office");
+		// dc.createAlias("createBy", "createBy");
+		// dc.createAlias("createBy.office", "office");
 		dc.createAlias("configApp", "configApp");
 		// dc.createAlias("workCertInfo", "workCertInfo");
 		// dc.createAlias("dealInfoType"," dealInfoType");
@@ -762,10 +1063,12 @@ public class WorkDealInfoService extends BaseService {
 		// dc.add(Restrictions.ne("dealInfoType",
 		// WorkDealInfoType.TYPE_PAY_REPLACED));
 
-//		dc.add(dataScopeFilter(UserUtils.getUser(), "office", "createBy"));
-		dc.add(dataScopeFilterByWorkDealInfo(UserUtils.getUser(), "areaId", "officeId"));
-		dc.add(Restrictions.in("dealInfoStatus",
-				new String[] { WorkDealInfoStatus.STATUS_CERT_REVOKE, WorkDealInfoStatus.STATUS_CERT_OBTAINED }));
+		// dc.add(dataScopeFilter(UserUtils.getUser(), "office", "createBy"));
+		dc.add(dataScopeFilterByWorkDealInfo(UserUtils.getUser(), "areaId",
+				"officeId"));
+		dc.add(Restrictions.in("dealInfoStatus", new String[] {
+				WorkDealInfoStatus.STATUS_CERT_REVOKE,
+				WorkDealInfoStatus.STATUS_CERT_OBTAINED }));
 
 		// dc.add(Restrictions.eq("dealInfoType",
 		// WorkDealInfoType.WorkDealInfoTypeMapReplaced));
@@ -774,11 +1077,13 @@ public class WorkDealInfoService extends BaseService {
 		}
 		// workcertinfo 在此处报流关闭错误，此处使用业务的createDate
 		SimpleDateFormat formater = new SimpleDateFormat("yyyy/MM/dd");
-	    SimpleDateFormat formater2 = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		SimpleDateFormat formater2 = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 		if (startTime != null && endTime != null) {
-			 try {
-				 startTime = formater2.parse(formater.format(startTime)+ " 00:00:00");
-				endTime = formater2.parse(formater.format(endTime)+ " 23:59:59");
+			try {
+				startTime = formater2.parse(formater.format(startTime)
+						+ " 00:00:00");
+				endTime = formater2.parse(formater.format(endTime)
+						+ " 23:59:59");
 			} catch (ParseException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -795,14 +1100,15 @@ public class WorkDealInfoService extends BaseService {
 		// dc.add(Restrictions.isNull("isIxin"));
 		// 更新和更新之前的新增都要统计，因为更新把新增的业务链给标志delete了，所以去掉这个约束条件，统一由
 		// WorkDealInfoStatus.STATUS_CERT_OBTAINED来判断
-		dc.add(Restrictions.in(WorkDealInfo.DEL_FLAG,
-				new String[] { WorkDealInfo.DEL_FLAG_NORMAL, WorkDealInfo.DEL_FLAG_DELETE }));
+		dc.add(Restrictions.in(WorkDealInfo.DEL_FLAG, new String[] {
+				WorkDealInfo.DEL_FLAG_NORMAL, WorkDealInfo.DEL_FLAG_DELETE }));
 		dc.addOrder(Order.desc("createDate"));
 
 		return workDealInfoDao.find(page, dc);
 	}
 
-	public List<WorkDealInfo> findPage4CertListAll(Long apply, Date startTime, Date endTime) {
+	public List<WorkDealInfo> findPage4CertListAll(Long apply, Date startTime,
+			Date endTime) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		// dc.createAlias("workUser", "workUser");
 		// dc.createAlias("workCompany", "workCompany");
@@ -811,8 +1117,9 @@ public class WorkDealInfoService extends BaseService {
 		dc.createAlias("configApp", "configApp");
 
 		dc.add(dataScopeFilter(UserUtils.getUser(), "office", "createBy"));
-		dc.add(Restrictions.in("dealInfoStatus",
-				new String[] { WorkDealInfoStatus.STATUS_CERT_REVOKE, WorkDealInfoStatus.STATUS_CERT_OBTAINED }));
+		dc.add(Restrictions.in("dealInfoStatus", new String[] {
+				WorkDealInfoStatus.STATUS_CERT_REVOKE,
+				WorkDealInfoStatus.STATUS_CERT_OBTAINED }));
 
 		if (apply != null) {
 			dc.add(Restrictions.eq("configApp.id", apply));
@@ -820,11 +1127,13 @@ public class WorkDealInfoService extends BaseService {
 
 		// workcertinfo 在此处报流关闭错误，此处使用业务的createDate
 		SimpleDateFormat formater = new SimpleDateFormat("yyyy/MM/dd");
-	    SimpleDateFormat formater2 = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		SimpleDateFormat formater2 = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 		if (startTime != null && endTime != null) {
-			 try {
-				 startTime = formater2.parse(formater.format(startTime)+ " 00:00:00");
-				endTime = formater2.parse(formater.format(endTime)+ " 23:59:59");
+			try {
+				startTime = formater2.parse(formater.format(startTime)
+						+ " 00:00:00");
+				endTime = formater2.parse(formater.format(endTime)
+						+ " 23:59:59");
 			} catch (ParseException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -836,13 +1145,14 @@ public class WorkDealInfoService extends BaseService {
 		// dc.add(Restrictions.isNull("isIxin"));
 		// 更新和更新之前的新增都要统计，因为更新把新增的业务链给标志delete了，所以去掉这个约束条件，统一由
 		// WorkDealInfoStatus.STATUS_CERT_OBTAINED来判断
-		dc.add(Restrictions.in(WorkDealInfo.DEL_FLAG,
-				new String[] { WorkDealInfo.DEL_FLAG_NORMAL, WorkDealInfo.DEL_FLAG_DELETE }));
+		dc.add(Restrictions.in(WorkDealInfo.DEL_FLAG, new String[] {
+				WorkDealInfo.DEL_FLAG_NORMAL, WorkDealInfo.DEL_FLAG_DELETE }));
 		dc.addOrder(Order.desc("createDate"));
 		return workDealInfoDao.find(dc);
 	}
 
-	public List<WorkDealInfo> find4CertList(Long apply, Date startTime,Date endTime) {
+	public List<WorkDealInfo> find4CertList(Long apply, Date startTime,
+			Date endTime) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		// dc.createAlias("workUser", "workUser");
 		// dc.createAlias("workCompany", "workCompany");
@@ -851,40 +1161,44 @@ public class WorkDealInfoService extends BaseService {
 		dc.createAlias("configApp", "configApp");
 
 		dc.add(dataScopeFilter(UserUtils.getUser(), "office", "createBy"));
-		dc.add(Restrictions.in("dealInfoStatus",
-				new String[] { WorkDealInfoStatus.STATUS_CERT_REVOKE, WorkDealInfoStatus.STATUS_CERT_OBTAINED }));
+		dc.add(Restrictions.in("dealInfoStatus", new String[] {
+				WorkDealInfoStatus.STATUS_CERT_REVOKE,
+				WorkDealInfoStatus.STATUS_CERT_OBTAINED }));
 
 		if (apply != null) {
 			dc.add(Restrictions.eq("configApp.id", apply));
 		}
 		// workcertinfo 在此处报流关闭错误，此处使用业务的createDate
-				if (startTime != null && endTime != null) {
-					endTime.setHours(29);
-					endTime.setMinutes(59);
-					endTime.setSeconds(59);
-					dc.add(Restrictions.ge("createDate", startTime));
-					dc.add(Restrictions.le("createDate", endTime));
-				}
+		if (startTime != null && endTime != null) {
+			endTime.setHours(29);
+			endTime.setMinutes(59);
+			endTime.setSeconds(59);
+			dc.add(Restrictions.ge("createDate", startTime));
+			dc.add(Restrictions.le("createDate", endTime));
+		}
 
-		/*if (certInfoList.size() > 0) {
-			dc.add(Restrictions.in("workCertInfo", certInfoList));
-		} else {
-			dc.add(Restrictions.eq("id", -1L)); // 其实取回来时空，为了过滤数据范围
-		}*/
+		/*
+		 * if (certInfoList.size() > 0) { dc.add(Restrictions.in("workCertInfo",
+		 * certInfoList)); } else { dc.add(Restrictions.eq("id", -1L)); //
+		 * 其实取回来时空，为了过滤数据范围 }
+		 */
 		// i信和非i信都统计
 		// dc.add(Restrictions.isNull("isIxin"));
 		// 更新和更新之前的新增都要统计，因为更新把新增的业务链给标志delete了，所以去掉这个约束条件，统一由
 		// WorkDealInfoStatus.STATUS_CERT_OBTAINED来判断
-		dc.add(Restrictions.in(WorkDealInfo.DEL_FLAG,
-				new String[] { WorkDealInfo.DEL_FLAG_NORMAL, WorkDealInfo.DEL_FLAG_DELETE }));
+		dc.add(Restrictions.in(WorkDealInfo.DEL_FLAG, new String[] {
+				WorkDealInfo.DEL_FLAG_NORMAL, WorkDealInfo.DEL_FLAG_DELETE }));
 		dc.addOrder(Order.desc("createDate"));
 		return workDealInfoDao.find(dc);
 	}
 
-	public Page<WorkDealInfo> find(Page<WorkDealInfo> page, WorkDealInfo workDealInfo, List<Long> dealInfoByAreaIds,
-			List<Long> dealInfoByOfficeAreaIds, List<Long> officeIds, Long apply, String certType, Integer workType,
-			Integer year, Date luruStartTime, Date luruEndTime, List<Long> offices, Date daoqiStartTime,
-			Date daoqiEndTime, Date jianzhengStartTime, Date jianzhengEndTime, List<WorkCertInfo> certInfoList
+	public Page<WorkDealInfo> find(Page<WorkDealInfo> page,
+			WorkDealInfo workDealInfo, List<Long> dealInfoByAreaIds,
+			List<Long> dealInfoByOfficeAreaIds, List<Long> officeIds,
+			Long apply, String certType, Integer workType, Integer year,
+			Date luruStartTime, Date luruEndTime, List<Long> offices,
+			Date daoqiStartTime, Date daoqiEndTime, Date jianzhengStartTime,
+			Date jianzhengEndTime, List<WorkCertInfo> certInfoList
 
 	) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
@@ -893,7 +1207,7 @@ public class WorkDealInfoService extends BaseService {
 		dc.createAlias("workUser", "workUser");
 		dc.createAlias("createBy", "createBy");
 		dc.createAlias("updateBy", "updateBy");
-//		dc.createAlias("createBy.office", "office");
+		// dc.createAlias("createBy.office", "office");
 		dc.createAlias("configApp", "configApp");
 		dc.createAlias("configProduct", "configProduct");
 		// workDealInfoDao.createDetachedCriteria();
@@ -902,78 +1216,104 @@ public class WorkDealInfoService extends BaseService {
 		// workUser.contactName
 		// workUser.conCertNumber
 		if (workDealInfo.getWorkCompany() != null
-				&& StringUtils.isNotEmpty(workDealInfo.getWorkCompany().getCompanyName())) {
-			dc.add(Restrictions.like("workCompany.companyName",
-					"%" + workDealInfo.getWorkCompany().getCompanyName() + "%"));
+				&& StringUtils.isNotEmpty(workDealInfo.getWorkCompany()
+						.getCompanyName())) {
+			dc.add(Restrictions.like("workCompany.companyName", "%"
+					+ workDealInfo.getWorkCompany().getCompanyName() + "%"));
 		}
 		if (workDealInfo.getWorkCompany() != null
-				&& StringUtils.isNotEmpty(workDealInfo.getWorkCompany().getOrganizationNumber())) {
-			dc.add(Restrictions.like("workCompany.organizationNumber",
-					"%" + workDealInfo.getWorkCompany().getOrganizationNumber() + "%"));
-		}
-		if (workDealInfo.getWorkUser() != null && StringUtils.isNotEmpty(workDealInfo.getWorkUser().getContactName())) {
-			dc.add(Restrictions.like("workUser.contactName", "%" + workDealInfo.getWorkUser().getContactName() + "%"));
+				&& StringUtils.isNotEmpty(workDealInfo.getWorkCompany()
+						.getOrganizationNumber())) {
+			dc.add(Restrictions.like("workCompany.organizationNumber", "%"
+					+ workDealInfo.getWorkCompany().getOrganizationNumber()
+					+ "%"));
 		}
 		if (workDealInfo.getWorkUser() != null
-				&& StringUtils.isNotEmpty(workDealInfo.getWorkUser().getConCertNumber())) {
-			dc.add(Restrictions.like("workUser.conCertNumber",
-					"%" + workDealInfo.getWorkUser().getConCertNumber() + "%"));
+				&& StringUtils.isNotEmpty(workDealInfo.getWorkUser()
+						.getContactName())) {
+			dc.add(Restrictions.like("workUser.contactName", "%"
+					+ workDealInfo.getWorkUser().getContactName() + "%"));
+		}
+		if (workDealInfo.getWorkUser() != null
+				&& StringUtils.isNotEmpty(workDealInfo.getWorkUser()
+						.getConCertNumber())) {
+			dc.add(Restrictions.like("workUser.conCertNumber", "%"
+					+ workDealInfo.getWorkUser().getConCertNumber() + "%"));
 		}
 
 		if (StringUtils.isNotEmpty(workDealInfo.getKeySn())) {
-			dc.add(Restrictions.like("keySn", "%" + workDealInfo.getKeySn() + "%"));
+			dc.add(Restrictions.like("keySn", "%" + workDealInfo.getKeySn()
+					+ "%"));
 		}
 
 		if (workDealInfo.getPayType() != null && workDealInfo.getPayType() != 0) {
 			dc.add(Restrictions.eq("payType", workDealInfo.getPayType()));
 		}
 
-		if (workDealInfo.getInputUser() != null && !workDealInfo.getInputUser().getName().equals("")) {
+		if (workDealInfo.getInputUser() != null
+				&& !workDealInfo.getInputUser().getName().equals("")) {
 			dc.createAlias("inputUser", "inputUser");
-			dc.add(Restrictions.like("inputUser.name", "%" + workDealInfo.getInputUser().getName() + "%"));
+			dc.add(Restrictions.like("inputUser.name", "%"
+					+ workDealInfo.getInputUser().getName() + "%"));
 		}
-		if (workDealInfo.getAttestationUser() != null && !workDealInfo.getAttestationUser().getName().equals("")) {
+		if (workDealInfo.getAttestationUser() != null
+				&& !workDealInfo.getAttestationUser().getName().equals("")) {
 			dc.createAlias("attestationUser", "attestationUser");
-			dc.add(Restrictions.like("attestationUser.name", "%" + workDealInfo.getAttestationUser().getName() + "%"));
+			dc.add(Restrictions.like("attestationUser.name", "%"
+					+ workDealInfo.getAttestationUser().getName() + "%"));
 		}
 		// businessCardUser
-		if (workDealInfo.getBusinessCardUser() != null && !workDealInfo.getBusinessCardUser().getName().equals("")) {
+		if (workDealInfo.getBusinessCardUser() != null
+				&& !workDealInfo.getBusinessCardUser().getName().equals("")) {
 			dc.createAlias("businessCardUser", "businessCardUser");
-			dc.add(Restrictions.like("businessCardUser.name",
-					"%" + workDealInfo.getBusinessCardUser().getName() + "%"));
+			dc.add(Restrictions.like("businessCardUser.name", "%"
+					+ workDealInfo.getBusinessCardUser().getName() + "%"));
 		}
 
 		// workCompany.province
 		// workCompany.city
 		// workCompany.district
-		if (workDealInfo.getWorkCompany() != null && StringUtils.isNotEmpty(workDealInfo.getWorkCompany().getProvince())
+		if (workDealInfo.getWorkCompany() != null
+				&& StringUtils.isNotEmpty(workDealInfo.getWorkCompany()
+						.getProvince())
 				&& !workDealInfo.getWorkCompany().getProvince().equals("省份")) {
-			dc.add(Restrictions.eq("workCompany.province", workDealInfo.getWorkCompany().getProvince()));
+			dc.add(Restrictions.eq("workCompany.province", workDealInfo
+					.getWorkCompany().getProvince()));
 		}
-		if (workDealInfo.getWorkCompany() != null && StringUtils.isNotEmpty(workDealInfo.getWorkCompany().getCity())
+		if (workDealInfo.getWorkCompany() != null
+				&& StringUtils.isNotEmpty(workDealInfo.getWorkCompany()
+						.getCity())
 				&& !workDealInfo.getWorkCompany().getCity().equals("地级市")) {
-			dc.add(Restrictions.eq("workCompany.city", workDealInfo.getWorkCompany().getCity()));
+			dc.add(Restrictions.eq("workCompany.city", workDealInfo
+					.getWorkCompany().getCity()));
 		}
-		if (workDealInfo.getWorkCompany() != null && StringUtils.isNotEmpty(workDealInfo.getWorkCompany().getDistrict())
+		if (workDealInfo.getWorkCompany() != null
+				&& StringUtils.isNotEmpty(workDealInfo.getWorkCompany()
+						.getDistrict())
 				&& !workDealInfo.getWorkCompany().getDistrict().equals("市、县级市")) {
-			dc.add(Restrictions.eq("workCompany.district", workDealInfo.getWorkCompany().getDistrict()));
+			dc.add(Restrictions.eq("workCompany.district", workDealInfo
+					.getWorkCompany().getDistrict()));
 		}
 
 		if (workDealInfo.getWorkPayInfo() != null) {
 			if (workDealInfo.getWorkPayInfo().getMethodMoney() == true) {
-				dc.add(Restrictions.or(Restrictions.eq("workPayInfo.methodMoney", true),
+				dc.add(Restrictions.or(
+						Restrictions.eq("workPayInfo.methodMoney", true),
 						Restrictions.eq("workPayInfo.relationMethod", 0)));
 			}
 			if (workDealInfo.getWorkPayInfo().getMethodPos() == true) {
-				dc.add(Restrictions.or(Restrictions.eq("workPayInfo.methodPos", true),
+				dc.add(Restrictions.or(
+						Restrictions.eq("workPayInfo.methodPos", true),
 						Restrictions.eq("workPayInfo.relationMethod", 1)));
 			}
 			if (workDealInfo.getWorkPayInfo().getMethodBank() == true) {
-				dc.add(Restrictions.or(Restrictions.eq("workPayInfo.methodBank", true),
+				dc.add(Restrictions.or(
+						Restrictions.eq("workPayInfo.methodBank", true),
 						Restrictions.eq("workPayInfo.relationMethod", 2)));
 			}
 			if (workDealInfo.getWorkPayInfo().getMethodAlipay() == true) {
-				dc.add(Restrictions.or(Restrictions.eq("workPayInfo.methodAlipay", true),
+				dc.add(Restrictions.or(
+						Restrictions.eq("workPayInfo.methodAlipay", true),
 						Restrictions.eq("workPayInfo.relationMethod", 3)));
 			}
 			if (workDealInfo.getWorkPayInfo().getMethodGov() == true) {
@@ -1020,7 +1360,8 @@ public class WorkDealInfoService extends BaseService {
 		if (dealInfoByAreaIds != null && dealInfoByAreaIds.size() > 0) {
 			dc.add(Restrictions.in("id", dealInfoByAreaIds));
 		}
-		if (dealInfoByOfficeAreaIds != null && dealInfoByOfficeAreaIds.size() > 0) {
+		if (dealInfoByOfficeAreaIds != null
+				&& dealInfoByOfficeAreaIds.size() > 0) {
 			dc.add(Restrictions.in("id", dealInfoByOfficeAreaIds));
 		}
 		if (officeIds != null && officeIds.size() > 0) {
@@ -1042,7 +1383,8 @@ public class WorkDealInfoService extends BaseService {
 			dc.add(Restrictions.eq("year", year));
 		}
 
-		dc.add(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED));
+		dc.add(Restrictions.eq("dealInfoStatus",
+				WorkDealInfoStatus.STATUS_CERT_OBTAINED));
 		// ProjectionList projectionList1 = Projections.projectionList();
 		// projectionList1.add(Projections.sqlGroupProjection("dealInfoType",
 		// "dealInfoType", null, null));
@@ -1051,10 +1393,13 @@ public class WorkDealInfoService extends BaseService {
 
 	}
 
-	public List<WorkDealInfo> find(WorkDealInfo workDealInfo, List<Long> dealInfoByAreaIds,
-			List<Long> dealInfoByOfficeAreaIds, List<Long> officeIds, Long apply, String certType, Integer workType,
-			Integer year, Date luruStartTime, Date luruEndTime, List<Office> offices, Date daoqiStartTime,
-			Date daoqiEndTime, Date jianzhengStartTime, Date jianzhengEndTime, List<WorkCertInfo> certInfoList
+	public List<WorkDealInfo> find(WorkDealInfo workDealInfo,
+			List<Long> dealInfoByAreaIds, List<Long> dealInfoByOfficeAreaIds,
+			List<Long> officeIds, Long apply, String certType,
+			Integer workType, Integer year, Date luruStartTime,
+			Date luruEndTime, List<Office> offices, Date daoqiStartTime,
+			Date daoqiEndTime, Date jianzhengStartTime, Date jianzhengEndTime,
+			List<WorkCertInfo> certInfoList
 
 	) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
@@ -1072,32 +1417,44 @@ public class WorkDealInfoService extends BaseService {
 		// workUser.contactName
 		// workUser.conCertNumber
 		if (workDealInfo.getWorkCompany() != null
-				&& StringUtils.isNotEmpty(workDealInfo.getWorkCompany().getCompanyName())) {
-			dc.add(Restrictions.like("workCompany.companyName",
-					"%" + workDealInfo.getWorkCompany().getCompanyName() + "%"));
+				&& StringUtils.isNotEmpty(workDealInfo.getWorkCompany()
+						.getCompanyName())) {
+			dc.add(Restrictions.like("workCompany.companyName", "%"
+					+ workDealInfo.getWorkCompany().getCompanyName() + "%"));
 		}
 		if (workDealInfo.getWorkCompany() != null
-				&& StringUtils.isNotEmpty(workDealInfo.getWorkCompany().getOrganizationNumber())) {
-			dc.add(Restrictions.like("workCompany.organizationNumber",
-					"%" + workDealInfo.getWorkCompany().getOrganizationNumber() + "%"));
-		}
-		if (workDealInfo.getWorkUser() != null && StringUtils.isNotEmpty(workDealInfo.getWorkUser().getContactName())) {
-			dc.add(Restrictions.like("workUser.contactName", "%" + workDealInfo.getWorkUser().getContactName() + "%"));
+				&& StringUtils.isNotEmpty(workDealInfo.getWorkCompany()
+						.getOrganizationNumber())) {
+			dc.add(Restrictions.like("workCompany.organizationNumber", "%"
+					+ workDealInfo.getWorkCompany().getOrganizationNumber()
+					+ "%"));
 		}
 		if (workDealInfo.getWorkUser() != null
-				&& StringUtils.isNotEmpty(workDealInfo.getWorkUser().getConCertNumber())) {
-			dc.add(Restrictions.like("workUser.conCertNumber",
-					"%" + workDealInfo.getWorkUser().getConCertNumber() + "%"));
+				&& StringUtils.isNotEmpty(workDealInfo.getWorkUser()
+						.getContactName())) {
+			dc.add(Restrictions.like("workUser.contactName", "%"
+					+ workDealInfo.getWorkUser().getContactName() + "%"));
+		}
+		if (workDealInfo.getWorkUser() != null
+				&& StringUtils.isNotEmpty(workDealInfo.getWorkUser()
+						.getConCertNumber())) {
+			dc.add(Restrictions.like("workUser.conCertNumber", "%"
+					+ workDealInfo.getWorkUser().getConCertNumber() + "%"));
 		}
 
 		if (StringUtils.isNotEmpty(workDealInfo.getKeySn())) {
-			dc.add(Restrictions.like("keySn", "%" + workDealInfo.getKeySn() + "%"));
+			dc.add(Restrictions.like("keySn", "%" + workDealInfo.getKeySn()
+					+ "%"));
 		}
-		if (workDealInfo.getCreateBy() != null && StringUtils.isNotEmpty(workDealInfo.getCreateBy().getName())) {
-			dc.add(Restrictions.like("createBy.name", "%" + workDealInfo.getCreateBy().getName() + "%"));
+		if (workDealInfo.getCreateBy() != null
+				&& StringUtils.isNotEmpty(workDealInfo.getCreateBy().getName())) {
+			dc.add(Restrictions.like("createBy.name", "%"
+					+ workDealInfo.getCreateBy().getName() + "%"));
 		}
-		if (workDealInfo.getCreateBy() != null && StringUtils.isNotEmpty(workDealInfo.getUpdateBy().getName())) {
-			dc.add(Restrictions.like("updateBy.name", "%" + workDealInfo.getUpdateBy().getName() + "%"));
+		if (workDealInfo.getCreateBy() != null
+				&& StringUtils.isNotEmpty(workDealInfo.getUpdateBy().getName())) {
+			dc.add(Restrictions.like("updateBy.name", "%"
+					+ workDealInfo.getUpdateBy().getName() + "%"));
 		}
 		if (workDealInfo.getPayType() != null && workDealInfo.getPayType() != 0) {
 			dc.add(Restrictions.eq("payType", workDealInfo.getPayType()));
@@ -1106,32 +1463,43 @@ public class WorkDealInfoService extends BaseService {
 		// workCompany.city
 		// workCompany.district
 		if (workDealInfo.getWorkCompany() != null
-				&& StringUtils.isNotEmpty(workDealInfo.getWorkCompany().getProvince())) {
-			dc.add(Restrictions.eq("workCompany.province", workDealInfo.getWorkCompany().getProvince()));
-		}
-		if (workDealInfo.getWorkCompany() != null && StringUtils.isNotEmpty(workDealInfo.getWorkCompany().getCity())) {
-			dc.add(Restrictions.eq("workCompany.city", workDealInfo.getWorkCompany().getCity()));
+				&& StringUtils.isNotEmpty(workDealInfo.getWorkCompany()
+						.getProvince())) {
+			dc.add(Restrictions.eq("workCompany.province", workDealInfo
+					.getWorkCompany().getProvince()));
 		}
 		if (workDealInfo.getWorkCompany() != null
-				&& StringUtils.isNotEmpty(workDealInfo.getWorkCompany().getDistrict())) {
-			dc.add(Restrictions.eq("workCompany.district", workDealInfo.getWorkCompany().getDistrict()));
+				&& StringUtils.isNotEmpty(workDealInfo.getWorkCompany()
+						.getCity())) {
+			dc.add(Restrictions.eq("workCompany.city", workDealInfo
+					.getWorkCompany().getCity()));
+		}
+		if (workDealInfo.getWorkCompany() != null
+				&& StringUtils.isNotEmpty(workDealInfo.getWorkCompany()
+						.getDistrict())) {
+			dc.add(Restrictions.eq("workCompany.district", workDealInfo
+					.getWorkCompany().getDistrict()));
 		}
 
 		if (workDealInfo.getWorkPayInfo() != null) {
 			if (workDealInfo.getWorkPayInfo().getMethodMoney() == true) {
-				dc.add(Restrictions.or(Restrictions.eq("workPayInfo.methodMoney", true),
+				dc.add(Restrictions.or(
+						Restrictions.eq("workPayInfo.methodMoney", true),
 						Restrictions.eq("workPayInfo.relationMethod", 0)));
 			}
 			if (workDealInfo.getWorkPayInfo().getMethodPos() == true) {
-				dc.add(Restrictions.or(Restrictions.eq("workPayInfo.methodPos", true),
+				dc.add(Restrictions.or(
+						Restrictions.eq("workPayInfo.methodPos", true),
 						Restrictions.eq("workPayInfo.relationMethod", 1)));
 			}
 			if (workDealInfo.getWorkPayInfo().getMethodBank() == true) {
-				dc.add(Restrictions.or(Restrictions.eq("workPayInfo.methodBank", true),
+				dc.add(Restrictions.or(
+						Restrictions.eq("workPayInfo.methodBank", true),
 						Restrictions.eq("workPayInfo.relationMethod", 2)));
 			}
 			if (workDealInfo.getWorkPayInfo().getMethodAlipay() == true) {
-				dc.add(Restrictions.or(Restrictions.eq("workPayInfo.methodAlipay", true),
+				dc.add(Restrictions.or(
+						Restrictions.eq("workPayInfo.methodAlipay", true),
 						Restrictions.eq("workPayInfo.relationMethod", 3)));
 			}
 			if (workDealInfo.getWorkPayInfo().getMethodGov() == true) {
@@ -1177,7 +1545,8 @@ public class WorkDealInfoService extends BaseService {
 		if (dealInfoByAreaIds != null && dealInfoByAreaIds.size() > 0) {
 			dc.add(Restrictions.in("id", dealInfoByAreaIds));
 		}
-		if (dealInfoByOfficeAreaIds != null && dealInfoByOfficeAreaIds.size() > 0) {
+		if (dealInfoByOfficeAreaIds != null
+				&& dealInfoByOfficeAreaIds.size() > 0) {
 			dc.add(Restrictions.in("id", dealInfoByOfficeAreaIds));
 		}
 		if (officeIds != null && officeIds.size() > 0) {
@@ -1199,7 +1568,8 @@ public class WorkDealInfoService extends BaseService {
 			dc.add(Restrictions.eq("year", year));
 		}
 
-		dc.add(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED));
+		dc.add(Restrictions.eq("dealInfoStatus",
+				WorkDealInfoStatus.STATUS_CERT_OBTAINED));
 		// ProjectionList projectionList1 = Projections.projectionList();
 		// projectionList1.add(Projections.sqlGroupProjection("dealInfoType",
 		// "dealInfoType", null, null));
@@ -1208,8 +1578,9 @@ public class WorkDealInfoService extends BaseService {
 
 	}
 
-	public Page<WorkDealInfo> find14(Page<WorkDealInfo> page, WorkDealInfo workDealInfo, Long area, Long office,
-			Long apply, Integer workType, List<WorkCertInfo> certInfoList
+	public Page<WorkDealInfo> find14(Page<WorkDealInfo> page,
+			WorkDealInfo workDealInfo, Long area, Long office, Long apply,
+			Integer workType, List<WorkCertInfo> certInfoList
 
 	) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
@@ -1222,38 +1593,56 @@ public class WorkDealInfoService extends BaseService {
 		dc.createAlias("configProduct", "configProduct");
 
 		if (workDealInfo.getWorkCompany() != null
-				&& StringUtils.isNotEmpty(workDealInfo.getWorkCompany().getCompanyName())) {
-			dc.add(Restrictions.like("workCompany.companyName",
-					"%" + workDealInfo.getWorkCompany().getCompanyName() + "%"));
+				&& StringUtils.isNotEmpty(workDealInfo.getWorkCompany()
+						.getCompanyName())) {
+			dc.add(Restrictions.like("workCompany.companyName", "%"
+					+ workDealInfo.getWorkCompany().getCompanyName() + "%"));
 		}
 		if (workDealInfo.getWorkCompany() != null
-				&& StringUtils.isNotEmpty(workDealInfo.getWorkCompany().getOrganizationNumber())) {
-			dc.add(Restrictions.like("workCompany.organizationNumber",
-					"%" + workDealInfo.getWorkCompany().getOrganizationNumber() + "%"));
-		}
-		if (workDealInfo.getWorkUser() != null && StringUtils.isNotEmpty(workDealInfo.getWorkUser().getContactName())) {
-			dc.add(Restrictions.like("workUser.contactName", "%" + workDealInfo.getWorkUser().getContactName() + "%"));
+				&& StringUtils.isNotEmpty(workDealInfo.getWorkCompany()
+						.getOrganizationNumber())) {
+			dc.add(Restrictions.like("workCompany.organizationNumber", "%"
+					+ workDealInfo.getWorkCompany().getOrganizationNumber()
+					+ "%"));
 		}
 		if (workDealInfo.getWorkUser() != null
-				&& StringUtils.isNotEmpty(workDealInfo.getWorkUser().getConCertNumber())) {
-			dc.add(Restrictions.like("workUser.conCertNumber",
-					"%" + workDealInfo.getWorkUser().getConCertNumber() + "%"));
+				&& StringUtils.isNotEmpty(workDealInfo.getWorkUser()
+						.getContactName())) {
+			dc.add(Restrictions.like("workUser.contactName", "%"
+					+ workDealInfo.getWorkUser().getContactName() + "%"));
+		}
+		if (workDealInfo.getWorkUser() != null
+				&& StringUtils.isNotEmpty(workDealInfo.getWorkUser()
+						.getConCertNumber())) {
+			dc.add(Restrictions.like("workUser.conCertNumber", "%"
+					+ workDealInfo.getWorkUser().getConCertNumber() + "%"));
 		}
 
-		if (workDealInfo.getWorkCompany() != null && StringUtils.isNotEmpty(workDealInfo.getWorkCompany().getProvince())
+		if (workDealInfo.getWorkCompany() != null
+				&& StringUtils.isNotEmpty(workDealInfo.getWorkCompany()
+						.getProvince())
 				&& !workDealInfo.getWorkCompany().getProvince().equals("省份")) {
-			dc.add(Restrictions.eq("workCompany.province", workDealInfo.getWorkCompany().getProvince()));
+			dc.add(Restrictions.eq("workCompany.province", workDealInfo
+					.getWorkCompany().getProvince()));
 		}
-		if (workDealInfo.getWorkCompany() != null && StringUtils.isNotEmpty(workDealInfo.getWorkCompany().getCity())
+		if (workDealInfo.getWorkCompany() != null
+				&& StringUtils.isNotEmpty(workDealInfo.getWorkCompany()
+						.getCity())
 				&& !workDealInfo.getWorkCompany().getCity().equals("地级市")) {
-			dc.add(Restrictions.eq("workCompany.city", workDealInfo.getWorkCompany().getCity()));
+			dc.add(Restrictions.eq("workCompany.city", workDealInfo
+					.getWorkCompany().getCity()));
 		}
-		if (workDealInfo.getWorkCompany() != null && StringUtils.isNotEmpty(workDealInfo.getWorkCompany().getDistrict())
+		if (workDealInfo.getWorkCompany() != null
+				&& StringUtils.isNotEmpty(workDealInfo.getWorkCompany()
+						.getDistrict())
 				&& !workDealInfo.getWorkCompany().getDistrict().equals("市、县级市")) {
-			dc.add(Restrictions.eq("workCompany.district", workDealInfo.getWorkCompany().getDistrict()));
+			dc.add(Restrictions.eq("workCompany.district", workDealInfo
+					.getWorkCompany().getDistrict()));
 		}
-		if (workDealInfo.getDealInfoStatus() != null && !workDealInfo.getDealInfoStatus().equals("")) {
-			dc.add(Restrictions.eq("dealInfoStatus", workDealInfo.getDealInfoStatus()));
+		if (workDealInfo.getDealInfoStatus() != null
+				&& !workDealInfo.getDealInfoStatus().equals("")) {
+			dc.add(Restrictions.eq("dealInfoStatus",
+					workDealInfo.getDealInfoStatus()));
 		}
 
 		if (office != null) {
@@ -1286,7 +1675,8 @@ public class WorkDealInfoService extends BaseService {
 
 	}
 
-	public List<WorkDealInfo> find14A(WorkDealInfo workDealInfo, Long area, Long office, Long apply, Integer workType,
+	public List<WorkDealInfo> find14A(WorkDealInfo workDealInfo, Long area,
+			Long office, Long apply, Integer workType,
 			List<WorkCertInfo> certInfoList
 
 	) {
@@ -1299,26 +1689,35 @@ public class WorkDealInfoService extends BaseService {
 		dc.createAlias("configProduct", "configProduct");
 
 		if (workDealInfo.getWorkCompany() != null
-				&& StringUtils.isNotEmpty(workDealInfo.getWorkCompany().getCompanyName())) {
-			dc.add(Restrictions.like("workCompany.companyName",
-					"%" + workDealInfo.getWorkCompany().getCompanyName() + "%"));
+				&& StringUtils.isNotEmpty(workDealInfo.getWorkCompany()
+						.getCompanyName())) {
+			dc.add(Restrictions.like("workCompany.companyName", "%"
+					+ workDealInfo.getWorkCompany().getCompanyName() + "%"));
 		}
 		if (workDealInfo.getWorkCompany() != null
-				&& StringUtils.isNotEmpty(workDealInfo.getWorkCompany().getOrganizationNumber())) {
-			dc.add(Restrictions.like("workCompany.organizationNumber",
-					"%" + workDealInfo.getWorkCompany().getOrganizationNumber() + "%"));
-		}
-		if (workDealInfo.getWorkUser() != null && StringUtils.isNotEmpty(workDealInfo.getWorkUser().getContactName())) {
-			dc.add(Restrictions.like("workUser.contactName", "%" + workDealInfo.getWorkUser().getContactName() + "%"));
+				&& StringUtils.isNotEmpty(workDealInfo.getWorkCompany()
+						.getOrganizationNumber())) {
+			dc.add(Restrictions.like("workCompany.organizationNumber", "%"
+					+ workDealInfo.getWorkCompany().getOrganizationNumber()
+					+ "%"));
 		}
 		if (workDealInfo.getWorkUser() != null
-				&& StringUtils.isNotEmpty(workDealInfo.getWorkUser().getConCertNumber())) {
-			dc.add(Restrictions.like("workUser.conCertNumber",
-					"%" + workDealInfo.getWorkUser().getConCertNumber() + "%"));
+				&& StringUtils.isNotEmpty(workDealInfo.getWorkUser()
+						.getContactName())) {
+			dc.add(Restrictions.like("workUser.contactName", "%"
+					+ workDealInfo.getWorkUser().getContactName() + "%"));
+		}
+		if (workDealInfo.getWorkUser() != null
+				&& StringUtils.isNotEmpty(workDealInfo.getWorkUser()
+						.getConCertNumber())) {
+			dc.add(Restrictions.like("workUser.conCertNumber", "%"
+					+ workDealInfo.getWorkUser().getConCertNumber() + "%"));
 		}
 
-		if (workDealInfo.getDealInfoStatus() != null && !workDealInfo.getDealInfoStatus().equals("")) {
-			dc.add(Restrictions.eq("dealInfoStatus", workDealInfo.getDealInfoStatus()));
+		if (workDealInfo.getDealInfoStatus() != null
+				&& !workDealInfo.getDealInfoStatus().equals("")) {
+			dc.add(Restrictions.eq("dealInfoStatus",
+					workDealInfo.getDealInfoStatus()));
 		}
 		if (office != null) {
 			dc.add(Restrictions.eq("office.id", office));
@@ -1350,8 +1749,8 @@ public class WorkDealInfoService extends BaseService {
 
 	}
 
-	public Page<WorkDealInfo> findCustomer(Page<WorkDealInfo> page, WorkDealInfo workDealInfo, Date startTime,
-			Date endTime) {
+	public Page<WorkDealInfo> findCustomer(Page<WorkDealInfo> page,
+			WorkDealInfo workDealInfo, Date startTime, Date endTime) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("workUser", "workUser");
 		dc.createAlias("configApp", "configApp");
@@ -1367,30 +1766,45 @@ public class WorkDealInfoService extends BaseService {
 		}
 		if (workDealInfo.getWorkCompany() != null) {
 			if (workDealInfo.getWorkCompany().getId() != null) {
-				dc.add(Restrictions.eq("workCompany", workDealInfo.getWorkCompany()));
+				dc.add(Restrictions.eq("workCompany",
+						workDealInfo.getWorkCompany()));
 			}
 			if (workDealInfo.getWorkCompany().getCompanyName() != null
-					&& !workDealInfo.getWorkCompany().getCompanyName().equals("")) {
-				dc.add(Restrictions.like("workCompany.companyName",
-						"%" + EscapeUtil.escapeLike(workDealInfo.getWorkCompany().getCompanyName()) + "%"));
+					&& !workDealInfo.getWorkCompany().getCompanyName()
+							.equals("")) {
+				dc.add(Restrictions.like(
+						"workCompany.companyName",
+						"%"
+								+ EscapeUtil.escapeLike(workDealInfo
+										.getWorkCompany().getCompanyName())
+								+ "%"));
 			}
 			if (workDealInfo.getWorkCompany().getCompanyMobile() != null
-					&& !workDealInfo.getWorkCompany().getCompanyMobile().equals("")) {
-				dc.add(Restrictions.like("workCompany.companyMobile",
-						"%" + EscapeUtil.escapeLike(workDealInfo.getWorkCompany().getCompanyMobile()) + "%"));
+					&& !workDealInfo.getWorkCompany().getCompanyMobile()
+							.equals("")) {
+				dc.add(Restrictions.like(
+						"workCompany.companyMobile",
+						"%"
+								+ EscapeUtil.escapeLike(workDealInfo
+										.getWorkCompany().getCompanyMobile())
+								+ "%"));
 			}
 		}
 		if (workDealInfo.getConfigApp() != null) {
 			if (workDealInfo.getConfigApp().getAppName() != null
 					&& !workDealInfo.getConfigApp().getAppName().equals("")) {
-				dc.add(Restrictions.eq("configApp.appName", workDealInfo.getConfigApp().getAppName()));
+				dc.add(Restrictions.eq("configApp.appName", workDealInfo
+						.getConfigApp().getAppName()));
 			}
 		}
 		if (workDealInfo.getWorkUser() != null) {
 			if (workDealInfo.getWorkUser().getContactName() != null
 					&& !workDealInfo.getWorkUser().getContactName().equals("")) {
-				dc.add(Restrictions.like("workUser.contactName",
-						"%" + EscapeUtil.escapeLike(workDealInfo.getWorkUser().getContactName()) + "%"));
+				dc.add(Restrictions.like(
+						"workUser.contactName",
+						"%"
+								+ EscapeUtil.escapeLike(workDealInfo
+										.getWorkUser().getContactName()) + "%"));
 			}
 			/*
 			 * if (workDealInfo.getWorkUser().getContactPhone() != null &&
@@ -1400,28 +1814,38 @@ public class WorkDealInfoService extends BaseService {
 			 */
 			if (workDealInfo.getWorkUser().getContactEmail() != null
 					&& !workDealInfo.getWorkUser().getContactEmail().equals("")) {
-				dc.add(Restrictions.like("workUser.contactEmail",
-						"%" + EscapeUtil.escapeLike(workDealInfo.getWorkUser().getContactEmail()) + "%"));
+				dc.add(Restrictions.like(
+						"workUser.contactEmail",
+						"%"
+								+ EscapeUtil.escapeLike(workDealInfo
+										.getWorkUser().getContactEmail()) + "%"));
 			}
 			if (workDealInfo.getWorkUser().getContactTel() != null
 					&& !workDealInfo.getWorkUser().getContactTel().equals("")) {
-				dc.add(Restrictions.like("workUser.contactTel",
-						"%" + EscapeUtil.escapeLike(workDealInfo.getWorkUser().getContactTel()) + "%"));
+				dc.add(Restrictions.like(
+						"workUser.contactTel",
+						"%"
+								+ EscapeUtil.escapeLike(workDealInfo
+										.getWorkUser().getContactTel()) + "%"));
 			}
 		}
 		if (workDealInfo.getDealInfoStatus() != null) {
-			dc.add(Restrictions.eq("dealInfoStatus", workDealInfo.getDealInfoStatus()));
+			dc.add(Restrictions.eq("dealInfoStatus",
+					workDealInfo.getDealInfoStatus()));
 		}
 		if (StringUtils.isNotEmpty(workDealInfo.getKeySn())) {
-			dc.add(Restrictions.like("keySn", "%" + EscapeUtil.escapeLike(workDealInfo.getKeySn()) + "%"));
+			dc.add(Restrictions.like("keySn",
+					"%" + EscapeUtil.escapeLike(workDealInfo.getKeySn()) + "%"));
 		}
-		dc.add(Restrictions.eq(WorkDealInfo.DEL_FLAG, WorkDealInfo.DEL_FLAG_NORMAL));
+		dc.add(Restrictions.eq(WorkDealInfo.DEL_FLAG,
+				WorkDealInfo.DEL_FLAG_NORMAL));
 		dc.addOrder(Order.desc("id"));
 		return workDealInfoDao.find(page, dc);
 	}
 
 	// 根据支付信息查询绑定的支付信息
-	public Page<WorkDealInfo> findByFinanceId(Page<WorkDealInfo> page, List<Long> idList) {
+	public Page<WorkDealInfo> findByFinanceId(Page<WorkDealInfo> page,
+			List<Long> idList) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		if (idList.size() > 0) {
 			dc.add(Restrictions.in("workPayInfo.id", idList));
@@ -1449,7 +1873,8 @@ public class WorkDealInfoService extends BaseService {
 			dc.add(Restrictions.eq("dealInfoType", dealInfoType));
 		}
 		dc.add(Restrictions.eq("dealInfoStatus", "0"));
-		dc.add(Restrictions.eq(WorkDealInfo.DEL_FLAG, WorkDealInfo.DEL_FLAG_NORMAL));
+		dc.add(Restrictions.eq(WorkDealInfo.DEL_FLAG,
+				WorkDealInfo.DEL_FLAG_NORMAL));
 		dc.addOrder(Order.desc("id"));
 		return workDealInfoDao.find(dc);
 	}
@@ -1460,10 +1885,13 @@ public class WorkDealInfoService extends BaseService {
 			dc.add(Restrictions.eq("keySn", Keysn));
 		}
 		if (certSn != null) {
-			dc.add(Restrictions.like("certSn", "%" + EscapeUtil.escapeLike(certSn) + "%"));
+			dc.add(Restrictions.like("certSn",
+					"%" + EscapeUtil.escapeLike(certSn) + "%"));
 		}
-		dc.add(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED));
-		dc.add(Restrictions.eq(WorkDealInfo.DEL_FLAG, WorkDealInfo.DEL_FLAG_NORMAL));
+		dc.add(Restrictions.eq("dealInfoStatus",
+				WorkDealInfoStatus.STATUS_CERT_OBTAINED));
+		dc.add(Restrictions.eq(WorkDealInfo.DEL_FLAG,
+				WorkDealInfo.DEL_FLAG_NORMAL));
 		dc.addOrder(Order.desc("id"));
 		return workDealInfoDao.find(dc);
 	}
@@ -1475,7 +1903,8 @@ public class WorkDealInfoService extends BaseService {
 		}
 
 		// a.DEAL_INFO_STATUS='6';
-		dc.add(Restrictions.ne("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_REVOKE));
+		dc.add(Restrictions.ne("dealInfoStatus",
+				WorkDealInfoStatus.STATUS_CERT_REVOKE));
 		// dc.add(Restrictions.eq(WorkDealInfo.DEL_FLAG,
 		// WorkDealInfo.DEL_FLAG_NORMAL));
 		if (workDealInfoDao.find(dc).size() > 0) {
@@ -1493,22 +1922,26 @@ public class WorkDealInfoService extends BaseService {
 		if (certSn != null) {
 			dc.add(Restrictions.eq("certSn", certSn));
 		}
-		dc.add(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED));
+		dc.add(Restrictions.eq("dealInfoStatus",
+				WorkDealInfoStatus.STATUS_CERT_OBTAINED));
 		dc.addOrder(Order.desc("id"));
 		return workDealInfoDao.find(dc);
 	}
 
-	public List<WorkDealInfo> findByManyCondition(String status, Date date, Integer year, Integer type) {
+	public List<WorkDealInfo> findByManyCondition(String status, Date date,
+			Integer year, Integer type) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		if (year != null) {
 			dc.add(Restrictions.eq("year", year));
 		}
 		dc.add(Restrictions.ge("createDate", date));
 		dc.add(Restrictions.eq("dealInfoStatus", status));
-		dc.add(Restrictions.or(Restrictions.eq("dealInfoType", type), Restrictions.or(
-				Restrictions.eq("dealInfoType1", type),
-				Restrictions.or(Restrictions.eq("dealInfoType2", type), Restrictions.eq("dealInfoType3", type)))));
-		dc.add(Restrictions.eq(WorkDealInfo.DEL_FLAG, WorkDealInfo.DEL_FLAG_NORMAL));
+		dc.add(Restrictions.or(Restrictions.eq("dealInfoType", type),
+				Restrictions.or(Restrictions.eq("dealInfoType1", type),
+						Restrictions.or(Restrictions.eq("dealInfoType2", type),
+								Restrictions.eq("dealInfoType3", type)))));
+		dc.add(Restrictions.eq(WorkDealInfo.DEL_FLAG,
+				WorkDealInfo.DEL_FLAG_NORMAL));
 		dc.addOrder(Order.desc("id"));
 		return workDealInfoDao.find(dc);
 	}
@@ -1518,7 +1951,8 @@ public class WorkDealInfoService extends BaseService {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("configApp", "configApp");
 		if (appName != null) {
-			dc.add(Restrictions.like("configApp.appName", "%" + EscapeUtil.escapeLike(appName) + "%"));
+			dc.add(Restrictions.like("configApp.appName",
+					"%" + EscapeUtil.escapeLike(appName) + "%"));
 		}
 		dc.addOrder(Order.desc("id"));
 		return workDealInfoDao.find(dc);
@@ -1559,8 +1993,8 @@ public class WorkDealInfoService extends BaseService {
 	}
 
 	// 根据公司，产品，应用查询WorkDealInfo
-	public List<WorkDealInfo> selectAccount(ConfigApp configApp, ConfigProduct configProduct, WorkCompany workCompany,
-			Long id) {
+	public List<WorkDealInfo> selectAccount(ConfigApp configApp,
+			ConfigProduct configProduct, WorkCompany workCompany, Long id) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("configApp", "configApp");
 		dc.createAlias("configProduct", "configProduct");
@@ -1578,7 +2012,8 @@ public class WorkDealInfoService extends BaseService {
 			dc.add(Restrictions.ne("id", id));
 		}
 		dc.addOrder(Order.desc("id"));
-		dc.add(Restrictions.eq(WorkDealInfo.DEL_FLAG, WorkDealInfo.DEL_FLAG_NORMAL));
+		dc.add(Restrictions.eq(WorkDealInfo.DEL_FLAG,
+				WorkDealInfo.DEL_FLAG_NORMAL));
 		return workDealInfoDao.find(dc);
 	}
 
@@ -1666,14 +2101,17 @@ public class WorkDealInfoService extends BaseService {
 	// return workDealInfoDao.find(page, dc);
 	// }
 
-	public Page<WorkDealInfo> findByDealPay(Page<WorkDealInfo> page, WorkDealInfo workDealInfo, Date startTime,
-			Date endTime, List<Long> idList, List<Long> dealInfoByAreaIds, List<Long> dealInfoByOfficeAreaIds,
-			Long appId, List<Long> officeIds) {
+	public Page<WorkDealInfo> findByDealPay(Page<WorkDealInfo> page,
+			WorkDealInfo workDealInfo, Date startTime, Date endTime,
+			List<Long> idList, List<Long> dealInfoByAreaIds,
+			List<Long> dealInfoByOfficeAreaIds, Long appId, List<Long> officeIds) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("workPayInfo", "workPayInfo");
 		dc.add(Restrictions.isNotNull("workPayInfo"));
-		dc.add(Restrictions.eq("workPayInfo.delFlag", WorkPayInfo.DEL_FLAG_NORMAL));
-		dc.add(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED));
+		dc.add(Restrictions.eq("workPayInfo.delFlag",
+				WorkPayInfo.DEL_FLAG_NORMAL));
+		dc.add(Restrictions.eq("dealInfoStatus",
+				WorkDealInfoStatus.STATUS_CERT_OBTAINED));
 		if (workDealInfo.getWorkPayInfo() != null) {
 			if (workDealInfo.getWorkPayInfo().getMethodMoney() == true) {
 				dc.add(Restrictions.eq("workPayInfo.methodMoney", true));
@@ -1710,7 +2148,8 @@ public class WorkDealInfoService extends BaseService {
 		if (dealInfoByAreaIds != null && dealInfoByAreaIds.size() > 0) {
 			dc.add(Restrictions.in("id", dealInfoByAreaIds));
 		}
-		if (dealInfoByOfficeAreaIds != null && dealInfoByOfficeAreaIds.size() > 0) {
+		if (dealInfoByOfficeAreaIds != null
+				&& dealInfoByOfficeAreaIds.size() > 0) {
 			dc.add(Restrictions.in("id", dealInfoByOfficeAreaIds));
 		}
 		if (appId != null) {
@@ -1723,15 +2162,19 @@ public class WorkDealInfoService extends BaseService {
 		return workDealInfoDao.find(page, dc);
 	}
 
-	public List<WorkDealInfo> findByDealPay(WorkDealInfo workDealInfo, Date startTime, Date endTime, List<Long> idList,
-			List<Long> dealInfoByAreaIds, List<Long> dealInfoByOfficeAreaIds, Long appId, List<Long> officeIds) {
+	public List<WorkDealInfo> findByDealPay(WorkDealInfo workDealInfo,
+			Date startTime, Date endTime, List<Long> idList,
+			List<Long> dealInfoByAreaIds, List<Long> dealInfoByOfficeAreaIds,
+			Long appId, List<Long> officeIds) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("workPayInfo", "workPayInfo");
 		dc.add(Restrictions.isNotNull("workPayInfo"));
 		dc.createAlias("createBy", "createBy");
 		dc.createAlias("createBy.office", "office");
-		dc.add(Restrictions.eq("workPayInfo.delFlag", WorkPayInfo.DEL_FLAG_NORMAL));
-		dc.add(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED));
+		dc.add(Restrictions.eq("workPayInfo.delFlag",
+				WorkPayInfo.DEL_FLAG_NORMAL));
+		dc.add(Restrictions.eq("dealInfoStatus",
+				WorkDealInfoStatus.STATUS_CERT_OBTAINED));
 		if (workDealInfo.getWorkPayInfo() != null) {
 			if (workDealInfo.getWorkPayInfo().getMethodMoney() == true) {
 				dc.add(Restrictions.eq("workPayInfo.methodMoney", true));
@@ -1795,7 +2238,8 @@ public class WorkDealInfoService extends BaseService {
 		if (dealInfoByAreaIds != null && dealInfoByAreaIds.size() > 0) {
 			dc.add(Restrictions.in("id", dealInfoByAreaIds));
 		}
-		if (dealInfoByOfficeAreaIds != null && dealInfoByOfficeAreaIds.size() > 0) {
+		if (dealInfoByOfficeAreaIds != null
+				&& dealInfoByOfficeAreaIds.size() > 0) {
 			dc.add(Restrictions.in("id", dealInfoByOfficeAreaIds));
 		}
 		if (appId != null) {
@@ -1813,15 +2257,18 @@ public class WorkDealInfoService extends BaseService {
 	 * @param appId
 	 * @return
 	 */
-	public Page<WorkDealInfo> findByDayPay(Page<WorkDealInfo> page, Date startTime, Date endTime, List<Long> officeids,
+	public Page<WorkDealInfo> findByDayPay(Page<WorkDealInfo> page,
+			Date startTime, Date endTime, List<Long> officeids,
 			List<Long> dealInfoByAreaIds, Long appId) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("workPayInfo", "workPayInfo");
 		dc.add(Restrictions.isNotNull("workPayInfo"));
 		dc.createAlias("createBy", "createBy");
 		dc.createAlias("createBy.office", "office");
-		dc.add(Restrictions.eq("workPayInfo.delFlag", WorkPayInfo.DEL_FLAG_NORMAL));
-		dc.add(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED));
+		dc.add(Restrictions.eq("workPayInfo.delFlag",
+				WorkPayInfo.DEL_FLAG_NORMAL));
+		dc.add(Restrictions.eq("dealInfoStatus",
+				WorkDealInfoStatus.STATUS_CERT_OBTAINED));
 		if (startTime != null) {
 			endTime.setHours(23);
 			endTime.setMinutes(59);
@@ -1887,11 +2334,13 @@ public class WorkDealInfoService extends BaseService {
 
 	}
 
-	public List<WorkDealInfo> findByDayPay(Date startTime, Date endTime, List<Long> officeids, Long appId) {
+	public List<WorkDealInfo> findByDayPay(Date startTime, Date endTime,
+			List<Long> officeids, Long appId) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("workPayInfo", "workPayInfo");
 		dc.add(Restrictions.isNotNull("workPayInfo"));
-		dc.add(Restrictions.eq("workPayInfo.delFlag", WorkPayInfo.DEL_FLAG_NORMAL));
+		dc.add(Restrictions.eq("workPayInfo.delFlag",
+				WorkPayInfo.DEL_FLAG_NORMAL));
 		List<String> status = Lists.newArrayList();
 		status.add(WorkDealInfoStatus.STATUS_CERT_OBTAINED);
 		status.add(WorkDealInfoStatus.STATUS_CERT_WAIT);
@@ -1922,15 +2371,18 @@ public class WorkDealInfoService extends BaseService {
 
 	}
 
-	public Page<WorkDealInfo> findByProjectPay(Page<WorkDealInfo> page, Date startTime, Date endTime,
-			List<Long> officeids, List<Long> dealInfoByAreaIds, Long appId) {
+	public Page<WorkDealInfo> findByProjectPay(Page<WorkDealInfo> page,
+			Date startTime, Date endTime, List<Long> officeids,
+			List<Long> dealInfoByAreaIds, Long appId) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("workPayInfo", "workPayInfo");
 		dc.add(Restrictions.isNotNull("workPayInfo"));
 		dc.createAlias("createBy", "createBy");
 		dc.createAlias("createBy.office", "office");
-		dc.add(Restrictions.eq("workPayInfo.delFlag", WorkPayInfo.DEL_FLAG_NORMAL));
-		dc.add(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED));
+		dc.add(Restrictions.eq("workPayInfo.delFlag",
+				WorkPayInfo.DEL_FLAG_NORMAL));
+		dc.add(Restrictions.eq("dealInfoStatus",
+				WorkDealInfoStatus.STATUS_CERT_OBTAINED));
 		if (startTime != null) {
 			endTime.setHours(23);
 			endTime.setMinutes(59);
@@ -1965,14 +2417,15 @@ public class WorkDealInfoService extends BaseService {
 
 	}
 
-	public List<WorkDealInfo> findByProjectYear(Date startTime, Date endTime, List<Long> dealInfoByAreaIds, Long appId,
-			List<Long> offices) {
+	public List<WorkDealInfo> findByProjectYear(Date startTime, Date endTime,
+			List<Long> dealInfoByAreaIds, Long appId, List<Long> offices) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("workPayInfo", "workPayInfo");
 		dc.createAlias("createBy", "createBy");
 		dc.createAlias("createBy.office", "office");
 		dc.add(Restrictions.isNotNull("workPayInfo"));
-		dc.add(Restrictions.eq("workPayInfo.delFlag", WorkPayInfo.DEL_FLAG_NORMAL));
+		dc.add(Restrictions.eq("workPayInfo.delFlag",
+				WorkPayInfo.DEL_FLAG_NORMAL));
 		List<String> status = Lists.newArrayList();
 		status.add(WorkDealInfoStatus.STATUS_CERT_OBTAINED);
 		status.add(WorkDealInfoStatus.STATUS_CERT_WAIT);
@@ -2003,12 +2456,14 @@ public class WorkDealInfoService extends BaseService {
 
 	}
 
-	public List<WorkDealInfo> findByProjectYear(Date startTime, Date endTime, List<Long> appIds) {
+	public List<WorkDealInfo> findByProjectYear(Date startTime, Date endTime,
+			List<Long> appIds) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("workPayInfo", "workPayInfo");
 		dc.createAlias("createBy", "createBy");
 		dc.add(Restrictions.isNotNull("workPayInfo"));
-		dc.add(Restrictions.eq("workPayInfo.delFlag", WorkPayInfo.DEL_FLAG_NORMAL));
+		dc.add(Restrictions.eq("workPayInfo.delFlag",
+				WorkPayInfo.DEL_FLAG_NORMAL));
 		List<String> status = Lists.newArrayList();
 		status.add(WorkDealInfoStatus.STATUS_CERT_OBTAINED);
 		status.add(WorkDealInfoStatus.STATUS_CERT_WAIT);
@@ -2033,14 +2488,15 @@ public class WorkDealInfoService extends BaseService {
 
 	}
 
-	public List<WorkDealInfo> findByProjectPay(Date startTime, Date endTime, List<Long> officeids,
-			List<Long> dealInfoByAreaIds, Long appId) {
+	public List<WorkDealInfo> findByProjectPay(Date startTime, Date endTime,
+			List<Long> officeids, List<Long> dealInfoByAreaIds, Long appId) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("workPayInfo", "workPayInfo");
 		dc.add(Restrictions.isNotNull("workPayInfo"));
 		dc.createAlias("createBy", "createBy");
 		dc.createAlias("createBy.office", "office");
-		dc.add(Restrictions.eq("workPayInfo.delFlag", WorkPayInfo.DEL_FLAG_NORMAL));
+		dc.add(Restrictions.eq("workPayInfo.delFlag",
+				WorkPayInfo.DEL_FLAG_NORMAL));
 		List<String> status = Lists.newArrayList();
 		status.add(WorkDealInfoStatus.STATUS_CERT_OBTAINED);
 		status.add(WorkDealInfoStatus.STATUS_CERT_WAIT);
@@ -2079,13 +2535,15 @@ public class WorkDealInfoService extends BaseService {
 
 	}
 
-	public List<WorkDealInfo> findByProjectPay(Date startTime, Date endTime, List<Long> officeIds, Long appId) {
+	public List<WorkDealInfo> findByProjectPay(Date startTime, Date endTime,
+			List<Long> officeIds, Long appId) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("workPayInfo", "workPayInfo");
 		dc.add(Restrictions.isNotNull("workPayInfo"));
-//		dc.createAlias("createBy", "createBy");
-//		dc.createAlias("createBy.office", "office");
-		dc.add(Restrictions.eq("workPayInfo.delFlag", WorkPayInfo.DEL_FLAG_NORMAL));
+		// dc.createAlias("createBy", "createBy");
+		// dc.createAlias("createBy.office", "office");
+		dc.add(Restrictions.eq("workPayInfo.delFlag",
+				WorkPayInfo.DEL_FLAG_NORMAL));
 		List<String> status = Lists.newArrayList();
 		status.add(WorkDealInfoStatus.STATUS_CERT_OBTAINED);
 		status.add(WorkDealInfoStatus.STATUS_CERT_WAIT);
@@ -2134,7 +2592,8 @@ public class WorkDealInfoService extends BaseService {
 			dc.add(Restrictions.eq("certSn", certSn));
 		}
 		dc.addOrder(Order.desc("id"));
-		dc.add(Restrictions.eq(WorkDealInfo.DEL_FLAG, WorkDealInfo.DEL_FLAG_NORMAL));
+		dc.add(Restrictions.eq(WorkDealInfo.DEL_FLAG,
+				WorkDealInfo.DEL_FLAG_NORMAL));
 		return workDealInfoDao.find(dc);
 	}
 
@@ -2165,7 +2624,8 @@ public class WorkDealInfoService extends BaseService {
 		dc.add(Restrictions.eq("dealInfoType", 0));
 		dc.add(Restrictions.isNotNull("workPayInfo"));
 		dc.addOrder(Order.desc("id"));
-		dc.add(Restrictions.eq(WorkDealInfo.DEL_FLAG, WorkDealInfo.DEL_FLAG_NORMAL));
+		dc.add(Restrictions.eq(WorkDealInfo.DEL_FLAG,
+				WorkDealInfo.DEL_FLAG_NORMAL));
 		return workDealInfoDao.find(dc);
 	}
 
@@ -2178,8 +2638,8 @@ public class WorkDealInfoService extends BaseService {
 	 * @param year
 	 * @return
 	 */
-	public Page<WorkDealInfo> findDealInfo(Page<WorkDealInfo> page, Long appId, Long productId, Integer dealInfoType,
-			Integer year, String agentName) {
+	public Page<WorkDealInfo> findDealInfo(Page<WorkDealInfo> page, Long appId,
+			Long productId, Integer dealInfoType, Integer year, String agentName) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("configApp", "configApp");
 		dc.createAlias("configProduct", "configProduct");
@@ -2196,13 +2656,15 @@ public class WorkDealInfoService extends BaseService {
 				Restrictions.eq("dealInfoType1", dealInfoType)));
 		dc.addOrder(Order.desc("id"));
 		dc.add(Restrictions.eq("canSettle", true));
-		dc.add(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED));
+		dc.add(Restrictions.eq("dealInfoStatus",
+				WorkDealInfoStatus.STATUS_CERT_OBTAINED));
 		return workDealInfoDao.find(page, dc);
 	}
 
 	public Long findDealInfoMax() {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
-		dc.add(Restrictions.eq(WorkDealInfo.DEL_FLAG, WorkDealInfo.DEL_FLAG_NORMAL));
+		dc.add(Restrictions.eq(WorkDealInfo.DEL_FLAG,
+				WorkDealInfo.DEL_FLAG_NORMAL));
 		dc.addOrder(Order.desc("id"));
 		if (workDealInfoDao.find(dc).size() > 0) {
 			return workDealInfoDao.find(dc).get(0).getId();
@@ -2215,15 +2677,16 @@ public class WorkDealInfoService extends BaseService {
 
 	/**
 	 * 用于结算处的业务明细
-	 *
+	 * 
 	 * @param appId
 	 * @param productId
 	 * @param dealInfoType
 	 * @param year
 	 * @return
 	 */
-	public Page<WorkDealInfo> findDealInfos(Page<WorkDealInfo> page, Long appId, Long productId, Integer dealInfoType,
-			Integer year, String agentName, Date startDate, Date endDate, boolean isCanSettle) {
+	public Page<WorkDealInfo> findDealInfos(Page<WorkDealInfo> page,
+			Long appId, Long productId, Integer dealInfoType, Integer year,
+			String agentName, Date startDate, Date endDate, boolean isCanSettle) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("configApp", "configApp");
 		dc.createAlias("configProduct", "configProduct");
@@ -2257,11 +2720,13 @@ public class WorkDealInfoService extends BaseService {
 			dc.add(Restrictions.eq("canSettle", isCanSettle));// 劳务关系的不用canSettle来判断
 
 		}
-		dc.add(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED));
+		dc.add(Restrictions.eq("dealInfoStatus",
+				WorkDealInfoStatus.STATUS_CERT_OBTAINED));
 		return workDealInfoDao.find(page, dc);
 	}
 
-	public Page<WorkDealInfo> findByFinance(Page<WorkDealInfo> page, List<WorkPayInfo> payInfoso) {
+	public Page<WorkDealInfo> findByFinance(Page<WorkDealInfo> page,
+			List<WorkPayInfo> payInfoso) {
 
 		List<Long> idList = Lists.newArrayList();
 		for (int i = 0; i < payInfoso.size(); i++) {
@@ -2276,7 +2741,9 @@ public class WorkDealInfoService extends BaseService {
 	}
 
 	public List<WorkDealInfo> findByCompany(Long companyId) {
-		return workDealInfoDao.find("from WorkDealInfo where work_company_id=?  order by create_date", companyId);
+		return workDealInfoDao
+				.find("from WorkDealInfo where work_company_id=?  order by create_date",
+						companyId);
 	}
 
 	@Transactional(readOnly = false)
@@ -2352,7 +2819,8 @@ public class WorkDealInfoService extends BaseService {
 		return (int) workDealInfoDao.count(dc);
 	}
 
-	public List<WorkDealInfo> getDealInfo(Office office, Long agentIds, Date startTime, Date endTime) {
+	public List<WorkDealInfo> getDealInfo(Office office, Long agentIds,
+			Date startTime, Date endTime) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("createBy", "createBy");
 		dc.createAlias("commercialAgent", "commercialAgent");
@@ -2366,20 +2834,23 @@ public class WorkDealInfoService extends BaseService {
 		}
 
 		// dc.add(Restrictions.eq("canSettle", true)); canSettle 只是控制是否是市场推广的结算
-		dc.add(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED));
+		dc.add(Restrictions.eq("dealInfoStatus",
+				WorkDealInfoStatus.STATUS_CERT_OBTAINED));
 		return workDealInfoDao.find(dc);
 	}
 
-	public List<Object[]> getSum4Agent(Long officeId, Long agentId, Date startTime, Date endTime) {
+	public List<Object[]> getSum4Agent(Long officeId, Long agentId,
+			Date startTime, Date endTime) {
 		// 这个SQL 注入风险基本为0 因为要拼接的参数是Long或者integer，没有String进行拼接
 		String sql = "SELECT D.APP_ID, D.PRODUCT_ID,D.DEAL_INFO_TYPE , COUNT (DISTINCT(D .ID)) FROM  WORK_DEAL_INFO D, WORK_CERT_INFO c,WORK_PAY_INFO P ,SYS_USER U "
 				+ " WHERE D.DEAL_INFO_TYPE IS NOT NULL AND D .CERT_ID = c.ID AND D .PAY_ID = P .ID  AND D.CREATE_BY = U.ID AND P.MONEY >0"; // 此版本不统计退费
 		sql += officeId == null ? "" : " and U.OFFICE_ID = " + officeId;
 		sql += agentId == null ? "" : " and d.COMMERCIAL_AGENT_ID =" + agentId;
-		sql += startTime == null ? ""
-				: " AND c.CREATE_DATE >= TO_DATE('" + DateUtils.formatDate(startTime, "yyyyMMdd") + "', 'yyyymmdd')";
-		sql += endTime == null ? ""
-				: " AND c.CREATE_DATE < TO_DATE ('" + DateUtils.formatDate(endTime, "yyyyMMdd") + "', 'yyyymmdd')";
+		sql += startTime == null ? "" : " AND c.CREATE_DATE >= TO_DATE('"
+				+ DateUtils.formatDate(startTime, "yyyyMMdd")
+				+ "', 'yyyymmdd')";
+		sql += endTime == null ? "" : " AND c.CREATE_DATE < TO_DATE ('"
+				+ DateUtils.formatDate(endTime, "yyyyMMdd") + "', 'yyyymmdd')";
 		sql += " group by D.APP_ID, D.PRODUCT_ID, D.DEAL_INFO_TYPE";
 		log.debug(sql);
 		List<Object[]> resList = new ArrayList<Object[]>();
@@ -2391,16 +2862,18 @@ public class WorkDealInfoService extends BaseService {
 		return resList;
 	}
 
-	public List<Object[]> getSumType14Agent(Long officeId, Long agentId, Date startTime, Date endTime) {
+	public List<Object[]> getSumType14Agent(Long officeId, Long agentId,
+			Date startTime, Date endTime) {
 		// 这个SQL 注入风险基本为0 因为要拼接的参数是Long或者integer，没有String进行拼接
 		String sql = "SELECT D.APP_ID, D.PRODUCT_ID, D.DEAL_INFO_TYPE1 , COUNT (DISTINCT(D .ID)) FROM  WORK_DEAL_INFO D, WORK_CERT_INFO c,WORK_PAY_INFO P ,SYS_USER U "
 				+ " WHERE D.DEAL_INFO_TYPE1 IS NOT NULL AND D .CERT_ID = c.ID AND D .PAY_ID = P .ID  AND D.CREATE_BY = U.ID AND P.MONEY >0"; // 此版本不统计退费
 		sql += officeId == null ? "" : " and U.OFFICE_ID = " + officeId;
 		sql += agentId == null ? "" : " and d.COMMERCIAL_AGENT_ID =" + agentId;
-		sql += startTime == null ? ""
-				: " AND c.CREATE_DATE >= TO_DATE('" + DateUtils.formatDate(startTime, "yyyyMMdd") + "', 'yyyymmdd')";
-		sql += endTime == null ? ""
-				: " AND c.CREATE_DATE < TO_DATE ('" + DateUtils.formatDate(endTime, "yyyyMMdd") + "', 'yyyymmdd')";
+		sql += startTime == null ? "" : " AND c.CREATE_DATE >= TO_DATE('"
+				+ DateUtils.formatDate(startTime, "yyyyMMdd")
+				+ "', 'yyyymmdd')";
+		sql += endTime == null ? "" : " AND c.CREATE_DATE < TO_DATE ('"
+				+ DateUtils.formatDate(endTime, "yyyyMMdd") + "', 'yyyymmdd')";
 		sql += " group by D.APP_ID, D.PRODUCT_ID, D.DEAL_INFO_TYPE1";
 		log.debug(sql);
 		List<Object[]> resList = new ArrayList<Object[]>();
@@ -2423,14 +2896,16 @@ public class WorkDealInfoService extends BaseService {
 	 * @param endDate
 	 * @return
 	 */
-	public List<WorkDealInfo> getSumInfo(Long appId, Integer workDealInfoType, Long productId, Integer year,
-			Date startDate, Date endDate, Long officeId, List<WorkPayInfo> workPayInfos) {
+	public List<WorkDealInfo> getSumInfo(Long appId, Integer workDealInfoType,
+			Long productId, Integer year, Date startDate, Date endDate,
+			Long officeId, List<WorkPayInfo> workPayInfos) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("configApp", "configApp");
 		dc.createAlias("configProduct", "configProduct");
 		dc.createAlias("createBy", "createBy");
 		dc.add(Restrictions.eq("configApp.id", appId));
-		dc.add(Restrictions.or(Restrictions.eq("dealInfoType", workDealInfoType),
+		dc.add(Restrictions.or(
+				Restrictions.eq("dealInfoType", workDealInfoType),
 				Restrictions.eq("dealInfoType1", workDealInfoType)));
 		dc.add(Restrictions.eq("configProduct.id", productId));
 		if (workPayInfos != null && workPayInfos.size() > 0) {
@@ -2448,8 +2923,9 @@ public class WorkDealInfoService extends BaseService {
 			dc.add(Restrictions.eq("createBy.office.id", officeId));
 		}
 		dc.add(Restrictions.eq("canSettle", true));
-		dc.add(Restrictions.or(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_REVOKE),
-				Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED)));
+		dc.add(Restrictions.or(Restrictions.eq("dealInfoStatus",
+				WorkDealInfoStatus.STATUS_CERT_REVOKE), Restrictions.eq(
+				"dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED)));
 		return workDealInfoDao.find(dc);
 	}
 
@@ -2464,24 +2940,27 @@ public class WorkDealInfoService extends BaseService {
 	 * @param endDate
 	 * @return
 	 */
-	public List<Object[]> getSumCount(Long appId, Integer workDealInfoType, Long productId, Integer year,
-			Date startDate, Date endDate, Long officeId, Long agentId, boolean chargeMethodPos,
-			boolean chargeMethodMoney, boolean chargeMethodBank, boolean chargeMethodGov,
-			boolean chargeMethodContract) {
+	public List<Object[]> getSumCount(Long appId, Integer workDealInfoType,
+			Long productId, Integer year, Date startDate, Date endDate,
+			Long officeId, Long agentId, boolean chargeMethodPos,
+			boolean chargeMethodMoney, boolean chargeMethodBank,
+			boolean chargeMethodGov, boolean chargeMethodContract) {
 		// 这个SQL 注入风险基本为0 因为要拼接的参数是Long或者integer，没有String进行拼接
 		String sql = "SELECT COUNT (DISTINCT(D .ID)),nvl(sum(p.work_payed_money),0) FROM  WORK_DEAL_INFO D, WORK_CERT_INFO c,WORK_PAY_INFO P ,SYS_USER U "
 				+ " WHERE D .CERT_ID = c.ID AND D .PAY_ID = P .ID  AND D.CREATE_BY = U.ID AND P.MONEY >0"; // 此版本不统计退费
 		sql += appId == null ? "" : " and d.app_id= " + appId;
 		sql += productId == null ? "" : " and d.PRODUCT_ID = " + productId;
 		sql += officeId == null ? "" : " and d.OFFICE_ID = " + officeId;
-		
+
 		sql += agentId == null ? "" : " and d.AGENT_ID =" + agentId;
-		sql += " and (d.DEAL_INFO_TYPE =" + workDealInfoType + " or d.DEAL_INFO_TYPE1 =" + workDealInfoType + ")";
+		sql += " and (d.DEAL_INFO_TYPE =" + workDealInfoType
+				+ " or d.DEAL_INFO_TYPE1 =" + workDealInfoType + ")";
 		sql += year == null ? "" : " and d.YEAR = " + year;
-		sql += startDate == null ? ""
-				: " AND c.CREATE_DATE > TO_DATE('" + DateUtils.formatDate(startDate, "yyyyMMdd") + "', 'yyyymmdd')";
-		sql += endDate == null ? ""
-				: " AND c.CREATE_DATE < TO_DATE ('" + DateUtils.formatDate(endDate, "yyyyMMdd") + "', 'yyyymmdd')";
+		sql += startDate == null ? "" : " AND c.CREATE_DATE > TO_DATE('"
+				+ DateUtils.formatDate(startDate, "yyyyMMdd")
+				+ "', 'yyyymmdd')";
+		sql += endDate == null ? "" : " AND c.CREATE_DATE < TO_DATE ('"
+				+ DateUtils.formatDate(endDate, "yyyyMMdd") + "', 'yyyymmdd')";
 
 		String condition = " and ( 1=0 "; // 确保程序里面有条件
 		if (chargeMethodPos) {
@@ -2520,7 +2999,8 @@ public class WorkDealInfoService extends BaseService {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("workUser", "workUser");
 		dc.add(Restrictions.eq("workUser.id", userId));
-		dc.add(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED));
+		dc.add(Restrictions.eq("dealInfoStatus",
+				WorkDealInfoStatus.STATUS_CERT_OBTAINED));
 		dc.addOrder(Order.desc("obtainedDate"));
 		List<WorkDealInfo> dealInfos = workDealInfoDao.find(dc);
 		if (dealInfos.size() == 0) {
@@ -2539,10 +3019,12 @@ public class WorkDealInfoService extends BaseService {
 	public Integer getNumByOrganizationNumber(String organizationNumber) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("workCompany", "workCompany");
-		dc.add(Restrictions.or(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED),
-				Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_REVOKE)));
+		dc.add(Restrictions.or(Restrictions.eq("dealInfoStatus",
+				WorkDealInfoStatus.STATUS_CERT_OBTAINED), Restrictions.eq(
+				"dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_REVOKE)));
 
-		dc.add(Restrictions.eq("workCompany.organizationNumber", organizationNumber));
+		dc.add(Restrictions.eq("workCompany.organizationNumber",
+				organizationNumber));
 		dc.addOrder(Order.asc("certSort"));
 		List<WorkDealInfo> dealInfos = workDealInfoDao.find(dc);
 		if (dealInfos.size() == 0) {
@@ -2550,7 +3032,8 @@ public class WorkDealInfoService extends BaseService {
 		} else {
 
 			for (int i = 0; i < dealInfos.size(); i++) {
-				if (dealInfos.get(i).getDealInfoStatus().equals(WorkDealInfoStatus.STATUS_CERT_REVOKE)) {
+				if (dealInfos.get(i).getDealInfoStatus()
+						.equals(WorkDealInfoStatus.STATUS_CERT_REVOKE)) {
 					return dealInfos.get(i).getCertSort();
 				}
 			}
@@ -2558,13 +3041,16 @@ public class WorkDealInfoService extends BaseService {
 		}
 	}
 
-	public Integer getNumByOrganizationNumberCompanyName(String organizationNumber, String companyName) {
+	public Integer getNumByOrganizationNumberCompanyName(
+			String organizationNumber, String companyName) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("workCompany", "workCompany");
-		dc.add(Restrictions.or(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED),
-				Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_REVOKE)));
+		dc.add(Restrictions.or(Restrictions.eq("dealInfoStatus",
+				WorkDealInfoStatus.STATUS_CERT_OBTAINED), Restrictions.eq(
+				"dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_REVOKE)));
 		if (organizationNumber != null && !organizationNumber.equals("")) {
-			dc.add(Restrictions.eq("workCompany.organizationNumber", organizationNumber));
+			dc.add(Restrictions.eq("workCompany.organizationNumber",
+					organizationNumber));
 		} else {
 			dc.add(Restrictions.eq("workCompany.companyName", companyName));
 		}
@@ -2575,7 +3061,8 @@ public class WorkDealInfoService extends BaseService {
 		} else {
 
 			for (int i = 0; i < dealInfos.size(); i++) {
-				if (dealInfos.get(i).getDealInfoStatus().equals(WorkDealInfoStatus.STATUS_CERT_REVOKE)) {
+				if (dealInfos.get(i).getDealInfoStatus()
+						.equals(WorkDealInfoStatus.STATUS_CERT_REVOKE)) {
 					return dealInfos.get(i).getCertSort();
 				}
 			}
@@ -2586,8 +3073,9 @@ public class WorkDealInfoService extends BaseService {
 	public Integer getNumByNameCard(String name, String card) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("workUser", "workUser");
-		dc.add(Restrictions.or(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED),
-				Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_REVOKE)));
+		dc.add(Restrictions.or(Restrictions.eq("dealInfoStatus",
+				WorkDealInfoStatus.STATUS_CERT_OBTAINED), Restrictions.eq(
+				"dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_REVOKE)));
 		if (card != null && !card.equals("")) {
 			dc.add(Restrictions.eq("workUser.conCertNumber", card));
 		} else {
@@ -2600,7 +3088,8 @@ public class WorkDealInfoService extends BaseService {
 		} else {
 
 			for (int i = 0; i < dealInfos.size(); i++) {
-				if (dealInfos.get(i).getDealInfoStatus().equals(WorkDealInfoStatus.STATUS_CERT_REVOKE)) {
+				if (dealInfos.get(i).getDealInfoStatus()
+						.equals(WorkDealInfoStatus.STATUS_CERT_REVOKE)) {
 					return dealInfos.get(i).getCertSort();
 				}
 			}
@@ -2625,12 +3114,14 @@ public class WorkDealInfoService extends BaseService {
 		if (serviceType == 0) {
 			try {
 				User user = UserUtils.getUser();
-				String timeSvn = "C-" + user.getOffice().getName() + "-" + sdf.format(date).substring(2);
+				String timeSvn = "C-" + user.getOffice().getName() + "-"
+						+ sdf.format(date).substring(2);
 				List<WorkDealInfo> list = findSvn("%" + timeSvn + "%");
 				int num = 1;
 				if (list.size() > 0) {
 					String oldSvn = list.get(0).getSvn();
-					num = Integer.parseInt(oldSvn.substring(oldSvn.length() - 3)) + 1;
+					num = Integer
+							.parseInt(oldSvn.substring(oldSvn.length() - 3)) + 1;
 				}
 				String numStr = "";
 				if (num > 0 && num < 10) {
@@ -2658,7 +3149,8 @@ public class WorkDealInfoService extends BaseService {
 		String svn = "";
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMM-");
 		try {
-			String timeSvn = "C-" + officeName + "-" + sdf.format(date).substring(2);
+			String timeSvn = "C-" + officeName + "-"
+					+ sdf.format(date).substring(2);
 			List<WorkDealInfo> list = findSvn("%" + timeSvn + "%");
 			int num = 1;
 			if (list.size() > 0) {
@@ -2714,7 +3206,8 @@ public class WorkDealInfoService extends BaseService {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("workCompany", "workCompany");
 		dc.add(Restrictions.eq("workCompany.id", companyId));
-		dc.add(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED));
+		dc.add(Restrictions.eq("dealInfoStatus",
+				WorkDealInfoStatus.STATUS_CERT_OBTAINED));
 		dc.addOrder(Order.desc("obtainedDate"));
 		List<WorkDealInfo> dealInfos = workDealInfoDao.find(dc);
 		if (dealInfos.size() == 0) {
@@ -2747,20 +3240,24 @@ public class WorkDealInfoService extends BaseService {
 	public void checkWorkDealInfoNeedSettle(WorkDealInfo dealInfo) {
 		try {
 			// 结算次数
-			int contractSettleTime = getSettleTimes(dealInfo.getConfigCommercialAgent().getAgentContractStart(),
+			int contractSettleTime = getSettleTimes(dealInfo
+					.getConfigCommercialAgent().getAgentContractStart(),
 					dealInfo.getConfigCommercialAgent().getAgentContractEnd());
-			if (dealInfo.getWorkPayInfo().getMethodGov() || dealInfo.getWorkPayInfo().getMethodContract()) {
+			if (dealInfo.getWorkPayInfo().getMethodGov()
+					|| dealInfo.getWorkPayInfo().getMethodContract()) {
 				dealInfo.setCanSettle(false);
 				return;
 			}
 
-			if (dealInfo.getDealInfoType().equals(WorkDealInfoType.TYPE_ADD_CERT)) {// 新增一定结算
+			if (dealInfo.getDealInfoType().equals(
+					WorkDealInfoType.TYPE_ADD_CERT)) {// 新增一定结算
 				dealInfo.setCanSettle(true);
 				// year和最大次数比较取小的
 				if (dealInfo.getYear() > contractSettleTime) {
 					dealInfo.setPhysicalLife(contractSettleTime);
 					// dealInfo.setResidualLife(0);
-					dealInfo.setResidualLife(dealInfo.getYear() - contractSettleTime);
+					dealInfo.setResidualLife(dealInfo.getYear()
+							- contractSettleTime);
 				} else {
 					dealInfo.setPhysicalLife(dealInfo.getYear());
 					dealInfo.setResidualLife(0);
@@ -2770,23 +3267,32 @@ public class WorkDealInfoService extends BaseService {
 				return;
 
 			}
-			if (dealInfo.getDealInfoType().equals(WorkDealInfoType.TYPE_UPDATE_CERT)
-					|| dealInfo.getDealInfoType1().equals(WorkDealInfoType.TYPE_UPDATE_CERT)
-					|| dealInfo.getDealInfoType2().equals(WorkDealInfoType.TYPE_UPDATE_CERT)
-					|| dealInfo.getDealInfoType3().equals(WorkDealInfoType.TYPE_UPDATE_CERT)) {
-				WorkDealInfo firstDealInfo = getFirstCertDealInfo(dealInfo, dealInfo);// 获取第一张被结算的证书业务
+			if (dealInfo.getDealInfoType().equals(
+					WorkDealInfoType.TYPE_UPDATE_CERT)
+					|| dealInfo.getDealInfoType1().equals(
+							WorkDealInfoType.TYPE_UPDATE_CERT)
+					|| dealInfo.getDealInfoType2().equals(
+							WorkDealInfoType.TYPE_UPDATE_CERT)
+					|| dealInfo.getDealInfoType3().equals(
+							WorkDealInfoType.TYPE_UPDATE_CERT)) {
+				WorkDealInfo firstDealInfo = getFirstCertDealInfo(dealInfo,
+						dealInfo);// 获取第一张被结算的证书业务
 				if (firstDealInfo.getConfigCommercialAgent().getId()
 						.equals(dealInfo.getConfigCommercialAgent().getId())) {// 判断是否是同一代理商
-					WorkCertInfo firstCertInfo = firstDealInfo.getWorkCertInfo();
+					WorkCertInfo firstCertInfo = firstDealInfo
+							.getWorkCertInfo();
 					// 已结算次数
-					int certSettleTime = getCertSettleTimes(firstCertInfo.getSignDate(), new Date());
+					int certSettleTime = getCertSettleTimes(
+							firstCertInfo.getSignDate(), new Date());
 					if (contractSettleTime > certSettleTime) {
 						// contractSettleTime - certSettleTime跟year比较取小的
 						dealInfo.setSettledLife(certSettleTime);
 						if (dealInfo.getYear() > (contractSettleTime - certSettleTime)) {
-							dealInfo.setPhysicalLife(Math.abs(contractSettleTime - certSettleTime));
+							dealInfo.setPhysicalLife(Math
+									.abs(contractSettleTime - certSettleTime));
 							// dealInfo.setResidualLife(0);
-							dealInfo.setResidualLife(dealInfo.getYear() - contractSettleTime - certSettleTime);
+							dealInfo.setResidualLife(dealInfo.getYear()
+									- contractSettleTime - certSettleTime);
 						} else {
 							dealInfo.setPhysicalLife(dealInfo.getYear());
 							// dealInfo.setResidualLife(contractSettleTime -
@@ -2824,12 +3330,15 @@ public class WorkDealInfoService extends BaseService {
 	 *            当前最早一笔的可结算业务
 	 * @return
 	 */
-	private WorkDealInfo getFirstCertDealInfo(WorkDealInfo dealInfo, WorkDealInfo curFirstSettleDealInfo) {
+	private WorkDealInfo getFirstCertDealInfo(WorkDealInfo dealInfo,
+			WorkDealInfo curFirstSettleDealInfo) {
 		if (dealInfo.getPrevId() == null) {// 不需要判断是否是政府统一采购or合同采购，如果没有前一笔业务?通常是递归中找到了新增业务，前一个嵌套中已经确定这笔新增付款方式是结算的
 			return curFirstSettleDealInfo;
 		}
-		WorkDealInfo prevDealInfo = workDealInfoDao.findOne(dealInfo.getPrevId());
-		if (prevDealInfo.getWorkPayInfo().getMethodGov() || prevDealInfo.getWorkPayInfo().getMethodContract()) {// 如果前一笔业务是是政府统一采购，那结算从这一笔开始
+		WorkDealInfo prevDealInfo = workDealInfoDao.findOne(dealInfo
+				.getPrevId());
+		if (prevDealInfo.getWorkPayInfo().getMethodGov()
+				|| prevDealInfo.getWorkPayInfo().getMethodContract()) {// 如果前一笔业务是是政府统一采购，那结算从这一笔开始
 			curFirstSettleDealInfo = dealInfo;
 			return getFirstCertDealInfo(prevDealInfo, curFirstSettleDealInfo);
 		}
@@ -2842,7 +3351,8 @@ public class WorkDealInfoService extends BaseService {
 				&& !settleType.contains(prevDealInfo.getDealInfoType1())) {
 			return getFirstCertDealInfo(prevDealInfo, curFirstSettleDealInfo);
 		}
-		if (prevDealInfo.getDealInfoType().equals(WorkDealInfoType.TYPE_ADD_CERT)) {// 新增一定是第一张结算证书,上面已规避付款方式问题，是否和第一个判断重复?
+		if (prevDealInfo.getDealInfoType().equals(
+				WorkDealInfoType.TYPE_ADD_CERT)) {// 新增一定是第一张结算证书,上面已规避付款方式问题，是否和第一个判断重复?
 			if (!prevDealInfo.getCanSettle()) {// 退费导致新增补结算
 				return curFirstSettleDealInfo;
 			}
@@ -2850,8 +3360,11 @@ public class WorkDealInfoService extends BaseService {
 		}
 		// 前一笔业务是结算的更新业务,更新前一笔业务可能会有 补办、变更等等...这里要记录当前可结算的业务
 		// 有可能新增业务是政府统一采购、合同采购，所以第一笔结算业务可能是新增
-		if (prevDealInfo.getCanSettle() && (prevDealInfo.getDealInfoType().equals(WorkDealInfoType.TYPE_UPDATE_CERT)
-				|| prevDealInfo.getDealInfoType1().equals(WorkDealInfoType.TYPE_UPDATE_CERT))) {
+		if (prevDealInfo.getCanSettle()
+				&& (prevDealInfo.getDealInfoType().equals(
+						WorkDealInfoType.TYPE_UPDATE_CERT) || prevDealInfo
+						.getDealInfoType1().equals(
+								WorkDealInfoType.TYPE_UPDATE_CERT))) {
 			curFirstSettleDealInfo = prevDealInfo;
 		}
 
@@ -2919,7 +3432,8 @@ public class WorkDealInfoService extends BaseService {
 		dc.add(Restrictions.in("dealInfoStatus", statusIntegers));
 		dc.createAlias("workPayInfo", "workPayInfo");
 		dc.add(Restrictions.ge("workPayInfo.updateDate", date));
-		dc.add(Restrictions.or(Restrictions.ne("isSJQY", 1), Restrictions.isNull("isSJQY")));
+		dc.add(Restrictions.or(Restrictions.ne("isSJQY", 1),
+				Restrictions.isNull("isSJQY")));
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
 		calendar.add(Calendar.DATE, 1);
@@ -2930,11 +3444,14 @@ public class WorkDealInfoService extends BaseService {
 		for (int i = 0; i < dealinfos.size(); i++) {
 			WorkDealInfo dealInfo = dealinfos.get(i);
 			if (dealInfo.getDealInfoStatus().equals("9")) {
-				if (dealInfo.getDealInfoType() != null && dealInfo.getDealInfoType().equals(1)) {
+				if (dealInfo.getDealInfoType() != null
+						&& dealInfo.getDealInfoType().equals(1)) {
 					createCount++;
-				} else if (dealInfo.getDealInfoType2() != null && dealInfo.getDealInfoType2().equals(4)) {
+				} else if (dealInfo.getDealInfoType2() != null
+						&& dealInfo.getDealInfoType2().equals(4)) {
 					createCount++;
-				} else if (dealInfo.getDealInfoType().equals(1) && dealInfo.getDealInfoType2().equals(4)) {
+				} else if (dealInfo.getDealInfoType().equals(1)
+						&& dealInfo.getDealInfoType2().equals(4)) {
 					createCount++;
 				}
 			} else {
@@ -2942,13 +3459,15 @@ public class WorkDealInfoService extends BaseService {
 			}
 		}
 		dc = workDealInfoDao.createDetachedCriteria();
-		dc.add(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_REVOKE));
+		dc.add(Restrictions.eq("dealInfoStatus",
+				WorkDealInfoStatus.STATUS_CERT_REVOKE));
 		dc.add(Restrictions.ge("obtainedDate", date));
 		int dealInfoType = WorkDealInfoType.TYPE_RETURN_WORK;
 		dc.add(Restrictions.or(Restrictions.eq("dealInfoType", dealInfoType),
-				Restrictions.eq("dealInfoType1", dealInfoType), Restrictions.eq("dealInfoType2", dealInfoType),
-				Restrictions.eq("dealInfoType3", dealInfoType),
-				Restrictions.eq("dealInfoType", WorkDealInfoType.TYPE_PAY_REPLACED))); // 类型是退费或者变更，都要剔除掉
+				Restrictions.eq("dealInfoType1", dealInfoType), Restrictions
+						.eq("dealInfoType2", dealInfoType), Restrictions.eq(
+						"dealInfoType3", dealInfoType), Restrictions.eq(
+						"dealInfoType", WorkDealInfoType.TYPE_PAY_REPLACED))); // 类型是退费或者变更，都要剔除掉
 		dc.add(Restrictions.lt("obtainedDate", calendar.getTime()));
 		int revertCount = (int) workDealInfoDao.count(dc);
 
@@ -2990,7 +3509,8 @@ public class WorkDealInfoService extends BaseService {
 		// "dealInfoType", WorkDealInfoType.TYPE_DAMAGED_REPLACED),
 		// Restrictions.eq("dealInfoType1",
 		// WorkDealInfoType.TYPE_DAMAGED_REPLACED)));
-		dc.add(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED));
+		dc.add(Restrictions.eq("dealInfoStatus",
+				WorkDealInfoStatus.STATUS_CERT_OBTAINED));
 		dc.add(Restrictions.ge("obtainedDate", date));
 		List<WorkDealInfo> dealInfos = workDealInfoDao.find(dc);
 		List<String> keys = new ArrayList<String>();
@@ -3002,7 +3522,8 @@ public class WorkDealInfoService extends BaseService {
 		return keys.size();
 	}
 
-	public int getKeyPublishTimes(Date date, Long officeId, Long appId, Date endDate) {
+	public int getKeyPublishTimes(Date date, Long officeId, Long appId,
+			Date endDate) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("createBy", "createBy");
 		dc.createAlias("createBy.office", "office");
@@ -3015,7 +3536,8 @@ public class WorkDealInfoService extends BaseService {
 		// "dealInfoType", WorkDealInfoType.TYPE_DAMAGED_REPLACED),
 		// Restrictions.eq("dealInfoType1",
 		// WorkDealInfoType.TYPE_DAMAGED_REPLACED)));
-		dc.add(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED));
+		dc.add(Restrictions.eq("dealInfoStatus",
+				WorkDealInfoStatus.STATUS_CERT_OBTAINED));
 		dc.add(Restrictions.ge("obtainedDate", date));
 		dc.add(Restrictions.le("obtainedDate", endDate));
 		List<WorkDealInfo> dealInfos = workDealInfoDao.find(dc);
@@ -3038,7 +3560,8 @@ public class WorkDealInfoService extends BaseService {
 	 * @param dealInfoType
 	 * @return
 	 */
-	public int getCertAppYearInfo(Date date, Long officeId, Integer year, Long appId, Integer dealInfoType) {
+	public int getCertAppYearInfo(Date date, Long officeId, Integer year,
+			Long appId, Integer dealInfoType) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("createBy", "createBy");
 		dc.createAlias("createBy.office", "office");
@@ -3059,7 +3582,8 @@ public class WorkDealInfoService extends BaseService {
 		return (int) workDealInfoDao.count(dc);
 	}
 
-	public int getCertAppYearInfoCount(Date date, Long officeId, Integer year, Long appId, Integer dealInfoType) {
+	public int getCertAppYearInfoCount(Date date, Long officeId, Integer year,
+			Long appId, Integer dealInfoType) {
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
 		calendar.add(Calendar.DATE, 1); //
@@ -3069,13 +3593,15 @@ public class WorkDealInfoService extends BaseService {
 		dc.add(Restrictions.eq("configApp.id", appId));
 		dc.add(Restrictions.ge("updateDate", date));
 		dc.add(Restrictions.lt("updateDate", calendar.getTime()));
-		dc.add(Restrictions.or(Restrictions.ne("isSJQY", 1), Restrictions.isNull("isSJQY")));
+		dc.add(Restrictions.or(Restrictions.ne("isSJQY", 1),
+				Restrictions.isNull("isSJQY")));
 		if (year != 0) {
 			dc.add(Restrictions.eq("year", year));
 		}
 		dc.add(Restrictions.isNull("dealInfoType3"));
 		dc.add(Restrictions.or(Restrictions.eq("dealInfoType", dealInfoType),
-				Restrictions.eq("dealInfoType1", dealInfoType), Restrictions.eq("dealInfoType2", dealInfoType),
+				Restrictions.eq("dealInfoType1", dealInfoType),
+				Restrictions.eq("dealInfoType2", dealInfoType),
 				Restrictions.eq("dealInfoType3", dealInfoType)));
 		List<String> statusIntegers = new ArrayList<String>();
 		statusIntegers.add(WorkDealInfoStatus.STATUS_CERT_OBTAINED);
@@ -3085,8 +3611,8 @@ public class WorkDealInfoService extends BaseService {
 		return (int) workDealInfoDao.count(dc);
 	}
 
-	public int getCertAppYearInfoCountOneDeal(Date date, Long officeId, Integer year, Long appId,
-			Integer dealInfoType) {
+	public int getCertAppYearInfoCountOneDeal(Date date, Long officeId,
+			Integer year, Long appId, Integer dealInfoType) {
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
 		calendar.add(Calendar.DATE, 1); //
@@ -3126,8 +3652,9 @@ public class WorkDealInfoService extends BaseService {
 		return (int) workDealInfoDao.count(dc);
 	}
 
-	public int getCertAppYearInfoUpdateChangeNum(Date date, Long officeId, Integer year, Long appId,
-			Integer dealInfoTypeUpdate, Integer dealInfoTypeChange) {
+	public int getCertAppYearInfoUpdateChangeNum(Date date, Long officeId,
+			Integer year, Long appId, Integer dealInfoTypeUpdate,
+			Integer dealInfoTypeChange) {
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
 		calendar.add(Calendar.DATE, 1); //
@@ -3156,8 +3683,9 @@ public class WorkDealInfoService extends BaseService {
 		return (int) workDealInfoDao.count(dc);
 	}
 
-	public int getCertAppYearInfoUpdateLostReplaceNum(Date date, Long officeId, Integer year, Long appId,
-			Integer dealInfoTypeUpdate, Integer dealInfoTypeLost) {
+	public int getCertAppYearInfoUpdateLostReplaceNum(Date date, Long officeId,
+			Integer year, Long appId, Integer dealInfoTypeUpdate,
+			Integer dealInfoTypeLost) {
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
 		calendar.add(Calendar.DATE, 1); //
@@ -3184,8 +3712,9 @@ public class WorkDealInfoService extends BaseService {
 		return (int) workDealInfoDao.count(dc);
 	}
 
-	public int getCertAppYearInfoChangeLostReplaceNum(Date date, Long officeId, Integer year, Long appId,
-			Integer dealInfoTypeChange, Integer dealInfoTypeLostReplace) {
+	public int getCertAppYearInfoChangeLostReplaceNum(Date date, Long officeId,
+			Integer year, Long appId, Integer dealInfoTypeChange,
+			Integer dealInfoTypeLostReplace) {
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
 		calendar.add(Calendar.DATE, 1); //
@@ -3213,8 +3742,10 @@ public class WorkDealInfoService extends BaseService {
 		return (int) workDealInfoDao.count(dc);
 	}
 
-	public int getCertAppYearInfoChangeLostReplaceUpdateNum(Date date, Long officeId, Integer year, Long appId,
-			Integer dealInfoTypeChange, Integer dealInfoTypeLostReplace, Integer dealInfoTypeUpdate) {
+	public int getCertAppYearInfoChangeLostReplaceUpdateNum(Date date,
+			Long officeId, Integer year, Long appId,
+			Integer dealInfoTypeChange, Integer dealInfoTypeLostReplace,
+			Integer dealInfoTypeUpdate) {
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
 		calendar.add(Calendar.DATE, 1); //
@@ -3240,8 +3771,8 @@ public class WorkDealInfoService extends BaseService {
 		return (int) workDealInfoDao.count(dc);
 	}
 
-	public int getCertAppYearInfo(Date date, Long officeId, Integer year, Long appId, Integer dealInfoType,
-			Date endDate) {
+	public int getCertAppYearInfo(Date date, Long officeId, Integer year,
+			Long appId, Integer dealInfoType, Date endDate) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("createBy", "createBy");
 		dc.createAlias("createBy.office", "office");
@@ -3275,8 +3806,9 @@ public class WorkDealInfoService extends BaseService {
 	 *            0:自费 1:政府 2:合同
 	 * @return
 	 */
-	public int getCertAppYearInfo(Date date, Long officeId, Integer year, Long appId, Integer dealInfoType,
-			String productType, Integer payType) {
+	public int getCertAppYearInfo(Date date, Long officeId, Integer year,
+			Long appId, Integer dealInfoType, String productType,
+			Integer payType) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("createBy", "createBy");
 		dc.createAlias("configApp", "configApp");
@@ -3295,13 +3827,15 @@ public class WorkDealInfoService extends BaseService {
 		}
 		// dc.add(Restrictions.in("configProduct.productName", productType));
 		if (dealInfoType != null) {
-			dc.add(Restrictions.or(Restrictions.eq("dealInfoType", dealInfoType),
+			dc.add(Restrictions.or(
+					Restrictions.eq("dealInfoType", dealInfoType),
 					Restrictions.eq("dealInfoType1", dealInfoType)));
 		} else {
 			List<Integer> dealInfoTypes = new ArrayList<Integer>();
 			dealInfoTypes.add(WorkDealInfoType.TYPE_ADD_CERT);
 			dealInfoTypes.add(WorkDealInfoType.TYPE_UPDATE_CERT);
-			dc.add(Restrictions.or(Restrictions.in("dealInfoType", dealInfoTypes),
+			dc.add(Restrictions.or(
+					Restrictions.in("dealInfoType", dealInfoTypes),
 					Restrictions.in("dealInfoType1", dealInfoTypes)));
 		}
 		List<String> statusIntegers = new ArrayList<String>();
@@ -3317,15 +3851,17 @@ public class WorkDealInfoService extends BaseService {
 				dc.add(Restrictions.eq("workPayInfo.methodContract", true));
 			}
 			if (payType.equals(0)) {
-				dc.add(Restrictions.and(Restrictions.ne("workPayInfo.methodGov", true),
+				dc.add(Restrictions.and(
+						Restrictions.ne("workPayInfo.methodGov", true),
 						Restrictions.ne("workPayInfo.methodContract", true)));
 			}
 		}
 		return (int) workDealInfoDao.count(dc);
 	}
 
-	public int getCertAppYearInfo(Date date, Long officeId, Integer year, Long appId, Integer dealInfoType,
-			List<String> productType, Integer payType) {
+	public int getCertAppYearInfo(Date date, Long officeId, Integer year,
+			Long appId, Integer dealInfoType, List<String> productType,
+			Integer payType) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("createBy", "createBy");
 		dc.createAlias("configApp", "configApp");
@@ -3341,13 +3877,15 @@ public class WorkDealInfoService extends BaseService {
 		}
 		dc.add(Restrictions.in("configProduct.productName", productType));
 		if (dealInfoType != null) {
-			dc.add(Restrictions.or(Restrictions.eq("dealInfoType", dealInfoType),
+			dc.add(Restrictions.or(
+					Restrictions.eq("dealInfoType", dealInfoType),
 					Restrictions.eq("dealInfoType1", dealInfoType)));
 		} else {
 			List<Integer> dealInfoTypes = new ArrayList<Integer>();
 			dealInfoTypes.add(WorkDealInfoType.TYPE_ADD_CERT);
 			dealInfoTypes.add(WorkDealInfoType.TYPE_UPDATE_CERT);
-			dc.add(Restrictions.or(Restrictions.in("dealInfoType", dealInfoTypes),
+			dc.add(Restrictions.or(
+					Restrictions.in("dealInfoType", dealInfoTypes),
 					Restrictions.in("dealInfoType1", dealInfoTypes)));
 		}
 		List<String> statusIntegers = new ArrayList<String>();
@@ -3363,15 +3901,17 @@ public class WorkDealInfoService extends BaseService {
 				dc.add(Restrictions.eq("workPayInfo.methodContract", true));
 			}
 			if (payType.equals(0)) {
-				dc.add(Restrictions.and(Restrictions.ne("workPayInfo.methodGov", true),
+				dc.add(Restrictions.and(
+						Restrictions.ne("workPayInfo.methodGov", true),
 						Restrictions.ne("workPayInfo.methodContract", true)));
 			}
 		}
 		return (int) workDealInfoDao.count(dc);
 	}
 
-	public int getCertAppYearInfo(Date date, Long officeId, Integer year, Long appId, Integer dealInfoType,
-			List<String> productType, Integer payType, Date endDate) {
+	public int getCertAppYearInfo(Date date, Long officeId, Integer year,
+			Long appId, Integer dealInfoType, List<String> productType,
+			Integer payType, Date endDate) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("createBy", "createBy");
 		dc.createAlias("configApp", "configApp");
@@ -3388,13 +3928,15 @@ public class WorkDealInfoService extends BaseService {
 		}
 		dc.add(Restrictions.in("configProduct.productName", productType));
 		if (dealInfoType != null) {
-			dc.add(Restrictions.or(Restrictions.eq("dealInfoType", dealInfoType),
+			dc.add(Restrictions.or(
+					Restrictions.eq("dealInfoType", dealInfoType),
 					Restrictions.eq("dealInfoType1", dealInfoType)));
 		} else {
 			List<Integer> dealInfoTypes = new ArrayList<Integer>();
 			dealInfoTypes.add(WorkDealInfoType.TYPE_ADD_CERT);
 			dealInfoTypes.add(WorkDealInfoType.TYPE_UPDATE_CERT);
-			dc.add(Restrictions.or(Restrictions.in("dealInfoType", dealInfoTypes),
+			dc.add(Restrictions.or(
+					Restrictions.in("dealInfoType", dealInfoTypes),
 					Restrictions.in("dealInfoType1", dealInfoTypes)));
 		}
 		List<String> statusIntegers = new ArrayList<String>();
@@ -3410,7 +3952,8 @@ public class WorkDealInfoService extends BaseService {
 				dc.add(Restrictions.eq("workPayInfo.methodContract", true));
 			}
 			if (payType.equals(0)) {
-				dc.add(Restrictions.and(Restrictions.ne("workPayInfo.methodGov", true),
+				dc.add(Restrictions.and(
+						Restrictions.ne("workPayInfo.methodGov", true),
 						Restrictions.ne("workPayInfo.methodContract", true)));
 			}
 		}
@@ -3479,7 +4022,8 @@ public class WorkDealInfoService extends BaseService {
 		dc.add(Restrictions.eq("office.id", officeId));
 		dc.createAlias("configApp", "configApp");
 		dc.add(Restrictions.eq("configApp.id", appId));
-		dc.add(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED));
+		dc.add(Restrictions.eq("dealInfoStatus",
+				WorkDealInfoStatus.STATUS_CERT_OBTAINED));
 		dc.add(Restrictions.ge("obtainedDate", date));
 		List<WorkDealInfo> dealInfos = workDealInfoDao.find(dc);
 		double totalReceipt = 0d;
@@ -3502,8 +4046,9 @@ public class WorkDealInfoService extends BaseService {
 		dc.add(Restrictions.eq("officeId", officeId));
 		dc.createAlias("configApp", "configApp");
 		dc.add(Restrictions.eq("configApp.id", appId));
-		dc.add(Restrictions.or(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED),
-				Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_WAIT)));
+		dc.add(Restrictions.or(Restrictions.eq("dealInfoStatus",
+				WorkDealInfoStatus.STATUS_CERT_OBTAINED), Restrictions.eq(
+				"dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_WAIT)));
 		dc.createAlias("workPayInfo", "workPayInfo");
 		dc.add(Restrictions.gt("workPayInfo.updateDate", date));
 		dc.add(Restrictions.lt("workPayInfo.updateDate", calendar.getTime()));
@@ -3513,17 +4058,25 @@ public class WorkDealInfoService extends BaseService {
 		double totalReceipt = 0d;
 		for (WorkDealInfo dealInfo : dealInfos) {
 			try {// 避免null的情况
-				if (dealInfo.getIsSJQY() == null || !dealInfo.getIsSJQY().equals(1)) {
+				if (dealInfo.getIsSJQY() == null
+						|| !dealInfo.getIsSJQY().equals(1)) {
 					if (dealInfo.getDealInfoStatus().equals("9")) {
-						if (dealInfo.getDealInfoType() != null && dealInfo.getDealInfoType().equals(1)) {
-							totalReceipt += dealInfo.getWorkPayInfo().getReceiptAmount();
-						} else if (dealInfo.getDealInfoType2() != null && dealInfo.getDealInfoType2().equals(4)) {
-							totalReceipt += dealInfo.getWorkPayInfo().getReceiptAmount();
-						} else if (dealInfo.getDealInfoType().equals(1) && dealInfo.getDealInfoType2().equals(4)) {
-							totalReceipt += dealInfo.getWorkPayInfo().getReceiptAmount();
+						if (dealInfo.getDealInfoType() != null
+								&& dealInfo.getDealInfoType().equals(1)) {
+							totalReceipt += dealInfo.getWorkPayInfo()
+									.getReceiptAmount();
+						} else if (dealInfo.getDealInfoType2() != null
+								&& dealInfo.getDealInfoType2().equals(4)) {
+							totalReceipt += dealInfo.getWorkPayInfo()
+									.getReceiptAmount();
+						} else if (dealInfo.getDealInfoType().equals(1)
+								&& dealInfo.getDealInfoType2().equals(4)) {
+							totalReceipt += dealInfo.getWorkPayInfo()
+									.getReceiptAmount();
 						}
 					} else {
-						totalReceipt += dealInfo.getWorkPayInfo().getReceiptAmount();
+						totalReceipt += dealInfo.getWorkPayInfo()
+								.getReceiptAmount();
 					}
 				}
 			} catch (Exception e) {
@@ -3534,14 +4087,16 @@ public class WorkDealInfoService extends BaseService {
 		return totalReceipt;
 	}
 
-	public double getWorkPayReceipt(Date date, Long officeId, Long appId, Date endDate) {
+	public double getWorkPayReceipt(Date date, Long officeId, Long appId,
+			Date endDate) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("createBy", "createBy");
 		dc.createAlias("createBy.office", "office");
 		dc.add(Restrictions.eq("office.id", officeId));
 		dc.createAlias("configApp", "configApp");
 		dc.add(Restrictions.eq("configApp.id", appId));
-		dc.add(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED));
+		dc.add(Restrictions.eq("dealInfoStatus",
+				WorkDealInfoStatus.STATUS_CERT_OBTAINED));
 		dc.add(Restrictions.ge("obtainedDate", date));
 		dc.add(Restrictions.le("obtainedDate", endDate));
 		List<WorkDealInfo> dealInfos = workDealInfoDao.find(dc);
@@ -3580,7 +4135,8 @@ public class WorkDealInfoService extends BaseService {
 	public Integer getValidDeviceTotal(Long appId) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("configApp", "configApp");
-		dc.add(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED));
+		dc.add(Restrictions.eq("dealInfoStatus",
+				WorkDealInfoStatus.STATUS_CERT_OBTAINED));
 		dc.add(Restrictions.eq("delFlag", WorkDealInfo.DEL_FLAG_NORMAL));
 		dc.add(Restrictions.eq("configApp.id", appId));
 		List<WorkDealInfo> dealInfos = workDealInfoDao.find(dc);
@@ -3603,7 +4159,8 @@ public class WorkDealInfoService extends BaseService {
 	public List<WorkDealInfo> getCurValidAddDealInfo() {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("configApp", "configApp");
-		dc.add(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED));
+		dc.add(Restrictions.eq("dealInfoStatus",
+				WorkDealInfoStatus.STATUS_CERT_OBTAINED));
 		dc.add(Restrictions.eq("dealInfoType", WorkDealInfoType.TYPE_ADD_CERT));
 		dc.add(Restrictions.eq("delFlag", WorkDealInfo.DEL_FLAG_NORMAL));
 		List<WorkDealInfo> dealInfos = workDealInfoDao.find(dc);
@@ -3648,15 +4205,17 @@ public class WorkDealInfoService extends BaseService {
 		return workDealInfoDao.find(dc);
 	}
 
-	public void exportExcelData(HttpServletRequest request, HttpServletResponse response) {
-		String[] title = { "付款单位名称", "付款金额/元", "联系人", "联系方式", "付款时间", "付款方式", "区域", "网点", "记录人员" };
+	public void exportExcelData(HttpServletRequest request,
+			HttpServletResponse response) {
+		String[] title = { "付款单位名称", "付款金额/元", "联系人", "联系方式", "付款时间", "付款方式",
+				"区域", "网点", "记录人员" };
 		String sheetName = "dealpaylist.xls";
 		try {
 			response.setContentType("application/octet-stream");
 			response.setHeader("Content-Type", "application/force-download");
 			response.setHeader("Content-Type", "application/vnd.ms-excel");
-			response.setHeader("Content-disposition",
-					"attachment; filename=" + new String(sheetName.getBytes("utf-8"), "ISO8859-1"));
+			response.setHeader("Content-disposition", "attachment; filename="
+					+ new String(sheetName.getBytes("utf-8"), "ISO8859-1"));
 			XSSFWorkbook wb = CreateExcelUtils.createExcel(title);
 			wb = createDS(wb, findList());
 			OutputStream os = response.getOutputStream();
@@ -3668,7 +4227,8 @@ public class WorkDealInfoService extends BaseService {
 		}
 	}
 
-	public XSSFWorkbook createDS(XSSFWorkbook wb, Collection<WorkDealInfo> coll) throws Exception {
+	public XSSFWorkbook createDS(XSSFWorkbook wb, Collection<WorkDealInfo> coll)
+			throws Exception {
 		Sheet sheet = null;
 		Row row = null;
 		Cell cell = null;
@@ -3688,39 +4248,56 @@ public class WorkDealInfoService extends BaseService {
 					cell = row.createCell(j);
 					switch (j) {
 					case 0:
-						cell.setCellValue(workDealInfo.getWorkCompany().getCompanyName());
+						cell.setCellValue(workDealInfo.getWorkCompany()
+								.getCompanyName());
 						break;
 					case 1:
-						cell.setCellValue(workDealInfo.getWorkPayInfo().getWorkPayedMoney());
+						cell.setCellValue(workDealInfo.getWorkPayInfo()
+								.getWorkPayedMoney());
 						break;
 					case 2:
-						cell.setCellValue(workDealInfo.getWorkUser().getContactName());
+						cell.setCellValue(workDealInfo.getWorkUser()
+								.getContactName());
 						break;
 					case 3:
-						cell.setCellValue(workDealInfo.getWorkUser().getContactPhone());
+						cell.setCellValue(workDealInfo.getWorkUser()
+								.getContactPhone());
 						break;
 					case 4:
-						cell.setCellValue(date.format(workDealInfo.getWorkPayInfo().getCreateDate()));
+						cell.setCellValue(date.format(workDealInfo
+								.getWorkPayInfo().getCreateDate()));
 						break;
 					case 5:
 						cell.setCellValue(paymentMethod(
-								new boolean[] { workDealInfo.getWorkPayInfo().getMethodPos(),
-										workDealInfo.getWorkPayInfo().getMethodMoney(),
-										workDealInfo.getWorkPayInfo().getMethodBank(),
-										workDealInfo.getWorkPayInfo().getMethodAlipay(),
-										workDealInfo.getWorkPayInfo().getMethodContract(),
-										workDealInfo.getWorkPayInfo().getMethodGov() },
-								workDealInfo.getWorkPayInfo().getRelationMethod() != null
-										? workDealInfo.getWorkPayInfo().getRelationMethod() : 0));
+								new boolean[] {
+										workDealInfo.getWorkPayInfo()
+												.getMethodPos(),
+										workDealInfo.getWorkPayInfo()
+												.getMethodMoney(),
+										workDealInfo.getWorkPayInfo()
+												.getMethodBank(),
+										workDealInfo.getWorkPayInfo()
+												.getMethodAlipay(),
+										workDealInfo.getWorkPayInfo()
+												.getMethodContract(),
+										workDealInfo.getWorkPayInfo()
+												.getMethodGov() },
+								workDealInfo.getWorkPayInfo()
+										.getRelationMethod() != null ? workDealInfo
+										.getWorkPayInfo().getRelationMethod()
+										: 0));
 						break;
 					case 6:
-						cell.setCellValue(workDealInfo.getCreateBy().getOffice().getAreaName());
+						cell.setCellValue(workDealInfo.getCreateBy()
+								.getOffice().getAreaName());
 						break;
 					case 7:
-						cell.setCellValue(workDealInfo.getCreateBy().getOffice().getName());
+						cell.setCellValue(workDealInfo.getCreateBy()
+								.getOffice().getName());
 						break;
 					case 8:
-						cell.setCellValue(workDealInfo.getWorkPayInfo().getCreateBy().getName());
+						cell.setCellValue(workDealInfo.getWorkPayInfo()
+								.getCreateBy().getName());
 						break;
 					}
 				}
@@ -3786,7 +4363,8 @@ public class WorkDealInfoService extends BaseService {
 
 	//
 	@Transactional(readOnly = true)
-	public List<WorkDealInfo> getWorkInfoByApp(Date date, ConfigApp configApp, String type) {
+	public List<WorkDealInfo> getWorkInfoByApp(Date date, ConfigApp configApp,
+			String type) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.add(Restrictions.eq("configApp", configApp));
 		Calendar rightNow = Calendar.getInstance();
@@ -3803,7 +4381,8 @@ public class WorkDealInfoService extends BaseService {
 			// 过滤更新过的重复证书
 			dcCert.add(Restrictions.isNull("renewalNextId"));
 			// 在这时间内没有被吊销
-			dcCert.add(Restrictions.or(Restrictions.isNull("revokeDate"), Restrictions.ge("revokeDate", dateEnd)));
+			dcCert.add(Restrictions.or(Restrictions.isNull("revokeDate"),
+					Restrictions.ge("revokeDate", dateEnd)));
 		}
 		// 一个月内到期的证书
 		if (type.equals("A1M")) {
@@ -3813,7 +4392,8 @@ public class WorkDealInfoService extends BaseService {
 			// 过滤更新过的重复证书
 			dcCert.add(Restrictions.isNull("renewalNextId"));
 			// 在这时间内没有被吊销
-			dcCert.add(Restrictions.or(Restrictions.isNull("revokeDate"), Restrictions.ge("revokeDate", dateEnd)));
+			dcCert.add(Restrictions.or(Restrictions.isNull("revokeDate"),
+					Restrictions.ge("revokeDate", dateEnd)));
 		}
 		// 一个月过期期的证书
 		if (type.equals("B1M")) {
@@ -3823,7 +4403,8 @@ public class WorkDealInfoService extends BaseService {
 			// 过滤更新过的重复证书
 			dcCert.add(Restrictions.isNull("renewalNextId"));
 			// 在这时间内没有被吊销
-			dcCert.add(Restrictions.or(Restrictions.isNull("revokeDate"), Restrictions.ge("revokeDate", dateEnd)));
+			dcCert.add(Restrictions.or(Restrictions.isNull("revokeDate"),
+					Restrictions.ge("revokeDate", dateEnd)));
 		}
 		// 三个月过期期的证书
 		if (type.equals("B3M")) {
@@ -3833,7 +4414,8 @@ public class WorkDealInfoService extends BaseService {
 			// 过滤更新过的重复证书
 			dcCert.add(Restrictions.isNull("renewalNextId"));
 			// 在这时间内没有被吊销
-			dcCert.add(Restrictions.or(Restrictions.isNull("revokeDate"), Restrictions.ge("revokeDate", dateEnd)));
+			dcCert.add(Restrictions.or(Restrictions.isNull("revokeDate"),
+					Restrictions.ge("revokeDate", dateEnd)));
 		}
 		// 历史更新1年证书(已更新)
 		if (type.equals("B1Y")) {
@@ -3862,7 +4444,8 @@ public class WorkDealInfoService extends BaseService {
 			// 证书更新日期用notberfore时间代替,因renewalDate没有值
 			dcCert.add(Restrictions.between("notbefore", startDate, dateEnd));
 			// 在这时间内没有被吊销
-			dcCert.add(Restrictions.or(Restrictions.isNull("revokeDate"), Restrictions.ge("revokeDate", dateEnd)));
+			dcCert.add(Restrictions.or(Restrictions.isNull("revokeDate"),
+					Restrictions.ge("revokeDate", dateEnd)));
 			// 过滤没有被更新过
 			dcCert.add(Restrictions.isNull("renewalNextId"));
 		}
@@ -3890,7 +4473,8 @@ public class WorkDealInfoService extends BaseService {
 			dateEnd = rightNow.getTime();
 			dcCert.add(Restrictions.between("notafter", startDate, dateEnd));// notafter
 			// 在这时间内没有被吊销
-			dcCert.add(Restrictions.or(Restrictions.isNull("revokeDate"), Restrictions.ge("revokeDate", dateEnd)));
+			dcCert.add(Restrictions.or(Restrictions.isNull("revokeDate"),
+					Restrictions.ge("revokeDate", dateEnd)));
 			// 过滤没有被更新过
 			dcCert.add(Restrictions.isNull("renewalNextId"));
 		}
@@ -3920,7 +4504,8 @@ public class WorkDealInfoService extends BaseService {
 			dateEnd = rightNow.getTime();
 			dcCert.add(Restrictions.between("notafter", startDate, dateEnd));// notafter
 			// 在这时间内没有被吊销
-			dcCert.add(Restrictions.or(Restrictions.isNull("revokeDate"), Restrictions.ge("revokeDate", dateEnd)));
+			dcCert.add(Restrictions.or(Restrictions.isNull("revokeDate"),
+					Restrictions.ge("revokeDate", dateEnd)));
 			// 过滤没有被更新过
 			dcCert.add(Restrictions.isNull("renewalNextId"));
 		}
@@ -3948,7 +4533,8 @@ public class WorkDealInfoService extends BaseService {
 			dateEnd = rightNow.getTime();
 			dcCert.add(Restrictions.between("notafter", startDate, dateEnd));// notafter
 			// 在这时间内没有被吊销
-			dcCert.add(Restrictions.or(Restrictions.isNull("revokeDate"), Restrictions.ge("revokeDate", dateEnd)));
+			dcCert.add(Restrictions.or(Restrictions.isNull("revokeDate"),
+					Restrictions.ge("revokeDate", dateEnd)));
 			// 过滤没有被更新过
 			dcCert.add(Restrictions.isNull("renewalNextId"));
 		}
@@ -3963,7 +4549,7 @@ public class WorkDealInfoService extends BaseService {
 	}
 
 	/**
-	 *
+	 * 
 	 * @param yesterDay
 	 * @param countDate
 	 * @param officeId
@@ -4007,7 +4593,8 @@ public class WorkDealInfoService extends BaseService {
 		return totalMoney;
 	}
 
-	public double getWorkPayMoneyCount(Date yesterDay, Date countDate, Long officeId) {
+	public double getWorkPayMoneyCount(Date yesterDay, Date countDate,
+			Long officeId) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.add(Restrictions.eq("officeId", officeId));
 		List<String> statusIntegers = new ArrayList<String>();
@@ -4028,17 +4615,25 @@ public class WorkDealInfoService extends BaseService {
 			try {// 避免null的情况
 					// totalMoney +=
 					// dealInfo.getWorkPayInfo().getWorkPayedMoney();
-				if (dealInfo.getIsSJQY() == null || !dealInfo.getIsSJQY().equals(1)) {
+				if (dealInfo.getIsSJQY() == null
+						|| !dealInfo.getIsSJQY().equals(1)) {
 					if (dealInfo.getDealInfoStatus().equals("9")) {
-						if (dealInfo.getDealInfoType() != null && dealInfo.getDealInfoType().equals(1)) {
-							totalMoney += dealInfo.getWorkPayInfo().getWorkTotalMoney();
-						} else if (dealInfo.getDealInfoType2() != null && dealInfo.getDealInfoType2().equals(4)) {
-							totalMoney += dealInfo.getWorkPayInfo().getWorkTotalMoney();
-						} else if (dealInfo.getDealInfoType().equals(1) && dealInfo.getDealInfoType2().equals(4)) {
-							totalMoney += dealInfo.getWorkPayInfo().getWorkTotalMoney();
+						if (dealInfo.getDealInfoType() != null
+								&& dealInfo.getDealInfoType().equals(1)) {
+							totalMoney += dealInfo.getWorkPayInfo()
+									.getWorkTotalMoney();
+						} else if (dealInfo.getDealInfoType2() != null
+								&& dealInfo.getDealInfoType2().equals(4)) {
+							totalMoney += dealInfo.getWorkPayInfo()
+									.getWorkTotalMoney();
+						} else if (dealInfo.getDealInfoType().equals(1)
+								&& dealInfo.getDealInfoType2().equals(4)) {
+							totalMoney += dealInfo.getWorkPayInfo()
+									.getWorkTotalMoney();
 						}
 					} else {
-						totalMoney += dealInfo.getWorkPayInfo().getWorkTotalMoney();
+						totalMoney += dealInfo.getWorkPayInfo()
+								.getWorkTotalMoney();
 
 					}
 				}
@@ -4051,7 +4646,8 @@ public class WorkDealInfoService extends BaseService {
 		return totalMoney;
 	}
 
-	public double getWorkPayMoneyCountByUpdate(Date yesterDay, Date countDate, Long officeId) {
+	public double getWorkPayMoneyCountByUpdate(Date yesterDay, Date countDate,
+			Long officeId) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.add(Restrictions.eq("officeId", officeId));
 		List<String> statusIntegers = new ArrayList<String>();
@@ -4059,7 +4655,8 @@ public class WorkDealInfoService extends BaseService {
 		dc.add(Restrictions.in("dealInfoStatus", statusIntegers));
 		dc.createAlias("workPayInfo", "workPayInfo");
 		dc.add(Restrictions.ge("workPayInfo.updateDate", countDate));
-		dc.add(Restrictions.eq("dealInfoType", WorkDealInfoType.TYPE_UPDATE_CERT));
+		dc.add(Restrictions.eq("dealInfoType",
+				WorkDealInfoType.TYPE_UPDATE_CERT));
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(countDate);
 		calendar.add(Calendar.DATE, 1);
@@ -4074,7 +4671,8 @@ public class WorkDealInfoService extends BaseService {
 		return totalMoney;
 	}
 
-	public int getWorkPayCountByUpdate(Date yesterDay, Date countDate, Long officeId) {
+	public int getWorkPayCountByUpdate(Date yesterDay, Date countDate,
+			Long officeId) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("createBy", "createBy");
 		dc.createAlias("createBy.office", "office");
@@ -4084,7 +4682,8 @@ public class WorkDealInfoService extends BaseService {
 		dc.add(Restrictions.in("dealInfoStatus", statusIntegers));
 		dc.createAlias("workPayInfo", "workPayInfo");
 		dc.add(Restrictions.ge("workPayInfo.updateDate", countDate));
-		dc.add(Restrictions.eq("dealInfoType", WorkDealInfoType.TYPE_UPDATE_CERT));
+		dc.add(Restrictions.eq("dealInfoType",
+				WorkDealInfoType.TYPE_UPDATE_CERT));
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(countDate);
 		calendar.add(Calendar.DATE, 1);
@@ -4105,17 +4704,21 @@ public class WorkDealInfoService extends BaseService {
 		dc.add(Restrictions.eq("officeId", officeId));
 		dc.add(Restrictions.eq("office.id", officeId));
 		// // 新增、置换时才有key
-		dc.add(Restrictions.or(Restrictions.eq("dealInfoType", WorkDealInfoType.TYPE_ADD_CERT),
-				Restrictions.eq("dealInfoType1", WorkDealInfoType.TYPE_DAMAGED_REPLACED),
-				Restrictions.eq("dealInfoType1", WorkDealInfoType.TYPE_LOST_CHILD)));
-		dc.add(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED));
+		dc.add(Restrictions.or(Restrictions.eq("dealInfoType",
+				WorkDealInfoType.TYPE_ADD_CERT), Restrictions.eq(
+				"dealInfoType1", WorkDealInfoType.TYPE_DAMAGED_REPLACED),
+				Restrictions.eq("dealInfoType1",
+						WorkDealInfoType.TYPE_LOST_CHILD)));
+		dc.add(Restrictions.eq("dealInfoStatus",
+				WorkDealInfoStatus.STATUS_CERT_OBTAINED));
 		dc.add(Restrictions.ge("updateDate", date));
 		dc.add(Restrictions.lt("updateDate", calendar.getTime()));
 
 		List<WorkDealInfo> dealInfos = workDealInfoDao.find(dc);
 		List<String> keys = new ArrayList<String>();
 		for (WorkDealInfo workDealInfo : dealInfos) {
-			if (workDealInfo.getIsSJQY() == null || !workDealInfo.getIsSJQY().equals(1)) {
+			if (workDealInfo.getIsSJQY() == null
+					|| !workDealInfo.getIsSJQY().equals(1)) {
 				if (!keys.contains(workDealInfo.getKeySn())) {
 					keys.add(workDealInfo.getKeySn());
 				}
@@ -4125,16 +4728,19 @@ public class WorkDealInfoService extends BaseService {
 	}
 
 	// 根据单位名称，经办人查询出业务办理列表
-	public List<WorkDealInfo> findByCompanyAttn(String companyString, String attn) {
+	public List<WorkDealInfo> findByCompanyAttn(String companyString,
+			String attn) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 
 		dc.createAlias("workUser", "workUser");
 		if (attn != null && !attn.equals("")) {
-			dc.add(Restrictions.like("workUser.contactName", "%" + EscapeUtil.escapeLike(attn) + "%"));
+			dc.add(Restrictions.like("workUser.contactName",
+					"%" + EscapeUtil.escapeLike(attn) + "%"));
 		}
 		dc.createAlias("workCompany", "workCompany");
 		if (companyString != null && !companyString.equals("")) {
-			dc.add(Restrictions.like("workCompany.companyName", "%" + EscapeUtil.escapeLike(companyString) + "%"));
+			dc.add(Restrictions.like("workCompany.companyName", "%"
+					+ EscapeUtil.escapeLike(companyString) + "%"));
 		}
 		dc.addOrder(Order.desc("id"));
 		return workDealInfoDao.find(dc);
@@ -4155,7 +4761,8 @@ public class WorkDealInfoService extends BaseService {
 	}
 
 	// 根据计费策略模版。判断是否计费策略模版办理过业务
-	public List<WorkDealInfo> findByAgentIdProductId(Long agentId, Long productId) {
+	public List<WorkDealInfo> findByAgentIdProductId(Long agentId,
+			Long productId) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.add(Restrictions.eq("configChargeAgentId", agentId));
 		dc.add(Restrictions.eq("configProduct.id", productId));
@@ -4174,13 +4781,17 @@ public class WorkDealInfoService extends BaseService {
 	 * 
 	 * @return
 	 */
-	public Integer getCertSortByOrganizationNumber(String organizationNumber, Integer productTdId) {
+	public Integer getCertSortByOrganizationNumber(String organizationNumber,
+			Integer productTdId) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("workCompany", "workCompany");
 		dc.createAlias("configProduct", "configProduct");
-		dc.add(Restrictions.eq("workCompany.organizationNumber", organizationNumber));
-		dc.add(Restrictions.eq("configProduct.productName", productTdId.toString()));
-		dc.add(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED));
+		dc.add(Restrictions.eq("workCompany.organizationNumber",
+				organizationNumber));
+		dc.add(Restrictions.eq("configProduct.productName",
+				productTdId.toString()));
+		dc.add(Restrictions.eq("dealInfoStatus",
+				WorkDealInfoStatus.STATUS_CERT_OBTAINED));
 		dc.addOrder(Order.desc("certSort"));
 		List<WorkDealInfo> dealInfos = workDealInfoDao.find(dc);
 		if (dealInfos.size() == 0) {
@@ -4195,13 +4806,16 @@ public class WorkDealInfoService extends BaseService {
 	 * 
 	 * @return
 	 */
-	public Integer getCertSortByCompanyName(String companyName, Integer productTdId) {
+	public Integer getCertSortByCompanyName(String companyName,
+			Integer productTdId) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("workCompany", "workCompany");
 		dc.createAlias("configProduct", "configProduct");
 		dc.add(Restrictions.eq("workCompany.companyName", companyName));
-		dc.add(Restrictions.eq("configProduct.productName", productTdId.toString()));
-		dc.add(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED));
+		dc.add(Restrictions.eq("configProduct.productName",
+				productTdId.toString()));
+		dc.add(Restrictions.eq("dealInfoStatus",
+				WorkDealInfoStatus.STATUS_CERT_OBTAINED));
 		dc.addOrder(Order.desc("certSort"));
 		List<WorkDealInfo> dealInfos = workDealInfoDao.find(dc);
 		if (dealInfos.size() == 0) {
@@ -4221,9 +4835,11 @@ public class WorkDealInfoService extends BaseService {
 		dc.createAlias("workUser", "workUser");
 		dc.createAlias("configProduct", "configProduct");
 		dc.add(Restrictions.eq("workUser.conCertNumber", conCertNumber));
-		dc.add(Restrictions.or(Restrictions.eq("configProduct.productName", "2"),
+		dc.add(Restrictions.or(
+				Restrictions.eq("configProduct.productName", "2"),
 				Restrictions.eq("configProduct.productName", "6")));
-		dc.add(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED));
+		dc.add(Restrictions.eq("dealInfoStatus",
+				WorkDealInfoStatus.STATUS_CERT_OBTAINED));
 		dc.addOrder(Order.desc("certSort"));
 		List<WorkDealInfo> dealInfos = workDealInfoDao.find(dc);
 		if (dealInfos.size() == 0) {
@@ -4243,9 +4859,11 @@ public class WorkDealInfoService extends BaseService {
 		dc.createAlias("workUser", "workUser");
 		dc.createAlias("configProduct", "configProduct");
 		dc.add(Restrictions.eq("workUser.contactName", contactName));
-		dc.add(Restrictions.or(Restrictions.eq("configProduct.productName", "2"),
+		dc.add(Restrictions.or(
+				Restrictions.eq("configProduct.productName", "2"),
 				Restrictions.eq("configProduct.productName", "6")));
-		dc.add(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED));
+		dc.add(Restrictions.eq("dealInfoStatus",
+				WorkDealInfoStatus.STATUS_CERT_OBTAINED));
 		dc.addOrder(Order.desc("certSort"));
 		List<WorkDealInfo> dealInfos = workDealInfoDao.find(dc);
 		if (dealInfos.size() == 0) {
@@ -4256,22 +4874,18 @@ public class WorkDealInfoService extends BaseService {
 	}
 
 	@Transactional(readOnly = false)
-	public JSONObject saveExcelDate(
-			Long appId,
-			String dealInfoType,
-			String productT,
-			String lableT,
-			Integer agentIdT,
-			Long agentDetailIdT,
-			Integer yearT,
-			MultipartFile file, String ifExcel) {
+	public JSONObject saveExcelDate(Long appId, String dealInfoType,
+			String productT, String lableT, Integer agentIdT,
+			Long agentDetailIdT, Integer yearT, MultipartFile file,
+			String ifExcel) {
 		StringBuffer ifErr = new StringBuffer();
-		ConfigChargeAgentBoundConfigProduct bound = configChargeAgentBoundConfigProductService.get(agentDetailIdT);
+		ConfigChargeAgentBoundConfigProduct bound = configChargeAgentBoundConfigProductService
+				.get(agentDetailIdT);
 		ConfigChargeAgent agent = bound.getAgent();
 		int pos = 0;
 		int money = 0;
 		int bank = 0;
-		if(agent.getChargeMethodPos()){
+		if (agent.getChargeMethodPos()) {
 			pos = 1;
 		}
 		if (agent.getChargeMethodMoney()) {
@@ -4281,8 +4895,8 @@ public class WorkDealInfoService extends BaseService {
 			bank = 1;
 		}
 		int total = pos + money + bank;
-		
-		if(total!=1){
+
+		if (total != 1) {
 			ifErr.append("该应用计费策略模板配置缴费方式不为一种，请确认！");
 			return ifErr(-1, ifErr.toString());
 		}
@@ -4331,92 +4945,120 @@ public class WorkDealInfoService extends BaseService {
 		if (rows <= 2) {
 			ifErr.append("模板中数据为空！<br>");
 			return ifErr(-1, ifErr.toString());
-		}else{
+		} else {
 			int addNum = agent.getSurplusNum();
-			
-			if (addNum<(rows-2) && !agent.getTempStyle().equals("1")) {
+
+			if (addNum < (rows - 2) && !agent.getTempStyle().equals("1")) {
 				ifErr.append("计费策略模板配置新增数量不足！<br>");
 				return ifErr(-1, ifErr.toString());
 			}
 		}
-		
+
 		ConfigApp configApp = configAppService.get(appId);
 		ConfigProduct configProduct = bound.getProduct();
 
-		
-
 		try {
 			for (int i = 0; i < rows; i++) {
-				
+
 				if (i == 0 || i == 1) {
 					continue;
 				}
 				row = sheetAt0.getRow(i);
-				ConfigRaAccountExtendInfo configRaAccountExtendInfo = configRaAccountExtendInfoService.get(configProduct.getRaAccountExtedId());
-				Set<String> extentInfos = RaAccountUtil.getExtendInfos(configRaAccountExtendInfo);
+				ConfigRaAccountExtendInfo configRaAccountExtendInfo = configRaAccountExtendInfoService
+						.get(configProduct.getRaAccountExtedId());
+				Set<String> extentInfos = RaAccountUtil
+						.getExtendInfos(configRaAccountExtendInfo);
 				for (String info : extentInfos) {
 					if (info.equals("companyName")) {
-						if (row.getCell(0) == null || row.getCell(0).toString().replace(" ", "").equals("")) {
+						if (row.getCell(0) == null
+								|| row.getCell(0).toString().replace(" ", "")
+										.equals("")) {
 							ifErr.append("第" + (i + 1) + "行第1列单位名称不能为空！<br>");
 						}
 					} else if (info.equals("contactName")) {
-						if (row.getCell(16) == null || row.getCell(16).toString().replace(" ", "").equals("")) {
-							ifErr.append("第" + (i + 1) + "行第17列证书持有人名称不能为空！<br>");
+						if (row.getCell(16) == null
+								|| row.getCell(16).toString().replace(" ", "")
+										.equals("")) {
+							ifErr.append("第" + (i + 1)
+									+ "行第17列证书持有人名称不能为空！<br>");
 						}
 					} else if (info.equals("pName")) {
-						if (row.getCell(23) == null || row.getCell(23).toString().replace(" ", "").equals("")) {
+						if (row.getCell(23) == null
+								|| row.getCell(23).toString().replace(" ", "")
+										.equals("")) {
 							ifErr.append("第" + (i + 1) + "行第24列经办人姓名不能为空！<br>");
 						}
 					} else if (info.equals("organizationNumber")) {
-						if (row.getCell(2) == null || row.getCell(2).toString().replace(" ", "").equals("")) {
+						if (row.getCell(2) == null
+								|| row.getCell(2).toString().replace(" ", "")
+										.equals("")) {
 							ifErr.append("第" + (i + 1) + "行第3列组织机构代码不能为空！<br>");
 						}
 					} else if (info.equals("conCertNumber")) {
-						if (row.getCell(17) == null || row.getCell(17).toString().replace(" ", "").equals("")) {
-							ifErr.append("第" + (i + 1) + "行第18列证书持有人身份证号不能为空！<br>");
+						if (row.getCell(17) == null
+								|| row.getCell(17).toString().replace(" ", "")
+										.equals("")) {
+							ifErr.append("第" + (i + 1)
+									+ "行第18列证书持有人身份证号不能为空！<br>");
 						}
 					} else if (info.equals("contacEmail")) {
-						if (row.getCell(19) == null || row.getCell(19).toString().replace(" ", "").equals("")) {
-							ifErr.append("第" + (i + 1) + "行第20列证书持有人邮箱不能为空！<br>");
+						if (row.getCell(19) == null
+								|| row.getCell(19).toString().replace(" ", "")
+										.equals("")) {
+							ifErr.append("第" + (i + 1)
+									+ "行第20列证书持有人邮箱不能为空！<br>");
 						}
 					} else if (info.equals("pIDCard")) {
-						if (row.getCell(24) == null || row.getCell(24).toString().replace(" ", "").equals("")) {
-							ifErr.append("第" + (i + 1) + "行第25列经办人身份证号不能为空！<br>");
+						if (row.getCell(24) == null
+								|| row.getCell(24).toString().replace(" ", "")
+										.equals("")) {
+							ifErr.append("第" + (i + 1)
+									+ "行第25列经办人身份证号不能为空！<br>");
 						}
 					} else if (info.equals("contactTel")) {
-						if (row.getCell(21) == null || row.getCell(21).toString().replace(" ", "").equals("")) {
-							ifErr.append("第" + (i + 1) + "行第22列业务系统UID不能为空！<br>");
+						if (row.getCell(21) == null
+								|| row.getCell(21).toString().replace(" ", "")
+										.equals("")) {
+							ifErr.append("第" + (i + 1)
+									+ "行第22列业务系统UID不能为空！<br>");
 						}
 					} else if (info.equals("comCertficateNumber")) {
-						if (row.getCell(6) == null || row.getCell(6).toString().replace(" ", "").equals("")) {
+						if (row.getCell(6) == null
+								|| row.getCell(6).toString().replace(" ", "")
+										.equals("")) {
 							ifErr.append("第" + (i + 1) + "行第7列证件号不能为空！<br>");
 						}
 					}
 				}
 			}
 
-			if (ifErr.toString().length()>0) {
+			if (ifErr.toString().length() > 0) {
 				return ifErr(-1, ifErr.toString());
 			}
-			
-			
+
 			for (int i = 0; i < rows; i++) {
 				if (i == 0 || i == 1) {
 					continue;
 				}
 				row = sheetAt0.getRow(i);
-				
+
 				String companyName = row.getCell(0).toString().replace(" ", "");
 				String organizationNumber = "";
-				if (row.getCell(2) != null && !row.getCell(2).toString().replace(" ", "").equals("")) {
-					organizationNumber = row.getCell(2).toString().replace(" ", "");
+				if (row.getCell(2) != null
+						&& !row.getCell(2).toString().replace(" ", "")
+								.equals("")) {
+					organizationNumber = row.getCell(2).toString()
+							.replace(" ", "");
 				}
-				WorkCompany workCompany = workCompanyService.finByNameAndNumber(companyName, organizationNumber);
+				WorkCompany workCompany = workCompanyService
+						.finByNameAndNumber(companyName, organizationNumber);
 				if (companyName != null && !companyName.equals("")) {
 					workCompany.setCompanyName(companyName);
 				}
 				String companyType = "";
-				if (row.getCell(1) != null && !row.getCell(1).toString().replace(" ", "").equals("")) {
+				if (row.getCell(1) != null
+						&& !row.getCell(1).toString().replace(" ", "")
+								.equals("")) {
 					companyType = row.getCell(1).toString().replace(" ", "");
 				}
 				if (companyType != null && !companyType.equals("")) {
@@ -4435,10 +5077,14 @@ public class WorkDealInfoService extends BaseService {
 					workCompany.setCompanyType("1");
 				}
 				String comCertificateType = "";
-				if (row.getCell(5) != null && !row.getCell(5).toString().replace(" ", "").equals("")) {
-					comCertificateType = row.getCell(5).toString().replace(" ", "");
+				if (row.getCell(5) != null
+						&& !row.getCell(5).toString().replace(" ", "")
+								.equals("")) {
+					comCertificateType = row.getCell(5).toString()
+							.replace(" ", "");
 				}
-				if (comCertificateType != null && !comCertificateType.equals("")) {
+				if (comCertificateType != null
+						&& !comCertificateType.equals("")) {
 					if (comCertificateType.equals("营业执照")) {
 						workCompany.setComCertificateType("0");
 					} else if (comCertificateType.equals("事业单位法人登记证")) {
@@ -4453,32 +5099,46 @@ public class WorkDealInfoService extends BaseService {
 				}
 				SimpleDateFormat dnf = new SimpleDateFormat("yyyy-MM-dd");
 				String orgExpirationTime = ""; // 组织机构代码有效期：
-				if (row.getCell(3) != null && !row.getCell(3).toString().replace(" ", "").equals("")) {
-					orgExpirationTime = row.getCell(3).toString().replace(" ", "");
+				if (row.getCell(3) != null
+						&& !row.getCell(3).toString().replace(" ", "")
+								.equals("")) {
+					orgExpirationTime = row.getCell(3).toString()
+							.replace(" ", "");
 				}
 				if (orgExpirationTime != null && !orgExpirationTime.equals("")) {
-					Timestamp ts1 = new Timestamp(dnf.parse(orgExpirationTime).getTime());
+					Timestamp ts1 = new Timestamp(dnf.parse(orgExpirationTime)
+							.getTime());
 					workCompany.setOrgExpirationTime(ts1);
 				}
 
 				String comCertficateTime = ""; // 单位证照有效期：
-				if (row.getCell(7) != null && !row.getCell(7).toString().replace(" ", "").equals("")) {
-					comCertficateTime = row.getCell(7).toString().replace(" ", "");
+				if (row.getCell(7) != null
+						&& !row.getCell(7).toString().replace(" ", "")
+								.equals("")) {
+					comCertficateTime = row.getCell(7).toString()
+							.replace(" ", "");
 				}
 				if (comCertficateTime != null && !comCertficateTime.equals("")) {
-					Timestamp ts = new Timestamp(dnf.parse(comCertficateTime).getTime());
+					Timestamp ts = new Timestamp(dnf.parse(comCertficateTime)
+							.getTime());
 					workCompany.setComCertficateTime(ts);
 				}
 
 				String comCertficateNumber = ""; // 证件号
-				if (row.getCell(6) != null && !row.getCell(6).toString().replace(" ", "").equals("")) {
-					comCertficateNumber = row.getCell(6).toString().replace(" ", "");
+				if (row.getCell(6) != null
+						&& !row.getCell(6).toString().replace(" ", "")
+								.equals("")) {
+					comCertficateNumber = row.getCell(6).toString()
+							.replace(" ", "");
 				}
-				if (comCertficateNumber != null && !comCertficateNumber.equals("")) {
+				if (comCertficateNumber != null
+						&& !comCertficateNumber.equals("")) {
 					workCompany.setComCertficateNumber(comCertficateNumber);
 				}
 				String selectLv = ""; // 服务级别
-				if (row.getCell(4) != null && !row.getCell(4).toString().replace(" ", "").equals("")) {
+				if (row.getCell(4) != null
+						&& !row.getCell(4).toString().replace(" ", "")
+								.equals("")) {
 					selectLv = row.getCell(4).toString().replace(" ", "");
 				}
 				if (selectLv != null && !selectLv.equals("")) {
@@ -4490,20 +5150,27 @@ public class WorkDealInfoService extends BaseService {
 				} else {
 					workCompany.setSelectLv("0");
 				}
-				if (organizationNumber != null && !organizationNumber.equals("")) {
+				if (organizationNumber != null
+						&& !organizationNumber.equals("")) {
 					workCompany.setOrganizationNumber(organizationNumber);
 				}
 
 				String s_province = ""; // 省
-				if (row.getCell(9) != null && !row.getCell(9).toString().replace(" ", "").equals("")) {
+				if (row.getCell(9) != null
+						&& !row.getCell(9).toString().replace(" ", "")
+								.equals("")) {
 					s_province = row.getCell(9).toString().replace(" ", "");
 				}
 				String s_city = ""; // 市
-				if (row.getCell(10) != null && !row.getCell(10).toString().replace(" ", "").equals("")) {
+				if (row.getCell(10) != null
+						&& !row.getCell(10).toString().replace(" ", "")
+								.equals("")) {
 					s_city = row.getCell(10).toString().replace(" ", "");
 				}
 				String s_county = ""; // 县
-				if (row.getCell(11) != null && !row.getCell(11).toString().replace(" ", "").equals("")) {
+				if (row.getCell(11) != null
+						&& !row.getCell(11).toString().replace(" ", "")
+								.equals("")) {
 					s_county = row.getCell(11).toString().replace(" ", "");
 				}
 				if (s_province != null && !s_province.equals("")) {
@@ -4516,14 +5183,18 @@ public class WorkDealInfoService extends BaseService {
 					workCompany.setDistrict(s_county);
 				}
 				String areaRemark = ""; // 区域备注
-				if (row.getCell(12) != null && !row.getCell(12).toString().replace(" ", "").equals("")) {
+				if (row.getCell(12) != null
+						&& !row.getCell(12).toString().replace(" ", "")
+								.equals("")) {
 					areaRemark = row.getCell(12).toString().replace(" ", "");
 				}
 				if (areaRemark != null && !areaRemark.equals("")) {
 					workCompany.setAreaRemark(areaRemark);
 				}
 				String legalName = ""; // 法人姓名
-				if (row.getCell(8) != null && !row.getCell(8).toString().replace(" ", "").equals("")) {
+				if (row.getCell(8) != null
+						&& !row.getCell(8).toString().replace(" ", "")
+								.equals("")) {
 					legalName = row.getCell(8).toString().replace(" ", "");
 				}
 				if (legalName != null && !legalName.equals("")) {
@@ -4531,21 +5202,27 @@ public class WorkDealInfoService extends BaseService {
 				}
 
 				String address = ""; // 街道地址：
-				if (row.getCell(13) != null && !row.getCell(13).toString().replace(" ", "").equals("")) {
+				if (row.getCell(13) != null
+						&& !row.getCell(13).toString().replace(" ", "")
+								.equals("")) {
 					address = row.getCell(18).toString().replace(" ", "");
 				}
 				if (address != null && !address.equals("")) {
 					workCompany.setAddress(address);
 				}
 				String companyMobile = ""; // 单位联系电话：
-				if (row.getCell(14) != null && !row.getCell(14).toString().replace(" ", "").equals("")) {
+				if (row.getCell(14) != null
+						&& !row.getCell(14).toString().replace(" ", "")
+								.equals("")) {
 					companyMobile = row.getCell(14).toString().replace(" ", "");
 				}
 				if (companyMobile != null && !companyMobile.equals("")) {
 					workCompany.setCompanyMobile(companyMobile);
 				}
 				String remarks = ""; // 备注信息
-				if (row.getCell(15) != null && !row.getCell(15).toString().replace(" ", "").equals("")) {
+				if (row.getCell(15) != null
+						&& !row.getCell(15).toString().replace(" ", "")
+								.equals("")) {
 					remarks = row.getCell(15).toString().replace(" ", "");
 				}
 				if (remarks != null && !remarks.equals("")) {
@@ -4556,14 +5233,18 @@ public class WorkDealInfoService extends BaseService {
 				workUser.setStatus(1);
 
 				String contactName = "";// 证书持有人姓名
-				if (row.getCell(16) != null && !row.getCell(16).toString().replace(" ", "").equals("")) {
+				if (row.getCell(16) != null
+						&& !row.getCell(16).toString().replace(" ", "")
+								.equals("")) {
 					contactName = row.getCell(16).toString().replace(" ", "");
 				}
 				if (contactName != null && !contactName.equals("")) {
 					workUser.setContactName(contactName);
 				}
 				String conCertType = "";// 证书持有人证件
-				if (row.getCell(17) != null && !row.getCell(17).toString().replace(" ", "").equals("")) {
+				if (row.getCell(17) != null
+						&& !row.getCell(17).toString().replace(" ", "")
+								.equals("")) {
 					conCertType = row.getCell(17).toString().replace(" ", "");
 				}
 				if (conCertType != null && !conCertType.equals("")) {
@@ -4579,7 +5260,9 @@ public class WorkDealInfoService extends BaseService {
 				}
 
 				String conCertNumber = ""; // 证件号码
-				if (row.getCell(18) != null && !row.getCell(18).toString().replace(" ", "").equals("")) {
+				if (row.getCell(18) != null
+						&& !row.getCell(18).toString().replace(" ", "")
+								.equals("")) {
 					conCertNumber = row.getCell(18).toString().replace(" ", "");
 				}
 				if (conCertNumber != null && !conCertNumber.equals("")) {
@@ -4587,7 +5270,9 @@ public class WorkDealInfoService extends BaseService {
 				}
 
 				String contacEmail = ""; // 证书持有人电子邮件
-				if (row.getCell(19) != null && !row.getCell(19).toString().replace(" ", "").equals("")) {
+				if (row.getCell(19) != null
+						&& !row.getCell(19).toString().replace(" ", "")
+								.equals("")) {
 					contacEmail = row.getCell(19).toString().replace(" ", "");
 				}
 				if (contacEmail != null && !contacEmail.equals("")) {
@@ -4595,7 +5280,9 @@ public class WorkDealInfoService extends BaseService {
 				}
 
 				String contactPhone = ""; // 证书持有人手机号:
-				if (row.getCell(20) != null && !row.getCell(20).toString().replace(" ", "").equals("")) {
+				if (row.getCell(20) != null
+						&& !row.getCell(20).toString().replace(" ", "")
+								.equals("")) {
 					contactPhone = row.getCell(20).toString().replace(" ", "");
 				}
 				if (contactPhone != null && !contactPhone.equals("")) {
@@ -4603,7 +5290,9 @@ public class WorkDealInfoService extends BaseService {
 				}
 
 				String contactTel = ""; // 业务系统UID:
-				if (row.getCell(21) != null && !row.getCell(21).toString().replace(" ", "").equals("")) {
+				if (row.getCell(21) != null
+						&& !row.getCell(21).toString().replace(" ", "")
+								.equals("")) {
 					contactTel = row.getCell(21).toString().replace(" ", "");
 				}
 				if (contactTel != null && !contactTel.equals("")) {
@@ -4612,7 +5301,9 @@ public class WorkDealInfoService extends BaseService {
 				workUser.setWorkCompany(workCompany);
 
 				String contactSex = ""; // 证书持有人性别:
-				if (row.getCell(22) != null && !row.getCell(22).toString().replace(" ", "").equals("")) {
+				if (row.getCell(22) != null
+						&& !row.getCell(22).toString().replace(" ", "")
+								.equals("")) {
 					contactSex = row.getCell(22).toString().replace(" ", "");
 				}
 				if (contactSex != null && !contactSex.equals("")) {
@@ -4626,12 +5317,14 @@ public class WorkDealInfoService extends BaseService {
 				workUserService.save(workUser);
 
 				// 保存work_deal_info
-				ConfigCommercialAgent commercialAgent = configAgentAppRelationService.findAgentByApp(configApp);
+				ConfigCommercialAgent commercialAgent = configAgentAppRelationService
+						.findAgentByApp(configApp);
 				workDealInfo.setConfigCommercialAgent(commercialAgent);
 				List<ConfigAgentOfficeRelation> configAgentOfficeRelations = configAgentOfficeRelationService
 						.findByOffice(UserUtils.getUser().getOffice());
 				if (configAgentOfficeRelations.size() > 0) {
-					workDealInfo.setCommercialAgent(configAgentOfficeRelations.get(0).getConfigCommercialAgent());// 劳务关系外键
+					workDealInfo.setCommercialAgent(configAgentOfficeRelations
+							.get(0).getConfigCommercialAgent());// 劳务关系外键
 				}
 				workDealInfo.setConfigApp(configApp);
 				workDealInfo.setWorkUser(workUser);
@@ -4646,34 +5339,43 @@ public class WorkDealInfoService extends BaseService {
 				workDealInfo.setConfigChargeAgentId(bound.getAgent().getId());
 				workDealInfo.setDealInfoType(WorkDealInfoType.TYPE_ADD_CERT);
 				workDealInfo.setYear(yearT);
-				workDealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_ENTRY_SUCCESS);
+				workDealInfo
+						.setDealInfoStatus(WorkDealInfoStatus.STATUS_ENTRY_SUCCESS);
 				workDealInfo.setCreateBy(UserUtils.getUser());
 				workDealInfo.setCreateDate(new Date());
 				workDealInfo.setPayType(Integer.parseInt(agent.getTempStyle()));
-				WorkCompanyHis workCompanyHis = workCompanyService.change(workCompany);
+				WorkCompanyHis workCompanyHis = workCompanyService
+						.change(workCompany);
 				workCompanyHisService.save(workCompanyHis);
 				workDealInfo.setWorkCompanyHis(workCompanyHis);
-				WorkUserHis workUserHis = workUserService.change(workUser, workCompanyHis);
+				WorkUserHis workUserHis = workUserService.change(workUser,
+						workCompanyHis);
 				workUserHisService.save(workUserHis);
 				workDealInfo.setWorkUserHis(workUserHis);
 				// 保存申请人信息
 				WorkCertApplyInfo workCertApplyInfo = new WorkCertApplyInfo();
 				String pName = ""; // 经办人姓名
-				if (row.getCell(23) != null && !row.getCell(23).toString().replace(" ", "").equals("")) {
+				if (row.getCell(23) != null
+						&& !row.getCell(23).toString().replace(" ", "")
+								.equals("")) {
 					pName = row.getCell(23).toString().replace(" ", "");
 				}
 				if (pName != null && !pName.equals("")) {
 					workCertApplyInfo.setName(pName);
 				}
 				String pEmail = ""; // 身份证号
-				if (row.getCell(24) != null && !row.getCell(24).toString().replace(" ", "").equals("")) {
+				if (row.getCell(24) != null
+						&& !row.getCell(24).toString().replace(" ", "")
+								.equals("")) {
 					pEmail = row.getCell(24).toString().replace(" ", "");
 				}
 				if (pEmail != null && !pEmail.equals("")) {
 					workCertApplyInfo.setEmail(pEmail);
 				}
 				String pIDCard = "";// 经办人邮箱
-				if (row.getCell(25) != null && !row.getCell(25).toString().replace(" ", "").equals("")) {
+				if (row.getCell(25) != null
+						&& !row.getCell(25).toString().replace(" ", "")
+								.equals("")) {
 					pIDCard = row.getCell(25).toString().replace(" ", "");
 				}
 				if (pIDCard != null && !pIDCard.equals("")) {
@@ -4687,16 +5389,19 @@ public class WorkDealInfoService extends BaseService {
 				workDealInfo.setInputUser(UserUtils.getUser());
 				workDealInfo.setPayUser(UserUtils.getUser());
 				workDealInfo.setIsSJQY(2);
-				workDealInfo.setAreaId(UserUtils.getUser().getOffice().getParent().getId());
-				workDealInfo.setOfficeId(UserUtils.getUser().getOffice().getId());
+				workDealInfo.setAreaId(UserUtils.getUser().getOffice()
+						.getParent().getId());
+				workDealInfo.setOfficeId(UserUtils.getUser().getOffice()
+						.getId());
 				this.save(workDealInfo);
 				ConfigAgentBoundDealInfo dealInfoBound = new ConfigAgentBoundDealInfo();
 				dealInfoBound.setDealInfo(workDealInfo);
-				ConfigChargeAgent agentBound = configChargeAgentService.get(workDealInfo.getConfigChargeAgentId());
+				ConfigChargeAgent agentBound = configChargeAgentService
+						.get(workDealInfo.getConfigChargeAgentId());
 				dealInfoBound.setAgent(agentBound);
 				configAgentBoundDealInfoService.save(dealInfoBound);
-				logUtil.saveSysLog("计费策略模版", "计费策略模版：" + agent.getId() + "--业务编号：" + workDealInfo.getId() + "--关联成功!",
-						"");
+				logUtil.saveSysLog("计费策略模版", "计费策略模版：" + agent.getId()
+						+ "--业务编号：" + workDealInfo.getId() + "--关联成功!", "");
 				// 录入人日志保存
 				WorkLog workLog1 = new WorkLog();
 				workLog1.setRecordContent("录入完毕");
@@ -4709,13 +5414,18 @@ public class WorkDealInfoService extends BaseService {
 				workLogService.save(workLog1);
 
 				WorkPayInfo workPayInfo = new WorkPayInfo();
-				Double openAccountMoney = configChargeAgentDetailService.getChargeMoney(
-						workDealInfo.getConfigChargeAgentId(),
-						WorkDealInfoType.getWorkType(WorkDealInfoType.TYPE_OPEN_ACCOUNT), null);
+				Double openAccountMoney = configChargeAgentDetailService
+						.getChargeMoney(
+								workDealInfo.getConfigChargeAgentId(),
+								WorkDealInfoType
+										.getWorkType(WorkDealInfoType.TYPE_OPEN_ACCOUNT),
+								null);
 				workPayInfo.setOpenAccountMoney(openAccountMoney);
 
-				Double addCert = configChargeAgentDetailService.getChargeMoney(workDealInfo.getConfigChargeAgentId(),
-						WorkDealInfoType.getWorkType(workDealInfo.getDealInfoType()), workDealInfo.getYear());
+				Double addCert = configChargeAgentDetailService.getChargeMoney(
+						workDealInfo.getConfigChargeAgentId(), WorkDealInfoType
+								.getWorkType(workDealInfo.getDealInfoType()),
+						workDealInfo.getYear());
 				workPayInfo.setAddCert(addCert);
 
 				workPayInfo.setUpdateCert(0d);
@@ -4732,10 +5442,10 @@ public class WorkDealInfoService extends BaseService {
 				if (agent.getChargeMethodPos()) {
 					workPayInfo.setMethodPos(true);
 					workPayInfo.setPosMoney(bindMoney);
-				}else if (agent.getChargeMethodMoney()) {
+				} else if (agent.getChargeMethodMoney()) {
 					workPayInfo.setMethodMoney(true);
 					workPayInfo.setMoney(bindMoney);
-				}else if (agent.getChargeMethodBank()) {
+				} else if (agent.getChargeMethodBank()) {
 					workPayInfo.setMethodBank(true);
 					workPayInfo.setBankMoney(bindMoney);
 				}
@@ -4751,7 +5461,8 @@ public class WorkDealInfoService extends BaseService {
 				workPayInfo.setSn(PayinfoUtil.getPayInfoNo());
 				workPayInfoService.save(workPayInfo);
 				this.checkWorkDealInfoNeedSettle(workDealInfo);
-				workDealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_APPROVE_WAIT);
+				workDealInfo
+						.setDealInfoStatus(WorkDealInfoStatus.STATUS_APPROVE_WAIT);
 				workDealInfo.setAttestationUser(UserUtils.getUser());
 				workDealInfo.setAttestationUserDate(new Date());
 				this.save(workDealInfo);
@@ -4765,7 +5476,6 @@ public class WorkDealInfoService extends BaseService {
 		return ifErr(1, ifErr.toString());
 	}
 
-	
 	@Transactional(readOnly = false)
 	public JSONObject saveExcelDateSed(MultipartFile file, String ifExcel) {
 		StringBuffer ifErr = new StringBuffer();
@@ -4816,14 +5526,9 @@ public class WorkDealInfoService extends BaseService {
 			return ifErr(-1, ifErr.toString());
 		}
 
-		
 		return ifErr(1, ifErr.toString());
 	}
 
-	
-	
-	
-	
 	/**
 	 * 创建workbook
 	 */
@@ -4831,7 +5536,8 @@ public class WorkDealInfoService extends BaseService {
 		/*
 		 * 判断路径为空或者不是xls或xlsx文件
 		 */
-		if (filePath.equals(null) || filePath.equals("") || !filePath.matches("^.+\\.(?i)((xls)|(xlsx))$")) {
+		if (filePath.equals(null) || filePath.equals("")
+				|| !filePath.matches("^.+\\.(?i)((xls)|(xlsx))$")) {
 			return null;
 		}
 
@@ -4940,7 +5646,8 @@ public class WorkDealInfoService extends BaseService {
 		return true;
 	}
 
-	public List<WorkDealInfo> findDealInfo(Long appId, List<Long> appIds, List<Long> productIds, Date start, Date end) {
+	public List<WorkDealInfo> findDealInfo(Long appId, List<Long> appIds,
+			List<Long> productIds, Date start, Date end) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("configApp", "configApp");
 		if (appId != null) {
@@ -4962,7 +5669,8 @@ public class WorkDealInfoService extends BaseService {
 		}
 		dc.add(Restrictions.eq("dealInfoType", 0));
 		dc.addOrder(Order.desc("id"));
-		dc.add(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED));
+		dc.add(Restrictions.eq("dealInfoStatus",
+				WorkDealInfoStatus.STATUS_CERT_OBTAINED));
 		return workDealInfoDao.find(dc);
 	}
 
@@ -4977,8 +5685,8 @@ public class WorkDealInfoService extends BaseService {
 
 	}
 
-	public int getCertAppYearInfoCount1(Date startTime, Date endTime, Long officeId, Integer year, Long appId,
-			Integer dealInfoType) {
+	public int getCertAppYearInfoCount1(Date startTime, Date endTime,
+			Long officeId, Integer year, Long appId, Integer dealInfoType) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("createBy", "createBy");
 		dc.createAlias("createBy.office", "office");
@@ -4986,18 +5694,22 @@ public class WorkDealInfoService extends BaseService {
 		// dc.createAlias("workCertInfo", "workCertInfo");
 		// dc.add(Restrictions.eq("office.id", officeId));
 		dc.add(Restrictions.eq("configApp.id", appId));
-		dc.add(Restrictions.or(Restrictions.ne("isSJQY", 1), Restrictions.isNull("isSJQY")));
-//		dc.add(dataScopeFilter(UserUtils.getUser(), "office", "createBy"));
-		dc.add(dataScopeFilterByWorkDealInfo(UserUtils.getUser(), "areaId", "officeId"));
+		dc.add(Restrictions.or(Restrictions.ne("isSJQY", 1),
+				Restrictions.isNull("isSJQY")));
+		// dc.add(dataScopeFilter(UserUtils.getUser(), "office", "createBy"));
+		dc.add(dataScopeFilterByWorkDealInfo(UserUtils.getUser(), "areaId",
+				"officeId"));
 		if (year != 0) {
 			dc.add(Restrictions.eq("year", year));
 		}
 		SimpleDateFormat formater = new SimpleDateFormat("yyyy/MM/dd");
-	    SimpleDateFormat formater2 = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		SimpleDateFormat formater2 = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 		if (startTime != null && endTime != null) {
-			 try {
-				 startTime = formater2.parse(formater.format(startTime)+ " 00:00:00");
-				endTime = formater2.parse(formater.format(endTime)+ " 23:59:59");
+			try {
+				startTime = formater2.parse(formater.format(startTime)
+						+ " 00:00:00");
+				endTime = formater2.parse(formater.format(endTime)
+						+ " 23:59:59");
 			} catch (ParseException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -5024,8 +5736,8 @@ public class WorkDealInfoService extends BaseService {
 		return (int) workDealInfoDao.count(dc);
 	}
 
-	public int getCertAppYearInfoCountOneDeal1(Date startTime, Date endTime, Long officeId, Integer year, Long appId,
-			Integer dealInfoType) {
+	public int getCertAppYearInfoCountOneDeal1(Date startTime, Date endTime,
+			Long officeId, Integer year, Long appId, Integer dealInfoType) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("createBy", "createBy");
 		dc.createAlias("createBy.office", "office");
@@ -5033,8 +5745,9 @@ public class WorkDealInfoService extends BaseService {
 		// dc.createAlias("workCertInfo", "workCertInfo");
 		// dc.add(Restrictions.eq("office.id", officeId));
 		dc.add(Restrictions.eq("configApp.id", appId));
-//		dc.add(dataScopeFilter(UserUtils.getUser(), "office", "createBy"));
-		dc.add(dataScopeFilterByWorkDealInfo(UserUtils.getUser(), "areaId", "officeId"));
+		// dc.add(dataScopeFilter(UserUtils.getUser(), "office", "createBy"));
+		dc.add(dataScopeFilterByWorkDealInfo(UserUtils.getUser(), "areaId",
+				"officeId"));
 		List<String> statusIntegers = new ArrayList<String>();
 
 		if (dealInfoType.equals(1)) {
@@ -5059,11 +5772,13 @@ public class WorkDealInfoService extends BaseService {
 			dc.add(Restrictions.eq("year", year));
 		}
 		SimpleDateFormat formater = new SimpleDateFormat("yyyy/MM/dd");
-	    SimpleDateFormat formater2 = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		SimpleDateFormat formater2 = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 		if (startTime != null && endTime != null) {
-			 try {
-				 startTime = formater2.parse(formater.format(startTime)+ " 00:00:00");
-				endTime = formater2.parse(formater.format(endTime)+ " 23:59:59");
+			try {
+				startTime = formater2.parse(formater.format(startTime)
+						+ " 00:00:00");
+				endTime = formater2.parse(formater.format(endTime)
+						+ " 23:59:59");
 			} catch (ParseException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -5078,7 +5793,8 @@ public class WorkDealInfoService extends BaseService {
 		return (int) workDealInfoDao.count(dc);
 	}
 
-	public int getCertAppYearInfoUpdateChangeNum1(Date startTime, Date endTime, Long officeId, Integer year, Long appId,
+	public int getCertAppYearInfoUpdateChangeNum1(Date startTime, Date endTime,
+			Long officeId, Integer year, Long appId,
 			Integer dealInfoTypeUpdate, Integer dealInfoTypeChange) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("createBy", "createBy");
@@ -5091,17 +5807,20 @@ public class WorkDealInfoService extends BaseService {
 		dc.add(Restrictions.isNull("dealInfoType1"));
 		dc.add(Restrictions.eq("dealInfoType2", dealInfoTypeChange));
 		dc.add(Restrictions.isNull("dealInfoType3"));
-//		dc.add(dataScopeFilter(UserUtils.getUser(), "office", "createBy"));
-		dc.add(dataScopeFilterByWorkDealInfo(UserUtils.getUser(), "areaId", "officeId"));
+		// dc.add(dataScopeFilter(UserUtils.getUser(), "office", "createBy"));
+		dc.add(dataScopeFilterByWorkDealInfo(UserUtils.getUser(), "areaId",
+				"officeId"));
 		if (year != 0) {
 			dc.add(Restrictions.eq("year", year));
 		}
 		SimpleDateFormat formater = new SimpleDateFormat("yyyy/MM/dd");
-	    SimpleDateFormat formater2 = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		SimpleDateFormat formater2 = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 		if (startTime != null && endTime != null) {
-			 try {
-				 startTime = formater2.parse(formater.format(startTime)+ " 00:00:00");
-				endTime = formater2.parse(formater.format(endTime)+ " 23:59:59");
+			try {
+				startTime = formater2.parse(formater.format(startTime)
+						+ " 00:00:00");
+				endTime = formater2.parse(formater.format(endTime)
+						+ " 23:59:59");
 			} catch (ParseException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -5118,8 +5837,9 @@ public class WorkDealInfoService extends BaseService {
 		return (int) workDealInfoDao.count(dc);
 	}
 
-	public int getCertAppYearInfoUpdateLostReplaceNum1(Date startTime, Date endTime, Long officeId, Integer year,
-			Long appId, Integer dealInfoTypeUpdate, Integer dealInfoTypeLost) {
+	public int getCertAppYearInfoUpdateLostReplaceNum1(Date startTime,
+			Date endTime, Long officeId, Integer year, Long appId,
+			Integer dealInfoTypeUpdate, Integer dealInfoTypeLost) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("createBy", "createBy");
 		dc.createAlias("createBy.office", "office");
@@ -5131,17 +5851,20 @@ public class WorkDealInfoService extends BaseService {
 		dc.add(Restrictions.eq("dealInfoType1", dealInfoTypeLost));
 		dc.add(Restrictions.isNull("dealInfoType2"));
 		dc.add(Restrictions.isNull("dealInfoType3"));
-//		dc.add(dataScopeFilter(UserUtils.getUser(), "office", "createBy"));
-		dc.add(dataScopeFilterByWorkDealInfo(UserUtils.getUser(), "areaId", "officeId"));
+		// dc.add(dataScopeFilter(UserUtils.getUser(), "office", "createBy"));
+		dc.add(dataScopeFilterByWorkDealInfo(UserUtils.getUser(), "areaId",
+				"officeId"));
 		if (year != 0) {
 			dc.add(Restrictions.eq("year", year));
 		}
 		SimpleDateFormat formater = new SimpleDateFormat("yyyy/MM/dd");
-	    SimpleDateFormat formater2 = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		SimpleDateFormat formater2 = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 		if (startTime != null && endTime != null) {
-			 try {
-				 startTime = formater2.parse(formater.format(startTime)+ " 00:00:00");
-				endTime = formater2.parse(formater.format(endTime)+ " 23:59:59");
+			try {
+				startTime = formater2.parse(formater.format(startTime)
+						+ " 00:00:00");
+				endTime = formater2.parse(formater.format(endTime)
+						+ " 23:59:59");
 			} catch (ParseException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -5156,8 +5879,9 @@ public class WorkDealInfoService extends BaseService {
 		return (int) workDealInfoDao.count(dc);
 	}
 
-	public int getCertAppYearInfoChangeLostReplaceNum1(Date startTime, Date endTime, Long officeId, Integer year,
-			Long appId, Integer dealInfoTypeChange, Integer dealInfoTypeLostReplace)  {
+	public int getCertAppYearInfoChangeLostReplaceNum1(Date startTime,
+			Date endTime, Long officeId, Integer year, Long appId,
+			Integer dealInfoTypeChange, Integer dealInfoTypeLostReplace) {
 
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("createBy", "createBy");
@@ -5170,17 +5894,20 @@ public class WorkDealInfoService extends BaseService {
 		dc.add(Restrictions.eq("dealInfoType2", dealInfoTypeChange));
 		dc.add(Restrictions.isNull("dealInfoType"));
 		dc.add(Restrictions.isNull("dealInfoType3"));
-//		dc.add(dataScopeFilter(UserUtils.getUser(), "office", "createBy"));
-		dc.add(dataScopeFilterByWorkDealInfo(UserUtils.getUser(), "areaId", "officeId"));
+		// dc.add(dataScopeFilter(UserUtils.getUser(), "office", "createBy"));
+		dc.add(dataScopeFilterByWorkDealInfo(UserUtils.getUser(), "areaId",
+				"officeId"));
 		if (year != 0) {
 			dc.add(Restrictions.eq("year", year));
 		}
 		SimpleDateFormat formater = new SimpleDateFormat("yyyy/MM/dd");
-	    SimpleDateFormat formater2 = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		SimpleDateFormat formater2 = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 		if (startTime != null && endTime != null) {
-			 try {
-				startTime = formater2.parse(formater.format(startTime)+ " 00:00:00");
-				endTime = formater2.parse(formater.format(endTime)+ " 23:59:59");
+			try {
+				startTime = formater2.parse(formater.format(startTime)
+						+ " 00:00:00");
+				endTime = formater2.parse(formater.format(endTime)
+						+ " 23:59:59");
 			} catch (ParseException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -5196,8 +5923,10 @@ public class WorkDealInfoService extends BaseService {
 		return (int) workDealInfoDao.count(dc);
 	}
 
-	public int getCertAppYearInfoChangeLostReplaceUpdateNum1(Date startTime, Date endTime, Long officeId, Integer year,
-			Long appId, Integer dealInfoTypeChange, Integer dealInfoTypeLostReplace, Integer dealInfoTypeUpdate) {
+	public int getCertAppYearInfoChangeLostReplaceUpdateNum1(Date startTime,
+			Date endTime, Long officeId, Integer year, Long appId,
+			Integer dealInfoTypeChange, Integer dealInfoTypeLostReplace,
+			Integer dealInfoTypeUpdate) {
 
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("createBy", "createBy");
@@ -5210,16 +5939,18 @@ public class WorkDealInfoService extends BaseService {
 		dc.add(Restrictions.eq("dealInfoType1", dealInfoTypeLostReplace));
 		dc.add(Restrictions.eq("dealInfoType2", dealInfoTypeChange));
 		dc.add(Restrictions.isNull("dealInfoType3"));
-		
+
 		if (year != 0) {
 			dc.add(Restrictions.eq("year", year));
 		}
 		SimpleDateFormat formater = new SimpleDateFormat("yyyy/MM/dd");
-	    SimpleDateFormat formater2 = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		SimpleDateFormat formater2 = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 		if (startTime != null && endTime != null) {
-			  try {
-				startTime = formater2.parse(formater.format(startTime)+ " 00:00:00");
-				endTime = formater2.parse(formater.format(endTime)+ " 23:59:59");
+			try {
+				startTime = formater2.parse(formater.format(startTime)
+						+ " 00:00:00");
+				endTime = formater2.parse(formater.format(endTime)
+						+ " 23:59:59");
 			} catch (ParseException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -5233,159 +5964,128 @@ public class WorkDealInfoService extends BaseService {
 		dc.add(Restrictions.in("dealInfoStatus", statusIntegers));
 		return (int) workDealInfoDao.count(dc);
 	}
-	/*public List<Projectcount> getCert(Date startTime, Date endTime,Long apply, Long officeId, Integer year, Long appId,
+
+	/*
+	 * public List<Projectcount> getCert(Date startTime, Date endTime,Long
+	 * apply, Long officeId, Integer year, Long appId, Integer dealInfoType) {
+	 * DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
+	 * dc.createAlias("createBy", "createBy"); dc.createAlias("createBy.office",
+	 * "office"); dc.createAlias("configApp", "configApp"); //
+	 * dc.createAlias("workCertInfo", "workCertInfo"); //
+	 * dc.add(Restrictions.eq("office.id", officeId));
+	 * dc.add(Restrictions.eq("configApp.id", appId));
+	 * dc.add(dataScopeFilter(UserUtils.getUser(), "office", "createBy"));
+	 * List<String> statusIntegers = new ArrayList<String>();
+	 * 
+	 * if (dealInfoType.equals(1)) { dc.add(Restrictions.eq("dealInfoType",
+	 * dealInfoType)); dc.add(Restrictions.isNull("dealInfoType1"));
+	 * dc.add(Restrictions.isNull("dealInfoType2"));
+	 * dc.add(Restrictions.isNull("dealInfoType3"));
+	 * statusIntegers.add(WorkDealInfoStatus.STATUS_CERT_OBTAINED); } else if
+	 * (dealInfoType.equals(4)) { dc.add(Restrictions.eq("dealInfoType2",
+	 * dealInfoType)); dc.add(Restrictions.isNull("dealInfoType"));
+	 * dc.add(Restrictions.isNull("dealInfoType1"));
+	 * dc.add(Restrictions.isNull("dealInfoType3"));
+	 * statusIntegers.add(WorkDealInfoStatus.STATUS_CERT_OBTAINED); } else if
+	 * (dealInfoType.equals(2) || dealInfoType.equals(3)) {
+	 * dc.add(Restrictions.eq("dealInfoType1", dealInfoType));
+	 * dc.add(Restrictions.isNull("dealInfoType"));
+	 * dc.add(Restrictions.isNull("dealInfoType2"));
+	 * dc.add(Restrictions.isNull("dealInfoType3")); } if (year != 0) {
+	 * dc.add(Restrictions.eq("year", year)); } SimpleDateFormat formater = new
+	 * SimpleDateFormat("yyyy/MM/dd"); SimpleDateFormat formater2 = new
+	 * SimpleDateFormat("yyyy/MM/dd HH:mm:ss"); if (startTime != null && endTime
+	 * != null) { try { startTime = formater2.parse(formater.format(startTime)+
+	 * " 00:00:00"); endTime = formater2.parse(formater.format(endTime)+
+	 * " 23:59:59"); } catch (ParseException e) { // TODO Auto-generated catch
+	 * block e.printStackTrace(); } dc.add(Restrictions.ge("createDate",
+	 * startTime)); dc.add(Restrictions.le("createDate", endTime)); }
+	 * statusIntegers.add(WorkDealInfoStatus.STATUS_CERT_OBTAINED);
+	 * statusIntegers.add(WorkDealInfoStatus.STATUS_CERT_REVOKE);
+	 * dc.add(Restrictions.in("dealInfoStatus", statusIntegers));
+	 * 
+	 * return null; }
+	 */
+	/*
+	 * public int getCertAppYearInfoCount11(List<String> monthList,Long area,
+	 * Long officeId,String tempStyle,String agentId, Integer year,Integer
+	 * paymethod, Long appId, String dealInfoType) { DetachedCriteria dc =
+	 * workDealInfoDao.createDetachedCriteria(); dc.createAlias("createBy",
+	 * "createBy"); dc.createAlias("createBy.office", "office");
+	 * dc.createAlias("configApp", "configApp"); //
+	 * dc.createAlias("workCertInfo", "workCertInfo"); //
+	 * dc.add(Restrictions.eq("office.id", officeId));
+	 * dc.add(Restrictions.eq("configApp.id", appId));
+	 * dc.add(Restrictions.or(Restrictions.ne("isSJQY", 1),
+	 * Restrictions.isNull("isSJQY")));
+	 * dc.add(dataScopeFilter(UserUtils.getUser(), "office", "createBy")); if
+	 * (year != 0) { dc.add(Restrictions.eq("year", year)); } SimpleDateFormat
+	 * formater = new SimpleDateFormat("yyyy/MM/dd"); SimpleDateFormat formater2
+	 * = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss"); if (startTime != null &&
+	 * endTime != null) { try { startTime =
+	 * formater2.parse(formater.format(startTime)+ " 00:00:00"); endTime =
+	 * formater2.parse(formater.format(endTime)+ " 23:59:59"); } catch
+	 * (ParseException e) { // TODO Auto-generated catch block
+	 * e.printStackTrace(); } dc.add(Restrictions.ge("createDate", startTime));
+	 * dc.add(Restrictions.le("createDate", endTime)); }
+	 * dc.add(Restrictions.eq("dealInfoType", dealInfoType));
+	 * dc.add(Restrictions.isNull("dealInfoType1"));
+	 * dc.add(Restrictions.isNull("dealInfoType2"));
+	 * dc.add(Restrictions.isNull("dealInfoType3"));
+	 * 
+	 * dc.add(Restrictions.or(Restrictions.eq("dealInfoType", dealInfoType),
+	 * Restrictions.eq("dealInfoType1", dealInfoType),
+	 * Restrictions.eq("dealInfoType2", dealInfoType),
+	 * Restrictions.eq("dealInfoType3", dealInfoType)));
+	 * 
+	 * 
+	 * List<String> statusIntegers = new ArrayList<String>();
+	 * statusIntegers.add(WorkDealInfoStatus.STATUS_CERT_OBTAINED);
+	 * statusIntegers.add(WorkDealInfoStatus.STATUS_CERT_REVOKE);
+	 * dc.add(Restrictions.in("dealInfoStatus", statusIntegers));
+	 * 
+	 * return (int) workDealInfoDao.count(dc); }
+	 */
+	/*
+	 * public List<WorkDealInfo> getCert(Date stratTime,Date endTime, List<Long>
+	 * officeId,String tempStyle,String agentId, Long appId,String
+	 * product,List<String>workType) { DetachedCriteria dc =
+	 * workDealInfoDao.createDetachedCriteria(); dc.createAlias("workPayInfo",
+	 * "workPayInfo"); dc.add(Restrictions.isNotNull("workPayInfo"));
+	 * dc.createAlias("createBy", "createBy"); dc.createAlias("createBy.office",
+	 * "office"); dc.createAlias("configProduct", "configProduct");
+	 * dc.createAlias("configApp", "configApp");
+	 * dc.add(Restrictions.eq("workPayInfo.delFlag",
+	 * WorkPayInfo.DEL_FLAG_NORMAL)); List<String> status =
+	 * Lists.newArrayList();
+	 * status.add(WorkDealInfoStatus.STATUS_CERT_OBTAINED);
+	 * status.add(WorkDealInfoStatus.STATUS_CERT_WAIT);
+	 * dc.add(Restrictions.in("dealInfoStatus", status)); SimpleDateFormat
+	 * formater = new SimpleDateFormat("yyyy/MM/dd"); SimpleDateFormat formater2
+	 * = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss"); if (stratTime != null &&
+	 * endTime != null) { try { stratTime =
+	 * formater2.parse(formater.format(stratTime)+ " 00:00:00"); endTime =
+	 * formater2.parse(formater.format(endTime)+ " 23:59:59"); } catch
+	 * (ParseException e) { // TODO Auto-generated catch block
+	 * e.printStackTrace(); } dc.add(Restrictions.ge("createDate", stratTime));
+	 * dc.add(Restrictions.le("createDate", endTime));
+	 * 
+	 * if (appId != null) { dc.add(Restrictions.eq("configApp.id", appId)); } if
+	 * (officeId != null && officeId.size() > 0) {
+	 * dc.add(Restrictions.in("office.id", officeId)); } if(agentId!=null){
+	 * dc.add(Restrictions.eq("configProduct.chargeAgentId", agentId)); }else
+	 * if(tempStyle!=null){ dc.add(Restrictions.eq("tempStyle", tempStyle)); }
+	 * if(appId!=null){ dc.add(Restrictions.eq("configApp.id", appId)); }
+	 * if(product!=null){ dc.add(Restrictions.eq("configProduct.productName",
+	 * product)); } if(workType!=null&&workType.size()>0){ for(int
+	 * i=0;i<workType.size();i++){ String value= workType.get(i); } } return
+	 * workDealInfoDao.find(dc); } else { return null; }
+	 * 
+	 * }
+	 */
+	public int getCert(Long appId, Date startTime, Date endTime, Long officeId,
+			Integer year, Integer payType, List<Long> productIds,
 			Integer dealInfoType) {
-		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
-		dc.createAlias("createBy", "createBy");
-		dc.createAlias("createBy.office", "office");
-		dc.createAlias("configApp", "configApp");
-		// dc.createAlias("workCertInfo", "workCertInfo");
-		// dc.add(Restrictions.eq("office.id", officeId));
-		dc.add(Restrictions.eq("configApp.id", appId));
-		dc.add(dataScopeFilter(UserUtils.getUser(), "office", "createBy"));
-		List<String> statusIntegers = new ArrayList<String>();
-
-		if (dealInfoType.equals(1)) {
-			dc.add(Restrictions.eq("dealInfoType", dealInfoType));
-			dc.add(Restrictions.isNull("dealInfoType1"));
-			dc.add(Restrictions.isNull("dealInfoType2"));
-			dc.add(Restrictions.isNull("dealInfoType3"));
-			statusIntegers.add(WorkDealInfoStatus.STATUS_CERT_OBTAINED);
-		} else if (dealInfoType.equals(4)) {
-			dc.add(Restrictions.eq("dealInfoType2", dealInfoType));
-			dc.add(Restrictions.isNull("dealInfoType"));
-			dc.add(Restrictions.isNull("dealInfoType1"));
-			dc.add(Restrictions.isNull("dealInfoType3"));
-			statusIntegers.add(WorkDealInfoStatus.STATUS_CERT_OBTAINED);
-		} else if (dealInfoType.equals(2) || dealInfoType.equals(3)) {
-			dc.add(Restrictions.eq("dealInfoType1", dealInfoType));
-			dc.add(Restrictions.isNull("dealInfoType"));
-			dc.add(Restrictions.isNull("dealInfoType2"));
-			dc.add(Restrictions.isNull("dealInfoType3"));
-		}
-		if (year != 0) {
-			dc.add(Restrictions.eq("year", year));
-		}
-		SimpleDateFormat formater = new SimpleDateFormat("yyyy/MM/dd");
-	    SimpleDateFormat formater2 = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-		if (startTime != null && endTime != null) {
-			 try {
-				 startTime = formater2.parse(formater.format(startTime)+ " 00:00:00");
-				endTime = formater2.parse(formater.format(endTime)+ " 23:59:59");
-			} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			dc.add(Restrictions.ge("createDate", startTime));
-			dc.add(Restrictions.le("createDate", endTime));
-		}
-		statusIntegers.add(WorkDealInfoStatus.STATUS_CERT_OBTAINED);
-		statusIntegers.add(WorkDealInfoStatus.STATUS_CERT_REVOKE);
-		dc.add(Restrictions.in("dealInfoStatus", statusIntegers));
-
-		return null;
-	}*/
-	/*public int getCertAppYearInfoCount11(List<String> monthList,Long area, Long officeId,String tempStyle,String agentId, Integer year,Integer paymethod, Long appId,
-			String dealInfoType) {
-		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
-		dc.createAlias("createBy", "createBy");
-		dc.createAlias("createBy.office", "office");
-		dc.createAlias("configApp", "configApp");
-		// dc.createAlias("workCertInfo", "workCertInfo");
-		// dc.add(Restrictions.eq("office.id", officeId));
-		dc.add(Restrictions.eq("configApp.id", appId));
-		dc.add(Restrictions.or(Restrictions.ne("isSJQY", 1), Restrictions.isNull("isSJQY")));
-		dc.add(dataScopeFilter(UserUtils.getUser(), "office", "createBy"));
-		if (year != 0) {
-			dc.add(Restrictions.eq("year", year));
-		}
-		SimpleDateFormat formater = new SimpleDateFormat("yyyy/MM/dd");
-	    SimpleDateFormat formater2 = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-		if (startTime != null && endTime != null) {
-			 try {
-				 startTime = formater2.parse(formater.format(startTime)+ " 00:00:00");
-				endTime = formater2.parse(formater.format(endTime)+ " 23:59:59");
-			} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			dc.add(Restrictions.ge("createDate", startTime));
-			dc.add(Restrictions.le("createDate", endTime));
-		}
-		dc.add(Restrictions.eq("dealInfoType", dealInfoType));
-		dc.add(Restrictions.isNull("dealInfoType1"));
-		dc.add(Restrictions.isNull("dealInfoType2"));
-		dc.add(Restrictions.isNull("dealInfoType3"));
-		
-		 * dc.add(Restrictions.or(Restrictions.eq("dealInfoType", dealInfoType),
-		 * Restrictions.eq("dealInfoType1", dealInfoType),
-		 * Restrictions.eq("dealInfoType2", dealInfoType),
-		 * Restrictions.eq("dealInfoType3", dealInfoType)));
-		 
-
-		List<String> statusIntegers = new ArrayList<String>();
-		statusIntegers.add(WorkDealInfoStatus.STATUS_CERT_OBTAINED);
-		statusIntegers.add(WorkDealInfoStatus.STATUS_CERT_REVOKE);
-		dc.add(Restrictions.in("dealInfoStatus", statusIntegers));
-
-		return (int) workDealInfoDao.count(dc);
-	}*/
-	/*public List<WorkDealInfo> getCert(Date stratTime,Date endTime, List<Long> officeId,String tempStyle,String agentId, Long appId,String product,List<String>workType) {
-		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
-		dc.createAlias("workPayInfo", "workPayInfo");
-		dc.add(Restrictions.isNotNull("workPayInfo"));
-		dc.createAlias("createBy", "createBy");
-		dc.createAlias("createBy.office", "office");
-		dc.createAlias("configProduct", "configProduct");
-		dc.createAlias("configApp", "configApp");
-		dc.add(Restrictions.eq("workPayInfo.delFlag", WorkPayInfo.DEL_FLAG_NORMAL));
-		List<String> status = Lists.newArrayList();
-		status.add(WorkDealInfoStatus.STATUS_CERT_OBTAINED);
-		status.add(WorkDealInfoStatus.STATUS_CERT_WAIT);
-		dc.add(Restrictions.in("dealInfoStatus", status));
-		SimpleDateFormat formater = new SimpleDateFormat("yyyy/MM/dd");
-	    SimpleDateFormat formater2 = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-		if (stratTime != null && endTime != null) {
-			 try {
-				 stratTime = formater2.parse(formater.format(stratTime)+ " 00:00:00");
-				endTime = formater2.parse(formater.format(endTime)+ " 23:59:59");
-			} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			dc.add(Restrictions.ge("createDate", stratTime));
-			dc.add(Restrictions.le("createDate", endTime));
-		
-			if (appId != null) {
-				dc.add(Restrictions.eq("configApp.id", appId));
-			}
-			if (officeId != null && officeId.size() > 0) {
-				dc.add(Restrictions.in("office.id", officeId));
-			}
-			if(agentId!=null){
-				dc.add(Restrictions.eq("configProduct.chargeAgentId", agentId));
-			}else if(tempStyle!=null){
-				dc.add(Restrictions.eq("tempStyle", tempStyle));
-			}
-			if(appId!=null){
-				dc.add(Restrictions.eq("configApp.id", appId));
-			}
-			if(product!=null){
-				dc.add(Restrictions.eq("configProduct.productName", product));
-			}
-			if(workType!=null&&workType.size()>0){
-				for(int i=0;i<workType.size();i++){
-					String value= workType.get(i);
-				}
-			}
-			return workDealInfoDao.find(dc);
-		} else {
-			return null;
-		}
-
-	}*/
-	public int getCert(Long appId,Date startTime, Date endTime, Long officeId, Integer year,Integer payType,List<Long> productIds,Integer dealInfoType
-			 ) {
 
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("createBy", "createBy");
@@ -5393,15 +6093,14 @@ public class WorkDealInfoService extends BaseService {
 		dc.createAlias("configApp", "configApp");
 		dc.createAlias("workCertInfo", "workCertInfo");
 		dc.add(Restrictions.eq("office.id", officeId));
-		
-		
-		if(appId!=null){
+
+		if (appId != null) {
 			dc.add(Restrictions.eq("configApp.id", appId));
 		}
 		if (year != 0) {
 			dc.add(Restrictions.eq("year", year));
 		}
-		if(payType!=0){
+		if (payType != 0) {
 			dc.add(Restrictions.eq("payType", payType));
 		}
 		if (productIds.size() > 0) {
@@ -5409,11 +6108,13 @@ public class WorkDealInfoService extends BaseService {
 			dc.add(Restrictions.in("configProduct.id", productIds));
 		}
 		SimpleDateFormat formater = new SimpleDateFormat("yyyy/MM/dd");
-	    SimpleDateFormat formater2 = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		SimpleDateFormat formater2 = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 		if (startTime != null && endTime != null) {
-			  try {
-				startTime = formater2.parse(formater.format(startTime)+ " 00:00:00");
-				endTime = formater2.parse(formater.format(endTime)+ " 23:59:59");
+			try {
+				startTime = formater2.parse(formater.format(startTime)
+						+ " 00:00:00");
+				endTime = formater2.parse(formater.format(endTime)
+						+ " 23:59:59");
 			} catch (ParseException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -5431,5 +6132,5 @@ public class WorkDealInfoService extends BaseService {
 		dc.add(Restrictions.in("dealInfoStatus", statusIntegers));
 		return (int) workDealInfoDao.count(dc);
 	}
-	
+
 }
