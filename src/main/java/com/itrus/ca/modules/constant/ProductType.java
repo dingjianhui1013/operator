@@ -61,7 +61,7 @@ public class ProductType {
 		
 		productTypeEnglishMap.put(1, "Organizational");
 		productTypeEnglishMap.put(2, "Personal");
-		productTypeEnglishMap.put(3, "Personal");
+		productTypeEnglishMap.put(3, "Organizational");
 		productTypeEnglishMap.put(4, "Organizational");
 		productTypeEnglishMap.put(6, "Personal");
 		
