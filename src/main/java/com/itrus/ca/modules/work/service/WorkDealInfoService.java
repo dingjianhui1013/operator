@@ -861,6 +861,9 @@ public class WorkDealInfoService extends BaseService {
 			Long apply, String productName, Date makeCertStartTime,
 			Date makeCertEndTime) {
 		StringBuffer sql = new StringBuffer();
+		String sqls=dataScopeFilterByWorkDealInfo(UserUtils.getUser(), "areaId","officeId").toString();
+		sqls=sqls.substring(1, sqls.length()-1);
+		sqls=sqls.replace("officeId", "office_Id");
 		sql.append(" from(select this_.id as id," + "this_.svn as svn,"
 				+ "configapp5_.app_name as configAppName,"
 				+ "workcompan2_.company_name as companyName," + "configprod7_.product_name as productName,"
@@ -885,7 +888,8 @@ public class WorkDealInfoService extends BaseService {
 		sql.append(" inner join work_company workcompan2_ on this_.work_company_id=workcompan2_.id ");
 		sql.append("left outer join work_pay_info workpayinf19_ on this_.pay_id=workpayinf19_.id ");
 		sql.append("inner join work_user workuser1_ on this_.work_user_id=workuser1_.id ");
-		sql.append("where (this_.is_ixin is not null or 1=1) and this_.del_flag=0 and this_.office_id="+UserUtils.getUser().getOffice().getId());
+		sql.append("where (this_.is_ixin is not null or (this_."+sqls+")) and this_.del_flag=0");
+		
 		
 		if(apply!=null)
 		{
