@@ -4702,7 +4702,7 @@ public class WorkDealInfoService extends BaseService {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("configApp", "configApp");
 		dc.add(Restrictions.eq("officeId", officeId));
-		dc.add(Restrictions.eq("office.id", officeId));
+//		dc.add(Restrictions.eq("office.id", officeId));
 		// // 新增、置换时才有key
 		dc.add(Restrictions.or(Restrictions.eq("dealInfoType",
 				WorkDealInfoType.TYPE_ADD_CERT), Restrictions.eq(
