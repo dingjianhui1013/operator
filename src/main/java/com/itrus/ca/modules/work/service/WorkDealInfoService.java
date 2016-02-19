@@ -950,7 +950,13 @@ public class WorkDealInfoService extends BaseService {
 		sql.append(" inner join work_company workcompan2_ on this_.work_company_id=workcompan2_.id ");
 		sql.append("left outer join work_pay_info workpayinf19_ on this_.pay_id=workpayinf19_.id ");
 		sql.append("inner join work_user workuser1_ on this_.work_user_id=workuser1_.id ");
-		sql.append("where (this_.is_ixin is not null or (this_."+sqls+")) and this_.del_flag=0");
+		if("".equals(sqls))
+		{
+			sql.append("where (this_.is_ixin is not null or 1=1) and this_.del_flag=0");
+		}else
+		{
+			sql.append("where (this_.is_ixin is not null or (this_."+sqls+")) and this_.del_flag=0");
+		}
 		
 		
 		if(apply!=null)
@@ -1006,7 +1012,7 @@ public class WorkDealInfoService extends BaseService {
 			sql.append(" and workcertin6_.sign_date <= TO_DATE ('"
 				+ DateUtils.formatDate(makeCertEndTime, "yyyyMMdd") + "', 'yyyymmdd')");
 		}
-		sql.append("order by this_.create_date desc)");
+		sql.append(" order by this_.create_date desc)");
 		return sql.toString();
 	}
 
