@@ -767,20 +767,19 @@ $(document)
 				<option value="4" <c:if test="${productName==4}">selected="selected"</c:if>>可信移动设备</option>
 				<option value="5" <c:if test="${productName==5}">selected="selected"</c:if>>个人证书(机构)</option>
 			</select>
-			<br />
-			<br />
 			&nbsp;&nbsp;<label>单位名称：</label>
 			&nbsp;&nbsp; <form:input path="workCompany.companyName" htmlEscape="false"
 				maxlength="50" class="input-medium" />
-			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label>组代码号：</label>
-			<form:input path="workCompany.organizationNumber" htmlEscape="false"
-				maxlength="50" class="input-medium" />
+			
 			<br>
 		</div>
 		<div style="margin-top: 8px">
 <!-- 			&nbsp;&nbsp;<label>证书持有人姓名：</label> -->
 <%-- 			<form:input path="workUser.contactName" htmlEscape="false" --%>
 <%-- 				maxlength="50" class="input-medium" /> --%>
+			&nbsp;&nbsp;<label>组代码号：</label>
+			&nbsp;&nbsp; <form:input path="workCompany.organizationNumber" htmlEscape="false"
+				maxlength="50" class="input-medium" />
 		<label>&nbsp;&nbsp;KEY编码：&nbsp;&nbsp;</label>
 			&nbsp;<form:input path="keySn" htmlEscape="false" maxlength="50"
 				class="input-medium" />
