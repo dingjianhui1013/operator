@@ -241,9 +241,8 @@ $(document)
 							if (dealType == "") {
 								top.$.jBox.tip("请选择业务类型");
 							} else {
-								
+								var url = "${ctx}/work/workDealInfo/findById?dealInfoId="+id;
 								if(dealType.indexOf("3")>=0){
-									var url = "${ctx}/work/workDealInfo/findById?dealInfoId="+id;
 									$.getJSON(url + "&_="+new Date().getTime(),	function(data){
 												if (data.status==1){
 													if (data.isUpdate==0) {
@@ -256,7 +255,18 @@ $(document)
 												}
 									});
 								}else{
-									window.location.href = "${ctx}/work/workDealInfo/typeForm?id="+id+"&reissueType="+reissueType+"&dealType="+dealType;
+									$.getJSON(url + "&_="+new Date().getTime(),	function(data){
+										if (data.status==1){
+											if (data.isDeal==1) {
+												top.$.jBox.tip("证书已过期，不允许此证书办理所选业务 ！");
+											}else{
+												window.location.href = "${ctx}/work/workDealInfo/typeForm?id="+id+"&reissueType="+reissueType+"&dealType="+dealType;
+											}
+										}else{
+											top.$.jBox.tip("系统异常");
+										}
+									});
+									
 								}
 							}
 						}
