@@ -778,7 +778,7 @@ $(document)
 				<option value="2" <c:if test="${productName==2}">selected="selected"</c:if>>个人证书(企业)</option>
 				<option value="3" <c:if test="${productName==3}">selected="selected"</c:if>>机构证书</option>
 				<option value="4" <c:if test="${productName==4}">selected="selected"</c:if>>可信移动设备</option>
-				<option value="5" <c:if test="${productName==5}">selected="selected"</c:if>>个人证书(机构)</option>
+				<option value="6" <c:if test="${productName==6}">selected="selected"</c:if>>个人证书(机构)</option>
 			</select>
 			&nbsp;&nbsp;<label>单位名称：</label>
 			&nbsp;&nbsp; <form:input path="workCompany.companyName" htmlEscape="false"
