@@ -5067,11 +5067,11 @@ public class WorkDealInfoService extends BaseService {
 							ifErr.append("第" + (i + 1) + "行第3列组织机构代码不能为空！<br>");
 						}
 					} else if (info.equals("conCertNumber")) {
-						if (row.getCell(17) == null
-								|| row.getCell(17).toString().replace(" ", "")
+						if (row.getCell(18) == null
+								|| row.getCell(18).toString().replace(" ", "")
 										.equals("")) {
 							ifErr.append("第" + (i + 1)
-									+ "行第18列证书持有人身份证号不能为空！<br>");
+									+ "行第19列证书持有人身份证号不能为空！<br>");
 						}
 					} else if (info.equals("contacEmail")) {
 						if (row.getCell(19) == null
@@ -5114,7 +5114,7 @@ public class WorkDealInfoService extends BaseService {
 				}
 				row = sheetAt0.getRow(i);
 
-				String companyName = row.getCell(0).toString().replace(" ", "");
+				
 				String organizationNumber = "";
 				if (row.getCell(2) != null
 						&& !row.getCell(2).toString().replace(" ", "")
@@ -5122,8 +5122,16 @@ public class WorkDealInfoService extends BaseService {
 					organizationNumber = row.getCell(2).toString()
 							.replace(" ", "");
 				}
-				WorkCompany workCompany = workCompanyService
+				
+				String companyName = "";
+				if (row.getCell(0) != null
+						&& !row.getCell(0).toString().replace(" ", "")
+								.equals("")) {
+					companyName = row.getCell(0).toString().replace(" ", "");
+				}
+				WorkCompany workCompany  = workCompanyService
 						.finByNameAndNumber(companyName, organizationNumber);
+				
 				if (companyName != null && !companyName.equals("")) {
 					workCompany.setCompanyName(companyName);
 				}
