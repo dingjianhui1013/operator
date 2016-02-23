@@ -1295,7 +1295,7 @@ var selected = false;
 								<c:if test="${workDealInfo.configProduct.productLabel==1}">checked</c:if>>专用</td>
 							<th><span class="prompt" style="color: red; display: none;">*</span>业务类型：</th>
 							<td><input type="checkbox" checked="checked"
-								disabled="disabled">新增证书 <input type="hidden"
+								disabled="disabled"><font color="red" style="font-weight:bold;">新增证书 </font><input type="hidden"
 								name="dealInfoType" value="0"></td>
 						</tr>
 						<tr>

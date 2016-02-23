@@ -189,7 +189,7 @@
 							<td colspan="3">
 								
 								<input type="checkbox" disabled="disabled" checked="checked" value = "4"
-								name="dealInfoType3">吊销证书
+								name="dealInfoType3"><font color="red" style="font-weight:bold;">吊销证书</font>
 						</tr>
 						<tr>
 							<th><span class="prompt" style="color: red; display: none;">*</span>申请年数：</th>

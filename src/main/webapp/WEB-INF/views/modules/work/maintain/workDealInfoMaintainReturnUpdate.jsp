@@ -539,7 +539,8 @@
 							
 							
 							
-							<input type="checkbox" disabled="disabled" checked="checked" value="0" name="dealInfoType">更新证书
+							<input type="checkbox" disabled="disabled" checked="checked" value="0" name="dealInfoType">
+							<font color="red" style="font-weight:bold;">更新证书</font>
 							<input type="hidden" value="0" name="dealInfoType">
 							
 							</td>

@@ -396,9 +396,9 @@
 							<td colspan="3">
 								
 								<c:if test="${reissue==1}"><input type="checkbox" disabled="disabled" checked="checked" value = "1"
-								name="dealInfoType1">遗失补办<input type="hidden" value="1" name="dealInfoType1"></c:if>
+								name="dealInfoType1"><font color="red" style="font-weight:bold;">遗失补办</font><input type="hidden" value="1" name="dealInfoType1"></c:if>
 								<c:if test="${reissue==2}"><input type="checkbox" disabled="disabled" checked="checked" value = "2"
-								name="dealInfoType1">损坏更换<input type="hidden" value="2" name="dealInfoType1"></c:if>
+								name="dealInfoType1"><font color="red" style="font-weight:bold;">损坏更换</font><input type="hidden" value="2" name="dealInfoType1"></c:if>
 								&nbsp;&nbsp;
 								<input class="btn btn-primary" type="button" value="更改业务类型" onclick="changeDealInfoType()"  />
 							</td>
