@@ -966,10 +966,10 @@ public class WorkDealInfoService extends BaseService {
 		if(startTime != null && endTime != null)
 		{
 			sql.append(" and workcertin6_.notafter >= TO_DATE('"
-				+ DateUtils.formatDate(startTime, "yyyyMMdd")
-				+ "', 'yyyymmdd')");
-			sql.append(" and workcertin6_.notbefore <= TO_DATE ('"
-				+ DateUtils.formatDate(endTime, "yyyyMMdd") + "', 'yyyymmdd')");
+				+ DateUtils.formatDate(startTime, "yyyy-MM-dd 00:00:01")
+				+ "', 'yyyy-MM-dd hh24:mi:ss')");
+			sql.append(" and workcertin6_.notafter <= TO_DATE ('"
+				+ DateUtils.formatDate(endTime, "yyyy-MM-dd 23:59:59") + "', 'yyyy-MM-dd hh24:mi:ss')");
 		}
 		if (workDealInfo.getWorkCompany() != null) {
 			if (workDealInfo.getWorkCompany().getId() != null) {
@@ -1007,10 +1007,10 @@ public class WorkDealInfoService extends BaseService {
 		if(makeCertStartTime!=null && makeCertEndTime!=null)
 		{
 			sql.append(" and workcertin6_.sign_date >= TO_DATE('"
-					+ DateUtils.formatDate(makeCertStartTime, "yyyyMMdd")
-					+ "', 'yyyymmdd')");
+					+ DateUtils.formatDate(makeCertStartTime, "yyyy-MM-dd 00:00:01")
+					+ "', 'yyyy-MM-dd hh24:mi:ss')");
 			sql.append(" and workcertin6_.sign_date <= TO_DATE ('"
-				+ DateUtils.formatDate(makeCertEndTime, "yyyyMMdd") + "', 'yyyymmdd')");
+				+ DateUtils.formatDate(makeCertEndTime, "yyyy-MM-dd 23:59:59") + "', 'yyyy-MM-dd hh24:mi:ss')");
 		}
 		sql.append(" order by this_.create_date desc)");
 		return sql.toString();
