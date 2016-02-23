@@ -208,113 +208,14 @@ public class CertificateSettlementStatisticsController extends BaseController {
 
 		HashMap<String, CertificateF> monthMap1 = certificateSettlementStatisticsService.getStaticMap1(findWorkList1);
 		
-		/*Map<Integer,Set<String>> deal_pro =new HashMap<Integer,Set<String>>();
-		Map<String, Set<Integer>> productType_year=new HashMap<String,Set<Integer>>();
-		List<DealInfoType_Year> dealInfoType_Year=Lists.newArrayList();
-		Set<String> month = new LinkedHashSet<String>();
-		if(findWorkList1!=null){
-			Set<Integer> dealInfoTypes = new LinkedHashSet<Integer>();
-			for(int i=0;i<findWorkList1.size();i++){
-				dealInfoTypes.add(findWorkList1.get(i).getDealInfoType());
-				month.add(findWorkList1.get(i).getMonth());
-			}
-			Object deals[] = dealInfoTypes.toArray();
-			
-			for(int j=0;j<deals.length;j++){
-				Set<String> productTypes =new LinkedHashSet<String>();
-				for(int CSVO=0;CSVO<findWorkList1.size();CSVO++)
-				{
-					if(deals[j]==findWorkList1.get(CSVO).getDealInfoType())
-					{
-						productTypes.add(findWorkList1.get(CSVO).getProductName());
-					}
-					
-				}
-				deal_pro.put(Integer.parseInt(String.valueOf(deals[j])), productTypes);
-				
-			}
-			Object months[]=month.toArray();
-			Iterator<Map.Entry<Integer, Set<String>>> it=deal_pro.entrySet().iterator();
-			while (it.hasNext()) {
-				Entry<Integer, Set<String>> productT = it.next();
-				Object productTypeas[]=productT.getValue().toArray();
-				
-				for(int i=0;i<productTypeas.length;i++)
-				{
-					DealInfoType_Year d_y=new DealInfoType_Year();
-					Set<Integer> years=new LinkedHashSet<Integer>();
-					List<Long> count=Lists.newArrayList();
-						for(int CSVO=0;CSVO<findWorkList1.size();CSVO++)
-						{
-							if(productTypeas[i].equals(findWorkList1.get(CSVO).getProductName())
-									&&findWorkList1.get(CSVO).getDealInfoType().equals(productT.getKey()))
-							{
-								years.add(findWorkList1.get(CSVO).getYear());
-							}
-							
-						}
-						for(int CSVO=0;CSVO<findWorkList1.size();CSVO++)
-						{
-							Object yearss[]=years.toArray();
-							for(int y=0;y<yearss.length;y++)
-							{
-								if(productTypeas[i].equals(findWorkList1.get(CSVO).getProductName())
-										&&findWorkList1.get(CSVO).getDealInfoType().equals(productT.getKey())
-										&&yearss[y].equals(findWorkList1.get(CSVO).getYear()))
-										
-								{
-									count.add(findWorkList1.get(CSVO).getWorkCount());
-								}
-							}
-						}
-//						d_y.setDate((String)months[m]);
-						d_y.setDeal(productT.getKey());
-						d_y.setProducType((String)productTypeas[i]);
-						d_y.setYear(years);
-//						d_y.setWorkCount(count);
-						dealInfoType_Year.add(d_y);
-				}
-			}
-			
-//			for(int m=0;m<months.length;m++)
-//			{
-//				
-//			}
-		}
 		
-		
-		Set entries = monthMap1.entrySet( );
-
-		if(entries != null) {
-
-		Iterator iterator = entries.iterator( );
-
-		while(iterator.hasNext( )) {
-
-		Map.Entry entry =(Entry) iterator.next( );
-
-		Object key = entry.getKey( );
-
-		Object value = entry.getValue();
-		System.out.println(key);
-		System.out.println(value);
-			
-		}
-		}
-		
-		
-		int index=0;
-		for (DealInfoType_Year d_y : dealInfoType_Year) {
-			index+=d_y.getYear().size();
-			System.out.println("日期"+d_y.getDate()+"业务类型"+d_y.getDeal()+"产品类型"+d_y.getProducType()+"年限"+d_y.getYear()+"数量"+d_y.getWorkCount());
-		}*/
 		model.addAttribute("list", findWorkList1);
 		//model.addAttribute("month", month);
 		//model.addAttribute("deal_pro", deal_pro);
 		//model.addAttribute("dealInfoType_Year", dealInfoType_Year);
 		model.addAttribute("monthList", new ArrayList<String>(monthMap1.keySet()));
 		model.addAttribute("sumList", monthMap1);	
-		//model.addAttribute("index", index);
+//		model.addAttribute("index", index);
 		//model.addAttribute("certificate", certificate);
 		return "modules/settle/certificateSettlementStatisticsList";
 	}

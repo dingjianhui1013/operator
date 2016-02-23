@@ -15,9 +15,14 @@ $(document).ready(function() {
 	var windowH=$(window).height();
 	$('.windowHeight').height(windowH);
 	$("#scrollBar").scroll(function(){
+		var tableWidth=$("#tableW").width();
 		var leftWidth=$("#scrollBar").scrollLeft();
-		$("#searchForm").css("margin-left",leftWidth);
-		$("#ulId").css("margin-left",leftWidth);
+		var formWidth=$("#searchForm").width();
+		if((tableWidth-formWidth)>=leftWidth)
+			{
+				$("#searchForm").css("margin-left",leftWidth);
+				$("#ulId").css("margin-left",leftWidth);
+			}
 	});
 	
 	$("#searchForm").validate({
@@ -221,9 +226,7 @@ $(document).ready(function() {
 						selected="selected"
 						</c:if>>${off.name}</option>
 					</c:forEach>
-				</select>  <label>组合业务：</label><input type="checkbox" name="multiType"
-					id="multiType" value="true"
-					<c:if test="${multiType}">checked="checked"</c:if>>
+				</select>  
 			</div>
 
 			<div style="margin-top: 10px">
@@ -244,19 +247,37 @@ $(document).ready(function() {
 					selected="selected"
 					</c:if>>${agen.tempName}</option>
 					</c:forEach>
-				</select> <label>业务类型：</label>
-				<c:forEach items="${workTypes}" var="type">
-					<input type="checkbox" name="workTypes" id="workTypes"
-						value="${type.id}"
-						<c:forEach items="${workType}" var="workType">
-						<c:if test="${workType==type.id}">checked="checked"</c:if> 
-					</c:forEach>>					
-					${type.name}
-				</c:forEach>
+				</select> 
+				<label>组合业务：</label><input type="checkbox" name="multiType"
+					id="multiType" value="true"
+					<c:if test="${multiType}">checked="checked"</c:if>>
 			</div>
-			
 			<div style="margin-top: 8px">
-				<label>统&nbsp;&nbsp;计&nbsp;&nbsp;时&nbsp;&nbsp;间 ：</label> <input
+				<label>业务类型：</label>
+					<c:forEach items="${workTypes}" var="type">
+						<input type="checkbox" name="workTypes" id="workTypes"
+							value="${type.id}" 
+							<c:if test="${workType==null }">checked="checked"</c:if>
+							<c:forEach items="${workType}" var="workType">
+							<c:if test="${workType==type.id}">checked="checked"</c:if> 
+						</c:forEach> />					
+						${type.name}
+					</c:forEach>
+					&nbsp;&nbsp;
+				<label>产品名称 ：</label>
+				<c:forEach items="${proList}" var="pro">
+					<input type="checkbox" name="proList" id="proList"
+						value="${pro.id}" 
+						<c:if test="${productId==null}">checked="checked"</c:if>
+						<c:forEach items="${productId}" var="productId">
+						<c:if test="${productId==pro.id}">checked="checked"</c:if> 
+					</c:forEach> />					
+					${pro.name}
+				</c:forEach>
+				
+			</div>
+			<div style="margin-top: 8px">
+				<label>统计时间 ：</label> <input
 					id="startTime" name="startDate" type="text" readonly="readonly"
 					maxlength="20" class="Wdate required"
 					onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"
@@ -266,15 +287,7 @@ $(document).ready(function() {
 					onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false,minDate:'#F{$dp.$D(\'startTime\')}'});"
 					value="<fmt:formatDate value="${endDate}" pattern="yyyy-MM-dd"/>" />
 
-				<label>产品名称 ：</label>
-				<c:forEach items="${proList}" var="pro">
-					<input type="checkbox" name="proList" id="proList"
-						value="${pro.id}"
-						<c:forEach items="${productId}" var="productId">
-						<c:if test="${productId==pro.id}">checked="checked"</c:if> 
-					</c:forEach>>					
-					${pro.name}
-				</c:forEach>
+				
 				<%-- <c:forEach items="${proList }" var="pro">
 				<input type="checkbox" name="proList" id="proList" value="${pro.id}">${pro.name}
 			</c:forEach> --%>
@@ -289,16 +302,13 @@ $(document).ready(function() {
 		</form:form>
 		<tags:message content="${message}" />
 
-		<div class="form-horizontal">
+		<div class="form-horizontal" style="margin-right:0px;">
 
-		<table class="table table-striped table-bordered table-condensed" >
-			<tr>
-				<th colspan="${index+1}" style="text-align: center;">项目:${yingyong}</th>
-			</tr>
-			<tr>
+		<table class="table table-striped table-bordered table-condensed" id="tableW">
+			
 				<!--新增  -->
 					
-							
+					<c:set var="index" value="0"/>
 					<c:set var="xz" value="0"/>
 					<c:set var="xzqy" value="0"/>
 					<c:set var="xzgeqy" value="0"/>
@@ -307,71 +317,82 @@ $(document).ready(function() {
 						<c:if test="${sumList.total.xzqyadd1!=0}">
 							<c:set var="xz" value="${xz+1}"/>
 							<c:set var="xzqy" value="${xzqy+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.xzqyadd2!=0}">
 							<c:set var="xz" value="${xz+1}"/>
 							<c:set var="xzqy" value="${xzqy+1}"/>
-							
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.xzqyadd4!=0}">
 							<c:set var="xz" value="${xz+1}"/>
 							<c:set var="xzqy" value="${xzqy+1}"/>
-							
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.xzqyadd5!=0}">
 							<c:set var="xz" value="${xz+1}"/>
 							<c:set var="xzqy" value="${xzqy+1}"/>
-							
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.xzgrQadd1!=0}">
 							<c:set var="xz" value="${xz+1}"/>
 							<c:set var="xzgeqy" value="${xzgeqy+1}"/>
-							
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.xzgrQadd2!=0}">
 								<c:set var="xz" value="${xz+1}"/>
 							<c:set var="xzgeqy" value="${xzgeqy+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.xzgrQadd4!=0}">
 							<c:set var="xz" value="${xz+1}"/>
 							<c:set var="xzgeqy" value="${xzgeqy+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.xzgrQadd5!=0}">
 								<c:set var="xz" value="${xz+1}"/>
 							<c:set var="xzgeqy" value="${xzgeqy+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.xzgrGadd1!=0}">
 							<c:set var="xz" value="${xz+1}"/>
 							<c:set var="xzgejg" value="${xzgejg+1}"/>
-						
+						<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.xzgrGadd2!=0}">
 							<c:set var="xz" value="${xz+1}"/>
 							<c:set var="xzgejg" value="${xzgejg+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.xzgrGadd4!=0}">
 							<c:set var="xz" value="${xz+1}"/>
 							<c:set var="xzgejg" value="${xzgejg+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.xzgrGadd5!=0}">
 							<c:set var="xz" value="${xz+1}"/>
 							<c:set var="xzgejg" value="${xzgejg+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.xzjgadd1!=0}">
 							<c:set var="xz" value="${xz+1}"/>
 							<c:set var="xzjg" value="${xzjg+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.xzjgadd2!=0}">
 							<c:set var="xz" value="${xz+1}"/>
 							<c:set var="xzjg" value="${xzjg+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.xzjgadd4!=0}">
 							<c:set var="xz" value="${xz+1}"/>
 							<c:set var="xzjg" value="${xzjg+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.xzjgadd5!=0}">
 						<c:set var="xz" value="${xz+1}"/>
 							<c:set var="xzjg" value="${xzjg+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<!-- 更新 -->
 						<c:set var="gx" value="0"/>
@@ -383,70 +404,84 @@ $(document).ready(function() {
 						<c:if test="${sumList.total.gxqyadd1!=0}">
 							<c:set var="gx" value="${gx+1}"/>
 							<c:set var="gxqy" value="${gxqy+1}"/>
-							
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.gxqyadd2!=0}">
 						
 						<c:set var="gx" value="${gx+1}"/>
 							<c:set var="gxqy" value="${gxqy+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.gxqyadd4!=0}">
 							<c:set var="gx" value="${gx+1}"/>
 							<c:set var="gxqy" value="${gxqy+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.gxqyadd5!=0}">
 							<c:set var="gx" value="${gx+1}"/>
 							<c:set var="gxqy" value="${gxqy+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.gxgrQadd1!=0}">
 							<c:set var="gx" value="${gx+1}"/>
 							<c:set var="gxgeqy" value="${gxgeqy+1}"/>
+							<c:set var="index" value="${index+1}"/>
 							
 						</c:if>
 						<c:if test="${sumList.total.gxgrQadd2!=0}">
 						<c:set var="gx" value="${gx+1}"/>
 							<c:set var="gxgeqy" value="${gxgeqy+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.gxgrQadd4!=0}">
 							<c:set var="gx" value="${gx+1}"/>
 							<c:set var="gxgeqy" value="${gxgeqy+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.gxgrQadd5!=0}">
 							<c:set var="gx" value="${gx+1}"/>
 							<c:set var="gxgeqy" value="${gxgeqy+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.gxgrGadd1!=0}">
 							<c:set var="gx" value="${gx+1}"/>
 							<c:set var="gxgejg" value="${gxgejg+1}"/>
-						
+						<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.gxgrGadd2!=0}">
 							<c:set var="gx" value="${gx+1}"/>
 							<c:set var="gxgejg" value="${gxgejg+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.gxgrGadd4!=0}">
 							<c:set var="gx" value="${gx+1}"/>
 							<c:set var="gxgejg" value="${gxgejg+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.gxgrGadd5!=0}">
 							<c:set var="gx" value="${gx+1}"/>
 							<c:set var="gxgejg" value="${gxgejg+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.gxjgadd1!=0}">
 							<c:set var="gx" value="${gx+1}"/>
 							<c:set var="gxjg" value="${gxjg+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.gxjgadd2!=0}">
 						<c:set var="gx" value="${gx+1}"/>
 							<c:set var="gxjg" value="${gxjg+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.gxjgadd4!=0}">
 							<c:set var="gx" value="${gx+1}"/>
 							<c:set var="gxjg" value="${gxjg+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.gxjgadd5!=0}">
 							<c:set var="gx" value="${gx+1}"/>
 							<c:set var="gxjg" value="${gxjg+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<!--遗失补办  -->
 						<c:set var="ysbb" value="0"/>
@@ -457,18 +492,22 @@ $(document).ready(function() {
 						<c:if test="${sumList.total.lostCerateqy!=0}">
 							<c:set var="ysbb" value="${ysbb+1}"/>
 							<c:set var="ysbbqy" value="${ysbbqy+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.lostCerategrQ!=0}">
 							<c:set var="ysbb" value="${ysbb+1}"/>
 							<c:set var="ysbbgeqy" value="${ysbbgeqy+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.lostCerategrG!=0}">
 							<c:set var="ysbb" value="${ysbb+1}"/>
 							<c:set var="ysbbgejg" value="${ysbbgejg+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.lostCeratejg!=0}">
 							<c:set var="ysbb" value="${ysbb+1}"/>
 							<c:set var="ysbbjg" value="${ysbbjg+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<!--损坏更换  -->
 						<c:set var="shgh" value="0"/>
@@ -479,18 +518,22 @@ $(document).ready(function() {
 						<c:if test="${sumList.total.damageCertificateqy!=0}">
 							<c:set var="shgh" value="${shgh+1}"/>
 							<c:set var="shghqy" value="${shghqy+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.damageCertificategrQ!=0}">
 							<c:set var="shgh" value="${shgh+1}"/>
 							<c:set var="shghgeqy" value="${shghgeqy+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.damageCertificategrG!=0}">
 							<c:set var="shgh" value="${shgh+1}"/>
 							<c:set var="shghgejg" value="${shghgejg+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.damageCertificatejg!=0}">
 							<c:set var="shgh" value="${shgh+1}"/>
 							<c:set var="shghjg" value="${shghjg+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						
 						<!--变更  -->
@@ -502,18 +545,22 @@ $(document).ready(function() {
 						<c:if test="${sumList.total.modifyNumqy!=0}">
 							<c:set var="bg" value="${bg+1}"/>
 							<c:set var="bgqy" value="${bgqy+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.modifyNumgrQ!=0}">
 							<c:set var="bg" value="${bg+1}"/>
 							<c:set var="bggeqy" value="${bggeqy+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.modifyNumgrG!=0}">
 							<c:set var="bg" value="${bg+1}"/>
 							<c:set var="bggejg" value="${bggejg+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.modifyNumjg!=0}">
 							<c:set var="bg" value="${bg+1}"/>
 							<c:set var="bgjg" value="${bgjg+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 					
 					<!--变更+遗失补办  -->
@@ -525,6 +572,7 @@ $(document).ready(function() {
 						<c:if test="${sumList.total.changeLostqyNum!=0}">
 							<c:set var="bgysbb" value="${bgysbb+1}"/>
 							<c:set var="bgysbbqy" value="${bgysbbqy+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.changeLostgrQNum!=0}">
 							<c:set var="bgysbb" value="${bgysbb+1}"/>
@@ -533,10 +581,12 @@ $(document).ready(function() {
 						<c:if test="${sumList.total.changeLostgrGNum!=0}">
 							<c:set var="bgysbb" value="${bgysbb+1}"/>
 							<c:set var="bgysbbgejg" value="${bgysbbgejg+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.changeLostjgNum!=0}">
 							<c:set var="bgysbb" value="${bgysbb+1}"/>
 							<c:set var="bgysbbjg" value="${bgysbbjg+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<!--变更+损坏更换  -->
 						<c:set var="bgshgh" value="0"/>
@@ -547,18 +597,22 @@ $(document).ready(function() {
 						<c:if test="${sumList.total.changeReplaceqyNum!=0}">
 							<c:set var="bgshgh" value="${bgshgh+1}"/>
 							<c:set var="bgshghqy" value="${bgshghqy+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.changeReplacegrQNum!=0}">
 							<c:set var="bgshgh" value="${bgshgh+1}"/>
 							<c:set var="bgshghgeqy" value="${bgshghgeqy+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.changeReplacegrGNum!=0}">
 							<c:set var="bgshgh" value="${bgshgh+1}"/>
 							<c:set var="bgshghgejg" value="${bgshghgejg+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.changeReplacejgNum!=0}">
 							<c:set var="bgshgh" value="${bgshgh+1}"/>
 							<c:set var="bgshghjg" value="${bgshghjg+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<!-- 更新+遗失补办 -->
 						<c:set var="gxysbb" value="0"/>
@@ -570,70 +624,84 @@ $(document).ready(function() {
 						<c:if test="${sumList.total.updateLostqyNum!=0}">
 							<c:set var="gxysbb" value="${gxysbb+1}"/>
 							<c:set var="gxysbbqy" value="${gxysbbqy+1}"/>
-							
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.updateLostqyNum2!=0}">
 						
 						<c:set var="gxysbb" value="${gxysbb+1}"/>
 							<c:set var="gxysbbqy" value="${gxysbbqy+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.updateLostqyNum4!=0}">
 							<c:set var="gxysbb" value="${gxysbb+1}"/>
 							<c:set var="gxysbbqy" value="${gxysbbqy+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.updateLostqyNum5!=0}">
 							<c:set var="gxysbb" value="${gxysbb+1}"/>
 							<c:set var="gxysbbqy" value="${gxysbbqy+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.updateLostgrQNum!=0}">
 							<c:set var="gxysbbysbb" value="${gxysbbysbb+1}"/>
 							<c:set var="gxysbbgeqy" value="${gxysbbgeqy+1}"/>
+							<c:set var="index" value="${index+1}"/>
 							
 						</c:if>
 						<c:if test="${sumList.total.updateLostgrQNum2!=0}">
 						<c:set var="gxysbb" value="${gxysbb+1}"/>
 							<c:set var="gxysbbgeqy" value="${gxysbbgeqy+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.updateLostgrQNum4!=0}">
 							<c:set var="gxysbb" value="${gxysbb+1}"/>
 							<c:set var="gxysbbgeqy" value="${gxysbbgeqy+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.updateLostgrQNum5!=0}">
 							<c:set var="gxysbb" value="${gxysbb+1}"/>
 							<c:set var="gxysbbgeqy" value="${gxysbbgeqy+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.updateLostgrGNum!=0}">
 							<c:set var="gxysbb" value="${gxysbb+1}"/>
 							<c:set var="gxysbbgejg" value="${gxysbbgejg+1}"/>
-						
+						<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.updateLostgrGNum2!=0}">
 							<c:set var="gxysbb" value="${gxysbb+1}"/>
 							<c:set var="gxysbbgejg" value="${gxysbbgejg+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.updateLostgrGNum4!=0}">
 							<c:set var="gxysbb" value="${gxysbb+1}"/>
 							<c:set var="gxysbbgejg" value="${gxysbbgejg+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.updateLostgrGNum5!=0}">
 							<c:set var="gxysbb" value="${gxysbb+1}"/>
 							<c:set var="gxysbbgejg" value="${gxysbbgejg+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.updateLostjgNum!=0}">
 							<c:set var="gxysbb" value="${gxysbb+1}"/>
 							<c:set var="gxysbbjg" value="${gxysbbjg+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.updateLostjgNum2!=0}">
 						<c:set var="gxysbb" value="${gxysbb+1}"/>
 							<c:set var="gxysbbjg" value="${gxysbbjg+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.updateLostjgNum4!=0}">
 							<c:set var="gxysbb" value="${gxysbb+1}"/>
 							<c:set var="gxysbbjg" value="${gxysbbjg+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.updateLostjgNum5!=0}">
 							<c:set var="gxysbb" value="${gxysbb+1}"/>
 							<c:set var="gxysbbjg" value="${gxysbbjg+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<!-- 更新+损坏更换 -->
 						<c:set var="gxshgh" value="0"/>
@@ -645,70 +713,84 @@ $(document).ready(function() {
 						<c:if test="${sumList.total.updateReplaceqyNum!=0}">
 							<c:set var="gxshgh" value="${gxshgh+1}"/>
 							<c:set var="gxshghqy" value="${gxshghqy+1}"/>
-							
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.updateReplaceqyNum2!=0}">
 						
 						<c:set var="gxshgh" value="${gxshgh+1}"/>
 							<c:set var="gxshghqy" value="${gxshghqy+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.updateReplaceqyNum4!=0}">
 							<c:set var="gxshgh" value="${gxshgh+1}"/>
 							<c:set var="gxshghqy" value="${gxshghqy+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.updateReplaceqyNum5!=0}">
 							<c:set var="gxshgh" value="${gxshgh+1}"/>
 							<c:set var="gxshghqy" value="${gxshghqy+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.updateReplacegrQNum!=0}">
 							<c:set var="gxshgh" value="${gxshgh+1}"/>
 							<c:set var="gxshghgeqy" value="${gxshghgeqy+1}"/>
+							<c:set var="index" value="${index+1}"/>
 							
 						</c:if>
 						<c:if test="${sumList.total.updateReplacegrQNum2!=0}">
 						<c:set var="gxshgh" value="${gxshgh+1}"/>
 							<c:set var="gxshghgeqy" value="${gxshghgeqy+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.updateReplacegrQNum4!=0}">
 							<c:set var="gxshgh" value="${gxshgh+1}"/>
 							<c:set var="gxshghgeqy" value="${gxshghgeqy+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.updateReplacegrQNum5!=0}">
 							<c:set var="gxshgh" value="${gxshgh+1}"/>
 							<c:set var="gxshghgeqy" value="${gxgeqy+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.updateReplacegrGNum!=0}">
 							<c:set var="gxshgh" value="${gxshgh+1}"/>
 							<c:set var="gxshghgxgejg" value="${gxshghgejg+1}"/>
-						
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.updateReplacegrGNum2!=0}">
 							<c:set var="gxshgh" value="${gxshgh+1}"/>
 							<c:set var="gxshghgejg" value="${gxshghgejg+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.updateReplacegrGNum4!=0}">
 							<c:set var="gxshgh" value="${gxshgh+1}"/>
 							<c:set var="gxshghgejg" value="${gxshghgejg+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.updateReplacegrGNum5!=0}">
 							<c:set var="gxshgh" value="${gxshgh+1}"/>
 							<c:set var="gxshghgejg" value="${gxshghgejg+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.updateReplacejgNum!=0}">
 							<c:set var="gxshgh" value="${gxshgh+1}"/>
 							<c:set var="gxshghjg" value="${gxshghjg+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.updateReplacejgNum2!=0}">
 						<c:set var="gxshgh" value="${gxshgh+1}"/>
 							<c:set var="gxshghjg" value="${gxshghjg+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.updateReplacejgNum4!=0}">
 							<c:set var="gxshgh" value="${gxshgh+1}"/>
 							<c:set var="gxshghjg" value="${gxshghjg+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.updateReplacejgNum5!=0}">
 							<c:set var="gxshgh" value="${gxshgh+1}"/>
 							<c:set var="gxshghjg" value="${gxshghjg+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<!-- 更新 +变更-->
 						<c:set var="gxbg" value="0"/>
@@ -720,70 +802,83 @@ $(document).ready(function() {
 						<c:if test="${sumList.total.updateChangeqyNum!=0}">
 							<c:set var="gxbg" value="${gxbg+1}"/>
 							<c:set var="gxbgqy" value="${gxbgqy+1}"/>
-							
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.updateChangeqyNum2!=0}">
 						
 						<c:set var="gxbg" value="${gxbg+1}"/>
 							<c:set var="gxbgqy" value="${gxbgqy+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.updateChangeqyNum4!=0}">
 							<c:set var="gxbg" value="${gxbg+1}"/>
 							<c:set var="gxbgqy" value="${gxbgqy+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.updateChangeqyNum5!=0}">
 							<c:set var="gxbg" value="${gxbg+1}"/>
 							<c:set var="gxbgqy" value="${gxbgqy+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.updateChangegrQNum!=0}">
 							<c:set var="gxbg" value="${gxbg+1}"/>
 							<c:set var="gxbggeqy" value="${gxbggeqy+1}"/>
-							
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.updateChangegrQNum2!=0}">
 						<c:set var="gxbg" value="${gxbg+1}"/>
 							<c:set var="gxbggeqy" value="${gxbggeqy+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.updateChangegrQNum4!=0}">
 							<c:set var="gxbg" value="${gxbg+1}"/>
 							<c:set var="gxbggeqy" value="${gxbggeqy+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.updateChangegrQNum5!=0}">
 							<c:set var="gxbg" value="${gxbg+1}"/>
 							<c:set var="gxbggeqy" value="${gxbggeqy+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.updateChangegrGNum!=0}">
 							<c:set var="gxbg" value="${gxbg+1}"/>
 							<c:set var="gxbggejg" value="${gxbggejg+1}"/>
-						
+						<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.updateChangegrGNum2!=0}">
 							<c:set var="gxbg" value="${gxbg+1}"/>
 							<c:set var="gxbggejg" value="${gxbggejg+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.updateChangegrGNum4!=0}">
 							<c:set var="gxbg" value="${gxbg+1}"/>
 							<c:set var="gxbggejg" value="${gxbggejg+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.updateChangegrGNum5!=0}">
 							<c:set var="gxbg" value="${gxbg+1}"/>
 							<c:set var="gxbggejg" value="${gxbggejg+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.updateChangejgNum!=0}">
 							<c:set var="gxbg" value="${gxbg+1}"/>
 							<c:set var="gxbgjg" value="${gxbgjg+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.updateChangejgNum2!=0}">
 						<c:set var="gxbg" value="${gxbg+1}"/>
 							<c:set var="gxbgjg" value="${gxbgjg+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.updateChangejgNum4!=0}">
 							<c:set var="gxbg" value="${gxbg+1}"/>
 							<c:set var="gxbgjg" value="${gxbgjg+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.updateChangejgNum5!=0}">
 							<c:set var="gxbg" value="${gxbg+1}"/>
 							<c:set var="gxbgjg" value="${gxbgjg+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						
 						<!-- 更新 +变更+遗失补办-->
@@ -796,70 +891,84 @@ $(document).ready(function() {
 						<c:if test="${sumList.total.changeUpdateLostqyNum!=0}">
 							<c:set var="gxbgysbb" value="${gxbgysbb+1}"/>
 							<c:set var="gxbgysbbqy" value="${gxbgysbbqy+1}"/>
-							
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.changeUpdateLostqyNum2!=0}">
 						
-						<c:set var="gxbgysbb" value="${gxbgysbb+1}"/>
+							<c:set var="gxbgysbb" value="${gxbgysbb+1}"/>
 							<c:set var="gxbgysbbqy" value="${gxbgysbbqy+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.changeUpdateLostqyNum4!=0}">
 							<c:set var="gxbgysbb" value="${gxbgysbb+1}"/>
 							<c:set var="gxbgysbbqy" value="${gxbgysbbqy+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.changeUpdateLostqyNum5!=0}">
 							<c:set var="gxbgysbb" value="${gxbgysbb+1}"/>
 							<c:set var="gxbgysbbqy" value="${gxbgysbbqy+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.changeUpdateLostgrQNum!=0}">
 							<c:set var="gxbgysbb" value="${gxbgysbb+1}"/>
 							<c:set var="gxbgysbbgeqy" value="${gxbgysbbgeqy+1}"/>
+							<c:set var="index" value="${index+1}"/>
 							
 						</c:if>
 						<c:if test="${sumList.total.changeUpdateLostgrQNum2!=0}">
-						<c:set var="gxbgysbb" value="${gxbgysbb+1}"/>
+							<c:set var="gxbgysbb" value="${gxbgysbb+1}"/>
 							<c:set var="gxbgysbbgeqy" value="${gxbgysbbgeqy+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.changeUpdateLostgrQNum4!=0}">
 							<c:set var="gxbgysbb" value="${gxbgysbb+1}"/>
 							<c:set var="gxbgysbbgeqy" value="${gxbgysbbgeqy+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.changeUpdateLostgrQNum5!=0}">
 							<c:set var="gxbgysbb" value="${gxbgysbb+1}"/>
 							<c:set var="gxbgysbbgeqy" value="${gxbgysbbgeqy+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.changeUpdateLostgrGNum!=0}">
 							<c:set var="gxbgysbb" value="${gxbgysbb+1}"/>
 							<c:set var="gxbgysbbgejg" value="${gxbgysbbgejg+1}"/>
-						
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.changeUpdateLostgrGNum2!=0}">
 							<c:set var="gxbgysbb" value="${gxbgysbb+1}"/>
 							<c:set var="gxbgysbbgejg" value="${gxbgysbbgejg+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.changeUpdateLostgrGNum4!=0}">
 							<c:set var="gxbgysbb" value="${gxbgysbb+1}"/>
 							<c:set var="gxbgysbbgejg" value="${gxbgysbbgejg+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.changeUpdateLostgrGNum5!=0}">
 							<c:set var="gxbgysbb" value="${gxbgysbb+1}"/>
 							<c:set var="gxbgysbbgejg" value="${gxbgysbbgejg+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.changeUpdateLostjgNum!=0}">
 							<c:set var="gxbgysbb" value="${gxbgysbb+1}"/>
 							<c:set var="gxbgysbbjg" value="${gxbgysbbjg+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.changeUpdateLostjgNum2!=0}">
 						<c:set var="gxbgysbb" value="${gxbgysbb+1}"/>
 							<c:set var="gxbgysbbjg" value="${gxbgysbbjg+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.changeUpdateLostjgNum4!=0}">
 							<c:set var="gxbgysbb" value="${gxbgysbb+1}"/>
 							<c:set var="gxbgysbbjg" value="${gxbgysbbjg+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.changeUpdateLostjgNum5!=0}">
 							<c:set var="gxbgysbb" value="${gxbgysbb+1}"/>
 							<c:set var="gxbgysbbjg" value="${gxbgysbbjg+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						
 						<!-- 更新 +变更+损坏更换-->
@@ -872,74 +981,92 @@ $(document).ready(function() {
 						<c:if test="${sumList.total.changeUpdateReplaceqyNum!=0}">
 							<c:set var="gxbgshgh" value="${gxbgshgh+1}"/>
 							<c:set var="gxbgshghqy" value="${gxbgshghqy+1}"/>
-							
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.changeUpdateReplaceqyNum2!=0}">
 						
 						<c:set var="gxbgshgh" value="${gxbgshgh+1}"/>
 							<c:set var="gxbgshghqy" value="${gxbgshghqy+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.changeUpdateReplaceqyNum4!=0}">
 							<c:set var="gxbgshgh" value="${gxbgshgh+1}"/>
 							<c:set var="gxbgshghqy" value="${gxbgshghqy+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.changeUpdateReplaceqyNum5!=0}">
 							<c:set var="gxbgshgh" value="${gxbgshgh+1}"/>
 							<c:set var="gxbgshghqy" value="${gxbgshghqy+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.changeUpdateReplacegrQNum!=0}">
 							<c:set var="gxbgshgh" value="${gxbgshgh+1}"/>
 							<c:set var="gxbgshghgeqy" value="${gxbgshghgeqy+1}"/>
+							<c:set var="index" value="${index+1}"/>
 							
 						</c:if>
 						<c:if test="${sumList.total.changeUpdateReplacegrQNum2!=0}">
 						<c:set var="gxbgshgh" value="${gxbgshgh+1}"/>
 							<c:set var="gxbgshghgeqy" value="${gxbgshghgeqy+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.changeUpdateReplacegrQNum4!=0}">
 							<c:set var="gxbgshgh" value="${gxbgshgh+1}"/>
 							<c:set var="gxbgshghgeqy" value="${gxbgshghgeqy+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.changeUpdateReplacegrQNum5!=0}">
 							<c:set var="gxbgshgh" value="${gxbgshgh+1}"/>
 							<c:set var="gxbgshghgeqy" value="${gxbgshghgeqy+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.changeUpdateReplacegrGNum!=0}">
 							<c:set var="gxbgshgh" value="${gxbgshgh+1}"/>
 							<c:set var="gxbgshghgejg" value="${gxbgshghgejg+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						
 						</c:if>
 						<c:if test="${sumList.total.changeUpdateReplacegrGNum2!=0}">
 							<c:set var="gxbgshgh" value="${gxbgshgh+1}"/>
 							<c:set var="gxbgshghgejg" value="${gxbgshghgejg+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.changeUpdateReplacegrGNum4!=0}">
 							<c:set var="gxbgshgh" value="${gxbgshgh+1}"/>
 							<c:set var="gxbgshghgejg" value="${gxbgshghgejg+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.changeUpdateReplacegrGNum5!=0}">
 							<c:set var="gxbgshgh" value="${gxbgshgh+1}"/>
 							<c:set var="gxbgshghgejg" value="${gxbgshghgejg+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.changeUpdateReplacejgNum!=0}">
 							<c:set var="gxbgshgh" value="${gxbgshgh+1}"/>
 							<c:set var="gxbgshghjg" value="${gxbgshghjg+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.changeUpdateReplacejgNum2!=0}">
 						<c:set var="gxbgshgh" value="${gxbgshgh+1}"/>
 							<c:set var="gxbgshghjg" value="${gxbgshghjg+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.changeUpdateReplacejgNum4!=0}">
 							<c:set var="gxbgshgh" value="${gxbgshgh+1}"/>
 							<c:set var="gxbgshghjg" value="${gxbgshghjg+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.changeUpdateReplacejgNum5!=0}">
 							<c:set var="gxbgshgh" value="${gxbgshgh+1}"/>
 							<c:set var="gxbgshghjg" value="${gxbgshghjg+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 					
-					
-				<th rowspan="3">月份</th>
+			<tr>
+				<th colspan="${index+1}" style="text-align: center;">项目:${yingyong}</th>
+			</tr>
+			<tr>
+				<th rowspan="3" style="width:10%;vertical-align:middle">月份</th>
 			<c:if test="${xz >0}">
 				<th colspan="${xz}">新增</th>
    			 </c:if>
@@ -1046,7 +1173,7 @@ $(document).ready(function() {
    			 </c:if>
    			 	<c:if test="${multiType}">
 				 <c:if test="${bgysbbqy >0}">
-				<th colspan="${bgysbbqy}" rowspan="2" style="text-align: center">企业证书${bgysbbqy}</th>
+				<th colspan="${bgysbbqy}" rowspan="2" style="text-align: center">企业证书</th>
    			 </c:if>
    			  <c:if test="${bgysbbgeqy >0}">
 				<th colspan="${bgysbbgeqy}" rowspan="2" style="text-align: center">个人证书（企业）</th>
