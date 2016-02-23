@@ -95,6 +95,13 @@ public class ConfigChargeAgentService extends BaseService {
 		return configChargeAgentDao.find(dc);
 	}
 	
+
+	
+	public List<ConfigChargeAgent> findAll(){
+		DetachedCriteria dc = configChargeAgentDao.createDetachedCriteria();
+		return configChargeAgentDao.find(dc);
+	}
+	
 	
 
 	/**

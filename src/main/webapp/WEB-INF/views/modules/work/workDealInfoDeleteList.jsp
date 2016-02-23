@@ -136,6 +136,30 @@
 			&nbsp;&nbsp; <label>单位名称：</label>
 			<form:input path="workCompany.companyName" htmlEscape="false"
 				maxlength="50" class="input-medium" />
+				
+				
+			&nbsp;&nbsp;
+			<label>导入日期：&nbsp;</label> &nbsp;&nbsp;<input class="input-medium Wdate" type="text"
+				required="required" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});"
+				value="<fmt:formatDate value="${c}" pattern="yyyy-MM-dd"/>" maxlength="20" readonly="readonly"
+				name="startTime" id="startTime"/> 至 <input class="input-medium Wdate" type="text"
+				required="required" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'startTime\')}'});"
+				value="<fmt:formatDate value="${endTime}" pattern="yyyy-MM-dd"/>" maxlength="20" readonly="readonly"
+				name="endTime" />
+			
+			
+			
+			&nbsp;&nbsp;<label>计费策略模板：</label>
+			<select name="agentId" id="agentId">
+				<option value="">请选择业务类型</option>
+				<c:forEach items="${agents}" var="agent">
+					<option value="${agent.id}"
+						<c:if test="${agent.id==agentId}">
+					selected="selected"
+					</c:if>>${agent.tempName}</option>
+				</c:forEach>
+			</select> 			
+			
 			&nbsp;&nbsp;&nbsp;&nbsp;
 			<input id="btnSubmit"
 				class="btn btn-primary" type="submit" value="查询" />

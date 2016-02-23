@@ -313,22 +313,33 @@ public class WorkDealInfoController extends BaseController {
 	@RequestMapping(value = "deleteList")
 	public String deleteList(WorkDealInfo workDealInfo, HttpServletRequest request,
 			HttpServletResponse response, Model model, RedirectAttributes redirectAttributes,
-			@RequestParam(value = "checkIds", required = false) String checkIds) {
+			@RequestParam(value = "checkIds", required = false) String checkIds,
+			@RequestParam(value = "startTime", required = false) Date startTime,
+			@RequestParam(value = "endTime", required = false) Date endTime,
+			@RequestParam(value = "agentId", required = false) Long agentId
+			) {
 		User user = UserUtils.getUser();
 		workDealInfo.setCreateBy(user.getCreateBy());
 
 		List<ConfigApp> configAppList = configAppService.selectAll();
 		model.addAttribute("configAppList", configAppList);
 
-		Page<WorkDealInfo> page = workDealInfoService.findByBatchAdd(new Page<WorkDealInfo>(request, response),
-				workDealInfo);
+		Page<WorkDealInfo> page =
+				workDealInfoService.findByBatchAdd(new Page<WorkDealInfo>(request, response),
+				workDealInfo, startTime, endTime, agentId);
 
 		if (checkIds != null) {
 			String[] ids = checkIds.split(",");
 			model.addAttribute("ids", ids);
 		}
+		
+		List<ConfigChargeAgent> agents = configChargeAgentService.findAll();
+		
+		model.addAttribute("agents", agents);
+		model.addAttribute("agentId", agentId);
 		model.addAttribute("checkIds", checkIds);
-
+		model.addAttribute("startTime", startTime);
+		model.addAttribute("endTime", endTime);
 		model.addAttribute("workType", workDealInfo.getDealInfoStatus());
 		model.addAttribute("proType", ProductType.productTypeStrMap);
 		model.addAttribute("wdiType", WorkDealInfoType.WorkDealInfoTypeMap);
@@ -2642,30 +2653,6 @@ public class WorkDealInfoController extends BaseController {
 			}
 		}
 
-		ArrayList<Integer> dealInfoTypes = new ArrayList<Integer>();
-		if (workDealInfo.getDealInfoType() != null) {
-			dealInfoTypes.add(workDealInfo.getDealInfoType());
-		}
-		if (workDealInfo.getDealInfoType1() != null) {
-			dealInfoTypes.add(workDealInfo.getDealInfoType1());
-		}
-		if (workDealInfo.getDealInfoType2() != null) {
-			dealInfoTypes.add(workDealInfo.getDealInfoType2());
-		}
-		if (workDealInfo.getDealInfoType3() != null) {
-			dealInfoTypes.add(workDealInfo.getDealInfoType3());
-		}
-
-		if (dealInfoTypes.size() == 1) {
-			if (dealInfoTypes.get(0).equals(1)) {
-				model.addAttribute("isOneUpdate", "yes");
-			} else {
-				model.addAttribute("isOneUpdate", "no");
-			}
-		} else {
-			model.addAttribute("isOneUpdate", "no");
-		}
-
 		return "modules/work/workDealInfoMaintainLoad";
 	}
 
@@ -2673,14 +2660,13 @@ public class WorkDealInfoController extends BaseController {
 	 * 返回基本信息界面
 	 */
 	@RequestMapping(value = "typeFormReturnUpdate")
-	public String typeFormReturnUpdate(String dealType, WorkDealInfo workDealInfo, Model model, String reissueType,
+	public String typeFormReturnUpdate(WorkDealInfo workDealInfo, Model model,
 			RedirectAttributes redirectAttributes) {
+		
 		boolean inOffice = false;
-
 		workDealInfo.setDealInfoStatus("15");
-
 		workDealInfoService.save(workDealInfo);
-
+		
 		List<ConfigAppOfficeRelation> configAppOfficeRelations = configAppOfficeRelationService
 				.findAllByOfficeId(UserUtils.getUser().getOffice().getId());
 		for (ConfigAppOfficeRelation appOffice : configAppOfficeRelations) {
@@ -2688,34 +2674,12 @@ public class WorkDealInfoController extends BaseController {
 				inOffice = true;
 			}
 		}
-		if (dealType.equals("3")) {
-			model.addAttribute("update", "3");
-			ConfigProduct configProduct = workDealInfo.getConfigProduct();
-			String[] years = configChargeAgentDetailService.getChargeAgentYears(configProduct.getChargeAgentId(),
-					WorkDealInfoType.TYPE_UPDATE_CERT);
-			for (int j = 0; j < years.length; j++) {
-				switch (years[j]) {
-				case "1":
-					model.addAttribute("year1", true);
-					break;
-				case "2":
-					model.addAttribute("year2", true);
-					break;
-				case "4":
-					model.addAttribute("year4", true);
-					break;
-				case "5":
-					model.addAttribute("year5", true);
-					break;
-				}
-			}
-
-			if (!inOffice) {
-				redirectAttributes.addAttribute("fd", UUID.randomUUID().toString());
-				addMessage(redirectAttributes, "请到业务办理网点更新！");
-				return "redirect:" + Global.getAdminPath() + "/work/workDealInfo/?repage";
-			}
+		if (!inOffice) {
+			redirectAttributes.addAttribute("fd", UUID.randomUUID().toString());
+			addMessage(redirectAttributes, "请到业务办理网点办理！");
+			return "redirect:" + Global.getAdminPath() + "/work/workDealInfo/?repage";
 		}
+			
 		if (workDealInfo.getWorkCertInfo() != null) {
 			model.addAttribute("workCertApplyInfo", workDealInfo.getWorkCertInfo().getWorkCertApplyInfo());
 		}
@@ -2739,17 +2703,66 @@ public class WorkDealInfoController extends BaseController {
 		List<WorkLog> list = workLogService.findByDealInfo(workDealInfo);
 		model.addAttribute("workLog", list);
 		model.addAttribute("tempStyle", chargeAgent.getTempStyle());
-
-		if (dealType.indexOf("3") >= 0) {
-
-			model.addAttribute("isOK", "isYes");
-		} else {
-
-			model.addAttribute("isOK", "isNo");
-
-		}
-		model.addAttribute("dealType", dealType);
-		return "modules/work/maintain/workDealInfoMaintainReturnUpdate";
+		
+		
+		ArrayList<Integer> dealInfoTypes = new ArrayList<Integer>();
+        if (workDealInfo.getDealInfoType() != null) {
+            dealInfoTypes.add(workDealInfo.getDealInfoType());
+        }
+        if (workDealInfo.getDealInfoType1() != null) {
+            dealInfoTypes.add(workDealInfo.getDealInfoType1());
+        }
+        if (workDealInfo.getDealInfoType2() != null) {
+            dealInfoTypes.add(workDealInfo.getDealInfoType2());
+        }
+        if (workDealInfo.getDealInfoType3() != null) {
+            dealInfoTypes.add(workDealInfo.getDealInfoType3());
+        }
+		
+        if (dealInfoTypes.size() == 1) {
+        	if (dealInfoTypes.get(0).equals(4)) {//变更
+        		return "modules/work/maintain/workDealInfoMaintainReturnChange";
+			}else if(dealInfoTypes.get(0).equals(1)){
+				model.addAttribute("update", "3");
+				ConfigProduct configProductOld = workDealInfo.getConfigProduct();
+				String[] years = configChargeAgentDetailService.getChargeAgentYears(configProductOld.getChargeAgentId(),
+						WorkDealInfoType.TYPE_UPDATE_CERT);
+				for (int j = 0; j < years.length; j++) {
+					switch (years[j]) {
+					case "1":
+						model.addAttribute("year1", true);
+						break;
+					case "2":
+						model.addAttribute("year2", true);
+						break;
+					case "4":
+						model.addAttribute("year4", true);
+						break;
+					case "5":
+						model.addAttribute("year5", true);
+						break;
+					}
+				}
+				model.addAttribute("dealType", dealInfoTypes.toString());
+				return "modules/work/maintain/workDealInfoMaintainReturnUpdate";
+			}
+        	
+        }else if(dealInfoTypes.size() == 2){
+        	if (dealInfoTypes.get(0).equals(2)||dealInfoTypes.get(0).equals(3) ) {
+				if (dealInfoTypes.get(1).equals(4)) {
+					model.addAttribute("reissue", dealInfoTypes.get(0));
+					return "modules/work/maintain/workDealInfoMaintainReturnChange";
+				}
+			}
+        	
+        	
+        	
+        }else{
+        	
+        	
+        }
+        
+        return null;
 	}
 
 	/**

@@ -1092,7 +1092,7 @@ public class WorkDealInfoService extends BaseService {
 	}
 
 	public Page<WorkDealInfo> findByBatchAdd(Page<WorkDealInfo> page,
-			WorkDealInfo workDealInfo) {
+			WorkDealInfo workDealInfo , Date startTime, Date endTime, Long agentId) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("createBy", "createBy");
 		dc.createAlias("createBy.office", "office");
@@ -1110,6 +1110,20 @@ public class WorkDealInfoService extends BaseService {
 								+ "%"));
 			}
 		}
+		
+		if (startTime!=null) {
+			dc.add(Restrictions.ge("createDate", startTime));
+			
+		}
+		if (endTime!=null) {
+			dc.add(Restrictions.le("createDate", startTime));
+		}
+		
+		if (agentId != null) {
+			dc.add(Restrictions.le("configChargeAgentId", agentId));
+		}
+		
+		
 		dc.add(Restrictions.eq("isSJQY", 2));
 		dc.add(Restrictions.eq("dealInfoStatus",
 				WorkDealInfoStatus.STATUS_APPROVE_WAIT));
