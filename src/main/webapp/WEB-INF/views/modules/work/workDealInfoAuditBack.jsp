@@ -197,7 +197,6 @@
 							+ "&receiptAmount=" + $("#tfpVal").val();
 					}
 				}else{
-					alert(revoke);
 					window.location.href = "${ctx}/work/workDealInfoAudit/backMoney1?id=${workDealInfo.id}&revoke="
 						+ revoke + "&receiptAmount=" + $("#tfpVal").val();
 				}
