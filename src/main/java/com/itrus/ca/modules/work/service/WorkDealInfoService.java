@@ -5545,6 +5545,7 @@ public class WorkDealInfoService extends BaseService {
 						.setDealInfoStatus(WorkDealInfoStatus.STATUS_APPROVE_WAIT);
 				workDealInfo.setAttestationUser(UserUtils.getUser());
 				workDealInfo.setAttestationUserDate(new Date());
+				workDealInfo.setWorkPayInfo(workPayInfo);
 				this.save(workDealInfo);
 			}
 		} catch (Exception e) {
