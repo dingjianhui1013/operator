@@ -7677,6 +7677,10 @@ public class WorkDealInfoController extends BaseController {
 
 				workDealInfo.setPayUser(UserUtils.getUser());
 				workDealInfo.setPayUserDate(new Date());
+				
+				workDealInfo.setAreaId(UserUtils.getUser().getOffice().getParent().getId());
+				workDealInfo.setOfficeId(UserUtils.getUser().getOffice().getId());
+				
 				workDealInfoService.save(workDealInfo);
 				ConfigRaAccount raAccount = raAccountService.get(workDealInfo.getConfigProduct().getRaAccountId());
 				List<String[]> list = RaAccountUtil.outPageLine(workDealInfo, raAccount.getConfigRaAccountExtendInfo());
