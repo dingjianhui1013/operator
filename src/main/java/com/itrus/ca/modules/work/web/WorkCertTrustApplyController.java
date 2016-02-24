@@ -130,7 +130,7 @@ public class WorkCertTrustApplyController extends BaseController {
 		WorkCertTrustApply workCertTrustApply = workCertTrustApplyService.get(id);
 		model.addAttribute("trust", workCertTrustApply);
 		model.addAttribute("cert", workCertTrustApply.getWorkCertInfo());
-		Set<WorkDealInfo> infos = workCertTrustApply.getWorkCertInfo().getWorkDealInfos();
+     	Set<WorkDealInfo> infos = workCertTrustApply.getWorkCertInfo().getWorkDealInfos();
 		model.addAttribute("dealInfo", infos.toArray()[0]);
 		model.addAttribute("productType", ProductType.productTypeStrMap);
 		model.addAttribute("user", UserUtils.getUser());
