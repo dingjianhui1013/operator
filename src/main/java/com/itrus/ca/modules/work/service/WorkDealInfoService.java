@@ -1113,10 +1113,12 @@ public class WorkDealInfoService extends BaseService {
 		
 		if (startTime!=null) {
 			dc.add(Restrictions.ge("createDate", startTime));
-			
 		}
 		if (endTime!=null) {
-			dc.add(Restrictions.le("createDate", startTime));
+			endTime.setHours(23);
+			endTime.setMinutes(59);
+			endTime.setSeconds(59);
+			dc.add(Restrictions.le("createDate", endTime));
 		}
 		
 		if (agentId != null) {

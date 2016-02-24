@@ -141,7 +141,7 @@
 			&nbsp;&nbsp;
 			<label>导入日期：&nbsp;</label> &nbsp;&nbsp;<input class="input-medium Wdate" type="text"
 				required="required" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});"
-				value="<fmt:formatDate value="${c}" pattern="yyyy-MM-dd"/>" maxlength="20" readonly="readonly"
+				value="<fmt:formatDate value="${startTime}" pattern="yyyy-MM-dd"/>" maxlength="20" readonly="readonly"
 				name="startTime" id="startTime"/> 至 <input class="input-medium Wdate" type="text"
 				required="required" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'startTime\')}'});"
 				value="<fmt:formatDate value="${endTime}" pattern="yyyy-MM-dd"/>" maxlength="20" readonly="readonly"
