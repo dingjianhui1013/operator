@@ -7003,6 +7003,9 @@ public class WorkDealInfoController extends BaseController {
 					case "2":
 						json.put("year2", true);
 						break;
+					case "3":
+						json.put("year3", true);
+						break;	
 					case "4":
 						json.put("year4", true);
 						break;
