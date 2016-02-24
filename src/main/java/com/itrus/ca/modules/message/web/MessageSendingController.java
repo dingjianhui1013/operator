@@ -174,6 +174,48 @@ public class MessageSendingController extends BaseController {
 		model.addAttribute("page", page);
 		return "modules/message/messageSendingList";
 	}
+
+	@RequestMapping(value = "selectData")
+	@ResponseBody
+	public String selectData(
+			@RequestParam(value = "areaId", required = false) Long areaId,
+			@RequestParam(value = "officeId", required = false) Long officeId,
+			@RequestParam(value = "apply", required = false) Long apply,
+			@RequestParam(value = "workType", required = false) Integer workType,
+			@RequestParam(value = "companyName", required = false) String companyName,
+			@RequestParam(value = "contactName", required = false) String contactName,
+			@RequestParam(value = "dealInfoStatus", required = false) String dealInfoStatus,
+			@RequestParam(value = "province", required = false) String province,
+			@RequestParam(value = "city", required = false) String city,
+			@RequestParam(value = "district", required = false) String district,
+			Model model
+			)
+	{
+		WorkCompany workCompany = new WorkCompany();
+		workCompany.setCompanyName(companyName);
+		workCompany.setProvince(province);
+		workCompany.setCity(city);
+		workCompany.setDistrict(district);
+		WorkUser workUser = new WorkUser();
+		workUser.setContactName(contactName);
+		WorkDealInfo workDealInfo = new WorkDealInfo();
+		workDealInfo.setWorkCompany(workCompany);
+		workDealInfo.setWorkUser(workUser);
+		workDealInfo.setDealInfoStatus(dealInfoStatus);
+		List<WorkCertInfo> certInfoList = new ArrayList<WorkCertInfo>();
+		List<WorkDealInfo> list = workDealInfoService.find14(workDealInfo,
+				areaId, officeId, apply, workType, certInfoList);
+		StringBuffer sb = new StringBuffer();
+		for (WorkDealInfo workDealInfos : list) {
+			if(workDealInfos.getWorkUser().getContactPhone()!=null)
+			{
+				sb.append(workDealInfos.getId()+",");
+			}
+		}
+		sb=sb.replace(sb.length()-1, sb.length(), "");
+		return sb.toString();
+		
+	}
 	@RequiresPermissions("message:messageSending:view")
 	@RequestMapping(value = "checkone")
 	@ResponseBody
@@ -280,6 +322,9 @@ public class MessageSendingController extends BaseController {
 		// return "redirect:" + Global.getAdminPath() +
 		// "/modules/message/messageSending/search";
 	}
+	
+	
+	
 	@RequiresPermissions("message:messageSending:view")
 	@RequestMapping(value = "send")
 	@ResponseBody

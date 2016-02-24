@@ -104,11 +104,48 @@
 			$("#checkIds").val(checkIds);
 		}
 	}
+	function selectData()
+	{
+		var apply = $("#apply").val();
+		var companyName = $("#companyName").val();
+		var contactName = $("#contactName").val();
+		var workType = $("#workType").val();
+		var dealInfoStatus = $("#dealInfoStatus").val();
+		var areaId = $("#areaId").val();
+		var officeId = $("#officeId").val();
+		var province = $("#s_province").val();
+		var city = $("#s_city").val();
+		var district = $("#s_county").val();
+		if(apply==null || apply=="")
+			{
+				$.jBox.tip("请选择应用！");
+			}else{
+					var url="${ctx}/message/messageSending/selectData";
+					$.ajax({
+						url:url,
+						type:"POST",
+						data:{"apply":apply,"companyName":companyName,"contactName":contactName,"workType":workType,
+								"dealInfoStatus":dealInfoStatus,"areaId":areaId,"officeId":officeId,
+								"province":province,"city":city,"district":district},
+						dataType:"text",
+						success:function(data)
+						{
+							$("#checkIds").val(data);
+							var xz = $("#contentTable").find("[name='oneDealCheck']");
+							for (var a = 0; a < xz.length; a++) {
+								var check = $($("#contentTable").find("[name='oneDealCheck']")[a]);
+								if (check.is(":checked") == false) {
+									check.attr("checked","true");
+								}
+							}
+						}
+					});
+			}
+	}
 	function send() {
 		var checkIds = $("#checkIds").val();
 		var apply = $("#apply").val();
 		var companyName = $("#companyName").val();
-
 		var contactName = $("#contactName").val();
 		var workType = $("#workType").val();
 		var dealInfoStatus = $("#dealInfoStatus").val();
@@ -118,19 +155,17 @@
 
 		 if (checkIds == null || checkIds == "") {
 			$.jBox.tip("请选择需要发送信息的公司！");
-				
-			if ($("#smsId").val() == null || $("#smsId").val() == "") {
-			$.jBox.tip("请选择短信模板！");
-				
-			}
 		}
-		else{ 
-		var url = "${ctx}/message/messageSending/send?checkIds=" + checkIds
+		if ($("#smsId").val() == null || $("#smsId").val() == "") {
+			$.jBox.tip("请选择短信模板！");
+			}else
+				{
+				var url = "${ctx}/message/messageSending/send?checkIds=" + checkIds
 				+ "&apply=" + apply + "&companyName=" + companyName
 				+ "&contactName=" + contactName + "&workType=" + workType
 				+ "&dealInfoStatus=" + dealInfoStatus + "&areaId=" + areaId
 				+ "&officeId=" + officeId + "&smsId=" + smsId + "&_="
-				+ new Date().getTime()
+				+ new Date().getTime();
 		var submit = function(v, h, f) {
 			if (v == true) {
 				$.getJSON(url, function(data) {
@@ -168,12 +203,10 @@
 				+ "&officeId=" + officeId + "&smsId=" + smsId + "&_="
 				+ new Date().getTime()
 
-		$
-				.getJSON(
-						updateUrl,
+		$.getJSON(		updateUrl,
 						function(data) {
 
-							var html = "未查询到相关证书信息";
+							var html = "";
 							if (data.status == 1) {
 
 								html = "<label class='control-label'>总共条数:</label><div class='controls'>"
@@ -190,7 +223,9 @@
 								}
 							});
 						});
-		}
+				}
+		
+		
 	}
 </script>
 <script type="text/javascript" src="${ctxStatic}/jquery/city.js"></script>
@@ -254,12 +289,12 @@
 						</c:if>>${off.name}</option>
 				</c:forEach>
 			</select>
-			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			<input id="btnSubmit" class="btn btn-primary" type="submit"
-				value="查询" />
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<input id="btnSubmit" class="btn btn-primary" type="button" onclick="selectData()"
+				value="选择全部数据" />
 		</div>
 		<br>
-
+		<div>
 		<label>业务状态：</label>
 		<select name="dealInfoStatus" id="dealInfoStatus">
 			<option value="">请选择业务类型</option>
@@ -305,9 +340,11 @@
 					.append(
 							'<option value="${workDealInfo.workCompany.district}" selected="selected">${workDealInfo.workCompany.district}</option>');
 		</script>
-		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<input id="btnSubmit" class="btn btn-primary" type="submit"
+				value="查询" />
 			<a href="javascript:send()" class="btn btn-primary">发送</a> <input
 				type="hidden" name="checkIds" id="checkIds" value="${checkIds }" />
+				
 		</div>
 	
 	</form:form>
