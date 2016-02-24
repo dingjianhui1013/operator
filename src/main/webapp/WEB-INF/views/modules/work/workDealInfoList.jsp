@@ -906,7 +906,14 @@ $(document)
 							<c:if test="${workDealInfo.dealInfoType!=10 }">
 								<a href="javascript:hisgoMoney(${workDealInfo.id})">退费</a>
 							</c:if>
-						</c:if> <c:if test="${workDealInfo.dealInfoStatus==5 }">
+						</c:if> 
+						
+						<c:if test="${true }">
+						    <a href="${ctx}/signature/signatureInfo/form?workDealInfoId=${workDealInfo.id}">印章授权</a>
+						</c:if>
+						
+						
+						<c:if test="${workDealInfo.dealInfoStatus==5 }">
 						<shiro:hasPermission name="work:workDealInfo:jiaofei">
 							<a href="${ctx}/work/workDealInfo/pay?id=${workDealInfo.id}">缴费</a>
 							</shiro:hasPermission>&nbsp;&nbsp;

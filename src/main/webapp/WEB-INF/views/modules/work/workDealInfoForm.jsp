@@ -1159,6 +1159,19 @@ var selected = false;
 				$("#year2").hide();
 				$("#word2").hide();
 			}
+			
+			
+			if (data.year3) {
+				$("#year3").show();
+				$("#word3").show();
+			} else {
+				$("#year3").hide();
+				$("#word3").hide();
+			}
+			
+			
+			
+			
 			if (data.year4) {
 				$("#year4").show();
 				$("#word4").show();
@@ -1335,7 +1348,13 @@ var selected = false;
 								<c:if test="${workDealInfo.year==1}">checked</c:if>><span
 								id="word1">1年</span> <input type="radio" name="year" value="2"
 								id="year2" <c:if test="${workDealInfo.year==2}">checked</c:if>><span
-								id="word2">2年 </span><input type="radio" name="year" value="4"
+								id="word2">2年 </span>
+								
+								<input type="radio" name="year" value="3"
+								id="year3" <c:if test="${workDealInfo.year==3}">checked</c:if>><span
+								id="word3">3年 </span>
+								
+								<input type="radio" name="year" value="4"
 								id="year4" <c:if test="${workDealInfo.year==4}">checked</c:if>><span
 								id="word4">4年</span><input type="radio" name="year" value="5"
 								id="year5" <c:if test="${workDealInfo.year==5}">checked</c:if>><span
