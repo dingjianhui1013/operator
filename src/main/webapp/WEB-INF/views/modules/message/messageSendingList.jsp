@@ -152,13 +152,13 @@
 		var areaId = $("#areaId").val();
 		var officeId = $("#officeId").val();
 		var smsId = $("#smsId").val();
-
 		 if (checkIds == null || checkIds == "") {
 			$.jBox.tip("请选择需要发送信息的公司！");
 		}
 		if ($("#smsId").val() == null || $("#smsId").val() == "") {
 			$.jBox.tip("请选择短信模板！");
-			}else
+			}
+		if(smsId!="" && checkIds !="")
 				{
 				var url = "${ctx}/message/messageSending/send?checkIds=" + checkIds
 				+ "&apply=" + apply + "&companyName=" + companyName
@@ -174,7 +174,8 @@
 						setTimeout(function() {
 							//something you want delayed
 							$("#searchForm").submit();
-							//	window.location.reload();
+// 							window.location.reload();
+							window.location.href="${ctx}/message/messageSending/";
 						}, 1500); // how long do you want the delay to be? 
 
 					} else if (data.status == '-1') {
@@ -203,7 +204,7 @@
 				+ "&officeId=" + officeId + "&smsId=" + smsId + "&_="
 				+ new Date().getTime()
 
-		$.getJSON(		updateUrl,
+		$.getJSON(	updateUrl,
 						function(data) {
 
 							var html = "";
@@ -353,7 +354,7 @@
 		class="table table-striped table-bordered table-condensed">
 		<thead>
 			<tr>
-				<th><input type="checkbox" id="checkAll" name="oneDealCheck"
+				<th><input type="checkbox" id="checkAll" name="dealCheck"
 					value=""
 					<%-- 	<c:forEach items="${ids }" var="id">
 					<c:if test="${id==page.pageNo}"> checked="checked"</c:if>

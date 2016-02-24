@@ -140,6 +140,24 @@ public class MessageSendingController extends BaseController {
 			messageSending.setCreateBy(user);
 		}
 
+		model.addAttribute("dealInfoStatus", workDealInfo.getDealInfoStatus());
+		model.addAttribute("proType", ProductType.productTypeStrMap);
+		model.addAttribute("wdiType", WorkDealInfoType.WorkDealInfoTypeMap);
+		model.addAttribute("wdiStatus", WorkDealInfoStatus.WorkDealInfoStatusMap);
+		model.addAttribute("workTypes", workDealInfoType.getProductTypeListNew());
+
+		model.addAttribute("offsList", offsList);
+		List<ConfigApp> configAppList = configAppService.selectAll();
+		model.addAttribute("configAppList", configAppList);
+		model.addAttribute("apply", apply);
+		model.addAttribute("workType", workType);
+		model.addAttribute("smsId", smsId);
+		model.addAttribute("checkIds", checkIds);
+		
+		if(areaId==null&&officeId==null&&apply==null&&workType==null){
+			return "modules/message/messageSendingList";
+		}
+		
 		Page<WorkDealInfo> page = workDealInfoService.find14(new Page<WorkDealInfo>(request, response), workDealInfo,
 				areaId, officeId, apply, workType, certInfoList);
 		if (checkIds != null) {
@@ -155,22 +173,7 @@ public class MessageSendingController extends BaseController {
 			}
 			model.addAttribute("count", ids.length-index);
 		}
-		model.addAttribute("checkIds", checkIds);
-		model.addAttribute("dealInfoStatus", workDealInfo.getDealInfoStatus());
-		model.addAttribute("proType", ProductType.productTypeStrMap);
-		model.addAttribute("wdiType", WorkDealInfoType.WorkDealInfoTypeMap);
-		model.addAttribute("wdiStatus", WorkDealInfoStatus.WorkDealInfoStatusMap);
-		model.addAttribute("workTypes", workDealInfoType.getProductTypeListNew());
-
-		model.addAttribute("offsList", offsList);
-		List<ConfigApp> configAppList = configAppService.selectAll();
-		model.addAttribute("configAppList", configAppList);
-		model.addAttribute("apply", apply);
-		model.addAttribute("workType", workType);
-		model.addAttribute("smsId", smsId);
-		if(areaId==null&&officeId==null&&apply==null&&workType==null){
-			return "modules/message/messageSendingList";
-		}
+		
 		model.addAttribute("page", page);
 		return "modules/message/messageSendingList";
 	}
