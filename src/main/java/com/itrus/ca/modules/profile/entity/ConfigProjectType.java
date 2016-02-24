@@ -22,7 +22,8 @@ public class ConfigProjectType extends DataEntity implements java.io.Serializabl
 
 	private Long id;
 	private String projectName;
-
+	private Boolean applyFlag1;//判断地税
+	private Boolean applyFlag2;//判断社保
 	// Constructors
 
 	/** default constructor */
@@ -30,8 +31,10 @@ public class ConfigProjectType extends DataEntity implements java.io.Serializabl
 	}
 
 	/** full constructor */
-	public ConfigProjectType(String projectName) {
+	public ConfigProjectType(String projectName,Boolean applyFlag1,Boolean applyFlag2) {
 		this.projectName = projectName;
+		this.applyFlag1=applyFlag1;
+		this.applyFlag2=applyFlag2;
 	}
 
 	// Property accessors
@@ -53,6 +56,23 @@ public class ConfigProjectType extends DataEntity implements java.io.Serializabl
 
 	public void setProjectName(String projectName) {
 		this.projectName = projectName;
+	}
+	
+	@Column(name = "apply_flag1")
+	public Boolean getApplyFlag1() {
+		return applyFlag1;
+	}
+
+	public void setApplyFlag1(Boolean applyFlag1) {
+		this.applyFlag1 = applyFlag1;
+	}
+	@Column(name = "apply_flag2")
+	public Boolean getApplyFlag2() {
+		return applyFlag2;
+	}
+
+	public void setApplyFlag2(Boolean applyFlag2) {
+		this.applyFlag2 = applyFlag2;
 	}
 	
 
