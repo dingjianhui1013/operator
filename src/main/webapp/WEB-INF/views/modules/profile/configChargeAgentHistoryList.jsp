@@ -87,9 +87,9 @@
 				<th style="vertical-align: middle; text-align: center;" rowspan="3">修改时间</th>
 			</tr>
 			<tr>
-				<th style="vertical-align: middle; text-align: center;" colspan="4">新增</th>
+				<th style="vertical-align: middle; text-align: center;" colspan="5">新增</th>
 
-				<th style="vertical-align: middle; text-align: center;" colspan="4">更新</th>
+				<th style="vertical-align: middle; text-align: center;" colspan="5">更新</th>
 				<th style="vertical-align: middle; text-align: center;" colspan="2">补办</th>
 				<th style="vertical-align: middle; text-align: center;" rowspan="2">变更</th>
 				<th style="vertical-align: middle; text-align: center;" rowspan="2">开户费</th>
@@ -100,10 +100,16 @@
 			<tr>
 				<th style="vertical-align: middle; text-align: center;">一年</th>
 				<th style="vertical-align: middle; text-align: center;">两年</th>
+				
+				<th style="vertical-align: middle; text-align: center;">三年</th>
+				
 				<th style="vertical-align: middle; text-align: center;">四年</th>
 				<th style="vertical-align: middle; text-align: center;">五年</th>
 				<th style="vertical-align: middle; text-align: center;">一年</th>
 				<th style="vertical-align: middle; text-align: center;">两年</th>
+				
+				<th style="vertical-align: middle; text-align: center;">三年</th>
+				
 				<th style="vertical-align: middle; text-align: center;">四年</th>
 				<th style="vertical-align: middle; text-align: center;">五年</th>
 				<th style="vertical-align: middle; text-align: center;">遗失补办</th>
@@ -132,6 +138,10 @@
 					</td>
 					<td style="vertical-align: middle; text-align: center;">${configChargeAgentHistory.map.xz2}
 					</td>
+					
+					<td style="vertical-align: middle; text-align: center;">${configChargeAgentHistory.map.xz3}
+					</td>
+					
 					<td style="vertical-align: middle; text-align: center;">${configChargeAgentHistory.map.xz4}
 					</td>
 					<td style="vertical-align: middle; text-align: center;">${configChargeAgentHistory.map.xz5}
@@ -140,6 +150,10 @@
 					</td>
 					<td style="vertical-align: middle; text-align: center;">${configChargeAgentHistory.map.gx2}
 					</td>
+					
+					<td style="vertical-align: middle; text-align: center;">${configChargeAgentHistory.map.gx3}
+					</td>
+					
 					<td style="vertical-align: middle; text-align: center;">${configChargeAgentHistory.map.gx4}
 					</td>
 					<td style="vertical-align: middle; text-align: center;">${configChargeAgentHistory.map.gx5}

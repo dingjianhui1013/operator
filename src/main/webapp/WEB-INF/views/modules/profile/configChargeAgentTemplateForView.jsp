@@ -95,18 +95,30 @@
 					</div>
 				</td>
 			</tr>
+			
 			<tr>
 				<td><div class="control-group">
 						<div class="controls" style="margin-top: 2px;">
-							四年：
-							<fmt:formatNumber pattern="#,##0.00">${xz4}</fmt:formatNumber>
+							三年：
+							<fmt:formatNumber pattern="#,##0.00">${xz3}</fmt:formatNumber>
 						</div>
 					</div></td>
 				<td><div class="control-group" style="margin-top: 2px;">
-						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;五年：
-						<fmt:formatNumber pattern="#,##0.00">${xz5}</fmt:formatNumber>
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;四年：
+						<fmt:formatNumber pattern="#,##0.00">${xz4}</fmt:formatNumber>
 					</div></td>
 			</tr>
+			
+			<tr>
+				<td><div class="control-group">
+						<div class="controls" style="margin-top: 2px;">
+							五年：
+							<fmt:formatNumber pattern="#,##0.00">${xz5}</fmt:formatNumber>
+						</div>
+					</div></td>
+				
+			</tr>
+		
 			<tr>
 				<td>
 					<div class="control-group">
@@ -124,18 +136,35 @@
 					</div>
 				</td>
 			</tr>
+			
+			
 			<tr>
 				<td><div class="control-group">
 						<div class="controls" style="margin-top: 2px;">
-							四年：
-							<fmt:formatNumber pattern="#,##0.00">${gx4}</fmt:formatNumber>
+							三年：
+							<fmt:formatNumber pattern="#,##0.00">${gx3}</fmt:formatNumber>
 						</div>
 					</div></td>
 				<td><div class="control-group" style="margin-top: 2px;">
-						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;五年：
-						<fmt:formatNumber pattern="#,##0.00">${gx5}</fmt:formatNumber>
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;四年：
+						<fmt:formatNumber pattern="#,##0.00">${gx4}</fmt:formatNumber>
 					</div></td>
-			</tr>
+			</tr>	
+			
+			
+			<tr>
+				<td><div class="control-group">
+						<div class="controls" style="margin-top: 2px;">
+							五年：
+							<fmt:formatNumber pattern="#,##0.00">${gx5}</fmt:formatNumber>
+						</div>
+					</div></td>
+			
+			</tr>	
+			
+			
+			
+		
 			<tr>
 				<td>
 					<div class="control-group">

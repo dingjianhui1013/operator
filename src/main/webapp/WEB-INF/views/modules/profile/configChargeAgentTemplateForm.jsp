@@ -69,13 +69,13 @@
 			return false;
 		}
 		if ($("#xz1").val() == "" && $("#xz2").val() == ""
-				&& $("#xz3").val() == "" && $("#xz4").val() == "") {
+				&& $("#xz3").val() == "" && $("#xz4").val() == "" && $("#xz5").val() == "") {
 			top.$.jBox.tip("业务类型：新增 ，请至少输入一项计费策略");
 			return false;
 		}
 
 		if ($("#gx1").val() == "" && $("#gx2").val() == ""
-				&& $("#gx3").val() == "" && $("#gx4").val() == "") {
+				&& $("#gx3").val() == "" && $("#gx4").val() == ""  && $("#gx5").val() == "") {
 			top.$.jBox.tip("业务类型：更新 ，请至少输入一项计费策略");
 			return false;
 		}
@@ -260,8 +260,8 @@
 				<td>
 					<div class="control-group">
 						<div class="controls">
-							四年：<input type="text" id="xz3" name="addMoney"
-								value="<fmt:formatNumber value='${xz4}' pattern='#,###0'/>"
+							三年：<input type="text" id="xz3" name="addMoney"
+								value="<fmt:formatNumber value='${xz3}' pattern='#,###0'/>"
 								maxlength="9" onkeyup="value=value.replace(/[^\d]/g,'') "
 								onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))">
 						</div>
@@ -269,14 +269,32 @@
 				</td>
 				<td><div class="control-group">
 						<div class="controls">
-							五年：<input type="text" id="xz4" name="addMoney"
-								value="<fmt:formatNumber value='${xz5}' pattern='#,###0'/>"
+							四年：<input type="text" id="xz4" name="addMoney"
+								value="<fmt:formatNumber value='${xz4}' pattern='#,###0'/>"
 								maxlength="9" onkeyup="value=value.replace(/[^\d]/g,'') "
 								onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))">
 						</div>
 					</div></td>
 
 			</tr>
+			
+			
+			<tr>
+				<td>
+					<div class="control-group">
+						<div class="controls">
+							五年：<input type="text" id="xz5" name="addMoney"
+								value="<fmt:formatNumber value='${xz5}' pattern='#,###0'/>"
+								maxlength="9" onkeyup="value=value.replace(/[^\d]/g,'') "
+								onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))">
+						</div>
+					</div>
+				</td>
+			</tr>
+			
+			
+			
+			
 			<tr>
 				<td>
 					<div class="control-group">
@@ -303,8 +321,8 @@
 				<td>
 					<div class="control-group">
 						<div class="controls">
-							四年：<input type="text" id="gx3" name="updateMoney"
-								value="<fmt:formatNumber value='${gx4}' pattern='#,###0'/>"
+							三年：<input type="text" id="gx3" name="updateMoney"
+								value="<fmt:formatNumber value='${gx3}' pattern='#,###0'/>"
 								maxlength="9" onkeyup="value=value.replace(/[^\d]/g,'') "
 								onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))">
 						</div>
@@ -312,14 +330,28 @@
 				</td>
 				<td><div class="control-group">
 						<div class="controls">
-							五年：<input type="text" id="gx4" name="updateMoney"
-								value="<fmt:formatNumber value='${gx5}' pattern='#,###0'/>"
+							四年：<input type="text" id="gx4" name="updateMoney"
+								value="<fmt:formatNumber value='${gx4}' pattern='#,###0'/>"
 								maxlength="9" onkeyup="value=value.replace(/[^\d]/g,'') "
 								onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))">
 						</div>
 					</div></td>
 
 			</tr>
+			
+			<tr>
+				<td>
+					<div class="control-group">
+						<div class="controls">
+							五年：<input type="text" id="gx5" name="updateMoney"
+								value="<fmt:formatNumber value='${gx5}' pattern='#,###0'/>"
+								maxlength="9" onkeyup="value=value.replace(/[^\d]/g,'') "
+								onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))">
+						</div>
+					</div>
+				</td>
+			</tr>
+			
 			<tr>
 				<td>
 
