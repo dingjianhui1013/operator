@@ -1462,7 +1462,11 @@ public class WorkDealInfoService extends BaseService {
 		}
 
 		if (workType != null) {
-			dc.add(Restrictions.eq("dealInfoType", workType));
+//			dc.add(Restrictions.eq("dealInfoType", workType));
+			dc.add(Restrictions.or(Restrictions.eq("dealInfoType", workType),
+					Restrictions.eq("dealInfoType1", workType),
+					Restrictions.eq("dealInfoType2", workType),
+					Restrictions.eq("dealInfoType3", workType)));
 		}
 
 		if (year != null) {
@@ -1666,9 +1670,7 @@ public class WorkDealInfoService extends BaseService {
 
 	public Page<WorkDealInfo> find14(Page<WorkDealInfo> page,
 			WorkDealInfo workDealInfo, Long area, Long office, Long apply,
-			Integer workType, List<WorkCertInfo> certInfoList
-
-	) {
+			Integer workType, List<WorkCertInfo> certInfoList) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("workPayInfo", "workPayInfo");
 		dc.createAlias("workCompany", "workCompany");
@@ -1760,7 +1762,91 @@ public class WorkDealInfoService extends BaseService {
 		return workDealInfoDao.find(page, dc);
 
 	}
+	public List<WorkDealInfo> find14(
+			WorkDealInfo workDealInfo, Long area, Long office, Long apply,
+			Integer workType, List<WorkCertInfo> certInfoList) {
+		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
+		dc.createAlias("workPayInfo", "workPayInfo");
+		dc.createAlias("workCompany", "workCompany");
+		dc.createAlias("workUser", "workUser");
+		dc.createAlias("createBy", "createBy");
+		dc.createAlias("createBy.office", "office");
+		dc.createAlias("configApp", "configApp");
+		dc.createAlias("configProduct", "configProduct");
 
+		if (workDealInfo.getWorkCompany() != null
+				&& StringUtils.isNotEmpty(workDealInfo.getWorkCompany()
+						.getCompanyName())) {
+			dc.add(Restrictions.like("workCompany.companyName", "%"
+					+ workDealInfo.getWorkCompany().getCompanyName() + "%"));
+		}
+		if (workDealInfo.getWorkCompany() != null
+				&& StringUtils.isNotEmpty(workDealInfo.getWorkCompany()
+						.getOrganizationNumber())) {
+			dc.add(Restrictions.like("workCompany.organizationNumber", "%"
+					+ workDealInfo.getWorkCompany().getOrganizationNumber()
+					+ "%"));
+		}
+		if (workDealInfo.getWorkUser() != null
+				&& StringUtils.isNotEmpty(workDealInfo.getWorkUser()
+						.getContactName())) {
+			dc.add(Restrictions.like("workUser.contactName", "%"
+					+ workDealInfo.getWorkUser().getContactName() + "%"));
+		}
+		if (workDealInfo.getWorkUser() != null
+				&& StringUtils.isNotEmpty(workDealInfo.getWorkUser()
+						.getConCertNumber())) {
+			dc.add(Restrictions.like("workUser.conCertNumber", "%"
+					+ workDealInfo.getWorkUser().getConCertNumber() + "%"));
+		}
+
+		if (workDealInfo.getWorkCompany() != null
+				&& StringUtils.isNotEmpty(workDealInfo.getWorkCompany()
+						.getProvince())
+				&& !workDealInfo.getWorkCompany().getProvince().equals("省份")) {
+			dc.add(Restrictions.eq("workCompany.province", workDealInfo
+					.getWorkCompany().getProvince()));
+		}
+		if (workDealInfo.getWorkCompany() != null
+				&& StringUtils.isNotEmpty(workDealInfo.getWorkCompany()
+						.getCity())
+				&& !workDealInfo.getWorkCompany().getCity().equals("地级市")) {
+			dc.add(Restrictions.eq("workCompany.city", workDealInfo
+					.getWorkCompany().getCity()));
+		}
+		if (workDealInfo.getWorkCompany() != null
+				&& StringUtils.isNotEmpty(workDealInfo.getWorkCompany()
+						.getDistrict())
+				&& !workDealInfo.getWorkCompany().getDistrict().equals("市、县级市")) {
+			dc.add(Restrictions.eq("workCompany.district", workDealInfo
+					.getWorkCompany().getDistrict()));
+		}
+		if (workDealInfo.getDealInfoStatus() != null
+				&& !workDealInfo.getDealInfoStatus().equals("")) {
+			dc.add(Restrictions.eq("dealInfoStatus",
+					workDealInfo.getDealInfoStatus()));
+		}
+
+		if (office != null) {
+			dc.add(Restrictions.eq("office.id", office));
+		} else if (area != null) {
+
+			dc.add(Restrictions.eq("workCompany.id", area));
+		}
+
+		if (apply != null) {
+			dc.add(Restrictions.eq("configApp.id", apply));
+		}
+
+		if (workType != null) {
+			dc.add(Restrictions.eq("dealInfoType", workType));
+		}
+		if (workDealInfo.getStatus() != null) {
+			dc.add(Restrictions.eq("status", workDealInfo.getStatus()));
+		}
+		return workDealInfoDao.find(dc);
+
+	}
 	public List<WorkDealInfo> find14A(WorkDealInfo workDealInfo, Long area,
 			Long office, Long apply, Integer workType,
 			List<WorkCertInfo> certInfoList
