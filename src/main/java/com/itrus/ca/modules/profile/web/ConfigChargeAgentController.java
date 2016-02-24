@@ -781,13 +781,13 @@ public class ConfigChargeAgentController extends BaseController {
 				continue;
 			}
 			ConfigChargeAgentDetail configChargeAgentDetail = new ConfigChargeAgentDetail();
-			if(year==3){
+			/*if(year==3){
 				configChargeAgentDetail.setChargeYear(4);
 			}else if(year == 4){
 				configChargeAgentDetail.setChargeYear(5);
-			}else{
+			}else{*/
 				configChargeAgentDetail.setChargeYear(year);
-			}
+			/*}*/
 
 			configChargeAgentDetail.setConfigChargeAgent(configChargeAgent);
 			configChargeAgentDetail.setMoney(double1);
@@ -813,13 +813,13 @@ public class ConfigChargeAgentController extends BaseController {
 				continue;
 			}
 			ConfigChargeAgentDetail configChargeAgentDetail = new ConfigChargeAgentDetail();
-			if(year==3){
+			/*if(year==3){
 				configChargeAgentDetail.setChargeYear(4);
 			}else if(year == 4){
 				configChargeAgentDetail.setChargeYear(5);
-			}else{
+			}else{*/
 				configChargeAgentDetail.setChargeYear(year);
-			}
+			/*}*/
 			configChargeAgentDetail.setConfigChargeAgent(configChargeAgent);
 			configChargeAgentDetail.setMoney(double1);
 			configChargeAgentDetail.setWorkType(WorkType.TYPE_ADD);
