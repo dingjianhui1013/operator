@@ -196,7 +196,7 @@ public class ConfigProductService extends BaseService {
 		DetachedCriteria dc = configProductDao.createDetachedCriteria();
 		dc.createAlias("configApp", "configApp");
 		dc.add(Restrictions.eq("productName", product.getProductName()));
-		dc.add(Restrictions.eq("productLabel", product.getProductLabel()));
+//		dc.add(Restrictions.eq("productLabel", product.getProductLabel()));
 		if (product.getId()!=null) {
 			dc.add(Restrictions.ne("id", product.getId()));
 		}
