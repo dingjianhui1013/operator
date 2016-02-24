@@ -152,11 +152,11 @@
 		var areaId = $("#areaId").val();
 		var officeId = $("#officeId").val();
 		var smsId = $("#smsId").val();
-		 if (checkIds == null || checkIds == "") {
+		if (checkIds == "") {
 			$.jBox.tip("请选择需要发送信息的公司！");
 		}
-		if ($("#smsId").val() == null || $("#smsId").val() == "") {
-			$.jBox.tip("请选择短信模板！");
+		if (checkIds != ""&&smsId == "") {
+				$.jBox.tip("请选择短信模板！");
 			}
 		if(smsId!="" && checkIds !="")
 				{
