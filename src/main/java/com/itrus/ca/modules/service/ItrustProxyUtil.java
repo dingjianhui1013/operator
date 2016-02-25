@@ -65,22 +65,57 @@ public class ItrustProxyUtil {
 	 * @throws JSONException
 	 */
 	public String postIxin(HttpClient client, String url,
-			HttpServletRequest request, List<ConfigApp> apps, User user,String fileUploadPath,String key)
+			HttpServletRequest request, List<ConfigApp> apps, User user,
+			String fileUploadPath, String key)
 			throws UnsupportedEncodingException, IOException,
 			ClientProtocolException, JSONException {
 		boolean isFileUpload = false;
 		if (request instanceof MultipartHttpServletRequest) {
 			isFileUpload = true;
 		}
-		
+
 		HttpPost post = new HttpPost(url);
+		String ss = "";
 		// 创建表单参数列表
 		List<NameValuePair> qparams = new ArrayList<NameValuePair>();
 		Map<Object, String[]> formValue = request.getParameterMap();
 		// 填充表单
 		for (Entry<Object, String[]> obj : formValue.entrySet()) {
-			qparams.add(new BasicNameValuePair(obj.getKey().toString(), obj.getValue()[0]));
+			if(!obj.getKey().toString().equalsIgnoreCase("project")){
+				qparams.add(new BasicNameValuePair(obj.getKey().toString(), obj
+						.getValue()[0]));
+			}
 		}
+
+		for (Entry<Object, String[]> obj : formValue.entrySet()) {
+			if(obj.getKey().toString().equalsIgnoreCase("project")){
+				for (int i = 0; i < obj.getValue().length; i++) {
+					qparams.add(new BasicNameValuePair(obj.getKey().toString(),obj.getValue()[i]));
+					ss =  this.getfation(apps, qparams, isFileUpload, request,
+							fileUploadPath, client, post, user, key);
+					for (int j = 0; j <qparams.size() ; j++) {
+						if(qparams.get(j).getName().equalsIgnoreCase("project")){
+							qparams.remove(j);
+							break;
+						}
+					}
+				}
+			}
+		}
+		if(ss.equalsIgnoreCase("")){
+			return this.getfation(apps, qparams, isFileUpload, request,
+					fileUploadPath, client, post, user, key);
+		}else{
+			return ss;
+		}
+		
+	}
+
+	private String getfation(List<ConfigApp> apps, List<NameValuePair> qparams,
+			boolean isFileUpload, HttpServletRequest request,
+			String fileUploadPath, HttpClient client, HttpPost post, User user,
+			String key) throws UnsupportedEncodingException, IOException,
+			ClientProtocolException, JSONException {
 		Map<Long, Map<String, Object>> projectMap = new HashMap<Long, Map<String, Object>>();
 		for (ConfigApp app : apps) {
 			Map<String, Object> project = new HashMap<String, Object>();
@@ -92,10 +127,11 @@ public class ItrustProxyUtil {
 		StringBuffer html = new StringBuffer();
 
 		String value = new JSONObject(projectMap).toString();
+
 		qparams.add(new BasicNameValuePair("aopProjects", value));
-		
-		if (isFileUpload) {//文件上传 特殊处理
-			MultipartEntity reqEntity = new MultipartEntity();  
+
+		if (isFileUpload) {// 文件上传 特殊处理
+			MultipartEntity reqEntity = new MultipartEntity();
 
 			MultipartHttpServletRequest fileRequest = (MultipartHttpServletRequest) request;
 			Iterator<String> fileNames = fileRequest.getFileNames();
@@ -107,8 +143,10 @@ public class ItrustProxyUtil {
 						+ "/"
 						+ System.currentTimeMillis()
 						+ "."
-						+ file.getOriginalFilename().substring(
-								file.getOriginalFilename().lastIndexOf(".") + 1));
+						+ file.getOriginalFilename()
+								.substring(
+										file.getOriginalFilename().lastIndexOf(
+												".") + 1));
 				file.transferTo(uploadFile);
 				FileBody fileBody = new FileBody(uploadFile);
 				reqEntity.addPart(name, fileBody);
@@ -118,31 +156,32 @@ public class ItrustProxyUtil {
 				reqEntity.addPart(nameValuePair.getName(), sb);
 			}
 			post.setEntity(reqEntity);
-		}else {
+		} else {
 			post.setEntity(new UrlEncodedFormEntity(qparams, "UTF-8"));
 		}
-		
+
 		post.setHeader("02iadmin", user.getName());
-		post.setHeader("User-Agent",request.getHeader("User-Agent"));
-		post.setHeader("Accept",request.getHeader("Accept"));
+		post.setHeader("User-Agent", request.getHeader("User-Agent"));
+		post.setHeader("Accept", request.getHeader("Accept"));
 		post.setHeader("Accept-Language", "zh-cn");
 		post.setHeader("restSecHeader", key);
-		
+
 		HttpResponse response2 = client.execute(post);
 		int statusCode = response2.getStatusLine().getStatusCode();
 		System.out.println("statusCode:" + statusCode);
 		if (statusCode == 200) {
 			HttpEntity entity2 = response2.getEntity();
 			BufferedReader reader2 = new BufferedReader(new InputStreamReader(
-					entity2.getContent(),"UTF-8"));
+					entity2.getContent(), "UTF-8"));
 			String buffer2;
 			while ((buffer2 = reader2.readLine()) != null) {
-				html.append(buffer2+"\n");
+				html.append(buffer2 + "\n");
 			}
 			return html.toString();
 		} else {
 			return "";
 		}
+
 	}
 
 	class AopProject {
@@ -191,7 +230,7 @@ public class ItrustProxyUtil {
 	 * @throws IOException
 	 */
 	public static HttpResponse sendGet(HttpClient client, String destURL,
-			String chacter, HttpServletRequest request,String key)
+			String chacter, HttpServletRequest request, String key)
 			throws MalformedURLException, IOException {
 		HttpGet get = new HttpGet(destURL);
 		System.out.println("=================");
@@ -202,18 +241,17 @@ public class ItrustProxyUtil {
 		get.setHeader("User-Agent", request.getHeader("User-Agent"));
 		get.setHeader("Accept", request.getHeader("Accept"));
 		get.setHeader("Accept-Encoding", request.getHeader("Accept-Encoding"));
-		get.setHeader("Connection",request.getHeader("Connection"));
+		get.setHeader("Connection", request.getHeader("Connection"));
 		get.setHeader("Accept-Language", "zh-cn");
 		get.setHeader("restSecHeader", key);
 
-		
 		HttpResponse response = client.execute(get);
 		return response;
 	}
 
 	public static String sendPost(HttpClient client, String destURL,
-			Map<String, String> params,HttpServletRequest request,String secret)
-			throws ClientProtocolException, IOException {
+			Map<String, String> params, HttpServletRequest request,
+			String secret) throws ClientProtocolException, IOException {
 		HttpPost post = new HttpPost(destURL);
 
 		// 创建表单参数列表
@@ -221,25 +259,24 @@ public class ItrustProxyUtil {
 		Map<Long, Map<String, Object>> projectMap = new HashMap<Long, Map<String, Object>>();
 		StringBuffer html = new StringBuffer();
 		String value = new JSONObject(projectMap).toString();
-		if (params!=null) {
+		if (params != null) {
 			for (String key : params.keySet()) {
 				qparams.add(new BasicNameValuePair(key, params.get(key)));
 			}
 		}
 
 		post.setEntity(new UrlEncodedFormEntity(qparams, "UTF-8"));
-		post.setHeader("Accept","text/html");
-		post.setHeader("Accept-Language","zh-cn");
+		post.setHeader("Accept", "text/html");
+		post.setHeader("Accept-Language", "zh-cn");
 		post.setHeader("restSecHeader", secret);
 
-		
 		HttpResponse response2 = client.execute(post);
 		int statusCode = response2.getStatusLine().getStatusCode();
 		System.out.println("statusCode:" + statusCode);
 		if (statusCode == 200) {
 			HttpEntity entity2 = response2.getEntity();
 			BufferedReader reader2 = new BufferedReader(new InputStreamReader(
-					entity2.getContent(),"UTF-8"));
+					entity2.getContent(), "UTF-8"));
 			String buffer2;
 			while ((buffer2 = reader2.readLine()) != null) {
 				html.append(buffer2);

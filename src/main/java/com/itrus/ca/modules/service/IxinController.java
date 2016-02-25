@@ -42,6 +42,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.MultipartRequest;
 
 import com.itrus.ca.modules.profile.entity.ConfigApp;
+import com.itrus.ca.modules.profile.service.ConfigAppService;
 import com.itrus.ca.modules.sys.entity.Office;
 import com.itrus.ca.modules.sys.service.OfficeService;
 import com.itrus.ca.modules.sys.utils.UserUtils;
@@ -73,7 +74,8 @@ public class IxinController {
 
 	@Autowired
 	OfficeService officeService;
-	
+	@Autowired
+	ConfigAppService configAppService;
 	Logger log = Logger.getLogger(IxinController.class);
 
 	/**
@@ -85,7 +87,24 @@ public class IxinController {
 			HttpServletResponse response) throws UnsupportedEncodingException,
 			ClientProtocolException, IOException, JSONException {
 		String url = request.getRequestURI() + "?";
+		
+		System.out.print(request.getParameterMap());
+		
+		Map<Object, String[]> formValue = request.getParameterMap();
+		String project = "";
+		for (Entry<Object, String[]> obj : formValue.entrySet()) {
+			if(obj.getKey().toString().equalsIgnoreCase("project")){
+				for (int i = 0; i < obj.getValue().length; i++) {
+//					project += obj.getValue()[i];
+					project+=configAppService.findByAppId(Long.parseLong(obj.getValue()[i])).getAppName()+" ";
+				
+				}
+			}
+		}
+		
 		if (request.getMethod().toUpperCase().equals("GET")) {
+		
+			
 			Map<String, String[]> paramMap = request.getParameterMap();
 			for (Entry<String, String[]> obj : paramMap.entrySet()) {
 				url += obj.getKey();
@@ -114,6 +133,10 @@ public class IxinController {
 			if (statusCode == 200) {
 				String responseContextType = response2.getEntity()
 						.getContentType().getValue();
+				
+				System.out.print(responseContextType);
+				
+				
 				if (!responseContextType.contains("html")
 						&& !responseContextType.contains("xml")
 						&& !responseContextType.contains("json")) {// 不包含这些图片or文件
@@ -168,6 +191,9 @@ public class IxinController {
 		// apps,UserUtils.getUser());
 		client.getConnectionManager().shutdown();
 		// content);//回写内容
+		
+		
+//		content=project;
 		uiModel.addAttribute("content", content);
 		return "/modules/temp/page";
 	}
