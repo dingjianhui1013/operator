@@ -3,6 +3,9 @@
 <!DOCTYPE html>
 <html>
 <head>
+<style type="text/css">
+.input-medium{width:206px;}
+</style>
 <title>业务办理管理</title>
 <meta name="decorator" content="default" />
 <script type="text/javascript">
@@ -770,7 +773,7 @@ $(document)
 					</c:if>>${app.appName}</option>
 				</c:forEach>
 			</select>
-			<label>&nbsp;&nbsp;产品名称 ：</label>
+			<label>&nbsp;&nbsp;产品名称：</label>
 			<select name="productName"
 				id="productName">
 				<option value="">请选择产品</option>
@@ -780,10 +783,16 @@ $(document)
 				<option value="4" <c:if test="${productName==4}">selected="selected"</c:if>>可信移动设备</option>
 				<option value="6" <c:if test="${productName==6}">selected="selected"</c:if>>个人证书(机构)</option>
 			</select>
-			&nbsp;&nbsp;<label>单位名称：</label>
-			&nbsp;&nbsp; <form:input path="workCompany.companyName" htmlEscape="false"
-				maxlength="50" class="input-medium" />
-			
+			<label>业务状态：</label>
+			<select name="dealInfoStatus" id="dealInfoStatus">
+				<option value="">请选择业务类型</option>
+				<c:forEach items="${wdiStatus}" var="type">
+					<option value="${type.key}"
+						<c:if test="${type.key==workType}">
+					selected="selected"
+					</c:if>>${type.value}</option>
+				</c:forEach>
+			</select> 
 			<br>
 		</div>
 		<div style="margin-top: 8px">
@@ -793,19 +802,13 @@ $(document)
 			&nbsp;&nbsp;<label>组代码号：</label>
 			&nbsp;&nbsp; <form:input path="workCompany.organizationNumber" htmlEscape="false"
 				maxlength="50" class="input-medium" />
-		<label>&nbsp;&nbsp;KEY编码：&nbsp;&nbsp;</label>
-			&nbsp;<form:input path="keySn" htmlEscape="false" maxlength="50"
+		<label>&nbsp;&nbsp;KEY编码：</label>
+			<form:input path="keySn" htmlEscape="false" maxlength="50"
 				class="input-medium" />
-		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label>业务状态：</label>
-			<select name="dealInfoStatus" id="dealInfoStatus">
-				<option value="">请选择业务类型</option>
-				<c:forEach items="${wdiStatus}" var="type">
-					<option value="${type.key}"
-						<c:if test="${type.key==workType}">
-					selected="selected"
-					</c:if>>${type.value}</option>
-				</c:forEach>
-			</select> 			
+			<label>单位名称：</label>
+			<form:input path="workCompany.companyName" htmlEscape="false"
+				maxlength="50" class="input-medium" />
+				
 		</div>
 		<div style="margin-top: 8px">
 			&nbsp;&nbsp;<label>到期日期：&nbsp;</label> &nbsp;&nbsp;<input class="input-medium Wdate" type="text"
@@ -824,9 +827,7 @@ $(document)
 				name="makeCertEndTime" /> 
 				<br />
 				<br />
-				&nbsp;&nbsp;&nbsp;&nbsp;<input id="btnSubmit"
-				class="btn btn-primary" type="submit" value="查询" />
-				&nbsp;&nbsp;&nbsp;&nbsp;
+				<div style="padding-left:100px;">
 				<a target="_blank" href="${ctx}/template/xls/batchImportDealInfo.xlsx" class="btn btn-primary">批量新增模板下载</a>
 				&nbsp;&nbsp;&nbsp;&nbsp;
 				<a id="manyAdd" data-toggle="modal" href="#declareDiv" class="btn btn-primary">批量新增导入</a>&nbsp;&nbsp;&nbsp;&nbsp;
@@ -834,7 +835,10 @@ $(document)
 				<a id="manyUpdate" data-toggle="modal" href="javaScript:updateCertOK();" class="btn btn-primary">批量更新证书</a>
 				&nbsp;&nbsp;&nbsp;&nbsp;
 				<a data-toggle="modal" href="${ctx}/work/workDealInfo/deleteList" class="btn btn-primary">删除批量新增信息</a>
-				<input type="hidden"  name="checkIds"  id="checkIds"  value="${checkIds }"/>
+				<input type="hidden"  name="checkIds"  id="checkIds"  value="${checkIds }"/>&nbsp;&nbsp;&nbsp;&nbsp;
+				<input id="btnSubmit"
+				class="btn btn-primary" type="submit" value="查询" />
+				</div>
 		</div>
 	</form:form>
 	<tags:message content="${message}" />
