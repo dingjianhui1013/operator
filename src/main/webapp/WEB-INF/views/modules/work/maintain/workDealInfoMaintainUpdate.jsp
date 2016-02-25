@@ -583,6 +583,10 @@
 								<span id="word1">1年</span>
 								<input type="radio" name="year" value="2" id="year2">
 								<span id="word2">2年 </span>
+								
+								<input type="radio" name="year" value="3" id="year3">
+								<span id="word3">3年</span>
+								
 								<input type="radio" name="year" value="4" id="year4">
 								<span id="word4">4年</span>
 								<input type="radio" name="year" value="5" id="year5">
