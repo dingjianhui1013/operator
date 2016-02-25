@@ -759,7 +759,7 @@ $(document)
 			value="${page.pageSize}" />
 		<input id="dealId" type="hidden" value="${workDealInfo.id}" />
 		<div>
-			<label>&nbsp;&nbsp;项目名称 ：&nbsp;&nbsp;</label>
+			<label>&nbsp;&nbsp;应用名称 ：&nbsp;&nbsp;</label>
 			<select name="alias"
 				id="alias">
 				<option value="">请选择应用</option>
@@ -849,7 +849,7 @@ $(document)
 				onchange="checkAll(this)"
 				/> </th>
 				<th>业务编号</th>
-				<th>项目名称</th>
+				<th>应用名称</th>
 				<th>单位名称</th>
 <!-- 				<th>证书持有人</th> -->
 				<th>经办人</th>
