@@ -378,31 +378,34 @@ public class SettlePayableDetailController extends BaseController {
 						detailVo.setMethod(payMethods);
 					}
 					if (infos.get(j).getDealInfoType().equals(1)||infos.get(j).getDealInfoType().equals(0)) {
-						if (infos.get(j).getBusinessCardUserDate().getTime()>endLastDate.getTime()) {
-							detailVo.setStartDate(infos.get(j).getBusinessCardUserDate());
-							detailVo.setEndDate(infos.get(j).getNotafter());
-							detailVo.setDealInfoType(dealInfoType);
-							detailVo.setSettleYear("0");
-							detailList.add(detailVo);
-						}else if (infos.get(j).getNotafter().getTime()<endLastDate.getTime()) {
-							yjNum += infos.get(j).getYear();
-							lastNum = infos.get(j).getYear();
-							detailVo.setStartDate(infos.get(j).getBusinessCardUserDate());
-							detailVo.setEndDate(infos.get(j).getNotafter());
-							detailVo.setDealInfoType(dealInfoType);
-							detailVo.setSettleYear(infos.get(j).getYear().toString());
-							detailList.add(detailVo);
-						}else if (infos.get(j).getBusinessCardUserDate().getTime()<endLastDate.getTime()&&infos.get(j).getNotafter().getTime()>endLastDate.getTime()) {
-							long between = endLastDate.getTime()-infos.get(j).getBusinessCardUserDate().getTime();
-							long a  = between/31536000000L; 
-							int yy = (int) Math.ceil(a);
-							yjNum += yy;
-							lastNum = yy;
-							detailVo.setStartDate(infos.get(j).getBusinessCardUserDate());
-							detailVo.setEndDate(infos.get(j).getNotafter());
-							detailVo.setDealInfoType(dealInfoType);
-							detailVo.setSettleYear(yy+"");
-							detailList.add(detailVo);
+						if(infos.get(j).getBusinessCardUserDate()!=null)
+						{
+							if (infos.get(j).getBusinessCardUserDate().getTime()>endLastDate.getTime()) {
+								detailVo.setStartDate(infos.get(j).getBusinessCardUserDate());
+								detailVo.setEndDate(infos.get(j).getNotafter());
+								detailVo.setDealInfoType(dealInfoType);
+								detailVo.setSettleYear("0");
+								detailList.add(detailVo);
+							}else if (infos.get(j).getNotafter().getTime()<endLastDate.getTime()) {
+								yjNum += infos.get(j).getYear();
+								lastNum = infos.get(j).getYear();
+								detailVo.setStartDate(infos.get(j).getBusinessCardUserDate());
+								detailVo.setEndDate(infos.get(j).getNotafter());
+								detailVo.setDealInfoType(dealInfoType);
+								detailVo.setSettleYear(infos.get(j).getYear().toString());
+								detailList.add(detailVo);
+							}else if (infos.get(j).getBusinessCardUserDate().getTime()<endLastDate.getTime()&&infos.get(j).getNotafter().getTime()>endLastDate.getTime()) {
+								long between = endLastDate.getTime()-infos.get(j).getBusinessCardUserDate().getTime();
+								long a  = between/31536000000L; 
+								int yy = (int) Math.ceil(a);
+								yjNum += yy;
+								lastNum = yy;
+								detailVo.setStartDate(infos.get(j).getBusinessCardUserDate());
+								detailVo.setEndDate(infos.get(j).getNotafter());
+								detailVo.setDealInfoType(dealInfoType);
+								detailVo.setSettleYear(yy+"");
+								detailList.add(detailVo);
+							}
 						}
 					}
 				}
