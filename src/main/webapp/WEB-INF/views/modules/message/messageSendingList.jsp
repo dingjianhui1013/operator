@@ -120,6 +120,7 @@
 			{
 				$.jBox.tip("请选择应用！");
 			}else{
+					$("#send").removeAttr("href");
 					var url="${ctx}/message/messageSending/selectData";
 					$.ajax({
 						url:url,
@@ -138,6 +139,7 @@
 									check.attr("checked","true");
 								}
 							}
+							$("#send").attr("href","javascript:send()");
 						}
 					});
 			}
@@ -202,7 +204,7 @@
 				+ "&contactName=" + contactName + "&workType=" + workType
 				+ "&dealInfoStatus=" + dealInfoStatus + "&areaId=" + areaId
 				+ "&officeId=" + officeId + "&smsId=" + smsId + "&_="
-				+ new Date().getTime()
+				+ new Date().getTime();
 
 		$.getJSON(	updateUrl,
 						function(data) {
@@ -229,6 +231,18 @@
 		
 	}
 </script>
+<script type="text/javascript">
+			_init_area();
+			$("#s_province")
+					.append(
+							'<option value="${workDealInfo.workCompany.province}" selected="selected">${workDealInfo.workCompany.province}</option>');
+			$("#s_city")
+					.append(
+							'<option value="${workDealInfo.workCompany.city}" selected="selected">${workDealInfo.workCompany.city}</option>');
+			$("#s_county")
+					.append(
+							'<option value="${workDealInfo.workCompany.district}" selected="selected">${workDealInfo.workCompany.district}</option>');
+		</script>
 <script type="text/javascript" src="${ctxStatic}/jquery/city.js"></script>
 </head>
 <body>
@@ -258,7 +272,7 @@
 			<form:input path="workCompany.companyName" htmlEscape="false"
 				maxlength="50" class="input-medium" id="companyName" />
 
-			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <label>证书持有人：</label>
+			<label>证书持有人：</label>
 			<form:input path="workUser.contactName" htmlEscape="false"
 				maxlength="16" class="input-medium" id="contactName" />
 		</div>
@@ -322,28 +336,17 @@
 		<select id="s_province" name="workCompany.province"
 			style="width: 100px;">
 		</select>
-								
-								&nbsp;&nbsp; 
-								<select id="s_city" name="workCompany.city"
-			style="width: 100px;">
-		</select>&nbsp;&nbsp; <select id="s_county" name="workCompany.district"
+
+		<select id="s_city" name="workCompany.city"
 			style="width: 100px;">
 		</select>
-		<script type="text/javascript">
-			_init_area();
-			$("#s_province")
-					.append(
-							'<option value="${workDealInfo.workCompany.province}" selected="selected">${workDealInfo.workCompany.province}</option>');
-			$("#s_city")
-					.append(
-							'<option value="${workDealInfo.workCompany.city}" selected="selected">${workDealInfo.workCompany.city}</option>');
-			$("#s_county")
-					.append(
-							'<option value="${workDealInfo.workCompany.district}" selected="selected">${workDealInfo.workCompany.district}</option>');
-		</script>
+
+		<select id="s_county" name="workCompany.district"
+			style="width: 100px;">
+		</select>
 			<input id="btnSubmit" class="btn btn-primary" type="submit"
 				value="查询" />
-			<a href="javascript:send()" class="btn btn-primary">发送</a> <input
+			<a href="javascript:send()" class="btn btn-primary" id="send">发送</a> <input
 				type="hidden" name="checkIds" id="checkIds" value="${checkIds }" />
 				
 		</div>

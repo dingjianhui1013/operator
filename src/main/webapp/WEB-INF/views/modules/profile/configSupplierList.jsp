@@ -61,7 +61,13 @@
 					}
 				});
 			}else {
-				window.location.href="${ctx}/profile/configSupplier/delete?id="+id;
+				var submit = function (v, h, f) {
+				    if (v == 'ok')
+				    	window.location.href="${ctx}/profile/configSupplier/delete?id="+id;
+				    return true; //close
+				};
+				top.$.jBox.confirm("确认要删除该证书", "提示", submit);
+				
 			}
 			
 			
