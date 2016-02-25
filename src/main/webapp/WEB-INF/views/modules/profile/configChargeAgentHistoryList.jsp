@@ -10,8 +10,13 @@
 		$('.windowHeight').height(windowH);
 		$("#scrollBar").scroll(function(){
 			var leftWidth=$("#scrollBar").scrollLeft();
-			$("#searchForm").css("margin-left",leftWidth);
-			$("#ulId").css("margin-left",leftWidth);
+			var tableWidth=$("#contentTable").width();
+			var formWidth=$("#searchForm").width();
+			if((tableWidth-formWidth)-leftWidth>0)
+				{
+					$("#searchForm").css("margin-left",leftWidth);
+					$("#ulId").css("margin-left",leftWidth);
+				}
 		});
 	});
 	function page(n, s) {
@@ -78,7 +83,7 @@
 				<th style="vertical-align: middle; text-align: center;" colspan="12">业务类型</th>
 				<th style="vertical-align: middle; text-align: center;" colspan="2">可信移动设备</th>
 				<th style="vertical-align: middle; text-align: center;" rowspan="3" >付款方式</th>
-				<th style="vertical-align: middle; text-align: center;" colspan="2" rowspan="2">配置数量</th>
+				<th style="vertical-align: middle; text-align: center;width:10%;" colspan="2" rowspan="2">配置数量</th>
 				<th style="vertical-align: middle; text-align: center;" colspan="2" rowspan="2">剩余数量</th>
 				<th style="vertical-align: middle; text-align: center;" colspan="2" rowspan="2">已用数量</th>
 				<th style="vertical-align: middle; text-align: center;" rowspan="3">修改人</th>

@@ -10,9 +10,14 @@
 		var windowH=$(window).height();
 		$('.windowHeight').height(windowH);
 		$("#scrollBar").scroll(function(){
+			var tableWidth=$("#contentTable").width();
+			var formWidth=$("#searchForm").width();
 			var leftWidth=$("#scrollBar").scrollLeft();
-			$("#searchForm").css("margin-left",leftWidth);
-			$("#ulId").css("margin-left",leftWidth);
+			if((tableWidth-formWidth)-leftWidth>0)
+				{
+					$("#searchForm").css("margin-left",leftWidth);
+					$("#ulId").css("margin-left",leftWidth);
+				}
 		});
 	});
 	function page(n, s) {
