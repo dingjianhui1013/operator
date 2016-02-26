@@ -80,7 +80,8 @@
 						</c:if>>${office.name}</option>
 				</c:forEach>
 			</select> 
-			
+	</div>
+	<div class="control-group">
 			 <label>应用名称 ：</label> <select name="congifApplyId" id="congifApplyId" onchange="products()">
 				<option value="">请选择</option>
 				<c:forEach items="${configApps}" var="app">
@@ -101,15 +102,9 @@
 						</option>
 				</c:forEach>
 			</select> 
-			
-			
 	</div>
 	<div class="control-group">
-			<label>办&nbsp;理&nbsp;人 &nbsp;：</label> <input type="text" name="handle" value="${handle }"/>
-	
-	
-	
-	
+			<label>&nbsp;&nbsp;&nbsp;办理人 ：</label> <input type="text" name="handle" value="${handle }"/>
 			<label>办理时间 ：</label> <input id="startTime" name="startTime"
 				type="text" readonly="readonly" maxlength="20"
 				class="input-medium Wdate" required="required"
