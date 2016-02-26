@@ -57,12 +57,17 @@
 						已吊销
 					</c:if>
 					<c:if test="${workDealInfo.status != 6}">
-						<c:if test="${productDate le nowDate }">
-							已过期
-						</c:if>	
-						<c:if test="${productDate ge nowDate }">
-							有效
-						</c:if>	
+						<c:if test="${productDate==''}">
+							未生效
+						</c:if>
+						<c:if test="${productDate!=''}">
+							<c:if test="${productDate le nowDate }">
+								已过期
+							</c:if>	
+							<c:if test="${productDate ge nowDate }">
+								有效
+							</c:if>	
+						</c:if>
 					</c:if>
 				</td>
 				<td>
