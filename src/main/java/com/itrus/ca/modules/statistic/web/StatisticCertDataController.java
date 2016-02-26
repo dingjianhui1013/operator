@@ -321,7 +321,6 @@ public class StatisticCertDataController extends BaseController {
 		
 				 if (totalListNum.size()>totalLocation) {
 					 totalListNum.set(totalLocation, totalListNum.get(totalLocation)+totaladd);
-					 
 				 }else{
 					 totalListNum.add(totalLocation,totaladd);
 				 }
@@ -531,7 +530,7 @@ public class StatisticCertDataController extends BaseController {
 				 
 				 Integer totaladd = certMonth.getOneAdd1()+certMonth.getOneAdd2()+certMonth.getOneAdd4()+certMonth.getOneAdd5()
 						 +certMonth.getTwoAdd1()+certMonth.getTwoAdd2()+certMonth.getTwoAdd4()+certMonth.getTwoAdd5()
-						 +certMonth.getFourAdd1()+certMonth.getFourAdd2()+certMonth.getFourAdd4()+certMonth.getFourAdd4();
+						 +certMonth.getFourAdd1()+certMonth.getFourAdd2()+certMonth.getFourAdd4()+certMonth.getFourAdd5();
 		
 				 if (totalListNum.size()>totalLocation) {
 					 totalListNum.set(totalLocation, totalListNum.get(totalLocation)+totaladd);
