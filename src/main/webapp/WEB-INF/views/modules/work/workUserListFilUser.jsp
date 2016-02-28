@@ -59,7 +59,11 @@
 					<td>${workUser.contactName}</td>
 					<td>${workUser.contactSex}</td>
 					<td>${workUser.department}</td>
-					<td>${workUser.contactPhone}</td>
+					<td>
+					
+					<fmt:formatNumber pattern="#">${workUser.contactPhone}</fmt:formatNumber>
+					
+					</td>
 					<td>${workUser.contactEmail}</td>
 					<td><a
 						href="${ctx}/work/workDealInfoFiling/updateUserFrom?id=${workUser.id}&workDealInfoId=${workDealInfo.id}">编辑</a>

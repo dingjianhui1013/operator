@@ -93,6 +93,7 @@ public class WorkCertInfoService extends BaseService {
 
 	@Transactional(readOnly = false)
 	public void delete(Long id) {
+		workCertInfoDao.delete(id);
 
 	}
 

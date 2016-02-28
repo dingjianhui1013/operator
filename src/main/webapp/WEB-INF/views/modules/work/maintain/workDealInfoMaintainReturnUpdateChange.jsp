@@ -93,15 +93,6 @@
 									$("input[name='" + arrList[i] + "']")
 											.parent().prev().find("span")
 											.show();
-									if(arrList[i] != "contacEmail"){
-										
-										$("input[name='" + arrList[i] + "']").attr("disabled","disabled");
-									}
-									
-									
-									
-									
-									
 								} else {
 									$("input[name='" + arrList[i] + "']").attr(
 											"required", "required");
@@ -219,15 +210,18 @@
 	function onSubmit(){
 		$("#newInfoId").val(getCookie("work_deal_info_id"));
 		delCookie("work_deal_info_id");
-		
 		if($("#agentDetailId").val()!=0 && $("#agentId").val()!=1){
-			
+			if($("#surplusNum").val()==0){
+				top.$.jBox.tip("此计费策略模版剩余数量为零，不能进行业务办理！"); 
+				return false;
+			}else{
 				var boundId = $("#agentDetailId").val();
 				var url = "${ctx}/profile/configChargeAgent/checkAgentIsZero?agentDetailId="+boundId+"&_="+new Date().getTime();
 				$.getJSON(url,function(data){
-					if(data.status==0 && $("#agentId").val()!=1 && data.agentId != "${workDealInfo.configChargeAgentId}" ){
+					if(data.status==0){
 						top.$.jBox.tip("此计费策略模版剩余数量为零，不能进行业务办理！"); 
 					}else{
+						
 						var year;
 						var isCheck = false;
 						$("input[name='year']").each(function(){
@@ -251,6 +245,9 @@
 					}
 				});
 				
+				
+				
+			}
 		}else{
 			var year;
 			var isCheck = false;
@@ -275,19 +272,14 @@
 			
 		}
 		
-		
-		
-			
-		
 	}
-	
 	
 	function setJBRName(){
 		var name = $("#contactName1").val();
 		$("#pName").val(name);
 	}
 	
-	function setJBRCard(o){
+	function setJBRCard(){
 		var card = $("#conCertNumber1").val();
 		$("#pIDCard").val(card);
 		$("#"+o).hide();
@@ -349,7 +341,7 @@
 			var url="${ctx}/work/workDealInfo/checkSurplusNum?boundId="+boundId+"&_="+new Date().getTime();
 			$.getJSON(url,function(data){
 				$("#surplusNum").val(data.surplusNum);
-				if($("#surplusNum").val()==0 && $("#agentId").val()!=1 && data.agentId != "${workDealInfo.configChargeAgentId}"){
+				if($("#surplusNum").val()==0 && $("#agentId").val()!=1){
 					top.$.jBox.tip("此计费策略模版剩余数量为零，不能进行业务办理！");
 					$("#agentMes").show();
 				}else{
@@ -493,7 +485,7 @@
 	<ul class="nav nav-tabs">
 		<li><a href="${ctx}/work/workDealInfo/list">业务办理列表</a></li>
 		<li class="active"><a
-			href="${ctx}/work/workDealInfo/typeFormReturnUpdate?id=${workDealInfo.id}&reissueType=${reissue}&dealType=${dealType}">业务<c:if test="${not empty update}">更新</c:if></a></li>
+			href="${ctx}/work/workDealInfo/typeForm?id=${workDealInfo.id}&reissueType=${reissue}&dealType=${dealType}">业务<c:if test="${not empty update}">更新</c:if><c:if test="${not empty change}">变更</c:if><c:if test="${not empty reissue}">补办</c:if><c:if test="${not empty revoke}">吊销</c:if></a></li>
 	</ul>
 	<form:form id="inputForm"
 		action="${ctx}/work/workDealInfoOperation/maintainSaveReturnUpdate" method="POST"
@@ -507,11 +499,11 @@
 							<th colspan="6" style="font-size: 20px;">基本信息</th>
 						</tr>
 						<tr>
-							<th><span class="prompt" style="color: red; display: none;">*</span>代办应用：</th>
+							<th><span class="prompt" style="color: red; display: none;">*</span>应用名称：</th>
 							<td colspan="3"><input type="text" name="configApp" disabled="disabled"
 								value="${workDealInfo.configApp.appName }" id="4" />
 								
-								<input type="hidden" id="appId" value="${workDealInfo.configApp.id }" />
+								<input type="hidden" id="appId" value="${workDealInfo.configApp.id }" on/>
 								
 								</td>
 							<th><span class="prompt" style="color: red; display: none;">*</span>选择产品：</th>
@@ -533,23 +525,19 @@
 							<th><span class="prompt" style="color: red; display: none;">*</span>业务类型：</th>
 							<td colspan="3">
 							
-							
-							
+							<input type="checkbox" disabled="disabled" checked="checked"
+										value="3" name="dealInfoType2">
+										<font color="red" style="font-weight:bold;">变更证书</font><input
+										type="hidden" value="3" name="dealInfoType2">
 							<input type="checkbox" disabled="disabled" checked="checked" value="0" name="dealInfoType">
-							<font color="red" style="font-weight:bold;">
-							更新证书</font>
-							<c:if test="${reissue==2}"><input type="checkbox" disabled="disabled" checked="checked" value = "1"
-								name="dealInfoType1"><font color="red" style="font-weight:bold;">
-								遗失补办</font>
-								<input type="hidden" value="1" name="dealInfoType1"></c:if>
-								<c:if test="${reissue==3}"><input type="checkbox" disabled="disabled" checked="checked" value = "2"
-								name="dealInfoType1"><font color="red" style="font-weight:bold;">损坏更换</font>
-								<input type="hidden" value="2" name="dealInfoType1"></c:if>
-							
+							<font color="red" style="font-weight:bold;">更新证书</font>
 							<input type="hidden" value="0" name="dealInfoType">
+							<c:if test="${reissue==2}"><input type="checkbox" disabled="disabled" checked="checked" value = "1"
+								name="dealInfoType1"><font color="red" style="font-weight:bold;">遗失补办</font><input type="hidden" value="1" name="dealInfoType1"></c:if>
+								<c:if test="${reissue==3}"><input type="checkbox" disabled="disabled" checked="checked" value = "2"
+								name="dealInfoType1"><font color="red" style="font-weight:bold;">损坏更换</font><input type="hidden" value="2" name="dealInfoType1"></c:if>
 							
 							</td>
-							
 						</tr>
 						<tr>
 
@@ -565,7 +553,7 @@
 								onchange="setYearByBoundId()" id="agentDetailId"
 								name="agentDetailId">
 									<option value="0">请选择</option>
-							</select> &nbsp;<label id="agentMes" style="color: red;display: none;">不可用</label>
+							</select>  &nbsp;<label id="agentMes" style="color: red;display: none;">不可用</label>
 							<input type="hidden" id="surplusNum" />
 
 							</td>
@@ -632,7 +620,7 @@
 								id="organizationNumber1"
 								onkeyup="value=value.replace(/[^\w\.\/]/ig,'')"
 								value="${workDealInfo.workCompany.organizationNumber}"
-								maxlength="20" oninput="count('organizationNumber','zzcount')" onblur="qxCount('zzcount')" onfocus="hqcount('organizationNumber','zzcount')"/><span id="zzcount" style="color: red; margin-left: 10px"></span></td>
+								maxlength="20" oninput="count('organizationNumber1','zzcount')" onblur="qxCount('zzcount')" onfocus="hqcount('organizationNumber1','zzcount')"/><span id="zzcount" style="color: red; margin-left: 10px"></span></td>
 							<th>组织机构代码有效期：</th>
 							<td><input class="input-medium Wdate"
 								
@@ -666,7 +654,7 @@
 							<th><span class="prompt" style="color: red; display: none;">*</span>证件号：</th>
 							<td><input type="text" name="comCertficateNumber"
 								id="comCertficateNumber1" 
-								value="${workDealInfo.workCompany.comCertficateNumber}" oninput="count('comCertficateNumber1','zjhcount')" onblur="qxCount('zjhcount')" onfocus="hqcount('comCertficateNumber1','zjhcount')"/><span id="zjhcount" style="color: red; margin-left: 10px"></span></td>
+								value="${workDealInfo.workCompany.comCertficateNumber}" oninput="count('comCertficateNumber1','zjcount')" onblur="qxCount('zjcount')" onfocus="hqcount('comCertficateNumber1','zjcount')"/><span id="zjcount" style="color: red; margin-left: 10px"></span></td>
 							<th>单位证照有效期：</th>
 							<td><input class="input-medium Wdate" type="text"
 								onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});" maxlength="20"
@@ -749,7 +737,7 @@
 							<td><input type="text" name="conCertNumber"
 								id="conCertNumber1" onblur="setJBRCard('zjmcount')"
 								onkeyup="value=value.replace(/[^\w\.\/]/ig,'')" maxlength="18"
-								value="${workDealInfo.workUser.conCertNumber }" oninput="count('conCertNumber1','zjmcount')"  onfocus="hqcount('conCertNumber1','zjmcount')"/><span id="zjmcount" style="color: red; margin-left: 10px"></span></td>
+								value="${workDealInfo.workUser.conCertNumber }" oninput="count('conCertNumber1','zjmcount')" onfocus="hqcount('conCertNumber1','zjmcount')"/><span id="zjmcount" style="color: red; margin-left: 10px"></span></td>
 							<th><span class="prompt" style="color: red; display: none;">*</span>证书持有人电子邮件:</th>
 							<td><input type="text" name="contacEmail" id="contacEmail" onblur="setJBRMail()"
 								class="email" maxlength="30"
@@ -759,13 +747,13 @@
 							<th><span class="prompt" style="color: red; display: none;">*</span>证书持有人手机号:</th>
 							<td><input type="text" name="contactPhone"
 								id="contactPhone1" maxlength="11" class="number"
-								value="${workDealInfo.workUser.contactPhone }" oninput="count('contactPhone1','zjtcount')" onblur="qxCount('zjtcount')" onfocus="hqcount('contactPhone1','zjtcount')"/><span id="zjtcount" style="color: red; margin-left: 10px"></span> <input
+								value="${workDealInfo.workUser.contactPhone }" oninput="count('contactPhone1','zstcount')" onblur="qxCount('zstcount')" onfocus="hqcount('contactPhone1','zstcount')"/><span id="zstcount" style="color: red; margin-left: 10px"></span> <input
 								type="hidden" name="contactPhone" id="contactPhone"
 								maxlength="11" class="number" disabled="disabled"
 								value="${workDealInfo.workUser.contactPhone }" /></td>
 							<th><span class="prompt" style="color: red; display: none;">*</span>业务系统UID:</th>
 							<td><input type="text" name="contactTel" id="contactTel1"
-								maxlength="20" value="${workDealInfo.workUser.contactTel }" oninput="count('contactTel1','ywcount')" onblur="qxCount('ywcount')" onfocus="hqcount('contactTel1','ywcount')"/><span id="ywcount" style="color: red; margin-left: 10px"></span>
+								maxlength="20" value="${workDealInfo.workUser.contactTel }" oninput="count('contactTel1','ywIDcount')" onblur="qxCount('ywIDcount')" onfocus="hqcount('contactTel1','ywIDcount')"/><span id="ywIDcount" style="color: red; margin-left: 10px"></span>
 							</td>
 						</tr>
 						<tr>
@@ -790,17 +778,17 @@
 						</tr>
 						<tr>
 							<th><span class="prompt" style="color: red; display: none;">*</span>经办人姓名:</th>
-							<td><input type="text" name="pName" id="pName" disabled="disabled"
+							<td><input type="text" name="pName" id="pName" 
 								value="${workDealInfo.workCertInfo.workCertApplyInfo.name }" /></td>
 						</tr>
 						<tr>
 							<th><span class="prompt" style="color: red; display: none;">*</span>经办人身份证号:</th>
-							<td><input type="text" name="pIDCard" id="pIDCard" disabled="disabled"
-								value="${workDealInfo.workCertInfo.workCertApplyInfo.idCard }" /></td>
+							<td><input type="text" name="pIDCard" id="pIDCard" 
+								value="${workDealInfo.workCertInfo.workCertApplyInfo.idCard }" oninput="count('pIDCard','pIDcount')" onblur="qxCount('pIDcount')" onfocus="hqcount('pIDCard','pIDcount')"/><span id="pIDcount" style="color: red; margin-left: 10px"></span></td>
 						</tr>
 						<tr>
 							<th><span class="prompt" style="color: red; display: none;">*</span>经办人邮箱:</th>
-							<td><input type="text" name="pEmail" id="pEmail" disabled="disabled"
+							<td><input type="text" name="pEmail" id="pEmail" 
 								value="${workDealInfo.workCertInfo.workCertApplyInfo.email }" /></td>
 						</tr>
 					</tbody>
@@ -845,7 +833,8 @@
 									<input id="btnSubmit" class="btn btn-primary" type="button"
 										onclick="onSubmit()" value="提 交" />&nbsp;</shiro:hasPermission> <input
 								id="btnCancel" class="btn" type="button" value="返 回"
-								onclick="history.go(-1)" /> </td>
+								onclick="history.go(-1)" /> <input type="hidden" id="isOK"
+								name="isOK" value="${isOK }"></td>
 						</tr>
 					</tbody>
 				</table>

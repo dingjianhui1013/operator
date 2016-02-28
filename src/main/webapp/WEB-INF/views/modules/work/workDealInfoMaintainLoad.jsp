@@ -84,9 +84,7 @@ document.onkeydown = function(event) {
 		var submit = function (v, h, f) {
 		    if (v == 'ok'){
 		    	var id = "${workDealInfo.id}";
-				var reissueType = "";
-				var dealType = "3";
-				window.location.href = "${ctx}/work/workDealInfo/typeFormReturnUpdate?id="+id+"&reissueType="+reissueType+"&dealType="+dealType;
+				window.location.href = "${ctx}/work/workDealInfo/typeFormReturnUpdate?id="+id;
 		    }
 		   		 return true; //close
 		};
@@ -541,20 +539,10 @@ function setReceiptMoneyNull(){
 				<input id="btnSubmit" class="btn btn-primary" type="button"
 					onclick="onSubmit()" value="提交" />&nbsp;</shiro:hasPermission>
 			
-				
-				<c:if test="${isOneUpdate!='yes'}">
-				<input id="btnCancel" class="btn" type="button" value="返 回"
-				onclick="cencel()" />
-				</c:if>
-				<c:if test="${isOneUpdate=='yes'}">
+			<c:if test="${workDealInfo.dealInfoType != 0}">
 				&nbsp;<a class="btn" href="javascript:returnDealInfo()">返回用户信息界面</a>
-				</c:if>
-				<c:if test="${isOneUpdate=='yes'}">
 				&nbsp;<a class="btn" href="javascript:cancelMaintenance()">取消本次维护</a>
-				</c:if>
-				
-				
-				
+			</c:if>
 		</div>
 	</form:form>
 

@@ -5391,7 +5391,7 @@ public class WorkDealInfoService extends BaseService {
 				if (row.getCell(13) != null
 						&& !row.getCell(13).toString().replace(" ", "")
 								.equals("")) {
-					address = row.getCell(18).toString().replace(" ", "");
+					address = row.getCell(13).toString().replace(" ", "");
 				}
 				if (address != null && !address.equals("")) {
 					workCompany.setAddress(address);

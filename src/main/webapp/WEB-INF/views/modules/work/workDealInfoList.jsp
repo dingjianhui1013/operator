@@ -286,9 +286,7 @@ $(document)
 	
 	function returnDealInfo(obj){
 		var id = obj;
-		var reissueType = "";
-		var dealType = "3";
-		window.location.href = "${ctx}/work/workDealInfo/typeFormReturnUpdate?id="+id+"&reissueType="+reissueType+"&dealType="+dealType;
+		window.location.href = "${ctx}/work/workDealInfo/typeFormReturnUpdate?id="+id;
 	}
 	
 	

@@ -2735,6 +2735,9 @@ public class WorkDealInfoController extends BaseController {
 					case "2":
 						model.addAttribute("year2", true);
 						break;
+					case "3":
+						model.addAttribute("year3", true);
+						break;
 					case "4":
 						model.addAttribute("year4", true);
 						break;
@@ -2745,6 +2748,9 @@ public class WorkDealInfoController extends BaseController {
 				}
 				model.addAttribute("dealType", dealInfoTypes.toString());
 				return "modules/work/maintain/workDealInfoMaintainReturnUpdate";
+			}else if(dealInfoTypes.get(0).equals(2)||dealInfoTypes.get(0).equals(3)){
+				model.addAttribute("reissue", dealInfoTypes.get(0));
+				return "modules/work/maintain/workDealInfoMaintainReturnLost";
 			}
         	
         }else if(dealInfoTypes.size() == 2){
@@ -2753,15 +2759,90 @@ public class WorkDealInfoController extends BaseController {
 					model.addAttribute("reissue", dealInfoTypes.get(0));
 					return "modules/work/maintain/workDealInfoMaintainReturnChange";
 				}
+			}else if(dealInfoTypes.get(0).equals(1)){
+				if (dealInfoTypes.get(1).equals(2)||dealInfoTypes.get(1).equals(3)) {
+					model.addAttribute("update", "3");
+					model.addAttribute("reissue", dealInfoTypes.get(1));
+					ConfigProduct configProductOld = workDealInfo.getConfigProduct();
+					String[] years = configChargeAgentDetailService.getChargeAgentYears(configProductOld.getChargeAgentId(),
+							WorkDealInfoType.TYPE_UPDATE_CERT);
+					for (int j = 0; j < years.length; j++) {
+						switch (years[j]) {
+						case "1":
+							model.addAttribute("year1", true);
+							break;
+						case "2":
+							model.addAttribute("year2", true);
+							break;
+						case "3":
+							model.addAttribute("year3", true);
+							break;
+						case "4":
+							model.addAttribute("year4", true);
+							break;
+						case "5":
+							model.addAttribute("year5", true);
+							break;
+						}
+					}
+					model.addAttribute("dealType", dealInfoTypes.toString());
+					return "modules/work/maintain/workDealInfoMaintainReturnUpdate";
+				}else if(dealInfoTypes.get(1).equals(4)){
+					model.addAttribute("update", "3");
+					ConfigProduct configProductOld = workDealInfo.getConfigProduct();
+					String[] years = configChargeAgentDetailService.getChargeAgentYears(configProductOld.getChargeAgentId(),
+							WorkDealInfoType.TYPE_UPDATE_CERT);
+					for (int j = 0; j < years.length; j++) {
+						switch (years[j]) {
+						case "1":
+							model.addAttribute("year1", true);
+							break;
+						case "2":
+							model.addAttribute("year2", true);
+							break;
+						case "3":
+							model.addAttribute("year3", true);
+							break;
+						case "4":
+							model.addAttribute("year4", true);
+							break;
+						case "5":
+							model.addAttribute("year5", true);
+							break;
+						}
+					}
+					model.addAttribute("dealType", dealInfoTypes.toString());
+					return "modules/work/maintain/workDealInfoMaintainReturnUpdateChange";
+				}
 			}
-        	
-        	
-        	
-        }else{
-        	
-        	
+        }else if(dealInfoTypes.size() == 3){
+        	model.addAttribute("update", "3");
+        	model.addAttribute("reissue", dealInfoTypes.get(1));
+			ConfigProduct configProductOld = workDealInfo.getConfigProduct();
+			String[] years = configChargeAgentDetailService.getChargeAgentYears(configProductOld.getChargeAgentId(),
+					WorkDealInfoType.TYPE_UPDATE_CERT);
+			for (int j = 0; j < years.length; j++) {
+				switch (years[j]) {
+				case "1":
+					model.addAttribute("year1", true);
+					break;
+				case "2":
+					model.addAttribute("year2", true);
+					break;
+				case "3":
+					model.addAttribute("year3", true);
+					break;
+				case "4":
+					model.addAttribute("year4", true);
+					break;
+				case "5":
+					model.addAttribute("year5", true);
+					break;
+				}
+			}
+			model.addAttribute("dealType", dealInfoTypes.toString());
+			return "modules/work/maintain/workDealInfoMaintainReturnUpdateChange";
         }
-        
         return null;
 	}
 
@@ -6986,13 +7067,7 @@ public class WorkDealInfoController extends BaseController {
 	public String showYearNew(Long boundId, Integer infoType) {
 		JSONObject json = new JSONObject();
 		try {
-
 			ConfigChargeAgentBoundConfigProduct bound = configChargeAgentBoundConfigProductService.get(boundId);
-
-			// ConfigProduct configProduct =
-			// configProductService.findByIdOrLable(
-			// app, productName, lable);
-
 			if (infoType != null) {
 				String[] years = configChargeAgentDetailService.getChargeAgentYears(bound.getAgent().getId(), infoType);
 				for (int i = 0; i < years.length; i++) {
@@ -7432,17 +7507,18 @@ public class WorkDealInfoController extends BaseController {
 			Long certId = dealinfo.getWorkCertInfo().getId();
 			Long agnetId = dealinfo.getConfigChargeAgentId();
 			Long dealPreId = dealinfo.getPrevId();
+			if (dealinfo.getDealInfoType().equals(1)) {
+				ConfigChargeAgent agentOri = configChargeAgentService.get(agnetId);
+				agentOri.setReserveUpdateNum(agentOri.getReserveUpdateNum() - 1);
+				agentOri.setSurplusUpdateNum(agentOri.getSurplusUpdateNum() + 1);
+				configChargeAgentService.save(agentOri);
 
-			ConfigChargeAgent agentOri = configChargeAgentService.get(agnetId);
-			agentOri.setReserveUpdateNum(agentOri.getReserveUpdateNum() - 1);
-			agentOri.setSurplusUpdateNum(agentOri.getSurplusUpdateNum() + 1);
-			configChargeAgentService.save(agentOri);
-
-			ConfigAgentBoundDealInfo bound = configAgentBoundDealInfoService.findByAgentIdDealId(agnetId, id);
-			if (bound != null) {
-				configAgentBoundDealInfoService.deleteById(bound.getId());
+				ConfigAgentBoundDealInfo bound = configAgentBoundDealInfoService.findByAgentIdDealId(agnetId, id);
+				if (bound != null) {
+					configAgentBoundDealInfoService.deleteById(bound.getId());
+				}
 			}
-
+		
 			workDealInfoService.deleteWork(id);
 			workCertInfoService.delete(certId);
 			workDealInfoService.deleteReturnById(dealPreId);

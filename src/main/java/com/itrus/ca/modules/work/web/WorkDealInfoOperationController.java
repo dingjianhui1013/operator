@@ -1280,9 +1280,6 @@ public class WorkDealInfoOperationController extends BaseController {
 			return "redirect:" + Global.getAdminPath() + "/work/workDealInfo/?repage";
 		}
 		
-		
-		
-		
 		WorkCompany workCompany = null;
 		WorkUser workUser = null;
 		WorkCompanyHis companyHis = null;
