@@ -85,7 +85,7 @@ public class SettleSupplierCertDetailService extends BaseService {
 		 */
 		// Query query = settleSupplierCertDetailDao.createSqlQuery(strSQL);
 		Query query = settleSupplierCertDetailDao
-				.createSqlQuery("select ou as ou,product_type as product_type,SUM(s.amount_year1) as year1,SUM(s.amount_year2) as year2,SUM(s.amount_year4) as year4,SUM(s.amount_year5) as year5,SUM(s.change_amount) as change_amount,SUM(s.frw_bb_amount) as frw_bb_amount,SUM(s.replace_amount) as replace_amount,SUM(s.revoke_amount) as revoke_amount,SUM(s.rw_bb_amount) as rw_bb_amount,SUM(s.test_amount) as test_amount,SUM(s.total_amount) as total_amount,SUM(s.add_amount) as add_amount from settle_supplier_cert_detail s where supplier_id="
+				.createSqlQuery("select ou as ou,product_type as product_type,SUM(s.amount_year1) as year1,SUM(s.amount_year2) as year2,SUM(s.amount_year3) as year3,SUM(s.amount_year4) as year4,SUM(s.amount_year5) as year5,SUM(s.change_amount) as change_amount,SUM(s.frw_bb_amount) as frw_bb_amount,SUM(s.replace_amount) as replace_amount,SUM(s.revoke_amount) as revoke_amount,SUM(s.rw_bb_amount) as rw_bb_amount,SUM(s.test_amount) as test_amount,SUM(s.total_amount) as total_amount,SUM(s.add_amount) as add_amount from settle_supplier_cert_detail s where supplier_id="
 						+ configSupplier.getId()
 						+ timeSQL
 						+ "  GROUP BY ou,product_type ORDER BY ou,product_type");
@@ -145,12 +145,12 @@ public class SettleSupplierCertDetailService extends BaseService {
 
 		}
 		String[] type = { "(3,6,2)", "(1)", "(3,6,2)", "(1)", "(3,6,2)", "(1)",
-				"(3,6,2)", "(1)" };
-		int[] year = { 1, 1, 2, 2, 4, 4, 5, 5 };
+				"(3,6,2)", "(1)" , "(3,6,2)", "(1)",};
+		int[] year = { 1, 1, 2, 2, 3, 3, 4, 4, 5, 5 };
 		List<String> ouString = new ArrayList<String>();
-		for (int i = 0; i < 9; i++) {
+		for (int i = 0; i < 11; i++) {
 			Query query = null;
-			if (i != 8) {
+			if (i != 10) {
 				query = settleSupplierCertDetailDao
 						.createSqlQuery("select ou as ou from settle_supplier_cert_detail s where s.supplier_id="
 								+ configSupplier.getId()

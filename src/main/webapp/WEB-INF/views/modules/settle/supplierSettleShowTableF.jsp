@@ -89,12 +89,12 @@
 		<table class="table table-striped table-bordered table-condensed">
 			<thead>
 				<tr>
-					<th colspan="14"><h3>四川CA对账统计表</h3></th>
+					<th colspan="15"><h3>四川CA对账统计表</h3></th>
 				</tr>
 			</thead>
 			<tr>
 				<th></th>
-				<th colspan="13">时间：${startTime } — ${endTime}</th>
+				<th colspan="14">时间：${startTime } — ${endTime}</th>
 			</tr>
 			<tr>
 				<th>类别</th>
@@ -116,6 +116,8 @@
 				<th>一年期<br />有效证<br />书数量
 				</th>
 				<th>两年期<br />有效证<br />书数量
+				</th>
+				<th>三年期<br />有效证<br />书数量
 				</th>
 				<th>四年期<br />有效证<br />书数量
 				</th>
@@ -162,6 +164,12 @@
 					<th>
 						<c:set var="year2" value = "${year2+supplier.YEAR2}"></c:set>
 					${supplier.YEAR2 }</th>
+					<th>
+						<c:set var="year3" value = "${year3+supplier.YEAR3}"></c:set>
+					<c:if test="${supplier.YEAR3==null}">0</c:if> 
+					<c:if test="${supplier.YEAR3==null}">${supplier.YEAR3}</c:if>
+					</th>
+
 					<th>
 						<c:set var="year4" value = "${year4+supplier.YEAR4}"></c:set>
 					${supplier.YEAR4 }</th>
@@ -222,6 +230,7 @@
 				<th>${changeAmount }</th>
 				<th>${year1 }</th>
 				<th>${year2 }</th>
+				<th>${year3 }</th>
 				<th>${year4 }</th>
 				<th>${year5 }</th>
 				<th></th>

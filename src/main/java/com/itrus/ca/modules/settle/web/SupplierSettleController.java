@@ -123,7 +123,7 @@ public class SupplierSettleController extends BaseController{
 		cell.setCellValue("四川CA对账统计表");
 		
 		//第二行数据
-		sheet.addMergedRegion(new CellRangeAddress(1,1,1,14));
+		sheet.addMergedRegion(new CellRangeAddress(1,1,1,15));
 		Row row1 = sheet.createRow(1);
 		cell = row1.createCell(1);
 		font.setFontHeightInPoints((short)14);
@@ -143,10 +143,11 @@ public class SupplierSettleController extends BaseController{
         row2.createCell((short) 8).setCellValue("6因变更用户信息补签证书数量");
         row2.createCell((short) 9).setCellValue("一年期有效证书数量");
         row2.createCell((short) 10).setCellValue("两年期有效证书数量");
-        row2.createCell((short) 11).setCellValue("四年期有效证书数量");
-        row2.createCell((short) 12).setCellValue("五年期有效证书数量");
-        row2.createCell((short) 13).setCellValue("备注");
-        cell = row2.createCell((short) 14);
+        row2.createCell((short) 11).setCellValue("三年期有效证书数量");
+        row2.createCell((short) 12).setCellValue("四年期有效证书数量");
+        row2.createCell((short) 13).setCellValue("五年期有效证书数量");
+        row2.createCell((short) 14).setCellValue("备注");
+        cell = row2.createCell((short) 15);
         //第四行遍历的数据
         int i=3;
         for (Map<String, Object> m : list) {
@@ -162,10 +163,17 @@ public class SupplierSettleController extends BaseController{
             row.createCell((short) 8).setCellValue(Integer.parseInt(String.valueOf(m.get("CHANGE_AMOUNT"))));
             row.createCell((short) 9).setCellValue(Integer.parseInt(String.valueOf(m.get("YEAR1"))));
             row.createCell((short) 10).setCellValue(Integer.parseInt(String.valueOf(m.get("YEAR2"))));
-            row.createCell((short) 11).setCellValue(Integer.parseInt(String.valueOf(m.get("YEAR4"))));
-            row.createCell((short) 12).setCellValue(Integer.parseInt(String.valueOf(m.get("YEAR5"))));
-            row.createCell((short) 13).setCellValue("");
-            cell = row.createCell((short) 14);
+            if(m.get("YEAR3")!=null)
+            {
+            	row.createCell((short) 11).setCellValue(Integer.parseInt(String.valueOf(m.get("YEAR3"))));
+            }else
+            {
+            	row.createCell((short) 11).setCellValue(0);
+            }
+            row.createCell((short) 12).setCellValue(Integer.parseInt(String.valueOf(m.get("YEAR4"))));
+            row.createCell((short) 13).setCellValue(Integer.parseInt(String.valueOf(m.get("YEAR5"))));
+            row.createCell((short) 14).setCellValue("");
+            cell = row.createCell((short) 15);
             i++;
 		}
         //第N行 小计
@@ -179,6 +187,7 @@ public class SupplierSettleController extends BaseController{
 		Integer change = 0;
 		Integer year1 = 0;
 		Integer year2 = 0;
+		Integer year3 = 0;
 		Integer year4 = 0;
 		Integer year5 = 0;
 		for (Map<String, Object> m : list) {
@@ -192,6 +201,13 @@ public class SupplierSettleController extends BaseController{
            change += Integer.parseInt(String.valueOf(m.get("CHANGE_AMOUNT")));
            year1 += Integer.parseInt(String.valueOf(m.get("YEAR1")));
            year2 += Integer.parseInt(String.valueOf(m.get("YEAR2")));
+           if(m.get("YEAR3")!=null)
+           {
+	         year3 += Integer.parseInt(String.valueOf(m.get("YEAR3")));
+           }else
+           {
+        	   year3 += 0;
+           }
            year4 += Integer.parseInt(String.valueOf(m.get("YEAR4")));
            year5 += Integer.parseInt(String.valueOf(m.get("YEAR5")));
 		}
@@ -207,10 +223,11 @@ public class SupplierSettleController extends BaseController{
         row3.createCell((short) 8).setCellValue(change);
         row3.createCell((short) 9).setCellValue(year1);
         row3.createCell((short) 10).setCellValue(year2);
-        row3.createCell((short) 11).setCellValue(year4);
-        row3.createCell((short) 12).setCellValue(year5);
-        row3.createCell((short) 13).setCellValue("");
-        cell = row3.createCell((short) 14);
+        row3.createCell((short) 11).setCellValue(year3);
+        row3.createCell((short) 12).setCellValue(year4);
+        row3.createCell((short) 13).setCellValue(year5);
+        row3.createCell((short) 14).setCellValue("");
+        cell = row3.createCell((short) 15);
 		
         try{
         ByteArrayOutputStream baos = new ByteArrayOutputStream();

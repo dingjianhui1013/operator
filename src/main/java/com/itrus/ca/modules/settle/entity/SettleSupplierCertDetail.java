@@ -43,6 +43,7 @@ public class SettleSupplierCertDetail implements java.io.Serializable {
 	private Integer changeAmount;
 	private Integer amountYear1;
 	private Integer amountYear2;
+	private Integer amountYear3;
 	private Integer amountYear4;
 	private Integer amountYear5;
 	private String ou;
@@ -58,7 +59,7 @@ public class SettleSupplierCertDetail implements java.io.Serializable {
 			Date settleDate, Integer productType, Integer totalAmount,
 			Integer replaceAmount, Integer revokeAmount, Integer testAmount,
 			Integer rwBbAmount, Integer frwBbAmount, Integer changeAmount,
-			Integer amountYear1, Integer amountYear2, Integer amountYear4,Integer amountYear5,
+			Integer amountYear1, Integer amountYear2, Integer amountYear3,Integer amountYear4,Integer amountYear5,
 			String ou) {
 		this.configSupplier = configSupplier;
 		this.settleDate = settleDate;
@@ -72,6 +73,7 @@ public class SettleSupplierCertDetail implements java.io.Serializable {
 		this.changeAmount = changeAmount;
 		this.amountYear1 = amountYear1;
 		this.amountYear2 = amountYear2;
+		this.amountYear3 = amountYear3;
 		this.amountYear4 = amountYear4;
 		this.amountYear5 = amountYear5;
 		this.ou = ou;
@@ -197,6 +199,16 @@ public class SettleSupplierCertDetail implements java.io.Serializable {
 
 	public void setAmountYear2(Integer amountYear2) {
 		this.amountYear2 = amountYear2;
+	}
+
+	
+	@Column(name = "amount_year3")
+	public Integer getAmountYear3() {
+		return amountYear3;
+	}
+
+	public void setAmountYear3(Integer amountYear3) {
+		this.amountYear3 = amountYear3;
 	}
 
 	@Column(name = "amount_year4")

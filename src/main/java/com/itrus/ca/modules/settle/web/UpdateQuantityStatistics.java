@@ -162,7 +162,7 @@ public class UpdateQuantityStatistics implements SettleBizI {
 		List<SettleSupplierCertDetail> details = settleSupplierCertDetailDao
 				.find(dc);
 		if (details == null || details.size() == 0) {
-			SettleSupplierCertDetail detail = new SettleSupplierCertDetail(configSupplier, sdf.parse(sdf.format(new Date())), productType, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0, ou);
+			SettleSupplierCertDetail detail = new SettleSupplierCertDetail(configSupplier, sdf.parse(sdf.format(new Date())), productType, 0, 0, 0, 0, 0, 0, 0, 0, 0,0, 0,0, ou);
 			detail.setAddAmount(0);
 			settleSupplierCertDetailDao.save(detail);
 			return detail;

@@ -137,7 +137,7 @@
 				<th>小计/元</th>
 			</tr>
 			<tr>
-				<th rowspan="9">${dateT }</th>
+				<th rowspan="11">${dateT }</th>
 				<th>一年期机构/个人证书</th>
 				<th>${oumap.ou0 }</th>
 				<th>
@@ -282,9 +282,82 @@
 						</c:if>
 				</th>
 			</tr>
+			
+			<tr>
+				<th>三年期机构/个人证书</th>
+				<th>${oumap.ou5 }</th>
+				<th>
+					<c:forEach items="${supplierlists }" var="sup">
+						<c:if test="${sup.PRODUCT_TYPE==2 }">
+							<c:set var="totolCount" value="${totolCount+sup.YEAR3 }"></c:set>
+								<c:set var="countOU3" value="${sup.YEAR3 }"></c:set>
+						</c:if>
+					</c:forEach>
+					<c:if test="${countOU3==null||countOU3<1 }">
+							0
+						</c:if>
+						<c:if test="${countOU3==null||countOU3<1 }">
+							${countOU3 }
+						</c:if>
+				</th>
+				<th>
+					${money.A3_2 }
+				</th>
+				<th>
+					<c:forEach items="${supplierlists }" var="sup">
+						<c:if test="${sup.PRODUCT_TYPE==2 }">
+							
+							<c:set var="totalMoney" value="${totalMoney+sup.YEAR4*money.A3_2  }"></c:set>
+							<c:set var="moneyOU3" value="${sup.YEAR3*money.A3_2   }"></c:set>
+						</c:if>
+					</c:forEach>
+					<c:if test="${moneyOU3==null||moneyOU3<1 }">
+							0.0
+						</c:if>
+							<c:if test="${moneyOU3>0 }">
+						<fmt:formatNumber pattern="#0.0">${moneyOU3}</fmt:formatNumber>
+						</c:if>
+				</th>
+			</tr>
+			<tr>
+				<th>三年期企业证书</th>
+				<th>${oumap.ou4 }</th>
+				<th>
+					<c:forEach items="${supplierlists }" var="sup">
+						<c:if test="${sup.PRODUCT_TYPE==2 }">
+							<c:set var="totolCount" value="${totolCount+sup.YEAR3 }"></c:set>
+								<c:set var="countOU3" value="${sup.YEAR3 }"></c:set>
+						</c:if>
+					</c:forEach>
+					<c:if test="${countOU3==null||countOU3<1 }">
+							0
+						</c:if>
+						<c:if test="${countOU3==null||countOU3<1 }">
+							${countOU3 }
+						</c:if>
+				</th>
+				<th>
+					${money.A3_1 }
+				</th>
+				<th>
+					<c:forEach items="${supplierlists }" var="sup">
+						<c:if test="${sup.PRODUCT_TYPE==2 }">
+							
+							<c:set var="totalMoney" value="${totalMoney+sup.YEAR3*money.A3_1  }"></c:set>
+							<c:set var="moneyOU3" value="${sup.YEAR3*money.A3_1   }"></c:set>
+						</c:if>
+					</c:forEach>
+					<c:if test="${moneyOU3==null||moneyOU3<1 }">
+							0.0
+						</c:if>
+							<c:if test="${moneyOU3>0 }">
+						<fmt:formatNumber pattern="#0.0">${moneyOU3}</fmt:formatNumber>
+						</c:if>
+				</th>
+			</tr>
 			<tr>
 				<th>四年期机构/个人证书</th>
-				<th>${oumap.ou4 }</th>
+				<th>${oumap.ou6 }</th>
 				<th>
 					<c:forEach items="${supplierlists }" var="sup">
 						<c:if test="${sup.PRODUCT_TYPE==2 }">
@@ -320,7 +393,7 @@
 			</tr>
 			<tr>
 				<th>四年期企业证书</th>
-				<th>${oumap.ou5 }</th>
+				<th>${oumap.ou7 }</th>
 				<th>
 					<c:forEach items="${supplierlists }" var="sup">
 						<c:if test="${sup.PRODUCT_TYPE==1 }">
@@ -355,7 +428,7 @@
 			</tr>
 			<tr>
 				<th>五年期机构/个人证书</th>
-				<th>${oumap.ou6 }</th>
+				<th>${oumap.ou8 }</th>
 				<th>
 					<c:forEach items="${supplierlists }" var="sup">
 						<c:if test="${sup.PRODUCT_TYPE==2 }">
@@ -391,7 +464,7 @@
 			</tr>
 			<tr>
 				<th>五年期企业证书</th>
-				<th>${oumap.ou7 }</th>
+				<th>${oumap.ou9 }</th>
 				<th>
 					<c:forEach items="${supplierlists }" var="sup">
 						<c:if test="${sup.PRODUCT_TYPE==1 }">
@@ -429,7 +502,7 @@
 			
 			<tr>
 				<th>因KEY非人为原因补签证书</th>
-				<th>${oumap.ou8 }</th>
+				<th>${oumap.ou10 }</th>
 				<th>
 					<c:if test="${supplierlists.size()==1 }">
 						${supplierlists.get(0).frw_bb_amount }
