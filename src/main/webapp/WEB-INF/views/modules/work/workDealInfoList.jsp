@@ -910,9 +910,9 @@ $(document)
 							</c:if>
 						</c:if> 
 						
-						<c:if test="${true }">
+					<%-- 	<c:if test="${true }">
 						    <a href="${ctx}/signature/signatureInfo/form?workDealInfoId=${workDealInfo.id}">印章授权</a>
-						</c:if>
+						</c:if> --%>
 						
 						
 						<c:if test="${workDealInfo.dealInfoStatus==5 }">
