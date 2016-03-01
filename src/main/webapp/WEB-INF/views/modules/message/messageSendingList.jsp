@@ -333,11 +333,11 @@
 			</c:forEach>
 		</select>
 		<label>行政所属区 ：</label>
-		<select id="s_province" name="s_province" style="width: 100px;">
+		<select id="s_province" name="workCompany.province" style="width: 100px;">
 		</select>
-		<select id="s_city" name="s_city" style="width: 100px;">
+		<select id="s_city" name="workCompany.city" style="width: 100px;">
 		</select>
-		<select id="s_county" name="s_county" style="width: 100px;">
+		<select id="s_county" name="workCompany.county" style="width: 100px;">
 		</select> 
 		<script	type="text/javascript">
 			_init_area();
