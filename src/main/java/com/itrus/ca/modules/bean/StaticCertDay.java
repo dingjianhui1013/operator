@@ -5,26 +5,32 @@ import java.util.Date;
 public class StaticCertDay {
 	private Integer oneAdd1;
 	private Integer oneAdd2;
+	private Integer oneAdd3;
 	private Integer oneAdd4;
 	private Integer oneAdd5;
 	private Integer oneRenew1;
 	private Integer oneRenew2;
+	private Integer oneRenew3;
 	private Integer oneRenew4;
 	private Integer oneRenew5;
 	private Integer twoAdd1;
 	private Integer twoAdd2;
+	private Integer twoAdd3;
 	private Integer twoAdd4;
 	private Integer twoAdd5;
 	private Integer twoRenew1;
 	private Integer twoRenew2;
+	private Integer twoRenew3;
 	private Integer twoRenew4;
 	private Integer twoRenew5;
 	private Integer fourAdd1;
 	private Integer fourAdd2;
+	private Integer fourAdd3;
 	private Integer fourAdd4;
 	private Integer fourAdd5;
 	private Integer fourRenew1;
 	private Integer fourRenew2;
+	private Integer fourRenew3;
 	private Integer fourRenew4;
 	private Integer fourRenew5;
 	private Integer fiveAdd1;
@@ -235,4 +241,42 @@ public class StaticCertDay {
 	public void setDay(Date day) {
 		this.day = day;
 	}
+	public Integer getOneAdd3() {
+		return oneAdd3;
+	}
+	public void setOneAdd3(Integer oneAdd3) {
+		this.oneAdd3 = oneAdd3;
+	}
+	public Integer getOneRenew3() {
+		return oneRenew3;
+	}
+	public void setOneRenew3(Integer oneRenew3) {
+		this.oneRenew3 = oneRenew3;
+	}
+	public Integer getTwoAdd3() {
+		return twoAdd3;
+	}
+	public void setTwoAdd3(Integer twoAdd3) {
+		this.twoAdd3 = twoAdd3;
+	}
+	public Integer getTwoRenew3() {
+		return twoRenew3;
+	}
+	public void setTwoRenew3(Integer twoRenew3) {
+		this.twoRenew3 = twoRenew3;
+	}
+	public Integer getFourAdd3() {
+		return fourAdd3;
+	}
+	public void setFourAdd3(Integer fourAdd3) {
+		this.fourAdd3 = fourAdd3;
+	}
+	public Integer getFourRenew3() {
+		return fourRenew3;
+	}
+	public void setFourRenew3(Integer fourRenew3) {
+		this.fourRenew3 = fourRenew3;
+	}
+	
+	
 }
