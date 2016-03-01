@@ -182,7 +182,7 @@
 		</table>
 		<input type="hidden" value="${startTime }" id="startDate">
 		<input type="hidden" value="${endTime }" id="endDate">		
-		<input type="hidden" value="${ConfigCommercialAgents.get(agentId) }" id="agent">
+		<input type="hidden" value="${ConfigCommercialAgents.agentId}" id="agent">
 		</div>
 </body>
 </html>
