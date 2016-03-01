@@ -379,6 +379,7 @@ public class AgentSettleController extends BaseController {
 			/* @RequestParam(value="year",required =false) Integer year, */
 			@RequestParam(value = "oneYear", required = false) boolean oneYear,
 			@RequestParam(value = "twoYear", required = false) boolean twoYear,
+			@RequestParam(value = "threeYear", required = false) boolean threeYear,
 			@RequestParam(value = "fourYear", required = false) boolean fourYear,
 			@RequestParam(value = "fiveYear", required = false) boolean fiveYear,
 			@RequestParam(value = "chargeMethodPos", required = false) boolean chargeMethodPos,
@@ -477,9 +478,10 @@ public class AgentSettleController extends BaseController {
 			configProducts.add(configPro);
 		}
 		int colspan = 0;
-		if (!(oneYear || twoYear || fourYear || fiveYear)) {// 年限都不选的话，默认四个都选
+		if (!(oneYear || twoYear || threeYear || fourYear || fiveYear)) {// 年限都不选的话，默认四个都选
 			oneYear = true;
 			twoYear = true;
+			threeYear = true;
 			fourYear = true;
 			fiveYear = true;
 		}
@@ -495,6 +497,10 @@ public class AgentSettleController extends BaseController {
 			colspan = colspan + 2;
 		}
 		if (twoYear) {
+			colspan = colspan + 2;
+		}
+		if(threeYear)
+		{
 			colspan = colspan + 2;
 		}
 		if (fourYear) {
@@ -531,6 +537,8 @@ public class AgentSettleController extends BaseController {
 				map.put("oneMoney", null);
 				map.put("twoSum", null);
 				map.put("twoMoney", null);
+				map.put("threeSum", null);
+				map.put("threeMoney", null);
 				map.put("fourSum", null);
 				map.put("fourMoney", null);
 				map.put("fiveSum", null);
@@ -538,6 +546,8 @@ public class AgentSettleController extends BaseController {
 
 				map.put("oneSum1", null);
 				map.put("oneMoney1", null);
+				map.put("threeSum1", null);
+				map.put("threeMoney1", null);
 				map.put("twoSum1", null);
 				map.put("twoMoney1", null);
 				map.put("fourSum1", null);
@@ -586,6 +596,27 @@ public class AgentSettleController extends BaseController {
 									.toString());
 
 				}
+				Double threeSubTotal = 0D;
+				if (threeYear) {
+					// 新增三年的业务集合
+					List<Object[]> resList = workDealInfoService.getSumCount(
+							configApp.getId(), WorkDealInfoType.TYPE_ADD_CERT,
+							configProduct.getId(), 3, startTime, endTime,
+							officeId, agentIds[0], chargeMethodPos,
+							chargeMethodMoney, chargeMethodBank,
+							chargeMethodGov, chargeMethodContract);
+					map.put("threeSum",
+							Long.parseLong(((Object[]) resList.get(0))[0]
+									.toString()));
+					Double threeMoney = chargeAgentDetailService.getChargeMoney(
+							configProduct.getChargeAgentId(),
+							WorkDealInfoType.TYPE_ADD_CERT, 3);
+					map.put("threeMoney", threeMoney == null ? 0 : threeMoney);
+					threeSubTotal = Double
+							.parseDouble(((Object[]) resList.get(0))[1]
+									.toString());
+
+				}
 				Double fourSubTotal = 0D;
 				if (fourYear) {
 					// 新增四年的业务集合
@@ -622,7 +653,7 @@ public class AgentSettleController extends BaseController {
 					fiveSubTotal = Double.parseDouble(((Object[]) resList
 							.get(0))[1].toString());
 				}
-				map.put("subTotal", oneSubTotal + twoSubTotal + fourSubTotal
+				map.put("subTotal", oneSubTotal + twoSubTotal +threeSubTotal+ fourSubTotal
 						+ fiveSubTotal);
 
 				Double oneSubTotal1 = 0D;
@@ -666,7 +697,26 @@ public class AgentSettleController extends BaseController {
 							.get(0))[1].toString());
 
 				}
+				// 更新三年的业务集合
+				Double threeSubTotal1 = 0D;
+				if (threeYear) {
+					List<Object[]> resList = workDealInfoService.getSumCount(
+							configApp.getId(),
+							WorkDealInfoType.TYPE_UPDATE_CERT,
+							configProduct.getId(), 3, startTime, endTime,
+							officeId, agentIds[0], chargeMethodPos,
+							chargeMethodMoney, chargeMethodBank,
+							chargeMethodGov, chargeMethodContract);
+					map.put("threeSum1", Long.parseLong(((Object[]) resList
+							.get(0))[0].toString()));
+					Double threeMoney1 = chargeAgentDetailService.getChargeMoney(
+							configProduct.getChargeAgentId(),
+							WorkDealInfoType.TYPE_UPDATE_CERT, 3);
+					map.put("threeMoney1", threeMoney1 == null ? 0 : threeMoney1);
+					threeSubTotal1 = Double.parseDouble(((Object[]) resList
+							.get(0))[1].toString());
 
+				}
 				// 更新四年的业务集合
 				Double fourSubTotal1 = 0D;
 				if (fourYear) {
@@ -705,7 +755,7 @@ public class AgentSettleController extends BaseController {
 					fiveSubTotal1 = Double.parseDouble(((Object[]) resList
 							.get(0))[1].toString());
 				}
-				map.put("subTotal1", oneSubTotal1 + twoSubTotal1
+				map.put("subTotal1", oneSubTotal1 + twoSubTotal1 +threeSubTotal1
 						+ fourSubTotal1 + fiveSubTotal1);
 				listSum.add(map);
 				configApp = null;
@@ -715,6 +765,7 @@ public class AgentSettleController extends BaseController {
 		model.addAttribute("colspan", colspan);
 		model.addAttribute("oneYear", oneYear);
 		model.addAttribute("twoYear", twoYear);
+		model.addAttribute("threeYear", threeYear);
 		model.addAttribute("fourYear", fourYear);
 		model.addAttribute("fiveYear", fiveYear);
 		model.addAttribute("chargeMethodPos", chargeMethodPos);
@@ -743,6 +794,7 @@ public class AgentSettleController extends BaseController {
 			/* @RequestParam(value="year",required =false) Integer year, */
 			@RequestParam(value = "oneYear", required = false) boolean oneYear,
 			@RequestParam(value = "twoYear", required = false) boolean twoYear,
+			@RequestParam(value = "threeYear", required = false) boolean threeYear,
 			@RequestParam(value = "fourYear", required = false) boolean fourYear,
 			@RequestParam(value = "fiveYear", required = false) boolean fiveYear,
 			@RequestParam(value = "chargeMethodPos", required = false) boolean chargeMethodPos,
@@ -796,11 +848,13 @@ public class AgentSettleController extends BaseController {
 		}
 
 		int colspan = 0;
-		if (!(oneYear || twoYear || fourYear || fiveYear)) {// 年限都不选的话，默认四个都选
+		if (!(oneYear || twoYear || threeYear || fourYear || fiveYear)) {// 年限都不选的话，默认四个都选
 			oneYear = true;
 			twoYear = true;
+			threeYear = true;
 			fourYear = true;
 			fiveYear = true;
+			
 		}
 		if (!(chargeMethodPos || chargeMethodMoney || chargeMethodBank
 				|| chargeMethodGov || chargeMethodContract)) {// 支付方式都不选的话，默认五个都选
@@ -814,6 +868,9 @@ public class AgentSettleController extends BaseController {
 			colspan = colspan + 2;
 		}
 		if (twoYear) {
+			colspan = colspan + 2;
+		}
+		if (threeYear) {
 			colspan = colspan + 2;
 		}
 		if (fourYear) {
@@ -849,6 +906,8 @@ public class AgentSettleController extends BaseController {
 				map.put("oneMoney", null);
 				map.put("twoSum", null);
 				map.put("twoMoney", null);
+				map.put("threeSum", null);
+				map.put("threeMoney", null);
 				map.put("fourSum", null);
 				map.put("fourMoney", null);
 				map.put("fiveSum", null);
@@ -856,13 +915,15 @@ public class AgentSettleController extends BaseController {
 
 				map.put("oneSum1", null);
 				map.put("oneMoney1", null);
+				map.put("threeSum1", null);
+				map.put("threeMoney1", null);
 				map.put("twoSum1", null);
 				map.put("twoMoney1", null);
 				map.put("fourSum1", null);
 				map.put("fourMoney1", null);
 				map.put("fiveSum1", null);
 				map.put("fiveMoney1", null);
-
+				
 				// 新增一年的业务集合
 				Double oneSubTotal = 0D;
 				if (oneYear) {//
@@ -904,6 +965,27 @@ public class AgentSettleController extends BaseController {
 									.toString());
 
 				}
+				Double threeSubTotal = 0D;
+				if (threeYear) {
+					// 新增三年的业务集合
+					List<Object[]> resList = workDealInfoService.getSumCount(
+							configApp.getId(), WorkDealInfoType.TYPE_ADD_CERT,
+							configProduct.getId(), 3, startTime, endTime,
+							officeId, agentIds[0], chargeMethodPos,
+							chargeMethodMoney, chargeMethodBank,
+							chargeMethodGov, chargeMethodContract);
+					map.put("threeSum",
+							Long.parseLong(((Object[]) resList.get(0))[0]
+									.toString()));
+					Double threeMoney = chargeAgentDetailService.getChargeMoney(
+							configProduct.getChargeAgentId(),
+							WorkDealInfoType.TYPE_ADD_CERT, 3);
+					map.put("threeMoney", threeMoney == null ? 0 : threeMoney);
+					threeSubTotal = Double
+							.parseDouble(((Object[]) resList.get(0))[1]
+									.toString());
+
+				}
 				Double fourSubTotal = 0D;
 				if (fourYear) {
 					// 新增四年的业务集合
@@ -940,7 +1022,7 @@ public class AgentSettleController extends BaseController {
 					fiveSubTotal = Double.parseDouble(((Object[]) resList
 							.get(0))[1].toString());
 				}
-				map.put("subTotal", oneSubTotal + twoSubTotal + fourSubTotal
+				map.put("subTotal", oneSubTotal + twoSubTotal +threeSubTotal+ fourSubTotal
 						+ fiveSubTotal);
 
 				Double oneSubTotal1 = 0D;
@@ -984,7 +1066,26 @@ public class AgentSettleController extends BaseController {
 							.get(0))[1].toString());
 
 				}
+				// 更新三年的业务集合
+				Double threeSubTotal1 = 0D;
+				if (threeYear) {
+					List<Object[]> resList = workDealInfoService.getSumCount(
+							configApp.getId(),
+							WorkDealInfoType.TYPE_UPDATE_CERT,
+							configProduct.getId(), 3, startTime, endTime,
+							officeId, agentIds[0], chargeMethodPos,
+							chargeMethodMoney, chargeMethodBank,
+							chargeMethodGov, chargeMethodContract);
+					map.put("threeSum1", Long.parseLong(((Object[]) resList
+							.get(0))[0].toString()));
+					Double threeMoney1 = chargeAgentDetailService.getChargeMoney(
+							configProduct.getChargeAgentId(),
+							WorkDealInfoType.TYPE_UPDATE_CERT, 3);
+					map.put("threeMoney1", threeMoney1 == null ? 0 : threeMoney1);
+					threeSubTotal1 = Double.parseDouble(((Object[]) resList
+							.get(0))[1].toString());
 
+				}
 				// 更新四年的业务集合
 				Double fourSubTotal1 = 0D;
 				if (fourYear) {
@@ -1023,7 +1124,7 @@ public class AgentSettleController extends BaseController {
 					fiveSubTotal1 = Double.parseDouble(((Object[]) resList
 							.get(0))[1].toString());
 				}
-				map.put("subTotal1", oneSubTotal1 + twoSubTotal1
+				map.put("subTotal1", oneSubTotal1 + twoSubTotal1 +threeSubTotal1
 						+ fourSubTotal1 + fiveSubTotal1);
 				listSum.add(map);
 				configApp = null;
@@ -1115,6 +1216,21 @@ public class AgentSettleController extends BaseController {
 				cell.setCellValue("单价(元)");
 				curCol = curCol + 2;
 			}
+			if (threeYear) {
+				cell = row2.createCell(curCol);
+				cell.setCellStyle(style);
+				cell.setCellValue("三年数量");
+				cell = row2.createCell(curCol + 1);
+				cell.setCellStyle(style);
+				cell.setCellValue("单价(元)");
+				cell = row2.createCell(1 + colspan + curCol);
+				cell.setCellStyle(style);
+				cell.setCellValue("三年数量");
+				cell = row2.createCell(1 + colspan + curCol + 1);
+				cell.setCellStyle(style);
+				cell.setCellValue("单价(元)");
+				curCol = curCol + 2;
+			}
 			if (fourYear) {
 				cell = row2.createCell(curCol);
 				cell.setCellStyle(style);
@@ -1149,11 +1265,13 @@ public class AgentSettleController extends BaseController {
 			int last = 0;
 			long addOneSum =0;
 			long addTwoSum =0;
+			long addThreeSum =0;
 			long addFourSum =0;
 			long addFiveSum =0;
 			double addTotal =0;
 			long updateOneSum=0;
 			long updateTwoSum =0;
+			long updateThreeSum =0;
 			long updateFourSum=0;
 			long updateFiveSum=0;
 			double updateTotal=0;
@@ -1204,6 +1322,23 @@ public class AgentSettleController extends BaseController {
 					curCol = curCol + 2;
 					addTwoSum = addTwoSum + (Long)m.get("twoSum");
 					updateTwoSum= updateTwoSum + (Long)m.get("twoSum1");
+				}
+				if (threeYear) {
+					cell = row.createCell(curCol);
+					cell.setCellStyle(style);
+					cell.setCellValue((Long)m.get("threeSum"));
+					cell = row.createCell(curCol + 1);
+					cell.setCellStyle(style);
+					cell.setCellValue((Double)m.get("threeMoney"));
+					cell = row.createCell(1 + colspan + curCol);
+					cell.setCellStyle(style);
+					cell.setCellValue((Long)m.get("threeSum1"));
+					cell = row.createCell(1 + colspan + curCol + 1);
+					cell.setCellStyle(style);
+					cell.setCellValue((Double)m.get("threeMoney1"));
+					curCol = curCol + 2;
+					addThreeSum = addThreeSum + (Long)m.get("threeSum");
+					updateThreeSum= updateThreeSum + (Long)m.get("threeSum1");
 				}
 				if (fourYear) {
 					cell = row.createCell(curCol);
@@ -1272,6 +1407,15 @@ public class AgentSettleController extends BaseController {
 				cell = rowl.createCell(1 + colspan + curCol);
 				cell.setCellStyle(style);
 				cell.setCellValue(updateTwoSum);	
+				curCol = curCol + 2;
+			}
+			if (threeYear) {
+				cell = rowl.createCell(curCol);
+				cell.setCellStyle(style);
+				cell.setCellValue(addThreeSum);				
+				cell = rowl.createCell(1 + colspan + curCol);
+				cell.setCellStyle(style);
+				cell.setCellValue(updateThreeSum);	
 				curCol = curCol + 2;
 			}
 			if (fourYear) {

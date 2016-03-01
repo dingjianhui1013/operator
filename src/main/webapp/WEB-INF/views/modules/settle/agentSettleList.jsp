@@ -170,6 +170,7 @@
 		 <label>有&nbsp;&nbsp;&nbsp;效&nbsp;&nbsp;&nbsp;期 ：</label> 
 		 <input name="oneYear" type="checkbox" <c:if test="${oneYear}">checked</c:if> value="1">一年&nbsp;&nbsp;&nbsp;
 		 <input name="twoYear" type="checkbox" <c:if test="${twoYear}">checked</c:if> value="1">二年&nbsp;&nbsp;&nbsp;
+		 <input name="twoYear" type="checkbox" <c:if test="${threeYear}">checked</c:if> value="1">三年&nbsp;&nbsp;&nbsp;
 		 <input name="fourYear" type="checkbox" <c:if test="${fourYear}">checked</c:if> value="1">四年&nbsp;&nbsp;&nbsp;
 		 <input name="fiveYear" type="checkbox" <c:if test="${fiveYear}">checked</c:if> value="1">五年&nbsp;&nbsp;&nbsp;
 		</div>
@@ -230,11 +231,13 @@
 			<c:set var="total" value="0" />
 			<c:set var="addOneSum" value="0" />
 			<c:set var="addTwoSum" value="0" />
+			<c:set var="addThreeSum" value="0" />
 			<c:set var="addFourSum" value="0" />
 			<c:set var="addFiveSum" value="0" />
 			<c:set var="addTotal" value="0" />
 			<c:set var="updateOneSum" value="0" />
 			<c:set var="updateTwoSum" value="0" />
+			<c:set var="updateThreeSum" value="0" />
 			<c:set var="updateFourSum" value="0" />
 			<c:set var="updateFiveSum" value="0" />
 			<c:set var="updateTotal" value="0" />
@@ -244,6 +247,8 @@
 				<th>单价<br/>(元)</th></c:if>
 				<c:if test='${twoYear==true}'><th>二年<br/>数量</th>
 				<th>单价<br/>(元)</th></c:if>
+				<c:if test='${threeYear==true}'><th>三年<br/>数量</th>
+				<th>单价<br/>(元)</th></c:if>
 				<c:if test='${fourYear==true}'><th>四年<br/>数量</th>
 				<th>单价<br/>(元)</th></c:if>
 				<c:if test='${fiveYear==true}'><th>五年<br/>数量</th>
@@ -252,6 +257,8 @@
 				<c:if test='${oneYear==true}'><th>一年<br/>数量</th>
 				<th>单价<br/>(元)</th></c:if>
 				<c:if test='${twoYear==true}'><th>二年<br/>数量</th>
+				<th>单价<br/>(元)</th></c:if>
+				<c:if test='${threeYear==true}'><th>三年<br/>数量</th>
 				<th>单价<br/>(元)</th></c:if>
 				<c:if test='${fourYear==true}'><th>四年<br/>数量</th>
 				<th>单价<br/>(元)</th></c:if>
@@ -268,6 +275,9 @@
 					<c:if test='${sum.twoSum!=null }'><td><c:if test='${sum.twoSum>0 }'><a
 						href="javascript:showDealInfo(${sum.appId },${sum.productId },0,2)">${sum.twoSum }</a></c:if><c:if test='${sum.twoSum==0 }'>${sum.twoSum }</c:if></td>
 					<td>${sum.twoMoney }</td></c:if>
+					<c:if test='${sum.threeSum!=null }'><td><c:if test='${sum.threeSum>0 }'><a
+						href="javascript:showDealInfo(${sum.appId },${sum.productId },0,3)">${sum.threeSum }</a></c:if><c:if test='${sum.threeSum==0 }'>${sum.threeSum }</c:if></td>
+					<td>${sum.threeMoney }</td></c:if>
 					<c:if test='${sum.fourSum!=null }'><td><c:if test='${sum.fourSum>0 }'><a
 						href="javascript:showDealInfo(${sum.appId },${sum.productId },0,4)">${sum.fourSum }</a></c:if><c:if test='${sum.fourSum==0 }'>${sum.fourSum }</c:if></td>
 					<td>${sum.fourMoney }</td></c:if>
@@ -281,6 +291,9 @@
 					<c:if test='${sum.twoSum!=null }'><td><c:if test='${sum.twoSum1>0 }'><a
 						href="javascript:showDealInfo(${sum.appId },${sum.productId },1,2)">${sum.twoSum1 }</a></c:if><c:if test='${sum.twoSum1==0 }'>${sum.twoSum1 }</c:if></td>
 					<td>${sum.twoMoney1 }</td></c:if>
+					<c:if test='${sum.threeSum!=null }'><td><c:if test='${sum.threeSum1>0 }'><a
+						href="javascript:showDealInfo(${sum.appId },${sum.productId },1,3)">${sum.threeSum1 }</a></c:if><c:if test='${sum.threeSum1==0 }'>${sum.threeSum1 }</c:if></td>
+					<td>${sum.threeMoney1 }</td></c:if>
 					<c:if test='${sum.fourSum!=null }'><td><c:if test='${sum.fourSum1>0 }'><a
 						href="javascript:showDealInfo(${sum.appId },${sum.productId },1,4)">${sum.fourSum1 }</a></c:if><c:if test='${sum.fourSum1==0 }'>${sum.fourSum1 }</c:if></td>
 					<td>${sum.fourMoney1 }</td></c:if>
@@ -292,11 +305,13 @@
 				<c:set var="total" value="${total+sum.subTotal+sum.subTotal1 }"></c:set>
 				<c:set var="addOneSum" value="${addOneSum+sum.oneSum }"></c:set>
 				<c:set var="addTwoSum" value="${addTwoSum+sum.twoSum }" />
+				<c:set var="addThreeSum" value="${addThreeSum+sum.threeSum }" />
 				<c:set var="addFourSum" value="${addFourSum+sum.fourSum }" />
 				<c:set var="addFiveSum" value="${addFiveSum+sum.fiveSum }" />
 				<c:set var="addTotal" value="${addTotal+sum.subTotal }" />
 				<c:set var="updateOneSum" value="${updateOneSum+sum.oneSum1 }" />
 				<c:set var="updateTwoSum" value="${updateTwoSum+sum.twoSum1 }" />
+				<c:set var="updateThreeSum" value="${updateThreeSum+sum.threeSum1 }" />
 				<c:set var="updateFourSum" value="${updateFourSum+sum.fourSum1 }" />
 				<c:set var="updateFiveSum" value="${updateFSum+sum.fiveSum1 }" />
 				<c:set var="updateTotal" value="${updateTotal+sum.subTotal1}" />
@@ -304,18 +319,22 @@
 			<tr>
 				<th>合计</th>
 				 <td></td>
-				<c:if test='${oneYear!=null}'><td>${addOneSum }</td>
+				<c:if test='${oneYear==true}'><td>${addOneSum }</td>
 				<td></td></c:if>
-				<c:if test='${twoYear!=null}'><td>${addTwoSum }</td>
+				<c:if test='${twoYear==true}'><td>${addTwoSum }</td>
 				<td></td></c:if>
-				<c:if test='${fourYear!=null}'><td>${addFourSum }</td>
+				<c:if test='${threeYear==true}'><td>${addThreeSum }</td>
 				<td></td></c:if>
-				<c:if test='${fiveYear!=null}'><td>${addFiveSum }</td>
+				<c:if test='${fourYear==true}'><td>${addFourSum }</td>
+				<td></td></c:if>
+				<c:if test='${fiveYear==true}'><td>${addFiveSum }</td>
 			    <td></td> </c:if>			
 			    <td>${addTotal }</td>
 				<c:if test='${oneYear==true}'><td>${updateOneSum }</td>
 				<td></td></c:if>
 				<c:if test='${twoYear==true }'><td>${updateTwoSum }</td>
+				<td></td></c:if>
+				<c:if test='${threeYear==true }'><td>${updateThreeSum }</td>
 				<td></td></c:if>
 				<c:if test='${fourYear==true}'><td>${updateFourSum }</td>
 				<td></td></c:if>
@@ -325,7 +344,7 @@
 			</tr>
 			<tr>
 				<th>总计</th>
-				<td colspan="19" align="center">${total }<input type="hidden" value="${total }" id="total">&nbsp;元</td>
+				<td colspan="${colsTitle-1}" align="center">${total }<input type="hidden" value="${total }" id="total">&nbsp;元</td>
 			</tr>
 			<tr>
 				<th>折扣率</th>

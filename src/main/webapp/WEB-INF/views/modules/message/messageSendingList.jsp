@@ -127,7 +127,7 @@
 						type:"POST",
 						data:{"apply":apply,"companyName":companyName,"contactName":contactName,"workType":workType,
 								"dealInfoStatus":dealInfoStatus,"areaId":areaId,"officeId":officeId,
-								"province":province,"city":city,"district":district},
+								"province":province,"city":city,"district":district,_:new Date().getTime()},
 						dataType:"text",
 						success:function(data)
 						{
