@@ -138,36 +138,45 @@ public class StatisticCertDataProductController extends BaseController {
 					sm.setMonth(start);
 					Integer oneSum = 0;
 					Integer twoSum = 0;
+					
+				Integer threeSum = 0;
+					
 					Integer fourSum = 0;
 					Integer fiveSum = 0;
 					
 					for (StatisticCertDataProduct statisticCertDataProduct2 : list) {
 						oneSum += statisticCertDataProduct2.getYear1();
 						twoSum += statisticCertDataProduct2.getYear2();
+						
+						threeSum += statisticCertDataProduct2.getYear3();
+						
 						fourSum += statisticCertDataProduct2.getYear4();
 						fiveSum += statisticCertDataProduct2.getYear5();
 					}
 					sm.setCount1(oneSum);
 					sm.setCount2(twoSum);
+					
+					sm.setCount3(threeSum);
+					
 					sm.setCount4(fourSum);
 					sm.setCount5(fiveSum);
 					if (entry.getKey()==1) {
-						sm.setPro1Sum(oneSum+twoSum+fourSum+fiveSum);
+						sm.setPro1Sum(oneSum+twoSum+ threeSum +fourSum+fiveSum);
 					}
 					if (entry.getKey()==2) {
-						sm.setPro2Sum(oneSum+twoSum+fourSum+fiveSum);
+						sm.setPro2Sum(oneSum+twoSum+ threeSum + fourSum+fiveSum);
 					}
 					if (entry.getKey()==3) {
-						sm.setPro3Sum(oneSum+twoSum+fourSum+fiveSum);
+						sm.setPro3Sum(oneSum+twoSum+ threeSum + fourSum+fiveSum);
 					}
 					if (entry.getKey()==4) {
-						sm.setPro4Sum(oneSum+twoSum+fourSum+fiveSum);
+						sm.setPro4Sum(oneSum+twoSum+ threeSum + fourSum+fiveSum);
 					}
 //					if (i==5) {
 //						sm.setPro5Sum(oneSum+twoSum+fourSum+fiveSum);
 //					}
 					if (entry.getKey()==6) {
-						sm.setPro6Sum(oneSum+twoSum+fourSum+fiveSum);
+						sm.setPro6Sum(oneSum+twoSum+  fourSum+fiveSum);
 					}
 					smList.add(sm);
 				} catch (Exception e) {
@@ -248,36 +257,41 @@ public class StatisticCertDataProductController extends BaseController {
 					sm.setMonth(start);
 					Integer oneSum = 0;
 					Integer twoSum = 0;
+					
+					Integer threeSum = 0;
+					
 					Integer fourSum = 0;
 					Integer fiveSum = 0;
 					
 					for (StatisticCertDataProduct statisticCertDataProduct2 : list) {
 						oneSum += statisticCertDataProduct2.getYear1();
 						twoSum += statisticCertDataProduct2.getYear2();
+						threeSum += statisticCertDataProduct2.getYear3();
 						fourSum += statisticCertDataProduct2.getYear4();
 						fiveSum += statisticCertDataProduct2.getYear5();
 					}
 					sm.setCount1(oneSum);
 					sm.setCount2(twoSum);
+					sm.setCount3(threeSum);
 					sm.setCount4(fourSum);
 					sm.setCount5(fiveSum);
 					if (entry.getKey()==1) {
-						sm.setPro1Sum(oneSum+twoSum+fourSum+fiveSum);
+						sm.setPro1Sum(oneSum+twoSum+threeSum+fourSum+fiveSum);
 					}
 					if (entry.getKey()==2) {
-						sm.setPro2Sum(oneSum+twoSum+fourSum+fiveSum);
+						sm.setPro2Sum(oneSum+twoSum+threeSum+fourSum+fiveSum);
 					}
 					if (entry.getKey()==3) {
-						sm.setPro3Sum(oneSum+twoSum+fourSum+fiveSum);
+						sm.setPro3Sum(oneSum+twoSum+threeSum+fourSum+fiveSum);
 					}
 					if (entry.getKey()==4) {
-						sm.setPro4Sum(oneSum+twoSum+fourSum+fiveSum);
+						sm.setPro4Sum(oneSum+twoSum+threeSum+fourSum+fiveSum);
 					}
 //					if (i==5) {
 //						sm.setPro5Sum(oneSum+twoSum+fourSum+fiveSum);
 //					}
 					if (entry.getKey()==6) {
-						sm.setPro6Sum(oneSum+twoSum+fourSum+fiveSum);
+						sm.setPro6Sum(oneSum+twoSum+threeSum+fourSum+fiveSum);
 					}
 					smList.add(sm);
 				} catch (Exception e) {
@@ -313,7 +327,7 @@ public class StatisticCertDataProductController extends BaseController {
 		HSSFCell cell=row.createCell(0);
 		cell.setCellValue("产品名称");
 		row.createCell(1).setCellValue("年限");
-		HSSFRow rownz=sheet.createRow(4*sumList.size()+2);
+		HSSFRow rownz=sheet.createRow(5*sumList.size()+2);
 		rownz.createCell(0).setCellValue("总计");
 		for(int i=0;i<monthList1.size();i++)
 		{
@@ -326,45 +340,52 @@ public class StatisticCertDataProductController extends BaseController {
 		HSSFRow rown2=null;
 		HSSFRow rown3=null;
 		HSSFRow rown4=null;
+		HSSFRow rown5=null;
 		int sum=0;
 		for(int i=0;i<sumList.size();i++)
 		{
 			int sum1=0;
 			int sum2=0;
+			int sum3=0;
 			int sum4=0;
 			int sum5=0;
-					sheet.addMergedRegion(new Region(i*4+2, (short)0, i*4+2+3, (short)0));
-					rown=sheet.createRow(i*4+2);
-					rown1= sheet.createRow(i*4+2);
+					sheet.addMergedRegion(new Region(i*5+2, (short)0, i*5+2+4, (short)0));
+					rown=sheet.createRow(i*5+2);
+					rown1= sheet.createRow(i*5+2);
 					rown1.createCell(1).setCellValue("一年期限");
-					rown2=sheet.createRow(i*4+2+1);
+					rown2=sheet.createRow(i*5+2+1);
 					rown2.createCell(1).setCellValue("二年期限");
-					rown3=sheet.createRow(i*4+2+2);
-					rown3.createCell(1).setCellValue("四年期限");
-					rown4=sheet.createRow(i*4+2+3);
-					rown4.createCell(1).setCellValue("五年期限");
+					rown3=sheet.createRow(i*5+2+2);
+					rown3.createCell(1).setCellValue("三年期限");
+					rown4=sheet.createRow(i*5+2+3);
+					rown4.createCell(1).setCellValue("四年期限");
+					rown5=sheet.createRow(i*5+2+4);
+					rown5.createCell(1).setCellValue("五年期限");
 			for(int j=0;j<monthList1.size();j++)
 			{
 				sum1+=sumList.get(i).getMonths().get(j).getCount1();
 				sum2+=sumList.get(i).getMonths().get(j).getCount2();
+				sum3+=sumList.get(i).getMonths().get(j).getCount3();
 				sum4+=sumList.get(i).getMonths().get(j).getCount4();
 				sum5+=sumList.get(i).getMonths().get(j).getCount5();
 				
 				
 			}
-			sum+=(sum1+sum2+sum4+sum5);
+			sum+=(sum1+sum2+sum3+sum4+sum5);
 			rown.createCell(0).setCellValue(ProductType.getProductTypeName(sumList.get(i).getProductType()));
 			
 			for(int j=0;j<monthList1.size();j++)
 			{
 				rown1.createCell(j+2).setCellValue(sumList.get(i).getMonths().get(j).getCount1());
 				rown2.createCell(j+2).setCellValue(sumList.get(i).getMonths().get(j).getCount2());
-				rown3.createCell(j+2).setCellValue(sumList.get(i).getMonths().get(j).getCount4());
-				rown4.createCell(j+2).setCellValue(sumList.get(i).getMonths().get(j).getCount5());
+				rown3.createCell(j+2).setCellValue(sumList.get(i).getMonths().get(j).getCount3());
+				rown4.createCell(j+2).setCellValue(sumList.get(i).getMonths().get(j).getCount4());
+				rown5.createCell(j+2).setCellValue(sumList.get(i).getMonths().get(j).getCount5());
 				rown1.createCell(monthList1.size()+2).setCellValue(sum1);
 				rown2.createCell(monthList1.size()+2).setCellValue(sum2);
-				rown3.createCell(monthList1.size()+2).setCellValue(sum4);
-				rown4.createCell(monthList1.size()+2).setCellValue(sum5);
+				rown3.createCell(monthList1.size()+2).setCellValue(sum3);
+				rown4.createCell(monthList1.size()+2).setCellValue(sum4);
+				rown5.createCell(monthList1.size()+2).setCellValue(sum5);
 				rownz.createCell(monthList1.size()+2).setCellValue(sum);
 			}
 			
@@ -374,7 +395,7 @@ public class StatisticCertDataProductController extends BaseController {
 			int z=0;
 			for(int i=0;i<sumList.size();i++)
 			{
-				z+=sumList.get(i).getMonths().get(j).getCount1()+sumList.get(i).getMonths().get(j).getCount2()+sumList.get(i).getMonths().get(j).getCount4()+sumList.get(i).getMonths().get(j).getCount5();
+				z+=sumList.get(i).getMonths().get(j).getCount1()+sumList.get(i).getMonths().get(j).getCount2()+sumList.get(i).getMonths().get(j).getCount3()+sumList.get(i).getMonths().get(j).getCount4()+sumList.get(i).getMonths().get(j).getCount5();
 			}
 				rownz.createCell(j+2).setCellValue(z);
 		}

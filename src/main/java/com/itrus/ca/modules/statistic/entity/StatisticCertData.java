@@ -35,10 +35,16 @@ public class StatisticCertData implements java.io.Serializable {
 	private Long id;
 	private Integer add1;
 	private Integer add2;
+	
+	private Integer add3;                 //新增三年
+	
 	private Integer add4;
 	private Integer add5;
 	private Integer renew1;
 	private Integer renew2;
+	
+	private Integer renew3;              //新增三年更新
+	
 	private Integer renew4;
 	private Integer renew5;
 	private Date countDate;
@@ -100,6 +106,19 @@ public class StatisticCertData implements java.io.Serializable {
 	public void setAdd2(Integer add2) {
 		this.add2 = add2;
 	}
+	
+	
+	@Column(name = "add3")
+	public Integer getAdd3() {
+		return add3;
+	}
+
+
+	public void setAdd3(Integer add3) {
+		this.add3 = add3;
+	}
+	
+	
 
 	@Column(name = "add4")
 	public Integer getAdd4() {
@@ -131,6 +150,19 @@ public class StatisticCertData implements java.io.Serializable {
 	public void setRenew2(Integer renew2) {
 		this.renew2 = renew2;
 	}
+	
+	
+	@Column(name = "renew3")
+	public Integer getRenew3() {
+		return renew3;
+	}
+
+
+	public void setRenew3(Integer renew3) {
+		this.renew3 = renew3;
+	}
+	
+	
 
 	@Column(name = "renew4")
 	public Integer getRenew4() {

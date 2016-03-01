@@ -35,6 +35,9 @@ public class StatisticCertDataProduct implements java.io.Serializable {
 	private Office office;
 	private Integer year1;
 	private Integer year2;
+	
+	private Integer year3;             //新增三年
+	
 	private Integer year4;
 	private Integer year5;
 	private Date countDate;
@@ -101,6 +104,17 @@ public class StatisticCertDataProduct implements java.io.Serializable {
 	public void setYear2(Integer year2) {
 		this.year2 = year2;
 	}
+	
+	
+	@Column(name = "year3")
+	public Integer getYear3() {
+		return year3;
+	}
+
+	public void setYear3(Integer year3) {
+		this.year3 = year3;
+	}
+	
 
 	@Column(name = "year4")
 	public Integer getYear4() {

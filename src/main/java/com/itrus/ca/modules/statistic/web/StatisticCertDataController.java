@@ -72,11 +72,6 @@ public class StatisticCertDataController extends BaseController {
 
 	@Autowired
 	private ConfigAppService configAppService;
-	@Autowired
-	private ConfigProductService configProductService;
-
-	private ConfigAppOfficeRelationService configAppOfficeRelationService;
-
 	@ModelAttribute
 	public StatisticCertData get(@RequestParam(required = false) Long id) {
 		if (id != null) {
@@ -203,11 +198,17 @@ public class StatisticCertDataController extends BaseController {
 					// 自费企业
 					Integer oneAdd1 = 0;
 					Integer oneAdd2 = 0;
+					
+					Integer oneAdd3 = 0;
+					
 					Integer oneAdd4 = 0;
 					Integer oneAdd5 = 0;
 
 					Integer oneRenew1 = 0;
 					Integer oneRenew2 = 0;
+					
+					Integer oneRenew3 = 0;
+					
 					Integer oneRenew4 = 0;
 					Integer oneRenew5 = 0;
 					// List<StatisticCertData> zList =
@@ -219,28 +220,46 @@ public class StatisticCertDataController extends BaseController {
 					for (StatisticCertData statisticCertData2 : zList) {
 						oneAdd1 += statisticCertData2.getAdd1();
 						oneAdd2 += statisticCertData2.getAdd2();
+						
+						oneAdd3 += statisticCertData2.getAdd3();
+						
 						oneAdd4 += statisticCertData2.getAdd4();
 						oneAdd5 += statisticCertData2.getAdd5();
 						oneRenew1 += statisticCertData2.getRenew1();
 						oneRenew2 += statisticCertData2.getRenew2();
+						
+						oneRenew3 += statisticCertData2.getRenew3();
+						
 						oneRenew4 += statisticCertData2.getRenew4();
 						oneRenew5 += statisticCertData2.getRenew5();
 					}
 					scm.setOneAdd1(oneAdd1);
 					scm.setOneAdd2(oneAdd2);
+					
+					scm.setOneAdd3(oneAdd3);
+					
 					scm.setOneAdd4(oneAdd4);
 					scm.setOneAdd5(oneAdd5);
 					scm.setOneRenew1(oneRenew1);
 					scm.setOneRenew2(oneRenew2);
+					
+					scm.setOneRenew3(oneRenew3);
+					
 					scm.setOneRenew4(oneRenew4);
 					scm.setOneRenew5(oneRenew5);
 					// 合同企业
 					Integer twoAdd1 = 0;
 					Integer twoAdd2 = 0;
+					
+					Integer twoAdd3 = 0;
+					
 					Integer twoAdd4 = 0;
 					Integer twoAdd5 = 0;
 					Integer twoRenew1 = 0;
 					Integer twoRenew2 = 0;
+					
+					Integer twoRenew3 = 0;
+					
 					Integer twoRenew4 = 0;
 					Integer twoRenew5 = 0;
 					// List<StatisticCertData> hList =
@@ -252,28 +271,46 @@ public class StatisticCertDataController extends BaseController {
 					for (StatisticCertData scd : hList) {
 						twoAdd1 += scd.getAdd1();
 						twoAdd2 += scd.getAdd2();
+						
+						twoAdd3 += scd.getAdd3();
+						
 						twoAdd4 += scd.getAdd4();
 						twoAdd5 += scd.getAdd5();
 						twoRenew1 += scd.getRenew1();
 						twoRenew2 += scd.getRenew2();
+						
+						twoRenew3 += scd.getRenew3();
+						
 						twoRenew4 += scd.getRenew4();
 						twoRenew5 += scd.getRenew5();
 					}
 					scm.setTwoAdd1(twoAdd1);
 					scm.setTwoAdd2(twoAdd2);
+					
+					scm.setTwoAdd3(twoAdd3);
+					
 					scm.setTwoAdd4(twoAdd4);
 					scm.setTwoAdd5(twoAdd5);
 					scm.setTwoRenew1(twoRenew1);
 					scm.setTwoRenew2(twoRenew2);
+					
+					scm.setTwoRenew3(twoRenew3);
+					
 					scm.setTwoRenew4(twoRenew4);
 					scm.setTwoRenew5(twoRenew5);
 					// 政府统一采购
 					Integer fourAdd1 = 0;
 					Integer fourAdd2 = 0;
+					
+					Integer fourAdd3 = 0;
+					
 					Integer fourAdd4 = 0;
 					Integer fourAdd5 = 0;
 					Integer fourRenew1 = 0;
 					Integer fourRenew2 = 0;
+					
+					Integer fourRenew3 = 0;
+					
 					Integer fourRenew4 = 0;
 					Integer fourRenew5 = 0;
 					// List<StatisticCertData> zfList =
@@ -285,19 +322,31 @@ public class StatisticCertDataController extends BaseController {
 					for (StatisticCertData scd1 : zfList) {
 						fourAdd1 += scd1.getAdd1();
 						fourAdd2 += scd1.getAdd2();
+						
+						fourAdd3 += scd1.getAdd3();
+						
 						fourAdd4 += scd1.getAdd4();
 						fourAdd5 += scd1.getAdd5();
 						fourRenew1 += scd1.getRenew1();
 						fourRenew2 += scd1.getRenew2();
+						
+						fourRenew3 += scd1.getRenew3();
+						
 						fourRenew4 += scd1.getRenew4();
 						fourRenew5 += scd1.getRenew5();
 					}
 					scm.setFourAdd1(fourAdd1);
 					scm.setFourAdd2(fourAdd2);
+					
+					scm.setFourAdd3(fourAdd3);
+					
 					scm.setFourAdd4(fourAdd4);
 					scm.setFourAdd5(fourAdd5);
 					scm.setFourRenew1(fourRenew1);
 					scm.setFourRenew2(fourRenew2);
+					
+					scm.setFourRenew3(fourRenew3);
+					
 					scm.setFourRenew4(fourRenew4);
 					scm.setFourRenew5(fourRenew5);
 				} catch (Exception e) {
@@ -315,9 +364,9 @@ public class StatisticCertDataController extends BaseController {
 			for (int j = 0; j < sumList.get(i).getCertMonths().size(); j++) {
 				 StaticCertMonth certMonth = sumList.get(i).getCertMonths().get(j);
 				 
-				 Integer totaladd = certMonth.getOneAdd1()+certMonth.getOneAdd2()+certMonth.getOneAdd4()+certMonth.getOneAdd5()
-						 +certMonth.getTwoAdd1()+certMonth.getTwoAdd2()+certMonth.getTwoAdd4()+certMonth.getTwoAdd5()
-						 +certMonth.getFourAdd1()+certMonth.getFourAdd2()+certMonth.getFourAdd4()+certMonth.getFourAdd4();
+				 Integer totaladd = certMonth.getOneAdd1()+certMonth.getOneAdd2()+certMonth.getOneAdd3()+certMonth.getOneAdd4()+certMonth.getOneAdd5()
+						 		   +certMonth.getTwoAdd1()+certMonth.getTwoAdd2()+certMonth.getTwoAdd3()+certMonth.getTwoAdd4()+certMonth.getTwoAdd5()
+						           +certMonth.getFourAdd1()+certMonth.getFourAdd2()+certMonth.getFourAdd3()+certMonth.getFourAdd4()+certMonth.getFourAdd5();
 		
 				 if (totalListNum.size()>totalLocation) {
 					 totalListNum.set(totalLocation, totalListNum.get(totalLocation)+totaladd);
@@ -326,9 +375,9 @@ public class StatisticCertDataController extends BaseController {
 				 }
 				 totalLocation++;
 				 
-				 Integer totalupdate = certMonth.getOneRenew1()+certMonth.getOneRenew2()+certMonth.getOneRenew4()+certMonth.getOneRenew5()
-						 +certMonth.getTwoRenew1()+certMonth.getTwoRenew2()+certMonth.getTwoRenew4()+certMonth.getTwoRenew5()
-						 +certMonth.getFourRenew1()+certMonth.getFourRenew2()+certMonth.getFourRenew4()+certMonth.getFourRenew5();
+				 Integer totalupdate = certMonth.getOneRenew1()+certMonth.getOneRenew2()+certMonth.getOneRenew3()+certMonth.getOneRenew4()+certMonth.getOneRenew5()
+						 			  +certMonth.getTwoRenew1()+certMonth.getTwoRenew2()+certMonth.getTwoRenew3()+certMonth.getTwoRenew4()+certMonth.getTwoRenew5()
+						 			  +certMonth.getFourRenew1()+certMonth.getFourRenew2()+certMonth.getFourRenew3()+certMonth.getFourRenew4()+certMonth.getFourRenew5();
 			
 				 if (totalListNum.size()>totalLocation) {
 					 totalListNum.set(totalLocation, totalListNum.get(totalLocation)+totalupdate);
@@ -417,11 +466,17 @@ public class StatisticCertDataController extends BaseController {
 					// 自费企业
 					Integer oneAdd1 = 0;
 					Integer oneAdd2 = 0;
+					
+					Integer oneAdd3 = 0;
+					
 					Integer oneAdd4 = 0;
 					Integer oneAdd5 = 0;
 
 					Integer oneRenew1 = 0;
 					Integer oneRenew2 = 0;
+					
+					Integer oneRenew3 = 0;
+					
 					Integer oneRenew4 = 0;
 					Integer oneRenew5 = 0;
 					// List<StatisticCertData> zList =
@@ -433,28 +488,46 @@ public class StatisticCertDataController extends BaseController {
 					for (StatisticCertData statisticCertData2 : zList) {
 						oneAdd1 += statisticCertData2.getAdd1();
 						oneAdd2 += statisticCertData2.getAdd2();
+						
+						oneAdd3 += statisticCertData2.getAdd3();
+						
 						oneAdd4 += statisticCertData2.getAdd4();
 						oneAdd5 += statisticCertData2.getAdd5();
 						oneRenew1 += statisticCertData2.getRenew1();
 						oneRenew2 += statisticCertData2.getRenew2();
+						
+						oneRenew3 += statisticCertData2.getRenew3();
+						
 						oneRenew4 += statisticCertData2.getRenew4();
 						oneRenew5 += statisticCertData2.getRenew5();
 					}
 					scm.setOneAdd1(oneAdd1);
 					scm.setOneAdd2(oneAdd2);
+					
+					scm.setOneAdd3(oneAdd3);
+					
 					scm.setOneAdd4(oneAdd4);
 					scm.setOneAdd5(oneAdd5);
 					scm.setOneRenew1(oneRenew1);
 					scm.setOneRenew2(oneRenew2);
+					
+					scm.setOneRenew3(oneRenew3);
+					
 					scm.setOneRenew4(oneRenew4);
 					scm.setOneRenew5(oneRenew5);
 					// 合同企业
 					Integer twoAdd1 = 0;
 					Integer twoAdd2 = 0;
+					
+					Integer twoAdd3 = 0;
+					
 					Integer twoAdd4 = 0;
 					Integer twoAdd5 = 0;
 					Integer twoRenew1 = 0;
 					Integer twoRenew2 = 0;
+					
+					Integer twoRenew3 = 0;
+					
 					Integer twoRenew4 = 0;
 					Integer twoRenew5 = 0;
 					// List<StatisticCertData> hList =
@@ -466,28 +539,46 @@ public class StatisticCertDataController extends BaseController {
 					for (StatisticCertData scd : hList) {
 						twoAdd1 += scd.getAdd1();
 						twoAdd2 += scd.getAdd2();
+						
+						twoAdd3 += scd.getAdd3();
+						
 						twoAdd4 += scd.getAdd4();
 						twoAdd5 += scd.getAdd5();
 						twoRenew1 += scd.getRenew1();
 						twoRenew2 += scd.getRenew2();
+						
+						twoRenew3 += scd.getRenew3();
+						
 						twoRenew4 += scd.getRenew4();
 						twoRenew5 += scd.getRenew5();
 					}
 					scm.setTwoAdd1(twoAdd1);
 					scm.setTwoAdd2(twoAdd2);
+					
+					scm.setTwoAdd3(twoAdd3);
+					
 					scm.setTwoAdd4(twoAdd4);
 					scm.setTwoAdd5(twoAdd5);
 					scm.setTwoRenew1(twoRenew1);
 					scm.setTwoRenew2(twoRenew2);
+					
+					scm.setTwoRenew3(twoRenew3);
+					
 					scm.setTwoRenew4(twoRenew4);
 					scm.setTwoRenew5(twoRenew5);
 					// 政府统一采购
 					Integer fourAdd1 = 0;
 					Integer fourAdd2 = 0;
+					
+					Integer fourAdd3 = 0;
+					
 					Integer fourAdd4 = 0;
 					Integer fourAdd5 = 0;
 					Integer fourRenew1 = 0;
 					Integer fourRenew2 = 0;
+					
+					Integer fourRenew3 = 0;
+					
 					Integer fourRenew4 = 0;
 					Integer fourRenew5 = 0;
 					// List<StatisticCertData> zfList =
@@ -499,19 +590,31 @@ public class StatisticCertDataController extends BaseController {
 					for (StatisticCertData scd1 : zfList) {
 						fourAdd1 += scd1.getAdd1();
 						fourAdd2 += scd1.getAdd2();
+						
+						fourAdd3 += scd1.getAdd3();
+						
 						fourAdd4 += scd1.getAdd4();
 						fourAdd5 += scd1.getAdd5();
 						fourRenew1 += scd1.getRenew1();
 						fourRenew2 += scd1.getRenew2();
+						
+						fourRenew3 += scd1.getRenew3();
+						
 						fourRenew4 += scd1.getRenew4();
 						fourRenew5 += scd1.getRenew5();
 					}
 					scm.setFourAdd1(fourAdd1);
 					scm.setFourAdd2(fourAdd2);
+					
+					scm.setFourAdd3(fourAdd3);
+					
 					scm.setFourAdd4(fourAdd4);
 					scm.setFourAdd5(fourAdd5);
 					scm.setFourRenew1(fourRenew1);
 					scm.setFourRenew2(fourRenew2);
+					
+					scm.setFourRenew3(fourRenew3);
+					
 					scm.setFourRenew4(fourRenew4);
 					scm.setFourRenew5(fourRenew5);
 				} catch (Exception e) {
@@ -528,9 +631,9 @@ public class StatisticCertDataController extends BaseController {
 			for (int j = 0; j < sumList.get(i).getCertMonths().size(); j++) {
 				 StaticCertMonth certMonth = sumList.get(i).getCertMonths().get(j);
 				 
-				 Integer totaladd = certMonth.getOneAdd1()+certMonth.getOneAdd2()+certMonth.getOneAdd4()+certMonth.getOneAdd5()
-						 +certMonth.getTwoAdd1()+certMonth.getTwoAdd2()+certMonth.getTwoAdd4()+certMonth.getTwoAdd5()
-						 +certMonth.getFourAdd1()+certMonth.getFourAdd2()+certMonth.getFourAdd4()+certMonth.getFourAdd5();
+				 Integer totaladd = certMonth.getOneAdd1()+certMonth.getOneAdd2()+certMonth.getOneAdd3()+certMonth.getOneAdd4()+certMonth.getOneAdd5()
+				 				   +certMonth.getTwoAdd1()+certMonth.getTwoAdd2()+certMonth.getTwoAdd3()+certMonth.getTwoAdd4()+certMonth.getTwoAdd5()
+				 				   +certMonth.getFourAdd1()+certMonth.getFourAdd2()+certMonth.getFourAdd3()+certMonth.getFourAdd4()+certMonth.getFourAdd5();
 		
 				 if (totalListNum.size()>totalLocation) {
 					 totalListNum.set(totalLocation, totalListNum.get(totalLocation)+totaladd);
@@ -540,9 +643,9 @@ public class StatisticCertDataController extends BaseController {
 				 }
 				 totalLocation++;
 				 
-				 Integer totalupdate = certMonth.getOneRenew1()+certMonth.getOneRenew2()+certMonth.getOneRenew4()+certMonth.getOneRenew5()
-						 +certMonth.getTwoRenew1()+certMonth.getTwoRenew2()+certMonth.getTwoRenew4()+certMonth.getTwoRenew5()
-						 +certMonth.getFourRenew1()+certMonth.getFourRenew2()+certMonth.getFourRenew4()+certMonth.getFourRenew5();
+				 Integer totalupdate = certMonth.getOneRenew1()+certMonth.getOneRenew2()+certMonth.getOneRenew3()+certMonth.getOneRenew4()+certMonth.getOneRenew5()
+						 			  +certMonth.getTwoRenew1()+certMonth.getTwoRenew2()+certMonth.getTwoRenew3()+certMonth.getTwoRenew4()+certMonth.getTwoRenew5()
+						 			  +certMonth.getFourRenew1()+certMonth.getFourRenew2()+certMonth.getFourRenew3()+certMonth.getFourRenew4()+certMonth.getFourRenew5();
 			
 				 if (totalListNum.size()>totalLocation) {
 					 totalListNum.set(totalLocation, totalListNum.get(totalLocation)+totalupdate);
@@ -573,7 +676,7 @@ public class StatisticCertDataController extends BaseController {
 		row.createCell(1).setCellValue("费用归属");
 		row.createCell(2).setCellValue("证书年限");
 		HSSFRow row1=sheet.createRow(2);
-		HSSFRow rowz=sheet.createRow(3+(3*4*(sumList.size())));
+		HSSFRow rowz=sheet.createRow(3+(3*5*(sumList.size())));
 		rowz.createCell(0).setCellValue("总计");
 		int z=0;
 		for(int i=0;i<totalListNum.size();i++)
@@ -606,43 +709,50 @@ public class StatisticCertDataController extends BaseController {
 
 		for(int a=0;a<sumList.size();a++)
 		{
-			sheet.addMergedRegion(new Region(a*12+3, (short)0, a*12+14, (short)0));
+			sheet.addMergedRegion(new Region(a*15+3, (short)0, a*15+14, (short)0));
 			for(int i=0;i<3*(a+1);i++)
 			{
-				sheet.addMergedRegion(new Region(i*4+3, (short)1, i*4+2+4, (short)1));
-				HSSFRow rown1= sheet.createRow(i*4+3);
+				sheet.addMergedRegion(new Region(i*5+3, (short)1, i*5+2+4, (short)1));
+				HSSFRow rown1= sheet.createRow(i*5+3);
 				rown1.createCell(2).setCellValue("一年期限");
-				HSSFRow rown2=sheet.createRow(i*4+4);
+				HSSFRow rown2=sheet.createRow(i*5+4);
 				rown2.createCell(2).setCellValue("二年期限");
-				HSSFRow rown3=sheet.createRow(i*4+5);
-				rown3.createCell(2).setCellValue("四年期限");
-				HSSFRow rown4=sheet.createRow(i*4+6);
-				rown4.createCell(2).setCellValue("五年期限");
+				HSSFRow rown3=sheet.createRow(i*5+5);
+				rown3.createCell(2).setCellValue("三年期限");
+				HSSFRow rown4=sheet.createRow(i*5+6);
+				rown4.createCell(2).setCellValue("四年期限");
+				HSSFRow rown5=sheet.createRow(i*5+7);
+				rown5.createCell(2).setCellValue("五年期限");
 			}
 			
 		}
 		for(int a=0;a<sumList.size();a++)
 		{
-			HSSFRow rown11=sheet.createRow(a*12+3);
-			HSSFRow rown12=sheet.createRow(a*12+4);
-			HSSFRow rown13=sheet.createRow(a*12+5);
-			HSSFRow rown14=sheet.createRow(a*12+6);
-			HSSFRow rown22=sheet.createRow(a*12+8);
-			HSSFRow rown23=sheet.createRow(a*12+9);
-			HSSFRow rown24=sheet.createRow(a*12+10);
-			HSSFRow rown32=sheet.createRow(a*12+12);
-			HSSFRow rown33=sheet.createRow(a*12+13);
-			HSSFRow rown34=sheet.createRow(a*12+14);
+			HSSFRow rown11=sheet.createRow(a*15+3);
+			HSSFRow rown12=sheet.createRow(a*15+4);
+			HSSFRow rown13=sheet.createRow(a*15+5);
+			HSSFRow rown14=sheet.createRow(a*15+6);
+			HSSFRow rown15=sheet.createRow(a*15+7);
+			HSSFRow rown22=sheet.createRow(a*15+9);
+			HSSFRow rown23=sheet.createRow(a*15+10);
+			HSSFRow rown24=sheet.createRow(a*15+11);
+			HSSFRow rown25=sheet.createRow(a*15+12);
+			HSSFRow rown32=sheet.createRow(a*15+14);
+			HSSFRow rown33=sheet.createRow(a*15+15);
+			HSSFRow rown34=sheet.createRow(a*15+16);
+			HSSFRow rown35=sheet.createRow(a*15+17);
 			rown11.createCell(0).setCellValue(sumList.get(a).getConfigApp().getAppName());
 			rown11.createCell(1).setCellValue("自费企业");
-			HSSFRow rown21=sheet.createRow(a*12+6+1);
+			HSSFRow rown21=sheet.createRow(a*15+7+1);
 			rown21.createCell(1).setCellValue("合同企业");
-			HSSFRow rown31=sheet.createRow(a*12+10+1);
+			HSSFRow rown31=sheet.createRow(a*15+12+1);
 			rown31.createCell(1).setCellValue("政府统一采购");
 			int onea1=0;
 			int oner1=0;
 			int onea2=0;
 			int oner2=0;
+			int onea3=0;
+			int oner3=0;
 			int onea4=0;
 			int oner4=0;
 			int onea5=0;
@@ -651,6 +761,8 @@ public class StatisticCertDataController extends BaseController {
 			int twor1=0;
 			int twoa2=0;
 			int twor2=0;
+			int twoa3=0;
+			int twor3=0;
 			int twoa4=0;
 			int twor4=0;
 			int twoa5=0;
@@ -659,6 +771,8 @@ public class StatisticCertDataController extends BaseController {
 			int foura1=0;
 			int foura2=0;
 			int fourr2=0;
+			int foura3=0;
+			int fourr3=0;
 			int foura4=0;
 			int fourr4=0;
 			int foura5=0;
@@ -669,6 +783,8 @@ public class StatisticCertDataController extends BaseController {
 				oner1+=sumList.get(a).getCertMonths().get(j-1).getOneRenew1();
 				onea2+=sumList.get(a).getCertMonths().get(j-1).getOneAdd2();
 				oner2+=sumList.get(a).getCertMonths().get(j-1).getOneRenew2();
+				onea3+=sumList.get(a).getCertMonths().get(j-1).getOneAdd3();
+				oner3+=sumList.get(a).getCertMonths().get(j-1).getOneRenew3();
 				onea4+=sumList.get(a).getCertMonths().get(j-1).getOneAdd4();
 				oner4+=sumList.get(a).getCertMonths().get(j-1).getOneRenew4();
 				onea5+=sumList.get(a).getCertMonths().get(j-1).getOneAdd5();
@@ -677,6 +793,8 @@ public class StatisticCertDataController extends BaseController {
 				twor1+=sumList.get(a).getCertMonths().get(j-1).getTwoRenew1();
 				twoa2+=sumList.get(a).getCertMonths().get(j-1).getTwoAdd2();
 				twor2+=sumList.get(a).getCertMonths().get(j-1).getTwoRenew2();
+				twoa3+=sumList.get(a).getCertMonths().get(j-1).getTwoAdd3();
+				twor3+=sumList.get(a).getCertMonths().get(j-1).getTwoRenew3();
 				twoa4+=sumList.get(a).getCertMonths().get(j-1).getTwoAdd4();
 				twor4+=sumList.get(a).getCertMonths().get(j-1).getTwoRenew4();
 				twoa5+=sumList.get(a).getCertMonths().get(j-1).getTwoAdd5();
@@ -685,6 +803,8 @@ public class StatisticCertDataController extends BaseController {
 				fourr1+=sumList.get(a).getCertMonths().get(j-1).getFourRenew1();
 				foura2+=sumList.get(a).getCertMonths().get(j-1).getFourAdd2();
 				fourr2+=sumList.get(a).getCertMonths().get(j-1).getFourRenew2();
+				foura3+=sumList.get(a).getCertMonths().get(j-1).getFourAdd3();
+				fourr3+=sumList.get(a).getCertMonths().get(j-1).getFourRenew3();
 				foura4+=sumList.get(a).getCertMonths().get(j-1).getFourAdd4();
 				fourr4+=sumList.get(a).getCertMonths().get(j-1).getFourRenew4();
 				foura5+=sumList.get(a).getCertMonths().get(j-1).getFourAdd5();
@@ -700,14 +820,19 @@ public class StatisticCertDataController extends BaseController {
 				rown12.createCell(2*j+1).setCellValue(sumList.get(a).getCertMonths().get(j-1).getOneAdd2());
 				rown12.createCell(2*j+2).setCellValue(sumList.get(a).getCertMonths().get(j-1).getOneRenew2());
 				rown12.createCell(3+2*monthlist1.size()).setCellValue(onea2+oner2);
-				rown13.createCell(2).setCellValue("四年期限");
-				rown13.createCell(2*j+1).setCellValue(sumList.get(a).getCertMonths().get(j-1).getOneAdd4());
-				rown13.createCell(2*j+2).setCellValue(sumList.get(a).getCertMonths().get(j-1).getOneRenew4());
-				rown13.createCell(3+2*monthlist1.size()).setCellValue(onea4+oner4);
-				rown14.createCell(2).setCellValue("五年期限");
-				rown14.createCell(2*j+1).setCellValue(sumList.get(a).getCertMonths().get(j-1).getOneAdd5());
-				rown14.createCell(2*j+2).setCellValue(sumList.get(a).getCertMonths().get(j-1).getOneRenew5());
-				rown14.createCell(3+2*monthlist1.size()).setCellValue(onea5+oner5);
+				rown13.createCell(2).setCellValue("三年期限");
+				rown13.createCell(2*j+1).setCellValue(sumList.get(a).getCertMonths().get(j-1).getOneAdd3());
+				rown13.createCell(2*j+2).setCellValue(sumList.get(a).getCertMonths().get(j-1).getOneRenew3());
+				rown13.createCell(3+2*monthlist1.size()).setCellValue(onea3+oner3);
+				rown14.createCell(2).setCellValue("四年期限");
+				rown14.createCell(2*j+1).setCellValue(sumList.get(a).getCertMonths().get(j-1).getOneAdd4());
+				rown14.createCell(2*j+2).setCellValue(sumList.get(a).getCertMonths().get(j-1).getOneRenew4());
+				rown14.createCell(3+2*monthlist1.size()).setCellValue(onea4+oner4);
+				rown15.createCell(2).setCellValue("五年期限");
+				rown15.createCell(2*j+1).setCellValue(sumList.get(a).getCertMonths().get(j-1).getOneAdd5());
+				rown15.createCell(2*j+2).setCellValue(sumList.get(a).getCertMonths().get(j-1).getOneRenew5());
+				rown15.createCell(3+2*monthlist1.size()).setCellValue(onea5+oner5);
+				
 				
 				
 				rown21.createCell(2).setCellValue("一年期限");
@@ -718,14 +843,18 @@ public class StatisticCertDataController extends BaseController {
 				rown22.createCell(2*j+1).setCellValue(sumList.get(a).getCertMonths().get(j-1).getTwoAdd2());
 				rown22.createCell(2*j+2).setCellValue(sumList.get(a).getCertMonths().get(j-1).getTwoRenew2());
 				rown22.createCell(3+2*monthlist1.size()).setCellValue(twoa2+twor2);
-				rown23.createCell(2).setCellValue("四年期限");
-				rown23.createCell(2*j+1).setCellValue(sumList.get(a).getCertMonths().get(j-1).getTwoAdd4());
-				rown23.createCell(2*j+2).setCellValue(sumList.get(a).getCertMonths().get(j-1).getTwoRenew4());
-				rown23.createCell(3+2*monthlist1.size()).setCellValue(twoa4+twor4);
-				rown24.createCell(2).setCellValue("五年期限");
-				rown24.createCell(2*j+1).setCellValue(sumList.get(a).getCertMonths().get(j-1).getTwoAdd5());
-				rown24.createCell(2*j+2).setCellValue(sumList.get(a).getCertMonths().get(j-1).getTwoRenew5());
-				rown24.createCell(3+2*monthlist1.size()).setCellValue(twoa5+twor5);
+				rown23.createCell(2).setCellValue("三年期限");
+				rown23.createCell(2*j+1).setCellValue(sumList.get(a).getCertMonths().get(j-1).getTwoAdd3());
+				rown23.createCell(2*j+2).setCellValue(sumList.get(a).getCertMonths().get(j-1).getTwoRenew3());
+				rown23.createCell(3+2*monthlist1.size()).setCellValue(twoa3+twor3);
+				rown24.createCell(2).setCellValue("四年期限");
+				rown24.createCell(2*j+1).setCellValue(sumList.get(a).getCertMonths().get(j-1).getTwoAdd4());
+				rown24.createCell(2*j+2).setCellValue(sumList.get(a).getCertMonths().get(j-1).getTwoRenew4());
+				rown24.createCell(3+2*monthlist1.size()).setCellValue(twoa4+twor4);
+				rown25.createCell(2).setCellValue("五年期限");
+				rown25.createCell(2*j+1).setCellValue(sumList.get(a).getCertMonths().get(j-1).getTwoAdd5());
+				rown25.createCell(2*j+2).setCellValue(sumList.get(a).getCertMonths().get(j-1).getTwoRenew5());
+				rown25.createCell(3+2*monthlist1.size()).setCellValue(twoa5+twor5);
 				
 				rown31.createCell(2).setCellValue("一年期限");
 				rown31.createCell(2*j+1).setCellValue(sumList.get(a).getCertMonths().get(j-1).getFourAdd1());
@@ -735,14 +864,19 @@ public class StatisticCertDataController extends BaseController {
 				rown32.createCell(2*j+1).setCellValue(sumList.get(a).getCertMonths().get(j-1).getFourAdd2());
 				rown32.createCell(2*j+2).setCellValue(sumList.get(a).getCertMonths().get(j-1).getFourRenew2());
 				rown32.createCell(3+2*monthlist1.size()).setCellValue(foura2+fourr2);
-				rown33.createCell(2).setCellValue("四年期限");
-				rown33.createCell(2*j+1).setCellValue(sumList.get(a).getCertMonths().get(j-1).getFourAdd4());
-				rown33.createCell(2*j+2).setCellValue(sumList.get(a).getCertMonths().get(j-1).getFourRenew4());
-				rown33.createCell(3+2*monthlist1.size()).setCellValue(foura4+fourr4);
-				rown34.createCell(2).setCellValue("五年期限");
-				rown34.createCell(2*j+1).setCellValue(sumList.get(a).getCertMonths().get(j-1).getFourAdd5());
-				rown34.createCell(2*j+2).setCellValue(sumList.get(a).getCertMonths().get(j-1).getFourRenew5());
-				rown34.createCell(3+2*monthlist1.size()).setCellValue(foura5+fourr5);
+				rown33.createCell(2).setCellValue("三年期限");
+				rown33.createCell(2*j+1).setCellValue(sumList.get(a).getCertMonths().get(j-1).getFourAdd3());
+				rown33.createCell(2*j+2).setCellValue(sumList.get(a).getCertMonths().get(j-1).getFourRenew3());
+				rown33.createCell(3+2*monthlist1.size()).setCellValue(foura3+fourr3);
+				rown34.createCell(2).setCellValue("四年期限");
+				rown34.createCell(2*j+1).setCellValue(sumList.get(a).getCertMonths().get(j-1).getFourAdd4());
+				rown34.createCell(2*j+2).setCellValue(sumList.get(a).getCertMonths().get(j-1).getFourRenew4());
+				rown34.createCell(3+2*monthlist1.size()).setCellValue(foura4+fourr4);
+				rown35.createCell(2).setCellValue("五年期限");
+				rown35.createCell(2*j+1).setCellValue(sumList.get(a).getCertMonths().get(j-1).getFourAdd5());
+				rown35.createCell(2*j+2).setCellValue(sumList.get(a).getCertMonths().get(j-1).getFourRenew5());
+				rown35.createCell(3+2*monthlist1.size()).setCellValue(foura5+fourr5);
+
 				
 			}
 			
@@ -862,10 +996,12 @@ public class StatisticCertDataController extends BaseController {
 					// 自费企业
 					Integer oneAdd1 = 0;
 					Integer oneAdd2 = 0;
+					Integer oneAdd3 = 0;
 					Integer oneAdd4 = 0;
 					Integer oneAdd5 = 0;
 					Integer oneRenew1 = 0;
 					Integer oneRenew2 = 0;
+					Integer oneRenew3 = 0;
 					Integer oneRenew4 = 0;
 					Integer oneRenew5 = 0;
 					List<StatisticCertData> zList = statisticCertDataService
@@ -874,28 +1010,34 @@ public class StatisticCertDataController extends BaseController {
 					for (StatisticCertData statisticCertData2 : zList) {
 						oneAdd1 += statisticCertData2.getAdd1();
 						oneAdd2 += statisticCertData2.getAdd2();
+						oneAdd3 += statisticCertData2.getAdd3();
 						oneAdd4 += statisticCertData2.getAdd4();
 						oneAdd5 += statisticCertData2.getAdd5();
 						oneRenew1 += statisticCertData2.getRenew1();
 						oneRenew2 += statisticCertData2.getRenew2();
+						oneRenew3 += statisticCertData2.getRenew3();
 						oneRenew4 += statisticCertData2.getRenew4();
 						oneRenew5 += statisticCertData2.getRenew5();
 					}
 					scd.setOneAdd1(oneAdd1);
 					scd.setOneAdd2(oneAdd2);
+					scd.setOneAdd3(oneAdd3);
 					scd.setOneAdd4(oneAdd4);
 					scd.setOneAdd5(oneAdd5);
 					scd.setOneRenew1(oneRenew1);
 					scd.setOneRenew2(oneRenew2);
+					scd.setOneRenew3(oneRenew3);
 					scd.setOneRenew4(oneRenew4);
 					scd.setOneRenew5(oneRenew5);
 					// 合同企业
 					Integer twoAdd1 = 0;
 					Integer twoAdd2 = 0;
+					Integer twoAdd3 = 0;
 					Integer twoAdd4 = 0;
 					Integer twoAdd5 = 0;
 					Integer twoRenew1 = 0;
 					Integer twoRenew2 = 0;
+					Integer twoRenew3 = 0;
 					Integer twoRenew4 = 0;
 					Integer twoRenew5 = 0;
 					// List<StatisticCertData> hList =
@@ -907,28 +1049,34 @@ public class StatisticCertDataController extends BaseController {
 					for (StatisticCertData scds : hList) {
 						twoAdd1 += scds.getAdd1();
 						twoAdd2 += scds.getAdd2();
+						twoAdd3 += scds.getAdd3();
 						twoAdd4 += scds.getAdd4();
 						twoAdd5 += scds.getAdd5();
 						twoRenew1 += scds.getRenew1();
 						twoRenew2 += scds.getRenew2();
+						twoRenew3 += scds.getRenew3();
 						twoRenew4 += scds.getRenew4();
 						twoRenew5 += scds.getRenew5();
 					}
 					scd.setTwoAdd1(twoAdd1);
 					scd.setTwoAdd2(twoAdd2);
+					scd.setTwoAdd3(twoAdd3);
 					scd.setTwoAdd4(twoAdd4);
 					scd.setTwoAdd5(twoAdd5);
 					scd.setTwoRenew1(twoRenew1);
 					scd.setTwoRenew2(twoRenew2);
+					scd.setTwoRenew3(twoRenew3);
 					scd.setTwoRenew4(twoRenew4);
 					scd.setTwoRenew5(twoRenew5);
 					// 政府统一采购
 					Integer fourAdd1 = 0;
 					Integer fourAdd2 = 0;
+					Integer fourAdd3 = 0;
 					Integer fourAdd4 = 0;
 					Integer fourAdd5 = 0;
 					Integer fourRenew1 = 0;
 					Integer fourRenew2 = 0;
+					Integer fourRenew3 = 0;
 					Integer fourRenew4 = 0;
 					Integer fourRenew5 = 0;
 					// List<StatisticCertData> zfList =
@@ -940,19 +1088,23 @@ public class StatisticCertDataController extends BaseController {
 					for (StatisticCertData scd1 : zfList) {
 						fourAdd1 += scd1.getAdd1();
 						fourAdd2 += scd1.getAdd2();
+						fourAdd3 += scd1.getAdd3();
 						fourAdd4 += scd1.getAdd4();
 						fourAdd5 += scd1.getAdd5();
 						fourRenew1 += scd1.getRenew1();
 						fourRenew2 += scd1.getRenew2();
+						fourRenew3 += scd1.getRenew3();
 						fourRenew4 += scd1.getRenew4();
 						fourRenew5 += scd1.getRenew5();
 					}
 					scd.setFourAdd1(fourAdd1);
 					scd.setFourAdd2(fourAdd2);
+					scd.setFourAdd3(fourAdd3);
 					scd.setFourAdd4(fourAdd4);
 					scd.setFourAdd5(fourAdd5);
 					scd.setFourRenew1(fourRenew1);
 					scd.setFourRenew2(fourRenew2);
+					scd.setFourRenew3(fourRenew3);
 					scd.setFourRenew4(fourRenew4);
 					scd.setFourRenew5(fourRenew5);
 				} catch (Exception e) {
@@ -1122,7 +1274,7 @@ public class StatisticCertDataController extends BaseController {
 			String month) {
 		List<String> dayLists = new ArrayList<String>();
 		List<String> dayList = new ArrayList<String>();
-		SimpleDateFormat dayFormat = new SimpleDateFormat("yyyy-MM-dd");
+		new SimpleDateFormat("yyyy-MM-dd");
 		try {
 			Integer day = daysBetween(beginTime, endTime);// 获取相差的天数
 			for (int i = 0; i <= day + 1; i++) {
