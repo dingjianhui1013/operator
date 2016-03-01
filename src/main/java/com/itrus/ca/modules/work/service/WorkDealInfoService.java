@@ -3637,6 +3637,7 @@ public class WorkDealInfoService extends BaseService {
 			}
 		}
 		dc = workDealInfoDao.createDetachedCriteria();
+		dc.add(Restrictions.eq("officeId", officeId));
 		dc.add(Restrictions.eq("dealInfoStatus",
 				WorkDealInfoStatus.STATUS_CERT_REVOKE));
 		dc.add(Restrictions.ge("obtainedDate", date));
@@ -4852,9 +4853,7 @@ public class WorkDealInfoService extends BaseService {
 	public int getWorkPayCountByUpdate(Date yesterDay, Date countDate,
 			Long officeId) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
-		dc.createAlias("createBy", "createBy");
-		dc.createAlias("createBy.office", "office");
-		dc.add(Restrictions.eq("createBy.office.id", officeId));
+		dc.add(Restrictions.eq("officeId", officeId));
 		List<String> statusIntegers = new ArrayList<String>();
 		statusIntegers.add(WorkDealInfoStatus.STATUS_CERT_WAIT);
 		dc.add(Restrictions.in("dealInfoStatus", statusIntegers));

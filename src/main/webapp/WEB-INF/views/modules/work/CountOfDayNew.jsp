@@ -165,33 +165,33 @@
 		<thead>
 			<tr>
 				<th rowspan="4" style="text-align:center; vertical-align: middle;">日期</th>
-				<th colspan="36" style="text-align:center; vertical-align: middle;">${appData.app.appName}</th> 
+				<th colspan="43" style="text-align:center; vertical-align: middle;">${appData.app.appName}</th> 
 				
 				
 			</tr>
 			  
 			<tr > 
-			     <th colspan="33" style="text-align:center; vertical-align: middle;">业务办理</th>
+			     <th colspan="40" style="text-align:center; vertical-align: middle;">业务办理</th>
 				 <th colspan="3" style="text-align:center; vertical-align: middle;">小计</th> 
 			</tr> 
 			<tr>
 				
-				<td colspan="4" style="text-align:center; vertical-align: middle;">新增</td>
-				<td colspan="4" style="text-align:center; vertical-align: middle;">更新</td>
+				<td colspan="5" style="text-align:center; vertical-align: middle;">新增</td>
+				<td colspan="5" style="text-align:center; vertical-align: middle;">更新</td>
 				<td rowspan="2" style="text-align:center; vertical-align: middle;">变更</td>
 				<td rowspan="2" style="text-align:center; vertical-align: middle;">遗失补办</td>
 				<td rowspan="2" style="text-align:center; vertical-align: middle;">损坏更换</td>
 				
-				<td colspan="4" style="text-align:center; vertical-align: middle;">更新+变更</td>
+				<td colspan="5" style="text-align:center; vertical-align: middle;">更新+变更</td>
 				
-				<td colspan="4" style="text-align:center; vertical-align: middle;">更新+遗失补办</td>
+				<td colspan="5" style="text-align:center; vertical-align: middle;">更新+遗失补办</td>
 				
-				<td colspan="4" style="text-align:center; vertical-align: middle;">更新+损坏更换</td>
+				<td colspan="5" style="text-align:center; vertical-align: middle;">更新+损坏更换</td>
 				
 				<td rowspan="2" style="text-align:center; vertical-align: middle;">变更+遗失补办</td>
 				<td rowspan="2" style="text-align:center; vertical-align: middle;">变更+损坏更换</td>
-				<td colspan="4" style="text-align:center; vertical-align: middle;">更新+变更+遗失补办</td>
-				<td colspan="4" style="text-align:center; vertical-align: middle;">更新+变更+损坏更换</td>
+				<td colspan="5" style="text-align:center; vertical-align: middle;">更新+变更+遗失补办</td>
+				<td colspan="5" style="text-align:center; vertical-align: middle;">更新+变更+损坏更换</td>
 				
 				
 				
@@ -203,30 +203,43 @@
 			<tr>
 				<td style="text-align:center; vertical-align: middle;">1年</td>
 				<td style="text-align:center; vertical-align: middle;">2年</td>
+				<td style="text-align:center; vertical-align: middle;">3年</td>
 				<td style="text-align:center; vertical-align: middle;">4年</td>
 				<td style="text-align:center; vertical-align: middle;">5年</td>
+				
 				<td style="text-align:center; vertical-align: middle;">1年</td>
 				<td style="text-align:center; vertical-align: middle;">2年</td>
+				<td style="text-align:center; vertical-align: middle;">3年</td>
 				<td style="text-align:center; vertical-align: middle;">4年</td>
 				<td style="text-align:center; vertical-align: middle;">5年</td>
+				
 				<td style="text-align:center; vertical-align: middle;">1年</td>
 				<td style="text-align:center; vertical-align: middle;">2年</td>
+				<td style="text-align:center; vertical-align: middle;">3年</td>
 				<td style="text-align:center; vertical-align: middle;">4年</td>
 				<td style="text-align:center; vertical-align: middle;">5年</td>
+				
 				<td style="text-align:center; vertical-align: middle;">1年</td>
 				<td style="text-align:center; vertical-align: middle;">2年</td>
+				<td style="text-align:center; vertical-align: middle;">3年</td>
 				<td style="text-align:center; vertical-align: middle;">4年</td>
 				<td style="text-align:center; vertical-align: middle;">5年</td>
+				
 				<td style="text-align:center; vertical-align: middle;">1年</td>
 				<td style="text-align:center; vertical-align: middle;">2年</td>
+				<td style="text-align:center; vertical-align: middle;">3年</td>
 				<td style="text-align:center; vertical-align: middle;">4年</td>
 				<td style="text-align:center; vertical-align: middle;">5年</td>
+				
 				<td style="text-align:center; vertical-align: middle;">1年</td>
 				<td style="text-align:center; vertical-align: middle;">2年</td>
+				<td style="text-align:center; vertical-align: middle;">3年</td>
 				<td style="text-align:center; vertical-align: middle;">4年</td>
 				<td style="text-align:center; vertical-align: middle;">5年</td>
+				
 				<td style="text-align:center; vertical-align: middle;">1年</td>
 				<td style="text-align:center; vertical-align: middle;">2年</td>
+				<td style="text-align:center; vertical-align: middle;">3年</td>
 				<td style="text-align:center; vertical-align: middle;">4年</td>
 				<td style="text-align:center; vertical-align: middle;">5年</td>
 				
@@ -238,10 +251,12 @@
 					<fmt:formatDate value="${appData.statisticDate}" pattern="yyyy-MM-dd"/></td>
 					<td style="text-align:center; vertical-align: middle;" >${appData.add1}</td>
 					<td style="text-align:center; vertical-align: middle;" >${appData.add2}</td>
+					<td style="text-align:center; vertical-align: middle;" >${appData.add3}</td>
 					<td style="text-align:center; vertical-align: middle;" >${appData.add4}</td>
 					<td style="text-align:center; vertical-align: middle;" >${appData.add5}</td>
 					<td style="text-align:center; vertical-align: middle;" >${appData.renew1}</td>
 					<td style="text-align:center; vertical-align: middle;" >${appData.renew2}</td>
+					<td style="text-align:center; vertical-align: middle;" >${appData.renew3}</td>
 					<td style="text-align:center; vertical-align: middle;" >${appData.renew4}</td>
 					<td style="text-align:center; vertical-align: middle;" >${appData.renew5}</td>
 					<td style="text-align:center; vertical-align: middle;" >${appData.modifyNum}</td>
@@ -249,24 +264,29 @@
 					<td style="text-align:center; vertical-align: middle;" >${appData.lostReplaceNum}</td>
 					<td style="text-align:center; vertical-align: middle;" >${appData.updateChangeNum}</td>
 					<td style="text-align:center; vertical-align: middle;" >${appData.updateChangeNum2}</td>
+					<td style="text-align:center; vertical-align: middle;" >${appData.updateChangeNum3}</td>
 					<td style="text-align:center; vertical-align: middle;" >${appData.updateChangeNum4}</td>
 					<td style="text-align:center; vertical-align: middle;" >${appData.updateChangeNum5}</td>
 					<td style="text-align:center; vertical-align: middle;" >${appData.updateLostNum}</td>
 					<td style="text-align:center; vertical-align: middle;" >${appData.updateLostNum2}</td>
+					<td style="text-align:center; vertical-align: middle;" >${appData.updateLostNum3}</td>
 					<td style="text-align:center; vertical-align: middle;" >${appData.updateLostNum4}</td>
 					<td style="text-align:center; vertical-align: middle;" >${appData.updateLostNum5}</td>
 					<td style="text-align:center; vertical-align: middle;" >${appData.updateReplaceNum}</td>
 					<td style="text-align:center; vertical-align: middle;" >${appData.updateReplaceNum2}</td>
+					<td style="text-align:center; vertical-align: middle;" >${appData.updateReplaceNum3}</td>
 					<td style="text-align:center; vertical-align: middle;" >${appData.updateReplaceNum4}</td>
 					<td style="text-align:center; vertical-align: middle;" >${appData.updateReplaceNum5}</td>
 					<td style="text-align:center; vertical-align: middle;" >${appData.changeLostNum}</td>
 					<td style="text-align:center; vertical-align: middle;" >${appData.changeReplaceNum}</td>
 					<td style="text-align:center; vertical-align: middle;" >${appData.changeUpdateLostNum}</td>
 					<td style="text-align:center; vertical-align: middle;" >${appData.changeUpdateLostNum2}</td>
+					<td style="text-align:center; vertical-align: middle;" >${appData.changeUpdateLostNum3}</td>
 					<td style="text-align:center; vertical-align: middle;" >${appData.changeUpdateLostNum4}</td>
 					<td style="text-align:center; vertical-align: middle;" >${appData.changeUpdateLostNum5}</td>
 					<td style="text-align:center; vertical-align: middle;" >${appData.changeUpdateReplaceNum}</td>
 					<td style="text-align:center; vertical-align: middle;" >${appData.changeUpdateReplaceNum2}</td>
+					<td style="text-align:center; vertical-align: middle;" >${appData.changeUpdateReplaceNum3}</td>
 					<td style="text-align:center; vertical-align: middle;" >${appData.changeUpdateReplaceNum4}</td>
 					<td style="text-align:center; vertical-align: middle;" >${appData.changeUpdateReplaceNum5}</td>
 					<td style="text-align:center; vertical-align: middle;" >${appData.certTotal}</td>

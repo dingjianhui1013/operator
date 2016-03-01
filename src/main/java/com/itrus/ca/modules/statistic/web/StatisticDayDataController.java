@@ -363,10 +363,12 @@ public class StatisticDayDataController extends BaseController {
 
 					Integer add1 = 0;
 					Integer add2 = 0;
+					Integer add3 = 0;
 					Integer add4 = 0;
 					Integer add5 = 0;
 					Integer renew1 = 0;
 					Integer renew2 = 0;
+					Integer renew3 = 0;
 					Integer renew4 = 0;
 					Integer renew5 = 0;
 					Integer modifyNum = 0;
@@ -377,34 +379,42 @@ public class StatisticDayDataController extends BaseController {
 					Integer lostReplaceNum = 0;
 					Integer updateChangeNum = 0;
 					Integer updateChangeNum2 = 0;
+					Integer updateChangeNum3 = 0;
 					Integer updateChangeNum4 = 0;
 					Integer updateChangeNum5 = 0;
 					Integer updateLostNum = 0;
 					Integer updateLostNum2 = 0;
+					Integer updateLostNum3 = 0;
 					Integer updateLostNum4 = 0;
 					Integer updateLostNum5 = 0;
 					Integer updateReplaceNum = 0;
 					Integer updateReplaceNum2 = 0;
+					Integer updateReplaceNum3 = 0;
 					Integer updateReplaceNum4 = 0;
 					Integer updateReplaceNum5 = 0;
 					Integer changeLostNum = 0;
 					Integer changeReplaceNum = 0;
 					Integer changeUpdateLostNum = 0;
 					Integer changeUpdateLostNum2 = 0;
+					Integer changeUpdateLostNum3 = 0;
 					Integer changeUpdateLostNum4 = 0;
 					Integer changeUpdateLostNum5 = 0;
 					Integer changeUpdateReplaceNum = 0;
 					Integer changeUpdateReplaceNum2 = 0;
+					Integer changeUpdateReplaceNum3 = 0;
 					Integer changeUpdateReplaceNum4 = 0;
 					Integer changeUpdateReplaceNum5 = 0;
 					List<StatisticAppData> listMonth = statisticAppDataService
 							.findByMonth(configApp, office, start, end);
 					for (StatisticAppData sad : listMonth) {
+								add1 += sad.getAdd1();
 								add2 += sad.getAdd2();
+								add3 += sad.getAdd3();
 								add4 += sad.getAdd4();
 								add5 += sad.getAdd5();
 								renew1 += sad.getRenew1();
 								renew2 += sad.getRenew2();
+								renew3 += sad.getRenew3();
 								renew4 += sad.getRenew4();
 								renew5 += sad.getRenew5();
 								modifyNum += sad.getModifyNum();
@@ -415,33 +425,40 @@ public class StatisticDayDataController extends BaseController {
 								lostReplaceNum += sad.getLostReplaceNum();
 								updateChangeNum += sad.getUpdateChangeNum();
 								updateChangeNum2 += sad.getUpdateChangeNum2();
+								updateChangeNum3 += sad.getUpdateChangeNum3();
 								updateChangeNum4 += sad.getUpdateChangeNum4();
 								updateChangeNum5 += sad.getUpdateChangeNum5();
 								updateLostNum += sad.getUpdateLostNum();
 								updateLostNum2 += sad.getUpdateLostNum2();
+								updateLostNum3 += sad.getUpdateLostNum3();
 								updateLostNum4 += sad.getUpdateLostNum4();
 								updateLostNum5 += sad.getUpdateLostNum5();
 								updateReplaceNum += sad.getUpdateReplaceNum();
 								updateReplaceNum2 += sad.getUpdateReplaceNum2();
+								updateReplaceNum3 += sad.getUpdateReplaceNum3();
 								updateReplaceNum4 += sad.getUpdateReplaceNum4();
 								updateReplaceNum5 += sad.getUpdateReplaceNum5();
 								changeLostNum += sad.getChangeLostNum();
 								changeReplaceNum += sad.getChangeReplaceNum();
 								changeUpdateLostNum += sad.getChangeUpdateLostNum();
 								changeUpdateLostNum2 += sad.getChangeUpdateLostNum2();
+								changeUpdateLostNum3 += sad.getChangeUpdateLostNum3();
 								changeUpdateLostNum4 += sad.getChangeUpdateLostNum4();
 								changeUpdateLostNum5 += sad.getChangeUpdateLostNum5();
 								changeUpdateReplaceNum += sad.getChangeUpdateReplaceNum();
 								changeUpdateReplaceNum2 += sad.getChangeUpdateReplaceNum2();
+								changeUpdateReplaceNum3 += sad.getChangeUpdateReplaceNum3();
 								changeUpdateReplaceNum4 += sad.getChangeUpdateReplaceNum4();
 								changeUpdateReplaceNum5 += sad.getChangeUpdateReplaceNum5();
 					}
 					samd.setAdd1(add1);
 					samd.setAdd2(add2);
+					samd.setAdd3(add3);
 					samd.setAdd4(add4);
 					samd.setAdd5(add5);
 					samd.setRenew1(renew1);
 					samd.setRenew2(renew2);
+					samd.setRenew3(renew3);
 					samd.setRenew4(renew4);
 					samd.setRenew5(renew5);
 					samd.setModifyNum(modifyNum);
@@ -449,24 +466,29 @@ public class StatisticDayDataController extends BaseController {
 					samd.setLostReplaceNum(lostReplaceNum);
 					samd.setUpdateChangeNum(updateChangeNum);
 					samd.setUpdateChangeNum2(updateChangeNum2);
+					samd.setUpdateChangeNum3(updateChangeNum3);
 					samd.setUpdateChangeNum4(updateChangeNum4);
 					samd.setUpdateChangeNum5(updateChangeNum5);
-					samd.setUpdateLostNum(changeUpdateLostNum);
-					samd.setUpdateLostNum2(changeUpdateLostNum2);
-					samd.setUpdateLostNum4(changeUpdateLostNum4);
-					samd.setUpdateLostNum5(changeUpdateLostNum5);
-					samd.setUpdateReplaceNum(changeUpdateReplaceNum);
-					samd.setUpdateReplaceNum2(changeUpdateReplaceNum2);
-					samd.setUpdateReplaceNum4(changeUpdateReplaceNum4);
-					samd.setUpdateReplaceNum5(changeUpdateReplaceNum5);
+					samd.setUpdateLostNum(updateLostNum);
+					samd.setUpdateLostNum2(updateLostNum2);
+					samd.setUpdateLostNum3(updateLostNum3);
+					samd.setUpdateLostNum4(updateLostNum4);
+					samd.setUpdateLostNum5(updateLostNum5);
+					samd.setUpdateReplaceNum(updateReplaceNum);
+					samd.setUpdateReplaceNum2(updateReplaceNum2);
+					samd.setUpdateReplaceNum3(updateReplaceNum3);
+					samd.setUpdateReplaceNum4(updateReplaceNum4);
+					samd.setUpdateReplaceNum5(updateReplaceNum5);
 					samd.setChangeLostNum(changeLostNum);
 					samd.setChangeReplaceNum(changeReplaceNum);
 					samd.setChangeUpdateLostNum(changeUpdateLostNum);
 					samd.setChangeUpdateLostNum2(changeUpdateLostNum2);
+					samd.setChangeUpdateLostNum3(changeUpdateLostNum3);
 					samd.setChangeUpdateLostNum4(changeUpdateLostNum4);
 					samd.setChangeUpdateLostNum5(changeUpdateLostNum5);
 					samd.setChangeUpdateReplaceNum(changeUpdateReplaceNum);
 					samd.setChangeUpdateReplaceNum2(changeUpdateReplaceNum2);
+					samd.setChangeUpdateReplaceNum3(changeUpdateReplaceNum3);
 					samd.setChangeUpdateReplaceNum4(changeUpdateReplaceNum4);
 					samd.setChangeUpdateReplaceNum5(changeUpdateReplaceNum5);
 					
@@ -1657,6 +1679,9 @@ public class StatisticDayDataController extends BaseController {
 			certData.setAdd2(workDealInfoService.getCertAppYearInfoCount(
 					countDate, officeId, 2, app.getId(),
 					WorkDealInfoType.TYPE_ADD_CERT));
+			certData.setAdd3(workDealInfoService.getCertAppYearInfoCount(
+					countDate, officeId, 3, app.getId(),
+					WorkDealInfoType.TYPE_ADD_CERT));
 			certData.setAdd4(workDealInfoService.getCertAppYearInfoCount(
 					countDate, officeId, 4, app.getId(),
 					WorkDealInfoType.TYPE_ADD_CERT));
@@ -1672,6 +1697,9 @@ public class StatisticDayDataController extends BaseController {
 					WorkDealInfoType.TYPE_UPDATE_CERT));
 			certData.setRenew2(workDealInfoService.getCertAppYearInfoCountOneDeal(
 					countDate, officeId, 2, app.getId(),
+					WorkDealInfoType.TYPE_UPDATE_CERT));
+			certData.setRenew3(workDealInfoService.getCertAppYearInfoCountOneDeal(
+					countDate, officeId, 3, app.getId(),
 					WorkDealInfoType.TYPE_UPDATE_CERT));
 			certData.setRenew4(workDealInfoService.getCertAppYearInfoCountOneDeal(
 					countDate, officeId, 4, app.getId(),
@@ -1698,6 +1726,9 @@ public class StatisticDayDataController extends BaseController {
 			certData.setUpdateChangeNum2(workDealInfoService.getCertAppYearInfoUpdateChangeNum(
 					countDate, officeId, 2, app.getId(),
 					WorkDealInfoType.TYPE_UPDATE_CERT,WorkDealInfoType.TYPE_INFORMATION_REROUTE));
+			certData.setUpdateChangeNum3(workDealInfoService.getCertAppYearInfoUpdateChangeNum(
+					countDate, officeId, 3, app.getId(),
+					WorkDealInfoType.TYPE_UPDATE_CERT,WorkDealInfoType.TYPE_INFORMATION_REROUTE));
 			certData.setUpdateChangeNum4(workDealInfoService.getCertAppYearInfoUpdateChangeNum(
 					countDate, officeId, 4, app.getId(),
 					WorkDealInfoType.TYPE_UPDATE_CERT,WorkDealInfoType.TYPE_INFORMATION_REROUTE));
@@ -1705,12 +1736,17 @@ public class StatisticDayDataController extends BaseController {
 					countDate, officeId, 5, app.getId(),
 					WorkDealInfoType.TYPE_UPDATE_CERT,WorkDealInfoType.TYPE_INFORMATION_REROUTE));
 			
+			
 			certData.setUpdateLostNum(workDealInfoService.getCertAppYearInfoUpdateLostReplaceNum(
 					countDate, officeId, 1, app.getId(),
 					WorkDealInfoType.TYPE_UPDATE_CERT,WorkDealInfoType.TYPE_LOST_CHILD)
 					);
 			certData.setUpdateLostNum2(workDealInfoService.getCertAppYearInfoUpdateLostReplaceNum(
 					countDate, officeId, 2, app.getId(),
+					WorkDealInfoType.TYPE_UPDATE_CERT,WorkDealInfoType.TYPE_LOST_CHILD)
+					);
+			certData.setUpdateLostNum3(workDealInfoService.getCertAppYearInfoUpdateLostReplaceNum(
+					countDate, officeId, 3, app.getId(),
 					WorkDealInfoType.TYPE_UPDATE_CERT,WorkDealInfoType.TYPE_LOST_CHILD)
 					);
 			certData.setUpdateLostNum4(workDealInfoService.getCertAppYearInfoUpdateLostReplaceNum(
@@ -1729,12 +1765,16 @@ public class StatisticDayDataController extends BaseController {
 			certData.setUpdateReplaceNum2(workDealInfoService.getCertAppYearInfoUpdateLostReplaceNum(
 					countDate, officeId, 2, app.getId(),
 					WorkDealInfoType.TYPE_UPDATE_CERT,WorkDealInfoType.TYPE_DAMAGED_REPLACED));
+			certData.setUpdateReplaceNum3(workDealInfoService.getCertAppYearInfoUpdateLostReplaceNum(
+					countDate, officeId, 3, app.getId(),
+					WorkDealInfoType.TYPE_UPDATE_CERT,WorkDealInfoType.TYPE_DAMAGED_REPLACED));
 			certData.setUpdateReplaceNum4(workDealInfoService.getCertAppYearInfoUpdateLostReplaceNum(
 					countDate, officeId, 4, app.getId(),
 					WorkDealInfoType.TYPE_UPDATE_CERT,WorkDealInfoType.TYPE_DAMAGED_REPLACED));
 			certData.setUpdateReplaceNum5(workDealInfoService.getCertAppYearInfoUpdateLostReplaceNum(
 					countDate, officeId, 5, app.getId(),
 					WorkDealInfoType.TYPE_UPDATE_CERT,WorkDealInfoType.TYPE_DAMAGED_REPLACED));
+			
 			
 			certData.setChangeLostNum(workDealInfoService.getCertAppYearInfoChangeLostReplaceNum(
 					countDate, officeId, 0, app.getId(),
@@ -1753,6 +1793,9 @@ public class StatisticDayDataController extends BaseController {
 			certData.setChangeUpdateLostNum2(workDealInfoService.getCertAppYearInfoChangeLostReplaceUpdateNum(
 					countDate, officeId, 2, app.getId(),
 					WorkDealInfoType.TYPE_INFORMATION_REROUTE,WorkDealInfoType.TYPE_LOST_CHILD,WorkDealInfoType.TYPE_UPDATE_CERT));
+			certData.setChangeUpdateLostNum3(workDealInfoService.getCertAppYearInfoChangeLostReplaceUpdateNum(
+					countDate, officeId, 3, app.getId(),
+					WorkDealInfoType.TYPE_INFORMATION_REROUTE,WorkDealInfoType.TYPE_LOST_CHILD,WorkDealInfoType.TYPE_UPDATE_CERT));
 			certData.setChangeUpdateLostNum4(workDealInfoService.getCertAppYearInfoChangeLostReplaceUpdateNum(
 					countDate, officeId, 4, app.getId(),
 					WorkDealInfoType.TYPE_INFORMATION_REROUTE,WorkDealInfoType.TYPE_LOST_CHILD,WorkDealInfoType.TYPE_UPDATE_CERT));
@@ -1767,6 +1810,9 @@ public class StatisticDayDataController extends BaseController {
 			certData.setChangeUpdateReplaceNum2(workDealInfoService.getCertAppYearInfoChangeLostReplaceUpdateNum(
 					countDate, officeId, 2, app.getId(),
 					WorkDealInfoType.TYPE_INFORMATION_REROUTE,WorkDealInfoType.TYPE_DAMAGED_REPLACED,WorkDealInfoType.TYPE_UPDATE_CERT));
+			certData.setChangeUpdateReplaceNum3(workDealInfoService.getCertAppYearInfoChangeLostReplaceUpdateNum(
+					countDate, officeId, 3, app.getId(),
+					WorkDealInfoType.TYPE_INFORMATION_REROUTE,WorkDealInfoType.TYPE_DAMAGED_REPLACED,WorkDealInfoType.TYPE_UPDATE_CERT));
 			certData.setChangeUpdateReplaceNum4(workDealInfoService.getCertAppYearInfoChangeLostReplaceUpdateNum(
 					countDate, officeId, 4, app.getId(),
 					WorkDealInfoType.TYPE_INFORMATION_REROUTE,WorkDealInfoType.TYPE_DAMAGED_REPLACED,WorkDealInfoType.TYPE_UPDATE_CERT));
@@ -1774,19 +1820,19 @@ public class StatisticDayDataController extends BaseController {
 					countDate, officeId, 5, app.getId(),
 					WorkDealInfoType.TYPE_INFORMATION_REROUTE,WorkDealInfoType.TYPE_DAMAGED_REPLACED,WorkDealInfoType.TYPE_UPDATE_CERT));
 			
-			certData.setCertTotal(certData.getAdd1() + certData.getAdd2()
-					+ certData.getAdd4() + certData.getRenew1()
-					+ certData.getAdd5() + certData.getRenew2()
+			certData.setCertTotal(certData.getAdd1() + certData.getAdd2()+ certData.getAdd3()
+					+ certData.getAdd4()+ certData.getAdd5()
+					+ certData.getRenew1() + certData.getRenew2() + certData.getRenew3()
 					+ certData.getRenew4() + certData.getRenew5()
 					+ certData.getModifyNum() + certData.getReissueNum()
 					+ certData.getLostReplaceNum() 
-					+ certData.getUpdateChangeNum() + certData.getUpdateChangeNum2() + certData.getUpdateChangeNum4() + certData.getUpdateChangeNum5()
-					+ certData.getUpdateLostNum() + certData.getUpdateLostNum2() + certData.getUpdateLostNum4() + certData.getUpdateLostNum5() 
-					+ certData.getUpdateReplaceNum() + certData.getUpdateReplaceNum2() + certData.getUpdateReplaceNum4() + certData.getUpdateReplaceNum5()
+					+ certData.getUpdateChangeNum() + certData.getUpdateChangeNum2() + certData.getUpdateChangeNum3() + certData.getUpdateChangeNum4() + certData.getUpdateChangeNum5()
+					+ certData.getUpdateLostNum() + certData.getUpdateLostNum2() + certData.getUpdateLostNum3() + certData.getUpdateLostNum4() + certData.getUpdateLostNum5() 
+					+ certData.getUpdateReplaceNum() + certData.getUpdateReplaceNum2() + certData.getUpdateReplaceNum3() + certData.getUpdateReplaceNum4() + certData.getUpdateReplaceNum5()
 					+ certData.getChangeLostNum() 
 					+ certData.getChangeReplaceNum()
-					+ certData.getChangeUpdateLostNum() + certData.getChangeUpdateLostNum2() + certData.getChangeUpdateLostNum4() + certData.getChangeUpdateLostNum5() 
-					+ certData.getChangeUpdateReplaceNum() + certData.getChangeUpdateReplaceNum2() + certData.getChangeUpdateReplaceNum4() + certData.getChangeUpdateReplaceNum5()
+					+ certData.getChangeUpdateLostNum() + certData.getChangeUpdateLostNum2() + certData.getChangeUpdateLostNum3() + certData.getChangeUpdateLostNum4() + certData.getChangeUpdateLostNum5() 
+					+ certData.getChangeUpdateReplaceNum() + certData.getChangeUpdateReplaceNum2() + certData.getChangeUpdateReplaceNum3() + certData.getChangeUpdateReplaceNum4() + certData.getChangeUpdateReplaceNum5()
 					);
 			certData.setReceiptTotal(workDealInfoService
 					.getWorkPayReceiptCount(countDate, officeId, app.getId()));
