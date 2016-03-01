@@ -51,8 +51,8 @@
 			
 			<c:forEach items="${sumList }" var="sum">
 			<tr>
-				<th rowspan="12">${sum.configApp.appName }</th>
-				<th rowspan="4">自费企业</th>
+				<th rowspan="15">${sum.configApp.appName }</th>
+				<th rowspan="5">自费企业</th>
 				<td>一年期</td>
 				<c:forEach items="${sum.certDays }" var="oneSm1">
 					<td>${oneSm1.oneAdd1 }</td>
@@ -66,6 +66,15 @@
 					<td>${oneSm2.oneRenew2 }</td>
 				</c:forEach>
 			</tr>
+			
+			<tr>
+				<td>三年期</td>
+				<c:forEach items="${sum.certDays }" var="oneSm3">
+					<td>${oneSm3.oneAdd3 }</td>
+					<td>${oneSm3.oneRenew3 }</td>
+				</c:forEach>
+			</tr>
+			
 			<tr>
 				<td>四年期</td>
 				<c:forEach items="${sum.certDays }" var="oneSm4">
@@ -81,7 +90,7 @@
 				</c:forEach>
 			</tr>
 			<tr>
-				<th rowspan="4">合同企业</th>
+				<th rowspan="5">合同企业</th>
 				<td>一年期</td>
 				<c:forEach items="${sum.certDays }" var="twoSm1">
 					<td>${twoSm1.twoAdd1 }</td>
@@ -95,6 +104,15 @@
 					<td>${twoSm2.twoRenew2 }</td>
 				</c:forEach>
 			</tr>
+			
+			<tr>
+				<td>三年期</td>
+				<c:forEach items="${sum.certDays }" var="twoSm3">
+					<td>${twoSm3.twoAdd3 }</td>
+					<td>${twoSm3.twoRenew3 }</td>
+				</c:forEach>
+			</tr>
+			
 			<tr>
 				<td>四年期</td>
 				<c:forEach items="${sum.certDays }" var="twoSm4">
@@ -110,7 +128,7 @@
 				</c:forEach>
 			</tr>
 			<tr>
-				<th rowspan="4">政府统一采购</th>
+				<th rowspan="5">政府统一采购</th>
 				<td>一年期</td>
 				<c:forEach items="${sum.certDays }" var="fourSm1">
 					<td>${fourSm1.fourAdd1 }</td>
@@ -124,6 +142,15 @@
 					<td>${fourSm2.fourRenew2 }</td>
 				</c:forEach>
 			</tr>
+			
+			<tr>
+				<td>三年期</td>
+				<c:forEach items="${sum.certDays }" var="fourSm3">
+					<td>${fourSm3.fourAdd3 }</td>
+					<td>${fourSm3.fourRenew3 }</td>
+				</c:forEach>
+			</tr>
+			
 			<tr>
 				<td>四年期</td>
 				<c:forEach items="${sum.certDays }" var="fourSm4">

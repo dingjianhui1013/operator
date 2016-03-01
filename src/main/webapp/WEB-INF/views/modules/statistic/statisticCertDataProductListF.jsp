@@ -133,10 +133,13 @@
 			<c:forEach items="${sumList }" var="sum">
 			<c:set var="oneCount" value="0"/>
 			<c:set var="twoCount" value="0"/>
+			
+			<c:set var="threeCount" value="0"/> 
+			
 			<c:set var="fourCount" value="0"/>
 			<c:set var="fiveCount" value="0"/>
 			<tr>
-				<td rowspan="4">${pro[sum.productType] }</td>
+				<td rowspan="5">${pro[sum.productType] }</td>
 				<td>一年期</td>
 				<c:forEach items="${sum.months }" var="sm1">
 					<td>${sm1.count1 }</td>
@@ -152,6 +155,19 @@
 				</c:forEach>
 				<td>${twoCount }</td>
 			</tr>
+			
+			
+			 <tr>
+				<td>三年期</td>
+				<c:forEach items="${sum.months }" var="sm3">
+					<td>${sm3.count3 }</td>
+				<c:set var="threeCount" value="${threeCount + sm3.count3 }" />
+				</c:forEach>
+				<td>${threeCount }</td>
+			</tr>
+			
+			
+			
 			<tr>
 				<td>四年期</td>
 				<c:forEach items="${sum.months }" var="sm4">
@@ -178,14 +194,20 @@
 					<td>
 					<c:forEach items="${sumList}" var="sum" varStatus="countYear">	
 						<c:set var="oneYear" value = "${oneYear+sum.months.get(status.index).count1 }"></c:set>						
-						<c:set var="twoYear" value = "${twoYear+sum.months.get(status.index).count2 }"></c:set>						
+						<c:set var="twoYear" value = "${twoYear+sum.months.get(status.index).count2 }"></c:set>
+						
+						<c:set var="threeYear" value = "${threeYear+sum.months.get(status.index).count3 }"></c:set>
+												
 						<c:set var="fourYear" value = "${fourYear+sum.months.get(status.index).count4 }"></c:set>
 						<c:set var="fiveYear" value = "${fiveYear+sum.months.get(status.index).count5 }"></c:set>						
 					</c:forEach>
-					<c:set var="allCount" value="${allCountNew + oneYear+twoYear+fourYear+fiveYear}" />
-						${oneYear+twoYear+fourYear+fiveYear}
+					<c:set var="allCount" value="${allCountNew + oneYear+twoYear+threeYear+fourYear+fiveYear}" />
+						${oneYear+twoYear+threeYear+fourYear+fiveYear}
 						<c:set var="oneYear" value = "0"></c:set>						
-						<c:set var="twoYear" value = "0"></c:set>						
+						<c:set var="twoYear" value = "0"></c:set>
+						
+						<c:set var="threeYear" value = "0"></c:set>
+												
 						<c:set var="fourYear" value = "0"></c:set>
 						<c:set var="fiveYear" value = "0"></c:set>
 						<c:set var="allCountNew" value="${allCount}" />
