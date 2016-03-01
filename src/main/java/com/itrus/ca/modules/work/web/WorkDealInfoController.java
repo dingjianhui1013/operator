@@ -2392,8 +2392,15 @@ public class WorkDealInfoController extends BaseController {
 		if (workDealInfoId == null) {
 			Integer reseNum = agent.getReserveNum();
 			Integer surNum = agent.getSurplusNum();
-			agent.setReserveNum(reseNum + 1);
-			agent.setSurplusNum(surNum - 1);
+			
+			if(reseNum!=null){
+				agent.setReserveNum(reseNum + 1);	
+			}
+			if(surNum!=null&&surNum>=1){
+				agent.setSurplusNum(surNum - 1);	
+			}
+			
+			
 			configChargeAgentService.save(agent);
 		}
 		workDealInfo.setConfigChargeAgentId(bound.getAgent().getId());
