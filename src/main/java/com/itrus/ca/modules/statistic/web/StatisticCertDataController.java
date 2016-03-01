@@ -364,9 +364,21 @@ public class StatisticCertDataController extends BaseController {
 			for (int j = 0; j < sumList.get(i).getCertMonths().size(); j++) {
 				 StaticCertMonth certMonth = sumList.get(i).getCertMonths().get(j);
 				 
-				 Integer totaladd = certMonth.getOneAdd1()+certMonth.getOneAdd2()+certMonth.getOneAdd3()+certMonth.getOneAdd4()+certMonth.getOneAdd5()
-						 		   +certMonth.getTwoAdd1()+certMonth.getTwoAdd2()+certMonth.getTwoAdd3()+certMonth.getTwoAdd4()+certMonth.getTwoAdd5()
-						           +certMonth.getFourAdd1()+certMonth.getFourAdd2()+certMonth.getFourAdd3()+certMonth.getFourAdd4()+certMonth.getFourAdd5();
+				 Integer totaladd = certMonth.getOneAdd1()==null?0:certMonth.getOneAdd1()
+						 		   +(certMonth.getOneAdd2()==null?0:certMonth.getOneAdd2())
+						 		   +(certMonth.getOneAdd3()==null?0:certMonth.getOneAdd3())
+								   +(certMonth.getOneAdd4()==null?0:certMonth.getOneAdd4())
+								   +(certMonth.getOneAdd5()==null?0:certMonth.getOneAdd5())
+						 		   +(certMonth.getTwoAdd1()==null?0:certMonth.getTwoAdd1())
+						 		   +(certMonth.getTwoAdd2()==null?0:certMonth.getTwoAdd2())
+						 		   +(certMonth.getTwoAdd3()==null?0:certMonth.getTwoAdd3())
+						 		   +(certMonth.getTwoAdd4()==null?0:certMonth.getTwoAdd4())
+						 		   +(certMonth.getTwoAdd5()==null?0:certMonth.getTwoAdd5())
+						           +(certMonth.getFourAdd1()==null?0:certMonth.getFourAdd1())
+						           +(certMonth.getFourAdd2()==null?0:certMonth.getFourAdd2())
+						           +(certMonth.getFourAdd3()==null?0:certMonth.getFourAdd3())
+						           +(certMonth.getFourAdd4()==null?0:certMonth.getFourAdd4())
+						           +(certMonth.getFourAdd5()==null?0:certMonth.getFourAdd5());
 		
 				 if (totalListNum.size()>totalLocation) {
 					 totalListNum.set(totalLocation, totalListNum.get(totalLocation)+totaladd);
@@ -375,9 +387,21 @@ public class StatisticCertDataController extends BaseController {
 				 }
 				 totalLocation++;
 				 
-				 Integer totalupdate = certMonth.getOneRenew1()+certMonth.getOneRenew2()+certMonth.getOneRenew3()+certMonth.getOneRenew4()+certMonth.getOneRenew5()
-						 			  +certMonth.getTwoRenew1()+certMonth.getTwoRenew2()+certMonth.getTwoRenew3()+certMonth.getTwoRenew4()+certMonth.getTwoRenew5()
-						 			  +certMonth.getFourRenew1()+certMonth.getFourRenew2()+certMonth.getFourRenew3()+certMonth.getFourRenew4()+certMonth.getFourRenew5();
+				 Integer totalupdate =  (certMonth.getOneRenew1()==null?0:certMonth.getOneRenew1())
+						 				+(certMonth.getOneRenew2()==null?0:certMonth.getOneRenew2())
+						 				+(certMonth.getOneRenew3()==null?0:certMonth.getOneRenew3())
+						 				+(certMonth.getOneRenew4()==null?0:certMonth.getOneRenew4())
+						 				+(certMonth.getOneRenew5()==null?0:certMonth.getOneRenew5())
+						 				+(certMonth.getTwoRenew1()==null?0:certMonth.getTwoRenew1())
+						 				+(certMonth.getTwoRenew2()==null?0:certMonth.getTwoRenew2())
+						 				+(certMonth.getTwoRenew3()==null?0:certMonth.getTwoRenew3())
+						 				+(certMonth.getTwoRenew4()==null?0:certMonth.getTwoRenew4())
+						 				+(certMonth.getTwoRenew5()==null?0:certMonth.getTwoRenew5())
+						 				+(certMonth.getFourRenew1()==null?0:certMonth.getFourRenew1())
+						 				+(certMonth.getFourRenew2()==null?0:certMonth.getFourRenew2())
+						 				+(certMonth.getFourRenew3()==null?0:certMonth.getFourRenew3())
+						 				+(certMonth.getFourRenew4()==null?0:certMonth.getFourRenew4())
+						 				+(certMonth.getFourRenew5()==null?0:certMonth.getFourRenew5());
 			
 				 if (totalListNum.size()>totalLocation) {
 					 totalListNum.set(totalLocation, totalListNum.get(totalLocation)+totalupdate);

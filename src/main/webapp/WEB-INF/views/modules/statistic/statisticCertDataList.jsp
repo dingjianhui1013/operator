@@ -228,8 +228,14 @@
 				<td>三年期</td>
 				<c:set value="0" var="subtotal" />
 				<c:forEach items="${sum.certMonths }" var="oneSm3">
-					<td>${oneSm3.oneAdd3 }</td>
-					<td>${oneSm3.oneRenew3 }</td>					
+					<td>
+						<c:if test="${oneSm3.oneAdd3==null}">0</c:if> 
+						<c:if test="${oneSm3.oneAdd3!=null}">${oneSm3.oneAdd3}</c:if>
+					</td>
+					<td>
+						<c:if test="${oneSm3.oneRenew3==null}">0</c:if> 
+						<c:if test="${oneSm3.oneRenew3!=null}">${oneSm3.oneRenew3}</c:if>
+					</td>					
 					<c:set value="${subtotal +oneSm3.oneAdd3+oneSm3.oneRenew3 }" var="subtotal" /> 
 				</c:forEach>
 				<td>${subtotal}</td>
@@ -283,9 +289,15 @@
 				<td>三年期</td>
 				<c:set value="0" var="subtotal" />
 				<c:forEach items="${sum.certMonths }" var="twoSm3">
-					<td>${twoSm3.twoAdd3 }</td>
-					<td>${twoSm3.twoRenew3 }</td>
-					<c:set value="${subtotal +twoSm3.twoAdd3+twoSm3.twoRenew3  }" var="subtotal" /> 
+					<td>
+						<c:if test="${twoSm3.twoAdd3==null}">0</c:if> 
+						<c:if test="${twoSm3.twoAdd3!=null}">${twoSm3.twoAdd3}</c:if>
+					</td>
+					<td>
+						<c:if test="${twoSm3.twoRenew3==null}">0</c:if> 
+						<c:if test="${twoSm3.twoRenew3!=null}">${twoSm3.twoRenew3}</c:if>
+					</td>
+					<c:set value="${subtotal +twoSm3.twoAdd3+twoSm3.twoRenew3}" var="subtotal" /> 
 				</c:forEach>
 				<td>${subtotal}</td>
 			</tr>
@@ -337,8 +349,14 @@
 				<td>三年期</td>
 				<c:set value="0" var="subtotal" />
 				<c:forEach items="${sum.certMonths }" var="fourSm3">
-					<td>${fourSm3.fourAdd3 }</td>
-					<td>${fourSm3.fourRenew3 }</td>					
+					<td>
+						<c:if test="${fourSm3.fourAdd3==null}">0</c:if> 
+						<c:if test="${fourSm3.fourAdd3!=null}">${fourSm3.fourAdd3}</c:if>
+					</td>
+					<td>
+						<c:if test="${fourSm3.fourRenew3 ==null}">0</c:if> 
+						<c:if test="${fourSm3.fourRenew3 !=null}">${fourSm3.fourRenew3 }</c:if>
+					</td>					
 					<c:set value="${subtotal +fourSm3.fourAdd3+fourSm3.fourRenew3 }" var="subtotal" /> 
 				</c:forEach>
 				<td>${subtotal}</td>
