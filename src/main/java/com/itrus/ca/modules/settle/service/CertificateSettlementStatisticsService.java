@@ -330,7 +330,26 @@ public class CertificateSettlementStatisticsService extends BaseService {
 
 	public HashMap<String, CertificateF> getStaticMap1(List<CertificateSettlementStatisticsVO> findWorkList1) {
 		HashMap<String, CertificateF> monthMap = new HashMap<String, CertificateF>();
-		CertificateF total = new CertificateF();
+		Integer zerro = new Integer(0); 
+		//初始化total防止下面出现空指针
+		CertificateF total = new CertificateF(
+				 zerro, zerro, zerro, zerro, zerro, zerro, zerro, zerro, zerro, zerro,  
+				 zerro, zerro, zerro, zerro, zerro, zerro, zerro, zerro, zerro, zerro, 
+				 zerro, zerro, zerro, zerro, zerro, zerro, zerro, zerro, zerro, zerro, 
+				 zerro, zerro, zerro, zerro, zerro, zerro, zerro, zerro, zerro, zerro, 
+				 zerro, zerro, zerro, zerro, zerro, zerro, zerro, zerro, zerro, zerro, 
+				 zerro, zerro, zerro, zerro, zerro, zerro, zerro, zerro, zerro, zerro, 
+				 zerro, zerro, zerro, zerro, zerro, zerro, zerro, zerro, zerro, zerro, 
+				 zerro, zerro, zerro, zerro, zerro, zerro, zerro, zerro, zerro, zerro, 
+				 zerro, zerro, zerro, zerro, zerro, zerro, zerro, zerro, zerro, zerro, 
+				 zerro, zerro, zerro, zerro, zerro, zerro, zerro, zerro, zerro, zerro, 
+				 zerro, zerro, zerro, zerro, zerro, zerro, zerro, zerro, zerro, zerro, 
+				 zerro, zerro, zerro, zerro, zerro, zerro, zerro, zerro, zerro, zerro, 
+				 zerro, zerro, zerro, zerro, zerro, zerro, zerro, zerro, zerro, zerro, 
+				 zerro, zerro, zerro, zerro, zerro, zerro, zerro, zerro, zerro, zerro, 
+				 zerro, zerro, zerro, zerro, zerro, zerro, zerro, zerro, zerro, zerro, 
+				 zerro, zerro, zerro, zerro, zerro, zerro, zerro, zerro, zerro,zerro
+				 );
 		for (int i = 0; i < findWorkList1.size(); i++) {
 			CertificateSettlementStatisticsVO cssv = findWorkList1.get(i);
 			CertificateF scm = monthMap.get(cssv.getMonth());
@@ -349,6 +368,10 @@ public class CertificateSettlementStatisticsService extends BaseService {
 					case 2:
 						scm.setXzqyadd2(cssv.getWorkCount().intValue());
 						total.setXzqyadd2(total.getXzqyadd2() +cssv.getWorkCount().intValue());
+						break;
+					case 3:
+						scm.setXzqyadd3(cssv.getWorkCount().intValue());
+						total.setXzqyadd3(total.getXzqyadd3() +cssv.getWorkCount().intValue());
 						break;
 					case 4:
 						scm.setXzqyadd4(cssv.getWorkCount().intValue());
@@ -370,6 +393,10 @@ public class CertificateSettlementStatisticsService extends BaseService {
 						scm.setXzgrQadd2(cssv.getWorkCount().intValue());
 						total.setXzgrQadd2(total.getXzgrQadd2() +cssv.getWorkCount().intValue());
 						break;
+					case 3:
+						scm.setXzgrQadd3(cssv.getWorkCount().intValue());
+						total.setXzgrQadd3(total.getXzgrQadd3() +cssv.getWorkCount().intValue());
+						break;
 					case 4:
 						scm.setXzgrQadd4(cssv.getWorkCount().intValue());
 						total.setXzgrQadd4(total.getXzgrQadd4() +cssv.getWorkCount().intValue());
@@ -390,6 +417,10 @@ public class CertificateSettlementStatisticsService extends BaseService {
 						scm.setXzgrGadd2(cssv.getWorkCount().intValue());
 						total.setXzgrGadd2(total.getXzgrGadd2() +cssv.getWorkCount().intValue());
 						break;
+					case 3:
+						scm.setXzgrGadd3(cssv.getWorkCount().intValue());
+						total.setXzgrGadd3(total.getXzgrGadd3() +cssv.getWorkCount().intValue());
+						break;
 					case 4:
 						scm.setXzgrGadd4(cssv.getWorkCount().intValue());
 						total.setXzgrGadd4(total.getXzgrGadd4() +cssv.getWorkCount().intValue());
@@ -409,6 +440,10 @@ public class CertificateSettlementStatisticsService extends BaseService {
 					case 2:
 						scm.setXzjgadd2(cssv.getWorkCount().intValue());
 						total.setXzjgadd2(total.getXzjgadd2() +cssv.getWorkCount().intValue());
+						break;
+					case 3:
+						scm.setXzjgadd3(cssv.getWorkCount().intValue());
+						total.setXzjgadd3(total.getXzjgadd3() +cssv.getWorkCount().intValue());
 						break;
 					case 4:
 						scm.setXzjgadd4(cssv.getWorkCount().intValue());
@@ -434,6 +469,10 @@ public class CertificateSettlementStatisticsService extends BaseService {
 						scm.setGxqyadd2(cssv.getWorkCount().intValue());
 						total.setGxqyadd2(total.getGxqyadd2() +cssv.getWorkCount().intValue());
 						break;
+					case 3:
+						scm.setGxqyadd3(cssv.getWorkCount().intValue());
+						total.setGxqyadd3(total.getGxqyadd3() +cssv.getWorkCount().intValue());
+						break;
 					case 4:
 						scm.setGxqyadd4(cssv.getWorkCount().intValue());
 						total.setGxqyadd4(total.getGxqyadd4() +cssv.getWorkCount().intValue());
@@ -453,6 +492,10 @@ public class CertificateSettlementStatisticsService extends BaseService {
 					case 2:
 						scm.setGxgrQadd2(cssv.getWorkCount().intValue());
 						total.setGxgrQadd2(total.getGxgrQadd2() +cssv.getWorkCount().intValue());
+						break;
+					case 3:
+						scm.setGxgrQadd3(cssv.getWorkCount().intValue());
+						total.setGxgrQadd3(total.getGxgrQadd3() +cssv.getWorkCount().intValue());
 						break;
 					case 4:
 						scm.setGxgrQadd4(cssv.getWorkCount().intValue());
@@ -474,6 +517,10 @@ public class CertificateSettlementStatisticsService extends BaseService {
 						scm.setGxgrGadd2(cssv.getWorkCount().intValue());
 						total.setGxgrGadd2(total.getGxgrGadd2() +cssv.getWorkCount().intValue());
 						break;
+					case 3:
+						scm.setGxgrGadd3(cssv.getWorkCount().intValue());
+						total.setGxgrGadd3(total.getGxgrGadd3() +cssv.getWorkCount().intValue());
+						break;
 					case 4:
 						scm.setGxgrGadd4(cssv.getWorkCount().intValue());
 						total.setGxgrGadd4(total.getGxgrGadd4() +cssv.getWorkCount().intValue());
@@ -493,6 +540,10 @@ public class CertificateSettlementStatisticsService extends BaseService {
 					case 2:
 						scm.setGxjgadd2(cssv.getWorkCount().intValue());
 						total.setGxjgadd2(total.getGxjgadd2() +cssv.getWorkCount().intValue());
+						break;
+					case 3:
+						scm.setGxjgadd3(cssv.getWorkCount().intValue());
+						total.setGxjgadd3(total.getGxjgadd3() +cssv.getWorkCount().intValue());
 						break;
 					case 4:
 						scm.setGxjgadd4(cssv.getWorkCount().intValue());
@@ -650,6 +701,10 @@ public class CertificateSettlementStatisticsService extends BaseService {
 						scm.setUpdateChangeqyNum2(cssv.getWorkCount().intValue());
 						total.setUpdateChangeqyNum2(total.getUpdateChangeqyNum2()+cssv.getWorkCount().intValue());
 						break;
+					case 3:
+						scm.setUpdateChangeqyNum3(cssv.getWorkCount().intValue());
+						total.setUpdateChangeqyNum3(total.getUpdateChangeqyNum3()+cssv.getWorkCount().intValue());
+						break;
 					case 4:
 						scm.setUpdateChangeqyNum4(cssv.getWorkCount().intValue() );
 						total.setUpdateChangeqyNum4(total.getUpdateChangeqyNum4()+cssv.getWorkCount().intValue() );
@@ -669,6 +724,10 @@ public class CertificateSettlementStatisticsService extends BaseService {
 					case 2:
 						scm.setUpdateChangegrQNum2(cssv.getWorkCount().intValue());
 						total.setUpdateChangegrQNum2(total.getUpdateChangegrQNum2()+cssv.getWorkCount().intValue());
+						break;
+					case 3:
+						scm.setUpdateChangegrQNum3(cssv.getWorkCount().intValue());
+						total.setUpdateChangegrQNum3(total.getUpdateChangegrQNum3()+cssv.getWorkCount().intValue());
 						break;
 					case 4:
 						scm.setUpdateChangegrQNum4(cssv.getWorkCount().intValue() );
@@ -690,6 +749,10 @@ public class CertificateSettlementStatisticsService extends BaseService {
 						scm.setUpdateChangegrGNum2(cssv.getWorkCount().intValue());
 						total.setUpdateChangegrGNum2(total.getUpdateChangegrGNum2()+cssv.getWorkCount().intValue());
 						break;
+					case 3:
+						scm.setUpdateChangegrGNum3(cssv.getWorkCount().intValue());
+						total.setUpdateChangegrGNum3(total.getUpdateChangegrGNum3()+cssv.getWorkCount().intValue());
+						break;
 					case 4:
 						scm.setUpdateChangegrGNum4(cssv.getWorkCount().intValue() );
 						total.setUpdateChangegrGNum4(total.getUpdateChangegrGNum4()+cssv.getWorkCount().intValue() );
@@ -709,6 +772,10 @@ public class CertificateSettlementStatisticsService extends BaseService {
 					case 2:
 						scm.setUpdateChangejgNum2(cssv.getWorkCount().intValue());
 						total.setUpdateChangejgNum2(total.getUpdateChangejgNum2()+cssv.getWorkCount().intValue());
+						break;
+					case 3:
+						scm.setUpdateChangejgNum3(cssv.getWorkCount().intValue());
+						total.setUpdateChangejgNum3(total.getUpdateChangejgNum3()+cssv.getWorkCount().intValue());
 						break;
 					case 4:
 						scm.setUpdateChangejgNum4(cssv.getWorkCount().intValue() );
@@ -735,6 +802,10 @@ public class CertificateSettlementStatisticsService extends BaseService {
 						scm.setUpdateLostqyNum2(cssv.getWorkCount().intValue());
 						total.setUpdateLostqyNum2(total.getUpdateLostqyNum2()+cssv.getWorkCount().intValue());
 						break;
+					case 3:
+						scm.setUpdateLostqyNum3(cssv.getWorkCount().intValue());
+						total.setUpdateLostqyNum3(total.getUpdateLostqyNum3()+cssv.getWorkCount().intValue());
+						break;
 					case 4:
 						scm.setUpdateLostqyNum4(cssv.getWorkCount().intValue() );
 						total.setUpdateLostqyNum4(total.getUpdateLostqyNum4()+cssv.getWorkCount().intValue() );
@@ -754,6 +825,10 @@ public class CertificateSettlementStatisticsService extends BaseService {
 					case 2:
 						scm.setUpdateLostgrQNum2(cssv.getWorkCount().intValue());
 						total.setUpdateLostgrQNum2(total.getUpdateLostgrQNum2()+cssv.getWorkCount().intValue());
+						break;
+					case 3:
+						scm.setUpdateLostgrQNum3(cssv.getWorkCount().intValue());
+						total.setUpdateLostgrQNum3(total.getUpdateLostgrQNum3()+cssv.getWorkCount().intValue());
 						break;
 					case 4:
 						scm.setUpdateLostgrQNum4(cssv.getWorkCount().intValue() );
@@ -775,6 +850,10 @@ public class CertificateSettlementStatisticsService extends BaseService {
 						scm.setUpdateLostgrGNum2(cssv.getWorkCount().intValue());
 						total.setUpdateLostgrGNum2(total.getUpdateLostgrGNum2()+cssv.getWorkCount().intValue());
 						break;
+					case 3:
+						scm.setUpdateLostgrGNum3(cssv.getWorkCount().intValue());
+						total.setUpdateLostgrGNum3(total.getUpdateLostgrGNum3()+cssv.getWorkCount().intValue());
+						break;
 					case 4:
 						scm.setUpdateLostgrGNum4(cssv.getWorkCount().intValue() );
 						total.setUpdateLostgrGNum4(total.getUpdateLostgrGNum4()+cssv.getWorkCount().intValue() );
@@ -794,6 +873,10 @@ public class CertificateSettlementStatisticsService extends BaseService {
 					case 2:
 						scm.setUpdateLostjgNum2(cssv.getWorkCount().intValue());
 						total.setUpdateLostjgNum2(total.getUpdateLostjgNum2()+cssv.getWorkCount().intValue());
+						break;
+					case 3:
+						scm.setUpdateLostjgNum3(cssv.getWorkCount().intValue());
+						total.setUpdateLostjgNum3(total.getUpdateLostjgNum3()+cssv.getWorkCount().intValue());
 						break;
 					case 4:
 						scm.setUpdateLostjgNum4(cssv.getWorkCount().intValue() );
@@ -820,6 +903,10 @@ public class CertificateSettlementStatisticsService extends BaseService {
 						scm.setUpdateReplaceqyNum2(cssv.getWorkCount().intValue());
 						total.setUpdateReplaceqyNum2(total.getUpdateReplaceqyNum2()+cssv.getWorkCount().intValue());
 						break;
+					case 3:
+						scm.setUpdateReplaceqyNum3(cssv.getWorkCount().intValue());
+						total.setUpdateReplaceqyNum3(total.getUpdateReplaceqyNum3()+cssv.getWorkCount().intValue());
+						break;
 					case 4:
 						scm.setUpdateReplaceqyNum4(cssv.getWorkCount().intValue() );
 						total.setUpdateReplaceqyNum4(total.getUpdateReplaceqyNum4()+cssv.getWorkCount().intValue() );
@@ -839,6 +926,10 @@ public class CertificateSettlementStatisticsService extends BaseService {
 					case 2:
 						scm.setUpdateReplacegrQNum2(cssv.getWorkCount().intValue());
 						total.setUpdateReplacegrQNum2(total.getUpdateReplacegrQNum2()+cssv.getWorkCount().intValue());
+						break;
+					case 3:
+						scm.setUpdateReplacegrQNum3(cssv.getWorkCount().intValue());
+						total.setUpdateReplacegrQNum3(total.getUpdateReplacegrQNum3()+cssv.getWorkCount().intValue());
 						break;
 					case 4:
 						scm.setUpdateReplacegrQNum4(cssv.getWorkCount().intValue() );
@@ -860,6 +951,10 @@ public class CertificateSettlementStatisticsService extends BaseService {
 						scm.setUpdateReplacegrGNum2(cssv.getWorkCount().intValue());
 						total.setUpdateReplacegrGNum2(total.getUpdateReplacegrGNum2()+cssv.getWorkCount().intValue());
 						break;
+					case 3:
+						scm.setUpdateReplacegrGNum3(cssv.getWorkCount().intValue());
+						total.setUpdateReplacegrGNum3(total.getUpdateReplacegrGNum3()+cssv.getWorkCount().intValue());
+						break;
 					case 4:
 						scm.setUpdateReplacegrGNum4(cssv.getWorkCount().intValue() );
 						total.setUpdateReplacegrGNum4(total.getUpdateReplacegrGNum4()+cssv.getWorkCount().intValue() );
@@ -879,6 +974,10 @@ public class CertificateSettlementStatisticsService extends BaseService {
 					case 2:
 						scm.setUpdateReplacejgNum2(cssv.getWorkCount().intValue());
 						total.setUpdateReplacejgNum2(total.getUpdateReplacejgNum2()+cssv.getWorkCount().intValue());
+						break;
+					case 3:
+						scm.setUpdateReplacejgNum3(cssv.getWorkCount().intValue());
+						total.setUpdateReplacejgNum3(total.getUpdateReplacejgNum3()+cssv.getWorkCount().intValue());
 						break;
 					case 4:
 						scm.setUpdateReplacejgNum4(cssv.getWorkCount().intValue() );
@@ -959,6 +1058,10 @@ public class CertificateSettlementStatisticsService extends BaseService {
 						scm.setChangeUpdateLostqyNum2(cssv.getWorkCount().intValue());
 						total.setChangeUpdateLostqyNum2(total.getChangeUpdateLostqyNum2()+cssv.getWorkCount().intValue());
 						break;
+					case 3:
+						scm.setChangeUpdateLostqyNum3(cssv.getWorkCount().intValue());
+						total.setChangeUpdateLostqyNum3(total.getChangeUpdateLostqyNum3()+cssv.getWorkCount().intValue());
+						break;
 					case 4:
 						scm.setChangeUpdateLostqyNum4(cssv.getWorkCount().intValue() );
 						total.setChangeUpdateLostqyNum4(total.getChangeUpdateLostqyNum4()+cssv.getWorkCount().intValue() );
@@ -978,6 +1081,10 @@ public class CertificateSettlementStatisticsService extends BaseService {
 					case 2:
 						scm.setChangeUpdateLostgrQNum2(cssv.getWorkCount().intValue());
 						total.setChangeUpdateLostgrQNum2(total.getChangeUpdateLostgrQNum2()+cssv.getWorkCount().intValue());
+						break;
+					case 3:
+						scm.setChangeUpdateLostgrQNum3(cssv.getWorkCount().intValue());
+						total.setChangeUpdateLostgrQNum3(total.getChangeUpdateLostgrQNum3()+cssv.getWorkCount().intValue());
 						break;
 					case 4:
 						scm.setChangeUpdateLostgrQNum4(cssv.getWorkCount().intValue() );
@@ -999,6 +1106,10 @@ public class CertificateSettlementStatisticsService extends BaseService {
 						scm.setChangeUpdateLostgrGNum2(cssv.getWorkCount().intValue());
 						total.setChangeUpdateLostgrGNum2(total.getChangeUpdateLostgrGNum2()+cssv.getWorkCount().intValue());
 						break;
+					case 3:
+						scm.setChangeUpdateLostgrGNum3(cssv.getWorkCount().intValue());
+						total.setChangeUpdateLostgrGNum3(total.getChangeUpdateLostgrGNum3()+cssv.getWorkCount().intValue());
+						break;
 					case 4:
 						scm.setChangeUpdateLostgrGNum4(cssv.getWorkCount().intValue() );
 						total.setChangeUpdateLostgrGNum4(total.getChangeUpdateLostgrGNum4()+cssv.getWorkCount().intValue() );
@@ -1018,6 +1129,10 @@ public class CertificateSettlementStatisticsService extends BaseService {
 					case 2:
 						scm.setChangeUpdateLostjgNum2(cssv.getWorkCount().intValue());
 						total.setChangeUpdateLostjgNum2(total.getChangeUpdateLostjgNum2()+cssv.getWorkCount().intValue());
+						break;
+					case 3:
+						scm.setChangeUpdateLostjgNum3(cssv.getWorkCount().intValue());
+						total.setChangeUpdateLostjgNum3(total.getChangeUpdateLostjgNum3()+cssv.getWorkCount().intValue());
 						break;
 					case 4:
 						scm.setChangeUpdateLostjgNum4(cssv.getWorkCount().intValue() );
@@ -1044,6 +1159,10 @@ public class CertificateSettlementStatisticsService extends BaseService {
 						scm.setChangeUpdateReplaceqyNum2(cssv.getWorkCount().intValue());
 						total.setChangeUpdateReplaceqyNum2(total.getChangeUpdateReplaceqyNum2()+cssv.getWorkCount().intValue());
 						break;
+					case 3:
+						scm.setChangeUpdateReplaceqyNum3(cssv.getWorkCount().intValue());
+						total.setChangeUpdateReplaceqyNum3(total.getChangeUpdateReplaceqyNum3()+cssv.getWorkCount().intValue());
+						break;
 					case 4:
 						scm.setChangeUpdateReplaceqyNum4(cssv.getWorkCount().intValue() );
 						total.setChangeUpdateReplaceqyNum4(total.getChangeUpdateReplaceqyNum4()+cssv.getWorkCount().intValue() );
@@ -1063,6 +1182,10 @@ public class CertificateSettlementStatisticsService extends BaseService {
 					case 2:
 						scm.setChangeUpdateReplacegrQNum2(cssv.getWorkCount().intValue());
 						total.setChangeUpdateReplacegrQNum2(total.getChangeUpdateReplacegrQNum2()+cssv.getWorkCount().intValue());
+						break;
+					case 3:
+						scm.setChangeUpdateReplacegrQNum3(cssv.getWorkCount().intValue());
+						total.setChangeUpdateReplacegrQNum3(total.getChangeUpdateReplacegrQNum3()+cssv.getWorkCount().intValue());
 						break;
 					case 4:
 						scm.setChangeUpdateReplacegrQNum4(cssv.getWorkCount().intValue() );
@@ -1084,6 +1207,10 @@ public class CertificateSettlementStatisticsService extends BaseService {
 						scm.setChangeUpdateReplacegrGNum2(cssv.getWorkCount().intValue());
 						total.setChangeUpdateReplacegrGNum2(total.getChangeUpdateReplacegrGNum2()+cssv.getWorkCount().intValue());
 						break;
+					case 3:
+						scm.setChangeUpdateReplacegrGNum3(cssv.getWorkCount().intValue());
+						total.setChangeUpdateReplacegrGNum3(total.getChangeUpdateReplacegrGNum3()+cssv.getWorkCount().intValue());
+						break;
 					case 4:
 						scm.setChangeUpdateReplacegrGNum4(cssv.getWorkCount().intValue() );
 						total.setChangeUpdateReplacegrGNum4(total.getChangeUpdateReplacegrGNum4()+cssv.getWorkCount().intValue() );
@@ -1104,6 +1231,10 @@ public class CertificateSettlementStatisticsService extends BaseService {
 						scm.setChangeUpdateReplacejgNum2(cssv.getWorkCount().intValue());
 						total.setChangeUpdateReplacejgNum2(total.getChangeUpdateReplacejgNum2()+cssv.getWorkCount().intValue());
 						break;
+					case 3:
+						scm.setChangeUpdateReplacejgNum3(cssv.getWorkCount().intValue());
+						total.setChangeUpdateReplacejgNum3(total.getChangeUpdateReplacejgNum3()+cssv.getWorkCount().intValue());
+						break;
 					case 4:
 						scm.setChangeUpdateReplacejgNum4(cssv.getWorkCount().intValue() );
 						total.setChangeUpdateReplacejgNum4(total.getChangeUpdateReplacejgNum4()+cssv.getWorkCount().intValue() );
@@ -1122,5 +1253,55 @@ public class CertificateSettlementStatisticsService extends BaseService {
 		}
 		monthMap.put("total", total);
 		return monthMap;
+	}
+
+	private CertificateF CertificateF(Integer zerro, Integer zerro2,
+			Integer zerro3, Integer zerro4, Integer zerro5, Integer zerro6,
+			Integer zerro7, Integer zerro8, Integer zerro9, Integer zerro10,
+			Integer zerro11, Integer zerro12, Integer zerro13, Integer zerro14,
+			Integer zerro15, Integer zerro16, Integer zerro17, Integer zerro18,
+			Integer zerro19, Integer zerro20, Integer zerro21, Integer zerro22,
+			Integer zerro23, Integer zerro24, Integer zerro25, Integer zerro26,
+			Integer zerro27, Integer zerro28, Integer zerro29, Integer zerro30,
+			Integer zerro31, Integer zerro32, Integer zerro33, Integer zerro34,
+			Integer zerro35, Integer zerro36, Integer zerro37, Integer zerro38,
+			Integer zerro39, Integer zerro40, Integer zerro41, Integer zerro42,
+			Integer zerro43, Integer zerro44, Integer zerro45, Integer zerro46,
+			Integer zerro47, Integer zerro48, Integer zerro49, Integer zerro50,
+			Integer zerro51, Integer zerro52, Integer zerro53, Integer zerro54,
+			Integer zerro55, Integer zerro56, Integer zerro57, Integer zerro58,
+			Integer zerro59, Integer zerro60, Integer zerro61, Integer zerro62,
+			Integer zerro63, Integer zerro64, Integer zerro65, Integer zerro66,
+			Integer zerro67, Integer zerro68, Integer zerro69, Integer zerro70,
+			Integer zerro71, Integer zerro72, Integer zerro73, Integer zerro74,
+			Integer zerro75, Integer zerro76, Integer zerro77, Integer zerro78,
+			Integer zerro79, Integer zerro80, Integer zerro81, Integer zerro82,
+			Integer zerro83, Integer zerro84, Integer zerro85, Integer zerro86,
+			Integer zerro87, Integer zerro88, Integer zerro89, Integer zerro90,
+			Integer zerro91, Integer zerro92, Integer zerro93, Integer zerro94,
+			Integer zerro95, Integer zerro96, Integer zerro97, Integer zerro98,
+			Integer zerro99, Integer zerro100, Integer zerro101,
+			Integer zerro102, Integer zerro103, Integer zerro104,
+			Integer zerro105, Integer zerro106, Integer zerro107,
+			Integer zerro108, Integer zerro109, Integer zerro110,
+			Integer zerro111, Integer zerro112, Integer zerro113,
+			Integer zerro114, Integer zerro115, Integer zerro116,
+			Integer zerro117, Integer zerro118, Integer zerro119,
+			Integer zerro120, Integer zerro121, Integer zerro122,
+			Integer zerro123, Integer zerro124, Integer zerro125,
+			Integer zerro126, Integer zerro127, Integer zerro128,
+			Integer zerro129, Integer zerro130, Integer zerro131,
+			Integer zerro132, Integer zerro133, Integer zerro134,
+			Integer zerro135, Integer zerro136, Integer zerro137,
+			Integer zerro138, Integer zerro139, Integer zerro140,
+			Integer zerro141, Integer zerro142, Integer zerro143,
+			Integer zerro144, Integer zerro145, Integer zerro146,
+			Integer zerro147, Integer zerro148, Integer zerro149,
+			Integer zerro150, Integer zerro151, Integer zerro152,
+			Integer zerro153, Integer zerro154, Integer zerro155,
+			Integer zerro156, Integer zerro157, Integer zerro158,
+			Integer zerro159, Integer zerro160) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

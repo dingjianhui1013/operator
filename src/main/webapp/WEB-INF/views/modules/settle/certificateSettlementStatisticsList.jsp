@@ -324,6 +324,11 @@ $(document).ready(function() {
 							<c:set var="xzqy" value="${xzqy+1}"/>
 							<c:set var="index" value="${index+1}"/>
 						</c:if>
+						<c:if test="${sumList.total.xzqyadd3!=0}">
+							<c:set var="xz" value="${xz+1}"/>
+							<c:set var="xzqy" value="${xzqy+1}"/>
+							<c:set var="index" value="${index+1}"/>
+						</c:if>
 						<c:if test="${sumList.total.xzqyadd4!=0}">
 							<c:set var="xz" value="${xz+1}"/>
 							<c:set var="xzqy" value="${xzqy+1}"/>
@@ -340,6 +345,11 @@ $(document).ready(function() {
 							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.xzgrQadd2!=0}">
+								<c:set var="xz" value="${xz+1}"/>
+							<c:set var="xzgeqy" value="${xzgeqy+1}"/>
+							<c:set var="index" value="${index+1}"/>
+						</c:if>
+						<c:if test="${sumList.total.xzgrQadd3!=0}">
 								<c:set var="xz" value="${xz+1}"/>
 							<c:set var="xzgeqy" value="${xzgeqy+1}"/>
 							<c:set var="index" value="${index+1}"/>
@@ -364,6 +374,11 @@ $(document).ready(function() {
 							<c:set var="xzgejg" value="${xzgejg+1}"/>
 							<c:set var="index" value="${index+1}"/>
 						</c:if>
+						<c:if test="${sumList.total.xzgrGadd3!=0}">
+							<c:set var="xz" value="${xz+1}"/>
+							<c:set var="xzgejg" value="${xzgejg+1}"/>
+							<c:set var="index" value="${index+1}"/>
+						</c:if>
 						<c:if test="${sumList.total.xzgrGadd4!=0}">
 							<c:set var="xz" value="${xz+1}"/>
 							<c:set var="xzgejg" value="${xzgejg+1}"/>
@@ -384,6 +399,11 @@ $(document).ready(function() {
 							<c:set var="xzjg" value="${xzjg+1}"/>
 							<c:set var="index" value="${index+1}"/>
 						</c:if>
+						<c:if test="${sumList.total.xzjgadd3!=0}">
+							<c:set var="xz" value="${xz+1}"/>
+							<c:set var="xzjg" value="${xzjg+1}"/>
+							<c:set var="index" value="${index+1}"/>
+						</c:if>
 						<c:if test="${sumList.total.xzjgadd4!=0}">
 							<c:set var="xz" value="${xz+1}"/>
 							<c:set var="xzjg" value="${xzjg+1}"/>
@@ -397,9 +417,9 @@ $(document).ready(function() {
 						<!-- 更新 -->
 						<c:set var="gx" value="0"/>
 						<c:set var="gxqy" value="0"/>
-					<c:set var="gxgeqy" value="0"/>
-					<c:set var="gxgejg" value="0"/>
-					<c:set var="gxjg" value="0"/>
+						<c:set var="gxgeqy" value="0"/>
+						<c:set var="gxgejg" value="0"/>
+						<c:set var="gxjg" value="0"/>
 					
 						<c:if test="${sumList.total.gxqyadd1!=0}">
 							<c:set var="gx" value="${gx+1}"/>
@@ -407,8 +427,12 @@ $(document).ready(function() {
 							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.gxqyadd2!=0}">
-						
-						<c:set var="gx" value="${gx+1}"/>
+							<c:set var="gx" value="${gx+1}"/>
+							<c:set var="gxqy" value="${gxqy+1}"/>
+							<c:set var="index" value="${index+1}"/>
+						</c:if>
+						<c:if test="${sumList.total.gxqyadd3!=0}">
+							<c:set var="gx" value="${gx+1}"/>
 							<c:set var="gxqy" value="${gxqy+1}"/>
 							<c:set var="index" value="${index+1}"/>
 						</c:if>
@@ -426,10 +450,14 @@ $(document).ready(function() {
 							<c:set var="gx" value="${gx+1}"/>
 							<c:set var="gxgeqy" value="${gxgeqy+1}"/>
 							<c:set var="index" value="${index+1}"/>
-							
 						</c:if>
 						<c:if test="${sumList.total.gxgrQadd2!=0}">
-						<c:set var="gx" value="${gx+1}"/>
+							<c:set var="gx" value="${gx+1}"/>
+							<c:set var="gxgeqy" value="${gxgeqy+1}"/>
+							<c:set var="index" value="${index+1}"/>
+						</c:if>
+						<c:if test="${sumList.total.gxgrQadd3!=0}">
+							<c:set var="gx" value="${gx+1}"/>
 							<c:set var="gxgeqy" value="${gxgeqy+1}"/>
 							<c:set var="index" value="${index+1}"/>
 						</c:if>
@@ -446,9 +474,14 @@ $(document).ready(function() {
 						<c:if test="${sumList.total.gxgrGadd1!=0}">
 							<c:set var="gx" value="${gx+1}"/>
 							<c:set var="gxgejg" value="${gxgejg+1}"/>
-						<c:set var="index" value="${index+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.gxgrGadd2!=0}">
+							<c:set var="gx" value="${gx+1}"/>
+							<c:set var="gxgejg" value="${gxgejg+1}"/>
+							<c:set var="index" value="${index+1}"/>
+						</c:if>
+						<c:if test="${sumList.total.gxgrGadd3!=0}">
 							<c:set var="gx" value="${gx+1}"/>
 							<c:set var="gxgejg" value="${gxgejg+1}"/>
 							<c:set var="index" value="${index+1}"/>
@@ -469,7 +502,12 @@ $(document).ready(function() {
 							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.gxjgadd2!=0}">
-						<c:set var="gx" value="${gx+1}"/>
+							<c:set var="gx" value="${gx+1}"/>
+							<c:set var="gxjg" value="${gxjg+1}"/>
+							<c:set var="index" value="${index+1}"/>
+						</c:if>
+						<c:if test="${sumList.total.gxjgadd3!=0}">
+							<c:set var="gx" value="${gx+1}"/>
 							<c:set var="gxjg" value="${gxjg+1}"/>
 							<c:set var="index" value="${index+1}"/>
 						</c:if>
@@ -577,6 +615,7 @@ $(document).ready(function() {
 						<c:if test="${sumList.total.changeLostgrQNum!=0}">
 							<c:set var="bgysbb" value="${bgysbb+1}"/>
 							<c:set var="bgysbbgeqy" value="${bgysbbgeqy+1}"/>
+							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.changeLostgrGNum!=0}">
 							<c:set var="bgysbb" value="${bgysbb+1}"/>
@@ -627,8 +666,12 @@ $(document).ready(function() {
 							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.updateLostqyNum2!=0}">
-						
-						<c:set var="gxysbb" value="${gxysbb+1}"/>
+							<c:set var="gxysbb" value="${gxysbb+1}"/>
+							<c:set var="gxysbbqy" value="${gxysbbqy+1}"/>
+							<c:set var="index" value="${index+1}"/>
+						</c:if>
+						<c:if test="${sumList.total.updateLostqyNum3!=0}">
+							<c:set var="gxysbb" value="${gxysbb+1}"/>
 							<c:set var="gxysbbqy" value="${gxysbbqy+1}"/>
 							<c:set var="index" value="${index+1}"/>
 						</c:if>
@@ -643,13 +686,17 @@ $(document).ready(function() {
 							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.updateLostgrQNum!=0}">
-							<c:set var="gxysbbysbb" value="${gxysbbysbb+1}"/>
+							<c:set var="gxysbb" value="${gxysbb+1}"/>
 							<c:set var="gxysbbgeqy" value="${gxysbbgeqy+1}"/>
 							<c:set var="index" value="${index+1}"/>
-							
 						</c:if>
 						<c:if test="${sumList.total.updateLostgrQNum2!=0}">
-						<c:set var="gxysbb" value="${gxysbb+1}"/>
+							<c:set var="gxysbb" value="${gxysbb+1}"/>
+							<c:set var="gxysbbgeqy" value="${gxysbbgeqy+1}"/>
+							<c:set var="index" value="${index+1}"/>
+						</c:if>
+						<c:if test="${sumList.total.updateLostgrQNum3!=0}">
+							<c:set var="gxysbb" value="${gxysbb+1}"/>
 							<c:set var="gxysbbgeqy" value="${gxysbbgeqy+1}"/>
 							<c:set var="index" value="${index+1}"/>
 						</c:if>
@@ -673,6 +720,11 @@ $(document).ready(function() {
 							<c:set var="gxysbbgejg" value="${gxysbbgejg+1}"/>
 							<c:set var="index" value="${index+1}"/>
 						</c:if>
+						<c:if test="${sumList.total.updateLostgrGNum3!=0}">
+							<c:set var="gxysbb" value="${gxysbb+1}"/>
+							<c:set var="gxysbbgejg" value="${gxysbbgejg+1}"/>
+							<c:set var="index" value="${index+1}"/>
+						</c:if>
 						<c:if test="${sumList.total.updateLostgrGNum4!=0}">
 							<c:set var="gxysbb" value="${gxysbb+1}"/>
 							<c:set var="gxysbbgejg" value="${gxysbbgejg+1}"/>
@@ -689,7 +741,12 @@ $(document).ready(function() {
 							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.updateLostjgNum2!=0}">
-						<c:set var="gxysbb" value="${gxysbb+1}"/>
+							<c:set var="gxysbb" value="${gxysbb+1}"/>
+							<c:set var="gxysbbjg" value="${gxysbbjg+1}"/>
+							<c:set var="index" value="${index+1}"/>
+						</c:if>
+						<c:if test="${sumList.total.updateLostjgNum3!=0}">
+							<c:set var="gxysbb" value="${gxysbb+1}"/>
 							<c:set var="gxysbbjg" value="${gxysbbjg+1}"/>
 							<c:set var="index" value="${index+1}"/>
 						</c:if>
@@ -706,18 +763,21 @@ $(document).ready(function() {
 						<!-- 更新+损坏更换 -->
 						<c:set var="gxshgh" value="0"/>
 						<c:set var="gxshghqy" value="0"/>
-					<c:set var="gxshghgeqy" value="0"/>
-					<c:set var="gxshghgejg" value="0"/>
-					<c:set var="gxshghjg" value="0"/>
-					
+						<c:set var="gxshghgeqy" value="0"/>
+						<c:set var="gxshghgejg" value="0"/>
+						<c:set var="gxshghjg" value="0"/>
 						<c:if test="${sumList.total.updateReplaceqyNum!=0}">
 							<c:set var="gxshgh" value="${gxshgh+1}"/>
 							<c:set var="gxshghqy" value="${gxshghqy+1}"/>
 							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.updateReplaceqyNum2!=0}">
-						
-						<c:set var="gxshgh" value="${gxshgh+1}"/>
+							<c:set var="gxshgh" value="${gxshgh+1}"/>
+							<c:set var="gxshghqy" value="${gxshghqy+1}"/>
+							<c:set var="index" value="${index+1}"/>
+						</c:if>
+						<c:if test="${sumList.total.updateReplaceqyNum3!=0}">
+							<c:set var="gxshgh" value="${gxshgh+1}"/>
 							<c:set var="gxshghqy" value="${gxshghqy+1}"/>
 							<c:set var="index" value="${index+1}"/>
 						</c:if>
@@ -735,10 +795,14 @@ $(document).ready(function() {
 							<c:set var="gxshgh" value="${gxshgh+1}"/>
 							<c:set var="gxshghgeqy" value="${gxshghgeqy+1}"/>
 							<c:set var="index" value="${index+1}"/>
-							
 						</c:if>
 						<c:if test="${sumList.total.updateReplacegrQNum2!=0}">
-						<c:set var="gxshgh" value="${gxshgh+1}"/>
+							<c:set var="gxshgh" value="${gxshgh+1}"/>
+							<c:set var="gxshghgeqy" value="${gxshghgeqy+1}"/>
+							<c:set var="index" value="${index+1}"/>
+						</c:if>
+						<c:if test="${sumList.total.updateReplacegrQNum3!=0}">
+							<c:set var="gxshgh" value="${gxshgh+1}"/>
 							<c:set var="gxshghgeqy" value="${gxshghgeqy+1}"/>
 							<c:set var="index" value="${index+1}"/>
 						</c:if>
@@ -762,6 +826,11 @@ $(document).ready(function() {
 							<c:set var="gxshghgejg" value="${gxshghgejg+1}"/>
 							<c:set var="index" value="${index+1}"/>
 						</c:if>
+						<c:if test="${sumList.total.updateReplacegrGNum3!=0}">
+							<c:set var="gxshgh" value="${gxshgh+1}"/>
+							<c:set var="gxshghgejg" value="${gxshghgejg+1}"/>
+							<c:set var="index" value="${index+1}"/>
+						</c:if>
 						<c:if test="${sumList.total.updateReplacegrGNum4!=0}">
 							<c:set var="gxshgh" value="${gxshgh+1}"/>
 							<c:set var="gxshghgejg" value="${gxshghgejg+1}"/>
@@ -778,7 +847,12 @@ $(document).ready(function() {
 							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.updateReplacejgNum2!=0}">
-						<c:set var="gxshgh" value="${gxshgh+1}"/>
+							<c:set var="gxshgh" value="${gxshgh+1}"/>
+							<c:set var="gxshghjg" value="${gxshghjg+1}"/>
+							<c:set var="index" value="${index+1}"/>
+						</c:if>
+						<c:if test="${sumList.total.updateReplacejgNum3!=0}">
+							<c:set var="gxshgh" value="${gxshgh+1}"/>
 							<c:set var="gxshghjg" value="${gxshghjg+1}"/>
 							<c:set var="index" value="${index+1}"/>
 						</c:if>
@@ -795,9 +869,9 @@ $(document).ready(function() {
 						<!-- 更新 +变更-->
 						<c:set var="gxbg" value="0"/>
 						<c:set var="gxbgqy" value="0"/>
-					<c:set var="gxbggeqy" value="0"/>
-					<c:set var="gxbggejg" value="0"/>
-					<c:set var="gxbgjg" value="0"/>
+						<c:set var="gxbggeqy" value="0"/>
+						<c:set var="gxbggejg" value="0"/>
+						<c:set var="gxbgjg" value="0"/>
 					
 						<c:if test="${sumList.total.updateChangeqyNum!=0}">
 							<c:set var="gxbg" value="${gxbg+1}"/>
@@ -805,8 +879,12 @@ $(document).ready(function() {
 							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.updateChangeqyNum2!=0}">
-						
-						<c:set var="gxbg" value="${gxbg+1}"/>
+							<c:set var="gxbg" value="${gxbg+1}"/>
+							<c:set var="gxbgqy" value="${gxbgqy+1}"/>
+							<c:set var="index" value="${index+1}"/>
+						</c:if>
+						<c:if test="${sumList.total.updateChangeqyNum3!=0}">
+							<c:set var="gxbg" value="${gxbg+1}"/>
 							<c:set var="gxbgqy" value="${gxbgqy+1}"/>
 							<c:set var="index" value="${index+1}"/>
 						</c:if>
@@ -826,7 +904,12 @@ $(document).ready(function() {
 							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.updateChangegrQNum2!=0}">
-						<c:set var="gxbg" value="${gxbg+1}"/>
+							<c:set var="gxbg" value="${gxbg+1}"/>
+							<c:set var="gxbggeqy" value="${gxbggeqy+1}"/>
+							<c:set var="index" value="${index+1}"/>
+						</c:if>
+						<c:if test="${sumList.total.updateChangegrQNum3!=0}">
+							<c:set var="gxbg" value="${gxbg+1}"/>
 							<c:set var="gxbggeqy" value="${gxbggeqy+1}"/>
 							<c:set var="index" value="${index+1}"/>
 						</c:if>
@@ -850,6 +933,11 @@ $(document).ready(function() {
 							<c:set var="gxbggejg" value="${gxbggejg+1}"/>
 							<c:set var="index" value="${index+1}"/>
 						</c:if>
+						<c:if test="${sumList.total.updateChangegrGNum3!=0}">
+							<c:set var="gxbg" value="${gxbg+1}"/>
+							<c:set var="gxbggejg" value="${gxbggejg+1}"/>
+							<c:set var="index" value="${index+1}"/>
+						</c:if>
 						<c:if test="${sumList.total.updateChangegrGNum4!=0}">
 							<c:set var="gxbg" value="${gxbg+1}"/>
 							<c:set var="gxbggejg" value="${gxbggejg+1}"/>
@@ -866,7 +954,12 @@ $(document).ready(function() {
 							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.updateChangejgNum2!=0}">
-						<c:set var="gxbg" value="${gxbg+1}"/>
+							<c:set var="gxbg" value="${gxbg+1}"/>
+							<c:set var="gxbgjg" value="${gxbgjg+1}"/>
+							<c:set var="index" value="${index+1}"/>
+						</c:if>
+						<c:if test="${sumList.total.updateChangejgNum3!=0}">
+							<c:set var="gxbg" value="${gxbg+1}"/>
 							<c:set var="gxbgjg" value="${gxbgjg+1}"/>
 							<c:set var="index" value="${index+1}"/>
 						</c:if>
@@ -884,17 +977,20 @@ $(document).ready(function() {
 						<!-- 更新 +变更+遗失补办-->
 						<c:set var="gxbgysbb" value="0"/>
 						<c:set var="gxbgysbbqy" value="0"/>
-					<c:set var="gxbgysbbgeqy" value="0"/>
-					<c:set var="gxbgysbbgejg" value="0"/>
-					<c:set var="gxbgysbbjg" value="0"/>
-					
+						<c:set var="gxbgysbbgeqy" value="0"/>
+						<c:set var="gxbgysbbgejg" value="0"/>
+						<c:set var="gxbgysbbjg" value="0"/>
 						<c:if test="${sumList.total.changeUpdateLostqyNum!=0}">
 							<c:set var="gxbgysbb" value="${gxbgysbb+1}"/>
 							<c:set var="gxbgysbbqy" value="${gxbgysbbqy+1}"/>
 							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.changeUpdateLostqyNum2!=0}">
-						
+							<c:set var="gxbgysbb" value="${gxbgysbb+1}"/>
+							<c:set var="gxbgysbbqy" value="${gxbgysbbqy+1}"/>
+							<c:set var="index" value="${index+1}"/>
+						</c:if>
+						<c:if test="${sumList.total.changeUpdateLostqyNum3!=0}">
 							<c:set var="gxbgysbb" value="${gxbgysbb+1}"/>
 							<c:set var="gxbgysbbqy" value="${gxbgysbbqy+1}"/>
 							<c:set var="index" value="${index+1}"/>
@@ -920,6 +1016,11 @@ $(document).ready(function() {
 							<c:set var="gxbgysbbgeqy" value="${gxbgysbbgeqy+1}"/>
 							<c:set var="index" value="${index+1}"/>
 						</c:if>
+						<c:if test="${sumList.total.changeUpdateLostgrQNum3!=0}">
+							<c:set var="gxbgysbb" value="${gxbgysbb+1}"/>
+							<c:set var="gxbgysbbgeqy" value="${gxbgysbbgeqy+1}"/>
+							<c:set var="index" value="${index+1}"/>
+						</c:if>
 						<c:if test="${sumList.total.changeUpdateLostgrQNum4!=0}">
 							<c:set var="gxbgysbb" value="${gxbgysbb+1}"/>
 							<c:set var="gxbgysbbgeqy" value="${gxbgysbbgeqy+1}"/>
@@ -940,6 +1041,11 @@ $(document).ready(function() {
 							<c:set var="gxbgysbbgejg" value="${gxbgysbbgejg+1}"/>
 							<c:set var="index" value="${index+1}"/>
 						</c:if>
+						<c:if test="${sumList.total.changeUpdateLostgrGNum3!=0}">
+							<c:set var="gxbgysbb" value="${gxbgysbb+1}"/>
+							<c:set var="gxbgysbbgejg" value="${gxbgysbbgejg+1}"/>
+							<c:set var="index" value="${index+1}"/>
+						</c:if>
 						<c:if test="${sumList.total.changeUpdateLostgrGNum4!=0}">
 							<c:set var="gxbgysbb" value="${gxbgysbb+1}"/>
 							<c:set var="gxbgysbbgejg" value="${gxbgysbbgejg+1}"/>
@@ -956,7 +1062,12 @@ $(document).ready(function() {
 							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.changeUpdateLostjgNum2!=0}">
-						<c:set var="gxbgysbb" value="${gxbgysbb+1}"/>
+							<c:set var="gxbgysbb" value="${gxbgysbb+1}"/>
+							<c:set var="gxbgysbbjg" value="${gxbgysbbjg+1}"/>
+							<c:set var="index" value="${index+1}"/>
+						</c:if>
+						<c:if test="${sumList.total.changeUpdateLostjgNum3!=0}">
+							<c:set var="gxbgysbb" value="${gxbgysbb+1}"/>
 							<c:set var="gxbgysbbjg" value="${gxbgysbbjg+1}"/>
 							<c:set var="index" value="${index+1}"/>
 						</c:if>
@@ -974,9 +1085,9 @@ $(document).ready(function() {
 						<!-- 更新 +变更+损坏更换-->
 						<c:set var="gxbgshgh" value="0"/>
 						<c:set var="gxbgshghqy" value="0"/>
-					<c:set var="gxbgshghgeqy" value="0"/>
-					<c:set var="gxbgshghgejg" value="0"/>
-					<c:set var="gxbgshghjg" value="0"/>
+						<c:set var="gxbgshghgeqy" value="0"/>
+						<c:set var="gxbgshghgejg" value="0"/>
+						<c:set var="gxbgshghjg" value="0"/>
 					
 						<c:if test="${sumList.total.changeUpdateReplaceqyNum!=0}">
 							<c:set var="gxbgshgh" value="${gxbgshgh+1}"/>
@@ -984,8 +1095,12 @@ $(document).ready(function() {
 							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.changeUpdateReplaceqyNum2!=0}">
-						
-						<c:set var="gxbgshgh" value="${gxbgshgh+1}"/>
+							<c:set var="gxbgshgh" value="${gxbgshgh+1}"/>
+							<c:set var="gxbgshghqy" value="${gxbgshghqy+1}"/>
+							<c:set var="index" value="${index+1}"/>
+						</c:if>
+						<c:if test="${sumList.total.changeUpdateReplaceqyNum3!=0}">
+							<c:set var="gxbgshgh" value="${gxbgshgh+1}"/>
 							<c:set var="gxbgshghqy" value="${gxbgshghqy+1}"/>
 							<c:set var="index" value="${index+1}"/>
 						</c:if>
@@ -1003,10 +1118,14 @@ $(document).ready(function() {
 							<c:set var="gxbgshgh" value="${gxbgshgh+1}"/>
 							<c:set var="gxbgshghgeqy" value="${gxbgshghgeqy+1}"/>
 							<c:set var="index" value="${index+1}"/>
-							
 						</c:if>
 						<c:if test="${sumList.total.changeUpdateReplacegrQNum2!=0}">
-						<c:set var="gxbgshgh" value="${gxbgshgh+1}"/>
+							<c:set var="gxbgshgh" value="${gxbgshgh+1}"/>
+							<c:set var="gxbgshghgeqy" value="${gxbgshghgeqy+1}"/>
+							<c:set var="index" value="${index+1}"/>
+						</c:if>
+						<c:if test="${sumList.total.changeUpdateReplacegrQNum3!=0}">
+							<c:set var="gxbgshgh" value="${gxbgshgh+1}"/>
 							<c:set var="gxbgshghgeqy" value="${gxbgshghgeqy+1}"/>
 							<c:set var="index" value="${index+1}"/>
 						</c:if>
@@ -1024,9 +1143,13 @@ $(document).ready(function() {
 							<c:set var="gxbgshgh" value="${gxbgshgh+1}"/>
 							<c:set var="gxbgshghgejg" value="${gxbgshghgejg+1}"/>
 							<c:set var="index" value="${index+1}"/>
-						
 						</c:if>
 						<c:if test="${sumList.total.changeUpdateReplacegrGNum2!=0}">
+							<c:set var="gxbgshgh" value="${gxbgshgh+1}"/>
+							<c:set var="gxbgshghgejg" value="${gxbgshghgejg+1}"/>
+							<c:set var="index" value="${index+1}"/>
+						</c:if>
+						<c:if test="${sumList.total.changeUpdateReplacegrGNum3!=0}">
 							<c:set var="gxbgshgh" value="${gxbgshgh+1}"/>
 							<c:set var="gxbgshghgejg" value="${gxbgshghgejg+1}"/>
 							<c:set var="index" value="${index+1}"/>
@@ -1047,7 +1170,12 @@ $(document).ready(function() {
 							<c:set var="index" value="${index+1}"/>
 						</c:if>
 						<c:if test="${sumList.total.changeUpdateReplacejgNum2!=0}">
-						<c:set var="gxbgshgh" value="${gxbgshgh+1}"/>
+							<c:set var="gxbgshgh" value="${gxbgshgh+1}"/>
+							<c:set var="gxbgshghjg" value="${gxbgshghjg+1}"/>
+							<c:set var="index" value="${index+1}"/>
+						</c:if>
+						<c:if test="${sumList.total.changeUpdateReplacejgNum3!=0}">
+							<c:set var="gxbgshgh" value="${gxbgshgh+1}"/>
 							<c:set var="gxbgshghjg" value="${gxbgshghjg+1}"/>
 							<c:set var="index" value="${index+1}"/>
 						</c:if>
@@ -1061,7 +1189,6 @@ $(document).ready(function() {
 							<c:set var="gxbgshghjg" value="${gxbgshghjg+1}"/>
 							<c:set var="index" value="${index+1}"/>
 						</c:if>
-					
 			<tr>
 				<th colspan="${index+1}" style="text-align: center;">项目:${yingyong}</th>
 			</tr>
@@ -1265,120 +1392,148 @@ $(document).ready(function() {
 			
 						<c:if test="${sumList.total.xzqyadd1!=0}"><th>一年</th></c:if>
 						<c:if test="${sumList.total.xzqyadd2!=0}"><th>二年</th></c:if>
+						<c:if test="${sumList.total.xzqyadd3!=0}"><th>三年</th></c:if>
 						<c:if test="${sumList.total.xzqyadd4!=0}"><th>四年</th></c:if>
 						<c:if test="${sumList.total.xzqyadd5!=0}"><th>五年</th></c:if>
 						<c:if test="${sumList.total.xzgrQadd1!=0}"><th>一年</th></c:if>
 						<c:if test="${sumList.total.xzgrQadd2!=0}"><th>二年</th></c:if>
+						<c:if test="${sumList.total.xzgrQadd3!=0}"><th>三年</th></c:if>
 						<c:if test="${sumList.total.xzgrQadd4!=0}"><th>四年</th></c:if>
 						<c:if test="${sumList.total.xzgrQadd5!=0}"><th>五年</th></c:if>
 						<c:if test="${sumList.total.xzgrGadd1!=0}"><th>一年</th></c:if>
 						<c:if test="${sumList.total.xzgrGadd2!=0}"><th>二年</th></c:if>
+						<c:if test="${sumList.total.xzgrGadd3!=0}"><th>三年</th></c:if>
 						<c:if test="${sumList.total.xzgrGadd4!=0}"><th>四年</th></c:if>
 						<c:if test="${sumList.total.xzgrGadd5!=0}"><th>五年</th></c:if>
 						<c:if test="${sumList.total.xzjgadd1!=0}"><th>一年</th></c:if>
 						<c:if test="${sumList.total.xzjgadd2!=0}"><th>二年</th></c:if>
+						<c:if test="${sumList.total.xzjgadd3!=0}"><th>三年</th></c:if>
 						<c:if test="${sumList.total.xzjgadd4!=0}"><th>四年</th></c:if>
 						<c:if test="${sumList.total.xzjgadd5!=0}"><th>五年</th></c:if>
 						
 						<c:if test="${sumList.total.gxqyadd1!=0}"><th>一年</th></c:if>
 						<c:if test="${sumList.total.gxqyadd2!=0}"><th>二年</th></c:if>
+						<c:if test="${sumList.total.gxqyadd3!=0}"><th>三年</th></c:if>
 						<c:if test="${sumList.total.gxqyadd4!=0}"><th>四年</th></c:if>
 						<c:if test="${sumList.total.gxqyadd5!=0}"><th>五年</th></c:if>
 						<c:if test="${sumList.total.gxgrQadd1!=0}"><th>一年</th></c:if>
 						<c:if test="${sumList.total.gxgrQadd2!=0}"><th>二年</th></c:if>
+						<c:if test="${sumList.total.gxgrQadd3!=0}"><th>三年</th></c:if>
 						<c:if test="${sumList.total.gxgrQadd4!=0}"><th>四年</th></c:if>
 						<c:if test="${sumList.total.gxgrQadd5!=0}"><th>五年</th></c:if>
 						<c:if test="${sumList.total.gxgrGadd1!=0}"><th>一年</th></c:if>
 						<c:if test="${sumList.total.gxgrGadd2!=0}"><th>二年</th></c:if>
+						<c:if test="${sumList.total.gxgrGadd3!=0}"><th>三年</th></c:if>
 						<c:if test="${sumList.total.gxgrGadd4!=0}"><th>四年</th></c:if>
 						<c:if test="${sumList.total.gxgrGadd5!=0}"><th>五年</th></c:if>
 						<c:if test="${sumList.total.gxjgadd1!=0}"><th>一年</th></c:if>
 						<c:if test="${sumList.total.gxjgadd2!=0}"><th>二年</th></c:if>
+						<c:if test="${sumList.total.gxjgadd3!=0}"><th>三年</th></c:if>
 						<c:if test="${sumList.total.gxjgadd4!=0}"><th>四年</th></c:if>
 						<c:if test="${sumList.total.gxjgadd5!=0}"><th>五年</th></c:if>
 						<c:if test="${multiType}">
 						<c:if test="${sumList.total.updateLostqyNum!=0}"><th>一年</th></c:if>
 						<c:if test="${sumList.total.updateLostqyNum2!=0}"><th>二年</th></c:if>
+						<c:if test="${sumList.total.updateLostqyNum3!=0}"><th>三年</th></c:if>
 						<c:if test="${sumList.total.updateLostqyNum4!=0}"><th>四年</th></c:if>
 						<c:if test="${sumList.total.updateLostqyNum5!=0}"><th>五年</th></c:if>
 						<c:if test="${sumList.total.updateLostgrQNum!=0}"><th>一年</th></c:if>
 						<c:if test="${sumList.total.updateLostgrQNum2!=0}"><th>二年</th></c:if>
+						<c:if test="${sumList.total.updateLostgrQNum3!=0}"><th>三年</th></c:if>
 						<c:if test="${sumList.total.updateLostgrQNum4!=0}"><th>四年</th></c:if>
 						<c:if test="${sumList.total.updateLostgrQNum5!=0}"><th>五年</th></c:if>
 						<c:if test="${sumList.total.updateLostgrGNum!=0}"><th>一年</th></c:if>
 						<c:if test="${sumList.total.updateLostgrGNum2!=0}"><th>二年</th></c:if>
+						<c:if test="${sumList.total.updateLostgrGNum3!=0}"><th>三年</th></c:if>
 						<c:if test="${sumList.total.updateLostgrGNum4!=0}"><th>四年</th></c:if>
 						<c:if test="${sumList.total.updateLostgrGNum5!=0}"><th>五年</th></c:if>
 						<c:if test="${sumList.total.updateLostjgNum!=0}"><th>一年</th></c:if>
 						<c:if test="${sumList.total.updateLostjgNum2!=0}"><th>二年</th></c:if>
+						<c:if test="${sumList.total.updateLostjgNum3!=0}"><th>三年</th></c:if>
 						<c:if test="${sumList.total.updateLostjgNum4!=0}"><th>四年</th></c:if>
 						<c:if test="${sumList.total.updateLostjgNum5!=0}"><th>五年</th></c:if>
 						
 						 <c:if test="${sumList.total.updateReplaceqyNum!=0}"><th>一年</th></c:if>
 						<c:if test="${sumList.total.updateReplaceqyNum2!=0}"><th>二年</th></c:if>
+						<c:if test="${sumList.total.updateReplaceqyNum3!=0}"><th>二年</th></c:if>
 						<c:if test="${sumList.total.updateReplaceqyNum4!=0}"><th>四年</th></c:if>
 						<c:if test="${sumList.total.updateReplaceqyNum5!=0}"><th>五年</th></c:if>
 						<c:if test="${sumList.total.updateReplacegrQNum!=0}"><th>一年</th></c:if>
 						<c:if test="${sumList.total.updateReplacegrQNum2!=0}"><th>二年</th></c:if>
+						<c:if test="${sumList.total.updateReplacegrQNum2!=0}"><th>三年</th></c:if>
 						<c:if test="${sumList.total.updateReplacegrQNum4!=0}"><th>四年</th></c:if>
 						<c:if test="${sumList.total.updateReplacegrQNum5!=0}"><th>五年</th></c:if>
 						<c:if test="${sumList.total.updateReplacegrGNum!=0}"><th>一年</th></c:if>
 						<c:if test="${sumList.total.updateReplacegrGNum2!=0}"><th>二年</th></c:if>
+						<c:if test="${sumList.total.updateReplacegrGNum3!=0}"><th>三年</th></c:if>
 						<c:if test="${sumList.total.updateReplacegrGNum4!=0}"><th>四年</th></c:if>
 						<c:if test="${sumList.total.updateReplacegrGNum5!=0}"><th>五年</th></c:if>
 						<c:if test="${sumList.total.updateReplacejgNum!=0}"><th>一年</th></c:if>
 						<c:if test="${sumList.total.updateReplacejgNum2!=0}"><th>二年</th></c:if>
+						<c:if test="${sumList.total.updateReplacejgNum3!=0}"><th>三年</th></c:if>
 						<c:if test="${sumList.total.updateReplacejgNum4!=0}"><th>四年</th></c:if>
 						<c:if test="${sumList.total.updateReplacejgNum5!=0}"><th>五年</th></c:if> 
 						
 						<c:if test="${sumList.total.updateChangeqyNum!=0}"><th>一年</th></c:if>
 						<c:if test="${sumList.total.updateChangeqyNum2!=0}"><th>二年</th></c:if>
+						<c:if test="${sumList.total.updateChangeqyNum3!=0}"><th>三年</th></c:if>
 						<c:if test="${sumList.total.updateChangeqyNum4!=0}"><th>四年</th></c:if>
 						<c:if test="${sumList.total.updateChangeqyNum5!=0}"><th>五年</th></c:if>
 						<c:if test="${sumList.total.updateChangegrQNum!=0}"><th>一年</th></c:if>
 						<c:if test="${sumList.total.updateChangegrQNum2!=0}"><th>二年</th></c:if>
+						<c:if test="${sumList.total.updateChangegrQNum3!=0}"><th>三年</th></c:if>
 						<c:if test="${sumList.total.updateChangegrQNum4!=0}"><th>四年</th></c:if>
 						<c:if test="${sumList.total.updateChangegrQNum5!=0}"><th>五年</th></c:if>
 						<c:if test="${sumList.total.updateChangegrGNum!=0}"><th>一年</th></c:if>
 						<c:if test="${sumList.total.updateChangegrGNum2!=0}"><th>二年</th></c:if>
+						<c:if test="${sumList.total.updateChangegrGNum3!=0}"><th>三年</th></c:if>
 						<c:if test="${sumList.total.updateChangegrGNum4!=0}"><th>四年</th></c:if>
 						<c:if test="${sumList.total.updateChangegrGNum5!=0}"><th>五年</th></c:if>
 						<c:if test="${sumList.total.updateChangejgNum!=0}"><th>一年</th></c:if>
 						<c:if test="${sumList.total.updateChangejgNum2!=0}"><th>二年</th></c:if>
+						<c:if test="${sumList.total.updateChangejgNum3!=0}"><th>三年</th></c:if>
 						<c:if test="${sumList.total.updateChangejgNum4!=0}"><th>四年</th></c:if>
 						<c:if test="${sumList.total.updateChangejgNum5!=0}"><th>五年</th></c:if> 
 						
 						 <c:if test="${sumList.total.changeUpdateLostqyNum!=0}"><th>一年</th></c:if>
 						<c:if test="${sumList.total.changeUpdateLostqyNum2!=0}"><th>二年</th></c:if>
+						<c:if test="${sumList.total.changeUpdateLostqyNum3!=0}"><th>三年</th></c:if>
 						<c:if test="${sumList.total.changeUpdateLostqyNum4!=0}"><th>四年</th></c:if>
 						<c:if test="${sumList.total.changeUpdateLostqyNum5!=0}"><th>五年</th></c:if>
 						<c:if test="${sumList.total.changeUpdateLostgrQNum!=0}"><th>一年</th></c:if>
 						<c:if test="${sumList.total.changeUpdateLostgrQNum2!=0}"><th>二年</th></c:if>
+						<c:if test="${sumList.total.changeUpdateLostgrQNum3!=0}"><th>三年</th></c:if>
 						<c:if test="${sumList.total.changeUpdateLostgrQNum4!=0}"><th>四年</th></c:if>
 						<c:if test="${sumList.total.changeUpdateLostgrQNum5!=0}"><th>五年</th></c:if>
 						<c:if test="${sumList.total.changeUpdateLostgrGNum!=0}"><th>一年</th></c:if>
 						<c:if test="${sumList.total.changeUpdateLostgrGNum2!=0}"><th>二年</th></c:if>
+						<c:if test="${sumList.total.changeUpdateLostgrGNum3!=0}"><th>三年</th></c:if>
 						<c:if test="${sumList.total.changeUpdateLostgrGNum4!=0}"><th>四年</th></c:if>
 						<c:if test="${sumList.total.changeUpdateLostgrGNum5!=0}"><th>五年</th></c:if>
 						<c:if test="${sumList.total.changeUpdateLostjgNum!=0}"><th>一年</th></c:if>
 						<c:if test="${sumList.total.changeUpdateLostjgNum2!=0}"><th>二年</th></c:if>
+						<c:if test="${sumList.total.changeUpdateLostjgNum3!=0}"><th>三年</th></c:if>
 						<c:if test="${sumList.total.changeUpdateLostjgNum4!=0}"><th>四年</th></c:if>
 						<c:if test="${sumList.total.changeUpdateLostjgNum5!=0}"><th>五年</th></c:if> 
 						
 						 <c:if test="${sumList.total.changeUpdateReplaceqyNum!=0}"><th>一年</th></c:if>
 						<c:if test="${sumList.total.changeUpdateReplaceqyNum2!=0}"><th>二年</th></c:if>
+						<c:if test="${sumList.total.changeUpdateReplaceqyNum3!=0}"><th>三年</th></c:if>
 						<c:if test="${sumList.total.changeUpdateReplaceqyNum4!=0}"><th>四年</th></c:if>
 						<c:if test="${sumList.total.changeUpdateReplaceqyNum5!=0}"><th>五年</th></c:if>
 						<c:if test="${sumList.total.changeUpdateReplacegrQNum!=0}"><th>一年</th></c:if>
 						<c:if test="${sumList.total.changeUpdateReplacegrQNum2!=0}"><th>二年</th></c:if>
+						<c:if test="${sumList.total.changeUpdateReplacegrQNum3!=0}"><th>三年</th></c:if>
 						<c:if test="${sumList.total.changeUpdateReplacegrQNum4!=0}"><th>四年</th></c:if>
 						<c:if test="${sumList.total.changeUpdateReplacegrQNum5!=0}"><th>五年</th></c:if>
 						<c:if test="${sumList.total.changeUpdateReplacegrGNum!=0}"><th>一年</th></c:if>
 						<c:if test="${sumList.total.changeUpdateReplacegrGNum2!=0}"><th>二年</th></c:if>
+						<c:if test="${sumList.total.changeUpdateReplacegrGNum3!=0}"><th>三年</th></c:if>
 						<c:if test="${sumList.total.changeUpdateReplacegrGNum4!=0}"><th>四年</th></c:if>
 						<c:if test="${sumList.total.changeUpdateReplacegrGNum5!=0}"><th>五年</th></c:if>
 						<c:if test="${sumList.total.changeUpdateReplacejgNum!=0}"><th>一年</th></c:if>
 						<c:if test="${sumList.total.changeUpdateReplacejgNum2!=0}"><th>二年</th></c:if>
+						<c:if test="${sumList.total.changeUpdateReplacejgNum3!=0}"><th>三年</th></c:if>
 						<c:if test="${sumList.total.changeUpdateReplacejgNum4!=0}"><th>四年</th></c:if>
 						<c:if test="${sumList.total.changeUpdateReplacejgNum5!=0}"><th>五年</th></c:if>
 				 		</c:if>
@@ -1391,37 +1546,45 @@ $(document).ready(function() {
 						<tr>
 						<td><c:if test="${sum.key!='total'}">${sum.key}</c:if></td>
 								
-							<c:if test="${sumList.total.xzqyadd1!=0}"><td>${sum.value.xzqyadd1}</td></c:if>
+						<c:if test="${sumList.total.xzqyadd1!=0}"><td>${sum.value.xzqyadd1}</td></c:if>
 						<c:if test="${sumList.total.xzqyadd2!=0}"><td>${sum.value.xzqyadd2}</td></c:if>
+						<c:if test="${sumList.total.xzqyadd3!=0}"><td>${sum.value.xzqyadd3}</td></c:if>
 						<c:if test="${sumList.total.xzqyadd4!=0}"><td>${sum.value.xzqyadd4}</td></c:if>
 						<c:if test="${sumList.total.xzqyadd5!=0}"><td>${sum.value.xzqyadd5}</td></c:if>
 						<c:if test="${sumList.total.xzgrQadd1!=0}"><td>${sum.value.xzgrQadd1}</td></c:if>
 						<c:if test="${sumList.total.xzgrQadd2!=0}"><td>${sum.value.xzgrQadd2}</td></c:if>
+						<c:if test="${sumList.total.xzgrQadd3!=0}"><td>${sum.value.xzgrQadd3}</td></c:if>
 						<c:if test="${sumList.total.xzgrQadd4!=0}"><td>${sum.value.xzgrQadd4}</td></c:if>
 						<c:if test="${sumList.total.xzgrQadd5!=0}"><td>${sum.value.xzgrQadd5}</td></c:if>
 						<c:if test="${sumList.total.xzgrGadd1!=0}"><td>${sum.value.xzgrGadd1}</td></c:if>
 						<c:if test="${sumList.total.xzgrGadd2!=0}"><td>${sum.value.xzgrGadd2}</td></c:if>
+						<c:if test="${sumList.total.xzgrGadd3!=0}"><td>${sum.value.xzgrGadd3}</td></c:if>
 						<c:if test="${sumList.total.xzgrGadd4!=0}"><td>${sum.value.xzgrGadd4}</td></c:if>
 						<c:if test="${sumList.total.xzgrGadd5!=0}"><td>${sum.value.xzgrGadd5}</td></c:if>
 						<c:if test="${sumList.total.xzjgadd1!=0}"><td>${sum.value.xzjgadd1}</td></c:if>
 						<c:if test="${sumList.total.xzjgadd2!=0}"><td>${sum.value.xzjgadd2}</td></c:if>
+						<c:if test="${sumList.total.xzjgadd3!=0}"><td>${sum.value.xzjgadd3}</td></c:if>
 						<c:if test="${sumList.total.xzjgadd4!=0}"><td>${sum.value.xzjgadd4}</td></c:if>
 						<c:if test="${sumList.total.xzjgadd5!=0}"><td>${sum.value.xzjgadd5}</td></c:if>
 						
 						<c:if test="${sumList.total.gxqyadd1!=0}"><td>${sum.value.gxqyadd1}</td></c:if>
 						<c:if test="${sumList.total.gxqyadd2!=0}"><td>${sum.value.gxqyadd2}</td></c:if>
+						<c:if test="${sumList.total.gxqyadd3!=0}"><td>${sum.value.gxqyadd3}</td></c:if>
 						<c:if test="${sumList.total.gxqyadd4!=0}"><td>${sum.value.gxqyadd4}</td></c:if>
 						<c:if test="${sumList.total.gxqyadd5!=0}"><td>${sum.value.gxqyadd5}</td></c:if>
 						<c:if test="${sumList.total.gxgrQadd1!=0}"><td>${sum.value.gxgrQadd1}</td></c:if>
 						<c:if test="${sumList.total.gxgrQadd2!=0}"><td>${sum.value.gxgrQadd2}</td></c:if>
+						<c:if test="${sumList.total.gxgrQadd3!=0}"><td>${sum.value.gxgrQadd3}</td></c:if>
 						<c:if test="${sumList.total.gxgrQadd4!=0}"><td>${sum.value.gxgrQadd4}</td></c:if>
 						<c:if test="${sumList.total.gxgrQadd5!=0}"><td>${sum.value.gxgrQadd5}</td></c:if>
 						<c:if test="${sumList.total.gxgrGadd1!=0}"><td>${sum.value.gxgrGadd1}</td></c:if>
 						<c:if test="${sumList.total.gxgrGadd2!=0}"><td>${sum.value.gxgrGadd2}</td></c:if>
+						<c:if test="${sumList.total.gxgrGadd3!=0}"><td>${sum.value.gxgrGadd3}</td></c:if>
 						<c:if test="${sumList.total.gxgrGadd4!=0}"><td>${sum.value.gxgrGadd4}</td></c:if>
 						<c:if test="${sumList.total.gxgrGadd5!=0}"><td>${sum.value.gxgrGadd5}</td></c:if>
 						<c:if test="${sumList.total.gxjgadd1!=0}"><td>${sum.value.gxjgadd1}</td></c:if>
 						<c:if test="${sumList.total.gxjgadd2!=0}"><td>${sum.value.gxjgadd2}</td></c:if>
+						<c:if test="${sumList.total.gxjgadd3!=0}"><td>${sum.value.gxjgadd3}</td></c:if>
 						<c:if test="${sumList.total.gxjgadd4!=0}"><td>${sum.value.gxjgadd4}</td></c:if>
 						<c:if test="${sumList.total.gxjgadd5!=0}"><td>${sum.value.gxjgadd5}</td></c:if>
 						
@@ -1452,87 +1615,107 @@ $(document).ready(function() {
 						
 						<c:if test="${sumList.total.updateLostqyNum!=0}"><td>${sum.value.updateLostqyNum}</td></c:if>
 						<c:if test="${sumList.total.updateLostqyNum2!=0}"><td>${sum.value.updateLostqyNum2}</td></c:if>
+						<c:if test="${sumList.total.updateLostqyNum3!=0}"><td>${sum.value.updateLostqyNum3}</td></c:if>
 						<c:if test="${sumList.total.updateLostqyNum4!=0}"><td>${sum.value.updateLostqyNum4}</td></c:if>
 						<c:if test="${sumList.total.updateLostqyNum5!=0}"><td>${sum.value.updateLostqyNum5}</td></c:if>
 						<c:if test="${sumList.total.updateLostgrQNum!=0}"><td>${sum.value.updateLostgrQNum}</td></c:if>
 						<c:if test="${sumList.total.updateLostgrQNum2!=0}"><td>${sum.value.updateLostgrQNum2}</td></c:if>
+						<c:if test="${sumList.total.updateLostgrQNum3!=0}"><td>${sum.value.updateLostgrQNum3}</td></c:if>
 						<c:if test="${sumList.total.updateLostgrQNum4!=0}"><td>${sum.value.updateLostgrQNum4}</td></c:if>
 						<c:if test="${sumList.total.updateLostgrQNum5!=0}"><td>${sum.value.updateLostgrQNum5}</td></c:if>
 						<c:if test="${sumList.total.updateLostgrGNum!=0}"><td>${sum.value.updateLostgrGNum}</td></c:if>
 						<c:if test="${sumList.total.updateLostgrGNum2!=0}"><td>${sum.value.updateLostgrGNum2}</td></c:if>
+						<c:if test="${sumList.total.updateLostgrGNum3!=0}"><td>${sum.value.updateLostgrGNum3}</td></c:if>
 						<c:if test="${sumList.total.updateLostgrGNum4!=0}"><td>${sum.value.updateLostgrGNum4}</td></c:if>
 						<c:if test="${sumList.total.updateLostgrGNum5!=0}"><td>${sum.value.updateLostgrGNum5}</td></c:if>
 						<c:if test="${sumList.total.updateLostjgNum!=0}"><td>${sum.value.updateLostjgNum}</td></c:if>
 						<c:if test="${sumList.total.updateLostjgNum2!=0}"><td>${sum.value.updateLostjgNum2}</td></c:if>
+						<c:if test="${sumList.total.updateLostjgNum3!=0}"><td>${sum.value.updateLostjgNum3}</td></c:if>
 						<c:if test="${sumList.total.updateLostjgNum4!=0}"><td>${sum.value.updateLostjgNum4}</td></c:if>
 						<c:if test="${sumList.total.updateLostjgNum5!=0}"><td>${sum.value.updateLostjgNum5}</td></c:if>
 						
 						 <c:if test="${sumList.total.updateReplaceqyNum!=0}"><td>${sum.value.updateReplaceqyNum}</td></c:if>
 						<c:if test="${sumList.total.updateReplaceqyNum2!=0}"><td>${sum.value.updateReplaceqyNum2}</td></c:if>
+						<c:if test="${sumList.total.updateReplaceqyNum3!=0}"><td>${sum.value.updateReplaceqyNum3}</td></c:if>
 						<c:if test="${sumList.total.updateReplaceqyNum4!=0}"><td>${sum.value.updateReplaceqyNum4}</td></c:if>
 						<c:if test="${sumList.total.updateReplaceqyNum5!=0}"><td>${sum.value.updateReplaceqyNum5}</td></c:if>
 						<c:if test="${sumList.total.updateReplacegrQNum!=0}"><td>${sum.value.updateReplacegrQNum}</td></c:if>
 						<c:if test="${sumList.total.updateReplacegrQNum2!=0}"><td>${sum.value.updateReplacegrQNum2}</td></c:if>
+						<c:if test="${sumList.total.updateReplacegrQNum3!=0}"><td>${sum.value.updateReplacegrQNum3}</td></c:if>
 						<c:if test="${sumList.total.updateReplacegrQNum4!=0}"><td>${sum.value.updateReplacegrQNum4}</td></c:if>
 						<c:if test="${sumList.total.updateReplacegrQNum5!=0}"><td>${sum.value.updateReplacegrQNum5}</td></c:if>
 						<c:if test="${sumList.total.updateReplacegrGNum!=0}"><td>${sum.value.updateReplacegrGNum}</td></c:if>
 						<c:if test="${sumList.total.updateReplacegrGNum2!=0}"><td>${sum.value.updateReplacegrGNum2}</td></c:if>
+						<c:if test="${sumList.total.updateReplacegrGNum3!=0}"><td>${sum.value.updateReplacegrGNum3}</td></c:if>
 						<c:if test="${sumList.total.updateReplacegrGNum4!=0}"><td>${sum.value.updateReplacegrGNum4}</td></c:if>
 						<c:if test="${sumList.total.updateReplacegrGNum5!=0}"><td>${sum.value.updateReplacegrGNum5}</td></c:if>
 						<c:if test="${sumList.total.updateReplacejgNum!=0}"><td>${sum.value.updateReplacejgNum}</td></c:if>
 						<c:if test="${sumList.total.updateReplacejgNum2!=0}"><td>${sum.value.updateReplacejgNum2}</td></c:if>
+						<c:if test="${sumList.total.updateReplacejgNum3!=0}"><td>${sum.value.updateReplacejgNum3}</td></c:if>
 						<c:if test="${sumList.total.updateReplacejgNum4!=0}"><td>${sum.value.updateReplacejgNum4}</td></c:if>
 						<c:if test="${sumList.total.updateReplacejgNum5!=0}"><td>${sum.value.updateReplacejgNum5}</td></c:if> 
 						
 						 <c:if test="${sumList.total.updateChangeqyNum!=0}"><td>${sum.value.updateChangeqyNum}</td></c:if>
 						<c:if test="${sumList.total.updateChangeqyNum2!=0}"><td>${sum.value.updateChangeqyNum2}</td></c:if>
+						<c:if test="${sumList.total.updateChangeqyNum3!=0}"><td>${sum.value.updateChangeqyNum3}</td></c:if>
 						<c:if test="${sumList.total.updateChangeqyNum4!=0}"><td>${sum.value.updateChangeqyNum4}</td></c:if>
 						<c:if test="${sumList.total.updateChangeqyNum5!=0}"><td>${sum.value.updateChangeqyNum5}</td></c:if>
 						<c:if test="${sumList.total.updateChangegrQNum!=0}"><td>${sum.value.updateChangegrQNum}</td></c:if>
 						<c:if test="${sumList.total.updateChangegrQNum2!=0}"><td>${sum.value.updateChangegrQNum2}</td></c:if>
+						<c:if test="${sumList.total.updateChangegrQNum3!=0}"><td>${sum.value.updateChangegrQNum3}</td></c:if>
 						<c:if test="${sumList.total.updateChangegrQNum4!=0}"><td>${sum.value.updateChangegrQNum4}</td></c:if>
 						<c:if test="${sumList.total.updateChangegrQNum5!=0}"><td>${sum.value.updateChangegrQNum5}</td></c:if>
 						<c:if test="${sumList.total.updateChangegrGNum!=0}"><td>${sum.value.updateChangegrGNum}</td></c:if>
 						<c:if test="${sumList.total.updateChangegrGNum2!=0}"><td>${sum.value.updateChangegrGNum2}</td></c:if>
+						<c:if test="${sumList.total.updateChangegrGNum3!=0}"><td>${sum.value.updateChangegrGNum3}</td></c:if>
 						<c:if test="${sumList.total.updateChangegrGNum4!=0}"><td>${sum.value.updateChangegrGNum4}</td></c:if>
 						<c:if test="${sumList.total.updateChangegrGNum5!=0}"><td>${sum.value.updateChangegrGNum5}</td></c:if>
 						<c:if test="${sumList.total.updateChangejgNum!=0}"><td>${sum.value.updateChangejgNum}</td></c:if>
 						<c:if test="${sumList.total.updateChangejgNum2!=0}"><td>${sum.value.updateChangejgNum2}</td></c:if>
+						<c:if test="${sumList.total.updateChangejgNum3!=0}"><td>${sum.value.updateChangejgNum3}</td></c:if>
 						<c:if test="${sumList.total.updateChangejgNum4!=0}"><td>${sum.value.updateChangejgNum4}</td></c:if>
 						<c:if test="${sumList.total.updateChangejgNum5!=0}"><td>${sum.value.updateChangejgNum5}</td></c:if> 
 						
 						
 						 <c:if test="${sumList.total.changeUpdateLostqyNum!=0}"><th>${sum.value.changeUpdateLostqyNum}</th></c:if>
 						<c:if test="${sumList.total.changeUpdateLostqyNum2!=0}"><th>${sum.value.changeUpdateLostqyNum2}</th></c:if>
+						<c:if test="${sumList.total.changeUpdateLostqyNum3!=0}"><th>${sum.value.changeUpdateLostqyNum3}</th></c:if>
 						<c:if test="${sumList.total.changeUpdateLostqyNum4!=0}"><th>${sum.value.changeUpdateLostqyNum4}</th></c:if>
 						<c:if test="${sumList.total.changeUpdateLostqyNum5!=0}"><th>${sum.value.changeUpdateLostqyNum5}</th></c:if>
 						<c:if test="${sumList.total.changeUpdateLostgrQNum!=0}"><th>${sum.value.changeUpdateLostgrQNum}</th></c:if>
 						<c:if test="${sumList.total.changeUpdateLostgrQNum2!=0}"><th>${sum.value.changeUpdateLostgrQNum2}</th></c:if>
+						<c:if test="${sumList.total.changeUpdateLostgrQNum3!=0}"><th>${sum.value.changeUpdateLostgrQNum3}</th></c:if>
 						<c:if test="${sumList.total.changeUpdateLostgrQNum4!=0}"><th>${sum.value.changeUpdateLostgrQNum4}</th></c:if>
 						<c:if test="${sumList.total.changeUpdateLostgrQNum5!=0}"><th>${sum.value.changeUpdateLostgrQNum5}</th></c:if>
 						<c:if test="${sumList.total.changeUpdateLostgrGNum!=0}"><th>${sum.value.changeUpdateLostgrGNum}</th></c:if>
 						<c:if test="${sumList.total.changeUpdateLostgrGNum2!=0}"><th>${sum.value.changeUpdateLostgrGNum2}</th></c:if>
+						<c:if test="${sumList.total.changeUpdateLostgrGNum3!=0}"><th>${sum.value.changeUpdateLostgrGNum3}</th></c:if>
 						<c:if test="${sumList.total.changeUpdateLostgrGNum4!=0}"><th>${sum.value.changeUpdateLostgrGNum4}</th></c:if>
 						<c:if test="${sumList.total.changeUpdateLostgrGNum5!=0}"><th>${sum.value.changeUpdateLostgrGNum5}</th></c:if>
 						<c:if test="${sumList.total.changeUpdateLostjgNum!=0}"><th>${sum.value.changeUpdateLostjgNum}</th></c:if>
 						<c:if test="${sumList.total.changeUpdateLostjgNum2!=0}"><th>${sum.value.changeUpdateLostjgNum2}</th></c:if>
+						<c:if test="${sumList.total.changeUpdateLostjgNum3!=0}"><th>${sum.value.changeUpdateLostjgNum3}</th></c:if>
 						<c:if test="${sumList.total.changeUpdateLostjgNum4!=0}"><th>${sum.value.changeUpdateLostjgNum4}</th></c:if>
 						<c:if test="${sumList.total.changeUpdateLostjgNum5!=0}"><th>${sum.value.changeUpdateLostjgNum5}</th></c:if> 
 						
 						 <c:if test="${sumList.total.changeUpdateReplaceqyNum!=0}"><th>${sum.value.changeUpdateReplaceqyNum}</th></c:if>
 						<c:if test="${sumList.total.changeUpdateReplaceqyNum2!=0}"><th>${sum.value.changeUpdateReplaceqyNum2}</th></c:if>
+						<c:if test="${sumList.total.changeUpdateReplaceqyNum3!=0}"><th>${sum.value.changeUpdateReplaceqyNum3}</th></c:if>
 						<c:if test="${sumList.total.changeUpdateReplaceqyNum4!=0}"><th>${sum.value.changeUpdateReplaceqyNum4}</th></c:if>
 						<c:if test="${sumList.total.changeUpdateReplaceqyNum5!=0}"><th>${sum.value.changeUpdateReplaceqyNum5}</th></c:if>
 						<c:if test="${sumList.total.changeUpdateReplacegrQNum!=0}"><th>${sum.value.changeUpdateReplacegrQNum}</th></c:if>
 						<c:if test="${sumList.total.changeUpdateReplacegrQNum2!=0}"><th>${sum.value.changeUpdateReplacegrQNum2}</th></c:if>
+						<c:if test="${sumList.total.changeUpdateReplacegrQNum3!=0}"><th>${sum.value.changeUpdateReplacegrQNum3}</th></c:if>
 						<c:if test="${sumList.total.changeUpdateReplacegrQNum4!=0}"><th>${sum.value.changeUpdateReplacegrQNum4}</th></c:if>
 						<c:if test="${sumList.total.changeUpdateReplacegrQNum5!=0}"><th>${sum.value.changeUpdateReplacegrQNum5}</th></c:if>
 						<c:if test="${sumList.total.changeUpdateReplacegrGNum!=0}"><th>${sum.value.changeUpdateReplacegrGNum}</th></c:if>
 						<c:if test="${sumList.total.changeUpdateReplacegrGNum2!=0}"><th>${sum.value.changeUpdateReplacegrGNum2}</th></c:if>
+						<c:if test="${sumList.total.changeUpdateReplacegrGNum3!=0}"><th>${sum.value.changeUpdateReplacegrGNum3}</th></c:if>
 						<c:if test="${sumList.total.changeUpdateReplacegrGNum4!=0}"><th>${sum.value.changeUpdateReplacegrGNum4}</th></c:if>
 						<c:if test="${sumList.total.changeUpdateReplacegrGNum5!=0}"><th>${sum.value.changeUpdateReplacegrGNum5}</th></c:if>
 						<c:if test="${sumList.total.changeUpdateReplacejgNum!=0}"><th>${sum.value.changeUpdateReplacejgNum}</th></c:if>
 						<c:if test="${sumList.total.changeUpdateReplacejgNum2!=0}"><th>${sum.value.changeUpdateReplacejgNum2}</th></c:if>
+						<c:if test="${sumList.total.changeUpdateReplacejgNum3!=0}"><th>${sum.value.changeUpdateReplacejgNum3}</th></c:if>
 						<c:if test="${sumList.total.changeUpdateReplacejgNum4!=0}"><th>${sum.value.changeUpdateReplacejgNum4}</th></c:if>
 						<c:if test="${sumList.total.changeUpdateReplacejgNum5!=0}"><th>${sum.value.changeUpdateReplacejgNum5}</th></c:if> 
 						</c:if>
@@ -1548,35 +1731,43 @@ $(document).ready(function() {
 						<th>总计</th>
 						<c:if test="${sumList.total.xzqyadd1!=0}"><td>${sumList.total.xzqyadd1}</td></c:if>
 						<c:if test="${sumList.total.xzqyadd2!=0}"><td>${sumList.total.xzqyadd2}</td></c:if>
+						<c:if test="${sumList.total.xzqyadd3!=0}"><td>${sumList.total.xzqyadd3}</td></c:if>
 						<c:if test="${sumList.total.xzqyadd4!=0}"><td>${sumList.total.xzqyadd4}</td></c:if>
 						<c:if test="${sumList.total.xzqyadd5!=0}"><td>${sumList.total.xzqyadd5}</td></c:if>
 						<c:if test="${sumList.total.xzgrQadd1!=0}"><td>${sumList.total.xzgrQadd1}</td></c:if>
 						<c:if test="${sumList.total.xzgrQadd2!=0}"><td>${sumList.total.xzgrQadd2}</td></c:if>
+						<c:if test="${sumList.total.xzgrQadd3!=0}"><td>${sumList.total.xzgrQadd3}</td></c:if>
 						<c:if test="${sumList.total.xzgrQadd4!=0}"><td>${sumList.total.xzgrQadd4}</td></c:if>
 						<c:if test="${sumList.total.xzgrQadd5!=0}"><td>${sumList.total.xzgrQadd5}</td></c:if>
 						<c:if test="${sumList.total.xzgrGadd1!=0}"><td>${sumList.total.xzgrGadd1}</td></c:if>
 						<c:if test="${sumList.total.xzgrGadd2!=0}"><td>${sumList.total.xzgrGadd2}</td></c:if>
+						<c:if test="${sumList.total.xzgrGadd3!=0}"><td>${sumList.total.xzgrGadd3}</td></c:if>
 						<c:if test="${sumList.total.xzgrGadd4!=0}"><td>${sumList.total.xzgrGadd4}</td></c:if>
 						<c:if test="${sumList.total.xzgrGadd5!=0}"><td>${sumList.total.xzgrGadd5}</td></c:if>
 						<c:if test="${sumList.total.xzjgadd1!=0}"><td>${sumList.total.xzjgadd1}</td></c:if>
 						<c:if test="${sumList.total.xzjgadd2!=0}"><td>${sumList.total.xzjgadd2}</td></c:if>
+						<c:if test="${sumList.total.xzjgadd3!=0}"><td>${sumList.total.xzjgadd3}</td></c:if>
 						<c:if test="${sumList.total.xzjgadd4!=0}"><td>${sumList.total.xzjgadd4}</td></c:if>
 						<c:if test="${sumList.total.xzjgadd5!=0}"><td>${sumList.total.xzjgadd5}</td></c:if>
 						
 						<c:if test="${sumList.total.gxqyadd1!=0}"><td>${sumList.total.gxqyadd1}</td></c:if>
 						<c:if test="${sumList.total.gxqyadd2!=0}"><td>${sumList.total.gxqyadd2}</td></c:if>
+						<c:if test="${sumList.total.gxqyadd3!=0}"><td>${sumList.total.gxqyadd3}</td></c:if>
 						<c:if test="${sumList.total.gxqyadd4!=0}"><td>${sumList.total.gxqyadd4}</td></c:if>
 						<c:if test="${sumList.total.gxqyadd5!=0}"><td>${sumList.total.gxqyadd5}</td></c:if>
 						<c:if test="${sumList.total.gxgrQadd1!=0}"><td>${sumList.total.gxgrQadd1}</td></c:if>
 						<c:if test="${sumList.total.gxgrQadd2!=0}"><td>${sumList.total.gxgrQadd2}</td></c:if>
+						<c:if test="${sumList.total.gxgrQadd3!=0}"><td>${sumList.total.gxgrQadd3}</td></c:if>
 						<c:if test="${sumList.total.gxgrQadd4!=0}"><td>${sumList.total.gxgrQadd4}</td></c:if>
 						<c:if test="${sumList.total.gxgrQadd5!=0}"><td>${sumList.total.gxgrQadd5}</td></c:if>
 						<c:if test="${sumList.total.gxgrGadd1!=0}"><td>${sumList.total.gxgrGadd1}</td></c:if>
 						<c:if test="${sumList.total.gxgrGadd2!=0}"><td>${sumList.total.gxgrGadd2}</td></c:if>
+						<c:if test="${sumList.total.gxgrGadd3!=0}"><td>${sumList.total.gxgrGadd3}</td></c:if>
 						<c:if test="${sumList.total.gxgrGadd4!=0}"><td>${sumList.total.gxgrGadd4}</td></c:if>
 						<c:if test="${sumList.total.gxgrGadd5!=0}"><td>${sumList.total.gxgrGadd5}</td></c:if>
 						<c:if test="${sumList.total.gxjgadd1!=0}"><td>${sumList.total.gxjgadd1}</td></c:if>
 						<c:if test="${sumList.total.gxjgadd2!=0}"><td>${sumList.total.gxjgadd2}</td></c:if>
+						<c:if test="${sumList.total.gxjgadd3!=0}"><td>${sumList.total.gxjgadd3}</td></c:if>
 						<c:if test="${sumList.total.gxjgadd4!=0}"><td>${sumList.total.gxjgadd4}</td></c:if>
 						<c:if test="${sumList.total.gxjgadd5!=0}"><td>${sumList.total.gxjgadd5}</td></c:if>
 						
@@ -1607,88 +1798,108 @@ $(document).ready(function() {
 						
 						<c:if test="${sumList.total.updateLostqyNum!=0}"><td>${sumList.total.updateLostqyNum}</td></c:if>
 						<c:if test="${sumList.total.updateLostqyNum2!=0}"><td>${sumList.total.updateLostqyNum2}</td></c:if>
+						<c:if test="${sumList.total.updateLostqyNum3!=0}"><td>${sumList.total.updateLostqyNum3}</td></c:if>
 						<c:if test="${sumList.total.updateLostqyNum4!=0}"><td>${sumList.total.updateLostqyNum4}</td></c:if>
 						<c:if test="${sumList.total.updateLostqyNum5!=0}"><td>${sumList.total.updateLostqyNum5}</td></c:if>
 						<c:if test="${sumList.total.updateLostgrQNum!=0}"><td>${sumList.total.updateLostgrQNum}</td></c:if>
 						<c:if test="${sumList.total.updateLostgrQNum2!=0}"><td>${sumList.total.updateLostgrQNum2}</td></c:if>
+						<c:if test="${sumList.total.updateLostgrQNum3!=0}"><td>${sumList.total.updateLostgrQNum3}</td></c:if>
 						<c:if test="${sumList.total.updateLostgrQNum4!=0}"><td>${sumList.total.updateLostgrQNum4}</td></c:if>
 						<c:if test="${sumList.total.updateLostgrQNum5!=0}"><td>${sumList.total.updateLostgrQNum5}</td></c:if>
 						<c:if test="${sumList.total.updateLostgrGNum!=0}"><td>${sumList.total.updateLostgrGNum}</td></c:if>
 						<c:if test="${sumList.total.updateLostgrGNum2!=0}"><td>${sumList.total.updateLostgrGNum2}</td></c:if>
+						<c:if test="${sumList.total.updateLostgrGNum3!=0}"><td>${sumList.total.updateLostgrGNum3}</td></c:if>
 						<c:if test="${sumList.total.updateLostgrGNum4!=0}"><td>${sumList.total.updateLostgrGNum4}</td></c:if>
 						<c:if test="${sumList.total.updateLostgrGNum5!=0}"><td>${sumList.total.updateLostgrGNum5}</td></c:if>
 						<c:if test="${sumList.total.updateLostjgNum!=0}"><td>${sumList.total.updateLostjgNum}</td></c:if>
 						<c:if test="${sumList.total.updateLostjgNum2!=0}"><td>${sumList.total.updateLostjgNum2}</td></c:if>
+						<c:if test="${sumList.total.updateLostjgNum3!=0}"><td>${sumList.total.updateLostjgNum3}</td></c:if>
 						<c:if test="${sumList.total.updateLostjgNum4!=0}"><td>${sumList.total.updateLostjgNum4}</td></c:if>
 						<c:if test="${sumList.total.updateLostjgNum5!=0}"><td>${sumList.total.updateLostjgNum5}</td></c:if>
 						
 						 <c:if test="${sumList.total.updateReplaceqyNum!=0}"><td>${sumList.total.updateReplaceqyNum}</td></c:if>
 						<c:if test="${sumList.total.updateReplaceqyNum2!=0}"><td>${sumList.total.updateReplaceqyNum2}</td></c:if>
+						<c:if test="${sumList.total.updateReplaceqyNum3!=0}"><td>${sumList.total.updateReplaceqyNum3}</td></c:if>
 						<c:if test="${sumList.total.updateReplaceqyNum4!=0}"><td>${sumList.total.updateReplaceqyNum4}</td></c:if>
 						<c:if test="${sumList.total.updateReplaceqyNum5!=0}"><td>${sumList.total.updateReplaceqyNum5}</td></c:if>
 						<c:if test="${sumList.total.updateReplacegrQNum!=0}"><td>${sumList.total.updateReplacegrQNum}</td></c:if>
 						<c:if test="${sumList.total.updateReplacegrQNum2!=0}"><td>${sumList.total.updateReplacegrQNum2}</td></c:if>
+						<c:if test="${sumList.total.updateReplacegrQNum3!=0}"><td>${sumList.total.updateReplacegrQNum3}</td></c:if>
 						<c:if test="${sumList.total.updateReplacegrQNum4!=0}"><td>${sumList.total.updateReplacegrQNum4}</td></c:if>
 						<c:if test="${sumList.total.updateReplacegrQNum5!=0}"><td>${sumList.total.updateReplacegrQNum5}</td></c:if>
 						<c:if test="${sumList.total.updateReplacegrGNum!=0}"><td>${sumList.total.updateReplacegrGNum}</td></c:if>
 						<c:if test="${sumList.total.updateReplacegrGNum2!=0}"><td>${sumList.total.updateReplacegrGNum2}</td></c:if>
+						<c:if test="${sumList.total.updateReplacegrGNum3!=0}"><td>${sumList.total.updateReplacegrGNum3}</td></c:if>
 						<c:if test="${sumList.total.updateReplacegrGNum4!=0}"><td>${sumList.total.updateReplacegrGNum4}</td></c:if>
 						<c:if test="${sumList.total.updateReplacegrGNum5!=0}"><td>${sumList.total.updateReplacegrGNum5}</td></c:if>
 						<c:if test="${sumList.total.updateReplacejgNum!=0}"><td>${sumList.total.updateReplacejgNum}</td></c:if>
 						<c:if test="${sumList.total.updateReplacejgNum2!=0}"><td>${sumList.total.updateReplacejgNum2}</td></c:if>
+						<c:if test="${sumList.total.updateReplacejgNum3!=0}"><td>${sumList.total.updateReplacejgNum3}</td></c:if>
 						<c:if test="${sumList.total.updateReplacejgNum4!=0}"><td>${sumList.total.updateReplacejgNum4}</td></c:if>
 						<c:if test="${sumList.total.updateReplacejgNum5!=0}"><td>${sumList.total.updateReplacejgNum5}</td></c:if> 
 						
 						  <c:if test="${sumList.total.updateChangeqyNum!=0}"><td>${sumList.total.updateChangeqyNum}</td></c:if>
 						<c:if test="${sumList.total.updateChangeqyNum2!=0}"><td>${sumList.total.updateChangeqyNum2}</td></c:if>
+						<c:if test="${sumList.total.updateChangeqyNum3!=0}"><td>${sumList.total.updateChangeqyNum3}</td></c:if>
 						<c:if test="${sumList.total.updateChangeqyNum4!=0}"><td>${sumList.total.updateChangeqyNum4}</td></c:if>
 						<c:if test="${sumList.total.updateChangeqyNum5!=0}"><td>${sumList.total.updateChangeqyNum5}</td></c:if>
 						<c:if test="${sumList.total.updateChangegrQNum!=0}"><td>${sumList.total.updateChangegrQNum}</td></c:if>
 						<c:if test="${sumList.total.updateChangegrQNum2!=0}"><td>${sumList.total.updateChangegrQNum2}</td></c:if>
+						<c:if test="${sumList.total.updateChangegrQNum3!=0}"><td>${sumList.total.updateChangegrQNum3}</td></c:if>
 						<c:if test="${sumList.total.updateChangegrQNum4!=0}"><td>${sumList.total.updateChangegrQNum4}</td></c:if>
 						<c:if test="${sumList.total.updateChangegrQNum5!=0}"><td>${sumList.total.updateChangegrQNum5}</td></c:if>
 						<c:if test="${sumList.total.updateChangegrGNum!=0}"><td>${sumList.total.updateChangegrGNum}</td></c:if>
 						<c:if test="${sumList.total.updateChangegrGNum2!=0}"><td>${sumList.total.updateChangegrGNum2}</td></c:if>
+						<c:if test="${sumList.total.updateChangegrGNum3!=0}"><td>${sumList.total.updateChangegrGNum3}</td></c:if>
 						<c:if test="${sumList.total.updateChangegrGNum4!=0}"><td>${sumList.total.updateChangegrGNum4}</td></c:if>
 						<c:if test="${sumList.total.updateChangegrGNum5!=0}"><td>${sumList.total.updateChangegrGNum5}</td></c:if>
 						<c:if test="${sumList.total.updateChangejgNum!=0}"><td>${sumList.total.updateChangejgNum}</td></c:if>
 						<c:if test="${sumList.total.updateChangejgNum2!=0}"><td>${sumList.total.updateChangejgNum2}</td></c:if>
+						<c:if test="${sumList.total.updateChangejgNum3!=0}"><td>${sumList.total.updateChangejgNum3}</td></c:if>
 						<c:if test="${sumList.total.updateChangejgNum4!=0}"><td>${sumList.total.updateChangejgNum4}</td></c:if>
 						<c:if test="${sumList.total.updateChangejgNum5!=0}"><td>${sumList.total.updateChangejgNum5}</td></c:if>  
 						
 						
 						 
-							<c:if test="${sumList.total.changeUpdateLostqyNum!=0}"><th>${sumList.total.changeUpdateLostqyNum}</th></c:if>
+						<c:if test="${sumList.total.changeUpdateLostqyNum!=0}"><th>${sumList.total.changeUpdateLostqyNum}</th></c:if>
 						<c:if test="${sumList.total.changeUpdateLostqyNum2!=0}"><th>${sumList.total.changeUpdateLostqyNum2}</th></c:if>
+						<c:if test="${sumList.total.changeUpdateLostqyNum3!=0}"><th>${sumList.total.changeUpdateLostqyNum3}</th></c:if>
 						<c:if test="${sumList.total.changeUpdateLostqyNum4!=0}"><th>${sumList.total.changeUpdateLostqyNum4}</th></c:if>
 						<c:if test="${sumList.total.changeUpdateLostqyNum5!=0}"><th>${sumList.total.changeUpdateLostqyNum5}</th></c:if>
 						<c:if test="${sumList.total.changeUpdateLostgrQNum!=0}"><th>${sumList.total.changeUpdateLostgrQNum}</th></c:if>
 						<c:if test="${sumList.total.changeUpdateLostgrQNum2!=0}"><th>${sumList.total.changeUpdateLostgrQNum2}</th></c:if>
+						<c:if test="${sumList.total.changeUpdateLostgrQNum3!=0}"><th>${sumList.total.changeUpdateLostgrQNum3}</th></c:if>
 						<c:if test="${sumList.total.changeUpdateLostgrQNum4!=0}"><th>${sumList.total.changeUpdateLostgrQNum4}</th></c:if>
 						<c:if test="${sumList.total.changeUpdateLostgrQNum5!=0}"><th>${sumList.total.changeUpdateLostgrQNum5}</th></c:if>
 						<c:if test="${sumList.total.changeUpdateLostgrGNum!=0}"><th>${sumList.total.changeUpdateLostgrGNum}</th></c:if>
 						<c:if test="${sumList.total.changeUpdateLostgrGNum2!=0}"><th>${sumList.total.changeUpdateLostgrGNum2}</th></c:if>
+						<c:if test="${sumList.total.changeUpdateLostgrGNum3!=0}"><th>${sumList.total.changeUpdateLostgrGNum3}</th></c:if>
 						<c:if test="${sumList.total.changeUpdateLostgrGNum4!=0}"><th>${sumList.total.changeUpdateLostgrGNum4}</th></c:if>
 						<c:if test="${sumList.total.changeUpdateLostgrGNum5!=0}"><th>${sumList.total.changeUpdateLostgrGNum5}</th></c:if>
 						<c:if test="${sumList.total.changeUpdateLostjgNum!=0}"><th>${sumList.total.changeUpdateLostjgNum}</th></c:if>
 						<c:if test="${sumList.total.changeUpdateLostjgNum2!=0}"><th>${sumList.total.changeUpdateLostjgNum2}</th></c:if>
+						<c:if test="${sumList.total.changeUpdateLostjgNum3!=0}"><th>${sumList.total.changeUpdateLostjgNum3}</th></c:if>
 						<c:if test="${sumList.total.changeUpdateLostjgNum4!=0}"><th>${sumList.total.changeUpdateLostjgNum4}</th></c:if>
 						<c:if test="${sumList.total.changeUpdateLostjgNum5!=0}"><th>${sumList.total.changeUpdateLostjgNum5}</th></c:if> 
 						
-						 <c:if test="${sumList.total.changeUpdateReplaceqyNum!=0}"><th>${sumList.total.changeUpdateReplaceqyNum}</th></c:if>
+						<c:if test="${sumList.total.changeUpdateReplaceqyNum!=0}"><th>${sumList.total.changeUpdateReplaceqyNum}</th></c:if>
 						<c:if test="${sumList.total.changeUpdateReplaceqyNum2!=0}"><th>${sumList.total.changeUpdateReplaceqyNum2}</th></c:if>
+						<c:if test="${sumList.total.changeUpdateReplaceqyNum3!=0}"><th>${sumList.total.changeUpdateReplaceqyNum3}</th></c:if>
 						<c:if test="${sumList.total.changeUpdateReplaceqyNum4!=0}"><th>${sumList.total.changeUpdateReplaceqyNum4}</th></c:if>
 						<c:if test="${sumList.total.changeUpdateReplaceqyNum5!=0}"><th>${sumList.total.changeUpdateReplaceqyNum5}</th></c:if>
 						<c:if test="${sumList.total.changeUpdateReplacegrQNum!=0}"><th>${sumList.total.changeUpdateReplacegrQNum}</th></c:if>
 						<c:if test="${sumList.total.changeUpdateReplacegrQNum2!=0}"><th>${sumList.total.changeUpdateReplacegrQNum2}</th></c:if>
+						<c:if test="${sumList.total.changeUpdateReplacegrQNum3!=0}"><th>${sumList.total.changeUpdateReplacegrQNum3}</th></c:if>
 						<c:if test="${sumList.total.changeUpdateReplacegrQNum4!=0}"><th>${sumList.total.changeUpdateReplacegrQNum4}</th></c:if>
 						<c:if test="${sumList.total.changeUpdateReplacegrQNum5!=0}"><th>${sumList.total.changeUpdateReplacegrQNum5}</th></c:if>
 						<c:if test="${sumList.total.changeUpdateReplacegrGNum!=0}"><th>${sumList.total.changeUpdateReplacegrGNum}</th></c:if>
 						<c:if test="${sumList.total.changeUpdateReplacegrGNum2!=0}"><th>${sumList.total.changeUpdateReplacegrGNum2}</th></c:if>
+						<c:if test="${sumList.total.changeUpdateReplacegrGNum3!=0}"><th>${sumList.total.changeUpdateReplacegrGNum3}</th></c:if>
 						<c:if test="${sumList.total.changeUpdateReplacegrGNum4!=0}"><th>${sumList.totalchangeUpdateReplacegrGNum4}</th></c:if>
 						<c:if test="${sumList.total.changeUpdateReplacegrGNum5!=0}"><th>${sumList.total.changeUpdateReplacegrGNum5}</th></c:if>
 						<c:if test="${sumList.total.changeUpdateReplacejgNum!=0}"><th>${sumList.total.changeUpdateReplacejgNum}</th></c:if>
 						<c:if test="${sumList.total.changeUpdateReplacejgNum2!=0}"><th>${sumList.total.changeUpdateReplacejgNum2}</th></c:if>
+						<c:if test="${sumList.total.changeUpdateReplacejgNum3!=0}"><th>${sumList.total.changeUpdateReplacejgNum3}</th></c:if>
 						<c:if test="${sumList.total.changeUpdateReplacejgNum4!=0}"><th>${sumList.total.changeUpdateReplacejgNum4}</th></c:if>
 						<c:if test="${sumList.total.changeUpdateReplacejgNum5!=0}"><th>${sumList.total.changeUpdateReplacejgNum5}</th></c:if> 
 						</c:if>
