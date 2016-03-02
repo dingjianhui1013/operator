@@ -188,6 +188,7 @@ public class ConfigChargeAgentController extends BaseController {
 		bound.setProduct(product);
 		configChargeAgentBoundConfigProductService.save(bound);
 	
+		logUtil.saveSysLog("计费策略绑定","产品id为"+productId+"的产品绑定id为"+agentId+"的计费策略模板成功",null);
 		addMessage(redirectAttributes, "绑定计费策略成功！");
 		return "redirect:" + Global.getAdminPath()+"/profile/configChargeAgent/bindListNew?productId="+productId;
 		
