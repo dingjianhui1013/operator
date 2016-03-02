@@ -713,6 +713,7 @@ public class WorkDealInfoAuditController extends BaseController {
 			quitMoney.setQuitDate(new Date());
 			quitMoney.setQuitWindow(UserUtils.getUser().getOffice().getName());
 			quitMoney.setQuitReason("现金退费");
+			quitMoney.setRession("现金退费");
 			quitMoney.setWorkDealInfo(workDealInfo);
 			quitMoney.setStatus("1");
 			financeQuitMoneyService.save(quitMoney);
@@ -1209,7 +1210,7 @@ public class WorkDealInfoAuditController extends BaseController {
 					quitMoney.setQuitMoney(oldAdd - newAdd);
 					quitMoney.setQuitDate(new Date());
 					quitMoney.setQuitWindow(UserUtils.getUser().getOffice().getName());
-					quitMoney.setQuitReason("现金退费");
+					quitMoney.setQuitReason("变更缴费类型退费");
 					quitMoney.setWorkDealInfo(dealInfo);
 					quitMoney.setStatus("1");
 					financeQuitMoneyService.save(quitMoney);

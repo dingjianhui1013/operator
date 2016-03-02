@@ -16,8 +16,8 @@
 		return false;
 	}
 
-	function quitMoney(id, residueMoney) {
-
+	function quitMoney(id , residueMoney) {
+		var ression = document.getElementById(id).value;
 		var url = "${ctx}/finance/financeQuitMoney/quitMoneyWorkDealInfo?quitMoneyId="
 				+ id;
 		var html = "<div style='padding:30px;'>"
@@ -25,7 +25,7 @@
 				+ residueMoney
 				+ "</br>"
 				+ "</br>"
-				+ "<span style='font-weight:bold;'>退费原因：</span>变更缴费类型操作记录</div>";
+				+ "<span style='font-weight:bold;'>退费原因：</span>"+ression+"</div>";
 		var quitReason;
 		var submit = function(v, h, f) {
 			if (v == "close") {
@@ -201,9 +201,14 @@
 							test="${financeQuitMoney.status==null }">已完成</c:if></td>
 					<td><c:if test="${financeQuitMoney.status==1 }">
 							<a
-								href="javascript:quitMoney(${financeQuitMoney.id }, ${financeQuitMoney.quitMoney})">确认退费</a>
-
-						</c:if></td>
+								href="javascript:quitMoney(${financeQuitMoney.id }, ${financeQuitMoney.workDealInfo.workPayInfo.workTotalMoney})">确认退费</a>
+							
+							<input type="hidden" value="${financeQuitMoney.quitReason }" id="${financeQuitMoney.id }" />
+						</c:if>
+						
+					
+						
+						</td>
 
 				</tr>
 			</c:forEach>
