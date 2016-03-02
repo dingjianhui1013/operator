@@ -10,10 +10,12 @@ import javax.persistence.Transient;
 public class Projectcount {
 	private Integer add1;
 	private Integer add2;
+	private Integer add3;
 	private Integer add4;
 	private Integer add5;
 	private Integer renew1;
 	private Integer renew2;
+	private Integer renew3;
 	private Integer renew4;
 	private Integer renew5;
 	private Integer lostCerate;//遗失补办
@@ -21,24 +23,29 @@ public class Projectcount {
 	private Integer modifyNum;//变更数量
 	private Integer updateChangeNum;//更新+变更 
 	private Integer updateChangeNum2;//更新+变更 2年
+	private Integer updateChangeNum3;
 	private Integer updateChangeNum4;//更新+变更 4年
 	private Integer updateChangeNum5;//更新+变更 5年
 	private Integer updateLostNum;//更新+遗失补办 
 	private Integer updateLostNum2;//更新+遗失补办 2年
+	private Integer updateLostNum3;
 	private Integer updateLostNum4;//更新+遗失补办 4年
 	private Integer updateLostNum5;//更新+遗失补办 5年
 	private Integer updateReplaceNum;//更新+损坏更换 
 	private Integer updateReplaceNum2;//更新+损坏更换 2年
+	private Integer updateReplaceNum3;
 	private Integer updateReplaceNum4;//更新+损坏更换 4年
 	private Integer updateReplaceNum5;//更新+损坏更换 5年
 	private Integer changeLostNum;//变更+遗失补办 
 	private Integer changeReplaceNum;//变更+损坏更换 
 	private Integer changeUpdateLostNum;//更新+变更+遗失补办  
 	private Integer changeUpdateLostNum2;//更新+变更+遗失补办  2年
+	private Integer changeUpdateLostNum3;
 	private Integer changeUpdateLostNum4;//更新+变更+遗失补办 4年
 	private Integer changeUpdateLostNum5;//更新+变更+遗失补办  5年
 	private Integer changeUpdateReplaceNum;//更新+变更+损坏更换 
 	private Integer changeUpdateReplaceNum2;//更新+变更+损坏更换 2年
+	private Integer changeUpdateReplaceNum3;
 	private Integer changeUpdateReplaceNum4;//更新+变更+损坏更换 4年
 	private Integer changeUpdateReplaceNum5;//更新+变更+损坏更换 5年
 	public Projectcount() {
@@ -46,21 +53,23 @@ public class Projectcount {
 	}
 	
 	
-	public Projectcount(Integer add1, Integer add2, Integer add4, Integer add5, Integer renew1, Integer renew2,
+	public Projectcount(Integer add1, Integer add2, Integer add3, Integer add4, Integer add5, Integer renew1, Integer renew2, Integer renew3,
 			Integer renew4, Integer renew5, Integer lostCerate, Integer damageCertificate, Integer modifyNum,
-			Integer updateChangeNum, Integer updateChangeNum2, Integer updateChangeNum4, Integer updateChangeNum5,
-			Integer updateLostNum, Integer updateLostNum2, Integer updateLostNum4, Integer updateLostNum5,
-			Integer updateReplaceNum, Integer updateReplaceNum2, Integer updateReplaceNum4, Integer updateReplaceNum5,
-			Integer changeLostNum, Integer changeReplaceNum, Integer changeUpdateLostNum, Integer changeUpdateLostNum2,
+			Integer updateChangeNum, Integer updateChangeNum2, Integer updateChangeNum3, Integer updateChangeNum4, Integer updateChangeNum5,
+			Integer updateLostNum, Integer updateLostNum2, Integer updateLostNum3, Integer updateLostNum4, Integer updateLostNum5,
+			Integer updateReplaceNum, Integer updateReplaceNum2, Integer updateReplaceNum3,Integer updateReplaceNum4, Integer updateReplaceNum5,
+			Integer changeLostNum, Integer changeReplaceNum, Integer changeUpdateLostNum, Integer changeUpdateLostNum2, Integer changeUpdateLostNum3,
 			Integer changeUpdateLostNum4, Integer changeUpdateLostNum5, Integer changeUpdateReplaceNum,
-			Integer changeUpdateReplaceNum2, Integer changeUpdateReplaceNum4, Integer changeUpdateReplaceNum5) {
+			Integer changeUpdateReplaceNum2, Integer changeUpdateReplaceNum3, Integer changeUpdateReplaceNum4, Integer changeUpdateReplaceNum5) {
 		super();
 		this.add1 = add1;
 		this.add2 = add2;
+		this.add3 = add3;
 		this.add4 = add4;
 		this.add5 = add5;
 		this.renew1 = renew1;
 		this.renew2 = renew2;
+		this.renew3 = renew3;
 		this.renew4 = renew4;
 		this.renew5 = renew5;
 		this.lostCerate = lostCerate;
@@ -68,24 +77,29 @@ public class Projectcount {
 		this.modifyNum = modifyNum;
 		this.updateChangeNum = updateChangeNum;
 		this.updateChangeNum2 = updateChangeNum2;
+		this.updateChangeNum3 = updateChangeNum3;
 		this.updateChangeNum4 = updateChangeNum4;
 		this.updateChangeNum5 = updateChangeNum5;
 		this.updateLostNum = updateLostNum;
 		this.updateLostNum2 = updateLostNum2;
+		this.updateLostNum3 = updateLostNum3;
 		this.updateLostNum4 = updateLostNum4;
 		this.updateLostNum5 = updateLostNum5;
 		this.updateReplaceNum = updateReplaceNum;
 		this.updateReplaceNum2 = updateReplaceNum2;
+		this.updateReplaceNum3 = updateReplaceNum3;
 		this.updateReplaceNum4 = updateReplaceNum4;
 		this.updateReplaceNum5 = updateReplaceNum5;
 		this.changeLostNum = changeLostNum;
 		this.changeReplaceNum = changeReplaceNum;
 		this.changeUpdateLostNum = changeUpdateLostNum;
 		this.changeUpdateLostNum2 = changeUpdateLostNum2;
+		this.changeUpdateLostNum3 = changeUpdateLostNum3;
 		this.changeUpdateLostNum4 = changeUpdateLostNum4;
 		this.changeUpdateLostNum5 = changeUpdateLostNum5;
 		this.changeUpdateReplaceNum = changeUpdateReplaceNum;
 		this.changeUpdateReplaceNum2 = changeUpdateReplaceNum2;
+		this.changeUpdateReplaceNum3 = changeUpdateReplaceNum3;
 		this.changeUpdateReplaceNum4 = changeUpdateReplaceNum4;
 		this.changeUpdateReplaceNum5 = changeUpdateReplaceNum5;
 	}
@@ -370,6 +384,79 @@ public class Projectcount {
 	public void setChangeUpdateReplaceNum5(Integer changeUpdateReplaceNum5) {
 		this.changeUpdateReplaceNum5 = changeUpdateReplaceNum5;
 	}
+
+	@Transient
+	public Integer getAdd3() {
+		return add3;
+	}
+
+
+	public void setAdd3(Integer add3) {
+		this.add3 = add3;
+	}
+
+	@Transient
+	public Integer getRenew3() {
+		return renew3;
+	}
+
+
+	public void setRenew3(Integer renew3) {
+		this.renew3 = renew3;
+	}
+
+	@Transient
+	public Integer getUpdateChangeNum3() {
+		return updateChangeNum3;
+	}
+
+
+	public void setUpdateChangeNum3(Integer updateChangeNum3) {
+		this.updateChangeNum3 = updateChangeNum3;
+	}
+
+	@Transient
+	public Integer getUpdateLostNum3() {
+		return updateLostNum3;
+	}
+
+
+	public void setUpdateLostNum3(Integer updateLostNum3) {
+		this.updateLostNum3 = updateLostNum3;
+	}
+
+	@Transient
+	public Integer getUpdateReplaceNum3() {
+		return updateReplaceNum3;
+	}
+
+
+	public void setUpdateReplaceNum3(Integer updateReplaceNum3) {
+		this.updateReplaceNum3 = updateReplaceNum3;
+	}
+
+	@Transient
+	public Integer getChangeUpdateLostNum3() {
+		return changeUpdateLostNum3;
+	}
+
+
+	public void setChangeUpdateLostNum3(Integer changeUpdateLostNum3) {
+		this.changeUpdateLostNum3 = changeUpdateLostNum3;
+	}
+
+	@Transient
+	public Integer getChangeUpdateReplaceNum3() {
+		return changeUpdateReplaceNum3;
+	}
+
+
+	public void setChangeUpdateReplaceNum3(Integer changeUpdateReplaceNum3) {
+		this.changeUpdateReplaceNum3 = changeUpdateReplaceNum3;
+	}
+	
+	
+	
 	
 	
 }
