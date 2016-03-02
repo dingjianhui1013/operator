@@ -169,6 +169,9 @@ public class ProjectCertificationDetailsController extends BaseController {
 		projectcount.setAdd2(workDealInfoService.getCertAppYearInfoCount1(
 				startTime,endTime, officeId, 2,alias,
 				WorkDealInfoType.TYPE_ADD_CERT));
+		projectcount.setAdd3(workDealInfoService.getCertAppYearInfoCount1(
+				startTime,endTime, officeId, 3,alias,
+				WorkDealInfoType.TYPE_ADD_CERT));
 		projectcount.setAdd4(workDealInfoService.getCertAppYearInfoCount1(
 				startTime,endTime, officeId, 4, alias,
 				WorkDealInfoType.TYPE_ADD_CERT));
@@ -180,6 +183,9 @@ public class ProjectCertificationDetailsController extends BaseController {
 				WorkDealInfoType.TYPE_UPDATE_CERT));
 		projectcount.setRenew2(workDealInfoService.getCertAppYearInfoCountOneDeal1(
 				startTime,endTime, officeId, 2, alias,
+				WorkDealInfoType.TYPE_UPDATE_CERT));
+		projectcount.setRenew3(workDealInfoService.getCertAppYearInfoCountOneDeal1(
+				startTime,endTime, officeId, 3, alias,
 				WorkDealInfoType.TYPE_UPDATE_CERT));
 		projectcount.setRenew4(workDealInfoService.getCertAppYearInfoCountOneDeal1(
 				startTime,endTime, officeId, 4, alias,
@@ -205,6 +211,9 @@ public class ProjectCertificationDetailsController extends BaseController {
 			projectcount.setUpdateChangeNum2(workDealInfoService.getCertAppYearInfoUpdateChangeNum1(
 					startTime,endTime, officeId, 2, alias,
 					WorkDealInfoType.TYPE_UPDATE_CERT,WorkDealInfoType.TYPE_INFORMATION_REROUTE));
+			projectcount.setUpdateChangeNum3(workDealInfoService.getCertAppYearInfoUpdateChangeNum1(
+					startTime,endTime, officeId, 3, alias,
+					WorkDealInfoType.TYPE_UPDATE_CERT,WorkDealInfoType.TYPE_INFORMATION_REROUTE));
 			projectcount.setUpdateChangeNum4(workDealInfoService.getCertAppYearInfoUpdateChangeNum1(
 					startTime,endTime, officeId, 4, alias,
 					WorkDealInfoType.TYPE_UPDATE_CERT,WorkDealInfoType.TYPE_INFORMATION_REROUTE));
@@ -220,6 +229,11 @@ public class ProjectCertificationDetailsController extends BaseController {
 					startTime,endTime, officeId, 2, alias,
 					WorkDealInfoType.TYPE_UPDATE_CERT,WorkDealInfoType.TYPE_LOST_CHILD)
 					);
+			projectcount.setUpdateLostNum3(workDealInfoService.getCertAppYearInfoUpdateLostReplaceNum1(
+					startTime,endTime, officeId, 3, alias,
+					WorkDealInfoType.TYPE_UPDATE_CERT,WorkDealInfoType.TYPE_LOST_CHILD)
+					);
+			
 			projectcount.setUpdateLostNum4(workDealInfoService.getCertAppYearInfoUpdateLostReplaceNum1(
 					startTime,endTime, officeId, 4, alias,
 					WorkDealInfoType.TYPE_UPDATE_CERT,WorkDealInfoType.TYPE_LOST_CHILD)
@@ -235,6 +249,9 @@ public class ProjectCertificationDetailsController extends BaseController {
 					WorkDealInfoType.TYPE_UPDATE_CERT,WorkDealInfoType.TYPE_DAMAGED_REPLACED));
 			projectcount.setUpdateReplaceNum2(workDealInfoService.getCertAppYearInfoUpdateLostReplaceNum1(
 					startTime,endTime, officeId, 2, alias,
+					WorkDealInfoType.TYPE_UPDATE_CERT,WorkDealInfoType.TYPE_DAMAGED_REPLACED));
+			projectcount.setUpdateReplaceNum3(workDealInfoService.getCertAppYearInfoUpdateLostReplaceNum1(
+					startTime,endTime, officeId, 3, alias,
 					WorkDealInfoType.TYPE_UPDATE_CERT,WorkDealInfoType.TYPE_DAMAGED_REPLACED));
 			projectcount.setUpdateReplaceNum4(workDealInfoService.getCertAppYearInfoUpdateLostReplaceNum1(
 					startTime,endTime, officeId, 4, alias,
@@ -260,6 +277,9 @@ public class ProjectCertificationDetailsController extends BaseController {
 			projectcount.setChangeUpdateLostNum2(workDealInfoService.getCertAppYearInfoChangeLostReplaceUpdateNum1(
 					startTime,endTime, officeId, 2, alias,
 					WorkDealInfoType.TYPE_INFORMATION_REROUTE,WorkDealInfoType.TYPE_LOST_CHILD,WorkDealInfoType.TYPE_UPDATE_CERT));
+			projectcount.setChangeUpdateLostNum3(workDealInfoService.getCertAppYearInfoChangeLostReplaceUpdateNum1(
+					startTime,endTime, officeId, 3, alias,
+					WorkDealInfoType.TYPE_INFORMATION_REROUTE,WorkDealInfoType.TYPE_LOST_CHILD,WorkDealInfoType.TYPE_UPDATE_CERT));
 			projectcount.setChangeUpdateLostNum4(workDealInfoService.getCertAppYearInfoChangeLostReplaceUpdateNum1(
 					startTime,endTime, officeId, 4, alias,
 					WorkDealInfoType.TYPE_INFORMATION_REROUTE,WorkDealInfoType.TYPE_LOST_CHILD,WorkDealInfoType.TYPE_UPDATE_CERT));
@@ -273,6 +293,9 @@ public class ProjectCertificationDetailsController extends BaseController {
 					WorkDealInfoType.TYPE_INFORMATION_REROUTE,WorkDealInfoType.TYPE_DAMAGED_REPLACED,WorkDealInfoType.TYPE_UPDATE_CERT));
 			projectcount.setChangeUpdateReplaceNum2(workDealInfoService.getCertAppYearInfoChangeLostReplaceUpdateNum1(
 					startTime,endTime, officeId, 2, alias,
+					WorkDealInfoType.TYPE_INFORMATION_REROUTE,WorkDealInfoType.TYPE_DAMAGED_REPLACED,WorkDealInfoType.TYPE_UPDATE_CERT));
+			projectcount.setChangeUpdateReplaceNum3(workDealInfoService.getCertAppYearInfoChangeLostReplaceUpdateNum1(
+					startTime,endTime, officeId, 3, alias,
 					WorkDealInfoType.TYPE_INFORMATION_REROUTE,WorkDealInfoType.TYPE_DAMAGED_REPLACED,WorkDealInfoType.TYPE_UPDATE_CERT));
 			projectcount.setChangeUpdateReplaceNum4(workDealInfoService.getCertAppYearInfoChangeLostReplaceUpdateNum1(
 					startTime,endTime, officeId, 4, alias,
@@ -600,7 +623,10 @@ public class ProjectCertificationDetailsController extends BaseController {
 				WorkDealInfoType.TYPE_ADD_CERT) + "张； 两年期证书"
 				+ workDealInfoService.getCertAppYearInfoCount1(
 						startTime,endTime, officeId, 2, alias,
-						WorkDealInfoType.TYPE_ADD_CERT) + "张；  四年期证书" + workDealInfoService.getCertAppYearInfoCount1(
+						WorkDealInfoType.TYPE_ADD_CERT) +  "张； 三年期证书"
+						+ workDealInfoService.getCertAppYearInfoCount1(
+								startTime,endTime, officeId, 3, alias,
+								WorkDealInfoType.TYPE_ADD_CERT) + "张；  四年期证书" + workDealInfoService.getCertAppYearInfoCount1(
 								startTime,endTime, officeId, 4, alias,
 								WorkDealInfoType.TYPE_ADD_CERT) + "张；五年期证书"+workDealInfoService.getCertAppYearInfoCount1(
 										startTime,endTime, officeId, 5, alias,
@@ -616,7 +642,9 @@ public class ProjectCertificationDetailsController extends BaseController {
 		cell.setCellValue("更新 一年期证书" + workDealInfoService.getCertAppYearInfoCountOneDeal1(startTime,endTime, officeId, 1, alias,
 				WorkDealInfoType.TYPE_UPDATE_CERT) + "张； 两年期证书"
 				+ workDealInfoService.getCertAppYearInfoCountOneDeal1(startTime,endTime, officeId, 2, alias,
-						WorkDealInfoType.TYPE_UPDATE_CERT) + "张；  四年期证书" + workDealInfoService.getCertAppYearInfoCountOneDeal1(startTime,endTime, officeId, 4, alias,
+						WorkDealInfoType.TYPE_UPDATE_CERT) + "张； 三年期证书"
+						+ workDealInfoService.getCertAppYearInfoCountOneDeal1(startTime,endTime, officeId, 3, alias,
+								WorkDealInfoType.TYPE_UPDATE_CERT) + "张；  四年期证书" + workDealInfoService.getCertAppYearInfoCountOneDeal1(startTime,endTime, officeId, 4, alias,
 								WorkDealInfoType.TYPE_UPDATE_CERT) + "张；五年期证书"+workDealInfoService.getCertAppYearInfoCountOneDeal1(startTime,endTime, officeId, 5, alias,
 										WorkDealInfoType.TYPE_UPDATE_CERT)+"张");
 		sheet.addMergedRegion(new CellRangeAddress(1, 1, 1, 14));
@@ -646,7 +674,10 @@ public class ProjectCertificationDetailsController extends BaseController {
 				WorkDealInfoType.TYPE_UPDATE_CERT,WorkDealInfoType.TYPE_INFORMATION_REROUTE) + "张； 两年期证书"
 				+ workDealInfoService.getCertAppYearInfoUpdateChangeNum1(
 						startTime,endTime, officeId, 2, alias,
-						WorkDealInfoType.TYPE_UPDATE_CERT,WorkDealInfoType.TYPE_INFORMATION_REROUTE) + "张；  四年期证书" + workDealInfoService.getCertAppYearInfoUpdateChangeNum1(
+						WorkDealInfoType.TYPE_UPDATE_CERT,WorkDealInfoType.TYPE_INFORMATION_REROUTE) +  "张； 三年期证书"
+						+ workDealInfoService.getCertAppYearInfoUpdateChangeNum1(
+								startTime,endTime, officeId, 3, alias,
+								WorkDealInfoType.TYPE_UPDATE_CERT,WorkDealInfoType.TYPE_INFORMATION_REROUTE) + "张；  四年期证书" + workDealInfoService.getCertAppYearInfoUpdateChangeNum1(
 								startTime,endTime, officeId, 4, alias,
 								WorkDealInfoType.TYPE_UPDATE_CERT,WorkDealInfoType.TYPE_INFORMATION_REROUTE) + "张；五年期证书"+workDealInfoService.getCertAppYearInfoUpdateChangeNum1(
 										startTime,endTime, officeId, 5, alias,
@@ -664,7 +695,10 @@ public class ProjectCertificationDetailsController extends BaseController {
 				WorkDealInfoType.TYPE_UPDATE_CERT,WorkDealInfoType.TYPE_LOST_CHILD) + "张； 两年期证书"
 				+ workDealInfoService.getCertAppYearInfoUpdateLostReplaceNum1(
 						startTime,endTime, officeId, 2, alias,
-						WorkDealInfoType.TYPE_UPDATE_CERT,WorkDealInfoType.TYPE_LOST_CHILD) + "张；  四年期证书" + workDealInfoService.getCertAppYearInfoUpdateLostReplaceNum1(
+						WorkDealInfoType.TYPE_UPDATE_CERT,WorkDealInfoType.TYPE_LOST_CHILD) + "张； 三年期证书"
+						+ workDealInfoService.getCertAppYearInfoUpdateLostReplaceNum1(
+								startTime,endTime, officeId, 3, alias,
+								WorkDealInfoType.TYPE_UPDATE_CERT,WorkDealInfoType.TYPE_LOST_CHILD) + "张；  四年期证书" + workDealInfoService.getCertAppYearInfoUpdateLostReplaceNum1(
 								startTime,endTime, officeId, 4, alias,
 								WorkDealInfoType.TYPE_UPDATE_CERT,WorkDealInfoType.TYPE_LOST_CHILD) + "张；五年期证书"+workDealInfoService.getCertAppYearInfoUpdateLostReplaceNum1(
 										startTime,endTime, officeId, 5, alias,
@@ -681,7 +715,10 @@ public class ProjectCertificationDetailsController extends BaseController {
 				WorkDealInfoType.TYPE_UPDATE_CERT,WorkDealInfoType.TYPE_DAMAGED_REPLACED) + "张； 两年期证书"
 				+ workDealInfoService.getCertAppYearInfoUpdateLostReplaceNum1(
 						startTime,endTime, officeId, 2, alias,
-						WorkDealInfoType.TYPE_UPDATE_CERT,WorkDealInfoType.TYPE_DAMAGED_REPLACED) + "张；  四年期证书" + workDealInfoService.getCertAppYearInfoUpdateLostReplaceNum1(
+						WorkDealInfoType.TYPE_UPDATE_CERT,WorkDealInfoType.TYPE_DAMAGED_REPLACED) + "张； 三年期证书"
+						+ workDealInfoService.getCertAppYearInfoUpdateLostReplaceNum1(
+								startTime,endTime, officeId, 3, alias,
+								WorkDealInfoType.TYPE_UPDATE_CERT,WorkDealInfoType.TYPE_DAMAGED_REPLACED) + "张；  四年期证书" + workDealInfoService.getCertAppYearInfoUpdateLostReplaceNum1(
 								startTime,endTime, officeId, 4, alias,
 								WorkDealInfoType.TYPE_UPDATE_CERT,WorkDealInfoType.TYPE_DAMAGED_REPLACED) + "张；五年期证书"+workDealInfoService.getCertAppYearInfoUpdateLostReplaceNum1(
 										startTime,endTime, officeId, 5, alias,
@@ -712,7 +749,10 @@ public class ProjectCertificationDetailsController extends BaseController {
 				WorkDealInfoType.TYPE_INFORMATION_REROUTE,WorkDealInfoType.TYPE_LOST_CHILD,WorkDealInfoType.TYPE_UPDATE_CERT) + "张； 两年期证书"
 				+ workDealInfoService.getCertAppYearInfoChangeLostReplaceUpdateNum1(
 						startTime,endTime, officeId, 2, alias,
-						WorkDealInfoType.TYPE_INFORMATION_REROUTE,WorkDealInfoType.TYPE_LOST_CHILD,WorkDealInfoType.TYPE_UPDATE_CERT) + "张；  四年期证书" + workDealInfoService.getCertAppYearInfoChangeLostReplaceUpdateNum1(
+						WorkDealInfoType.TYPE_INFORMATION_REROUTE,WorkDealInfoType.TYPE_LOST_CHILD,WorkDealInfoType.TYPE_UPDATE_CERT) + "张； 三年期证书"
+						+ workDealInfoService.getCertAppYearInfoChangeLostReplaceUpdateNum1(
+								startTime,endTime, officeId, 3, alias,
+								WorkDealInfoType.TYPE_INFORMATION_REROUTE,WorkDealInfoType.TYPE_LOST_CHILD,WorkDealInfoType.TYPE_UPDATE_CERT) + "张；  四年期证书" + workDealInfoService.getCertAppYearInfoChangeLostReplaceUpdateNum1(
 								startTime,endTime, officeId, 4, alias,
 								WorkDealInfoType.TYPE_INFORMATION_REROUTE,WorkDealInfoType.TYPE_LOST_CHILD,WorkDealInfoType.TYPE_UPDATE_CERT) + "张；五年期证书"+workDealInfoService.getCertAppYearInfoChangeLostReplaceUpdateNum1(
 										startTime,endTime, officeId, 5, alias,
@@ -729,7 +769,10 @@ public class ProjectCertificationDetailsController extends BaseController {
 				WorkDealInfoType.TYPE_INFORMATION_REROUTE,WorkDealInfoType.TYPE_DAMAGED_REPLACED,WorkDealInfoType.TYPE_UPDATE_CERT) + "张； 两年期证书"
 				+ workDealInfoService.getCertAppYearInfoChangeLostReplaceUpdateNum1(
 						startTime,endTime, officeId, 2, alias,
-						WorkDealInfoType.TYPE_INFORMATION_REROUTE,WorkDealInfoType.TYPE_DAMAGED_REPLACED,WorkDealInfoType.TYPE_UPDATE_CERT) + "张；  四年期证书" + workDealInfoService.getCertAppYearInfoChangeLostReplaceUpdateNum1(
+						WorkDealInfoType.TYPE_INFORMATION_REROUTE,WorkDealInfoType.TYPE_DAMAGED_REPLACED,WorkDealInfoType.TYPE_UPDATE_CERT) + "张； 三年期证书"
+						+ workDealInfoService.getCertAppYearInfoChangeLostReplaceUpdateNum1(
+								startTime,endTime, officeId, 3, alias,
+								WorkDealInfoType.TYPE_INFORMATION_REROUTE,WorkDealInfoType.TYPE_DAMAGED_REPLACED,WorkDealInfoType.TYPE_UPDATE_CERT) + "张；  四年期证书" + workDealInfoService.getCertAppYearInfoChangeLostReplaceUpdateNum1(
 								startTime,endTime, officeId, 4, alias,
 								WorkDealInfoType.TYPE_INFORMATION_REROUTE,WorkDealInfoType.TYPE_DAMAGED_REPLACED,WorkDealInfoType.TYPE_UPDATE_CERT) + "张；五年期证书"+workDealInfoService.getCertAppYearInfoChangeLostReplaceUpdateNum1(
 										startTime,endTime, officeId, 5, alias,
