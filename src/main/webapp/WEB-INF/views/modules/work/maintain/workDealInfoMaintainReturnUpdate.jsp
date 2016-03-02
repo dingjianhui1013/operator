@@ -759,10 +759,10 @@
 							<th><span class="prompt" style="color: red; display: none;">*</span>证书持有人手机号:</th>
 							<td><input type="text" name="contactPhone"
 								id="contactPhone1" maxlength="11" class="number"
-								value="${workDealInfo.workUser.contactPhone }" oninput="count('contactPhone1','zjtcount')" onblur="qxCount('zjtcount')" onfocus="hqcount('contactPhone1','zjtcount')"/><span id="zjtcount" style="color: red; margin-left: 10px"></span> <input
+								value="<fmt:formatNumber pattern="#">${workDealInfo.workUser.contactPhone }</fmt:formatNumber>" oninput="count('contactPhone1','zjtcount')" onblur="qxCount('zjtcount')" onfocus="hqcount('contactPhone1','zjtcount')"/><span id="zjtcount" style="color: red; margin-left: 10px"></span> <input
 								type="hidden" name="contactPhone" id="contactPhone"
 								maxlength="11" class="number" disabled="disabled"
-								value="${workDealInfo.workUser.contactPhone }" /></td>
+								value="<fmt:formatNumber pattern="#">${workDealInfo.workUser.contactPhone }</fmt:formatNumber>" /></td>
 							<th><span class="prompt" style="color: red; display: none;">*</span>业务系统UID:</th>
 							<td><input type="text" name="contactTel" id="contactTel1"
 								maxlength="20" value="${workDealInfo.workUser.contactTel }" oninput="count('contactTel1','ywcount')" onblur="qxCount('ywcount')" onfocus="hqcount('contactTel1','ywcount')"/><span id="ywcount" style="color: red; margin-left: 10px"></span>

@@ -540,11 +540,11 @@ function revoke(dealInfoId){
 							<th><span class="prompt" style="color:red; display: none;">*</span>证书持有人手机号:</th>
 							<td><input type="text" name="contactPhone" id="contactPhone1"  maxlength="11" class="number"
 								<%-- <c:if test="${empty change}">disabled="disabled"</c:if> --%>
-								value="${workDealInfo.workUser.contactPhone }" />
+								value="<fmt:formatNumber pattern="#">${workDealInfo.workUser.contactPhone }</fmt:formatNumber>" />
 								
 								<input type="hidden" name="contactPhone" id="contactPhone"  maxlength="11" class="number" disabled="disabled"
 								<%-- <c:if test="${empty change}">disabled="disabled"</c:if> --%>
-								value="${workDealInfo.workUser.contactPhone }" />
+								value="<fmt:formatNumber pattern="#">${workDealInfo.workUser.contactPhone }</fmt:formatNumber>" />
 								
 								</td>
 							<th><span class="prompt" style="color:red; display: none;">*</span>业务系统UID:</th>
