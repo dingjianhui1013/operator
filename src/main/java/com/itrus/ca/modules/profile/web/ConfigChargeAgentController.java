@@ -450,8 +450,20 @@ public class ConfigChargeAgentController extends BaseController {
 		
 		Page<ConfigAgentBoundDealInfo> dealInfos = configAgentBoundDealInfoService.findByAgentId(new Page<ConfigAgentBoundDealInfo>(request, response),agentId,handle,startTime,endTime,areaId,officeId,congifApplyId,productId);
 		
+		/*
+		 * 根据workDealInfo的officeId来获取业务的办理网点     避免当User变化网点时业务办理网点跟着变化
+		 * */
+		List<Office> boundOffices = new ArrayList<Office>();
+		Office o = null;
+		List<ConfigAgentBoundDealInfo> lists = dealInfos.getList();
+		for(ConfigAgentBoundDealInfo configAgentBoundDealInfo:lists){
+			WorkDealInfo dealInfo = configAgentBoundDealInfo.getDealInfo();
+			o = officeService.findById(dealInfo.getOfficeId());
+			boundOffices.add(o);
+		}
 		
 		model.addAttribute("page",dealInfos);
+		model.addAttribute("boundOffices", boundOffices);
 		model.addAttribute("agentId", agentId);
 
 		model.addAttribute("wdiType", WorkDealInfoType.WorkDealInfoTypeMap);
