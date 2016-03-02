@@ -298,6 +298,12 @@
 					<c:if test="${'2'==year}">
 					selected="selected"
 					</c:if>>2年</option>
+					
+				<option value="3"
+					<c:if test="${'3'==year}">
+					selected="selected"
+					</c:if>>3年</option>	
+					
 				<option value="4"
 					<c:if test="${'4'==year}">
 					selected="selected"
