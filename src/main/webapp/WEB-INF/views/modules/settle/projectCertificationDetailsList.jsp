@@ -99,6 +99,9 @@
 		<c:if test="${projectcount.add2>0}">
 			<c:set var="xz" value="${xz+1}"/>
 		</c:if>
+		<c:if test="${projectcount.add3>0}">
+			<c:set var="xz" value="${xz+1}"/>
+		</c:if>
 		<c:if test="${projectcount.add4>0}">
 			<c:set var="xz" value="${xz+1}"/>
 		</c:if>
@@ -111,6 +114,9 @@
 			<c:set var="gx" value="${gx+1}"/>
 		</c:if>
 		<c:if test="${projectcount.renew2>0}">
+			<c:set var="gx" value="${gx+1}"/>
+		</c:if>
+		<c:if test="${projectcount.renew3>0}">
 			<c:set var="gx" value="${gx+1}"/>
 		</c:if>
 		<c:if test="${projectcount.renew4>0}">
@@ -127,6 +133,9 @@
 		<c:if test="${projectcount.updateChangeNum2>0}">
 			<c:set var="gxbg" value="${gxbg+1}"/>
 		</c:if>
+		<c:if test="${projectcount.updateChangeNum3>0}">
+			<c:set var="gxbg" value="${gxbg+1}"/>
+		</c:if>
 		<c:if test="${projectcount.updateChangeNum4>0}">
 			<c:set var="gxbg" value="${gxbg+1}"/>
 		</c:if>
@@ -139,6 +148,9 @@
 			<c:set var="gxysbb" value="${gxysbb+1}"/>
 		</c:if>
 		<c:if test="${projectcount.updateLostNum2>0}">
+			<c:set var="gxysbb" value="${gxysbb+1}"/>
+		</c:if>
+		<c:if test="${projectcount.updateLostNum3>0}">
 			<c:set var="gxysbb" value="${gxysbb+1}"/>
 		</c:if>
 		<c:if test="${projectcount.updateLostNum4>0}">
@@ -155,6 +167,9 @@
 		<c:if test="${projectcount.updateReplaceNum2>0}">
 			<c:set var="gxshbg" value="${gxshbg+1}"/>
 		</c:if>
+		<c:if test="${projectcount.updateReplaceNum3>0}">
+			<c:set var="gxshbg" value="${gxshbg+1}"/>
+		</c:if>
 		<c:if test="${projectcount.updateReplaceNum4>0}">
 			<c:set var="gxshbg" value="${gxshbg+1}"/>
 		</c:if>
@@ -169,6 +184,9 @@
 		<c:if test="${projectcount.changeUpdateLostNum2>0}">
 			<c:set var="gxbgysbb" value="${gxbgysbb+1}"/>
 		</c:if>
+		<c:if test="${projectcount.changeUpdateLostNum3>0}">
+			<c:set var="gxbgysbb" value="${gxbgysbb+1}"/>
+		</c:if>
 		<c:if test="${projectcount.changeUpdateLostNum4>0}">
 			<c:set var="gxbgysbb" value="${gxbgysbb+1}"/>
 		</c:if>
@@ -181,6 +199,9 @@
 			<c:set var="gxbgshbg" value="${gxbgshbg+1}"/>
 		</c:if>
 		<c:if test="${projectcount.changeUpdateReplaceNum2>0}">
+			<c:set var="gxbgshbg" value="${gxbgshbg+1}"/>
+		</c:if>
+		<c:if test="${projectcount.changeUpdateReplaceNum3>0}">
 			<c:set var="gxbgshbg" value="${gxbgshbg+1}"/>
 		</c:if>
 		<c:if test="${projectcount.changeUpdateReplaceNum4>0}">
@@ -235,6 +256,9 @@
 				<c:if test="${projectcount.add2>0}">
 					<td style="text-align:center; vertical-align: middle;">2年</td>
 				</c:if>
+				<c:if test="${projectcount.add3>0}">
+					<td style="text-align:center; vertical-align: middle;">3年</td>
+				</c:if>
 				<c:if test="${projectcount.add4>0}">
 					<td style="text-align:center; vertical-align: middle;">4年</td>
 				</c:if>
@@ -246,6 +270,9 @@
 				</c:if>
 				<c:if test="${projectcount.renew2>0}">
 					<td style="text-align:center; vertical-align: middle;">2年</td>
+				</c:if>
+				<c:if test="${projectcount.renew3>0}">
+					<td style="text-align:center; vertical-align: middle;">3年</td>
 				</c:if>
 				<c:if test="${projectcount.renew4>0}">
 					<td style="text-align:center; vertical-align: middle;">4年</td>
@@ -259,6 +286,9 @@
 				<c:if test="${projectcount.updateChangeNum2>0}">
 					<td style="text-align:center; vertical-align: middle;">2年</td>
 				</c:if>
+					<c:if test="${projectcount.updateChangeNum3>0}">
+					<td style="text-align:center; vertical-align: middle;">3年</td>
+				</c:if>
 				<c:if test="${projectcount.updateChangeNum4>0}">
 					<td style="text-align:center; vertical-align: middle;">4年</td>
 				</c:if>
@@ -270,6 +300,9 @@
 				</c:if>
 				<c:if test="${projectcount.updateLostNum2>0}">
 					<td style="text-align:center; vertical-align: middle;">2年</td>
+				</c:if>
+				<c:if test="${projectcount.updateLostNum3>0}">
+					<td style="text-align:center; vertical-align: middle;">3年</td>
 				</c:if>
 				<c:if test="${projectcount.updateLostNum4>0}">
 					<td style="text-align:center; vertical-align: middle;">4年</td>
@@ -283,6 +316,9 @@
 				<c:if test="${projectcount.updateReplaceNum2>0}">
 					<td style="text-align:center; vertical-align: middle;">2年</td>
 				</c:if>
+				<c:if test="${projectcount.updateReplaceNum3>0}">
+					<td style="text-align:center; vertical-align: middle;">3年</td>
+				</c:if>
 				<c:if test="${projectcount.updateReplaceNum4>0}">
 					<td style="text-align:center; vertical-align: middle;">4年</td>
 				</c:if>
@@ -295,6 +331,9 @@
 				<c:if test="${projectcount.changeUpdateLostNum2>0}">
 					<td style="text-align:center; vertical-align: middle;">2年</td>
 				</c:if>
+				<c:if test="${projectcount.changeUpdateLostNum3>0}">
+					<td style="text-align:center; vertical-align: middle;">3年</td>
+				</c:if>
 				<c:if test="${projectcount.changeUpdateLostNum4>0}">
 					<td style="text-align:center; vertical-align: middle;">4年</td>
 				</c:if>
@@ -306,6 +345,9 @@
 				</c:if>
 				<c:if test="${projectcount.changeUpdateReplaceNum2>0}">
 					<td style="text-align:center; vertical-align: middle;">2年</td>
+				</c:if>
+				<c:if test="${projectcount.changeUpdateReplaceNum3>0}">
+					<td style="text-align:center; vertical-align: middle;">3年</td>
 				</c:if>
 				<c:if test="${projectcount.changeUpdateReplaceNum4>0}">
 					<td style="text-align:center; vertical-align: middle;">4年</td>
@@ -323,6 +365,9 @@
 				<c:if test="${projectcount.add2>0}">
 					<td style="text-align:center; vertical-align: middle;">${projectcount.add2}</td>
 				</c:if>
+				<c:if test="${projectcount.add3>0}">
+					<td style="text-align:center; vertical-align: middle;">${projectcount.add3}</td>
+				</c:if>
 				<c:if test="${projectcount.add4>0}">
 					<td style="text-align:center; vertical-align: middle;">${projectcount.add4}</td>
 				</c:if>
@@ -335,6 +380,9 @@
 				</c:if>
 				<c:if test="${projectcount.renew2>0}">
 					<td style="text-align:center; vertical-align: middle;">${projectcount.renew2}</td>
+				</c:if>
+					<c:if test="${projectcount.renew3>0}">
+					<td style="text-align:center; vertical-align: middle;">${projectcount.renew3}</td>
 				</c:if>
 				<c:if test="${projectcount.renew4>0}">
 					<td style="text-align:center; vertical-align: middle;">${projectcount.renew4}</td>
@@ -357,6 +405,9 @@
 				<c:if test="${projectcount.updateChangeNum2>0}">
 					<td style="text-align:center; vertical-align: middle;">${projectcount.updateChangeNum2}</td>
 				</c:if>
+				<c:if test="${projectcount.updateChangeNum3>0}">
+					<td style="text-align:center; vertical-align: middle;">${projectcount.updateChangeNum3}</td>
+				</c:if>
 				<c:if test="${projectcount.updateChangeNum4>0}">
 					<td style="text-align:center; vertical-align: middle;">${projectcount.updateChangeNum4}</td>
 				</c:if>
@@ -369,6 +420,9 @@
 				<c:if test="${projectcount.updateLostNum2>0}">
 					<td style="text-align:center; vertical-align: middle;">${projectcount.updateLostNum2}</td>
 				</c:if>
+				<c:if test="${projectcount.updateLostNum3>0}">
+					<td style="text-align:center; vertical-align: middle;">${projectcount.updateLostNum3}</td>
+				</c:if>
 				<c:if test="${projectcount.updateLostNum4>0}">
 					<td style="text-align:center; vertical-align: middle;">${projectcount.updateLostNum4}</td>
 				</c:if>
@@ -380,6 +434,9 @@
 				</c:if>
 				<c:if test="${projectcount.updateReplaceNum2>0}">
 					<td style="text-align:center; vertical-align: middle;">${projectcount.updateReplaceNum2}</td>
+				</c:if>
+				<c:if test="${projectcount.updateReplaceNum3>0}">
+					<td style="text-align:center; vertical-align: middle;">${projectcount.updateReplaceNum3}</td>
 				</c:if>
 				<c:if test="${projectcount.updateReplaceNum4>0}">
 					<td style="text-align:center; vertical-align: middle;">${projectcount.updateReplaceNum4}</td>
@@ -399,6 +456,9 @@
 				<c:if test="${projectcount.changeUpdateLostNum2>0}">
 					<td style="text-align:center; vertical-align: middle;">${projectcount.changeUpdateLostNum2}</td>
 				</c:if>
+				<c:if test="${projectcount.changeUpdateLostNum3>0}">
+					<td style="text-align:center; vertical-align: middle;">${projectcount.changeUpdateLostNum3}</td>
+				</c:if>
 				<c:if test="${projectcount.changeUpdateLostNum4>0}">
 					<td style="text-align:center; vertical-align: middle;">${projectcount.changeUpdateLostNum4}</td>
 				</c:if>
@@ -410,6 +470,9 @@
 				</c:if>
 				<c:if test="${projectcount.changeUpdateReplaceNum2>0}">
 					<td style="text-align:center; vertical-align: middle;">${projectcount.changeUpdateReplaceNum2}</td>
+				</c:if>
+				<c:if test="${projectcount.changeUpdateReplaceNum3>0}">
+					<td style="text-align:center; vertical-align: middle;">${projectcount.changeUpdateReplaceNum3}</td>
 				</c:if>
 				<c:if test="${projectcount.changeUpdateReplaceNum4>0}">
 					<td style="text-align:center; vertical-align: middle;">${projectcount.changeUpdateReplaceNum4}</td>
