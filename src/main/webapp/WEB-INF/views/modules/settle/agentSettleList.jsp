@@ -170,7 +170,7 @@
 		 <label>有&nbsp;&nbsp;&nbsp;效&nbsp;&nbsp;&nbsp;期 ：</label> 
 		 <input name="oneYear" type="checkbox" <c:if test="${oneYear}">checked</c:if> value="1">一年&nbsp;&nbsp;&nbsp;
 		 <input name="twoYear" type="checkbox" <c:if test="${twoYear}">checked</c:if> value="1">二年&nbsp;&nbsp;&nbsp;
-		 <input name="twoYear" type="checkbox" <c:if test="${threeYear}">checked</c:if> value="1">三年&nbsp;&nbsp;&nbsp;
+		 <input name="threeYear" type="checkbox" <c:if test="${threeYear}">checked</c:if> value="1">三年&nbsp;&nbsp;&nbsp;
 		 <input name="fourYear" type="checkbox" <c:if test="${fourYear}">checked</c:if> value="1">四年&nbsp;&nbsp;&nbsp;
 		 <input name="fiveYear" type="checkbox" <c:if test="${fiveYear}">checked</c:if> value="1">五年&nbsp;&nbsp;&nbsp;
 		</div>
