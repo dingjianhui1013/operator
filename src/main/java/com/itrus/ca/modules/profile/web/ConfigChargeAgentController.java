@@ -211,7 +211,10 @@ public class ConfigChargeAgentController extends BaseController {
 			e.printStackTrace();
 			// TODO: handle exception
 		}
+		logUtil.saveSysLog("计费策略绑定","产品id为"+productId+"的产品取消绑定id为"+agentId+"的计费策略模板成功",null);
+
 		addMessage(redirectAttributes, "取消绑定计费策略成功！");
+		
 		return "redirect:" + Global.getAdminPath()+"/profile/configChargeAgent/bindListNew?productId="+productId;
 		
 	}
