@@ -1751,7 +1751,11 @@ public class WorkDealInfoService extends BaseService {
 		}
 
 		if (workType != null) {
-			dc.add(Restrictions.eq("dealInfoType", workType));
+			dc.add(Restrictions.or(Restrictions.eq("dealInfoType", workType),
+									Restrictions.eq("dealInfoType1", workType),
+									Restrictions.eq("dealInfoType2", workType),
+									Restrictions.eq("dealInfoType3", workType)));
+			
 		}
 		if (workDealInfo.getStatus() != null) {
 			dc.add(Restrictions.eq("status", workDealInfo.getStatus()));
