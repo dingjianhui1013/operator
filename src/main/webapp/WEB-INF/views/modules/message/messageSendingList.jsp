@@ -7,7 +7,24 @@
 <%@include file="/WEB-INF/views/include/dialog.jsp"%>
 <script type="text/javascript">
 	$(document).ready(function() {
+		
+	
 	});
+	function selectedAll()
+	{
+		var xz = $("#contentTable").find("[name='oneDealCheck']");
+		var index=0;
+		for (var a = 0; a < xz.length; a++) {
+			var check = $($("#contentTable").find("[name='oneDealCheck']")[a]);
+			if (check.is(":checked") == false) {
+				index++;
+			}
+		}
+		if(index==0)
+			{
+				$("#checkAll").attr("checked","true");
+			}
+	}
 	function page(n, s) {
 		$("#pageNo").val(n);
 		$("#pageSize").val(s);
@@ -37,6 +54,7 @@
 		var checkIds = $("#checkIds").val();
 		var xz = $("#contentTable").find("[name='oneDealCheck']");
 		if (check.is(":checked") == true) {
+			$("#checkAllVal").val("1");
 			$('input:checkbox').each(function() {
 				$(this).attr('checked', true);
 			});
@@ -60,6 +78,7 @@
 				$("#checkIds").val(checkIds);
 			}
 		} else {
+			$("#checkAllVal").val("0");
 			$('input:checkbox').each(function() {
 				$(this).attr('checked', false);
 			});
@@ -140,6 +159,7 @@
 								}
 							}
 							$("#send").attr("href","javascript:send()");
+							$("#checkAll").attr("checked","true");
 						}
 					});
 			}
@@ -349,7 +369,6 @@
 			value="查询" />
 		<a href="javascript:send()" class="btn btn-primary" id="send">发送</a> <input
 			type="hidden" name="checkIds" id="checkIds" value="${checkIds }" />
-				
 		</div>
 	
 	</form:form>
@@ -358,12 +377,8 @@
 		class="table table-striped table-bordered table-condensed">
 		<thead>
 			<tr>
-				<th><input type="checkbox" id="checkAll" name="dealCheck"
-					value=""
-					<%-- 	<c:forEach items="${ids }" var="id">
-					<c:if test="${id==page.pageNo}"> checked="checked"</c:if>
-				</c:forEach> --%>
-					onchange="checkAll(this)" /></th>
+				<th><input type="checkbox" id="checkAll" name="checkAll"
+					 value="" onchange="checkAll(this)" /></th>
 				<th>序号</th>
 				<th>应用名称</th>
 				<th>单位名称</th>
@@ -376,8 +391,9 @@
 		</thead>
 		<tbody>
 			<c:set var="zje" value="0" />
+			<c:set var="count" value="0" />
 			<c:forEach items="${page.list}" var="messageSend" varStatus="status">
-
+			<c:set var="count" value="${count+1 }" />
 				<tr>
 					<td><c:if test="${messageSend.workUser.contactPhone!=null}">
 							<input type="checkbox" name="oneDealCheck"
@@ -397,8 +413,14 @@
 					<td><fmt:formatDate value="${messageSend.notafter }"
 							pattern="yyyy-MM-dd" /></td>
 				</tr>
-
 			</c:forEach>
+			<c:if test="${count>0}">
+				<script	type="text/javascript">
+						
+						selectedAll();
+				</script>
+			</c:if>
+			
 			<shiro:hasPermission name="settle:settleKey:edit">
 				<td></td>
 			</shiro:hasPermission>
