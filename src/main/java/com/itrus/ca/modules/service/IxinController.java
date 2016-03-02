@@ -88,7 +88,7 @@ public class IxinController {
 			ClientProtocolException, IOException, JSONException {
 		String url = request.getRequestURI() + "?";
 		
-		System.out.print(request.getParameterMap());
+		/*System.out.print(request.getParameterMap());
 		
 		Map<Object, String[]> formValue = request.getParameterMap();
 		String project = "";
@@ -100,7 +100,7 @@ public class IxinController {
 				
 				}
 			}
-		}
+		}*/
 		
 		if (request.getMethod().toUpperCase().equals("GET")) {
 		
