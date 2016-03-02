@@ -152,6 +152,7 @@
 		</thead>
 		<tbody>
 		<c:forEach items="${page.list}" var="boundDealInfo" varStatus="status">
+		
 			<tr>
 			
 				<td>${status.index + 1}</td>
@@ -161,7 +162,7 @@
 				<fmt:formatDate value="${boundDealInfo.createDate}" pattern="yyyy-MM-dd"/>
 				</td>
 				<td>
-					${boundDealInfo.createBy.office.name}
+					${boundOffices[status.count-1].name}
 				</td>
 				<td>${boundDealInfo.dealInfo.svn}</td>
 				<td>${boundDealInfo.dealInfo.configApp.appName}</td>
