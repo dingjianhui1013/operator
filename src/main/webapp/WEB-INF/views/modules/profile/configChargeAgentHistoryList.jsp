@@ -80,7 +80,7 @@
 			<tr>
 				<th style="vertical-align: middle; text-align: center;" rowspan="3">计费策略模版名称</th>
 				<th style="vertical-align: middle; text-align: center;" rowspan="3">模版类型</th>
-				<th style="vertical-align: middle; text-align: center;" colspan="12">业务类型</th>
+				<th style="vertical-align: middle; text-align: center;" colspan="14">业务类型</th>
 				<th style="vertical-align: middle; text-align: center;" colspan="2">可信移动设备</th>
 				<th style="vertical-align: middle; text-align: center;" rowspan="3" >付款方式</th>
 				<th style="vertical-align: middle; text-align: center;width:10%;" colspan="2" rowspan="2">配置数量</th>
