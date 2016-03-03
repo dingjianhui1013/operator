@@ -247,28 +247,19 @@
 	}
 
 	function checkAgent() {
-		var type = "${workDealInfo.dealInfoType}";
+		var type = ${workDealInfo.dealInfoType};
 		if (type == '12') {
 			top.$.jBox.tip("不能重复更改缴费类型！");
 			return false;
 		}
 		var agentDetailId = $("#agentDetailId").val();
-		var configChargeAgentId = $
-		{
-			workDealInfo.configChargeAgentId
-		}
-		;
+		var configChargeAgentId = ${workDealInfo.configChargeAgentId};
 		if (agentDetailId == configChargeAgentId) {
 			top.$.jBox.tip("计费策略模板相同，请重新选择您要更换的模板！");
 		} else {
-			var url = "${ctx}/work/workDealInfoAudit/getAgentMoney?dealInfoId="
-					+ $
-			{
-				workDealInfo.id
-			}
+			var url = "${ctx}/work/workDealInfoAudit/getAgentMoney?dealInfoId="+${workDealInfo.id}
 			+"&newAgentId=" + agentDetailId + "&_=" + new Date().getTime();
-			$
-					.getJSON(
+			$.getJSON(
 							url,
 							function(data) {
 								if (data.status == 0) {
@@ -291,7 +282,7 @@
 									var submit = function(v, h, f) {
 										if (v == 'ok') {
 
-											window.location.href = "${ctx}/work/workDealInfoAudit/backMoney?id=${workDealInfo.id}&agentDetailId="
+											window.location.href = "${ctx}/work/workDealInfoAudit/backMoney?id="+${workDealInfo.id}+"&agentDetailId="
 													+ agentDetailId
 													+ "&iseq="
 													+ iseq;

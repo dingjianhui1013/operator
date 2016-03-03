@@ -706,6 +706,8 @@ public class WorkDealInfoAuditController extends BaseController {
 			workDealInfo.setClassifying(0);// 结算年限为0年
 			// 存入修改过的payinfo
 			workDealInfo.setWorkPayInfo(payInfo);
+			workDealInfo.setAreaId(UserUtils.getUser().getOffice().getParent().getId());
+			workDealInfo.setOfficeId(UserUtils.getUser().getOffice().getId());
 			workDealInfoService.save(workDealInfo);
 
 			FinanceQuitMoney quitMoney = new FinanceQuitMoney();
@@ -819,6 +821,8 @@ public class WorkDealInfoAuditController extends BaseController {
 				WorkCertInfo workCertInfo = workCertInfoService.get(wDealInfo.getWorkCertInfo().getId());
 				workDealInfo.setWorkCertInfo(workCertInfo);
 			}
+			workDealInfo.setAreaId(UserUtils.getUser().getOffice().getParent().getId());
+			workDealInfo.setOfficeId(UserUtils.getUser().getOffice().getId());
 			workDealInfoService.save(workDealInfo);
 			// 删除以前的dealinfo使其不再列表显示
 			workDealInfoService.delete(dealInfo.getId());
@@ -1255,7 +1259,11 @@ public class WorkDealInfoAuditController extends BaseController {
 
 			workDealInfo.setPayType(Integer.parseInt(agent.getTempStyle()));
 			workDealInfo.setConfigChargeAgentId(agentDetailId);
+			
 
+			workDealInfo.setAreaId(UserUtils.getUser().getOffice().getParent().getId());
+			workDealInfo.setOfficeId(UserUtils.getUser().getOffice().getId());
+			
 			workDealInfoService.save(workDealInfo);
 
 			workDealInfoService.delete(dealInfo.getId());
