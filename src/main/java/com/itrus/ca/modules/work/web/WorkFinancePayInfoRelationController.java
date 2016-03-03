@@ -170,11 +170,11 @@ public class WorkFinancePayInfoRelationController extends BaseController {
 		 {
 			 count+=1;
 		 }
-		 if(list.get(i).getResidueMoney()>0)
+		 if(list.get(i).getResidueMoney()!=null && list.get(i).getResidueMoney()>0)
 		 {
 			 money+=1;
 		 }
-		 if(list.get(i).getResidueMoney()==0)
+		 if(list.get(i).getResidueMoney()!=null && list.get(i).getResidueMoney()==0)
 		 {
 			 moneyIsNull+=1;
 		 }

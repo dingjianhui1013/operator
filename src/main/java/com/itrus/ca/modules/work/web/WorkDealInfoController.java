@@ -652,28 +652,52 @@ public class WorkDealInfoController extends BaseController {
 						{
 							posCount += 1;
 							if (page.getList().get(i).getWorkPayInfo().getPosMoney() != null) {
-								posCountMoney += page.getList().get(i).getWorkPayInfo().getPosMoney();
+								if(page.getList().get(i).getWorkPayInfo().getPosMoney()>0)
+								{
+									posCountMoney += page.getList().get(i).getWorkPayInfo().getPosMoney();
+								}else
+								{
+									posCountMoney += (-page.getList().get(i).getWorkPayInfo().getPosMoney());
+								}
 							}
 						}
 						if(page.getList().get(i).getWorkPayInfo().getMethodBank()==true)
 						{
 							bankCount += 1;
 							if (page.getList().get(i).getWorkPayInfo().getBankMoney() != null) {
-								bankCountMoney += page.getList().get(i).getWorkPayInfo().getBankMoney();
+								if(page.getList().get(i).getWorkPayInfo().getBankMoney()>0)
+								{
+									bankCountMoney += page.getList().get(i).getWorkPayInfo().getBankMoney();
+								}else
+								{
+									bankCountMoney +=(-page.getList().get(i).getWorkPayInfo().getBankMoney());
+								}
 							}
 						}
 						if(page.getList().get(i).getWorkPayInfo().getMethodMoney()==true)
 						{
 							moneyCount += 1;
 							if (page.getList().get(i).getWorkPayInfo().getMoney() != null) {
-								moneyCountMoney += page.getList().get(i).getWorkPayInfo().getMoney();
+								if(page.getList().get(i).getWorkPayInfo().getMoney()>0)
+								{
+									moneyCountMoney += page.getList().get(i).getWorkPayInfo().getMoney();
+								}else
+								{
+									moneyCountMoney += (-page.getList().get(i).getWorkPayInfo().getMoney());
+								}
 							}
 						}
 						if(page.getList().get(i).getWorkPayInfo().getMethodAlipay()==true)
 						{
 							alipayCount += 1;
 							if (page.getList().get(i).getWorkPayInfo().getAlipayMoney() != null) {
-								alipayCountMoney += page.getList().get(i).getWorkPayInfo().getAlipayMoney();
+								if(page.getList().get(i).getWorkPayInfo().getAlipayMoney()>0)
+								{
+									alipayCountMoney += page.getList().get(i).getWorkPayInfo().getAlipayMoney();
+								}else
+								{
+									alipayCountMoney += (-page.getList().get(i).getWorkPayInfo().getAlipayMoney());
+								}
 							}
 						}
 						if (page.getList().get(i).getWorkPayInfo().getMethodGov() != null) {
@@ -698,7 +722,13 @@ public class WorkDealInfoController extends BaseController {
 //									moneyCount += 1;
 									if(workfinancePayinfos.get(w).getMoney()!=null)
 									{
-										moneyCountMoney += workfinancePayinfos.get(w).getMoney();
+										if(workfinancePayinfos.get(w).getMoney()>0)
+										{
+											moneyCountMoney += workfinancePayinfos.get(w).getMoney();
+										}else
+										{
+											moneyCountMoney +=(-workfinancePayinfos.get(w).getMoney());
+										}
 									}
 								}
 								if(workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod()==2)
@@ -707,7 +737,13 @@ public class WorkDealInfoController extends BaseController {
 //									posCount += 1;
 									if(workfinancePayinfos.get(w).getMoney()!=null)
 									{
-										posCountMoney += workfinancePayinfos.get(w).getMoney();
+										if(workfinancePayinfos.get(w).getMoney()>0)
+										{
+											posCountMoney += workfinancePayinfos.get(w).getMoney();
+										}else
+										{
+											posCountMoney += (-workfinancePayinfos.get(w).getMoney());
+										}
 									}
 								}
 								if(workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod()==3)
@@ -716,7 +752,13 @@ public class WorkDealInfoController extends BaseController {
 //									bankCount += 1;
 									if(workfinancePayinfos.get(w).getMoney()!=null)
 									{
-										bankCountMoney += workfinancePayinfos.get(w).getMoney();
+										if(workfinancePayinfos.get(w).getMoney()>0)
+										{
+											bankCountMoney += workfinancePayinfos.get(w).getMoney();
+										}else
+										{
+											bankCountMoney += (-workfinancePayinfos.get(w).getMoney());
+										}
 									}
 								}
 								if(workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod()==4)
@@ -725,7 +767,13 @@ public class WorkDealInfoController extends BaseController {
 //									alipayCount += 1;
 									if(workfinancePayinfos.get(w).getMoney()!=null)
 									{
-										alipayCountMoney += workfinancePayinfos.get(w).getMoney();
+										if(workfinancePayinfos.get(w).getMoney()>0)
+										{
+											alipayCountMoney += workfinancePayinfos.get(w).getMoney();
+										}else
+										{
+											alipayCountMoney += (-workfinancePayinfos.get(w).getMoney());
+										}
 									}
 								}
 							}
