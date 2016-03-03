@@ -257,10 +257,10 @@ public class WorkLogService extends BaseService {
 
 	public Page<WorkLog> findKfList(Page<WorkLog> page, WorkLog workLog) {
 		DetachedCriteria dc = workLogDao.createDetachedCriteria();
-//		if(workLog.getWorkCompany()!=null&&workLog.getWorkCompany().getCompanyName()!=null&&!workLog.getWorkCompany().getCompanyName().equals("")){
-//			dc.createAlias("workCompany","workCompany");
-//			dc.add(Restrictions.like("workCompany.companyName", "%"+EscapeUtil.escapeLike(workLog.getWorkCompany().getCompanyName())+"%"));
-//		}
+		if(workLog.getWorkCompany()!=null&&workLog.getWorkCompany().getCompanyName()!=null&&!workLog.getWorkCompany().getCompanyName().equals("")){
+			dc.createAlias("workCompany","workCompany");
+			dc.add(Restrictions.like("workCompany.companyName", "%"+EscapeUtil.escapeLike(workLog.getWorkCompany().getCompanyName())+"%"));
+		}
 		if(workLog.getConfigApp()!=null)
 		{
 			if(workLog.getConfigApp().getId()!=null)

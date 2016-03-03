@@ -21,7 +21,7 @@
 	<ul class="nav nav-tabs">
 		<li class="active"><a href="${ctx}/work/workLog/">客服记录</a></li>
 	</ul>
-	<form:form id="searchForm" modelAttribute="workLog" action="${ctx}/work/workLog/kflist" method="post" class="breadcrumb form-search">
+	<form:form id="searchForm" modelAttribute="workLog" action="${ctx}/work/workLog/kflist?distinguish=0" method="post" class="breadcrumb form-search">
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
 		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
 		<label>单位名称 ：</label><form:input path="workCompany.companyName" htmlEscape="false" maxlength="50" class="input-medium"/>
