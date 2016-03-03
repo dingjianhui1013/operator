@@ -151,7 +151,7 @@
 						<a
 							href="${ctx}/message/smsConfiguration/form?id=${smsConfiguration.id}">修改</a>
 							<a
-							href="${ctx}/message/smsConfiguration/delete?id=${smsConfiguration.id}"
+							href="${ctx}/message/smsConfiguration/delete?id=${smsConfiguration.id}&messageName=${smsConfiguration.messageName}"
 							onclick="return confirmx('确认要删除该短信配置吗？', this.href)">删除</a></td>
 					</shiro:hasPermission>
 				</tr>
