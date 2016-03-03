@@ -43,8 +43,12 @@ public class FinanceQuitMoneyService extends BaseService {
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		DetachedCriteria dc = financeQuitMoneyDao.createDetachedCriteria();
 		if (!Strings.isNullOrEmpty(commUserName)) {
-			dc.createAlias("financePaymentInfo", "financePaymentInfo");
-			dc.add(Restrictions.eq("financePaymentInfo.commUserName", commUserName));
+//			dc.createAlias("financePaymentInfo", "financePaymentInfo");
+			dc.createAlias("workDealInfo", "workDealInfo");
+			dc.createAlias("workDealInfo.workUser", "workUser");
+//			dc.add(Restrictions.or(Restrictions.eq("financePaymentInfo.commUserName", commUserName),
+//					Restrictions.eq("workUser.contactName", commUserName)));
+			dc.add(Restrictions.eq("workUser.contactName", commUserName));
 		}
 		try {
 			if (payStartTime != null && payEndTime != null && !"".equals(payEndTime) && !"".equals(payStartTime)) {
@@ -81,7 +85,10 @@ public class FinanceQuitMoneyService extends BaseService {
 		
 		if (!Strings.isNullOrEmpty(commUserName)) {
 			dc.createAlias("financePaymentInfo", "financePaymentInfo");
-			dc.add(Restrictions.eq("financePaymentInfo.commUserName", commUserName));
+			dc.createAlias("workDealInfo", "workDealInfo");
+			dc.createAlias("workDealInfo.workUser", "workUser");
+			dc.add(Restrictions.or(Restrictions.eq("financePaymentInfo.commUserName", commUserName),
+					Restrictions.eq("workUser.contactName", commUserName)));
 		}
 		try {
 
