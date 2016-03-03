@@ -5047,7 +5047,7 @@ public class WorkDealInfoController extends BaseController {
 				}
 
 				if (dealInfo.getAddCertDays() == null) {
-					dealInfoVo.setCertDays(dealInfo.getYear() * 365 + dealInfo.getLastDays() + "（天）");
+					dealInfoVo.setCertDays((dealInfo.getYear()==null?0:dealInfo.getYear()) * 365 + (dealInfo.getLastDays()==null?0:dealInfo.getLastDays()) + "（天）");
 				} else {
 					dealInfoVo.setCertDays(
 							dealInfo.getYear() * 365 + dealInfo.getLastDays() + dealInfo.getAddCertDays() + "（天）");
