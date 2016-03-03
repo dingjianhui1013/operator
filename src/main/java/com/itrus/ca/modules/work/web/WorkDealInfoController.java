@@ -5052,7 +5052,7 @@ public class WorkDealInfoController extends BaseController {
 					dealInfoVo.setCertDays(
 							dealInfo.getYear() * 365 + dealInfo.getLastDays() + dealInfo.getAddCertDays() + "（天）");
 				}
-				String notafterString = df.format(dealInfo.getNotafter());
+				String notafterString = df.format(dealInfo.getNotafter()==null?"":dealInfo.getNotafter());
 				dealInfoVo.setNotAfter(notafterString);
 				dealInfoVo
 						.setDealInfoStatus(workDealInfoStatus.WorkDealInfoStatusMap.get(dealInfo.getDealInfoStatus()));
