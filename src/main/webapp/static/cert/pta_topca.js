@@ -320,7 +320,8 @@ function loadItrusPTA(){
     var urlArray = new Array();
     urlArray = window.location.toString().split('/');
     var base = urlArray[0]+'//' + window.location.host + '/' + urlArray[3];
-    var iePtaObject = "<object id='iTrusPTA' codebase='"+base+"/download/itruscertctl.CAB#version=2,5,7,6' classid='clsid:F1F0506B-E2DC-4910-9CFC-4D7B18FEA5F9'></object>";
+   // var iePtaObject = "<object id='iTrusPTA' codebase='"+base+"/download/itruscertctl.CAB#version=2,5,7,6' classid='clsid:F1F0506B-E2DC-4910-9CFC-4D7B18FEA5F9'></object>";
+    var iePtaObject = "<object id='iTrusPTA' classid='clsid:41992E4D-6707-4342-842E-7EF66DED5163'></object>";
     var ffPtaObject = "<embed  id='iTrusPTA' type='application/iTrusPTA.iTrusPTA.Version.1' width='0' height='0'></embed>";
     if (IsValidBrowser()) {
         iTrusPTA = $(iePtaObject).appendTo(document.body)[0];
