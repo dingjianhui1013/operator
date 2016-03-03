@@ -230,6 +230,9 @@ public class KeyUsbKeyController extends BaseController {
 				case 5:
 					page.getList().get(i).setInReasonName("盘点异常入库");
 					break;
+				case 6:
+					page.getList().get(i).setInReasonName("退费入库");
+					break;
 				}
 			}
 		}
