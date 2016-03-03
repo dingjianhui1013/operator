@@ -12,6 +12,7 @@ import com.itrus.ca.modules.work.dao.WorkLogDao;
 import com.itrus.ca.modules.work.entity.WorkCompany;
 import com.itrus.ca.modules.work.entity.WorkDealInfo;
 import com.itrus.ca.modules.work.entity.WorkLog;
+
 import org.hibernate.Query;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
@@ -23,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -350,7 +352,7 @@ public class WorkLogService extends BaseService {
 				.createSqlQuery("SELECT s.ID,s.NAME from SYS_USER s").setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
 		return off.list();
 	}
-	public Page<WorkLog> findworkLogAchievements(Page<WorkLog> page,String name, Date startTime, Date endTime){
+	public Page<WorkLog> findworkLogAchievements(Page<WorkLog> page,String name, Date startTime, Date endTime) {
 		DetachedCriteria dc=workLogDao.createDetachedCriteria();
 		dc.createAlias("createBy", "createBy");
 		if(name!=null&&!"".equals(name))
@@ -362,7 +364,10 @@ public class WorkLogService extends BaseService {
 		}
 		if(endTime != null)
 		{
-			dc.add(Restrictions.le("createDate", endTime));
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(endTime);
+			cal.add(Calendar.DATE, 1);
+			dc.add(Restrictions.le("createDate", cal.getTime()));
 		}
 		dc.add(Restrictions.isNotNull("distinguish"));
 		dc.addOrder(Order.desc("distinguish"));
