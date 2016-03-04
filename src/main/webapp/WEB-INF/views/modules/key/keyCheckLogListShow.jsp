@@ -68,12 +68,9 @@
 					>${gene.name}</option>
 				</c:forEach>
 		</select>
-		
-		
-		
-		
+		<br />
+		<br />
 		<label>盘点时间：从</label>
-
 		<input id="startTime" name="startTime" type="text" readonly="readonly"
 			maxlength="20" class="Wdate required"
 			onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"
