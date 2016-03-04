@@ -277,9 +277,9 @@ public class WorkLogService extends BaseService {
 		{
 			dc.add(Restrictions.eq("distinguish", workLog.getDistinguish()));
 		}
-		if(workLog.getCompleteType()!=null&&!"".equals(workLog.getCompleteType()))
+		if(workLog.getSerType()!=null&&!"".equals(workLog.getSerType()))
 		{
-			dc.add(Restrictions.eq("completeType",workLog.getCompleteType()));
+			dc.add(Restrictions.eq("serType",workLog.getSerType()));
 		}
 		dc.add(Restrictions.eq("state",1));
 		dc.addOrder(Order.desc("id"));
