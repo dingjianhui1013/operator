@@ -409,12 +409,12 @@ public class StatisticDayDataController extends BaseController {
 					for (StatisticAppData sad : listMonth) {
 								add1 += sad.getAdd1();
 								add2 += sad.getAdd2();
-								add3 += sad.getAdd3();
+								add3 += sad.getAdd3()==null?0:sad.getAdd3();
 								add4 += sad.getAdd4();
 								add5 += sad.getAdd5();
 								renew1 += sad.getRenew1();
 								renew2 += sad.getRenew2();
-								renew3 += sad.getRenew3();
+								renew3 += sad.getRenew3()==null?0:sad.getRenew3();
 								renew4 += sad.getRenew4();
 								renew5 += sad.getRenew5();
 								modifyNum += sad.getModifyNum();
@@ -425,29 +425,29 @@ public class StatisticDayDataController extends BaseController {
 								lostReplaceNum += sad.getLostReplaceNum();
 								updateChangeNum += sad.getUpdateChangeNum();
 								updateChangeNum2 += sad.getUpdateChangeNum2();
-								updateChangeNum3 += sad.getUpdateChangeNum3();
+								updateChangeNum3 += sad.getUpdateChangeNum3()==null?0:sad.getUpdateChangeNum3();
 								updateChangeNum4 += sad.getUpdateChangeNum4();
 								updateChangeNum5 += sad.getUpdateChangeNum5();
 								updateLostNum += sad.getUpdateLostNum();
 								updateLostNum2 += sad.getUpdateLostNum2();
-								updateLostNum3 += sad.getUpdateLostNum3();
+								updateLostNum3 += sad.getUpdateLostNum3()==null?0:sad.getUpdateLostNum3();
 								updateLostNum4 += sad.getUpdateLostNum4();
 								updateLostNum5 += sad.getUpdateLostNum5();
 								updateReplaceNum += sad.getUpdateReplaceNum();
 								updateReplaceNum2 += sad.getUpdateReplaceNum2();
-								updateReplaceNum3 += sad.getUpdateReplaceNum3();
+								updateReplaceNum3 += sad.getUpdateReplaceNum3()==null?0:sad.getUpdateReplaceNum3();
 								updateReplaceNum4 += sad.getUpdateReplaceNum4();
 								updateReplaceNum5 += sad.getUpdateReplaceNum5();
 								changeLostNum += sad.getChangeLostNum();
 								changeReplaceNum += sad.getChangeReplaceNum();
 								changeUpdateLostNum += sad.getChangeUpdateLostNum();
 								changeUpdateLostNum2 += sad.getChangeUpdateLostNum2();
-								changeUpdateLostNum3 += sad.getChangeUpdateLostNum3();
+								changeUpdateLostNum3 += sad.getChangeUpdateLostNum3()==null?0:sad.getChangeUpdateLostNum3();
 								changeUpdateLostNum4 += sad.getChangeUpdateLostNum4();
 								changeUpdateLostNum5 += sad.getChangeUpdateLostNum5();
 								changeUpdateReplaceNum += sad.getChangeUpdateReplaceNum();
 								changeUpdateReplaceNum2 += sad.getChangeUpdateReplaceNum2();
-								changeUpdateReplaceNum3 += sad.getChangeUpdateReplaceNum3();
+								changeUpdateReplaceNum3 += sad.getChangeUpdateReplaceNum3()==null?0:sad.getChangeUpdateReplaceNum3();
 								changeUpdateReplaceNum4 += sad.getChangeUpdateReplaceNum4();
 								changeUpdateReplaceNum5 += sad.getChangeUpdateReplaceNum5();
 					}
@@ -1610,18 +1610,20 @@ public class StatisticDayDataController extends BaseController {
 		// 获得统计日期之前发票所有的入库信息
 		List<ReceiptEnterInfo> receiptEnterInfos = receiptEnterInfoService
 				.findByDate(countDate, nextDay, officeId);
-//getReceiptMoney 如果有值，这 receiptMoney是正确的，如果没有，则nowMoney是正确的，产生的原因待查
+		//getReceiptMoney 如果有值，这 receiptMoney是正确的，如果没有，则nowMoney是正确的，产生的原因待查
 		for (ReceiptEnterInfo receiptEnterInfo : receiptEnterInfos) {
 			if (receiptEnterInfo.getReceiptMoney()!=null && receiptEnterInfo.getReceiptMoney()>0) {
 				receiptIn += receiptEnterInfo.getReceiptMoney();
+				System.out.println(receiptIn);
 			}else{
 				
 				receiptIn += receiptEnterInfo.getNow_Money();
+				
 			}
 			
 
 		}
-
+		System.out.println(receiptIn);
 		List<ReceiptInvoice> receiptInvoices = receiptInvoiceService
 				.findByDate(countDate, nextDay, officeId);
 
@@ -1655,7 +1657,7 @@ public class StatisticDayDataController extends BaseController {
 		statisticDayData.setOffice(officeService.get(officeId));
 		statisticDayData.setStatisticDate(countDate);
 		session.setAttribute("statisticDayData", statisticDayData);
-	//	statisticDayDataService.save(statisticDayData);
+		//	statisticDayDataService.save(statisticDayData);
 
 		// ======================日经营汇总表结束========================
 		// ======================日经营详情表===========================
