@@ -845,7 +845,7 @@ public class WorkDealInfoController extends BaseController {
 		model.addAttribute("payMethod", payMethod);
 		model.addAttribute("page", page);
 		model.addAttribute("Id_paymethod",Id_paymethod);
-		List<Office> offs= officeService.findAll();
+		List<Office> offs= officeService.findall();
 		model.addAttribute("offs", offs);
 		return "modules/work/statisticalDealPayList";
 	}

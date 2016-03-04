@@ -55,7 +55,9 @@ public class OfficeService extends BaseService {
 	public List<Office> findAll(){
 		return UserUtils.getOfficeList();
 	}
-	
+	public List<Office> findall(){
+		return (List<Office>) officeDao.findAll();
+	}
 	/**
 	 * 区域列表 （禁用启用都显示）
 	* @Title: find
