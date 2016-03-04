@@ -4885,6 +4885,7 @@ public class WorkDealInfoService extends BaseService {
 		dc.add(Restrictions.eq("officeId", officeId));
 //		dc.add(Restrictions.eq("office.id", officeId));
 		// // 新增、置换时才有key
+		dc.add(Restrictions.eq("configApp.id",appId));
 		dc.add(Restrictions.or(Restrictions.eq("dealInfoType",
 				WorkDealInfoType.TYPE_ADD_CERT), Restrictions.eq(
 				"dealInfoType1", WorkDealInfoType.TYPE_DAMAGED_REPLACED),
