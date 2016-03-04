@@ -219,41 +219,33 @@
 							items="${keyUsbKeyDepot.keyDepotGeneralStatisticsList}"
 							var="statis">
 					        	${statis.keyGeneralInfo.name}
-								<br />
 						</c:forEach>
-						${keyUsbKeyDepot.totolName} <br /> 
 					</td>
 					<td><c:forEach
 							items="${keyUsbKeyDepot.keyDepotGeneralStatisticsList}"
 							var="statis">
 					        	${statis.totalCount}
-								<br />
 						</c:forEach>
-						${keyUsbKeyDepot.totolCount}
 						</td>
 					<td><c:forEach
 							items="${keyUsbKeyDepot.keyDepotGeneralStatisticsList}"
 							var="statis">
 					        	${statis.inCount}
-								<br />
 						</c:forEach>
-						${keyUsbKeyDepot.inCount} 
+						
 						</td>
 					<td><c:forEach
 							items="${keyUsbKeyDepot.keyDepotGeneralStatisticsList}"
 							var="statis">
 					        	${statis.outCount}
-								<br />
 						</c:forEach>
-						${keyUsbKeyDepot.outCount}
+						
 						</td>
 					<td> <c:forEach
 							items="${keyUsbKeyDepot.keyDepotGeneralStatisticsList}"
 							var="statis">
 					        	${statis.totalEndCount}
-								<br />
 						</c:forEach>
-						${keyUsbKeyDepot.totalEndCount} 
 						</td>
 					<td><a
 						href="javascript:showIn(${keyUsbKeyDepot.id})"  >入库详情</a>
@@ -262,6 +254,17 @@
 					</td>
 
 				</tr>
+			<tr>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>${keyUsbKeyDepot.totolName}</td>
+				<td>${keyUsbKeyDepot.totolCount}</td>
+				<td>${keyUsbKeyDepot.inCount} </td>
+				<td>${keyUsbKeyDepot.outCount}</td>
+				<td>${keyUsbKeyDepot.totalEndCount} </td>
+				<td></td>
+			</tr>
 			</c:forEach>
 		</tbody>
 	</table>
