@@ -352,6 +352,18 @@
 			top.$.jBox.confirm("您确定赠送的时间是："+$("#addCertDays").val()+"天么？","提示",submit);
 		}
 	}
+	
+	function returnDZZ(id){
+		var submit = function (v, h, f) {
+		    if (v == 'ok'){
+				window.location.href = "${ctx}/work/workDealInfo/returnDZZ?dealId="+id;
+		    }
+		   		 return true; //close
+		};
+		top.$.jBox.confirm("是否重新鉴证？", "提示", submit);
+		
+		
+	}
 </script>
 </head>
 <body>
@@ -469,7 +481,9 @@
 		<input class="btn btn-primary" type="button" id="makeCertButton"
 			onclick="makeCert()" value="制 证" />&nbsp; <input
 			class="btn btn-primary" type="button" onclick="history.go(-1)"
-			value="返回" />&nbsp;<label id="msg" style="color: red;"></label>
+			value="返回" />&nbsp; <input
+			class="btn btn-primary" type="button" onclick="returnDZZ(${workDealInfo.id})"
+			value="重新鉴证" />&nbsp;<label id="msg" style="color: red;"></label>
 	</div>
 </body>
 </html>

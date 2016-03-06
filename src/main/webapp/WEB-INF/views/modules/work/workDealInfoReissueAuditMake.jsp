@@ -361,6 +361,29 @@ function makeCert() {
 		}
 	}
 	
+	function cancelMaintenance(){
+		var submit = function (v, h, f) {
+		    if (v == 'ok'){
+		    	var id = "${workDealInfo.id}";
+				window.location.href = "${ctx}/work/workDealInfo/cancelMaintenanceByReturn?id="+id;
+		    }
+		   		 return true; //close
+		};
+		top.$.jBox.confirm("是否取消本次维护？", "提示", submit);
+	}
+	
+	function returnPayment(){
+		var submit = function (v, h, f) {
+		    if (v == 'ok'){
+		    	var id = "${workDealInfo.id}";
+				window.location.href="${ctx}/work/workPayInfo/returnPayment?workDealInfoId="+id;
+		    }
+		   		 return true; //close
+		};
+		top.$.jBox.confirm("是否重新缴费？", "提示", submit);
+	}
+	
+	
 </script>
 </head>
 <body>
@@ -485,7 +508,16 @@ function makeCert() {
 				value="" name="" />
 			<div class="form-actions" style="text-align: center; width: 100%; border-top: none;">
 				<input class="btn btn-primary" type="button" onclick="makeCert()" id="makeCertButton" 
-					value="制 证" />&nbsp;<label id="msg" style="color: red;"></label>
+					value="制 证" />&nbsp;
+				<c:if test="${workDealInfo.dealInfoType != 0 }">
+					<input class="btn btn-primary" type="button"
+						onclick="returnPayment()" value="重新缴费" />
+				&nbsp;<a class="btn btn-primary"
+						href="javascript:cancelMaintenance()">取消本次维护</a>
+				</c:if>
+					
+					
+					<label id="msg" style="color: red;"></label>
 			</div>
 		</form>
 	</div>

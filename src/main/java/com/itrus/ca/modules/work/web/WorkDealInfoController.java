@@ -8133,42 +8133,68 @@ public class WorkDealInfoController extends BaseController {
 		try {
 
 			WorkDealInfo dealInfo = workDealInfoService.get(id);
-			WorkPayInfo payInfo = dealInfo.getWorkPayInfo();
-			Set<WorkFinancePayInfoRelation> relations = payInfo.getWorkFinancePayInfoRelations();
-			if (relations.size() != 0) {
-				for (WorkFinancePayInfoRelation relation : relations) {// 退费
-					FinancePaymentInfo financePaymentInfo = relation.getFinancePaymentInfo();
-					financePaymentInfo.setBingdingTimes(financePaymentInfo.getBingdingTimes() - 1);
-					financePaymentInfo.setResidueMoney(financePaymentInfo.getResidueMoney() + relation.getMoney());// 返还金额
-					financePaymentInfoService.save(financePaymentInfo);
-					workFinancePayInfoRelationService.delete(relation.getId());
+			List<Integer> dealInfoList = new ArrayList<Integer>();
+			if (dealInfo.getDealInfoType() != null) {
+				dealInfoList.add(dealInfo.getDealInfoType());
+			}
+			if (dealInfo.getDealInfoType1() != null) {
+				dealInfoList.add(dealInfo.getDealInfoType1());
+			}
+			if (dealInfo.getDealInfoType2() != null) {
+				dealInfoList.add(dealInfo.getDealInfoType2());
+			}
+			boolean isOut = false;
+			if (dealInfoList.size() == 1) {
+				if (dealInfoList.get(0).equals(1)) {
+					isOut = true;
+				} else if (dealInfoList.get(0).equals(4)) {
+					isOut = true;
+				}
+			} else if (dealInfoList.size() == 2) {
+				if (dealInfoList.get(0).equals(1) && dealInfoList.get(1).equals(4)) {
+					isOut = true;
 				}
 			}
 
-			// this.fixOldPayInfo(dealInfo);
+			if (isOut) {
+				WorkPayInfo payInfo = dealInfo.getWorkPayInfo();
+				Set<WorkFinancePayInfoRelation> relations = payInfo.getWorkFinancePayInfoRelations();
+				if (relations.size() != 0) {
+					for (WorkFinancePayInfoRelation relation : relations) {// 退费
+						FinancePaymentInfo financePaymentInfo = relation.getFinancePaymentInfo();
+						financePaymentInfo.setBingdingTimes(financePaymentInfo.getBingdingTimes() - 1);
+						financePaymentInfo.setResidueMoney(financePaymentInfo.getResidueMoney() + relation.getMoney());// 返还金额
+						financePaymentInfoService.save(financePaymentInfo);
+						workFinancePayInfoRelationService.delete(relation.getId());
+					}
+				}
+				Double money = dealInfo.getWorkPayInfo().getReceiptAmount();
+				
+				if (money > 0d) {
+					ReceiptDepotInfo receiptDepotInfo = receiptDepotInfoService
+							.findDepotByOffice(dealInfo.getCreateBy().getOffice()).get(0);
+					// 修改余额
+					receiptDepotInfo.setReceiptResidue(receiptDepotInfo.getReceiptResidue() + money);
+					receiptDepotInfo.setReceiptTotal(receiptDepotInfo.getReceiptTotal() + money);
 
-			Double money = dealInfo.getWorkPayInfo().getReceiptAmount();
-			if (money > 0d) {
-				ReceiptDepotInfo receiptDepotInfo = receiptDepotInfoService
-						.findDepotByOffice(dealInfo.getCreateBy().getOffice()).get(0);
-				// 修改余额
-				receiptDepotInfo.setReceiptResidue(receiptDepotInfo.getReceiptResidue() + money);
-				receiptDepotInfo.setReceiptTotal(receiptDepotInfo.getReceiptTotal() + money);
+					// 创建入库信息
+					ReceiptEnterInfo receiptEnterInfo = new ReceiptEnterInfo();
+					receiptEnterInfo.setReceiptDepotInfo(receiptDepotInfo);
+					receiptEnterInfo.setNow_Money(Double.valueOf(money));
+					receiptEnterInfo.setBeforMoney(
+							receiptEnterInfo.getReceiptDepotInfo().getReceiptResidue() - Double.valueOf(money));
+					receiptEnterInfo.setReceiptMoney(receiptEnterInfo.getReceiptDepotInfo().getReceiptResidue());
+					receiptEnterInfo.setReceiptType(4);// 退费入库
+					receiptEnterInfoService.save(receiptEnterInfo);
 
-				// 创建入库信息
-				ReceiptEnterInfo receiptEnterInfo = new ReceiptEnterInfo();
-				receiptEnterInfo.setReceiptDepotInfo(receiptDepotInfo);
-				receiptEnterInfo.setNow_Money(Double.valueOf(money));
-				receiptEnterInfo.setBeforMoney(
-						receiptEnterInfo.getReceiptDepotInfo().getReceiptResidue() - Double.valueOf(money));
-				receiptEnterInfo.setReceiptMoney(receiptEnterInfo.getReceiptDepotInfo().getReceiptResidue());
-				receiptEnterInfo.setReceiptType(4);// 退费入库
-				receiptEnterInfoService.save(receiptEnterInfo);
-
-				logUtil.saveSysLog("更新业务办理重新缴费", "库房" + receiptDepotInfo.getReceiptName() + "添加入库信息成功", "");
-				receiptDepotInfoService.save(receiptDepotInfo);
+					logUtil.saveSysLog("更新业务办理重新缴费", "库房" + receiptDepotInfo.getReceiptName() + "添加入库信息成功", "");
+					receiptDepotInfoService.save(receiptDepotInfo);
+				}
+				
 			}
-
+			
+			
+			
 			workPayInfoService.delete(dealInfo.getWorkPayInfo().getId());
 			dealInfo.setWorkPayInfo(null);
 			dealInfo.setDealInfoStatus("5");
@@ -8179,14 +8205,15 @@ public class WorkDealInfoController extends BaseController {
 			// private Integer availableNum;//已用数量
 			// private Integer reserveNum;//预留数量
 
-			ConfigChargeAgent agentOri = configChargeAgentService.get(dealInfo.getConfigChargeAgentId());
-			agentOri.setAvailableUpdateNum(agentOri.getAvailableUpdateNum() - 1);
-			agentOri.setSurplusUpdateNum(agentOri.getSurplusUpdateNum() + 1);
-			configChargeAgentService.save(agentOri);
-
-			ConfigAgentBoundDealInfo bound = configAgentBoundDealInfoService.findByAgentIdDealId(agentOri.getId(), id);
-			if (bound != null) {
-				configAgentBoundDealInfoService.deleteById(bound.getId());
+			if (dealInfo.getDealInfoType()!=null && dealInfo.getDealInfoType().equals(1)) {
+				ConfigChargeAgent agentOri = configChargeAgentService.get(dealInfo.getConfigChargeAgentId());
+				agentOri.setAvailableUpdateNum(agentOri.getAvailableUpdateNum() - 1);
+				agentOri.setSurplusUpdateNum(agentOri.getSurplusUpdateNum() + 1);
+				configChargeAgentService.save(agentOri);
+				ConfigAgentBoundDealInfo bound = configAgentBoundDealInfoService.findByAgentIdDealId(agentOri.getId(), id);
+				if (bound != null) {
+					configAgentBoundDealInfoService.deleteById(bound.getId());
+				}
 			}
 
 			WorkDealInfo dealinfo = workDealInfoService.get(id);
@@ -8379,5 +8406,19 @@ public class WorkDealInfoController extends BaseController {
 		}
 		return "redirect:" + Global.getAdminPath() + "/work/workDealInfo/";
 	}
+	
+	@RequestMapping(value = "returnDZZ")
+	public String returnDZZ(Long dealId) {
+		WorkDealInfo dealInfo = workDealInfoService.get(dealId);
+		dealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_UPDATE_USER);
+		workDealInfoService.save(dealInfo);
+		
+		
+		return "redirect:" + Global.getAdminPath() + "/work/workDealInfoAudit/";
+	}
+	
+	
+	
+	
 
 }

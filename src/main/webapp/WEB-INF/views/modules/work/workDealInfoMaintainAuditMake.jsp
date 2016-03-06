@@ -370,8 +370,6 @@
 		   		 return true; //close
 		};
 		top.$.jBox.confirm("是否取消本次维护？", "提示", submit);
-		
-		
 	}
 	
 </script>
@@ -422,7 +420,7 @@
 			<tr>
 				<td>证书SN</td>
 				<td>组织机构代码</td>
-				<td style="width: 50%">${workDealInfo.workCompany.organizationNumber }</td>
+				<td style="width: 50%">${cworkCompany.organizationNumber }</td>
 			</tr>
 			<tr>
 				<td>accountOrgunit</td>
@@ -502,7 +500,7 @@
 					onclick="makeCert()" value="制 证" />&nbsp;
 
 
-				<c:if test="${onlyUpdate=='onlyUpdate' }">
+				<c:if test="${workDealInfo.dealInfoType != 0 }">
 					<input class="btn btn-primary" type="button"
 						onclick="returnPayment()" value="重新缴费" />
 				&nbsp;<a class="btn btn-primary"
