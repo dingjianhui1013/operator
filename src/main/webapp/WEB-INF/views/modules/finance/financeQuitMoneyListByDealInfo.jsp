@@ -72,10 +72,10 @@
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li class="active"><a href="${ctx}/finance/financeQuitMoney/">退费信息列表</a></li>
+		<li class="active"><a href="${ctx}/finance/financeQuitMoney/dealQuitList">业务退费</a></li>
 	</ul>
 
-	<form id="searchForm" action="${ctx}/finance/financeQuitMoney/list"
+	<form id="searchForm" action="${ctx}/finance/financeQuitMoney/dealQuitList"
 		method="post" class="breadcrumb form-search">
 		<input type="hidden" id="pageNo" name="pageNo" value="${page.pageNo}" />
 		<input type="hidden" id="pageSize" name="pageSize"
