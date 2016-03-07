@@ -1,6 +1,7 @@
 package com.itrus.ca.modules.work.web;
 
 import java.io.UnsupportedEncodingException;
+import java.net.ConnectException;
 import java.net.URLDecoder;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -13,6 +14,7 @@ import java.util.Map;
 
 import javax.validation.Valid;
 
+import org.apache.http.conn.HttpHostConnectException;
 import org.bouncycastle.mail.smime.handlers.pkcs7_mime;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Restrictions;
@@ -436,14 +438,58 @@ public class CertController extends BaseController {
 				logUtil.saveSysLog("计费策略模版", "更改剩余数量和使用数量成功!", "");
 			}
 
-		} catch (Exception e) {
+		}
+		
+		
+		
+		catch (HttpHostConnectException e) {
 			e.printStackTrace();
 			json.put("status", -1);
-			json.put("msg", "申请证书失败");
-			// 异常业务
+			json.put("msg", "申请证书失败,可能原因:制证服务器未连接！");
+				// 异常业务
 			dealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_ABNORMAL_USER);// 异常业务
 			workDealInfoService.save(dealInfo);
+			logUtil.saveSysLog("业务中心", "制证失败", e.getMessage());	
+			return json.toString();
 		}
+		
+		
+		catch (ConnectException e) {
+			e.printStackTrace();
+			json.put("status", -1);
+			json.put("msg", "申请证书失败,可能原因:制证服务器未连接！");
+				// 异常业务
+			dealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_ABNORMAL_USER);// 异常业务
+			workDealInfoService.save(dealInfo);
+			logUtil.saveSysLog("业务中心", "制证失败", e.getMessage());	
+			return json.toString();
+			
+		}
+		
+		catch (NullPointerException e) {
+			e.printStackTrace();
+			json.put("status", -1);
+			json.put("msg", "申请证书失败,可能原因:制证服务器未连接！");
+				// 异常业务
+			dealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_ABNORMAL_USER);// 异常业务
+			workDealInfoService.save(dealInfo);
+			logUtil.saveSysLog("业务中心", "制证失败", e.getMessage());	
+			return json.toString();
+			
+		}
+		
+		catch(Exception e){
+			e.printStackTrace();
+			json.put("status", -1);
+			json.put("msg", "申请证书失败,可能原因:制证服务器未连接！");
+				// 异常业务
+			dealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_ABNORMAL_USER);// 异常业务
+			workDealInfoService.save(dealInfo);
+			logUtil.saveSysLog("业务中心", "制证失败", e.getMessage());	
+			return json.toString();
+		}
+		
+	
 		logUtil.saveSysLog("业务中心", "制证：编号" + dealInfoId, "");
 		return json.toString();
 	}
