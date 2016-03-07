@@ -445,7 +445,7 @@ public class CertController extends BaseController {
 		catch (HttpHostConnectException e) {
 			e.printStackTrace();
 			json.put("status", -1);
-			json.put("msg", "申请证书失败,可能原因:制证服务器未连接！");
+			json.put("msg", "申请证书失败,可能原因:制证服务器未连接,制证服务器未开启！");
 				// 异常业务
 			dealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_ABNORMAL_USER);// 异常业务
 			workDealInfoService.save(dealInfo);
@@ -457,7 +457,7 @@ public class CertController extends BaseController {
 		catch (ConnectException e) {
 			e.printStackTrace();
 			json.put("status", -1);
-			json.put("msg", "申请证书失败,可能原因:制证服务器未连接！");
+			json.put("msg", "申请证书失败,可能原因:制证服务器未连接,CA模板配置错误！");
 				// 异常业务
 			dealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_ABNORMAL_USER);// 异常业务
 			workDealInfoService.save(dealInfo);
