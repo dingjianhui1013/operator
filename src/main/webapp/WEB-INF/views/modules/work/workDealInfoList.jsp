@@ -353,6 +353,11 @@ $(document)
 					document.getElementById("declareDiv").style.display= "none";
 					//top.$.jBox.tip("上传失败"+data.msg);
 					//$("#searchForm").submit();
+				}else if(data.status==null||typeof(data.status)=='undefined'){
+					top.$.jBox.tip("上传失败!");
+					document.getElementById("declareDiv").style.display= "none";
+					//top.$.jBox.tip("上传失败"+data.msg);
+					//$("#searchForm").submit();
 				}else{
 					top.$.jBox.tip("上传失败!");
 					var info = "失败信息:<br>"+data.msg;
