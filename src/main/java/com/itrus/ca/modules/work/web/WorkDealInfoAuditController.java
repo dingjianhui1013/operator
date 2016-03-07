@@ -1406,7 +1406,12 @@ public class WorkDealInfoAuditController extends BaseController {
 		if (notAfterLong < nowLong) {
 			return 0;
 		}
-		return (int) ((notAfterLong - nowLong) / MILL);
+		long d = (notAfterLong - nowLong)/MILL;
+		long hour1=(notAfterLong - nowLong)%MILL;
+		if (hour1>0) {
+			d+=1;
+		}
+		return (int) d;
 	}
 
 	@RequestMapping(value = "getAgentMoney")
