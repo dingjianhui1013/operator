@@ -111,7 +111,7 @@ public class FinanceQuitMoney extends DataEntity implements Serializable{
 		this.quitReason = quitReason;
 	}
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "payment_id")
 	public FinancePaymentInfo getFinancePaymentInfo() {
 		return financePaymentInfo;
@@ -121,7 +121,7 @@ public class FinanceQuitMoney extends DataEntity implements Serializable{
 		this.financePaymentInfo = financePaymentInfo;
 	}
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "work_deal_info")
 	public WorkDealInfo getWorkDealInfo() {
 		return workDealInfo;

@@ -53,31 +53,11 @@ public class FinanceQuitMoneyController {
 		try {
 			
 	
-		Page<FinanceQuitMoney> page = financeQuitMoneyService.findAll(new Page<FinanceQuitMoney>(request, response), commUserName, payStartTime, payEndTime, quitStartTime, quitEndTime);
+		Page<FinanceQuitMoney> page = financeQuitMoneyService.findAllFinance(new Page<FinanceQuitMoney>(request, response), commUserName, payStartTime, payEndTime, quitStartTime, quitEndTime);
 		
 		
 		
-		/*if(commUserName!=null&&!commUserName.equals("")){
-			List<FinanceQuitMoney> list =  page.getList();
-			List<FinanceQuitMoney> lists = new ArrayList<FinanceQuitMoney>();	
-		
-		for(FinanceQuitMoney m:list){
-			if(m.getWorkDealInfo().getWorkUser().getContactName()!=null&&!m.getWorkDealInfo().getWorkUser().getContactName().equals("")){
-				if(m.getWorkDealInfo().getWorkUser().getContactName().contains(commUserName)){
-					lists.add(m);
-				}
-			}else{
-				if(m.getFinancePaymentInfo().getCommUserName()!=null&&!m.getFinancePaymentInfo().getCommUserName().equals("")){
-					if(m.getFinancePaymentInfo().getCommUserName().contains(commUserName)){
-						lists.add(m);
-					}
-				}
-			}
-		}
-		
-		page.setList(lists);
-		
-		}*/
+	
 		
 		if (page.getList().size() > 0 ) {
 			for (int i = 0; i < page.getList().size(); i++) {
@@ -110,6 +90,13 @@ public class FinanceQuitMoneyController {
 		List<FinanceQuitMoney> financeQuitMoney= financeQuitMoneyService.findAll(commUserName, payStartTime, payEndTime, quitStartTime, quitEndTime);
 		model.addAttribute("page", page);
 		model.addAttribute("count",financeQuitMoney.size());
+		
+		model.addAttribute("commUserName", commUserName);
+		model.addAttribute("payStartTime", payStartTime);
+		model.addAttribute("payEndTime", payEndTime);
+		model.addAttribute("quitStartTime", quitStartTime);
+		model.addAttribute("quitEndTime", quitEndTime);
+		
 		} catch (Exception e) {
 			e.printStackTrace();
 			// TODO: handle exception
@@ -162,6 +149,72 @@ public class FinanceQuitMoneyController {
 	}
 	
 	
+	
+	
+	@RequiresPermissions("finance:financeQuitMoney:view")
+	@RequestMapping(value = { "dealQuitList"})
+	public String dealQuitList(@RequestParam(value = "commUserName", required = false) String commUserName
+						,@RequestParam(value = "payStartTime", required = false) String payStartTime
+						,@RequestParam(value = "payEndTime", required = false) String payEndTime
+						,@RequestParam(value = "quitStartTime", required = false) String quitStartTime
+						,@RequestParam(value = "quitEndTime", required = false) String quitEndTime
+						, HttpServletRequest request
+						, HttpServletResponse response
+						, Model model){
+
+		try {
+			
+	
+		Page<FinanceQuitMoney> page = financeQuitMoneyService.findAllDealInfo(new Page<FinanceQuitMoney>(request, response), commUserName, payStartTime, payEndTime, quitStartTime, quitEndTime);
+		
+		
+		
+	
+		
+		if (page.getList().size() > 0 ) {
+			for (int i = 0; i < page.getList().size(); i++) {
+				if (page.getList().get(i).getWorkDealInfo()==null) {
+					int methode = page.getList().get(i).getFinancePaymentInfo().getPaymentMethod();
+					switch (methode) {
+					case 1:
+						page.getList().get(i).getFinancePaymentInfo().setPaymentMethodName("现金");
+						break;
+					case 2:
+						page.getList().get(i).getFinancePaymentInfo().setPaymentMethodName("POS收款");
+						break;
+					case 3:
+						page.getList().get(i).getFinancePaymentInfo().setPaymentMethodName("银行转账");
+						break;
+					case 4:
+						page.getList().get(i).getFinancePaymentInfo().setPaymentMethodName("支付宝转账");
+						break;
+					default:
+						page.getList().get(i).getFinancePaymentInfo().setPaymentMethodName("您没有选择付款方式");
+						break;
+					}
+				}else{
+					
+					
+					
+				}
+			}
+		}
+		List<FinanceQuitMoney> financeQuitMoney= financeQuitMoneyService.findAll(commUserName, payStartTime, payEndTime, quitStartTime, quitEndTime);
+		model.addAttribute("page", page);
+		model.addAttribute("count",financeQuitMoney.size());
+		
+		model.addAttribute("commUserName", commUserName);
+		model.addAttribute("payStartTime", payStartTime);
+		model.addAttribute("payEndTime", payEndTime);
+		model.addAttribute("quitStartTime", quitStartTime);
+		model.addAttribute("quitEndTime", quitEndTime);
+		
+		} catch (Exception e) {
+			e.printStackTrace();
+			// TODO: handle exception
+		}
+		return "modules/finance/financeQuitMoneyListByDealInfo";
+	}
 	
 	
 	

@@ -64,7 +64,7 @@ public class WorkCertInfo  implements java.io.Serializable {
 	private Integer lastTrustDeviceCount;
 	private Date lastTrustDeviceDate;
 	private Date trustDeviceDate;
-	private Set<WorkDealInfo> workDealInfos = new HashSet<WorkDealInfo>(0);
+/*	private Set<WorkDealInfo> workDealInfos = new HashSet<WorkDealInfo>(0);*/
 	private String provider;
 	private Boolean obtained;
 	private String type;
@@ -102,8 +102,8 @@ public class WorkCertInfo  implements java.io.Serializable {
 			Date signDate, String source, Integer status,
 			String subjectDn, String subjectHashMd5, Date suspendDate,
 			Integer trustDeviceCount, Integer lastTrustDeviceCount,
-			Date lastTrustDeviceDate, Date trustDeviceDate,
-			Set<WorkDealInfo> workDealInfos) {
+			Date lastTrustDeviceDate, Date trustDeviceDate
+			/*Set<WorkDealInfo> workDealInfos*/) {
 		this.workCertApplyInfo = workCertApplyInfo;
 		this.isMaster = isMaster;
 		this.issuerDn = issuerDn;
@@ -135,7 +135,7 @@ public class WorkCertInfo  implements java.io.Serializable {
 		this.lastTrustDeviceCount = lastTrustDeviceCount;
 		this.lastTrustDeviceDate = lastTrustDeviceDate;
 		this.trustDeviceDate = trustDeviceDate;
-		this.workDealInfos = workDealInfos;
+	/*	this.workDealInfos = workDealInfos;*/
 	}
 
 	// Property accessors
@@ -429,14 +429,14 @@ public class WorkCertInfo  implements java.io.Serializable {
 		this.trustDeviceDate = trustDeviceDate;
 	}
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "workCertInfo")
+	/*@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "workCertInfo")
 	public Set<WorkDealInfo> getWorkDealInfos() {
 		return this.workDealInfos;
 	}
 
 	public void setWorkDealInfos(Set<WorkDealInfo> workDealInfos) {
 		this.workDealInfos = workDealInfos;
-	}
+	}*/
 
 	@Column(name = "provider")
 	public String getProvider() {
