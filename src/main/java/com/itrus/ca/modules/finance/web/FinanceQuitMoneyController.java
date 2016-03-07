@@ -1,5 +1,6 @@
 package com.itrus.ca.modules.finance.web;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -53,6 +54,31 @@ public class FinanceQuitMoneyController {
 			
 	
 		Page<FinanceQuitMoney> page = financeQuitMoneyService.findAll(new Page<FinanceQuitMoney>(request, response), commUserName, payStartTime, payEndTime, quitStartTime, quitEndTime);
+		
+		
+		
+		/*if(commUserName!=null&&!commUserName.equals("")){
+			List<FinanceQuitMoney> list =  page.getList();
+			List<FinanceQuitMoney> lists = new ArrayList<FinanceQuitMoney>();	
+		
+		for(FinanceQuitMoney m:list){
+			if(m.getWorkDealInfo().getWorkUser().getContactName()!=null&&!m.getWorkDealInfo().getWorkUser().getContactName().equals("")){
+				if(m.getWorkDealInfo().getWorkUser().getContactName().contains(commUserName)){
+					lists.add(m);
+				}
+			}else{
+				if(m.getFinancePaymentInfo().getCommUserName()!=null&&!m.getFinancePaymentInfo().getCommUserName().equals("")){
+					if(m.getFinancePaymentInfo().getCommUserName().contains(commUserName)){
+						lists.add(m);
+					}
+				}
+			}
+		}
+		
+		page.setList(lists);
+		
+		}*/
+		
 		if (page.getList().size() > 0 ) {
 			for (int i = 0; i < page.getList().size(); i++) {
 				if (page.getList().get(i).getWorkDealInfo()==null) {

@@ -43,7 +43,7 @@ public class FinanceQuitMoneyService extends BaseService {
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		DetachedCriteria dc = financeQuitMoneyDao.createDetachedCriteria();
 		if (!Strings.isNullOrEmpty(commUserName)) {
-//			dc.createAlias("financePaymentInfo", "financePaymentInfo");
+			dc.createAlias("financePaymentInfo", "financePaymentInfo");
 			dc.createAlias("workDealInfo", "workDealInfo");
 			dc.createAlias("workDealInfo.workUser", "workUser");
 //			dc.add(Restrictions.or(Restrictions.eq("financePaymentInfo.commUserName", commUserName),
@@ -52,7 +52,7 @@ public class FinanceQuitMoneyService extends BaseService {
 		}
 		try {
 			if (payStartTime != null && payEndTime != null && !"".equals(payEndTime) && !"".equals(payStartTime)) {
-				dc.createAlias("financePaymentInfo", "financePaymentInfo");
+//				dc.createAlias("financePaymentInfo", "financePaymentInfo");
 				dc.add(Restrictions.ge("financePaymentInfo.payDate", format.parse(payStartTime)));
 				dc.add(Restrictions.le("financePaymentInfo.payDate", format.parse(payEndTime)));
 			}
