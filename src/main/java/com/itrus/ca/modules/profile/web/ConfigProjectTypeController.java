@@ -25,7 +25,9 @@ import com.itrus.ca.common.persistence.Page;
 import com.itrus.ca.common.web.BaseController;
 import com.itrus.ca.modules.sys.entity.User;
 import com.itrus.ca.modules.sys.utils.UserUtils;
+import com.itrus.ca.modules.profile.entity.ConfigApp;
 import com.itrus.ca.modules.profile.entity.ConfigProjectType;
+import com.itrus.ca.modules.profile.service.ConfigAppService;
 import com.itrus.ca.modules.profile.service.ConfigProjectTypeService;
 
 /**
@@ -39,6 +41,10 @@ public class ConfigProjectTypeController extends BaseController {
 
 	@Autowired
 	private ConfigProjectTypeService configProjectTypeService;
+	
+	
+	@Autowired
+	private ConfigAppService configAppService;
 	
 	@ModelAttribute
 	public ConfigProjectType get(@RequestParam(required=false) Long id) {
@@ -79,6 +85,14 @@ public class ConfigProjectTypeController extends BaseController {
 	@RequiresPermissions("profile:configProjectType:edit")
 	@RequestMapping(value = "delete")
 	public String delete(Long id, RedirectAttributes redirectAttributes) {
+		
+		List<ConfigApp> apps = configAppService.findByconfigProjectType(id);
+		
+		if(apps.size()==0){
+			addMessage(redirectAttributes,"项目类型管理已被应用绑定,无法删除!");
+			return "redirect:"+Global.getAdminPath()+"/profile/configProjectType/?repage";
+		}
+		
 		configProjectTypeService.delete(id);
 		addMessage(redirectAttributes, "删除项目类型管理成功");
 		return "redirect:"+Global.getAdminPath()+"/profile/configProjectType/?repage";
