@@ -73,7 +73,7 @@ public class CaService {
 	 * @param raAccount  configRaAccount
 	 * @return
 	 */
-	public CertificateResponse getCaCert(CertificateRequest certificateRequest,String reqBuf,Integer validityDays,ConfigRaAccount raAccount) {
+	public CertificateResponse getCaCert(CertificateRequest certificateRequest,String reqBuf,Integer validityDays,ConfigRaAccount raAccount)  throws Exception{
 		CertificateResponse certificateResponse = null;//证书数据
 		if (validityDays==null) {//更新证书时，如果不配ra的默认更新天数，并且未指定，则时间是原来证书的天数
 			validityDays = 365;
