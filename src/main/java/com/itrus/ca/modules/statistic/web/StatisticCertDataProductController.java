@@ -145,13 +145,13 @@ public class StatisticCertDataProductController extends BaseController {
 					Integer fiveSum = 0;
 					
 					for (StatisticCertDataProduct statisticCertDataProduct2 : list) {
-						oneSum += statisticCertDataProduct2.getYear1();
-						twoSum += statisticCertDataProduct2.getYear2();
+						oneSum += statisticCertDataProduct2.getYear1()==null?0:statisticCertDataProduct2.getYear1();
+						twoSum += statisticCertDataProduct2.getYear2()==null?0:statisticCertDataProduct2.getYear2();
 						
-						threeSum += statisticCertDataProduct2.getYear3();
+						threeSum += statisticCertDataProduct2.getYear3()==null?0:statisticCertDataProduct2.getYear3();
 						
-						fourSum += statisticCertDataProduct2.getYear4();
-						fiveSum += statisticCertDataProduct2.getYear5();
+						fourSum += statisticCertDataProduct2.getYear4()==null?0:statisticCertDataProduct2.getYear4();
+						fiveSum += statisticCertDataProduct2.getYear5()==null?0:statisticCertDataProduct2.getYear5();
 					}
 					sm.setCount1(oneSum);
 					sm.setCount2(twoSum);
@@ -176,7 +176,7 @@ public class StatisticCertDataProductController extends BaseController {
 //						sm.setPro5Sum(oneSum+twoSum+fourSum+fiveSum);
 //					}
 					if (entry.getKey()==6) {
-						sm.setPro6Sum(oneSum+twoSum+  fourSum+fiveSum);
+						sm.setPro6Sum(oneSum+twoSum+ threeSum+ fourSum+fiveSum);
 					}
 					smList.add(sm);
 				} catch (Exception e) {
