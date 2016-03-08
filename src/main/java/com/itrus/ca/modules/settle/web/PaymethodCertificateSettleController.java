@@ -157,7 +157,7 @@ public class PaymethodCertificateSettleController extends BaseController {
 		if (startDate == null || endDate == null || applyId == null) {
 			model.addAttribute("startDate", DateUtils.firstDayOfMonth(new Date()));
 			model.addAttribute("endDate", new Date());
- 			return "modules/settle/certificateSettlementStatisticsList";
+ 			return "modules/settle/paymethodCertificateSettleList";
 		} else {
 			model.addAttribute("startDate", startDate);
 			model.addAttribute("endDate", endDate);

@@ -9,6 +9,7 @@ public class PaymethodCertificateSettleVo {
 	private Long workCount;
 	private Integer dealInfoType;
 	private Integer paymethod;
+	private Integer payMethod;
 
 	public PaymethodCertificateSettleVo() {
 
@@ -120,5 +121,15 @@ public class PaymethodCertificateSettleVo {
 	public void setPAYMETHOD(BigDecimal paymethod) {
 		this.paymethod = paymethod.intValue();
 	}
+
+	public Integer getPayMethod() {
+		return payMethod;
+	}
+
+	public void setPayMethod(Integer payMethod) {
+		this.payMethod = payMethod;
+	}
+	
+	
 
 }
