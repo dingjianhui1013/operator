@@ -8109,18 +8109,16 @@ public class WorkDealInfoController extends BaseController {
 			Long certId = dealinfo.getWorkCertInfo().getId();
 			Long agnetId = dealinfo.getConfigChargeAgentId();
 			Long dealPreId = dealinfo.getPrevId();
-			if (dealinfo.getDealInfoType().equals(1)) {
+			if (dealinfo.getDealInfoType()!=null && dealinfo.getDealInfoType().equals(1)) {
 				ConfigChargeAgent agentOri = configChargeAgentService.get(agnetId);
 				agentOri.setReserveUpdateNum(agentOri.getReserveUpdateNum() - 1);
 				agentOri.setSurplusUpdateNum(agentOri.getSurplusUpdateNum() + 1);
 				configChargeAgentService.save(agentOri);
-
 				ConfigAgentBoundDealInfo bound = configAgentBoundDealInfoService.findByAgentIdDealId(agnetId, id);
 				if (bound != null) {
 					configAgentBoundDealInfoService.deleteById(bound.getId());
 				}
 			}
-		
 			workDealInfoService.deleteWork(id);
 			workCertInfoService.delete(certId);
 			workDealInfoService.deleteReturnById(dealPreId);

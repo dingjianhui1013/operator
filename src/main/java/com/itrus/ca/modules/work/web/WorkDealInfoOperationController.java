@@ -1293,7 +1293,7 @@ public class WorkDealInfoOperationController extends BaseController {
 		WorkCompanyHis companyHis = null;
 		WorkUserHis userHis = null;
 		// 保存经办人信息
-		workUser = workDealInfo1.getWorkUser();
+		workUser = new WorkUser();
 		workUser.setContactName(contactName);
 		workUser.setStatus(1);
 		workUser.setConCertType(conCertType);
@@ -1307,7 +1307,7 @@ public class WorkDealInfoOperationController extends BaseController {
 		workUserHisService.save(userHis);
 
 			//变更业务保存单位信息
-			workCompany = workDealInfo1.getWorkCompany();
+			workCompany = new WorkCompany();
 			workCompany.setComCertificateType(comCertificateType);
 			Timestamp ts = new Timestamp(System.currentTimeMillis());
 			Timestamp ts1 = new Timestamp(System.currentTimeMillis());
@@ -1352,9 +1352,7 @@ public class WorkDealInfoOperationController extends BaseController {
 		workDealInfo.setWorkUserHis(userHis);
 		workDealInfo.setWorkCompanyHis(companyHis);
 		workDealInfo.setConfigProduct(workDealInfo1.getConfigProduct());
-	
 		workDealInfo.setYear(0);
-		
 	
 		
 		workDealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_ENTRY_SUCCESS);
@@ -1385,7 +1383,7 @@ public class WorkDealInfoOperationController extends BaseController {
 		} else {
 			workDealInfo.setLastDays(0);
 		}
-		WorkCertApplyInfo workCertApplyInfo = workDealInfo1.getWorkCertInfo().getWorkCertApplyInfo();
+		WorkCertApplyInfo workCertApplyInfo = new WorkCertApplyInfo();
 		workCertApplyInfo.setName(pName);
 		workCertApplyInfo.setEmail(pEmail);
 		workCertApplyInfo.setIdCard(pIDCard);
@@ -1469,28 +1467,40 @@ public class WorkDealInfoOperationController extends BaseController {
 		WorkCompanyHis companyHis = null;
 		WorkUserHis userHis = null;
 		// 保存经办人信息
-		workUser = workDealInfo1.getWorkUser();
+		workUser = new WorkUser();
+		WorkUser oldUser = workDealInfo1.getWorkUser(); 
 		
 		if (contactName!=null&&!contactName.equals("")) {
 			workUser.setContactName(contactName);
+		}else{
+			workUser.setContactName(oldUser.getContactName());
 		}
 		workUser.setStatus(1);
 		if (conCertType!=null&&!conCertType.equals("")) {
 			workUser.setConCertType(conCertType);
+		}else{
+			workUser.setContactName(oldUser.getConCertType());
 		}
 		if (conCertNumber!=null&&!conCertNumber.equals("")) {
 			workUser.setConCertNumber(conCertNumber);
+		}else{
+			workUser.setConCertNumber(oldUser.getConCertNumber());
 		}
 		if (contactPhone!=null&&!contactPhone.equals("")) {
 			workUser.setContactPhone(contactPhone);
+		}else{
+			workUser.setContactPhone(oldUser.getContactPhone());
 		}
 		if (contactTel!=null&&!contactTel.equals("")) {
 			workUser.setContactTel(contactTel);
+		}else{
+			workUser.setContactTel(oldUser.getContactTel());
 		}
 		if (contactSex!=null&&!contactSex.equals("")) {
 			workUser.setContactSex(contactSex);
+		}else{
+			workUser.setContactSex(oldUser.getContactSex());
 		}
-		
 		workUser.setContactEmail(contacEmail);
 		workUserService.save(workUser);
 		userHis = workUserService.change(workUser, companyHis);
@@ -1618,32 +1628,51 @@ public class WorkDealInfoOperationController extends BaseController {
 		WorkCompanyHis companyHis = null;
 		// 保存经办人信息
 		WorkUser workUser = workDealInfo1.getWorkUser();
+		workUser = new WorkUser();
+		WorkUser oldUser = workDealInfo1.getWorkUser(); 
+		
 		if (contactName!=null&&!contactName.equals("")) {
 			workUser.setContactName(contactName);
+		}else{
+			workUser.setContactName(oldUser.getContactName());
 		}
 		workUser.setStatus(1);
 		if (conCertType!=null&&!conCertType.equals("")) {
 			workUser.setConCertType(conCertType);
+		}else{
+			workUser.setContactName(oldUser.getConCertType());
 		}
 		if (conCertNumber!=null&&!conCertNumber.equals("")) {
 			workUser.setConCertNumber(conCertNumber);
+		}else{
+			workUser.setConCertNumber(oldUser.getConCertNumber());
 		}
-		workUser.setContactEmail(contacEmail);
 		if (contactPhone!=null&&!contactPhone.equals("")) {
 			workUser.setContactPhone(contactPhone);
+		}else{
+			workUser.setContactPhone(oldUser.getContactPhone());
 		}
 		if (contactTel!=null&&!contactTel.equals("")) {
 			workUser.setContactTel(contactTel);
+		}else{
+			workUser.setContactTel(oldUser.getContactTel());
 		}
 		if (contactSex!=null&&!contactSex.equals("")) {
 			workUser.setContactSex(contactSex);
+		}else{
+			workUser.setContactSex(oldUser.getContactSex());
+		}
+		if (contacEmail!=null&&!contacEmail.equals("")) {
+			workUser.setContactEmail(contacEmail);
+		}else{
+			workUser.setContactEmail(oldUser.getContactEmail());;
 		}
 		workUserService.save(workUser);
 		WorkUserHis userHis = workUserService.change(workUser, companyHis);
 		workUserHisService.save(userHis);
 
 			//变更业务保存单位信息
-		WorkCompany workCompany = workDealInfo1.getWorkCompany();
+		WorkCompany workCompany = new WorkCompany();
 		
 		if(companyName!=null && !companyName.equals("")){
 			workCompany.setCompanyName(companyName);
@@ -1779,26 +1808,28 @@ public class WorkDealInfoOperationController extends BaseController {
 		} else {
 			workDealInfo.setLastDays(0);
 		}
-		WorkCertApplyInfo workCertApplyInfo = workDealInfo1.getWorkCertInfo().getWorkCertApplyInfo();
+		WorkCertApplyInfo workCertApplyInfo = new WorkCertApplyInfo();
+		WorkCertApplyInfo oldWorkCertApplyInfo = workDealInfo1.getWorkCertInfo().getWorkCertApplyInfo();
 		
 		
 		if (pName!=null && !pName.equals("")) {
 			workCertApplyInfo.setName(pName);
+		}else{
+			workCertApplyInfo.setName(oldWorkCertApplyInfo.getName());
 		}
 		if (pEmail!=null && !pEmail.equals("")) {
 			workCertApplyInfo.setEmail(pEmail);
+		}else{
+			workCertApplyInfo.setEmail(oldWorkCertApplyInfo.getEmail());
 		}
 		if (pIDCard!=null && !pIDCard.equals("")) {
 			workCertApplyInfo.setIdCard(pIDCard);
+		}else{
+			workCertApplyInfo.setIdCard(oldWorkCertApplyInfo.getIdCard());
 		}
-		
-		
-		
 		workCertApplyInfo.setProvince(workCompany.getProvince());
 		workCertApplyInfo.setCity(workCompany.getCity());
 		workCertApplyInfoService.save(workCertApplyInfo);
-		
-		
 		
 		WorkCertInfo oldCertInfo = workDealInfo1.getWorkCertInfo();
 		WorkCertInfo workCertInfo = new WorkCertInfo();
