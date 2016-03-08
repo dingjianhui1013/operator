@@ -5212,8 +5212,37 @@ public class WorkDealInfoService extends BaseService {
 						}
 					}
 				}
+				
+				SimpleDateFormat dnf = new SimpleDateFormat("yyyy-MM-dd");
+				String orgExpirationTime = ""; // 组织机构代码有效期：
+				if (row.getCell(3) != null && !row.getCell(3).toString().replace(" ", "").equals("")){
+					orgExpirationTime = row.getCell(3).toString()
+							.replace(" ", "");
+				}
+				if (orgExpirationTime != null && !orgExpirationTime.equals("")) {
+					try {
+						Timestamp ts1 = new Timestamp(dnf.parse(orgExpirationTime)
+								.getTime());
+					} catch (Exception e) {
+						ifErr.append("第" + (i + 1) + "行第4列组织机构代码有效期格式不正确！<br>");
+					}
+				}
+				String comCertficateTime = ""; // 单位证照有效期：
+				if (row.getCell(7) != null
+						&& !row.getCell(7).toString().replace(" ", "")
+								.equals("")) {
+					comCertficateTime = row.getCell(7).toString()
+							.replace(" ", "");
+				}
+				if (comCertficateTime != null && !comCertficateTime.equals("")) {
+					try {
+						Timestamp ts = new Timestamp(dnf.parse(comCertficateTime)
+								.getTime());
+						} catch (Exception e) {
+						ifErr.append("第" + (i + 1) + "行第8列单位证照有效期格式不正确！<br>");
+					}
+				}
 			}
-
 			if (ifErr.toString().length() > 0) {
 				return ifErr(-1, ifErr.toString());
 			}
