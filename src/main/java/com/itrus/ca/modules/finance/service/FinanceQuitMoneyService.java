@@ -46,11 +46,7 @@ public class FinanceQuitMoneyService extends BaseService {
 		
 		
 		if (!Strings.isNullOrEmpty(commUserName)) {
-//			dc.createAlias("financePaymentInfo", "financePaymentInfo");
-			/*dc.createAlias("workDealInfo", "workDealInfo");
-			dc.createAlias("workDealInfo.workUser", "workUser");*/
-//			dc.add(Restrictions.or(Restrictions.eq("financePaymentInfo.commUserName", commUserName),
-//					Restrictions.eq("workUser.contactName", commUserName)));
+
 			dc.add(Restrictions.eq("financePaymentInfo.commUserName", commUserName));
 		}
 		try {
@@ -84,28 +80,26 @@ public class FinanceQuitMoneyService extends BaseService {
 		return financeQuitMoneyDao.find(page, dc);
 	}
 	
-	
-	
-	public Page<FinanceQuitMoney> findAllDealInfo(Page<FinanceQuitMoney> page, String commUserName, String payStartTime,
-			String payEndTime, String quitStartTime, String quitEndTime) {
+	public List<FinanceQuitMoney> findAllFinance(String commUserName, String payStartTime, String payEndTime,
+			String quitStartTime, String quitEndTime) {
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		DetachedCriteria dc = financeQuitMoneyDao.createDetachedCriteria();
-		dc.createAlias("workDealInfo", "workDealInfo");
-		dc.createAlias("workDealInfo.workCertInfo", "workCertInfo");
+		dc.createAlias("financePaymentInfo", "financePaymentInfo");
 		
 		if (!Strings.isNullOrEmpty(commUserName)) {
-			dc.createAlias("workDealInfo.workUser", "workUser");
-			dc.add(Restrictions.eq("workUser.contactName", commUserName));
+			
+			dc.add(Restrictions.eq("financePaymentInfo.commUserName", commUserName));
 		}
 		try {
-			if (payStartTime != null &&  !"".equals(payStartTime)) {
+
+		if (payStartTime != null &&  !"".equals(payStartTime)) {
 				
-				dc.add(Restrictions.ge("workCertInfo.signDate", format.parse(payStartTime)));
+				dc.add(Restrictions.ge("financePaymentInfo.payDate", format.parse(payStartTime)));
 			}
 			
 			if(payEndTime != null && !"".equals(payEndTime)){
 				
-				dc.add(Restrictions.le("workCertInfo.signDate", format.parse(payEndTime)));
+				dc.add(Restrictions.le("financePaymentInfo.payDate", format.parse(payEndTime)));
 			}
 
 		} catch (Exception ex) {
@@ -125,7 +119,79 @@ public class FinanceQuitMoneyService extends BaseService {
 			e.printStackTrace();
 		}
 		dc.addOrder(Order.desc("id"));
+		return financeQuitMoneyDao.find(dc);
+	}
+	
+	
+	
+	public Page<FinanceQuitMoney> findAllDealInfo(Page<FinanceQuitMoney> page, String companyName, String contactName,
+	       String quitStartTime, String quitEndTime) {
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		DetachedCriteria dc = financeQuitMoneyDao.createDetachedCriteria();
+		dc.createAlias("workDealInfo", "workDealInfo");
+		
+		
+		if (!Strings.isNullOrEmpty(companyName)) {
+			dc.createAlias("workDealInfo.workCompany", "workCompany");
+			dc.add(Restrictions.eq("workCompany.companyName", companyName));
+		}
+		
+		if(!Strings.isNullOrEmpty(contactName)){
+			dc.createAlias("workDealInfo.workUserHis", "workUserHis");
+			dc.add(Restrictions.eq("workUserHis.contactName", contactName));
+		}
+		
+		try {
+			if (quitStartTime != null &&  !"".equals(quitStartTime)) {
+				dc.add(Restrictions.ge("quitDate", format.parse(quitStartTime)));
+				
+			}
+			
+			if(quitEndTime != null && !"".equals(quitEndTime)){
+				dc.add(Restrictions.le("quitDate", format.parse(quitEndTime)));
+			}
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		dc.addOrder(Order.desc("id"));
 		return financeQuitMoneyDao.find(page, dc);
+	}
+	
+	
+	public List<FinanceQuitMoney> findAllDealInfo(String companyName, String contactName,
+		       String quitStartTime, String quitEndTime){
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		DetachedCriteria dc = financeQuitMoneyDao.createDetachedCriteria();
+		dc.createAlias("workDealInfo", "workDealInfo");
+		
+		
+		if (!Strings.isNullOrEmpty(companyName)) {
+			dc.createAlias("workDealInfo.workCompany", "workCompany");
+			dc.add(Restrictions.eq("workCompany.companyName", companyName));
+		}
+		
+		if(!Strings.isNullOrEmpty(contactName)){
+			dc.createAlias("workDealInfo.workUserHis", "workUserHis");
+			dc.add(Restrictions.eq("workUserHis.contactName", contactName));
+		}
+		
+		try {
+			if (quitStartTime != null &&  !"".equals(quitStartTime)) {
+				dc.add(Restrictions.ge("quitDate", format.parse(quitStartTime)));
+				
+			}
+			
+			if(quitEndTime != null && !"".equals(quitEndTime)){
+				dc.add(Restrictions.le("quitDate", format.parse(quitEndTime)));
+			}
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		dc.addOrder(Order.desc("id"));
+		
+		
+		return financeQuitMoneyDao.find(dc);
 	}
 	
 	
@@ -135,41 +201,7 @@ public class FinanceQuitMoneyService extends BaseService {
 		financeQuitMoneyDao.save(financeQuitMoney);
 	}
 
-	public List<FinanceQuitMoney> findAll(String commUserName, String payStartTime, String payEndTime,
-			String quitStartTime, String quitEndTime) {
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-		DetachedCriteria dc = financeQuitMoneyDao.createDetachedCriteria();
-		
-		if (!Strings.isNullOrEmpty(commUserName)) {
-			dc.createAlias("financePaymentInfo", "financePaymentInfo");
-			dc.createAlias("workDealInfo", "workDealInfo");
-			dc.createAlias("workDealInfo.workUser", "workUser");
-			dc.add(Restrictions.or(Restrictions.eq("financePaymentInfo.commUserName", commUserName),
-					Restrictions.eq("workUser.contactName", commUserName)));
-		}
-		try {
-
-			if (payStartTime != null && payEndTime != null && !"".equals(payEndTime) && !"".equals(payStartTime)) {
-				dc.createAlias("financePaymentInfo", "financePaymentInfo");
-				dc.add(Restrictions.ge("financePaymentInfo.payDate", format.parse(payStartTime)));
-				dc.add(Restrictions.le("financePaymentInfo.payDate", format.parse(payEndTime)));
-			}
-
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-		try {
-			if (quitStartTime != null && quitEndTime != null && !"".equals(quitEndTime) && !"".equals(quitStartTime)) {
-				dc.add(Restrictions.ge("quitDate", format.parse(quitStartTime)));
-				dc.add(Restrictions.le("quitDate", format.parse(quitEndTime)));
-			}
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		dc.addOrder(Order.desc("id"));
-		return financeQuitMoneyDao.find(dc);
-	}
+	
 
 	@Transactional(readOnly = false)
 	public void save(FinancePaymentInfo financePaymentInfo, String quitReason) {

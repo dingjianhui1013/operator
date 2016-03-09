@@ -19,6 +19,7 @@ import com.itrus.ca.modules.finance.entity.FinancePaymentInfo;
 import com.itrus.ca.modules.finance.entity.FinanceQuitMoney;
 import com.itrus.ca.modules.finance.service.FinancePaymentInfoService;
 import com.itrus.ca.modules.finance.service.FinanceQuitMoneyService;
+import com.itrus.ca.modules.work.entity.WorkDealInfo;
 
 @Controller
 @RequestMapping(value = "${adminPath}/finance/financeQuitMoney")
@@ -87,7 +88,7 @@ public class FinanceQuitMoneyController {
 				}
 			}
 		}
-		List<FinanceQuitMoney> financeQuitMoney= financeQuitMoneyService.findAll(commUserName, payStartTime, payEndTime, quitStartTime, quitEndTime);
+		List<FinanceQuitMoney> financeQuitMoney= financeQuitMoneyService.findAllFinance(commUserName, payStartTime, payEndTime, quitStartTime, quitEndTime);
 		model.addAttribute("page", page);
 		model.addAttribute("count",financeQuitMoney.size());
 		
@@ -153,9 +154,8 @@ public class FinanceQuitMoneyController {
 	
 	@RequiresPermissions("finance:financeQuitMoney:view")
 	@RequestMapping(value = { "dealQuitList"})
-	public String dealQuitList(@RequestParam(value = "commUserName", required = false) String commUserName
-						,@RequestParam(value = "payStartTime", required = false) String payStartTime
-						,@RequestParam(value = "payEndTime", required = false) String payEndTime
+	public String dealQuitList(@RequestParam(value = "companyName", required = false) String companyName
+						,@RequestParam(value = "contactName", required = false) String contactName
 						,@RequestParam(value = "quitStartTime", required = false) String quitStartTime
 						,@RequestParam(value = "quitEndTime", required = false) String quitEndTime
 						, HttpServletRequest request
@@ -165,7 +165,7 @@ public class FinanceQuitMoneyController {
 		try {
 			
 	
-		Page<FinanceQuitMoney> page = financeQuitMoneyService.findAllDealInfo(new Page<FinanceQuitMoney>(request, response), commUserName, payStartTime, payEndTime, quitStartTime, quitEndTime);
+		Page<FinanceQuitMoney> page = financeQuitMoneyService.findAllDealInfo(new Page<FinanceQuitMoney>(request, response), companyName,contactName,quitStartTime, quitEndTime);
 		
 		
 		
@@ -199,13 +199,19 @@ public class FinanceQuitMoneyController {
 				}
 			}
 		}
-		List<FinanceQuitMoney> financeQuitMoney= financeQuitMoneyService.findAll(commUserName, payStartTime, payEndTime, quitStartTime, quitEndTime);
+		List<FinanceQuitMoney> financeQuitMoney= financeQuitMoneyService.findAllDealInfo(companyName,contactName, quitStartTime, quitEndTime);
+		
 		model.addAttribute("page", page);
+		model.addAttribute("companyName", companyName);
+		model.addAttribute("contactName", contactName);
+		model.addAttribute("quitStartTime", quitStartTime);
+		model.addAttribute("quitStartTime", quitEndTime);
+		
+		
 		model.addAttribute("count",financeQuitMoney.size());
 		
-		model.addAttribute("commUserName", commUserName);
-		model.addAttribute("payStartTime", payStartTime);
-		model.addAttribute("payEndTime", payEndTime);
+		
+	
 		model.addAttribute("quitStartTime", quitStartTime);
 		model.addAttribute("quitEndTime", quitEndTime);
 		
