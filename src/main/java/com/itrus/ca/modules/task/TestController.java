@@ -412,10 +412,17 @@ public class TestController {
 								yesterDay, office.getId(), 2, app.getId(),
 								WorkDealInfoType.TYPE_ADD_CERT, productType,
 								type, cur);
+						
+						Integer add3 = workDealInfoService.getCertAppYearInfo(yesterDay, office.getId(), 3, app.getId(),WorkDealInfoType.TYPE_ADD_CERT, productType, type,cur);
+						
 						Integer add4 = workDealInfoService.getCertAppYearInfo(
 								yesterDay, office.getId(), 4, app.getId(),
 								WorkDealInfoType.TYPE_ADD_CERT, productType,
 								type, cur);
+						
+						Integer add5 = workDealInfoService.getCertAppYearInfo(yesterDay, office.getId(), 5, app.getId(),WorkDealInfoType.TYPE_ADD_CERT, productType, type,cur);
+						
+						
 						Integer renew1 = workDealInfoService
 								.getCertAppYearInfo(yesterDay, office.getId(),
 										1, app.getId(),
@@ -426,17 +433,31 @@ public class TestController {
 										2, app.getId(),
 										WorkDealInfoType.TYPE_UPDATE_CERT,
 										productType, type, cur);
+						Integer renew3 = workDealInfoService
+								.getCertAppYearInfo(yesterDay, office.getId(),
+										3, app.getId(),
+										WorkDealInfoType.TYPE_UPDATE_CERT,
+										productType, type, cur);
 						Integer renew4 = workDealInfoService
 								.getCertAppYearInfo(yesterDay, office.getId(),
 										4, app.getId(),
 										WorkDealInfoType.TYPE_UPDATE_CERT,
 										productType, type, cur);
+						Integer renew5 = workDealInfoService
+								.getCertAppYearInfo(yesterDay, office.getId(),
+										5, app.getId(),
+										WorkDealInfoType.TYPE_UPDATE_CERT,
+										productType, type, cur);
 						data.setAdd1(add1);
 						data.setAdd2(add2);
+						data.setAdd3(add3);
 						data.setAdd4(add4);
+						data.setAdd5(add5);
 						data.setRenew1(renew1);
 						data.setRenew2(renew2);
+						data.setRenew3(renew3);
 						data.setRenew4(renew4);
+						data.setRenew5(renew5);
 						data.setPayType(type);
 						// 每一个po存的是 某个应用下某种证书（企业or个人）某种付款方式 新增、更新了多少
 						statisticCertDataService.save(data);
@@ -455,15 +476,27 @@ public class TestController {
 					Integer year2 = workDealInfoService.getCertAppYearInfo(
 							yesterDay, office.getId(), 2, null, null, type,
 							null, cur);
+					
+					Integer year3 = workDealInfoService.getCertAppYearInfo(
+							yesterDay, office.getId(), 3, null, null, type,
+							null, cur);
+					
 					Integer year4 = workDealInfoService.getCertAppYearInfo(
 							yesterDay, office.getId(), 4, null, null, type,
 							null, cur);
+					
+					Integer year5 = workDealInfoService.getCertAppYearInfo(
+							yesterDay, office.getId(), 5, null, null, type,
+							null, cur);
+					
 					product.setCountDate(cur);
 					product.setOffice(office);
 					product.setProductType(Integer.valueOf(certType));
 					product.setYear1(year1);
 					product.setYear2(year2);
+					product.setYear3(year3);
 					product.setYear4(year4);
+					product.setYear5(year5);
 					// 某个网点 某种类型证书 发放数量
 					statisticCertDataProductService.save(product);
 				}
