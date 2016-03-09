@@ -55,7 +55,88 @@
 		});
 	}
 	
-
+	function saveSettlementLog()
+	{
+		var comAgentId = $("#comAgentId").val();
+		var appId = $("#appId").val();
+		var productIds=' ';
+		$("input[name='productIds']:checkbox").each(function(i,e){ 
+			productIds+=$(e).val()+",";
+			});
+		var startTime=$("#startTime").val();
+		var endTime=$("#endTime").val();
+		if(comAgentId==0){
+			top.$.jBox.tip("代理商不能为空！");
+		}else{
+			
+			var html = " &nbsp;&nbsp;&nbsp;&nbsp;请填写备注信息：<input class='input-medium' type='text' name='remarks' value='' style='margin-left:10px'/>";
+			var submit=function(v,h,f)
+			{
+				if(v=='ok')
+					{
+						if(f.remarks=='')
+						{
+							top.$.jBox.tip("请填写备注。", 'error', { focusId: "remarks" });
+					        return false;
+						}else
+							{
+									$("#remarks").val(f.remarks);
+									var remarks = $("#remarks").val();
+									$.ajax({
+										url:"${ctx}/settle/settlementLog/isExist",
+										data:{'appId':appId,'comAgentId':comAgentId,'productIds':productIds,'startTime':startTime,'endTime':endTime,'remarks':remarks,_:new Date().getTime()},
+										dataType:'json',
+										success:function(data){
+											if(data.status==1)
+												{
+													top.$.jBox.confirm(data.msg,'系统提示',function(v,h,f){
+						                            	if(v=='ok'){
+						                            		$.ajax({
+						        								url:"${ctx}/settle/settlementLog/deleteAndSave",
+						        								data:{'appId':appId,'comAgentId':comAgentId,'productIds':productIds,'startTime':startTime,'endTime':endTime,'remarks':remarks,_:new Date().getTime()},
+						        								dataType:'json',
+						        								success:function(data){
+						        									if(data.status==1)
+						        										{
+						        											top.$.jBox.tip("删除并保存成功！");
+						        										}else
+						        											{
+						        												top.$.jBox.tip("删除并保存失败！");
+						        											}
+						        								}
+						                            		});
+						                            	}
+													});
+											}else{
+														
+													// 	$("#remarks").val(f.remarks);
+													var remarks = $("#remarks").val();
+				 									var url="${ctx}/settle/settlementLog/saveSettlementLog";
+				 									$.ajax({
+				 										url:url,
+				 										data:{'appId':appId,'comAgentId':comAgentId,'productIds':productIds,'startTime':startTime,'endTime':endTime,'remarks':remarks,_:new Date().getTime()},
+				 										dataType:'json',
+				 										success:function(data){
+				 											if(data.status==1)
+				 												{
+				 													top.$.jBox.tip("保存成功！");
+				 												}else{
+				 													top.$.jBox.tip("保存失败！");
+				 												}
+				 										}
+				 									});	
+											}
+									}
+								});
+							}
+					}else
+						{
+							return false;
+						}
+			};
+			top.$.jBox(html, { title:"填写备注",buttons:{"确定":"ok","关闭":true}, submit: submit });
+		}
+	}
 	function searchForm(){
 		var comAgentId = $("#comAgentId").val();
 		if(comAgentId==0){
@@ -72,6 +153,7 @@
 <div style="overflow:auto;" class="windowHeight" id="scrollBar" >
 	<ul class="nav nav-tabs" id="ulId" style="width:100%;">
 		<li class="active"><a href="${ctx}/settle/settlePayableDetail/list">年限结算表</a></li>
+		<li><a href="${ctx}/settle/settlementLog/list">年限结算保存查看</a></li>
 	</ul>
 	<form:form id="searchForm" modelAttribute="workDealInfo"
 		action="${ctx}/settle/settlePayableDetail/list" method="post"
@@ -79,6 +161,7 @@
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}" />
 		<input id="pageSize" name="pageSize" type="hidden"
 			value="${page.pageSize}" />
+		<input id="remarks" type="hidden" value="" name="remarks"/>
 		<div class="control-group">
 			<label><font color="red" >*</font>代理商 ：</label>
 			<select onchange="setApp(this)" name="comAgentId" id="comAgentId" class="required" >
@@ -103,20 +186,14 @@
 			
 			<c:forEach items="${products }" var="product" >
 					
-					<input name="productIds" type="checkbox" 
-					
+					<input name="productIds" type="checkbox" id="productIds"
 						<c:forEach items="${productIdList }" var="a" >
 							<c:if test="${a == product.id}">
 								checked="checked"
 							</c:if>
 						</c:forEach>
-					
 					 value="${product.id }">${proType[product.productName ]}
 				</c:forEach>
-			
-			
-			
-			
 			</label>
 		</div>
 		<div style="width: 800px">                 
@@ -127,7 +204,7 @@
 				name="startTime" id="startTime"/> 至 <input class="input-medium Wdate" type="text"
 				required="required" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'startTime\')}'});"
 				value="<fmt:formatDate value="${endTime}" pattern="yyyy-MM-dd"/>" maxlength="20" readonly="readonly"
-				name="endTime" />
+				name="endTime" id="endTime"/>
 <!-- 		  	<input id="btnSubmit" class="btn btn-primary" -->
 <!-- 				type="submit" value="查询" /> -->
 				
@@ -136,6 +213,8 @@
 				
 				&nbsp; <input id="btnExport" class="btn btn-primary"
 				type="button" value="导出" />
+				&nbsp;<input id="btnExport" class="btn btn-primary" onclick="saveSettlementLog()"
+				type="button" value="保存" />
 		</div>
 	
 	
@@ -181,7 +260,7 @@
 							<td>${status.index + 1}</td>
 							<td>${dealInfo.workCompany.companyName}</td>
 							<td>${dealInfo.workCertInfo.workCertApplyInfo.name}</td>
-							<td>${dealInfo.configProduct.productName}</td>
+							<td>${proType[dealInfo.configProduct.productName]}</td>
 							<c:forEach items="${dealInfo.detailList }" var="detail">
 <%-- 								<c:if test="${dealInfo.workPayInfo.methodPos}"><td>Pos付款</td></c:if> --%>
 <%-- 								<c:if test="${dealInfo.workPayInfo.methodMoney}"><td>现金付款</td></c:if> --%>

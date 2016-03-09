@@ -59,7 +59,11 @@ public class ConfigAgentAppRelationService extends BaseService {
 		dc.add(Restrictions.in("configCommercialAgent.id",ids));
 		return configAgentAppRelationDao.find(dc);
 	}
-	
+	public List<ConfigAgentAppRelation> findByAppName(Long appId){
+		DetachedCriteria dc = configAgentAppRelationDao.createDetachedCriteria();
+		dc.add(Restrictions.eq("configApp.id",appId));
+		return configAgentAppRelationDao.find(dc);
+	}
 	public List<ConfigAgentAppRelation> findByComAgentId(Long id){
 		DetachedCriteria dc = configAgentAppRelationDao.createDetachedCriteria();
 		dc.createAlias("configCommercialAgent", "configCommercialAgent");
