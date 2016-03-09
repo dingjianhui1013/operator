@@ -75,37 +75,35 @@
 		<li class="active"><a href="${ctx}/finance/financeQuitMoney/dealQuitList">业务退费</a></li>
 	</ul>
 
-	<form id="searchForm" action="${ctx}/finance/financeQuitMoney/dealQuitList"
+	<form:form id="searchForm"
+	    action="${ctx}/finance/financeQuitMoney/dealQuitList"
 		method="post" class="breadcrumb form-search">
 		<input type="hidden" id="pageNo" name="pageNo" value="${page.pageNo}" />
 		<input type="hidden" id="pageSize" name="pageSize"
 			value="${page.pageSize }" />
 		<div>
-			<label>&nbsp;&nbsp;联系人&nbsp; ：</label> <input name="commUserName" value="${commUserName }"
-				class="input-medium" /> <label>&nbsp;&nbsp;支付时间&nbsp; ：</label> <input
-				id="payStartTime" class="input-medium Wdate" type="text"
-				onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});"
-				value="${payStartTime }" maxlength="20" readonly="readonly"
-				name="payStartTime" />&nbsp;&nbsp;至&nbsp;&nbsp; <input
-				class="input-medium Wdate" type="text"
-				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'payStartTime\')}'});"
-				value="${payEndTime }" maxlength="20" readonly="readonly"
-				name="payEndTime" />
-			<div style="margin-top: 8px">
-				<label>退费时间：</label> <input id="quitStartTime"
-					class="input-medium Wdate" type="text"
-					onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});"
-					value="${quitStartTime }" maxlength="20" readonly="readonly"
-					name="quitStartTime" />&nbsp;&nbsp;至&nbsp;&nbsp; <input
-					class="input-medium Wdate" type="text"
-					onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'quitStartTime\')}'});"
-					value="${quitEndTime }" maxlength="20" readonly="readonly"
-					name="quitEndTime" /> &nbsp;<input id="btnSubmit"
-					class="btn btn-primary" type="submit" value="查询" />
-			</div>
-		</div>
-	</form>
+			<label>&nbsp;&nbsp;单位名称&nbsp; ：</label>  
+				<input name="companyName" value="${companyName }" 
+			 class="input-medium" />
+			
+			<label>经办人 ：</label>
+			<input name="contactName" value="${contactName }"
+			 class="input-medium" />
 
+			
+			<label>退费时间：</label> <input id="quitStartTime"
+				class="input-medium Wdate" type="text"
+				onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});"
+				value="${quitStartTime }" maxlength="20" readonly="readonly"
+				name="quitStartTime" />&nbsp;&nbsp;至&nbsp;&nbsp; <input
+				class="input-medium Wdate" type="text"
+				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'quitStartTime\')}'});"
+				value="${quitEndTime }" maxlength="20" readonly="readonly"
+				name="quitEndTime" /> &nbsp;<input id="btnSubmit"
+				class="btn btn-primary" type="submit" value="查询" />
+			
+		</div>
+	</form:form>
 	<table id="contentTable"
 		class="table table-striped table-bordered table-condensed">
 		<thead>
@@ -113,17 +111,17 @@
 				<th colspan="13">共&nbsp;${count}&nbsp;条数据</th>
 			</tr>
 			<tr>
-				<th>付款编号</th>
-				<th>付款单位名称</th>
-				<th>支付金额</th>
-				<th>联系人</th>
-				<th>联系方式</th>
-				<th>付款时间</th>
-				<th>付款方式</th>
+				<th>业务编号</th>
+				<th>受理网点</th>
+				<th>应用名称</th>
+				<th>单位名称</th>
+				<th>经办人</th>
+				<th>经办人号码</th>
+				
 				<th>退费金额</th>
 				<th>退费时间</th>
 				<th>退费原因</th>
-				<th>受理窗口</th>
+			
 				<th>状态</th>
 				<th>操作</th>
 			</tr>
@@ -131,71 +129,40 @@
 		<tbody>
 			<c:forEach items="${page.list }" var="financeQuitMoney" varStatus="f">
 				<tr>
-					<td>${financeQuitMoney.id }</td>
+					<td>${financeQuitMoney.workDealInfo.svn }</td>
+					
+					<td>${financeQuitMoney.quitWindow }</td>
+					
+					<td><c:if test="${financeQuitMoney.workDealInfo !=null }">
+					${financeQuitMoney.workDealInfo.configApp.appName }
+					</c:if> </td>
+									
 					<td><c:if test="${financeQuitMoney.workDealInfo !=null }">
 					${financeQuitMoney.workDealInfo.workCompany.companyName }
-					</c:if> <c:if test="${financeQuitMoney.workDealInfo ==null }">
-					${financeQuitMoney.financePaymentInfo.company }
 					</c:if></td>
-					<td><c:if test="${financeQuitMoney.workDealInfo !=null }">
-					${financeQuitMoney.workDealInfo.workPayInfo.workTotalMoney }
-					</c:if> <c:if test="${financeQuitMoney.workDealInfo ==null }">
-							<fmt:formatNumber
-								value="${financeQuitMoney.financePaymentInfo.paymentMoney}"
-								type="number" />
-						</c:if></td>
 
 					<td><c:if test="${financeQuitMoney.workDealInfo !=null }">
-					${financeQuitMoney.workDealInfo.workUser.contactName }
-					</c:if> <c:if test="${financeQuitMoney.workDealInfo ==null }">
-					${financeQuitMoney.financePaymentInfo.commUserName}
+					${financeQuitMoney.workDealInfo.workUserHis.contactName }
 					</c:if></td>
+					
+					
 					<td><c:if test="${financeQuitMoney.workDealInfo !=null }">
-					${financeQuitMoney.workDealInfo.workUser.contactEmail }
-					</c:if> <c:if test="${financeQuitMoney.workDealInfo ==null }">
-					${financeQuitMoney.financePaymentInfo.commMobile}
+					${financeQuitMoney.workDealInfo.workUserHis.contactPhone }
 					</c:if></td>
-					<td><c:if test="${financeQuitMoney.workDealInfo !=null }">
-							<fmt:formatDate
-								value="${financeQuitMoney.workDealInfo.workCertInfo.signDate}"
-								pattern="yyyy-MM-dd" />
-						</c:if> <c:if test="${financeQuitMoney.workDealInfo ==null }">
-							<fmt:formatDate
-								value="${financeQuitMoney.financePaymentInfo.payDate}"
-								pattern="yyyy-MM-dd" />
-						</c:if></td>
-					<td><c:if test="${financeQuitMoney.workDealInfo !=null }">
-							<c:if
-								test="${financeQuitMoney.workDealInfo.workPayInfo.methodPos }">POS机付款&nbsp;</c:if>
-							<c:if
-								test="${financeQuitMoney.workDealInfo.workPayInfo.methodMoney }">现金交易&nbsp;</c:if>
-							<c:if
-								test="${financeQuitMoney.workDealInfo.workPayInfo.methodAlipay }">支付宝交易&nbsp;</c:if>
-							<c:if
-								test="${financeQuitMoney.workDealInfo.workPayInfo.methodGov }">政府统一采购&nbsp;</c:if>
-							<c:if
-								test="${financeQuitMoney.workDealInfo.workPayInfo.methodContract }">合同采购&nbsp;</c:if>
-							<c:if
-								test="${financeQuitMoney.workDealInfo.workPayInfo.methodBank }">银行转账&nbsp;</c:if>
-						</c:if> <c:if test="${financeQuitMoney.workDealInfo ==null }">
-					${financeQuitMoney.financePaymentInfo.paymentMethodName}
-					</c:if></td>
+					
 					<td><fmt:formatNumber value="${financeQuitMoney.quitMoney }"
 							type="number" /></td>
+							
+							
 					<td><fmt:formatDate value="${financeQuitMoney.quitDate }"
 							pattern="yyyy-MM-dd" /></td>
+							
 					<td width="80px" style="word-break: break-all"><c:if
 							test="${financeQuitMoney.workDealInfo !=null }">
 					${financeQuitMoney.ression  }
-					</c:if> <c:if test="${financeQuitMoney.workDealInfo ==null }">
-					${financeQuitMoney.quitReason  }
 					</c:if></td>
 
-
-
-
-
-					<td>${financeQuitMoney.quitWindow }</td>
+	
 					<td><c:if test="${financeQuitMoney.status==1 }">未处理</c:if> <c:if
 							test="${financeQuitMoney.status==2 }">已处理</c:if> <c:if
 							test="${financeQuitMoney.status==null }">已完成</c:if></td>
