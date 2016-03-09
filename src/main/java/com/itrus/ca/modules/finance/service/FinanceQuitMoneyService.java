@@ -126,7 +126,7 @@ public class FinanceQuitMoneyService extends BaseService {
 	
 	public Page<FinanceQuitMoney> findAllDealInfo(Page<FinanceQuitMoney> page, String companyName, String contactName,
 	       String quitStartTime, String quitEndTime) {
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		DetachedCriteria dc = financeQuitMoneyDao.createDetachedCriteria();
 		dc.createAlias("workDealInfo", "workDealInfo");
 		
@@ -143,7 +143,11 @@ public class FinanceQuitMoneyService extends BaseService {
 		
 		try {
 			if (quitStartTime != null &&  !"".equals(quitStartTime)) {
-				dc.add(Restrictions.ge("quitDate", format.parse(quitStartTime)));
+				Date start = format.parse(quitStartTime);
+				start.setHours(00);
+				start.setMinutes(0);
+				start.setSeconds(0);
+				dc.add(Restrictions.ge("quitDate", start));
 				
 			}
 			
@@ -165,7 +169,7 @@ public class FinanceQuitMoneyService extends BaseService {
 	
 	public List<FinanceQuitMoney> findAllDealInfo(String companyName, String contactName,
 		       String quitStartTime, String quitEndTime){
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		DetachedCriteria dc = financeQuitMoneyDao.createDetachedCriteria();
 		dc.createAlias("workDealInfo", "workDealInfo");
 		
@@ -182,10 +186,12 @@ public class FinanceQuitMoneyService extends BaseService {
 		
 		try {
 			if (quitStartTime != null &&  !"".equals(quitStartTime)) {
-				dc.add(Restrictions.ge("quitDate", format.parse(quitStartTime)));
-				
+				Date start = format.parse(quitStartTime);
+				start.setHours(00);
+				start.setMinutes(0);
+				start.setSeconds(0);
+				dc.add(Restrictions.ge("quitDate", start));
 			}
-			
 			if(quitEndTime != null && !"".equals(quitEndTime)){
 				Date end = format.parse(quitEndTime);
 				end.setHours(23);
