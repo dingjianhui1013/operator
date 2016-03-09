@@ -218,20 +218,20 @@ public class StatisticCertDataController extends BaseController {
 							.getSum1(configApp, Integer.parseInt(productType),
 									office, start, end, 0);
 					for (StatisticCertData statisticCertData2 : zList) {
-						oneAdd1 += statisticCertData2.getAdd1();
-						oneAdd2 += statisticCertData2.getAdd2();
+						oneAdd1 += statisticCertData2.getAdd1()==null?0:statisticCertData2.getAdd1();
+						oneAdd2 += statisticCertData2.getAdd2()==null?0:statisticCertData2.getAdd2();
 						
-						oneAdd3 += statisticCertData2.getAdd3();
+						oneAdd3 += statisticCertData2.getAdd3()==null?0:statisticCertData2.getAdd3();
 						
-						oneAdd4 += statisticCertData2.getAdd4();
-						oneAdd5 += statisticCertData2.getAdd5();
-						oneRenew1 += statisticCertData2.getRenew1();
-						oneRenew2 += statisticCertData2.getRenew2();
+						oneAdd4 += statisticCertData2.getAdd4()==null?0:statisticCertData2.getAdd4();
+						oneAdd5 += statisticCertData2.getAdd5()==null?0:statisticCertData2.getAdd5();
+						oneRenew1 += statisticCertData2.getRenew1()==null?0:statisticCertData2.getRenew1();
+						oneRenew2 += statisticCertData2.getRenew2()==null?0:statisticCertData2.getRenew2();
 						
-						oneRenew3 += statisticCertData2.getRenew3();
+						oneRenew3 += statisticCertData2.getRenew3()==null?0:statisticCertData2.getRenew3();
 						
-						oneRenew4 += statisticCertData2.getRenew4();
-						oneRenew5 += statisticCertData2.getRenew5();
+						oneRenew4 += statisticCertData2.getRenew4()==null?0:statisticCertData2.getRenew4();
+						oneRenew5 += statisticCertData2.getRenew5()==null?0:statisticCertData2.getRenew5();
 					}
 					scm.setOneAdd1(oneAdd1);
 					scm.setOneAdd2(oneAdd2);
@@ -269,20 +269,20 @@ public class StatisticCertDataController extends BaseController {
 							.getSum1(configApp, Integer.parseInt(productType),
 									office, start, end, 2);
 					for (StatisticCertData scd : hList) {
-						twoAdd1 += scd.getAdd1();
-						twoAdd2 += scd.getAdd2();
+						twoAdd1 += scd.getAdd1()==null?0:scd.getAdd1();
+						twoAdd2 += scd.getAdd2()==null?0:scd.getAdd2();
 						
-						twoAdd3 += scd.getAdd3();
+						twoAdd3 += scd.getAdd3()==null?0:scd.getAdd3();
 						
-						twoAdd4 += scd.getAdd4();
-						twoAdd5 += scd.getAdd5();
-						twoRenew1 += scd.getRenew1();
-						twoRenew2 += scd.getRenew2();
+						twoAdd4 += scd.getAdd4()==null?0:scd.getAdd4();
+						twoAdd5 += scd.getAdd5()==null?0:scd.getAdd5();
+						twoRenew1 += scd.getRenew1()==null?0:scd.getRenew1();
+						twoRenew2 += scd.getRenew2()==null?0:scd.getRenew2();
 						
-						twoRenew3 += scd.getRenew3();
+						twoRenew3 += scd.getRenew3()==null?0:scd.getRenew3();
 						
-						twoRenew4 += scd.getRenew4();
-						twoRenew5 += scd.getRenew5();
+						twoRenew4 += scd.getRenew4()==null?0:scd.getRenew4();
+						twoRenew5 += scd.getRenew5()==null?0:scd.getRenew5();
 					}
 					scm.setTwoAdd1(twoAdd1);
 					scm.setTwoAdd2(twoAdd2);
@@ -320,20 +320,20 @@ public class StatisticCertDataController extends BaseController {
 							.getSum1(configApp, Integer.parseInt(productType),
 									office, start, end, 1);
 					for (StatisticCertData scd1 : zfList) {
-						fourAdd1 += scd1.getAdd1();
-						fourAdd2 += scd1.getAdd2();
+						fourAdd1 += scd1.getAdd1()==null?0:scd1.getAdd1();
+						fourAdd2 += scd1.getAdd2()==null?0:scd1.getAdd2();
 						
-						fourAdd3 += scd1.getAdd3();
+						fourAdd3 += scd1.getAdd3()==null?0:scd1.getAdd3();
 						
-						fourAdd4 += scd1.getAdd4();
-						fourAdd5 += scd1.getAdd5();
-						fourRenew1 += scd1.getRenew1();
-						fourRenew2 += scd1.getRenew2();
+						fourAdd4 += scd1.getAdd4()==null?0:scd1.getAdd4();
+						fourAdd5 += scd1.getAdd5()==null?0:scd1.getAdd5();
+						fourRenew1 += scd1.getRenew1()==null?0:scd1.getRenew1();
+						fourRenew2 += scd1.getRenew2()==null?0:scd1.getRenew2();
 						
-						fourRenew3 += scd1.getRenew3();
+						fourRenew3 += scd1.getRenew3()==null?0:scd1.getRenew3();
 						
-						fourRenew4 += scd1.getRenew4();
-						fourRenew5 += scd1.getRenew5();
+						fourRenew4 += scd1.getRenew4()==null?0:scd1.getRenew4();
+						fourRenew5 += scd1.getRenew5()==null?0:scd1.getRenew5();
 					}
 					scm.setFourAdd1(fourAdd1);
 					scm.setFourAdd2(fourAdd2);
