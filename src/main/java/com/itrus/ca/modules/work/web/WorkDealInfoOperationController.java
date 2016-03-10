@@ -1673,15 +1673,22 @@ public class WorkDealInfoOperationController extends BaseController {
 
 			//变更业务保存单位信息
 		WorkCompany workCompany = new WorkCompany();
+		WorkCompany oldWorkCompany = workDealInfo1.getWorkCompany();
 		
 		if(companyName!=null && !companyName.equals("")){
 			workCompany.setCompanyName(companyName);
+		}else{
+			workCompany.setCompanyName(oldWorkCompany.getCompanyName());
 		}
 		if(companyType!=null && !companyType.equals("")){
 			workCompany.setCompanyType(companyType);
+		}else{
+			workCompany.setCompanyType(oldWorkCompany.getCompanyType());
 		}
 		if(organizationNumber!=null && !organizationNumber.equals("")){
 			workCompany.setOrganizationNumber(organizationNumber);
+		}else{
+			workCompany.setOrganizationNumber(oldWorkCompany.getOrganizationNumber());
 		}
 		
 		Timestamp ts = new Timestamp(System.currentTimeMillis());

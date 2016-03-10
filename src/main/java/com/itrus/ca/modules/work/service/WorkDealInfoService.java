@@ -214,12 +214,12 @@ public class WorkDealInfoService extends BaseService {
 			WorkDealInfo workDealInfo, ArrayList<Long> dealInfoIds) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("workCompany", "workCompany");
-		if (workDealInfo.getWorkCompany() != null) {
+		/*if (workDealInfo.getWorkCompany() != null) {
 			if (workDealInfo.getWorkCompany().getId() != null) {
 				dc.add(Restrictions.eq("workCompany",
 						workDealInfo.getWorkCompany()));
 			}
-		}
+		}*/
 		dc.add(Restrictions.in("id", dealInfoIds));
 		dc.add(Restrictions.or(Restrictions.eq("dealInfoStatus",
 				WorkDealInfoStatus.STATUS_CERT_OBTAINED), Restrictions.eq(
@@ -2095,6 +2095,25 @@ public class WorkDealInfoService extends BaseService {
 			return 0;
 		}
 	}
+	
+	public Integer findByKey(String Keysn , Long id) {
+		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
+		if (Keysn != null) {
+			dc.add(Restrictions.eq("keySn", Keysn));
+		}
+		dc.add(Restrictions.eq("id", id));
+		dc.add(Restrictions.ne("dealInfoStatus",
+				WorkDealInfoStatus.STATUS_CERT_REVOKE));
+		// dc.add(Restrictions.eq(WorkDealInfo.DEL_FLAG,
+		// WorkDealInfo.DEL_FLAG_NORMAL));
+		if (workDealInfoDao.find(dc).size() > 0) {
+			return workDealInfoDao.find(dc).size();
+		} else {
+			return 0;
+		}
+	}
+
+	
 
 	public List<WorkDealInfo> findByKeySnWithOutDel(String Keysn, String certSn) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();

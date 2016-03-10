@@ -66,7 +66,14 @@
 				<td>
 					<a href="${ctx}/work/workDealInfo/form?id=${workDealInfo.id}">编辑</a>
 					<shiro:hasPermission name="work:workDealInfo:makezheng">
-					<a href="${ctx}/work/workDealInfoOperation/make?id=${workDealInfo.id}">制证</a>
+					
+					<c:if test="${workDealInfo.certSn != null}">
+						<a href="${ctx}/work/workDealInfoOperationSed/installCert?id=${workDealInfo.id}">安装</a>
+					</c:if>
+					<c:if test="${workDealInfo.certSn == null}">
+						<a href="${ctx}/work/workDealInfoOperation/make?id=${workDealInfo.id}">制证</a>
+					</c:if>
+					
 					</shiro:hasPermission>
 				
 

@@ -5,7 +5,9 @@
 package com.itrus.ca.modules.work.web;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +17,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.itrus.ca.common.config.Global;
+import com.itrus.ca.common.utils.RaAccountUtil;
 import com.itrus.ca.common.web.BaseController;
+import com.itrus.ca.modules.constant.ProductType;
 import com.itrus.ca.modules.constant.WorkDealInfoStatus;
+import com.itrus.ca.modules.constant.WorkDealInfoType;
 import com.itrus.ca.modules.profile.entity.ConfigChargeAgentBoundConfigProduct;
+import com.itrus.ca.modules.profile.entity.ConfigRaAccount;
 import com.itrus.ca.modules.profile.service.ConfigChargeAgentBoundConfigProductService;
+import com.itrus.ca.modules.profile.service.ConfigRaAccountService;
 import com.itrus.ca.modules.sys.utils.UserUtils;
 import com.itrus.ca.modules.work.entity.WorkCertApplyInfo;
 import com.itrus.ca.modules.work.entity.WorkCompany;
@@ -65,6 +72,9 @@ public class WorkDealInfoOperationSedController extends BaseController {
 	
 	@Autowired
 	private WorkLogService workLogService;
+	
+	@Autowired
+	private ConfigRaAccountService raAccountService;
 	
 	@Autowired
 	private ConfigChargeAgentBoundConfigProductService configChargeAgentBoundConfigProductService;
@@ -289,7 +299,27 @@ public class WorkDealInfoOperationSedController extends BaseController {
 				+ "/work/workDealInfo/pay?id=" + workDealInfo1.getId();
 	}
 	
-	
+	@RequestMapping("installCert")
+	public String installCert(Long id, Model model) {
+		WorkDealInfo workDealInfo = workDealInfoService.get(id);
+		ConfigRaAccount raAccount = raAccountService.get(workDealInfo.getConfigProduct().getRaAccountId());
+		List<String []> list = RaAccountUtil.outPageLine(workDealInfo, raAccount.getConfigRaAccountExtendInfo());
+		model.addAttribute("list", list);
+		model.addAttribute("workDealInfo", workDealInfo);
+		model.addAttribute("pt", ProductType.productTypeStrMap);
+		model.addAttribute("wdiType", WorkDealInfoType.WorkDealInfoTypeMap);
+		
+		if (workDealInfo.getPrevId()!=null) {
+			//获取上一张证书的签名证书序列号
+			WorkDealInfo oldDealInfo = workDealInfoService.get(workDealInfo.getPrevId());
+			try {
+				model.addAttribute("signSerialNumber", oldDealInfo.getWorkCertInfo().getSerialnumber().toLowerCase());
+			} catch (Exception e) {
+			}
+		}
+		
+		return "modules/work/maintain/workDealInfoMakeInstallFail";
+	}
 	
 	
 }

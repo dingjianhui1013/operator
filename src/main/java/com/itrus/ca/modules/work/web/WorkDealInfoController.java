@@ -7663,6 +7663,47 @@ public class WorkDealInfoController extends BaseController {
 		}
 		return json.toString();
 	}
+	
+	
+	@RequestMapping(value = "findByKeySnFailInstall")
+	@ResponseBody
+	public String findByKeySnFailInstall(String keySn, Long dealId) {
+		JSONObject json = new JSONObject();
+		try {
+			Integer isUserInteger = workDealInfoService.findByKey(keySn,dealId);
+			WorkDealInfo dealInfo = workDealInfoService.get(dealId);
+			if (dealInfo.getWorkCertInfo().getIssuerDn() != null
+					&& !dealInfo.getWorkCertInfo().getIssuerDn().equals("")) {
+
+				if (!dealInfo.getDealInfoStatus().equals("7")) {
+					json.put("isOK", 0);
+				} else {
+					json.put("isOK", 1);
+				}
+			} else {
+				json.put("isOK", 0);
+			}
+
+			if (isUserInteger > 0) {
+				json.put("isUser", 0);
+			} else {
+				json.put("isUser", 1);
+			}
+			json.put("status", 1);
+		} catch (Exception e) {
+			// TODO: handle exception
+			try {
+				json.put("status", 0);
+			} catch (JSONException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+		return json.toString();
+	}
+
+	
+	
 
 	@RequestMapping(value = "findById")
 	@ResponseBody

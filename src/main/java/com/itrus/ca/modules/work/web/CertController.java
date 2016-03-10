@@ -489,10 +489,84 @@ public class CertController extends BaseController {
 			return json.toString();
 		}
 		
-	
+		System.out.println("json:"+json.toString());
 		logUtil.saveSysLog("业务中心", "制证：编号" + dealInfoId, "");
 		return json.toString();
 	}
+	
+	
+	
+	@RequestMapping(value = "makeCertInstallFail")
+	@ResponseBody
+	public String makeCertInstallFail(Long dealInfoId,  String certProvider,
+			String csr, String keySn) throws Exception {
+		JSONObject json = new JSONObject();
+		WorkDealInfo dealInfo = workDealInfoService.get(dealInfoId);
+		WorkCertInfo caCert = dealInfo.getWorkCertInfo();
+		certProvider = URLDecoder.decode(certProvider, "UTF-8");
+		if (certProvider.length() != 0) {
+			boolean inStore = keyInvoiceService.validateCSPvalid(certProvider);
+			if (!inStore) {
+				json.put("status", -1);
+				json.put("msg", "当前网点无" + certProvider + "库存，申请证书失败！");
+				return json.toString();
+			}
+		}
+		caCert.setProvider(certProvider);
+		caCert.setReqBuf(csr);
+		workCertInfoService.save(caCert);
+		
+		SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		json.put("status", 1);
+		json.put("signBufP7", caCert.getSignBufP7());
+		json.put("signBuf", caCert.getSignBuf());
+		json.put("issuer", caCert.getIssuerDn());// 颁发者
+		json.put("sort", dealInfo.getCertSort());
+		json.put("sn", caCert.getSerialnumber());// 序列号
+		json.put("notbefore", sdf1.format(caCert.getNotbefore()));
+		json.put("notafter", sdf1.format(caCert.getNotafter()));// 有效期
+		json.put("subject", caCert.getSubjectDn());// 主题
+		if (caCert.getCertSignBufKmc() != null) {
+			json.put("kmcvalid", 1);
+		} else {
+			json.put("kmcvalid", 0);
+		}
+		return json.toString();
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 	@RequestMapping(value = "enrollMakeCert")
 	@ResponseBody
