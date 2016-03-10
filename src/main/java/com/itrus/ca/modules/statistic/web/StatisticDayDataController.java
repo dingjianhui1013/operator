@@ -277,7 +277,7 @@ public class StatisticDayDataController extends BaseController {
 					
 					certTotal += sdd.getCertTotal();
 					keyOver += sdd.getKeyOver();
-					certMoneyTotal += sdd.getReceiptOver();
+					certMoneyTotal += sdd.getCertMoneyTotal();
 					
 					
 				}

@@ -3808,7 +3808,7 @@ public class WorkDealInfoService extends BaseService {
 		dc.add(Restrictions.lt("workPayInfo.updateDate", calendar.getTime()));
 		List<String> statusIntegers = new ArrayList<String>();
 		if (dealInfoType.equals(1)) {
- 			dc.add(Restrictions.eq("dealInfoType", dealInfoType));
+			dc.add(Restrictions.eq("dealInfoType", dealInfoType));
 			dc.add(Restrictions.isNull("dealInfoType1"));
 			dc.add(Restrictions.isNull("dealInfoType2"));
 			dc.add(Restrictions.isNull("dealInfoType3"));
@@ -3828,8 +3828,7 @@ public class WorkDealInfoService extends BaseService {
 		if (year != 0) {
 			dc.add(Restrictions.eq("year", year));
 		}
-		
-		statusIntegers.add(WorkDealInfoStatus.STATUS_ABNORMAL_USER);
+
 		statusIntegers.add(WorkDealInfoStatus.STATUS_CERT_OBTAINED);
 		statusIntegers.add(WorkDealInfoStatus.STATUS_CERT_REVOKE);
 		dc.add(Restrictions.in("dealInfoStatus", statusIntegers));
@@ -4232,8 +4231,7 @@ public class WorkDealInfoService extends BaseService {
 		dc.add(Restrictions.eq("configApp.id", appId));
 		dc.add(Restrictions.or(Restrictions.eq("dealInfoStatus",
 				WorkDealInfoStatus.STATUS_CERT_OBTAINED), Restrictions.eq(
-				"dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_WAIT),Restrictions.eq(
-						"dealInfoStatus", WorkDealInfoStatus.STATUS_ABNORMAL_USER)));
+				"dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_WAIT)));
 		dc.createAlias("workPayInfo", "workPayInfo");
 		dc.add(Restrictions.gt("workPayInfo.updateDate", date));
 		dc.add(Restrictions.lt("workPayInfo.updateDate", calendar.getTime()));
@@ -4259,22 +4257,7 @@ public class WorkDealInfoService extends BaseService {
 							totalReceipt += dealInfo.getWorkPayInfo()
 									.getReceiptAmount();
 						}
-					} else if (dealInfo.getDealInfoStatus().equals("1")){
-						if (dealInfo.getDealInfoType() != null
-								&& dealInfo.getDealInfoType().equals(1)) {
-							totalReceipt += dealInfo.getWorkPayInfo()
-									.getReceiptAmount();
-						} else if (dealInfo.getDealInfoType2() != null
-								&& dealInfo.getDealInfoType2().equals(4)) {
-							totalReceipt += dealInfo.getWorkPayInfo()
-									.getReceiptAmount();
-						} else if (dealInfo.getDealInfoType().equals(1)
-								&& dealInfo.getDealInfoType2().equals(4)) {
-							totalReceipt += dealInfo.getWorkPayInfo()
-									.getReceiptAmount();
-						}
-						
-					}else  {
+					} else {
 						totalReceipt += dealInfo.getWorkPayInfo()
 								.getReceiptAmount();
 					}
