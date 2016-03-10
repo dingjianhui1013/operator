@@ -91,16 +91,17 @@
 			 class="input-medium" />
 
 			
-			<label>退费时间：</label> <input id="quitStartTime"
-				class="input-medium Wdate" type="text"
-				onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});"
-				value="${quitStartTime }" maxlength="20" readonly="readonly"
-				name="quitStartTime" />&nbsp;&nbsp;至&nbsp;&nbsp; <input
-				class="input-medium Wdate" type="text"
-				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'quitStartTime\')}'});"
-				value="${quitEndTime }" maxlength="20" readonly="readonly"
-				name="quitEndTime" /> &nbsp;<input id="btnSubmit"
-				class="btn btn-primary" type="submit" value="查询" />
+			 
+			<label>退费时间：</label> 
+			<input id="quitStartTime" class="input-medium Wdate" type="text" required="required" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});"
+								value="${quitStartTime }"
+								maxlength="20" readonly="readonly" name="quitStartTime" />至
+		<input class="input-medium Wdate" type="text" required="required" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'quitStartTime\')}'});"
+								value="${quitEndTime }"
+								maxlength="20" readonly="readonly" name="quitEndTime" />
+			
+					&nbsp;<input id="btnSubmit" class="btn btn-primary" type="submit" value="查询" />
+				
 			
 		</div>
 	</form:form>
@@ -157,9 +158,12 @@
 					<td><fmt:formatDate value="${financeQuitMoney.quitDate }"
 							pattern="yyyy-MM-dd" /></td>
 							
-					<td width="80px" style="word-break: break-all"><c:if
-							test="${financeQuitMoney.workDealInfo !=null }">
+					<td width="80px" style="word-break: break-all">
+					<c:if test="${financeQuitMoney.workDealInfo !=null }">
 					${financeQuitMoney.ression  }
+					</c:if>
+					<c:if test="${financeQuitMoney.workDealInfo ==null }">
+					${financeQuitMoney.quitReason  }
 					</c:if></td>
 
 	
