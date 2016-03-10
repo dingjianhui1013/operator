@@ -1,6 +1,7 @@
 package com.itrus.ca.modules.finance.web;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -138,7 +139,7 @@ public class FinanceQuitMoneyController {
 		try{
 			FinanceQuitMoney financeQuitMoney = financeQuitMoneyService.get(quitMoneyId);
 			financeQuitMoney.setStatus("2");
-			financeQuitMoney.setRession(quitReason);
+			//financeQuitMoney.setRession(quitReason);
 			financeQuitMoneyService.save(financeQuitMoney);
 		}catch(Exception ex){
 			ex.printStackTrace();

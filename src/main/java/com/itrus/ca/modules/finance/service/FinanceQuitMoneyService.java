@@ -127,6 +127,7 @@ public class FinanceQuitMoneyService extends BaseService {
 	public Page<FinanceQuitMoney> findAllDealInfo(Page<FinanceQuitMoney> page, String companyName, String contactName,
 	       String quitStartTime, String quitEndTime) {
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		
 		DetachedCriteria dc = financeQuitMoneyDao.createDetachedCriteria();
 		dc.createAlias("workDealInfo", "workDealInfo");
 		
@@ -142,15 +143,19 @@ public class FinanceQuitMoneyService extends BaseService {
 		}
 		
 		try {
-			if (quitStartTime != null &&  !"".equals(quitStartTime)) {
+			
+			
+			
+			if (quitStartTime != null && !"".equals(quitStartTime) && quitEndTime != null && !"".equals(quitEndTime)) {
 				Date start = format.parse(quitStartTime);
 				start.setHours(00);
 				start.setMinutes(0);
 				start.setSeconds(0);
 				dc.add(Restrictions.ge("quitDate", start));
-				
+				dc.add(Restrictions.le("quitDate", format.parse(quitEndTime)));
 			}
 			
+
 			if(quitEndTime != null && !"".equals(quitEndTime)){
 				Date end = format.parse(quitEndTime);
 				end.setHours(23);
@@ -158,10 +163,14 @@ public class FinanceQuitMoneyService extends BaseService {
 				end.setSeconds(59);
 				dc.add(Restrictions.le("quitDate", end));
 			}
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
+				
+			
+		} catch (Exception e) {
 			e.printStackTrace();
-		}
+		
+		} 
+			
+		
 		dc.addOrder(Order.desc("id"));
 		return financeQuitMoneyDao.find(page, dc);
 	}
@@ -185,7 +194,10 @@ public class FinanceQuitMoneyService extends BaseService {
 		}
 		
 		try {
-			if (quitStartTime != null &&  !"".equals(quitStartTime)) {
+			if (quitStartTime != null && !"".equals(quitStartTime) && quitEndTime != null && !"".equals(quitEndTime)) {
+
+				dc.add(Restrictions.ge("quitDate", format.parse(quitStartTime)));
+
 				Date start = format.parse(quitStartTime);
 				start.setHours(00);
 				start.setMinutes(0);
@@ -193,13 +205,14 @@ public class FinanceQuitMoneyService extends BaseService {
 				dc.add(Restrictions.ge("quitDate", start));
 			}
 			if(quitEndTime != null && !"".equals(quitEndTime)){
+
 				Date end = format.parse(quitEndTime);
 				end.setHours(23);
 				end.setMinutes(59);
 				end.setSeconds(59);
 				dc.add(Restrictions.le("quitDate", format.parse(quitEndTime)));
 			}
-		} catch (ParseException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		dc.addOrder(Order.desc("id"));

@@ -1215,6 +1215,7 @@ public class WorkDealInfoAuditController extends BaseController {
 					quitMoney.setQuitDate(new Date());
 					quitMoney.setQuitWindow(UserUtils.getUser().getOffice().getName());
 					quitMoney.setQuitReason("变更缴费类型退费");
+					quitMoney.setRession("变更缴费类型退费");
 					quitMoney.setWorkDealInfo(dealInfo);
 					quitMoney.setStatus("1");
 					financeQuitMoneyService.save(quitMoney);
