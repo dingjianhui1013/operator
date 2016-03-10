@@ -129,10 +129,7 @@
 									}
 								});
 							}
-					}else
-						{
-							return false;
-						}
+					}
 			};
 			top.$.jBox(html, { title:"填写备注",buttons:{"确定":"ok","关闭":true}, submit: submit });
 		}
