@@ -221,8 +221,14 @@ public class AutoTask {
 				certData.setAdd2(workDealInfoService.getCertAppYearInfo(
 						yesterDay, office.getId(), 2, app.getId(),
 						WorkDealInfoType.TYPE_ADD_CERT));
+				certData.setAdd3(workDealInfoService.getCertAppYearInfo(
+						yesterDay, office.getId(), 3, app.getId(),
+						WorkDealInfoType.TYPE_ADD_CERT));
 				certData.setAdd4(workDealInfoService.getCertAppYearInfo(
 						yesterDay, office.getId(), 4, app.getId(),
+						WorkDealInfoType.TYPE_ADD_CERT));
+				certData.setAdd5(workDealInfoService.getCertAppYearInfo(
+						yesterDay, office.getId(), 5, app.getId(),
 						WorkDealInfoType.TYPE_ADD_CERT));
 				certData.setRenew1(workDealInfoService.getCertAppYearInfo(
 						yesterDay, office.getId(), 1, app.getId(),
@@ -230,8 +236,14 @@ public class AutoTask {
 				certData.setRenew2(workDealInfoService.getCertAppYearInfo(
 						yesterDay, office.getId(), 2, app.getId(),
 						WorkDealInfoType.TYPE_UPDATE_CERT));
+				certData.setRenew3(workDealInfoService.getCertAppYearInfo(
+						yesterDay, office.getId(), 3, app.getId(),
+						WorkDealInfoType.TYPE_UPDATE_CERT));
 				certData.setRenew4(workDealInfoService.getCertAppYearInfo(
 						yesterDay, office.getId(), 4, app.getId(),
+						WorkDealInfoType.TYPE_UPDATE_CERT));
+				certData.setRenew5(workDealInfoService.getCertAppYearInfo(
+						yesterDay, office.getId(), 5, app.getId(),
 						WorkDealInfoType.TYPE_UPDATE_CERT));
 
 				certData.setModifyNum(workDealInfoService.getCertAppYearInfo(
@@ -240,9 +252,9 @@ public class AutoTask {
 				certData.setReissueNum(workDealInfoService.getCertAppYearInfo(
 						yesterDay, office.getId(), 0, app.getId(),
 						WorkDealInfoType.TYPE_LOST_CHILD));
-				certData.setCertTotal(certData.getAdd1() + certData.getAdd2()
-						+ certData.getAdd4() + certData.getRenew1()
-						+ certData.getRenew2() + certData.getRenew4()
+				certData.setCertTotal(certData.getAdd1() + certData.getAdd2()+ certData.getAdd3()
+						+ certData.getAdd4() +certData.getAdd5()+ certData.getRenew1()
+						+ certData.getRenew2() + certData.getRenew3() +certData.getRenew4()
 						+ certData.getModifyNum() + certData.getReissueNum());
 				certData.setReceiptTotal(workDealInfoService.getWorkPayReceipt(
 						yesterDay, office.getId(), app.getId()));
