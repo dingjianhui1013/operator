@@ -117,15 +117,24 @@ public class SettlementLogController extends BaseController {
 			String appName = configAgentAppRelationService.findByAppName(appId).get(0).getConfigApp().getAppName();
 			settlementLog.setAppName(appName);
 		}
-		if(startTime!=null)
-		{
-			settlementLog.setStartTime(startTime);
-		}
+//		if(startTime!=null)
+//		{
+//			settlementLog.setStartTime(startTime);
+//		}
+//		if(endTime!=null)
+//		{
+//			settlementLog.setEndTime(endTime);
+//		}
+		Date end = null;
 		if(endTime!=null)
 		{
-			settlementLog.setEndTime(endTime);
+			end = endTime;
+			end.setHours(23);
+			end.setSeconds(59);
+			end.setMinutes(59);
 		}
-		List<SettlementLog> list = settlementLogService.findAll(settlementLog);
+		
+		List<SettlementLog> list = settlementLogService.findAll(settlementLog,end,startTime);
 		
 		List<ConfigCommercialAgent> comAgents = configCommercialAgentService.findAllNameByType(1);
 		model.addAttribute("comAgents", comAgents);

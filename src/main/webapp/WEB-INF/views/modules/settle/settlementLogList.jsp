@@ -70,15 +70,14 @@
 					</c:if> >${app.configApp.appName }</option>
 				</c:forEach>
 			</select>
-		</div>
-		<div style="width: 800px">                 
-			   <label>业务办理起始时间：</label>
+<!-- 		</div> -->
+<!-- 		<div style="width: 800px">                  -->
+			   <label>结算时间：</label>
 				 <input class="input-medium Wdate" type="text"
 				required="required" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});"
 				value="<fmt:formatDate value="${startTime}" pattern="yyyy-MM-dd"/>" maxlength="20" readonly="readonly"
-				name="startTime" id="startTime"/>
-				<label>业务办理结束时间：</label>	 
-				 <input class="input-medium Wdate" type="text"
+				name="startTime" id="startTime"/>至
+				<input class="input-medium Wdate" type="text"
 				required="required" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'startTime\')}'});"
 				value="<fmt:formatDate value="${endTime}" pattern="yyyy-MM-dd"/>" maxlength="20" readonly="readonly"
 				name="endTime" id="endTime"/>

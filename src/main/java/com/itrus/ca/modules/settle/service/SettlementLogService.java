@@ -3,6 +3,7 @@
  */
 package com.itrus.ca.modules.settle.service;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -79,7 +80,7 @@ public class SettlementLogService extends BaseService {
 		dc.add(Restrictions.eq(SettlementLog.DEL_FLAG, SettlementLog.DEL_FLAG_NORMAL));
 		return settlementLogDao.find(dc);
 	}
-	public List<SettlementLog> findAll(SettlementLog settlementLog) {
+	public List<SettlementLog> findAll(SettlementLog settlementLog,Date endTime,Date startTime) {
 		DetachedCriteria dc = settlementLogDao.createDetachedCriteria();
 
 		
@@ -91,13 +92,13 @@ public class SettlementLogService extends BaseService {
 		{
 			dc.add(Restrictions.eq("appName", settlementLog.getAppName()));
 		}
-		if(settlementLog.getStartTime()!=null)
+		if(startTime!=null)
 		{
-			dc.add(Restrictions.eq("startTime", settlementLog.getStartTime()));
+			dc.add(Restrictions.ge("createDate",startTime));
 		}
-		if(settlementLog.getEndTime()!=null)
+		if(endTime!=null)
 		{
-			dc.add(Restrictions.eq("endTime", settlementLog.getEndTime()));
+			dc.add(Restrictions.le("createDate", endTime));
 		}
 		dc.add(Restrictions.eq(SettlementLog.DEL_FLAG, SettlementLog.DEL_FLAG_NORMAL));
 		return settlementLogDao.find(dc);

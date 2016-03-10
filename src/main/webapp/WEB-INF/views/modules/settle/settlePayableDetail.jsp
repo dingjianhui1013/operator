@@ -274,7 +274,8 @@
 								</td>
 								<td><fmt:formatDate	value="${detail.startDate }" pattern="yyyy-MM-dd" /></td>
 								<td><fmt:formatDate value="${detail.endDate }" pattern="yyyy-MM-dd" /></td>
-								<td>${detail.dealInfoType }</td>
+								<td><c:if test="${detail.dealInfoType=='null '}"> </c:if> 
+								<c:if test="${detail.dealInfoType!='null '}">${detail.dealInfoType}</c:if> </td>
 								<td>${detail.settleYear }</td>
 							</c:forEach>
 							<c:forEach begin="1" end="${lenth - dealInfo.detailList.size() }">
