@@ -146,13 +146,13 @@ public class FinanceQuitMoneyService extends BaseService {
 			
 			
 			
-			if (quitStartTime != null && !"".equals(quitStartTime) && quitEndTime != null && !"".equals(quitEndTime)) {
+			if (quitStartTime != null && !"".equals(quitStartTime)) {
 				Date start = format.parse(quitStartTime);
 				start.setHours(00);
 				start.setMinutes(0);
 				start.setSeconds(0);
 				dc.add(Restrictions.ge("quitDate", start));
-				dc.add(Restrictions.le("quitDate", format.parse(quitEndTime)));
+			
 			}
 			
 
