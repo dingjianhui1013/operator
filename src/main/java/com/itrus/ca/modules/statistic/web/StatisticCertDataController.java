@@ -195,6 +195,11 @@ public class StatisticCertDataController extends BaseController {
 					// rightNow.setTime(start);
 					// rightNow.add(Calendar.MONTH, 1);//从当前月日到下一个月的日
 					Date end = sdf.parse(monthList.get(i + 1));// rightNow.getTime();
+					Date endT = end;
+					
+					endT.setHours(23);
+					endT.setSeconds(59);
+					endT.setMinutes(59);
 					// 自费企业
 					Integer oneAdd1 = 0;
 					Integer oneAdd2 = 0;
@@ -216,7 +221,7 @@ public class StatisticCertDataController extends BaseController {
 					// end, 0);
 					List<StatisticCertData> zList = statisticCertDataService
 							.getSum1(configApp, Integer.parseInt(productType),
-									office, start, end, 0);
+									office, start, endT, 0);
 					for (StatisticCertData statisticCertData2 : zList) {
 						oneAdd1 += statisticCertData2.getAdd1()==null?0:statisticCertData2.getAdd1();
 						oneAdd2 += statisticCertData2.getAdd2()==null?0:statisticCertData2.getAdd2();

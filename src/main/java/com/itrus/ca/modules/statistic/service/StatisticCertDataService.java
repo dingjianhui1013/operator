@@ -72,8 +72,8 @@ public class StatisticCertDataService extends BaseService {
 		}
 		dc.add(Restrictions.eq("app", configApp));
 		dc.add(Restrictions.eq("office", office));    
-		dc.add(Restrictions.gt("countDate", startDate));
-		dc.add(Restrictions.lt("countDate", endDate));
+		dc.add(Restrictions.ge("countDate", startDate));
+		dc.add(Restrictions.le("countDate", endDate));
 		dc.add(Restrictions.eq("payType", payType));
 		return statisticCertDataDao.find(dc);
 	}
