@@ -3,6 +3,7 @@ package com.itrus.ca.modules.settle.web;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -491,13 +492,7 @@ public class SettlePayableDetailController extends BaseController {
 				@RequestParam(value = "startTime", required = false) Date startTime,
 				@RequestParam(value = "endTime", required = false) Date endTime)
 	 {
-//		List<ConfigAgentAppRelation> relationByComAgentId =  configAgentAppRelationService.findByComAgentId(comAgentId);
-//		model.addAttribute("relationByComAgentId", relationByComAgentId);
-//		
-//		if (appId!=null) {
-//			List<ConfigProduct> products = configProductService.findByAppId(appId);
-//			model.addAttribute("products", products);
-//		}
+
 		
 		
 			
@@ -542,6 +537,7 @@ public class SettlePayableDetailController extends BaseController {
 				workDealInfoService.findDealInfo(appId,appIds,productIdList,start,end);
 		
 		Integer lenth = 0;
+		
 		for (int i = 0; i < dealInfos.size(); i++) {
 			WorkDealInfo dealInfo = dealInfos.get(i);
 			int totalAgentYear = comAgent.getSettlementPeriod();
@@ -812,26 +808,82 @@ public class SettlePayableDetailController extends BaseController {
 			}
 		}
 		
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		
-		model.addAttribute("dealInfos", dealInfos);
-		model.addAttribute("lenth", lenth);
-		
-		HSSFWorkbook wb = new HSSFWorkbook();
-		HSSFSheet sheet = wb.createSheet("年限结算统计表");
-		sheet.addMergedRegion(new Region(0, (short)0, 0, (short)(7+lenth*5)));
-		HSSFRow row0= sheet.createRow(0);
-		row0.setHeight((short)20);
-		HSSFCellStyle style =wb.createCellStyle();
-		style.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+		HSSFWorkbook wb=new HSSFWorkbook();
+		HSSFSheet sheet=wb.createSheet("年限结算表");
+		HSSFCellStyle style=wb.createCellStyle();
 		style.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
-		HSSFFont font = wb.createFont();
+		style.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+		HSSFFont font=wb.createFont();
 		font.setFontName("宋体");
-		font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
-		font.setFontHeightInPoints((short) 14);
+		font.setFontHeightInPoints((short)20);
+		
 		style.setFont(font);
-		HSSFCell cell0 = row0.createCell(0);
+		//sheet.addMergedRegion(new Region(0,(short)0, 0,(short) (2*monthlist1.size()+3)));
+		HSSFRow row0=sheet.createRow(0);
+		HSSFCell cell0=row0.createCell(0);
+		cell0.setCellValue("统计周期:"+format.format(startTime)+"-"+format.format(endTime));
+		//row0.setHeightInPoints(40);
 		cell0.setCellStyle(style);
-		cell0.setCellValue("年限统计表");
+			
+		
+		HSSFRow row1=sheet.createRow(1);
+		row1.createCell(0).setCellValue("本期结算证书年限(本次结算年数总数)");
+		
+		
+		HSSFRow row2=sheet.createRow(2);
+		row2.createCell(0).setCellValue("序号");
+		row2.createCell(1).setCellValue("单位名称");
+		row2.createCell(2).setCellValue("经办人姓名");
+		row2.createCell(3).setCellValue("产品名称");
+		
+		for(int i=0;i<lenth;i++){
+			row2.createCell(4+5*i).setCellValue("第"+(i+1)+"次结算");
+		}
+		
+		row2.createCell(5*lenth+4).setCellValue("结算年限统计");
+		
+		HSSFRow row3=sheet.createRow(3);
+		
+		for(int i=0;i<lenth;i++){
+			row3.createCell(i*5+4).setCellValue("缴费类型");
+			row3.createCell(i*5+4+1).setCellValue("起始时间");
+			row3.createCell(i*5+4+2).setCellValue("结束时间");
+			row3.createCell(i*5+4+3).setCellValue("业务类型");
+			row3.createCell(i*5+4+4).setCellValue("结算(年)");
+		}
+		
+		row3.createCell(5*lenth+4).setCellValue("已结算(年)");
+		row3.createCell(5*lenth+4+1).setCellValue("本期结算(年)");
+		row3.createCell(5*lenth+4+2).setCellValue("剩余结算(年)");
+		
+		
+		
+		for(int i=4;i<dealInfos.size()+4;i++){
+			HSSFRow rowi=sheet.createRow(i);
+			
+			rowi.createCell(0).setCellValue(i-4+1);
+			rowi.createCell(1).setCellValue(dealInfos.get(i-4).getWorkCompany().getCompanyName());
+			rowi.createCell(2).setCellValue(dealInfos.get(i-4).getWorkCertInfo().getWorkCertApplyInfo().getName());
+			rowi.createCell(3).setCellValue(dealInfos.get(i-4).getConfigProduct().getProductName());
+			
+			for(int j=0;j<dealInfos.get(i-4).getDetailList().size();j++){
+				rowi.createCell(j*5+4).setCellValue(dealInfos.get(i-4).getDetailList().get(j).getMethod()==null?"":dealInfos.get(i-4).getDetailList().get(j).getMethod().toString());
+				rowi.createCell(j*5+4+1).setCellValue(dealInfos.get(i-4).getDetailList().get(j).getStartDate()==null?"":dealInfos.get(i-4).getDetailList().get(j).getStartDate().toString());
+				rowi.createCell(j*5+4+2).setCellValue(dealInfos.get(i-4).getDetailList().get(j).getEndDate()==null?"":dealInfos.get(i-4).getDetailList().get(j).getEndDate().toString());
+				rowi.createCell(j*5+4+3).setCellValue(dealInfos.get(i-4).getDetailList().get(j).getDealInfoType()==null?"":dealInfos.get(i-4).getDetailList().get(j).getDealInfoType());
+				rowi.createCell(j*5+4+4).setCellValue(dealInfos.get(i-4).getDetailList().get(j).getSettleYear()==null?"":dealInfos.get(i-4).getDetailList().get(j).getSettleYear());
+			}
+			
+			rowi.createCell(5*lenth+4).setCellValue(dealInfos.get(i-4).getYyNum()-dealInfos.get(i-4).getLastNum());
+			rowi.createCell(5*lenth+4+1).setCellValue(dealInfos.get(i-4).getLastNum());
+			rowi.createCell(5*lenth+4+2).setCellValue(dealInfos.get(i-4).getTotalNum()-dealInfos.get(i-4).getYyNum());
+		}
+		
+		
+		
+		
 	 
 		try {
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -846,7 +898,7 @@ public class SettlePayableDetailController extends BaseController {
 			bos.close();
 			baos.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		
