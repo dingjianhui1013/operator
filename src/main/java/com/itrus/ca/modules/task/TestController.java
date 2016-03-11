@@ -380,6 +380,11 @@ public class TestController {
 					.add(idMap.get(ProductType.PRODUCT_TYPE_PERE).toString());
 			productType
 					.add(idMap.get(ProductType.PRODUCT_TYPE_PERO).toString());
+			
+			productType.add(idMap.get(ProductType.PRODUCT_TYPE_MOB).toString());
+			
+			productType.add(idMap.get(ProductType.PRODUCT_TYPE_ORG).toString());
+			
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 			Date cur = sdf.parse(curDate);
 			Calendar calendar = Calendar.getInstance();
@@ -398,13 +403,14 @@ public class TestController {
 					types.add(1);
 					types.add(2);
 					for (Integer type : types) {
+						for (String product : productType) {
 						StatisticCertData data = new StatisticCertData();
 						ConfigApp app = appOfficeRelation.getConfigApp();
 						data.setApp(app);
 						data.setOffice(office);
 						data.setCountDate(sdf.parse(curDate));
 
-						Integer add1 = workDealInfoService.getCertAppYearInfo(
+						/*Integer add1 = workDealInfoService.getCertAppYearInfo(
 								yesterDay, office.getId(), 1, app.getId(),
 								WorkDealInfoType.TYPE_ADD_CERT, productType,
 								type, cur);
@@ -448,6 +454,25 @@ public class TestController {
 										5, app.getId(),
 										WorkDealInfoType.TYPE_UPDATE_CERT,
 										productType, type, cur);
+						*/
+						
+						
+						Integer add1 = workDealInfoService.getCertAppYearInfo(yesterDay, office.getId(), 1, app.getId(),WorkDealInfoType.TYPE_ADD_CERT, product,type);
+						Integer add2 = workDealInfoService.getCertAppYearInfo(yesterDay, office.getId(), 2, app.getId(),WorkDealInfoType.TYPE_ADD_CERT, product, type);
+						
+						Integer add3 = workDealInfoService.getCertAppYearInfo(yesterDay, office.getId(), 3, app.getId(),WorkDealInfoType.TYPE_ADD_CERT, product, type);
+						
+						Integer add4 = workDealInfoService.getCertAppYearInfo(yesterDay, office.getId(), 4, app.getId(),WorkDealInfoType.TYPE_ADD_CERT, product, type);
+						Integer add5 = workDealInfoService.getCertAppYearInfo(yesterDay, office.getId(), 5, app.getId(),WorkDealInfoType.TYPE_ADD_CERT, product, type);
+						Integer renew1 = workDealInfoService.getCertAppYearInfo(yesterDay, office.getId(),1, app.getId(),WorkDealInfoType.TYPE_UPDATE_CERT,product, type);
+						Integer renew2 = workDealInfoService.getCertAppYearInfo(yesterDay, office.getId(),2, app.getId(),WorkDealInfoType.TYPE_UPDATE_CERT,product, type);
+						
+						Integer renew3 = workDealInfoService.getCertAppYearInfo(yesterDay, office.getId(),3, app.getId(),WorkDealInfoType.TYPE_UPDATE_CERT,product, type);
+						
+						Integer renew4 = workDealInfoService.getCertAppYearInfo(yesterDay, office.getId(),4, app.getId(),WorkDealInfoType.TYPE_UPDATE_CERT,product, type);
+						Integer renew5 = workDealInfoService.getCertAppYearInfo(yesterDay, office.getId(),5, app.getId(),WorkDealInfoType.TYPE_UPDATE_CERT,product, type);
+						
+						
 						data.setAdd1(add1);
 						data.setAdd2(add2);
 						data.setAdd3(add3);
@@ -461,6 +486,8 @@ public class TestController {
 						data.setPayType(type);
 						// 每一个po存的是 某个应用下某种证书（企业or个人）某种付款方式 新增、更新了多少
 						statisticCertDataService.save(data);
+						
+					}
 					}
 				}
 				// ==================================
@@ -470,7 +497,7 @@ public class TestController {
 					List<String> type = new ArrayList<String>();
 					type.add(certType);
 					StatisticCertDataProduct product = new StatisticCertDataProduct();
-					Integer year1 = workDealInfoService.getCertAppYearInfo(
+					/*Integer year1 = workDealInfoService.getCertAppYearInfo(
 							yesterDay, office.getId(), 1, null, null, type,
 							null, cur);
 					Integer year2 = workDealInfoService.getCertAppYearInfo(
@@ -487,7 +514,22 @@ public class TestController {
 					
 					Integer year5 = workDealInfoService.getCertAppYearInfo(
 							yesterDay, office.getId(), 5, null, null, type,
-							null, cur);
+							null, cur);*/
+					
+					
+					Integer year1 = workDealInfoService.getCertAppYearInfo(
+							yesterDay, office.getId(), 1, null, null, type, null);
+					Integer year2 = workDealInfoService.getCertAppYearInfo(
+							yesterDay, office.getId(), 2, null, null, type, null);
+					
+					Integer year3 = workDealInfoService.getCertAppYearInfo(
+							yesterDay, office.getId(), 3, null, null, type, null);
+					
+					
+					Integer year4 = workDealInfoService.getCertAppYearInfo(
+							yesterDay, office.getId(), 4, null, null, type, null);
+					Integer year5 = workDealInfoService.getCertAppYearInfo(
+							yesterDay, office.getId(), 5, null, null, type, null);
 					
 					product.setCountDate(cur);
 					product.setOffice(office);
