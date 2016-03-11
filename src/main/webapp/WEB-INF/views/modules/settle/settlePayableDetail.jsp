@@ -142,7 +142,25 @@
 			$("#searchForm").submit();
 		}
 	}
-	
+	function dcPayableDetail()
+	{
+		var comAgentId = $("#comAgentId").val();
+		var appId = $("#appId").val();
+		var productIds=' ';
+		$("input[name='productIds']:checkbox").each(function(i,e){ 
+			productIds+=$(e).val()+",";
+			});
+		var startTime=$("#startTime").val();
+		var endTime=$("#endTime").val();
+		if(comAgentId==0){
+			top.$.jBox.tip("代理商不能为空！");
+		}else{
+			var url="${ctx}/settle/settlePayableDetail/dcPayableDetail?comAgentId="+comAgentId+"&appId="+appId+"&productIds="+productIds
+					+"&startTime="+startTime+"&endTime="+endTime;
+				window.location.href=url;
+			
+		}
+	}
 	
 </script>
 </head>
@@ -208,8 +226,9 @@
 				<input id="btnExport" class="btn btn-primary" onclick="searchForm()"
 				type="button" value="查询" />
 				
-				&nbsp; <input id="btnExport" class="btn btn-primary"
+				&nbsp; <input id="dc" class="btn btn-primary" onclick="dcPayableDetail()"
 				type="button" value="导出" />
+				
 				&nbsp;<input id="btnExport" class="btn btn-primary" onclick="saveSettlementLog()"
 				type="button" value="保存" />
 		</div>

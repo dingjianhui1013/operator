@@ -1,5 +1,8 @@
 package com.itrus.ca.modules.settle.web;
 
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -10,6 +13,13 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFFont;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.util.Region;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -469,6 +479,381 @@ public class SettlePayableDetailController extends BaseController {
 	        date = calendar.getTime();
 	        System.out.println(date);
 	    }
-	
+	 
+	 @RequestMapping(value="dcPayableDetail")
+	 public void dcPayableDetail(HttpServletRequest request,
+				HttpServletResponse response, 
+				Model model, 
+				RedirectAttributes redirectAttributes,
+				@RequestParam(value = "comAgentId", required = false) Long comAgentId,
+				@RequestParam(value = "appId", required = false) Long appId,
+				@RequestParam(value = "productIds", required = false) String productIds,
+				@RequestParam(value = "startTime", required = false) Date startTime,
+				@RequestParam(value = "endTime", required = false) Date endTime)
+	 {
+//		List<ConfigAgentAppRelation> relationByComAgentId =  configAgentAppRelationService.findByComAgentId(comAgentId);
+//		model.addAttribute("relationByComAgentId", relationByComAgentId);
+//		
+//		if (appId!=null) {
+//			List<ConfigProduct> products = configProductService.findByAppId(appId);
+//			model.addAttribute("products", products);
+//		}
+		
+		
+			
+		ConfigCommercialAgent comAgent = configCommercialAgentService.get(comAgentId);
+		List<Long> appIds = new ArrayList<Long>();
+		if (appId==null) {
+			List<ConfigAgentAppRelation> relation =  configAgentAppRelationService.findByComAgentId(comAgentId);
+			for (int i = 0; i < relation.size(); i++) {
+				appIds.add(relation.get(i).getConfigApp().getId());
+			}
+		}
+		List<Long> productIdList = new ArrayList<Long>();
+		if (productIds!=null && !productIds.equals("")) {
+			String[] products = productIds.split(",");
+			for (int i = 0; i < products.length; i++) {
+				productIdList.add(Long.parseLong(products[i].toString()));
+			}
+		}
+		model.addAttribute("productIdList", productIdList);
+		Date start = new Date();
+		Date end = new Date();
+		if (startTime!=null && !startTime.equals("")) {
+			if (comAgent.getAgentContractStart().getTime()>startTime.getTime()) {
+				start = new Date(comAgent.getAgentContractStart().getTime());
+			}else{
+				start = startTime;
+			}
+		}else{
+			start = new Date(comAgent.getAgentContractStart().getTime());
+		}
+		if (endTime!=null && !endTime.equals("")) {
+			if (comAgent.getAgentContractEnd().getTime()<startTime.getTime()) {
+				start = new Date(comAgent.getAgentContractStart().getTime());
+			}else{
+				start = startTime;
+			}
+		}else{
+			
+			end = new Date(comAgent.getAgentContractEnd().getTime());
+		}
+		List<WorkDealInfo> dealInfos = 
+				workDealInfoService.findDealInfo(appId,appIds,productIdList,start,end);
+		
+		Integer lenth = 0;
+		for (int i = 0; i < dealInfos.size(); i++) {
+			WorkDealInfo dealInfo = dealInfos.get(i);
+			int totalAgentYear = comAgent.getSettlementPeriod();
+			List<WorkDealInfo> infos = new ArrayList<WorkDealInfo>();
+			infos.add(dealInfo);
+			WorkDealInfo info = workDealInfoService.findDealInfo(dealInfo.getId());
+			if (info!=null) {
+				infos.add(info);
+			}
+			while(info!=null){
+				info = workDealInfoService.findDealInfo(info.getId());
+				if (info!=null) {
+					infos.add(info);
+				}
+			}
+			List<PayableDetailVo> detailList = new ArrayList<PayableDetailVo>();
+			
+			Date endLastDate = new Date();
+			Calendar calendar = Calendar.getInstance();
+	        
+	        calendar.setTime(dealInfo.getBusinessCardUserDate());
+	        calendar.add(Calendar.YEAR, totalAgentYear);
+	        endLastDate = calendar.getTime();
+			
+			int yjNum = 0;
+			int lastNum = 0;
+			
+			for (int j = 0; j < infos.size(); j++) {
+				WorkDealInfo prvedDealInfo = infos.get(j);
+				PayableDetailVo detailVo = new PayableDetailVo();
+				String dealInfoType ="";
+				if (infos.get(j).getDealInfoType()!=null) {
+					dealInfoType= WorkDealInfoType.WorkDealInfoTypeMapNew.get(infos.get(j).getDealInfoType()) +" ";
+				}
+				if (infos.get(j).getDealInfoType1()!=null) {
+					dealInfoType += WorkDealInfoType.WorkDealInfoTypeMapNew.get(infos.get(j).getDealInfoType1()) +" ";
+				}
+				if (infos.get(j).getDealInfoType2()!=null) {
+					dealInfoType += WorkDealInfoType.WorkDealInfoTypeMapNew.get(infos.get(j).getDealInfoType2()) +" ";				
+				}
+				if (infos.get(j).getDealInfoType3()!=null) {
+					dealInfoType += WorkDealInfoType.WorkDealInfoTypeMapNew.get(infos.get(j).getDealInfoType3());	
+				}
+						
+				if (prvedDealInfo.getPayType()==null) {
+					Set<String> payMethods=new LinkedHashSet<String>();
+					if(infos.get(j).getWorkPayInfo()!=null)
+					{
+						if(infos.get(j).getWorkPayInfo().getRelationMethod()==null)
+						{
+							if(infos.get(j).getWorkPayInfo().getMethodPos()==true)
+							{
+								payMethods.add("Pos付款");
+							}
+							if(infos.get(j).getWorkPayInfo().getMethodMoney()==true)
+							{
+								payMethods.add("现金付款");
+							}
+							if(infos.get(j).getWorkPayInfo().getMethodAlipay()==true)
+							{
+								payMethods.add("支付宝付款");
+							}
+							if(infos.get(j).getWorkPayInfo().getMethodBank()==true)
+							{
+								payMethods.add("银行付款");
+							}
+							if(infos.get(j).getWorkPayInfo().getMethodGov()==true)
+							{
+								payMethods.add("政府统一采购");
+							}
+							if(infos.get(j).getWorkPayInfo().getMethodContract()==true)
+							{
+								payMethods.add("合同采购");
+							}
+						}else
+						{
+							List<WorkFinancePayInfoRelation> workfinancePayinfos=workFinancePayInfoRelationService.findByPayInfoId(infos.get(j).getWorkPayInfo().getId());
+							for(int w=0;w<workfinancePayinfos.size();w++)
+							{
+									if(workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod()==1)
+									{
+										payMethods.add("现金付款");
+									}
+									if(workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod()==2)
+									{
+										payMethods.add("POS付款");
+									}
+									if(workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod()==3)
+									{
+										payMethods.add("银行转账");
+									}
+									if(workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod()==4)
+									{
+										payMethods.add("支付宝付款");
+									}
+								}
+							
+						}
+						detailVo.setMethod(payMethods);
+					}
+					detailVo.setStartDate(infos.get(j).getBusinessCardUserDate());
+					detailVo.setEndDate(infos.get(j).getNotafter());
+					detailVo.setDealInfoType(dealInfoType);
+					detailVo.setSettleYear("0");
+					detailList.add(detailVo);
+					continue;
+				}
+				if (!prvedDealInfo.getPayType().equals(1)) {
+					Set<String> payMethods=new LinkedHashSet<String>();
+					if(infos.get(j).getWorkPayInfo()!=null)
+					{
+						if(infos.get(j).getWorkPayInfo().getRelationMethod()==null)
+						{
+							if(infos.get(j).getWorkPayInfo().getMethodPos()==true)
+							{
+								payMethods.add("Pos付款");
+							}
+							if(infos.get(j).getWorkPayInfo().getMethodMoney()==true)
+							{
+								payMethods.add("现金付款");
+							}
+							if(infos.get(j).getWorkPayInfo().getMethodAlipay()==true)
+							{
+								payMethods.add("支付宝付款");
+							}
+							if(infos.get(j).getWorkPayInfo().getMethodBank()==true)
+							{
+								payMethods.add("银行付款");
+							}
+							if(infos.get(j).getWorkPayInfo().getMethodGov()==true)
+							{
+								payMethods.add("政府统一采购");
+							}
+							if(infos.get(j).getWorkPayInfo().getMethodContract()==true)
+							{
+								payMethods.add("合同采购");
+							}
+						}else
+						{
+							List<WorkFinancePayInfoRelation> workfinancePayinfos=workFinancePayInfoRelationService.findByPayInfoId(infos.get(j).getWorkPayInfo().getId());
+							for(int w=0;w<workfinancePayinfos.size();w++)
+							{
+									if(workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod()==1)
+									{
+										payMethods.add("现金付款");
+									}
+									if(workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod()==2)
+									{
+										payMethods.add("POS付款");
+									}
+									if(workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod()==3)
+									{
+										payMethods.add("银行转账");
+									}
+									if(workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod()==4)
+									{
+										payMethods.add("支付宝付款");
+									}
+								}
+							
+						}
+						detailVo.setMethod(payMethods);
+					}
+					
+					detailVo.setStartDate(infos.get(j).getBusinessCardUserDate());
+					detailVo.setEndDate(infos.get(j).getNotafter());
+					detailVo.setDealInfoType(dealInfoType);
+					detailVo.setSettleYear("0");
+					detailList.add(detailVo);
+					continue;
+				}
+				
+				if (infos.get(j).getDealInfoType()!=null) {
+					Set<String> payMethods=new LinkedHashSet<String>();
+					if(infos.get(j).getWorkPayInfo()!=null)
+					{
+						if(infos.get(j).getWorkPayInfo().getRelationMethod()==null)
+						{
+							if(infos.get(j).getWorkPayInfo().getMethodPos()==true)
+							{
+								payMethods.add("Pos付款");
+							}
+							if(infos.get(j).getWorkPayInfo().getMethodMoney()==true)
+							{
+								payMethods.add("现金付款");
+							}
+							if(infos.get(j).getWorkPayInfo().getMethodAlipay()==true)
+							{
+								payMethods.add("支付宝付款");
+							}
+							if(infos.get(j).getWorkPayInfo().getMethodBank()==true)
+							{
+								payMethods.add("银行付款");
+							}
+							if(infos.get(j).getWorkPayInfo().getMethodGov()==true)
+							{
+								payMethods.add("政府统一采购");
+							}
+							if(infos.get(j).getWorkPayInfo().getMethodContract()==true)
+							{
+								payMethods.add("合同采购");
+							}
+						}else
+						{
+							List<WorkFinancePayInfoRelation> workfinancePayinfos=workFinancePayInfoRelationService.findByPayInfoId(infos.get(j).getWorkPayInfo().getId());
+							for(int w=0;w<workfinancePayinfos.size();w++)
+							{
+									if(workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod()==1)
+									{
+										payMethods.add("现金付款");
+									}
+									if(workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod()==2)
+									{
+										payMethods.add("POS付款");
+									}
+									if(workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod()==3)
+									{
+										payMethods.add("银行转账");
+									}
+									if(workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod()==4)
+									{
+										payMethods.add("支付宝付款");
+									}
+								}
+							
+						}
+						detailVo.setMethod(payMethods);
+					}
+					if (infos.get(j).getDealInfoType().equals(1)||infos.get(j).getDealInfoType().equals(0)) {
+						if(infos.get(j).getBusinessCardUserDate()!=null)
+						{
+							if (infos.get(j).getBusinessCardUserDate().getTime()>endLastDate.getTime()) {
+								detailVo.setStartDate(infos.get(j).getBusinessCardUserDate());
+								detailVo.setEndDate(infos.get(j).getNotafter());
+								detailVo.setDealInfoType(dealInfoType);
+								detailVo.setSettleYear("0");
+								detailList.add(detailVo);
+							}else if (infos.get(j).getNotafter().getTime()<endLastDate.getTime()) {
+								yjNum += infos.get(j).getYear();
+								lastNum = infos.get(j).getYear();
+								detailVo.setStartDate(infos.get(j).getBusinessCardUserDate());
+								detailVo.setEndDate(infos.get(j).getNotafter());
+								detailVo.setDealInfoType(dealInfoType);
+								detailVo.setSettleYear(infos.get(j).getYear().toString());
+								detailList.add(detailVo);
+							}else if (infos.get(j).getBusinessCardUserDate().getTime()<endLastDate.getTime()&&infos.get(j).getNotafter().getTime()>endLastDate.getTime()) {
+								long between = endLastDate.getTime()-infos.get(j).getBusinessCardUserDate().getTime();
+								long a  = between/31536000000L; 
+								int yy = (int) Math.ceil(a);
+								yjNum += yy;
+								lastNum = yy;
+								detailVo.setStartDate(infos.get(j).getBusinessCardUserDate());
+								detailVo.setEndDate(infos.get(j).getNotafter());
+								detailVo.setDealInfoType(dealInfoType);
+								detailVo.setSettleYear(yy+"");
+								detailList.add(detailVo);
+							}
+						}
+					}
+				}
+			}
+			dealInfos.get(i).setYyNum(yjNum);
+			dealInfos.get(i).setTotalNum(totalAgentYear);
+			dealInfos.get(i).setDetailList(detailList);
+			dealInfos.get(i).setLastNum(lastNum);
+			if (detailList.size()>lenth) {
+				lenth = detailList.size();
+			}
+		}
+		
+		
+		model.addAttribute("dealInfos", dealInfos);
+		model.addAttribute("lenth", lenth);
+		
+		HSSFWorkbook wb = new HSSFWorkbook();
+		HSSFSheet sheet = wb.createSheet("年限结算统计表");
+		sheet.addMergedRegion(new Region(0, (short)0, 0, (short)(7+lenth*5)));
+		HSSFRow row0= sheet.createRow(0);
+		row0.setHeight((short)20);
+		HSSFCellStyle style =wb.createCellStyle();
+		style.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+		style.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+		HSSFFont font = wb.createFont();
+		font.setFontName("宋体");
+		font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+		font.setFontHeightInPoints((short) 14);
+		style.setFont(font);
+		HSSFCell cell0 = row0.createCell(0);
+		cell0.setCellStyle(style);
+		cell0.setCellValue("年限统计表");
+	 
+		try {
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			response.setContentType(response.getContentType());
+			response.setHeader("Content-disposition", "attachment; filename=dcPayableDetail.xls");
+			wb.write(baos);
+			byte[] bytes = baos.toByteArray();
+			response.setHeader("Content-Length", String.valueOf(bytes.length));
+			BufferedOutputStream bos = null;
+			bos = new BufferedOutputStream(response.getOutputStream());
+			bos.write(bytes);
+			bos.close();
+			baos.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+	 
+		 
+		 
+	 }
 
 }
