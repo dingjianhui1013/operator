@@ -7,6 +7,7 @@
 	<meta name="decorator" content="default"/>
 	<script type="text/javascript">
 		$(document).ready(function() {
+			localStorage.setItem("cid","");
 		});
 		function page(n,s){
 			$("#pageNo").val(n);
@@ -20,12 +21,9 @@
 	        if("1"==radioCheck){  
 	            $(obj1).attr("checked",false);  
 	            $(obj1).val("0");  
-	            $("#workdealinfoId").val("");
 	            localStorage.setItem("cid","");
 	        }else{   
-// 	        	$("input['#xz']:checked").attr("checked","false");
 	            $(obj1).val("1");  
-	            $("#workdealinfoId").val(obj);
 	            localStorage.setItem("cid",obj);
 	        }  
 		}
@@ -44,27 +42,26 @@
 		<th>编号</th>
 		<th>应用名称</th>
 		<th>证书类型</th>
-		<th>应用标识</th>
-        <th>证书有效期</th>
+		<th>持有人</th>
+        <th>经办人</th>
         <th>操作</th>
 		<tbody>
 		<c:forEach items="${page.list}" var="cert">
 			<tr>
-				<td>${cert.id }</td>
+				<td>${cert.svn}</td>
 				<td>${cert.configApp.appName }</td>
 				<td>${pro[cert.configProduct.productName] }</td>
-				<td><c:if test="${cert.configProduct.productLabel==1 }">专用</c:if>
-				<c:if test="${cert.configProduct.productLabel==0 }">通用</c:if></td>
-				<td>
-				<fmt:formatDate value="${cert.workCertInfo.notbefore}" pattern="yyyy-MM-dd"/>
-				至
-				<fmt:formatDate value="${cert.workCertInfo.notafter}" pattern="yyyy-MM-dd"/></td>
+				<td>${cert.workUser.contactName}</td>
+				<td>${cert.workCertInfo.workCertApplyInfo.name}</td>
+				
+<%-- 				<td></td> --%>
+<%-- 				<td>${cert.certApplyInfoName}</td> --%>
 				<td><input type="radio"  onclick="fillCompany('${cert.id}',this)"  value="0" name="xz" />选择</td>
 			</tr>
 		</c:forEach>
 		</tbody>
 	</table>
-	<input type="hidden" value="" name="workdealinfoId" id="workdealinfoId"/>
+<!-- 	<input type="text" value="" name="workdealinfoId" id="workdealinfoId"/> -->
 	<input type="hidden" value="${companyId}" name="companyIds" />
 	<input type="hidden" value="${productId}" name="productId" />
 	</form>

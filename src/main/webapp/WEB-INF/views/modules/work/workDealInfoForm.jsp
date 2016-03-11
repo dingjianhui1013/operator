@@ -693,12 +693,12 @@ var selected = false;
 			{
 				if(productId==1||productId==3||productId==4)
 					{
-						var urlajax = "${ctx}/work/workDealInfo/ajaxEnterpriseCount?companyIds=" + companyId+"&productId="+productId;
+						var urlajax = "${ctx}/work/workDealInfo/ajaxEnterpriseCount?companyIds=" + companyId+"&productId="+productId+"&_="+new Date().getTime();
 						$.getJSON(urlajax,function(data){
 							
 							if(data.index>0)
 								{
-									var url = "${ctx}/work/workDealInfo/showCertEnterprise?companyIds=" + companyId+"&productId="+productId;
+									var url = "${ctx}/work/workDealInfo/showCertEnterprise?companyIds=" + companyId+"&productId="+productId+"&workdealinfoIds="+data.workdealinfoss+"&_="+new Date().getTime();
 									top.$.jBox.open("iframe:" + url, "已有证书明细", 800, 420, {
 										buttons : {
 											"确定" : "ok",
@@ -711,7 +711,7 @@ var selected = false;
 													{
 															var cid = localStorage.getItem("cid");
 																//根据workdealinfoId获取单位详细信息
-															var url1="${ctx}/work/workDealInfo/findCompanyInformation?id="+cid;
+															var url1="${ctx}/work/workDealInfo/findCompanyInformation?id="+cid+"&_="+new Date().getTime();
 															$.getJSON(url1,function(d){
 																	$("#companyId").val(d.companyId);
 																	$("#companyName").val(d.companyName);

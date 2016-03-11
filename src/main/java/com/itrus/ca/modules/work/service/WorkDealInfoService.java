@@ -528,7 +528,62 @@ public class WorkDealInfoService extends BaseService {
 		dc.addOrder(Order.desc("id"));
 		return workDealInfoDao.find(page, dc);
 	}
+	public Page<WorkDealInfo> findEnterprise2(Page<WorkDealInfo> page,List<Long> workdealinfoIds) {
+		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
+		String dealInfoStatus = WorkDealInfoStatus.STATUS_CERT_OBTAINED;
+		if (dealInfoStatus != null) {
+			dc.add(Restrictions.eq("dealInfoStatus", dealInfoStatus));
+		}
+		if(workdealinfoIds.size()>0&&!workdealinfoIds.isEmpty())
+		{
+			dc.add(Restrictions.in("id", workdealinfoIds));
+		}else
+		{
+			dc.add(Restrictions.eq("id", -1L));
+		}
+		dc.addOrder(Order.desc("id"));
+		return workDealInfoDao.find(page, dc);
+	}
 
+	public Page<WorkDealInfo> findEnterprise1(Page<WorkDealInfo> page,
+			List<Long> companyIds, String productId) {
+		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
+		String dealInfoStatus = WorkDealInfoStatus.STATUS_CERT_OBTAINED;
+		if (companyIds != null && companyIds.size() > 0) {
+			dc.createAlias("workCompany", "workCompany");
+			dc.add(Restrictions.in("workCompany.id", companyIds));
+		}
+		if (productId != null) {
+			dc.createAlias("configProduct", "configProduct");
+			dc.add(Restrictions.eq("configProduct.productName", productId));
+		}
+		if (dealInfoStatus != null) {
+			dc.add(Restrictions.eq("dealInfoStatus", dealInfoStatus));
+		}
+		dc.add(Restrictions.isNotNull("prevId"));
+		dc.addOrder(Order.desc("id"));
+		return workDealInfoDao.find(page, dc);
+	}
+	
+	public List<WorkDealInfo> findEnterprise(
+			List<Long> companyIds, String productId) {
+		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
+		String dealInfoStatus = WorkDealInfoStatus.STATUS_CERT_OBTAINED;
+		if (companyIds != null && companyIds.size() > 0) {
+			dc.createAlias("workCompany", "workCompany");
+			dc.add(Restrictions.in("workCompany.id", companyIds));
+		}
+		if (productId != null) {
+			dc.createAlias("configProduct", "configProduct");
+			dc.add(Restrictions.eq("configProduct.productName", productId));
+		}
+		if (dealInfoStatus != null) {
+			dc.add(Restrictions.eq("dealInfoStatus", dealInfoStatus));
+		}
+//		dc.add(Restrictions.isNotNull("prevId"));
+		dc.addOrder(Order.desc("id"));
+		return workDealInfoDao.find(dc);
+	}
 	public List<WorkDealInfo> findPersonal(List<Long> companyIds,
 			String productId) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
