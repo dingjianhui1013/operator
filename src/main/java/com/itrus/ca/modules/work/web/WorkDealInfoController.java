@@ -4091,11 +4091,17 @@ public class WorkDealInfoController extends BaseController {
 			List<Long> workdealinfos = new ArrayList<Long>();
 			for(int j=0;j<workdealinfoIds.size();j++)
 			{
-				for(int i = 0 ;i<previds.size();i++)
+				if(previds.isEmpty())
 				{
-					if(!workdealinfoIds.get(j).equals(previds.get(i)))
+					workdealinfos.add(workdealinfoIds.get(j));
+				}else
+				{
+					for(int i = 0 ;i<previds.size();i++)
 					{
-						workdealinfos.add(workdealinfoIds.get(j));
+						if(!workdealinfoIds.get(j).equals(previds.get(i)))
+						{
+							workdealinfos.add(workdealinfoIds.get(j));
+						}
 					}
 				}
 			}
