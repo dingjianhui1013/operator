@@ -54,7 +54,7 @@
 		</div>
 		<div class="control-group">
 			<label class="control-label">单位类型:</label>
-			<div class="controls">
+			<div class="controls">${workDealInfo.workCompany.companyType}
 				<c:if test="${workDealInfo.workCompany.companyType==1}">企业</c:if>
 				<c:if test="${workDealInfo.workCompany.companyType==2}">事业单位</c:if>
 				<c:if test="${workDealInfo.workCompany.companyType==3}">政府机构</c:if>

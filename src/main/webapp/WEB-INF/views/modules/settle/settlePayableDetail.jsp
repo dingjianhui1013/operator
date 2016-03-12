@@ -162,6 +162,24 @@
 		}
 	}
 	
+	function dcCountDay(){
+		if ($("#startTime").val()==""||$("#endTime").val()=="") {
+			top.$.jBox.tip("请选定时间范围");
+			return false;
+		} else {
+			if ($("#office").val()==""){
+				top.$.jBox.tip("请选定网点");
+			} else {
+				var startTime = document.getElementById("startTime").value;
+				var endTime = document.getElementById("endTime").value;
+				var office = document.getElementById("office").value;
+				window.location.href="${ctx}/statistic/StatisticDayData/exportCountDay?startTime="+startTime+"&endTime="+endTime+"&office="+office;
+			}
+		}
+		
+		
+		
+	}
 </script>
 </head>
 <body>

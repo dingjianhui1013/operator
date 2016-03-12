@@ -941,7 +941,8 @@ var selected = false;
 //				$(obj).focus(); //让手机文本框获得焦点
 				return false;
 			}
-			$("#contacEmail").after("<span id='emailpro' style='color:red'>邮箱格式错误!</span>");
+			//$("#contacEmail").after("<span id='emailpro' style='color:red'>邮箱格式错误!</span>");
+			$("#emailMess").html("邮箱格式错误!");
 		/* 	top.$.jBox.tip("邮箱格式错误!");  */
 //			$(obj).focus(); //让邮箱文本框获得焦点
 			return false;
@@ -1530,7 +1531,7 @@ var selected = false;
 							<th><span class="prompt" style="color: red; display: none;">*</span>证书持有人电子邮件:</th>
 							<td><input type="text" name="contacEmail" id="contacEmail"
 								maxlength="30" value="${workUser.contactEmail }"
-								onchange="emailFill(this)" /></td>
+								onchange="emailFill(this)" /><span id="emailMess" style="style="color: red;"> </span></td>
 						</tr>
 						<tr>
 							<th><span class="prompt" style="color: red; display: none;">*</span>证书持有人手机号:</th>

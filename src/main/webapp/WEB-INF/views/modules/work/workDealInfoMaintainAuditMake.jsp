@@ -420,7 +420,7 @@
 			<tr>
 				<td>证书SN</td>
 				<td>组织机构代码</td>
-				<td style="width: 50%">${cworkCompany.organizationNumber }</td>
+				<td style="width: 50%">${workDealInfo.workCompany.organizationNumber }</td>
 			</tr>
 			<tr>
 				<td>accountOrgunit</td>

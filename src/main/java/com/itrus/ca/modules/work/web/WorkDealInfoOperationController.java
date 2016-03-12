@@ -1265,7 +1265,7 @@ public class WorkDealInfoOperationController extends BaseController {
 	@RequestMapping(value = "maintainSaveChange")
 	public String maintainSaveChange(Long workDealInfoId, String orgExpirationTime,
 			String selectLv, String comCertificateType, String organizationNumber,
-			String comCertficateNumber, String comCertficateTime, String companyName,
+			String comCertficateNumber, String comCertficateTime, String companyName,String companyType,
 			String legalName, String s_province, String s_city,
 			String s_county, String address, String companyMobile,
 			String remarks, Integer workType, String contactName,
@@ -1320,6 +1320,7 @@ public class WorkDealInfoOperationController extends BaseController {
 			//4月17号修改，变更业务可变更单位名称以及组织机构代码
 			workCompany.setCompanyName(companyName);
 			workCompany.setOrganizationNumber(organizationNumber);
+			workCompany.setCompanyType(companyType);
 			
 			workCompany.setComCertficateTime(ts);
 			workCompany.setComCertficateNumber(comCertficateNumber);
