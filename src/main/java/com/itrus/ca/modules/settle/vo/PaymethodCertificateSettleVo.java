@@ -9,7 +9,7 @@ public class PaymethodCertificateSettleVo {
 	private Long workCount;
 	private Integer dealInfoType;
 	private Integer paymethod;
-	private Integer payMethod;
+//	private Integer payMethod;
 
 	public PaymethodCertificateSettleVo() {
 
@@ -122,14 +122,14 @@ public class PaymethodCertificateSettleVo {
 		this.paymethod = paymethod.intValue();
 	}
 
-	public Integer getPayMethod() {
-		return payMethod;
-	}
-
-	public void setPayMethod(Integer payMethod) {
-		this.payMethod = payMethod;
-	}
-	
+//	public Integer getPayMethod() {
+//		return payMethod;
+//	}
+//
+//	public void setPayMethod(Integer payMethod) {
+//		this.payMethod = payMethod;
+//	}
+//	
 	
 
 }

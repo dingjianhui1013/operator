@@ -47,6 +47,7 @@ import com.itrus.ca.modules.settle.vo.PaymethodCertificateSettleVo;
 
 /**
  * 支付方式证书结算Controller
+ * 
  * @author qt
  * @version 2016-01-31
  */
@@ -56,7 +57,7 @@ public class PaymethodCertificateSettleController extends BaseController {
 
 	@Autowired
 	private PaymethodCertificateSettleService paymethodCertificateSettleService;
-	
+
 	@Autowired
 	private OfficeService officeService;
 
@@ -65,22 +66,21 @@ public class PaymethodCertificateSettleController extends BaseController {
 
 	@Autowired
 	private ConfigChargeAgentService configChargeAgentService;
-	
+
 	@ModelAttribute
-	public PaymethodCertificateSettle get(@RequestParam(required=false) Long id) {
-		if (id != null){
+	public PaymethodCertificateSettle get(@RequestParam(required = false) Long id) {
+		if (id != null) {
 			return paymethodCertificateSettleService.get(id);
-		}else{
+		} else {
 			return new PaymethodCertificateSettle();
 		}
 	}
-	
+
 	@RequiresPermissions("settle:paymethodCertificateSettle:view")
-	
+
 	@RequestMapping(value = { "list", "" })
-	public String list(Long areaId, Long officeId, Date startDate, Date endDate, String tempStyle,String agentId,
-			boolean multiType,
-			HttpServletRequest request, HttpServletResponse response,
+	public String list(Long areaId, Long officeId, Date startDate, Date endDate, String tempStyle, String agentId,
+			boolean multiType, HttpServletRequest request, HttpServletResponse response,
 			@RequestParam(value = "applyId", required = false) Long applyId,
 			@RequestParam(value = "proList", required = false) List<String> productType,
 			@RequestParam(value = "workTypes", required = false) List<String> workType, Model model) {
@@ -96,13 +96,13 @@ public class PaymethodCertificateSettleController extends BaseController {
 				i++;
 			}
 		}
-		
+
 		if (areaId != null) {
 			List<Office> offices = officeService.findByParentId(areaId);
 			model.addAttribute("offices", offices);
 		}
-		if(tempStyle !=null){
-			List<ConfigChargeAgent> agentList=configChargeAgentService.findByStyle(tempStyle.toString());
+		if (tempStyle != null) {
+			List<ConfigChargeAgent> agentList = configChargeAgentService.findByStyle(tempStyle.toString());
 			model.addAttribute("agentList", agentList);
 			model.addAttribute("tempStyle", tempStyle);
 			model.addAttribute("agentId", agentId);
@@ -111,8 +111,7 @@ public class PaymethodCertificateSettleController extends BaseController {
 		List<ConfigApp> configAppList = configAppService.selectAll();
 		model.addAttribute("configAppList", configAppList);
 		model.addAttribute("proList", ProductType.getProductTypeAutoTask());
-		
-		
+
 		String product = "";
 		if (productType != null && productType.size() > 0) {
 			for (int i = 0; i < productType.size(); i++) {
@@ -146,18 +145,17 @@ public class PaymethodCertificateSettleController extends BaseController {
 		model.addAttribute("workTypes", workDealInfoType.getProductTypeListLess());
 		// model.addAttribute("workType", workDealInfo.getDealInfoStatus());
 		model.addAttribute("productId", productType);
-		model.addAttribute("multiType",multiType);
+		model.addAttribute("multiType", multiType);
 		model.addAttribute("workType", workType);
 		model.addAttribute("offsList", offsList);
 		model.addAttribute("areaId", areaId);
-		
 
 		model.addAttribute("officeId", officeId);
 		// 开始日期，结束日期，应用必须选择
 		if (startDate == null || endDate == null || applyId == null) {
 			model.addAttribute("startDate", DateUtils.firstDayOfMonth(new Date()));
 			model.addAttribute("endDate", new Date());
- 			return "modules/settle/paymethodCertificateSettleList";
+			return "modules/settle/paymethodCertificateSettleList";
 		} else {
 			model.addAttribute("startDate", startDate);
 			model.addAttribute("endDate", endDate);
@@ -169,22 +167,21 @@ public class PaymethodCertificateSettleController extends BaseController {
 		} else if (areaId != null) {
 			officeIdList = officeService.findOfficeIdsByParentId(areaId);
 		}
-		List<PaymethodCertificateSettleVo> findWorkList1 = paymethodCertificateSettleService.findMulitWorkList1(
-				applyId, org.springframework.util.StringUtils.collectionToCommaDelimitedString(productType),
+		List<PaymethodCertificateSettleVo> findWorkList1 = paymethodCertificateSettleService.findMulitWorkList1(applyId,
+				org.springframework.util.StringUtils.collectionToCommaDelimitedString(productType),
 				org.springframework.util.StringUtils.collectionToCommaDelimitedString(workType),
 				org.springframework.util.StringUtils.collectionToCommaDelimitedString(officeIdList), agentId, startDate,
 				endDate);
 
-		HashMap<String, Certificate> monthMap1 = paymethodCertificateSettleService.getStaticMap1(findWorkList1);
-		
-		
+		HashMap<String, Object> monthMap = paymethodCertificateSettleService.getStaticMap(findWorkList1);
+
 		model.addAttribute("list", findWorkList1);
-		model.addAttribute("monthList", new ArrayList<String>(monthMap1.keySet()));
-		model.addAttribute("sumList", monthMap1);	
-		
+		model.addAttribute("monthList", new ArrayList<String>(monthMap.keySet()));
+		model.addAttribute("sumList", monthMap);
+
 		return "modules/settle/paymethodCertificateSettleList";
 	}
-	
+
 	public List<String> getMonthList(Date begin, Date end) {
 		List<String> monthList = new ArrayList<String>();
 		SimpleDateFormat monthFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -236,6 +233,7 @@ public class PaymethodCertificateSettleController extends BaseController {
 
 		return monthList;
 	}
+
 	@RequiresPermissions("settle:paymethodCertificateSettle:view")
 	@RequestMapping(value = "form")
 	public String form(PaymethodCertificateSettle paymethodCertificateSettle, Model model) {
@@ -245,21 +243,22 @@ public class PaymethodCertificateSettleController extends BaseController {
 
 	@RequiresPermissions("settle:paymethodCertificateSettle:edit")
 	@RequestMapping(value = "save")
-	public String save(PaymethodCertificateSettle paymethodCertificateSettle, Model model, RedirectAttributes redirectAttributes) {
-		if (!beanValidator(model, paymethodCertificateSettle)){
+	public String save(PaymethodCertificateSettle paymethodCertificateSettle, Model model,
+			RedirectAttributes redirectAttributes) {
+		if (!beanValidator(model, paymethodCertificateSettle)) {
 			return form(paymethodCertificateSettle, model);
 		}
 		paymethodCertificateSettleService.save(paymethodCertificateSettle);
 		addMessage(redirectAttributes, "保存支付方式证书结算'" + paymethodCertificateSettle.getName() + "'成功");
-		return "redirect:"+Global.getAdminPath()+"/modules/settle/paymethodCertificateSettle/?repage";
+		return "redirect:" + Global.getAdminPath() + "/modules/settle/paymethodCertificateSettle/?repage";
 	}
-	
+
 	@RequiresPermissions("settle:paymethodCertificateSettle:edit")
 	@RequestMapping(value = "delete")
 	public String delete(Long id, RedirectAttributes redirectAttributes) {
 		paymethodCertificateSettleService.delete(id);
 		addMessage(redirectAttributes, "删除支付方式证书结算成功");
-		return "redirect:"+Global.getAdminPath()+"/modules/settle/paymethodCertificateSettle/?repage";
+		return "redirect:" + Global.getAdminPath() + "/modules/settle/paymethodCertificateSettle/?repage";
 	}
 
 }
