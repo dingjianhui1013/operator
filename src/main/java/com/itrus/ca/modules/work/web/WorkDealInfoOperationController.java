@@ -1292,19 +1292,6 @@ public class WorkDealInfoOperationController extends BaseController {
 		WorkUser workUser = null;
 		WorkCompanyHis companyHis = null;
 		WorkUserHis userHis = null;
-		// 保存经办人信息
-		workUser = new WorkUser();
-		workUser.setContactName(contactName);
-		workUser.setStatus(1);
-		workUser.setConCertType(conCertType);
-		workUser.setConCertNumber(conCertNumber);
-		workUser.setContactEmail(contacEmail);
-		workUser.setContactPhone(contactPhone);
-		workUser.setContactTel(contactTel);
-		workUser.setContactSex(contactSex);
-		workUserService.save(workUser);
-		userHis = workUserService.change(workUser, companyHis);
-		workUserHisService.save(userHis);
 
 			//变更业务保存单位信息
 			workCompany = new WorkCompany();
@@ -1338,6 +1325,21 @@ public class WorkDealInfoOperationController extends BaseController {
 			companyHis = workCompanyService.change(workCompany);
 			workCompanyHisService.save(companyHis);
 		
+			// 保存经办人信息
+			workUser = new WorkUser();
+			workUser.setWorkCompany(workCompany);
+			workUser.setContactName(contactName);
+			workUser.setStatus(1);
+			workUser.setConCertType(conCertType);
+			workUser.setConCertNumber(conCertNumber);
+			workUser.setContactEmail(contacEmail);
+			workUser.setContactPhone(contactPhone);
+			workUser.setContactTel(contactTel);
+			workUser.setContactSex(contactSex);
+			workUserService.save(workUser);
+			userHis = workUserService.change(workUser, companyHis);
+			workUserHisService.save(userHis);
+	
 			//workDealInfo1
 		WorkDealInfo workDealInfo = new WorkDealInfo();
 		workDealInfo.setConfigApp(workDealInfo1.getConfigApp());

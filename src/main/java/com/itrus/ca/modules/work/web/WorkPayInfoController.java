@@ -4,10 +4,13 @@
  */
 package com.itrus.ca.modules.work.web;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -41,9 +44,15 @@ import com.itrus.ca.modules.key.service.KeyUsbKeyInvoiceService;
 import com.itrus.ca.modules.log.service.LogUtil;
 import com.itrus.ca.modules.profile.entity.ConfigAgentBoundDealInfo;
 import com.itrus.ca.modules.profile.entity.ConfigApp;
+import com.itrus.ca.modules.profile.entity.ConfigAppOfficeRelation;
 import com.itrus.ca.modules.profile.entity.ConfigChargeAgent;
+import com.itrus.ca.modules.profile.entity.ConfigChargeAgentBoundConfigProduct;
+import com.itrus.ca.modules.profile.entity.ConfigProduct;
 import com.itrus.ca.modules.profile.entity.ConfigRaAccount;
 import com.itrus.ca.modules.profile.service.ConfigAgentBoundDealInfoService;
+import com.itrus.ca.modules.profile.service.ConfigAppOfficeRelationService;
+import com.itrus.ca.modules.profile.service.ConfigChargeAgentBoundConfigProductService;
+import com.itrus.ca.modules.profile.service.ConfigChargeAgentDetailService;
 import com.itrus.ca.modules.profile.service.ConfigChargeAgentService;
 import com.itrus.ca.modules.profile.service.ConfigRaAccountService;
 import com.itrus.ca.modules.receipt.entity.ReceiptDepotInfo;
@@ -57,9 +66,11 @@ import com.itrus.ca.modules.sys.entity.User;
 import com.itrus.ca.modules.sys.utils.UserUtils;
 import com.itrus.ca.modules.work.entity.WorkDealInfo;
 import com.itrus.ca.modules.work.entity.WorkFinancePayInfoRelation;
+import com.itrus.ca.modules.work.entity.WorkLog;
 import com.itrus.ca.modules.work.entity.WorkPayInfo;
 import com.itrus.ca.modules.work.service.WorkDealInfoService;
 import com.itrus.ca.modules.work.service.WorkFinancePayInfoRelationService;
+import com.itrus.ca.modules.work.service.WorkLogService;
 import com.itrus.ca.modules.work.service.WorkPayInfoService;
 
 /**
@@ -103,8 +114,24 @@ public class WorkPayInfoController extends BaseController {
 	@Autowired
 	private ConfigAgentBoundDealInfoService configAgentBoundDealInfoService;
 
+	@Autowired
+	private ConfigAppOfficeRelationService configAppOfficeRelationService;
+	
 	private LogUtil logUtil = new LogUtil();
 
+	@Autowired
+	private ConfigChargeAgentService chargeAgentService;
+
+	@Autowired
+	private WorkLogService workLogService;
+	
+	@Autowired
+	private ConfigChargeAgentDetailService configChargeAgentDetailService;
+	
+	@Autowired
+	private ConfigChargeAgentBoundConfigProductService configChargeAgentBoundConfigProductService;
+
+	
 	@ModelAttribute
 	public WorkPayInfo get(@RequestParam(required = false) Long id) {
 		if (id != null) {
@@ -117,10 +144,6 @@ public class WorkPayInfoController extends BaseController {
 	@RequiresPermissions("work:workPayInfo:view")
 	@RequestMapping(value = { "list", "" })
 	public String list(WorkPayInfo workPayInfo, HttpServletRequest request, HttpServletResponse response, Model model) {
-		User user = UserUtils.getUser();
-		// if (!user.isAdmin()){
-		// workPayInfo.setCreateBy(user);
-		// }
 		Page<WorkPayInfo> page = workPayInfoService.find(new Page<WorkPayInfo>(request, response), workPayInfo);
 		model.addAttribute("page", page);
 		return "modules/work/workPayInfoList";
@@ -1365,4 +1388,285 @@ public class WorkPayInfoController extends BaseController {
 		workDealInfoService.save(dealInfo);
 		return "redirect:" + Global.getAdminPath() + "/work/workDealInfo/pay?id=" + dealInfo.getId();
 	}
+	
+	
+	
+	
+	@RequiresPermissions("work:workPayInfo:edit")
+	@RequestMapping(value = "errorReturnPayment")
+	public String errorReturnPayment(Long workDealInfoId, RedirectAttributes redirectAttributes, Model model) {
+
+		WorkDealInfo dealInfo = workDealInfoService.get(workDealInfoId);
+		if (dealInfo.getDealInfoType()!=null && dealInfo.getDealInfoType().equals(1)) {
+			ConfigChargeAgent agentOri = configChargeAgentService.get(dealInfo.getConfigChargeAgentId());
+			agentOri.setReserveUpdateNum(agentOri.getReserveUpdateNum() + 1);
+			agentOri.setAvailableUpdateNum(agentOri.getAvailableUpdateNum() - 1);
+			configChargeAgentService.save(agentOri);
+		}
+
+		List<Integer> dealInfoList = new ArrayList<Integer>();
+		if (dealInfo.getDealInfoType() != null) {
+			dealInfoList.add(dealInfo.getDealInfoType());
+		}
+		if (dealInfo.getDealInfoType1() != null) {
+			dealInfoList.add(dealInfo.getDealInfoType1());
+		}
+		if (dealInfo.getDealInfoType2() != null) {
+			dealInfoList.add(dealInfo.getDealInfoType2());
+		}
+		boolean isOut = false;
+		if (dealInfoList.size() == 1) {
+			if (dealInfoList.get(0).equals(1)) {
+				isOut = true;
+			} else if (dealInfoList.get(0).equals(4)) {
+				isOut = true;
+			}
+		} else if (dealInfoList.size() == 2) {
+			if (dealInfoList.get(0).equals(1) && dealInfoList.get(1).equals(4)) {
+				isOut = true;
+			}
+		}
+
+		if (isOut) {
+			WorkPayInfo payInfo = dealInfo.getWorkPayInfo();
+			Set<WorkFinancePayInfoRelation> relations = payInfo.getWorkFinancePayInfoRelations();
+			if (relations.size() != 0) {
+				for (WorkFinancePayInfoRelation relation : relations) {// 退费
+					FinancePaymentInfo financePaymentInfo = relation.getFinancePaymentInfo();
+					financePaymentInfo.setBingdingTimes(financePaymentInfo.getBingdingTimes() - 1);
+					financePaymentInfo.setResidueMoney(financePaymentInfo.getResidueMoney() + relation.getMoney());// 返还金额
+					financePaymentInfoService.save(financePaymentInfo);
+					workFinancePayInfoRelationService.delete(relation.getId());
+				}
+			}
+
+			Double money = dealInfo.getWorkPayInfo().getReceiptAmount();
+
+			if (money > 0d) {
+				ReceiptDepotInfo receiptDepotInfo = receiptDepotInfoService
+						.findDepotByOffice(dealInfo.getCreateBy().getOffice()).get(0);
+				// 修改余额
+				receiptDepotInfo.setReceiptResidue(receiptDepotInfo.getReceiptResidue() + money);
+				receiptDepotInfo.setReceiptTotal(receiptDepotInfo.getReceiptTotal() + money);
+
+				// 创建入库信息
+				ReceiptEnterInfo receiptEnterInfo = new ReceiptEnterInfo();
+				receiptEnterInfo.setReceiptDepotInfo(receiptDepotInfo);
+				receiptEnterInfo.setNow_Money(Double.valueOf(money));
+				receiptEnterInfo.setBeforMoney(
+						receiptEnterInfo.getReceiptDepotInfo().getReceiptResidue() - Double.valueOf(money));
+				receiptEnterInfo.setReceiptMoney(receiptEnterInfo.getReceiptDepotInfo().getReceiptResidue());
+				receiptEnterInfo.setReceiptType(4);// 退费入库
+				receiptEnterInfoService.save(receiptEnterInfo);
+
+				logUtil.saveSysLog("更新业务办理重新缴费", "库房" + receiptDepotInfo.getReceiptName() + "添加入库信息成功", "");
+				receiptDepotInfoService.save(receiptDepotInfo);
+			}
+		}
+
+		workPayInfoService.delete(dealInfo.getWorkPayInfo().getId());
+		dealInfo.setWorkPayInfo(null);
+		boolean inOffice = false;
+		dealInfo.setDealInfoStatus("15");
+		workDealInfoService.save(dealInfo);
+
+		List<ConfigAppOfficeRelation> configAppOfficeRelations = configAppOfficeRelationService
+				.findAllByOfficeId(UserUtils.getUser().getOffice().getId());
+		for (ConfigAppOfficeRelation appOffice : configAppOfficeRelations) {
+			if (appOffice.getConfigApp().getId().equals(dealInfo.getConfigApp().getId())) {
+				inOffice = true;
+			}
+		}
+		if (!inOffice) {
+			redirectAttributes.addAttribute("fd", UUID.randomUUID().toString());
+			addMessage(redirectAttributes, "请到业务办理网点办理！");
+			return "redirect:" + Global.getAdminPath() + "/work/workDealInfo/?repage";
+		}
+
+		if (dealInfo.getWorkCertInfo() != null) {
+			model.addAttribute("workCertApplyInfo", dealInfo.getWorkCertInfo().getWorkCertApplyInfo());
+		}
+
+		ConfigChargeAgent chargeAgent = chargeAgentService.get(dealInfo.getConfigChargeAgentId());
+		model.addAttribute("tempStyle", chargeAgent.getTempStyle());
+		model.addAttribute("pro", ProductType.productTypeStrMap);
+		model.addAttribute("user", UserUtils.getUser());
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		model.addAttribute("date", sdf.format(new Date()));
+		model.addAttribute("workDealInfo", dealInfo);
+
+		ConfigProduct configProduct = dealInfo.getConfigProduct();
+		List<ConfigChargeAgentBoundConfigProduct> boundList = configChargeAgentBoundConfigProductService
+				.findByProIdAll(configProduct.getId());
+		Set<Integer> nameSet = new HashSet<Integer>();
+		for (int i = 0; i < boundList.size(); i++) {
+			nameSet.add(Integer.parseInt(boundList.get(i).getAgent().getTempStyle()));
+		}
+		model.addAttribute("boundLabelList", nameSet);
+		List<WorkLog> list = workLogService.findByDealInfo(dealInfo);
+		model.addAttribute("workLog", list);
+		model.addAttribute("tempStyle", chargeAgent.getTempStyle());
+
+		ArrayList<Integer> dealInfoTypes = new ArrayList<Integer>();
+		if (dealInfo.getDealInfoType() != null) {
+			dealInfoTypes.add(dealInfo.getDealInfoType());
+		}
+		if (dealInfo.getDealInfoType1() != null) {
+			dealInfoTypes.add(dealInfo.getDealInfoType1());
+		}
+		if (dealInfo.getDealInfoType2() != null) {
+			dealInfoTypes.add(dealInfo.getDealInfoType2());
+		}
+		if (dealInfo.getDealInfoType3() != null) {
+			dealInfoTypes.add(dealInfo.getDealInfoType3());
+		}
+
+		if (dealInfoTypes.size() == 1) {
+			if (dealInfoTypes.get(0).equals(4)) {// 变更
+				return "modules/work/maintain/workDealInfoMaintainReturnChange";
+			} else if (dealInfoTypes.get(0).equals(1)) {
+				model.addAttribute("update", "3");
+				ConfigProduct configProductOld = dealInfo.getConfigProduct();
+				String[] years = configChargeAgentDetailService.getChargeAgentYears(configProductOld.getChargeAgentId(),
+						WorkDealInfoType.TYPE_UPDATE_CERT);
+				for (int j = 0; j < years.length; j++) {
+					switch (years[j]) {
+					case "1":
+						model.addAttribute("year1", true);
+						break;
+					case "2":
+						model.addAttribute("year2", true);
+						break;
+					case "3":
+						model.addAttribute("year3", true);
+						break;
+					case "4":
+						model.addAttribute("year4", true);
+						break;
+					case "5":
+						model.addAttribute("year5", true);
+						break;
+					}
+				}
+				model.addAttribute("dealType", dealInfoTypes.toString());
+				return "modules/work/maintain/workDealInfoMaintainReturnUpdate";
+			} else if (dealInfoTypes.get(0).equals(2) || dealInfoTypes.get(0).equals(3)) {
+				model.addAttribute("reissue", dealInfoTypes.get(0));
+				return "modules/work/maintain/workDealInfoMaintainReturnLost";
+			}
+
+		} else if (dealInfoTypes.size() == 2) {
+			if (dealInfoTypes.get(0).equals(2) || dealInfoTypes.get(0).equals(3)) {
+				if (dealInfoTypes.get(1).equals(4)) {
+					model.addAttribute("reissue", dealInfoTypes.get(0));
+					return "modules/work/maintain/workDealInfoMaintainReturnChange";
+				}
+			} else if (dealInfoTypes.get(0).equals(1)) {
+				if (dealInfoTypes.get(1).equals(2) || dealInfoTypes.get(1).equals(3)) {
+					model.addAttribute("update", "3");
+					model.addAttribute("reissue", dealInfoTypes.get(1));
+					ConfigProduct configProductOld = dealInfo.getConfigProduct();
+					String[] years = configChargeAgentDetailService.getChargeAgentYears(
+							configProductOld.getChargeAgentId(), WorkDealInfoType.TYPE_UPDATE_CERT);
+					for (int j = 0; j < years.length; j++) {
+						switch (years[j]) {
+						case "1":
+							model.addAttribute("year1", true);
+							break;
+						case "2":
+							model.addAttribute("year2", true);
+							break;
+						case "3":
+							model.addAttribute("year3", true);
+							break;
+						case "4":
+							model.addAttribute("year4", true);
+							break;
+						case "5":
+							model.addAttribute("year5", true);
+							break;
+						}
+					}
+					model.addAttribute("dealType", dealInfoTypes.toString());
+					return "modules/work/maintain/workDealInfoMaintainReturnUpdate";
+				} else if (dealInfoTypes.get(1).equals(4)) {
+					model.addAttribute("update", "3");
+					ConfigProduct configProductOld = dealInfo.getConfigProduct();
+					String[] years = configChargeAgentDetailService.getChargeAgentYears(
+							configProductOld.getChargeAgentId(), WorkDealInfoType.TYPE_UPDATE_CERT);
+					for (int j = 0; j < years.length; j++) {
+						switch (years[j]) {
+						case "1":
+							model.addAttribute("year1", true);
+							break;
+						case "2":
+							model.addAttribute("year2", true);
+							break;
+						case "3":
+							model.addAttribute("year3", true);
+							break;
+						case "4":
+							model.addAttribute("year4", true);
+							break;
+						case "5":
+							model.addAttribute("year5", true);
+							break;
+						}
+					}
+					model.addAttribute("dealType", dealInfoTypes.toString());
+					return "modules/work/maintain/workDealInfoMaintainReturnUpdateChange";
+				}
+			}
+		} else if (dealInfoTypes.size() == 3) {
+			model.addAttribute("update", "3");
+			model.addAttribute("reissue", dealInfoTypes.get(1));
+			ConfigProduct configProductOld = dealInfo.getConfigProduct();
+			String[] years = configChargeAgentDetailService.getChargeAgentYears(configProductOld.getChargeAgentId(),
+					WorkDealInfoType.TYPE_UPDATE_CERT);
+			for (int j = 0; j < years.length; j++) {
+				switch (years[j]) {
+				case "1":
+					model.addAttribute("year1", true);
+					break;
+				case "2":
+					model.addAttribute("year2", true);
+					break;
+				case "3":
+					model.addAttribute("year3", true);
+					break;
+				case "4":
+					model.addAttribute("year4", true);
+					break;
+				case "5":
+					model.addAttribute("year5", true);
+					break;
+				}
+			}
+			model.addAttribute("dealType", dealInfoTypes.toString());
+			return "modules/work/maintain/workDealInfoMaintainReturnUpdateChange";
+		}
+		return null;
+	
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

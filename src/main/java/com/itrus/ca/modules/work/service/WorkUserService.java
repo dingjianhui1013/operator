@@ -57,9 +57,9 @@ public class WorkUserService extends BaseService {
 		DetachedCriteria dc = workUserDao.createDetachedCriteria();
 		dc.createAlias("workCompany", "workCompany");
 		if(workUser.getWorkCompany()!=null){
-			if(workUser.getWorkCompany().getId()!=null){
-				dc.add(Restrictions.eq("workCompany", workUser.getWorkCompany()));
-			}
+//			if(workUser.getWorkCompany().getId()!=null){
+//				dc.add(Restrictions.eq("workCompany", workUser.getWorkCompany()));
+//			}
 			if(workUser.getWorkCompany().getCompanyName()!=null && !workUser.getWorkCompany().getCompanyName().equals("")){
 				dc.add(Restrictions.like("workCompany.companyName","%"+EscapeUtil.escapeLike(workUser.getWorkCompany().getCompanyName())+"%"));
 			}

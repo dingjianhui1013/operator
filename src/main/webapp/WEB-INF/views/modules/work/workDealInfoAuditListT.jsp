@@ -15,6 +15,31 @@
 			$("#searchForm").submit();
         	return false;
         }
+		
+		function returnDealInfo(id){
+			var submit = function (v, h, f) {
+			    if (v == 'ok'){
+			    	alert(id);
+					window.location.href = "${ctx}/work/workPayInfo/errorReturnPayment?workDealInfoId="+id;
+			    }
+			   		 return true; //close
+			};
+			top.$.jBox.confirm("是否重新编辑用户信息？", "提示", submit);
+		}
+		
+		function returnNewDealInfo(id){
+			var submit = function (v, h, f) {
+			    if (v == 'ok'){
+			    	alert(id);
+					window.location.href = "${ctx}/work/workDealInfo/form?id="+id;
+			    }
+			   		 return true; //close
+			};
+			top.$.jBox.confirm("是否重新编辑用户信息？", "提示", submit);
+		}
+		
+		
+		
 	</script>
 </head>
 <body>
@@ -64,7 +89,13 @@
 				<td>${wdiType[workDealInfo.dealInfoType]}&nbsp;&nbsp;${wdiType[workDealInfo.dealInfoType1]}&nbsp;&nbsp;${wdiType[workDealInfo.dealInfoType2]}&nbsp;&nbsp;${wdiType[workDealInfo.dealInfoType3]}</td>
 				<td>${wdiStatus[workDealInfo.dealInfoStatus]}</td>
 				<td>
-					<a href="${ctx}/work/workDealInfo/form?id=${workDealInfo.id}">编辑</a>
+					<c:if test="${workDealInfo.dealInfoType!=null && workDealInfo.dealInfoType == 0}">
+					<a href="javascript:returnNewDealInfo(${workDealInfo.id});">编辑</a>
+					</c:if>
+					<c:if test="${workDealInfo.dealInfoType != 0}">
+					<a href="javaScript:returnDealInfo(${workDealInfo.id});">编辑</a>
+					</c:if>
+					
 					<shiro:hasPermission name="work:workDealInfo:makezheng">
 					
 					<c:if test="${workDealInfo.certSn != null}">
