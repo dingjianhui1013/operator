@@ -4095,34 +4095,31 @@ public class WorkDealInfoController extends BaseController {
 					previds.add(workDealInfo.getPrevId());
 				}
 			}
-			List<Long> workdealinfos = new ArrayList<Long>();
 			for(int j=0;j<workdealinfoIds.size();j++)
 			{
-				if(previds.isEmpty())
+				for(int i = 0 ;i<previds.size();i++)
 				{
-					workdealinfos.add(workdealinfoIds.get(j));
-				}else
-				{
-					for(int i = 0 ;i<previds.size();i++)
+					if(!previds.isEmpty())
 					{
-						if(!workdealinfoIds.get(j).equals(previds.get(i)))
+						if(workdealinfoIds.get(j).equals(previds.get(i)))
 						{
-							workdealinfos.add(workdealinfoIds.get(j));
+							workdealinfoIds.remove(j);
 						}
 					}
 				}
 			}
-			if(workdealinfos.size()>0&&!workdealinfos.isEmpty())
+			
+			if(workdealinfoIds.size()>0&&!workdealinfoIds.isEmpty())
 			{
 				StringBuffer workdealinfoss = new StringBuffer();
-				for (Long long1 : workdealinfos) {
+				for (Long long1 : workdealinfoIds) {
 					workdealinfoss.append(long1+",");
 				}
 				
 				int end =  workdealinfoss.length()-1;
 				String wi=new String();
 				wi=workdealinfoss.substring(0, end);
-				json.put("index", workdealinfos.size());
+				json.put("index", workdealinfoIds.size());
 				json.put("workdealinfoss", wi);
 			}else
 			{
@@ -4156,34 +4153,31 @@ public class WorkDealInfoController extends BaseController {
 					previds.add(workDealInfo.getPrevId());
 				}
 			}
-			List<Long> workdealinfos = new ArrayList<Long>();
 			for(int j=0;j<workdealinfoIds.size();j++)
 			{
-				if(previds.isEmpty())
+				for(int i = 0 ;i<previds.size();i++)
 				{
-					workdealinfos.add(workdealinfoIds.get(j));
-				}else
-				{
-					for(int i = 0 ;i<previds.size();i++)
+					if(!previds.isEmpty())
 					{
-						if(!workdealinfoIds.get(j).equals(previds.get(i)))
+						if(workdealinfoIds.get(j).equals(previds.get(i)))
 						{
-							workdealinfos.add(workdealinfoIds.get(j));
+							workdealinfoIds.remove(j);
 						}
 					}
 				}
 			}
-			if(workdealinfos.size()>0&&!workdealinfos.isEmpty())
+			
+			if(workdealinfoIds.size()>0&&!workdealinfoIds.isEmpty())
 			{
 				StringBuffer workdealinfoss = new StringBuffer();
-				for (Long long1 : workdealinfos) {
+				for (Long long1 : workdealinfoIds) {
 					workdealinfoss.append(long1+",");
 				}
 				
 				int end =  workdealinfoss.length()-1;
 				String wi=new String();
 				wi=workdealinfoss.substring(0, end);
-				json.put("index", workdealinfos.size());
+				json.put("index", workdealinfoIds.size());
 				json.put("workdealinfoss", wi);
 			}else
 			{
