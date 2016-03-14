@@ -41,6 +41,20 @@ public class FinanceQuitMoneyService extends BaseService {
 	public Page<FinanceQuitMoney> findAllFinance(Page<FinanceQuitMoney> page, String commUserName, String payStartTime,
 			String payEndTime, String quitStartTime, String quitEndTime) {
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		Date quitEnd =null;
+		try {
+			if(quitEndTime!=null&&!"".equals(quitEndTime))
+			{
+				quitEnd = format.parse(quitEndTime);
+				quitEnd.setHours(23);
+				quitEnd.setMinutes(59);
+				quitEnd.setSeconds(59);
+			}
+		} catch (ParseException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
 		DetachedCriteria dc = financeQuitMoneyDao.createDetachedCriteria();
 		dc.createAlias("financePaymentInfo", "financePaymentInfo");
 		
@@ -69,8 +83,8 @@ public class FinanceQuitMoneyService extends BaseService {
 				
 			}
 			
-			if(quitEndTime != null && !"".equals(quitEndTime)){
-				dc.add(Restrictions.le("quitDate", format.parse(quitEndTime)));
+			if(quitEnd != null && !"".equals(quitEnd)){
+				dc.add(Restrictions.le("quitDate", quitEnd));
 			}
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
