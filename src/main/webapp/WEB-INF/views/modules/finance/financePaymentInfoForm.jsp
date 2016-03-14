@@ -86,6 +86,7 @@
 		} 
 	}
 
+	
 	function checkLr(){
 		var serialNum = $("#serialNum").val();
 		var company = $("#company").val();
@@ -128,6 +129,19 @@
 			$("#account_").show();
 		}
 	} */
+	
+	function pMoney(){
+		
+		var money = $("input[name='paymentMoney']").val();
+		if(money==0&&money!="")
+			{
+				top.$.jBox.confirm("是否付款金额填写为零");
+			}
+		if(money<0)
+			{
+				top.$.jBox.confirm("是否付款金额填写为负值");
+			}
+	}
 </script>
 <script type="text/javascript">
 	$(document).ready(function() {
@@ -188,7 +202,7 @@
 		<div class="control-group">
 			<label class="control-label"><span style="color : red">*</span>&nbsp;付款金额(元):</label>
 			<div class="controls">
-			<input <c:if test="${financePaymentInfo.id!=null}">readonly="readonly" </c:if>type="text" name="paymentMoney" maxlength="12" value="${financePaymentInfo.paymentMoney}" class="required number"/>
+			<input <c:if test="${financePaymentInfo.id!=null}">readonly="readonly" </c:if>type="text" name="paymentMoney"  maxlength="12" value="${financePaymentInfo.paymentMoney}" onblur="pMoney()" class="required number" />
 				<%-- <form:input path="paymentMoney" htmlEscape="false" maxlength="12"
 					class="required" /> --%>
 			</div>
