@@ -866,13 +866,13 @@ public class SettlePayableDetailController extends BaseController {
 			rowi.createCell(0).setCellValue(i-4+1);
 			rowi.createCell(1).setCellValue(dealInfos.get(i-4).getWorkCompany().getCompanyName());
 			rowi.createCell(2).setCellValue(dealInfos.get(i-4).getWorkCertInfo().getWorkCertApplyInfo().getName());
-			rowi.createCell(3).setCellValue(dealInfos.get(i-4).getConfigProduct().getProductName());
+			rowi.createCell(3).setCellValue(ProductType.productTypeStrMap.get(dealInfos.get(i-4).getConfigProduct().getProductName()));
 			
 			for(int j=0;j<dealInfos.get(i-4).getDetailList().size();j++){
 				rowi.createCell(j*5+4).setCellValue(dealInfos.get(i-4).getDetailList().get(j).getMethod()==null?"":dealInfos.get(i-4).getDetailList().get(j).getMethod().toString());
 				rowi.createCell(j*5+4+1).setCellValue(dealInfos.get(i-4).getDetailList().get(j).getStartDate()==null?"":dealInfos.get(i-4).getDetailList().get(j).getStartDate().toString());
 				rowi.createCell(j*5+4+2).setCellValue(dealInfos.get(i-4).getDetailList().get(j).getEndDate()==null?"":dealInfos.get(i-4).getDetailList().get(j).getEndDate().toString());
-				rowi.createCell(j*5+4+3).setCellValue(dealInfos.get(i-4).getDetailList().get(j).getDealInfoType()==null?"":dealInfos.get(i-4).getDetailList().get(j).getDealInfoType());
+				rowi.createCell(j*5+4+3).setCellValue(dealInfos.get(i-4).getDetailList().get(j).getDealInfoType()==null||dealInfos.get(i-4).getDetailList().get(j).getDealInfoType().equals("")?"":dealInfos.get(i-4).getDetailList().get(j).getDealInfoType());
 				rowi.createCell(j*5+4+4).setCellValue(dealInfos.get(i-4).getDetailList().get(j).getSettleYear()==null?"":dealInfos.get(i-4).getDetailList().get(j).getSettleYear());
 			}
 			
