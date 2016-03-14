@@ -7,6 +7,7 @@
 	<meta name="decorator" content="default"/>
 	<script type="text/javascript">
 		$(document).ready(function() {
+			 localStorage.setItem("cid","");
 		});
 		function page(n,s){
 			$("#pageNo").val(n);
