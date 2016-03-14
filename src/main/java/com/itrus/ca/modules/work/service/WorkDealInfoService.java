@@ -602,6 +602,23 @@ public class WorkDealInfoService extends BaseService {
 		dc.addOrder(Order.desc("id"));
 		return workDealInfoDao.manyFind(dc, 10);
 	}
+	public List<WorkDealInfo> findPersonal1(List<Long> workdealinfoIds) {
+		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
+		String dealInfoStatus = WorkDealInfoStatus.STATUS_CERT_OBTAINED;
+		
+		if (dealInfoStatus != null) {
+			dc.add(Restrictions.eq("dealInfoStatus", dealInfoStatus));
+		}
+		if(workdealinfoIds.size()>0&&!workdealinfoIds.isEmpty())
+		{
+			dc.add(Restrictions.in("id", workdealinfoIds));
+		}else
+		{
+			dc.add(Restrictions.eq("id", -1L));
+		}
+		dc.addOrder(Order.desc("id"));
+		return workDealInfoDao.manyFind(dc, 10);
+	}
 
 	public Page<WorkDealInfo> findByStatus(Page<WorkDealInfo> page,
 			WorkDealInfo workDealInfo) {

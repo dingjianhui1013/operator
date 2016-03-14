@@ -811,11 +811,11 @@ var selected = false;
 						});
 					}else if(productId==2||productId==5)
 					{
-						var urlajax = "${ctx}/work/workDealInfo/ajaxPersonalCount?companyIds=" + companyId+"&productId="+productId;
+						var urlajax = "${ctx}/work/workDealInfo/ajaxPersonalCount?companyIds=" + companyId+"&productId="+productId+"&_="+new Date().getTime();
 						$.getJSON(urlajax,function(data){
 							if(data.index>0)
 								{
-									var url = "${ctx}/work/workDealInfo/showCertPersonal?companyIds="+companyId+"&productId="+productId;
+									var url = "${ctx}/work/workDealInfo/showCertPersonal?companyIds="+companyId+"&productId="+productId+"&workdealinfoIds="+data.workdealinfoss+"&_="+new Date().getTime();
 									top.$.jBox.open("iframe:" + url, "已有证书明细", 800, 420, {
 										buttons : {
 											"确定" : "ok",

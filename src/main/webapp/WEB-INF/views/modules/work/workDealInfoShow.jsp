@@ -45,6 +45,8 @@
 		<th>持有人</th>
         <th>经办人</th>
         <th>操作</th>
+        </tr>
+        </thead>
 		<tbody>
 		<c:forEach items="${page.list}" var="cert">
 			<tr>

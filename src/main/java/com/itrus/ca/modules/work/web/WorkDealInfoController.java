@@ -4056,12 +4056,19 @@ public class WorkDealInfoController extends BaseController {
 	@RequestMapping(value = "showCertPersonal")
 	public String showCertPersonal(Model model, HttpServletRequest request,
 			@RequestParam(value = "companyIds", required = false) List<Long> companyIds, HttpServletResponse response,
+			@RequestParam(value = "workdealinfoIds", required = false) String workdealinfoIds,
 			String productId) {
-		List<WorkDealInfo> list = workDealInfoService.findPersonal(companyIds, productId);
+		List<Long> workdealinfos = new ArrayList<Long>();
+		String [] workdealinfoss = workdealinfoIds.split(",");
+		for (String string : workdealinfoss) {
+			workdealinfos.add(Long.parseLong(string));
+		}
+		List<WorkDealInfo> list = workDealInfoService.findPersonal1(workdealinfos);
 		model.addAttribute("list", list);
 		model.addAttribute("pro", ProductType.productTypeStrMap);
 		model.addAttribute("companyId", companyIds);
 		model.addAttribute("productId", productId);
+		model.addAttribute("pro", ProductType.productTypeStrMap);
 		return "modules/work/workDealInfoShowPersonal";
 	}
 
@@ -4138,7 +4145,51 @@ public class WorkDealInfoController extends BaseController {
 		JSONObject json = new JSONObject();
 		try {
 			List<WorkDealInfo> list = workDealInfoService.findPersonal(companyIds, productId);
-			json.put("index", list.size());
+			List<Long> workdealinfoIds = new ArrayList<Long>();
+			List<Long> previds = new ArrayList<Long>();
+			for (WorkDealInfo workDealInfo : list) {
+				
+				workdealinfoIds.add(workDealInfo.getId());
+				
+				if(workDealInfo.getPrevId()!=null)
+				{
+					previds.add(workDealInfo.getPrevId());
+				}
+			}
+			List<Long> workdealinfos = new ArrayList<Long>();
+			for(int j=0;j<workdealinfoIds.size();j++)
+			{
+				if(previds.isEmpty())
+				{
+					workdealinfos.add(workdealinfoIds.get(j));
+				}else
+				{
+					for(int i = 0 ;i<previds.size();i++)
+					{
+						if(!workdealinfoIds.get(j).equals(previds.get(i)))
+						{
+							workdealinfos.add(workdealinfoIds.get(j));
+						}
+					}
+				}
+			}
+			if(workdealinfos.size()>0&&!workdealinfos.isEmpty())
+			{
+				StringBuffer workdealinfoss = new StringBuffer();
+				for (Long long1 : workdealinfos) {
+					workdealinfoss.append(long1+",");
+				}
+				
+				int end =  workdealinfoss.length()-1;
+				String wi=new String();
+				wi=workdealinfoss.substring(0, end);
+				json.put("index", workdealinfos.size());
+				json.put("workdealinfoss", wi);
+			}else
+			{
+				json.put("index", 0);
+				json.put("workdealinfoss", "");
+			}
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
