@@ -19,7 +19,6 @@
 		function returnDealInfo(id){
 			var submit = function (v, h, f) {
 			    if (v == 'ok'){
-			    	alert(id);
 					window.location.href = "${ctx}/work/workPayInfo/errorReturnPayment?workDealInfoId="+id;
 			    }
 			   		 return true; //close
@@ -30,7 +29,6 @@
 		function returnNewDealInfo(id){
 			var submit = function (v, h, f) {
 			    if (v == 'ok'){
-			    	alert(id);
 					window.location.href = "${ctx}/work/workDealInfo/form?id="+id;
 			    }
 			   		 return true; //close
