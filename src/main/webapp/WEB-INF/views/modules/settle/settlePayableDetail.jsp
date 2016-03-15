@@ -238,8 +238,8 @@
 				required="required" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'startTime\')}'});"
 				value="<fmt:formatDate value="${endTime}" pattern="yyyy-MM-dd"/>" maxlength="20" readonly="readonly"
 				name="endTime" id="endTime"/>
-<!-- 		  	<input id="btnSubmit" class="btn btn-primary" -->
-<!-- 				type="submit" value="查询" /> -->
+ 		  		<input id="btnSubmit" class="btn btn-primary" 
+				type="submit" value="查询" /> 
 				
 				<input id="btnExport" class="btn btn-primary" onclick="searchForm()"
 				type="button" value="查询" />
@@ -319,9 +319,9 @@
 								<td></td>
 								<td></td>
 							</c:forEach>
-							<td>${dealInfo.yyNum-dealInfo.lastNum}</td>
+							<td>${dealInfo.yyNum}</td>
 							<td>${dealInfo.lastNum}</td>
-							<td>${dealInfo.totalNum-dealInfo.yyNum}</td>
+							<td>${dealInfo.totalNum - dealInfo.yyNum - dealInfo.lastNum}</td>
 						</tr>
 					</c:forEach>
 				</table>
