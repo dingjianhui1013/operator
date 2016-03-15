@@ -113,6 +113,12 @@ public class ConfigSupplierService extends BaseService {
 		return configSupplierDao.find(dc);
 	}
 	
+	public List<ConfigSupplier> findAllKeySupplier() {
+		DetachedCriteria dc = configSupplierDao.createDetachedCriteria();
+		dc.add(Restrictions.eq(ConfigSupplier.DEL_FLAG,ConfigSupplier.DEL_FLAG_NORMAL));
+		dc.add(Restrictions.eq("supplierType",1));
+		return configSupplierDao.find(dc);
+	}
 	public ConfigSupplier findByName(String  supplierName){
 		DetachedCriteria dc = configSupplierDao.createDetachedCriteria();
 		dc.add(Restrictions.eq("supplierName", supplierName));
