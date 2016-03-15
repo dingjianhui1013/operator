@@ -205,8 +205,8 @@ public class ReceiptTongController extends BaseController {
 			model.addAttribute("offices", offices);
 		}
 		
-		
-	
+		List<ReceiptDepotInfo> receipts=receiptDepotInfoService.findAllDepot();
+		model.addAttribute("receipts",receipts);
 		model.addAttribute("page", page);
 		model.addAttribute("officeId", officeId);
 		model.addAttribute("areaId", areaId);

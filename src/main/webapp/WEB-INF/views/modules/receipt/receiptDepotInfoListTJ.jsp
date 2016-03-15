@@ -66,8 +66,14 @@
 			value="${page.pageSize}" />
 		<div>
 		<label>库房名称 ：</label>
-		<input type="text" name="receiptName" id="receiptName" maxlength="50"
-			class="input-medium"  value="${receiptName }" />
+<!-- 		<input type="text" name="receiptName" id="receiptName" maxlength="50" -->
+<%-- 			class="input-medium"  value="${receiptName }" /> --%>
+			<select name="receiptName" id="receiptName">
+				<option value="">请选择库房</option>
+				<c:forEach items="${receipts}" var="receipts">
+					<option value="${receipts.receiptName}" <c:if test="${receipts.receiptName==receiptName}">selected="selected"</c:if>>${receipts.receiptName}</option>
+				</c:forEach>
+			</select>
 	
 		<label>选择区域 ：</label>
 		<select name="areaId" id="areaId" onchange="addOffice()">
