@@ -252,17 +252,17 @@
 	}
 </script>
 <script type="text/javascript">
-			_init_area();
-			$("#s_province")
-					.append(
-							'<option value="${workDealInfo.workCompany.province}" selected="selected">${workDealInfo.workCompany.province}</option>');
-			$("#s_city")
-					.append(
-							'<option value="${workDealInfo.workCompany.city}" selected="selected">${workDealInfo.workCompany.city}</option>');
-			$("#s_county")
-					.append(
-							'<option value="${workDealInfo.workCompany.district}" selected="selected">${workDealInfo.workCompany.district}</option>');
-		</script>
+// 			_init_area();
+// 			$("#s_province")
+// 					.append(
+// 							'<option value="${workDealInfo.workCompany.province}" selected="selected">${workDealInfo.workCompany.province}</option>');
+// 			$("#s_city")
+// 					.append(
+// 							'<option value="${workDealInfo.workCompany.city}" selected="selected">${workDealInfo.workCompany.city}</option>');
+// 			$("#s_county")
+// 					.append(
+// 							'<option value="${workDealInfo.workCompany.district}" selected="selected">${workDealInfo.workCompany.district}</option>');
+</script>
 <script type="text/javascript" src="${ctxStatic}/jquery/city.js"></script>
 </head>
 <body>
@@ -357,7 +357,7 @@
 		</select>
 		<select id="s_city" name="workCompany.city" style="width: 100px;">
 		</select>
-		<select id="s_county" name="workCompany.county" style="width: 100px;">
+		<select id="s_county" name="workCompany.district" style="width: 100px;">
 		</select> 
 		<script	type="text/javascript">
 			_init_area();

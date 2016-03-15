@@ -154,10 +154,15 @@ public class MessageSendingController extends BaseController {
 		model.addAttribute("smsId", smsId);
 		model.addAttribute("checkIds", checkIds);
 		
-		if(areaId==null&&officeId==null&&apply==null&&workType==null){
+		if(areaId==null&&officeId==null&&apply==null&&workType==null&&workDealInfo.getWorkCompany()==null){
 			return "modules/message/messageSendingList";
 		}
-		
+		if(workDealInfo.getWorkCompany()!=null)
+		{
+			if(areaId==null&&officeId==null&&apply==null&&workType==null&&workDealInfo.getWorkCompany().getDistrict()==""){
+				return "modules/message/messageSendingList";
+			}
+		}
 		Page<WorkDealInfo> page = workDealInfoService.find14(new Page<WorkDealInfo>(request, response), workDealInfo,
 				areaId, officeId, apply, workType, certInfoList);
 		if (checkIds != null) {
