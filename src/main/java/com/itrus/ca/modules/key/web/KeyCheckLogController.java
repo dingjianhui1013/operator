@@ -627,7 +627,7 @@ public class KeyCheckLogController extends BaseController {
 				endTime,supplierId,geneId);
 
 		//List<KeyManufacturer> manus = keyManufacturerService.findAll();
-		List<ConfigSupplier> suppliers = configSupplierService.findAllSupplier();
+		List<ConfigSupplier> suppliers = configSupplierService.findAllKeySupplier();
 		model.addAttribute("suppliers", suppliers);
 
 		List<KeyGeneralInfo> genes = 	keyGeneralInfoService.findBySupplierId(supplierId);
