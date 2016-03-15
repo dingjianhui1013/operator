@@ -206,15 +206,21 @@
 	}
 	
 	function addCertDaysCheck(){
-		if($("#addCertDays").val()<0){
-			var submit = function( v, h, f){
-				if( v != 'ok'){
-					$("#addCertDays").val(0);
-				}				
-				return true;
+		if($("#addCertDays").val()<=0){
+			$("#negative").html("");
+			$("#negative").html("<font color='red'>"+"您确定赠送的时间是："+$("#addCertDays").val()+"天么？"+"</font>");
+// 			var submit = function( v, h, f){
+// 				if( v != 'ok'){
+// 					$("#addCertDays").val(0);
+// 				}				
+// 				return true;
+// 			}
+// 			top.$.jBox.confirm("您确定赠送的时间是："+$("#addCertDays").val()+"天么？","提示",submit);
+			
+		}else
+			{
+				$("#negative").html("");
 			}
-			top.$.jBox.confirm("您确定赠送的时间是："+$("#addCertDays").val()+"天么？","提示",submit);
-		}
 	}
 	
 	function makeCert() {
