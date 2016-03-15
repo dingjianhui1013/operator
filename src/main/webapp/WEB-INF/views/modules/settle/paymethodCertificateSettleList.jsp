@@ -1526,7 +1526,7 @@ $(document).ready(function() {
 						<tr>
 						<td><c:if test="${sum.key!='total'}">${sum.key}</c:if></td>
 								
-						<c:if test="${sumList.total.xzqyadd1!=0}"><td>${sum.value.xzqyadd1.totalCount}</td></c:if>
+						<c:if test="${sumList.total.xzqyadd1!=0}"><td><tags:settlepaymethod content="${sum.value.xzqyadd1}"></tags:settlepaymethod></td></c:if>
 						<c:if test="${sumList.total.xzqyadd2!=0}"><td>${sum.value.xzqyadd2.totalCount}</td></c:if>
 						<c:if test="${sumList.total.xzqyadd3!=0}"><td>${sum.value.xzqyadd3.totalCount}</td></c:if>
 						<c:if test="${sumList.total.xzqyadd4!=0}"><td>${sum.value.xzqyadd4.totalCount}</td></c:if>
