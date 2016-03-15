@@ -66,12 +66,25 @@ public class FinanceQuitMoneyService extends BaseService {
 		try {
 			if (payStartTime != null &&  !"".equals(payStartTime)) {
 				
-				dc.add(Restrictions.ge("financePaymentInfo.payDate", format.parse(payStartTime)));
+				Date start = format.parse(quitStartTime);
+				start.setHours(00);
+				start.setMinutes(0);
+				start.setSeconds(0);
+				dc.add(Restrictions.ge("financePaymentInfo.payDate", start));
+				
+				
+				
 			}
 			
 			if(payEndTime != null && !"".equals(payEndTime)){
 				
-				dc.add(Restrictions.le("financePaymentInfo.payDate", format.parse(payEndTime)));
+				Date end = format.parse(payEndTime);
+				end.setHours(23);
+				end.setMinutes(59);
+				end.setSeconds(59);
+				
+				
+				dc.add(Restrictions.le("financePaymentInfo.payDate", end));
 			}
 
 		} catch (Exception ex) {
@@ -79,12 +92,28 @@ public class FinanceQuitMoneyService extends BaseService {
 		}
 		try {
 			if (quitStartTime != null &&  !"".equals(quitStartTime)) {
-				dc.add(Restrictions.ge("quitDate", format.parse(quitStartTime)));
+				
+				Date start = format.parse(quitStartTime);
+				start.setHours(00);
+				start.setMinutes(0);
+				start.setSeconds(0);
+				dc.add(Restrictions.ge("quitDate", start));
+				
+				
 				
 			}
 			
-			if(quitEnd != null && !"".equals(quitEnd)){
-				dc.add(Restrictions.le("quitDate", quitEnd));
+
+			if(quitEndTime != null && !"".equals(quitEndTime)){
+				Date end = format.parse(quitEndTime);
+				end.setHours(23);
+				end.setMinutes(59);
+				end.setSeconds(59);
+				dc.add(Restrictions.le("quitDate", end));
+			
+
+		
+
 			}
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block

@@ -75,6 +75,7 @@ public class ConfigAppService extends BaseService {
 		dc.add(Restrictions.eq(ConfigApp.DEL_FLAG, ConfigApp.DEL_FLAG_NORMAL));
 		if(configProjectTypeId!=null&&!"".equals(configProjectTypeId))
 		{
+			dc.createAlias("configProjectType", "configProjectType");
 			dc.add(Restrictions.eq("configProjectType.id",configProjectTypeId));
 		}
 		return configAppDao.find(dc);

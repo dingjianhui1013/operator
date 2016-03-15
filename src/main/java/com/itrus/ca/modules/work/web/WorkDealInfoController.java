@@ -7786,6 +7786,7 @@ public class WorkDealInfoController extends BaseController {
 				json.put("isUser", 0);
 			} else {
 				json.put("isUser", 1);
+				json.put("dealKeySn", dealInfo.getKeySn());
 			}
 			json.put("status", 1);
 		} catch (Exception e) {

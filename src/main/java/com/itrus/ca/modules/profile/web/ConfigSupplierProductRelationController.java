@@ -108,16 +108,9 @@ public class ConfigSupplierProductRelationController extends BaseController {
 				configChargeSupplierDetail.setConfigSupplierProductRelation(configSupplierProductRelation);
 				configChargeSupplierDetail.setMoneyType(configSupplierProductRelation.getProductType());
 				configChargeSupplierDetail.setMoney(double1);
-				if(year==3){
-					configChargeSupplierDetail.setYear(4);
+				configChargeSupplierDetail.setYear(year);
 
-				}else if(year==4){
-					configChargeSupplierDetail.setYear(5);
-
-				}else{
-					configChargeSupplierDetail.setYear(year);
-
-				}
+				
 				//configChargeSupplierDetail.setYear(year==3? 4:year);
 				configChargeSupplierDetailService.save(configChargeSupplierDetail);
 			}

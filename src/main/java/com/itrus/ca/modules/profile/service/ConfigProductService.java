@@ -158,6 +158,7 @@ public class ConfigProductService extends BaseService {
 			}
 		}
 		dc.add(Restrictions.isNotNull("raAccountId"));
+		dc.add(Restrictions.isNotNull("raAccountExtedId"));
 		dc.add(Restrictions.eq(ConfigProduct.DEL_FLAG, ConfigProduct.DEL_FLAG_NORMAL));
 		dc.addOrder(Order.desc("id"));
 		return configProductDao.find(dc);

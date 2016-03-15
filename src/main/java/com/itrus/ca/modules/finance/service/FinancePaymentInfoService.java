@@ -154,6 +154,9 @@ public class FinancePaymentInfoService extends BaseService {
 		if (ids.size()>0) {
 			dc.add(Restrictions.in("officeId", ids));
 		}
+		
+		dc.add(Restrictions.gt("bingdingTimes", 0));
+		
 		dc.add(Restrictions.eq(FinancePaymentInfo.DEL_FLAG, FinancePaymentInfo.DEL_FLAG_NORMAL));
 		dc.addOrder(Order.desc("id"));
 		return financePaymentInfoDao.find(page, dc);
@@ -182,6 +185,8 @@ public class FinancePaymentInfoService extends BaseService {
 		if (ids.size()>0) {
 			dc.add(Restrictions.in("officeId", ids));
 		}
+		dc.add(Restrictions.gt("bingdingTimes", 0));
+		
 		dc.add(Restrictions.eq(FinancePaymentInfo.DEL_FLAG, FinancePaymentInfo.DEL_FLAG_NORMAL));
 		dc.addOrder(Order.desc("id"));
 		return financePaymentInfoDao.find(dc);

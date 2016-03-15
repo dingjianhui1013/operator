@@ -88,7 +88,7 @@ public class ConfigProjectTypeController extends BaseController {
 		
 		List<ConfigApp> apps = configAppService.findByconfigProjectType(id);
 		
-		if(apps.size()==0){
+		if(apps.size()>0){
 			addMessage(redirectAttributes,"项目类型管理已被应用绑定,无法删除!");
 			return "redirect:"+Global.getAdminPath()+"/profile/configProjectType/?repage";
 		}
