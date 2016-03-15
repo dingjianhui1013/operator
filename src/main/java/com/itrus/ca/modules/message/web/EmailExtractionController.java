@@ -142,7 +142,8 @@ public class EmailExtractionController extends BaseController {
 	public void export(HttpServletRequest request,
 			HttpServletResponse response,WorkDealInfo workDealInfo,
 			@RequestParam(value = "apply", required = false) Long apply,
-			@RequestParam(value = "workType", required = false) Integer workType)
+			@RequestParam(value = "workType", required = false) Integer workType,
+			@RequestParam(value = "companyName", required = false) String companyName)
 			
 	{
 		try {
@@ -169,6 +170,9 @@ public class EmailExtractionController extends BaseController {
 			row1.createCell(3).setCellValue("经办人邮箱");
 			row1.createCell(4).setCellValue("证书持有人名称");
 			row1.createCell(5).setCellValue("持有人邮箱");
+			WorkCompany workCompany = new WorkCompany();
+			workCompany.setCompanyName(companyName);
+			workDealInfo.setWorkCompany(workCompany);
 			List<WorkDealInfo> list = workDealInfoService.find12(workDealInfo, apply, workType);
 			for(int i=0;i<list.size();i++)
 			{
