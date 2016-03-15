@@ -87,7 +87,7 @@
 				$.getJSON(url,function(data){
 					if (data.status==1) {
 						if (data.isUser==1) {
-							top.$.jBox.info("KEY序列号不是制证失败时的KEY序列号，请更换一只新KEY！");
+							top.$.jBox.info("KEY序列号不是制证失败时的KEY序列号("+data.dealKeySn+")请更换为制证失败的KEY！");
 							return false;
 						}
 					}else{

@@ -58,6 +58,7 @@
 			<div class="controls">
 				一年:<input type="text" name="money" value="${money1 }"  maxlength="9" onkeyup="value=value.replace(/[^\d]/g,'') "onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))"/><br>
 				两年:<input type="text" name="money" value="${money2 }"  maxlength="9" onkeyup="value=value.replace(/[^\d]/g,'') "onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))"/><br>
+				三年:<input type="text" name="money" value="${money3 }"  maxlength="9" onkeyup="value=value.replace(/[^\d]/g,'') "onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))"/><br>
 				四年:<input type="text" name="money" value="${money4 }"  maxlength="9" onkeyup="value=value.replace(/[^\d]/g,'') "onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))"/><br>
 				五年:<input type="text" name="money" value="${money5 }"  maxlength="9" onkeyup="value=value.replace(/[^\d]/g,'') "onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))"/>
 			</div>

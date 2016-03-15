@@ -152,178 +152,7 @@ var selected = false;
 															});
 										});
 
-// 						var url = "${ctx}/work/workDealInfo/tt?_="+new Date().getTime();
-// 						$
-// 								.getJSON(
-// 										url,
-// 										function(da) {
-// 											$("#tt")
-// 													.bigAutocomplete(
-// 															{
-// 																data : da.lis,
-// 																callback : function(
-// 																		data) {
-// 																	var url1 = "${ctx}/work/workDealInfo/cert?id=";
-// 																	$
-// 																			.getJSON(
-// 																					url1
-// 																							+ data.result+"&_="+new Date().getTime(),
-// 																					function(
-// 																							d) {
-// 																						$("#companyId")
-// 																								.val(
-// 																										d.companyId);
-// 																						$(
-// 																								"#companyName")
-// 																								.val(
-// 																										d.companyName);
-// 																						if (d.workCompany.companyType == 1) {
-// 																							$("#companyType1").attr("selected","selected");
-// 																						}
-// 																						if (d.companyType == 2) {
-// 																							$("#companyType2").attr("selected","selected");
-// 																						}
-// 																						if (d.companyType == 3) {
-// 																							$("#companyType3").attr("selected","selected");
-// 																						}
-// 																						if (d.companyType == 4) {
-// 																							$("#companyType4").attr("selected","selected");
-// 																						}
-// 																						if (d.companyType == 5) {
-// 																							$("#companyType5").attr("selected","selected");
-// 																						}
-// 																						$(
-// 																								"#organizationNumber")
-// 																								.val(
-// 																										d.organizationNumber);
-// 																						$(
-// 																								"#orgExpirationTime")
-// 																								.val(
-// 																										d.orgExpirationTime);
-// 																						if (d.selectLv==0) {
-// 																							$("#selectLv0").attr("selected","selected");
-// 																						}
-// 																						if (d.selectLv==1) {
-// 																							$("#selectLv1").attr("selected","selected");
-// 																						}
-// 																						if (d.comCertificateType == 0) {
-// 																							$(
-// 																									"#comCertificateType0")
-// 																									.attr("selected","selected");
-// 																						}
-// 																						if (d.comCertificateType == 1) {
-// 																							$(
-// 																									"#comCertificateType1")
-// 																									.attr("selected","selected");
-// 																						}
-// 																						if (d.comCertificateType == 2) {
-// 																							$(
-// 																									"#comCertificateType2")
-// 																									.attr("selected","selected");
-// 																						}
-// 																						if (d.comCertificateType == 3) {
-// 																							$(
-// 																									"#comCertificateType3")
-// 																									.attr("selected","selected");
-// 																						}
-// 																						if (d.comCertificateType == 4) {
-// 																							$(
-// 																									"#comCertificateType4")
-// 																									.attr("selected","selected");
-// 																						}
-// 																						$(
-// 																								"#comCertficateNumber")
-// 																								.val(
-// 																										d.comCertficateNumber);
-// 																						$(
-// 																								"#comCertficateTime")
-// 																								.val(
-// 																										d.comCertficateTime);
-// 																						$(
-// 																								"#legalName")
-// 																								.val(
-// 																										d.legalName);
-// 																						$(
-// 																								"#address")
-// 																								.val(
-// 																										d.address);
-// 																						$(
-// 																								"#companyMobile")
-// 																								.val(
-// 																										d.companyMobile);
-// 																						$(
-// 																								"#remarks")
-// 																								.val(
-// 																										d.remarks);
-// 																						$(
-// 																								"#s_province")
-// 																								.val(
-// 																										d.province);
-// 																						$(
-// 																								"#contactName")
-// 																								.val(
-// 																										d.contactName);
-// 																						if (d.conCertType == 0) {
-// 																							$(
-// 																									"#conCertType0")
-// 																									.attr("selected","selected");
-// 																						}
-// 																						if (d.conCertType == 1) {
-// 																							$(
-// 																									"#conCertType1")
-// 																									.attr("selected","selected");
-// 																						}
-// 																						if (d.conCertType == 2) {
-// 																							$(
-// 																									"#conCertType2")
-// 																									.attr("selected","selected");
-// 																						}
-// 																						if ('男' == d.conCertSex) {
-// 																							$(
-// 																									"#sex0")
-// 																									.attr("checked","checked");
-// 																						}
-// 																						if (d.conCertSex =='女') {
-// 																							$(
-// 																									"#sex1")
-// 																									.attr("checked","checked");
-// 																						}
-// 																						$(
-// 																								"#contacEmail")
-// 																								.val(
-// 																										d.contacEmail);
-// 																						$(
-// 																								"#contactPhone")
-// 																								.val(
-// 																										d.contactPhone);
-// 																						$(
-// 																								"#contactTel")
-// 																								.val(
-// 																										d.contactTel);
-// 																						$(
-// 																								"#workuserId")
-// 																								.val(
-// 																										d.workuserId);
-// 																						$(
-// 																								"#conCertNumber")
-// 																								.val(
-// 																										d.conCertNumber);
-// 																						$("#pName").val(d.contactName);
-// 																						if(d.conCertType==0){
-// 																							$("#pIDCard").val(d.conCertNumber);
-// 																						}
-// 																						$("#pEmail").val(d.contacEmail);
-// 																						if(d.province != null){
-// 																							$("#s_province").append('<option value="'+d.province+'" selected="selected">'+d.province+'</option>');
-// 																							$("#s_city").append('<option value="'+d.city+'" selected="selected">'+d.city+'</option>');
-// 																							$("#s_county").append('<option value="'+d.district+'" selected="selected">'+d.district+'</option>');
-// 																						}
-																						
-// 																						showCert(d.companyId);
-// 																					});
-// 																}
-// 															});
-// 										});
+
 						if("${workDealInfo.id}"!=null && "${workDealInfo.id}"!=""){
 							var boundLabelList = "${boundLabelList}";
 							var lable = "${workDealInfo.configProduct.productLabel}";
@@ -398,22 +227,7 @@ var selected = false;
 		document.all["pIDCard"].value=document.all["conCertNumber"].value;
 	}
 	function onSubmit(){
-		//if($("#appId").val()==null) {
-			//var app = $("#app").val();
-			//for (var i=0; i<appData.length;i++) {
-				//if (appData[i].title==app) {
-				//	$("#appId").val(appData[i].result);
-					//return true;
-				//} else {
-				//	top.$.jBox.tip("该应用不存在!"); 
-				//	return false;
-				//}
-			//} 
-		//} else {
-			//return true;
-		//}
-		//console.log($("#productTdId").find("[name='product']"));
-		//console.log($("#productTdId").find("[name='product']").length);
+		
 		var productLength = $("#productTdId").find("[name='product']").length;
 		for (var a = 0; a <productLength; a++) {
 			var radioIndex = $($("#productTdId").find("[name='product']")[a]);
@@ -448,11 +262,7 @@ var selected = false;
 			$("input[name='year']").focus(); //让手机文本框获得焦点 
 			return false;
 		} 
-		/* else if($("input[name='payType']").val() == null || $("input[name='payType']").val() == ""){
-			top.$.jBox.tip("请配置计费策略"); 
-			$("input[name='payType']").focus(); //让手机文本框获得焦点 
-			return false;
-		} */
+		
 		else if($("#agentDetailId").val()==0){
 			top.$.jBox.tip("请配置计费策略"); 
 			$("#agentDetailId").focus(); 
@@ -1019,15 +829,44 @@ var selected = false;
 			return true; 
 		} else { 
 			if($("#phonepro").text()!=""){
-//				$(obj).focus(); //让手机文本框获得焦点 
+
 				return false; 
 			}
 			$("#contactPhone").after("<span id='phonepro' style='color:red'>请输入正确的手机号码</span>");
-			/* top.$.jBox.tip("请输入正确的手机号码!");  */
-//			$(obj).focus(); //让手机文本框获得焦点 
+		
 			return false; 
 		} 
-	} 
+	}
+	
+	
+	
+	function checkContactMobil(obj,o){
+		$("#"+o).hide();
+		var mobil = $(obj).val();
+		
+		
+		var isPhone = /^([0-9]{3,4}-)?[0-9]{7,8}$/;
+	    var isMob=/^((\+?86)|(\(\+86\)))?(13[012356789][0-9]{8}|15[012356789][0-9]{8}|18[02356789][0-9]{8}|147[0-9]{8}|1349[0-9]{7})$/;
+	    var ip = new RegExp(isPhone);
+	    var im = new RegExp(isMob);
+	    
+	    if(ip.test(mobil)||im.test(mobil)){
+	    	if($("#phonepro").text()!=""){
+				$("#phonepro").hide();
+			}
+	    	
+	        return true;
+	    }
+	    else{
+	    	if($("#phonepro").text()!=""){
+
+				return false; 
+			}
+	    	$("#companyMobile").after("<span id='phonepro' style='color:red'>请输入正确的号码</span>");
+	        return false;
+	    }
+		
+	}
 	
 	//根据商品获取引用标识
 	function productLabel(data) {
@@ -1338,18 +1177,7 @@ var selected = false;
 								name="agentDetailId">
 									<option value="0">请选择</option>
 							</select>&nbsp;<label id="agentMes" style="color: red; display: none;">不可用</label>
-								<input type="hidden" id="surplusNum" /> <!-- 		计费策略类型：
-							<select id="agentId" name="agentId" >
-								<option value="0">请选择</option>
-							</select>
-							
-							计费策略模版：
-								<select id="agentDetailId" name="agentDetailId" >
-									<option value="0">请选择</option>
-								</select>
-							 --> <%-- 			 		<input type="radio" name="payType" id="payType1" <c:if test="${workDealInfo.payType == 1}">checked</c:if> value="1">标准
-								<input type="radio" name="payType" id="payType2" <c:if test="${workDealInfo.payType == 2}">checked</c:if> value="2">政府统一采购
-								<input type="radio" name="payType" id="payType3" <c:if test="${workDealInfo.payType == 3}">checked</c:if> value="3">合同采购 --%>
+								<input type="hidden" id="surplusNum" />
 
 							</td>
 
@@ -1486,8 +1314,9 @@ var selected = false;
 							<th><span class="prompt" style="color: red; display: none;">*</span>单位联系电话：</th>
 							<td><input type="text" name="companyMobile"
 								id="companyMobile" value="${workCompany.companyMobile }"
-								class="number" oninput="count('companyMobile','dwcount')"
-								onblur="qxCount('dwcount')"
+								 oninput="count('companyMobile','dwcount')"
+								
+								onblur="checkContactMobil(this,'dwcount')"
 								onfocus="hqcount('companyMobile','dwcount')" /><span
 								id="dwcount" style="color: red; margin-left: 10px"></span></td>
 
