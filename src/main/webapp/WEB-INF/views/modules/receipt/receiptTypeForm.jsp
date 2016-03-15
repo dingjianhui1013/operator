@@ -45,6 +45,10 @@
 			top.$.jBox.tip("请填入发票金额");
 			return false;
 		} 
+		if ($("#typeName").val() ==0) {
+			top.$.jBox.tip("填入发票金额为零请重新填写");
+			return false;
+		} 
 			
 			return true;
 			
@@ -69,7 +73,7 @@
 		<div class="control-group">
 			<label class="control-label">发票类型:</label>
 			<div class="controls">
-				<form:input path="typeName" htmlEscape="false" onkeyup="value=value.match(/^[0-9]+$/,'')" 
+				<form:input path="typeName" htmlEscape="false" onkeyup="this.value=this.value.replace(/\D/g,'')" 
 				maxlength="3" id="typeName"/>元&nbsp;&nbsp;<label>例如：2元、10元、100元</label>
 			</div>
 		</div>
