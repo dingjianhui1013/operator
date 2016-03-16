@@ -1053,7 +1053,7 @@ public class WorkDealInfoService extends BaseService {
 			}
 			if (workDealInfo.getWorkCompany().getOrganizationNumber() != null
 					&& !workDealInfo.getWorkCompany().getOrganizationNumber().equals("")) {
-				sql.append(" and workcompan2_.organization_number = "+EscapeUtil.escapeLike(workDealInfo.getWorkCompany().getOrganizationNumber()));
+				sql.append(" and workcompan2_.organization_number = "+workDealInfo.getWorkCompany().getOrganizationNumber()+"");
 			}
 		}
 		
@@ -1067,7 +1067,7 @@ public class WorkDealInfoService extends BaseService {
 			sql.append(" and this_.deal_info_status = "+workDealInfo.getDealInfoStatus());
 		}
 		if (StringUtils.isNotEmpty(workDealInfo.getKeySn())) {
-			sql.append(" and this_.key_sn like '% "+EscapeUtil.escapeLike(workDealInfo.getKeySn())+"%'");
+			sql.append(" and this_.key_sn like '%"+EscapeUtil.escapeLike(workDealInfo.getKeySn())+"%'");
 		}
 		if (workDealInfo.getStatus() != null) {
 			sql.append(" and this_.status = "+workDealInfo.getStatus());
