@@ -531,7 +531,7 @@ public class SettlementLogController extends BaseController {
 			String comAgentName = configCommercialAgent.get(0).getAgentName();
 			Date start = configCommercialAgent.get(0).getAgentContractStart();
 			Date end = configCommercialAgent.get(0).getAgentContractEnd();
-			String  validity = new SimpleDateFormat("yyyy-mm-dd").format(start)+" 至  "+new SimpleDateFormat("yyyy-mm-dd").format(end);
+			String  validity = new SimpleDateFormat("yyyy-MM-dd").format(start)+" 至  "+new SimpleDateFormat("yyyy-MM-dd").format(end);
 			settlementLog.setComagentValidity(validity);
 			settlementLog.setComagentName(comAgentName);			
 		}
@@ -561,7 +561,11 @@ public class SettlementLogController extends BaseController {
 		}
 		settlementLog.setProductName(productNameList.toString());
 		settlementLog.setStartTime(startTime);
-		settlementLog.setEndTime(endTime);
+		Date endT = endTime;
+		endT.setHours(23);
+		endT.setMinutes(59);
+		endT.setSeconds(59);
+		settlementLog.setEndTime(endT);
 		
 		List<SettlementLog> list = settlementLogService.find(settlementLog);
 		if(list.size()>0)
@@ -655,7 +659,7 @@ public class SettlementLogController extends BaseController {
 			String comAgentName = configCommercialAgent.get(0).getAgentName();
 			Date start = configCommercialAgent.get(0).getAgentContractStart();
 			Date end = configCommercialAgent.get(0).getAgentContractEnd();
-			String  validity = new SimpleDateFormat("yyyy-mm-dd").format(start)+" 至  "+new SimpleDateFormat("yyyy-mm-dd").format(end);
+			String  validity = new SimpleDateFormat("yyyy-MM-dd").format(start)+" 至  "+new SimpleDateFormat("yyyy-MM-dd").format(end);
 			settlementLog.setComagentValidity(validity);
 			settlementLog.setComagentName(comAgentName);		
 		}
@@ -685,7 +689,11 @@ public class SettlementLogController extends BaseController {
 		}
 		settlementLog.setProductName(productNameList.toString());
 		settlementLog.setStartTime(startTime);
-		settlementLog.setEndTime(endTime);
+		Date endT = endTime;
+		endT.setHours(23);
+		endT.setMinutes(59);
+		endT.setSeconds(59);
+		settlementLog.setEndTime(endT);
 		
 		Date start = new Date();
 		Date end = new Date();
