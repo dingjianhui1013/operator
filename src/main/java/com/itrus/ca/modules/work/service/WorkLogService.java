@@ -102,7 +102,7 @@ public class WorkLogService extends BaseService {
 	}
 	public List<Map<String, Object>> findtj(List<Office> offices,String name,String staDate,String endDate){
 		String sqlOffice ="";
-		if(name!=null && "".equals(name)){
+		if(name!=null && !"".equals(name)){
 			Query off = workLogDao.createSqlQuery("SELECT s.OFFICE_ID from WORK_INFO_LOG w,SYS_USER s where s.ID = w.CREATE_BY AND s.NAME Like '%"+name+"%'");
 			List lists = off.list();
 			if(lists.size()!=0){
@@ -148,7 +148,7 @@ public class WorkLogService extends BaseService {
 				e.printStackTrace();
 			}
 		}
-		Query query = workLogDao.createSqlQuery("select a.app_name as dealInfoId,SUM(CASE WHEN l.ser_type = '日常客服' then 1 else 0 end) as rc, SUM(CASE WHEN l.ser_type = '温馨提示' then 1 else 0 end) as wx, SUM(CASE WHEN l.ser_type = '更新提示' then 1 else 0 end) as gx,SUM(CASE WHEN l.ser_type = '回访' then 1 else 0 end) as hf,SUM(CASE WHEN l.ser_type = '培训' then 1 else 0 end) as px FROM work_info_log l, config_app a where l.config_app = a.id and l.office_id in ("+sqlOffice+") "+timeSQL+" group by a.app_name");
+		Query query = workLogDao.createSqlQuery("select a.app_name as dealInfoId,SUM(CASE WHEN l.ser_type = '日常客服' then 1 else 0 end) as rc, SUM(CASE WHEN l.ser_type = '温馨提示' then 1 else 0 end) as wx, SUM(CASE WHEN l.ser_type = '更新提示' then 1 else 0 end) as gx,SUM(CASE WHEN l.ser_type = '回访' then 1 else 0 end) as hf,SUM(CASE WHEN l.ser_type = '培训' then 1 else 0 end) as px FROM work_info_log l, config_app a where l.config_app = a.id and l.office_id in ("+sqlOffice+") "+timeSQL+"  and l.DISTINGUISH in('0','3') group by a.app_name");
 		List list = query.list();
 		List result = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
 		List<Map<String, Object>> mapList = new ArrayList<Map<String,Object>>();
