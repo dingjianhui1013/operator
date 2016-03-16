@@ -176,10 +176,10 @@ public class CertController extends BaseController {
 			}
 			caCert.setProvider(certProvider);
 			json.put("status", -1);
-			if (caCert.getReqBuf() == null) {
+		/*	if (caCert.getReqBuf() == null) {
 		
 				caCert.setReqBuf(csr);
-			}
+			}*/
 		
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
 			Integer sort = 1;
@@ -314,10 +314,10 @@ public class CertController extends BaseController {
 				System.out.println(caCert.getReqBuf());
 				
 				
-				String reqBuf = caCert.getReqBuf();
-				caCert.setReqBuf(null);
+				/*String reqBuf = caCert.getReqBuf();
+				caCert.setReqBuf(null);*/
 
-				CertificateResponse certificateResponse = caService.getCaCert(request, reqBuf,
+				CertificateResponse certificateResponse = caService.getCaCert(request, csr,
 						Integer.valueOf(reqOverrideValidity) + Integer.valueOf(addCertDays), raAccount);
 
 				caCert.setType(certificateResponse.getCertType());
