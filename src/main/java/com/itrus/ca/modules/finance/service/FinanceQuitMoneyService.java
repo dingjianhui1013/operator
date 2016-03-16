@@ -66,7 +66,7 @@ public class FinanceQuitMoneyService extends BaseService {
 		try {
 			if (payStartTime != null &&  !"".equals(payStartTime)) {
 				
-				Date start = format.parse(quitStartTime);
+				Date start = format.parse(payStartTime);
 				start.setHours(00);
 				start.setMinutes(0);
 				start.setSeconds(0);
@@ -82,7 +82,6 @@ public class FinanceQuitMoneyService extends BaseService {
 				end.setHours(23);
 				end.setMinutes(59);
 				end.setSeconds(59);
-				
 				
 				dc.add(Restrictions.le("financePaymentInfo.payDate", end));
 			}
