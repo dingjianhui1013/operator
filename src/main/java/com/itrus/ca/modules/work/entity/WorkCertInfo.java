@@ -43,7 +43,7 @@ public class WorkCertInfo  implements java.io.Serializable {
 	private Date renewalDate;
 	private Long renewalNextId;
 	private Long renewalPrevId;
-	private String reqBuf;
+	private String reqBuf;                //公钥
 	private String reqBufType;
 	private String reqChallenge;
 	private String reqComment;
