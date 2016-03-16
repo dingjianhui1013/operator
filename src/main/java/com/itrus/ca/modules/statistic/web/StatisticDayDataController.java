@@ -1709,19 +1709,21 @@ public class StatisticDayDataController extends BaseController {
 			certData.setRenew5(workDealInfoService.getCertAppYearInfoCountOneDeal(
 					countDate, officeId, 5, app.getId(),
 					WorkDealInfoType.TYPE_UPDATE_CERT));
-
+//变更
 			certData.setModifyNum(workDealInfoService.getCertAppYearInfoCountOneDeal(
 					countDate, officeId, 0, app.getId(),
 					WorkDealInfoType.TYPE_INFORMATION_REROUTE));
+//遗失补办
 			certData.setReissueNum(workDealInfoService.getCertAppYearInfoCountOneDeal(
 					countDate, officeId, 0, app.getId(),
 					WorkDealInfoType.TYPE_LOST_CHILD)
 					);
+//损坏更换
 			certData.setLostReplaceNum(workDealInfoService.getCertAppYearInfoCountOneDeal(
 					countDate, officeId, 0, app.getId(),
 					WorkDealInfoType.TYPE_DAMAGED_REPLACED));
 			
-			
+//变更+更新
 			certData.setUpdateChangeNum(workDealInfoService.getCertAppYearInfoUpdateChangeNum(
 					countDate, officeId, 1, app.getId(),
 					WorkDealInfoType.TYPE_UPDATE_CERT,WorkDealInfoType.TYPE_INFORMATION_REROUTE));
@@ -1738,7 +1740,7 @@ public class StatisticDayDataController extends BaseController {
 					countDate, officeId, 5, app.getId(),
 					WorkDealInfoType.TYPE_UPDATE_CERT,WorkDealInfoType.TYPE_INFORMATION_REROUTE));
 			
-			
+//更新+遗失补办
 			certData.setUpdateLostNum(workDealInfoService.getCertAppYearInfoUpdateLostReplaceNum(
 					countDate, officeId, 1, app.getId(),
 					WorkDealInfoType.TYPE_UPDATE_CERT,WorkDealInfoType.TYPE_LOST_CHILD)
@@ -1760,7 +1762,7 @@ public class StatisticDayDataController extends BaseController {
 					WorkDealInfoType.TYPE_UPDATE_CERT,WorkDealInfoType.TYPE_LOST_CHILD)
 					);
 			
-			
+//更新+损坏更换
 			certData.setUpdateReplaceNum(workDealInfoService.getCertAppYearInfoUpdateLostReplaceNum(
 					countDate, officeId, 1, app.getId(),
 					WorkDealInfoType.TYPE_UPDATE_CERT,WorkDealInfoType.TYPE_DAMAGED_REPLACED));
@@ -1777,18 +1779,19 @@ public class StatisticDayDataController extends BaseController {
 					countDate, officeId, 5, app.getId(),
 					WorkDealInfoType.TYPE_UPDATE_CERT,WorkDealInfoType.TYPE_DAMAGED_REPLACED));
 			
-			
+//变更+遗失补办
 			certData.setChangeLostNum(workDealInfoService.getCertAppYearInfoChangeLostReplaceNum(
 					countDate, officeId, 0, app.getId(),
 					WorkDealInfoType.TYPE_INFORMATION_REROUTE,WorkDealInfoType.TYPE_LOST_CHILD)
 					
 					);
+//变更+损坏更换
 			certData.setChangeReplaceNum(workDealInfoService.getCertAppYearInfoChangeLostReplaceNum(
 					countDate, officeId, 0, app.getId(),
 					WorkDealInfoType.TYPE_INFORMATION_REROUTE,WorkDealInfoType.TYPE_DAMAGED_REPLACED)
 					
 					);
-			
+//更新+遗失补办+变更
 			certData.setChangeUpdateLostNum(workDealInfoService.getCertAppYearInfoChangeLostReplaceUpdateNum(
 					countDate, officeId, 1, app.getId(),
 					WorkDealInfoType.TYPE_INFORMATION_REROUTE,WorkDealInfoType.TYPE_LOST_CHILD,WorkDealInfoType.TYPE_UPDATE_CERT));
@@ -1805,7 +1808,7 @@ public class StatisticDayDataController extends BaseController {
 					countDate, officeId, 5, app.getId(),
 					WorkDealInfoType.TYPE_INFORMATION_REROUTE,WorkDealInfoType.TYPE_LOST_CHILD,WorkDealInfoType.TYPE_UPDATE_CERT));
 			
-			
+//更新+变更+损坏更换			
 			certData.setChangeUpdateReplaceNum(workDealInfoService.getCertAppYearInfoChangeLostReplaceUpdateNum(
 					countDate, officeId, 1, app.getId(),
 					WorkDealInfoType.TYPE_INFORMATION_REROUTE,WorkDealInfoType.TYPE_DAMAGED_REPLACED,WorkDealInfoType.TYPE_UPDATE_CERT));
