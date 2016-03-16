@@ -235,7 +235,7 @@
 				<c:if test="${appMonthData.certTotal==0}">
 				<tr>
 					<td style="text-align:center; vertical-align: middle;" ><fmt:formatDate value="${appMonthData.statisticDate}" pattern="yyyy-MM-dd"/></td>
-					<td colspan="36" >${appMonthData.app.appName}应用当月没办理数据
+					<td colspan="43" >${appMonthData.app.appName}应用当月没办理数据
 					</td>
 				</tr>
 				</c:if>

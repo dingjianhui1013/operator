@@ -189,12 +189,16 @@ public class SettlePayableDetailController extends BaseController {
 
 			for (int j = 0; j < infos.size(); j++) {
 				WorkDealInfo prvedDealInfo = infos.get(j);
-
-				Integer payType = prvedDealInfo.getPayType();
-
-				if (payType != null && payType.equals(1)) {
-
+				if (infos.get(j).getNotafter()==null) {
+					continue;
+				}
+				
 					PayableDetailVo detailVo = new PayableDetailVo();
+					if (prvedDealInfo.getPayType()==null) {
+						detailVo.setMethod(1);
+					}else{
+						detailVo.setMethod(prvedDealInfo.getPayType());
+					}
 					String dealInfoType = "";
 					if (infos.get(j).getDealInfoType() != null) {
 						dealInfoType = WorkDealInfoType.WorkDealInfoTypeMapNew.get(infos.get(j).getDealInfoType())
@@ -213,48 +217,6 @@ public class SettlePayableDetailController extends BaseController {
 					}
 
 					if (prvedDealInfo.getPayType() == null) {
-						Set<String> payMethods = new LinkedHashSet<String>();
-						if (infos.get(j).getWorkPayInfo() != null) {
-							if (infos.get(j).getWorkPayInfo().getRelationMethod() == null) {
-								if (infos.get(j).getWorkPayInfo().getMethodPos() == true) {
-									payMethods.add("Pos付款");
-								}
-								if (infos.get(j).getWorkPayInfo().getMethodMoney() == true) {
-									payMethods.add("现金付款");
-								}
-								if (infos.get(j).getWorkPayInfo().getMethodAlipay() == true) {
-									payMethods.add("支付宝付款");
-								}
-								if (infos.get(j).getWorkPayInfo().getMethodBank() == true) {
-									payMethods.add("银行付款");
-								}
-								if (infos.get(j).getWorkPayInfo().getMethodGov() == true) {
-									payMethods.add("政府统一采购");
-								}
-								if (infos.get(j).getWorkPayInfo().getMethodContract() == true) {
-									payMethods.add("合同采购");
-								}
-							} else {
-								List<WorkFinancePayInfoRelation> workfinancePayinfos = workFinancePayInfoRelationService
-										.findByPayInfoId(infos.get(j).getWorkPayInfo().getId());
-								for (int w = 0; w < workfinancePayinfos.size(); w++) {
-									if (workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod() == 1) {
-										payMethods.add("现金付款");
-									}
-									if (workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod() == 2) {
-										payMethods.add("POS付款");
-									}
-									if (workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod() == 3) {
-										payMethods.add("银行转账");
-									}
-									if (workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod() == 4) {
-										payMethods.add("支付宝付款");
-									}
-								}
-
-							}
-							detailVo.setMethod(payMethods);
-						}
 						detailVo.setStartDate(infos.get(j).getBusinessCardUserDate());
 						detailVo.setEndDate(infos.get(j).getNotafter());
 						detailVo.setDealInfoType(dealInfoType);
@@ -263,49 +225,6 @@ public class SettlePayableDetailController extends BaseController {
 						continue;
 					}
 					if (!prvedDealInfo.getPayType().equals(1)) {
-						Set<String> payMethods = new LinkedHashSet<String>();
-						if (infos.get(j).getWorkPayInfo() != null) {
-							if (infos.get(j).getWorkPayInfo().getRelationMethod() == null) {
-								if (infos.get(j).getWorkPayInfo().getMethodPos() == true) {
-									payMethods.add("Pos付款");
-								}
-								if (infos.get(j).getWorkPayInfo().getMethodMoney() == true) {
-									payMethods.add("现金付款");
-								}
-								if (infos.get(j).getWorkPayInfo().getMethodAlipay() == true) {
-									payMethods.add("支付宝付款");
-								}
-								if (infos.get(j).getWorkPayInfo().getMethodBank() == true) {
-									payMethods.add("银行付款");
-								}
-								if (infos.get(j).getWorkPayInfo().getMethodGov() == true) {
-									payMethods.add("政府统一采购");
-								}
-								if (infos.get(j).getWorkPayInfo().getMethodContract() == true) {
-									payMethods.add("合同采购");
-								}
-							} else {
-								List<WorkFinancePayInfoRelation> workfinancePayinfos = workFinancePayInfoRelationService
-										.findByPayInfoId(infos.get(j).getWorkPayInfo().getId());
-								for (int w = 0; w < workfinancePayinfos.size(); w++) {
-									if (workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod() == 1) {
-										payMethods.add("现金付款");
-									}
-									if (workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod() == 2) {
-										payMethods.add("POS付款");
-									}
-									if (workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod() == 3) {
-										payMethods.add("银行转账");
-									}
-									if (workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod() == 4) {
-										payMethods.add("支付宝付款");
-									}
-								}
-
-							}
-							detailVo.setMethod(payMethods);
-						}
-
 						detailVo.setStartDate(infos.get(j).getBusinessCardUserDate());
 						detailVo.setEndDate(infos.get(j).getNotafter());
 						detailVo.setDealInfoType(dealInfoType);
@@ -315,48 +234,6 @@ public class SettlePayableDetailController extends BaseController {
 					}
 
 					if (infos.get(j).getDealInfoType() != null) {
-						Set<String> payMethods = new LinkedHashSet<String>();
-						if (infos.get(j).getWorkPayInfo() != null) {
-							if (infos.get(j).getWorkPayInfo().getRelationMethod() == null) {
-								if (infos.get(j).getWorkPayInfo().getMethodPos() == true) {
-									payMethods.add("Pos付款");
-								}
-								if (infos.get(j).getWorkPayInfo().getMethodMoney() == true) {
-									payMethods.add("现金付款");
-								}
-								if (infos.get(j).getWorkPayInfo().getMethodAlipay() == true) {
-									payMethods.add("支付宝付款");
-								}
-								if (infos.get(j).getWorkPayInfo().getMethodBank() == true) {
-									payMethods.add("银行付款");
-								}
-								if (infos.get(j).getWorkPayInfo().getMethodGov() == true) {
-									payMethods.add("政府统一采购");
-								}
-								if (infos.get(j).getWorkPayInfo().getMethodContract() == true) {
-									payMethods.add("合同采购");
-								}
-							} else {
-								List<WorkFinancePayInfoRelation> workfinancePayinfos = workFinancePayInfoRelationService
-										.findByPayInfoId(infos.get(j).getWorkPayInfo().getId());
-								for (int w = 0; w < workfinancePayinfos.size(); w++) {
-									if (workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod() == 1) {
-										payMethods.add("现金付款");
-									}
-									if (workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod() == 2) {
-										payMethods.add("POS付款");
-									}
-									if (workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod() == 3) {
-										payMethods.add("银行转账");
-									}
-									if (workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod() == 4) {
-										payMethods.add("支付宝付款");
-									}
-								}
-
-							}
-							detailVo.setMethod(payMethods);
-						}
 						if (infos.get(j).getDealInfoType().equals(1) || infos.get(j).getDealInfoType().equals(0)) {
 							if (infos.get(j).getBusinessCardUserDate() != null) {
 								if (infos.get(j).getBusinessCardUserDate().getTime() > endLastDate.getTime()) {
@@ -389,7 +266,6 @@ public class SettlePayableDetailController extends BaseController {
 								}
 							}
 						}
-					}
 				}
 			}
 
@@ -403,7 +279,7 @@ public class SettlePayableDetailController extends BaseController {
 				dealInfos.get(i).setLastNum(0);
 
 			} else {
-				int ava = totalAgentYear;
+				Integer ava = totalAgentYear;
 				if (detailList.size() > 0) {
 					for (int k = 0; k < detailList.size(); k++) {
 						if (ava > 0) {
@@ -412,8 +288,8 @@ public class SettlePayableDetailController extends BaseController {
 							if (ava > settle) {
 								ava -= settle;
 							} else {
+								detailList.get(k).setSettleYear(ava.toString());
 								ava = 0;
-								detailList.get(k).setSettleYear(ava + "");
 							}
 						} else {
 							detailList.get(k).setSettleYear("0");
@@ -422,20 +298,36 @@ public class SettlePayableDetailController extends BaseController {
 
 					dealInfos.get(i)
 							.setLastNum(Integer.parseInt(detailList.get(detailList.size() - 1).getSettleYear()));
-					dealInfos.get(i).setYyNum(ava + dealInfos.get(i).getLastNum());
+					int yNum=0;
+					for (int k = 0;  k < detailList.size()-1; k++) {
+						yNum += Integer.parseInt(detailList.get(k).getSettleYear());
+					}
+					
+					dealInfos.get(i).setYyNum(yNum);
 				}
 			}
 
 			dealInfos.get(i).setDetailList(detailList);
 			if (detailList.size() > lenth) {
-				lenth = detailList.size();
+				lenth = detailList.size()-1;
 			}
 		}
 
 		for (int k = dealInfos.size() - 1; k >= 0; k--) {
 			WorkDealInfo deal = dealInfos.get(k);
 			List<PayableDetailVo> detailVos = deal.getDetailList();
+			int payType=0;
 			if (detailVos.size() < 1) {
+				dealInfos.remove(k);
+			}else{
+				for (int j = detailVos.size()-1; j >=0 ; j--) {
+					if (detailVos.get(j).getMethod().equals(1)) {
+						payType=1;
+						break;
+					}
+				}
+			}
+			if (payType == 0) {
 				dealInfos.remove(k);
 			}
 		}
@@ -566,7 +458,12 @@ public class SettlePayableDetailController extends BaseController {
 
 			for (int j = 0; j < infos.size(); j++) {
 				WorkDealInfo prvedDealInfo = infos.get(j);
+				if (infos.get(j).getNotafter()==null) {
+					continue;
+				}
+				
 				PayableDetailVo detailVo = new PayableDetailVo();
+				detailVo.setMethod(prvedDealInfo.getPayType());
 				String dealInfoType = "";
 				if (infos.get(j).getDealInfoType() != null) {
 					dealInfoType = WorkDealInfoType.WorkDealInfoTypeMapNew.get(infos.get(j).getDealInfoType()) + " ";
@@ -582,48 +479,6 @@ public class SettlePayableDetailController extends BaseController {
 				}
 
 				if (prvedDealInfo.getPayType() == null) {
-					Set<String> payMethods = new LinkedHashSet<String>();
-					if (infos.get(j).getWorkPayInfo() != null) {
-						if (infos.get(j).getWorkPayInfo().getRelationMethod() == null) {
-							if (infos.get(j).getWorkPayInfo().getMethodPos() == true) {
-								payMethods.add("Pos付款");
-							}
-							if (infos.get(j).getWorkPayInfo().getMethodMoney() == true) {
-								payMethods.add("现金付款");
-							}
-							if (infos.get(j).getWorkPayInfo().getMethodAlipay() == true) {
-								payMethods.add("支付宝付款");
-							}
-							if (infos.get(j).getWorkPayInfo().getMethodBank() == true) {
-								payMethods.add("银行付款");
-							}
-							if (infos.get(j).getWorkPayInfo().getMethodGov() == true) {
-								payMethods.add("政府统一采购");
-							}
-							if (infos.get(j).getWorkPayInfo().getMethodContract() == true) {
-								payMethods.add("合同采购");
-							}
-						} else {
-							List<WorkFinancePayInfoRelation> workfinancePayinfos = workFinancePayInfoRelationService
-									.findByPayInfoId(infos.get(j).getWorkPayInfo().getId());
-							for (int w = 0; w < workfinancePayinfos.size(); w++) {
-								if (workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod() == 1) {
-									payMethods.add("现金付款");
-								}
-								if (workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod() == 2) {
-									payMethods.add("POS付款");
-								}
-								if (workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod() == 3) {
-									payMethods.add("银行转账");
-								}
-								if (workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod() == 4) {
-									payMethods.add("支付宝付款");
-								}
-							}
-
-						}
-						detailVo.setMethod(payMethods);
-					}
 					detailVo.setStartDate(infos.get(j).getBusinessCardUserDate());
 					detailVo.setEndDate(infos.get(j).getNotafter());
 					detailVo.setDealInfoType(dealInfoType);
@@ -632,48 +487,6 @@ public class SettlePayableDetailController extends BaseController {
 					continue;
 				}
 				if (!prvedDealInfo.getPayType().equals(1)) {
-					Set<String> payMethods = new LinkedHashSet<String>();
-					if (infos.get(j).getWorkPayInfo() != null) {
-						if (infos.get(j).getWorkPayInfo().getRelationMethod() == null) {
-							if (infos.get(j).getWorkPayInfo().getMethodPos() == true) {
-								payMethods.add("Pos付款");
-							}
-							if (infos.get(j).getWorkPayInfo().getMethodMoney() == true) {
-								payMethods.add("现金付款");
-							}
-							if (infos.get(j).getWorkPayInfo().getMethodAlipay() == true) {
-								payMethods.add("支付宝付款");
-							}
-							if (infos.get(j).getWorkPayInfo().getMethodBank() == true) {
-								payMethods.add("银行付款");
-							}
-							if (infos.get(j).getWorkPayInfo().getMethodGov() == true) {
-								payMethods.add("政府统一采购");
-							}
-							if (infos.get(j).getWorkPayInfo().getMethodContract() == true) {
-								payMethods.add("合同采购");
-							}
-						} else {
-							List<WorkFinancePayInfoRelation> workfinancePayinfos = workFinancePayInfoRelationService
-									.findByPayInfoId(infos.get(j).getWorkPayInfo().getId());
-							for (int w = 0; w < workfinancePayinfos.size(); w++) {
-								if (workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod() == 1) {
-									payMethods.add("现金付款");
-								}
-								if (workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod() == 2) {
-									payMethods.add("POS付款");
-								}
-								if (workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod() == 3) {
-									payMethods.add("银行转账");
-								}
-								if (workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod() == 4) {
-									payMethods.add("支付宝付款");
-								}
-							}
-
-						}
-						detailVo.setMethod(payMethods);
-					}
 
 					detailVo.setStartDate(infos.get(j).getBusinessCardUserDate());
 					detailVo.setEndDate(infos.get(j).getNotafter());
@@ -684,48 +497,6 @@ public class SettlePayableDetailController extends BaseController {
 				}
 
 				if (infos.get(j).getDealInfoType() != null) {
-					Set<String> payMethods = new LinkedHashSet<String>();
-					if (infos.get(j).getWorkPayInfo() != null) {
-						if (infos.get(j).getWorkPayInfo().getRelationMethod() == null) {
-							if (infos.get(j).getWorkPayInfo().getMethodPos() == true) {
-								payMethods.add("Pos付款");
-							}
-							if (infos.get(j).getWorkPayInfo().getMethodMoney() == true) {
-								payMethods.add("现金付款");
-							}
-							if (infos.get(j).getWorkPayInfo().getMethodAlipay() == true) {
-								payMethods.add("支付宝付款");
-							}
-							if (infos.get(j).getWorkPayInfo().getMethodBank() == true) {
-								payMethods.add("银行付款");
-							}
-							if (infos.get(j).getWorkPayInfo().getMethodGov() == true) {
-								payMethods.add("政府统一采购");
-							}
-							if (infos.get(j).getWorkPayInfo().getMethodContract() == true) {
-								payMethods.add("合同采购");
-							}
-						} else {
-							List<WorkFinancePayInfoRelation> workfinancePayinfos = workFinancePayInfoRelationService
-									.findByPayInfoId(infos.get(j).getWorkPayInfo().getId());
-							for (int w = 0; w < workfinancePayinfos.size(); w++) {
-								if (workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod() == 1) {
-									payMethods.add("现金付款");
-								}
-								if (workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod() == 2) {
-									payMethods.add("POS付款");
-								}
-								if (workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod() == 3) {
-									payMethods.add("银行转账");
-								}
-								if (workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod() == 4) {
-									payMethods.add("支付宝付款");
-								}
-							}
-
-						}
-						detailVo.setMethod(payMethods);
-					}
 					if (infos.get(j).getDealInfoType().equals(1) || infos.get(j).getDealInfoType().equals(0)) {
 						if (infos.get(j).getBusinessCardUserDate() != null) {
 							if (infos.get(j).getBusinessCardUserDate().getTime() > endLastDate.getTime()) {
@@ -759,12 +530,47 @@ public class SettlePayableDetailController extends BaseController {
 					}
 				}
 			}
-			dealInfos.get(i).setYyNum(yjNum);
 			dealInfos.get(i).setTotalNum(totalAgentYear);
+
+			if (totalAgentYear == 0) {
+				for (int k = 0; k < detailList.size(); k++) {
+					detailList.get(k).setSettleYear("0");
+				}
+				dealInfos.get(i).setYyNum(0);
+				dealInfos.get(i).setLastNum(0);
+
+			} else {
+				Integer ava = totalAgentYear;
+				if (detailList.size() > 0) {
+					for (int k = 0; k < detailList.size(); k++) {
+						if (ava > 0) {
+							int settle = Integer.parseInt(detailList.get(k).getSettleYear());
+
+							if (ava > settle) {
+								ava -= settle;
+							} else {
+								detailList.get(k).setSettleYear(ava.toString());
+								ava = 0;
+							}
+						} else {
+							detailList.get(k).setSettleYear("0");
+						}
+					}
+
+					dealInfos.get(i)
+							.setLastNum(Integer.parseInt(detailList.get(detailList.size() - 1).getSettleYear()));
+					int yNum=0;
+					for (int k = 0;  k < detailList.size()-1; k++) {
+						yNum += Integer.parseInt(detailList.get(k).getSettleYear());
+					}
+					
+					dealInfos.get(i).setYyNum(yNum);
+				}
+			}
+
 			dealInfos.get(i).setDetailList(detailList);
-			dealInfos.get(i).setLastNum(lastNum);
 			if (detailList.size() > lenth) {
-				lenth = detailList.size();
+				lenth = detailList.size()-1;
 			}
 		}
 

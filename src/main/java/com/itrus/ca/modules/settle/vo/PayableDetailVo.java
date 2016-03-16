@@ -4,17 +4,17 @@ import java.util.Date;
 import java.util.Set;
 
 public class PayableDetailVo {
-	private Set<String> method;
+	private Integer method;
 	private Date startDate;
 	private Date endDate;
 	private String dealInfoType;
 	private String settleYear;
 	
-	public Set<String> getMethod() {
+	public Integer getMethod() {
 		return method;
 	}
-	public void setMethod(Set<String> payMethods) {
-		this.method = payMethods;
+	public void setMethod(Integer method) {
+		this.method = method;
 	}
 	public Date getStartDate() {
 		return startDate;

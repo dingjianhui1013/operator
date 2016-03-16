@@ -303,11 +303,9 @@
 <%-- 								<c:if test="${dealInfo.workPayInfo.methodBank}"><td>银行付款</td></c:if> --%>
 <%-- 								<c:if test="${dealInfo.workPayInfo.methodAlipay}"><td>支付宝付款</td></c:if> --%>
 <%-- 								<c:if test="${dealInfo.workPayInfo.methodAlipay==false&&dealInfo.workPayInfo.methodMoney==false&&dealInfo.workPayInfo.methodPos==false&&dealInfo.workPayInfo.methodBank==false}"><td> </td></c:if> --%>
-								<td>
-									<c:forEach items="${detail.method}" var="method">
-										<c:if test="${fn:length(method)>0}">${method}</c:if>
-									</c:forEach>
-								</td>
+									<c:if test="${detail.method==1}"><td>标准</td></c:if> 
+	 								<c:if test="${detail.method==2}"><td>政府统一采购</td></c:if> 
+	 								<c:if test="${detail.method==3}"><td>合同采购</td></c:if> 
 								<td><fmt:formatDate	value="${detail.startDate }" pattern="yyyy-MM-dd" /></td>
 								<td><fmt:formatDate value="${detail.endDate }" pattern="yyyy-MM-dd" /></td>
 								<td><c:if test="${detail.dealInfoType=='null '}"> </c:if> 

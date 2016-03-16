@@ -78,11 +78,9 @@
 							<td>${dealInfo.workCertInfo.workCertApplyInfo.name}</td>
 							<td>${proType[dealInfo.configProduct.productName]}</td>
 							<c:forEach items="${dealInfo.detailList }" var="detail">
-								<td>
-									<c:forEach items="${detail.method}" var="method">
-										<c:if test="${fn:length(method)>0}">${method}</c:if>
-									</c:forEach>
-								</td>
+									<c:if test="${detail.method==1}"><td>标准</td></c:if> 
+	 								<c:if test="${detail.method==2}"><td>政府统一采购</td></c:if> 
+	 								<c:if test="${detail.method==3}"><td>合同采购</td></c:if> 
 								<td><fmt:formatDate	value="${detail.startDate }" pattern="yyyy-MM-dd" /></td>
 								<td><fmt:formatDate value="${detail.endDate }" pattern="yyyy-MM-dd" /></td>
 								<td><c:if test="${detail.dealInfoType=='null '}"> </c:if>
