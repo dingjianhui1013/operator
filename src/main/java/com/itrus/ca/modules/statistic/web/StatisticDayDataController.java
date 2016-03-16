@@ -285,8 +285,8 @@ public class StatisticDayDataController extends BaseController {
 					receiptTotal = ListMonth.get(0).getReceiptTotal();
 					keyTotal = ListMonth.get(0).getKeyTotal();
 				}
-				keyStoreTotal =  keyIn - keyOver ;
-				receiptStoreTotal = receiptIn - certMoneyTotal ;
+				keyStoreTotal =  keyIn + keyTotal - keyOver ;
+				receiptStoreTotal = receiptIn + receiptTotal - certMoneyTotal ;
 				smd.setKeyIn(keyIn);
 				smd.setKeyOver(keyOver);
 				smd.setKeyStoreTotal(keyStoreTotal);
