@@ -22,6 +22,7 @@
 		function page(n,s){
 			$("#pageNo").val(n);
 			$("#pageSize").val(s);
+			loading('正在提交，请稍等...');
 			$("#searchForm").submit();
         	return false;
         }

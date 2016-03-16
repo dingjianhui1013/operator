@@ -23,6 +23,7 @@
 	function page(n, s) {
 		$("#pageNo").val(n);
 		$("#pageSize").val(s);
+		loading('正在提交，请稍等...');
 		$("#searchForm").submit();
 		return false;
 	}
@@ -68,7 +69,6 @@
 		if(comAgentId==0){
 			top.$.jBox.tip("代理商不能为空！");
 		}else{
-			
 			var html = " &nbsp;&nbsp;&nbsp;&nbsp;请填写备注信息：<input class='input-medium' type='text' name='remarks' value='' style='margin-left:10px'/>";
 			var submit=function(v,h,f)
 			{
@@ -80,6 +80,7 @@
 					        return false;
 						}else
 							{
+									loading('正在提交，请稍等...');
 									$("#remarks").val(f.remarks);
 									var remarks = $("#remarks").val();
 									$.ajax({
@@ -139,6 +140,7 @@
 		if(comAgentId==0){
 			top.$.jBox.tip("代理商不能为空！");
 		}else{
+			loading('正在提交，请稍等...');
 			$("#searchForm").submit();
 		}
 	}
@@ -238,8 +240,8 @@
 				required="required" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'startTime\')}'});"
 				value="<fmt:formatDate value="${endTime}" pattern="yyyy-MM-dd"/>" maxlength="20" readonly="readonly"
 				name="endTime" id="endTime"/>
- 		  		<input id="btnSubmit" class="btn btn-primary" 
-				type="submit" value="查询" /> 
+<!--  		  		<input id="btnSubmit" class="btn btn-primary"  -->
+<!-- 				type="submit" value="查询" />  -->
 				
 				<input id="btnExport" class="btn btn-primary" onclick="searchForm()"
 				type="button" value="查询" />
