@@ -167,7 +167,7 @@ public class CertController extends BaseController {
 				}
 			}
 			WorkCertInfo caCert = dealInfo.getWorkCertInfo();
-			WorkCertApplyInfo applyInfo = caCert.getWorkCertApplyInfo();
+		
 			if (reqOverrideValidity != null) {
 				reqOverrideValidity = reqOverrideValidity.replace(",", "");
 				caCert.setReqOverrideValidity(Integer.valueOf(reqOverrideValidity) + Integer.valueOf(addCertDays));
@@ -176,14 +176,11 @@ public class CertController extends BaseController {
 			}
 			caCert.setProvider(certProvider);
 			json.put("status", -1);
-			if (caCert.getReqBuf() == null) {
-				String result = java.net.URLDecoder.decode(csr, "UTF-8");
+		/*	if (caCert.getReqBuf() == null) {
+			//	String result = java.net.URLDecoder.decode(csr, "UTF-8");
 				caCert.setReqBuf(csr);
-			}
-			Calendar cal = Calendar.getInstance();
-			// cal.add(Calendar.DAY_OF_MONTH, caCert.getReqOverrideValidity());
-			Date da = cal.getTime();
-			// caCert.setNotafter(da);
+			}*/
+		
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
 			Integer sort = 1;
 			Integer amount = 1;
@@ -196,23 +193,9 @@ public class CertController extends BaseController {
 							String orgNum = dealInfo.getWorkCompany().getOrganizationNumber();
 
 							Integer certSortInteger = workDealInfoService.getCertSortByOrganizationNumber(orgNum, 1);
-							// String url = dzsBH;
-							// Map<String, String> params = new HashMap<String,
-							// String>();
-							// params.put("param1", "按单位组织机构代码(含企业和机构证书)查单位证书");
-							// params.put("param2", orgNum);
+						
 							Integer certSortIntegerSC = 0;
-							// String res =HttpClientUtil.post(url, params);
-							// if (!res.equals("")) {
-							//
-							// JSONObject jsonReturn = new JSONObject(res);
-							//
-							// String status = jsonReturn.getString("status");
-							// if (status.equals("success")) {
-							// certSortIntegerSC =
-							// jsonReturn.getInt("certsInSccA");
-							// }
-							// }
+						
 							if (certSortInteger > certSortIntegerSC) {
 								dealInfo.setCertSort(certSortInteger + 1);
 							} else {
@@ -324,13 +307,7 @@ public class CertController extends BaseController {
 					json.put("msg", "CA配置错误：无证书注册项模板");
 					return json.toString();
 				}
-				// if
-				// (raAccount==null||raAccount.getConfigRaAccountExtendInfo()==null||raAccount.getConfigRaAccountExtendInfo().getId()==null)
-				// {
-				// json.put("status", -1);
-				// json.put("msg", "CA配置错误：无证书注册项模板");
-				// return json.toJSONString();
-				// }
+			
 
 				CertificateRequest request = RaAccountUtil.outRequest(dealInfo, extendInfo);
 				System.out.println("==========");
