@@ -320,31 +320,23 @@ public class AutoTask {
 						System.out.println(sdf.parse(sdf.format(new Date())));
 						System.out.println(yesterDay);
 						Integer add1 = workDealInfoService.getCertAppYearInfo(yesterDay, office.getId(), 1, app.getId(),WorkDealInfoType.TYPE_ADD_CERT, product, type);
-						Integer add2 = workDealInfoService.getCertAppYearInfo(yesterDay, office.getId(), 2, app.getId(),WorkDealInfoType.TYPE_ADD_CERT, product, type);
-						
+						Integer add2 = workDealInfoService.getCertAppYearInfo(yesterDay, office.getId(), 2, app.getId(),WorkDealInfoType.TYPE_ADD_CERT, product, type);	
 						Integer add3 = workDealInfoService.getCertAppYearInfo(yesterDay, office.getId(), 3, app.getId(),WorkDealInfoType.TYPE_ADD_CERT, product, type);
-						
 						Integer add4 = workDealInfoService.getCertAppYearInfo(yesterDay, office.getId(), 4, app.getId(),WorkDealInfoType.TYPE_ADD_CERT, product, type);
 						Integer add5 = workDealInfoService.getCertAppYearInfo(yesterDay, office.getId(), 5, app.getId(),WorkDealInfoType.TYPE_ADD_CERT, product, type);
 						Integer renew1 = workDealInfoService.getCertAppYearInfo(yesterDay, office.getId(),1, app.getId(),WorkDealInfoType.TYPE_UPDATE_CERT,product, type);
 						Integer renew2 = workDealInfoService.getCertAppYearInfo(yesterDay, office.getId(),2, app.getId(),WorkDealInfoType.TYPE_UPDATE_CERT,product, type);
-						
 						Integer renew3 = workDealInfoService.getCertAppYearInfo(yesterDay, office.getId(),3, app.getId(),WorkDealInfoType.TYPE_UPDATE_CERT,product, type);
-						
 						Integer renew4 = workDealInfoService.getCertAppYearInfo(yesterDay, office.getId(),4, app.getId(),WorkDealInfoType.TYPE_UPDATE_CERT,product, type);
 						Integer renew5 = workDealInfoService.getCertAppYearInfo(yesterDay, office.getId(),5, app.getId(),WorkDealInfoType.TYPE_UPDATE_CERT,product, type);
 						data.setAdd1(add1);
 						data.setAdd2(add2);
-						
 						data.setAdd3(add3);
-						
 						data.setAdd4(add4);
 						data.setAdd5(add5);
 						data.setRenew1(renew1);
 						data.setRenew2(renew2);
-						
 						data.setRenew3(renew3);
-						
 						data.setRenew4(renew4);
 						data.setRenew5(renew5);
 						data.setProductType(Integer.valueOf(product));
