@@ -192,6 +192,7 @@ function addPayInfoToList() {
 		$("#money").val(0);
 	}
 	if($("#pos").val()==''){
+	
 		$("#pos").val(0);
 	}
 	if (parseFloat($("#money").val()) + parseFloat($("#pos").val()) > sumMoney) {
@@ -220,6 +221,7 @@ function addPayInfoToList() {
 	
 	
 	if(parseFloat($("#money").val()) + parseFloat($("#pos").val()) >= sumMoney ||payInfoIds=="") {
+		
 	// 现金
 	if ($("#money").val() != "0" && $("#money").val() != "0.0"
 			&& $("#money").val() != "") {
@@ -231,6 +233,12 @@ function addPayInfoToList() {
 		useReceipt = true;
 		receiptMoney += parseInt($("#money").val());
 	}
+	if(sumMoney==0)
+	{
+		$("#money").attr("readonly", "readonly");
+		$("#pos").attr("readonly", "readonly");
+	}
+	
 	// pos
 	if ($("#pos").val() != "0" && $("#pos").val() != "0.0"
 			&& $("#pos").val() != "") {
@@ -297,6 +305,8 @@ function removePayInfoToList() {
 
 	}
 	$("#money").val("0");
+	$("#pos").attr("readonly","readonly");
+	$("#money").attr("readonly","readonly");
 	$("#pos").val("0");
 	$("#bank").val("0");
 	$("#alipay").val("0");
