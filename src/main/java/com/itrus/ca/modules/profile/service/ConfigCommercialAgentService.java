@@ -3,7 +3,9 @@
  */
 package com.itrus.ca.modules.profile.service;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -71,6 +73,9 @@ public class ConfigCommercialAgentService extends BaseService {
 		//市场推广
 		if (type==1) {
 			dc.add(Restrictions.eq("agentType1", true));
+			
+			dc.add(Restrictions.le("agentContractStart", new Timestamp(new Date().getTime())));
+			dc.add(Restrictions.ge("agentContractEnd", new Timestamp(new Date().getTime())));
 		}
 		//劳务关系
 		if (type==2) {
