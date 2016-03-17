@@ -887,7 +887,7 @@ $(document)
 					<td>${workDealInfo.configAppName}</td>
 					<td><a
 						href="${ctx}/work/workDealInfoFiling/formF?id=${workDealInfo.id}">${workDealInfo.companyName}</a></td>
-<%-- 					<td>${workDealInfo.workUser.contactName}</td> --%>
+
 					<td>${workDealInfo.certApplyInfoName }</td>
 					<td>${proType[workDealInfo.productName]}</td>
 					<td>
