@@ -7,9 +7,7 @@ package com.itrus.ca.modules.work.web;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -267,20 +265,10 @@ public class WorkDealInfoFilingController extends BaseController {
 				return "modules/work/workUserListFilUserU";
 			}
 			User user = UserUtils.getUser();
-			List<WorkDealInfo> workdealinfos = workDealInfoService.findByCompany(comId);
-			Set<Long> workUserIds = new LinkedHashSet<Long>();
-			if(workdealinfos.size()>0)
-			{
-				for (WorkDealInfo workDealinfo : workdealinfos) {
-					workUserIds.add(workDealinfo.getWorkUser().getId());
-				}
-			}
-			Object[] workUsers = workUserIds.toArray();
-			Page<WorkUser> page = workUserService.findUsers(new Page<WorkUser>(request, response), workUsers);
-//			WorkCompany workCompany = workCompanyService.get(comId);
-//			workUser.setWorkCompany(workCompany);
-//			Page<WorkUser> page = workUserService.find(new Page<WorkUser>(
-//					request, response), workUser);
+			WorkCompany workCompany = workCompanyService.get(comId);
+			workUser.setWorkCompany(workCompany);
+			Page<WorkUser> page = workUserService.find(new Page<WorkUser>(
+					request, response), workUser);
 			model.addAttribute("page", page);
 		} catch (Exception e) {
 		}

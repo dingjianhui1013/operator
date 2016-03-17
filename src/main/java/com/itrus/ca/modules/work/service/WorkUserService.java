@@ -82,18 +82,7 @@ public class WorkUserService extends BaseService {
 		dc.addOrder(Order.desc("id"));
 		return workUserDao.find(page, dc);
 	}
-	public Page<WorkUser> findUsers(Page<WorkUser> page, Object[] workUsers) {
-		DetachedCriteria dc = workUserDao.createDetachedCriteria();
-		if(workUsers.length>0)
-		{
-			dc.add(Restrictions.in("id", workUsers));
-		}else
-		{
-			dc.add(Restrictions.eq("id", -1L));
-		}
-		dc.addOrder(Order.desc("id"));
-		return workUserDao.find(page, dc);
-	}
+	
 	@Transactional(readOnly = false)
 	public void save(WorkUser workUser) {
 		workUserDao.save(workUser);
