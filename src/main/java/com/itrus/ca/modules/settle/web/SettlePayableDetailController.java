@@ -308,8 +308,9 @@ public class SettlePayableDetailController extends BaseController {
 			}
 
 			dealInfos.get(i).setDetailList(detailList);
-			if (detailList.size() > lenth) {
-				lenth = detailList.size()-1;
+			dealInfos.get(i).setLastNum(lastNum);
+			if (detailList.size()>lenth) {
+				lenth = detailList.size();
 			}
 		}
 
