@@ -321,7 +321,7 @@
 							</c:forEach>
 							<td>${dealInfo.yyNum}</td>
 							<td>${dealInfo.lastNum}</td>
-							<td>${dealInfo.totalNum - dealInfo.yyNum - dealInfo.lastNum}</td>
+							<td>${dealInfo.totalNum - dealInfo.yyNum - dealInfo.lastNum-dealInfo.occupy}</td>
 						</tr>
 					</c:forEach>
 				</table>
