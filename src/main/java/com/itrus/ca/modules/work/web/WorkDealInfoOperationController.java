@@ -1469,45 +1469,7 @@ public class WorkDealInfoOperationController extends BaseController {
 		WorkUser workUser = null;
 		WorkCompanyHis companyHis = null;
 		WorkUserHis userHis = null;
-		// 保存经办人信息
-		workUser = new WorkUser();
-		WorkUser oldUser = workDealInfo1.getWorkUser(); 
 		
-		if (contactName!=null&&!contactName.equals("")) {
-			workUser.setContactName(contactName);
-		}else{
-			workUser.setContactName(oldUser.getContactName());
-		}
-		workUser.setStatus(1);
-		if (conCertType!=null&&!conCertType.equals("")) {
-			workUser.setConCertType(conCertType);
-		}else{
-			workUser.setContactName(oldUser.getConCertType());
-		}
-		if (conCertNumber!=null&&!conCertNumber.equals("")) {
-			workUser.setConCertNumber(conCertNumber);
-		}else{
-			workUser.setConCertNumber(oldUser.getConCertNumber());
-		}
-		if (contactPhone!=null&&!contactPhone.equals("")) {
-			workUser.setContactPhone(contactPhone);
-		}else{
-			workUser.setContactPhone(oldUser.getContactPhone());
-		}
-		if (contactTel!=null&&!contactTel.equals("")) {
-			workUser.setContactTel(contactTel);
-		}else{
-			workUser.setContactTel(oldUser.getContactTel());
-		}
-		if (contactSex!=null&&!contactSex.equals("")) {
-			workUser.setContactSex(contactSex);
-		}else{
-			workUser.setContactSex(oldUser.getContactSex());
-		}
-		workUser.setContactEmail(contacEmail);
-		workUserService.save(workUser);
-		userHis = workUserService.change(workUser, companyHis);
-		workUserHisService.save(userHis);
 
 			//变更业务保存单位信息
 			workCompany = workDealInfo1.getWorkCompany();
@@ -1515,6 +1477,51 @@ public class WorkDealInfoOperationController extends BaseController {
 			companyHis = workCompanyService.change(workCompany);
 			workCompanyHisService.save(companyHis);
 		
+			
+			
+			// 保存经办人信息
+			workUser = new WorkUser();
+			WorkUser oldUser = workDealInfo1.getWorkUser(); 
+			
+			if (contactName!=null&&!contactName.equals("")) {
+				workUser.setContactName(contactName);
+			}else{
+				workUser.setContactName(oldUser.getContactName());
+			}
+			workUser.setStatus(1);
+			if (conCertType!=null&&!conCertType.equals("")) {
+				workUser.setConCertType(conCertType);
+			}else{
+				workUser.setContactName(oldUser.getConCertType());
+			}
+			if (conCertNumber!=null&&!conCertNumber.equals("")) {
+				workUser.setConCertNumber(conCertNumber);
+			}else{
+				workUser.setConCertNumber(oldUser.getConCertNumber());
+			}
+			if (contactPhone!=null&&!contactPhone.equals("")) {
+				workUser.setContactPhone(contactPhone);
+			}else{
+				workUser.setContactPhone(oldUser.getContactPhone());
+			}
+			if (contactTel!=null&&!contactTel.equals("")) {
+				workUser.setContactTel(contactTel);
+			}else{
+				workUser.setContactTel(oldUser.getContactTel());
+			}
+			if (contactSex!=null&&!contactSex.equals("")) {
+				workUser.setContactSex(contactSex);
+			}else{
+				workUser.setContactSex(oldUser.getContactSex());
+			}
+			workUser.setContactEmail(contacEmail);
+			workUser.setWorkCompany(workCompany);
+			workUserService.save(workUser);
+			userHis = workUserService.change(workUser, companyHis);
+			workUserHisService.save(userHis);
+			
+			
+			
 			//workDealInfo1
 		WorkDealInfo workDealInfo = new WorkDealInfo();
 		workDealInfo.setConfigApp(workDealInfo1.getConfigApp());
@@ -1629,50 +1636,7 @@ public class WorkDealInfoOperationController extends BaseController {
 		}
 		
 		WorkCompanyHis companyHis = null;
-		// 保存经办人信息
-		WorkUser workUser = workDealInfo1.getWorkUser();
-		workUser = new WorkUser();
-		WorkUser oldUser = workDealInfo1.getWorkUser(); 
 		
-		if (contactName!=null&&!contactName.equals("")) {
-			workUser.setContactName(contactName);
-		}else{
-			workUser.setContactName(oldUser.getContactName());
-		}
-		workUser.setStatus(1);
-		if (conCertType!=null&&!conCertType.equals("")) {
-			workUser.setConCertType(conCertType);
-		}else{
-			workUser.setContactName(oldUser.getConCertType());
-		}
-		if (conCertNumber!=null&&!conCertNumber.equals("")) {
-			workUser.setConCertNumber(conCertNumber);
-		}else{
-			workUser.setConCertNumber(oldUser.getConCertNumber());
-		}
-		if (contactPhone!=null&&!contactPhone.equals("")) {
-			workUser.setContactPhone(contactPhone);
-		}else{
-			workUser.setContactPhone(oldUser.getContactPhone());
-		}
-		if (contactTel!=null&&!contactTel.equals("")) {
-			workUser.setContactTel(contactTel);
-		}else{
-			workUser.setContactTel(oldUser.getContactTel());
-		}
-		if (contactSex!=null&&!contactSex.equals("")) {
-			workUser.setContactSex(contactSex);
-		}else{
-			workUser.setContactSex(oldUser.getContactSex());
-		}
-		if (contacEmail!=null&&!contacEmail.equals("")) {
-			workUser.setContactEmail(contacEmail);
-		}else{
-			workUser.setContactEmail(oldUser.getContactEmail());;
-		}
-		workUserService.save(workUser);
-		WorkUserHis userHis = workUserService.change(workUser, companyHis);
-		workUserHisService.save(userHis);
 
 			//变更业务保存单位信息
 		WorkCompany workCompany = new WorkCompany();
@@ -1742,6 +1706,54 @@ public class WorkDealInfoOperationController extends BaseController {
 		workCompanyService.save(workCompany);
 		companyHis = workCompanyService.change(workCompany);
 		workCompanyHisService.save(companyHis);
+		
+		
+		// 保存经办人信息
+				WorkUser workUser = workDealInfo1.getWorkUser();
+				workUser = new WorkUser();
+				WorkUser oldUser = workDealInfo1.getWorkUser(); 
+				
+				if (contactName!=null&&!contactName.equals("")) {
+					workUser.setContactName(contactName);
+				}else{
+					workUser.setContactName(oldUser.getContactName());
+				}
+				workUser.setStatus(1);
+				if (conCertType!=null&&!conCertType.equals("")) {
+					workUser.setConCertType(conCertType);
+				}else{
+					workUser.setContactName(oldUser.getConCertType());
+				}
+				if (conCertNumber!=null&&!conCertNumber.equals("")) {
+					workUser.setConCertNumber(conCertNumber);
+				}else{
+					workUser.setConCertNumber(oldUser.getConCertNumber());
+				}
+				if (contactPhone!=null&&!contactPhone.equals("")) {
+					workUser.setContactPhone(contactPhone);
+				}else{
+					workUser.setContactPhone(oldUser.getContactPhone());
+				}
+				if (contactTel!=null&&!contactTel.equals("")) {
+					workUser.setContactTel(contactTel);
+				}else{
+					workUser.setContactTel(oldUser.getContactTel());
+				}
+				if (contactSex!=null&&!contactSex.equals("")) {
+					workUser.setContactSex(contactSex);
+				}else{
+					workUser.setContactSex(oldUser.getContactSex());
+				}
+				if (contacEmail!=null&&!contacEmail.equals("")) {
+					workUser.setContactEmail(contacEmail);
+				}else{
+					workUser.setContactEmail(oldUser.getContactEmail());;
+				}
+				workUser.setWorkCompany(workCompany);
+				workUserService.save(workUser);
+				WorkUserHis userHis = workUserService.change(workUser, companyHis);
+				workUserHisService.save(userHis);
+		
 		
 			//workDealInfo1
 		WorkDealInfo workDealInfo = new WorkDealInfo();

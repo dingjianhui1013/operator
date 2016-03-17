@@ -29,12 +29,13 @@
 		<li><a
 			href="${ctx}/work/workDealInfoFiling/loglist?comId=${workDealInfo.workCompany.id}&id=${workDealInfo.id}">客服记录</a></li>
 	</ul>
-	<form:form id="searchForm" modelAttribute="workUser"
-		action="${ctx}/work/workUser/" method="post"
+	<form:form id="searchForm"
+		action="${ctx}/work/workDealInfoFiling/userlist" method="POST"
 		class="breadcrumb form-search">
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}" />
-		<input id="pageSize" name="pageSize" type="hidden"
-			value="${page.pageSize}" />
+		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}" />
+		<input name="comId" type="hidden" value="${workDealInfo.workCompany.id}"/>
+		<input name="id" type="hidden" value="${workDealInfo.id}"/>
 	</form:form>
 	<input class="btn btn-primary" type="button"
 		onclick="window.location.href='${ctx}/work/workUser/insertWorkUserFrom?comId=${workDealInfo.workCompany.id}&workDealInfoId=${workDealInfo.id}'" value="新建联系人" />
