@@ -148,10 +148,10 @@ public class SettlePayableDetailController extends BaseController {
 			start = new Date(comAgent.getAgentContractStart().getTime());
 		}
 		if (endTime != null && !endTime.equals("")) {
-			if (comAgent.getAgentContractEnd().getTime() < startTime.getTime()) {
-				start = new Date(comAgent.getAgentContractStart().getTime());
+			if (comAgent.getAgentContractEnd().getTime() < endTime.getTime()) {
+				end = new Date(comAgent.getAgentContractEnd().getTime());
 			} else {
-				start = startTime;
+				end = endTime;
 			}
 		} else {
 
@@ -262,7 +262,7 @@ public class SettlePayableDetailController extends BaseController {
 									long between = endLastDate.getTime()
 											- infos.get(j).getBusinessCardUserDate().getTime();
 									long a = between / 31536000000L;
-									int yy = (int) Math.ceil(a);
+									int yy = (int) Math.ceil(a+1);
 									yjNum += yy;
 									lastNum = yy;
 									detailVo.setStartDate(infos.get(j).getBusinessCardUserDate());
