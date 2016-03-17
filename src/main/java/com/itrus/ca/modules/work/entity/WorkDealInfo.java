@@ -114,6 +114,8 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 	private Integer totalNum;
 	private Integer lastNum;
 	
+	private Integer occupy;
+	
 	
 	private Long officeId;
 	private Long areaId;
@@ -749,6 +751,20 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 
 	public void setLastNum(Integer lastNum) {
 		this.lastNum = lastNum;
+	}
+	
+	
+	
+	
+	
+	
+	@Transient
+	public Integer getOccupy() {
+		return occupy;
+	}
+
+	public void setOccupy(Integer occupy) {
+		this.occupy = occupy;
 	}
 
 	@Column(name = "office_id")
