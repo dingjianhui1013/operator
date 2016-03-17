@@ -61,7 +61,10 @@ public class WorkUserService extends BaseService {
 //				dc.add(Restrictions.eq("workCompany", workUser.getWorkCompany()));
 //			}
 			if(workUser.getWorkCompany().getCompanyName()!=null && !workUser.getWorkCompany().getCompanyName().equals("")){
-				dc.add(Restrictions.like("workCompany.companyName","%"+EscapeUtil.escapeLike(workUser.getWorkCompany().getCompanyName())+"%"));
+			/*	dc.add(Restrictions.like("workCompany.companyName","%"+EscapeUtil.escapeLike(workUser.getWorkCompany().getCompanyName())+"%"));*/
+				
+				dc.add(Restrictions.eq("workCompany.companyName", workUser.getWorkCompany().getCompanyName()));
+				
 			}
 		}
 		if(workUser.getStatus()!=null&&workUser.getStatus()==2){
