@@ -1053,7 +1053,7 @@ public class WorkDealInfoService extends BaseService {
 			}
 			if (workDealInfo.getWorkCompany().getOrganizationNumber() != null
 					&& !workDealInfo.getWorkCompany().getOrganizationNumber().equals("")) {
-				sql.append(" and workcompan2_.organization_number = "+workDealInfo.getWorkCompany().getOrganizationNumber()+"");
+				sql.append(" and workcompan2_.organization_number = '"+workDealInfo.getWorkCompany().getOrganizationNumber()+"'");
 			}
 		}
 		
