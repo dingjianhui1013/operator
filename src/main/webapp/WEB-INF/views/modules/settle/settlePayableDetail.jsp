@@ -80,7 +80,7 @@
 					        return false;
 						}else
 							{
-									loading('正在提交，请稍等...');
+// 									
 									$("#remarks").val(f.remarks);
 									var remarks = $("#remarks").val();
 									$.ajax({
@@ -92,6 +92,7 @@
 												{
 													top.$.jBox.confirm(data.msg,'系统提示',function(v,h,f){
 						                            	if(v=='ok'){
+						                            		loading('正在提交，请稍等...');
 						                            		$.ajax({
 						        								url:"${ctx}/settle/settlementLog/deleteAndSave",
 						        								data:{'appId':appId,'comAgentId':comAgentId,'productIds':productIds,'startTime':startTime,'endTime':endTime,'remarks':remarks,_:new Date().getTime()},
@@ -112,6 +113,7 @@
 														
 													// 	$("#remarks").val(f.remarks);
 													var remarks = $("#remarks").val();
+													loading('正在提交，请稍等...');
 				 									var url="${ctx}/settle/settlementLog/saveSettlementLog";
 				 									$.ajax({
 				 										url:url,

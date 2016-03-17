@@ -172,103 +172,179 @@ public class SettlementLogController extends BaseController {
 			List<WorkDealInfo> infos = new ArrayList<WorkDealInfo>();
 			infos.add(dealInfo);
 			WorkDealInfo info = workDealInfoService.findDealInfo(dealInfo.getId());
-			if (info!=null) {
+			if (info != null) {
 				infos.add(info);
 			}
-			while(info!=null){
+			while (info != null) {
 				info = workDealInfoService.findDealInfo(info.getId());
-				if (info!=null) {
+				if (info != null) {
 					infos.add(info);
 				}
 			}
 			List<PayableDetailVo> detailList = new ArrayList<PayableDetailVo>();
-			
+
 			Date endLastDate = new Date();
 			Calendar calendar = Calendar.getInstance();
-	        
-	        calendar.setTime(dealInfo.getBusinessCardUserDate());
-	        calendar.add(Calendar.YEAR, totalAgentYear);
-	        endLastDate = calendar.getTime();
-			
+
+			calendar.setTime(dealInfo.getBusinessCardUserDate());
+			calendar.add(Calendar.YEAR, totalAgentYear);
+			endLastDate = calendar.getTime();
+
 			int yjNum = 0;
 			int lastNum = 0;
-			
+			int occupy = 0;        //占用数量
+
 			for (int j = 0; j < infos.size(); j++) {
 				WorkDealInfo prvedDealInfo = infos.get(j);
-				PayableDetailVo detailVo = new PayableDetailVo();
-				detailVo.setMethod(prvedDealInfo.getPayType());
-				String dealInfoType ="";
-				if (infos.get(j).getDealInfoType()!=null) {
-					dealInfoType= WorkDealInfoType.WorkDealInfoTypeMapNew.get(infos.get(j).getDealInfoType()) +" ";
-				}
-				if (infos.get(j).getDealInfoType1()!=null) {
-					dealInfoType += WorkDealInfoType.WorkDealInfoTypeMapNew.get(infos.get(j).getDealInfoType1()) +" ";
-				}
-				if (infos.get(j).getDealInfoType2()!=null) {
-					dealInfoType += WorkDealInfoType.WorkDealInfoTypeMapNew.get(infos.get(j).getDealInfoType2()) +" ";				
-				}
-				if (infos.get(j).getDealInfoType3()!=null) {
-					dealInfoType += WorkDealInfoType.WorkDealInfoTypeMapNew.get(infos.get(j).getDealInfoType3());	
-				}
-						
-				if (prvedDealInfo.getPayType()==null) {
-					detailVo.setStartDate(infos.get(j).getBusinessCardUserDate());
-					detailVo.setEndDate(infos.get(j).getNotafter());
-					detailVo.setDealInfoType(dealInfoType);
-					detailVo.setSettleYear("0");
-					detailList.add(detailVo);
-					continue;
-				}
-				if (!prvedDealInfo.getPayType().equals(1)) {
-					
-					detailVo.setStartDate(infos.get(j).getBusinessCardUserDate());
-					detailVo.setEndDate(infos.get(j).getNotafter());
-					detailVo.setDealInfoType(dealInfoType);
-					detailVo.setSettleYear("0");
-					detailList.add(detailVo);
+				if (infos.get(j).getNotafter()==null) {
 					continue;
 				}
 				
-				if (infos.get(j).getDealInfoType()!=null) {
-					if (infos.get(j).getDealInfoType().equals(1)||infos.get(j).getDealInfoType().equals(0)) {
-						if(infos.get(j).getBusinessCardUserDate()!=null)
-						{
-							if (infos.get(j).getBusinessCardUserDate().getTime()>endLastDate.getTime()) {
-								detailVo.setStartDate(infos.get(j).getBusinessCardUserDate());
-								detailVo.setEndDate(infos.get(j).getNotafter());
-								detailVo.setDealInfoType(dealInfoType);
-								detailVo.setSettleYear("0");
-								detailList.add(detailVo);
-							}else if (infos.get(j).getNotafter().getTime()<endLastDate.getTime()) {
-								yjNum += infos.get(j).getYear();
-								lastNum = infos.get(j).getYear();
-								detailVo.setStartDate(infos.get(j).getBusinessCardUserDate());
-								detailVo.setEndDate(infos.get(j).getNotafter());
-								detailVo.setDealInfoType(dealInfoType);
-								detailVo.setSettleYear(infos.get(j).getYear().toString());
-								detailList.add(detailVo);
-							}else if (infos.get(j).getBusinessCardUserDate().getTime()<endLastDate.getTime()&&infos.get(j).getNotafter().getTime()>endLastDate.getTime()) {
-								long between = endLastDate.getTime()-infos.get(j).getBusinessCardUserDate().getTime();
-								long a  = between/31536000000L; 
-								int yy = (int) Math.ceil(a);
-								yjNum += yy;
-								lastNum = yy;
-								detailVo.setStartDate(infos.get(j).getBusinessCardUserDate());
-								detailVo.setEndDate(infos.get(j).getNotafter());
-								detailVo.setDealInfoType(dealInfoType);
-								detailVo.setSettleYear(yy+"");
-								detailList.add(detailVo);
+					PayableDetailVo detailVo = new PayableDetailVo();
+					if (prvedDealInfo.getPayType()==null) {
+						detailVo.setMethod(1);
+					}else{
+						detailVo.setMethod(prvedDealInfo.getPayType());
+					}
+					String dealInfoType = "";
+					if (infos.get(j).getDealInfoType() != null) {
+						dealInfoType = WorkDealInfoType.WorkDealInfoTypeMapNew.get(infos.get(j).getDealInfoType())
+								+ " ";
+					}
+					if (infos.get(j).getDealInfoType1() != null) {
+						dealInfoType += WorkDealInfoType.WorkDealInfoTypeMapNew.get(infos.get(j).getDealInfoType1())
+								+ " ";
+					}
+					if (infos.get(j).getDealInfoType2() != null) {
+						dealInfoType += WorkDealInfoType.WorkDealInfoTypeMapNew.get(infos.get(j).getDealInfoType2())
+								+ " ";
+					}
+					if (infos.get(j).getDealInfoType3() != null) {
+						dealInfoType += WorkDealInfoType.WorkDealInfoTypeMapNew.get(infos.get(j).getDealInfoType3());
+					}
+
+					if (prvedDealInfo.getPayType() == null) {
+						detailVo.setStartDate(infos.get(j).getBusinessCardUserDate());
+						detailVo.setEndDate(infos.get(j).getNotafter());
+						detailVo.setDealInfoType(dealInfoType);
+						detailVo.setSettleYear("0");
+						detailList.add(detailVo);
+						continue;
+					}
+					
+					
+					
+					if (!prvedDealInfo.getPayType().equals(1)) {
+						detailVo.setStartDate(infos.get(j).getBusinessCardUserDate());
+						detailVo.setEndDate(infos.get(j).getNotafter());
+						detailVo.setDealInfoType(dealInfoType);
+						detailVo.setSettleYear("0");
+						detailList.add(detailVo);
+						
+						occupy += prvedDealInfo.getYear();
+						
+						continue;
+					}
+
+					if (infos.get(j).getDealInfoType() != null) {
+						if (infos.get(j).getDealInfoType().equals(1) || infos.get(j).getDealInfoType().equals(0)) {
+							if (infos.get(j).getBusinessCardUserDate() != null) {
+								if (infos.get(j).getBusinessCardUserDate().getTime() > endLastDate.getTime()) {
+									detailVo.setStartDate(infos.get(j).getBusinessCardUserDate());
+									detailVo.setEndDate(infos.get(j).getNotafter());
+									detailVo.setDealInfoType(dealInfoType);
+									detailVo.setSettleYear("0");
+									detailList.add(detailVo);
+								} else if (infos.get(j).getNotafter().getTime() < endLastDate.getTime()) {
+									yjNum += infos.get(j).getYear();
+									lastNum = infos.get(j).getYear();
+									detailVo.setStartDate(infos.get(j).getBusinessCardUserDate());
+									detailVo.setEndDate(infos.get(j).getNotafter());
+									detailVo.setDealInfoType(dealInfoType);
+									detailVo.setSettleYear(infos.get(j).getYear().toString());
+									detailList.add(detailVo);
+								} else if (infos.get(j).getBusinessCardUserDate().getTime() < endLastDate.getTime()
+										&& infos.get(j).getNotafter().getTime() > endLastDate.getTime()) {
+									long between = endLastDate.getTime()
+											- infos.get(j).getBusinessCardUserDate().getTime();
+									long a = between / 31536000000L;
+									int yy = (int) Math.ceil(a+1);
+									yjNum += yy;
+									lastNum = yy;
+									detailVo.setStartDate(infos.get(j).getBusinessCardUserDate());
+									detailVo.setEndDate(infos.get(j).getNotafter());
+									detailVo.setDealInfoType(dealInfoType);
+									detailVo.setSettleYear(yy + "");
+									detailList.add(detailVo);
+								}
 							}
 						}
+				}
+			}
+
+			dealInfos.get(i).setTotalNum(totalAgentYear);
+
+			if (totalAgentYear == 0) {
+				for (int k = 0; k < detailList.size(); k++) {
+					detailList.get(k).setSettleYear("0");
+				}
+				dealInfos.get(i).setYyNum(0);
+				dealInfos.get(i).setLastNum(0);
+				dealInfos.get(i).setOccupy(0);
+
+			} else {
+				Integer ava = totalAgentYear;
+				if (detailList.size() > 0) {
+					for (int k = 0; k < detailList.size(); k++) {
+						if (ava > 0) {
+							int settle = Integer.parseInt(detailList.get(k).getSettleYear());
+
+							if (ava > settle) {
+								ava -= settle;
+							} else {
+								detailList.get(k).setSettleYear(ava.toString());
+								ava = 0;
+							}
+						} else {
+							detailList.get(k).setSettleYear("0");
+						}
+					}
+
+					dealInfos.get(i)
+							.setLastNum(Integer.parseInt(detailList.get(detailList.size() - 1).getSettleYear()));
+					int yNum=0;
+					for (int k = 0;  k < detailList.size()-1; k++) {
+						yNum += Integer.parseInt(detailList.get(k).getSettleYear());
+					}
+					
+					dealInfos.get(i).setYyNum(yNum);
+				}
+			}
+
+			dealInfos.get(i).setDetailList(detailList);
+			/*dealInfos.get(i).setLastNum(lastNum);*/
+			dealInfos.get(i).setOccupy(occupy);
+			if (detailList.size()>lenth) {
+				lenth = detailList.size();
+			}
+		}
+
+		for (int k = dealInfos.size() - 1; k >= 0; k--) {
+			WorkDealInfo deal = dealInfos.get(k);
+			List<PayableDetailVo> detailVos = deal.getDetailList();
+			int payType=0;
+			if (detailVos.size() < 1) {
+				dealInfos.remove(k);
+			}else{
+				for (int j = detailVos.size()-1; j >=0 ; j--) {
+					if (detailVos.get(j).getMethod().equals(1)) {
+						payType=1;
+						break;
 					}
 				}
 			}
-			dealInfos.get(i).setYyNum(yjNum);
-			dealInfos.get(i).setTotalNum(totalAgentYear);
-			dealInfos.get(i).setDetailList(detailList);
-			dealInfos.get(i).setLastNum(lastNum);
-			if (detailList.size()>lenth) {
-				lenth = detailList.size();
+			if (payType == 0) {
+				dealInfos.remove(k);
 			}
 		}
 		model.addAttribute("settlementLogs", settlementLogs);
@@ -330,7 +406,11 @@ public class SettlementLogController extends BaseController {
 		}
 		settlementLog.setProductName(productNameList.toString());
 		settlementLog.setStartTime(startTime);
-		settlementLog.setEndTime(endTime);
+		Date endT = endTime;
+		endT.setHours(23);
+		endT.setMinutes(59);
+		endT.setSeconds(59);
+		settlementLog.setEndTime(endT);
 		List<SettlementLog> list = settlementLogService.find(settlementLog);
 		JSONObject json = new JSONObject();
 		if(list.size()>0)
@@ -369,18 +449,16 @@ public class SettlementLogController extends BaseController {
 			Date end = configCommercialAgent.get(0).getAgentContractEnd();
 			String  validity = new SimpleDateFormat("yyyy-MM-dd").format(start)+" 至  "+new SimpleDateFormat("yyyy-MM-dd").format(end);
 			settlementLog.setComagentValidity(validity);
-			settlementLog.setComagentName(comAgentName);			
+			settlementLog.setComagentName(comAgentName);		
 		}
 		if (appId!=null) {
 			String appName = configAgentAppRelationService.findByAppName(appId).get(0).getConfigApp().getAppName();
 			settlementLog.setAppName(appName);
-			List<ConfigProduct> products = configProductService.findByAppId(appId);
 		}
-	
 		ConfigCommercialAgent comAgent = configCommercialAgentService.get(comAgentId);
 		List<Long> appIds = new ArrayList<Long>();
-		if (appId==null) {
-			List<ConfigAgentAppRelation> relation =  configAgentAppRelationService.findByComAgentId(comAgentId);
+		if (appId == null) {
+			List<ConfigAgentAppRelation> relation = configAgentAppRelationService.findByComAgentId(comAgentId);
 			for (int i = 0; i < relation.size(); i++) {
 				appIds.add(relation.get(i).getConfigApp().getId());
 			}
@@ -415,26 +493,26 @@ public class SettlementLogController extends BaseController {
 		
 		Date start = new Date();
 		Date end = new Date();
-		if (startTime!=null && !startTime.equals("")) {
-			if (comAgent.getAgentContractStart().getTime()>startTime.getTime()) {
+		if (startTime != null && !startTime.equals("")) {
+			if (comAgent.getAgentContractStart().getTime() > startTime.getTime()) {
 				start = new Date(comAgent.getAgentContractStart().getTime());
-			}else{
+			} else {
 				start = startTime;
 			}
-		}else{
+		} else {
 			start = new Date(comAgent.getAgentContractStart().getTime());
 		}
-		if (endTime!=null && !endTime.equals("")) {
-			if (comAgent.getAgentContractEnd().getTime()<startTime.getTime()) {
-				start = new Date(comAgent.getAgentContractStart().getTime());
-			}else{
-				start = startTime;
+		if (endTime != null && !endTime.equals("")) {
+			if (comAgent.getAgentContractEnd().getTime() < endTime.getTime()) {
+				end = new Date(comAgent.getAgentContractEnd().getTime());
+			} else {
+				end = endTime;
 			}
-		}else{
-			
+		} else {
+
 			end = new Date(comAgent.getAgentContractEnd().getTime());
 		}
-		List<WorkDealInfo> dealInfos = workDealInfoService.findDealInfo(appId,appIds,productIdList,start,end);
+		List<WorkDealInfo> dealInfos = workDealInfoService.findDealInfo(appId, appIds, productIdList, start, end);
 		Set<WorkDealInfo_settlementLog> workDealInfos = new HashSet<WorkDealInfo_settlementLog>();
 		JSONObject json = new JSONObject();
 		for(int i=0;i<dealInfos.size();i++)
@@ -502,20 +580,18 @@ public class SettlementLogController extends BaseController {
 		if (appId!=null) {
 			String appName = configAgentAppRelationService.findByAppName(appId).get(0).getConfigApp().getAppName();
 			settlementLog.setAppName(appName);
-//			List<ConfigProduct> products = configProductService.findByAppId(appId);
 		}
-	
 		ConfigCommercialAgent comAgent = configCommercialAgentService.get(comAgentId);
 		List<Long> appIds = new ArrayList<Long>();
-		if (appId==null) {
-			List<ConfigAgentAppRelation> relation =  configAgentAppRelationService.findByComAgentId(comAgentId);
+		if (appId == null) {
+			List<ConfigAgentAppRelation> relation = configAgentAppRelationService.findByComAgentId(comAgentId);
 			for (int i = 0; i < relation.size(); i++) {
 				appIds.add(relation.get(i).getConfigApp().getId());
 			}
 		}
 		List<Long> productIdList = new ArrayList<Long>();
 		StringBuffer productNameList = new StringBuffer();
-		if (productIds!=null && !productIds.equals("")) {
+		if (productIds != null && !productIds.equals("")) {
 			String[] products = productIds.split(",");
 			for (int i = 0; i < products.length; i++) {
 				productIdList.add(Long.parseLong(products[i].toString()));
@@ -530,29 +606,30 @@ public class SettlementLogController extends BaseController {
 		endT.setMinutes(59);
 		endT.setSeconds(59);
 		settlementLog.setEndTime(endT);
-		
 		Date start = new Date();
 		Date end = new Date();
-		if (startTime!=null && !startTime.equals("")) {
-			if (comAgent.getAgentContractStart().getTime()>startTime.getTime()) {
+		if (startTime != null && !startTime.equals("")) {
+			if (comAgent.getAgentContractStart().getTime() > startTime.getTime()) {
 				start = new Date(comAgent.getAgentContractStart().getTime());
-			}else{
+			} else {
 				start = startTime;
 			}
-		}else{
+		} else {
 			start = new Date(comAgent.getAgentContractStart().getTime());
 		}
-		if (endTime!=null && !endTime.equals("")) {
-			if (comAgent.getAgentContractEnd().getTime()<startTime.getTime()) {
-				start = new Date(comAgent.getAgentContractStart().getTime());
-			}else{
-				start = startTime;
+		if (endTime != null && !endTime.equals("")) {
+			if (comAgent.getAgentContractEnd().getTime() < endTime.getTime()) {
+				end = new Date(comAgent.getAgentContractEnd().getTime());
+			} else {
+				end = endTime;
 			}
-		}else{
-			
+		} else {
+
 			end = new Date(comAgent.getAgentContractEnd().getTime());
 		}
-		List<WorkDealInfo> dealInfos = workDealInfoService.findDealInfo(appId,appIds,productIdList,start,end);
+		List<WorkDealInfo> dealInfos = workDealInfoService.findDealInfo(appId, appIds, productIdList, start, end);
+		
+		
 		Set<WorkDealInfo_settlementLog> workDealInfos = new HashSet<WorkDealInfo_settlementLog>();
 		for(int i=0;i<dealInfos.size();i++)
 		{
