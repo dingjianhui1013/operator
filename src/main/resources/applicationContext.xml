@@ -40,20 +40,21 @@
 	<task:annotation-driven executor="executor"
 		scheduler="scheduler" />
 	<task:scheduled-tasks>
-		<!-- 日经营统计 -->
+		
 		<!--<task:scheduled ref="controlTask" method="staticDayCertData"
-			 cron="0 1 18  * * ? " />-->
+			 cron="0 1 18  * * ? " />-->	<!-- 日经营统计 -->
 
 		<task:scheduled ref="controlTask" method="workDayStatic"
-			 cron="0 1 18  * * ? " /><!-- 证书发放量统计 正式上线环境cron="0 1 18  * * ? "-->
+			 cron="0 1 18  * * ? " />	<!--证书发放量统计 正式上线环境cron="0 1 18  * * ? "-->
 
 		<!--<task:scheduled ref="controlTask" method="workDayStatic"
-			 cron="1 59 23  * * ? " /> 证书发放量统计 测试环境 上线请注解cron="0 1 15  * * ? "-->
+			 cron="0 15 11  * * ? " /> 证书发放量统计 测试环境 上线请注解cron="0 1 15  * * ? "-->
+			 
 		<task:scheduled ref="controlTask" method="receiptTask"
-			cron="0 1 0  * * ? " />
+			cron="0 1 0  * * ? " />	<!--邮件提醒发送时间-->
 			<!-- 0 0 9,14  * * ?  -->
  		<task:scheduled ref="controlTask" method="sendMail"
-			cron="0 0 9,14  * * ? " />
+			cron="0 0 9,14  * * ? " />	<!--邮件提醒发送时间-->
 	</task:scheduled-tasks>
 
 
