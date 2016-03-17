@@ -186,6 +186,7 @@ public class SettlePayableDetailController extends BaseController {
 
 			int yjNum = 0;
 			int lastNum = 0;
+			int occupy = 0;        //占用数量
 
 			for (int j = 0; j < infos.size(); j++) {
 				WorkDealInfo prvedDealInfo = infos.get(j);
@@ -224,12 +225,18 @@ public class SettlePayableDetailController extends BaseController {
 						detailList.add(detailVo);
 						continue;
 					}
+					
+					
+					
 					if (!prvedDealInfo.getPayType().equals(1)) {
 						detailVo.setStartDate(infos.get(j).getBusinessCardUserDate());
 						detailVo.setEndDate(infos.get(j).getNotafter());
 						detailVo.setDealInfoType(dealInfoType);
 						detailVo.setSettleYear("0");
 						detailList.add(detailVo);
+						
+						occupy += prvedDealInfo.getYear();
+						
 						continue;
 					}
 
@@ -277,6 +284,7 @@ public class SettlePayableDetailController extends BaseController {
 				}
 				dealInfos.get(i).setYyNum(0);
 				dealInfos.get(i).setLastNum(0);
+				dealInfos.get(i).setOccupy(0);
 
 			} else {
 				Integer ava = totalAgentYear;
@@ -308,7 +316,8 @@ public class SettlePayableDetailController extends BaseController {
 			}
 
 			dealInfos.get(i).setDetailList(detailList);
-			dealInfos.get(i).setLastNum(lastNum);
+			/*dealInfos.get(i).setLastNum(lastNum);*/
+			dealInfos.get(i).setOccupy(occupy);
 			if (detailList.size()>lenth) {
 				lenth = detailList.size();
 			}
