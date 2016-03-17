@@ -74,8 +74,8 @@ public class ConfigCommercialAgentService extends BaseService {
 		if (type==1) {
 			dc.add(Restrictions.eq("agentType1", true));
 			
-			dc.add(Restrictions.le("agentContractStart", new Timestamp(new Date().getTime())));
-			dc.add(Restrictions.ge("agentContractEnd", new Timestamp(new Date().getTime())));
+		/*	dc.add(Restrictions.le("agentContractStart", new Timestamp(new Date().getTime())));
+			dc.add(Restrictions.ge("agentContractEnd", new Timestamp(new Date().getTime())));*/
 		}
 		//劳务关系
 		if (type==2) {
