@@ -342,7 +342,7 @@
 						});
 	}
 	function addCertDaysCheck(){
-		if($("#addCertDays").val()<=0){
+		if($("#addCertDays").val()<0){
 			$("#negative").html("");
 			$("#negative").html("<font color='red'>"+"您确定赠送的时间是："+$("#addCertDays").val()+"天么？"+"</font>");
 // 			var submit = function( v, h, f){

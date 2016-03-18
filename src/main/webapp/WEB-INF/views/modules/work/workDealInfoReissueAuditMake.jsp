@@ -349,7 +349,7 @@ function makeCert() {
 						});
 	}
 	function addCertDaysCheck(){
-		if($("#addCertDays").val()<=0){
+		if($("#addCertDays").val()<0){
 			$("#negative").html("");
 			$("#negative").html("<font color='red'>"+"您确定赠送的时间是："+$("#addCertDays").val()+"天么？"+"</font>");
 // 			var submit = function( v, h, f){
@@ -476,6 +476,7 @@ function makeCert() {
 				<td>${workDealInfo.year*365+workDealInfo.lastDays }&nbsp;赠送<input type="text"
 					style="width: 100px" id="addCertDays" class="num required" onblur="addCertDaysCheck()" 
 					value="0">天
+					<span id="negative"></span>
 				</td>
 			</tr>
 			<tr>
