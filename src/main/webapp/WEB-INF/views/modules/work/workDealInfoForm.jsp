@@ -345,6 +345,7 @@ var selected = false;
 			top.$.jBox.tip("单位名称格式有误!");
 			return false;
 		}
+		
 		if($("#contactName").val()!="" && !checkJbrxm($("#contactName"))){
 			top.$.jBox.tip("经办人姓名格式有误!");
 			return false;
@@ -1370,6 +1371,7 @@ var selected = false;
 							<th><span class="prompt" style="color: red; display: none;">*</span>证书持有人手机号:</th>
 							<td><input type="text" name="contactPhone" id="contactPhone"
 								maxlength="11" value="${workUser.contactPhone }"
+								onkeyup="value=value.replace(/[^\w\.\/]/ig,'')" 
 								onblur="checkMobile(this,'zjmcount')"
 								oninput="count('contactPhone','zjmcount')"
 								onfocus="hqcount('contactPhone','zjmcount')" /><span
