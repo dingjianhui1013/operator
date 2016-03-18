@@ -235,6 +235,16 @@ function addPayInfoToList() {
 	}
 	if(sumMoney==0)
 	{
+		if($("#money").val() == "0" || $("#money").val() == "0.0"
+			|| $("#money").val() == "")
+			{
+				$("#mc").removeAttr("checked");
+			}
+		if($("#pos").val() == "0" || $("#pos").val() == "0.0"
+			|| $("#pos").val() == "")
+			{
+				$("#pc").removeAttr("checked");
+			}
 		$("#money").attr("readonly", "readonly");
 		$("#pos").attr("readonly", "readonly");
 	}
