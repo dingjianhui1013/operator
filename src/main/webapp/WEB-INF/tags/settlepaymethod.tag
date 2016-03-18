@@ -9,7 +9,7 @@
 
 <c:if test="${not empty content}">
 	<c:if test="${not empty content.methods}">
-		<table width="100%">
+		<table width="100%" class="insertTable">
 			<tr>
 				<c:forEach var="payMethodMap" items="${total.methods}">
 					<c:set var="payMethod" value="${payMethodMap.key}" />
