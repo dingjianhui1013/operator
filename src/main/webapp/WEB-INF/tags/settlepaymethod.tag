@@ -3,12 +3,15 @@
 <%@ attribute name="content"
 	type="com.itrus.ca.modules.settle.vo.CertificatePayMethodDetails"
 	required="true" description="支付方式明细"%>
+<%@ attribute name="total"
+	type="com.itrus.ca.modules.settle.vo.CertificatePayMethodDetails"
+	required="true" description="支付方式汇总数据"%>
 
 <c:if test="${not empty content}">
 	<c:if test="${not empty content.methods}">
 		<table width="100%">
 			<tr>
-				<c:forEach var="payMethodMap" items="${content.methods}">
+				<c:forEach var="payMethodMap" items="${total.methods}">
 					<c:set var="payMethod" value="${payMethodMap.key}" />
 					<td><c:if test="${payMethod eq '1' }">
 					${content.methodPosCount}

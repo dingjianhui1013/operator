@@ -108,11 +108,11 @@ public class CertificatePayMethodDetails {
 		this.methods = methods;
 	}
 	
-	public void addMethod(String method) {
+	public void addMethod(String method,String desc) {
 		if(this.methods==null){
 			this.methods = new HashMap<String,String>();
 		}
-		this.methods.put(method,"1");
+		this.methods.put(method,desc);
 	}
 	
 	
