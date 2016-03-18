@@ -318,9 +318,9 @@ public class SettlePayableDetailController extends BaseController {
 			dealInfos.get(i).setDetailList(detailList);
 			/*dealInfos.get(i).setLastNum(lastNum);*/
 			dealInfos.get(i).setOccupy(occupy);
-			if (detailList.size()>lenth) {
+			/*if (detailList.size()>lenth) {
 				lenth = detailList.size();
-			}
+			}*/
 		}
 
 		for (int k = dealInfos.size() - 1; k >= 0; k--) {
@@ -341,6 +341,15 @@ public class SettlePayableDetailController extends BaseController {
 				dealInfos.remove(k);
 			}
 		}
+		
+		
+		for(WorkDealInfo info:dealInfos){
+			if(info.getDetailList().size()>lenth){
+				lenth = info.getDetailList().size();
+			}
+		}
+		
+		
 		model.addAttribute("dealInfos", dealInfos);
 		model.addAttribute("lenth", lenth);
 		return "modules/settle/settlePayableDetail";
