@@ -7,9 +7,9 @@
 	description="列头"%>
 
 <c:if test="${not empty total}">
-	<table width="100%">
+	<table width="100%" class="insertTable">
 		<tr>
-			<th colspan="${total.methods.size}">${theader}</th>
+			<th colspan="${fn:length(total.methods)}">${theader}</th>
 		</tr>
 		<tr>
 			<c:forEach var="payMethodMap" items="${total.methods}">
