@@ -381,6 +381,7 @@
 							<th><span class="prompt" style="color: red; display: none;">*</span>证书持有人手机号:</th>
 							<td><input type="text" name="contactPhone" disabled="disabled"
 								id="contactPhone1" maxlength="11" class="number"
+								onkeyup="this.value=this.value.replace(/\D/g,'')"
 								value="<fmt:formatNumber pattern="#">${workDealInfo.workUser.contactPhone }</fmt:formatNumber>" /> 
 							</td>
 							<th><span class="prompt" style="color: red; display: none;">*</span>业务系统UID:</th>
