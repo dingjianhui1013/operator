@@ -9,6 +9,9 @@
 	.table th,.table td{
 		text-align: center;
 		}
+.insertTable{border:none;}
+.table .insertTable th:first-child,.table .insertTable td:first-child{border-left:none;}
+.table .insertTable td{width:60px;}
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
@@ -1173,7 +1176,7 @@ $(document).ready(function() {
 				<th colspan="${index+1}" style="text-align: center;">项目:${yingyong}</th>
 			</tr>
 			<tr>
-				<th rowspan="3" style="width:10%;vertical-align:middle">月份</th>
+				<th rowspan="3" style="width:10%;vertical-align:middle">月&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;份</th>
 			<c:if test="${xz >0}">
 				<th colspan="${xz}">新增</th>
    			 </c:if>
@@ -1371,151 +1374,151 @@ $(document).ready(function() {
 			<tr>
 			
 						<c:if test="${sumList.total.xzqyadd1.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.xzqyadd1 }" theader="一年"></tags:settlepaymethodheader></th></c:if>
-						<c:if test="${sumList.total.xzqyadd2.totalCount !=0}"><th>二年</th></c:if>
-						<c:if test="${sumList.total.xzqyadd3.totalCount !=0}"><th>三年</th></c:if>
-						<c:if test="${sumList.total.xzqyadd4.totalCount !=0}"><th>四年</th></c:if>
-						<c:if test="${sumList.total.xzqyadd5.totalCount !=0}"><th>五年</th></c:if>
-						<c:if test="${sumList.total.xzgrQadd1.totalCount !=0}"><th>一年</th></c:if>
-						<c:if test="${sumList.total.xzgrQadd2.totalCount !=0}"><th>二年</th></c:if>
-						<c:if test="${sumList.total.xzgrQadd3.totalCount !=0}"><th>三年</th></c:if>
-						<c:if test="${sumList.total.xzgrQadd4.totalCount !=0}"><th>四年</th></c:if>
-						<c:if test="${sumList.total.xzgrQadd5.totalCount !=0}"><th>五年</th></c:if>
-						<c:if test="${sumList.total.xzgrGadd1.totalCount !=0}"><th>一年</th></c:if>
-						<c:if test="${sumList.total.xzgrGadd2.totalCount !=0}"><th>二年</th></c:if>
-						<c:if test="${sumList.total.xzgrGadd3.totalCount !=0}"><th>三年</th></c:if>
-						<c:if test="${sumList.total.xzgrGadd4.totalCount !=0}"><th>四年</th></c:if>
-						<c:if test="${sumList.total.xzgrGadd5.totalCount !=0}"><th>五年</th></c:if>
-						<c:if test="${sumList.total.xzjgadd1.totalCount !=0}"><th>一年</th></c:if>
-						<c:if test="${sumList.total.xzjgadd2.totalCount !=0}"><th>二年</th></c:if>
-						<c:if test="${sumList.total.xzjgadd3.totalCount !=0}"><th>三年</th></c:if>
-						<c:if test="${sumList.total.xzjgadd4.totalCount !=0}"><th>四年</th></c:if>
-						<c:if test="${sumList.total.xzjgadd5.totalCount !=0}"><th>五年</th></c:if>
+						<c:if test="${sumList.total.xzqyadd2.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.xzqyadd2 }" theader="二年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.xzqyadd3.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.xzqyadd3 }" theader="三年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.xzqyadd4.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.xzqyadd4 }" theader="四年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.xzqyadd5.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.xzqyadd5 }" theader="五年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.xzgrQadd1.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.xzgrQadd1 }" theader="一年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.xzgrQadd2.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.xzgrQadd2 }" theader="二年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.xzgrQadd3.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.xzgrQadd3 }" theader="三 年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.xzgrQadd4.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.xzgrQadd4 }" theader="四年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.xzgrQadd5.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.xzgrQadd5 }" theader="五年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.xzgrGadd1.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.xzgrGadd1 }" theader="一年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.xzgrGadd2.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.xzgrGadd2 }" theader="二年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.xzgrGadd3.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.xzgrGadd3 }" theader="三年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.xzgrGadd4.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.xzgrGadd4 }" theader="四年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.xzgrGadd5.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.xzgrGadd5 }" theader="五年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.xzjgadd1.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.xzjgadd1 }" theader="一年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.xzjgadd2.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.xzjgadd2 }" theader="二年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.xzjgadd3.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.xzjgadd3 }" theader="三年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.xzjgadd4.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.xzjgadd4 }" theader="四年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.xzjgadd5.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.xzjgadd5 }" theader="五年"></tags:settlepaymethodheader></th></c:if>
 						
-						<c:if test="${sumList.total.gxqyadd1.totalCount !=0}"><th>一年</th></c:if>
-						<c:if test="${sumList.total.gxqyadd2.totalCount !=0}"><th>二年</th></c:if>
-						<c:if test="${sumList.total.gxqyadd3.totalCount !=0}"><th>三年</th></c:if>
-						<c:if test="${sumList.total.gxqyadd4.totalCount !=0}"><th>四年</th></c:if>
-						<c:if test="${sumList.total.gxqyadd5.totalCount !=0}"><th>五年</th></c:if>
-						<c:if test="${sumList.total.gxgrQadd1.totalCount !=0}"><th>一年</th></c:if>
-						<c:if test="${sumList.total.gxgrQadd2.totalCount !=0}"><th>二年</th></c:if>
-						<c:if test="${sumList.total.gxgrQadd3.totalCount !=0}"><th>三年</th></c:if>
-						<c:if test="${sumList.total.gxgrQadd4.totalCount !=0}"><th>四年</th></c:if>
-						<c:if test="${sumList.total.gxgrQadd5.totalCount !=0}"><th>五年</th></c:if>
-						<c:if test="${sumList.total.gxgrGadd1.totalCount !=0}"><th>一年</th></c:if>
-						<c:if test="${sumList.total.gxgrGadd2.totalCount !=0}"><th>二年</th></c:if>
-						<c:if test="${sumList.total.gxgrGadd3.totalCount !=0}"><th>三年</th></c:if>
-						<c:if test="${sumList.total.gxgrGadd4.totalCount !=0}"><th>四年</th></c:if>
-						<c:if test="${sumList.total.gxgrGadd5.totalCount !=0}"><th>五年</th></c:if>
-						<c:if test="${sumList.total.gxjgadd1.totalCount !=0}"><th>一年</th></c:if>
-						<c:if test="${sumList.total.gxjgadd2.totalCount !=0}"><th>二年</th></c:if>
-						<c:if test="${sumList.total.gxjgadd3.totalCount !=0}"><th>三年</th></c:if>
-						<c:if test="${sumList.total.gxjgadd4.totalCount !=0}"><th>四年</th></c:if>
-						<c:if test="${sumList.total.gxjgadd5.totalCount !=0}"><th>五年</th></c:if>
+						<c:if test="${sumList.total.gxqyadd1.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.gxqyadd1 }" theader="一年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.gxqyadd2.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.gxqyadd2 }" theader="二年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.gxqyadd3.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.gxqyadd3 }" theader="三年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.gxqyadd4.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.gxqyadd4 }" theader="四年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.gxqyadd5.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.gxqyadd5 }" theader="五年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.gxgrQadd1.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.gxgrQadd1 }" theader="一年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.gxgrQadd2.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.gxgrQadd2 }" theader="二年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.gxgrQadd3.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.gxgrQadd3 }" theader="三年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.gxgrQadd4.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.gxgrQadd4 }" theader="四年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.gxgrQadd5.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.gxgrQadd5 }" theader="五年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.gxgrGadd1.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.gxgrGadd1 }" theader="一年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.gxgrGadd2.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.gxgrGadd2 }" theader="二年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.gxgrGadd3.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.gxgrGadd3 }" theader="三年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.gxgrGadd4.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.gxgrGadd4 }" theader="四年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.gxgrGadd5.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.gxgrGadd5 }" theader="五年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.gxjgadd1.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.gxjgadd1 }" theader="一年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.gxjgadd2.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.gxjgadd2 }" theader="二年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.gxjgadd3.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.gxjgadd3 }" theader="三年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.gxjgadd4.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.gxjgadd4 }" theader="四年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.gxjgadd5.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.gxjgadd5 }" theader="五年"></tags:settlepaymethodheader></th></c:if>
 						<c:if test="${multiType}">
-						<c:if test="${sumList.total.updateLostqyNum.totalCount !=0}"><th>一年</th></c:if>
-						<c:if test="${sumList.total.updateLostqyNum2.totalCount !=0}"><th>二年</th></c:if>
-						<c:if test="${sumList.total.updateLostqyNum3.totalCount !=0}"><th>三年</th></c:if>
-						<c:if test="${sumList.total.updateLostqyNum4.totalCount !=0}"><th>四年</th></c:if>
-						<c:if test="${sumList.total.updateLostqyNum5.totalCount !=0}"><th>五年</th></c:if>
-						<c:if test="${sumList.total.updateLostgrQNum.totalCount !=0}"><th>一年</th></c:if>
-						<c:if test="${sumList.total.updateLostgrQNum2.totalCount !=0}"><th>二年</th></c:if>
-						<c:if test="${sumList.total.updateLostgrQNum3.totalCount !=0}"><th>三年</th></c:if>
-						<c:if test="${sumList.total.updateLostgrQNum4.totalCount !=0}"><th>四年</th></c:if>
-						<c:if test="${sumList.total.updateLostgrQNum5.totalCount !=0}"><th>五年</th></c:if>
-						<c:if test="${sumList.total.updateLostgrGNum.totalCount !=0}"><th>一年</th></c:if>
-						<c:if test="${sumList.total.updateLostgrGNum2.totalCount !=0}"><th>二年</th></c:if>
-						<c:if test="${sumList.total.updateLostgrGNum3.totalCount !=0}"><th>三年</th></c:if>
-						<c:if test="${sumList.total.updateLostgrGNum4.totalCount !=0}"><th>四年</th></c:if>
-						<c:if test="${sumList.total.updateLostgrGNum5.totalCount !=0}"><th>五年</th></c:if>
-						<c:if test="${sumList.total.updateLostjgNum.totalCount !=0}"><th>一年</th></c:if>
-						<c:if test="${sumList.total.updateLostjgNum2.totalCount !=0}"><th>二年</th></c:if>
-						<c:if test="${sumList.total.updateLostjgNum3.totalCount !=0}"><th>三年</th></c:if>
-						<c:if test="${sumList.total.updateLostjgNum4.totalCount !=0}"><th>四年</th></c:if>
-						<c:if test="${sumList.total.updateLostjgNum5.totalCount !=0}"><th>五年</th></c:if>
+						<c:if test="${sumList.total.updateLostqyNum.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.updateLostqyNum }" theader="一年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.updateLostqyNum2.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.updateLostqyNum2 }" theader="二年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.updateLostqyNum3.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.updateLostqyNum3 }" theader="三年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.updateLostqyNum4.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.updateLostqyNum4 }" theader="四年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.updateLostqyNum5.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.updateLostqyNum5 }" theader="五年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.updateLostgrQNum.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.updateLostgrQNum }" theader="一年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.updateLostgrQNum2.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.updateLostgrQNum2 }" theader="二年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.updateLostgrQNum3.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.updateLostgrQNum3 }" theader="三年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.updateLostgrQNum4.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.updateLostgrQNum4 }" theader="四年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.updateLostgrQNum5.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.updateLostgrQNum5 }" theader="五年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.updateLostgrGNum.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.updateLostgrGNum }" theader="一年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.updateLostgrGNum2.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.updateLostgrGNum2 }" theader="二年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.updateLostgrGNum3.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.updateLostgrGNum3 }" theader="三年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.updateLostgrGNum4.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.updateLostgrGNum4 }" theader="四年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.updateLostgrGNum5.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.updateLostgrGNum5 }" theader="五年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.updateLostjgNum.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.updateLostjgNum }" theader="一年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.updateLostjgNum2.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.updateLostjgNum2 }" theader="二年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.updateLostjgNum3.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.updateLostjgNum3 }" theader="三年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.updateLostjgNum4.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.updateLostjgNum4 }" theader="四年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.updateLostjgNum5.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.updateLostjgNum5 }" theader="五年"></tags:settlepaymethodheader></th></c:if>
 						
-						 <c:if test="${sumList.total.updateReplaceqyNum.totalCount !=0}"><th>一年</th></c:if>
-						<c:if test="${sumList.total.updateReplaceqyNum2.totalCount !=0}"><th>二年</th></c:if>
-						<c:if test="${sumList.total.updateReplaceqyNum3.totalCount !=0}"><th>三年</th></c:if>
-						<c:if test="${sumList.total.updateReplaceqyNum4.totalCount !=0}"><th>四年</th></c:if>
-						<c:if test="${sumList.total.updateReplaceqyNum5.totalCount !=0}"><th>五年</th></c:if>
-						<c:if test="${sumList.total.updateReplacegrQNum.totalCount !=0}"><th>一年</th></c:if>
-						<c:if test="${sumList.total.updateReplacegrQNum2.totalCount !=0}"><th>二年</th></c:if>
-						<c:if test="${sumList.total.updateReplacegrQNum2.totalCount !=0}"><th>三年</th></c:if>
-						<c:if test="${sumList.total.updateReplacegrQNum4.totalCount !=0}"><th>四年</th></c:if>
-						<c:if test="${sumList.total.updateReplacegrQNum5.totalCount !=0}"><th>五年</th></c:if>
-						<c:if test="${sumList.total.updateReplacegrGNum.totalCount !=0}"><th>一年</th></c:if>
-						<c:if test="${sumList.total.updateReplacegrGNum2.totalCount !=0}"><th>二年</th></c:if>
-						<c:if test="${sumList.total.updateReplacegrGNum3.totalCount !=0}"><th>三年</th></c:if>
-						<c:if test="${sumList.total.updateReplacegrGNum4.totalCount !=0}"><th>四年</th></c:if>
-						<c:if test="${sumList.total.updateReplacegrGNum5.totalCount !=0}"><th>五年</th></c:if>
-						<c:if test="${sumList.total.updateReplacejgNum.totalCount !=0}"><th>一年</th></c:if>
-						<c:if test="${sumList.total.updateReplacejgNum2.totalCount !=0}"><th>二年</th></c:if>
-						<c:if test="${sumList.total.updateReplacejgNum3.totalCount !=0}"><th>三年</th></c:if>
-						<c:if test="${sumList.total.updateReplacejgNum4.totalCount !=0}"><th>四年</th></c:if>
-						<c:if test="${sumList.total.updateReplacejgNum5.totalCount !=0}"><th>五年</th></c:if> 
+						 <c:if test="${sumList.total.updateReplaceqyNum.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.updateReplaceqyNum }" theader="一年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.updateReplaceqyNum2.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.updateReplaceqyNum2 }" theader="二年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.updateReplaceqyNum3.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.updateReplaceqyNum3 }" theader="三年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.updateReplaceqyNum4.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.updateReplaceqyNum4 }" theader="四年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.updateReplaceqyNum5.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.updateReplaceqyNum5 }" theader="五年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.updateReplacegrQNum.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.updateReplacegrQNum }" theader="一年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.updateReplacegrQNum2.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.updateReplacegrQNum2 }" theader="二年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.updateReplacegrQNum2.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.updateReplacegrQNum3 }" theader="三年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.updateReplacegrQNum4.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.updateReplacegrQNum4 }" theader="四年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.updateReplacegrQNum5.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.updateReplacegrQNum5 }" theader="五年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.updateReplacegrGNum.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.updateReplacegrGNum }" theader="一年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.updateReplacegrGNum2.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.updateReplacegrGNum2 }" theader="二年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.updateReplacegrGNum3.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.updateReplacegrGNum3 }" theader="三年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.updateReplacegrGNum4.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.updateReplacegrGNum4 }" theader="四年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.updateReplacegrGNum5.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.updateReplacegrGNum5 }" theader="五年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.updateReplacejgNum.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.updateReplacejgNum }" theader="一年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.updateReplacejgNum2.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.updateReplacejgNum2 }" theader="二年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.updateReplacejgNum3.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.updateReplacejgNum3 }" theader="三年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.updateReplacejgNum4.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.updateReplacejgNum4 }" theader="四年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.updateReplacejgNum5.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.updateReplacejgNum5 }" theader="五年"></tags:settlepaymethodheader></th></c:if> 
 						
-						<c:if test="${sumList.total.updateChangeqyNum.totalCount !=0}"><th>一年</th></c:if>
-						<c:if test="${sumList.total.updateChangeqyNum2.totalCount !=0}"><th>二年</th></c:if>
-						<c:if test="${sumList.total.updateChangeqyNum3.totalCount !=0}"><th>三年</th></c:if>
-						<c:if test="${sumList.total.updateChangeqyNum4.totalCount !=0}"><th>四年</th></c:if>
-						<c:if test="${sumList.total.updateChangeqyNum5.totalCount !=0}"><th>五年</th></c:if>
-						<c:if test="${sumList.total.updateChangegrQNum.totalCount !=0}"><th>一年</th></c:if>
-						<c:if test="${sumList.total.updateChangegrQNum2.totalCount !=0}"><th>二年</th></c:if>
-						<c:if test="${sumList.total.updateChangegrQNum3.totalCount !=0}"><th>三年</th></c:if>
-						<c:if test="${sumList.total.updateChangegrQNum4.totalCount !=0}"><th>四年</th></c:if>
-						<c:if test="${sumList.total.updateChangegrQNum5.totalCount !=0}"><th>五年</th></c:if>
-						<c:if test="${sumList.total.updateChangegrGNum.totalCount !=0}"><th>一年</th></c:if>
-						<c:if test="${sumList.total.updateChangegrGNum2.totalCount !=0}"><th>二年</th></c:if>
-						<c:if test="${sumList.total.updateChangegrGNum3.totalCount !=0}"><th>三年</th></c:if>
-						<c:if test="${sumList.total.updateChangegrGNum4.totalCount !=0}"><th>四年</th></c:if>
-						<c:if test="${sumList.total.updateChangegrGNum5.totalCount !=0}"><th>五年</th></c:if>
-						<c:if test="${sumList.total.updateChangejgNum.totalCount !=0}"><th>一年</th></c:if>
-						<c:if test="${sumList.total.updateChangejgNum2.totalCount !=0}"><th>二年</th></c:if>
-						<c:if test="${sumList.total.updateChangejgNum3.totalCount !=0}"><th>三年</th></c:if>
-						<c:if test="${sumList.total.updateChangejgNum4.totalCount !=0}"><th>四年</th></c:if>
-						<c:if test="${sumList.total.updateChangejgNum5.totalCount !=0}"><th>五年</th></c:if> 
+						<c:if test="${sumList.total.updateChangeqyNum.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.updateChangeqyNum }" theader="一年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.updateChangeqyNum2.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.updateChangeqyNum2 }" theader="二年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.updateChangeqyNum3.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.updateChangeqyNum3 }" theader="三年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.updateChangeqyNum4.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.updateChangeqyNum4 }" theader="四年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.updateChangeqyNum5.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.updateChangeqyNum5 }" theader="五年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.updateChangegrQNum.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.updateChangegrQNum }" theader="一年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.updateChangegrQNum2.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.updateChangegrQNum2 }" theader="二年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.updateChangegrQNum3.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.updateChangegrQNum3 }" theader="三年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.updateChangegrQNum4.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.updateChangegrQNum4 }" theader="四年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.updateChangegrQNum5.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.updateChangegrQNum5 }" theader="五年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.updateChangegrGNum.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.updateChangegrGNum }" theader="一年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.updateChangegrGNum2.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.updateChangegrGNum2 }" theader="二年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.updateChangegrGNum3.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.updateChangegrGNum3 }" theader="三年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.updateChangegrGNum4.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.updateChangegrGNum4 }" theader="四年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.updateChangegrGNum5.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.updateChangegrGNum5 }" theader="五年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.updateChangejgNum.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.updateChangejgNum }" theader="一年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.updateChangejgNum2.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.updateChangejgNum2 }" theader="二年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.updateChangejgNum3.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.updateChangejgNum3 }" theader="三年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.updateChangejgNum4.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.updateChangejgNum4 }" theader="四年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.updateChangejgNum5.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.updateChangejgNum5 }" theader="五年"></tags:settlepaymethodheader></th></c:if> 
 						
-						 <c:if test="${sumList.total.changeUpdateLostqyNum.totalCount !=0}"><th>一年</th></c:if>
-						<c:if test="${sumList.total.changeUpdateLostqyNum2.totalCount !=0}"><th>二年</th></c:if>
-						<c:if test="${sumList.total.changeUpdateLostqyNum3.totalCount !=0}"><th>三年</th></c:if>
-						<c:if test="${sumList.total.changeUpdateLostqyNum4.totalCount !=0}"><th>四年</th></c:if>
-						<c:if test="${sumList.total.changeUpdateLostqyNum5.totalCount !=0}"><th>五年</th></c:if>
-						<c:if test="${sumList.total.changeUpdateLostgrQNum.totalCount !=0}"><th>一年</th></c:if>
-						<c:if test="${sumList.total.changeUpdateLostgrQNum2.totalCount !=0}"><th>二年</th></c:if>
-						<c:if test="${sumList.total.changeUpdateLostgrQNum3.totalCount !=0}"><th>三年</th></c:if>
-						<c:if test="${sumList.total.changeUpdateLostgrQNum4.totalCount !=0}"><th>四年</th></c:if>
-						<c:if test="${sumList.total.changeUpdateLostgrQNum5.totalCount !=0}"><th>五年</th></c:if>
-						<c:if test="${sumList.total.changeUpdateLostgrGNum.totalCount !=0}"><th>一年</th></c:if>
-						<c:if test="${sumList.total.changeUpdateLostgrGNum2.totalCount !=0}"><th>二年</th></c:if>
-						<c:if test="${sumList.total.changeUpdateLostgrGNum3.totalCount !=0}"><th>三年</th></c:if>
-						<c:if test="${sumList.total.changeUpdateLostgrGNum4.totalCount !=0}"><th>四年</th></c:if>
-						<c:if test="${sumList.total.changeUpdateLostgrGNum5.totalCount !=0}"><th>五年</th></c:if>
-						<c:if test="${sumList.total.changeUpdateLostjgNum.totalCount !=0}"><th>一年</th></c:if>
-						<c:if test="${sumList.total.changeUpdateLostjgNum2.totalCount !=0}"><th>二年</th></c:if>
-						<c:if test="${sumList.total.changeUpdateLostjgNum3.totalCount !=0}"><th>三年</th></c:if>
-						<c:if test="${sumList.total.changeUpdateLostjgNum4.totalCount !=0}"><th>四年</th></c:if>
-						<c:if test="${sumList.total.changeUpdateLostjgNum5.totalCount !=0}"><th>五年</th></c:if> 
+						 <c:if test="${sumList.total.changeUpdateLostqyNum.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.changeUpdateLostqyNum }" theader="一年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.changeUpdateLostqyNum2.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.changeUpdateLostqyNum2 }" theader="二年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.changeUpdateLostqyNum3.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.changeUpdateLostqyNum3 }" theader="三年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.changeUpdateLostqyNum4.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.changeUpdateLostqyNum4 }" theader="四年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.changeUpdateLostqyNum5.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.changeUpdateLostqyNum5 }" theader="五年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.changeUpdateLostgrQNum.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.changeUpdateLostgrQNum }" theader="一年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.changeUpdateLostgrQNum2.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.changeUpdateLostgrQNum2 }" theader="二年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.changeUpdateLostgrQNum3.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.changeUpdateLostgrQNum3 }" theader="三年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.changeUpdateLostgrQNum4.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.changeUpdateLostgrQNum4 }" theader="四年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.changeUpdateLostgrQNum5.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.changeUpdateLostgrQNum5 }" theader="五年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.changeUpdateLostgrGNum.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.changeUpdateLostgrGNum }" theader="一年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.changeUpdateLostgrGNum2.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.changeUpdateLostgrGNum2 }" theader="二年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.changeUpdateLostgrGNum3.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.changeUpdateLostgrGNum3 }" theader="三年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.changeUpdateLostgrGNum4.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.changeUpdateLostgrGNum4 }" theader="四年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.changeUpdateLostgrGNum5.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.changeUpdateLostgrGNum5 }" theader="五年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.changeUpdateLostjgNum.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.changeUpdateLostjgNum }" theader="一年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.changeUpdateLostjgNum2.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.changeUpdateLostjgNum2 }" theader="二年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.changeUpdateLostjgNum3.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.changeUpdateLostjgNum3 }" theader= "三年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.changeUpdateLostjgNum4.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.changeUpdateLostjgNum4 }" theader="四年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.changeUpdateLostjgNum5.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.changeUpdateLostjgNum5 }" theader="五年"></tags:settlepaymethodheader></th></c:if> 
 						
-						 <c:if test="${sumList.total.changeUpdateReplaceqyNum.totalCount !=0}"><th>一年</th></c:if>
-						<c:if test="${sumList.total.changeUpdateReplaceqyNum2.totalCount !=0}"><th>二年</th></c:if>
-						<c:if test="${sumList.total.changeUpdateReplaceqyNum3.totalCount !=0}"><th>三年</th></c:if>
-						<c:if test="${sumList.total.changeUpdateReplaceqyNum4.totalCount !=0}"><th>四年</th></c:if>
-						<c:if test="${sumList.total.changeUpdateReplaceqyNum5.totalCount !=0}"><th>五年</th></c:if>
-						<c:if test="${sumList.total.changeUpdateReplacegrQNum.totalCount !=0}"><th>一年</th></c:if>
-						<c:if test="${sumList.total.changeUpdateReplacegrQNum2.totalCount !=0}"><th>二年</th></c:if>
-						<c:if test="${sumList.total.changeUpdateReplacegrQNum3.totalCount !=0}"><th>三年</th></c:if>
-						<c:if test="${sumList.total.changeUpdateReplacegrQNum4.totalCount !=0}"><th>四年</th></c:if>
-						<c:if test="${sumList.total.changeUpdateReplacegrQNum5.totalCount !=0}"><th>五年</th></c:if>
-						<c:if test="${sumList.total.changeUpdateReplacegrGNum.totalCount !=0}"><th>一年</th></c:if>
-						<c:if test="${sumList.total.changeUpdateReplacegrGNum2.totalCount !=0}"><th>二年</th></c:if>
-						<c:if test="${sumList.total.changeUpdateReplacegrGNum3.totalCount !=0}"><th>三年</th></c:if>
-						<c:if test="${sumList.total.changeUpdateReplacegrGNum4.totalCount !=0}"><th>四年</th></c:if>
-						<c:if test="${sumList.total.changeUpdateReplacegrGNum5.totalCount !=0}"><th>五年</th></c:if>
-						<c:if test="${sumList.total.changeUpdateReplacejgNum.totalCount !=0}"><th>一年</th></c:if>
-						<c:if test="${sumList.total.changeUpdateReplacejgNum2.totalCount !=0}"><th>二年</th></c:if>
-						<c:if test="${sumList.total.changeUpdateReplacejgNum3.totalCount !=0}"><th>三年</th></c:if>
-						<c:if test="${sumList.total.changeUpdateReplacejgNum4.totalCount !=0}"><th>四年</th></c:if>
-						<c:if test="${sumList.total.changeUpdateReplacejgNum5.totalCount !=0}"><th>五年</th></c:if>
+						 <c:if test="${sumList.total.changeUpdateReplaceqyNum.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.changeUpdateReplaceqyNum }" theader="一年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.changeUpdateReplaceqyNum2.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.changeUpdateReplaceqyNum2 }" theader="二年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.changeUpdateReplaceqyNum3.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.changeUpdateReplaceqyNum3 }" theader="三年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.changeUpdateReplaceqyNum4.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.changeUpdateReplaceqyNum4 }" theader="四年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.changeUpdateReplaceqyNum5.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.changeUpdateReplaceqyNum5 }" theader="五年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.changeUpdateReplacegrQNum.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.changeUpdateReplacegrQNum }" theader="一年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.changeUpdateReplacegrQNum2.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.changeUpdateReplacegrQNum2 }" theader="二年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.changeUpdateReplacegrQNum3.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.changeUpdateReplacegrQNum3 }" theader="三年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.changeUpdateReplacegrQNum4.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.changeUpdateReplacegrQNum4 }" theader="四年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.changeUpdateReplacegrQNum5.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.changeUpdateReplacegrQNum5 }" theader="五年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.changeUpdateReplacegrGNum.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.changeUpdateReplacegrGNum }" theader="一年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.changeUpdateReplacegrGNum2.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.changeUpdateReplacegrGNum2 }" theader="二年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.changeUpdateReplacegrGNum3.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.changeUpdateReplacegrGNum3 }" theader="三年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.changeUpdateReplacegrGNum4.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.changeUpdateReplacegrGNum4 }" theader="四年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.changeUpdateReplacegrGNum5.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.changeUpdateReplacegrGNum5 }" theader="五年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.changeUpdateReplacejgNum.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.changeUpdateReplacejgNum }" theader="一年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.changeUpdateReplacejgNum2.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.changeUpdateReplacejgNum2 }" theader="二年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.changeUpdateReplacejgNum3.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.changeUpdateReplacejgNum3 }" theader="三年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.changeUpdateReplacejgNum4.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.changeUpdateReplacejgNum4 }" theader="四年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.changeUpdateReplacejgNum5.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.changeUpdateReplacejgNum5 }" theader="五年"></tags:settlepaymethodheader></th></c:if>
 				 		</c:if>
 	 		</tr>
 				
@@ -1528,176 +1531,176 @@ $(document).ready(function() {
 														
 						<c:if test="${sumList.total.xzqyadd1.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.xzqyadd1}" total="${sumList.total.xzqyadd1 }"></tags:settlepaymethod></td></c:if>
 						<c:if test="${sumList.total.xzqyadd2.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.xzqyadd2}" total="${sumList.total.xzqyadd2 }"></tags:settlepaymethod></td></c:if>
-						<c:if test="${sumList.total.xzqyadd3.totalCount !=0}"><td>${sum.value.xzqyadd3}</td></c:if>
-						<c:if test="${sumList.total.xzqyadd4.totalCount !=0}"><td>${sum.value.xzqyadd4}</td></c:if>
-						<c:if test="${sumList.total.xzqyadd5.totalCount !=0}"><td>${sum.value.xzqyadd5}</td></c:if>
-						<c:if test="${sumList.total.xzgrQadd1.totalCount !=0}"><td>${sum.value.xzgrQadd1}</td></c:if>
-						<c:if test="${sumList.total.xzgrQadd2.totalCount !=0}"><td>${sum.value.xzgrQadd2}</td></c:if>
-						<c:if test="${sumList.total.xzgrQadd3.totalCount !=0}"><td>${sum.value.xzgrQadd3}</td></c:if>
-						<c:if test="${sumList.total.xzgrQadd4.totalCount !=0}"><td>${sum.value.xzgrQadd4}</td></c:if>
-						<c:if test="${sumList.total.xzgrQadd5.totalCount !=0}"><td>${sum.value.xzgrQadd5}</td></c:if>
-						<c:if test="${sumList.total.xzgrGadd1.totalCount !=0}"><td>${sum.value.xzgrGadd1}</td></c:if>
-						<c:if test="${sumList.total.xzgrGadd2.totalCount !=0}"><td>${sum.value.xzgrGadd2}</td></c:if>
-						<c:if test="${sumList.total.xzgrGadd3.totalCount !=0}"><td>${sum.value.xzgrGadd3}</td></c:if>
-						<c:if test="${sumList.total.xzgrGadd4.totalCount !=0}"><td>${sum.value.xzgrGadd4}</td></c:if>
-						<c:if test="${sumList.total.xzgrGadd5.totalCount !=0}"><td>${sum.value.xzgrGadd5}</td></c:if>
-						<c:if test="${sumList.total.xzjgadd1.totalCount !=0}"><td>${sum.value.xzjgadd1}</td></c:if>
-						<c:if test="${sumList.total.xzjgadd2.totalCount !=0}"><td>${sum.value.xzjgadd2}</td></c:if>
-						<c:if test="${sumList.total.xzjgadd3.totalCount !=0}"><td>${sum.value.xzjgadd3}</td></c:if>
-						<c:if test="${sumList.total.xzjgadd4.totalCount !=0}"><td>${sum.value.xzjgadd4}</td></c:if>
-						<c:if test="${sumList.total.xzjgadd5.totalCount !=0}"><td>${sum.value.xzjgadd5}</td></c:if>
+						<c:if test="${sumList.total.xzqyadd3.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.xzqyadd3}" total="${sumList.total.xzqyadd3 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.xzqyadd4.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.xzqyadd4}" total="${sumList.total.xzqyadd4 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.xzqyadd5.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.xzqyadd5}" total="${sumList.total.xzqyadd5 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.xzgrQadd1.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.xzgrQadd1}" total="${sumList.total.xzgrQadd1 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.xzgrQadd2.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.xzgrQadd2}" total="${sumList.total.xzgrQadd2 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.xzgrQadd3.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.xzgrQadd3}" total="${sumList.total.xzgrQadd3 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.xzgrQadd4.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.xzgrQadd4}" total="${sumList.total.xzgrQadd4 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.xzgrQadd5.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.xzgrQadd5}" total="${sumList.total.xzgrQadd5 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.xzgrGadd1.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.xzgrGadd1}" total="${sumList.total.xzgrGadd1 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.xzgrGadd2.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.xzgrGadd2}" total="${sumList.total.xzgrGadd2 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.xzgrGadd3.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.xzgrGadd3}" total="${sumList.total.xzgrGadd3 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.xzgrGadd4.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.xzgrGadd4}" total="${sumList.total.xzgrGadd4 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.xzgrGadd5.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.xzgrGadd5}" total="${sumList.total.xzgrGadd5 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.xzjgadd1.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.xzjgadd1}" total="${sumList.total.xzjgadd1 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.xzjgadd2.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.xzjgadd2}" total="${sumList.total.xzjgadd2 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.xzjgadd3.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.xzjgadd3}" total="${sumList.total.xzjgadd3 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.xzjgadd4.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.xzjgadd4}" total="${sumList.total.xzjgadd4 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.xzjgadd5.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.xzjgadd5}" total="${sumList.total.xzjgadd5 }"></tags:settlepaymethod></td></c:if>
 						
-						<c:if test="${sumList.total.gxqyadd1.totalCount !=0}"><td>${sum.value.gxqyadd1}</td></c:if>
-						<c:if test="${sumList.total.gxqyadd2.totalCount !=0}"><td>${sum.value.gxqyadd2}</td></c:if>
-						<c:if test="${sumList.total.gxqyadd3.totalCount !=0}"><td>${sum.value.gxqyadd3}</td></c:if>
-						<c:if test="${sumList.total.gxqyadd4.totalCount !=0}"><td>${sum.value.gxqyadd4}</td></c:if>
-						<c:if test="${sumList.total.gxqyadd5.totalCount !=0}"><td>${sum.value.gxqyadd5}</td></c:if>
-						<c:if test="${sumList.total.gxgrQadd1.totalCount !=0}"><td>${sum.value.gxgrQadd1}</td></c:if>
-						<c:if test="${sumList.total.gxgrQadd2.totalCount !=0}"><td>${sum.value.gxgrQadd2}</td></c:if>
-						<c:if test="${sumList.total.gxgrQadd3.totalCount !=0}"><td>${sum.value.gxgrQadd3}</td></c:if>
-						<c:if test="${sumList.total.gxgrQadd4.totalCount !=0}"><td>${sum.value.gxgrQadd4}</td></c:if>
-						<c:if test="${sumList.total.gxgrQadd5.totalCount !=0}"><td>${sum.value.gxgrQadd5}</td></c:if>
-						<c:if test="${sumList.total.gxgrGadd1.totalCount !=0}"><td>${sum.value.gxgrGadd1}</td></c:if>
-						<c:if test="${sumList.total.gxgrGadd2.totalCount !=0}"><td>${sum.value.gxgrGadd2}</td></c:if>
-						<c:if test="${sumList.total.gxgrGadd3.totalCount !=0}"><td>${sum.value.gxgrGadd3}</td></c:if>
-						<c:if test="${sumList.total.gxgrGadd4.totalCount !=0}"><td>${sum.value.gxgrGadd4}</td></c:if>
-						<c:if test="${sumList.total.gxgrGadd5.totalCount !=0}"><td>${sum.value.gxgrGadd5}</td></c:if>
-						<c:if test="${sumList.total.gxjgadd1.totalCount !=0}"><td>${sum.value.gxjgadd1}</td></c:if>
-						<c:if test="${sumList.total.gxjgadd2.totalCount !=0}"><td>${sum.value.gxjgadd2}</td></c:if>
-						<c:if test="${sumList.total.gxjgadd3.totalCount !=0}"><td>${sum.value.gxjgadd3}</td></c:if>
-						<c:if test="${sumList.total.gxjgadd4.totalCount !=0}"><td>${sum.value.gxjgadd4}</td></c:if>
-						<c:if test="${sumList.total.gxjgadd5.totalCount !=0}"><td>${sum.value.gxjgadd5}</td></c:if>
+						<c:if test="${sumList.total.gxqyadd1.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.gxqyadd1}" total="${sumList.total.gxqyadd1 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.gxqyadd2.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.gxqyadd2}" total="${sumList.total.gxqyadd2 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.gxqyadd3.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.gxqyadd3}" total="${sumList.total.gxqyadd3 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.gxqyadd4.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.gxqyadd4}" total="${sumList.total.gxqyadd4 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.gxqyadd5.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.gxqyadd5}" total="${sumList.total.gxqyadd5 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.gxgrQadd1.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.gxgrQadd1}" total="${sumList.total.gxgrQadd1 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.gxgrQadd2.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.gxgrQadd2}" total="${sumList.total.gxgrQadd2 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.gxgrQadd3.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.gxgrQadd3}" total="${sumList.total.gxgrQadd3 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.gxgrQadd4.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.gxgrQadd4}" total="${sumList.total.gxgrQadd4 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.gxgrQadd5.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.gxgrQadd5}" total="${sumList.total.gxgrQadd5 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.gxgrGadd1.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.gxgrGadd1}" total="${sumList.total.gxgrGadd1 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.gxgrGadd2.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.gxgrGadd2}" total="${sumList.total.gxgrGadd2 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.gxgrGadd3.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.gxgrGadd3}" total="${sumList.total.gxgrGadd3 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.gxgrGadd4.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.gxgrGadd4}" total="${sumList.total.gxgrGadd4 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.gxgrGadd5.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.gxgrGadd5}" total="${sumList.total.gxgrGadd5 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.gxjgadd1.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.gxjgadd1}" total="${sumList.total.gxjgadd1 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.gxjgadd2.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.gxjgadd2}" total="${sumList.total.gxjgadd2 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.gxjgadd3.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.gxjgadd3}" total="${sumList.total.gxjgadd3 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.gxjgadd4.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.gxjgadd4}" total="${sumList.total.gxjgadd4 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.gxjgadd5.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.gxjgadd5}" total="${sumList.total.gxjgadd5 }"></tags:settlepaymethod></td></c:if>
 						
-						<c:if test="${sumList.total.lostCerateqy.totalCount !=0}"><td>${sum.value.lostCerateqy}</td></c:if>
-						<c:if test="${sumList.total.lostCerategrQ.totalCount !=0}"><td>${sum.value.lostCerategrQ}</td></c:if>
-						<c:if test="${sumList.total.lostCerategrG.totalCount !=0}"><td>${sum.value.lostCerategrG}</td></c:if>
-						<c:if test="${sumList.total.lostCeratejg.totalCount !=0}"><td>${sum.value.lostCeratejg}</td></c:if>
+						<c:if test="${sumList.total.lostCerateqy.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.lostCerateqy}" total="${sumList.total.lostCerateqy }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.lostCerategrQ.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.lostCerategrQ}" total="${sumList.total.lostCerategrQ }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.lostCerategrG.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.lostCerategrG}" total="${sumList.total.lostCerategrG }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.lostCeratejg.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.lostCeratejg}" total="${sumList.total.lostCeratejg }"></tags:settlepaymethod></td></c:if>
 						
-						<c:if test="${sumList.total.damageCertificateqy.totalCount !=0}"><td>${sum.value.damageCertificateqy}</td></c:if>
-						<c:if test="${sumList.total.damageCertificategrQ.totalCount !=0}"><td>${sum.value.damageCertificategrQ}</td></c:if>
-						<c:if test="${sumList.total.damageCertificategrG.totalCount !=0}"><td>${sum.value.damageCertificategrG}</td></c:if>
-						<c:if test="${sumList.total.damageCertificatejg.totalCount !=0}"><td>${sum.value.damageCertificatejg}</td></c:if>
+						<c:if test="${sumList.total.damageCertificateqy.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.damageCertificateqy}" total="${sumList.total.damageCertificateqy }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.damageCertificategrQ.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.damageCertificategrQ}" total="${sumList.total.damageCertificategrQ }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.damageCertificategrG.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.damageCertificategrG}" total="${sumList.total.damageCertificategrG }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.damageCertificatejg.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.damageCertificatejg}" total="${sumList.total.damageCertificatejg }"></tags:settlepaymethod></td></c:if>
 						
-						<c:if test="${sumList.total.modifyNumqy.totalCount !=0}"><td>${sum.value.modifyNumqy}</td></c:if>
-						<c:if test="${sumList.total.modifyNumgrQ.totalCount !=0}"><td>${sum.value.modifyNumgrQ}</td></c:if>
-						<c:if test="${sumList.total.modifyNumgrG.totalCount !=0}"><td>${sum.value.modifyNumgrG}</td></c:if>
-						<c:if test="${sumList.total.modifyNumjg.totalCount !=0}"><td>${sum.value.modifyNumjg}</td></c:if>
+						<c:if test="${sumList.total.modifyNumqy.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.modifyNumqy}" total="${sumList.total.modifyNumqy }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.modifyNumgrQ.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.modifyNumgrQ}" total="${sumList.total.modifyNumgrQ }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.modifyNumgrG.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.modifyNumgrG}" total="${sumList.total.modifyNumgrG }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.modifyNumjg.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.modifyNumjg}" total="${sumList.total.modifyNumjg }"></tags:settlepaymethod></td></c:if>
 						<c:if test="${multiType}">
-						<c:if test="${sumList.total.changeLostqyNum.totalCount !=0}"><td>${sum.value.changeLostqyNum}</td></c:if>
-						<c:if test="${sumList.total.changeLostgrQNum.totalCount !=0}"><td>${sum.value.changeLostgrQNum}</td></c:if>
-						<c:if test="${sumList.total.changeLostgrGNum.totalCount !=0}"><td>${sum.value.changeLostgrGNum}</td></c:if>
-						<c:if test="${sumList.total.changeLostjgNum.totalCount !=0}"><td>${sum.value.changeLostjgNum}</td></c:if>
+						<c:if test="${sumList.total.changeLostqyNum.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.changeLostqyNum}" total="${sumList.total.changeLostqyNum }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.changeLostgrQNum.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.changeLostgrQNum}" total="${sumList.total.changeLostgrQNum }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.changeLostgrGNum.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.changeLostgrGNum}" total="${sumList.total.changeLostgrGNum }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.changeLostjgNum.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.changeLostjgNum}" total="${sumList.total.changeLostjgNum }"></tags:settlepaymethod></td></c:if>
 						
-						<c:if test="${sumList.total.changeReplaceqyNum.totalCount !=0}"><td>${sum.value.changeReplaceqyNum}</td></c:if>
-						<c:if test="${sumList.total.changeReplacegrQNum.totalCount !=0}"><td>${sum.value.changeReplacegrQNum}</td></c:if>
-						<c:if test="${sumList.total.changeReplacegrGNum.totalCount !=0}"><td>${sum.value.changeReplacegrGNum}</td></c:if>
-						<c:if test="${sumList.total.changeReplacejgNum.totalCount !=0}"><td>${sum.value.changeReplacejgNum}</td></c:if>
+						<c:if test="${sumList.total.changeReplaceqyNum.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.changeReplaceqyNum}" total="${sumList.total.changeReplaceqyNum }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.changeReplacegrQNum.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.changeReplacegrQNum}" total="${sumList.total.changeReplacegrQNum }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.changeReplacegrGNum.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.changeReplacegrGNum}" total="${sumList.total.changeReplacegrGNum }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.changeReplacejgNum.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.changeReplacejgNum}" total="${sumList.total.changeReplacejgNum }"></tags:settlepaymethod></td></c:if>
 						
-						<c:if test="${sumList.total.updateLostqyNum.totalCount !=0}"><td>${sum.value.updateLostqyNum}</td></c:if>
-						<c:if test="${sumList.total.updateLostqyNum2.totalCount !=0}"><td>${sum.value.updateLostqyNum2}</td></c:if>
-						<c:if test="${sumList.total.updateLostqyNum3.totalCount !=0}"><td>${sum.value.updateLostqyNum3}</td></c:if>
-						<c:if test="${sumList.total.updateLostqyNum4.totalCount !=0}"><td>${sum.value.updateLostqyNum4}</td></c:if>
-						<c:if test="${sumList.total.updateLostqyNum5.totalCount !=0}"><td>${sum.value.updateLostqyNum5}</td></c:if>
-						<c:if test="${sumList.total.updateLostgrQNum.totalCount !=0}"><td>${sum.value.updateLostgrQNum}</td></c:if>
-						<c:if test="${sumList.total.updateLostgrQNum2.totalCount !=0}"><td>${sum.value.updateLostgrQNum2}</td></c:if>
-						<c:if test="${sumList.total.updateLostgrQNum3.totalCount !=0}"><td>${sum.value.updateLostgrQNum3}</td></c:if>
-						<c:if test="${sumList.total.updateLostgrQNum4.totalCount !=0}"><td>${sum.value.updateLostgrQNum4}</td></c:if>
-						<c:if test="${sumList.total.updateLostgrQNum5.totalCount !=0}"><td>${sum.value.updateLostgrQNum5}</td></c:if>
-						<c:if test="${sumList.total.updateLostgrGNum.totalCount !=0}"><td>${sum.value.updateLostgrGNum}</td></c:if>
-						<c:if test="${sumList.total.updateLostgrGNum2.totalCount !=0}"><td>${sum.value.updateLostgrGNum2}</td></c:if>
-						<c:if test="${sumList.total.updateLostgrGNum3.totalCount !=0}"><td>${sum.value.updateLostgrGNum3}</td></c:if>
-						<c:if test="${sumList.total.updateLostgrGNum4.totalCount !=0}"><td>${sum.value.updateLostgrGNum4}</td></c:if>
-						<c:if test="${sumList.total.updateLostgrGNum5.totalCount !=0}"><td>${sum.value.updateLostgrGNum5}</td></c:if>
-						<c:if test="${sumList.total.updateLostjgNum.totalCount !=0}"><td>${sum.value.updateLostjgNum}</td></c:if>
-						<c:if test="${sumList.total.updateLostjgNum2.totalCount !=0}"><td>${sum.value.updateLostjgNum2}</td></c:if>
-						<c:if test="${sumList.total.updateLostjgNum3.totalCount !=0}"><td>${sum.value.updateLostjgNum3}</td></c:if>
-						<c:if test="${sumList.total.updateLostjgNum4.totalCount !=0}"><td>${sum.value.updateLostjgNum4}</td></c:if>
-						<c:if test="${sumList.total.updateLostjgNum5.totalCount !=0}"><td>${sum.value.updateLostjgNum5}</td></c:if>
+						<c:if test="${sumList.total.updateLostqyNum.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.updateLostqyNum}" total="${sumList.total.updateLostqyNum }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.updateLostqyNum2.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.updateLostqyNum2}" total="${sumList.total.updateLostqyNum2 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.updateLostqyNum3.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.updateLostqyNum3}" total="${sumList.total.updateLostqyNum3 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.updateLostqyNum4.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.updateLostqyNum4}" total="${sumList.total.updateLostqyNum4 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.updateLostqyNum5.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.updateLostqyNum5}" total="${sumList.total.updateLostqyNum5 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.updateLostgrQNum.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.updateLostgrQNum}" total="${sumList.total.updateLostgrQNum }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.updateLostgrQNum2.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.updateLostgrQNum2}" total="${sumList.total.updateLostgrQNum2 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.updateLostgrQNum3.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.updateLostgrQNum3}" total="${sumList.total.updateLostgrQNum3 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.updateLostgrQNum4.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.updateLostgrQNum4}" total="${sumList.total.updateLostgrQNum4 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.updateLostgrQNum5.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.updateLostgrQNum5}" total="${sumList.total.updateLostgrQNum5 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.updateLostgrGNum.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.updateLostgrGNum}" total="${sumList.total.updateLostgrGNum }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.updateLostgrGNum2.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.updateLostgrGNum2}" total="${sumList.total.updateLostgrGNum2 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.updateLostgrGNum3.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.updateLostgrGNum3}" total="${sumList.total.updateLostgrGNum3 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.updateLostgrGNum4.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.updateLostgrGNum4}" total="${sumList.total.updateLostgrGNum4 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.updateLostgrGNum5.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.updateLostgrGNum5}" total="${sumList.total.updateLostgrGNum5 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.updateLostjgNum.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.updateLostjgNum}" total="${sumList.total.updateLostjgNum }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.updateLostjgNum2.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.updateLostjgNum2}" total="${sumList.total.updateLostjgNum2 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.updateLostjgNum3.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.updateLostjgNum3}" total="${sumList.total.updateLostjgNum3 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.updateLostjgNum4.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.updateLostjgNum4}" total="${sumList.total.updateLostjgNum4 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.updateLostjgNum5.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.updateLostjgNum5}" total="${sumList.total.updateLostjgNum5 }"></tags:settlepaymethod></td></c:if>
 						
-						 <c:if test="${sumList.total.updateReplaceqyNum.totalCount !=0}"><td>${sum.value.updateReplaceqyNum}</td></c:if>
-						<c:if test="${sumList.total.updateReplaceqyNum2.totalCount !=0}"><td>${sum.value.updateReplaceqyNum2}</td></c:if>
-						<c:if test="${sumList.total.updateReplaceqyNum3.totalCount !=0}"><td>${sum.value.updateReplaceqyNum3}</td></c:if>
-						<c:if test="${sumList.total.updateReplaceqyNum4.totalCount !=0}"><td>${sum.value.updateReplaceqyNum4}</td></c:if>
-						<c:if test="${sumList.total.updateReplaceqyNum5.totalCount !=0}"><td>${sum.value.updateReplaceqyNum5}</td></c:if>
-						<c:if test="${sumList.total.updateReplacegrQNum.totalCount !=0}"><td>${sum.value.updateReplacegrQNum}</td></c:if>
-						<c:if test="${sumList.total.updateReplacegrQNum2.totalCount !=0}"><td>${sum.value.updateReplacegrQNum2}</td></c:if>
-						<c:if test="${sumList.total.updateReplacegrQNum3.totalCount !=0}"><td>${sum.value.updateReplacegrQNum3}</td></c:if>
-						<c:if test="${sumList.total.updateReplacegrQNum4.totalCount !=0}"><td>${sum.value.updateReplacegrQNum4}</td></c:if>
-						<c:if test="${sumList.total.updateReplacegrQNum5.totalCount !=0}"><td>${sum.value.updateReplacegrQNum5}</td></c:if>
-						<c:if test="${sumList.total.updateReplacegrGNum.totalCount !=0}"><td>${sum.value.updateReplacegrGNum}</td></c:if>
-						<c:if test="${sumList.total.updateReplacegrGNum2.totalCount !=0}"><td>${sum.value.updateReplacegrGNum2}</td></c:if>
-						<c:if test="${sumList.total.updateReplacegrGNum3.totalCount !=0}"><td>${sum.value.updateReplacegrGNum3}</td></c:if>
-						<c:if test="${sumList.total.updateReplacegrGNum4.totalCount !=0}"><td>${sum.value.updateReplacegrGNum4}</td></c:if>
-						<c:if test="${sumList.total.updateReplacegrGNum5.totalCount !=0}"><td>${sum.value.updateReplacegrGNum5}</td></c:if>
-						<c:if test="${sumList.total.updateReplacejgNum.totalCount !=0}"><td>${sum.value.updateReplacejgNum}</td></c:if>
-						<c:if test="${sumList.total.updateReplacejgNum2.totalCount !=0}"><td>${sum.value.updateReplacejgNum2}</td></c:if>
-						<c:if test="${sumList.total.updateReplacejgNum3.totalCount !=0}"><td>${sum.value.updateReplacejgNum3}</td></c:if>
-						<c:if test="${sumList.total.updateReplacejgNum4.totalCount !=0}"><td>${sum.value.updateReplacejgNum4}</td></c:if>
-						<c:if test="${sumList.total.updateReplacejgNum5.totalCount !=0}"><td>${sum.value.updateReplacejgNum5}</td></c:if> 
+						 <c:if test="${sumList.total.updateReplaceqyNum.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.updateReplaceqyNum}" total="${sumList.total.updateReplaceqyNum }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.updateReplaceqyNum2.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.updateReplaceqyNum2}" total="${sumList.total.updateReplaceqyNum2 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.updateReplaceqyNum3.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.updateReplaceqyNum3}" total="${sumList.total.updateReplaceqyNum3 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.updateReplaceqyNum4.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.updateReplaceqyNum4}" total="${sumList.total.updateReplaceqyNum4 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.updateReplaceqyNum5.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.updateReplaceqyNum5}" total="${sumList.total.updateReplaceqyNum5 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.updateReplacegrQNum.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.updateReplacegrQNum}" total="${sumList.total.updateReplacegrQNum }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.updateReplacegrQNum2.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.updateReplacegrQNum2}" total="${sumList.total.updateReplacegrQNum2 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.updateReplacegrQNum3.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.updateReplacegrQNum3}" total="${sumList.total.updateReplacegrQNum3}"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.updateReplacegrQNum4.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.updateReplacegrQNum4}" total="${sumList.total.updateReplacegrQNum4 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.updateReplacegrQNum5.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.updateReplacegrQNum5}" total="${sumList.total.updateReplacegrQNum5 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.updateReplacegrGNum.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.updateReplacegrGNum}" total="${sumList.total.updateReplacegrGNum }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.updateReplacegrGNum2.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.updateReplacegrGNum2}" total="${sumList.total.updateReplacegrGNum2 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.updateReplacegrGNum3.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.updateReplacegrGNum3}" total="${sumList.total.updateReplacegrGNum3 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.updateReplacegrGNum4.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.updateReplacegrGNum4}" total="${sumList.total.updateReplacegrGNum4 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.updateReplacegrGNum5.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.updateReplacegrGNum5}" total="${sumList.total.updateReplacegrGNum5}"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.updateReplacejgNum.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.updateReplacejgNum}" total="${sumList.total.updateReplacejgNum }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.updateReplacejgNum2.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.updateReplacejgNum2}" total="${sumList.total.updateReplacejgNum2 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.updateReplacejgNum3.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.updateReplacejgNum3}" total="${sumList.total.updateReplacejgNum3 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.updateReplacejgNum4.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.updateReplacejgNum4}" total="${sumList.total.updateReplacejgNum4 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.updateReplacejgNum5.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.updateReplacejgNum5}" total="${sumList.total.updateReplacejgNum5 }"></tags:settlepaymethod></td></c:if> 
 						
-						 <c:if test="${sumList.total.updateChangeqyNum.totalCount !=0}"><td>${sum.value.updateChangeqyNum}</td></c:if>
-						<c:if test="${sumList.total.updateChangeqyNum2.totalCount !=0}"><td>${sum.value.updateChangeqyNum2}</td></c:if>
-						<c:if test="${sumList.total.updateChangeqyNum3.totalCount !=0}"><td>${sum.value.updateChangeqyNum3}</td></c:if>
-						<c:if test="${sumList.total.updateChangeqyNum4.totalCount !=0}"><td>${sum.value.updateChangeqyNum4}</td></c:if>
-						<c:if test="${sumList.total.updateChangeqyNum5.totalCount !=0}"><td>${sum.value.updateChangeqyNum5}</td></c:if>
-						<c:if test="${sumList.total.updateChangegrQNum.totalCount !=0}"><td>${sum.value.updateChangegrQNum}</td></c:if>
-						<c:if test="${sumList.total.updateChangegrQNum2.totalCount !=0}"><td>${sum.value.updateChangegrQNum2}</td></c:if>
-						<c:if test="${sumList.total.updateChangegrQNum3.totalCount !=0}"><td>${sum.value.updateChangegrQNum3}</td></c:if>
-						<c:if test="${sumList.total.updateChangegrQNum4.totalCount !=0}"><td>${sum.value.updateChangegrQNum4}</td></c:if>
-						<c:if test="${sumList.total.updateChangegrQNum5.totalCount !=0}"><td>${sum.value.updateChangegrQNum5}</td></c:if>
-						<c:if test="${sumList.total.updateChangegrGNum.totalCount !=0}"><td>${sum.value.updateChangegrGNum}</td></c:if>
-						<c:if test="${sumList.total.updateChangegrGNum2.totalCount !=0}"><td>${sum.value.updateChangegrGNum2}</td></c:if>
-						<c:if test="${sumList.total.updateChangegrGNum3.totalCount !=0}"><td>${sum.value.updateChangegrGNum3}</td></c:if>
-						<c:if test="${sumList.total.updateChangegrGNum4.totalCount !=0}"><td>${sum.value.updateChangegrGNum4}</td></c:if>
-						<c:if test="${sumList.total.updateChangegrGNum5.totalCount !=0}"><td>${sum.value.updateChangegrGNum5}</td></c:if>
-						<c:if test="${sumList.total.updateChangejgNum.totalCount !=0}"><td>${sum.value.updateChangejgNum}</td></c:if>
-						<c:if test="${sumList.total.updateChangejgNum2.totalCount !=0}"><td>${sum.value.updateChangejgNum2}</td></c:if>
-						<c:if test="${sumList.total.updateChangejgNum3.totalCount !=0}"><td>${sum.value.updateChangejgNum3}</td></c:if>
-						<c:if test="${sumList.total.updateChangejgNum4.totalCount !=0}"><td>${sum.value.updateChangejgNum4}</td></c:if>
-						<c:if test="${sumList.total.updateChangejgNum5.totalCount !=0}"><td>${sum.value.updateChangejgNum5}</td></c:if> 
+						 <c:if test="${sumList.total.updateChangeqyNum.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.updateChangeqyNum}" total="${sumList.total.updateChangeqyNum }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.updateChangeqyNum2.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.updateChangeqyNum2}" total="${sumList.total.updateChangeqyNum2 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.updateChangeqyNum3.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.updateChangeqyNum3}" total="${sumList.total.updateChangeqyNum3 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.updateChangeqyNum4.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.updateChangeqyNum4}" total="${sumList.total.updateChangeqyNum4 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.updateChangeqyNum5.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.updateChangeqyNum5}" total="${sumList.total.updateChangeqyNum5 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.updateChangegrQNum.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.updateChangegrQNum}" total="${sumList.total.updateChangegrQNum }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.updateChangegrQNum2.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.updateChangegrQNum2}" total="${sumList.total.updateChangegrQNum2 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.updateChangegrQNum3.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.updateChangegrQNum3}" total="${sumList.total.updateChangegrQNum3}"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.updateChangegrQNum4.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.updateChangegrQNum4}" total="${sumList.total.updateChangegrQNum4 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.updateChangegrQNum5.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.updateChangegrQNum5}" total="${sumList.total.updateChangegrQNum5}"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.updateChangegrGNum.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.updateChangegrGNum}" total="${sumList.total.updateChangegrGNum }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.updateChangegrGNum2.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.updateChangegrGNum2}" total="${sumList.total.updateChangegrGNum2 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.updateChangegrGNum3.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.updateChangegrGNum3}" total="${sumList.total.updateChangegrGNum3 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.updateChangegrGNum4.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.updateChangegrGNum4}" total="${sumList.total.updateChangegrGNum4 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.updateChangegrGNum5.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.updateChangegrGNum5}" total="${sumList.total.updateChangegrGNum5 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.updateChangejgNum.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.updateChangejgNum}" total="${sumList.total.updateChangejgNum }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.updateChangejgNum2.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.updateChangejgNum2}" total="${sumList.total.updateChangejgNum2 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.updateChangejgNum3.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.updateChangejgNum3}" total="${sumList.total.updateChangejgNum3 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.updateChangejgNum4.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.updateChangejgNum4}" total="${sumList.total.updateChangejgNum4 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.updateChangejgNum5.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.updateChangejgNum5}" total="${sumList.total.updateChangejgNum5 }"></tags:settlepaymethod></td></c:if> 
 						
 						
-						 <c:if test="${sumList.total.changeUpdateLostqyNum.totalCount !=0}"><td>${sum.value.changeUpdateLostqyNum}</td></c:if>
-						<c:if test="${sumList.total.changeUpdateLostqyNum2.totalCount !=0}"><td>${sum.value.changeUpdateLostqyNum2}</td></c:if>
-						<c:if test="${sumList.total.changeUpdateLostqyNum3.totalCount !=0}"><td>${sum.value.changeUpdateLostqyNum3}</td></c:if>
-						<c:if test="${sumList.total.changeUpdateLostqyNum4.totalCount !=0}"><td>${sum.value.changeUpdateLostqyNum4}</td></c:if>
-						<c:if test="${sumList.total.changeUpdateLostqyNum5.totalCount !=0}"><td>${sum.value.changeUpdateLostqyNum5}</td></c:if>
-						<c:if test="${sumList.total.changeUpdateLostgrQNum.totalCount !=0}"><td>${sum.value.changeUpdateLostgrQNum}</td></c:if>
-						<c:if test="${sumList.total.changeUpdateLostgrQNum2.totalCount !=0}"><td>${sum.value.changeUpdateLostgrQNum2}</td></c:if>
-						<c:if test="${sumList.total.changeUpdateLostgrQNum3.totalCount !=0}"><td>${sum.value.changeUpdateLostgrQNum3}</td></c:if>
-						<c:if test="${sumList.total.changeUpdateLostgrQNum4.totalCount !=0}"><td>${sum.value.changeUpdateLostgrQNum4}</td></c:if>
-						<c:if test="${sumList.total.changeUpdateLostgrQNum5.totalCount !=0}"><td>${sum.value.changeUpdateLostgrQNum5}</td></c:if>
-						<c:if test="${sumList.total.changeUpdateLostgrGNum.totalCount !=0}"><td>${sum.value.changeUpdateLostgrGNum}</td></c:if>
-						<c:if test="${sumList.total.changeUpdateLostgrGNum2.totalCount !=0}"><td>${sum.value.changeUpdateLostgrGNum2}</td></c:if>
-						<c:if test="${sumList.total.changeUpdateLostgrGNum3.totalCount !=0}"><td>${sum.value.changeUpdateLostgrGNum3}</td></c:if>
-						<c:if test="${sumList.total.changeUpdateLostgrGNum4.totalCount !=0}"><td>${sum.value.changeUpdateLostgrGNum4}</td></c:if>
-						<c:if test="${sumList.total.changeUpdateLostgrGNum5.totalCount !=0}"><td>${sum.value.changeUpdateLostgrGNum5}</td></c:if>
-						<c:if test="${sumList.total.changeUpdateLostjgNum.totalCount !=0}"><td>${sum.value.changeUpdateLostjgNum}</td></c:if>
-						<c:if test="${sumList.total.changeUpdateLostjgNum2.totalCount !=0}"><td>${sum.value.changeUpdateLostjgNum2}</td></c:if>
-						<c:if test="${sumList.total.changeUpdateLostjgNum3.totalCount !=0}"><td>${sum.value.changeUpdateLostjgNum3}</td></c:if>
-						<c:if test="${sumList.total.changeUpdateLostjgNum4.totalCount !=0}"><td>${sum.value.changeUpdateLostjgNum4}</td></c:if>
-						<c:if test="${sumList.total.changeUpdateLostjgNum5.totalCount !=0}"><td>${sum.value.changeUpdateLostjgNum5}</td></c:if> 
+						 <c:if test="${sumList.total.changeUpdateLostqyNum.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.changeUpdateLostqyNum}" total="${sumList.total.changeUpdateLostqyNum }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.changeUpdateLostqyNum2.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.changeUpdateLostqyNum2}" total="${sumList.total.changeUpdateLostqyNum2 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.changeUpdateLostqyNum3.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.changeUpdateLostqyNum3}" total="${sumList.total.changeUpdateLostqyNum3 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.changeUpdateLostqyNum4.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.changeUpdateLostqyNum4}" total="${sumList.total.changeUpdateLostqyNum4 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.changeUpdateLostqyNum5.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.changeUpdateLostqyNum5}" total="${sumList.total.changeUpdateLostqyNum5 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.changeUpdateLostgrQNum.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.changeUpdateLostgrQNum}" total="${sumList.total.changeUpdateLostgrQNum }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.changeUpdateLostgrQNum2.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.changeUpdateLostgrQNum2}" total="${sumList.total.changeUpdateLostgrQNum2 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.changeUpdateLostgrQNum3.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.changeUpdateLostgrQNum3}" total="${sumList.total.changeUpdateLostgrQNum3 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.changeUpdateLostgrQNum4.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.changeUpdateLostgrQNum4}" total="${sumList.total.changeUpdateLostgrQNum4 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.changeUpdateLostgrQNum5.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.changeUpdateLostgrQNum5}" total="${sumList.total.changeUpdateLostgrQNum5 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.changeUpdateLostgrGNum.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.changeUpdateLostgrGNum}" total="${sumList.total.changeUpdateLostgrGNum }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.changeUpdateLostgrGNum2.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.changeUpdateLostgrGNum2}" total="${sumList.total.changeUpdateLostgrGNum2 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.changeUpdateLostgrGNum3.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.changeUpdateLostgrGNum3}" total="${sumList.total.changeUpdateLostgrGNum3 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.changeUpdateLostgrGNum4.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.changeUpdateLostgrGNum4}" total="${sumList.total.changeUpdateLostgrGNum4 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.changeUpdateLostgrGNum5.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.changeUpdateLostgrGNum5}" total="${sumList.total.changeUpdateLostgrGNum5 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.changeUpdateLostjgNum.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.changeUpdateLostjgNum}" total="${sumList.total.changeUpdateLostjgNum }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.changeUpdateLostjgNum2.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.changeUpdateLostjgNum2}" total="${sumList.total.changeUpdateLostjgNum2 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.changeUpdateLostjgNum3.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.changeUpdateLostjgNum3}" total="${sumList.total.changeUpdateLostjgNum3 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.changeUpdateLostjgNum4.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.changeUpdateLostjgNum4}" total="${sumList.total.changeUpdateLostjgNum4 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.changeUpdateLostjgNum5.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.changeUpdateLostjgNum5}" total="${sumList.total.changeUpdateLostjgNum5 }"></tags:settlepaymethod></td></c:if> 
 						
-						 <c:if test="${sumList.total.changeUpdateReplaceqyNum.totalCount !=0}"><td>${sum.value.changeUpdateReplaceqyNum}</td></c:if>
-						<c:if test="${sumList.total.changeUpdateReplaceqyNum2.totalCount !=0}"><td>${sum.value.changeUpdateReplaceqyNum2}</td></c:if>
-						<c:if test="${sumList.total.changeUpdateReplaceqyNum3.totalCount !=0}"><td>${sum.value.changeUpdateReplaceqyNum3}</td></c:if>
-						<c:if test="${sumList.total.changeUpdateReplaceqyNum4.totalCount !=0}"><td>${sum.value.changeUpdateReplaceqyNum4}</td></c:if>
-						<c:if test="${sumList.total.changeUpdateReplaceqyNum5.totalCount !=0}"><td>${sum.value.changeUpdateReplaceqyNum5}</td></c:if>
-						<c:if test="${sumList.total.changeUpdateReplacegrQNum.totalCount !=0}"><td>${sum.value.changeUpdateReplacegrQNum}</td></c:if>
-						<c:if test="${sumList.total.changeUpdateReplacegrQNum2.totalCount !=0}"><td>${sum.value.changeUpdateReplacegrQNum2}</td></c:if>
-						<c:if test="${sumList.total.changeUpdateReplacegrQNum3.totalCount !=0}"><td>${sum.value.changeUpdateReplacegrQNum3}</td></c:if>
-						<c:if test="${sumList.total.changeUpdateReplacegrQNum4.totalCount !=0}"><td>${sum.value.changeUpdateReplacegrQNum4}</td></c:if>
-						<c:if test="${sumList.total.changeUpdateReplacegrQNum5.totalCount !=0}"><td>${sum.value.changeUpdateReplacegrQNum5}</td></c:if>
-						<c:if test="${sumList.total.changeUpdateReplacegrGNum.totalCount !=0}"><td>${sum.value.changeUpdateReplacegrGNum}</td></c:if>
-						<c:if test="${sumList.total.changeUpdateReplacegrGNum2.totalCount !=0}"><td>${sum.value.changeUpdateReplacegrGNum2}</td></c:if>
-						<c:if test="${sumList.total.changeUpdateReplacegrGNum3.totalCount !=0}"><td>${sum.value.changeUpdateReplacegrGNum3}</td></c:if>
-						<c:if test="${sumList.total.changeUpdateReplacegrGNum4.totalCount !=0}"><td>${sum.value.changeUpdateReplacegrGNum4}</td></c:if>
-						<c:if test="${sumList.total.changeUpdateReplacegrGNum5.totalCount !=0}"><td>${sum.value.changeUpdateReplacegrGNum5}</td></c:if>
-						<c:if test="${sumList.total.changeUpdateReplacejgNum.totalCount !=0}"><td>${sum.value.changeUpdateReplacejgNum}</td></c:if>
-						<c:if test="${sumList.total.changeUpdateReplacejgNum2.totalCount !=0}"><td>${sum.value.changeUpdateReplacejgNum2}</td></c:if>
-						<c:if test="${sumList.total.changeUpdateReplacejgNum3.totalCount !=0}"><td>${sum.value.changeUpdateReplacejgNum3}</td></c:if>
-						<c:if test="${sumList.total.changeUpdateReplacejgNum4.totalCount !=0}"><td>${sum.value.changeUpdateReplacejgNum4}</td></c:if>
-						<c:if test="${sumList.total.changeUpdateReplacejgNum5.totalCount !=0}"><td>${sum.value.changeUpdateReplacejgNum5}</td></c:if> 
+						 <c:if test="${sumList.total.changeUpdateReplaceqyNum.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.changeUpdateReplaceqyNum}" total="${sumList.total.changeUpdateReplaceqyNum }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.changeUpdateReplaceqyNum2.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.changeUpdateReplaceqyNum2}" total="${sumList.total.changeUpdateReplaceqyNum2}"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.changeUpdateReplaceqyNum3.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.changeUpdateReplaceqyNum3}" total="${sumList.total.changeUpdateReplaceqyNum3 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.changeUpdateReplaceqyNum4.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.changeUpdateReplaceqyNum4}" total="${sumList.total.changeUpdateReplaceqyNum4 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.changeUpdateReplaceqyNum5.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.changeUpdateReplaceqyNum5}" total="${sumList.total.changeUpdateReplaceqyNum5 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.changeUpdateReplacegrQNum.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.changeUpdateReplacegrQNum}" total="${sumList.total.changeUpdateReplacegrQNum }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.changeUpdateReplacegrQNum2.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.changeUpdateReplacegrQNum2}" total="${sumList.total.changeUpdateReplacegrQNum2 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.changeUpdateReplacegrQNum3.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.changeUpdateReplacegrQNum3}" total="${sumList.total.changeUpdateReplacegrQNum3 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.changeUpdateReplacegrQNum4.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.changeUpdateReplacegrQNum4}" total="${sumList.total.changeUpdateReplacegrQNum4 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.changeUpdateReplacegrQNum5.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.changeUpdateReplacegrQNum5}" total="${sumList.total.changeUpdateReplacegrQNum5 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.changeUpdateReplacegrGNum.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.changeUpdateReplacegrGNum}" total="${sumList.total.changeUpdateReplacegrGNum }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.changeUpdateReplacegrGNum2.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.changeUpdateReplacegrGNum2}" total="${sumList.total.changeUpdateReplacegrGNum2 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.changeUpdateReplacegrGNum3.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.changeUpdateReplacegrGNum3}" total="${sumList.total.changeUpdateReplacegrGNum3 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.changeUpdateReplacegrGNum4.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.changeUpdateReplacegrGNum4}" total="${sumList.total.changeUpdateReplacegrGNum4 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.changeUpdateReplacegrGNum5.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.changeUpdateReplacegrGNum5}" total="${sumList.total.changeUpdateReplacegrGNum5 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.changeUpdateReplacejgNum.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.changeUpdateReplacejgNum}" total="${sumList.total.changeUpdateReplacejgNum }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.changeUpdateReplacejgNum2.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.changeUpdateReplacejgNum2}" total="${sumList.total.changeUpdateReplacejgNum2 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.changeUpdateReplacejgNum3.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.changeUpdateReplacejgNum3}" total="${sumList.total.changeUpdateReplacejgNum3 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.changeUpdateReplacejgNum4.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.changeUpdateReplacejgNum4}" total="${sumList.total.changeUpdateReplacejgNum4 }"></tags:settlepaymethod></td></c:if>
+						<c:if test="${sumList.total.changeUpdateReplacejgNum5.totalCount !=0}"><td><tags:settlepaymethod content="${sum.value.changeUpdateReplacejgNum5}" total="${sumList.total.changeUpdateReplacejgNum5 }"></tags:settlepaymethod></td></c:if> 
 						</c:if>
 						</tr>
 						</c:if>
