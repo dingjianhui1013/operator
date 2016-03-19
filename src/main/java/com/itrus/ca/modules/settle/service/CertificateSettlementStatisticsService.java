@@ -293,7 +293,7 @@ public class CertificateSettlementStatisticsService extends BaseService {
 	}
 
 	public List<CertificateSettlementStatisticsVO> findMulitWorkList1(Long apply, String productType, String workTypes,
-			String officeIdsList, String agentId, Date startDate, Date endDate) {
+			String officeIdsList, String agentIds, Date startDate, Date endDate) {
 
 		String sql = "select to_char(t.create_date,'YYYY-MM') as month, (NVL(t.deal_info_type,0)*100+ NVL(t.deal_info_type1,0)*10+ NVL(t.deal_info_type2,0 )) as dealInfoType ,p.product_name productName,t.year year,count(t.id) workCount "
 				+ " from WORK_DEAL_INFO t, CONFIG_PRODUCT p,SYS_USER u ,config_agent_bound_deal_info b "
@@ -306,8 +306,8 @@ public class CertificateSettlementStatisticsService extends BaseService {
 		if (StringUtils.isNotBlank(productType)) {
 			sql = sql + " and  p.product_name in(" + productType + ")";
 		}
-		if (StringUtils.isNotBlank(agentId)) {
-			sql = sql + " and  b.agent_id = " + agentId;
+		if (StringUtils.isNotBlank(agentIds)) {
+			sql = sql + " and  b.agent_id in (" + agentIds +")";
 		}
 		if (StringUtils.isNotBlank(workTypes)) {
 			sql = sql + "and (t.deal_info_type in(" + workTypes + ") or t.deal_info_type1 in(" + workTypes

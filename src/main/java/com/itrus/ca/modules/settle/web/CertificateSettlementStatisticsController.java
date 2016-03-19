@@ -21,7 +21,7 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-
+import org.apache.commons.collections.ListUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
@@ -56,7 +56,6 @@ import com.itrus.ca.modules.settle.entity.CertificateSettlementStatistics;
 import com.itrus.ca.modules.settle.service.CertificateSettlementStatisticsService;
 import com.itrus.ca.modules.settle.vo.CertificateF;
 import com.itrus.ca.modules.settle.vo.CertificateSettlementStatisticsVO;
-
 import com.itrus.ca.modules.sys.entity.Office;
 import com.itrus.ca.modules.sys.service.OfficeService;
 import com.itrus.ca.modules.sys.utils.UserUtils;
@@ -132,10 +131,19 @@ public class CertificateSettlementStatisticsController extends BaseController {
 			List<Office> offices = officeService.findByParentId(areaId);
 			model.addAttribute("offices", offices);
 		}
-		if(tempStyle !=null){
+		List<Long> agentIds =new ArrayList<Long>();
+		if(tempStyle !=null&&"".equals(agentId)){
 			List<ConfigChargeAgent> agentList=configChargeAgentService.findByStyle(tempStyle.toString());
 			model.addAttribute("agentList", agentList);
 			model.addAttribute("tempStyle", tempStyle);
+			model.addAttribute("agentId", agentId);
+			for (ConfigChargeAgent configChargeAgent : agentList) {
+				agentIds.add(configChargeAgent.getId());
+			}
+		}
+		if(!"".equals(agentId)&&agentId!=null)
+		{
+			agentIds.add(Long.parseLong(agentId));
 			model.addAttribute("agentId", agentId);
 		}
 		/* 应用查询列表显示 */
@@ -203,7 +211,7 @@ public class CertificateSettlementStatisticsController extends BaseController {
 		List<CertificateSettlementStatisticsVO> findWorkList1 = certificateSettlementStatisticsService.findMulitWorkList1(
 				applyId, org.springframework.util.StringUtils.collectionToCommaDelimitedString(productType),
 				org.springframework.util.StringUtils.collectionToCommaDelimitedString(workType),
-				org.springframework.util.StringUtils.collectionToCommaDelimitedString(officeIdList), agentId, startDate,
+				org.springframework.util.StringUtils.collectionToCommaDelimitedString(officeIdList), org.springframework.util.StringUtils.collectionToCommaDelimitedString(agentIds), startDate,
 				endDate);
 
 		HashMap<String, CertificateF> monthMap1 = certificateSettlementStatisticsService.getStaticMap1(findWorkList1);
@@ -297,7 +305,7 @@ public class CertificateSettlementStatisticsController extends BaseController {
 
 	@SuppressWarnings("deprecation")
 	@RequestMapping(value = "export")
-	public void export(Long areaId, Long officeId, Date startDate, Date endDate, String agentId, boolean multiType,
+	public void export(Long areaId, Long officeId, Date startDate, Date endDate, String tempStyle,String agentId, boolean multiType,
 			HttpServletRequest request, HttpServletResponse response,
 			@RequestParam(value = "applyId", required = false) Long applyId,
 			@RequestParam(value = "proList", required = false) List<String> productType,
@@ -334,12 +342,24 @@ public class CertificateSettlementStatisticsController extends BaseController {
 				officeIdList = officeService.findOfficeIdsByParentId(areaId);
 			}
 			
+			List<Long> agentIds =new ArrayList<Long>();
+			if(tempStyle !=null&&agentId==null){
+				List<ConfigChargeAgent> agentList=configChargeAgentService.findByStyle(tempStyle.toString());
+				for (ConfigChargeAgent configChargeAgent : agentList) {
+					agentIds.add(configChargeAgent.getId());
+				}
+			}
+			if(agentId!=null)
+			{
+				agentIds.add(Long.parseLong(agentId));
+			}
+			
 			List<CertificateSettlementStatisticsVO> findWorkList1 = certificateSettlementStatisticsService
 					.findMulitWorkList1(applyId,
 							org.springframework.util.StringUtils.collectionToCommaDelimitedString(productType),
 							org.springframework.util.StringUtils.collectionToCommaDelimitedString(workType),
 							org.springframework.util.StringUtils.collectionToCommaDelimitedString(officeIdList),
-							agentId, startDate, endDate);
+							org.springframework.util.StringUtils.collectionToCommaDelimitedString(agentIds), startDate, endDate);
 
 			HashMap<String, CertificateF> monthMap = certificateSettlementStatisticsService
 					.getStaticMap1(findWorkList1);

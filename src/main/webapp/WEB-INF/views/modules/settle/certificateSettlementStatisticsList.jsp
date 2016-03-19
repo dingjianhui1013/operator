@@ -120,6 +120,7 @@ $(document).ready(function() {
 		var applyId = $("#applyId").val();
 		var areaId = $("#areaId").val();
 		var officeId = $("#officeId").val();
+		var tempStyle = $("#tempStyle").val();
 		//var proList = $("#proList").val();
 		//var workTypes = $("#workTypes").val();
 		var startDate = $("#startTime").val();
@@ -168,6 +169,8 @@ $(document).ready(function() {
 				+ startDate
 				+ "&endDate="
 				+ endDate
+				+ "&tempStyle="
+				+ tempStyle
 				+ "&multiType=" + multiType;
 	}
 	/* function dcZS() {
