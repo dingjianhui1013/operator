@@ -101,6 +101,7 @@ public class SettlementLogService extends BaseService {
 			dc.add(Restrictions.le("createDate", endTime));
 		}
 		dc.add(Restrictions.eq(SettlementLog.DEL_FLAG, SettlementLog.DEL_FLAG_NORMAL));
+		dc.addOrder(Order.desc("createDate"));
 		return settlementLogDao.find(dc);
 	}
 	public Page<SettlementLog> find(Page<SettlementLog> page, SettlementLog settlementLog) {
