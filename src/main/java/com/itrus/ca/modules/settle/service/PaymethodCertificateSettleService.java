@@ -72,13 +72,14 @@ public class PaymethodCertificateSettleService extends BaseService {
 	public List<PaymethodCertificateSettleVo> findMulitWorkList1(Long apply, String productType, String workTypes,
 			String officeIdsList, String agentId, Date startDate, Date endDate) {
 
-		String sql = "select to_char(t.create_date,'YYYY-MM') as month, (NVL(t.deal_info_type,0)*100+ NVL(t.deal_info_type1,0)*10+ NVL(t.deal_info_type2,0 )) as dealInfoType ,p.product_name productName,t.year year,(NVL(pay.method_alipay,0)*1000+ NVL(pay.method_bank,0)*100  + NVL(pay.method_money,0 )*10 +NVL(pay.method_pos,0 )) as paymethod ,count(t.id) workCount "
-				+ " from WORK_DEAL_INFO t, CONFIG_PRODUCT p,SYS_USER u ,config_agent_bound_deal_info b , WORK_PAY_INFO pay "
+		String sql = "select to_char(t.create_date,'YYYY-MM') as month, (NVL(t.deal_info_type,0)*100+ NVL(t.deal_info_type1,0)*10+ NVL(t.deal_info_type2,0 )) as dealInfoType ,p.product_name productName,t.year year,(case pay.relation_method when 1 then 10 when 2 then 1 when 3 then 100 when 4 then 1000 else  NVL(pay.method_alipay,0)*1000+ NVL(pay.method_bank,0)*100  + NVL(pay.method_money,0 )*10 +NVL(pay.method_pos,0 ) end) as paymethod ,count(t.id) workCount "
+				+ " from WORK_DEAL_INFO t, CONFIG_PRODUCT p,config_agent_bound_deal_info b , WORK_PAY_INFO pay "
 				+ " where t.product_id = p.id and t.app_id =?  and t.deal_info_status  in(7,9) and b.deal_info = t.id  and t.pay_id = pay.id "
-				+ " and t.create_by = u.id " + " and t.create_date > to_date(? ,'yyyy-MM-dd HH24:mi:ss')"
+				+ " and pay.del_flag =0"
+				+ " and t.create_date > to_date(? ,'yyyy-MM-dd HH24:mi:ss')"
 				+ " and t.create_date <= to_date(? ,'yyyy-MM-dd HH24:mi:ss')";
 		if (StringUtils.isNotBlank(officeIdsList)) {
-			sql = sql + " and  u.office_id in(" + officeIdsList + ")";
+			sql = sql + " and  t.office_id in(" + officeIdsList + ")";
 		}
 		if (StringUtils.isNotBlank(productType)) {
 			sql = sql + " and  p.product_name in(" + productType + ")";
@@ -94,7 +95,7 @@ public class PaymethodCertificateSettleService extends BaseService {
 					+ "and t.deal_info_type in(0,1) and (t.deal_info_type1 is not null or t.deal_info_type2 is not null)";
 		}
 		sql = sql
-				+ " group by  to_char(t.create_date,'YYYY-MM'),(NVL(t.deal_info_type,0)*100+ NVL(t.deal_info_type1,0)*10+ NVL(t.deal_info_type2,0 )) ,p.product_name,t.year ,(NVL(pay.method_alipay,0)*1000+ NVL(pay.method_bank,0)*100 + NVL(pay.method_money,0 )*10 +NVL(pay.method_pos,0 ))"
+				+ " group by  to_char(t.create_date,'YYYY-MM'),(NVL(t.deal_info_type,0)*100+ NVL(t.deal_info_type1,0)*10+ NVL(t.deal_info_type2,0 )) ,p.product_name,t.year ,(case pay.relation_method when 1 then 10 when 2 then 1 when 3 then 100 when 4 then 1000 else  NVL(pay.method_alipay,0)*1000+ NVL(pay.method_bank,0)*100  + NVL(pay.method_money,0 )*10 +NVL(pay.method_pos,0 ) end)"
 				+ " order by to_char(t.create_date,'YYYY-MM') asc,(NVL(t.deal_info_type,0)*100+ NVL(t.deal_info_type1,0)*10+ NVL(t.deal_info_type2,0 )) ,p.product_name,t.year";
 		List<PaymethodCertificateSettleVo> resultList = new ArrayList<PaymethodCertificateSettleVo>();
 

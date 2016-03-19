@@ -1244,68 +1244,68 @@ $(document).ready(function() {
 				<th colspan="${gxjg}" style="text-align: center">机构证书</th>
    			 </c:if>
    			  <c:if test="${ysbbqy >0}">
-				<th colspan="${ysbbqy}" rowspan="2" style="text-align: center">企业证书</th>
+				<th colspan="${ysbbqy}"  style="text-align: center">企业证书</th>
    			 </c:if>
    			  <c:if test="${ysbbgeqy >0}">
-				<th colspan="${ysbbgeqy}" rowspan="2" style="text-align: center">个人证书（企业）</th>
+				<th colspan="${ysbbgeqy}"  style="text-align: center">个人证书（企业）</th>
    			 </c:if>
    			 <c:if test="${ysbbgejg >0}">
-				<th colspan="${ysbbgejg}" rowspan="2" style="text-align: center">个人证书（机构）</th>
+				<th colspan="${ysbbgejg}"  style="text-align: center">个人证书（机构）</th>
    			 </c:if>
    			 <c:if test="${ysbbjg >0}">
-				<th colspan="${ysbbjg} " rowspan="2" style="text-align: center">机构证书</th>
+				<th colspan="${ysbbjg} "  style="text-align: center">机构证书</th>
    			 </c:if>
    			 
    			   <c:if test="${shghqy >0}">
-				<th colspan="${shghqy}" rowspan="2" style="text-align: center">企业证书</th>
+				<th colspan="${shghqy}"  style="text-align: center">企业证书</th>
    			 </c:if>
    			  <c:if test="${shghgeqy >0}">
-				<th colspan="${shghgeqy}" rowspan="2" style="text-align: center">个人证书（企业）</th>
+				<th colspan="${shghgeqy}"  style="text-align: center">个人证书（企业）</th>
    			 </c:if>
    			 <c:if test="${shghgejg >0}">
-				<th colspan="${shghgejg}" rowspan="2" style="text-align: center">个人证书（机构）</th>
+				<th colspan="${shghgejg}"  style="text-align: center">个人证书（机构）</th>
    			 </c:if>
    			 <c:if test="${shghjg >0}">
-				<th colspan="${ysbbjg} " rowspan="2" style="text-align: center">机构证书</th>
+				<th colspan="${shghjg} "  style="text-align: center">机构证书</th>
    			 </c:if>
    			 
    			   <c:if test="${bgqy >0}">
-				<th colspan="${bgqy}" rowspan="2" style="text-align: center">企业证书</th>
+				<th colspan="${bgqy}"  style="text-align: center">企业证书</th>
    			 </c:if>
    			  <c:if test="${bggeqy >0}">
-				<th colspan="${bggeqy}" rowspan="2" style="text-align: center">个人证书（企业）</th>
+				<th colspan="${bggeqy}"  style="text-align: center">个人证书（企业）</th>
    			 </c:if>
    			 <c:if test="${bggejg >0}">
-				<th colspan="${bggejg}" rowspan="2" style="text-align: center">个人证书（机构）</th>
+				<th colspan="${bggejg}"  style="text-align: center">个人证书（机构）</th>
    			 </c:if>
    			 <c:if test="${bgjg >0}">
-				<th colspan="${bgjg} " rowspan="2" style="text-align: center">机构证书</th>
+				<th colspan="${bgjg} "  style="text-align: center">机构证书</th>
    			 </c:if>
    			 	<c:if test="${multiType}">
 				 <c:if test="${bgysbbqy >0}">
-				<th colspan="${bgysbbqy}" rowspan="2" style="text-align: center">企业证书</th>
+				<th colspan="${bgysbbqy}"  style="text-align: center">企业证书</th>
    			 </c:if>
    			  <c:if test="${bgysbbgeqy >0}">
-				<th colspan="${bgysbbgeqy}" rowspan="2" style="text-align: center">个人证书（企业）</th>
+				<th colspan="${bgysbbgeqy}"  style="text-align: center">个人证书（企业）</th>
    			 </c:if>
    			 <c:if test="${bgysbbgejg >0}">
-				<th colspan="${bgysbbgejg}" rowspan="2" style="text-align: center">个人证书（机构）</th>
+				<th colspan="${bgysbbgejg}" style="text-align: center">个人证书（机构）</th>
    			 </c:if>
    			 <c:if test="${bgysbbjg >0}">
-				<th colspan="${bgysbbjg} " rowspan="2" style="text-align: center">机构证书</th>
+				<th colspan="${bgysbbjg} "  style="text-align: center">机构证书</th>
    			 </c:if>
    			 
    			   <c:if test="${bgshghqy >0}">
-				<th colspan="${bgshghqy}" rowspan="2" style="text-align: center">企业证书</th>
+				<th colspan="${bgshghqy}"  style="text-align: center">企业证书</th>
    			 </c:if>
    			  <c:if test="${bgshghgeqy >0}">
-				<th colspan="${bgshghgeqy}" rowspan="2" style="text-align: center">个人证书（企业）</th>
+				<th colspan="${bgshghgeqy}"  style="text-align: center">个人证书（企业）</th>
    			 </c:if>
    			 <c:if test="${bgshghgejg >0}">
-				<th colspan="${bgshghgejg}" rowspan="2" style="text-align: center">个人证书（机构）</th>
+				<th colspan="${bgshghgejg}"  style="text-align: center">个人证书（机构）</th>
    			 </c:if>
    			 <c:if test="${bgshghjg >0}">
-				<th colspan="${bgysbbjg} " rowspan="2" style="text-align: center">机构证书</th>
+				<th colspan="${bgysbbjg} "  style="text-align: center">机构证书</th>
    			 </c:if>
    			  <c:if test="${gxysbbqy >0}">
 				<th colspan="${gxysbbqy}" style="text-align: center">企业证书</th>
@@ -1414,7 +1414,30 @@ $(document).ready(function() {
 						<c:if test="${sumList.total.gxjgadd3.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.gxjgadd3 }" theader="三年"></tags:settlepaymethodheader></th></c:if>
 						<c:if test="${sumList.total.gxjgadd4.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.gxjgadd4 }" theader="四年"></tags:settlepaymethodheader></th></c:if>
 						<c:if test="${sumList.total.gxjgadd5.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.gxjgadd5 }" theader="五年"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.lostCerateqy.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.lostCerateqy }" theader="全部"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.lostCerategrQ.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.lostCerategrQ }" theader="全部"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.lostCerategrG.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.lostCerategrG }" theader="全部"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.lostCeratejg.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.lostCeratejg }" theader="全部"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.damageCertificateqy.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.damageCertificateqy }" theader="全部"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.damageCertificategrQ.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.damageCertificategrQ }" theader="全部"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.damageCertificategrG.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.damageCertificategrG }" theader="全部"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.damageCertificatejg.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.damageCertificatejg }" theader="全部"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.modifyNumqy.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.modifyNumqy }" theader="全部"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.modifyNumgrQ.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.modifyNumgrQ }" theader="全部"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.modifyNumgrG.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.modifyNumgrG }" theader="全部"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.modifyNumjg.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.modifyNumjg }" theader="全部"></tags:settlepaymethodheader></th></c:if>
+						
+						
 						<c:if test="${multiType}">
+						<c:if test="${sumList.total.changeLostqyNum.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.changeLostqyNum }" theader="全部"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.changeLostgrQNum.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.changeLostgrQNum }" theader="全部"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.changeLostgrGNum.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.changeLostgrGNum }" theader="全部"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.changeLostjgNum.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.changeLostjgNum }" theader="全部"></tags:settlepaymethodheader></th></c:if>						
+						<c:if test="${sumList.total.changeReplaceqyNum.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.changeReplaceqyNum }" theader="全部"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.changeReplacegrQNum.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.changeReplacegrQNum }" theader="全部"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.changeReplacegrGNum.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.changeReplacegrGNum }" theader="全部"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.changeReplacejgNum.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.changeReplacejgNum }" theader="全部"></tags:settlepaymethodheader></th></c:if>
+						
 						<c:if test="${sumList.total.updateLostqyNum.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.updateLostqyNum }" theader="一年"></tags:settlepaymethodheader></th></c:if>
 						<c:if test="${sumList.total.updateLostqyNum2.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.updateLostqyNum2 }" theader="二年"></tags:settlepaymethodheader></th></c:if>
 						<c:if test="${sumList.total.updateLostqyNum3.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.updateLostqyNum3 }" theader="三年"></tags:settlepaymethodheader></th></c:if>
