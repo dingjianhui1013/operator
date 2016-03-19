@@ -705,7 +705,7 @@ public class ProjectCertificationDetailsController extends BaseController {
 										WorkDealInfoType.TYPE_UPDATE_CERT,WorkDealInfoType.TYPE_LOST_CHILD)+"张");
 		sheet.addMergedRegion(new CellRangeAddress(1, 1, 1, 14));
 		HSSFRow row7 = sheet.createRow(7);
-		cell = row6.createCell(1);
+		cell = row7.createCell(1);
 		font.setFontHeightInPoints((short) 14);
 		style.setFont(font);
 		cell.setCellStyle(style);
@@ -725,7 +725,7 @@ public class ProjectCertificationDetailsController extends BaseController {
 										WorkDealInfoType.TYPE_UPDATE_CERT,WorkDealInfoType.TYPE_DAMAGED_REPLACED)+"张");
 		sheet.addMergedRegion(new CellRangeAddress(1, 1, 1, 14));
 		HSSFRow row8 = sheet.createRow(8);
-		cell = row6.createCell(1);
+		cell = row8.createCell(1);
 		font.setFontHeightInPoints((short) 14);
 		style.setFont(font);
 		cell.setCellStyle(style);
@@ -739,7 +739,7 @@ public class ProjectCertificationDetailsController extends BaseController {
 						);
 		sheet.addMergedRegion(new CellRangeAddress(1, 1, 1, 14));
 		HSSFRow row9= sheet.createRow(9);
-		cell = row6.createCell(1);
+		cell = row9.createCell(1);
 		font.setFontHeightInPoints((short) 14);
 		style.setFont(font);
 		cell.setCellStyle(style);
@@ -759,7 +759,7 @@ public class ProjectCertificationDetailsController extends BaseController {
 										WorkDealInfoType.TYPE_INFORMATION_REROUTE,WorkDealInfoType.TYPE_LOST_CHILD,WorkDealInfoType.TYPE_UPDATE_CERT)+"张");
 		sheet.addMergedRegion(new CellRangeAddress(1, 1, 1, 14));
 		HSSFRow row10= sheet.createRow(10);
-		cell = row6.createCell(1);
+		cell = row10.createCell(1);
 		font.setFontHeightInPoints((short) 14);
 		style.setFont(font);
 		cell.setCellStyle(style);
@@ -781,16 +781,16 @@ public class ProjectCertificationDetailsController extends BaseController {
 		List<WorkDealInfo> list = workDealInfoService.find4CertList(alias, startTime,endTime);
 		
 		HSSFRow row11= sheet.createRow(11);
-		row7.createCell(0).setCellValue("ID");
-		row7.createCell(1).setCellValue("单位名称");
-		row7.createCell(2).setCellValue("业务类型");
-		row7.createCell(3).setCellValue("证书类型");
-		row7.createCell(4).setCellValue("证书有效期/天");
-		row7.createCell(5).setCellValue("制证时间");
-		row7.createCell(6).setCellValue("所属区域");
+		row11.createCell(0).setCellValue("ID");
+		row11.createCell(1).setCellValue("单位名称");
+		row11.createCell(2).setCellValue("业务类型");
+		row11.createCell(3).setCellValue("证书类型");
+		row11.createCell(4).setCellValue("证书有效期/天");
+		row11.createCell(5).setCellValue("制证时间");
+		row11.createCell(6).setCellValue("所属区域");
 		for (int i = 0; i < list.size(); i++) {
 
-			HSSFRow rown = sheet.createRow(i + 8);
+			HSSFRow rown = sheet.createRow(i + 12);
 			rown.createCell(0).setCellValue(i + 1);
 			if (list.get(i).getWorkCompany().getCompanyName() == null) {
 

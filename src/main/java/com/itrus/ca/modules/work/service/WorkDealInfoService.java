@@ -1228,7 +1228,7 @@ public class WorkDealInfoService extends BaseService {
 				"officeId"));
 		dc.add(Restrictions.in("dealInfoStatus", new String[] {
 				WorkDealInfoStatus.STATUS_CERT_REVOKE,
-				WorkDealInfoStatus.STATUS_CERT_OBTAINED }));
+				WorkDealInfoStatus.STATUS_CERT_OBTAINED}));
 
 		// dc.add(Restrictions.eq("dealInfoType",
 		// WorkDealInfoType.WorkDealInfoTypeMapReplaced));
@@ -1262,9 +1262,16 @@ public class WorkDealInfoService extends BaseService {
 		// WorkDealInfoStatus.STATUS_CERT_OBTAINED来判断
 		
 		//不统计吊销 变更缴费类型 退费 业务
-		dc.add(Restrictions.ne("dealInfoType", 10));
-		dc.add(Restrictions.ne("dealInfoType", 11));
-		dc.add(Restrictions.ne("dealInfoType", 12));
+		dc.add(Restrictions.or(Restrictions.and(Restrictions.ne("dealInfoType", 10),
+				Restrictions.ne("dealInfoType", 11),Restrictions.ne("dealInfoType", 12)),
+				Restrictions.isNull("dealInfoType")));
+//		dc.add(Restrictions.or(Restrictions.ne("dealInfoType", 10),
+//				Restrictions.ne("dealInfoType", 11),
+//				Restrictions.ne("dealInfoType", 12),
+//				Restrictions.isNull("dealInfoType")));
+//		dc.add(Restrictions.ne("dealInfoType", 10));
+//		dc.add(Restrictions.ne("dealInfoType", 11));
+//		dc.add(Restrictions.ne("dealInfoType", 12));
 		dc.add(Restrictions.in(WorkDealInfo.DEL_FLAG, new String[] {
 				WorkDealInfo.DEL_FLAG_NORMAL, WorkDealInfo.DEL_FLAG_DELETE }));
 		dc.addOrder(Order.desc("createDate"));
@@ -6233,6 +6240,7 @@ public class WorkDealInfoService extends BaseService {
 			dc.add(Restrictions.ge("createDate", startTime));
 			dc.add(Restrictions.le("createDate", endTime));
 		}
+		
 		dc.add(Restrictions.eq("dealInfoType", dealInfoType));
 		dc.add(Restrictions.isNull("dealInfoType1"));
 		dc.add(Restrictions.isNull("dealInfoType2"));
