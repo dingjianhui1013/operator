@@ -4313,6 +4313,63 @@ public class WorkDealInfoController extends BaseController {
 		if (zhizhengStartTime != null && zhizhengEndTime != null) {
 			certInfoList = workCertInfoService.findZhiZhengTime(zhizhengStartTime, zhizhengEndTime);
 		}
+		//单独处理吊销
+		if(workType!=null&&workType==5)
+		{
+			Page<WorkDealInfo> page = workDealInfoService.findCX(new Page<WorkDealInfo>(request, response), workDealInfo,
+					dealInfoByOfficeAreaIds, dealInfoByAreaIds, officeids, apply, certType, workType, year, luruStartTime,
+					luruEndTime, officeIds, daoqiStartTime, daoqiEndTime, jianzhengStartTime, jianzhengEndTime,
+					certInfoList);
+			model.addAttribute("proType", ProductType.productTypeStrMap);
+			model.addAttribute("wdiType", WorkDealInfoType.WorkDealInfoTypeMap);
+			model.addAttribute("wdiStatus", WorkDealInfoStatus.WorkDealInfoStatusMap);
+			model.addAttribute("certTypes", productType.getProductTypeList());
+			model.addAttribute("workTypes", workDealInfoType.getProductTypeList());
+	
+			model.addAttribute("page", page);
+	
+			List<Office> offsList = officeService.getOfficeByType(UserUtils.getUser(), 1);
+			for (int i = 0; i < offsList.size();) {
+				Office office = offsList.get(i);
+				if (office.getType().equals("2")) {
+					offsList.remove(i);
+				} else {
+					i++;
+				}
+			}
+			/*
+			 * Office scca = officeService.get(1L); offsList.add(scca);
+			 */
+			if (area != null) {
+				List<Office> offices = officeService.findByParentId(area);
+				model.addAttribute("offices", offices);
+			}
+	
+			model.addAttribute("offsList", offsList);
+	
+			List<ConfigApp> configAppList = configAppService.selectAll();
+			model.addAttribute("configAppList", configAppList);
+			model.addAttribute("apply", apply);
+			model.addAttribute("certType", certType);
+			model.addAttribute("workType", workType);
+			model.addAttribute("year", year);
+			model.addAttribute("payMethod", payMethod);
+			model.addAttribute("luruStartTime", luruStartTime);
+			model.addAttribute("luruEndTime", luruEndTime);
+	
+			model.addAttribute("daoqiStartTime", daoqiStartTime);
+			model.addAttribute("daoqiEndTime", daoqiEndTime);
+	
+			model.addAttribute("jianzhengStartTime", jianzhengStartTime);
+			model.addAttribute("jianzhengEndTime", jianzhengEndTime);
+	
+			model.addAttribute("zhizhengStartTime", zhizhengStartTime);
+			model.addAttribute("zhizhengEndTime", zhizhengEndTime);
+	
+			model.addAttribute("officeId", officeId);
+			model.addAttribute("area", area);
+			return "modules/work/workDealInfoBusinessQueryList";
+		}
 		Page<WorkDealInfo> page = workDealInfoService.find(new Page<WorkDealInfo>(request, response), workDealInfo,
 				dealInfoByOfficeAreaIds, dealInfoByAreaIds, officeids, apply, certType, workType, year, luruStartTime,
 				luruEndTime, officeIds, daoqiStartTime, daoqiEndTime, jianzhengStartTime, jianzhengEndTime,
@@ -4321,7 +4378,7 @@ public class WorkDealInfoController extends BaseController {
 		model.addAttribute("wdiType", WorkDealInfoType.WorkDealInfoTypeMap);
 		model.addAttribute("wdiStatus", WorkDealInfoStatus.WorkDealInfoStatusMap);
 		model.addAttribute("certTypes", productType.getProductTypeList());
-		model.addAttribute("workTypes", workDealInfoType.getProductTypeListNew());
+		model.addAttribute("workTypes", workDealInfoType.getProductTypeList());
 
 		model.addAttribute("page", page);
 
@@ -4366,6 +4423,7 @@ public class WorkDealInfoController extends BaseController {
 		model.addAttribute("officeId", officeId);
 		model.addAttribute("area", area);
 		return "modules/work/workDealInfoBusinessQueryList";
+		
 	}
 
 	@RequestMapping(value = "showWorkDeal")

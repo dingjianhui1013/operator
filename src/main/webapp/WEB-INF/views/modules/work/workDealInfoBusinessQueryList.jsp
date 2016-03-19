@@ -243,7 +243,10 @@
 					<option value="${type.id}"
 						<c:if test="${type.id==workType}">
 					selected="selected"
-					</c:if>>${type.name}</option>
+					</c:if>>
+							<c:if test="${type.id==11}">现金退费</c:if>
+							<c:if test="${type.id!=11}">${type.name}</c:if>
+						</option>
 				</c:forEach>
 			</select> 
 			<label>KEY编码：</label> <form:input path="keySn" htmlEscape="false"
