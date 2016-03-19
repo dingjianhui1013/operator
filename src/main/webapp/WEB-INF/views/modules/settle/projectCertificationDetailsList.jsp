@@ -7,6 +7,20 @@
 	<script type="text/javascript">
 		$(document).ready(function() {
 			
+			var windowH=$(window).height();
+			$('.windowHeight').height(windowH);
+			$("#scrollBar").scroll(function(){
+				var tableWidth=$("#projectcountTable").width();
+				var formWidth=$("#searchForm").width();
+				var leftWidth=$("#scrollBar").scrollLeft();
+				if((tableWidth-formWidth)-leftWidth>0)
+					{
+						$("#searchForm").css("margin-left",leftWidth);
+						$("#ulId").css("margin-left",leftWidth);
+					}
+			});
+			
+			
 		});
 		function page(n,s){
 			$("#pageNo").val(n);
@@ -51,11 +65,12 @@
 	</script>
 </head>
 <body>
-	<ul class="nav nav-tabs">
+<div style="overflow:auto;" class="windowHeight" id="scrollBar">
+	<ul class="nav nav-tabs" id="ulId" style="width:100%;">
 		<li class="active"><a href="${ctx}/settle/projectCertificationDetails/">项目发证明细列表</a></li>
 		<shiro:hasPermission name="settle:projectCertificationDetails:edit"><li><a href="${ctx}/settle/projectCertificationDetails/form">项目发证明细添加</a></li></shiro:hasPermission>
 	</ul>
-	<form:form id="searchForm" modelAttribute="projectCertificationDetails" action="${ctx}/settle/projectCertificationDetails/" method="post" class="breadcrumb form-search">
+	<form:form id="searchForm" modelAttribute="projectCertificationDetails" action="${ctx}/settle/projectCertificationDetails/" method="post" class="breadcrumb form-search" style="width:100%;">
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
 		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
 		<div>
@@ -89,6 +104,9 @@
 	<tags:message content="${message}"/>
 		
 		<c:if test="${projectcount!=null}">
+		
+		
+		
 		<table id="projectcountTable"
 		class="table table-striped table-bordered table-condensed">
 		
@@ -530,6 +548,7 @@
 				
 		</tbody>
 	</table>
+	</div>
 	<div class="pagination">${page}</div>
 </body>
 </html>
