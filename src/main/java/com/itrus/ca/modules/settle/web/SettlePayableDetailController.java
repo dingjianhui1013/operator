@@ -157,6 +157,11 @@ public class SettlePayableDetailController extends BaseController {
 
 			end = new Date(comAgent.getAgentContractEnd().getTime());
 		}
+		
+		end.setHours(23);
+		end.setHours(59);
+		end.setSeconds(59);
+		
 		List<WorkDealInfo> dealInfos = workDealInfoService.findDealInfo(appId, appIds, productIdList, start, end);
 
 		Integer lenth = 0;
