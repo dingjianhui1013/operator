@@ -12,6 +12,10 @@
 .insertTable{border:none;}
 .table .insertTable th:first-child,.table .insertTable td:first-child{border-left:none;}
 .table .insertTable td{width:60px;}
+.addTable tr:nth-of-type(4) th {
+    padding: 4px 0px;
+}
+
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
@@ -293,7 +297,7 @@ $(document).ready(function() {
 
 		<div class="form-horizontal" style="margin-right:0px;">
 
-		<table class="table table-striped table-bordered table-condensed" id="tableW">
+		<table class="table table-striped table-bordered table-condensed addTable" id="tableW">
 			
 				<!--新增  -->
 					
@@ -1182,7 +1186,7 @@ $(document).ready(function() {
 				<th colspan="${index+1}" style="text-align: center;">项目:${yingyong}</th>
 			</tr>
 			<tr>
-				<th rowspan="3" style="width:10%;vertical-align:middle">月&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;份</th>
+				<th rowspan="3" style="width:10%;vertical-align:middle">月&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;份</th>
 			<c:if test="${xz >0}">
 				<th colspan="${xz}">新增</th>
    			 </c:if>
