@@ -85,14 +85,14 @@ public class PaymethodCertificateSettleService extends BaseService {
 			sql = sql + " and  p.product_name in(" + productType + ")";
 		}
 		if (StringUtils.isNotBlank(agentId)) {
-			sql = sql + " and  b.agent_id = " + agentId;
+			sql = sql + " and  b.agent_id in  (" + agentId +") ";
 		}
 		if (StringUtils.isNotBlank(workTypes)) {
-			sql = sql + "and (t.deal_info_type in(" + workTypes + ") or t.deal_info_type1 in(" + workTypes
+			sql = sql + " and (t.deal_info_type in(" + workTypes + ") or t.deal_info_type1 in(" + workTypes
 					+ ") or t.deal_info_type2 in(" + workTypes + "))";
 		} else { // 默认只查 新增和更新
 			sql = sql
-					+ "and t.deal_info_type in(0,1) and (t.deal_info_type1 is not null or t.deal_info_type2 is not null)";
+					+ " and t.deal_info_type in(0,1) and (t.deal_info_type1 is not null or t.deal_info_type2 is not null)";
 		}
 		sql = sql
 				+ " group by  to_char(t.create_date,'YYYY-MM'),(NVL(t.deal_info_type,0)*100+ NVL(t.deal_info_type1,0)*10+ NVL(t.deal_info_type2,0 )) ,p.product_name,t.year ,(case pay.relation_method when 1 then 10 when 2 then 1 when 3 then 100 when 4 then 1000 else  NVL(pay.method_alipay,0)*1000+ NVL(pay.method_bank,0)*100  + NVL(pay.method_money,0 )*10 +NVL(pay.method_pos,0 ) end)"

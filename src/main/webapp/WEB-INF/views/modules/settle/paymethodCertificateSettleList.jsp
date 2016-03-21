@@ -112,6 +112,8 @@ $(document).ready(function() {
 		//var workTypes = $("#workTypes").val();
 		var startDate = $("#startTime").val();
 		var endDate = $("#endTime").val();
+		var tempStyle = $("#tempStyle").val();
+		var agentId = $("#agentId").val();
 		
 		
 		if (applyId == null || applyId == "") {
@@ -152,6 +154,10 @@ $(document).ready(function() {
 				+ proList
 				+ "&workTypes="
 				+ workTypes
+				+ "&tempStyle="
+				+ tempStyle
+				+ "&agentId="
+				+ agentId				
 				+ "&startDate="
 				+ startDate
 				+ "&endDate="
