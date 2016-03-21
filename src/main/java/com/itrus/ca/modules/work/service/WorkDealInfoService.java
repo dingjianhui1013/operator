@@ -1265,6 +1265,8 @@ public class WorkDealInfoService extends BaseService {
 		dc.add(Restrictions.or(Restrictions.and(Restrictions.ne("dealInfoType", 10),
 				Restrictions.ne("dealInfoType", 11),Restrictions.ne("dealInfoType", 12)),
 				Restrictions.isNull("dealInfoType")));
+		dc.add(Restrictions.isNull("dealInfoType3"));
+		
 //		dc.add(Restrictions.or(Restrictions.ne("dealInfoType", 10),
 //				Restrictions.ne("dealInfoType", 11),
 //				Restrictions.ne("dealInfoType", 12),
