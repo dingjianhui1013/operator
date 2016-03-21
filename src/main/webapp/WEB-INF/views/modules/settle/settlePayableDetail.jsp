@@ -300,11 +300,7 @@
 							<td>${dealInfo.workCertInfo.workCertApplyInfo.name}</td>
 							<td>${proType[dealInfo.configProduct.productName]}</td>
 							<c:forEach items="${dealInfo.detailList }" var="detail">
-<%-- 								<c:if test="${dealInfo.workPayInfo.methodPos}"><td>Pos付款</td></c:if> --%>
-<%-- 								<c:if test="${dealInfo.workPayInfo.methodMoney}"><td>现金付款</td></c:if> --%>
-<%-- 								<c:if test="${dealInfo.workPayInfo.methodBank}"><td>银行付款</td></c:if> --%>
-<%-- 								<c:if test="${dealInfo.workPayInfo.methodAlipay}"><td>支付宝付款</td></c:if> --%>
-<%-- 								<c:if test="${dealInfo.workPayInfo.methodAlipay==false&&dealInfo.workPayInfo.methodMoney==false&&dealInfo.workPayInfo.methodPos==false&&dealInfo.workPayInfo.methodBank==false}"><td> </td></c:if> --%>
+
 									<c:if test="${detail.method==1}"><td>标准</td></c:if> 
 	 								<c:if test="${detail.method==2}"><td>政府统一采购</td></c:if> 
 	 								<c:if test="${detail.method==3}"><td>合同采购</td></c:if> 
@@ -323,7 +319,10 @@
 							</c:forEach>
 							<td>${dealInfo.yyNum}</td>
 							<td>${dealInfo.lastNum}</td>
-							<td>${dealInfo.totalNum - dealInfo.yyNum - dealInfo.lastNum-dealInfo.occupy}</td>
+							<td><c:if test="${dealInfo.totalNum - dealInfo.yyNum - dealInfo.lastNum-dealInfo.occupy<0}">0</c:if>
+							
+								<c:if test="${dealInfo.totalNum - dealInfo.yyNum - dealInfo.lastNum-dealInfo.occupy>=0}">${dealInfo.totalNum - dealInfo.yyNum - dealInfo.lastNum-dealInfo.occupy}</c:if>
+							</td>
 						</tr>
 					</c:forEach>
 				</table>
