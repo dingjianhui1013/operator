@@ -176,6 +176,8 @@ public class SettlePayableDetailController extends BaseController {
 			}
 			while (info != null) {
 				info = workDealInfoService.findDealInfo(info.getId());
+				
+				
 				if (info != null) {
 					infos.add(info);
 				}
