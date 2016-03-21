@@ -6209,6 +6209,21 @@ public class WorkDealInfoService extends BaseService {
 		}
 
 	}
+	
+	
+	//找到父业务
+	public WorkDealInfo findPreDealInfo(Long prvedId) {
+		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
+		dc.add(Restrictions.eq("id", prvedId));
+		if (workDealInfoDao.find(dc).size() > 0) {
+			return workDealInfoDao.find(dc).get(0);
+		} else {
+			return null;
+		}
+
+	}
+	
+	
 
 	public int getCertAppYearInfoCount1(Date startTime, Date endTime,
 			Long officeId, Integer year, Long appId, Integer dealInfoType) {
@@ -6658,5 +6673,80 @@ public class WorkDealInfoService extends BaseService {
 		dc.add(Restrictions.in("dealInfoStatus", statusIntegers));
 		return (int) workDealInfoDao.count(dc);
 	}
+	
+	
+	
+	
+	
+	
+	public List<WorkDealInfo> findDealInfoByAdd(Long appId, List<Long> appIds,
+			List<Long> productIds, Date start, Date end) {
+		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
+		dc.createAlias("configApp", "configApp");
+		if (appId != null) {
+
+			dc.add(Restrictions.eq("configApp.id", appId));
+		}
+		if (appIds.size() > 0) {
+			dc.add(Restrictions.in("configApp.id", appIds));
+		}
+		if (productIds.size() > 0) {
+			dc.createAlias("configProduct", "configProduct");
+			dc.add(Restrictions.in("configProduct.id", productIds));
+		}
+		if (start != null) {
+			dc.add(Restrictions.ge("businessCardUserDate", start));
+		}
+		if (end != null) {
+			dc.add(Restrictions.le("businessCardUserDate", end));
+		}
+		dc.add(Restrictions.eq("dealInfoType", 0));
+		dc.addOrder(Order.desc("id"));
+		dc.add(Restrictions.eq("dealInfoStatus",
+				WorkDealInfoStatus.STATUS_CERT_OBTAINED));
+		return workDealInfoDao.find(dc);
+	}
+
+	
+	public List<WorkDealInfo> findDealInfoByUpdate(Long appId, List<Long> appIds,
+			List<Long> productIds, Date start, Date end) {
+		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
+		dc.createAlias("configApp", "configApp");
+		if (appId != null) {
+
+			dc.add(Restrictions.eq("configApp.id", appId));
+		}
+		if (appIds.size() > 0) {
+			dc.add(Restrictions.in("configApp.id", appIds));
+		}
+		if (productIds.size() > 0) {
+			dc.createAlias("configProduct", "configProduct");
+			dc.add(Restrictions.in("configProduct.id", productIds));
+		}
+		if (start != null) {
+			dc.add(Restrictions.ge("payUserDate", start));
+		}
+		if (end != null) {
+			dc.add(Restrictions.le("payUserDate", end));
+		}
+		dc.add(Restrictions.eq("dealInfoType", 1));
+		dc.addOrder(Order.desc("id"));
+		/*dc.add(Restrictions.eq("dealInfoStatus",
+				WorkDealInfoStatus.STATUS_CERT_OBTAINED));*/
+		
+		List<String> statusIntegers = new ArrayList<String>();
+		statusIntegers.add(WorkDealInfoStatus.STATUS_CERT_WAIT);
+		statusIntegers.add(WorkDealInfoStatus.STATUS_CERT_OBTAINED);
+		
+		
+		
+		dc.add(Restrictions.in("dealInfoStatus", statusIntegers));
+		
+		return workDealInfoDao.find(dc);
+	}
+	
+	
+	
+	
 
 }
