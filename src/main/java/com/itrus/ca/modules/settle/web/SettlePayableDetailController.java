@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -136,7 +137,7 @@ public class SettlePayableDetailController extends BaseController {
 			}
 		}
 		model.addAttribute("productIdList", productIdList);
-		Date start = new Date();
+		/*Date start = new Date();
 		Date end = new Date();
 		if (startTime != null && !startTime.equals("")) {
 			if (comAgent.getAgentContractStart().getTime() > startTime.getTime()) {
@@ -160,9 +161,47 @@ public class SettlePayableDetailController extends BaseController {
 		
 		end.setHours(23);
 		end.setMinutes(59);
-		end.setSeconds(59);
+		end.setSeconds(59);*/
 		
-		List<WorkDealInfo> dealInfos = workDealInfoService.findDealInfo(appId, appIds, productIdList, start, end);
+		
+		endTime.setHours(23);
+		endTime.setMinutes(59);
+		endTime.setSeconds(59);
+		
+		
+		
+		//先得到业务办理时间范围内所有的新增和更新  然后找到每个业务链的头部，和代理商合同有效期比较，符合条件放入list
+		List<WorkDealInfo> dealInfoAdds = workDealInfoService.findDealInfoByAdd(appId,appIds,productIdList,startTime,endTime);
+		List<WorkDealInfo> dealInfoUpdates = workDealInfoService.findDealInfoByUpdate(appId,appIds,productIdList,startTime,endTime); 
+		
+		Set<WorkDealInfo> dealInfoSet = new HashSet<>();
+		
+		for(WorkDealInfo info:dealInfoAdds){
+			if(info.getBusinessCardUserDate().after(new Date(comAgent.getAgentContractStart().getTime()))&&info.getBusinessCardUserDate().before(new Date(comAgent.getAgentContractEnd().getTime()))){
+				dealInfoSet.add(info);	
+			}
+		}
+		
+		for(WorkDealInfo info:dealInfoUpdates){
+			while (info.getPrevId() != null) {
+
+                info = workDealInfoService.findPreDealInfo(info.getPrevId());
+			
+				if (info.getPrevId() == null) {
+					
+					if(info.getBusinessCardUserDate().after(new Date(comAgent.getAgentContractStart().getTime()))&&info.getBusinessCardUserDate().before(new Date(comAgent.getAgentContractEnd().getTime()))){
+						dealInfoSet.add(info);	
+					}
+					
+					
+				}
+			}
+		}
+		
+		
+		List<WorkDealInfo> dealInfos = new ArrayList<>(dealInfoSet);
+		
+		
 
 		Integer lenth = 0;
 		for (int i = 0; i < dealInfos.size(); i++) {
