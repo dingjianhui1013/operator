@@ -95,7 +95,7 @@
 						                            		loading('正在提交，请稍等...');
 						                            		$.ajax({
 						        								url:"${ctx}/settle/settlementLog/deleteAndSave",
-						        								data:{'appId':appId,'comAgentId':comAgentId,'productIds':productIds,'startTime':startTime,'endTime':endTime,'remarks':remarks,_:new Date().getTime()},
+						        								data:{'appId':appId,'comAgentId':comAgentId,'productIds':productIds,'startTime':startTime,'endTime':endTime,'remarks':data.remarks,_:new Date().getTime()},
 						        								dataType:'json',
 						        								success:function(data){
 						        									if(data.status==1)

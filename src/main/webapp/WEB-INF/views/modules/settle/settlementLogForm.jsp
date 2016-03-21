@@ -78,13 +78,14 @@
 							<td>${dealInfo.workCertInfo.workCertApplyInfo.name}</td>
 							<td>${proType[dealInfo.configProduct.productName]}</td>
 							<c:forEach items="${dealInfo.detailList }" var="detail">
+
 									<c:if test="${detail.method==1}"><td>标准</td></c:if> 
 	 								<c:if test="${detail.method==2}"><td>政府统一采购</td></c:if> 
 	 								<c:if test="${detail.method==3}"><td>合同采购</td></c:if> 
 								<td><fmt:formatDate	value="${detail.startDate }" pattern="yyyy-MM-dd" /></td>
 								<td><fmt:formatDate value="${detail.endDate }" pattern="yyyy-MM-dd" /></td>
-								<td><c:if test="${detail.dealInfoType=='null '}"> </c:if>
-									 <c:if test="${detail.dealInfoType!='null '}">${detail.dealInfoType}</c:if> </td>
+								<td><c:if test="${detail.dealInfoType=='null '}"> </c:if> 
+								<c:if test="${detail.dealInfoType!='null '}">${detail.dealInfoType}</c:if> </td>
 								<td>${detail.settleYear }</td>
 							</c:forEach>
 							<c:forEach begin="1" end="${lenth - dealInfo.detailList.size() }">
@@ -94,9 +95,12 @@
 								<td></td>
 								<td></td>
 							</c:forEach>
-							<td>${dealInfo.yyNum-dealInfo.lastNum}</td>
+							<td>${dealInfo.yyNum}</td>
 							<td>${dealInfo.lastNum}</td>
-							<td>${dealInfo.totalNum-dealInfo.yyNum}</td>
+							<td><c:if test="${dealInfo.totalNum - dealInfo.yyNum - dealInfo.lastNum-dealInfo.occupy<0}">0</c:if>
+							
+								<c:if test="${dealInfo.totalNum - dealInfo.yyNum - dealInfo.lastNum-dealInfo.occupy>=0}">${dealInfo.totalNum - dealInfo.yyNum - dealInfo.lastNum-dealInfo.occupy}</c:if>
+							</td>
 						</tr>
 					</c:forEach>
 				</table>

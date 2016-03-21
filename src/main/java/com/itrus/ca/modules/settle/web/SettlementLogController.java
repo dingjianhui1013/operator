@@ -177,6 +177,8 @@ public class SettlementLogController extends BaseController {
 			}
 			while (info != null) {
 				info = workDealInfoService.findDealInfo(info.getId());
+				
+				
 				if (info != null) {
 					infos.add(info);
 				}
@@ -324,9 +326,9 @@ public class SettlementLogController extends BaseController {
 			dealInfos.get(i).setDetailList(detailList);
 			/*dealInfos.get(i).setLastNum(lastNum);*/
 			dealInfos.get(i).setOccupy(occupy);
-			if (detailList.size()>lenth) {
+			/*if (detailList.size()>lenth) {
 				lenth = detailList.size();
-			}
+			}*/
 		}
 
 		for (int k = dealInfos.size() - 1; k >= 0; k--) {
@@ -345,6 +347,13 @@ public class SettlementLogController extends BaseController {
 			}
 			if (payType == 0) {
 				dealInfos.remove(k);
+			}
+		}
+		
+		
+		for(WorkDealInfo info:dealInfos){
+			if(info.getDetailList().size()>lenth){
+				lenth = info.getDetailList().size();
 			}
 		}
 		model.addAttribute("settlementLogs", settlementLogs);
@@ -416,6 +425,7 @@ public class SettlementLogController extends BaseController {
 		if(list.size()>0)
 		{
 			json.put("status", 1);
+			json.put("remarks",remarks);
 			json.put("msg","此查询条件已保存是否重新保存");
 		}else
 		{
@@ -512,6 +522,9 @@ public class SettlementLogController extends BaseController {
 
 			end = new Date(comAgent.getAgentContractEnd().getTime());
 		}
+		end.setHours(23);
+		end.setMinutes(59);
+		end.setSeconds(59);
 		List<WorkDealInfo> dealInfos = workDealInfoService.findDealInfo(appId, appIds, productIdList, start, end);
 		Set<WorkDealInfo_settlementLog> workDealInfos = new HashSet<WorkDealInfo_settlementLog>();
 		JSONObject json = new JSONObject();
@@ -627,6 +640,9 @@ public class SettlementLogController extends BaseController {
 
 			end = new Date(comAgent.getAgentContractEnd().getTime());
 		}
+		end.setHours(23);
+		end.setMinutes(59);
+		end.setSeconds(59);
 		List<WorkDealInfo> dealInfos = workDealInfoService.findDealInfo(appId, appIds, productIdList, start, end);
 		
 		

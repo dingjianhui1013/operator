@@ -451,6 +451,9 @@ public class SettlePayableDetailController extends BaseController {
 
 			end = new Date(comAgent.getAgentContractEnd().getTime());
 		}
+		end.setHours(23);
+		end.setMinutes(59);
+		end.setSeconds(59);
 		List<WorkDealInfo> dealInfos = workDealInfoService.findDealInfo(appId, appIds, productIdList, start, end);
 
 		Integer lenth = 0;
@@ -465,6 +468,8 @@ public class SettlePayableDetailController extends BaseController {
 			}
 			while (info != null) {
 				info = workDealInfoService.findDealInfo(info.getId());
+				
+				
 				if (info != null) {
 					infos.add(info);
 				}
@@ -612,9 +617,9 @@ public class SettlePayableDetailController extends BaseController {
 			dealInfos.get(i).setDetailList(detailList);
 			/*dealInfos.get(i).setLastNum(lastNum);*/
 			dealInfos.get(i).setOccupy(occupy);
-			if (detailList.size()>lenth) {
+			/*if (detailList.size()>lenth) {
 				lenth = detailList.size();
-			}
+			}*/
 		}
 
 		for (int k = dealInfos.size() - 1; k >= 0; k--) {
@@ -633,6 +638,13 @@ public class SettlePayableDetailController extends BaseController {
 			}
 			if (payType == 0) {
 				dealInfos.remove(k);
+			}
+		}
+		
+		
+		for(WorkDealInfo info:dealInfos){
+			if(info.getDetailList().size()>lenth){
+				lenth = info.getDetailList().size();
 			}
 		}
 
@@ -693,10 +705,24 @@ public class SettlePayableDetailController extends BaseController {
 			rowi.createCell(2).setCellValue(dealInfos.get(i - 4).getWorkCertInfo().getWorkCertApplyInfo().getName());
 			rowi.createCell(3).setCellValue(
 					ProductType.productTypeStrMap.get(dealInfos.get(i - 4).getConfigProduct().getProductName()));
-
 			for (int j = 0; j < dealInfos.get(i - 4).getDetailList().size(); j++) {
-				rowi.createCell(j * 5 + 4).setCellValue(dealInfos.get(i - 4).getDetailList().get(j).getMethod() == null
-						? "" : dealInfos.get(i - 4).getDetailList().get(j).getMethod().toString());
+				
+				if(dealInfos.get(i - 4).getDetailList().get(j).getMethod().toString().equals("1"))
+				{
+					rowi.createCell(j * 5 + 4).setCellValue("标准");
+				}
+				if(dealInfos.get(i - 4).getDetailList().get(j).getMethod().toString().equals("2"))
+				{
+					rowi.createCell(j * 5 + 4).setCellValue("政府统一采购");
+				}
+				if(dealInfos.get(i - 4).getDetailList().get(j).getMethod().toString().equals("3"))
+				{
+					rowi.createCell(j * 5 + 4).setCellValue("合同采购");
+				}
+				if(dealInfos.get(i - 4).getDetailList().get(j).getMethod()==null)
+				{
+					rowi.createCell(j * 5 + 4).setCellValue("123");
+				}
 				rowi.createCell(j * 5 + 4 + 1)
 						.setCellValue(dealInfos.get(i - 4).getDetailList().get(j).getStartDate() == null ? ""
 								: dealInfos.get(i - 4).getDetailList().get(j).getStartDate().toString());
@@ -713,10 +739,19 @@ public class SettlePayableDetailController extends BaseController {
 			}
 
 			rowi.createCell(5 * lenth + 4)
-					.setCellValue(dealInfos.get(i - 4).getYyNum() - dealInfos.get(i - 4).getLastNum());
+					.setCellValue(dealInfos.get(i - 4).getYyNum());
 			rowi.createCell(5 * lenth + 4 + 1).setCellValue(dealInfos.get(i - 4).getLastNum());
-			rowi.createCell(5 * lenth + 4 + 2)
-					.setCellValue(dealInfos.get(i - 4).getTotalNum() - dealInfos.get(i - 4).getYyNum());
+			if((dealInfos.get(i - 4).getTotalNum() - dealInfos.get(i - 4).getYyNum() - dealInfos.get(i - 4).getLastNum() - dealInfos.get(i - 4).getOccupy())<0)
+			{
+				rowi.createCell(5 * lenth + 4 + 2)
+				.setCellValue(0);
+			}
+			if((dealInfos.get(i - 4).getTotalNum() - dealInfos.get(i - 4).getYyNum() - dealInfos.get(i - 4).getLastNum() - dealInfos.get(i - 4).getOccupy())>=0)
+			{
+				
+				rowi.createCell(5 * lenth + 4 + 2)
+				.setCellValue(dealInfos.get(i - 4).getTotalNum() - dealInfos.get(i - 4).getYyNum() - dealInfos.get(i - 4).getLastNum() - dealInfos.get(i - 4).getOccupy());
+			}
 		}
 
 		try {
