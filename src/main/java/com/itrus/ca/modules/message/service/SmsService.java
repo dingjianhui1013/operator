@@ -18,7 +18,7 @@ import sun.util.logging.resources.logging;
 
 @org.springframework.stereotype.Service
 public class SmsService {
-	  private static final Log LOGGER = LogFactory.getLog(SmsService.class);
+	 /* private static final Log LOGGER = LogFactory.getLog(SmsService.class);
 	  @Value("${sms.username}")
 	   private String uid;
 
@@ -106,4 +106,4 @@ public class SmsService {
 //	        System.out.println("发送成功");
 //	        return true;
 //	}
-}
+*/}
