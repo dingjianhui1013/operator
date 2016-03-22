@@ -1329,27 +1329,44 @@ public class WorkDealInfoService extends BaseService {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		// dc.createAlias("workUser", "workUser");
 		// dc.createAlias("workCompany", "workCompany");
-		dc.createAlias("createBy", "createBy");
-		dc.createAlias("createBy.office", "office");
+		// dc.createAlias("createBy", "createBy");
+		// dc.createAlias("createBy.office", "office");
 		dc.createAlias("configApp", "configApp");
+		// dc.createAlias("workCertInfo", "workCertInfo");
+		// dc.createAlias("dealInfoType"," dealInfoType");
+		// dc.add(Restrictions.ne("dealInfoType",
+		// WorkDealInfoType.TYPE_UNLOCK_CERT));
+		// dc.add(Restrictions.ne("dealInfoType",
+		// WorkDealInfoType.TYPE_PAY_REPLACED));
 
-		dc.add(dataScopeFilter(UserUtils.getUser(), "office", "createBy"));
+		// dc.add(dataScopeFilter(UserUtils.getUser(), "office", "createBy"));
+		dc.add(dataScopeFilterByWorkDealInfo(UserUtils.getUser(), "areaId",
+				"officeId"));
 		dc.add(Restrictions.in("dealInfoStatus", new String[] {
 				WorkDealInfoStatus.STATUS_CERT_REVOKE,
-				WorkDealInfoStatus.STATUS_CERT_OBTAINED }));
+				WorkDealInfoStatus.STATUS_CERT_OBTAINED}));
 
+		// dc.add(Restrictions.eq("dealInfoType",
+		// WorkDealInfoType.WorkDealInfoTypeMapReplaced));
 		if (apply != null) {
 			dc.add(Restrictions.eq("configApp.id", apply));
 		}
 		// workcertinfo 在此处报流关闭错误，此处使用业务的createDate
+		SimpleDateFormat formater = new SimpleDateFormat("yyyy/MM/dd");
+		SimpleDateFormat formater2 = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 		if (startTime != null && endTime != null) {
-			endTime.setHours(29);
-			endTime.setMinutes(59);
-			endTime.setSeconds(59);
+			try {
+				startTime = formater2.parse(formater.format(startTime)
+						+ " 00:00:00");
+				endTime = formater2.parse(formater.format(endTime)
+						+ " 23:59:59");
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			dc.add(Restrictions.ge("createDate", startTime));
 			dc.add(Restrictions.le("createDate", endTime));
 		}
-
 		/*
 		 * if (certInfoList.size() > 0) { dc.add(Restrictions.in("workCertInfo",
 		 * certInfoList)); } else { dc.add(Restrictions.eq("id", -1L)); //
@@ -1359,9 +1376,24 @@ public class WorkDealInfoService extends BaseService {
 		// dc.add(Restrictions.isNull("isIxin"));
 		// 更新和更新之前的新增都要统计，因为更新把新增的业务链给标志delete了，所以去掉这个约束条件，统一由
 		// WorkDealInfoStatus.STATUS_CERT_OBTAINED来判断
+		
+		//不统计吊销 变更缴费类型 退费 业务
+		dc.add(Restrictions.or(Restrictions.and(Restrictions.ne("dealInfoType", 10),
+				Restrictions.ne("dealInfoType", 11),Restrictions.ne("dealInfoType", 12)),
+				Restrictions.isNull("dealInfoType")));
+		dc.add(Restrictions.isNull("dealInfoType3"));
+		
+//		dc.add(Restrictions.or(Restrictions.ne("dealInfoType", 10),
+//				Restrictions.ne("dealInfoType", 11),
+//				Restrictions.ne("dealInfoType", 12),
+//				Restrictions.isNull("dealInfoType")));
+//		dc.add(Restrictions.ne("dealInfoType", 10));
+//		dc.add(Restrictions.ne("dealInfoType", 11));
+//		dc.add(Restrictions.ne("dealInfoType", 12));
 		dc.add(Restrictions.in(WorkDealInfo.DEL_FLAG, new String[] {
 				WorkDealInfo.DEL_FLAG_NORMAL, WorkDealInfo.DEL_FLAG_DELETE }));
 		dc.addOrder(Order.desc("createDate"));
+
 		return workDealInfoDao.find(dc);
 	}
 

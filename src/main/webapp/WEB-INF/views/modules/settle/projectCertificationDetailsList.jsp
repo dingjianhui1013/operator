@@ -522,7 +522,7 @@
 			<c:forEach items="${page.list}" var="workDealInfo" varStatus="status">
 			
 				<tr>
-				<td>${status.index+1 }+${workDealInfo.id }</td>
+				<td>${status.index+1 }</td>
 				<td>${workDealInfo.workCompany.companyName}</td>
 				<td>${proType[workDealInfo.configProduct.productName]}</td>
 				<td>
