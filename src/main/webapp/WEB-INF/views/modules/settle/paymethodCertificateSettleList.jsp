@@ -1424,29 +1424,29 @@ $(document).ready(function() {
 						<c:if test="${sumList.total.gxjgadd3.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.gxjgadd3 }" theader="三年"></tags:settlepaymethodheader></th></c:if>
 						<c:if test="${sumList.total.gxjgadd4.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.gxjgadd4 }" theader="四年"></tags:settlepaymethodheader></th></c:if>
 						<c:if test="${sumList.total.gxjgadd5.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.gxjgadd5 }" theader="五年"></tags:settlepaymethodheader></th></c:if>
-						<c:if test="${sumList.total.lostCerateqy.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.lostCerateqy }" theader="全部"></tags:settlepaymethodheader></th></c:if>
-						<c:if test="${sumList.total.lostCerategrQ.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.lostCerategrQ }" theader="全部"></tags:settlepaymethodheader></th></c:if>
-						<c:if test="${sumList.total.lostCerategrG.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.lostCerategrG }" theader="全部"></tags:settlepaymethodheader></th></c:if>
-						<c:if test="${sumList.total.lostCeratejg.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.lostCeratejg }" theader="全部"></tags:settlepaymethodheader></th></c:if>
-						<c:if test="${sumList.total.damageCertificateqy.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.damageCertificateqy }" theader="全部"></tags:settlepaymethodheader></th></c:if>
-						<c:if test="${sumList.total.damageCertificategrQ.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.damageCertificategrQ }" theader="全部"></tags:settlepaymethodheader></th></c:if>
-						<c:if test="${sumList.total.damageCertificategrG.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.damageCertificategrG }" theader="全部"></tags:settlepaymethodheader></th></c:if>
-						<c:if test="${sumList.total.damageCertificatejg.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.damageCertificatejg }" theader="全部"></tags:settlepaymethodheader></th></c:if>
-						<c:if test="${sumList.total.modifyNumqy.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.modifyNumqy }" theader="全部"></tags:settlepaymethodheader></th></c:if>
-						<c:if test="${sumList.total.modifyNumgrQ.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.modifyNumgrQ }" theader="全部"></tags:settlepaymethodheader></th></c:if>
-						<c:if test="${sumList.total.modifyNumgrG.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.modifyNumgrG }" theader="全部"></tags:settlepaymethodheader></th></c:if>
-						<c:if test="${sumList.total.modifyNumjg.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.modifyNumjg }" theader="全部"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.lostCerateqy.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.lostCerateqy }" theader="&nbsp;&nbsp;"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.lostCerategrQ.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.lostCerategrQ }" theader="&nbsp;&nbsp;"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.lostCerategrG.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.lostCerategrG }" theader="&nbsp;&nbsp;"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.lostCeratejg.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.lostCeratejg }" theader="&nbsp;&nbsp;"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.damageCertificateqy.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.damageCertificateqy }" theader="&nbsp;&nbsp;"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.damageCertificategrQ.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.damageCertificategrQ }" theader="&nbsp;&nbsp;"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.damageCertificategrG.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.damageCertificategrG }" theader="&nbsp;&nbsp;"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.damageCertificatejg.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.damageCertificatejg }" theader="&nbsp;&nbsp;"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.modifyNumqy.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.modifyNumqy }" theader="&nbsp;&nbsp;"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.modifyNumgrQ.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.modifyNumgrQ }" theader="&nbsp;&nbsp;"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.modifyNumgrG.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.modifyNumgrG }" theader="&nbsp;&nbsp;"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.modifyNumjg.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.modifyNumjg }" theader="&nbsp;&nbsp;"></tags:settlepaymethodheader></th></c:if>
 						
 						
 						<c:if test="${multiType}">
-						<c:if test="${sumList.total.changeLostqyNum.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.changeLostqyNum }" theader="全部"></tags:settlepaymethodheader></th></c:if>
-						<c:if test="${sumList.total.changeLostgrQNum.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.changeLostgrQNum }" theader="全部"></tags:settlepaymethodheader></th></c:if>
-						<c:if test="${sumList.total.changeLostgrGNum.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.changeLostgrGNum }" theader="全部"></tags:settlepaymethodheader></th></c:if>
-						<c:if test="${sumList.total.changeLostjgNum.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.changeLostjgNum }" theader="全部"></tags:settlepaymethodheader></th></c:if>						
-						<c:if test="${sumList.total.changeReplaceqyNum.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.changeReplaceqyNum }" theader="全部"></tags:settlepaymethodheader></th></c:if>
-						<c:if test="${sumList.total.changeReplacegrQNum.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.changeReplacegrQNum }" theader="全部"></tags:settlepaymethodheader></th></c:if>
-						<c:if test="${sumList.total.changeReplacegrGNum.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.changeReplacegrGNum }" theader="全部"></tags:settlepaymethodheader></th></c:if>
-						<c:if test="${sumList.total.changeReplacejgNum.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.changeReplacejgNum }" theader="全部"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.changeLostqyNum.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.changeLostqyNum }" theader="&nbsp;&nbsp;"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.changeLostgrQNum.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.changeLostgrQNum }" theader="&nbsp;&nbsp;"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.changeLostgrGNum.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.changeLostgrGNum }" theader="&nbsp;&nbsp;"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.changeLostjgNum.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.changeLostjgNum }" theader="&nbsp;&nbsp;"></tags:settlepaymethodheader></th></c:if>						
+						<c:if test="${sumList.total.changeReplaceqyNum.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.changeReplaceqyNum }" theader="&nbsp;&nbsp;"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.changeReplacegrQNum.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.changeReplacegrQNum }" theader="&nbsp;&nbsp;"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.changeReplacegrGNum.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.changeReplacegrGNum }" theader="&nbsp;&nbsp;"></tags:settlepaymethodheader></th></c:if>
+						<c:if test="${sumList.total.changeReplacejgNum.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.changeReplacejgNum }" theader="&nbsp;&nbsp;"></tags:settlepaymethodheader></th></c:if>
 						
 						<c:if test="${sumList.total.updateLostqyNum.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.updateLostqyNum }" theader="一年"></tags:settlepaymethodheader></th></c:if>
 						<c:if test="${sumList.total.updateLostqyNum2.totalCount !=0}"><th><tags:settlepaymethodheader total="${sumList.total.updateLostqyNum2 }" theader="二年"></tags:settlepaymethodheader></th></c:if>
