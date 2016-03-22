@@ -501,31 +501,84 @@ public class SettlementLogController extends BaseController {
 		}
 		
 		
-		Date start = new Date();
-		Date end = new Date();
-		if (startTime != null && !startTime.equals("")) {
-			if (comAgent.getAgentContractStart().getTime() > startTime.getTime()) {
-				start = new Date(comAgent.getAgentContractStart().getTime());
-			} else {
-				start = startTime;
+//		Date start = new Date();
+//		Date end = new Date();
+//		if (startTime != null && !startTime.equals("")) {
+//			if (comAgent.getAgentContractStart().getTime() > startTime.getTime()) {
+//				start = new Date(comAgent.getAgentContractStart().getTime());
+//			} else {
+//				start = startTime;
+//			}
+//		} else {
+//			start = new Date(comAgent.getAgentContractStart().getTime());
+//		}
+//		if (endTime != null && !endTime.equals("")) {
+//			if (comAgent.getAgentContractEnd().getTime() < endTime.getTime()) {
+//				end = new Date(comAgent.getAgentContractEnd().getTime());
+//			} else {
+//				end = endTime;
+//			}
+//		} else {
+//
+//			end = new Date(comAgent.getAgentContractEnd().getTime());
+//		}
+//		end.setHours(23);
+//		end.setMinutes(59);
+//		end.setSeconds(59);
+		
+//		Date start = new Date();
+//		Date end = new Date();
+//		if (startTime != null && !startTime.equals("")) {
+//			if (comAgent.getAgentContractStart().getTime() > startTime.getTime()) {
+//				start = new Date(comAgent.getAgentContractStart().getTime());
+//			} else {
+//				start = startTime;
+//			}
+//		} else {
+//			start = new Date(comAgent.getAgentContractStart().getTime());
+//		}
+//		if (endTime != null && !endTime.equals("")) {
+//			if (comAgent.getAgentContractEnd().getTime() < endTime.getTime()) {
+//				end = new Date(comAgent.getAgentContractEnd().getTime());
+//			} else {
+//				end = endTime;
+//			}
+//		} else {
+//
+//			end = new Date(comAgent.getAgentContractEnd().getTime());
+//		}
+//		end.setHours(23);
+//		end.setMinutes(59);
+//		end.setSeconds(59);
+		List<WorkDealInfo> dealInfoAdds = workDealInfoService.findDealInfoByAdd(appId,appIds,productIdList,startTime,endT);
+		List<WorkDealInfo> dealInfoUpdates = workDealInfoService.findDealInfoByUpdate(appId,appIds,productIdList,startTime,endT); 
+		
+		Set<WorkDealInfo> dealInfoSet = new HashSet<>();
+		
+		for(WorkDealInfo info:dealInfoAdds){
+			if(info.getBusinessCardUserDate().after(new Date(comAgent.getAgentContractStart().getTime()))&&info.getBusinessCardUserDate().before(new Date(comAgent.getAgentContractEnd().getTime()))){
+				dealInfoSet.add(info);	
 			}
-		} else {
-			start = new Date(comAgent.getAgentContractStart().getTime());
 		}
-		if (endTime != null && !endTime.equals("")) {
-			if (comAgent.getAgentContractEnd().getTime() < endTime.getTime()) {
-				end = new Date(comAgent.getAgentContractEnd().getTime());
-			} else {
-				end = endTime;
-			}
-		} else {
+		
+		for(WorkDealInfo info:dealInfoUpdates){
+			while (info.getPrevId() != null) {
 
-			end = new Date(comAgent.getAgentContractEnd().getTime());
+                info = workDealInfoService.findPreDealInfo(info.getPrevId());
+			
+				if (info.getPrevId() == null) {
+					
+					if(info.getBusinessCardUserDate().after(new Date(comAgent.getAgentContractStart().getTime()))&&info.getBusinessCardUserDate().before(new Date(comAgent.getAgentContractEnd().getTime()))){
+						dealInfoSet.add(info);	
+					}
+					
+					
+				}
+			}
 		}
-		end.setHours(23);
-		end.setMinutes(59);
-		end.setSeconds(59);
-		List<WorkDealInfo> dealInfos = workDealInfoService.findDealInfo(appId, appIds, productIdList, start, end);
+		
+		
+		List<WorkDealInfo> dealInfos = new ArrayList<>(dealInfoSet);
 		Set<WorkDealInfo_settlementLog> workDealInfos = new HashSet<WorkDealInfo_settlementLog>();
 		JSONObject json = new JSONObject();
 		for(int i=0;i<dealInfos.size();i++)
@@ -619,32 +672,59 @@ public class SettlementLogController extends BaseController {
 		endT.setMinutes(59);
 		endT.setSeconds(59);
 		settlementLog.setEndTime(endT);
-		Date start = new Date();
-		Date end = new Date();
-		if (startTime != null && !startTime.equals("")) {
-			if (comAgent.getAgentContractStart().getTime() > startTime.getTime()) {
-				start = new Date(comAgent.getAgentContractStart().getTime());
-			} else {
-				start = startTime;
-			}
-		} else {
-			start = new Date(comAgent.getAgentContractStart().getTime());
-		}
-		if (endTime != null && !endTime.equals("")) {
-			if (comAgent.getAgentContractEnd().getTime() < endTime.getTime()) {
-				end = new Date(comAgent.getAgentContractEnd().getTime());
-			} else {
-				end = endTime;
-			}
-		} else {
-
-			end = new Date(comAgent.getAgentContractEnd().getTime());
-		}
-		end.setHours(23);
-		end.setMinutes(59);
-		end.setSeconds(59);
-		List<WorkDealInfo> dealInfos = workDealInfoService.findDealInfo(appId, appIds, productIdList, start, end);
+//		Date start = new Date();
+//		Date end = new Date();
+//		if (startTime != null && !startTime.equals("")) {
+//			if (comAgent.getAgentContractStart().getTime() > startTime.getTime()) {
+//				start = new Date(comAgent.getAgentContractStart().getTime());
+//			} else {
+//				start = startTime;
+//			}
+//		} else {
+//			start = new Date(comAgent.getAgentContractStart().getTime());
+//		}
+//		if (endTime != null && !endTime.equals("")) {
+//			if (comAgent.getAgentContractEnd().getTime() < endTime.getTime()) {
+//				end = new Date(comAgent.getAgentContractEnd().getTime());
+//			} else {
+//				end = endTime;
+//			}
+//		} else {
+//
+//			end = new Date(comAgent.getAgentContractEnd().getTime());
+//		}
+//		end.setHours(23);
+//		end.setMinutes(59);
+//		end.setSeconds(59);
+		List<WorkDealInfo> dealInfoAdds = workDealInfoService.findDealInfoByAdd(appId,appIds,productIdList,startTime,endT);
+		List<WorkDealInfo> dealInfoUpdates = workDealInfoService.findDealInfoByUpdate(appId,appIds,productIdList,startTime,endT); 
 		
+		Set<WorkDealInfo> dealInfoSet = new HashSet<>();
+		
+		for(WorkDealInfo info:dealInfoAdds){
+			if(info.getBusinessCardUserDate().after(new Date(comAgent.getAgentContractStart().getTime()))&&info.getBusinessCardUserDate().before(new Date(comAgent.getAgentContractEnd().getTime()))){
+				dealInfoSet.add(info);	
+			}
+		}
+		
+		for(WorkDealInfo info:dealInfoUpdates){
+			while (info.getPrevId() != null) {
+
+                info = workDealInfoService.findPreDealInfo(info.getPrevId());
+			
+				if (info.getPrevId() == null) {
+					
+					if(info.getBusinessCardUserDate().after(new Date(comAgent.getAgentContractStart().getTime()))&&info.getBusinessCardUserDate().before(new Date(comAgent.getAgentContractEnd().getTime()))){
+						dealInfoSet.add(info);	
+					}
+					
+					
+				}
+			}
+		}
+		
+		
+		List<WorkDealInfo> dealInfos = new ArrayList<>(dealInfoSet);
 		
 		Set<WorkDealInfo_settlementLog> workDealInfos = new HashSet<WorkDealInfo_settlementLog>();
 		for(int i=0;i<dealInfos.size();i++)

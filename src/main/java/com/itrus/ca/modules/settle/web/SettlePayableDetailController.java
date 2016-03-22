@@ -21,6 +21,7 @@ import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.Region;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.json.JSONArray;
@@ -469,7 +470,7 @@ public class SettlePayableDetailController extends BaseController {
 			}
 		}
 		model.addAttribute("productIdList", productIdList);
-		Date start = new Date();
+		/*Date start = new Date();
 		Date end = new Date();
 		if (startTime != null && !startTime.equals("")) {
 			if (comAgent.getAgentContractStart().getTime() > startTime.getTime()) {
@@ -490,10 +491,50 @@ public class SettlePayableDetailController extends BaseController {
 
 			end = new Date(comAgent.getAgentContractEnd().getTime());
 		}
+		
 		end.setHours(23);
 		end.setMinutes(59);
-		end.setSeconds(59);
-		List<WorkDealInfo> dealInfos = workDealInfoService.findDealInfo(appId, appIds, productIdList, start, end);
+		end.setSeconds(59);*/
+		
+		
+		endTime.setHours(23);
+		endTime.setMinutes(59);
+		endTime.setSeconds(59);
+		
+		
+		
+		//先得到业务办理时间范围内所有的新增和更新  然后找到每个业务链的头部，和代理商合同有效期比较，符合条件放入list
+		List<WorkDealInfo> dealInfoAdds = workDealInfoService.findDealInfoByAdd(appId,appIds,productIdList,startTime,endTime);
+		List<WorkDealInfo> dealInfoUpdates = workDealInfoService.findDealInfoByUpdate(appId,appIds,productIdList,startTime,endTime); 
+		
+		Set<WorkDealInfo> dealInfoSet = new HashSet<>();
+		
+		for(WorkDealInfo info:dealInfoAdds){
+			if(info.getBusinessCardUserDate().after(new Date(comAgent.getAgentContractStart().getTime()))&&info.getBusinessCardUserDate().before(new Date(comAgent.getAgentContractEnd().getTime()))){
+				dealInfoSet.add(info);	
+			}
+		}
+		
+		for(WorkDealInfo info:dealInfoUpdates){
+			while (info.getPrevId() != null) {
+
+                info = workDealInfoService.findPreDealInfo(info.getPrevId());
+			
+				if (info.getPrevId() == null) {
+					
+					if(info.getBusinessCardUserDate().after(new Date(comAgent.getAgentContractStart().getTime()))&&info.getBusinessCardUserDate().before(new Date(comAgent.getAgentContractEnd().getTime()))){
+						dealInfoSet.add(info);	
+					}
+					
+					
+				}
+			}
+		}
+		
+		
+		List<WorkDealInfo> dealInfos = new ArrayList<>(dealInfoSet);
+		
+		
 
 		Integer lenth = 0;
 		for (int i = 0; i < dealInfos.size(); i++) {
@@ -703,6 +744,7 @@ public class SettlePayableDetailController extends BaseController {
 		// (2*monthlist1.size()+3)));
 		HSSFRow row0 = sheet.createRow(0);
 		HSSFCell cell0 = row0.createCell(0);
+		sheet.addMergedRegion(new CellRangeAddress(0, (short)0, 0, (short)(5 * lenth + 4 + 2)));
 		cell0.setCellValue("统计周期:" + format.format(startTime) + "-" + format.format(endTime));
 		// row0.setHeightInPoints(40);
 		cell0.setCellStyle(style);
