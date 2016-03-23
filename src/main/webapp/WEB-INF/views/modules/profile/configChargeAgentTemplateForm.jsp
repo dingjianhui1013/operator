@@ -208,6 +208,8 @@
 				<td></td>
 			</tr>
 			<tr>
+			
+				<c:if test="${id==null }">
 				<td>
 					<div class="control-group">
 						<label class="control-label"><font color="red">*</font>模板类型:</label>
@@ -223,6 +225,30 @@
 						</div>
 					</div>
 				</td>
+				
+				</c:if>
+				
+				
+				<c:if test="${id!=null }">
+				<td>
+					<div class="control-group">
+						<label class="control-label"><font color="red">*</font>模板类型:</label>
+						<div class="controls"   >
+
+							<form:radiobutton disabled="true" path="tempStyle" value="1" onclick="checkBZ()" />
+							标准
+							<form:radiobutton disabled="true" path="tempStyle" value="2" onclick="checkBZ()" />
+							政府统一采购
+							<form:radiobutton disabled="true" path="tempStyle" value="3" onclick="checkBZ()" />
+							合同采购 <input type="hidden" id="tStyle"
+								value="${configChargeAgent.tempStyle}" />
+						</div>
+					</div>
+				</td>
+				
+				</c:if>
+				
+				
 				<td></td>
 			</tr>
 			<tr>
