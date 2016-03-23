@@ -1825,7 +1825,7 @@ public class WorkDealInfoService extends BaseService {
 		dc.createAlias("createBy.office", "office");
 		dc.createAlias("configApp", "configApp");
 		dc.createAlias("configProduct", "configProduct");
-		// workDealInfoDao.createDetachedCriteria();
+		
 		dc.add(Restrictions.in("createBy.office", offices));
 
 		// workUser.contactName
@@ -1873,9 +1873,7 @@ public class WorkDealInfoService extends BaseService {
 		if (workDealInfo.getPayType() != null && workDealInfo.getPayType() != 0) {
 			dc.add(Restrictions.eq("payType", workDealInfo.getPayType()));
 		}
-		// workCompany.province
-		// workCompany.city
-		// workCompany.district
+		
 		if (workDealInfo.getWorkCompany() != null
 				&& StringUtils.isNotEmpty(workDealInfo.getWorkCompany()
 						.getProvince())) {
@@ -1984,9 +1982,7 @@ public class WorkDealInfoService extends BaseService {
 
 		dc.add(Restrictions.eq("dealInfoStatus",
 				WorkDealInfoStatus.STATUS_CERT_OBTAINED));
-		// ProjectionList projectionList1 = Projections.projectionList();
-		// projectionList1.add(Projections.sqlGroupProjection("dealInfoType",
-		// "dealInfoType", null, null));
+		
 
 		return workDealInfoDao.find(dc);
 
