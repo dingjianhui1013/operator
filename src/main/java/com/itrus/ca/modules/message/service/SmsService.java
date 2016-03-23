@@ -18,7 +18,7 @@ import sun.util.logging.resources.logging;
 
 @org.springframework.stereotype.Service
 public class SmsService {
-	 /* private static final Log LOGGER = LogFactory.getLog(SmsService.class);
+	  private static final Log LOGGER = LogFactory.getLog(SmsService.class);
 	  @Value("${sms.username}")
 	   private String uid;
 
@@ -35,14 +35,14 @@ public class SmsService {
 	    
 	   private Service service;
 	   private ServiceSoap serviceSoap;
-	   @PostConstruct
+//	   @PostConstruct
 	    private void init(){
 
 	        
 	            // sendServiceSoap = new
 	            // FocusSendWebService(EmailProvider.class.getResource("FocussendWebservice.wsdl")).getFocusSendWebServiceSoap();
 	        	try {
-					service = new Service(new URL("http://221.237.182.5:8068/Service.asmx?WSDL"));
+					service = new Service(new URL(smsEndpoint));
 					serviceSoap= service.getServiceSoap();
 	        	} catch (MalformedURLException e) {
 					// TODO Auto-generated catch block
@@ -69,7 +69,7 @@ public class SmsService {
 		this.pid = pid;
 	}
 	
-//	单个手机号码发送
+//	鍗曚釜鎵嬫満鍙风爜鍙戦��
 	public String sendSms( String messid,String phone,String message) {
 //		SendMessage senMessage= new SendMessage();
 //		 senMessage.setUid(uid);
@@ -79,7 +79,7 @@ public class SmsService {
 //		 senMessage.setPhone(phone);;
 //		 senMessage.setMessage(message);
 		try {
-			service = new Service(new URL("http://221.237.182.5:8068/Service.asmx?WSDL"));
+			service = new Service(new URL(smsEndpoint));
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -103,7 +103,7 @@ public class SmsService {
 //	            LOGGER.warn(String.format("sms sending failed: sms messageFile= %s and result = %s",messageFile, result));
 //	            return false;
 //	        }
-//	        System.out.println("发送成功");
+//	        System.out.println("鍙戦�佹垚鍔�");
 //	        return true;
 //	}
-*/}
+}
