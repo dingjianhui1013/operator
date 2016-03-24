@@ -33,84 +33,7 @@
 									}
 								});
 
-						var url = "${ctx}/work/workDealInfo/showYear?lable=${workDealInfo.configProduct.productLabel}&productName=${workDealInfo.configProduct.productName}&app=${workDealInfo.configApp.id}&infoType=${empty update?'':1}&_="
-								+ new Date().getTime();
-						$.getJSON(url, function(data) {
-							if (data.year1) {
-								$("#year1").show();
-								$("#word1").show();
-							} else {
-								$("#year1").hide();
-								$("#word1").hide();
-							}
-							if (data.year2) {
-								$("#year2").show();
-								$("#word2").show();
-							} else {
-								$("#year2").hide();
-								$("#word2").hide();
-							}
-							if (data.year3) {
-								$("#year3").show();
-								$("#word3").show();
-							} else {
-								$("#year3").hide();
-								$("#word3").hide();
-							}
-							if (data.year4) {
-								$("#year4").show();
-								$("#word4").show();
-							} else {
-								$("#year4").hide();
-								$("#word4").hide();
-							}
-							if (data.year5) {
-								$("#year5").show();
-								$("#word5").show();
-							} else {
-								$("#year5").hide();
-								$("#word5").hide();
-							}
-							var arr = [ data.nameDisplayName,
-									data.orgunitDisplayName,
-									data.emailDisplayName,
-									data.commonNameDisplayName,
-									data.addtionalField1DisplayName,
-									data.addtionalField2DisplayName,
-									data.addtionalField3DisplayName,
-									data.addtionalField4DisplayName,
-									data.addtionalField5DisplayName,
-									data.addtionalField6DisplayName,
-									data.addtionalField7DisplayName,
-									data.addtionalField8DisplayName ]
-							var arrList = arr.unique();
-							//清除所有必填项显示
-							$(".prompt").css("display", "none");
-							for (var i = 0; i < arrList.length; i++) {
-								if (arrList[i] != "product") {
-									$("input[name='" + arrList[i] + "']").attr(
-											"required", "required");
-									$("input[name='" + arrList[i] + "']")
-											.parent().prev().find("span")
-											.show();
-									if(arrList[i] != "contacEmail"){
-										
-										$("input[name='" + arrList[i] + "']").attr("disabled","disabled");
-									}
-									
-									
-									
-									
-									
-								} else {
-									$("input[name='" + arrList[i] + "']").attr(
-											"required", "required");
-									$("input[name='" + arrList[i] + "']")
-											.parent().parent().prev().find(
-													"span").show();
-								}
-							}
-						});
+						
 						
 						
 						
@@ -160,15 +83,112 @@
 										if(item.agentId=="${workDealInfo.configChargeAgentId}"){
 											styleHtml +="<option selected='selected'  value='"+item.id+"'>" + item.name + "</option>";
 											$("#boundId").val(item.id);
-											showYear();
+											/* showYear(); */
 										}else{
 											styleHtml +="<option value='"+item.id+"'>" + item.name + "</option>";
 										}
+										
+										
+										
+										
+										
+										
+										
 									});
 									$("#agentDetailId").html(styleHtml);
+									
+									
+									
+									var agentBountId = $("#boundId").val();
+									/* var url = "${ctx}/work/workDealInfo/showYear?lable=${workDealInfo.configProduct.productLabel}&productName=${workDealInfo.configProduct.productName}&app=${workDealInfo.configApp.id}&infoType=${empty update?'':1}&_="
+											+ new Date().getTime(); */
+									
+									var url = "${ctx}/work/workDealInfo/showYearNew?boundId="+agentBountId+"&infoType=1&_="+new Date().getTime();
+											
+									$.getJSON(url, function(data) {
+										if (data.year1) {
+											$("#year1").show();
+											$("#word1").show();
+										} else {
+											$("#year1").hide();
+											$("#word1").hide();
+										}
+										if (data.year2) {
+											$("#year2").show();
+											$("#word2").show();
+										} else {
+											$("#year2").hide();
+											$("#word2").hide();
+										}
+										if (data.year3) {
+											$("#year3").show();
+											$("#word3").show();
+										} else {
+											$("#year3").hide();
+											$("#word3").hide();
+										}
+										if (data.year4) {
+											$("#year4").show();
+											$("#word4").show();
+										} else {
+											$("#year4").hide();
+											$("#word4").hide();
+										}
+										if (data.year5) {
+											$("#year5").show();
+											$("#word5").show();
+										} else {
+											$("#year5").hide();
+											$("#word5").hide();
+										}
+										var arr = [ data.nameDisplayName,
+												data.orgunitDisplayName,
+												data.emailDisplayName,
+												data.commonNameDisplayName,
+												data.addtionalField1DisplayName,
+												data.addtionalField2DisplayName,
+												data.addtionalField3DisplayName,
+												data.addtionalField4DisplayName,
+												data.addtionalField5DisplayName,
+												data.addtionalField6DisplayName,
+												data.addtionalField7DisplayName,
+												data.addtionalField8DisplayName ]
+										var arrList = arr.unique();
+										//清除所有必填项显示
+										$(".prompt").css("display", "none");
+										for (var i = 0; i < arrList.length; i++) {
+											if (arrList[i] != "product") {
+												$("input[name='" + arrList[i] + "']").attr(
+														"required", "required");
+												$("input[name='" + arrList[i] + "']")
+														.parent().prev().find("span")
+														.show();
+												if(arrList[i] != "contacEmail"){
+													
+													$("input[name='" + arrList[i] + "']").attr("disabled","disabled");
+												}
+												
+												
+												
+												
+												
+											} else {
+												$("input[name='" + arrList[i] + "']").attr(
+														"required", "required");
+												$("input[name='" + arrList[i] + "']")
+														.parent().parent().prev().find(
+																"span").show();
+											}
+										}
+									});
+									
+									
 								});
 							}
 						}
+						
+						
+						
 						
 						
 						
@@ -312,7 +332,7 @@
 	* 传参：lable+name
 	* 返回值：年限1，2，4，5是否为true
 	*/ 
-	function showYear(){
+	/* function showYear(){
 		var agentId = $("#boundId").val();
 		//var url = "${ctx}/work/workDealInfo/showYear?lable="+lable+"&productName="+productName+"&app="+$("#appId").val()+"&infoType=0&_="+new Date().getTime();
 		var url = "${ctx}/work/workDealInfo/showYearNew?boundId="+agentId+"&infoType=1&_="+new Date().getTime();
@@ -369,7 +389,7 @@
 			
 		});
 		
-	}
+	} */
 	
 	/*
 	* 给计费策略模版配置赋值
@@ -387,7 +407,7 @@
 				$.each(styleList,function(i,item){
 					if(i==0){
 						$("#boundId").val(item.id);
-						showYear();
+						/* showYear(); */
 					}
 					styleHtml +="<option value='"+item.id+"'>" + item.name + "</option>";
 				});
@@ -404,7 +424,7 @@
 	function setYearByBoundId(){
 		var boundId = $("#agentDetailId").val();
 		$("#boundId").val(boundId);
-		showYear();
+		/* showYear(); */
 	} 
 	
 	
