@@ -338,10 +338,19 @@ public class ConfigChargeAgentController extends BaseController {
 				ConfigChargeAgent agent = agents.get(i);
 				
 				Integer updateNum =  configAgentBoundDealInfoService.findByAgentIdDealInfoType(agents.get(i).getId() , 1);
+				if (agent.getConfigureNum()==null) {
+					agent.setConfigureNum(0);
+				}
 				Integer configureNum = agent.getConfigureNum() - updateNum;
 				Integer configureUpdateNum = updateNum;
+				if (agent.getSurplusNum()==null) {
+					agent.setSurplusNum(0);
+				}
 				Integer surplusNum = agent.getSurplusNum();
 				Integer surplusUpdateNum = 0;
+				if (agent.getAvailableNum()==null) {
+					agent.setAvailableNum(0);
+				}
 				Integer availableNum = agent.getAvailableNum() - updateNum;
 				Integer availableUpdateNum = updateNum;
 				agent.setConfigureNum(configureNum);

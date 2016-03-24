@@ -89,6 +89,7 @@ public class ConfigChargeAgentService extends BaseService {
 		DetachedCriteria dc = configChargeAgentDao.createDetachedCriteria();
 		dc.add(Restrictions.isNull("configureUpdateNum"));
 		List<String> styles = new ArrayList<String>();
+		styles.add("1");
 		styles.add("2");
 		styles.add("3");
 		dc.add(Restrictions.in("tempStyle", styles));
