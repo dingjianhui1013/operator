@@ -336,11 +336,14 @@ public class UserController extends BaseController {
 		JSONObject json = new JSONObject();
 		try {
 			if (user.getLoginIp() != null && !user.getLoginIp().equals(newIP)) {
-				json.put("newIP", newIP);
-				json.put("oldIP", user.getLoginIp());
-				json.put("loginDate", user.getLoginDate());
-				json.put("officeName", user.getOffice().getName());
+				json.put("isError", 1);
 			}
+			json.put("newIP", newIP);
+			json.put("oldIP", user.getLoginIp());
+			json.put("loginDate", user.getLoginDate());
+			json.put("officeName", user.getOffice().getName());
+			
+			
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
