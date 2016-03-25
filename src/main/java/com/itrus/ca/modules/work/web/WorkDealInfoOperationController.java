@@ -1411,7 +1411,7 @@ public class WorkDealInfoOperationController extends BaseController {
 		
 		ConfigChargeAgentBoundConfigProduct bound =  configChargeAgentBoundConfigProductService.get(agentDetailId);
 		workDealInfo.setPayType(agentId);
-		workDealInfo.setConfigChargeAgentId(bound.getAgent().getId());
+		workDealInfo.setConfigChargeAgentId(workDealInfo1.getConfigChargeAgentId());
 		
 		workDealInfo.setInputUser(UserUtils.getUser());
 		workDealInfo.setInputUserDate(new Date());
