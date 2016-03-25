@@ -106,8 +106,8 @@ public class PaymethodCertificateSettleService extends BaseService {
 		return resultList;
 	}
 
-	public HashMap<String, Object> getStaticMap(List<PaymethodCertificateSettleVo> findMulitWorkList1) {
-		HashMap<String, Object> monthMap = new HashMap<String, Object>();
+	public HashMap<String, CertificatePayMethod> getStaticMap(List<PaymethodCertificateSettleVo> findMulitWorkList1) {
+		HashMap<String, CertificatePayMethod> monthMap = new HashMap<String, CertificatePayMethod>();
 		CertificatePayMethod total = new CertificatePayMethod();
 		Certificate totalCoumn = new Certificate();
 		for (int i = 0; i < findMulitWorkList1.size(); i++) {
@@ -157,7 +157,7 @@ public class PaymethodCertificateSettleService extends BaseService {
 			monthMap.put(cssv.getMonth(), scm);
 		}
 		monthMap.put("total", total);
-		monthMap.put("totalColumn", totalCoumn);
+//		monthMap.put("totalColumn", totalCoumn);
 		return monthMap;
 	}
 
