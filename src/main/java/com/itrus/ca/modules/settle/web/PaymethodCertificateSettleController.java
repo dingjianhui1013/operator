@@ -1267,7 +1267,116 @@ public class PaymethodCertificateSettleController extends BaseController {
 					curCol = addData2Sheet(sheet, rown, curCol, monthMap.get(key).getXzgrQadd5(),
 							monthMap.get("total").getXzgrQadd5());
 					
-				
+					curCol = addData2Sheet(sheet, rown, curCol, monthMap.get(key).getXzgrGadd1(),
+							monthMap.get("total").getXzgrGadd1());
+					curCol = addData2Sheet(sheet, rown, curCol, monthMap.get(key).getXzgrGadd2(),
+							monthMap.get("total").getXzgrGadd2());
+					curCol = addData2Sheet(sheet, rown, curCol, monthMap.get(key).getXzgrGadd3(),
+							monthMap.get("total").getXzgrGadd3());
+					curCol = addData2Sheet(sheet, rown, curCol, monthMap.get(key).getXzgrGadd4(),
+							monthMap.get("total").getXzgrGadd4());
+					curCol = addData2Sheet(sheet, rown, curCol, monthMap.get(key).getXzgrGadd5(),
+							monthMap.get("total").getXzgrGadd5());
+					
+					curCol = addData2Sheet(sheet, rown, curCol, monthMap.get(key).getXzjgadd1(),
+							monthMap.get("total").getXzjgadd1());
+					curCol = addData2Sheet(sheet, rown, curCol, monthMap.get(key).getXzjgadd2(),
+							monthMap.get("total").getXzjgadd2());
+					curCol = addData2Sheet(sheet, rown, curCol, monthMap.get(key).getXzjgadd3(),
+							monthMap.get("total").getXzjgadd3());
+					curCol = addData2Sheet(sheet, rown, curCol, monthMap.get(key).getXzjgadd4(),
+							monthMap.get("total").getXzjgadd4());
+					curCol = addData2Sheet(sheet, rown, curCol, monthMap.get(key).getXzjgadd5(),
+							monthMap.get("total").getXzjgadd5());
+					
+					curCol = addData2Sheet(sheet, rown, curCol, monthMap.get(key).getGxqyadd1(),
+							monthMap.get("total").getGxqyadd1());
+					curCol = addData2Sheet(sheet, rown, curCol, monthMap.get(key).getGxqyadd2(),
+							monthMap.get("total").getGxqyadd2());
+					curCol = addData2Sheet(sheet, rown, curCol, monthMap.get(key).getGxqyadd3(),
+							monthMap.get("total").getGxqyadd3());
+					curCol = addData2Sheet(sheet, rown, curCol, monthMap.get(key).getGxqyadd4(),
+							monthMap.get("total").getGxqyadd4());
+					curCol = addData2Sheet(sheet, rown, curCol, monthMap.get(key).getGxqyadd5(),
+							monthMap.get("total").getGxqyadd5());
+					
+					curCol = addData2Sheet(sheet, rown, curCol, monthMap.get(key).getGxgrQadd1(),
+							monthMap.get("total").getGxgrQadd1());
+					curCol = addData2Sheet(sheet, rown, curCol, monthMap.get(key).getGxgrQadd2(),
+							monthMap.get("total").getGxgrQadd2());
+					curCol = addData2Sheet(sheet, rown, curCol, monthMap.get(key).getGxgrQadd3(),
+							monthMap.get("total").getGxgrQadd3());
+					curCol = addData2Sheet(sheet, rown, curCol, monthMap.get(key).getGxgrQadd4(),
+							monthMap.get("total").getGxgrQadd4());
+					curCol = addData2Sheet(sheet, rown, curCol, monthMap.get(key).getGxgrQadd5(),
+							monthMap.get("total").getGxgrQadd5());
+					
+					curCol = addData2Sheet(sheet, rown, curCol, monthMap.get(key).getGxgrGadd1(),
+							monthMap.get("total").getGxgrGadd1());
+					curCol = addData2Sheet(sheet, rown, curCol, monthMap.get(key).getGxgrGadd2(),
+							monthMap.get("total").getGxgrGadd2());
+					curCol = addData2Sheet(sheet, rown, curCol, monthMap.get(key).getGxgrGadd3(),
+							monthMap.get("total").getGxgrGadd3());
+					curCol = addData2Sheet(sheet, rown, curCol, monthMap.get(key).getGxgrGadd4(),
+							monthMap.get("total").getGxgrGadd4());
+					curCol = addData2Sheet(sheet, rown, curCol, monthMap.get(key).getGxgrGadd5(),
+							monthMap.get("total").getGxgrGadd5());
+					
+					curCol = addData2Sheet(sheet, rown, curCol, monthMap.get(key).getGxjgadd1(),
+							monthMap.get("total").getGxjgadd1());
+					curCol = addData2Sheet(sheet, rown, curCol, monthMap.get(key).getGxjgadd2(),
+							monthMap.get("total").getGxjgadd2());
+					curCol = addData2Sheet(sheet, rown, curCol, monthMap.get(key).getGxjgadd3(),
+							monthMap.get("total").getGxjgadd3());
+					curCol = addData2Sheet(sheet, rown, curCol, monthMap.get(key).getGxjgadd4(),
+							monthMap.get("total").getGxjgadd4());
+					curCol = addData2Sheet(sheet, rown, curCol, monthMap.get(key).getGxjgadd5(),
+							monthMap.get("total").getGxjgadd5());
+					
+					curCol = addData2Sheet(sheet, rown, curCol, monthMap.get(key).getLostCerateqy(),
+							monthMap.get("total").getLostCerateqy());
+					curCol = addData2Sheet(sheet, rown, curCol, monthMap.get(key).getLostCerategrQ(),
+							monthMap.get("total").getLostCerategrQ());
+					curCol = addData2Sheet(sheet, rown, curCol, monthMap.get(key).getLostCerategrG(),
+							monthMap.get("total").getLostCerategrG());
+					curCol = addData2Sheet(sheet, rown, curCol, monthMap.get(key).getLostCeratejg(),
+							monthMap.get("total").getLostCeratejg());
+					
+					curCol = addData2Sheet(sheet, rown, curCol, monthMap.get(key).getDamageCertificateqy(),
+							monthMap.get("total").getDamageCertificateqy());
+					curCol = addData2Sheet(sheet, rown, curCol, monthMap.get(key).getDamageCertificategrQ(),
+							monthMap.get("total").getDamageCertificategrQ());
+					curCol = addData2Sheet(sheet, rown, curCol, monthMap.get(key).getDamageCertificategrG(),
+							monthMap.get("total").getDamageCertificategrG());
+					curCol = addData2Sheet(sheet, rown, curCol, monthMap.get(key).getDamageCertificatejg(),
+							monthMap.get("total").getDamageCertificatejg());
+					
+					curCol = addData2Sheet(sheet, rown, curCol, monthMap.get(key).getModifyNumqy(),
+							monthMap.get("total").getModifyNumqy());
+					curCol = addData2Sheet(sheet, rown, curCol, monthMap.get(key).getModifyNumgrQ(),
+							monthMap.get("total").getModifyNumgrQ());
+					curCol = addData2Sheet(sheet, rown, curCol, monthMap.get(key).getModifyNumgrG(),
+							monthMap.get("total").getModifyNumgrG());
+					curCol = addData2Sheet(sheet, rown, curCol, monthMap.get(key).getModifyNumjg(),
+							monthMap.get("total").getModifyNumjg());
+					
+					curCol = addData2Sheet(sheet, rown, curCol, monthMap.get(key).getChangeLostqyNum(),
+							monthMap.get("total").getChangeLostqyNum());
+					curCol = addData2Sheet(sheet, rown, curCol, monthMap.get(key).getChangeLostgrQNum(),
+							monthMap.get("total").getChangeLostgrQNum());
+					curCol = addData2Sheet(sheet, rown, curCol, monthMap.get(key).getChangeLostgrGNum(),
+							monthMap.get("total").getChangeLostgrGNum());
+					curCol = addData2Sheet(sheet, rown, curCol, monthMap.get(key).getChangeLostjgNum(),
+							monthMap.get("total").getChangeLostjgNum());
+					
+//					curCol = addData2Sheet(sheet, rown, curCol, monthMap.get(key).getChangeReplaceqyNum(),
+//							monthMap.get("total").getChangeReplaceqyNum());
+//					curCol = addData2Sheet(sheet, rown, curCol, monthMap.get(key).getChangeReplacegrQNum(),
+//							monthMap.get("total").getChangeReplacegrQNum());
+//					curCol = addData2Sheet(sheet, rown, curCol, monthMap.get(key).getChangeReplacegrGNum(),
+//							monthMap.get("total").getChangeReplacegrGNum());
+//					curCol = addData2Sheet(sheet, rown, curCol, monthMap.get(key).getChangeReplacejgNum(),
+//							monthMap.get("total").getChangeReplacejgNum());
 					// rown.createCell(11).setCellValue(monthMap.get(key).getXzgrGadd1()==null?0:monthMap.get(key).getXzgrGadd1());
 					// rown.createCell(12).setCellValue(monthMap.get(key).getXzgrGadd2()==null?0:monthMap.get(key).getXzgrGadd2());
 					// rown.createCell(13).setCellValue(monthMap.get(key).getXzgrGadd3()==null?0:monthMap.get(key).getXzgrGadd3());
@@ -1278,53 +1387,56 @@ public class PaymethodCertificateSettleController extends BaseController {
 					// rown.createCell(18).setCellValue(monthMap.get(key).getXzjgadd3()==null?0:monthMap.get(key).getXzjgadd3());
 					// rown.createCell(19).setCellValue(monthMap.get(key).getXzjgadd4()==null?0:monthMap.get(key).getXzjgadd4());
 					// rown.createCell(20).setCellValue(monthMap.get(key).getXzjgadd5()==null?0:monthMap.get(key).getXzjgadd5());
-					//
+					//**
 					// rown.createCell(21).setCellValue(monthMap.get(key).getGxqyadd1()==null?0:monthMap.get(key).getGxqyadd1());
 					// rown.createCell(22).setCellValue(monthMap.get(key).getGxqyadd2()==null?0:monthMap.get(key).getGxqyadd2());
 					// rown.createCell(23).setCellValue(monthMap.get(key).getGxqyadd3()==null?0:monthMap.get(key).getGxqyadd3());
 					// rown.createCell(24).setCellValue(monthMap.get(key).getGxqyadd4()==null?0:monthMap.get(key).getGxqyadd4());
 					// rown.createCell(25).setCellValue(monthMap.get(key).getGxqyadd5()==null?0:monthMap.get(key).getGxqyadd5());
+					
 					// rown.createCell(26).setCellValue(monthMap.get(key).getGxgrQadd1()==null?0:monthMap.get(key).getGxgrQadd1());
 					// rown.createCell(27).setCellValue(monthMap.get(key).getGxgrQadd2()==null?0:monthMap.get(key).getGxgrQadd2());
 					// rown.createCell(28).setCellValue(monthMap.get(key).getGxgrQadd3()==null?0:monthMap.get(key).getGxgrQadd3());
 					// rown.createCell(29).setCellValue(monthMap.get(key).getGxgrQadd4()==null?0:monthMap.get(key).getGxgrQadd4());
 					// rown.createCell(30).setCellValue(monthMap.get(key).getGxgrQadd5()==null?0:monthMap.get(key).getGxgrQadd5());
+					
 					// rown.createCell(31).setCellValue(monthMap.get(key).getGxgrGadd1()==null?0:monthMap.get(key).getGxgrGadd1());
 					// rown.createCell(32).setCellValue(monthMap.get(key).getGxgrGadd2()==null?0:monthMap.get(key).getGxgrGadd2());
 					// rown.createCell(33).setCellValue(monthMap.get(key).getGxgrGadd3()==null?0:monthMap.get(key).getGxgrGadd3());
 					// rown.createCell(34).setCellValue(monthMap.get(key).getGxgrGadd4()==null?0:monthMap.get(key).getGxgrGadd4());
 					// rown.createCell(35).setCellValue(monthMap.get(key).getGxgrGadd5()==null?0:monthMap.get(key).getGxgrGadd5());
+					//**
 					// rown.createCell(36).setCellValue(monthMap.get(key).getGxjgadd1()==null?0:monthMap.get(key).getGxjgadd1());
 					// rown.createCell(37).setCellValue(monthMap.get(key).getGxjgadd2()==null?0:monthMap.get(key).getGxjgadd2());
 					// rown.createCell(38).setCellValue(monthMap.get(key).getGxjgadd3()==null?0:monthMap.get(key).getGxjgadd3());
 					// rown.createCell(39).setCellValue(monthMap.get(key).getGxjgadd4()==null?0:monthMap.get(key).getGxjgadd4());
 					// rown.createCell(40).setCellValue(monthMap.get(key).getGxjgadd5()==null?0:monthMap.get(key).getGxjgadd5());
-					//
+					//**
 					// rown.createCell(41).setCellValue(monthMap.get(key).getLostCerateqy()==null?0:monthMap.get(key).getLostCerateqy());
 					// rown.createCell(42).setCellValue(monthMap.get(key).getLostCerategrQ()==null?0:monthMap.get(key).getLostCerategrQ());
 					// rown.createCell(43).setCellValue(monthMap.get(key).getLostCerategrG()==null?0:monthMap.get(key).getLostCerategrG());
 					// rown.createCell(44).setCellValue(monthMap.get(key).getLostCeratejg()==null?0:monthMap.get(key).getLostCeratejg());
-					//
+					//**
 					// rown.createCell(45).setCellValue(monthMap.get(key).getDamageCertificateqy()==null?0:monthMap.get(key).getDamageCertificateqy());
 					// rown.createCell(46).setCellValue(monthMap.get(key).getDamageCertificategrQ()==null?0:monthMap.get(key).getDamageCertificategrQ());
 					// rown.createCell(47).setCellValue(monthMap.get(key).getDamageCertificategrG()==null?0:monthMap.get(key).getDamageCertificategrG());
 					// rown.createCell(48).setCellValue(monthMap.get(key).getDamageCertificatejg()==null?0:monthMap.get(key).getDamageCertificatejg());
-					//
+					//**
 					// rown.createCell(49).setCellValue(monthMap.get(key).getModifyNumqy()==null?0:monthMap.get(key).getModifyNumqy());
 					// rown.createCell(50).setCellValue(monthMap.get(key).getModifyNumgrQ()==null?0:monthMap.get(key).getModifyNumgrQ());
 					// rown.createCell(51).setCellValue(monthMap.get(key).getModifyNumgrG()==null?0:monthMap.get(key).getModifyNumgrG());
 					// rown.createCell(52).setCellValue(monthMap.get(key).getModifyNumjg()==null?0:monthMap.get(key).getModifyNumjg());
-					//
+					//**
 					// rown.createCell(53).setCellValue(monthMap.get(key).getChangeLostqyNum()==null?0:monthMap.get(key).getChangeLostqyNum());
 					// rown.createCell(54).setCellValue(monthMap.get(key).getChangeLostgrQNum()==null?0:monthMap.get(key).getChangeLostgrQNum());
 					// rown.createCell(55).setCellValue(monthMap.get(key).getChangeLostgrGNum()==null?0:monthMap.get(key).getChangeLostgrGNum());
 					// rown.createCell(56).setCellValue(monthMap.get(key).getChangeLostjgNum()==null?0:monthMap.get(key).getChangeLostjgNum());
-					//
+					//**
 					// rown.createCell(57).setCellValue(monthMap.get(key).getChangeReplaceqyNum()==null?0:monthMap.get(key).getChangeReplaceqyNum());
 					// rown.createCell(58).setCellValue(monthMap.get(key).getChangeReplacegrQNum()==null?0:monthMap.get(key).getChangeReplacegrQNum());
 					// rown.createCell(59).setCellValue(monthMap.get(key).getChangeReplacegrGNum()==null?0:monthMap.get(key).getChangeReplacegrGNum());
 					// rown.createCell(60).setCellValue(monthMap.get(key).getChangeReplacejgNum()==null?0:monthMap.get(key).getChangeReplacejgNum());
-					//
+					//**
 					// rown.createCell(61).setCellValue(monthMap.get(key).getUpdateLostqyNum()==null?0:monthMap.get(key).getUpdateLostqyNum());
 					// rown.createCell(62).setCellValue(monthMap.get(key).getUpdateLostqyNum2()==null?0:monthMap.get(key).getUpdateLostqyNum2());
 					// rown.createCell(63).setCellValue(monthMap.get(key).getUpdateLostqyNum3()==null?0:monthMap.get(key).getUpdateLostqyNum3());
