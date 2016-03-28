@@ -3,12 +3,16 @@
  */
 package com.itrus.ca.modules.profile.web;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.avro.data.Json;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.alibaba.fastjson.JSON;
 import com.itrus.ca.common.config.Global;
 import com.itrus.ca.common.persistence.Page;
 import com.itrus.ca.common.web.BaseController;
@@ -119,5 +124,25 @@ public class ConfigProjectTypeController extends BaseController {
 		return json.toString();
 	}
 	
-
+	@RequestMapping(value = "showAppList")
+	@ResponseBody
+	public String showAppList(Long proId) throws Exception{
+		List<ConfigApp> configApps =  configAppService.findByconfigProjectType(proId);
+		JSONObject json=new JSONObject();
+		/*for (ConfigApp configApp : configApps) {
+		
+			
+		}*/
+		Map<String, Object> map = new HashMap<String, Object>();
+		if(configApps.size()>0)
+		{
+			map.put("status", "1");
+			map.put("list", configApps);
+			
+		}else{
+			json.put("status", "0");
+		}
+		// TODO Auto-generated catch block
+		return JSON.toJSONString(map);
+	}
 }
