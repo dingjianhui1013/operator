@@ -10,6 +10,9 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
@@ -232,9 +235,8 @@ public class PaymethodCertificateSettleService extends BaseService {
 				cpd = handleCertificatePayMethodDetails(cpd, cssv);
 				scm.setXzqyadd1(cpd);
 				total.getXzqyadd1().getMethods().putAll(cpd.getMethods());
-				System.out.println(total.getXzqyadd1().getTotalCount());
 				total.getXzqyadd1().setTotalCount(total.getXzqyadd1().getTotalCount() + (cssv.getPAYMETHOD()>0?cssv.getWorkCount().intValue():0));
-				System.out.println(total.getXzqyadd1().getTotalCount());
+			
 				break;
 			case 2:
 				cpd = scm.getXzqyadd2();
@@ -1864,4 +1866,21 @@ public class PaymethodCertificateSettleService extends BaseService {
 
 		}
 	}
+	
+	public void mergeCell(HSSFSheet sheet,HSSFRow row ,int maxCol){
+		String cellValue = row.getCell(1).getStringCellValue();;
+		int cellStart=1;
+		for(int i=2;i< maxCol;i++){
+			if(row.getCell(i)!=null && !cellValue.equals(row.getCell(i).getStringCellValue())){
+				cellValue = row.getCell(i).getStringCellValue();
+				System.out.println("i:" +i +"\t" + row.getCell(i).getStringCellValue());
+				sheet.addMergedRegion(new CellRangeAddress(row.getRowNum(), row.getRowNum(), cellStart, i-1));
+				cellStart =i;
+			}
+			
+			
+		}		
+	}
+	
+	
 }
