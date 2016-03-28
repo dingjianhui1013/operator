@@ -83,7 +83,7 @@
 										if(item.agentId=="${workDealInfo.configChargeAgentId}"){
 											styleHtml +="<option selected='selected'  value='"+item.id+"'>" + item.name + "</option>";
 											$("#boundId").val(item.id);
-											showYear();
+											/* showYear(); */
 										}else{
 											styleHtml +="<option value='"+item.id+"'>" + item.name + "</option>";
 										}
@@ -332,7 +332,7 @@
 	* 传参：lable+name
 	* 返回值：年限1，2，4，5是否为true
 	*/ 
-	function showYear(){
+	/* function showYear(){
 		var agentId = $("#boundId").val();
 		//var url = "${ctx}/work/workDealInfo/showYear?lable="+lable+"&productName="+productName+"&app="+$("#appId").val()+"&infoType=0&_="+new Date().getTime();
 		var url = "${ctx}/work/workDealInfo/showYearNew?boundId="+agentId+"&infoType=1&_="+new Date().getTime();
@@ -389,7 +389,7 @@
 			
 		});
 		
-	} 
+	} */
 	
 	/*
 	* 给计费策略模版配置赋值
@@ -407,7 +407,7 @@
 				$.each(styleList,function(i,item){
 					if(i==0){
 						$("#boundId").val(item.id);
-						showYear();
+						/* showYear(); */
 					}
 					styleHtml +="<option value='"+item.id+"'>" + item.name + "</option>";
 				});
@@ -424,7 +424,7 @@
 	function setYearByBoundId(){
 		var boundId = $("#agentDetailId").val();
 		$("#boundId").val(boundId);
-		showYear();
+		/* showYear(); */
 	} 
 	
 	
