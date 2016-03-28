@@ -964,14 +964,16 @@ public class PaymethodCertificateSettleController extends BaseController {
 				}
 
 			}
+			// totalColums = curCol; // 全部列数
+			sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, curCol - 1));
 
-			int k = 4;
-
+			int k = 5;
 			//
 			for (String key : monthMap.keySet()) {
 				curCol = 1;
-				HSSFRow rown = sheet.createRow(k++);
+
 				if (!"total".equals(key) && !"totalColumn".equals(key)) {
+					HSSFRow rown = sheet.createRow(k++);
 					rown.createCell(0).setCellValue(key);
 					curCol = addData2Sheet(sheet, rown, curCol, monthMap.get(key).getXzqyadd1(),
 							monthMap.get("total").getXzqyadd1());
@@ -1342,368 +1344,209 @@ public class PaymethodCertificateSettleController extends BaseController {
 			}
 			HSSFRow rown = sheet.createRow(4 + monthMap.size());
 			rown.createCell(0).setCellValue("总计");
-			curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getXzqyadd1(),
-					monthMap.get("total").getXzqyadd1());
-			curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getXzqyadd2(),
-					monthMap.get("total").getXzqyadd2());
-			curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getXzqyadd3(),
-					monthMap.get("total").getXzqyadd3());
-			curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getXzqyadd4(),
-					monthMap.get("total").getXzqyadd4());
-			curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getXzqyadd5(),
-					monthMap.get("total").getXzqyadd5());
+			curCol = 1;
+			curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getXzqyadd1());
+			curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getXzqyadd2());
+			curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getXzqyadd3());
+			curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getXzqyadd4());
+			curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getXzqyadd5());
 
-			curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getXzgrQadd1(),
-					monthMap.get("total").getXzgrQadd1());
-			curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getXzgrQadd2(),
-					monthMap.get("total").getXzgrQadd2());
-			curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getXzgrQadd3(),
-					monthMap.get("total").getXzgrQadd3());
-			curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getXzgrQadd4(),
-					monthMap.get("total").getXzgrQadd4());
-			curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getXzgrQadd5(),
-					monthMap.get("total").getXzgrQadd5());
+			curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getXzgrQadd1());
+			curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getXzgrQadd2());
+			curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getXzgrQadd3());
+			curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getXzgrQadd4());
+			curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getXzgrQadd5());
 
-			curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getXzgrGadd1(),
-					monthMap.get("total").getXzgrGadd1());
-			curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getXzgrGadd2(),
-					monthMap.get("total").getXzgrGadd2());
-			curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getXzgrGadd3(),
-					monthMap.get("total").getXzgrGadd3());
-			curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getXzgrGadd4(),
-					monthMap.get("total").getXzgrGadd4());
-			curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getXzgrGadd5(),
-					monthMap.get("total").getXzgrGadd5());
+			curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getXzgrGadd1());
+			curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getXzgrGadd2());
+			curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getXzgrGadd3());
+			curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getXzgrGadd4());
+			curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getXzgrGadd5());
 
-			curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getXzjgadd1(),
-					monthMap.get("total").getXzjgadd1());
-			curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getXzjgadd2(),
-					monthMap.get("total").getXzjgadd2());
-			curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getXzjgadd3(),
-					monthMap.get("total").getXzjgadd3());
-			curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getXzjgadd4(),
-					monthMap.get("total").getXzjgadd4());
-			curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getXzjgadd5(),
-					monthMap.get("total").getXzjgadd5());
+			curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getXzjgadd1());
+			curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getXzjgadd2());
+			curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getXzjgadd3());
+			curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getXzjgadd4());
+			curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getXzjgadd5());
 
-			curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getGxqyadd1(),
-					monthMap.get("total").getGxqyadd1());
-			curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getGxqyadd2(),
-					monthMap.get("total").getGxqyadd2());
-			curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getGxqyadd3(),
-					monthMap.get("total").getGxqyadd3());
-			curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getGxqyadd4(),
-					monthMap.get("total").getGxqyadd4());
-			curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getGxqyadd5(),
-					monthMap.get("total").getGxqyadd5());
+			curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getGxqyadd1());
+			curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getGxqyadd2());
+			curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getGxqyadd3());
+			curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getGxqyadd4());
+			curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getGxqyadd5());
 
-			curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getGxgrQadd1(),
-					monthMap.get("total").getGxgrQadd1());
-			curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getGxgrQadd2(),
-					monthMap.get("total").getGxgrQadd2());
-			curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getGxgrQadd3(),
-					monthMap.get("total").getGxgrQadd3());
-			curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getGxgrQadd4(),
-					monthMap.get("total").getGxgrQadd4());
-			curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getGxgrQadd5(),
-					monthMap.get("total").getGxgrQadd5());
+			curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getGxgrQadd1());
+			curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getGxgrQadd2());
+			curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getGxgrQadd3());
+			curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getGxgrQadd4());
+			curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getGxgrQadd5());
 
-			curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getGxgrGadd1(),
-					monthMap.get("total").getGxgrGadd1());
-			curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getGxgrGadd2(),
-					monthMap.get("total").getGxgrGadd2());
-			curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getGxgrGadd3(),
-					monthMap.get("total").getGxgrGadd3());
-			curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getGxgrGadd4(),
-					monthMap.get("total").getGxgrGadd4());
-			curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getGxgrGadd5(),
-					monthMap.get("total").getGxgrGadd5());
+			curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getGxgrGadd1());
+			curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getGxgrGadd2());
+			curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getGxgrGadd3());
+			curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getGxgrGadd4());
+			curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getGxgrGadd5());
 
-			curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getGxjgadd1(),
-					monthMap.get("total").getGxjgadd1());
-			curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getGxjgadd2(),
-					monthMap.get("total").getGxjgadd2());
-			curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getGxjgadd3(),
-					monthMap.get("total").getGxjgadd3());
-			curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getGxjgadd4(),
-					monthMap.get("total").getGxjgadd4());
-			curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getGxjgadd5(),
-					monthMap.get("total").getGxjgadd5());
+			curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getGxjgadd1());
+			curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getGxjgadd2());
+			curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getGxjgadd3());
+			curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getGxjgadd4());
+			curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getGxjgadd5());
 
-			curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getLostCerateqy(),
-					monthMap.get("total").getLostCerateqy());
-			curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getLostCerategrQ(),
-					monthMap.get("total").getLostCerategrQ());
-			curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getLostCerategrG(),
-					monthMap.get("total").getLostCerategrG());
-			curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getLostCeratejg(),
-					monthMap.get("total").getLostCeratejg());
+			curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getLostCerateqy());
+			curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getLostCerategrQ());
+			curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getLostCerategrG());
+			curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getLostCeratejg());
 
-			curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getDamageCertificateqy(),
-					monthMap.get("total").getDamageCertificateqy());
-			curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getDamageCertificategrQ(),
-					monthMap.get("total").getDamageCertificategrQ());
-			curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getDamageCertificategrG(),
-					monthMap.get("total").getDamageCertificategrG());
-			curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getDamageCertificatejg(),
-					monthMap.get("total").getDamageCertificatejg());
+			curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getDamageCertificateqy());
+			curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getDamageCertificategrQ());
+			curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getDamageCertificategrG());
+			curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getDamageCertificatejg());
 
-			curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getModifyNumqy(),
-					monthMap.get("total").getModifyNumqy());
-			curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getModifyNumgrQ(),
-					monthMap.get("total").getModifyNumgrQ());
-			curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getModifyNumgrG(),
-					monthMap.get("total").getModifyNumgrG());
-			curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getModifyNumjg(),
-					monthMap.get("total").getModifyNumjg());
+			curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getModifyNumqy());
+			curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getModifyNumgrQ());
+			curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getModifyNumgrG());
+			curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getModifyNumjg());
 			if (multiType) {
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeLostqyNum(),
-						monthMap.get("total").getChangeLostqyNum());
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeLostgrQNum(),
-						monthMap.get("total").getChangeLostgrQNum());
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeLostgrGNum(),
-						monthMap.get("total").getChangeLostgrGNum());
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeLostjgNum(),
-						monthMap.get("total").getChangeLostjgNum());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeLostqyNum());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeLostgrQNum());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeLostgrGNum());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeLostjgNum());
 
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeReplaceqyNum(),
-						monthMap.get("total").getChangeReplaceqyNum());
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeReplacegrQNum(),
-						monthMap.get("total").getChangeReplacegrQNum());
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeReplacegrGNum(),
-						monthMap.get("total").getChangeReplacegrGNum());
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeReplacejgNum(),
-						monthMap.get("total").getChangeReplacejgNum());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeReplaceqyNum());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeReplacegrQNum());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeReplacegrGNum());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeReplacejgNum());
 
 				// 更新+遗失补办
 
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateLostqyNum(),
-						monthMap.get("total").getUpdateLostqyNum());
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateLostqyNum2(),
-						monthMap.get("total").getUpdateLostqyNum2());
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateLostqyNum3(),
-						monthMap.get("total").getUpdateLostqyNum3());
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateLostqyNum4(),
-						monthMap.get("total").getUpdateLostqyNum4());
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateLostqyNum5(),
-						monthMap.get("total").getUpdateLostqyNum5());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateLostqyNum());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateLostqyNum2());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateLostqyNum3());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateLostqyNum4());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateLostqyNum5());
 
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateLostgrQNum(),
-						monthMap.get("total").getUpdateLostgrQNum());
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateLostgrQNum2(),
-						monthMap.get("total").getUpdateLostgrQNum2());
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateLostgrQNum3(),
-						monthMap.get("total").getUpdateLostgrQNum3());
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateLostgrQNum4(),
-						monthMap.get("total").getUpdateLostgrQNum4());
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateLostgrQNum5(),
-						monthMap.get("total").getUpdateLostgrQNum5());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateLostgrQNum());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateLostgrQNum2());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateLostgrQNum3());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateLostgrQNum4());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateLostgrQNum5());
 
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateLostgrGNum(),
-						monthMap.get("total").getUpdateLostgrGNum());
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateLostgrGNum2(),
-						monthMap.get("total").getUpdateLostgrGNum2());
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateLostgrGNum3(),
-						monthMap.get("total").getUpdateLostgrGNum3());
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateLostgrGNum4(),
-						monthMap.get("total").getUpdateLostgrGNum4());
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateLostgrGNum5(),
-						monthMap.get("total").getUpdateLostgrGNum5());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateLostgrGNum());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateLostgrGNum2());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateLostgrGNum3());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateLostgrGNum4());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateLostgrGNum5());
 
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateLostjgNum(),
-						monthMap.get("total").getUpdateLostjgNum());
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateLostjgNum2(),
-						monthMap.get("total").getUpdateLostjgNum2());
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateLostjgNum3(),
-						monthMap.get("total").getUpdateLostjgNum3());
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateLostjgNum4(),
-						monthMap.get("total").getUpdateLostjgNum4());
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateLostjgNum5(),
-						monthMap.get("total").getUpdateLostjgNum5());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateLostjgNum());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateLostjgNum2());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateLostjgNum3());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateLostjgNum4());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateLostjgNum5());
 
 				// 更新+损坏更换
 
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateReplaceqyNum(),
-						monthMap.get("total").getUpdateReplaceqyNum());
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateReplaceqyNum2(),
-						monthMap.get("total").getUpdateReplaceqyNum2());
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateReplaceqyNum3(),
-						monthMap.get("total").getUpdateReplaceqyNum3());
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateReplaceqyNum4(),
-						monthMap.get("total").getUpdateReplaceqyNum4());
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateReplaceqyNum5(),
-						monthMap.get("total").getUpdateReplaceqyNum5());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateReplaceqyNum());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateReplaceqyNum2());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateReplaceqyNum3());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateReplaceqyNum4());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateReplaceqyNum5());
 
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateReplacegrQNum(),
-						monthMap.get("total").getUpdateReplacegrQNum());
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateReplacegrQNum2(),
-						monthMap.get("total").getUpdateReplacegrQNum2());
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateReplacegrQNum3(),
-						monthMap.get("total").getUpdateReplacegrQNum3());
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateReplacegrQNum4(),
-						monthMap.get("total").getUpdateReplacegrQNum4());
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateReplacegrQNum5(),
-						monthMap.get("total").getUpdateReplacegrQNum5());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateReplacegrQNum());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateReplacegrQNum2());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateReplacegrQNum3());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateReplacegrQNum4());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateReplacegrQNum5());
 
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateReplacegrGNum(),
-						monthMap.get("total").getUpdateReplacegrGNum());
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateReplacegrGNum2(),
-						monthMap.get("total").getUpdateReplacegrGNum2());
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateReplacegrGNum3(),
-						monthMap.get("total").getUpdateReplacegrGNum3());
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateReplacegrGNum4(),
-						monthMap.get("total").getUpdateReplacegrGNum4());
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateReplacegrGNum5(),
-						monthMap.get("total").getUpdateReplacegrGNum5());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateReplacegrGNum());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateReplacegrGNum2());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateReplacegrGNum3());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateReplacegrGNum4());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateReplacegrGNum5());
 
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateReplacejgNum(),
-						monthMap.get("total").getUpdateReplacejgNum());
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateReplacejgNum2(),
-						monthMap.get("total").getUpdateReplacejgNum2());
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateReplacejgNum3(),
-						monthMap.get("total").getUpdateReplacejgNum3());
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateReplacejgNum4(),
-						monthMap.get("total").getUpdateReplacejgNum4());
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateReplacejgNum5(),
-						monthMap.get("total").getUpdateReplacejgNum5());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateReplacejgNum());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateReplacejgNum2());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateReplacejgNum3());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateReplacejgNum4());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateReplacejgNum5());
 
 				// 更新+变更
 
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateChangeqyNum(),
-						monthMap.get("total").getUpdateChangeqyNum());
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateChangeqyNum2(),
-						monthMap.get("total").getUpdateChangeqyNum2());
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateChangeqyNum3(),
-						monthMap.get("total").getUpdateChangeqyNum3());
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateChangeqyNum4(),
-						monthMap.get("total").getUpdateChangeqyNum4());
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateChangeqyNum5(),
-						monthMap.get("total").getUpdateChangeqyNum5());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateChangeqyNum());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateChangeqyNum2());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateChangeqyNum3());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateChangeqyNum4());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateChangeqyNum5());
 
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateChangegrQNum(),
-						monthMap.get("total").getUpdateChangegrQNum());
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateChangegrQNum2(),
-						monthMap.get("total").getUpdateChangegrQNum2());
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateChangegrQNum3(),
-						monthMap.get("total").getUpdateChangegrQNum3());
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateChangegrQNum4(),
-						monthMap.get("total").getUpdateChangegrQNum4());
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateChangegrQNum5(),
-						monthMap.get("total").getUpdateChangegrQNum5());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateChangegrQNum());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateChangegrQNum2());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateChangegrQNum3());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateChangegrQNum4());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateChangegrQNum5());
 
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateChangegrGNum(),
-						monthMap.get("total").getUpdateChangegrGNum());
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateChangegrGNum2(),
-						monthMap.get("total").getUpdateChangegrGNum2());
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateChangegrGNum3(),
-						monthMap.get("total").getUpdateChangegrGNum3());
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateChangegrGNum4(),
-						monthMap.get("total").getUpdateChangegrGNum4());
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateChangegrGNum5(),
-						monthMap.get("total").getUpdateChangegrGNum5());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateChangegrGNum());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateChangegrGNum2());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateChangegrGNum3());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateChangegrGNum4());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateChangegrGNum5());
 
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateChangejgNum(),
-						monthMap.get("total").getUpdateChangejgNum());
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateChangejgNum2(),
-						monthMap.get("total").getUpdateChangejgNum2());
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateChangejgNum3(),
-						monthMap.get("total").getUpdateChangejgNum3());
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateChangejgNum4(),
-						monthMap.get("total").getUpdateChangejgNum4());
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateChangejgNum5(),
-						monthMap.get("total").getUpdateChangejgNum5());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateChangejgNum());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateChangejgNum2());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateChangejgNum3());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateChangejgNum4());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getUpdateChangejgNum5());
 
 				// 更新+变更+遗失补办
 
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeUpdateLostqyNum(),
-						monthMap.get("total").getChangeUpdateLostqyNum());
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeUpdateLostqyNum2(),
-						monthMap.get("total").getChangeUpdateLostqyNum2());
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeUpdateLostqyNum3(),
-						monthMap.get("total").getChangeUpdateLostqyNum3());
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeUpdateLostqyNum4(),
-						monthMap.get("total").getChangeUpdateLostqyNum4());
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeUpdateLostqyNum5(),
-						monthMap.get("total").getChangeUpdateLostqyNum5());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeUpdateLostqyNum());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeUpdateLostqyNum2());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeUpdateLostqyNum3());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeUpdateLostqyNum4());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeUpdateLostqyNum5());
 
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeUpdateLostgrQNum(),
-						monthMap.get("total").getChangeUpdateLostgrQNum());
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeUpdateLostgrQNum2(),
-						monthMap.get("total").getChangeUpdateLostgrQNum2());
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeUpdateLostgrQNum3(),
-						monthMap.get("total").getChangeUpdateLostgrQNum3());
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeUpdateLostgrQNum4(),
-						monthMap.get("total").getChangeUpdateLostgrQNum4());
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeUpdateLostgrQNum5(),
-						monthMap.get("total").getChangeUpdateLostgrQNum5());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeUpdateLostgrQNum());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeUpdateLostgrQNum2());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeUpdateLostgrQNum3());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeUpdateLostgrQNum4());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeUpdateLostgrQNum5());
 
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeUpdateLostgrGNum(),
-						monthMap.get("total").getChangeUpdateLostgrGNum());
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeUpdateLostgrGNum2(),
-						monthMap.get("total").getChangeUpdateLostgrGNum2());
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeUpdateLostgrGNum3(),
-						monthMap.get("total").getChangeUpdateLostgrGNum3());
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeUpdateLostgrGNum4(),
-						monthMap.get("total").getChangeUpdateLostgrGNum4());
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeUpdateLostgrGNum5(),
-						monthMap.get("total").getChangeUpdateLostgrGNum5());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeUpdateLostgrGNum());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeUpdateLostgrGNum2());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeUpdateLostgrGNum3());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeUpdateLostgrGNum4());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeUpdateLostgrGNum5());
 
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeUpdateLostjgNum(),
-						monthMap.get("total").getChangeUpdateLostjgNum());
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeUpdateLostjgNum2(),
-						monthMap.get("total").getChangeUpdateLostjgNum2());
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeUpdateLostjgNum3(),
-						monthMap.get("total").getChangeUpdateLostjgNum3());
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeUpdateLostjgNum4(),
-						monthMap.get("total").getChangeUpdateLostjgNum4());
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeUpdateLostjgNum5(),
-						monthMap.get("total").getChangeUpdateLostjgNum5());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeUpdateLostjgNum());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeUpdateLostjgNum2());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeUpdateLostjgNum3());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeUpdateLostjgNum4());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeUpdateLostjgNum5());
 
 				// 更新+变更+损坏更换
 
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeUpdateReplaceqyNum(),
-						monthMap.get("total").getChangeUpdateReplaceqyNum());
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeUpdateReplaceqyNum2(),
-						monthMap.get("total").getChangeUpdateReplaceqyNum2());
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeUpdateReplaceqyNum3(),
-						monthMap.get("total").getChangeUpdateReplaceqyNum3());
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeUpdateReplaceqyNum4(),
-						monthMap.get("total").getChangeUpdateReplaceqyNum4());
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeUpdateReplaceqyNum5(),
-						monthMap.get("total").getChangeUpdateReplaceqyNum5());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeUpdateReplaceqyNum());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeUpdateReplaceqyNum2());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeUpdateReplaceqyNum3());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeUpdateReplaceqyNum4());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeUpdateReplaceqyNum5());
 
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeUpdateReplacegrQNum(),
-						monthMap.get("total").getChangeUpdateReplacegrQNum());
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeUpdateReplacegrQNum2(),
-						monthMap.get("total").getChangeUpdateReplacegrQNum2());
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeUpdateReplacegrQNum3(),
-						monthMap.get("total").getChangeUpdateReplacegrQNum3());
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeUpdateReplacegrQNum4(),
-						monthMap.get("total").getChangeUpdateReplacegrQNum4());
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeUpdateReplacegrQNum5(),
-						monthMap.get("total").getChangeUpdateReplacegrQNum5());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeUpdateReplacegrQNum());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeUpdateReplacegrQNum2());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeUpdateReplacegrQNum3());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeUpdateReplacegrQNum4());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeUpdateReplacegrQNum5());
 
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeUpdateReplacegrGNum(),
-						monthMap.get("total").getChangeUpdateReplacegrGNum());
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeUpdateReplacegrGNum2(),
-						monthMap.get("total").getChangeUpdateReplacegrGNum2());
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeUpdateReplacegrGNum3(),
-						monthMap.get("total").getChangeUpdateReplacegrGNum3());
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeUpdateReplacegrGNum4(),
-						monthMap.get("total").getChangeUpdateReplacegrGNum4());
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeUpdateReplacegrGNum5(),
-						monthMap.get("total").getChangeUpdateReplacegrGNum5());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeUpdateReplacegrGNum());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeUpdateReplacegrGNum2());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeUpdateReplacegrGNum3());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeUpdateReplacegrGNum4());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeUpdateReplacegrGNum5());
 
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeUpdateReplacejgNum(),
-						monthMap.get("total").getChangeUpdateReplacejgNum());
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeUpdateReplacejgNum2(),
-						monthMap.get("total").getChangeUpdateReplacejgNum2());
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeUpdateReplacejgNum3(),
-						monthMap.get("total").getChangeUpdateReplacejgNum3());
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeUpdateReplacejgNum4(),
-						monthMap.get("total").getChangeUpdateReplacejgNum4());
-				curCol = addData2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeUpdateReplacejgNum5(),
-						monthMap.get("total").getChangeUpdateReplacejgNum5());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeUpdateReplacejgNum());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeUpdateReplacejgNum2());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeUpdateReplacejgNum3());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeUpdateReplacejgNum4());
+				curCol = addTotal2Sheet(sheet, rown, curCol, monthMap.get("total").getChangeUpdateReplacejgNum5());
 			}
 
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -1729,11 +1572,11 @@ public class PaymethodCertificateSettleController extends BaseController {
 			return curCol;
 		}
 		Map<String, String> payMethods = total.getMethods();
-		HSSFRow row4 = sheet.getRow(4);
+		// HSSFRow row4 = sheet.getRow(4);
 		for (String method : payMethods.keySet()) {
 			// HSSFRow row4 = sheet.createRow(4);
 
-			row4.createCell(curCol).setCellValue(payMethods.get(method));
+			// row4.createCell(curCol).setCellValue(payMethods.get(method));
 			// HSSFRow curRow = sheet.createRow(row);
 			switch (method) {
 			case "1":
@@ -1797,6 +1640,18 @@ public class PaymethodCertificateSettleController extends BaseController {
 			row4.createCell(curCol).setCellValue(payMethods.get(method));
 			curCol++;
 		}
+		return curCol;
+	}
+
+	public int addTotal2Sheet(HSSFSheet sheet, HSSFRow curRow, int curCol, CertificatePayMethodDetails total) {
+		if (total.getTotalCount() == 0) {
+			return curCol;
+		}
+		Map<String, String> payMethods = total.getMethods();
+		curRow.createCell(curCol).setCellValue(total.getTotalCount());
+		sheet.addMergedRegion(
+				new CellRangeAddress(curRow.getRowNum(), curRow.getRowNum(), curCol, curCol + payMethods.size() - 1));
+		curCol += payMethods.size();
 		return curCol;
 	}
 
