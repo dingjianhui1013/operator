@@ -3,6 +3,7 @@
  */
 package com.itrus.ca.modules.receipt.service;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -356,6 +357,13 @@ public class ReceiptInvoiceService extends BaseService {
 		dc.add(Restrictions.lt("createDate", endDate));
 		dc.createAlias("receiptDepotInfo", "receiptDepotInfo");
 		dc.createAlias("receiptDepotInfo.office", "office");
+		
+		List<Integer> type = new ArrayList<Integer>();
+		type.add(0);
+		type.add(1);
+		type.add(2);
+		dc.add(Restrictions.in("receiptType",type ));
+		
 		dc.add(Restrictions.eq("office.id", officeId));
 		dc.add(Restrictions.eq(ReceiptInvoice.DEL_FLAG, ReceiptInvoice.DEL_FLAG_NORMAL));
 		dc.addOrder(Order.desc("id"));

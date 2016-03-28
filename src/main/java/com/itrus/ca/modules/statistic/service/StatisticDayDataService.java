@@ -263,7 +263,7 @@ public class StatisticDayDataService extends BaseService {
 			return list;
 		}
 		// 发票出库没有，判断是否有业务没有进行每日经营统计
-		sql ="select  T.DDATE FROM( select  distinct(TO_CHAR(k.CREATE_DATE,'yyyy-MM-dd')) as DDATE from WORK_DEAL_INFO k , SYS_USER d  where  k.CREATE_BY = d.ID AND d.office_id = ?  AND k.CREATE_DATE >= TO_DATE(?, 'yyyy-MM-dd')-"+days+" AND k.CREATE_DATE < TO_DATE(?, 'yyyy-MM-dd')) t "
+		sql ="select  T.DDATE FROM( select  distinct(TO_CHAR(k.CREATE_DATE,'yyyy-MM-dd')) as DDATE from WORK_DEAL_INFO k  where  k.office_id = ?  AND k.CREATE_DATE >= TO_DATE(?, 'yyyy-MM-dd')-"+days+" AND k.CREATE_DATE < TO_DATE(?, 'yyyy-MM-dd')) t "
 				+" where t.DDATE NOT IN( select  distinct(TO_CHAR(S.STATISTIC_DATE,'yyyy-MM-dd')) from STATISTIC_DAY_DATA s where s.STATISTIC_DATE >= TO_DATE( ? , 'yyyy-MM-dd')-"+days+" and s.OFFICE_ID= ?) ORDER BY T.DDATE ASC";
 		list = statisticDayDataDao.findBySql(sql, officeId,countDate,countDate,countDate,officeId);
 

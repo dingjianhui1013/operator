@@ -1614,16 +1614,12 @@ public class StatisticDayDataController extends BaseController {
 		for (ReceiptEnterInfo receiptEnterInfo : receiptEnterInfos) {
 			if (receiptEnterInfo.getReceiptMoney()!=null && receiptEnterInfo.getReceiptMoney()>0) {
 				receiptIn += receiptEnterInfo.getReceiptMoney();
-				System.out.println(receiptIn);
 			}else{
-				
 				receiptIn += receiptEnterInfo.getNow_Money();
-				
 			}
-			
-
 		}
-		System.out.println(receiptIn);
+		
+		
 		List<ReceiptInvoice> receiptInvoices = receiptInvoiceService
 				.findByDate(countDate, nextDay, officeId);
 
