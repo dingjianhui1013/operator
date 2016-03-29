@@ -1873,7 +1873,6 @@ public class PaymethodCertificateSettleService extends BaseService {
 		for(int i=2;i< maxCol;i++){
 			if(row.getCell(i)!=null && !cellValue.equals(row.getCell(i).getStringCellValue())){
 				cellValue = row.getCell(i).getStringCellValue();
-				System.out.println("i:" +i +"\t" + row.getCell(i).getStringCellValue());
 				sheet.addMergedRegion(new CellRangeAddress(row.getRowNum(), row.getRowNum(), cellStart, i-1));
 				cellStart =i;
 			}
