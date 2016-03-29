@@ -141,6 +141,21 @@
 											$("#year5").hide();
 											$("#word5").hide();
 										}
+										
+										
+										var boundId =  $("#agentDetailId").val(); 
+										var url="${ctx}/work/workDealInfo/checkSurplusNum?boundId="+boundId+"&_="+new Date().getTime();
+										$.getJSON(url,function(data){
+											$("#surplusNum").val(data.surplusNum);
+											if($("#surplusNum").val()==0 && $("#agentId").val()!=1){
+												top.$.jBox.tip("此计费策略模版剩余数量为零，不能进行业务办理！");
+												$("#agentMes").show();
+											}else{
+												$("#agentMes").hide();
+											}
+										});
+										
+										
 										var arr = [ data.nameDisplayName,
 												data.orgunitDisplayName,
 												data.emailDisplayName,
