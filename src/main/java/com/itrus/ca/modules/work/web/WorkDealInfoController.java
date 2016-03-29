@@ -8264,7 +8264,18 @@ public class WorkDealInfoController extends BaseController {
 
 				Double money = configChargeAgentDetailService.getChargeMoney(workDealInfo.getConfigChargeAgentId(), 1,
 						year);
-
+				workPayInfo.setMethodPos(agent.getChargeMethodPos());
+				workPayInfo.setMethodMoney(agent.getChargeMethodMoney());
+				workPayInfo.setMethodBank(agent.getChargeMethodBank());
+				if (agent.getTempStyle().equals("2")) {
+					workPayInfo.setMethodGov(true);
+				}else if(agent.getTempStyle().equals("3")){
+					workPayInfo.setMethodContract(true);
+				}else{
+					workPayInfo.setMethodGov(false);
+					workPayInfo.setMethodContract(false);
+				}
+				
 				workPayInfo.setUpdateCert(money);
 				workPayInfo.setErrorReplaceCert(0d);
 				workPayInfo.setLostReplaceCert(0d);
