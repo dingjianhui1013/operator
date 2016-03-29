@@ -308,7 +308,6 @@ public class PaymethodCertificateSettleController extends BaseController {
 			if (StringUtils.isNotBlank(agentId)) {
 				agentIds.add(Long.parseLong(agentId));
 			}
-
 			List<PaymethodCertificateSettleVo> findWorkList = paymethodCertificateSettleService.findMulitWorkList1(
 					applyId, org.springframework.util.StringUtils.collectionToCommaDelimitedString(productType),
 					org.springframework.util.StringUtils.collectionToCommaDelimitedString(workType),
@@ -1553,7 +1552,7 @@ public class PaymethodCertificateSettleController extends BaseController {
 
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			response.setContentType(response.getContentType());
-			response.setHeader("Content-disposition", "attachment; filename=certificateSettlementStatistics.xls");
+			response.setHeader("Content-disposition", "attachment; filename=PaymethodcertificateSettlement.xls");
 			wb.write(baos);
 			byte[] bytes = baos.toByteArray();
 			response.setHeader("Content-Length", String.valueOf(bytes.length));
