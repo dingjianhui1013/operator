@@ -240,8 +240,8 @@
 							<form:radiobutton disabled="true" path="tempStyle" value="2" onclick="checkBZ()" />
 							政府统一采购
 							<form:radiobutton disabled="true" path="tempStyle" value="3" onclick="checkBZ()" />
-							合同采购 <input type="hidden" id="tStyle"
-								value="${configChargeAgent.tempStyle}" />
+							合同采购 
+								<input type="hidden" name="tempStyle" value="${configChargeAgent.tempStyle }">
 						</div>
 					</div>
 				</td>
