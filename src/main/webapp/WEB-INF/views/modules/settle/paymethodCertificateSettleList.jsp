@@ -14,8 +14,9 @@
 .table .insertTable td{width:60px;}
 .addTable tr:nth-of-type(4) th {
     padding: 4px 0px;
+    
 }
-
+.insertTable tr th{filter:none;}
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
