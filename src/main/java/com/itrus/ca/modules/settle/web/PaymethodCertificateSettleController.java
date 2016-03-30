@@ -966,7 +966,8 @@ public class PaymethodCertificateSettleController extends BaseController {
 			// totalColums = curCol; // 全部列数
 			sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, curCol - 1));
 
-			paymethodCertificateSettleService.mergeCell(sheet, row1, curCol);			
+			paymethodCertificateSettleService.mergeCell(sheet, row1, curCol);
+			paymethodCertificateSettleService.mergeCell(sheet, row2, curCol);
 			
 			int k = 5;
 			//
@@ -1561,8 +1562,7 @@ public class PaymethodCertificateSettleController extends BaseController {
 			bos.write(bytes);
 			bos.close();
 			baos.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+		} catch (IOException e) {			
 			e.printStackTrace();
 		}
 	}
@@ -1632,12 +1632,13 @@ public class PaymethodCertificateSettleController extends BaseController {
 			row4 = sheet.createRow(4);
 		}
 
-		row2.createCell(curCol).setCellValue(row2Title);
-		sheet.addMergedRegion(new CellRangeAddress(2, 2, curCol, curCol + payMethods.size() - 1));
+//		row2.createCell(curCol).setCellValue(row2Title);
+//		sheet.addMergedRegion(new CellRangeAddress(2, 2, curCol, curCol + payMethods.size() - 1));
 		row3.createCell(curCol).setCellValue(row3Title);
 		sheet.addMergedRegion(new CellRangeAddress(3, 3, curCol, curCol + payMethods.size() - 1));
 		for (String method : payMethods.keySet()) {
-			row1.createCell(curCol).setCellValue(row1Title);			
+			row1.createCell(curCol).setCellValue(row1Title);
+			row2.createCell(curCol).setCellValue(row2Title);
 			row4.createCell(curCol).setCellValue(payMethods.get(method));
 			curCol++;
 		}
