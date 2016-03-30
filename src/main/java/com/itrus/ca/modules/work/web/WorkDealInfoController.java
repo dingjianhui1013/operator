@@ -7918,6 +7918,7 @@ public class WorkDealInfoController extends BaseController {
 			}
 			
 			
+			
 			List<ConfigProduct> productNames = workDealInfoService.findByDistinkIds(dealIdList);
 			if (productNames.size()>1) {
 				json.put("status", 1);
@@ -7927,6 +7928,24 @@ public class WorkDealInfoController extends BaseController {
 				json.put("html", html);
 				return json.toString();
 			}
+			
+			boolean inOffice = false;
+			List<ConfigAppOfficeRelation> configAppOfficeRelations = configAppOfficeRelationService
+					.findAllByOfficeId(UserUtils.getUser().getOffice().getId());
+			for (ConfigAppOfficeRelation appOffice : configAppOfficeRelations) {
+				if (appOffice.getConfigApp().getId().equals(productNames.get(0).getConfigApp().getId())) {
+					inOffice = true;
+				}
+			}
+			if (!inOffice) {
+				json.put("status", 1);
+				json.put("isUpdate", 0);
+				String html = "请到业务网点办理更新！";
+				json.put("html", html);
+				return json.toString();
+			}
+			
+			
 			
 			String html = "";
 			List<String> companyNames = new ArrayList<>();

@@ -630,14 +630,17 @@ $(document)
 				$("#methodPay3").hide();
 			}
 			
-			var updateSize = $("updateSize").val();
-			if(parse.Int(updateSize)>parse.Int(data.avaNum)){
-				top.$.jBox.tip("该计费策略模版更新剩余数量不足，请检查！");
-				$("#buttonByUpdate").attr("onclick","#");
-			}else{
-				$("#buttonByUpdate").attr("onclick","updateSubmit()");
+			var updateSize = $("#updateSize").val();
+			var agentType = $("#agentIdByUpdate").val();
+			if(agentType != 1){
+				if(parseInt(updateSize)>parseInt(data.avaNum)){
+					top.$.jBox.tip("该计费策略模版更新剩余数量不足，请检查！");
+					$("#buttonByUpdate").attr("onclick","#");
+				}else{
+					$("#buttonByUpdate").attr("onclick","updateSubmit()");
+				}
+				
 			}
-			
 			
 			
 		});
