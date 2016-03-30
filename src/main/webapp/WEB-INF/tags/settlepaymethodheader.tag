@@ -11,9 +11,14 @@
 		<tr>
 			<th colspan="${fn:length(total.methods)}">${theader}</th>
 		</tr>
-		<tr>
+		<tr class="payWayBox">
 			<c:forEach var="payMethodMap" items="${total.methods}">
-				<td>${payMethodMap.value}</td>
+			
+				<td class="payMethod<c:if test="${payMethodMap.value=='POS'}">P</c:if><c:if test="${payMethodMap.value=='现金'}">X</c:if><c:if test="${payMethodMap.value=='转账'}">Z</c:if><c:if test="${payMethodMap.value=='现金+POS'}">XP</c:if>">
+				
+				${payMethodMap.value}
+				
+				</td>
 			</c:forEach>
 		</tr>
 	</table>
