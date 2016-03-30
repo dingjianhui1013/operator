@@ -8172,6 +8172,13 @@ public class WorkDealInfoController extends BaseController {
 
 	@RequestMapping(value = "updateDealInfos")
 	public String updateDealInfos(String dealInfoIds, Integer year,Long bounddId,String methodPay) {
+		
+		ConfigChargeAgentBoundConfigProduct bound =  configChargeAgentBoundConfigProductService.get(bounddId);
+		ConfigChargeAgent agent = bound.getAgent();
+		
+		
+		
+		
 		String[] infoIds = dealInfoIds.split(",");
 		for (int i = 0; i < infoIds.length; i++) {
 			try {
@@ -8204,8 +8211,8 @@ public class WorkDealInfoController extends BaseController {
 					workDealInfo.setCommercialAgent(configAgentOfficeRelations.get(0).getConfigCommercialAgent());// 劳务关系外键
 				}
 
-				workDealInfo.setPayType(workDealInfo1.getPayType());
-				ConfigChargeAgent agent = configChargeAgentService.get(workDealInfo1.getConfigChargeAgentId());
+				workDealInfo.setPayType(Integer.parseInt(agent.getTempStyle()));
+				
 				Integer reseUpdateNum = agent.getReserveUpdateNum();
 				Integer surUpdateNum = agent.getSurplusUpdateNum();
 				agent.setReserveUpdateNum(reseUpdateNum + 1);
@@ -8271,11 +8278,17 @@ public class WorkDealInfoController extends BaseController {
 				workPayInfo.setOpenAccountMoney(0d);
 				workPayInfo.setAddCert(0d);
 
-				Double money = configChargeAgentDetailService.getChargeMoney(workDealInfo.getConfigChargeAgentId(), 1,
+				Double money = configChargeAgentDetailService.getChargeMoney(agent.getId(), 1,
 						year);
-				workPayInfo.setMethodPos(agent.getChargeMethodPos());
-				workPayInfo.setMethodMoney(agent.getChargeMethodMoney());
-				workPayInfo.setMethodBank(agent.getChargeMethodBank());
+			
+				if (methodPay.equals("0")) {
+					workPayInfo.setMethodPos(true);
+				}else if (methodPay.equals("1")) {
+					workPayInfo.setMethodMoney(true);
+				}else if (methodPay.equals("2")) {
+					workPayInfo.setMethodBank(true);
+				}
+				
 				if (agent.getTempStyle().equals("2")) {
 					workPayInfo.setMethodGov(true);
 				}else if(agent.getTempStyle().equals("3")){
