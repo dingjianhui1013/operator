@@ -6775,6 +6775,11 @@ public class WorkDealInfoService extends BaseService {
 	
 	
 	
+	public List<ConfigProduct> findByDistinkIds(List<Long> ids){
+		return workDealInfoDao.findByDistinkIds(ids);
+	}
+	
+	
 	
 
 }

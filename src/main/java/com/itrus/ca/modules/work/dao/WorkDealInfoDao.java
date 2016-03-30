@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import com.itrus.ca.common.persistence.BaseDao;
 import com.itrus.ca.common.persistence.BaseDaoImpl;
+import com.itrus.ca.modules.profile.entity.ConfigProduct;
 import com.itrus.ca.modules.work.entity.WorkCertInfo;
 import com.itrus.ca.modules.work.entity.WorkDealInfo;
 import com.itrus.ca.modules.work.entity.WorkPayInfo;
@@ -54,6 +55,11 @@ public interface WorkDealInfoDao extends WorkDealInfoDaoCustom, CrudRepository<W
 	@Modifying
 	@Query("update WorkDealInfo set delFlag='" + WorkDealInfo.DEL_FLAG_NORMAL + "' where id = ?1")
 	public void deleteReturnById(Long id);
+	
+	
+	@Modifying
+	@Query("select DISTINCT(w.configProduct) From WorkDealInfo w where w.id  in ?1")
+	public List<ConfigProduct> findByDistinkIds(List<Long> ids);
 	
 }
 

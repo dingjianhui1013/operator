@@ -910,8 +910,6 @@ var selected = false;
 				$("#agentId").attr("onchange","setStyleList("+lable+")");
 				$.each(map, function(i, item){
 					agentHtml+="<option onchange=setStyleList("+lable+")  value='"+item.id+"'>" + item.name + "</option>";
-					
-					
 				});
 				$("#agentId").html(agentHtml);
 				var styleList = data.boundStyleList;

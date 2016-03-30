@@ -12,6 +12,7 @@
 $(document)
 .ready(
 		function() {
+			$("#declareDivUpdate").hide();
 			$("#app").focus();
 			var url = "${ctx}/work/workDealInfo/app?_="+new Date().getTime();
 			$
@@ -457,51 +458,225 @@ $(document)
 			$.getJSON(url,function(data){
 				if (data.status==1){
 					if (data.isUpdate==0) {
-						
 						var info = "错误信息为:<br>&nbsp;&nbsp;&nbsp;&nbsp;"+data.html;
 						top.$.jBox.info(info);
 					}else{
-						var html = "<div style='padding:10px;'><input type='radio' value='1' name='year' checked='checked'>1年<br><input type='radio' value='2' name='year'>2年<br><input type='radio' value='4' name='year'>4年<br><input type='radio' value='5' name='year'>5年</div>";
-						var submit = function(v, h, f) {
-							if (f.year == '') {
-								$.jBox.tip("请选择更新年限！", 'error', {
-									focusId : "year"
-								}); // 关闭设置 yourname 为焦点
-								return false;
-							}
-							
-							var url = "${ctx}/work/workDealInfo/checkYears?dealInfoIds="+checkIds + "&year=" + f.year + "&_="+new Date().getTime();	
-							$.getJSON(url,function(data){
-								if (data.status==1){
-									if (data.isYes==0) {
-										var info = "错误信息为:<br>&nbsp;&nbsp;&nbsp;&nbsp;"+data.html;
-										top.$.jBox.info(info);
-									}else{
-										 top.$.jBox.tip("正在批量更新业务...", 'loading');
-										window.location.href = "${ctx}/work/workDealInfo/updateDealInfos?dealInfoIds="
-										+ checkIds + "&year=" + f.year;
-									}
-									
-								}else{
-									top.$.jBox.tip("系统异常");
-								}
-							});
-							return true;
-						};
-
-						top.$.jBox(html, {
-							title : "请选择更新年限方式！",
-							submit : submit
-						});
-						
-						
-						
+						$("#appIdd").val(data.appIdd);
+						$("#updateSize").val(data.updateSize);
+						$("#productNamee").val(data.productNamee);
+						$("#labell").val(data.labell);
+						var lable = data.labell;
+						showAgentByUpdate(lable);
+						$("#declareDivUpdate").show();
 					}
 				}else{
 					top.$.jBox.tip("系统异常");
 				}
 			});
 		}
+		
+	}
+	
+	function hideUpdateDiv(){
+		
+		$("#declareDivUpdate").hide();
+		
+	}
+	
+	/* 
+	* 功能:根据产品带回计费模版
+	* 传参：lable+name
+	* 返回值：年限1，2，4，5是否为true
+	*/ 
+	function showAgentByUpdate(obj){
+		var lable = obj;
+		var productName = $("#productNamee").val();
+		var url = "${ctx}/work/workDealInfo/showAgentProduct?lable="+lable+"&productName="+productName+"&app="+$("#appIdd").val()+"&infoType=1&_="+new Date().getTime();
+		$.getJSON(url,function(data){
+			if(data.tempStyle!=-1){
+				var map = data.typeMap;
+				var agentHtml="";
+				$("#agentIdByUpdate").attr("onchange","setStyleListByUpdate("+lable+")");
+				$.each(map, function(i, item){
+					agentHtml+="<option onchange=setStyleListByUpdate("+lable+")  value='"+item.id+"'>" + item.name + "</option>";
+				});
+				$("#agentIdByUpdate").html(agentHtml);
+				var styleList = data.boundStyleList;
+				var styleHtml="";
+				$.each(styleList, function(i, item2){
+					if(i==0){
+						$("#bounddId").val(item2.id);
+						showYearByUpdate();
+					}
+					styleHtml +="<option value='"+item2.id+"'>" + item2.name + "</option>";
+				});
+				$("#agentDetailIdByUpdate").html(styleHtml);
+			}else{
+				var agentHtml="<option value='0'>请选择</option>";
+				$("#agentIdByUpdate").html(agentHtml);
+				var styleHtml="<option value='0'>请选择</option>";
+				$("#agentDetailIdByUpdate").html(styleHtml);
+				
+				$("#year1U").show();
+				$("#word1U").show();
+				$("#year2U").show();
+				$("#word2U").show();
+				$("#year4U").show();
+				$("#word4U").show();
+				$("#year5U").show();
+				$("#word5U").show();
+				$(".prompt").css("display","none");
+				top.$.jBox.tip("请先配置计费策略！"); 
+			}
+			
+			
+		});
+	}
+	
+	/*
+	* 给计费策略模版配置赋值
+	*/
+	function setStyleListByUpdate(obj){
+		var lable = obj;
+		var productName = $("#productNamee").val();
+		var agentId = $("#agentIdByUpdate").val();
+		if (agentId!=0) {
+			var url = "${ctx}/work/workDealInfo/setStyleList?lable="+lable+"&productName="+productName+"&app="+$("#appIdd").val()+"&infoType=1&style="+agentId+"&_="+new Date().getTime();
+			$.getJSON(url,function(data){
+				var styleList = data.array;
+				var styleHtml="";
+				$.each(styleList,function(i,item){
+					if(i==0){
+						$("#bounddId").val(item.id);
+						showYearByUpdate();
+					}
+					styleHtml +="<option value='"+item.id+"'>" + item.name + "</option>";
+					
+				});
+				$("#agentDetailIdByUpdate").html(styleHtml);
+			});
+		}else{
+			top.$.jBox.tip("请您选择产品！");
+			
+		}
+	}
+	
+	/* 
+	* 功能:根据产品带回年限
+	* 传参：lable+name
+	* 返回值：年限1，2，4，5是否为true
+	*/ 
+	function showYearByUpdate(){
+		var agentId = $("#bounddId").val();
+		//var url = "${ctx}/work/workDealInfo/showYear?lable="+lable+"&productName="+productName+"&app="+$("#appId").val()+"&infoType=0&_="+new Date().getTime();
+		var url = "${ctx}/work/workDealInfo/showYearNew?boundId="+agentId+"&infoType=1&_="+new Date().getTime();
+		
+		$.getJSON(url, function(data) {
+			if (data.year1) {
+				$("#year1U").show();
+				$("#word1U").show();
+			} else {
+				$("#year1U").hide();
+				$("#word1U").hide();
+			}
+			if (data.year2) {
+				$("#year2U").show();
+				$("#word2U").show();
+			} else {
+				$("#year2U").hide();
+				$("#word2U").hide();
+			}
+			if (data.year3) {
+				$("#year3U").show();
+				$("#word3U").show();
+			} else {
+				$("#year3U").hide();
+				$("#word3U").hide();
+			}
+			if (data.year4) {
+				$("#year4U").show();
+				$("#word4U").show();
+			} else {
+				$("#year4U").hide();
+				$("#word4U").hide();
+			}
+			if (data.year5) {
+				$("#year5U").show();
+				$("#word5U").show();
+			} else {
+				$("#year5U").hide();
+				$("#word5U").hide();
+			}
+			
+			if(data.pos){
+				$("#pay1").show();
+				$("#methodPay1").show();
+			}else{
+				$("#pay1").hide();
+				$("#methodPay1").hide();
+			}
+			if(data.money){
+				$("#pay2").show();
+				$("#methodPay2").show();
+			}else{
+				$("#pay2").hide();
+				$("#methodPay2").hide();
+			}
+			if(data.bank){
+				$("#pay3").show();
+				$("#methodPay3").show();
+			}else{
+				$("#pay3").hide();
+				$("#methodPay3").hide();
+			}
+			
+			var updateSize = $("updateSize").val();
+			if(parse.Int(updateSize)>parse.Int(data.avaNum)){
+				top.$.jBox.tip("该计费策略模版更新剩余数量不足，请检查！");
+				$("#buttonByUpdate").attr("onclick","#");
+			}else{
+				$("#buttonByUpdate").attr("onclick","updateSubmit()");
+			}
+			
+			
+			
+		});
+		
+	}
+	
+	//获取计费模版相对应的年限
+	function setYearByBoundIdByUpdate(){
+		var boundId = $("#agentDetailIdByUpdate").val();
+		$("#bounddId").val(boundId);
+		showYearByUpdate();
+	}
+	
+	
+	function updateSubmit(){
+		
+		var agentDetailIdByUpdate = $("#agentDetailIdByUpdate").val()
+		if(agentDetailIdByUpdate==null || agentDetailIdByUpdate==0){
+			top.$.jBox.tip("请选择计费策略模版！");
+        	return false;
+		}
+		
+		var year = $("input[name='yearU']:checked").val()
+		if(year == null || year == ''){
+			top.$.jBox.tip("请选择更新年数！");
+        	return false;
+		}
+		var methodPay = $("input[name='methodPay']:checked").val()
+		if(methodPay == null || methodPay == ''){
+			top.$.jBox.tip("请选择缴费类型！");
+        	return false;
+		}
+		
+		var bounddId = $("#bounddId").val();
+		var checkIds = $("#checkIds").val();
+		
+		 top.$.jBox.tip("正在批量更新业务...", 'loading');
+			window.location.href = "${ctx}/work/workDealInfo/updateDealInfos?dealInfoIds="
+			+ checkIds + "&year=" + year + "&bounddId=" + bounddId + "&methodPay="+methodPay ;
 		
 	}
 	
@@ -610,6 +785,8 @@ $(document)
 				$("#word1").show();
 				$("#year2").show();
 				$("#word2").show();
+				$("#year3").show();
+				$("#word3").show();
 				$("#year4").show();
 				$("#word4").show();
 				$("#year5").show();
@@ -683,6 +860,13 @@ $(document)
 			if (data.year2) {
 				$("#year2").show();
 				$("#word2").show();
+			} else {
+				$("#year2").hide();
+				$("#word2").hide();
+			}
+			if (data.year3) {
+				$("#year3").show();
+				$("#word3").show();
 			} else {
 				$("#year2").hide();
 				$("#word2").hide();
@@ -836,6 +1020,8 @@ $(document)
 				<a id="manyAdd" data-toggle="modal" href="#declareDiv" class="btn btn-primary">批量新增导入</a>&nbsp;&nbsp;&nbsp;&nbsp;
 				&nbsp;&nbsp;&nbsp;&nbsp;
 				<a id="manyUpdate" data-toggle="modal" href="javaScript:updateCertOK();" class="btn btn-primary">批量更新证书</a>
+			 
+			
 				&nbsp;&nbsp;&nbsp;&nbsp;
 				<a data-toggle="modal" href="${ctx}/work/workDealInfo/deleteList" class="btn btn-primary">删除批量新增信息</a>
 				<input type="hidden"  name="checkIds"  id="checkIds"  value="${checkIds }"/>&nbsp;&nbsp;&nbsp;&nbsp;
@@ -1034,7 +1220,12 @@ $(document)
 								<c:if test="${workDealInfo.year==1}">checked</c:if>><span
 								id="word1">1年</span> <input type="radio" name="year" value="2"
 								id="year2" <c:if test="${workDealInfo.year==2}">checked</c:if>><span
-								id="word2">2年 </span><input type="radio" name="year" value="4"
+								id="word2">2年 </span>
+								<input type="radio" name="year" value="3"
+								id="year3" <c:if test="${workDealInfo.year==3}">checked</c:if>><span
+								id="word3">3年</span>
+								
+								<input type="radio" name="year" value="4"
 								id="year4" <c:if test="${workDealInfo.year==4}">checked</c:if>><span
 								id="word4">4年</span><input type="radio" name="year" value="5"
 								id="year5" <c:if test="${workDealInfo.year==5}">checked</c:if>><span
@@ -1058,5 +1249,103 @@ $(document)
 				onclick="addAttach()" class="btn btn-primary">导入</a>
 		</div>
 	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div id="declareDivUpdate" style="width: 800px;margin-left: -450px;" class="modal">
+		<div class="modal-header">
+			<h3>批量更新</h3>
+		</div>
+		<div class="modal-body">
+			<div class="row-fluid">
+			<table class="table table-striped table-bordered table-condensed">
+				<tbody>
+					<tr>
+						<th style="width: 80px;">计费策略类型：</th>
+						<td style="width: 260px;">
+						<select id="agentIdByUpdate" name="agentIdByUpdate">
+								<option value="0">请选择</option>
+						</select></td>
+						<th>计费策略模版：</th>
+						<td id="productTdId">
+							<select
+								onchange="setYearByBoundIdByUpdate()" id="agentDetailIdByUpdate"
+								name="agentDetailIdByUpdate">
+									<option value="0">请选择</option>
+							</select>
+							
+							<input type="hidden" id="appIdd">
+							<input type="hidden" id="updateSize">
+							<input type="hidden" id="productNamee">
+							<input type="hidden" id="labell">
+							<input type="hidden" id="bounddId">
+							
+						</td>
+					</tr>
+					<tr>
+						<th style="width: 80px;">申请年数：</th>
+						<td style="width: 260px;">
+							<input type="radio" name="yearU" value="1" id="year1U"
+								>
+								<span
+								id="word1U">1年</span> <input type="radio" name="yearU" value="2"
+								id="year2U"><span
+								id="word2U">2年 </span>
+								
+								<input type="radio" name="yearU" value="3"
+								id="year3U">
+								<span
+								id="word3U">3年</span>
+								
+								<input type="radio" name="yearU" value="4"
+								id="year4U" >
+								<span
+								id="word4U">4年</span>
+								
+								
+								<input type="radio" name="yearU" value="5"
+								id="year5U"><span
+								id="word5U">5年</span>
+						</td>
+						
+						<th>缴费方式：</th>
+						<td >
+							<input type="radio" name="methodPay" value="0"
+								id="pay1">
+							<span id="methodPay1">pos</span>
+							<input type="radio" name="methodPay" value="1"
+								id="pay2">
+							<span id="methodPay2">现金缴费</span>
+							<input type="radio" name="methodPay" value="2"
+								id="pay3">
+							<span id="methodPay3">银行转账</span>
+						</td>
+						
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		</div>
+		<div class="modal-footer">
+			<a href="javascript:void(0)" data-dismiss="modal" 
+				onclick="hideUpdateDiv()" class="btn">取消</a> 
+				<a
+				href="javascript:void(0)" data-dismiss="modal" id="buttonByUpdate"
+				onclick="updateSubmit()" class="btn btn-primary">更新</a>
+		</div>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
 </body>
 </html>

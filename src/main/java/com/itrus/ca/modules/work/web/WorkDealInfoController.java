@@ -7549,6 +7549,15 @@ public class WorkDealInfoController extends BaseController {
 		JSONObject json = new JSONObject();
 		try {
 			ConfigChargeAgentBoundConfigProduct bound = configChargeAgentBoundConfigProductService.get(boundId);
+			json.put("pos", bound.getAgent().getChargeMethodPos());
+			json.put("bank", bound.getAgent().getChargeMethodBank());
+			json.put("money", bound.getAgent().getChargeMethodMoney());
+			
+			if (bound.getAgent().getSurplusUpdateNum()==null) {
+				json.put("avaNum", 0);
+			}else{
+				json.put("avaNum", bound.getAgent().getSurplusUpdateNum());
+			}
 			if (infoType != null) {
 				String[] years = configChargeAgentDetailService.getChargeAgentYears(bound.getAgent().getId(), infoType);
 				for (int i = 0; i < years.length; i++) {
@@ -7907,6 +7916,18 @@ public class WorkDealInfoController extends BaseController {
 				}
 
 			}
+			
+			
+			List<ConfigProduct> productNames = workDealInfoService.findByDistinkIds(dealIdList);
+			if (productNames.size()>1) {
+				json.put("status", 1);
+				json.put("isUpdate", 0);
+				
+				String html = "选中的业务不为同一个产品，请检查！";
+				json.put("html", html);
+				return json.toString();
+			}
+			
 			String html = "";
 			List<String> companyNames = new ArrayList<>();
 			for (int i = 0; i < dealInfos.length; i++) {
@@ -7927,36 +7948,10 @@ public class WorkDealInfoController extends BaseController {
 				if ((certAfterLong - nowLong) > (1000 * 60 * 60 * 24 * 60L)) {
 					tip = "'" + dealInfo.getWorkCompany().getCompanyName() + "'单位的证书未在更新范围内！";
 					companyNames.add(tip);
-				} else {
-					if (dealInfo.getConfigChargeAgentId() == null) {
-						tip = "'" + dealInfo.getWorkCompany().getCompanyName() + "'单位未绑定计费策略模板!";
-						companyNames.add(tip);
-						continue;
-					} else {
-						ConfigChargeAgent configChargeAgent = configChargeAgentService
-								.get(dealInfo.getConfigChargeAgentId());
-
-						Integer agentSize = configAgentBoundDealInfoService
-								.findByAgentIdDealIds(configChargeAgent.getId(), dealIdList);
-
-						if (!configChargeAgent.getTempStyle().equals("1")) {
-							if (configChargeAgent.getSurplusUpdateNum() == null) {
-								tip = "'" + dealInfo.getWorkCompany().getCompanyName() + "'单位绑定'"
-										+ configChargeAgent.getTempName() + "'缴费模板剩余更新数量为空！";
-								companyNames.add(tip);
-							} else if (configChargeAgent.getSurplusUpdateNum() < agentSize) {
-								tip = "'" + dealInfo.getWorkCompany().getCompanyName() + "'单位绑定'"
-										+ configChargeAgent.getTempName() + "'缴费模板剩余更新数量不足！";
-								companyNames.add(tip);
-							}
-						}
-					}
-				}
+				} 
 
 			}
-
 			for (int i = 0; i < companyNames.size(); i++) {
-
 				html += companyNames.get(i);
 				if (i < (companyNames.size() - 1)) {
 					html += "<br>&nbsp;&nbsp;&nbsp;&nbsp;";
@@ -7964,6 +7959,20 @@ public class WorkDealInfoController extends BaseController {
 			}
 			if (html.equals("")) {
 				json.put("isUpdate", 1);
+				
+				Long proIdd = productNames.get(0).getId();
+				List<ConfigChargeAgentBoundConfigProduct> bounds =  configChargeAgentBoundConfigProductService.findByProductId(proIdd);
+				Set<Integer> nameSet = new HashSet<Integer>();
+				for (int i = 0; i < bounds.size(); i++) {
+					nameSet.add(Integer.parseInt(bounds.get(i).getAgent().getTempStyle()));
+				}
+				json.put("boundLabelList", nameSet);
+				
+				json.put("appIdd",  productNames.get(0).getConfigApp().getId());
+				json.put("productNamee",  productNames.get(0).getProductName());
+				json.put("updateSize", dealIdList.size());
+				json.put("labell", productNames.get(0).getProductLabel());
+				
 			} else {
 				json.put("isUpdate", 0);
 				json.put("html", html);
@@ -8162,7 +8171,7 @@ public class WorkDealInfoController extends BaseController {
 	}
 
 	@RequestMapping(value = "updateDealInfos")
-	public String updateDealInfos(String dealInfoIds, Integer year) {
+	public String updateDealInfos(String dealInfoIds, Integer year,Long bounddId,String methodPay) {
 		String[] infoIds = dealInfoIds.split(",");
 		for (int i = 0; i < infoIds.length; i++) {
 			try {
