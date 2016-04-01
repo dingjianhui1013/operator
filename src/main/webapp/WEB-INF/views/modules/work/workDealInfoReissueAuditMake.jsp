@@ -351,7 +351,14 @@ function makeCert() {
 	function addCertDaysCheck(){
 		if($("#addCertDays").val()<0){
 			$("#negative").html("");
-			$("#negative").html("<font color='red'>"+"您确定赠送的时间是："+$("#addCertDays").val()+"天么？"+"</font>");
+			if(parseInt(${workDealInfo.year*365+workDealInfo.lastDays})+parseInt($("#addCertDays").val())>0)
+			{
+				$("#negative").html("<font color='red'>"+"您确定赠送的时间是："+$("#addCertDays").val()+"天么？"+"</font>");
+			}else
+				{
+					top.$.jBox.tip("赠送天数填写有误请重新填写");
+					$("#addCertDays").val("0");
+				}
 // 			var submit = function( v, h, f){
 // 				if( v != 'ok'){
 // 					$("#addCertDays").val(0);
