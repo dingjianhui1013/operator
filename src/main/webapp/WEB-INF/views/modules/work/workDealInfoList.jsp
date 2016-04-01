@@ -1062,7 +1062,7 @@ $(document)
 				<tr>
 					<td>
 					
-					<c:if test="${workDealInfo.dealInfoStatus==7}">
+					<c:if test="${workDealInfo.dealInfoStatus==7 && (workDealInfo.year*365+workDealInfo.lastDays+workDealInfo.addCertDays)<61 }">
 						<input type="checkbox" name="oneDealCheck" value = "${workDealInfo.id}" 
 						<c:forEach items="${ids }" var="id">
 							<c:if test="${id==workDealInfo.id }"> checked="checked"</c:if>
