@@ -4571,11 +4571,11 @@ public class WorkDealInfoController extends BaseController {
 					}
 				}
 
-				if (!inOffice) {
+				/*if (!inOffice) {
 					redirectAttributes.addAttribute("fd", UUID.randomUUID().toString());
 					addMessage(redirectAttributes, "请到业务办理网点更新！");
 					return "redirect:" + Global.getAdminPath() + "/work/workDealInfo/?repage";
-				}
+				}*/
 			} else if (type[i].equals("4")) {
 				model.addAttribute("revoke", "4");
 				if (!inOffice) {
@@ -7925,22 +7925,6 @@ public class WorkDealInfoController extends BaseController {
 				json.put("isUpdate", 0);
 				
 				String html = "选中的业务不为同一个产品，请检查！";
-				json.put("html", html);
-				return json.toString();
-			}
-			
-			boolean inOffice = false;
-			List<ConfigAppOfficeRelation> configAppOfficeRelations = configAppOfficeRelationService
-					.findAllByOfficeId(UserUtils.getUser().getOffice().getId());
-			for (ConfigAppOfficeRelation appOffice : configAppOfficeRelations) {
-				if (appOffice.getConfigApp().getId().equals(productNames.get(0).getConfigApp().getId())) {
-					inOffice = true;
-				}
-			}
-			if (!inOffice) {
-				json.put("status", 1);
-				json.put("isUpdate", 0);
-				String html = "请到业务网点办理更新！";
 				json.put("html", html);
 				return json.toString();
 			}

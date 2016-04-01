@@ -931,6 +931,11 @@ $(document)
 		$("#"+c).show();
  		$("#"+c).html($("#"+o).val().length);
 	}
+	
+	function replaceChecks(){
+		$("#checkIds").val("");
+	}
+	
 </script>
 
 
@@ -1029,7 +1034,7 @@ $(document)
 				<a data-toggle="modal" href="${ctx}/work/workDealInfo/deleteList" class="btn btn-primary">删除批量新增信息</a>
 				<input type="hidden"  name="checkIds"  id="checkIds"  value="${checkIds }"/>&nbsp;&nbsp;&nbsp;&nbsp;
 				<input id="btnSubmit"
-				class="btn btn-primary" type="submit" value="查询" />
+				class="btn btn-primary" type="submit" onclick="replaceChecks()" value="查询" />
 				</div>
 		</div>
 	</form:form>
