@@ -1084,7 +1084,7 @@ public class WorkDealInfoService extends BaseService {
 			sql.append(" and workcertin6_.sign_date <= TO_DATE ('"
 				+ DateUtils.formatDate(makeCertEndTime, "yyyy-MM-dd 23:59:59") + "', 'yyyy-MM-dd hh24:mi:ss')");
 		}
-		sql.append(" order by this_.create_date desc)");
+		sql.append(" order by this_.create_date desc,this_.svn asc)");
 		return sql.toString();
 	}
 
