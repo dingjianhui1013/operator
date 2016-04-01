@@ -128,21 +128,27 @@ public class ConfigProjectTypeController extends BaseController {
 	@ResponseBody
 	public String showAppList(Long proId) throws Exception{
 		List<ConfigApp> configApps =  configAppService.findByconfigProjectType(proId);
-		JSONObject json=new JSONObject();
-		/*for (ConfigApp configApp : configApps) {
-		
-			
-		}*/
-		Map<String, Object> map = new HashMap<String, Object>();
+		JSONObject json = new org.json.JSONObject();
+		JSONArray array = new JSONArray();
 		if(configApps.size()>0)
 		{
-			map.put("status", "1");
-			map.put("list", configApps);
-			
-		}else{
-			json.put("status", "0");
+			for (ConfigApp configApp : configApps) {
+				try {
+					json = new JSONObject();
+					json.put("id", configApp.getId());
+					json.put("name", configApp.getAppName());
+					array.put(json);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					json.put("status", "0");
+					array.put(json);
+				}
+			}
+		}else {
+			json.put("status", 0);
+			array.put(json);
 		}
-		// TODO Auto-generated catch block
-		return JSON.toJSONString(map);
+		return array.toString();
 	}
 }
