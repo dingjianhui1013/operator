@@ -243,10 +243,20 @@ var selected = false;
 			top.$.jBox.tip("单位名称格式有误!");
 			return false;
 		}
+		
+		
+		
+		
 		if($("#contactName").val()!="" && !checkJbrxm($("#contactName"))){
 			top.$.jBox.tip("经办人姓名格式有误!");
 			return false;
 		}
+		
+		if($("#contacEmail").val()!="" && !form_check($("#contacEmail"))){
+			top.$.jBox.tip("经办人电子邮箱格式有误!");
+			return false;
+		}
+		
 		
 		if($("#pName").val()!="" &&!checkSqr($("#pName"))){
 			top.$.jBox.tip("申请人姓名格式有误!");
@@ -350,6 +360,12 @@ var selected = false;
 			top.$.jBox.tip("经办人姓名格式有误!");
 			return false;
 		}
+		
+		if($("#contacEmail").val()!="" && !form_check($("#contacEmail"))){
+			top.$.jBox.tip("经办人电子邮箱格式有误!");
+			return false;
+		}
+		
 		if($("#pName").val()!="" &&!checkSqr($("#pName"))){
 			top.$.jBox.tip("申请人姓名格式有误!");
 			return false;
@@ -451,6 +467,11 @@ var selected = false;
 		}
 		if($("#contactName").val()!="" && !checkJbrxm($("#contactName"))){
 			top.$.jBox.tip("经办人姓名格式有误!");
+			return false;
+		}
+		
+		if($("#contacEmail").val()!="" && !form_check($("#contacEmail"))){
+			top.$.jBox.tip("经办人电子邮箱格式有误!");
 			return false;
 		}
 		
