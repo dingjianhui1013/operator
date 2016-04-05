@@ -75,10 +75,11 @@
 	
 
 	function nextStep(){
+		$('#aHref').attr('href','javascript:void(0);');
 		if(!flag){
 			$("#msg").html("UKEY状态错误，不允许申请");
 			$("#nextt").removeClass().addClass("gray_nextStep"); 
-			$('#aHref').attr('href','javascript:void(0);');
+			$('#aHref').attr('href','javascript:nextStep()');
 		}else{
 			$.ajax({
 				url:"${ctxILetter}/enroll/gxfw1Submit?dealInfoId="+dealInfoId+"&_"+Math.random() * 10,
@@ -90,7 +91,7 @@
 					}else{
 						$("#msg").html("提交失败");
 						$("#nextt").removeClass().addClass("gray_nextStep"); 
-						$('#aHref').attr('href','javascript:void(0);');
+						$('#aHref').attr('href','javascript:nextStep()');
 					}
 				}
 			});

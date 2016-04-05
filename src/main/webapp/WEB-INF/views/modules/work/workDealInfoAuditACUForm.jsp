@@ -126,6 +126,9 @@ $(document)
 							if ($("#year2").prop("checked") == true) {
 								saveYear = $("#year2").val();
 							}
+							if ($("#year3").prop("checked") == true) {
+								saveYear = $("#year3").val();
+							}
 							if ($("#year4").prop("checked") == true) {
 								saveYear = $("#year4").val();
 							}
@@ -155,6 +158,9 @@ $(document)
 				}
 				if ($("#year2").prop("checked") == true) {
 					saveYear = $("#year2").val();
+				}
+				if ($("#year3").prop("checked") == true) {
+					saveYear = $("#year3").val();
 				}
 				if ($("#year4").prop("checked") == true) {
 					saveYear = $("#year4").val();
@@ -190,8 +196,14 @@ $(document)
 			if ($("#year2").prop("checked") == true) {
 				saveYear = $("#year2").val();
 			}
+			if ($("#year3").prop("checked") == true) {
+				saveYear = $("#year3").val();
+			}
 			if ($("#year4").prop("checked") == true) {
 				saveYear = $("#year4").val();
+			}
+			if ($("#year5").prop("checked") == true) {
+				saveYear = $("#year5").val();
 			}
 			if (saveYear == 0) {
 				$("#mmsg").html("请选择更新年限");
@@ -296,6 +308,13 @@ $(document)
 			} else {
 				$("#year2").hide();
 				$("#word2").hide();
+			}
+			if (data.year3) {
+				$("#year3").show();
+				$("#word3").show();
+			} else {
+				$("#year3").hide();
+				$("#word3").hide();
 			}
 			if (data.year4) {
 				$("#year4").show();
@@ -424,6 +443,8 @@ $(document)
 								<span id="word1">1年</span>
 								<input type="radio" name="year" value="2" id="year2">
 								<span id="word2">2年 </span>
+								<input type="radio" name="year" value="3" id="year3">
+								<span id="word3">3年</span>
 								<input type="radio" name="year" value="4" id="year4">
 								<span id="word4">4年</span>
 								<input type="radio" name="year" value="5" id="year5">
