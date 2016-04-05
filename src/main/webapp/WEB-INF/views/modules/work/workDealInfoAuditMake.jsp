@@ -344,7 +344,7 @@
 	function addCertDaysCheck(){
 		if($("#addCertDays").val()<0){
 			$("#negative").html("");
-			if(${workDealInfo.year*365+workDealInfo.lastDays}+$("#addCertDays").val()>0)
+			if(parseInt(${workDealInfo.year*365+workDealInfo.lastDays})+parseInt($("#addCertDays").val())>0)
 				{
 					$("#negative").html("<font color='red'>"+"您确定赠送的时间是："+$("#addCertDays").val()+"天么？"+"</font>");
 				}else
