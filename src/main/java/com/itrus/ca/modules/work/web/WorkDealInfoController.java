@@ -5248,12 +5248,15 @@ public class WorkDealInfoController extends BaseController {
 		user.setName(createByname);
 		User user1 = new User();
 		user1.setName(updateByname);
+		User user2 = new User();
+		user2.setName(zhizhengname);
 		workDealInfo.setWorkCompany(company);
 		workDealInfo.setWorkUser(workUser);
 		workDealInfo.setPayType(payType);
 		workDealInfo.setKeySn(keySn);
-		workDealInfo.setCreateBy(user);
-		workDealInfo.setUpdateBy(user1);
+		workDealInfo.setInputUser(user);
+		workDealInfo.setAttestationUser(user1);
+		workDealInfo.setBusinessCardUser(user2);
 		if (payMethod != null) {
 			WorkPayInfo workPayInfo = new WorkPayInfo();
 			if (payMethod.equals("1")) {
@@ -5341,15 +5344,27 @@ public class WorkDealInfoController extends BaseController {
 		WorkDealInfoType workDealInfoType = new WorkDealInfoType();
 		WorkDealInfoStatus workDealInfoStatus = new WorkDealInfoStatus();
 		List<Office> officeList = officeService.getOfficeByType(UserUtils.getUser(), 2);
+		List<Long> officeIds = new ArrayList<Long>();
+		for (int i = 0; i < officeList.size(); i++) {
+			officeIds.add(officeList.get(i).getId());
+		}
 		// Calendar calendar = Calendar.getInstance();
 		try {
 			List<WorkCertInfo> certInfoList = new ArrayList<WorkCertInfo>();
 			if (zhizhengStartTime != null && zhizhengEndTime != null) {
 				certInfoList = workCertInfoService.findZhiZhengTime(zhizhengStartTime, zhizhengEndTime);
 			}
-			final List<WorkDealInfo> list = workDealInfoService.find(workDealInfo, dealInfoByOfficeAreaIds,
+			List<WorkDealInfo> list = new ArrayList<WorkDealInfo>();
+			if(workType!=null&&workType==5)
+			{
+				list = workDealInfoService.findCX(workDealInfo,
+						dealInfoByOfficeAreaIds, dealInfoByAreaIds, officeids, apply, certType, workType, year, luruStartTime,
+						luruEndTime, officeIds, daoqiStartTime, daoqiEndTime, jianzhengStartTime, jianzhengEndTime,
+						certInfoList);
+			}
+			list = workDealInfoService.find(workDealInfo, dealInfoByOfficeAreaIds,
 					dealInfoByAreaIds, officeids, apply, certType, workType, year, luruStartTime, luruEndTime,
-					officeList, daoqiStartTime, daoqiEndTime, jianzhengStartTime, jianzhengEndTime, certInfoList);
+					officeIds, daoqiStartTime, daoqiEndTime, jianzhengStartTime, jianzhengEndTime, certInfoList);
 			final String fileName = "WorkDealInfos.csv";
 			final List<WorkDealInfoVo> workDealInfoVos = new ArrayList<WorkDealInfoVo>();
 			String dealInfoType = null;
@@ -5404,7 +5419,7 @@ public class WorkDealInfoController extends BaseController {
 					dealInfoVo.setCertDays(
 							dealInfo.getYear() * 365 + dealInfo.getLastDays() + dealInfo.getAddCertDays() + "（天）");
 				}
-				String notafterString = df.format(dealInfo.getNotafter() == null ? "" : dealInfo.getNotafter());
+				String notafterString = dealInfo.getNotafter() == null ? "" : df.format(dealInfo.getNotafter());
 				dealInfoVo.setNotAfter(notafterString);
 				dealInfoVo
 						.setDealInfoStatus(workDealInfoStatus.WorkDealInfoStatusMap.get(dealInfo.getDealInfoStatus()));
