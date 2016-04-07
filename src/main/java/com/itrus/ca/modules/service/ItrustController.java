@@ -1,6 +1,8 @@
 package com.itrus.ca.modules.service;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.apache.shiro.authz.annotation.RequiresGuest;
@@ -70,7 +72,7 @@ public class ItrustController {
 			throws JSONException {
 		JSONObject json = new JSONObject();
 		try {
-			json.put("status", 0);
+			json.put("status", 0); 
 			certsn = certsn.toUpperCase();
 			log.info("certSn:"+certsn);
 			WorkDealInfo wdi = itrustService.findBySn(certsn, 0);
@@ -81,11 +83,19 @@ public class ItrustController {
 				} else {
 					json.put("project", appToJson(wdi.getConfigApp()));// 应用
 					json.put("product", productToJson(wdi.getConfigProduct()));// 产品
-					if (wdi.getConfigProduct().getProductLabel() != null
+					
+					List<Long> ids = new ArrayList<Long>();
+					ids.add(wdi.getConfigApp().getId());
+					
+					json.put("commonProjects", ids);
+					
+					/*if (wdi.getConfigProduct().getProductLabel() != null
 							&& wdi.getConfigProduct().getProductLabel()==0) {
 						json.put("commonProjects",
 								itrustService.listCommonApp());// 不返回po 只返回应用的id
-					}
+					}*/
+					
+					
 					if ("profile".equals(include)) {
 					//	if (wdi.getConfigProduct().getConfigRaAccounts().size() != 0) {
 							ConfigRaAccount raAccount = itrustService.findRaById(wdi.getConfigProduct().getRaAccountId());
