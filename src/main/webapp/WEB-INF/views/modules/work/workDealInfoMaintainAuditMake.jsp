@@ -206,6 +206,9 @@
 	}
 	
 	function addCertDaysCheck(){
+		if($("#addCertDays").val()==""){
+			$("#addCertDays").val("0");
+		}
 		if($("#addCertDays").val()<0){
 			$("#negative").html("");
 			if(parseInt(${workDealInfo.year*365+workDealInfo.lastDays})+parseInt($("#addCertDays").val())>0)
@@ -474,7 +477,7 @@
 				<td>证书有效期</td>
 				<td>${workDealInfo.year*365+workDealInfo.lastDays }&nbsp;赠送<input
 					type="text" style="width: 100px" id="addCertDays"
-					class="num required" onblur="addCertDaysCheck()" value="0">天
+					class="num required" onblur="addCertDaysCheck()" value="0" onkeyup="value=value.replace(/[^\- \d.]/g,'')">天
 					<span id="negative"></span>
 				</td>
 			</tr>
