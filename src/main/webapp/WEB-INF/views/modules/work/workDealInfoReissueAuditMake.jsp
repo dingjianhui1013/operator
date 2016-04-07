@@ -349,6 +349,9 @@ function makeCert() {
 						});
 	}
 	function addCertDaysCheck(){
+		if($("#addCertDays").val()==""){
+			$("#addCertDays").val("0");
+		}
 		if($("#addCertDays").val()<0){
 			$("#negative").html("");
 			if(parseInt(${workDealInfo.year*365+workDealInfo.lastDays})+parseInt($("#addCertDays").val())>0)
@@ -481,7 +484,7 @@ function makeCert() {
 			<tr>
 				<td>证书有效期</td>
 				<td>${workDealInfo.year*365+workDealInfo.lastDays }&nbsp;赠送<input type="text"
-					style="width: 100px" id="addCertDays" class="num required" onblur="addCertDaysCheck()" 
+					style="width: 100px" id="addCertDays" class="num required" onblur="addCertDaysCheck()"  onkeyup="value=value.replace(/[^\- \d.]/g,'')"
 					value="0">天
 					<span id="negative"></span>
 				</td>
