@@ -84,16 +84,13 @@ public class ItrustController {
 					json.put("project", appToJson(wdi.getConfigApp()));// 应用
 					json.put("product", productToJson(wdi.getConfigProduct()));// 产品
 					
-					List<Long> ids = new ArrayList<Long>();
-					ids.add(wdi.getConfigApp().getId());
 					
-					json.put("commonProjects", ids);
 					
-					/*if (wdi.getConfigProduct().getProductLabel() != null
+					if (wdi.getConfigProduct().getProductLabel() != null
 							&& wdi.getConfigProduct().getProductLabel()==0) {
 						json.put("commonProjects",
 								itrustService.listCommonApp());// 不返回po 只返回应用的id
-					}*/
+					}
 					
 					
 					if ("profile".equals(include)) {
@@ -162,11 +159,18 @@ public class ItrustController {
 				} else {
 					json.put("project", appToJson(wdi.getConfigApp()));
 					json.put("product", productToJson(wdi.getConfigProduct()));
-					if (wdi.getConfigProduct().getProductLabel() != null
+					
+					List<Long> ids = new ArrayList<Long>();
+					ids.add(wdi.getConfigApp().getId());
+					
+					json.put("commonProjects", ids);
+					
+					
+					/*if (wdi.getConfigProduct().getProductLabel() != null
 							&& wdi.getConfigProduct().getProductLabel()==0) {
 						json.put("commonProjects",
 								itrustService.listCommonApp());
-					}
+					}*/
 					if ("profile".equals(include)) {
 						if (wdi.getConfigProduct().getRaAccountId()!=null) {
 							ConfigRaAccount raAccount = itrustService.findRaById(wdi.getConfigProduct().getRaAccountId());
