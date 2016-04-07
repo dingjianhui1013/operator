@@ -169,8 +169,15 @@ public class CertController extends BaseController {
 			WorkCertInfo caCert = dealInfo.getWorkCertInfo();
 		
 			if (reqOverrideValidity != null) {
-				reqOverrideValidity = reqOverrideValidity.replace(",", "");
-				caCert.setReqOverrideValidity(Integer.valueOf(reqOverrideValidity) + Integer.valueOf(addCertDays));
+				reqOverrideValidity = reqOverrideValidity.replace(",","");
+				if(!addCertDays.equals("")){
+					caCert.setReqOverrideValidity(Integer.valueOf(reqOverrideValidity) + Integer.valueOf(addCertDays));
+				}else{
+					caCert.setReqOverrideValidity(Integer.valueOf(reqOverrideValidity));
+				}
+				
+				
+				
 			} else {
 				caCert.setReqOverrideValidity(365);
 			}
