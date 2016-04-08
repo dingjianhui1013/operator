@@ -332,7 +332,7 @@
 		<div>
 		<label>业务状态：</label>
 		<select name="dealInfoStatus" id="dealInfoStatus">
-			<option value="">请选择业务类型</option>
+			<option value="">请选择业务状态</option>
 			<c:forEach items="${wdiStatus}" var="type">
 				<option value="${type.key}"
 					<c:if test="${type.key==dealInfoStatus}">
@@ -365,6 +365,32 @@
 			$("#s_city").append('<option value="${workDealInfo.workCompany.city}" selected="selected">${workDealInfo.workCompany.city}</option>');
 			$("#s_county").append('<option value="${workDealInfo.workCompany.district}" selected="selected">${workDealInfo.workCompany.district}</option>');
 		</script>
+		
+		</div>
+		
+		<div style="margin-top: 8px">
+		
+		<label>制证时间：</label> 
+		
+		<input id="makeCertStart" name="makeCertStart"	type="text" readonly="readonly" maxlength="20" class="input-medium Wdate"
+				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});" value="<fmt:formatDate value="${makeCertStart}" pattern="yyyy-MM-dd"/>" />
+			&nbsp;-&nbsp;
+			<input id="makeCertEnd" name="makeCertEnd" type="text"  readonly="readonly" maxlength="20" class="input-medium Wdate"
+				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false,minDate:'#F{$dp.$D(\'makeCertStart\')}'});"
+				value="<fmt:formatDate value="${makeCertEnd}" pattern="yyyy-MM-dd"/>" />
+		
+		
+		<label>到期时间：</label> 
+		
+		<input id="expiredStart" name="expiredStart"	type="text" readonly="readonly" maxlength="20" class="input-medium Wdate"
+				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});" value="<fmt:formatDate value="${expiredStart}" pattern="yyyy-MM-dd"/>" />
+			&nbsp;-&nbsp;
+			<input id="expiredEnd" name="expiredEnd" type="text"  readonly="readonly" maxlength="20" class="input-medium Wdate"
+				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false,minDate:'#F{$dp.$D(\'expiredStart\')}'});"
+				value="<fmt:formatDate value="${expiredEnd}" pattern="yyyy-MM-dd"/>" />
+			
+		&nbsp; &nbsp; &nbsp; &nbsp; 
+		
 		<input id="btnSubmit" class="btn btn-primary" type="submit"
 			value="查询" />
 		<a href="javascript:send()" class="btn btn-primary" id="send">发送</a> <input
