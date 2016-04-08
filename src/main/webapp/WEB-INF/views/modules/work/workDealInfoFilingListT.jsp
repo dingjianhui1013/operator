@@ -52,6 +52,24 @@
 			<form:option value="回访">回访</form:option>
 			<form:option value="培训">培训</form:option>
 		</form:select>
+		
+		<br>
+		<br>
+		
+		<label>记录人员 ：</label>
+		<form:input path="createBy.name" htmlEscape="false"
+				maxlength="50" class="input-medium" id="companyName" />
+				
+		
+		<label>记录时间：</label> 
+		
+		<input id="createStart" name="createStart"	type="text" readonly="readonly" maxlength="20" class="input-medium Wdate"
+				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});" value="<fmt:formatDate value="${createStart}" pattern="yyyy-MM-dd"/>" />
+			&nbsp;-&nbsp;
+			<input id="createEnd" name="createEnd" type="text"  readonly="readonly" maxlength="20" class="input-medium Wdate"
+				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false,minDate:'#F{$dp.$D(\'createStart\')}'});"
+				value="<fmt:formatDate value="${createEnd}" pattern="yyyy-MM-dd"/>" />		
+		
 		&nbsp;<input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/>
 	</form:form>
 	<tags:message content="${message}"/>
