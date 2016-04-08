@@ -7811,8 +7811,23 @@ public class WorkDealInfoController extends BaseController {
 	public String findByKeySn(String keySn, Long dealId) {
 		JSONObject json = new JSONObject();
 		try {
-
 			Integer isUserInteger = workDealInfoService.findByKey(keySn);
+			
+			if(isUserInteger>0){	
+				//和吊销的证书做比对
+				WorkDealInfo dealInfo = workDealInfoService.findByRevokeStatus(keySn);
+				if(dealInfo!=null){
+					int count=1;
+					while (dealInfo.getPrevId() != null) {
+						dealInfo = workDealInfoService.findPreDealInfo(dealInfo.getPrevId());
+						if(dealInfo.getKeySn().equals(keySn)){
+							count +=1;
+						}
+					}
+					isUserInteger = isUserInteger-count;
+				}
+			}
+			
 			WorkDealInfo dealInfo = workDealInfoService.get(dealId);
 			if (dealInfo.getWorkCertInfo().getIssuerDn() != null
 					&& !dealInfo.getWorkCertInfo().getIssuerDn().equals("")) {
