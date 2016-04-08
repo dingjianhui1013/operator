@@ -111,7 +111,11 @@ public class MessageSendingController extends BaseController {
 			@RequestParam(value = "officeId", required = false) Long officeId,
 			@RequestParam(value = "apply", required = false) Long apply,
 			@RequestParam(value = "workType", required = false) Integer workType,
-			@RequestParam(value = "smsId", required = false) Long smsId, HttpServletRequest request,
+			@RequestParam(value = "smsId", required = false) Long smsId,
+			@RequestParam(value = "makeCertStart", required = false) Date makeCertStart,
+			@RequestParam(value = "makeCertEnd", required = false) Date makeCertEnd,
+			@RequestParam(value = "expiredStart", required = false) Date expiredStart,
+			@RequestParam(value = "expiredEnd", required = false) Date expiredEnd,HttpServletRequest request,
 			HttpServletResponse response, Model model) {
 		List<SmsConfiguration> smsConfigurationList = smsConfigurationService.findAll();
 		model.addAttribute("smsConfigurationList", smsConfigurationList);
@@ -154,6 +158,7 @@ public class MessageSendingController extends BaseController {
 		model.addAttribute("smsId", smsId);
 		model.addAttribute("checkIds", checkIds);
 		
+		
 		if(areaId==null&&officeId==null&&apply==null&&workType==null&&workDealInfo.getWorkCompany()==null){
 			return "modules/message/messageSendingList";
 		}
@@ -164,7 +169,7 @@ public class MessageSendingController extends BaseController {
 			}
 		}
 		Page<WorkDealInfo> page = workDealInfoService.find14(new Page<WorkDealInfo>(request, response), workDealInfo,
-				areaId, officeId, apply, workType, certInfoList);
+				areaId, officeId, apply, workType, certInfoList,makeCertStart,makeCertEnd,expiredStart,expiredEnd);
 		if (checkIds != null) {
 			String[] ids = checkIds.split(",");
 			model.addAttribute("ids", ids);
@@ -178,6 +183,11 @@ public class MessageSendingController extends BaseController {
 			}
 			model.addAttribute("count", ids.length-index);
 		}
+		
+		/*model.addAttribute("makeCertStart", makeCertStart);
+		model.addAttribute("makeCertEnd", makeCertEnd);
+		model.addAttribute("expiredStart", expiredStart);
+		model.addAttribute("expiredEnd", expiredEnd);*/
 		
 		model.addAttribute("page", page);
 		return "modules/message/messageSendingList";

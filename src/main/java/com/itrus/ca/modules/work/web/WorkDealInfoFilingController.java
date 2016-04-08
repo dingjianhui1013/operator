@@ -190,10 +190,10 @@ public class WorkDealInfoFilingController extends BaseController {
 	// }
 	@RequiresPermissions("work:workDealInfo:view")
 	@RequestMapping(value = { "ulist" })
-	public String ulist(WorkLog workLog, HttpServletRequest request,
+	public String ulist(WorkLog workLog,Date createStart,Date createEnd,HttpServletRequest request,
 			HttpServletResponse response, Model model) {
 		Page<WorkLog> page = workLogService.findKpList(new Page<WorkLog>(
-				request, response), workLog);
+				request, response), workLog,createStart,createEnd);
 		model.addAttribute("page", page);
 		List<ConfigApp> appNames=configAppService.findAllConfigApp();
 		model.addAttribute("configApp", appNames);
@@ -201,10 +201,12 @@ public class WorkDealInfoFilingController extends BaseController {
 	}
 	@RequiresPermissions("work:workDealInfo:view")
 	@RequestMapping(value = {"flist"})
-	public String flist(WorkLog workLog, HttpServletRequest request,
+	public String flist(WorkLog workLog, Date createStart, Date createEnd, HttpServletRequest request,
 			HttpServletResponse response, Model model) {
 		Page<WorkLog> page = workLogService.findKpList(new Page<WorkLog>(
-				request, response), workLog);
+				request, response), workLog,null,null);
+		model.addAttribute("createStart", createStart);
+		model.addAttribute("createEnd", createEnd);
 		model.addAttribute("page", page);
 		List<ConfigApp> configApp= configAppService.findAllConfigApp();
 		model.addAttribute("configApp", configApp);
@@ -215,7 +217,7 @@ public class WorkDealInfoFilingController extends BaseController {
 	public String plist(WorkLog workLog, HttpServletRequest request,
 			HttpServletResponse response, Model model) {
 		Page<WorkLog> page = workLogService.findKpList(new Page<WorkLog>(
-				request, response), workLog);
+				request, response), workLog,null,null);
 		model.addAttribute("page", page);
 		List<ConfigApp> configApp= configAppService.findAllConfigApp();
 		model.addAttribute("configApp", configApp);

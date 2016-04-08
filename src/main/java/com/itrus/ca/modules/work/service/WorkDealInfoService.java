@@ -383,7 +383,7 @@ public class WorkDealInfoService extends BaseService {
 	}
 
 	public Page<WorkDealInfo> find11(Page<WorkDealInfo> page,
-			WorkDealInfo workDealInfo, Long apply, Integer workType) {
+			WorkDealInfo workDealInfo, Long apply, Integer workType,Date makeCertStart,Date makeCertEnd, Date expiredStart, Date expiredEnd) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("workUser", "workUser");
 		dc.createAlias("workCompany", "workCompany");
@@ -430,6 +430,36 @@ public class WorkDealInfoService extends BaseService {
 
 			}
 		}
+		
+		if(makeCertStart!=null){
+			makeCertStart.setHours(0);
+			makeCertStart.setMinutes(0);
+			makeCertStart.setSeconds(0);
+			dc.add(Restrictions.ge("businessCardUserDate", makeCertStart));
+		}
+
+		if(makeCertEnd!=null){
+			makeCertEnd.setHours(23);
+			makeCertEnd.setMinutes(59);
+			makeCertEnd.setSeconds(59);
+			dc.add(Restrictions.le("businessCardUserDate", makeCertEnd));
+		}
+		
+		
+		if(expiredStart!=null){
+			expiredStart.setHours(0);
+			expiredStart.setMinutes(0);
+			expiredStart.setSeconds(0);
+			dc.add(Restrictions.ge("notafter", expiredStart));
+		}
+		
+		if(expiredEnd!=null){
+			expiredEnd.setHours(23);
+			expiredEnd.setMinutes(59);
+			expiredEnd.setSeconds(59);
+			dc.add(Restrictions.le("notafter", expiredEnd));
+		}
+		
 		dc.add(Restrictions.isNull("isIxin"));
 		dc.add(Restrictions.eq(WorkDealInfo.DEL_FLAG,
 				WorkDealInfo.DEL_FLAG_NORMAL));
@@ -2220,7 +2250,7 @@ public class WorkDealInfoService extends BaseService {
 	
 	public Page<WorkDealInfo> find14(Page<WorkDealInfo> page,
 			WorkDealInfo workDealInfo, Long area, Long office, Long apply,
-			Integer workType, List<WorkCertInfo> certInfoList) {
+			Integer workType, List<WorkCertInfo> certInfoList,Date makeCertStart,Date makeCertEnd, Date expiredStart, Date expiredEnd) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("workPayInfo", "workPayInfo");
 		dc.createAlias("workCompany", "workCompany");
@@ -2312,7 +2342,36 @@ public class WorkDealInfoService extends BaseService {
 		// ProjectionList projectionList1 = Projections.projectionList();
 		// projectionList1.add(Projections.sqlGroupProjection("dealInfoType",
 		// "dealInfoType", null, null));
+		
+		if(makeCertStart!=null){
+			makeCertStart.setHours(0);
+			makeCertStart.setMinutes(0);
+			makeCertStart.setSeconds(0);
+			dc.add(Restrictions.ge("businessCardUserDate", makeCertStart));
+		}
 
+		if(makeCertEnd!=null){
+			makeCertEnd.setHours(23);
+			makeCertEnd.setMinutes(59);
+			makeCertEnd.setSeconds(59);
+			dc.add(Restrictions.le("businessCardUserDate", makeCertEnd));
+		}
+		
+		
+		if(expiredStart!=null){
+			expiredStart.setHours(0);
+			expiredStart.setMinutes(0);
+			expiredStart.setSeconds(0);
+			dc.add(Restrictions.ge("notafter", expiredStart));
+		}
+		
+		if(expiredEnd!=null){
+			expiredEnd.setHours(23);
+			expiredEnd.setMinutes(59);
+			expiredEnd.setSeconds(59);
+			dc.add(Restrictions.le("notafter", expiredEnd));
+		}
+		
 		return workDealInfoDao.find(page, dc);
 
 	}

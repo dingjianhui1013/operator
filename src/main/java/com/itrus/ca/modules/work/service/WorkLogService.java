@@ -285,7 +285,7 @@ public class WorkLogService extends BaseService {
 		dc.addOrder(Order.desc("id"));
 		return workLogDao.find(page,dc);
 	}
-	public Page<WorkLog> findKpList(Page<WorkLog> page, WorkLog workLog) {
+	public Page<WorkLog> findKpList(Page<WorkLog> page, WorkLog workLog,Date createStart,Date createEnd) {
 		DetachedCriteria dc = workLogDao.createDetachedCriteria();
 		if(workLog.getAccess()!=null&&!workLog.getAccess().equals("")){
 			dc.add(Restrictions.eq("access", workLog.getAccess()));
@@ -304,6 +304,27 @@ public class WorkLogService extends BaseService {
 				dc.add(Restrictions.eq("configApp.id",workLog.getConfigApp().getId()));
 			}
 		}
+		
+		if(workLog.getCreateBy().getName()!=null&&!workLog.getCreateBy().getName().equals("")){
+			dc.createAlias("createBy", "createBy");
+			dc.add(Restrictions.eq("createBy.name", workLog.getCreateBy().getName()));
+		}
+		
+		if(createStart!=null){
+			createStart.setHours(0);
+			createStart.setMinutes(0);
+			createStart.setSeconds(0);
+			dc.add(Restrictions.ge("createDate", createStart));
+		}
+
+		if(createEnd!=null){
+			createEnd.setHours(23);
+			createEnd.setMinutes(59);
+			createEnd.setSeconds(59);
+			dc.add(Restrictions.le("createDate", createEnd));
+		}
+		
+		
 		dc.add(Restrictions.eq("state",1));
 		dc.addOrder(Order.desc("id"));
 		return workLogDao.find(page,dc);
