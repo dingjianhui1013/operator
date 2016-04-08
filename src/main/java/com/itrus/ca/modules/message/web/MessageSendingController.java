@@ -157,7 +157,10 @@ public class MessageSendingController extends BaseController {
 		model.addAttribute("workType", workType);
 		model.addAttribute("smsId", smsId);
 		model.addAttribute("checkIds", checkIds);
-		
+		model.addAttribute("makeCertStart", makeCertStart);
+		model.addAttribute("makeCertEnd", makeCertEnd);
+		model.addAttribute("expiredStart", expiredStart);
+		model.addAttribute("expiredEnd", expiredEnd);
 		
 		if(areaId==null&&officeId==null&&apply==null&&workType==null&&workDealInfo.getWorkCompany()==null){
 			return "modules/message/messageSendingList";
@@ -184,10 +187,7 @@ public class MessageSendingController extends BaseController {
 			model.addAttribute("count", ids.length-index);
 		}
 		
-		/*model.addAttribute("makeCertStart", makeCertStart);
-		model.addAttribute("makeCertEnd", makeCertEnd);
-		model.addAttribute("expiredStart", expiredStart);
-		model.addAttribute("expiredEnd", expiredEnd);*/
+		
 		
 		model.addAttribute("page", page);
 		return "modules/message/messageSendingList";

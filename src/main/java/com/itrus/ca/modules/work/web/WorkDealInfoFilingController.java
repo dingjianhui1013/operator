@@ -197,6 +197,8 @@ public class WorkDealInfoFilingController extends BaseController {
 		model.addAttribute("page", page);
 		List<ConfigApp> appNames=configAppService.findAllConfigApp();
 		model.addAttribute("configApp", appNames);
+		model.addAttribute("createStart", createStart);
+		model.addAttribute("createEnd", createEnd);
 		return "modules/work/workDealInfoFilingListT";
 	}
 	@RequiresPermissions("work:workDealInfo:view")

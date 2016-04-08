@@ -42,6 +42,9 @@ public class ConfigApp extends DataEntity implements java.io.Serializable {
 	
 	private ConfigProjectType configProjectType;
 	
+	private Boolean applyFlag1;//判断地税
+	private Boolean applyFlag2;//判断社保
+	
 	
 	/**
 	 * 应用配是否支持通用，决定产品列表是否支持选通用or专用
@@ -56,12 +59,14 @@ public class ConfigApp extends DataEntity implements java.io.Serializable {
 
 	/** full constructor */
 	public ConfigApp(String appName, Integer appType,
-			String appDescription, String appImg , ConfigProjectType configProjectType) {
+			String appDescription, String appImg , ConfigProjectType configProjectType,Boolean applyFlag1,Boolean applyFlag2) {
 		this.appName = appName;
 		this.appType = appType;
 		this.appDescription = appDescription;
 		this.appImg = appImg;
 		this.configProjectType = configProjectType;
+		this.applyFlag1=applyFlag1;
+		this.applyFlag2=applyFlag2;
 	}
 
 	// Property accessors
@@ -168,7 +173,22 @@ public class ConfigApp extends DataEntity implements java.io.Serializable {
 	}
 	
 	
-	
+	@Column(name = "apply_flag1")
+	public Boolean getApplyFlag1() {
+		return applyFlag1;
+	}
+
+	public void setApplyFlag1(Boolean applyFlag1) {
+		this.applyFlag1 = applyFlag1;
+	}
+	@Column(name = "apply_flag2")
+	public Boolean getApplyFlag2() {
+		return applyFlag2;
+	}
+
+	public void setApplyFlag2(Boolean applyFlag2) {
+		this.applyFlag2 = applyFlag2;
+	}
 	
 	
 	

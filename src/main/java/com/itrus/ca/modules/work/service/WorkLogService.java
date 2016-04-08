@@ -304,11 +304,13 @@ public class WorkLogService extends BaseService {
 				dc.add(Restrictions.eq("configApp.id",workLog.getConfigApp().getId()));
 			}
 		}
-		
-		if(workLog.getCreateBy().getName()!=null&&!workLog.getCreateBy().getName().equals("")){
-			dc.createAlias("createBy", "createBy");
-			dc.add(Restrictions.eq("createBy.name", workLog.getCreateBy().getName()));
+		if(workLog.getCreateBy()!=null){
+			if(workLog.getCreateBy().getName()!=null&&!workLog.getCreateBy().getName().equals("")){
+				dc.createAlias("createBy", "createBy");
+				dc.add(Restrictions.eq("createBy.name", workLog.getCreateBy().getName()));
+			}	
 		}
+		
 		
 		if(createStart!=null){
 			createStart.setHours(0);
