@@ -2629,8 +2629,8 @@ public class WorkDealInfoService extends BaseService {
 		}
 
 		// a.DEAL_INFO_STATUS='6';
-		dc.add(Restrictions.ne("dealInfoStatus",
-				WorkDealInfoStatus.STATUS_CERT_REVOKE));
+		/*dc.add(Restrictions.ne("dealInfoStatus",
+				WorkDealInfoStatus.STATUS_CERT_REVOKE));*/
 		// dc.add(Restrictions.eq(WorkDealInfo.DEL_FLAG,
 		// WorkDealInfo.DEL_FLAG_NORMAL));
 		if (workDealInfoDao.find(dc).size() > 0) {
@@ -7009,7 +7009,17 @@ public class WorkDealInfoService extends BaseService {
 		return workDealInfoDao.findByDistinkIds(ids);
 	}
 	
-	
+	public WorkDealInfo findByRevokeStatus(String keySn){
+		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
+		dc.add(Restrictions.eq("keySn", keySn));
+		dc.add(Restrictions.eq("dealInfoStatus",WorkDealInfoStatus.STATUS_CERT_REVOKE));
+		
+		List<WorkDealInfo> list = workDealInfoDao.find(dc);
+		if(list.size()==1){
+			return list.get(0);
+		}
+		return null;
+	}
 	
 
 }
