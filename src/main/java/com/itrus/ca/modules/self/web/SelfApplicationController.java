@@ -338,9 +338,9 @@ public class SelfApplicationController extends BaseController {
 		selfApplication.setStatus(SelfApplicationStatus.downApply);
 		selfApplication.setMoney(configChargeAgentDetail.getMoney());
 		selfApplicationService.save(selfApplication);
-	
+	/*
 		
-		model.addAttribute("selfApplication", selfApplication);
+		model.addAttribute("selfApplication", selfApplication);*/
 		return "redirect:" + Global.getAdminPath()+ "/self/selfApplication/?repage";
 	}
 

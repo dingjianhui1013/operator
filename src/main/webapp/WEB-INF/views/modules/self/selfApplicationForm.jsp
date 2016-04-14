@@ -61,18 +61,12 @@
 					var agentHtml="<option value='0'>请选择计费策略类型</option>";
 					$("#agentId").attr("onchange","setStyleList("+lable+")");
 					$.each(map, function(i, item){
-						agentHtml+="<option onchange=setStyleList("+lable+")  value='"+item.id+"'>" + item.name + "</option>";
+						agentHtml+="<option value='"+item.id+"'>" + item.name + "</option>";
 						
 					});
 					$("#agentId").html(agentHtml);
 					var styleList = data.boundStyleList;
 					var styleHtml="<option value='0'>请选择计费策略模版</option>";
-					$.each(styleList, function(i, item2){
-						if(i==0){
-							$("#boundId").val(item2.id);
-						}
-						styleHtml +="<option onchange=showYear() value='"+item2.id+"'>" + item2.name + "</option>";
-					});
 					$("#agentDetailId").html(styleHtml);
 				}else{
 					var agentHtml="<option value='0'>请选择计费策略类型</option>";
@@ -95,7 +89,7 @@
 				var url = "${ctx}/work/workDealInfo/setStyleList?lable="+lable+"&productName="+productName+"&app="+appId+"&infoType=0&style="+agentId+"&_="+new Date().getTime();
 				$.getJSON(url,function(data){
 					var styleList = data.array;
-					var styleHtml="<option value='0'>请选择计费策略模版</option>";
+					var styleHtml="";
 					$("#agentDetailId").attr("onchange","showYear()");
 					$.each(styleList,function(i,item){
 						if(i==0){
@@ -108,6 +102,8 @@
 				});
 			}else{
 				top.$.jBox.tip("请选择计费策略模版");
+				var styleHtml="<option value='0'>请选择计费策略模版</option>";
+				$("#agentDetailId").html(styleHtml);
 			}
 		}
 		
@@ -204,7 +200,7 @@
 			class="table table-striped table-bordered table-condensed">
 			<thead>
 				<tr>
-					<th colspan="2">申请表信息</th>
+					<th colspan="2">基本信息</th>
 				</tr>
 			</thead>
 			<tr>

@@ -24,3 +24,4 @@
 <script src="${ctxStatic}/js/jquery.formatDateTime.min.js" type="text/javascript"></script>
 <script type="text/javascript" src="${js}/validation/validation.js"></script>
 <script type="text/javascript" src="${ctxStatic}/jquery/cancelBackspace.js"></script>
+<script type="text/javascript" src="${js}/content_zoom.js"></script>

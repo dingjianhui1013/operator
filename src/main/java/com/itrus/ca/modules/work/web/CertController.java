@@ -3,7 +3,6 @@ package com.itrus.ca.modules.work.web;
 import java.io.UnsupportedEncodingException;
 import java.net.ConnectException;
 import java.net.URLDecoder;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -12,10 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.validation.Valid;
-
 import org.apache.http.conn.HttpHostConnectException;
-import org.bouncycastle.mail.smime.handlers.pkcs7_mime;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Restrictions;
 import org.json.JSONException;
@@ -28,12 +24,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import cn.topca.tca.client.CertificateRequest;
 import cn.topca.tca.client.CertificateResponse;
 
-import com.alibaba.fastjson.JSON;
 import com.itrus.ca.common.utils.HttpClientUtil;
 import com.itrus.ca.common.utils.PropertiesUtil;
 import com.itrus.ca.common.utils.RaAccountUtil;
 import com.itrus.ca.common.web.BaseController;
-import com.itrus.ca.modules.constant.ProductType;
 import com.itrus.ca.modules.constant.WorkDealInfoStatus;
 import com.itrus.ca.modules.constant.WorkDealInfoType;
 import com.itrus.ca.modules.key.service.KeyUsbKeyInvoiceService;
@@ -46,11 +40,13 @@ import com.itrus.ca.modules.profile.entity.ConfigRaAccountExtendInfo;
 import com.itrus.ca.modules.profile.entity.ConfigSupplier;
 import com.itrus.ca.modules.profile.entity.ConfigSupplierProductRelation;
 import com.itrus.ca.modules.profile.service.ConfigAgentBoundDealInfoService;
-import com.itrus.ca.modules.profile.service.ConfigChargeAgentBoundConfigProductService;
 import com.itrus.ca.modules.profile.service.ConfigChargeAgentService;
 import com.itrus.ca.modules.profile.service.ConfigRaAccountExtendInfoService;
 import com.itrus.ca.modules.profile.service.ConfigRaAccountService;
 import com.itrus.ca.modules.receipt.service.ReceiptInvoiceService;
+import com.itrus.ca.modules.self.entity.SelfApplication;
+import com.itrus.ca.modules.self.service.SelfApplicationService;
+import com.itrus.ca.modules.self.utils.SelfApplicationStatus;
 import com.itrus.ca.modules.service.CaService;
 import com.itrus.ca.modules.settle.web.UpdateQuantityStatistics;
 import com.itrus.ca.modules.signature.entity.SignatureInfo;
@@ -71,6 +67,9 @@ import com.itrus.ca.modules.work.service.WorkLogService;
 public class CertController extends BaseController {
 	@Autowired
 	SystemService systemService;
+	
+	@Autowired
+	private SelfApplicationService selfApplicationService;
 
 	@Autowired
 	WorkDealInfoService workDealInfoService;
@@ -389,6 +388,12 @@ public class CertController extends BaseController {
 					}
 				} else {
 					dealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_CERT_OBTAINED);
+				}
+				if(dealInfo.getSelfApplyId()!=null){
+					SelfApplication selfApplication=selfApplicationService.get(dealInfo.getSelfApplyId());
+					selfApplication.setKeySn(keySn);
+					selfApplication.setStatus(SelfApplicationStatus.finishApply);
+					selfApplicationService.save(selfApplication);
 				}
 				workDealInfoService.save(dealInfo);
 			}
