@@ -53,6 +53,8 @@ import com.itrus.ca.modules.profile.service.ConfigRaAccountService;
 import com.itrus.ca.modules.receipt.service.ReceiptInvoiceService;
 import com.itrus.ca.modules.service.CaService;
 import com.itrus.ca.modules.settle.web.UpdateQuantityStatistics;
+import com.itrus.ca.modules.signature.entity.SignatureInfo;
+import com.itrus.ca.modules.signature.service.SignatureInfoService;
 import com.itrus.ca.modules.sys.entity.User;
 import com.itrus.ca.modules.sys.service.SystemService;
 import com.itrus.ca.modules.sys.utils.UserUtils;
@@ -92,6 +94,10 @@ public class CertController extends BaseController {
 
 	@Autowired
 	UpdateQuantityStatistics updateQuantityStatistics;
+	
+	
+	@Autowired
+	private SignatureInfoService  signatureInfoService;
 
 	private LogUtil logUtil = new LogUtil();
 
@@ -727,6 +733,10 @@ public class CertController extends BaseController {
 		JSONObject json = new JSONObject();
 		try {
 			if (result == 1) {// 安装成功
+				
+				json.put("isChange", false);
+				
+				
 				WorkCertInfo workCertInfo = dealInfo.getWorkCertInfo();
 				workCertInfo.setObtained(true);
 				workCertInfoService.save(workCertInfo);
@@ -757,6 +767,19 @@ public class CertController extends BaseController {
 					}
 
 				}
+				
+				
+				List<SignatureInfo> signatureInfos = signatureInfoService.findByDealInfo(dealInfo);
+				if(!signatureInfos.isEmpty()){
+					if(dealInfo.getDealInfoType2()!=null){
+						if(dealInfo.getDealInfoType2()==4){
+							json.put("isChange", true);
+						}	
+					}	
+				}
+				
+				
+				
 				List<Integer> revokeList = new ArrayList<Integer>();
 				revokeList.add(WorkDealInfoType.TYPE_LOST_CHILD);
 				revokeList.add(WorkDealInfoType.TYPE_DAMAGED_REPLACED);
