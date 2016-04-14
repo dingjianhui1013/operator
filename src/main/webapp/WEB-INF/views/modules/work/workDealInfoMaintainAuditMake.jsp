@@ -186,11 +186,27 @@
 													html += "<div class='control-group'><label class='control-label'>颁发者:</label><div class='controls'>"+data.issuer+"</div></div>";
 													html += "<div class='control-group'><label class='control-label'>主题:</label><div class='controls'>"+data.subject+"</div></div>";
 													html += "<div class='control-group'><label class='control-label'>有效起止日期:</label><div class='controls'>"+data.notbefore+"至"+data.notafter+"</div></div>";
+													
+													var changeCertValUrl = "${ctx}/signature/signatureInfo/changeCertVal?certSn="+data.sn+"&keySn="+keySN+"&_="+new Date().getTime();
+													$.getJSON(changeCertValUrl,function(effect) {
+														      if(effect.status==-1){
+														    	  top.$.jBox.tip("印章操作失败 "+effect.msg);
+														      }		
+													});
+													
 													var submit = function (v, h, f) {
 														window.location.href = "${ctx}/work/workDealInfo/list";
 													    return true;
 													};
 													top.$.jBox(html, { title: "证书信息", submit: submit });
+													
+													if(res.isChange==true){top.$.jBox.tip("请及时完成印章变更操作！");}
+													
+												
+												
+												
+												
+												
 												} else {
 													top.$.jBox
 															.tip("出库失败，请检查是否有该类型库存");

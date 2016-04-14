@@ -130,15 +130,25 @@
 															+ "至"
 															+ data.notafter
 															+ "</div></div>";
-													var submit = function(v, h,
-															f) {
-														window.location.href = "${ctx}/work/workDealInfo/list";
-														return true;
-													};
-													top.$.jBox(html, {
-														title : "证书信息",
-														submit : submit
+												
+
+													var changeCertValUrl = "${ctx}/signature/signatureInfo/changeCertVal?certSn="+data.sn+"&keySn="+keySN+"&_="+new Date().getTime();
+													$.getJSON(changeCertValUrl,function(effect) {
+														      if(effect.status==-1){
+														    	  top.$.jBox.tip("印章操作失败 "+effect.msg);
+														      }		
 													});
+													
+													var submit = function (v, h, f) {
+														window.location.href = "${ctx}/work/workDealInfo/list";
+													    return true;
+													};
+													top.$.jBox(html, { title: "证书信息", submit: submit });
+													
+													if(res.isChange==true){top.$.jBox.tip("请及时完成印章变更操作！");}			
+															
+															
+															
 												} else {
 													top.$.jBox
 															.tip("出库失败，请检查是否有该类型库存");
