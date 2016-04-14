@@ -185,7 +185,14 @@ public class ConfigAppService extends BaseService {
 	}
 
 	
-	
+    public ConfigProduct findByProductName(Long appId, String productName) {
+        DetachedCriteria dc = configProductDao.createDetachedCriteria();
+        dc.createAlias("configApp", "configApp");
+        dc.add(Restrictions.eq("configApp.id", appId));
+        dc.add(Restrictions.eq("productName", productName));
+        List<ConfigProduct> products = configProductDao.find(dc);
+        return products.get(0);
+    }
 	
 	/**
 	 * 查询属于当前登录网点的应用

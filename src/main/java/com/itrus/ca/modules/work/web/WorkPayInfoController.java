@@ -131,6 +131,9 @@ public class WorkPayInfoController extends BaseController {
 	@Autowired
 	private ConfigChargeAgentBoundConfigProductService configChargeAgentBoundConfigProductService;
 
+	@Autowired
+	private SelfApplicationService selfApplicationService;
+	
 	
 	@ModelAttribute
 	public WorkPayInfo get(@RequestParam(required = false) Long id) {
@@ -369,6 +372,13 @@ public class WorkPayInfoController extends BaseController {
 			RedirectAttributes redirectAttributes, Model model) {
 		WorkDealInfo workDealInfo = workDealInfoService.get(workDealInfoId);
 		fixOldPayInfo(workDealInfo);
+		if(workDealInfo.getSelfApplyId()!=null){
+			SelfApplication selfApplication=selfApplicationService.get(workDealInfo.getSelfApplyId());
+			if(selfApplication.getStatus().equalsIgnoreCase(selfApplicationStatus.payApply)||selfApplication.getStatus().equalsIgnoreCase(selfApplicationStatus.downApply)){
+				selfApplication.setStatus(selfApplicationStatus.handApply);
+				selfApplicationService.save(selfApplication);
+			}
+		}
 		WorkPayInfo workPayInfo = new WorkPayInfo();
 		workPayInfo.setOpenAccountMoney(openAccountMoney);
 		workPayInfo.setAddCert(addCert);

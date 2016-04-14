@@ -328,4 +328,41 @@ public class ConfigAppController extends BaseController {
 	public void setUserPath(String userPath) {
 		this.userPath = userPath;
 	}
+	
+	@RequiresPermissions("profile:configApp:view")
+	@RequestMapping(value = "findAllConfigApp")
+	public  String findAllConfigApp(Model model){
+		 List<ConfigApp> list = configAppService.findAllConfigApp();
+		 model.addAttribute("list", list);
+		 return "modules/profile/configAppSet";
+	}
+	
+	@RequestMapping(value = "saveApplyFlag")
+	public  String saveApplyFlag(String selectApplyFlag1,String selectApplyFlag2,Model model){
+		List<ConfigApp> list = configAppService.findAllConfigApp();
+		for (int i = 0; i < list.size(); i++) {
+			ConfigApp configApp = list.get(i);
+			configApp.setApplyFlag1(false);
+			configApp.setApplyFlag2(false);
+			configAppService.save(configApp);
+		}
+		if(StringUtils.isNotEmpty(selectApplyFlag1)){
+			String[] ApplyFlag1 = selectApplyFlag1.split(",");
+			for (int i = 0; i < ApplyFlag1.length; i++) {
+				ConfigApp configApp = configAppService.get(Long.parseLong(ApplyFlag1[i]));
+				configApp.setApplyFlag1(true);
+				configAppService.save(configApp);
+			}
+		}
+		if(StringUtils.isNotEmpty(selectApplyFlag2)){
+			String[] ApplyFlag2 = selectApplyFlag2.split(",");
+			for (int i = 0; i < ApplyFlag2.length; i++) {
+				ConfigApp configApp = configAppService.get(Long.parseLong(ApplyFlag2[i]));
+				configApp.setApplyFlag2(true);
+				configAppService.save(configApp);
+			}
+		}
+		 model.addAttribute("list", list);
+		 return "modules/profile/configAppSet";
+	}
 }
