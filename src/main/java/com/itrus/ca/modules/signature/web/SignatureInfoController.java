@@ -495,7 +495,7 @@ public class SignatureInfoController extends BaseController {
 									- Double.valueOf(receiptInvoice.getReceiptMoney()));
 							enterInfo.setReceiptMoney(enterInfo
 									.getReceiptDepotInfo().getReceiptResidue());
-							enterInfo.setReceiptType(4);// 退费入库
+							enterInfo.setReceiptType(7);// 印章修改入库
 						}
 					}
 				}else{
@@ -517,7 +517,7 @@ public class SignatureInfoController extends BaseController {
 										- Double.valueOf(receiptInvoice.getReceiptMoney()));
 								enterInfo.setReceiptMoney(enterInfo
 										.getReceiptDepotInfo().getReceiptResidue());
-								enterInfo.setReceiptType(4);// 退费入库
+								enterInfo.setReceiptType(7);
 								
 								ReceiptInvoice newReceiptInvoice = new ReceiptInvoice();
 								
@@ -821,7 +821,7 @@ public class SignatureInfoController extends BaseController {
 									- Double.valueOf(receiptInvoice.getReceiptMoney()));
 							enterInfo.setReceiptMoney(enterInfo
 									.getReceiptDepotInfo().getReceiptResidue());
-							enterInfo.setReceiptType(4);// 退费入库
+							enterInfo.setReceiptType(7);
 						}
 					}
 				}else{
@@ -843,7 +843,7 @@ public class SignatureInfoController extends BaseController {
 										- Double.valueOf(receiptInvoice.getReceiptMoney()));
 								enterInfo.setReceiptMoney(enterInfo
 										.getReceiptDepotInfo().getReceiptResidue());
-								enterInfo.setReceiptType(4);// 退费入库
+								enterInfo.setReceiptType(7);
 								
 								ReceiptInvoice newReceiptInvoice = new ReceiptInvoice();
 								
