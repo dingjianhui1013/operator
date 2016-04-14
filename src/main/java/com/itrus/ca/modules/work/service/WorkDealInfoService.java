@@ -7095,5 +7095,19 @@ public class WorkDealInfoService extends BaseService {
 			return null;
 		}
 	}
+	public WorkDealInfo findApply(Long appId) {
+		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
+		if (appId != null ) {
+			dc.add(Restrictions.eq("selfApplyId", appId));
+		}
+		dc.addOrder(Order.desc("id"));
+		List<WorkDealInfo> list = workDealInfoDao.find(dc);
+		if(list.size()>0){
+			return list.get(0);
+		}else{
+			return  null;
+		}
+		
+	}
 
 }
