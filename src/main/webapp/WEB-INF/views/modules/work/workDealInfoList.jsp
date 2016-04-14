@@ -936,6 +936,28 @@ $(document)
 		$("#checkIds").val("");
 	}
 	
+	function checkAdd(id)
+	{
+		var url="${ctx}/signature/signatureInfo/check";
+		$.ajax({
+			type:"POST",
+			url:url,
+			data:{"signatureId":id,"_":new Date().getTime()},
+			dataType:"json",
+			success:function(data){
+				if(data.status=="1")
+					{
+						top.$.jBox.tip("此证书有未完成的印章，请先完成办理中的的印章业务！");
+					}else if(data.status=="0")
+						{
+							window.location.href="${ctx}/signature/signatureInfo/form?workDealInfoId="+id;
+						}
+			}
+		});
+
+	}
+	
+	
 </script>
 
 
@@ -1062,6 +1084,7 @@ $(document)
 				<th>到期日期</th>
 				<th>业务状态</th>
 				<th>操作</th>
+				<th>印章操作</th>
 		<tbody>
 			<c:forEach items="${page.list}" var="workDealInfo">
 				<tr>
@@ -1109,9 +1132,7 @@ $(document)
 							</c:if>
 						</c:if> 
 						
-					<%-- 	<c:if test="${true }">
-						    <a href="${ctx}/signature/signatureInfo/form?workDealInfoId=${workDealInfo.id}">印章授权</a>
-						</c:if> --%>
+				
 						
 						
 						<c:if test="${workDealInfo.dealInfoStatus==5 }">
@@ -1142,6 +1163,14 @@ $(document)
 						</shiro:hasPermission>
 					</c:if>
 					</td>
+					
+					<td>
+						<c:if test="${workDealInfo.dealInfoStatus==7 }">
+
+ 								<a href="javascript:checkAdd(${workDealInfo.id})">印章授权</a>
+						</c:if>
+					</td>
+					
 				</tr>
 			</c:forEach>
 		</tbody>
