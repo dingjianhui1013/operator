@@ -1409,7 +1409,7 @@ public class WorkDealInfoOperationController extends BaseController {
 		workDealInfoService.delete(workDealInfo1.getId());
 		workDealInfo.setPayType(workDealInfo1.getPayType());
 		
-		ConfigChargeAgentBoundConfigProduct bound =  configChargeAgentBoundConfigProductService.get(agentDetailId);
+		ConfigChargeAgentBoundConfigProduct bound = configChargeAgentBoundConfigProductService.get(agentDetailId);
 		workDealInfo.setPayType(agentId);
 		workDealInfo.setConfigChargeAgentId(workDealInfo1.getConfigChargeAgentId());
 		
