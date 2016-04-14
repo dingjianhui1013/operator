@@ -64,6 +64,7 @@
 							<c:if test="${receiptInvoice.receiptType==0}">销售出库</c:if>
 							<c:if test="${receiptInvoice.receiptType==1}">调拨出库</c:if>
 							<c:if test="${receiptInvoice.receiptType==2}">盘点异常出库</c:if>
+							<c:if test="${receiptInvoice.receiptType==3}">印章出库</c:if>
 						</td>
 						<td><fmt:formatDate value="${receiptInvoice.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
 						<td></td>
@@ -85,6 +86,7 @@
 							<c:if test="${receiptInvoice.receiptType==0}">销售出库</c:if>
 							<c:if test="${receiptInvoice.receiptType==1}">调拨出库</c:if>
 							<c:if test="${receiptInvoice.receiptType==2}">异常出库</c:if>
+							<c:if test="${receiptInvoice.receiptType==3}">印章出库</c:if>
 						</td>
 						<td><fmt:formatDate value="${receiptInvoice.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
 						<td>${receiptInvoice.companyName}</td>
