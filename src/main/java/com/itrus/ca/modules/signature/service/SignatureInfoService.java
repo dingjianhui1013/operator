@@ -42,7 +42,7 @@ import com.itrus.ca.modules.profile.entity.ConfigApp;
 import com.itrus.ca.modules.signature.dao.SignatureInfoDao;
 import com.itrus.ca.modules.signature.entity.SignatureConfigChargeAgent;
 import com.itrus.ca.modules.signature.entity.SignatureInfo;
-import com.itrus.ca.modules.statistic.entity.StatisticSealDayData;
+
 import com.itrus.ca.modules.sys.entity.Office;
 import com.itrus.ca.modules.sys.entity.User;
 import com.itrus.ca.modules.sys.utils.UserUtils;
@@ -351,7 +351,9 @@ public class SignatureInfoService extends BaseService {
 	}
 	
 	
-	@Transactional(readOnly = false)
+	
+	//制印章时检查是否可以新增的方法
+	@Transactional(readOnly = true)
 	public SignatureInfo getNewByCertSn(String certSn) {
 		DetachedCriteria dc = signatureInfoDao.createDetachedCriteria();
 		dc.createAlias("workCertInfo", "workCertInfo");
@@ -369,7 +371,27 @@ public class SignatureInfoService extends BaseService {
 		}
 	}
 
-
+	//检查同一时间只允许办理一个印章方法
+	@Transactional(readOnly = true)
+	public SignatureInfo getCanDoByCertSn(String certSn) {
+		DetachedCriteria dc = signatureInfoDao.createDetachedCriteria();
+		dc.createAlias("workCertInfo", "workCertInfo");
+		dc.add(Restrictions.eq("workCertInfo.serialnumber", certSn));
+		//和getNewByCertSn方法的区别之处
+		dc.add(Restrictions.eq("signatureInfoStatus", SignatureInfoStatus.STATUS_ADD_Info));
+		dc.add(Restrictions.eq("signatureInfoType", SignatureInfoType.TYPE_ADD_SIGNATURE));
+		dc.add(Restrictions.eq("status", SignatureInfoStatus.STATUS_UNSTART));
+		dc.add(Restrictions.eq("delFlag", SignatureInfo.DEL_FLAG_NORMAL));
+		List<SignatureInfo> signInfos = signatureInfoDao.find(dc);
+		if (signInfos.size()==1) {
+			return signInfos.get(0);
+		} else {
+			return null;
+		}
+	}
+	
+	
+	
 	
 	public SignatureInfo getChangeBySignatureId(String old,String young,Long signId){
 		DetachedCriteria dc = signatureInfoDao.createDetachedCriteria();

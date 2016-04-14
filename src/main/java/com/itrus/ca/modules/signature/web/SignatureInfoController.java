@@ -935,7 +935,7 @@ public class SignatureInfoController extends BaseController {
 		WorkDealInfo workDealInfo =  workDealInfoService.get(signatureId);
 		String  string=	workDealInfo.getWorkCertInfo().getSerialnumber();
 		System.out.println(string);
-		SignatureInfo signature = signatureInfoService.getNewByCertSn(workDealInfo.getWorkCertInfo().getSerialnumber());
+		SignatureInfo signature = signatureInfoService.getCanDoByCertSn(workDealInfo.getWorkCertInfo().getSerialnumber());
 		try {
 			if(signature==null)
 			{
