@@ -7,10 +7,13 @@
 <meta name="decorator" content="default" />
 <link href="${ctxStatic}/jquery/jquery.bigautocomplete.css"
 	rel="stylesheet" />
+<script type="text/javascript" src="${ctxStatic }/js/content_zoom.js"></script>
+<script type="text/javascript" src="${ctxStatic }/js/common.js"></script>
 <script type="text/javascript">
 	$(document)
 			.ready(
 					function() {
+						$('div.small_pic a').fancyZoom({scaleImg: true, closeOnClick: true});
 						$("#name").focus();
 						$("#inputForm").validate(
 								{
@@ -370,7 +373,8 @@
 			href="${ctx}/work/workDealInfo/typeForm?id=${workDealInfo.id}&reissueType=${reissue}&dealType=${dealType}">业务变更<c:if test="${not empty reissue}">补办</c:if></a></li>
 	</ul>
 	<form:form id="inputForm"
-		action="${ctx}/work/workDealInfoOperation/maintainSaveChange" method="POST"
+		action="${ctx}/work/workDealInfoOperation/maintainSaveChange" 
+		method="post" enctype="multipart/form-data"
 		class="form-horizontal">
 		<tags:message content="${message}" />
 		<div class="row-fluid">
@@ -571,12 +575,32 @@
 							<th><span class="prompt" style="color: red; display: none;">*</span>备注信息：</th>
 							<td><input type="text" name="remarks" id="remarks"
 								value="${workDealInfo.workCompany.remarks }"></td>
+								
+							<c:if test="${workDealInfo.selfImage!=null }">
+							<th>单位电子证件:</th>
+							<td class ="small_pic">
+								
+								<div class="col-sm-9">
+										<label for="exampleInputFile" class="uploadBtn">上传文件</label>
+										<input type="file" id="exampleInputFile" name = "companyImage" class="uploadFileInput" onchange="PreviewImage(this,'imghead','preview','picBigBox')">
+			                            <br><br>
+			                            <div class="previewImg" id="preview">
+			                            	<div class="small_pic">
+													<img id="imghead" style = "width:100px;height:75px" src="${imgUrl}/${workDealInfo.selfImage.companyImage }" >
+			                                </div>
+			                            </div>
+									</div>
+							</td>
+								</c:if>
+								
+								
 						</tr>
 
 					</tbody>
 				</table>
 			</div>
 		</div>
+		
 		<div class="row-fluid">
 			<div class="span12">
 				<table class="table table-striped table-bordered table-condensed">
@@ -631,6 +655,25 @@
 								name="contactSex" id="sex1"
 								<c:if test="${workDealInfo.workUser.contactSex=='女' }">checked</c:if>
 								type="radio" value="女">女</td>
+								
+							<c:if test="${workDealInfo.selfImage!=null }">
+							<th >个人电子证件:</th>
+							<td class = "small_pic">
+								
+								
+								<div class="col-sm-9">
+									<label for="exampleInputFile1" class="uploadBtn">上传图片</label>
+									<input type="file" id="exampleInputFile1" name = "transactorImage" class="uploadFileInput"  onChange="PreviewImage(this,'imghead1','preview1','picBigBox1')">
+									<br><br>
+									<div id="preview1" class="previewImg">
+	                            		<div class="small_pic">
+	                            		   <img id="imghead1" style = "width:100px;height:75px"  src="${imgUrl }/${workDealInfo.selfImage.transactorImage}" >
+	                            		</div>
+	                            	</div>
+                        		</div>
+							</td>	
+								</c:if>	
+						
 						</tr>
 					</tbody>
 				</table>

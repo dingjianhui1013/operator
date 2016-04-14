@@ -4,6 +4,10 @@
  */
 package com.itrus.ca.modules.work.web;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -13,11 +17,16 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.itrus.ca.common.config.Global;
@@ -1262,7 +1271,7 @@ public class WorkDealInfoOperationController extends BaseController {
 	 * 信息变更界面保存方法
 	 */
 	@RequiresPermissions("work:workDealInfo:edit")
-	@RequestMapping(value = "maintainSaveChange")
+	@RequestMapping(value = "maintainSaveChange" , method = RequestMethod.POST)
 	public String maintainSaveChange(Long workDealInfoId, String orgExpirationTime,
 			String selectLv, String comCertificateType, String organizationNumber,
 			String comCertficateNumber, String comCertficateTime, String companyName,String companyType,
@@ -1276,7 +1285,11 @@ public class WorkDealInfoOperationController extends BaseController {
 			Integer dealInfoType2,Integer dealInfoType1,Boolean manMadeDamage,
 			
 			Model model, String pName, String pEmail, String pIDCard,String contactSex,String areaRemark,
-		 Long newInfoId, RedirectAttributes redirectAttributes) {
+		 Long newInfoId, RedirectAttributes redirectAttributes,
+		 @RequestParam("companyImage") MultipartFile companyImage ,
+		 @RequestParam("transactorImage") MultipartFile transactorImage,
+		 HttpServletRequest request
+			) {
 		//是否返回造成业务重复，如重复则删除
 		if (newInfoId != null) {
 			workDealInfoService.deleteWork(newInfoId);
@@ -1429,10 +1442,45 @@ public class WorkDealInfoOperationController extends BaseController {
 		workLog.setWorkCompany(workDealInfo.getWorkCompany());
 		workLog.setOffice(UserUtils.getUser().getOffice());
 		workLogService.save(workLog);
-		
+		if (companyImage!=null || transactorImage!=null) {
+		}
 		return "redirect:" + Global.getAdminPath()
 				+ "/work/workDealInfo/pay?id=" + workDealInfo.getId();
 	}
+	
+	/**
+     * 保存证件图片
+     * 
+     * @param file
+     */
+    private String saveToux(MultipartFile file, String name) {
+        try {
+            String path = Global.getConfig("images.url");
+            File saveFile = new File(path);
+            // 如果目录不存在就创建
+            if (!saveFile.exists()) {
+                saveFile.mkdirs();
+            }
+            InputStream is = file.getInputStream();
+            String fileName = file.getOriginalFilename();
+            fileName = name + new Date().getTime() + fileName.substring(fileName.lastIndexOf('.'), fileName.length());
+            FileOutputStream fos = new FileOutputStream(path + "/" + fileName);
+            byte[] buffer = new byte[1024 * 1024];
+            int byteread = 0;
+            while ((byteread = is.read(buffer)) != -1) {
+                fos.write(buffer, 0, byteread);
+                fos.flush();
+            }
+            fos.close();
+            is.close();
+            return fileName;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+	
 	
 	
 	

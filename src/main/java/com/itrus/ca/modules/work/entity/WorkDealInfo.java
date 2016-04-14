@@ -32,6 +32,7 @@ import com.itrus.ca.modules.profile.entity.ConfigApp;
 import com.itrus.ca.modules.profile.entity.ConfigChargeAgent;
 import com.itrus.ca.modules.profile.entity.ConfigCommercialAgent;
 import com.itrus.ca.modules.profile.entity.ConfigProduct;
+import com.itrus.ca.modules.self.entity.SelfImage;
 import com.itrus.ca.modules.settle.vo.PayableDetailVo;
 import com.itrus.ca.modules.sys.entity.User;
 
@@ -809,7 +810,17 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 		IsMainTain = isMainTain;
 	}
 	
-	
+	private  SelfImage selfImage;
+
+	@Transient
+	public SelfImage getSelfImage() {
+		return selfImage;
+	}
+
+	public void setSelfImage(SelfImage selfImage) {
+		this.selfImage = selfImage;
+	}
+
 	
 	
 	

@@ -113,6 +113,8 @@ import com.itrus.ca.modules.receipt.entity.ReceiptInvoice;
 import com.itrus.ca.modules.receipt.service.ReceiptDepotInfoService;
 import com.itrus.ca.modules.receipt.service.ReceiptEnterInfoService;
 import com.itrus.ca.modules.receipt.service.ReceiptInvoiceService;
+import com.itrus.ca.modules.self.entity.SelfImage;
+import com.itrus.ca.modules.self.service.SelfImageService;
 import com.itrus.ca.modules.service.ItrustProxyUtil;
 import com.itrus.ca.modules.sys.entity.Office;
 import com.itrus.ca.modules.sys.entity.User;
@@ -249,6 +251,10 @@ public class WorkDealInfoController extends BaseController {
 	@Autowired
 	private ConfigProjectTypeService configProjectTypeService;
 
+	@Autowired
+	private SelfImageService selfImageService;
+	
+	
 	@Value(value = "${ixin.url}")
 	private String ixinUrl;
 
@@ -4626,6 +4632,13 @@ public class WorkDealInfoController extends BaseController {
 			}
 		}
 
+		if (workDealInfo.getSelfApplyId() != null) {
+			model.addAttribute("imgUrl",Global.getConfig("images.url"));
+			SelfImage selfImage =  selfImageService.findByApplicationId(workDealInfo.getSelfApplyId());
+			
+			workDealInfo.setSelfImage(selfImage);
+		}
+		
 		if (dealInfoTypes.size() == 1) {
 			if (dealInfoTypes.get(0).equals("1")) {
 
