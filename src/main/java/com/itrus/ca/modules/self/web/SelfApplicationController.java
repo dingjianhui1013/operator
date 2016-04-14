@@ -43,7 +43,7 @@ import com.itrus.ca.modules.profile.service.ConfigProductService;
 import com.itrus.ca.modules.self.entity.SelfApplication;
 import com.itrus.ca.modules.self.entity.SelfImage;
 import com.itrus.ca.modules.self.service.SelfApplicationService;
-import com.itrus.ca.modules.self.utils.selfApplicationStatus;
+import com.itrus.ca.modules.self.utils.SelfApplicationStatus;
 import com.itrus.ca.modules.sys.utils.UserUtils;
 import com.itrus.ca.modules.work.entity.WorkCertApplyInfo;
 import com.itrus.ca.modules.work.entity.WorkCertInfo;
@@ -180,7 +180,7 @@ public class SelfApplicationController extends BaseController {
 	@RequiresPermissions("self:selfApplication:view")
 	@RequestMapping(value = "denyApply")
 	public String denyApply(SelfApplication selfApplication, Model model,String denyText) {
-		selfApplication.setStatus(selfApplicationStatus.denyApply);
+		selfApplication.setStatus(SelfApplicationStatus.denyApply);
 		selfApplication.setDenyText(denyText);
 		selfApplicationService.save(selfApplication);
 		return "redirect:" + Global.getAdminPath()+ "/self/selfApplication/?repage";
@@ -335,7 +335,7 @@ public class SelfApplicationController extends BaseController {
 		workLogService.save(workLog);
 		logUtil.saveSysLog("业务办理", "新增业务保存：编号" + workDealInfo.getId() + "单位名称："+ workDealInfo.getWorkCompany().getCompanyName(), "");
 		// 改变申请表的状态
-		selfApplication.setStatus(selfApplicationStatus.downApply);
+		selfApplication.setStatus(SelfApplicationStatus.downApply);
 		selfApplication.setMoney(configChargeAgentDetail.getMoney());
 		selfApplicationService.save(selfApplication);
 	

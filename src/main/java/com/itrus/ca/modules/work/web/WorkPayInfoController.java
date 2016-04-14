@@ -63,7 +63,7 @@ import com.itrus.ca.modules.receipt.service.ReceiptEnterInfoService;
 import com.itrus.ca.modules.receipt.service.ReceiptInvoiceService;
 import com.itrus.ca.modules.self.entity.SelfApplication;
 import com.itrus.ca.modules.self.service.SelfApplicationService;
-import com.itrus.ca.modules.self.utils.selfApplicationStatus;
+import com.itrus.ca.modules.self.utils.SelfApplicationStatus;
 import com.itrus.ca.modules.sys.entity.Office;
 import com.itrus.ca.modules.sys.entity.User;
 import com.itrus.ca.modules.sys.utils.UserUtils;
@@ -377,8 +377,8 @@ public class WorkPayInfoController extends BaseController {
 		fixOldPayInfo(workDealInfo);
 		if(workDealInfo.getSelfApplyId()!=null){
 			SelfApplication selfApplication=selfApplicationService.get(workDealInfo.getSelfApplyId());
-			if(selfApplication.getStatus().equalsIgnoreCase(selfApplicationStatus.payApply)||selfApplication.getStatus().equalsIgnoreCase(selfApplicationStatus.downApply)){
-				selfApplication.setStatus(selfApplicationStatus.handApply);
+			if(selfApplication.getStatus().equalsIgnoreCase(SelfApplicationStatus.payApply)||selfApplication.getStatus().equalsIgnoreCase(SelfApplicationStatus.downApply)){
+				selfApplication.setStatus(SelfApplicationStatus.handApply);
 				selfApplicationService.save(selfApplication);
 			}
 		}

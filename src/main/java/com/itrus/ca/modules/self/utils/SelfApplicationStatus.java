@@ -5,7 +5,7 @@ package com.itrus.ca.modules.self.utils;
  * 
  *
  */
-public class selfApplicationStatus {
+public class SelfApplicationStatus {
 	// 申请表状态
     public static final String examinations = "0";// 等待审核
     public static final String downApply = "1";// 审核完成 下载
