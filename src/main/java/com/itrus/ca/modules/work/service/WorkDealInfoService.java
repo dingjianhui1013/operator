@@ -7080,5 +7080,20 @@ public class WorkDealInfoService extends BaseService {
 		return null;
 	}
 	
+	public WorkDealInfo findByCertSnAndKeySn(String certSn,String keySn){
+		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
+		dc.createAlias("workCertInfo", "workCertInfo");
+		dc.add(Restrictions.eq("workCertInfo.serialnumber", certSn));
+		dc.add(Restrictions.eq("keySn", keySn));
+		dc.add(Restrictions.isNotNull("prevId"));
+		
+		List<WorkDealInfo> infos = workDealInfoDao.find(dc);
+		if(infos.size()==1){
+			return infos.get(0);
+		}
+		else{
+			return null;
+		}
+	}
 
 }
