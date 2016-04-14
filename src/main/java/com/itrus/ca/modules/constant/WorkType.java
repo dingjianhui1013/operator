@@ -14,4 +14,5 @@ public class WorkType {
 	public static Integer TYPE_OPEN = 4;//开户费
 	public static Integer TYPE_TRUST = 5;//可信设备
 	public static Integer TYPE_DAMAGE = 6;//损坏更换
+	public static Integer TYPE_RENEW = 7;//续费
 }
