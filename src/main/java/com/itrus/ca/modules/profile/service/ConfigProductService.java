@@ -250,6 +250,14 @@ public class ConfigProductService extends BaseService {
 		return configProductDao.find(dc);
 	}
 	
+	 public ConfigProduct findByProductName(Long appId, String productName) {
+	        DetachedCriteria dc = configProductDao.createDetachedCriteria();
+	        dc.createAlias("configApp", "configApp");
+	        dc.add(Restrictions.eq("configApp.id", appId));
+	        dc.add(Restrictions.eq("productName", productName));
+	        List<ConfigProduct> products = configProductDao.find(dc);
+	        return products.get(0);
+	    }
 
 	/*public List<ConfigProduct> findProductId(Long applyId) {
 		

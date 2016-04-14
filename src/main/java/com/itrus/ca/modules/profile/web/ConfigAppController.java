@@ -15,7 +15,10 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -30,16 +33,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.google.common.collect.Lists;
 import com.itrus.ca.common.config.Global;
 import com.itrus.ca.common.persistence.Page;
+import com.itrus.ca.common.utils.StringUtils;
 import com.itrus.ca.common.web.BaseController;
-import com.itrus.ca.modules.sys.entity.CommonAttach;
-import com.itrus.ca.modules.sys.entity.Office;
-import com.itrus.ca.modules.sys.entity.User;
-import com.itrus.ca.modules.sys.service.CommonAttachService;
-import com.itrus.ca.modules.sys.service.OfficeService;
-import com.itrus.ca.modules.sys.utils.UserUtils;
 import com.itrus.ca.modules.constant.ProductType;
 import com.itrus.ca.modules.log.service.LogUtil;
-import com.itrus.ca.modules.profile.dao.ConfigProjectTypeDao;
 import com.itrus.ca.modules.profile.entity.ConfigApp;
 import com.itrus.ca.modules.profile.entity.ConfigAppOfficeRelation;
 import com.itrus.ca.modules.profile.entity.ConfigProduct;
@@ -48,11 +45,12 @@ import com.itrus.ca.modules.profile.service.ConfigAppOfficeRelationService;
 import com.itrus.ca.modules.profile.service.ConfigAppService;
 import com.itrus.ca.modules.profile.service.ConfigProductService;
 import com.itrus.ca.modules.profile.service.ConfigProjectTypeService;
-
-import org.apache.commons.io.FileUtils;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.itrus.ca.modules.sys.entity.CommonAttach;
+import com.itrus.ca.modules.sys.entity.Office;
+import com.itrus.ca.modules.sys.entity.User;
+import com.itrus.ca.modules.sys.service.CommonAttachService;
+import com.itrus.ca.modules.sys.service.OfficeService;
+import com.itrus.ca.modules.sys.utils.UserUtils;
 
 /**
  * 应用Controller

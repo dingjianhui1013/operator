@@ -3,7 +3,6 @@
  */
 package com.itrus.ca.modules.profile.service;
 
-import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -19,11 +18,9 @@ import org.springframework.transaction.annotation.Transactional;
 import com.itrus.ca.common.persistence.Page;
 import com.itrus.ca.common.service.BaseService;
 import com.itrus.ca.common.utils.EscapeUtil;
-import com.itrus.ca.modules.profile.entity.ConfigApp;
 import com.itrus.ca.modules.profile.dao.ConfigAppDao;
-import com.itrus.ca.modules.statistic.entity.StatisticCertData;
-import com.itrus.ca.modules.sys.entity.Office;
-import com.itrus.ca.modules.sys.entity.User;
+import com.itrus.ca.modules.profile.entity.ConfigApp;
+import com.itrus.ca.modules.profile.entity.ConfigProduct;
 import com.itrus.ca.modules.sys.utils.UserUtils;
 
 /**
@@ -185,14 +182,7 @@ public class ConfigAppService extends BaseService {
 	}
 
 	
-    public ConfigProduct findByProductName(Long appId, String productName) {
-        DetachedCriteria dc = configProductDao.createDetachedCriteria();
-        dc.createAlias("configApp", "configApp");
-        dc.add(Restrictions.eq("configApp.id", appId));
-        dc.add(Restrictions.eq("productName", productName));
-        List<ConfigProduct> products = configProductDao.find(dc);
-        return products.get(0);
-    }
+   
 	
 	/**
 	 * 查询属于当前登录网点的应用
