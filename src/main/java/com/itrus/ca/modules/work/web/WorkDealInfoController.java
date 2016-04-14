@@ -4527,7 +4527,8 @@ public class WorkDealInfoController extends BaseController {
 				inOffice = true;
 			}
 		}
-
+		workDealInfo.setIsMainTain("mainTain");
+		workDealInfoService.save(workDealInfo);
 		String[] type = dealType.replace(",", " ").split(" ");
 		for (int i = 0; i < type.length; i++) {
 			if (type[i].equals("1")) {
@@ -7922,6 +7923,14 @@ public class WorkDealInfoController extends BaseController {
 			} else {
 				json.put("isUpdate", 0);
 			}
+			if(dealInfo.getIsMainTain()!=null){
+				if(dealInfo.getIsMainTain().equalsIgnoreCase("selfMainTain")){
+					json.put("isMainTain", 1);
+				}
+			}else{
+				json.put("isMainTain", 0);
+			}
+			
 			json.put("status", 1);
 		} catch (Exception e) {
 			try {

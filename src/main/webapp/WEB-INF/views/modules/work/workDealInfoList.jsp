@@ -249,10 +249,14 @@ $(document)
 								if(dealType.indexOf("3")>=0){
 									$.getJSON(url + "&_="+new Date().getTime(),	function(data){
 												if (data.status==1){
-													if (data.isUpdate==0) {
-														top.$.jBox.tip("证书未在更新范围内，不允许更新此证书 ！");
+													if(data.isMainTain==1){
+														top.$.jBox.tip("更新业务已在自助系统中办理！");
 													}else{
-														window.location.href = "${ctx}/work/workDealInfo/typeForm?id="+id+"&reissueType="+reissueType+"&dealType="+dealType;
+														if (data.isUpdate==0) {
+															top.$.jBox.tip("证书未在更新范围内，不允许更新此证书 ！");
+														}else{
+															window.location.href = "${ctx}/work/workDealInfo/typeForm?id="+id+"&reissueType="+reissueType+"&dealType="+dealType;
+														}
 													}
 												}else{
 													top.$.jBox.tip("系统异常");
@@ -264,10 +268,14 @@ $(document)
 								}else{
 									$.getJSON(url + "&_="+new Date().getTime(),	function(data){
 										if (data.status==1){
-											if (data.isDeal==1) {
-												top.$.jBox.tip("证书已过期，不允许此证书办理所选业务 ！");
+											if(dealType.indexOf("1")>=0&&data.isMainTain==1){
+												top.$.jBox.tip("业务已在自助系统中办理！");
 											}else{
-												window.location.href = "${ctx}/work/workDealInfo/typeForm?id="+id+"&reissueType="+reissueType+"&dealType="+dealType;
+												if (data.isDeal==1) {
+													top.$.jBox.tip("证书已过期，不允许此证书办理所选业务 ！");
+												}else{
+													window.location.href = "${ctx}/work/workDealInfo/typeForm?id="+id+"&reissueType="+reissueType+"&dealType="+dealType;
+												}
 											}
 										}else{
 											top.$.jBox.tip("系统异常");

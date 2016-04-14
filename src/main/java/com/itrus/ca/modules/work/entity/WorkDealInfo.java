@@ -120,6 +120,8 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 	private Long officeId;
 	private Long areaId;
 	
+	private Long selfApplyId;
+	private String IsMainTain;
 	
 	/** default constructor */
 	public WorkDealInfo() {
@@ -148,7 +150,9 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 			Date attestationUserDate,
 			Date businessCardUserDate,
 			Long officeId,
-			Long areaId
+			Long areaId,
+			Long selfApplyId,
+			String IsMainTain
 			) {
 		this.configApp = configApp;
 		this.workCompany = workCompany;
@@ -175,6 +179,8 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 		this.businessCardUserDate = businessCardUserDate;
 		this.officeId = officeId;
 		this.areaId = areaId;
+		this.selfApplyId = selfApplyId;
+		this.IsMainTain = IsMainTain;
 		
 		
 	}
@@ -783,6 +789,24 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 
 	public void setAreaId(Long areaId) {
 		this.areaId = areaId;
+	}
+
+	@Column(name = "self_apply_id")
+	public Long getSelfApplyId() {
+		return selfApplyId;
+	}
+
+	public void setSelfApplyId(Long selfApplyId) {
+		this.selfApplyId = selfApplyId;
+	}
+
+	@Column(name = "is_main_tain")
+	public String getIsMainTain() {
+		return IsMainTain;
+	}
+
+	public void setIsMainTain(String isMainTain) {
+		IsMainTain = isMainTain;
 	}
 	
 	
