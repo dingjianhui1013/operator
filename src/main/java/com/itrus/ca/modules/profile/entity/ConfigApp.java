@@ -18,6 +18,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.itrus.ca.common.persistence.DataEntity;
+import com.itrus.ca.modules.signature.entity.SignatureAgentBoundConfigApp;
 import com.itrus.ca.modules.work.entity.WorkDealInfo;
 
 /**
@@ -42,14 +43,16 @@ public class ConfigApp extends DataEntity implements java.io.Serializable {
 	
 	private ConfigProjectType configProjectType;
 	
+	private List<SignatureAgentBoundConfigApp> bounds;
+	
 	private Boolean applyFlag1;//判断地税
 	private Boolean applyFlag2;//判断社保
-	
 	
 	/**
 	 * 应用配是否支持通用，决定产品列表是否支持选通用or专用
 	 */
 	private Boolean supportCommon;//是否支持通用
+	
 
 	// Constructors
 
@@ -171,7 +174,15 @@ public class ConfigApp extends DataEntity implements java.io.Serializable {
 	public void setConfigProjectType(ConfigProjectType configProjectType) {
 		this.configProjectType = configProjectType;
 	}
-	
+
+	@Transient
+	public List<SignatureAgentBoundConfigApp> getBounds() {
+		return bounds;
+	}
+
+	public void setBounds(List<SignatureAgentBoundConfigApp> bounds) {
+		this.bounds = bounds;
+	}
 	
 	@Column(name = "apply_flag1")
 	public Boolean getApplyFlag1() {
@@ -189,6 +200,10 @@ public class ConfigApp extends DataEntity implements java.io.Serializable {
 	public void setApplyFlag2(Boolean applyFlag2) {
 		this.applyFlag2 = applyFlag2;
 	}
+	
+	
+	
+	
 	
 	
 	
