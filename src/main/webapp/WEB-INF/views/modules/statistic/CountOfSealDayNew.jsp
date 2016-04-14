@@ -159,7 +159,7 @@
 				     <td style="text-align:center; vertical-align: middle;" >
 						<fmt:formatDate value="${appData.statisticDate}" pattern="yyyy-MM-dd"/>
 					</td>
-					 <td  colspan="15">
+					 <td  colspan="18">
 						${appData.app.appName}应用今天没有办理业务
 					</td>
 				</tr> 
@@ -172,54 +172,58 @@
 			<thead>
 				<tr>
 					<th rowspan="4" style="text-align:center; vertical-align: middle;">日期</th>
-					
-					<th colspan="16" style="text-align:center; vertical-align: middle;">${appData.app.appName}</th>
+					<th colspan="18" style="text-align:center; vertical-align: middle;">${appData.app.appName}</th>
 				</tr>
-				  
-				<tr > 
-				     <th colspan="12" style="text-align:center; vertical-align: middle;">业务办理</th>
-					 <th colspan="3" style="text-align:center; vertical-align: middle;">小计</th> 
+				<tr> 
+				    <th colspan="15" style="text-align:center; vertical-align: middle;">业务办理</th>
+					<th colspan="3" style="text-align:center; vertical-align: middle;">小计</th> 
 				</tr> 
 				<tr>
-					<td colspan="4" style="text-align:center; vertical-align: middle;">新增</td>
-					<td colspan="4" style="text-align:center; vertical-align: middle;">更新</td>
-					<td colspan="4" style="text-align:center; vertical-align: middle;">变更</td>
+					<td colspan="5" style="text-align:center; vertical-align: middle;">新增</td>
+					<td colspan="5" style="text-align:center; vertical-align: middle;">更新</td>
+					<td colspan="5" style="text-align:center; vertical-align: middle;">变更</td>
 					<td rowspan="2" style="text-align:center; vertical-align: middle;">印章</td>
 					<td rowspan="2" style="text-align:center; vertical-align: middle;">费用</td>
 					<td rowspan="2" style="text-align:center; vertical-align: middle;">发票</td> 
 				
 				</tr>
 				<tr>
-					<td style="text-align:center; vertical-align: middle;">财务章</td>
-					<td style="text-align:center; vertical-align: middle;">合同章</td>
-					<td style="text-align:center; vertical-align: middle;">个人章</td>
-					<td style="text-align:center; vertical-align: middle;">公章</td>
-					<td style="text-align:center; vertical-align: middle;">财务章</td>
-					<td style="text-align:center; vertical-align: middle;">合同章</td>
-					<td style="text-align:center; vertical-align: middle;">个人章</td>
-					<td style="text-align:center; vertical-align: middle;">公章</td>
-					<td style="text-align:center; vertical-align: middle;">财务章</td>
-					<td style="text-align:center; vertical-align: middle;">合同章</td>
-					<td style="text-align:center; vertical-align: middle;">个人章</td>
-					<td style="text-align:center; vertical-align: middle;">公章</td>
+					<td style="text-align:center; vertical-align: middle;">1年</td>
+					<td style="text-align:center; vertical-align: middle;">2年</td>
+					<td style="text-align:center; vertical-align: middle;">3年</td>
+					<td style="text-align:center; vertical-align: middle;">4年</td>
+					<td style="text-align:center; vertical-align: middle;">5年</td>
+					<td style="text-align:center; vertical-align: middle;">1年</td>
+					<td style="text-align:center; vertical-align: middle;">2年</td>
+					<td style="text-align:center; vertical-align: middle;">3年</td>
+					<td style="text-align:center; vertical-align: middle;">4年</td>
+					<td style="text-align:center; vertical-align: middle;">5年</td>
+					<td style="text-align:center; vertical-align: middle;">1年</td>
+					<td style="text-align:center; vertical-align: middle;">2年</td>
+					<td style="text-align:center; vertical-align: middle;">3年</td>
+					<td style="text-align:center; vertical-align: middle;">4年</td>
+					<td style="text-align:center; vertical-align: middle;">5年</td>
 				</tr> 
 			</thead>
 			<tbody>
 				<tr>
 					<td style="text-align:center; vertical-align: middle;" >
 					<fmt:formatDate value="${appData.statisticDate}" pattern="yyyy-MM-dd"/></td>
-					<td style="text-align:center; vertical-align: middle;" >${appData.addFinance}</td>
-					<td style="text-align:center; vertical-align: middle;" >${appData.addContract}</td>
-					<td style="text-align:center; vertical-align: middle;" >${appData.addPersonal}</td>
-					<td style="text-align:center; vertical-align: middle;" >${appData.addOfficial}</td>
-					<td style="text-align:center; vertical-align: middle;" >${appData.renewFinance}</td>
-					<td style="text-align:center; vertical-align: middle;" >${appData.renewContract}</td>
-					<td style="text-align:center; vertical-align: middle;" >${appData.renewPersonal}</td>
-					<td style="text-align:center; vertical-align: middle;" >${appData.renewOfficial}</td>
-					<td style="text-align:center; vertical-align: middle;" >${appData.changeFinance}</td>
-					<td style="text-align:center; vertical-align: middle;" >${appData.changeContract}</td>
-					<td style="text-align:center; vertical-align: middle;" >${appData.changePersonal}</td>
-					<td style="text-align:center; vertical-align: middle;" >${appData.changeOfficial}</td>
+					<td style="text-align:center; vertical-align: middle;" >${appData.addOne}</td>
+					<td style="text-align:center; vertical-align: middle;" >${appData.addTwo}</td>
+					<td style="text-align:center; vertical-align: middle;" >${appData.addThree}</td>
+					<td style="text-align:center; vertical-align: middle;" >${appData.addFour}</td>
+					<td style="text-align:center; vertical-align: middle;" >${appData.addFive}</td>
+					<td style="text-align:center; vertical-align: middle;" >${appData.renewOne}</td>
+					<td style="text-align:center; vertical-align: middle;" >${appData.renewTwo}</td>
+					<td style="text-align:center; vertical-align: middle;" >${appData.renewThree}</td>
+					<td style="text-align:center; vertical-align: middle;" >${appData.renewFour}</td>
+					<td style="text-align:center; vertical-align: middle;" >${appData.renewFive}</td>
+					<td style="text-align:center; vertical-align: middle;" >${appData.changeOne}</td>
+					<td style="text-align:center; vertical-align: middle;" >${appData.changeTwo}</td>
+					<td style="text-align:center; vertical-align: middle;" >${appData.changeThree}</td>
+					<td style="text-align:center; vertical-align: middle;" >${appData.changeFour}</td>
+					<td style="text-align:center; vertical-align: middle;" >${appData.changeFive}</td>
 					<td style="text-align:center; vertical-align: middle;" >${appData.sealTotal}</td>
 					<td style="text-align:center; vertical-align: middle;" >${appData.sealMoney}</td>
 					<td style="text-align:center; vertical-align: middle;" >${appData.receiptTotal}</td>

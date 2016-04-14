@@ -303,53 +303,62 @@ public class StatisticSealDayDataController extends BaseController {
 					Integer sealTotal=0;
 					Double receiptTotal=0d;
 					Double sealMoney=0d;
-					Integer addFinance=0; 	//新增财务章
-					Integer addContract=0;	//新增合同章
-					Integer addPersonal=0;	//新增个人章
-					Integer addOfficial=0;	//新增公章
-					Integer renewFinance=0; 	//更新财务章
-					Integer renewContract=0;	//更新合同章
-					Integer renewPersonal=0;	//更新个人章
-					Integer renewOfficial=0;	//更新公章
-					Integer changeFinance=0; 	//变更财务章
-					Integer changeContract=0;	//变更合同章
-					Integer changePersonal=0;	//变更个人章
-					Integer changeOfficial=0;	//变更公章
+					Integer addOne=0; 	//新增财务章
+					Integer addTwo=0;	//新增合同章
+					Integer addThree=0;	//新增个人章
+					Integer addFour=0;	//新增公章
+					Integer addFive=0;
+					Integer renewOne=0; 	//更新财务章
+					Integer renewTwo=0;	//更新合同章
+					Integer renewThree=0;	//更新个人章
+					Integer renewFour=0;	//更新公章
+					Integer renewFive=0;
+					Integer changeOne=0; 	//变更财务章
+					Integer changeTwo=0;	//变更合同章
+					Integer changeThree=0;	//变更个人章
+					Integer changeFour=0;	//变更公章
+					Integer changeFive=0;
 					List<StatisticSealAppData> listMonth = statisticSealAppDataService
 							.findByMonth(configApp, office, start, end);
 					for (StatisticSealAppData sad : listMonth) {
 						sealTotal+=sad.getSealTotal();
 						receiptTotal+=sad.getReceiptTotal();
 						sealMoney+=sad.getSealMoney();
-						addFinance+=sad.getAddFinance();
-						addContract+=sad.getAddContract();
-						addPersonal+=sad.getAddPersonal();
-						addOfficial+=sad.getAddOfficial();
-						renewFinance+=sad.getRenewFinance();
-						renewContract+=sad.getRenewContract();
-						renewPersonal+=sad.getRenewPersonal();
-						renewOfficial+=sad.getRenewOfficial();
-						changeFinance+=sad.getChangeFinance();
-						changeContract+=sad.getChangeContract();
-						changePersonal+=sad.getChangePersonal();
-						changeOfficial+=sad.getChangeOfficial();
+						addOne+=sad.getAddOne();
+						addTwo+=sad.getAddTwo();
+						addThree+=sad.getAddThree();
+						addFour+=sad.getAddFour();
+						addFive+=sad.getAddFive();
+						renewOne+=sad.getRenewOne();
+						renewTwo+=sad.getRenewTwo();
+						renewThree+=sad.getRenewThree();
+						renewFour+=sad.getRenewFour();
+						renewFive+=sad.getRenewFive();
+						changeOne+=sad.getChangeOne();
+						changeTwo+=sad.getChangeTwo();
+						changeThree+=sad.getChangeThree();
+						changeFour+=sad.getChangeFour();
+						changeFive+=sad.getChangeFive();
 					}
 					samd.setSealTotal(sealTotal);
 					samd.setReceiptTotal(receiptTotal);
 					samd.setSealMoney(sealMoney);
-					samd.setAddFinance(addFinance);
-					samd.setAddContract(addContract);
-					samd.setAddPersonal(addPersonal);
-					samd.setAddPersonal(addPersonal);
-					samd.setAddOfficial(addOfficial);
-					samd.setRenewFinance(renewFinance);
-					samd.setRenewContract(renewContract);
-					samd.setRenewPersonal(renewPersonal);
-					samd.setRenewOfficial(renewOfficial);
-					samd.setChangeFinance(changeFinance);
-					samd.setChangeContract(changeContract);
-					samd.setChangePersonal(changePersonal);
-					samd.setChangeOfficial(changeOfficial);
+					samd.setAddOne(addOne);
+					samd.setAddTwo(addTwo);
+					samd.setAddThree(addThree);
+					samd.setAddThree(addThree);
+					samd.setAddFour(addFour);
+					samd.setAddFive(addFive);
+					samd.setRenewOne(renewOne);
+					samd.setRenewTwo(renewTwo);
+					samd.setRenewThree(renewThree);
+					samd.setRenewFour(renewFour);
+					samd.setRenewFive(renewFive);
+					samd.setChangeOne(changeOne);
+					samd.setChangeTwo(changeTwo);
+					samd.setChangeThree(changeThree);
+					samd.setChangeFour(changeFour);
+					samd.setChangeFive(changeFive);
 					samd.setApp(configApp);
 					samd.setStatisticDate(start);
 					statisticSealAppMonth.add(samd);
@@ -587,36 +596,42 @@ public class StatisticSealDayDataController extends BaseController {
 			 * 根据应用、网点、时间、年限生成数据
 			 */
 			// 新增
-			certData.setAddFinance(signatureInfoService.getInfocount(
+			certData.setAddOne(signatureInfoService.getInfocount(
 					countDate,officeId,"1",app.getId(),SignatureInfoType.TYPE_ADD_SIGNATURE));
-			certData.setAddContract(signatureInfoService.getInfocount(
+			certData.setAddTwo(signatureInfoService.getInfocount(
 					countDate,officeId,"2",app.getId(),SignatureInfoType.TYPE_ADD_SIGNATURE));
-			certData.setAddPersonal(signatureInfoService.getInfocount(
+			certData.setAddThree(signatureInfoService.getInfocount(
 					countDate,officeId,"3",app.getId(),SignatureInfoType.TYPE_ADD_SIGNATURE));
-			certData.setAddOfficial(signatureInfoService.getInfocount(
+			certData.setAddFour(signatureInfoService.getInfocount(
 					countDate,officeId,"4",app.getId(),SignatureInfoType.TYPE_ADD_SIGNATURE));
+			certData.setAddFive(signatureInfoService.getInfocount(
+					countDate,officeId,"5",app.getId(),SignatureInfoType.TYPE_ADD_SIGNATURE));
 			//变更
-			certData.setChangeFinance(signatureInfoService.getInfocount(
+			certData.setChangeOne(signatureInfoService.getInfocount(
 					countDate,officeId,"1",app.getId(),SignatureInfoType.TYPE_CHANGE_SIGNATURE));
-			certData.setChangeContract(signatureInfoService.getInfocount(
+			certData.setChangeTwo(signatureInfoService.getInfocount(
 					countDate,officeId,"2",app.getId(),SignatureInfoType.TYPE_CHANGE_SIGNATURE));
-			certData.setChangePersonal(signatureInfoService.getInfocount(
+			certData.setChangeThree(signatureInfoService.getInfocount(
 					countDate,officeId,"3",app.getId(),SignatureInfoType.TYPE_CHANGE_SIGNATURE));
-			certData.setChangeOfficial(signatureInfoService.getInfocount(
+			certData.setChangeFour(signatureInfoService.getInfocount(
 					countDate,officeId,"4",app.getId(),SignatureInfoType.TYPE_CHANGE_SIGNATURE));
+			certData.setChangeFive(signatureInfoService.getInfocount(
+					countDate,officeId,"5",app.getId(),SignatureInfoType.TYPE_CHANGE_SIGNATURE));
 			//续期
-			certData.setRenewFinance(signatureInfoService.getInfocount(
+			certData.setRenewOne(signatureInfoService.getInfocount(
 					countDate,officeId,"1",app.getId(),SignatureInfoType.TYPE_UPDATE_SIGNATURE));
-			certData.setRenewContract(signatureInfoService.getInfocount(
+			certData.setRenewTwo(signatureInfoService.getInfocount(
 					countDate,officeId,"2",app.getId(),SignatureInfoType.TYPE_UPDATE_SIGNATURE));
-			certData.setRenewPersonal(signatureInfoService.getInfocount(
+			certData.setRenewThree(signatureInfoService.getInfocount(
 					countDate,officeId,"3",app.getId(),SignatureInfoType.TYPE_UPDATE_SIGNATURE));
-			certData.setRenewOfficial(signatureInfoService.getInfocount(
+			certData.setRenewFour(signatureInfoService.getInfocount(
 					countDate,officeId,"4",app.getId(),SignatureInfoType.TYPE_UPDATE_SIGNATURE));
-			certData.setSealTotal(certData.getAddFinance()+certData.getAddContract()+
-					certData.getAddPersonal()+certData.getAddOfficial()+certData.getChangeFinance()
-					+certData.getChangeContract()+certData.getChangePersonal()+certData.getChangeOfficial()+
-					certData.getRenewFinance()+certData.getRenewContract()+certData.getRenewPersonal()+certData.getRenewOfficial());
+			certData.setRenewFive(signatureInfoService.getInfocount(
+					countDate,officeId,"5",app.getId(),SignatureInfoType.TYPE_UPDATE_SIGNATURE));
+			certData.setSealTotal(certData.getAddOne()+certData.getAddTwo()+
+					certData.getAddThree()+certData.getAddFour()+certData.getAddFive()+certData.getChangeOne()
+					+certData.getChangeTwo()+certData.getChangeThree()+certData.getChangeFour()+certData.getChangeFive()+
+					certData.getRenewOne()+certData.getRenewTwo()+certData.getRenewThree()+certData.getRenewFour()+certData.getRenewFive());
 			Double detailedMoney=0d;
 			Double detailedReceiptOut=0d;
 			List<SignatureInfo> detailedsSgnatureInfos = signatureInfoService.finDaySeal(countDate, officeId,app.getId());
@@ -756,15 +771,15 @@ public class StatisticSealDayDataController extends BaseController {
 		for(int j=0;j<appDatas.size();j++)
 		{
 			sheet.addMergedRegion(new Region((j*6)+(5+list.size()+appDataIndex),(short)0,(j*6)+(5+list.size()+appDataIndex)+3,(short)0));
-			sheet.addMergedRegion(new Region((j*6)+(5+list.size()+appDataIndex),(short)1,(j*6)+(5+list.size()+appDataIndex),(short)15));
-			sheet.addMergedRegion(new Region((j*6)+(5+list.size()+appDataIndex)+1, (short)1, (j*6)+(5+list.size()+appDataIndex)+1, (short)12));
-			sheet.addMergedRegion(new Region((j*6)+(5+list.size()+appDataIndex)+1, (short)12, (j*6)+(5+list.size()+appDataIndex)+1, (short)15));
-			sheet.addMergedRegion(new Region((j*6)+(5+list.size()+appDataIndex)+2, (short)1, (j*6)+(5+list.size()+appDataIndex)+2, (short)4));
-			sheet.addMergedRegion(new Region((j*6)+(5+list.size()+appDataIndex)+2, (short)5, (j*6)+(5+list.size()+appDataIndex)+2, (short)8));
-			sheet.addMergedRegion(new Region((j*6)+(5+list.size()+appDataIndex)+2, (short)9, (j*6)+(5+list.size()+appDataIndex)+2, (short)12));
-			sheet.addMergedRegion(new Region((j*6)+(5+list.size()+appDataIndex)+2, (short)13, (j*6)+(5+list.size()+appDataIndex)+2+1, (short)13));
-			sheet.addMergedRegion(new Region((j*6)+(5+list.size()+appDataIndex)+2, (short)14, (j*6)+(5+list.size()+appDataIndex)+2+1, (short)14));
-			sheet.addMergedRegion(new Region((j*6)+(5+list.size()+appDataIndex)+2, (short)15, (j*6)+(5+list.size()+appDataIndex)+2, (short)15));
+			sheet.addMergedRegion(new Region((j*6)+(5+list.size()+appDataIndex),(short)1,(j*6)+(5+list.size()+appDataIndex),(short)18));
+			sheet.addMergedRegion(new Region((j*6)+(5+list.size()+appDataIndex)+1, (short)1, (j*6)+(5+list.size()+appDataIndex)+1, (short)15));
+			sheet.addMergedRegion(new Region((j*6)+(5+list.size()+appDataIndex)+1, (short)16, (j*6)+(5+list.size()+appDataIndex)+1, (short)18));
+			sheet.addMergedRegion(new Region((j*6)+(5+list.size()+appDataIndex)+2, (short)1, (j*6)+(5+list.size()+appDataIndex)+2, (short)5));
+			sheet.addMergedRegion(new Region((j*6)+(5+list.size()+appDataIndex)+2, (short)6, (j*6)+(5+list.size()+appDataIndex)+2, (short)10));
+			sheet.addMergedRegion(new Region((j*6)+(5+list.size()+appDataIndex)+2, (short)11, (j*6)+(5+list.size()+appDataIndex)+2, (short)15));
+			sheet.addMergedRegion(new Region((j*6)+(5+list.size()+appDataIndex)+2, (short)16, (j*6)+(5+list.size()+appDataIndex)+2+1, (short)16));
+			sheet.addMergedRegion(new Region((j*6)+(5+list.size()+appDataIndex)+2, (short)17, (j*6)+(5+list.size()+appDataIndex)+2+1, (short)17));
+			sheet.addMergedRegion(new Region((j*6)+(5+list.size()+appDataIndex)+2, (short)18, (j*6)+(5+list.size()+appDataIndex)+2+1, (short)18));
 			HSSFCellStyle stylese=wb.createCellStyle();
 			stylese.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
 			stylese.setAlignment(HSSFCellStyle.ALIGN_CENTER);
@@ -786,49 +801,55 @@ public class StatisticSealDayDataController extends BaseController {
 			serow1.createCell(13).setCellValue("小计");
 			HSSFRow serow2=sheet.createRow((j*6)+(5+list.size()+appDataIndex)+2);
 			serow2.createCell(1).setCellValue("新增");
-			serow2.createCell(5).setCellValue("更新");
-			serow2.createCell(9).setCellValue("变更");
-			serow2.createCell(13).setCellValue("印章");
-			serow2.createCell(14).setCellValue("费用");
-			serow2.createCell(15).setCellValue("发票");
+			serow2.createCell(6).setCellValue("更新");
+			serow2.createCell(11).setCellValue("变更");
+			serow2.createCell(16).setCellValue("印章");
+			serow2.createCell(17).setCellValue("费用");
+			serow2.createCell(18).setCellValue("发票");
 			HSSFRow serow3=sheet.createRow((j*6)+(5+list.size()+appDataIndex)+3);
-			serow3.createCell(1).setCellValue("财务章");
-			serow3.createCell(2).setCellValue("合同章");
-			serow3.createCell(3).setCellValue("个人章");
-			serow3.createCell(4).setCellValue("公章");
-			serow3.createCell(5).setCellValue("财务章");
-			serow3.createCell(6).setCellValue("合同章");
-			serow3.createCell(7).setCellValue("个人章");
-			serow3.createCell(8).setCellValue("公章");
-			serow3.createCell(9).setCellValue("财务章");
-			serow3.createCell(10).setCellValue("合同章");
-			serow3.createCell(11).setCellValue("个人章");
-			serow3.createCell(12).setCellValue("公章");
+			serow3.createCell(1).setCellValue("1年");
+			serow3.createCell(2).setCellValue("2年");
+			serow3.createCell(3).setCellValue("3年");
+			serow3.createCell(4).setCellValue("4年");
+			serow3.createCell(5).setCellValue("5年");
+			serow3.createCell(6).setCellValue("1年");
+			serow3.createCell(7).setCellValue("2年");
+			serow3.createCell(8).setCellValue("3年");
+			serow3.createCell(9).setCellValue("4年");
+			serow3.createCell(10).setCellValue("5年");
+			serow3.createCell(11).setCellValue("1年");
+			serow3.createCell(12).setCellValue("2年");
+			serow3.createCell(13).setCellValue("3年");
+			serow3.createCell(14).setCellValue("4年");
+			serow3.createCell(15).setCellValue("5年");
 			for(int i=0;i<appDatas.get(j).size();i++)
 			{
 				HSSFRow serow4=sheet.createRow((j*6)+(5+list.size()+appDataIndex)+(4+i));
 				serow4.createCell(0).setCellValue((appDatas.get(j).get(i).getStatisticDate()).toString());
 				if(appDatas.get(j).get(i).getSealTotal()==0)
 				{
-					sheet.addMergedRegion(new Region((j*6)+(5+list.size()+appDataIndex)+(4+i), (short)1, (j*6)+(5+list.size()+appDataIndex)+(4+i), (short)15));
+					sheet.addMergedRegion(new Region((j*6)+(5+list.size()+appDataIndex)+(4+i), (short)1, (j*6)+(5+list.size()+appDataIndex)+(4+i), (short)18));
 					serow4.createCell(1).setCellValue(appDatas.get(j).get(i).getApp().getAppName()+"应用当天没办理数据");
 				}else if(appDatas.get(j).get(i).getSealTotal()!=0)
 					{
-						serow4.createCell(1).setCellValue(appDatas.get(j).get(i).getAddFinance());
-						serow4.createCell(2).setCellValue(appDatas.get(j).get(i).getAddContract());
-						serow4.createCell(3).setCellValue(appDatas.get(j).get(i).getAddPersonal());
-						serow4.createCell(4).setCellValue(appDatas.get(j).get(i).getAddOfficial());
-						serow4.createCell(5).setCellValue(appDatas.get(j).get(i).getRenewFinance());
-						serow4.createCell(6).setCellValue(appDatas.get(j).get(i).getRenewContract());
-						serow4.createCell(7).setCellValue(appDatas.get(j).get(i).getRenewPersonal());
-						serow4.createCell(8).setCellValue(appDatas.get(j).get(i).getRenewOfficial());
-						serow4.createCell(9).setCellValue(appDatas.get(j).get(i).getChangeFinance());
-						serow4.createCell(10).setCellValue(appDatas.get(j).get(i).getChangeContract());
-						serow4.createCell(11).setCellValue(appDatas.get(j).get(i).getChangePersonal());
-						serow4.createCell(12).setCellValue(appDatas.get(j).get(i).getChangeOfficial());
-						serow4.createCell(13).setCellValue(appDatas.get(j).get(i).getSealTotal());
-						serow4.createCell(14).setCellValue(appDatas.get(j).get(i).getSealMoney());
-						serow4.createCell(15).setCellValue(appDatas.get(j).get(i).getReceiptTotal());
+						serow4.createCell(1).setCellValue(appDatas.get(j).get(i).getAddOne());
+						serow4.createCell(2).setCellValue(appDatas.get(j).get(i).getAddTwo());
+						serow4.createCell(3).setCellValue(appDatas.get(j).get(i).getAddThree());
+						serow4.createCell(4).setCellValue(appDatas.get(j).get(i).getAddFour());
+						serow4.createCell(5).setCellValue(appDatas.get(j).get(i).getAddFive());
+						serow4.createCell(6).setCellValue(appDatas.get(j).get(i).getRenewOne());
+						serow4.createCell(7).setCellValue(appDatas.get(j).get(i).getRenewTwo());
+						serow4.createCell(8).setCellValue(appDatas.get(j).get(i).getRenewThree());
+						serow4.createCell(9).setCellValue(appDatas.get(j).get(i).getRenewFour());
+						serow4.createCell(10).setCellValue(appDatas.get(j).get(i).getRenewFive());
+						serow4.createCell(11).setCellValue(appDatas.get(j).get(i).getChangeOne());
+						serow4.createCell(12).setCellValue(appDatas.get(j).get(i).getChangeTwo());
+						serow4.createCell(13).setCellValue(appDatas.get(j).get(i).getChangeThree());
+						serow4.createCell(14).setCellValue(appDatas.get(j).get(i).getChangeFour());
+						serow4.createCell(15).setCellValue(appDatas.get(j).get(i).getChangeFive());
+						serow4.createCell(16).setCellValue(appDatas.get(j).get(i).getSealTotal());
+						serow4.createCell(17).setCellValue(appDatas.get(j).get(i).getSealMoney());
+						serow4.createCell(18).setCellValue(appDatas.get(j).get(i).getReceiptTotal());
 					}
 				}
 			appDataIndex+=appDatas.get(j).size();
@@ -995,53 +1016,62 @@ public class StatisticSealDayDataController extends BaseController {
 					Integer sealTotal=0;
 					Double receiptTotal=0d;
 					Double sealMoney=0d;
-					Integer addFinance=0; 	//新增财务章
-					Integer addContract=0;	//新增合同章
-					Integer addPersonal=0;	//新增个人章
-					Integer addOfficial=0;	//新增公章
-					Integer renewFinance=0; 	//更新财务章
-					Integer renewContract=0;	//更新合同章
-					Integer renewPersonal=0;	//更新个人章
-					Integer renewOfficial=0;	//更新公章
-					Integer changeFinance=0; 	//变更财务章
-					Integer changeContract=0;	//变更合同章
-					Integer changePersonal=0;	//变更个人章
-					Integer changeOfficial=0;	//变更公章
+					Integer addOne=0; 	//新增财务章
+					Integer addTwo=0;	//新增合同章
+					Integer addThree=0;	//新增个人章
+					Integer addFour=0;	//新增公章
+					Integer addFive=0;
+					Integer renewOne=0; 	//更新财务章
+					Integer renewTwo=0;	//更新合同章
+					Integer renewThree=0;	//更新个人章
+					Integer renewFour=0;	//更新公章
+					Integer renewFive=0; 
+					Integer changeOne=0; 	//变更财务章
+					Integer changeTwo=0;	//变更合同章
+					Integer changeThree=0;	//变更个人章
+					Integer changeFour=0;	//变更公章
+					Integer changeFive=0;
 					List<StatisticSealAppData> listMonth = statisticSealAppDataService
 							.findByMonth(configApp, office, start, end);
 					for (StatisticSealAppData sad : listMonth) {
 						sealTotal+=sad.getSealTotal();
 						receiptTotal+=sad.getReceiptTotal();
 						sealMoney+=sad.getSealMoney();
-						addFinance+=sad.getAddFinance();
-						addContract+=sad.getAddContract();
-						addPersonal+=sad.getAddPersonal();
-						addOfficial+=sad.getAddOfficial();
-						renewFinance+=sad.getRenewFinance();
-						renewContract+=sad.getRenewContract();
-						renewPersonal+=sad.getRenewPersonal();
-						renewOfficial+=sad.getRenewOfficial();
-						changeFinance+=sad.getChangeFinance();
-						changeContract+=sad.getChangeContract();
-						changePersonal+=sad.getChangePersonal();
-						changeOfficial+=sad.getChangeOfficial();
+						addOne+=sad.getAddOne();
+						addTwo+=sad.getAddTwo();
+						addThree+=sad.getAddThree();
+						addFour+=sad.getAddFour();
+						addFive+=sad.getAddFive();
+						renewOne+=sad.getRenewOne();
+						renewTwo+=sad.getRenewTwo();
+						renewThree+=sad.getRenewThree();
+						renewFour+=sad.getRenewFour();
+						renewFive+=sad.getRenewFive();
+						changeOne+=sad.getChangeOne();
+						changeTwo+=sad.getChangeTwo();
+						changeThree+=sad.getChangeThree();
+						changeFour+=sad.getChangeFour();
+						changeFive+=sad.getChangeFive();
 					}
 					samd.setSealTotal(sealTotal);
 					samd.setReceiptTotal(receiptTotal);
 					samd.setSealMoney(sealMoney);
-					samd.setAddFinance(addFinance);
-					samd.setAddContract(addContract);
-					samd.setAddPersonal(addPersonal);
-					samd.setAddPersonal(addPersonal);
-					samd.setAddOfficial(addOfficial);
-					samd.setRenewFinance(renewFinance);
-					samd.setRenewContract(renewContract);
-					samd.setRenewPersonal(renewPersonal);
-					samd.setRenewOfficial(renewOfficial);
-					samd.setChangeFinance(changeFinance);
-					samd.setChangeContract(changeContract);
-					samd.setChangePersonal(changePersonal);
-					samd.setChangeOfficial(changeOfficial);
+					samd.setAddOne(addOne);
+					samd.setAddTwo(addTwo);
+					samd.setAddThree(addThree);
+					samd.setAddThree(addThree);
+					samd.setAddFour(addFour);
+					samd.setAddFive(addFive);
+					samd.setRenewOne(renewOne);
+					samd.setRenewTwo(renewTwo);
+					samd.setRenewThree(renewThree);
+					samd.setRenewFour(renewFour);
+					samd.setRenewFive(renewFive);
+					samd.setChangeOne(changeOne);
+					samd.setChangeTwo(changeTwo);
+					samd.setChangeThree(changeThree);
+					samd.setChangeFour(changeFour);
+					samd.setChangeFive(changeFive);
 					samd.setApp(configApp);
 					samd.setStatisticDate(start);
 					statisticSealAppMonth.add(samd);
@@ -1068,16 +1098,15 @@ public class StatisticSealDayDataController extends BaseController {
 		for(int j=0;j<appSumList.size();j++)
 		{
 			sheet.addMergedRegion(new Region((j*6)+(5+sumList.size()+appDataIndex),(short)0,(j*6)+(5+sumList.size()+appDataIndex)+3,(short)0));
-			sheet.addMergedRegion(new Region((j*6)+(5+sumList.size()+appDataIndex),(short)1,(j*6)+(5+sumList.size()+appDataIndex),(short)15));
-			sheet.addMergedRegion(new Region((j*6)+(5+sumList.size()+appDataIndex)+1, (short)1, (j*6)+(5+sumList.size()+appDataIndex)+1, (short)12));
-			sheet.addMergedRegion(new Region((j*6)+(5+sumList.size()+appDataIndex)+1, (short)12, (j*6)+(5+sumList.size()+appDataIndex)+1, (short)15));
-			sheet.addMergedRegion(new Region((j*6)+(5+sumList.size()+appDataIndex)+2, (short)1, (j*6)+(5+sumList.size()+appDataIndex)+2, (short)4));
-			sheet.addMergedRegion(new Region((j*6)+(5+sumList.size()+appDataIndex)+2, (short)5, (j*6)+(5+sumList.size()+appDataIndex)+2, (short)8));
-			sheet.addMergedRegion(new Region((j*6)+(5+sumList.size()+appDataIndex)+2, (short)9, (j*6)+(5+sumList.size()+appDataIndex)+2, (short)12));
-			sheet.addMergedRegion(new Region((j*6)+(5+sumList.size()+appDataIndex)+2, (short)13, (j*6)+(5+sumList.size()+appDataIndex)+2+1, (short)13));
-			sheet.addMergedRegion(new Region((j*6)+(5+sumList.size()+appDataIndex)+2, (short)14, (j*6)+(5+sumList.size()+appDataIndex)+2+1, (short)14));
-			sheet.addMergedRegion(new Region((j*6)+(5+sumList.size()+appDataIndex)+2, (short)15, (j*6)+(5+sumList.size()+appDataIndex)+2+1, (short)15));
-				
+			sheet.addMergedRegion(new Region((j*6)+(5+sumList.size()+appDataIndex),(short)1,(j*6)+(5+sumList.size()+appDataIndex),(short)18));
+			sheet.addMergedRegion(new Region((j*6)+(5+sumList.size()+appDataIndex)+1, (short)1, (j*6)+(5+sumList.size()+appDataIndex)+1, (short)15));
+			sheet.addMergedRegion(new Region((j*6)+(5+sumList.size()+appDataIndex)+1, (short)16, (j*6)+(5+sumList.size()+appDataIndex)+1, (short)18));
+			sheet.addMergedRegion(new Region((j*6)+(5+sumList.size()+appDataIndex)+2, (short)1, (j*6)+(5+sumList.size()+appDataIndex)+2, (short)5));
+			sheet.addMergedRegion(new Region((j*6)+(5+sumList.size()+appDataIndex)+2, (short)6, (j*6)+(5+sumList.size()+appDataIndex)+2, (short)10));
+			sheet.addMergedRegion(new Region((j*6)+(5+sumList.size()+appDataIndex)+2, (short)11, (j*6)+(5+sumList.size()+appDataIndex)+2, (short)15));
+			sheet.addMergedRegion(new Region((j*6)+(5+sumList.size()+appDataIndex)+2, (short)16, (j*6)+(5+sumList.size()+appDataIndex)+2+1, (short)16));
+			sheet.addMergedRegion(new Region((j*6)+(5+sumList.size()+appDataIndex)+2, (short)17, (j*6)+(5+sumList.size()+appDataIndex)+2+1, (short)17));
+			sheet.addMergedRegion(new Region((j*6)+(5+sumList.size()+appDataIndex)+2, (short)18, (j*6)+(5+sumList.size()+appDataIndex)+2+1, (short)18));
 			HSSFCellStyle stylese=wb.createCellStyle();
 			stylese.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
 			stylese.setAlignment(HSSFCellStyle.ALIGN_CENTER);
@@ -1087,33 +1116,39 @@ public class StatisticSealDayDataController extends BaseController {
 			fontse.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
 			stylese.setFont(fontse);
 			HSSFRow serow0=sheet.createRow((j*6)+(5+sumList.size()+appDataIndex));
+			HSSFCell cellse0=serow0.createCell(0);
+			cellse0.setCellStyle(stylese);
+			cellse0.setCellValue("日期");
+			serow0.setHeightInPoints((short)20);
 			HSSFCell cellse1=serow0.createCell(1);
 			cellse1.setCellStyle(style);
 			cellse1.setCellValue(appSumList.get(j).get(0).getApp().getAppName());
 			HSSFRow serow1=sheet.createRow((j*6)+(5+sumList.size()+appDataIndex)+1);
 			serow1.createCell(1).setCellValue("业务办理");
-			serow1.createCell(13).setCellValue("小计");
+			serow1.createCell(16).setCellValue("小计");
 			HSSFRow serow2=sheet.createRow((j*6)+(5+sumList.size()+appDataIndex)+2);
 			serow2.createCell(1).setCellValue("新增");
-			serow2.createCell(5).setCellValue("更新");
-			serow2.createCell(9).setCellValue("变更");
-			serow2.createCell(13).setCellValue("印章");
-			serow2.createCell(14).setCellValue("费用");
-			serow2.createCell(15).setCellValue("发票");
+			serow2.createCell(6).setCellValue("更新");
+			serow2.createCell(11).setCellValue("变更");
+			serow2.createCell(16).setCellValue("印章");
+			serow2.createCell(17).setCellValue("费用");
+			serow2.createCell(18).setCellValue("发票");
 			HSSFRow serow3=sheet.createRow((j*6)+(5+sumList.size()+appDataIndex)+3);
-			serow3.createCell(1).setCellValue("财务章");
-			serow3.createCell(2).setCellValue("合同章");
-			serow3.createCell(3).setCellValue("个人章");
-			serow3.createCell(4).setCellValue("公章");
-			serow3.createCell(5).setCellValue("财务章");
-			serow3.createCell(6).setCellValue("合同章");
-			serow3.createCell(7).setCellValue("个人章");
-			serow3.createCell(8).setCellValue("公章");
-			serow3.createCell(9).setCellValue("财务章");
-			serow3.createCell(10).setCellValue("合同章");
-			serow3.createCell(11).setCellValue("个人章");
-			serow3.createCell(12).setCellValue("公章");
-				
+			serow3.createCell(1).setCellValue("1年");
+			serow3.createCell(2).setCellValue("2年");
+			serow3.createCell(3).setCellValue("3年");
+			serow3.createCell(4).setCellValue("4年");
+			serow3.createCell(5).setCellValue("5年");
+			serow3.createCell(6).setCellValue("1年");
+			serow3.createCell(7).setCellValue("2年");
+			serow3.createCell(8).setCellValue("3年");
+			serow3.createCell(9).setCellValue("4年");
+			serow3.createCell(10).setCellValue("5年");
+			serow3.createCell(11).setCellValue("1年");
+			serow3.createCell(12).setCellValue("2年");
+			serow3.createCell(13).setCellValue("3年");
+			serow3.createCell(14).setCellValue("4年");
+			serow3.createCell(15).setCellValue("5年");
 			for(int i=0;i<appSumList.get(j).size();i++)
 			{
 				HSSFRow serow4=sheet.createRow((j*6)+(5+sumList.size()+appDataIndex)+(4+i));
@@ -1124,21 +1159,24 @@ public class StatisticSealDayDataController extends BaseController {
 					serow4.createCell(1).setCellValue(appSumList.get(j).get(i).getApp().getAppName()+"应用当月没办理数据");
 				}else if(appSumList.get(j).get(i).getSealTotal()!=0)
 				{
-					serow4.createCell(1).setCellValue(appSumList.get(j).get(i).getAddFinance());
-					serow4.createCell(2).setCellValue(appSumList.get(j).get(i).getAddContract());
-					serow4.createCell(3).setCellValue(appSumList.get(j).get(i).getAddPersonal());
-					serow4.createCell(4).setCellValue(appSumList.get(j).get(i).getAddOfficial());
-					serow4.createCell(5).setCellValue(appSumList.get(j).get(i).getRenewFinance());
-					serow4.createCell(6).setCellValue(appSumList.get(j).get(i).getRenewContract());
-					serow4.createCell(7).setCellValue(appSumList.get(j).get(i).getRenewPersonal());
-					serow4.createCell(8).setCellValue(appSumList.get(j).get(i).getRenewOfficial());
-					serow4.createCell(9).setCellValue(appSumList.get(j).get(i).getChangeFinance());
-					serow4.createCell(10).setCellValue(appSumList.get(j).get(i).getChangeContract());
-					serow4.createCell(11).setCellValue(appSumList.get(j).get(i).getChangePersonal());
-					serow4.createCell(12).setCellValue(appSumList.get(j).get(i).getChangeOfficial());
-					serow4.createCell(13).setCellValue(appSumList.get(j).get(i).getSealTotal());
-					serow4.createCell(14).setCellValue(appSumList.get(j).get(i).getSealMoney());
-					serow4.createCell(15).setCellValue(appSumList.get(j).get(i).getReceiptTotal());
+					serow4.createCell(1).setCellValue(appSumList.get(j).get(i).getAddOne());
+					serow4.createCell(2).setCellValue(appSumList.get(j).get(i).getAddTwo());
+					serow4.createCell(3).setCellValue(appSumList.get(j).get(i).getAddThree());
+					serow4.createCell(4).setCellValue(appSumList.get(j).get(i).getAddFour());
+					serow4.createCell(5).setCellValue(appSumList.get(j).get(i).getAddFive());
+					serow4.createCell(6).setCellValue(appSumList.get(j).get(i).getRenewOne());
+					serow4.createCell(7).setCellValue(appSumList.get(j).get(i).getRenewTwo());
+					serow4.createCell(8).setCellValue(appSumList.get(j).get(i).getRenewThree());
+					serow4.createCell(9).setCellValue(appSumList.get(j).get(i).getRenewFour());
+					serow4.createCell(10).setCellValue(appSumList.get(j).get(i).getRenewFive());
+					serow4.createCell(11).setCellValue(appSumList.get(j).get(i).getChangeOne());
+					serow4.createCell(12).setCellValue(appSumList.get(j).get(i).getChangeTwo());
+					serow4.createCell(13).setCellValue(appSumList.get(j).get(i).getChangeThree());
+					serow4.createCell(14).setCellValue(appSumList.get(j).get(i).getChangeFour());
+					serow4.createCell(15).setCellValue(appSumList.get(j).get(i).getChangeFive());
+					serow4.createCell(16).setCellValue(appSumList.get(j).get(i).getSealTotal());
+					serow4.createCell(17).setCellValue(appSumList.get(j).get(i).getSealMoney());
+					serow4.createCell(18).setCellValue(appSumList.get(j).get(i).getReceiptTotal());
 				}
 			}
 			appDataIndex+=appSumList.get(j).size();

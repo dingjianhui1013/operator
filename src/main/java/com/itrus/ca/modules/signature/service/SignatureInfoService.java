@@ -431,7 +431,7 @@ public class SignatureInfoService extends BaseService {
 			return null;
 		}
 	}
-	public int getInfocount(Date date, Long officeId,String signatureType,Long appId, String signatureInfoType) {
+	public int getInfocount(Date date, Long officeId,String year,Long appId, String signatureInfoType) {
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
 		calendar.add(Calendar.DATE, 1); 
@@ -442,7 +442,7 @@ public class SignatureInfoService extends BaseService {
 		dc.add(Restrictions.ge("manageDate", date));
 		dc.add(Restrictions.lt("manageDate", calendar.getTime()));
 		dc.add(Restrictions.eq("signatureInfoType",signatureInfoType));
-		dc.add(Restrictions.eq("signatureType", signatureType));
+		dc.add(Restrictions.eq("year", year));
 		List<String> list = new ArrayList<String>();
 		list.add(SignatureInfoStatus.STATUS_START);
 		list.add(SignatureInfoStatus.STATUS_UPDATE);

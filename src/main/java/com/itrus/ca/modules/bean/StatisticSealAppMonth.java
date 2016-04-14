@@ -1,6 +1,7 @@
 package com.itrus.ca.modules.bean;
 
 import java.util.Date;
+
 import com.itrus.ca.modules.profile.entity.ConfigApp;
 
 public class StatisticSealAppMonth {
@@ -11,30 +12,35 @@ public class StatisticSealAppMonth {
 	private Integer sealTotal;
 	private Double receiptTotal;
 	private Double sealMoney;
-	private Integer addFinance; 	//新增财务章
-	private Integer addContract;	//新增合同章
-	private Integer addPersonal;	//新增个人章
-	private Integer addOfficial;	//新增公章
-	private Integer renewFinance; 	//更新财务章
-	private Integer renewContract;	//更新合同章
-	private Integer renewPersonal;	//更新个人章
-	private Integer renewOfficial;	//更新公章
-	private Integer changeFinance; 	//变更财务章
-	private Integer changeContract;	//变更合同章
-	private Integer changePersonal;	//变更个人章
-	private Integer changeOfficial;	//变更公章
+	private Integer addOne; 	//新增财务章
+	private Integer addTwo;	//新增合同章
+	private Integer addThree;	//新增个人章
+	private Integer addFour;	//新增公章
+	private Integer addFive;	//新增公章
+	private Integer renewOne; 	//更新财务章
+	private Integer renewTwo;	//更新合同章
+	private Integer renewThree;	//更新个人章
+	private Integer renewFour;	//更新公章
+	private Integer renewFive;	//新增公章
+	private Integer changeOne; 	//变更财务章
+	private Integer changeTwo;	//变更合同章
+	private Integer changeThree;	//变更个人章
+	private Integer changeFour;	//变更公章
+	private Integer changeFive;	//变更公章
 	
 	public StatisticSealAppMonth() {
 		
 	}
 	
+	
+
 	public StatisticSealAppMonth(Long id, ConfigApp app, Date statisticDate,
 			Integer sealTotal, Double receiptTotal, Double sealMoney,
-			Integer addFinance, Integer addContract, Integer addPersonal,
-			Integer addOfficial, Integer renewFinance, Integer renewContract,
-			Integer renewPersonal, Integer renewOfficial,
-			Integer changeFinance, Integer changeContract,
-			Integer changePersonal, Integer changeOfficial) {
+			Integer addOne, Integer addTwo, Integer addThree, Integer addFour,
+			Integer addFive, Integer renewOne, Integer renewTwo,
+			Integer renewThree, Integer renewFour, Integer renewFive,
+			Integer changeOne, Integer changeTwo, Integer changeThree,
+			Integer changeFour, Integer changeFive) {
 		super();
 		this.id = id;
 		this.app = app;
@@ -42,19 +48,24 @@ public class StatisticSealAppMonth {
 		this.sealTotal = sealTotal;
 		this.receiptTotal = receiptTotal;
 		this.sealMoney = sealMoney;
-		this.addFinance = addFinance;
-		this.addContract = addContract;
-		this.addPersonal = addPersonal;
-		this.addOfficial = addOfficial;
-		this.renewFinance = renewFinance;
-		this.renewContract = renewContract;
-		this.renewPersonal = renewPersonal;
-		this.renewOfficial = renewOfficial;
-		this.changeFinance = changeFinance;
-		this.changeContract = changeContract;
-		this.changePersonal = changePersonal;
-		this.changeOfficial = changeOfficial;
+		this.addOne = addOne;
+		this.addTwo = addTwo;
+		this.addThree = addThree;
+		this.addFour = addFour;
+		this.addFive = addFive;
+		this.renewOne = renewOne;
+		this.renewTwo = renewTwo;
+		this.renewThree = renewThree;
+		this.renewFour = renewFour;
+		this.renewFive = renewFive;
+		this.changeOne = changeOne;
+		this.changeTwo = changeTwo;
+		this.changeThree = changeThree;
+		this.changeFour = changeFour;
+		this.changeFive = changeFive;
 	}
+
+
 
 	public Long getId() {
 		return id;
@@ -92,77 +103,114 @@ public class StatisticSealAppMonth {
 	public void setSealMoney(Double sealMoney) {
 		this.sealMoney = sealMoney;
 	}
-	public Integer getAddFinance() {
-		return addFinance;
+	public Integer getAddOne() {
+		return addOne;
 	}
-	public void setAddFinance(Integer addFinance) {
-		this.addFinance = addFinance;
+	public void setAddOne(Integer addOne) {
+		this.addOne = addOne;
 	}
-	public Integer getAddContract() {
-		return addContract;
+	public Integer getAddTwo() {
+		return addTwo;
 	}
-	public void setAddContract(Integer addContract) {
-		this.addContract = addContract;
+	public void setAddTwo(Integer addTwo) {
+		this.addTwo = addTwo;
 	}
-	public Integer getAddPersonal() {
-		return addPersonal;
+	public Integer getAddThree() {
+		return addThree;
 	}
-	public void setAddPersonal(Integer addPersonal) {
-		this.addPersonal = addPersonal;
+	public void setAddThree(Integer addThree) {
+		this.addThree = addThree;
 	}
-	public Integer getAddOfficial() {
-		return addOfficial;
+	public Integer getAddFour() {
+		return addFour;
 	}
-	public void setAddOfficial(Integer addOfficial) {
-		this.addOfficial = addOfficial;
+	public void setAddFour(Integer addFour) {
+		this.addFour = addFour;
 	}
-	public Integer getRenewFinance() {
-		return renewFinance;
+	public Integer getRenewOne() {
+		return renewOne;
 	}
-	public void setRenewFinance(Integer renewFinance) {
-		this.renewFinance = renewFinance;
+	public void setRenewOne(Integer renewOne) {
+		this.renewOne = renewOne;
 	}
-	public Integer getRenewContract() {
-		return renewContract;
+	public Integer getRenewTwo() {
+		return renewTwo;
 	}
-	public void setRenewContract(Integer renewContract) {
-		this.renewContract = renewContract;
+	public void setRenewTwo(Integer renewTwo) {
+		this.renewTwo = renewTwo;
 	}
-	public Integer getRenewPersonal() {
-		return renewPersonal;
+	public Integer getRenewThree() {
+		return renewThree;
 	}
-	public void setRenewPersonal(Integer renewPersonal) {
-		this.renewPersonal = renewPersonal;
+	public void setRenewThree(Integer renewThree) {
+		this.renewThree = renewThree;
 	}
-	public Integer getRenewOfficial() {
-		return renewOfficial;
+	public Integer getRenewFour() {
+		return renewFour;
 	}
-	public void setRenewOfficial(Integer renewOfficial) {
-		this.renewOfficial = renewOfficial;
+	public void setRenewFour(Integer renewFour) {
+		this.renewFour = renewFour;
 	}
-	public Integer getChangeFinance() {
-		return changeFinance;
+	public Integer getChangeOne() {
+		return changeOne;
 	}
-	public void setChangeFinance(Integer changeFinance) {
-		this.changeFinance = changeFinance;
+	public void setChangeOne(Integer changeOne) {
+		this.changeOne = changeOne;
 	}
-	public Integer getChangeContract() {
-		return changeContract;
+	public Integer getChangeTwo() {
+		return changeTwo;
 	}
-	public void setChangeContract(Integer changeContract) {
-		this.changeContract = changeContract;
+	public void setChangeTwo(Integer changeTwo) {
+		this.changeTwo = changeTwo;
 	}
-	public Integer getChangePersonal() {
-		return changePersonal;
+	public Integer getChangeThree() {
+		return changeThree;
 	}
-	public void setChangePersonal(Integer changePersonal) {
-		this.changePersonal = changePersonal;
+	public void setChangeThree(Integer changeThree) {
+		this.changeThree = changeThree;
 	}
-	public Integer getChangeOfficial() {
-		return changeOfficial;
+	public Integer getChangeFour() {
+		return changeFour;
 	}
-	public void setChangeOfficial(Integer changeOfficial) {
-		this.changeOfficial = changeOfficial;
+	public void setChangeFour(Integer changeFour) {
+		this.changeFour = changeFour;
 	}
+
+
+
+	public Integer getAddFive() {
+		return addFive;
+	}
+
+
+
+	public void setAddFive(Integer addFive) {
+		this.addFive = addFive;
+	}
+
+
+
+	public Integer getRenewFive() {
+		return renewFive;
+	}
+
+
+
+	public void setRenewFive(Integer renewFive) {
+		this.renewFive = renewFive;
+	}
+
+
+
+	public Integer getChangeFive() {
+		return changeFive;
+	}
+
+
+
+	public void setChangeFive(Integer changeFive) {
+		this.changeFive = changeFive;
+	}
+	
 	
 }

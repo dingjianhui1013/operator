@@ -50,18 +50,22 @@ public class StatisticSealAppData  implements java.io.Serializable   {
 	private Integer sealTotal;
 	private Double receiptTotal;
 	private Double sealMoney;
-	private Integer addFinance; 	//新增财务章
-	private Integer addContract;	//新增合同章
-	private Integer addPersonal;	//新增个人章
-	private Integer addOfficial;	//新增公章
-	private Integer renewFinance; 	//更新财务章
-	private Integer renewContract;	//更新合同章
-	private Integer renewPersonal;	//更新个人章
-	private Integer renewOfficial;	//更新公章
-	private Integer changeFinance; 	//变更财务章
-	private Integer changeContract;	//变更合同章
-	private Integer changePersonal;	//变更个人章
-	private Integer changeOfficial;	//变更公章
+	private Integer addOne; 	//新增财务章
+	private Integer addTwo;	//新增合同章
+	private Integer addThree;	//新增个人章
+	private Integer addFour;	//新增个人章
+	private Integer addFive;	//新增公章
+	
+	private Integer renewOne; 	//更新财务章
+	private Integer renewTwo;	//更新合同章
+	private Integer renewThree;	//更新个人章
+	private Integer renewFour;	//更新公章
+	private Integer renewFive;	//更新公章
+	private Integer changeOne; 	//变更财务章
+	private Integer changeTwo;	//变更合同章
+	private Integer changeThree;	//变更个人章
+	private Integer changeFour;	//变更公章
+	private Integer changeFive;	//变更公章
 
 	public StatisticSealAppData() {
 		super();
@@ -69,12 +73,11 @@ public class StatisticSealAppData  implements java.io.Serializable   {
 	
 	public StatisticSealAppData(Long id, Office office, ConfigApp app,
 			Date statisticDate, Integer sealTotal, Double receiptTotal,
-			Double sealMoney, Integer addFinance, Integer addContract,
-			Integer addPersonal, Integer addOfficial, Integer renewFinance,
-			Integer renewContract, Integer renewPersonal,
-			Integer renewOfficial, Integer changeFinance,
-			Integer changeContract, Integer changePersonal,
-			Integer changeOfficial) {
+			Double sealMoney, Integer addOne, Integer addTwo, Integer addThree,
+			Integer addFour, Integer addFive, Integer renewOne,
+			Integer renewTwo, Integer renewThree, Integer renewFour,
+			Integer renewFive, Integer changeOne, Integer changeTwo,
+			Integer changeThree, Integer changeFour, Integer changeFive) {
 		super();
 		this.id = id;
 		this.office = office;
@@ -83,19 +86,24 @@ public class StatisticSealAppData  implements java.io.Serializable   {
 		this.sealTotal = sealTotal;
 		this.receiptTotal = receiptTotal;
 		this.sealMoney = sealMoney;
-		this.addFinance = addFinance;
-		this.addContract = addContract;
-		this.addPersonal = addPersonal;
-		this.addOfficial = addOfficial;
-		this.renewFinance = renewFinance;
-		this.renewContract = renewContract;
-		this.renewPersonal = renewPersonal;
-		this.renewOfficial = renewOfficial;
-		this.changeFinance = changeFinance;
-		this.changeContract = changeContract;
-		this.changePersonal = changePersonal;
-		this.changeOfficial = changeOfficial;
+		this.addOne = addOne;
+		this.addTwo = addTwo;
+		this.addThree = addThree;
+		this.addFour = addFour;
+		this.addFive = addFive;
+		this.renewOne = renewOne;
+		this.renewTwo = renewTwo;
+		this.renewThree = renewThree;
+		this.renewFour = renewFour;
+		this.renewFive = renewFive;
+		this.changeOne = changeOne;
+		this.changeTwo = changeTwo;
+		this.changeThree = changeThree;
+		this.changeFour = changeFour;
+		this.changeFive = changeFive;
 	}
+
+
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -159,102 +167,129 @@ public class StatisticSealAppData  implements java.io.Serializable   {
 	public void setSealMoney(Double sealMoney) {
 		this.sealMoney = sealMoney;
 	}
-	@Column(name="add_finance")
-	public Integer getAddFinance() {
-		return addFinance;
+	@Column(name="add_one")
+	public Integer getAddOne() {
+		return addOne;
 	}
 
-	public void setAddFinance(Integer addFinance) {
-		this.addFinance = addFinance;
+	public void setAddOne(Integer addOne) {
+		this.addOne = addOne;
 	}
-	@Column(name="add_contract")
-	public Integer getAddContract() {
-		return addContract;
-	}
-
-	public void setAddContract(Integer addContract) {
-		this.addContract = addContract;
-	}
-	@Column(name="add_personal")
-	public Integer getAddPersonal() {
-		return addPersonal;
+	@Column(name="add_two")
+	public Integer getAddTwo() {
+		return addTwo;
 	}
 
-	public void setAddPersonal(Integer addPersonal) {
-		this.addPersonal = addPersonal;
+	public void setAddTwo(Integer addTwo) {
+		this.addTwo = addTwo;
 	}
-	@Column(name="add_official")
-	public Integer getAddOfficial() {
-		return addOfficial;
-	}
-
-	public void setAddOfficial(Integer addOfficial) {
-		this.addOfficial = addOfficial;
-	}
-	@Column(name="renew_finance")
-	public Integer getRenewFinance() {
-		return renewFinance;
+	@Column(name="add_three")
+	public Integer getAddThree() {
+		return addThree;
 	}
 
-	public void setRenewFinance(Integer renewFinance) {
-		this.renewFinance = renewFinance;
-	}
-	@Column(name="renew_contract")
-	public Integer getRenewContract() {
-		return renewContract;
+	public void setAddThree(Integer addThree) {
+		this.addThree = addThree;
 	}
 
-	public void setRenewContract(Integer renewContract) {
-		this.renewContract = renewContract;
-	}
-	@Column(name="renew_personal")
-	public Integer getRenewPersonal() {
-		return renewPersonal;
+	@Column(name="add_four")
+	public Integer getAddFour() {
+		return addFour;
 	}
 
-	public void setRenewPersonal(Integer renewPersonal) {
-		this.renewPersonal = renewPersonal;
-	}
-	@Column(name="renew_official")
-	public Integer getRenewOfficial() {
-		return renewOfficial;
+	public void setAddFour(Integer addFour) {
+		this.addFour = addFour;
 	}
 
-	public void setRenewOfficial(Integer renewOfficial) {
-		this.renewOfficial = renewOfficial;
-	}
-	@Column(name="change_finance")
-	public Integer getChangeFinance() {
-		return changeFinance;
+	@Column(name="add_five")
+	public Integer getAddFive() {
+		return addFive;
 	}
 
-	public void setChangeFinance(Integer changeFinance) {
-		this.changeFinance = changeFinance;
+	public void setAddFive(Integer addFive) {
+		this.addFive = addFive;
 	}
-	@Column(name="change_contract")
-	public Integer getChangeContract() {
-		return changeContract;
-	}
-
-	public void setChangeContract(Integer changeContract) {
-		this.changeContract = changeContract;
-	}
-	@Column(name="change_personal")
-	public Integer getChangePersonal() {
-		return changePersonal;
+	@Column(name="renew_one")
+	public Integer getRenewOne() {
+		return renewOne;
 	}
 
-	public void setChangePersonal(Integer changePersonal) {
-		this.changePersonal = changePersonal;
+	public void setRenewOne(Integer renewOne) {
+		this.renewOne = renewOne;
 	}
-	@Column(name="change_official")
-	public Integer getChangeOfficial() {
-		return changeOfficial;
+	@Column(name="renew_two")
+	public Integer getRenewTwo() {
+		return renewTwo;
 	}
 
-	public void setChangeOfficial(Integer changeOfficial) {
-		this.changeOfficial = changeOfficial;
+	public void setRenewTwo(Integer renewTwo) {
+		this.renewTwo = renewTwo;
 	}
+	@Column(name="renew_three")
+	public Integer getRenewThree() {
+		return renewThree;
+	}
+
+	public void setRenewThree(Integer renewThree) {
+		this.renewThree = renewThree;
+	}
+	@Column(name="renew_four")
+	public Integer getRenewFour() {
+		return renewFour;
+	}
+
+	public void setRenewFour(Integer renewFour) {
+		this.renewFour = renewFour;
+	}
+	@Column(name="renew_five")
+	public Integer getRenewFive() {
+		return renewFive;
+	}
+
+	public void setRenewFive(Integer renewFive) {
+		this.renewFive = renewFive;
+	}
+	@Column(name="change_one")
+	public Integer getChangeOne() {
+		return changeOne;
+	}
+
+	public void setChangeOne(Integer changeOne) {
+		this.changeOne = changeOne;
+	}
+	@Column(name="change_two")
+	public Integer getChangeTwo() {
+		return changeTwo;
+	}
+
+	public void setChangeTwo(Integer changeTwo) {
+		this.changeTwo = changeTwo;
+	}
+	@Column(name="change_three")
+	public Integer getChangeThree() {
+		return changeThree;
+	}
+
+	public void setChangeThree(Integer changeThree) {
+		this.changeThree = changeThree;
+	}
+	@Column(name="change_four")
+	public Integer getChangeFour() {
+		return changeFour;
+	}
+
+	public void setChangeFour(Integer changeFour) {
+		this.changeFour = changeFour;
+	}
+	@Column(name="change_five")
+	public Integer getChangeFive() {
+		return changeFive;
+	}
+
+	public void setChangeFive(Integer changeFive) {
+		this.changeFive = changeFive;
+	}
+	
 
 	
 }
