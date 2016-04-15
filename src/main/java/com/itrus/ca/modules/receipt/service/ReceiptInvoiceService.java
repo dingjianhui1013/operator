@@ -369,4 +369,16 @@ public class ReceiptInvoiceService extends BaseService {
 		dc.addOrder(Order.desc("id"));
 		return receiptInvoiceDao.find(dc);
 	}
+	public List<ReceiptInvoice> findBySealDate(Date countDate,Date endDate, Long officeId) {
+		DetachedCriteria dc = receiptInvoiceDao.createDetachedCriteria();
+		dc.add(Restrictions.ge("createDate", countDate));
+		dc.add(Restrictions.lt("createDate", endDate));
+		dc.createAlias("receiptDepotInfo", "receiptDepotInfo");
+		dc.createAlias("receiptDepotInfo.office", "office");
+		dc.add(Restrictions.eq("receiptType",3 ));
+		dc.add(Restrictions.eq("office.id", officeId));
+		dc.add(Restrictions.eq(ReceiptInvoice.DEL_FLAG, ReceiptInvoice.DEL_FLAG_NORMAL));
+		dc.addOrder(Order.desc("id"));
+		return receiptInvoiceDao.find(dc);
+	}
 }

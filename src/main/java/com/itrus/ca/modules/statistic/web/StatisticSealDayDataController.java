@@ -557,7 +557,7 @@ public class StatisticSealDayDataController extends BaseController {
 			}
 		}
 		List<ReceiptInvoice> receiptInvoices = receiptInvoiceService
-				.findByDate(countDate, nextDay, officeId);
+				.findBySealDate(countDate, nextDay, officeId);
 		Double receiptOut = 0d;
 		for (ReceiptInvoice receiptInvoice : receiptInvoices) {
 			receiptOut += receiptInvoice.getReceiptMoney();
