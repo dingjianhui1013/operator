@@ -306,6 +306,8 @@ function checkSave(){
 	$("input[name='posMoney']").val($("#posMoney").val());
 	
 	$("#inputForm").submit();
+	
+	$("#btnSubmit").attr("disabled","disabled");
 }
 
 	
@@ -545,7 +547,8 @@ function checkSave(){
 									<input type="radio" name="userReceipt" onclick="setReceiptMoneyNull()"  value="false" id="sff1">否</td>
 								<td>发票金额：</td>
 								<td><input type="text" name="receiptAmount" id = "receiptAmount" 
-									value="0">元</td>
+									<c:if test="${not empty moneyChange}">value="${moneyChange}"</c:if>
+									<c:if test="${empty moneyChange}">value="0"</c:if>>元</td>
 							</tr>
 						</tbody>
 					</table>

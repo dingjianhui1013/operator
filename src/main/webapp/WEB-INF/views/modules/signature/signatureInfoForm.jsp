@@ -324,6 +324,8 @@
 		$("input[name='posMoney']").val($("#posMoney").val());
 		
 		$("#inputForm").submit();
+		
+		$("#btnSubmit").attr("disabled","disabled");
 	}
 	
 	
@@ -610,7 +612,7 @@
 								<input id="btnCancel" class="btn" type="button" value="返 回"
 								onclick="history.go(-1)" /> 
 								<input id="btnSubmit"
-								class="btn  btn-primary" type="button" value="保存业务信息"
+								class="btn  btn-primary" type="button" value="保存业务信息" 
 								onclick="checkSave()" /> 
 								
 								
