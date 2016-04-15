@@ -83,6 +83,7 @@
 				<c:if test="${workDealInfo.workCompany.companyType==4}">社会团体</c:if>
 				<c:if test="${workDealInfo.workCompany.companyType==5}">其他</c:if>
 				</td>
+
 				<td>${proType[workDealInfo.configProduct.productName]}</td>
 				<td>${wdiType[workDealInfo.dealInfoType]}&nbsp;&nbsp;${wdiType[workDealInfo.dealInfoType1]}&nbsp;&nbsp;${wdiType[workDealInfo.dealInfoType2]}&nbsp;&nbsp;${wdiType[workDealInfo.dealInfoType3]}</td>
 				<td>${wdiStatus[workDealInfo.dealInfoStatus]}</td>
