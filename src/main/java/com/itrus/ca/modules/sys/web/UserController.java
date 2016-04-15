@@ -116,7 +116,12 @@ public class UserController extends BaseController {
 
 		// 如果新密码为空，则不更换密码
 		if (StringUtils.isNotBlank(newPassword)) {
-			user.setPassword(SystemService.entryptPassword(newPassword));
+			if("1".equals(user.getLoginType())){
+				user.setSccaNumber(newPassword);
+				user.setPassword(SystemService.entryptPassword("SCCALOGIN"+newPassword));
+			}else{
+				user.setPassword(SystemService.entryptPassword(newPassword));
+			}
 		}
 		if (!beanValidator(model, user)) {
 			return form(user, model);
