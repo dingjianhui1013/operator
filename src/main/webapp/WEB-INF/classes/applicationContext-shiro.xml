@@ -32,6 +32,7 @@
 				/static/** = anon
 				/enroll/** = anon
 				/servlet/** = anon
+				/sys/dzqzpt/** = anon
 				/unlock/** = anon
 				/cert/** = anon
 				/key/** = anon
