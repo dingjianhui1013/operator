@@ -3,21 +3,16 @@ package com.itrus.ca.modules.service;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.Enumeration;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
 import java.util.Map.Entry;
 
-import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -27,7 +22,6 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
 import org.apache.log4j.Logger;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -37,9 +31,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
-import org.springframework.web.multipart.MultipartRequest;
 
 import com.itrus.ca.modules.profile.entity.ConfigApp;
 import com.itrus.ca.modules.profile.service.ConfigAppService;
@@ -78,6 +69,40 @@ public class IxinController {
 	ConfigAppService configAppService;
 	Logger log = Logger.getLogger(IxinController.class);
 
+	@ResponseBody
+	@RequestMapping(value = "/getCrlContextJson")
+	public String getCrlContext(HttpServletRequest request,
+			HttpServletResponse response) throws JSONException{
+		String url = ixinURL + "/crlcontext/listjson?"+new Date().getTime()+"=&page=1&size=100";
+		HttpClient client = new DefaultHttpClient();
+		HttpResponse response2 = null;
+		try {
+			response2 = new ItrustProxyUtil().sendGet(client, url,
+					"", request,key);
+			HttpEntity entity2 = response2.getEntity();
+			BufferedReader reader2 = new BufferedReader(
+					new InputStreamReader(entity2.getContent(), "UTF-8"));
+			String buffer2;
+			StringBuffer content = new StringBuffer();
+			while ((buffer2 = reader2.readLine()) != null) {
+				content.append(buffer2 + "\n");
+			}
+			return content.toString();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} 
+		return null;
+//		JSONObject json = new JSONObject();
+//		JSONArray array = new JSONArray();
+//		for(int i= 0;i<4;i++){
+//			JSONObject j = new JSONObject();
+//			j.put("certSubject",""+i);
+//			array.put(j);
+//		}
+//		json.put("crlList", array);
+//		return json.toString();
+	}
+	
 	/**
 	 * 
 	 * @throws JSONException
