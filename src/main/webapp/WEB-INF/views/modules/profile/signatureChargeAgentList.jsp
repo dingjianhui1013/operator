@@ -77,7 +77,10 @@
 			
 				<td>${configApp.appName}</td>
 				<td>
-			
+					<c:forEach items="${configApp.bounds }" var="bound">
+						${bound.agent.tempName}<br>
+					
+					</c:forEach>
 				</td>
 				<shiro:hasPermission name="signature:signatureChargeAgent:edit"><td>
     				
