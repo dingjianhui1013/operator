@@ -25,7 +25,7 @@ import com.itrus.ca.modules.sys.entity.User;
  */
 public interface UserDao extends UserDaoCustom, CrudRepository<User, Long> {
 	
-	@Query("from User where loginName = ?1 and delFlag = '" + User.DEL_FLAG_NORMAL + "'")
+	@Query("from User where loginName = ?1 or sccaNumber =?1 and delFlag = '" + User.DEL_FLAG_NORMAL + "'")
 	public User findByLoginName(String loginName);
 
 	@Modifying
