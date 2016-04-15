@@ -79,7 +79,10 @@
 					</td>
 				<td><c:if test="${workDealInfo.workCompany.companyType==1}">企业</c:if>
 				<c:if test="${workDealInfo.workCompany.companyType==2}">事业单位</c:if>
-				<c:if test="${workDealInfo.workCompany.companyType==3}">政府机关</c:if></td>
+				<c:if test="${workDealInfo.workCompany.companyType==3}">政府机关</c:if>
+				<c:if test="${workDealInfo.workCompany.companyType==4}">社会团体</c:if>
+				<c:if test="${workDealInfo.workCompany.companyType==5}">其他</c:if>
+				</td>
 				<td>${proType[workDealInfo.configProduct.productName]}</td>
 				<td>${wdiType[workDealInfo.dealInfoType]}&nbsp;&nbsp;${wdiType[workDealInfo.dealInfoType1]}&nbsp;&nbsp;${wdiType[workDealInfo.dealInfoType2]}&nbsp;&nbsp;${wdiType[workDealInfo.dealInfoType3]}</td>
 				<td>${wdiStatus[workDealInfo.dealInfoStatus]}</td>

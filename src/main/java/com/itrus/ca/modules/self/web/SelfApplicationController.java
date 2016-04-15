@@ -188,7 +188,7 @@ public class SelfApplicationController extends BaseController {
 
 	@RequiresPermissions("self:selfApplication:view")
 	@RequestMapping(value = "agreeApply")
-	public String agreeApply(SelfApplication selfApplication, Model model,Integer agentId, Long agentDetailId) {
+	public String agreeApply(SelfApplication selfApplication,Integer agentId, Long agentDetailId) {
 		ConfigApp configApp = configAppService.findByAppname(selfApplication
 				.getAppName());
 		ConfigChargeAgentBoundConfigProduct bound = configChargeAgentBoundConfigProductService.get(agentDetailId);
@@ -315,7 +315,7 @@ public class SelfApplicationController extends BaseController {
 		dealInfoBound.setAgent(agentBound);
 		configAgentBoundDealInfoService.save(dealInfoBound);
 		logUtil.saveSysLog("计费策略模版", "计费策略模版：" + agent.getId() + "--业务编号："+ workDealInfo.getId() + "--关联成功!", "");
-		// 录入人日志保存
+	    	// 录入人日志保存
 		WorkLog workLog1 = new WorkLog();
 		workLog1.setRecordContent("录入完毕");
 		workLog1.setWorkDealInfo(workDealInfo);
@@ -338,9 +338,6 @@ public class SelfApplicationController extends BaseController {
 		selfApplication.setStatus(SelfApplicationStatus.downApply);
 		selfApplication.setMoney(configChargeAgentDetail.getMoney());
 		selfApplicationService.save(selfApplication);
-	/*
-		
-		model.addAttribute("selfApplication", selfApplication);*/
 		return "redirect:" + Global.getAdminPath()+ "/self/selfApplication/?repage";
 	}
 
