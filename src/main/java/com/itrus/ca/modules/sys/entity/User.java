@@ -68,6 +68,8 @@ public class User extends DataEntity {
 	private String userType;// 用户类型
 	private String loginIp;	// 最后登陆IP
 	private Date loginDate;	// 最后登陆日期
+	private String loginType;	//登录类型
+	private String sccaNumber; //证书编号
 	
 	private List<Role> roleList = Lists.newArrayList(); // 拥有角色列表
 
@@ -154,6 +156,14 @@ public class User extends DataEntity {
 
 	public void setNo(String no) {
 		this.no = no;
+	}
+
+	public String getLoginType() {
+		return loginType;
+	}
+
+	public void setLoginType(String loginType) {
+		this.loginType = loginType;
 	}
 
 	public void setName(String name) {
@@ -246,6 +256,8 @@ public class User extends DataEntity {
 	public void setRoleList(List<Role> roleList) {
 		this.roleList = roleList;
 	}
+	
+	
 
 	@Transient
 	@JsonIgnore
@@ -283,6 +295,14 @@ public class User extends DataEntity {
 	@Transient
 	public static boolean isAdmin(Long id){
 		return id != null && id.equals(1L);
+	}
+
+	public String getSccaNumber() {
+		return sccaNumber;
+	}
+
+	public void setSccaNumber(String sccaNumber) {
+		this.sccaNumber = sccaNumber;
 	}
 	
 //	@Override
