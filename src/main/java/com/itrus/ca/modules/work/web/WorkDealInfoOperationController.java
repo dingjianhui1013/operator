@@ -1286,8 +1286,8 @@ public class WorkDealInfoOperationController extends BaseController {
 			
 			Model model, String pName, String pEmail, String pIDCard,String contactSex,String areaRemark,
 		 Long newInfoId, RedirectAttributes redirectAttributes,
-		 @RequestParam("companyImage") MultipartFile companyImage ,
-		 @RequestParam("transactorImage") MultipartFile transactorImage,
+		 @RequestParam(value="companyImage", required=false) MultipartFile companyImage ,
+		 @RequestParam(value="transactorImage", required=false) MultipartFile transactorImage,
 		 HttpServletRequest request
 			) {
 		//是否返回造成业务重复，如重复则删除
