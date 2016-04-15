@@ -318,6 +318,7 @@
 		}
 		
 		
+		
 		$("input[name='methodMoney']").val($("#methodMoney").val());
 		$("input[name='methodPos']").val($("#methodPos").val());
 		$("input[name='cashMoney']").val($("#cashMoney").val());
@@ -536,18 +537,18 @@
 							<tr>
 								<td style="width:30%">
 								
-									<input type="checkbox" value="0" id="methodMoney" disabled="disabled" onclick="changeInputStatus(this)" name="methodMoney"
+									<input type="checkbox" value="0" id="methodMoney" disabled="disabled" onclick="changeInputStatus(this)" 
 									<c:if test="${payInfo.methodMoney==true }">checked="checked"</c:if>>
 									现金
-									<input type="text" disabled="disabled" id="cashMoney" name="cashMoney" 
+									<input type="text" disabled="disabled" id="cashMoney"  
 									<c:if test="${payInfo.cashMoney>0}">value="${payInfo.cashMoney}"</c:if> 
 									<c:if test="${payInfo.cashMoney==0}">value="0"</c:if>>
 								</td>
 								<td style="width:30%">
-									<input type="checkbox" value="0" id="methodPos" disabled="disabled" onclick="changeInputStatus(this)" name="methodPos"
+									<input type="checkbox" value="0" id="methodPos" disabled="disabled" onclick="changeInputStatus(this)" 
 									<c:if test="${payInfo.methodPos==true }">checked="checked"</c:if>>
 									pos
-									<input type="text" disabled="disabled" id="posMoney" name="posMoney" 
+									<input type="text" disabled="disabled" id="posMoney" 
 									<c:if test="${payInfo.posMoney>0}">value="${payInfo.posMoney}"</c:if> 
 									<c:if test="${payInfo.posMoney==0}">value="0"</c:if>>
 								</td>

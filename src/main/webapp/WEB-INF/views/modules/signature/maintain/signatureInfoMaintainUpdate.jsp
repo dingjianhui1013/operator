@@ -199,10 +199,11 @@ function setReceiptMoneyNull(){
 function changeInputStatus(obj) {
 	var nextInput = $(obj).next("input")[0];
 	if ($(obj).prop("checked")) {
+		$(obj).val("1");
 		$(nextInput).removeAttr("disabled","disabled");
 		$(nextInput).val("");
 	} else {
-	
+		$(obj).val("0");
 		$(nextInput).attr("disabled", "disabled");
 		$(nextInput).val("0");
 	}
@@ -298,6 +299,7 @@ function checkSave(){
 		 top.$.jBox.tip("请确定缴费信息！");
   	 	 return false;
 	}
+	
 	
 	
 	$("input[name='methodMoney']").val($("#methodMoney").val());
@@ -489,10 +491,9 @@ function checkSave(){
 							
 							<tr>
 								<td style="width:30%">
-									<input type="checkbox" value="0" id="methodMoney"
+									<input type="checkbox" value="0" id="methodMoney" onclick="changeInputStatus(this)"
 									<c:if test="${signaturePayInfo.methodMoney==true}">checked="checked"</c:if>
-									<c:if test="${signatureInfo.signatureAgent.chargeMethodMoney!=true }">disabled="disabled"</c:if>
-									 onclick="changeInputStatus(this)" >
+									<c:if test="${signatureInfo.signatureAgent.chargeMethodMoney!=true }">disabled="disabled"</c:if>>
 									现金
 									
 									<input type="text"  id="cashMoney"  disabled="disabled" 
@@ -501,7 +502,7 @@ function checkSave(){
 									<c:if test="${signaturePayInfo.methodMoney==false}">value="0"</c:if>>
 								</td>
 								<td style="width:30%">
-									<input type="checkbox" value="0" id="methodPos"
+									<input type="checkbox" value="0"  id="methodPos"
 									<c:if test="${signatureInfo.signatureAgent.chargeMethodPos!=true }">disabled="disabled"</c:if>
 									<c:if test="${signaturePayInfo.methodPos==true}">checked="checked"</c:if>
 									onclick="changeInputStatus(this)" >
