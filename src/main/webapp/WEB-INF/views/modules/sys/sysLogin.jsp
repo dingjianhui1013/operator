@@ -8,21 +8,17 @@
 	<meta name="decorator" content="default"/>
 	<style type="text/css">
       html,body,table{background-color:#f5f5f5;width:100%;height:500px;text-align:center;}.form-signin-heading{font-size:36px;margin-bottom:20px;color:#0663a2;}
-      .form-signin{position:relative;text-align:left;width:320px;padding:30px;margin:0 auto 20px;background-color:#fff;border:1px solid #e5e5e5;
+      .form-signin{position:relative;text-align:left;width:300px;padding:45px 29px 29px;margin:0 auto 20px;background-color:#fff;border:1px solid #e5e5e5;
         	-webkit-border-radius:5px;-moz-border-radius:5px;border-radius:5px;-webkit-box-shadow:0 1px 2px rgba(0,0,0,.05);-moz-box-shadow:0 1px 2px rgba(0,0,0,.05);box-shadow:0 1px 2px rgba(0,0,0,.05);}
       .form-signin .checkbox{margin-bottom:10px;color:#0663a2;} .form-signin .input-label{font-size:16px;line-height:23px;color:#999;}
-      .form-signin .input-block-level{font-size:16px;height:auto;margin-bottom:10px;padding:7px;*width:283px;*padding-bottom:0;_padding:7px 7px 9px 7px;}
+      .form-signin .input-block-level{font-size:16px;height:auto;margin-bottom:15px;padding:7px;*width:283px;*padding-bottom:0;_padding:7px 7px 9px 7px;}
       .form-signin .btn.btn-large{font-size:16px;} .form-signin #themeSwitch{position:absolute;right:15px;bottom:10px;}
       .form-signin div.validateCode {padding-bottom:15px;} .mid{vertical-align:middle;}
       .header{height:60px;padding-top:30px;} .alert{position:relative;width:300px;margin:0 auto;*padding-bottom:0px;}
       label.error{background:none;padding:2px;font-weight:normal;color:inherit;margin:0;}
       .form-group-sign{ margin-bottom:20px;}
       .form-group-sign .btn.btn-large{width:100%;}
-      .btnBox{margin-bottom:15px;overflow:hidden;}
-      .selCertificate{overflow:hidden;margin-bottom:10px; margin-top:15px;border-top:1px solid #ddd; padding-top:15px;}
-      .fl{float:left:}
-      .wLeft{width:90px;}
-      .wRight{width:220px;}
+      .btnBox{margin-bottom:15px; }
     </style>
     <script src="${ctxStatic}/js/pta.js" type="text/javascript"></script>
 	<script type="text/javascript">
@@ -355,8 +351,8 @@
 	</div>
 	<h1 class="form-signin-heading">${fns:getConfig('productName')}</h1>
 	<form id="loginForm" class="form-signin" action="${ctx}/login" method="post">
-		<div id="plogin">
-			<label class="input-label" for="username">用户名</label>
+		<div style="display:none" id="plogin">
+			<label class="input-label" for="username">登录名</label>
 			<input type="text" id="username" name="username" class="input-block-level required" value="${username}">
 			<label class="input-label" for="password">密码</label>
 			<input type="hidden" id="ltype" name="type" value = "0" />
@@ -366,16 +362,33 @@
 			<label class="input-label mid" for="validateCode">验证码</label>
 			<tags:validateCode name="validateCode" inputCssStyle="margin-bottom:0;"/>
 		</div></c:if>
-		
-		<!-- <form name="SignForm" > -->
-			<div class="selCertificate">
-				<div class="input-label">请选择证书：</div>
-				<div class="">
-					<select name="CertList" style="width:100%" class="input-block-level"></select>
-					<input name="RandStr" type="hidden" value="2134783982345" />
-				</div>
-				
-				<div style="display:none;">
+		<div class="form-group-sign">
+			<input class="btn btn-large btn-primary" type="button" onclick="sccaLogin();" value="证书登录" id="sccaLoginId"/>
+		</div>
+		<div class="form-group-sign">
+			<input class="btn btn-large btn-primary" type="button" onclick="login();" value="密码登录" id="passlogin"/>
+		</div>
+		<div style="display:none" id="sub">
+			<div class="btnBox">
+				<input class="btn btn-large btn-primary" type="submit" value="登  录"  style="width:45%;margin-right:25px;"/>
+				<input class="btn btn-large btn-primary" type="button" onclick="sccaLogin();" value="证书登录" id="sccaLoginId" style="width:45%;"/>
+			</div>
+			<label for="rememberMe" title="下次不需要再登录"><input type="checkbox" id="rememberMe" name="rememberMe"/> 记住我（公共场所慎用）</label>
+		</div>
+		<%-- <div id="themeSwitch" class="dropdown">
+			<a class="dropdown-toggle" data-toggle="dropdown" href="#">${fns:getDictLabel(cookie.theme.value,'theme','默认主题')}<b class="caret"></b></a>
+			<ul class="dropdown-menu">
+			  <c:forEach items="${fns:getDictList('theme')}" var="dict"><li><a href="#" onclick="location='${pageContext.request.contextPath}/theme/${dict.value}?url='+location.href">${dict.label}</a></li></c:forEach>
+			</ul>
+			<!--[if lte IE 6]><script type="text/javascript">$('#themeSwitch').hide();</script><![endif]-->
+		</div> --%>
+	</form>
+	<form name="SignForm" id="selectCN">
+			<div >
+				请选择证书：
+				<select name="CertList"></select>
+				<input name="RandStr" type="hidden" value="2134783982345" />
+				<div style="display:none">
 					<br>
 					待签名原文：
 					<textarea name="ToSign" cols="50" rows="10">小王于2006年12月13日提款10万元</textarea>
@@ -385,24 +398,8 @@
 					<br>
 				</div>
 			</div>
-		<!-- </form> -->
-		<div  id="sub"  style="clear:both;padding-top:15px;">
-			
-			<label for="rememberMe" title="下次不需要再登录"><input type="checkbox" id="rememberMe" name="rememberMe"/> 记住我（公共场所慎用）</label>
-			<div class="btnBox">
-				<input class="btn btn-large btn-primary pull-right" type="submit" value="登  录"  style="width:100%;margin-top:15px;"/>
-				<!-- <input class="btn btn-large btn-primary" type="button" onclick="sccaLogin();" value="证书登录" id="sccaLoginId" style="width:45%;"/> -->
-			</div>
-		</div>
 		</form>
-		<%-- <div id="themeSwitch" class="dropdown">
-			<a class="dropdown-toggle" data-toggle="dropdown" href="#">${fns:getDictLabel(cookie.theme.value,'theme','默认主题')}<b class="caret"></b></a>
-			<ul class="dropdown-menu">
-			  <c:forEach items="${fns:getDictList('theme')}" var="dict"><li><a href="#" onclick="location='${pageContext.request.contextPath}/theme/${dict.value}?url='+location.href">${dict.label}</a></li></c:forEach>
-			</ul>
-			<!--[if lte IE 6]><script type="text/javascript">$('#themeSwitch').hide();</script><![endif]-->
-		</div> --%>
-		
+	
 	Copyright &copy; 2014-${fns:getConfig('copyrightYear')} <a href="${pageContext.request.contextPath}">${fns:getConfig('productName')}</a>
 	
 		<script language="javascript">
