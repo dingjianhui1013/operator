@@ -395,9 +395,10 @@ public class SignatureInfoService extends BaseService {
 	
 	public SignatureInfo getChangeBySignatureId(String old,String young,Long signId){
 		DetachedCriteria dc = signatureInfoDao.createDetachedCriteria();
-		//dc.createAlias("workCertInfo", "workCertInfo");
+		//如果一个指向certInfo另一个指向oldCertInfo会造成流已关闭的错误，所以这里新的证书序列号去dealinfo里取
+		dc.createAlias("workDealInfo", "workDealInfo");
 		dc.createAlias("oldWorkCertInfo", "oldWorkCertInfo");
-		//dc.add(Restrictions.eq("workCertInfo.serialnumber", young));
+		dc.add(Restrictions.eq("workDealInfo.certSn", young));
 		dc.add(Restrictions.eq("oldWorkCertInfo.serialnumber", old));
 		dc.add(Restrictions.eq("firstId",signId));
 		//缴费完成或签章失败都可以办理
@@ -489,6 +490,7 @@ public class SignatureInfoService extends BaseService {
 		dc.createAlias("workCertInfo", "workCertInfo");
 		dc.add(Restrictions.eq("workCertInfo.serialnumber", certSn));
 		dc.add(Restrictions.eq("delFlag", SignatureInfo.DEL_FLAG_NORMAL));
+		dc.add(Restrictions.neProperty("signatureInfoType", SignatureInfoStatus.STATUS_REVOKE_USER));
 		return signatureInfoDao.find(dc);
 	}
 	public Page<SignatureInfo> findAll(Page<SignatureInfo> page,SignatureInfo signatureInfo)

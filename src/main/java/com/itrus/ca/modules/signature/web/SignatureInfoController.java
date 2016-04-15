@@ -972,6 +972,8 @@ public class SignatureInfoController extends BaseController {
 						for(SignatureInfo info:signatureInfos){
 							info.setOldWorkCertInfo(info.getWorkCertInfo());
 							info.setWorkCertInfo(certInfo);
+							info.setWorkDealInfo(dealInfo);
+							
 							signatureInfoService.save(info);
 						}
 					}

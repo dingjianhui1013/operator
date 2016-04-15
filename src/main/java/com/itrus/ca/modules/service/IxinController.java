@@ -8,7 +8,12 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+
 import java.util.Date;
+
+
+
+
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -68,7 +73,7 @@ public class IxinController {
 	@Autowired
 	ConfigAppService configAppService;
 	Logger log = Logger.getLogger(IxinController.class);
-
+	
 	@ResponseBody
 	@RequestMapping(value = "/getCrlContextJson")
 	public String getCrlContext(HttpServletRequest request,
