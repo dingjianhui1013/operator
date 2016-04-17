@@ -4635,7 +4635,6 @@ public class WorkDealInfoController extends BaseController {
 		if (workDealInfo.getSelfApplyId() != null) {
 			model.addAttribute("imgUrl",Global.getConfig("images.url"));
 			SelfImage selfImage =  selfImageService.findByApplicationId(workDealInfo.getSelfApplyId());
-			
 			workDealInfo.setSelfImage(selfImage);
 		}
 		

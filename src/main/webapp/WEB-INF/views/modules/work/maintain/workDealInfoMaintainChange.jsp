@@ -576,7 +576,7 @@
 							<td><input type="text" name="remarks" id="remarks"
 								value="${workDealInfo.workCompany.remarks }"></td>
 								
-							<c:if test="${workDealInfo.selfImage!=null }">
+							<c:if test="${workDealInfo.selfImage.id!=null }">
 							<th>单位电子证件:</th>
 							<td class ="small_pic">
 								
@@ -656,7 +656,7 @@
 								<c:if test="${workDealInfo.workUser.contactSex=='女' }">checked</c:if>
 								type="radio" value="女">女</td>
 								
-							<c:if test="${workDealInfo.selfImage!=null }">
+							<c:if test="${workDealInfo.selfImage.id!=null }">
 							<th >个人电子证件:</th>
 							<td class = "small_pic">
 								

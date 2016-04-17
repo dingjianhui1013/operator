@@ -124,6 +124,8 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 	private Long selfApplyId;
 	private String IsMainTain;
 	
+	
+	
 	/** default constructor */
 	public WorkDealInfo() {
 	}
@@ -812,13 +814,14 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 	
 	private  SelfImage selfImage;
 
-	@Transient
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "self_Image")
 	public SelfImage getSelfImage() {
 		return selfImage;
 	}
 
 	public void setSelfImage(SelfImage selfImage) {
-		this.selfImage = selfImage;
+		this.selfImage = selfImage;  
 	}
 
 	

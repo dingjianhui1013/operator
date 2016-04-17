@@ -30,6 +30,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.itrus.ca.common.config.Global;
+import com.itrus.ca.common.persistence.BaseEntity;
 import com.itrus.ca.common.utils.RaAccountUtil;
 import com.itrus.ca.common.web.BaseController;
 import com.itrus.ca.modules.constant.ProductType;
@@ -55,6 +56,8 @@ import com.itrus.ca.modules.profile.service.ConfigChargeAgentDetailService;
 import com.itrus.ca.modules.profile.service.ConfigChargeAgentService;
 import com.itrus.ca.modules.profile.service.ConfigProductService;
 import com.itrus.ca.modules.profile.service.ConfigRaAccountService;
+import com.itrus.ca.modules.self.entity.SelfImage;
+import com.itrus.ca.modules.self.service.SelfImageService;
 import com.itrus.ca.modules.sys.utils.UserUtils;
 import com.itrus.ca.modules.work.entity.WorkCertApplyInfo;
 import com.itrus.ca.modules.work.entity.WorkCertInfo;
@@ -149,6 +152,9 @@ public class WorkDealInfoOperationController extends BaseController {
 	
 	@Autowired
 	private ConfigAgentBoundDealInfoService configAgentBoundDealInfoService;
+	
+	@Autowired
+	private SelfImageService selfImageService;
 	
 	private LogUtil logUtil = new LogUtil();
 
@@ -1407,8 +1413,6 @@ public class WorkDealInfoOperationController extends BaseController {
 		workCertApplyInfo.setCity(workCompany.getCity());
 		workCertApplyInfoService.save(workCertApplyInfo);
 		
-		
-		
 		WorkCertInfo oldCertInfo = workDealInfo1.getWorkCertInfo();
 		WorkCertInfo workCertInfo = new WorkCertInfo();
 		workCertInfo.setWorkCertApplyInfo(workCertApplyInfo);
@@ -1430,7 +1434,29 @@ public class WorkDealInfoOperationController extends BaseController {
 		workDealInfo.setInputUserDate(new Date());
 		workDealInfo.setAreaId(UserUtils.getUser().getOffice().getParent().getId());
 		workDealInfo.setOfficeId(UserUtils.getUser().getOffice().getId());
-		
+		if (companyImage!=null || transactorImage!=null) {
+			SelfImage image = new SelfImage();
+			String companyImageName = saveToux(companyImage, workDealInfo.getWorkCompany().getCompanyType());
+			if (companyImageName !=null ) {
+				image.setCompanyImage(companyImageName);
+			}else{
+				SelfImage selfImage =  selfImageService.findByApplicationId(workDealInfo1.getSelfApplyId());
+				image.setCompanyImage(selfImage.getCompanyImage());
+			}
+			
+			
+			String transactorImageName = saveToux(transactorImage, workDealInfo.getWorkUser().getConCertType());
+			if(transactorImageName!=null){
+				image.setTransactorImage(transactorImageName);
+			}else{
+				SelfImage selfImage =  selfImageService.findByApplicationId(workDealInfo1.getSelfApplyId());
+				image.setTransactorImage(selfImage.getTransactorImage());
+			}
+			image.setCreatedate(new Date());
+			image.setStatus(BaseEntity.SHOW);
+			selfImageService.save(image);
+			workDealInfo.setSelfImage(image);
+		}
 		workDealInfoService.save(workDealInfo);
 		// 保存日志信息
 		WorkLog workLog = new WorkLog();
@@ -1442,8 +1468,9 @@ public class WorkDealInfoOperationController extends BaseController {
 		workLog.setWorkCompany(workDealInfo.getWorkCompany());
 		workLog.setOffice(UserUtils.getUser().getOffice());
 		workLogService.save(workLog);
-		if (companyImage!=null || transactorImage!=null) {
-		}
+		
+		
+		
 		return "redirect:" + Global.getAdminPath()
 				+ "/work/workDealInfo/pay?id=" + workDealInfo.getId();
 	}
@@ -1463,7 +1490,9 @@ public class WorkDealInfoOperationController extends BaseController {
             }
             InputStream is = file.getInputStream();
             String fileName = file.getOriginalFilename();
-            fileName = name + new Date().getTime() + fileName.substring(fileName.lastIndexOf('.'), fileName.length());
+            SimpleDateFormat df = new SimpleDateFormat("yyyyMMddH");
+            String timeS = df.format(new Date());
+            fileName = name + timeS + fileName.substring(fileName.lastIndexOf('.'), fileName.length());
             FileOutputStream fos = new FileOutputStream(path + "/" + fileName);
             byte[] buffer = new byte[1024 * 1024];
             int byteread = 0;
