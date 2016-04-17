@@ -4,19 +4,29 @@
  */
 package com.itrus.ca.modules.work.web;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.itrus.ca.common.config.Global;
+import com.itrus.ca.common.persistence.BaseEntity;
 import com.itrus.ca.common.utils.RaAccountUtil;
 import com.itrus.ca.common.web.BaseController;
 import com.itrus.ca.modules.constant.ProductType;
@@ -26,6 +36,8 @@ import com.itrus.ca.modules.profile.entity.ConfigChargeAgentBoundConfigProduct;
 import com.itrus.ca.modules.profile.entity.ConfigRaAccount;
 import com.itrus.ca.modules.profile.service.ConfigChargeAgentBoundConfigProductService;
 import com.itrus.ca.modules.profile.service.ConfigRaAccountService;
+import com.itrus.ca.modules.self.entity.SelfImage;
+import com.itrus.ca.modules.self.service.SelfImageService;
 import com.itrus.ca.modules.sys.utils.UserUtils;
 import com.itrus.ca.modules.work.entity.WorkCertApplyInfo;
 import com.itrus.ca.modules.work.entity.WorkCompany;
@@ -79,6 +91,9 @@ public class WorkDealInfoOperationSedController extends BaseController {
 	@Autowired
 	private ConfigChargeAgentBoundConfigProductService configChargeAgentBoundConfigProductService;
 	
+	@Autowired
+	private SelfImageService selfImageService;
+	
 	/*
 	 * 信息变更界面保存方法
 	 */
@@ -94,7 +109,12 @@ public class WorkDealInfoOperationSedController extends BaseController {
 			String contactPhone, String contactTel, String recordContent,
 			Integer agentId,Long agentDetailId, //获取计费策略类型  获取计费策略模版
 			Model model, String pName, String pEmail, String pIDCard,String contactSex,String areaRemark,
-		 Long newInfoId, RedirectAttributes redirectAttributes) {
+		 Long newInfoId, RedirectAttributes redirectAttributes,
+		 @RequestParam(value="companyImage", required=false) MultipartFile companyImage ,
+		 @RequestParam(value="transactorImage", required=false) MultipartFile transactorImage,
+		 HttpServletRequest request
+			
+			) {
 		
 		WorkDealInfo workDealInfo1 = workDealInfoService.get(workDealInfoId);
 		if (workDealInfo1.getDelFlag().equals("1")) {
@@ -212,6 +232,43 @@ public class WorkDealInfoOperationSedController extends BaseController {
 		workDealInfo1.setInputUserDate(new Date());
 		workDealInfo1.setAreaId(UserUtils.getUser().getOffice().getParent().getId());
 		workDealInfo1.setOfficeId(UserUtils.getUser().getOffice().getId());
+		
+		if (companyImage!=null || transactorImage!=null) {
+			SelfImage image = new SelfImage();
+			String companyImageName = saveToux(companyImage, workDealInfo1.getWorkCompany().getCompanyType());
+			if (companyImageName !=null ) {
+				image.setCompanyImage(companyImageName);
+			}else{
+				
+				if (workDealInfo1.getSelfImage()!=null) {
+					image.setCompanyImage(workDealInfo1.getSelfImage().getCompanyImage());
+				}else{
+					SelfImage selfImage =  selfImageService.findByApplicationId(workDealInfo1.getSelfApplyId());
+					image.setCompanyImage(selfImage.getCompanyImage());
+				}
+				
+			}
+			
+			
+			String transactorImageName = saveToux(transactorImage, workDealInfo1.getWorkUser().getConCertType());
+			if(transactorImageName!=null){
+				image.setTransactorImage(transactorImageName);
+			}else{
+				if(workDealInfo1.getSelfImage()!=null){
+					
+					image.setTransactorImage(workDealInfo1.getSelfImage().getTransactorImage());
+				}else{
+					SelfImage selfImage =  selfImageService.findByApplicationId(workDealInfo1.getSelfApplyId());
+					image.setTransactorImage(selfImage.getTransactorImage());
+				}
+				
+			}
+			image.setCreatedate(new Date());
+			image.setStatus(BaseEntity.SHOW);
+			selfImageService.save(image);
+			workDealInfo1.setSelfImage(image);
+		}
+		
 		workDealInfoService.save(workDealInfo1);
 		// 保存日志信息
 		WorkLog workLog = new WorkLog();
@@ -238,7 +295,10 @@ public class WorkDealInfoOperationSedController extends BaseController {
 			String conCertType, String contacEmail, String conCertNumber,
 			String contactPhone, String contactTel, String contactSex,
 			String recordContent,Integer agentId,Long agentDetailId, //获取计费策略类型  获取计费策略模版
-			Model model,RedirectAttributes redirectAttributes) {
+			Model model,RedirectAttributes redirectAttributes,
+			 @RequestParam(value="companyImage", required=false) MultipartFile companyImage ,
+			 @RequestParam(value="transactorImage", required=false) MultipartFile transactorImage,
+			 HttpServletRequest request) {
 		
 		WorkDealInfo workDealInfo1 = workDealInfoService.get(workDealInfoId);
 		if (workDealInfo1.getDelFlag().equals("1")) {
@@ -284,6 +344,43 @@ public class WorkDealInfoOperationSedController extends BaseController {
 		workDealInfo1.setInputUserDate(new Date());
 		workDealInfo1.setAreaId(UserUtils.getUser().getOffice().getParent().getId());
 		workDealInfo1.setOfficeId(UserUtils.getUser().getOffice().getId());
+		
+		if (companyImage!=null || transactorImage!=null) {
+			SelfImage image = new SelfImage();
+			String companyImageName = saveToux(companyImage, workDealInfo1.getWorkCompany().getCompanyType());
+			if (companyImageName !=null ) {
+				image.setCompanyImage(companyImageName);
+			}else{
+				
+				if (workDealInfo1.getSelfImage()!=null) {
+					image.setCompanyImage(workDealInfo1.getSelfImage().getCompanyImage());
+				}else{
+					SelfImage selfImage =  selfImageService.findByApplicationId(workDealInfo1.getSelfApplyId());
+					image.setCompanyImage(selfImage.getCompanyImage());
+				}
+				
+			}
+			
+			
+			String transactorImageName = saveToux(transactorImage, workDealInfo1.getWorkUser().getConCertType());
+			if(transactorImageName!=null){
+				image.setTransactorImage(transactorImageName);
+			}else{
+				if(workDealInfo1.getSelfImage()!=null){
+					
+					image.setTransactorImage(workDealInfo1.getSelfImage().getTransactorImage());
+				}else{
+					SelfImage selfImage =  selfImageService.findByApplicationId(workDealInfo1.getSelfApplyId());
+					image.setTransactorImage(selfImage.getTransactorImage());
+				}
+				
+			}
+			image.setCreatedate(new Date());
+			image.setStatus(BaseEntity.SHOW);
+			selfImageService.save(image);
+			workDealInfo1.setSelfImage(image);
+		}
+		
 		workDealInfoService.save(workDealInfo1);
 		// 保存日志信息
 		WorkLog workLog = new WorkLog();
@@ -320,6 +417,46 @@ public class WorkDealInfoOperationSedController extends BaseController {
 		
 		return "modules/work/maintain/workDealInfoMakeInstallFail";
 	}
+	
+	
+	/**
+     * 保存证件图片
+     * 
+     * @param file
+     */
+    private String saveToux(MultipartFile file, String name) {
+        try {
+        	
+        	if(file.getSize()<1){
+        		return null;
+        	}
+        	
+            String path = Global.getConfig("images.url");
+            File saveFile = new File(path);
+            // 如果目录不存在就创建
+            if (!saveFile.exists()) {
+                saveFile.mkdirs();
+            }
+            InputStream is = file.getInputStream();
+            String fileName = file.getOriginalFilename();
+            SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmssSSS");
+            String timeS = df.format(new Date());
+            fileName = name + timeS + fileName.substring(fileName.lastIndexOf('.'), fileName.length());
+            FileOutputStream fos = new FileOutputStream(path + "/" + fileName);
+            byte[] buffer = new byte[1024 * 1024];
+            int byteread = 0;
+            while ((byteread = is.read(buffer)) != -1) {
+                fos.write(buffer, 0, byteread);
+                fos.flush();
+            }
+            fos.close();
+            is.close();
+            return fileName;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 	
 	
 }

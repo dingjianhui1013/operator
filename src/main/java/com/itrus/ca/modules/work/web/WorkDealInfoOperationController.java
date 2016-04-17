@@ -1440,8 +1440,14 @@ public class WorkDealInfoOperationController extends BaseController {
 			if (companyImageName !=null ) {
 				image.setCompanyImage(companyImageName);
 			}else{
-				SelfImage selfImage =  selfImageService.findByApplicationId(workDealInfo1.getSelfApplyId());
-				image.setCompanyImage(selfImage.getCompanyImage());
+				
+				if (workDealInfo1.getSelfImage()!=null) {
+					image.setCompanyImage(workDealInfo1.getSelfImage().getCompanyImage());
+				}else{
+					SelfImage selfImage =  selfImageService.findByApplicationId(workDealInfo1.getSelfApplyId());
+					image.setCompanyImage(selfImage.getCompanyImage());
+				}
+				
 			}
 			
 			
@@ -1449,8 +1455,14 @@ public class WorkDealInfoOperationController extends BaseController {
 			if(transactorImageName!=null){
 				image.setTransactorImage(transactorImageName);
 			}else{
-				SelfImage selfImage =  selfImageService.findByApplicationId(workDealInfo1.getSelfApplyId());
-				image.setTransactorImage(selfImage.getTransactorImage());
+				if(workDealInfo1.getSelfImage()!=null){
+					
+					image.setTransactorImage(workDealInfo1.getSelfImage().getTransactorImage());
+				}else{
+					SelfImage selfImage =  selfImageService.findByApplicationId(workDealInfo1.getSelfApplyId());
+					image.setTransactorImage(selfImage.getTransactorImage());
+				}
+				
 			}
 			image.setCreatedate(new Date());
 			image.setStatus(BaseEntity.SHOW);
@@ -1482,6 +1494,11 @@ public class WorkDealInfoOperationController extends BaseController {
      */
     private String saveToux(MultipartFile file, String name) {
         try {
+        	
+        	if(file.getSize()<1){
+        		return null;
+        	}
+        	
             String path = Global.getConfig("images.url");
             File saveFile = new File(path);
             // 如果目录不存在就创建
@@ -1490,7 +1507,7 @@ public class WorkDealInfoOperationController extends BaseController {
             }
             InputStream is = file.getInputStream();
             String fileName = file.getOriginalFilename();
-            SimpleDateFormat df = new SimpleDateFormat("yyyyMMddH");
+            SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmssSSS");
             String timeS = df.format(new Date());
             fileName = name + timeS + fileName.substring(fileName.lastIndexOf('.'), fileName.length());
             FileOutputStream fos = new FileOutputStream(path + "/" + fileName);
@@ -1528,7 +1545,11 @@ public class WorkDealInfoOperationController extends BaseController {
 			Integer agentId,Long agentDetailId, //获取计费策略类型  获取计费策略模版
 			Integer dealInfoType1,
 			
-			Boolean manMadeDamage,Model model, RedirectAttributes redirectAttributes) {
+			Boolean manMadeDamage,Model model, RedirectAttributes redirectAttributes,
+			@RequestParam(value="companyImage", required=false) MultipartFile companyImage ,
+			 @RequestParam(value="transactorImage", required=false) MultipartFile transactorImage,
+			 HttpServletRequest request
+			) {
 		
 		
 		
@@ -1667,6 +1688,43 @@ public class WorkDealInfoOperationController extends BaseController {
 		workDealInfo.setAreaId(UserUtils.getUser().getOffice().getParent().getId());
 		workDealInfo.setOfficeId(UserUtils.getUser().getOffice().getId());
 		
+		if (companyImage!=null || transactorImage!=null) {
+			SelfImage image = new SelfImage();
+			String companyImageName = saveToux(companyImage, workDealInfo.getWorkCompany().getCompanyType());
+			if (companyImageName !=null ) {
+				image.setCompanyImage(companyImageName);
+			}else{
+				
+				if (workDealInfo1.getSelfImage()!=null) {
+					image.setCompanyImage(workDealInfo1.getSelfImage().getCompanyImage());
+				}else{
+					SelfImage selfImage =  selfImageService.findByApplicationId(workDealInfo1.getSelfApplyId());
+					image.setCompanyImage(selfImage.getCompanyImage());
+				}
+				
+			}
+			
+			
+			String transactorImageName = saveToux(transactorImage, workDealInfo.getWorkUser().getConCertType());
+			if(transactorImageName!=null){
+				image.setTransactorImage(transactorImageName);
+			}else{
+				if(workDealInfo1.getSelfImage()!=null){
+					
+					image.setTransactorImage(workDealInfo1.getSelfImage().getTransactorImage());
+				}else{
+					SelfImage selfImage =  selfImageService.findByApplicationId(workDealInfo1.getSelfApplyId());
+					image.setTransactorImage(selfImage.getTransactorImage());
+				}
+				
+			}
+			image.setCreatedate(new Date());
+			image.setStatus(BaseEntity.SHOW);
+			selfImageService.save(image);
+			workDealInfo.setSelfImage(image);
+		}
+		
+		
 		workDealInfoService.save(workDealInfo);
 		// 保存日志信息
 		WorkLog workLog = new WorkLog();
@@ -1703,7 +1761,10 @@ public class WorkDealInfoOperationController extends BaseController {
 			String contactPhone, String contactTel,String contactSex, Boolean manMadeDamage,
 			Model model, String recordContent
 			,String pName , String pIDCard , String pEmail
-			, RedirectAttributes redirectAttributes
+			, RedirectAttributes redirectAttributes,
+			@RequestParam(value="companyImage", required=false) MultipartFile companyImage ,
+			 @RequestParam(value="transactorImage", required=false) MultipartFile transactorImage,
+			 HttpServletRequest request
 			) {
 		//保存新业务信息(dealInfoType存在即为更新，dealInfoType1存在即为补办(1：遗失补办，2：损坏更换)，dealInfoType2存在即为变更)
 		WorkDealInfo workDealInfo1 = workDealInfoService.get(workDealInfoId);
@@ -1950,6 +2011,42 @@ public class WorkDealInfoOperationController extends BaseController {
 		workDealInfo.setAreaId(UserUtils.getUser().getOffice().getParent().getId());
 		workDealInfo.setOfficeId(UserUtils.getUser().getOffice().getId());
 		
+		if (companyImage!=null || transactorImage!=null) {
+			SelfImage image = new SelfImage();
+			String companyImageName = saveToux(companyImage, workDealInfo.getWorkCompany().getCompanyType());
+			if (companyImageName !=null ) {
+				image.setCompanyImage(companyImageName);
+			}else{
+				
+				if (workDealInfo1.getSelfImage()!=null) {
+					image.setCompanyImage(workDealInfo1.getSelfImage().getCompanyImage());
+				}else{
+					SelfImage selfImage =  selfImageService.findByApplicationId(workDealInfo1.getSelfApplyId());
+					image.setCompanyImage(selfImage.getCompanyImage());
+				}
+				
+			}
+			
+			
+			String transactorImageName = saveToux(transactorImage, workDealInfo.getWorkUser().getConCertType());
+			if(transactorImageName!=null){
+				image.setTransactorImage(transactorImageName);
+			}else{
+				if(workDealInfo1.getSelfImage()!=null){
+					
+					image.setTransactorImage(workDealInfo1.getSelfImage().getTransactorImage());
+				}else{
+					SelfImage selfImage =  selfImageService.findByApplicationId(workDealInfo1.getSelfApplyId());
+					image.setTransactorImage(selfImage.getTransactorImage());
+				}
+				
+			}
+			image.setCreatedate(new Date());
+			image.setStatus(BaseEntity.SHOW);
+			selfImageService.save(image);
+			workDealInfo.setSelfImage(image);
+		}
+		
 		workDealInfoService.save(workDealInfo);
 		
 		ConfigAgentBoundDealInfo dealInfoBound = new ConfigAgentBoundDealInfo();
@@ -1991,7 +2088,10 @@ public class WorkDealInfoOperationController extends BaseController {
 			String contactPhone, String contactTel,String contactSex, Boolean manMadeDamage,
 			Model model, String recordContent
 			,String pName , String pIDCard , String pEmail
-			, RedirectAttributes redirectAttributes
+			, RedirectAttributes redirectAttributes,
+			 @RequestParam(value="companyImage", required=false) MultipartFile companyImage ,
+			 @RequestParam(value="transactorImage", required=false) MultipartFile transactorImage,
+			 HttpServletRequest request
 			) {
 		//保存新业务信息(dealInfoType存在即为更新，dealInfoType1存在即为补办(1：遗失补办，2：损坏更换)，dealInfoType2存在即为变更)
 		WorkDealInfo workDealInfo1 = workDealInfoService.get(workDealInfoId);
@@ -2175,6 +2275,43 @@ public class WorkDealInfoOperationController extends BaseController {
 		
 		//workDealInfo.setPayType(workDealInfo1.getPayType());
 		//workDealInfo.setConfigChargeAgentId(workDealInfo1.getConfigChargeAgentId());
+		if (companyImage!=null || transactorImage!=null) {
+			SelfImage image = new SelfImage();
+			String companyImageName = saveToux(companyImage, workDealInfo1.getWorkCompany().getCompanyType());
+			if (companyImageName !=null ) {
+				image.setCompanyImage(companyImageName);
+			}else{
+				
+				if (workDealInfo1.getSelfImage()!=null) {
+					image.setCompanyImage(workDealInfo1.getSelfImage().getCompanyImage());
+				}else{
+					SelfImage selfImage =  selfImageService.findByApplicationId(workDealInfo1.getSelfApplyId());
+					image.setCompanyImage(selfImage.getCompanyImage());
+				}
+				
+			}
+			
+			
+			String transactorImageName = saveToux(transactorImage, workDealInfo1.getWorkUser().getConCertType());
+			if(transactorImageName!=null){
+				image.setTransactorImage(transactorImageName);
+			}else{
+				if(workDealInfo1.getSelfImage()!=null){
+					
+					image.setTransactorImage(workDealInfo1.getSelfImage().getTransactorImage());
+				}else{
+					SelfImage selfImage =  selfImageService.findByApplicationId(workDealInfo1.getSelfApplyId());
+					image.setTransactorImage(selfImage.getTransactorImage());
+				}
+				
+			}
+			image.setCreatedate(new Date());
+			image.setStatus(BaseEntity.SHOW);
+			selfImageService.save(image);
+			workDealInfo1.setSelfImage(image);
+		}
+		
+		
 		workDealInfoService.save(workDealInfo1);
 		
 		// 保存日志信息

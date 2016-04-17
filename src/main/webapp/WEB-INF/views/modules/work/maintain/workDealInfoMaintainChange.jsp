@@ -586,7 +586,7 @@
 			                            <br><br>
 			                            <div class="previewImg" id="preview">
 			                            	<div class="small_pic">
-													<img id="imghead" style = "width:100px;height:75px" src="${imgUrl}/${workDealInfo.selfImage.companyImage }" >
+													<a href="#picBigBox" ><img id="imghead" style = "width:100px;height:75px" src="${imgUrl}/${workDealInfo.selfImage.companyImage }" ></a>
 			                                </div>
 			                            </div>
 									</div>
@@ -667,7 +667,9 @@
 									<br><br>
 									<div id="preview1" class="previewImg">
 	                            		<div class="small_pic">
-	                            		   <img id="imghead1" style = "width:100px;height:75px"  src="${imgUrl }/${workDealInfo.selfImage.transactorImage}" >
+		                            		<a href="#picBigBox1" >
+		                            		   <img id="imghead1" style = "width:100px;height:75px"  src="${imgUrl }/${workDealInfo.selfImage.transactorImage}" >
+	                            			</a>
 	                            		</div>
 	                            	</div>
                         		</div>
@@ -751,5 +753,13 @@
 			</div>
 		</div>
 	</form:form>
+	
+	<div id="picBigBox" style="display:none;">
+		<img src="${imgUrl }/${companyImage }"  >
+	</div>
+	<div id="picBigBox1" style="display:none;">
+		<img src="${imgUrl }/${transactorImage }" >
+	</div>
+	
 </body>
 </html>

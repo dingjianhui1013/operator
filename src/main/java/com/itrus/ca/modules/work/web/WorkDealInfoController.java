@@ -2951,6 +2951,13 @@ public class WorkDealInfoController extends BaseController {
 			dealInfoTypes.add(workDealInfo.getDealInfoType3());
 		}
 
+		if (workDealInfo.getSelfApplyId() != null) {
+			model.addAttribute("imgUrl",Global.getConfig("images.path"));
+			SelfImage selfImage =  selfImageService.findByApplicationId(workDealInfo.getSelfApplyId());
+			workDealInfo.setSelfImage(selfImage);
+		}
+		
+		
 		if (dealInfoTypes.size() == 1) {
 			if (dealInfoTypes.get(0).equals(4)) {// 变更
 				return "modules/work/maintain/workDealInfoMaintainReturnChange";
@@ -4633,7 +4640,7 @@ public class WorkDealInfoController extends BaseController {
 		}
 
 		if (workDealInfo.getSelfApplyId() != null) {
-			model.addAttribute("imgUrl",Global.getConfig("images.url"));
+			model.addAttribute("imgUrl",Global.getConfig("images.path"));
 			SelfImage selfImage =  selfImageService.findByApplicationId(workDealInfo.getSelfApplyId());
 			workDealInfo.setSelfImage(selfImage);
 		}
