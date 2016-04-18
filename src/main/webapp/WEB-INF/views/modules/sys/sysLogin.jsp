@@ -27,15 +27,15 @@
     <script src="${ctxStatic}/js/pta.js" type="text/javascript"></script>
 	<script type="text/javascript">
 		//颁发者CA的DN项
-		//var arrayIssuerDN = setArrayIssuerDN();
-		var arrayIssuerDN = new Array(
-				"C=CN, O=四川省数字证书认证管理中心有限公司, OU=SCEB CA, CN=SCEB CA"
-				, "C=CN, O=四川省数字证书认证管理中心有限公司, OU=China Trust Network, OU=Terms of use at https://www.itrus.com.cn/ctnrpa (c)2008, OU=Class 2 Enterprise Individual Subscriber CA, CN=SCEGB CA"
-				, "C=CN, O=CFCA Operation CA2"
-				, "CN=天诚安信测试RSA1024用户CA, OU=TOPCA, O=TOPCA, C=CN"
-				, "CN=天诚安信测试SM2用户证书, OU=测试部, O=天诚安信, C=CN"
-				, "O=四川省数字证书认证管理中心有限公司, OU=技术部, CN=SCCA Employee CA"
-		);
+		var arrayIssuerDN = setArrayIssuerDN();
+//		var arrayIssuerDN = new Array(
+//				"C=CN, O=四川省数字证书认证管理中心有限公司, OU=SCEB CA, CN=SCEB CA"
+//				, "C=CN, O=四川省数字证书认证管理中心有限公司, OU=China Trust Network, OU=Terms of use at https://www.itrus.com.cn/ctnrpa (c)2008, OU=Class 2 Enterprise Individual Subscriber CA, CN=SCEGB CA"
+//				, "C=CN, O=CFCA Operation CA2"
+//				, "CN=天诚安信测试RSA1024用户CA, OU=TOPCA, O=TOPCA, C=CN"
+//				, "CN=天诚安信测试SM2用户证书, OU=测试部, O=天诚安信, C=CN"
+//				, "O=四川省数字证书认证管理中心有限公司, OU=技术部, CN=SCCA Employee CA"
+//		);
 	
 		function setArrayIssuerDN(){
 			var array = new Array();
