@@ -2956,6 +2956,9 @@ public class WorkDealInfoController extends BaseController {
 			SelfImage selfImage =  selfImageService.findByApplicationId(workDealInfo.getSelfApplyId());
 			workDealInfo.setSelfImage(selfImage);
 		}
+		if (workDealInfo.getSelfImage()!=null) {
+			model.addAttribute("imgUrl",Global.getConfig("images.path"));
+		}
 		
 		
 		if (dealInfoTypes.size() == 1) {
@@ -4644,6 +4647,10 @@ public class WorkDealInfoController extends BaseController {
 			SelfImage selfImage =  selfImageService.findByApplicationId(workDealInfo.getSelfApplyId());
 			workDealInfo.setSelfImage(selfImage);
 		}
+		if (workDealInfo.getSelfImage()!=null) {
+			model.addAttribute("imgUrl",Global.getConfig("images.path"));
+		}
+		
 		
 		if (dealInfoTypes.size() == 1) {
 			if (dealInfoTypes.get(0).equals("1")) {

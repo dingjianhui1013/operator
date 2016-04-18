@@ -894,10 +894,10 @@
 		</div>
 	</form:form>
 	<div id="picBigBox" style="display:none;">
-		<img src="${imgUrl }/${companyImage }"  >
+		<img src="${imgUrl }/${workDealInfo.selfImage.companyImage }"  >
 	</div>
 	<div id="picBigBox1" style="display:none;">
-		<img src="${imgUrl }/${transactorImage }" >
+		<img src="${imgUrl }/${workDealInfo.selfImage.transactorImage }" >
 	</div>
 	
 </body>

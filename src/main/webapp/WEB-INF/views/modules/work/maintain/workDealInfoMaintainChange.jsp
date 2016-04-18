@@ -583,7 +583,9 @@
 								<div class="col-sm-9">
 										<label for="exampleInputFile" class="uploadBtn">上传文件</label>
 										<input type="file" id="exampleInputFile" name = "companyImage" class="uploadFileInput" onchange="PreviewImage(this,'imghead','preview','picBigBox')">
-			                            <br><br>
+			                            <br>
+			                            ${imgUrl}/${workDealInfo.selfImage.companyImage }
+			                            <br>
 			                            <div class="previewImg" id="preview">
 			                            	<div class="small_pic">
 													<a href="#picBigBox" ><img id="imghead" style = "width:100px;height:75px" src="${imgUrl}/${workDealInfo.selfImage.companyImage }" ></a>
@@ -755,10 +757,10 @@
 	</form:form>
 	
 	<div id="picBigBox" style="display:none;">
-		<img src="${imgUrl }/${companyImage }"  >
+		<img src="${imgUrl }/${workDealInfo.selfImage.companyImage }"  >
 	</div>
 	<div id="picBigBox1" style="display:none;">
-		<img src="${imgUrl }/${transactorImage }" >
+		<img src="${imgUrl }/${workDealInfo.selfImage.transactorImage }" >
 	</div>
 	
 </body>
