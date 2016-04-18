@@ -334,6 +334,15 @@
 			$("#js").html(CurCert.ValidTo+"");
 		}
 		
+		function tabSccaLogin(){
+			$("#plogin").css("display","none");
+			$("#sub").css("display","none");
+			$("#sccaLoginId").show();
+			$("#passlogin").show();
+			$("#caInfo").show();
+			$("#selectCN").show();
+		}
+		
 		function sccaLogin(){
 			$("#plogin").css("display","none");
 			$("#sub").css("display","none");
@@ -420,7 +429,7 @@
 		<div style="display:none" id="sub">
 			<div class="btnBox">
 				<input class="btn btn-large btn-primary" type="submit" value="登  录"  style="width:45%;margin-right:25px;"/>
-				<input class="btn btn-large btn-primary" type="button" onclick="sccaLogin();" value="证书登录" id="sccaLoginId" style="width:45%;"/>
+				<input class="btn btn-large btn-primary" type="button" onclick="tabSccaLogin();" value="证书登录" id="sccaLoginId" style="width:45%;"/>
 			</div>
 			<label for="rememberMe" title="下次不需要再登录"><input type="checkbox" id="rememberMe" name="rememberMe"/> 记住我（公共场所慎用）</label>
 		</div>
