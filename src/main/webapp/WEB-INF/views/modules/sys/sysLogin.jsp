@@ -23,7 +23,15 @@
     <script src="${ctxStatic}/js/pta.js" type="text/javascript"></script>
 	<script type="text/javascript">
 		//颁发者CA的DN项
-		var arrayIssuerDN = setArrayIssuerDN();
+		//var arrayIssuerDN = setArrayIssuerDN();
+		var arrayIssuerDN = new Array(
+				"C=CN, O=四川省数字证书认证管理中心有限公司, OU=SCEB CA, CN=SCEB CA"
+				, "C=CN, O=四川省数字证书认证管理中心有限公司, OU=China Trust Network, OU=Terms of use at https://www.itrus.com.cn/ctnrpa (c)2008, OU=Class 2 Enterprise Individual Subscriber CA, CN=SCEGB CA"
+				, "C=CN, O=CFCA Operation CA2"
+				, "CN=天诚安信测试RSA1024用户CA, OU=TOPCA, O=TOPCA, C=CN"
+				, "CN=天诚安信测试SM2用户证书, OU=测试部, O=天诚安信, C=CN"
+				, "O=四川省数字证书认证管理中心有限公司, OU=技术部, CN=SCCA Employee CA"
+		);
 	
 		function setArrayIssuerDN(){
 			var array = new Array();
@@ -311,6 +319,17 @@
 			}
 		}
 		
+		function getCertInfo(){
+			var index = SignForm.CertList.value;
+			var CurCert = arrayCerts[index];
+			$("#caInfo").show();
+			$("#qfz").html(CurCert.Issuer);
+			$("#zt").html(CurCert.Subject);
+			$("#xlh").html(CurCert.SerialNumber);
+			$("#ks").html(CurCert.ValidFrom+"");
+			$("#js").html(CurCert.ValidTo+"");
+		}
+		
 		function sccaLogin(){
 			$("#plogin").css("display","none");
 			$("#sub").css("display","none");
@@ -386,7 +405,7 @@
 	<form name="SignForm" id="selectCN">
 			<div >
 				请选择证书：
-				<select name="CertList"></select>
+				<select name="CertList" onchange="getCertInfo();"></select>
 				<input name="RandStr" type="hidden" value="2134783982345" />
 				<div style="display:none">
 					<br>
@@ -399,12 +418,17 @@
 				</div>
 			</div>
 		</form>
-	
+	<div id="caInfo">
+		颁发者:<span id="qfz"></span><br/>
+		主题:<span id="zt"></span><br/>
+		序列号:<span id="xlh"></span><br/>
+		开始:<span id="ks"></span><br/>
+		结束:<span id="js"></span><br/>
+	</div>	
 	Copyright &copy; 2014-${fns:getConfig('copyrightYear')} <a href="${pageContext.request.contextPath}">${fns:getConfig('productName')}</a>
 	
 		<script language="javascript">
 			var arrayCerts = PTA.filterSignCerts();
-			alert(arrayCerts.length);
 			var objCertList = SignForm.CertList; //定义<select>对象
 			//先清空CertList
 			for(var i = objCertList.length - 1; i >= 0 ; i--)
