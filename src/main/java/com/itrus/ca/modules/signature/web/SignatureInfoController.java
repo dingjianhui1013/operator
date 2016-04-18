@@ -565,7 +565,7 @@ public class SignatureInfoController extends BaseController {
 			
 		}
 		
-		return "redirect:" + Global.getAdminPath() + "/signature/signatureInfo/?repage";
+		return "redirect:" + Global.getAdminPath() + "/signature/signatureInfo/";
 	}
 	
 	
