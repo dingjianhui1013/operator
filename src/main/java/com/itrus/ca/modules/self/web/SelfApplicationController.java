@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.itrus.ca.common.config.Global;
 import com.itrus.ca.common.persistence.BaseEntity;
 import com.itrus.ca.common.persistence.Page;
+import com.itrus.ca.common.utils.StringUtils;
 import com.itrus.ca.common.web.BaseController;
 import com.itrus.ca.modules.constant.WorkDealInfoStatus;
 import com.itrus.ca.modules.constant.WorkDealInfoType;
@@ -265,7 +266,18 @@ public class SelfApplicationController extends BaseController {
 		// 新增时扣减计费策略数量 
 		ConfigChargeAgent agent = bound.getAgent();
 		workDealInfo.setConfigChargeAgentId(bound.getAgent().getId());
-		workDealInfo.setDealInfoType(WorkDealInfoType.TYPE_ADD_CERT);
+		if(StringUtils.isNotEmpty(selfApplication.getIsMaintain())){
+			if(selfApplication.getBusinessType().equalsIgnoreCase(SelfApplicationStatus.renovateApply)){
+				//更新
+				workDealInfo.setDealInfoType(WorkDealInfoType.TYPE_UPDATE_CERT);
+			}else if(selfApplication.getBusinessType().equalsIgnoreCase(SelfApplicationStatus.modifyApply)){
+				//变更
+				workDealInfo.setDealInfoType2(WorkDealInfoType.TYPE_INFORMATION_REROUTE);
+			}
+		}else{
+			//新增
+			workDealInfo.setDealInfoType(WorkDealInfoType.TYPE_ADD_CERT);
+		}
 		workDealInfo.setYear(Integer.parseInt(selfApplication.getApplicationPeriod()));
 		workDealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_ENTRY_SUCCESS);
 		workDealInfo.setCreateBy(UserUtils.getUser());
