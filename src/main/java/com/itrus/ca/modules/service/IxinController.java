@@ -28,6 +28,7 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.log4j.Logger;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,34 +79,34 @@ public class IxinController {
 	@RequestMapping(value = "/getCrlContextJson")
 	public String getCrlContext(HttpServletRequest request,
 			HttpServletResponse response) throws JSONException{
-		String url = ixinURL + "/crlcontext/listjson?"+new Date().getTime()+"=&page=1&size=100";
-		HttpClient client = new DefaultHttpClient();
-		HttpResponse response2 = null;
-		try {
-			response2 = new ItrustProxyUtil().sendGet(client, url,
-					"", request,key);
-			HttpEntity entity2 = response2.getEntity();
-			BufferedReader reader2 = new BufferedReader(
-					new InputStreamReader(entity2.getContent(), "UTF-8"));
-			String buffer2;
-			StringBuffer content = new StringBuffer();
-			while ((buffer2 = reader2.readLine()) != null) {
-				content.append(buffer2 + "\n");
-			}
-			return content.toString();
-		} catch (Exception e) {
-			e.printStackTrace();
-		} 
-		return null;
-//		JSONObject json = new JSONObject();
-//		JSONArray array = new JSONArray();
-//		for(int i= 0;i<4;i++){
-//			JSONObject j = new JSONObject();
-//			j.put("certSubject",""+i);
-//			array.put(j);
-//		}
-//		json.put("crlList", array);
-//		return json.toString();
+//		String url = ixinURL + "/crlcontext/listjson?"+new Date().getTime()+"=&page=1&size=100";
+//		HttpClient client = new DefaultHttpClient();
+//		HttpResponse response2 = null;
+//		try {
+//			response2 = new ItrustProxyUtil().sendGet(client, url,
+//					"", request,key);
+//			HttpEntity entity2 = response2.getEntity();
+//			BufferedReader reader2 = new BufferedReader(
+//					new InputStreamReader(entity2.getContent(), "UTF-8"));
+//			String buffer2;
+//			StringBuffer content = new StringBuffer();
+//			while ((buffer2 = reader2.readLine()) != null) {
+//				content.append(buffer2 + "\n");
+//			}
+//			return content.toString();
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		} 
+//		return null;
+		JSONObject json = new JSONObject();
+		JSONArray array = new JSONArray();
+		for(int i= 0;i<4;i++){
+			JSONObject j = new JSONObject();
+			j.put("certSubject",""+i);
+			//array.put(j);
+		}
+		json.put("crlList", array);
+		return json.toString();
 	}
 	
 	/**
