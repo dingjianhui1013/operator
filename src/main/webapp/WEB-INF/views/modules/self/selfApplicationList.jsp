@@ -26,7 +26,7 @@
 		<label>单位名称 ：</label><form:input path="companyName" htmlEscape="false" maxlength="50" class="input-medium"/>&nbsp;
 		<label>经办人：</label><form:input path="transactorName" htmlEscape="false" maxlength="50" class="input-medium"/>
 		&nbsp;<label>受理状态：</label>
-		<select name="status"id="appluStatus">
+		<select name="status">
 			<option value=""<c:if test="${status==''|| status == null}">selected="selected"</c:if>>请选择状态</option>
 			<option value="0" <c:if test="${status=='0'}">selected="selected"</c:if>>未审核</option>
 			<option value="1" <c:if test="${status=='1'}">selected="selected"</c:if>>审核完成,等待下载</option>
@@ -35,6 +35,13 @@
 			<option value="4" <c:if test="${status=='4'}">selected="selected"</c:if>>业务完成</option>
 			<option value="5" <c:if test="${status=='5'}">selected="selected"</c:if>>等待制证</option>
 			<option value="6" <c:if test="${status=='6'}">selected="selected"</c:if>>审核未通过</option>
+		</select>
+		&nbsp;
+		<label>收件方式：</label>
+		<select name="receiverType">
+			<option value=""<c:if test="${receiverType==''|| receiverType == null}">selected="selected"</c:if>>请选择收件方式</option>
+			<option value="0" <c:if test="${receiverType=='0'}">selected="selected"</c:if>>自取</option>
+			<option value="1" <c:if test="${receiverType=='1'}">selected="selected"</c:if>>邮寄</option>
 		</select>
 		&nbsp;
 		<div style="margin-top: 8px">
@@ -56,7 +63,9 @@
 				<th>费用</th>
 				<th>申请时间</th>
 				<th>业务编号</th>
+				<th>业务类型</th>
 				<th>受理状态</th>
+				<th>收件方式</th>
 				<th>备注</th>
 				<th>操作</th>
 			</tr>
@@ -77,6 +86,17 @@
 				</td>
 				<td><fmt:formatDate value="${selfApplication.createdate}" pattern="yyyy-MM-dd HH:mm:ss"></fmt:formatDate></td>
 				<td>${selfApplication.no }</td>
+				<td>
+					<c:if test = "${selfApplication.businessType == '0'}">
+               			新增
+               		</c:if>
+               		<c:if test = "${selfApplication.businessType == '1'}">
+               			更新
+               		</c:if>
+               		<c:if test = "${selfApplication.businessType == '2'}">
+               			变更
+               		</c:if>
+               	</td>
 				<td>
 					<c:if test = "${selfApplication.status == '0'}">
                			未审核
@@ -99,6 +119,16 @@
                		<c:if test = "${selfApplication.status == '6' }">
                			审核未通过
                		</c:if>
+				</td>
+				<td>
+				<c:if test = "${selfApplication.receiverType == '0' }">
+               		自取
+               		</c:if>
+               		<c:if test = "${selfApplication.receiverType == '1' }">
+               			邮寄
+               		</c:if>
+				
+				
 				</td>
 				<td>${selfApplication.denyText} </td>
 				<td>

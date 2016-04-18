@@ -18,8 +18,7 @@ public class SelfApplicationStatus {
     
     // 申请表类型
     public static final String addApply = "0";//新增
-    public static final String updateApply = "1";//未审核时修改
-    public static final String modifyApply = "2";//变更
-    public static final String renovateApply = "3";//更新
+    public static final String modifyApply = "1";//变更
+    public static final String renovateApply = "2";//更新
 
 }

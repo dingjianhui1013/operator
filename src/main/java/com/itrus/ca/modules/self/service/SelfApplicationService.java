@@ -52,6 +52,9 @@ public class SelfApplicationService extends BaseService {
 		if (StringUtils.isNotEmpty(selfApplication.getStatus())){
 			dc.add(Restrictions.like("status", "%"+selfApplication.getStatus()+"%"));
 		}
+		if (StringUtils.isNotEmpty(selfApplication.getReceiverType())){
+			dc.add(Restrictions.like("receiverType", "%"+selfApplication.getReceiverType()+"%"));
+		}
 		if (startTime!=null){
 			dc.add(Restrictions.ge("createdate", DateUtils.parseDate( DateUtils.formatDate(startTime, "yyyy-MM-dd 00:00:01"))));
 		}

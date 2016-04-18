@@ -144,6 +144,7 @@ public class SelfApplicationController extends BaseController {
 				new Page<SelfApplication>(request, response), selfApplication,startTime,endTime);
 		model.addAttribute("page", page);
 		model.addAttribute("status",selfApplication.getStatus());
+		model.addAttribute("receiverType",selfApplication.getReceiverType());
 		model.addAttribute("startTime",startTime);
 		model.addAttribute("endTime",endTime);
 		return "modules/self/selfApplicationList";
@@ -266,17 +267,15 @@ public class SelfApplicationController extends BaseController {
 		// 新增时扣减计费策略数量 
 		ConfigChargeAgent agent = bound.getAgent();
 		workDealInfo.setConfigChargeAgentId(bound.getAgent().getId());
-		if(StringUtils.isNotEmpty(selfApplication.getIsMaintain())){
-			if(selfApplication.getBusinessType().equalsIgnoreCase(SelfApplicationStatus.renovateApply)){
-				//更新
-				workDealInfo.setDealInfoType(WorkDealInfoType.TYPE_UPDATE_CERT);
-			}else if(selfApplication.getBusinessType().equalsIgnoreCase(SelfApplicationStatus.modifyApply)){
-				//变更
-				workDealInfo.setDealInfoType2(WorkDealInfoType.TYPE_INFORMATION_REROUTE);
-			}
+		if(selfApplication.getBusinessType().equalsIgnoreCase(SelfApplicationStatus.renovateApply)){
+			//更新
+			workDealInfo.setDealInfoType(WorkDealInfoType.TYPE_UPDATE_CERT);
+		}else if(selfApplication.getBusinessType().equalsIgnoreCase(SelfApplicationStatus.modifyApply)){
+			//变更
+			workDealInfo.setDealInfoType2(WorkDealInfoType.TYPE_INFORMATION_REROUTE);
 		}else{
-			//新增
-			workDealInfo.setDealInfoType(WorkDealInfoType.TYPE_ADD_CERT);
+		//新增
+		workDealInfo.setDealInfoType(WorkDealInfoType.TYPE_ADD_CERT);
 		}
 		workDealInfo.setYear(Integer.parseInt(selfApplication.getApplicationPeriod()));
 		workDealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_ENTRY_SUCCESS);
