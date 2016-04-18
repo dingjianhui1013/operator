@@ -25,10 +25,6 @@
 		//颁发者CA的DN项
 		var arrayIssuerDN = setArrayIssuerDN();
 	
-		function nicai(){
-			alert(PTA.filterCerts("",1,""));
-		}
-		nicai();
 		function setArrayIssuerDN(){
 			var array = new Array();
 			$.ajax({
@@ -408,6 +404,7 @@
 	
 		<script language="javascript">
 			var arrayCerts = PTA.filterSignCerts();
+			alert(arrayCerts.length);
 			var objCertList = SignForm.CertList; //定义<select>对象
 			//先清空CertList
 			for(var i = objCertList.length - 1; i >= 0 ; i--)
