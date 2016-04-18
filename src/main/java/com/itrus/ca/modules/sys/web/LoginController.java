@@ -66,8 +66,13 @@ public class LoginController extends BaseController{
 			systemService.updateUserLoginInfo(user.getId(),StringUtils.getRemoteAddr(request));
 			return "redirect:"+Global.getAdminPath();
 		}
-		model.addAttribute(FormAuthenticationFilter.DEFAULT_USERNAME_PARAM, username);
-		model.addAttribute("isValidateCodeLogin", isValidateCodeLogin(username, true, false));
+		String type = request.getParameter("type");
+		if(StringUtils.isNotEmpty(type)&&"1".equals(type)){
+			model.addAttribute("sccaError", "error");
+		}else{
+			model.addAttribute(FormAuthenticationFilter.DEFAULT_USERNAME_PARAM, username);
+			model.addAttribute("isValidateCodeLogin", isValidateCodeLogin(username, true, false));
+		}
 		return "modules/sys/sysLogin";
 	}
 
