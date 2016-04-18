@@ -12,7 +12,15 @@
 	<script type="text/javascript">
 		//颁发者CA的DN项
 		var arrayIssuerDN = setArrayIssuerDN();
-	
+//		var arrayIssuerDN = new Array(
+//				"C=CN, O=四川省数字证书认证管理中心有限公司, OU=SCEB CA, CN=SCEB CA"
+//				, "C=CN, O=四川省数字证书认证管理中心有限公司, OU=China Trust Network, OU=Terms of use at https://www.itrus.com.cn/ctnrpa (c)2008, OU=Class 2 Enterprise Individual Subscriber CA, CN=SCEGB CA"
+//				, "C=CN, O=CFCA Operation CA2"
+//				, "CN=天诚安信测试RSA1024用户CA, OU=TOPCA, O=TOPCA, C=CN"
+//				, "CN=天诚安信测试SM2用户证书, OU=测试部, O=天诚安信, C=CN"
+//				, "O=四川省数字证书认证管理中心有限公司, OU=技术部, CN=SCCA Employee CA"
+//		);
+
 		function setArrayIssuerDN(){
 			var array = new Array();
 			$.ajax({
@@ -32,7 +40,7 @@
 		$(document).ready(function() {
 			var loginType = "${user.loginType}";
 			if(loginType=='1'){
-				logonSign();
+				//logonSign();
 				$(".srk").hide();
 				$("#selectCN").show();
 			}
@@ -48,22 +56,24 @@
 				},
 				submitHandler: function(form){
 					if($("#sccaLogin").attr("checked")=="checked"){
-						var index = SignForm.CertList.value;
-						var CurCert = arrayCerts[index];
-						if(CurCert&&CurCert.SerialNumber&&CurCert.SerialNumber!="${user.sccaNumber}"){
-							var Result=PTA.VerifyStringSignature(SignForm.SignedData.value,SignForm.ToSign.value);
-							if(Result){
-								var seeaPassword = $("#sccaPasssword").val();
-								if(seeaPassword!=null&&seeaPassword!="${user.sccaNumber}"){
-									form.submit();
+						if(logonSign()){
+							var index = SignForm.CertList.value;
+							var CurCert = arrayCerts[index];
+							if(CurCert&&CurCert.SerialNumber&&CurCert.SerialNumber!="${user.sccaNumber}"){
+								var Result=PTA.VerifyStringSignature(SignForm.SignedData.value,SignForm.ToSign.value);
+								if(Result){
+									var seeaPassword = $("#sccaPasssword").val();
+									if(seeaPassword!=null&&seeaPassword!="${user.sccaNumber}"){
+										form.submit();
+									}else{
+										alert("证书登录设置失败,请重新	!");
+									}
 								}else{
-									alert("证书登录设置失败,请重新	!");
+									alert("证书登录设置失败,请查看您的证书是否有效合法!");
 								}
 							}else{
-								alert("证书登录设置失败,请查看您的证书是否有效合法!");
+								form.submit();
 							}
-						}else{
-							form.submit();
 						}
 					}else{
 						var seeaPassword1 = $("#sccaPasssword1").val();
@@ -356,7 +366,7 @@
 				$(".srk").hide();
 				$("#validationZS").show();
 				$("#selectCN").show();
-				logonSign();
+				//logonSign();
 			}else{
 				$("#selectCN").hide();
 				$(".srk").show();
@@ -431,7 +441,7 @@
 			<div class="controls">
 				<input type = "radio" onclick="javascript:validationT();" <c:if test="${user.loginType!='1' }"> checked="checked" </c:if> name = "loginType" value ="0" /> 密码登录
 				<input type = "radio" id="sccaLogin" onclick="javascript:validationT();" <c:if test="${user.loginType=='1' }"> checked="checked" </c:if> name = "loginType" value ="1" /> 证书登录
-				<a class="ml20" href="javascript:logonVerify();" id="validationZS" <c:if test="${user.loginType!='1' }"> style="display:none" </c:if> margin-left:50px" >验证证书</a>
+				<!-- <a class="ml20" href="javascript:logonVerify();" id="validationZS" <c:if test="${user.loginType!='1' }"> style="display:none" </c:if> margin-left:50px" >验证证书</a>  -->
 			</div>
 		</div>
 		<div class="control-group srk">
