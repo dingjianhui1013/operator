@@ -25,6 +25,10 @@
 		//颁发者CA的DN项
 		var arrayIssuerDN = setArrayIssuerDN();
 	
+		function nicai(){
+			alert(PTA.filterCerts("",1,""));
+		}
+		nicai();
 		function setArrayIssuerDN(){
 			var array = new Array();
 			$.ajax({
