@@ -8,7 +8,7 @@
 	<meta name="decorator" content="default"/>
 	<style type="text/css">
       html,body,table{background-color:#f5f5f5;width:100%;height:500px;text-align:center;}.form-signin-heading{font-size:36px;margin-bottom:20px;color:#0663a2;}
-      .form-signin{position:relative;text-align:left;width:300px;padding:45px 29px 29px;margin:0 auto 20px;background-color:#fff;border:1px solid #e5e5e5;
+      .form-signin{position:relative;text-align:left;width:330px;padding:15px 20px 5px;margin:0 auto 20px;background-color:#fff;border:1px solid #e5e5e5;
         	-webkit-border-radius:5px;-moz-border-radius:5px;border-radius:5px;-webkit-box-shadow:0 1px 2px rgba(0,0,0,.05);-moz-box-shadow:0 1px 2px rgba(0,0,0,.05);box-shadow:0 1px 2px rgba(0,0,0,.05);}
       .form-signin .checkbox{margin-bottom:10px;color:#0663a2;} .form-signin .input-label{font-size:16px;line-height:23px;color:#999;}
       .form-signin .input-block-level{font-size:16px;height:auto;margin-bottom:15px;padding:7px;*width:283px;*padding-bottom:0;_padding:7px 7px 9px 7px;}
@@ -19,6 +19,10 @@
       .form-group-sign{ margin-bottom:20px;}
       .form-group-sign .btn.btn-large{width:100%;}
       .btnBox{margin-bottom:15px; }
+      .selectzsBox{background:#fff;width:350px;padding:15px 10px; margin:0px auto 10px; overflow:hidden;border:1px solid #e5e5e5;-webkit-border-radius:5px;-moz-border-radius:5px;border-radius:5px;}
+      .selectzsBox form{margin-bottom:5px;}
+      .caInfo{ text-align:left; padding:10px 10px 0px; border-top:1px solid #ddd; margin-bottom:10px;}
+      .caInfo p{margin-bottom:5px; display:block}
     </style>
     <script src="${ctxStatic}/js/pta.js" type="text/javascript"></script>
 	<script type="text/javascript">
@@ -369,6 +373,30 @@
 		</c:if>
 	</div>
 	<h1 class="form-signin-heading">${fns:getConfig('productName')}</h1>
+	<div  class="selectzsBox">
+		<form name="SignForm" id="selectCN">
+				<strong>请选择证书：</strong>
+				<select name="CertList" onchange="getCertInfo();" style="width:71%;"></select>
+				<input name="RandStr" type="hidden" value="2134783982345" />
+				<div style="display:none">
+					<br>
+					待签名原文：
+					<textarea name="ToSign" cols="50" rows="10">小王于2006年12月13日提款10万元</textarea>
+					<br>
+					签名后结果：
+					<textarea name="SignedData" cols="50" rows="10"></textarea>
+					<br>
+				</div>
+			
+		</form>
+		<div id="caInfo" class="caInfo">
+			<p>颁发者:<span id="qfz"></span></p>
+			<p>主题:<span id="zt"></span></p>
+			<p>序列号:<span id="xlh"></span></p>
+			<p>开始:<span id="ks"></span></p>
+			<p>结束:<span id="js"></span></p>
+		</div>	
+	</div>
 	<form id="loginForm" class="form-signin" action="${ctx}/login" method="post">
 		<div style="display:none" id="plogin">
 			<label class="input-label" for="username">登录名</label>
@@ -402,29 +430,8 @@
 			<!--[if lte IE 6]><script type="text/javascript">$('#themeSwitch').hide();</script><![endif]-->
 		</div> --%>
 	</form>
-	<form name="SignForm" id="selectCN">
-			<div >
-				请选择证书：
-				<select name="CertList" onchange="getCertInfo();"></select>
-				<input name="RandStr" type="hidden" value="2134783982345" />
-				<div style="display:none">
-					<br>
-					待签名原文：
-					<textarea name="ToSign" cols="50" rows="10">小王于2006年12月13日提款10万元</textarea>
-					<br>
-					签名后结果：
-					<textarea name="SignedData" cols="50" rows="10"></textarea>
-					<br>
-				</div>
-			</div>
-		</form>
-	<div id="caInfo">
-		颁发者:<span id="qfz"></span><br/>
-		主题:<span id="zt"></span><br/>
-		序列号:<span id="xlh"></span><br/>
-		开始:<span id="ks"></span><br/>
-		结束:<span id="js"></span><br/>
-	</div>	
+	
+	
 	Copyright &copy; 2014-${fns:getConfig('copyrightYear')} <a href="${pageContext.request.contextPath}">${fns:getConfig('productName')}</a>
 	
 		<script language="javascript">
