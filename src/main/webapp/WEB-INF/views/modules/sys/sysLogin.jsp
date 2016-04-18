@@ -339,6 +339,7 @@
 			$("#sub").css("display","none");
 			$("#sccaLoginId").show();
 			$("#passlogin").show();
+			$("#caInfo").show();
 			$("#selectCN").show();
 			if(logonSign()){
 				var index = SignForm.CertList.value;
@@ -359,6 +360,7 @@
 		$("#sub").css("display","block");
 		$("#sccaLoginId").hide();
 		$("#passlogin").hide();
+		$("#caInfo").hide();
 		$("#selectCN").hide();
 	}
 	</script>
@@ -454,6 +456,13 @@
 					el.value = i;
 					objCertList.add(el);
 				}
+				var CurCert = arrayCerts[0];
+				$("#caInfo").show();
+				$("#qfz").html(CurCert.Issuer);
+				$("#zt").html(CurCert.Subject);
+				$("#xlh").html(CurCert.SerialNumber);
+				$("#ks").html(CurCert.ValidFrom+"");
+				$("#js").html(CurCert.ValidTo+"");
 			}
 		</script>
 </body>
