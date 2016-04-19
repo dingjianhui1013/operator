@@ -584,7 +584,6 @@
 										<label for="exampleInputFile" class="uploadBtn">上传文件</label>
 										<input type="file" id="exampleInputFile" name = "companyImage" class="uploadFileInput" onchange="PreviewImage(this,'imghead','preview','picBigBox')">
 			                            <br>
-			                            ${imgUrl}/${workDealInfo.selfImage.companyImage }
 			                            <br>
 			                            <div class="previewImg" id="preview">
 			                            	<div class="small_pic">
