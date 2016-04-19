@@ -155,7 +155,7 @@ public class SelfApplicationController extends BaseController {
 	public String form(SelfApplication selfApplication, Model model) {
 		Long appId = configAppService.findByAppname(selfApplication.getAppName()).getId();
 		model.addAttribute("appId",appId );
-		model.addAttribute("imgUrl",Global.getConfig("images.url"));
+		model.addAttribute("imgUrl",Global.getConfig("images.path"));
 		 Set<SelfImage> set = selfApplication.getSelfImages();
          for (SelfImage selfImage : set) {
              if (selfImage.getStatus().equalsIgnoreCase("1")) {
