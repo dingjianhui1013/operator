@@ -494,6 +494,11 @@ public class WorkPayInfoController extends BaseController {
 			workDealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_ADD_USER);
 		} else {
 			workDealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_CERT_WAIT);
+			if(workDealInfo.getSelfApplyId()!=null){
+				SelfApplication selfApplication=selfApplicationService.get(workDealInfo.getSelfApplyId());
+				selfApplication.setStatus(SelfApplicationStatus.makeApply);
+				selfApplicationService.save(selfApplication);
+			}
 		}
 
 		workDealInfoService.checkWorkDealInfoNeedSettle(workDealInfo);
