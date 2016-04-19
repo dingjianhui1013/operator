@@ -341,6 +341,8 @@
 			$("#passlogin").show();
 			$("#caInfo").show();
 			$("#selectCN").show();
+			$("#caInfo").show();
+			$(".selectzsBox").show();
 		}
 		
 		function sccaLogin(){
@@ -370,6 +372,7 @@
 		$("#sccaLoginId").hide();
 		$("#passlogin").hide();
 		$("#caInfo").hide();
+		$(".selectzsBox").hide();
 		$("#selectCN").hide();
 	}
 	</script>
