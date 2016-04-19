@@ -708,7 +708,7 @@
 								id="organizationNumber1"
 								onkeyup="value=value.replace(/[^\w\.\/]/ig,'')"
 								value="${workDealInfo.workCompany.organizationNumber}"
-								maxlength="20" oninput="count('organizationNumber1','zzcount')" onblur="qxCount('zzcount')" onfocus="hqcount('organizationNumber1','zzcount')"/><span id="zzcount" style="color: red; margin-left: 10px"></span></td>
+								maxlength="9" oninput="count('organizationNumber1','zzcount')" onblur="qxCount('zzcount')" onfocus="hqcount('organizationNumber1','zzcount')"/><span id="zzcount" style="color: red; margin-left: 10px"></span></td>
 							<th>组织机构代码有效期：</th>
 							<td><input class="input-medium Wdate"
 								

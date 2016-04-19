@@ -636,7 +636,7 @@
 								id="organizationNumber1"
 								onkeyup="value=value.replace(/[^\w\.\/]/ig,'')"
 								value="${workDealInfo.workCompany.organizationNumber}"
-								maxlength="20" oninput="count('organizationNumber','zzcount')" onblur="qxCount('zzcount')" onfocus="hqcount('organizationNumber','zzcount')"/><span id="zzcount" style="color: red; margin-left: 10px"></span></td>
+								maxlength="9" oninput="count('organizationNumber','zzcount')" onblur="qxCount('zzcount')" onfocus="hqcount('organizationNumber','zzcount')"/><span id="zzcount" style="color: red; margin-left: 10px"></span></td>
 							<th>组织机构代码有效期：</th>
 							<td><input class="input-medium Wdate"
 								
@@ -669,7 +669,7 @@
 						<tr>
 							<th><span class="prompt" style="color: red; display: none;">*</span>证件号：</th>
 							<td><input type="text" name="comCertficateNumber"
-								id="comCertficateNumber1" 
+								id="comCertficateNumber1" maxlength="18"
 								value="${workDealInfo.workCompany.comCertficateNumber}" oninput="count('comCertficateNumber1','zjhcount')" onblur="qxCount('zjhcount')" onfocus="hqcount('comCertficateNumber1','zjhcount')"/><span id="zjhcount" style="color: red; margin-left: 10px"></span></td>
 							<th>单位证照有效期：</th>
 							<td><input class="input-medium Wdate" type="text"

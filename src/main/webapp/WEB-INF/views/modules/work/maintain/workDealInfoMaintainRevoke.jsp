@@ -254,7 +254,7 @@
 								id="organizationNumber1"
 								onkeyup="value=value.replace(/[^\w\.\/]/ig,'')"
 								value="${workDealInfo.workCompany.organizationNumber}"
-								maxlength="20" /></td>
+								maxlength="9" /></td>
 							<th>组织机构代码有效期：</th>
 							<td><input class="input-medium Wdate" disabled="disabled"
 								
@@ -287,7 +287,7 @@
 						<tr>
 							<th><span class="prompt" style="color: red; display: none;">*</span>证件号：</th>
 							<td><input type="text" name="comCertficateNumber" disabled="disabled"
-								id="comCertficateNumber1" 
+								id="comCertficateNumber1" maxlength="18"
 								value="${workDealInfo.workCompany.comCertficateNumber}" /></td>
 							<th>单位证照有效期：</th>
 							<td><input class="input-medium Wdate" type="text" disabled="disabled"
