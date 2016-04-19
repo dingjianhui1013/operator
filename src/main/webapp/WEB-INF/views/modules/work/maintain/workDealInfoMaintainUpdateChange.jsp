@@ -660,7 +660,7 @@
 						<tr>
 							<th><span class="prompt" style="color: red; display: none;">*</span>证件号：</th>
 							<td><input type="text" name="comCertficateNumber"
-								id="comCertficateNumber1" 
+								id="comCertficateNumber1" maxlength="18"
 								value="${workDealInfo.workCompany.comCertficateNumber}" oninput="count('comCertficateNumber1','zjcount')" onblur="qxCount('zjcount')" onfocus="hqcount('comCertficateNumber1','zjcount')"/><span id="zjcount" style="color: red; margin-left: 10px"></span></td>
 							<th>单位证照有效期：</th>
 							<td><input class="input-medium Wdate" type="text"
@@ -833,7 +833,7 @@
 						</tr>
 						<tr>
 							<th><span class="prompt" style="color: red; display: none;">*</span>经办人身份证号:</th>
-							<td><input type="text" name="pIDCard" id="pIDCard" 
+							<td><input type="text" name="pIDCard" id="pIDCard" maxlength="18"
 								value="${workDealInfo.workCertInfo.workCertApplyInfo.idCard }" oninput="count('pIDCard','pIDcount')" onblur="qxCount('pIDcount')" onfocus="hqcount('pIDCard','pIDcount')"/><span id="pIDcount" style="color: red; margin-left: 10px"></span></td>
 						</tr>
 						<tr>
