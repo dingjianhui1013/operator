@@ -435,10 +435,6 @@ public class SignatureInfoController extends BaseController {
 					receiptInvoice.setUpdateBy(signature.getCreateBy());
 					receiptInvoice.setDelFlag(BaseEntity.DEL_FLAG_NORMAL);
 					receiptInvoiceService.save(receiptInvoice);
-					ReceiptDepotInfo receiptDepotInfo = depotInfos.get(0);
-					receiptDepotInfo.setReceiptResidue(receiptDepotInfo.getReceiptResidue()-receiptAmount);
-					receiptDepotInfo.setReceiptOut(receiptDepotInfo.getReceiptOut()+receiptAmount);
-					receiptDepotInfoService.save(receiptDepotInfo);
 					pay.setReceiptInvoice(receiptInvoice);
 					signaturePayInfoService.save(pay);	
 				}
@@ -475,27 +471,13 @@ public class SignatureInfoController extends BaseController {
 						receiptInvoice.setUpdateBy(signatureInfo.getCreateBy());
 						receiptInvoice.setDelFlag(BaseEntity.DEL_FLAG_NORMAL);
 						receiptInvoiceService.save(receiptInvoice);
-						ReceiptDepotInfo receiptDepotInfo = depotInfos.get(0);
-						receiptDepotInfo.setReceiptResidue(receiptDepotInfo.getReceiptResidue()-receiptAmount);
-						receiptDepotInfo.setReceiptOut(receiptDepotInfo.getReceiptOut()+receiptAmount);
-						receiptDepotInfoService.save(receiptDepotInfo);
+				
 						payInfo.setReceiptInvoice(receiptInvoice);
 					}else{
 						ReceiptInvoice receiptInvoice = payInfo.getReceiptInvoice();
 						if(receiptInvoice!=null){
-							ReceiptDepotInfo receiptDepotInfo = receiptInvoice.getReceiptDepotInfo();
-							receiptDepotInfo.setReceiptResidue(receiptDepotInfo.getReceiptResidue()+receiptInvoice.getReceiptMoney());
-							receiptDepotInfo.setReceiptOut(receiptDepotInfo.getReceiptOut()-receiptInvoice.getReceiptMoney());
-							receiptDepotInfoService.save(receiptDepotInfo);
-							ReceiptEnterInfo enterInfo =  new ReceiptEnterInfo();
-							enterInfo.setReceiptDepotInfo(receiptDepotInfo);
-							enterInfo.setNow_Money(receiptInvoice.getReceiptMoney());
-							enterInfo.setBeforMoney(enterInfo
-									.getReceiptDepotInfo().getReceiptResidue()
-									- Double.valueOf(receiptInvoice.getReceiptMoney()));
-							enterInfo.setReceiptMoney(enterInfo
-									.getReceiptDepotInfo().getReceiptResidue());
-							enterInfo.setReceiptType(7);// 印章修改入库
+							receiptInvoice.setDelFlag(BaseEntity.DEL_FLAG_DELETE);
+							receiptInvoiceService.save(receiptInvoice);
 						}
 					}
 				}else{
@@ -503,51 +485,15 @@ public class SignatureInfoController extends BaseController {
 						ReceiptInvoice receiptInvoice = payInfo.getReceiptInvoice();
 						if(receiptInvoice!=null){
 							//发票金额更改
-							if(receiptInvoice.getReceiptMoney()!=receiptAmount){
-								
-								ReceiptDepotInfo receiptDepotInfo = receiptInvoice.getReceiptDepotInfo();
-								receiptDepotInfo.setReceiptResidue(receiptDepotInfo.getReceiptResidue()+receiptInvoice.getReceiptMoney());
-								receiptDepotInfo.setReceiptOut(receiptDepotInfo.getReceiptOut()-receiptInvoice.getReceiptMoney());
-								receiptDepotInfoService.save(receiptDepotInfo);
-								ReceiptEnterInfo enterInfo =  new ReceiptEnterInfo();
-								enterInfo.setReceiptDepotInfo(receiptDepotInfo);
-								enterInfo.setNow_Money(receiptInvoice.getReceiptMoney());
-								enterInfo.setBeforMoney(enterInfo
-										.getReceiptDepotInfo().getReceiptResidue()
-										- Double.valueOf(receiptInvoice.getReceiptMoney()));
-								enterInfo.setReceiptMoney(enterInfo
-										.getReceiptDepotInfo().getReceiptResidue());
-								enterInfo.setReceiptType(7);
-								
-								ReceiptInvoice newReceiptInvoice = new ReceiptInvoice();
-								
-								newReceiptInvoice.setReceiptDepotInfo(receiptDepotInfo);
-								newReceiptInvoice.setCompanyName(signatureInfo.getWorkDealInfo().getWorkCompany().getCompanyName());
-								receiptInvoice.setReceiptMoney(receiptAmount);
-								receiptInvoice.setReceiptType(3);//印章出库
-								receiptInvoice.setDealInfoId(signatureInfo.getWorkDealInfo().getId());
-								receiptInvoice.setCreateDate(new Date());
-								receiptInvoice.setUpdateDate(new Date());
-								receiptInvoice.setCreateBy(signatureInfo.getCreateBy());
-								receiptInvoice.setUpdateBy(signatureInfo.getCreateBy());
-								receiptInvoice.setDelFlag(BaseEntity.DEL_FLAG_NORMAL);
-								receiptInvoiceService.save(receiptInvoice);
-								
-								receiptDepotInfo.setReceiptResidue(receiptDepotInfo.getReceiptResidue()-receiptAmount);
-								receiptDepotInfo.setReceiptOut(receiptDepotInfo.getReceiptOut()+receiptAmount);
-								receiptDepotInfoService.save(receiptDepotInfo);
-								
-								payInfo.setReceiptInvoice(newReceiptInvoice);
-								
-								
-								
-							}
+							receiptInvoice.setReceiptMoney(receiptAmount);
+							receiptInvoiceService.save(receiptInvoice);
+							
+
 						}
 					}
 				}
 				
 				
-
 				payInfo.setYear(year);
 				payInfo.setMethodMoney(methodMoney);
 				payInfo.setMethodPos(methodPos);
@@ -801,27 +747,12 @@ public class SignatureInfoController extends BaseController {
 						receiptInvoice.setUpdateBy(signature.getCreateBy());
 						receiptInvoice.setDelFlag(BaseEntity.DEL_FLAG_NORMAL);
 						receiptInvoiceService.save(receiptInvoice);
-						ReceiptDepotInfo receiptDepotInfo = depotInfos.get(0);
-						receiptDepotInfo.setReceiptResidue(receiptDepotInfo.getReceiptResidue()-receiptAmount);
-						receiptDepotInfo.setReceiptOut(receiptDepotInfo.getReceiptOut()+receiptAmount);
-						receiptDepotInfoService.save(receiptDepotInfo);
 						pay.setReceiptInvoice(receiptInvoice);
 					}else{
 						ReceiptInvoice receiptInvoice = pay.getReceiptInvoice();
 						if(receiptInvoice!=null){
-							ReceiptDepotInfo receiptDepotInfo = receiptInvoice.getReceiptDepotInfo();
-							receiptDepotInfo.setReceiptResidue(receiptDepotInfo.getReceiptResidue()+receiptInvoice.getReceiptMoney());
-							receiptDepotInfo.setReceiptOut(receiptDepotInfo.getReceiptOut()-receiptInvoice.getReceiptMoney());
-							receiptDepotInfoService.save(receiptDepotInfo);
-							ReceiptEnterInfo enterInfo =  new ReceiptEnterInfo();
-							enterInfo.setReceiptDepotInfo(receiptDepotInfo);
-							enterInfo.setNow_Money(receiptInvoice.getReceiptMoney());
-							enterInfo.setBeforMoney(enterInfo
-									.getReceiptDepotInfo().getReceiptResidue()
-									- Double.valueOf(receiptInvoice.getReceiptMoney()));
-							enterInfo.setReceiptMoney(enterInfo
-									.getReceiptDepotInfo().getReceiptResidue());
-							enterInfo.setReceiptType(7);
+							receiptInvoice.setDelFlag(BaseEntity.DEL_FLAG_DELETE);
+							receiptInvoiceService.save(receiptInvoice);
 						}
 					}
 				}else{
@@ -829,45 +760,8 @@ public class SignatureInfoController extends BaseController {
 						ReceiptInvoice receiptInvoice = pay.getReceiptInvoice();
 						if(receiptInvoice!=null){
 							//发票金额更改
-							if(receiptInvoice.getReceiptMoney()!=receiptAmount){
-								
-								ReceiptDepotInfo receiptDepotInfo = receiptInvoice.getReceiptDepotInfo();
-								receiptDepotInfo.setReceiptResidue(receiptDepotInfo.getReceiptResidue()+receiptInvoice.getReceiptMoney());
-								receiptDepotInfo.setReceiptOut(receiptDepotInfo.getReceiptOut()-receiptInvoice.getReceiptMoney());
-								receiptDepotInfoService.save(receiptDepotInfo);
-								ReceiptEnterInfo enterInfo =  new ReceiptEnterInfo();
-								enterInfo.setReceiptDepotInfo(receiptDepotInfo);
-								enterInfo.setNow_Money(receiptInvoice.getReceiptMoney());
-								enterInfo.setBeforMoney(enterInfo
-										.getReceiptDepotInfo().getReceiptResidue()
-										- Double.valueOf(receiptInvoice.getReceiptMoney()));
-								enterInfo.setReceiptMoney(enterInfo
-										.getReceiptDepotInfo().getReceiptResidue());
-								enterInfo.setReceiptType(7);
-								
-								ReceiptInvoice newReceiptInvoice = new ReceiptInvoice();
-								
-								newReceiptInvoice.setReceiptDepotInfo(receiptDepotInfo);
-								newReceiptInvoice.setCompanyName(signature.getWorkDealInfo().getWorkCompany().getCompanyName());
-								receiptInvoice.setReceiptMoney(receiptAmount);
-								receiptInvoice.setReceiptType(3);//印章出库
-								receiptInvoice.setDealInfoId(signature.getWorkDealInfo().getId());
-								receiptInvoice.setCreateDate(new Date());
-								receiptInvoice.setUpdateDate(new Date());
-								receiptInvoice.setCreateBy(signature.getCreateBy());
-								receiptInvoice.setUpdateBy(signature.getCreateBy());
-								receiptInvoice.setDelFlag(BaseEntity.DEL_FLAG_NORMAL);
-								receiptInvoiceService.save(receiptInvoice);
-								
-								receiptDepotInfo.setReceiptResidue(receiptDepotInfo.getReceiptResidue()-receiptAmount);
-								receiptDepotInfo.setReceiptOut(receiptDepotInfo.getReceiptOut()+receiptAmount);
-								receiptDepotInfoService.save(receiptDepotInfo);
-								
-								pay.setReceiptInvoice(newReceiptInvoice);
-								
-								
-								
-							}
+							receiptInvoice.setReceiptMoney(receiptAmount);
+							receiptInvoiceService.save(receiptInvoice);
 						}
 					}
 				}
@@ -917,10 +811,7 @@ public class SignatureInfoController extends BaseController {
 			receiptInvoice.setUpdateBy(signature.getCreateBy());
 			receiptInvoice.setDelFlag(BaseEntity.DEL_FLAG_NORMAL);
 			receiptInvoiceService.save(receiptInvoice);
-			ReceiptDepotInfo receiptDepotInfo = depotInfos.get(0);
-			receiptDepotInfo.setReceiptResidue(receiptDepotInfo.getReceiptResidue()-pay.getTotalMoney());
-			receiptDepotInfo.setReceiptOut(receiptDepotInfo.getReceiptOut()+pay.getTotalMoney());
-			receiptDepotInfoService.save(receiptDepotInfo);
+			
 			pay.setReceiptInvoice(receiptInvoice);
 			signaturePayInfoService.save(pay);	
 	}

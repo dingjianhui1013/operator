@@ -282,6 +282,17 @@ public class SignatureInterfaceController {
 					signatureInfo.setStatus(SignatureInfoStatus.STATUS_UPDATE);
 				}
 				
+				SignaturePayInfo pay = signaturePayInfoService.findBySignatureInfo(signatureInfo);
+				
+				if(pay.getIsReceipt()==true){
+					ReceiptInvoice receiptInvoice = pay.getReceiptInvoice();
+					ReceiptDepotInfo receiptDepotInfo = receiptInvoice.getReceiptDepotInfo();
+					receiptDepotInfo.setReceiptOut(receiptDepotInfo.getReceiptOut()+receiptInvoice.getReceiptMoney());
+					receiptDepotInfo.setReceiptResidue(receiptDepotInfo.getReceiptResidue()-receiptInvoice.getReceiptMoney());
+					receiptDepotInfoService.save(receiptDepotInfo);
+				}
+				
+				
 				json.put("msg", "该印章业务已标记为成功！");
 						
 			//签章失败	
