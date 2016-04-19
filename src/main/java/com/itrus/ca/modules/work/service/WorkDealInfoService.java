@@ -6527,6 +6527,17 @@ public class WorkDealInfoService extends BaseService {
 
 	}
 	
+	public WorkDealInfo findNextDealInfo(Long id) {
+		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
+		dc.add(Restrictions.eq("prevId", id));
+		if (workDealInfoDao.find(dc).size() > 0) {
+			return workDealInfoDao.find(dc).get(0);
+		} else {
+			return null;
+		}
+
+	} 
+	
 	
 	//找到父业务
 	public WorkDealInfo findPreDealInfo(Long prvedId) {

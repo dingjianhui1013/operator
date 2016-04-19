@@ -4100,31 +4100,38 @@ public class WorkDealInfoController extends BaseController {
 //					companyIds, productId);
 			Page<WorkDealInfo> list = workDealInfoService.findEnterprise(new Page<WorkDealInfo>(request, response),
 					companyIds, productId);
-			List<Long> workdealinfoIds = new ArrayList<Long>();
-			List<Long> previds = new ArrayList<Long>();
-			for (WorkDealInfo workDealInfo : list.getList()) {
-				
-				workdealinfoIds.add(workDealInfo.getId());
-				
-				if(workDealInfo.getPrevId()!=null)
-				{
-					previds.add(workDealInfo.getPrevId());
-				}
-			}
-			for(int j=0;j<workdealinfoIds.size();j++)
-			{
-				for(int i = 0 ;i<previds.size();i++)
-				{
-					if(!previds.isEmpty())
-					{
-						if(workdealinfoIds.get(j).equals(previds.get(i)))
-						{
-							workdealinfoIds.remove(j);
-						}
-					}
-				}
-			}
 			
+			List<Long> workdealinfoIds = new ArrayList<Long>();
+//			List<Long> workdealinfos = new ArrayList<Long>();
+//			List<Long> previds = new ArrayList<Long>();
+			for (WorkDealInfo workDealInfo : list.getList()) {
+				WorkDealInfo workDealInfo1 = workDealInfoService.findNextDealInfo(workDealInfo.getId());
+				if(workDealInfo1==null)
+				{
+					workdealinfoIds.add(workDealInfo.getId());
+				}
+				
+//				if(workDealInfo.getPrevId()!=null)
+//				{
+//					previds.add(workDealInfo.getPrevId());
+//				}
+			}
+//			int size=workdealinfoIds.size();
+//			workdealinfos = workdealinfoIds;
+//			for(int j=0;j<size;j++)
+//			{
+//				for(int i = 0 ;i<previds.size();i++)
+//				{
+//					if(!previds.isEmpty())
+//					{
+//						if(workdealinfos.get(j).equals(previds.get(i)))
+//						{
+//							workdealinfos.remove(j);
+//						}
+//					}
+//				}
+//			}
+//			
 			if(workdealinfoIds.size()>0&&!workdealinfoIds.isEmpty())
 			{
 				StringBuffer workdealinfoss = new StringBuffer();
