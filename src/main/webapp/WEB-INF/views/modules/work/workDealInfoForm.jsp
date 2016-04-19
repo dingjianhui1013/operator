@@ -1256,7 +1256,7 @@ var selected = false;
 							<th><span class="prompt" style="color: red; display: none;">*</span>组织机构代码：</th>
 							<td><input type="text" name="organizationNumber"
 								onkeyup="value=value.replace(/[^\w\.\/]/ig,'')"
-								value="${workCompany.organizationNumber }" maxlength="20"
+								value="${workCompany.organizationNumber }" maxlength="9"
 								id="organizationNumber"
 								oninput="count('organizationNumber','zdcount')"
 								onblur="qxCount('zdcount')"
