@@ -118,8 +118,7 @@ public class SignatureInfoController extends BaseController {
 	@Autowired
 	private OfficeService officeService;
 
-	@Autowired
-	private ReceiptEnterInfoService receiptEnterInfoService;
+	
 	@ModelAttribute
 	public SignatureInfo get(@RequestParam(required = false) Long id) {
 		if (id != null) {
@@ -433,7 +432,7 @@ public class SignatureInfoController extends BaseController {
 					receiptInvoice.setUpdateDate(new Date());
 					receiptInvoice.setCreateBy(signature.getCreateBy());
 					receiptInvoice.setUpdateBy(signature.getCreateBy());
-					receiptInvoice.setDelFlag(BaseEntity.DEL_FLAG_NORMAL);
+					receiptInvoice.setDelFlag(BaseEntity.DEL_FLAG_DELETE);
 					receiptInvoiceService.save(receiptInvoice);
 					pay.setReceiptInvoice(receiptInvoice);
 					signaturePayInfoService.save(pay);	
@@ -469,7 +468,7 @@ public class SignatureInfoController extends BaseController {
 						receiptInvoice.setUpdateDate(new Date());
 						receiptInvoice.setCreateBy(signatureInfo.getCreateBy());
 						receiptInvoice.setUpdateBy(signatureInfo.getCreateBy());
-						receiptInvoice.setDelFlag(BaseEntity.DEL_FLAG_NORMAL);
+						receiptInvoice.setDelFlag(BaseEntity.DEL_FLAG_DELETE);
 						receiptInvoiceService.save(receiptInvoice);
 				
 						payInfo.setReceiptInvoice(receiptInvoice);
@@ -745,7 +744,7 @@ public class SignatureInfoController extends BaseController {
 						receiptInvoice.setUpdateDate(new Date());
 						receiptInvoice.setCreateBy(signature.getCreateBy());
 						receiptInvoice.setUpdateBy(signature.getCreateBy());
-						receiptInvoice.setDelFlag(BaseEntity.DEL_FLAG_NORMAL);
+						receiptInvoice.setDelFlag(BaseEntity.DEL_FLAG_DELETE);
 						receiptInvoiceService.save(receiptInvoice);
 						pay.setReceiptInvoice(receiptInvoice);
 					}else{
@@ -809,7 +808,7 @@ public class SignatureInfoController extends BaseController {
 			receiptInvoice.setUpdateDate(new Date());
 			receiptInvoice.setCreateBy(signature.getCreateBy());
 			receiptInvoice.setUpdateBy(signature.getCreateBy());
-			receiptInvoice.setDelFlag(BaseEntity.DEL_FLAG_NORMAL);
+			receiptInvoice.setDelFlag(BaseEntity.DEL_FLAG_DELETE);
 			receiptInvoiceService.save(receiptInvoice);
 			
 			pay.setReceiptInvoice(receiptInvoice);
@@ -899,7 +898,7 @@ public class SignatureInfoController extends BaseController {
 	{
 		SignatureInfo signatureInfo =signatureInfoService.get(signarureId);
 		SignaturePayInfo signaturePayInfo = signaturePayInfoService.findBySignatureInfo(signatureInfo);
-		if(signaturePayInfo.getIsReceipt())
+		/*if(signaturePayInfo.getIsReceipt())
 		{
 			Office office = signatureInfo.getEnterUser().getOffice();
 			List<ReceiptDepotInfo> depotInfos =receiptDepotInfoService.findDepotByOffice(office);
@@ -914,7 +913,7 @@ public class SignatureInfoController extends BaseController {
 			User user = UserUtils.getUser();
 			receiptEnterInfo.setCreateBy(user);
 			receiptEnterInfoService.save(receiptEnterInfo);
-		}
+		}*/
 		if(signatureInfo.getPrevId()!=null)
 		{
 			SignatureInfo signatureInfoUp =signatureInfoService.get(signatureInfo.getPrevId());

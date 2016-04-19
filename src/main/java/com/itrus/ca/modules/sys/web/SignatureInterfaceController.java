@@ -286,6 +286,7 @@ public class SignatureInterfaceController {
 				
 				if(pay.getIsReceipt()==true){
 					ReceiptInvoice receiptInvoice = pay.getReceiptInvoice();
+					receiptInvoice.setDelFlag(BaseEntity.DEL_FLAG_NORMAL);
 					ReceiptDepotInfo receiptDepotInfo = receiptInvoice.getReceiptDepotInfo();
 					receiptDepotInfo.setReceiptOut(receiptDepotInfo.getReceiptOut()+receiptInvoice.getReceiptMoney());
 					receiptDepotInfo.setReceiptResidue(receiptDepotInfo.getReceiptResidue()-receiptInvoice.getReceiptMoney());

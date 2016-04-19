@@ -490,7 +490,7 @@ public class SignatureInfoService extends BaseService {
 		dc.createAlias("workCertInfo", "workCertInfo");
 		dc.add(Restrictions.eq("workCertInfo.serialnumber", certSn));
 		dc.add(Restrictions.eq("delFlag", SignatureInfo.DEL_FLAG_NORMAL));
-		dc.add(Restrictions.ne("signatureInfoType", SignatureInfoStatus.STATUS_REVOKE_USER));
+		dc.add(Restrictions.ne("signatureInfoStatus", SignatureInfoStatus.STATUS_REVOKE_USER));
 		return signatureInfoDao.find(dc);
 	}
 	public Page<SignatureInfo> findAll(Page<SignatureInfo> page,SignatureInfo signatureInfo)
