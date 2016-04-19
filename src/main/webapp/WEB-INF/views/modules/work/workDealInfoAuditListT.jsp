@@ -84,7 +84,22 @@
 					<c:if test="${workDealInfo.workCompany.companyType==3}">政府机构</c:if>
 				</td>
 				<td>${proType[workDealInfo.configProduct.productName]}</td>
-				<td>${wdiType[workDealInfo.dealInfoType]}&nbsp;&nbsp;${wdiType[workDealInfo.dealInfoType1]}&nbsp;&nbsp;${wdiType[workDealInfo.dealInfoType2]}&nbsp;&nbsp;${wdiType[workDealInfo.dealInfoType3]}</td>
+				<td>
+				<c:if test="${workDealInfo.dealInfoType!=nul }">
+					${wdiType[workDealInfo.dealInfoType]}&nbsp;&nbsp;
+				</c:if>
+				<c:if test="${workDealInfo.dealInfoType1!=null}">
+					${wdiType[workDealInfo.dealInfoType1]}&nbsp;&nbsp;
+				</c:if>
+				<c:if test="${workDealInfo.dealInfoType2!=null }">
+					${wdiType[workDealInfo.dealInfoType2]}&nbsp;&nbsp;
+				</c:if>
+				<c:if test="${workDealInfo.dealInfoType3!=null }">
+					${wdiType[workDealInfo.dealInfoType3]}
+				</c:if>
+<%-- 				${wdiType[workDealInfo.dealInfoType]}&nbsp;&nbsp;${wdiType[workDealInfo.dealInfoType1]}&nbsp;&nbsp;${wdiType[workDealInfo.dealInfoType2]}&nbsp;&nbsp;${wdiType[workDealInfo.dealInfoType3]} --%>
+				
+				</td>
 				<td>${wdiStatus[workDealInfo.dealInfoStatus]}</td>
 				<td>
 					<c:if test="${workDealInfo.dealInfoType!=null && workDealInfo.dealInfoType == 0}">
