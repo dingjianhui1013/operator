@@ -12,7 +12,6 @@
 $(document)
 .ready(
 		function() {
-			$("#declareDivUpdate").hide();
 			$("#app").focus();
 			var url = "${ctx}/work/workDealInfo/app?_="+new Date().getTime();
 			$
@@ -1301,7 +1300,7 @@ $(document)
 	
 	
 	
-	<div id="declareDivUpdate" style="width: 800px;margin-left: -450px;" class="modal">
+	<div id="declareDivUpdate" style="width: 800px;margin-left: -450px;" class="modal hide">
 		<div class="modal-header">
 			<h3>批量更新</h3>
 		</div>
