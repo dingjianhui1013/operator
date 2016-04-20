@@ -118,15 +118,26 @@
 		</thead>
 		<tbody>
 			<c:forEach items="${sumList}" var="StatisticMonthData">
-				<tr>
-					<td style="text-align:center; vertical-align: middle;"><fmt:formatDate value="${StatisticMonthData.statisticDate}" pattern="yyyy-MM"/></td>
-					<td>${StatisticMonthData.receiptIn}</td>
-					<td>${StatisticMonthData.receiptTotal}</td>
-					<td>${StatisticMonthData.sealDay}</td>
-					<td>${StatisticMonthData.sealMoney}</td>
-					<td>${StatisticMonthData.receiptDay}</td>
-					<td>${StatisticMonthData.receiptSurplus}</td>
-				</tr>
+				<c:set var="count" value="${StatisticMonthData.receiptIn+
+				StatisticMonthData.receiptTotal+StatisticMonthData.sealDay+StatisticMonthData.sealDay+StatisticMonthData.sealMoney+
+				StatisticMonthData.receiptDay+StatisticMonthData.receiptSurplus}"/>
+				<c:if test="${count==0}">
+					<tr>
+						<td style="text-align:center; vertical-align: middle;"><fmt:formatDate value="${StatisticMonthData.statisticDate}" pattern="yyyy-MM"/></td>
+						<td colspan="6">当月没有办理业务</td>
+					</tr>
+				</c:if>
+				<c:if test="${count!=0}">
+					<tr>
+						<td style="text-align:center; vertical-align: middle;"><fmt:formatDate value="${StatisticMonthData.statisticDate}" pattern="yyyy-MM"/></td>
+						<td>${StatisticMonthData.receiptIn}</td>
+						<td>${StatisticMonthData.receiptTotal}</td>
+						<td>${StatisticMonthData.sealDay}</td>
+						<td>${StatisticMonthData.sealMoney}</td>
+						<td>${StatisticMonthData.receiptDay}</td>
+						<td>${StatisticMonthData.receiptSurplus}</td>
+					</tr>
+				</c:if>
 			</c:forEach>
 		</tbody>
 	</table>

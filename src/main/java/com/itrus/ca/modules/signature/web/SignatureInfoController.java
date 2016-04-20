@@ -884,12 +884,16 @@ public class SignatureInfoController extends BaseController {
 	}
 	@RequiresPermissions("signature:signatureInfo:view")
 	@RequestMapping(value = "sealLog")
-	public String sealLog(SignatureInfo signatureInfo,HttpServletRequest request, HttpServletResponse response, Model model) {
-		Page<SignatureInfo> page = signatureInfoService.findAll(new Page<SignatureInfo>(request, response), signatureInfo); 
+	public String sealLog(SignatureInfo signatureInfo,Date startTime,Date endTime,HttpServletRequest request, HttpServletResponse response, Model model) {
+		Page<SignatureInfo> page = signatureInfoService.findAll(new Page<SignatureInfo>(request, response), signatureInfo,startTime,endTime); 
         List<Office> offices = officeService.findAll();
         model.addAttribute("page", page);
+        model.addAttribute("signatureInfostatus", SignatureInfoStatus.statusMap);
+		model.addAttribute("infoStatus", SignatureInfoStatus.signatureInfoMap);
         model.addAttribute("signatureTypeMap", SignatureInfoType.SignatureInfoTypeMap);
         model.addAttribute("offices", offices);
+        model.addAttribute("startTime", startTime);
+        model.addAttribute("endTime", endTime);
 		return "modules/log/sealLogList";
 	}
 

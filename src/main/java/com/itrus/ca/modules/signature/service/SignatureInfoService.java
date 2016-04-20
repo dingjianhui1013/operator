@@ -493,7 +493,7 @@ public class SignatureInfoService extends BaseService {
 		dc.add(Restrictions.ne("signatureInfoStatus", SignatureInfoStatus.STATUS_REVOKE_USER));
 		return signatureInfoDao.find(dc);
 	}
-	public Page<SignatureInfo> findAll(Page<SignatureInfo> page,SignatureInfo signatureInfo)
+	public Page<SignatureInfo> findAll(Page<SignatureInfo> page,SignatureInfo signatureInfo,Date startTime,Date endTime)
 	{
 		DetachedCriteria dc=signatureInfoDao.createDetachedCriteria();
 		dc.createAlias("workDealInfo", "workDealInfo");
@@ -521,6 +521,18 @@ public class SignatureInfoService extends BaseService {
 		{
 			dc.add(Restrictions.eq("signatureInfoType", signatureInfo.getSignatureInfoType()));
 		}
+		if(startTime!=null&&!"".equals(startTime))
+		{
+			dc.add(Restrictions.ge("enterDate", startTime));
+			if(endTime!=null&&!"".equals(endTime))
+			{
+				Calendar calendar = Calendar.getInstance();
+				calendar.setTime(endTime);
+				calendar.add(Calendar.DATE, 1);
+				dc.add(Restrictions.lt("enterDate", calendar.getTime()));
+			}
+		}
+		dc.add(Restrictions.ne("signatureInfoStatus",SignatureInfoStatus.STATUS_ADD_Info));
 		dc.addOrder(Order.desc("updateDate"));
 		return signatureInfoDao.find(page,dc);
 	}
