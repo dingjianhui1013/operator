@@ -115,6 +115,7 @@
 		</c:forEach>
 		</tbody>
 	</table>
+	<div class="pagination">${page}</div>
 	<c:set var="appDatas" value="${requestScope.appDatas}"></c:set>	
 	<c:forEach items="${appDatas}" var="appDataList"> 
 		<table id="contentTable"
@@ -192,6 +193,5 @@
 		</tbody>
 	</table>
 	</c:forEach>
-	<div class="pagination">${page}</div>
 </body>
 </html>

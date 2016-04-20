@@ -119,7 +119,7 @@
 		<tbody>
 			<c:forEach items="${sumList}" var="StatisticMonthData">
 				<tr>
-					<td><fmt:formatDate value="${StatisticMonthData.statisticDate}" pattern="yyyy-MM-dd"/></td>
+					<td style="text-align:center; vertical-align: middle;"><fmt:formatDate value="${StatisticMonthData.statisticDate}" pattern="yyyy-MM"/></td>
 					<td>${StatisticMonthData.receiptIn}</td>
 					<td>${StatisticMonthData.receiptTotal}</td>
 					<td>${StatisticMonthData.sealDay}</td>
@@ -176,7 +176,7 @@
 				
 				<c:if test="${appMonthData.sealTotal==0}">
 				<tr>
-					<td style="text-align:center; vertical-align: middle;" ><fmt:formatDate value="${appMonthData.statisticDate}" pattern="yyyy-MM-dd"/></td>
+					<td style="text-align:center; vertical-align: middle;" ><fmt:formatDate value="${appMonthData.statisticDate}" pattern="yyyy-MM"/></td>
 					<td colspan="18" >${appMonthData.app.appName}应用当月没办理数据
 					</td>
 				</tr>
@@ -184,7 +184,7 @@
 				<c:if test="${appMonthData.sealTotal!=0}">
 					<tr>
 						<td style="text-align:center; vertical-align: middle;" >
-						<fmt:formatDate value="${appMonthData.statisticDate}" pattern="yyyy-MM-dd"/></td>
+						<fmt:formatDate value="${appMonthData.statisticDate}" pattern="yyyy-MM"/></td>
 						<td style="text-align:center; vertical-align: middle;" >${appMonthData.addOne}</td>
 						<td style="text-align:center; vertical-align: middle;" >${appMonthData.addTwo}</td>
 						<td style="text-align:center; vertical-align: middle;" >${appMonthData.addThree}</td>

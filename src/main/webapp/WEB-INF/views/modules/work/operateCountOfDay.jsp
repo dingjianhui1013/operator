@@ -169,8 +169,8 @@
 			</c:forEach>
 		</tbody>
 	</table>
-	
-	
+
+	<div class="pagination">${page}</div>
 	
 	<c:set var="appDatas" value="${requestScope.appDatas}"></c:set>	
 	
@@ -336,10 +336,5 @@
 	</table>
 	
 	</c:forEach>
-	
-	
-	
-	
-	<div class="pagination">${page}</div>
 </body>
 </html>

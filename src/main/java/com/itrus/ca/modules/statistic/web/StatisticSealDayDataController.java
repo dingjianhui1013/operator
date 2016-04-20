@@ -240,7 +240,8 @@ public class StatisticSealDayDataController extends BaseController {
 				smd.setReceiptDay(receiptDay);
 				smd.setSealDay(sealDay);
 				smd.setSealMoney(sealMoney);
-				smd.setCreateDate(start);
+				smd.setCreateDate(new Date());
+				smd.setStatisticDate(start);
 				sumList.add(smd);
 			}
 			model.addAttribute("sumList", sumList);
