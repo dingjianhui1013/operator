@@ -1436,7 +1436,7 @@ public class WorkDealInfoOperationController extends BaseController {
 		workDealInfo.setOfficeId(UserUtils.getUser().getOffice().getId());
 		if (companyImage!=null || transactorImage!=null) {
 			SelfImage image = new SelfImage();
-			String companyImageName = saveToux(companyImage, workDealInfo.getWorkCompany().getCompanyType());
+			String companyImageName = saveToux(companyImage,"company", workDealInfo.getWorkCompany().getCompanyType());
 			if (companyImageName !=null ) {
 				image.setCompanyImage(companyImageName);
 			}else{
@@ -1451,7 +1451,7 @@ public class WorkDealInfoOperationController extends BaseController {
 			}
 			
 			
-			String transactorImageName = saveToux(transactorImage, workDealInfo.getWorkUser().getConCertType());
+			String transactorImageName = saveToux(transactorImage,"yourSelf", workDealInfo.getWorkUser().getConCertType());
 			if(transactorImageName!=null){
 				image.setTransactorImage(transactorImageName);
 			}else{
@@ -1492,7 +1492,7 @@ public class WorkDealInfoOperationController extends BaseController {
      * 
      * @param file
      */
-    private String saveToux(MultipartFile file, String name) {
+    private String saveToux(MultipartFile file,String type ,String name) {
         try {
         	
         	if(file.getSize()<1){
@@ -1501,15 +1501,36 @@ public class WorkDealInfoOperationController extends BaseController {
         	
             String path = Global.getConfig("images.url");
             File saveFile = new File(path);
+            String nameType = "";
             // 如果目录不存在就创建
             if (!saveFile.exists()) {
                 saveFile.mkdirs();
             }
+            if(type.equalsIgnoreCase("company")){
+            	 if(name.equalsIgnoreCase("1")){
+                     nameType= "QY-";
+                 }else if(name.equalsIgnoreCase("2")){
+                     nameType= "SY-";
+                 }else if(name.equalsIgnoreCase("4")){
+                     nameType= "SH-";
+                 }else if(name.equalsIgnoreCase("5")){
+                     nameType= "QT-";
+                 }
+            }else if(type.equalsIgnoreCase("yourSelf")){
+            	 if(name.equalsIgnoreCase("0")){
+                     nameType= "SFZ-";
+                 }else if(name.equalsIgnoreCase("1")){
+                     nameType= "JGZ-";
+                 }else if(name.equalsIgnoreCase("2")){
+                     nameType= "QT-";
+                 }
+            }
+          
             InputStream is = file.getInputStream();
             String fileName = file.getOriginalFilename();
             SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmssSSS");
             String timeS = df.format(new Date());
-            fileName = name + timeS + fileName.substring(fileName.lastIndexOf('.'), fileName.length());
+            fileName = nameType + timeS + fileName.substring(fileName.lastIndexOf('.'), fileName.length());
             FileOutputStream fos = new FileOutputStream(path + "/" + fileName);
             byte[] buffer = new byte[1024 * 1024];
             int byteread = 0;
@@ -1690,7 +1711,7 @@ public class WorkDealInfoOperationController extends BaseController {
 		
 		if (companyImage!=null || transactorImage!=null) {
 			SelfImage image = new SelfImage();
-			String companyImageName = saveToux(companyImage, workDealInfo.getWorkCompany().getCompanyType());
+			String companyImageName = saveToux(companyImage, "company",workDealInfo.getWorkCompany().getCompanyType());
 			if (companyImageName !=null ) {
 				image.setCompanyImage(companyImageName);
 			}else{
@@ -1705,7 +1726,7 @@ public class WorkDealInfoOperationController extends BaseController {
 			}
 			
 			
-			String transactorImageName = saveToux(transactorImage, workDealInfo.getWorkUser().getConCertType());
+			String transactorImageName = saveToux(transactorImage, "yourSelf",workDealInfo.getWorkUser().getConCertType());
 			if(transactorImageName!=null){
 				image.setTransactorImage(transactorImageName);
 			}else{
@@ -2013,7 +2034,7 @@ public class WorkDealInfoOperationController extends BaseController {
 		
 		if (companyImage!=null || transactorImage!=null) {
 			SelfImage image = new SelfImage();
-			String companyImageName = saveToux(companyImage, workDealInfo.getWorkCompany().getCompanyType());
+			String companyImageName = saveToux(companyImage,"company", workDealInfo.getWorkCompany().getCompanyType());
 			if (companyImageName !=null ) {
 				image.setCompanyImage(companyImageName);
 			}else{
@@ -2028,7 +2049,7 @@ public class WorkDealInfoOperationController extends BaseController {
 			}
 			
 			
-			String transactorImageName = saveToux(transactorImage, workDealInfo.getWorkUser().getConCertType());
+			String transactorImageName = saveToux(transactorImage, "yourSelf",workDealInfo.getWorkUser().getConCertType());
 			if(transactorImageName!=null){
 				image.setTransactorImage(transactorImageName);
 			}else{
@@ -2277,7 +2298,7 @@ public class WorkDealInfoOperationController extends BaseController {
 		//workDealInfo.setConfigChargeAgentId(workDealInfo1.getConfigChargeAgentId());
 		if (companyImage!=null || transactorImage!=null) {
 			SelfImage image = new SelfImage();
-			String companyImageName = saveToux(companyImage, workDealInfo1.getWorkCompany().getCompanyType());
+			String companyImageName = saveToux(companyImage,"company", workDealInfo1.getWorkCompany().getCompanyType());
 			if (companyImageName !=null ) {
 				image.setCompanyImage(companyImageName);
 			}else{
@@ -2292,7 +2313,7 @@ public class WorkDealInfoOperationController extends BaseController {
 			}
 			
 			
-			String transactorImageName = saveToux(transactorImage, workDealInfo1.getWorkUser().getConCertType());
+			String transactorImageName = saveToux(transactorImage,"yourSelf", workDealInfo1.getWorkUser().getConCertType());
 			if(transactorImageName!=null){
 				image.setTransactorImage(transactorImageName);
 			}else{

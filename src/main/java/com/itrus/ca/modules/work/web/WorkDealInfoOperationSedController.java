@@ -235,7 +235,7 @@ public class WorkDealInfoOperationSedController extends BaseController {
 		
 		if (companyImage!=null || transactorImage!=null) {
 			SelfImage image = new SelfImage();
-			String companyImageName = saveToux(companyImage, workDealInfo1.getWorkCompany().getCompanyType());
+			String companyImageName = saveToux(companyImage, "company",workDealInfo1.getWorkCompany().getCompanyType());
 			if (companyImageName !=null ) {
 				image.setCompanyImage(companyImageName);
 			}else{
@@ -250,7 +250,7 @@ public class WorkDealInfoOperationSedController extends BaseController {
 			}
 			
 			
-			String transactorImageName = saveToux(transactorImage, workDealInfo1.getWorkUser().getConCertType());
+			String transactorImageName = saveToux(transactorImage, "yourSelf",workDealInfo1.getWorkUser().getConCertType());
 			if(transactorImageName!=null){
 				image.setTransactorImage(transactorImageName);
 			}else{
@@ -347,7 +347,7 @@ public class WorkDealInfoOperationSedController extends BaseController {
 		
 		if (companyImage!=null || transactorImage!=null) {
 			SelfImage image = new SelfImage();
-			String companyImageName = saveToux(companyImage, workDealInfo1.getWorkCompany().getCompanyType());
+			String companyImageName = saveToux(companyImage,"company", workDealInfo1.getWorkCompany().getCompanyType());
 			if (companyImageName !=null ) {
 				image.setCompanyImage(companyImageName);
 			}else{
@@ -362,7 +362,7 @@ public class WorkDealInfoOperationSedController extends BaseController {
 			}
 			
 			
-			String transactorImageName = saveToux(transactorImage, workDealInfo1.getWorkUser().getConCertType());
+			String transactorImageName = saveToux(transactorImage,"yourSelf", workDealInfo1.getWorkUser().getConCertType());
 			if(transactorImageName!=null){
 				image.setTransactorImage(transactorImageName);
 			}else{
@@ -424,19 +424,40 @@ public class WorkDealInfoOperationSedController extends BaseController {
      * 
      * @param file
      */
-    private String saveToux(MultipartFile file, String name) {
+    private String saveToux(MultipartFile file, String type ,String name) {
         try {
         	
         	if(file.getSize()<1){
         		return null;
         	}
         	
-            String path = Global.getConfig("images.url");
-            File saveFile = new File(path);
-            // 如果目录不存在就创建
-            if (!saveFile.exists()) {
-                saveFile.mkdirs();
-            }
+        	 String path = Global.getConfig("images.url");
+             File saveFile = new File(path);
+             String nameType = "";
+             // 如果目录不存在就创建
+             if (!saveFile.exists()) {
+                 saveFile.mkdirs();
+             }
+             if(type.equalsIgnoreCase("company")){
+             	 if(name.equalsIgnoreCase("1")){
+                      nameType= "QY-";
+                  }else if(name.equalsIgnoreCase("2")){
+                      nameType= "SY-";
+                  }else if(name.equalsIgnoreCase("4")){
+                      nameType= "SH-";
+                  }else if(name.equalsIgnoreCase("5")){
+                      nameType= "QT-";
+                  }
+             }else if(type.equalsIgnoreCase("yourSelf")){
+             	 if(name.equalsIgnoreCase("0")){
+                      nameType= "SFZ-";
+                  }else if(name.equalsIgnoreCase("1")){
+                      nameType= "JGZ-";
+                  }else if(name.equalsIgnoreCase("2")){
+                      nameType= "QT-";
+                  }
+             }
+           
             InputStream is = file.getInputStream();
             String fileName = file.getOriginalFilename();
             SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmssSSS");
