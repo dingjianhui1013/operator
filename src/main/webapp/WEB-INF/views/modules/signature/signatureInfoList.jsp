@@ -90,22 +90,22 @@ function page(n, s) {
 						<c:if test="${signatureInfo.signatureType == 3 }">个人章</c:if>
 						<c:if test="${signatureInfo.signatureType == 4 }">公章</c:if>
 					</td>
-					<td><fmt:formatDate pattern="yyyy-MM-dd" value="${signatureInfo.createDate}"/><fmt:formatDate pattern="yyyy-MM-dd" value="${signatureInfo.createDate}" var="createDate"/></td>
+					<td><fmt:formatDate pattern="yyyy-MM-dd" value="${signatureInfo.createDate}"/></td>
 					<td><fmt:formatDate pattern="yyyy-MM-dd" value="${signatureInfo.startDate}"/></td>
 					<td><fmt:formatDate pattern="yyyy-MM-dd" value="${signatureInfo.endDate}"/></td>
 					<td>${status[signatureInfo.status]}</td>
 					<td>${signatureTypeMap[signatureInfo.signatureInfoType] }</td>
 					<td>${infoStatus[signatureInfo.signatureInfoStatus]}</td>
 					<td>
-						<c:if test="${(signatureInfo.signatureInfoStatus == 0 || signatureInfo.signatureInfoStatus == 2)&&signatureInfo.signatureInfoType==0 && createDate==date}">
+						<c:if test="${(signatureInfo.signatureInfoStatus == 0 || signatureInfo.signatureInfoStatus == 2)&&signatureInfo.signatureInfoType==0 }">
 							
 							<a href="${ctx}/signature/signatureInfo/form?signatureInfoId=${signatureInfo.id}">修改</a>
 						</c:if>
 					
-						<c:if test="${(signatureInfo.signatureInfoStatus == 0 || signatureInfo.signatureInfoStatus == 2)&&(signatureInfo.signatureInfoType==1||signatureInfo.signatureInfoType==2) && createDate==date}">
+						<c:if test="${(signatureInfo.signatureInfoStatus == 0 || signatureInfo.signatureInfoStatus == 2)&&(signatureInfo.signatureInfoType==1||signatureInfo.signatureInfoType==2)}">
 							<a href="${ctx}/signature/signatureInfo/modifyForm?signatureInfoId=${signatureInfo.id}">修改</a>
 						</c:if>
-						<c:if test="${signatureInfo.signatureInfoStatus==0 && createDate==date}"><a onclick="return confirmx('确认要删除该信息吗？', this.href)" href="${ctx}/signature/signatureInfo/delete?signarureId=${signatureInfo.id}">删除</a></c:if>
+						<c:if test="${signatureInfo.signatureInfoStatus==0}"><a onclick="return confirmx('确认要删除该信息吗？', this.href)" href="${ctx}/signature/signatureInfo/delete?signarureId=${signatureInfo.id}">删除</a></c:if>
 						<c:if test="${signatureInfo.signatureInfoStatus == 1 }">
 							<a href="${ctx}/signature/signatureInfo/typeForm?id=${signatureInfo.id}&&dealType=1">变更</a>
 							<a href="${ctx}/signature/signatureInfo/typeForm?id=${signatureInfo.id}&&dealType=2">续期</a>

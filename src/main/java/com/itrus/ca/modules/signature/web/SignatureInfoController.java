@@ -154,7 +154,6 @@ public class SignatureInfoController extends BaseController {
 		model.addAttribute("infoStatus", SignatureInfoStatus.signatureInfoMap);
 		
 		model.addAttribute("signatureTypeMap",SignatureInfoType.SignatureInfoTypeMap);
-		model.addAttribute("date",new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
 		return "modules/signature/signatureInfoList";
 	}
 
