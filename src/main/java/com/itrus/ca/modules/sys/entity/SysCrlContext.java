@@ -37,6 +37,8 @@ public class SysCrlContext extends DataEntity implements java.io.Serializable {
 	private String issuerdn;
 	private String retryPolicy;
 	private Integer version;
+	
+	private String caCert;
 
 	// Constructors
 
@@ -181,5 +183,16 @@ public class SysCrlContext extends DataEntity implements java.io.Serializable {
 	public void setVersion(Integer version) {
 		this.version = version;
 	}
+
+	@Column(name = "ca_cert")
+	public String getCaCert() {
+		return caCert;
+	}
+
+	public void setCaCert(String caCert) {
+		this.caCert = caCert;
+	}
+	
+	
 
 }
