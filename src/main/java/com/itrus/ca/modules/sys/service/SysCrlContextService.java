@@ -47,6 +47,13 @@ public class SysCrlContextService extends BaseService {
 		return sysCrlContextDao.find(page, dc);
 	}
 	
+	public List<SysCrlContext> findAll(){
+		DetachedCriteria dc = sysCrlContextDao.createDetachedCriteria();
+		dc.add(Restrictions.eq(SysCrlContext.DEL_FLAG, SysCrlContext.DEL_FLAG_NORMAL));
+		return sysCrlContextDao.find(dc);
+		
+	}
+	
 	@Transactional(readOnly = false)
 	public void save(SysCrlContext sysCrlContext) {
 		sysCrlContextDao.save(sysCrlContext);
