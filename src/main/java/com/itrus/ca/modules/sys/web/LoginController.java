@@ -6,10 +6,13 @@
 package com.itrus.ca.modules.sys.web;
 
 import java.util.Map;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.log4j.Logger;
 import org.apache.shiro.authz.annotation.RequiresUser;
 import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
@@ -27,9 +30,15 @@ import com.itrus.ca.common.utils.CacheUtils;
 import com.itrus.ca.common.utils.CookieUtils;
 import com.itrus.ca.common.utils.StringUtils;
 import com.itrus.ca.common.web.BaseController;
+import com.itrus.ca.modules.sys.entity.SingleCvm;
 import com.itrus.ca.modules.sys.entity.User;
 import com.itrus.ca.modules.sys.service.SystemService;
 import com.itrus.ca.modules.sys.utils.UserUtils;
+
+import cn.topca.sp.cvm.CVM;
+import cn.topca.sp.svm.SVM;
+import cn.topca.sp.x509.X509CRL;
+import cn.topca.sp.x509.X509Certificate;
 
 /**
  * 登录Controller
@@ -52,6 +61,13 @@ public class LoginController extends BaseController{
 			systemService.updateUserLoginInfo(user.getId(),StringUtils.getRemoteAddr(request));
 			return "redirect:"+Global.getAdminPath();
 		}
+		String randomString = UUID.randomUUID().toString();
+		
+		HttpSession session = request.getSession();
+		session.setAttribute("randomString", randomString);
+		
+		model.addAttribute("randomString", randomString);
+		
 		return "modules/sys/sysLogin";
 	}
 
@@ -75,6 +91,42 @@ public class LoginController extends BaseController{
 		}
 		return "modules/sys/sysLogin";
 	}
+	
+	public String validate(String signData,HttpServletRequest request, HttpServletResponse response){
+		
+		
+		
+		HttpSession session = request.getSession();
+		try {
+			
+			
+			String randomString = (String)session.getAttribute("randomString");
+			
+			if(randomString==null){
+				return "redirect:"+Global.getAdminPath()+"/login";
+			}
+			
+			String toSign = "LOGONDATA:"+randomString;
+			byte[] signedDate = Base64.decodeBase64(signData);
+			X509Certificate certificate = SVM.verifyPKCS7SignedData(signedDate, toSign.getBytes());
+		
+			
+			
+			CVM cvm = SingleCvm.getCvm();
+			int status = cvm.verifyCertificate(certificate);
+			if(status!=0){
+				return "redirect:"+Global.getAdminPath()+"/login";
+			}
+			
+			
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return "";
+		
+	}
 
 	/**
 	 * 登录成功，进入管理首页
@@ -87,6 +139,7 @@ public class LoginController extends BaseController{
 		if(user.getId() == null){
 			return "redirect:"+Global.getAdminPath()+"/login";
 		}
+		
 		// 更新登录IP和时间
 		systemService.updateUserLoginInfo(user.getId(),StringUtils.getRemoteAddr(request));
 		log.info(user.getId()+"登陆成功..");

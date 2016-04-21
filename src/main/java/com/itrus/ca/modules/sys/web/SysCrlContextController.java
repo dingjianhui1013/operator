@@ -10,11 +10,9 @@ import java.io.InputStream;
 import java.security.SignatureException;
 import java.security.cert.CRLException;
 import java.security.cert.CertificateException;
-import java.security.cert.X509CRL;
 
-import com.itrus.cert.X509Certificate;
-
-import java.util.List;
+import cn.emay.sdk.communication.util.Base64;
+import cn.topca.sp.x509.X509Certificate;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -67,7 +65,7 @@ public class SysCrlContextController extends BaseController {
 	 * @return
 	 */
 	@RequiresPermissions("sys:sysCrlContext:view")
-	@RequestMapping(value = { "insertFrom", "" })
+	@RequestMapping(value = { "insertFrom"})
 	public String insetFrom() {
 		return "modules/sys/sysCrlContextInsert";
 	}
@@ -156,7 +154,7 @@ public class SysCrlContextController extends BaseController {
 				return "modules/sys/sysCrlContextInsert";
 			}
 			try {
-				X509Certificate caCert = com.itrus.cert.X509Certificate.getInstance(sysCrlContext.getCaCertBuf());
+				X509Certificate caCert = X509Certificate.getInstance(sysCrlContext.getCaCertBuf());
 				sysCrlContext.setIssuerdn(caCert.getIssuerDNString());
 				sysCrlContext.setCertSn(caCert.getSerialNumber() + "");
 				sysCrlContext.setCertSubject(caCert.getSubjectDNString());
@@ -211,8 +209,10 @@ public class SysCrlContextController extends BaseController {
 			FileInputStream fis = new FileInputStream(file1);
 			byte[] buffer = new byte[fis.available()];
 			fis.read(buffer);
-		//	System.out.println(buffer);
+		
 			sysCrlContext.setCaCertBuf(buffer);
+			
+			sysCrlContext.setCaCert(Base64.base64Str(buffer));
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
@@ -223,8 +223,9 @@ public class SysCrlContextController extends BaseController {
 			return "modules/sys/sysCrlContextInsert";
 		}
 		String message = null;
+		
 		try {
-			X509Certificate caCert = com.itrus.cert.X509Certificate.getInstance(sysCrlContext.getCaCertBuf());
+			cn.topca.sp.x509.X509Certificate caCert = cn.topca.sp.x509.X509Certificate.getInstance(sysCrlContext.getCaCertBuf());
 			sysCrlContext.setIssuerdn(caCert.getIssuerDNString());
 			sysCrlContext.setCertSn(caCert.getSerialNumber() + "");
 			sysCrlContext.setCertSubject(caCert.getSubjectDNString());
@@ -237,7 +238,11 @@ public class SysCrlContextController extends BaseController {
 				message = "X509Certificate对象实例化失败，请您检查CA证书格式是否正确。";
 			else if (e instanceof CRLException)
 				message = "X509CRL对象实例化失败，请您检查CRL文件格式是否正确。";
+			else{
+				message = e.getMessage();
+			}
 			model.addAttribute("message", message);
+			
 			return "redirect:" + Global.getAdminPath()
 					+"/sys/sysCrlContext/list/";
 		}
