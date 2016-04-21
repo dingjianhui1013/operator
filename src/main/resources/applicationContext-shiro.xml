@@ -41,8 +41,10 @@
 				/js/** = anon
 				/test.jsp = anon
 				/DZSBH.jsp = anon
+				${adminPath}/sys/certLogin = anon
 				/test/** = anon
-				${adminPath}/login = authc
+				 ${adminPath}/login = authc
+				
 				${adminPath}/logout = logout
 				${adminPath}/** = user
 		 	</value>
