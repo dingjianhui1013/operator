@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.itrus.ca.common.config.Global;
 import com.itrus.ca.common.persistence.BaseEntity;
 import com.itrus.ca.common.persistence.Page;
-import com.itrus.ca.common.utils.StringUtils;
 import com.itrus.ca.common.web.BaseController;
 import com.itrus.ca.modules.constant.WorkDealInfoStatus;
 import com.itrus.ca.modules.constant.WorkDealInfoType;
@@ -168,6 +167,14 @@ public class SelfApplicationController extends BaseController {
         	ConfigChargeAgent agentBound = configChargeAgentService.get(workDealInfo.getConfigChargeAgentId());
         	model.addAttribute("tempName", agentBound.getTempName());
         	model.addAttribute("tempStyle", agentBound.getTempStyle());
+        }
+        if(selfApplication.getDealId()!=null){
+        	 WorkDealInfo dealInfo = workDealInfoService.get(selfApplication.getDealId());
+             if(dealInfo!=null){
+             	ConfigChargeAgent agentBound = configChargeAgentService.get(dealInfo.getConfigChargeAgentId());
+             	model.addAttribute("tempName01", agentBound.getTempName());
+             	model.addAttribute("tempStyle01", agentBound.getTempStyle());
+             }
         }
         ConfigApp configApp = configAppService.findByAppname(selfApplication.getAppName());
         model.addAttribute("applyFlag1", configApp.getApplyFlag1() == null ? "" : configApp.getApplyFlag1());
