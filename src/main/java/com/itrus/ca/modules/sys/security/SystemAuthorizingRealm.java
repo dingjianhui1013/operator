@@ -66,12 +66,26 @@ public class SystemAuthorizingRealm extends AuthorizingRealm {
 				throw new CaptchaException("验证码错误.");
 			}
 		}
+		
+		
 
 		User user = getSystemService().getUserByLoginName(token.getUsername());
+		
 		if (user.getOffice().getDelFlag().equals(Office.DEL_FLAG_DELETE)) {
 			return null;
 		}
 		if (user != null) {
+			
+			if(token.getLoginType()!=null&&token.getLoginType()==1){
+				
+				String password = SystemService.entryptPassword("certLogin");
+				
+				byte[] salt = Encodes.decodeHex(password.substring(0,16));
+				return new SimpleAuthenticationInfo(new Principal(user), 
+						password.substring(16), ByteSource.Util.bytes(salt), getName());
+			}
+			
+			
 			byte[] salt = Encodes.decodeHex(user.getPassword().substring(0,16));
 			return new SimpleAuthenticationInfo(new Principal(user), 
 					user.getPassword().substring(16), ByteSource.Util.bytes(salt), getName());

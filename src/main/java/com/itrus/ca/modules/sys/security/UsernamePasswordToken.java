@@ -15,7 +15,10 @@ public class UsernamePasswordToken extends org.apache.shiro.authc.UsernamePasswo
 	private static final long serialVersionUID = 1L;
 
 	private String captcha;
-
+	
+	//登录类型
+	private Integer loginType;
+	
 	public String getCaptcha() {
 		return captcha;
 	}
@@ -23,7 +26,15 @@ public class UsernamePasswordToken extends org.apache.shiro.authc.UsernamePasswo
 	public void setCaptcha(String captcha) {
 		this.captcha = captcha;
 	}
+	
+	public Integer getLoginType() {
+		return loginType;
+	}
 
+	public void setLoginType(Integer loginType) {
+		this.loginType = loginType;
+	}
+	
 	public UsernamePasswordToken() {
 		super();
 	}
