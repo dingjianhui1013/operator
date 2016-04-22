@@ -355,6 +355,7 @@ public class SelfApplicationController extends BaseController {
 		// 改变申请表的状态
 		selfApplication.setStatus(SelfApplicationStatus.downApply);
 		selfApplication.setMoney(configChargeAgentDetail.getMoney());
+		selfApplication.setWorkCertInfo(workCertInfo);
 		selfApplicationService.save(selfApplication);
 		return "redirect:" + Global.getAdminPath()+ "/self/selfApplication/?repage";
 	}
