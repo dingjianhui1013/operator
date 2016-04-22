@@ -29,28 +29,6 @@
 			productLabel();
 		});
 		
-		var str = '${tempStyle01}';
-		var str01 = '${tempStyle01}';
-		var type =2;
-		
-		$(document).ready(function(){
-			if(str!=''&&str!=null){
-				setTimeout(function(){
-					$("#agentId option").each(function(){
-				        if($(this).val() == str){
-					        $(this).attr("selected",true);
-					        setStyleList(type);
-					         $("#agentDetailId option").each(function(){
-						        if($(this).val() == str01){
-						        	$(this).attr("selected",true);
-						        }
-							}); 
-				        }  
-				    });     
-				},500)
-			}
-		});
-		
 		//根据商品获取引用标识
 		function productLabel() {
 			selected = true;
@@ -61,10 +39,8 @@
 			$.getJSON(url, function(da) {
 				if (da.type1) {
 					showAgent(1);
-					type = 1;
 				}else if (da.type0) {
 					showAgent(0);
-					type = 0;
 				}
 			});
 		}
@@ -92,6 +68,21 @@
 					var styleList = data.boundStyleList;
 					var styleHtml="<option value='0'>请选择计费策略模版</option>";
 					$("#agentDetailId").html(styleHtml);
+					var str = '${tempStyle01}';
+					var str01 = '${tempStyle01}';
+					if(str!=''&&str!=null){
+						$("#agentId option").each(function(){
+					        if($(this).val() == str){
+						        $(this).attr("selected",true);
+						        setStyleList(obj);
+						         $("#agentDetailId option").each(function(){
+							        if($(this).val() == str01){
+							        	$(this).attr("selected",true);
+							        }
+								}); 
+					        }  
+					    });
+					}
 				}else{
 					var agentHtml="<option value='0'>请选择计费策略类型</option>";
 					$("#agentId").html(agentHtml);
@@ -121,7 +112,6 @@
 						}
 						styleHtml +="<option value='"+item.id+"'>" + item.name + "</option>";
 					});
-					
 					$("#agentDetailId").html(styleHtml);
 				});
 			}else{
