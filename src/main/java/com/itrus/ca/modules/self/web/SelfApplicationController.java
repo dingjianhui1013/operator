@@ -270,6 +270,16 @@ public class SelfApplicationController extends BaseController {
 			workDealInfoHis.setDelFlag(BaseEntity.SHOW);
 			workDealInfoService.save(workDealInfoHis);
 			workDealInfo.setPrevId(selfApplication.getDealId());
+			
+			if (workDealInfoHis.getWorkCertInfo().getNotafter().after(new Date())) {
+				int day = getLastCertDay(workDealInfoHis.getWorkCertInfo()
+						.getNotafter());
+				workDealInfo.setLastDays(day);
+			} else {
+				workDealInfo.setLastDays(0);
+			}
+			
+			
 		}
 		// 新增时扣减计费策略数量 
 		ConfigChargeAgent agent = bound.getAgent();
@@ -281,8 +291,8 @@ public class SelfApplicationController extends BaseController {
 			//变更
 			workDealInfo.setDealInfoType2(WorkDealInfoType.TYPE_INFORMATION_REROUTE);
 		}else{
-		//新增
-		workDealInfo.setDealInfoType(WorkDealInfoType.TYPE_ADD_CERT);
+			//新增
+			workDealInfo.setDealInfoType(WorkDealInfoType.TYPE_ADD_CERT);
 		}
 		workDealInfo.setYear(Integer.parseInt(selfApplication.getApplicationPeriod()));
 		workDealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_ENTRY_SUCCESS);
@@ -299,8 +309,7 @@ public class SelfApplicationController extends BaseController {
 		WorkCertApplyInfo workCertApplyInfo = null;
 		WorkCertInfo workCertInfo = null;
 		if (workDealInfo.getWorkCertInfo() != null) {
-			workCertApplyInfo = workDealInfo.getWorkCertInfo()
-					.getWorkCertApplyInfo();
+			workCertApplyInfo = workDealInfo.getWorkCertInfo().getWorkCertApplyInfo();
 		} else {
 			workCertApplyInfo = new WorkCertApplyInfo();
 		}
@@ -358,6 +367,25 @@ public class SelfApplicationController extends BaseController {
 		selfApplication.setWorkCertInfo(workCertInfo);
 		selfApplicationService.save(selfApplication);
 		return "redirect:" + Global.getAdminPath()+ "/self/selfApplication/?repage";
+	}
+	
+	static Long MILL = 86400000L;
+
+	private int getLastCertDay(Date notAfter) {
+		Long notAfterLong = notAfter.getTime();
+		Long nowLong = System.currentTimeMillis();
+		if (notAfterLong<nowLong) {
+			return 0;
+		}
+		
+		long d = (notAfterLong - nowLong)/MILL;
+		
+		long hour1=(notAfterLong - nowLong)%MILL;
+		if (hour1>0) {
+			d+=1;
+		}
+		
+		return (int) d;
 	}
 
 }
