@@ -629,7 +629,7 @@
 				<artifactId>cxf-codegen-plugin</artifactId>
 				<version>${cxf.Version}</version>
 				<executions>
-					<execution>
+					 <execution>
 						<id>generate-sources</id>
 						<phase>generate-sources</phase>
 						<configuration>

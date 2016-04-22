@@ -11,7 +11,9 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpSession;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -27,18 +29,26 @@ import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.SimplePrincipalCollection;
 import org.apache.shiro.util.ByteSource;
+import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Service;
 
+import com.itrus.ca.common.config.Global;
 import com.itrus.ca.common.servlet.ValidateCodeServlet;
 import com.itrus.ca.common.utils.Encodes;
 import com.itrus.ca.common.utils.SpringContextHolder;
 import com.itrus.ca.modules.sys.entity.Menu;
 import com.itrus.ca.modules.sys.entity.Office;
+import com.itrus.ca.modules.sys.entity.SingleCvm;
 import com.itrus.ca.modules.sys.entity.User;
 import com.itrus.ca.modules.sys.service.SystemService;
 import com.itrus.ca.modules.sys.utils.UserUtils;
 import com.itrus.ca.modules.sys.web.LoginController;
+
+import cn.topca.sp.cvm.CVM;
+import cn.topca.sp.svm.SVM;
+import cn.topca.sp.x509.X509Certificate;
 
 /**
  * 系统安全认证实现类
@@ -48,6 +58,9 @@ import com.itrus.ca.modules.sys.web.LoginController;
 @Service
 @DependsOn({"userDao","roleDao","menuDao"})
 public class SystemAuthorizingRealm extends AuthorizingRealm {
+	
+	@Autowired
+	private SingleCvm singleCvm;
 
 	private SystemService systemService;
 
@@ -58,40 +71,83 @@ public class SystemAuthorizingRealm extends AuthorizingRealm {
 	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authcToken) throws AuthenticationException {
 		UsernamePasswordToken token = (UsernamePasswordToken) authcToken;
 		
-		if (token.getUsername().length()<30&&LoginController.isValidateCodeLogin(token.getUsername(), false, false)){
-			// 判断验证码
-			Session session = SecurityUtils.getSubject().getSession();
-			String code = (String)session.getAttribute(ValidateCodeServlet.VALIDATE_CODE);
-			if (token.getCaptcha() == null || !token.getCaptcha().toUpperCase().equals(code)){
-				throw new CaptchaException("验证码错误.");
-			}
-		}
 		
 		
-
-		User user = getSystemService().getUserByLoginName(token.getUsername());
 		
-		if (user.getOffice().getDelFlag().equals(Office.DEL_FLAG_DELETE)) {
-			return null;
-		}
-		if (user != null) {
+		
+		if(token.getLoginType()!=null&&token.getLoginType().equals("1")){
+			HttpSession session = token.getSession();
+			 if(session==null){
+				 throw new CaptchaException("session过期！");
+			 }
 			
-			if(token.getLoginType()!=null&&token.getLoginType()==1){
+			try {
 				
+				
+				String randomString = (String)session.getAttribute("randomString");
+				if(randomString==null){
+					 throw new CaptchaException("session过期！");
+				}
+				
+				String toSign = "LOGONDATA:"+randomString;
+				
+				byte[] signedDate = Base64.decodeBase64(token.getSignedData());
+				X509Certificate certificate = SVM.verifyPKCS7SignedData(signedDate, toSign.getBytes());
+			
+				
+				
+				CVM cvm = singleCvm.getCVM();
+				int status = cvm.verifyCertificate(certificate);
+			
+				if(status!=0){
+					throw new CaptchaException("认证证书失败！");
+				}
+				
+				
+				//certificate.getCertSubjectNames().getItem("CN");
+				//String userName = "wang_xiaoxue"; 
+				User user = getSystemService().getUserByLoginName(certificate.getCertSubjectNames().getItem("CN"));
+				
+				if (user.getOffice().getDelFlag().equals(Office.DEL_FLAG_DELETE)) {
+					return null;
+				}
 				String password = SystemService.entryptPassword("certLogin");
 				
 				byte[] salt = Encodes.decodeHex(password.substring(0,16));
 				return new SimpleAuthenticationInfo(new Principal(user), 
 						password.substring(16), ByteSource.Util.bytes(salt), getName());
+				
+			} catch (Exception e) {
+				throw new CaptchaException(e.getMessage());
+			}
+			
+			
+		}
+		else{
+			if (token.getUsername().length()<30&&LoginController.isValidateCodeLogin(token.getUsername(), false, false)){
+				// 判断验证码
+				Session session = SecurityUtils.getSubject().getSession();
+				String code = (String)session.getAttribute(ValidateCodeServlet.VALIDATE_CODE);
+				if (token.getCaptcha() == null || !token.getCaptcha().toUpperCase().equals(code)){
+					throw new CaptchaException("验证码错误.");
+				}
+			}
+			
+			
+	
+			User user = getSystemService().getUserByLoginName(token.getUsername());
+			if (user==null) 
+				return null;
+			if (user.getOffice().getDelFlag().equals(Office.DEL_FLAG_DELETE)) {
+				return null;
 			}
 			
 			
 			byte[] salt = Encodes.decodeHex(user.getPassword().substring(0,16));
 			return new SimpleAuthenticationInfo(new Principal(user), 
 					user.getPassword().substring(16), ByteSource.Util.bytes(salt), getName());
-		} else {
-			return null;
 		}
+		
 	}
 
 	/**

@@ -42,7 +42,7 @@ public class CertLoginController extends BaseController{
 	@RequestMapping(value = "/certLogin", method = RequestMethod.POST)
 	public String certLogin(HttpServletRequest request, HttpServletResponse response,String signedData, Model model) {
 	
-		HttpSession session = request.getSession();
+	/*	HttpSession session = request.getSession();
 		try {
 			String randomString = (String)session.getAttribute("randomString");
 			if(randomString==null){
@@ -52,25 +52,29 @@ public class CertLoginController extends BaseController{
 			
 			String toSign = "LOGONDATA:"+randomString;
 			byte[] signedDate = Base64.decodeBase64(signedData);
-			X509Certificate certificate = SVM.verifyPKCS7SignedData(signedDate, toSign.getBytes());
+			//X509Certificate certificate = SVM.verifyPKCS7SignedData(signedDate, toSign.getBytes());
 		
 			
 			
 			CVM cvm = SingleCvm.getCvm();
-			int status = cvm.verifyCertificate(certificate);
+			//int status = cvm.verifyCertificate(certificate);
+			int status = 0;
 			if(status!=0){
 				return "redirect:"+Global.getAdminPath()+"/login";
 			}
 			
 			
 			
-			String userName = certificate.getCertSubjectNames().getItem("CN");
+			//String userName = certificate.getCertSubjectNames().getItem("CN");
+			String userName = "admin";
 			
-			return "redirect:"+Global.getAdminPath()+"/login?username="+userName+"&password=certLogin";
+			String url = Global.getAdminPath()+"/login?username="+userName+"&password=certLogin";
 			
-		} catch (Exception e) {
+			return "redirect:"+url;*/
+			
+		/*} catch (Exception e) {
 			e.printStackTrace();
-		}
+		}*/
 		
 		
 		

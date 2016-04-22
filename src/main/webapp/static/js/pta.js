@@ -1526,7 +1526,7 @@ decryptFile:function (encFile,destFile,cert){
 	}
 	return Result;
 },
-filterSignCerts:function () {
+filterSignCerts:function (arrayIssuerDN) {
 	this.Init();
 	var arrayCerts = this.filterCerts(arrayIssuerDN, 1, "");
 	this.filterCertsByItem(arrayCerts, arrayIssuerDN[0], "OU="+ProjectName);

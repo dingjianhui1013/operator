@@ -26,7 +26,7 @@ import com.itrus.ca.modules.sys.dao.SysCrlContextDao;
  * @author WangHongwei
  * @version 2014-06-03
  */
-@Component
+@Component("SysCrlContextService")
 @Transactional(readOnly = true)
 public class SysCrlContextService extends BaseService {
 

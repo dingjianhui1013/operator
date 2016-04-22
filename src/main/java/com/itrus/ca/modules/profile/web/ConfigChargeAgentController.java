@@ -56,7 +56,6 @@ import com.itrus.ca.modules.profile.service.ConfigChargeAgentDetailService;
 import com.itrus.ca.modules.profile.service.ConfigChargeAgentHistoryService;
 import com.itrus.ca.modules.profile.service.ConfigChargeAgentService;
 import com.itrus.ca.modules.profile.service.ConfigProductService;
-import com.mysql.jdbc.Util;
 
 /**
  * 代理商应用计费策略Controller

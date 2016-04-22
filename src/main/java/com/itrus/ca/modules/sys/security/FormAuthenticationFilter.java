@@ -7,10 +7,15 @@ package com.itrus.ca.modules.sys.security;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 
 import org.apache.shiro.authc.AuthenticationToken;
+
 import org.apache.shiro.web.util.WebUtils;
 import org.springframework.stereotype.Service;
+
 
 /**
  * 表单验证（包含验证码）过滤类
@@ -33,6 +38,27 @@ public class FormAuthenticationFilter extends org.apache.shiro.web.filter.authc.
 	}
 
 	protected AuthenticationToken createToken(ServletRequest request, ServletResponse response) {
+		
+		String loginType =  request.getParameter("type");
+		
+		String signedData = request.getParameter("signedData");
+		
+		HttpSession session = ((HttpServletRequest)request).getSession();
+		
+		if(loginType!=null&&loginType.equals("1")){
+			
+			
+			//String signedData = request.getParameter("signedData");
+			
+			String username = getUsername(request);
+			String password = "certLogin";
+		
+			boolean rememberMe = isRememberMe(request);
+			String host = getHost(request);
+			String captcha = getCaptcha(request);
+			
+			return new UsernamePasswordToken(username, password.toCharArray(), rememberMe, host, captcha,session,signedData,loginType);
+		}
 		String username = getUsername(request);
 		String password = getPassword(request);
 		if (password==null){
@@ -41,6 +67,7 @@ public class FormAuthenticationFilter extends org.apache.shiro.web.filter.authc.
 		boolean rememberMe = isRememberMe(request);
 		String host = getHost(request);
 		String captcha = getCaptcha(request);
+		
 		return new UsernamePasswordToken(username, password.toCharArray(), rememberMe, host, captcha);
 	}
 

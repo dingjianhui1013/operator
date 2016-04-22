@@ -50,7 +50,6 @@ import com.itrus.ca.modules.sys.utils.UserUtils;
 import com.itrus.ca.modules.statistic.entity.StatisticCertDataProduct;
 import com.itrus.ca.modules.statistic.service.StatisticCertDataProductService;
 import com.itrus.ca.modules.work.service.WorkDealInfoService;
-import com.mysql.jdbc.Util;
 
 /**
  * 证书发放统计Controller

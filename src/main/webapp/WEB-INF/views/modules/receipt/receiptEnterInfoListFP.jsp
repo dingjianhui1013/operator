@@ -1,3 +1,4 @@
+
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ include file="/WEB-INF/views/include/taglib.jsp"%>
 <!DOCTYPE html>
@@ -62,8 +63,8 @@
 					<c:if test="${receiptEnterInfo.receiptType==3}">退费入库</c:if>
 					<c:if test="${receiptEnterInfo.receiptType==4}">重新缴费入库</c:if>
 					<c:if test="${receiptEnterInfo.receiptType==5}">印章业务删除</c:if>
-					<c:if test="${receiptEnterInfo.receiptType==5}">印章吊销回退入库</c:if>
-					<c:if test="${receiptEnterInfo.receiptType==5}">印章修改回退入库</c:if>
+					<c:if test="${receiptEnterInfo.receiptType==6}">印章吊销回退入库</c:if>
+					<c:if test="${receiptEnterInfo.receiptType==7}">印章修改回退入库</c:if>
 				</td>
 				<td>${receiptEnterInfo.createBy.name}</td>
 				<td>${receiptEnterInfo.remarks}</td>
@@ -74,3 +75,4 @@
 	<div class="pagination">${page}</div>
 </body>
 </html>
+>>>>>>> .r22520
