@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.security.NoSuchProviderException;
 import java.security.SignatureException;
 import java.security.cert.CRLException;
 import java.security.cert.CertificateException;
@@ -32,6 +33,7 @@ import com.itrus.ca.common.config.Global;
 import com.itrus.ca.common.persistence.Page;
 import com.itrus.ca.common.web.BaseController;
 import com.itrus.ca.modules.log.service.LogUtil;
+import com.itrus.ca.modules.sys.entity.SingleCvm;
 import com.itrus.ca.modules.sys.entity.SysCrlContext;
 import com.itrus.ca.modules.sys.service.SysCrlContextService;
 
@@ -175,6 +177,23 @@ public class SysCrlContextController extends BaseController {
 		}
 		logUtil.saveSysLog("系统管理", "修改信任源"+sysCrlContext.getCrlName()+"成功", null);
 		addMessage(redirectAttributes, "修改成功！");
+		
+		try {
+			SingleCvm.getInstance().reInit();
+		} catch (CertificateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoSuchProviderException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (CRLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		return "redirect:" + Global.getAdminPath()
 				+"/sys/sysCrlContext/list/";
 	}
@@ -247,6 +266,24 @@ public class SysCrlContextController extends BaseController {
 					+"/sys/sysCrlContext/list/";
 		}
 		sysCrlContextService.save(sysCrlContext);
+		
+		
+		try {
+			SingleCvm.getInstance().reInit();
+		} catch (CertificateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoSuchProviderException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (CRLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		logUtil.saveSysLog("系统管理", "添加信任源"+sysCrlContext.getCrlName()+"成功", null);
 		addMessage(redirectAttributes, "保存信任源管理成功");
 		return "redirect:" + Global.getAdminPath()
@@ -265,6 +302,23 @@ public class SysCrlContextController extends BaseController {
 		sysCrlContextService.delete(id);
 		logUtil.saveSysLog("系统管理", "删除id为"+id+"的信任源成功", null);
 		addMessage(redirectAttributes, "删除信任源管理成功");
+		
+		try {
+			SingleCvm.getInstance().reInit();
+		} catch (CertificateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoSuchProviderException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (CRLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		return "redirect:" + Global.getAdminPath()
 				+"/sys/sysCrlContext/list/";
 	}

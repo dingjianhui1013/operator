@@ -10,7 +10,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-
+import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationToken;
 
 import org.apache.shiro.web.util.WebUtils;
@@ -71,4 +71,10 @@ public class FormAuthenticationFilter extends org.apache.shiro.web.filter.authc.
 		return new UsernamePasswordToken(username, password.toCharArray(), rememberMe, host, captcha);
 	}
 
+	protected boolean onLoginFailure(AuthenticationToken token, AuthenticationException e,
+            ServletRequest request, ServletResponse response) {
+		request.setAttribute(getFailureKeyAttribute(), e.getMessage());
+		//login failed, let request continue back to the login page:
+		return true;
+	}
 }

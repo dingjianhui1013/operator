@@ -5,6 +5,7 @@
  */
 package com.itrus.ca.modules.sys.web;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -16,6 +17,7 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.log4j.Logger;
 import org.apache.shiro.authz.annotation.RequiresUser;
 import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,7 +33,9 @@ import com.itrus.ca.common.utils.CookieUtils;
 import com.itrus.ca.common.utils.StringUtils;
 import com.itrus.ca.common.web.BaseController;
 import com.itrus.ca.modules.sys.entity.SingleCvm;
+import com.itrus.ca.modules.sys.entity.SysCrlContext;
 import com.itrus.ca.modules.sys.entity.User;
+import com.itrus.ca.modules.sys.service.SysCrlContextService;
 import com.itrus.ca.modules.sys.service.SystemService;
 import com.itrus.ca.modules.sys.utils.UserUtils;
 
@@ -50,6 +54,10 @@ public class LoginController extends BaseController{
 	Logger log = Logger.getLogger(LoginController.class);
 	@Autowired
 	SystemService systemService;
+	
+	
+	@Autowired
+	SysCrlContextService sysCrlContextService;
 	/**
 	 * 管理登录
 	 */
@@ -61,13 +69,35 @@ public class LoginController extends BaseController{
 			systemService.updateUserLoginInfo(user.getId(),StringUtils.getRemoteAddr(request));
 			return "redirect:"+Global.getAdminPath();
 		}
-		//String randomString = UUID.randomUUID().toString();
-		String randomString = "111111";
-		
+		String randomString = UUID.randomUUID().toString();
 		HttpSession session = request.getSession();
 		session.setAttribute("randomString", randomString);
-		
 		model.addAttribute("randomString", randomString);
+		
+		try {
+			JSONObject dd = new JSONObject();
+			dd.put("list", SingleCvm.getInstance().getCVM().getCRLContexts().keySet());
+			model.addAttribute("crlList", dd.toString());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		/*StringBuffer subjects = new StringBuffer();
+		subjects.append("[\"\",\"");
+		
+		List<SysCrlContext> sysCrlContexts = sysCrlContextService.findAll();
+		
+		for(int i=0;i<sysCrlContexts.size();i++){
+			if(i==sysCrlContexts.size()-1){
+				subjects.append(sysCrlContexts.get(i).getCertSubject()+"\"]");
+				break;
+			}
+			subjects.append(sysCrlContexts.get(i).getCertSubject()+"\",\"");
+		}
+		
+		model.addAttribute("subjects", subjects);*/
+		
+		
 		
 		return "modules/sys/sysLogin";
 	}
@@ -86,10 +116,44 @@ public class LoginController extends BaseController{
 		String type = request.getParameter("type");
 		if(StringUtils.isNotEmpty(type)&&"1".equals(type)){
 			model.addAttribute("sccaError", "error");
+			HttpSession session = request.getSession();
+			String randomString = (String)session.getAttribute("randomString");	
+			if(randomString==null){
+				randomString = UUID.randomUUID().toString();
+				session.setAttribute("randomString", randomString);
+			}
+			model.addAttribute("randomString", randomString);	
 		}else{
 			model.addAttribute(FormAuthenticationFilter.DEFAULT_USERNAME_PARAM, username);
 			model.addAttribute("isValidateCodeLogin", isValidateCodeLogin(username, true, false));
 		}
+		model.addAttribute("type", type);
+		
+		/*StringBuffer subjects = new StringBuffer();
+		
+		subjects.append("[\"\",\"");
+		
+		List<SysCrlContext> sysCrlContexts = sysCrlContextService.findAll();
+		
+		for(int i=0;i<sysCrlContexts.size();i++){
+			if(i==sysCrlContexts.size()-1){
+				subjects.append(sysCrlContexts.get(i).getCertSubject()+"\"]");
+				break;
+			}
+			subjects.append(sysCrlContexts.get(i).getCertSubject()+"\",\"");
+		}
+		
+		model.addAttribute("subjects", subjects);*/
+		
+		try {
+			JSONObject dd = new JSONObject();
+			dd.put("list", SingleCvm.getInstance().getCVM().getCRLContexts().keySet());
+			model.addAttribute("crlList", dd.toString());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		
 		return "modules/sys/sysLogin";
 	}
 	

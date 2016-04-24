@@ -13,6 +13,7 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpSession;
 
+import com.itrus.ca.modules.sys.service.SysCrlContextService;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
@@ -58,9 +59,9 @@ import cn.topca.sp.x509.X509Certificate;
 @Service
 @DependsOn({"userDao","roleDao","menuDao"})
 public class SystemAuthorizingRealm extends AuthorizingRealm {
-	
-	@Autowired
-	private SingleCvm singleCvm;
+
+	//@Autowired
+	//private SysCrlContextService sysCrlContextService;
 
 	private SystemService systemService;
 
@@ -71,14 +72,10 @@ public class SystemAuthorizingRealm extends AuthorizingRealm {
 	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authcToken) throws AuthenticationException {
 		UsernamePasswordToken token = (UsernamePasswordToken) authcToken;
 		
-		
-		
-		
-		
 		if(token.getLoginType()!=null&&token.getLoginType().equals("1")){
 			HttpSession session = token.getSession();
 			 if(session==null){
-				 throw new CaptchaException("session过期！");
+				 throw new CaptchaException("session过期,请重新登录");
 			 }
 			
 			try {
@@ -86,8 +83,8 @@ public class SystemAuthorizingRealm extends AuthorizingRealm {
 				
 				String randomString = (String)session.getAttribute("randomString");
 				if(randomString==null){
-					 throw new CaptchaException("session过期！");
-				}
+					 throw new CaptchaException("session过期,请重新登录");
+			}
 				
 				String toSign = "LOGONDATA:"+randomString;
 				
@@ -95,15 +92,30 @@ public class SystemAuthorizingRealm extends AuthorizingRealm {
 				X509Certificate certificate = SVM.verifyPKCS7SignedData(signedDate, toSign.getBytes());
 			
 				
-				
-				CVM cvm = singleCvm.getCVM();
+
+				CVM cvm = SingleCvm.getInstance().getCVM();
 				int status = cvm.verifyCertificate(certificate);
 			
 				if(status!=0){
+					if(status==1){
+						throw new CaptchaException("证书已过期！");
+					}
+					if(status==-1){
+						throw new CaptchaException("严重系统错误,CVM初始化失败,请检查配置文件和日志！");
+					}
+					if(status==3){
+						throw new CaptchaException("不支持的颁发者=["+certificate.getCertSubjectNames()+"]");
+					}
+					if(status==4){
+						throw new CaptchaException("验证CA签名失败,疑是伪造证书！");
+					}
+					if(status==5){
+						throw new CaptchaException("无法获取CRL,请检查配置文件和网络！");
+					}
+					
 					throw new CaptchaException("认证证书失败！");
 				}
-				
-				
+
 				//certificate.getCertSubjectNames().getItem("CN");
 				//String userName = "wang_xiaoxue"; 
 				User user = getSystemService().getUserByLoginName(certificate.getCertSubjectNames().getItem("CN"));
@@ -118,7 +130,7 @@ public class SystemAuthorizingRealm extends AuthorizingRealm {
 						password.substring(16), ByteSource.Util.bytes(salt), getName());
 				
 			} catch (Exception e) {
-				throw new CaptchaException(e.getMessage());
+				throw new CaptchaException("证书登录错误！:" + e.getMessage());
 			}
 			
 			
