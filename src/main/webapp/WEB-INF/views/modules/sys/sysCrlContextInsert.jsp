@@ -33,18 +33,21 @@
 	</ul><br/>
 	<form:form id="inputForm" action="${ctx}/sys/sysCrlContext/save" method="post" enctype="multipart/form-data" class="form-horizontal" >
 		<tags:message content="${message}"/>
-		<div class="control-group">
-			<label class="control-label">CA证书(DER编码)：</label>
-			<div class="controls">
-				<input type="file" name="file" />
-			</div>
-		</div>
+		
 		<div class="control-group">
 			<label class="control-label">信任源名称：</label>
 			<div class="controls">
 				<input id="crlName" name="crlName" type="text" size="100">
 			</div>
 		</div>
+		
+		<div class="control-group">
+			<label class="control-label">CA证书(DER编码)：</label>
+			<div class="controls">
+				<input type="file" name="file" />
+			</div>
+		</div>
+		
 		<div class="control-group">
 				<label class="control-label">CRL颁发点：</label>
 				<div class="controls">

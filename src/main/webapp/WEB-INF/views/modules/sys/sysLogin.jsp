@@ -30,55 +30,20 @@
 		//颁发者CA的DN项
 		var arrayIssuerDN;
 		var arrayCerts;
-		
-			function getArrayIssuerDN(){
-				var array = new Array();
-				$.ajax({
-					url:"${ctx}/itrust/getCrlContextJson",
-					type:"GET",
-					dataType:"JSON",
-					async: false,
-					success:function(d){
-						$.each(d.crlList,function(i,e){
-							array[i] = e.certSubject;
-						})
-						
-						arrayIssuerDN = array;
-					}
-				});
-				
-			}
-	
 		$(document).ready(function() {
 			
+			if(${type==0}){
+				login();
+			}
 			
-			$.ajax({
-				url:"${ctx}/itrust/getCrlContextJson",
-				type:"GET",
-				dataType:"JSON",
-				async: false,
-				success:function(d){
-					$.each(d.crlList,function(i,e){
-						array[i] = e.certSubject;
-					})
-					
-					arrayIssuerDN = array;
-				}
-			});
-			
-			
-			
-			getArrayIssuerDN();
-			
-			//alert($("#randomString").val());
-			
-			arrayIssuerDN = ["C=CN, O=四川省数字证书认证管理中心有限公司, OU=SCEB CA, CN=SCEB CA"
-			 				, "C=CN, O=四川省数字证书认证管理中心有限公司, OU=China Trust Network, OU=Terms of use at https://www.itrus.com.cn/ctnrpa (c)2008, OU=Class 2 Enterprise Individual Subscriber CA, CN=SCEGB CA"
-			 				, "C=CN, O=CFCA Operation CA2"
-		 				, "CN=天诚安信测试RSA1024用户CA, OU=TOPCA, O=TOPCA, C=CN"
-		 				, "CN=天诚安信测试SM2用户证书, OU=测试部, O=天诚安信, C=CN"
-		 				, "O=四川省数字证书认证管理中心有限公司, OU=技术部, CN=SCCA Employee CA"];
-			listCerts(arrayIssuerDN);
+			/* arrayIssuerDN = ["C=CN, O=CFCA Operation CA2","CN=天诚安信测试RSA1024用户CA, OU=TOPCA, O=TOPCA, C=CN","C=CN, O=四川省数字证书认证管理中心有限公司, OU=SCEB CA, CN=SCEB CA"]; */
+			/* arrayIssuerDN = ${subjects}; */
+		 	/* arrayIssuerDN=["CN=天诚安信测试RSA1024用户CA, OU=TOPCA, O=TOPCA, C=CN"]; */
+		 	
+		 	
+		 	
+		 	arrayIssuerDN = ${crlList}.list;
+		 	listCerts(arrayIssuerDN);
 			
 			$("#loginForm").validate({
 				rules: {
@@ -101,19 +66,16 @@
 		
 		function logonSign(){
 			var index = SignForm.CertList.value;
+			
 			if(index == -1) {
 				// 没有找到证书，是否允许登陆？
 				// return true;允许登陆，后来判断是否签名
 				// return false;无证书不允许登陆
 				return false;
 			} else {					
-				alert($("#randomString").val());
-				var signedData = PTA.signLogonData("111111",arrayCerts[index]);
-				
+				var signedData = PTA.signLogonData($("#randomString").val(),arrayCerts[index]);
 				if(signedData.length > 0){
 					$("#signedData").val(signedData);
-					alert($("#signedData").val());
-					
 					return true;
 				} else
 					return false;
@@ -185,7 +147,7 @@
 				var index = SignForm.CertList.value;
 				var CurCert = arrayCerts[index];
 				if(CurCert){
-					$("#ltype").val("1");
+					$("#type").val("1");
 					$("#username").val(CurCert.CommonName);
 					$("#loginForm").submit();
 				}
@@ -208,12 +170,18 @@
 <body>
 	<!--[if lte IE 6]><br/><div class='alert alert-block' style="text-align:left;padding-bottom:10px;"><a class="close" data-dismiss="alert">x</a><h4>温馨提示：</h4><p>你使用的浏览器版本过低。为了获得更好的浏览体验，我们强烈建议您 <a href="http://browsehappy.com" target="_blank">升级</a> 到最新版本的IE浏览器，或者使用较新版本的 Chrome、Firefox、Safari 等。</p></div><![endif]-->
 	<div class="header"><%String error = (String) request.getAttribute(FormAuthenticationFilter.DEFAULT_ERROR_KEY_ATTRIBUTE_NAME);%>
-		<c:if test="${sccaError!='error'}">
-			<div id="messageBox" class="alert alert-error <%=error==null?"hide":""%>"><button data-dismiss="alert" class="close">×</button>
+	
+		<c:if test="${type==0 }">
+		<div id="messageBox" class="alert alert-error <%=error==null?"hide":""%>"><button data-dismiss="alert" class="close">×</button>
 				<label id="loginError" class="error"><%=error==null?"":"com.itrus.ca.modules.sys.security.CaptchaException".equals(error)?"验证码错误, 请重试.":"用户或密码错误, 请重试." %></label>
-				<label><%=request.getAttribute("shiroLoginFailure") %></label>
 			</div>
 		</c:if>
+		<c:if test="${type==1 }">
+			<div id="messageBox" class="alert alert-error <%=error==null?"hide":""%>"><button data-dismiss="alert" class="close">×</button>				
+				<label><%=request.getAttribute("shiroLoginFailure") %></label>
+			</div>
+		</c:if>	
+	
 	</div>
 	<h1 class="form-signin-heading">${fns:getConfig('productName')}</h1>
 	<div  class="selectzsBox">
@@ -241,7 +209,7 @@
 			<input name="signedData" type="hidden" id="signedData" />
 			<input type="text" id="username" name="username" class="input-block-level required" value="${username}">
 			<label class="input-label" for="password">密码</label>
-			<input type="hidden" id="ltype" name="type" value = "0" />
+			<input type="hidden" id="type" name="type" value = "0" />
 			<input type="password" id="password" name="password" class="input-block-level required">
 		</div>
 		<c:if test="${isValidateCodeLogin}"><div class="validateCode">
