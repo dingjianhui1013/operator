@@ -100,18 +100,17 @@ public class SystemAuthorizingRealm extends AuthorizingRealm {
 				
 				CVM cvm = SingleCvm.getInstance().getCVM();
 				int status = cvm.verifyCertificate(certificate);
-			
+			    
 				if(status!=0){
-					if(status==1){
-						throw new CaptchaException("证书已过期！");
-					}
 					if(status==-1){
 						throw new CaptchaException("严重系统错误,CVM初始化失败,请检查配置文件和日志！");
+					}
+					if(status==1){
+						throw new CaptchaException("证书已过期！");
 					}
 					if(status==2){
 						throw new CaptchaException("证书已吊销！");
 					}
-					
 					if(status==3){
 						throw new CaptchaException("不支持的颁发者=["+certificate.getCertSubjectNames()+"]");
 					}
@@ -120,6 +119,9 @@ public class SystemAuthorizingRealm extends AuthorizingRealm {
 					}
 					if(status==5){
 						throw new CaptchaException("无法获取CRL,请检查配置文件和网络！");
+					}
+					if(status==6){
+						throw new CaptchaException("证书已被吊销而且已过期！");
 					}
 					
 					throw new CaptchaException("认证证书失败！");
@@ -147,9 +149,6 @@ public class SystemAuthorizingRealm extends AuthorizingRealm {
 					throw new CaptchaException("验证码错误.");
 				}
 			}
-			
-			
-	
 			User user = getSystemService().getUserByLoginName(token.getUsername());
 			if (user==null){
 				return null;
@@ -160,8 +159,6 @@ public class SystemAuthorizingRealm extends AuthorizingRealm {
 			if (user.getOffice().getDelFlag().equals(Office.DEL_FLAG_DELETE)) {
 				return null;
 			}
-			
-			
 			byte[] salt = Encodes.decodeHex(user.getPassword().substring(0,16));
 			return new SimpleAuthenticationInfo(new Principal(user), 
 					user.getPassword().substring(16), ByteSource.Util.bytes(salt), getName());
