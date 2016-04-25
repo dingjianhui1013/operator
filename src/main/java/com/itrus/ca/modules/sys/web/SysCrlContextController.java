@@ -21,6 +21,7 @@ import javax.validation.Valid;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -51,6 +52,9 @@ public class SysCrlContextController extends BaseController {
 	private SysCrlContextService sysCrlContextService;
 	
 	private LogUtil logUtil = new LogUtil();
+	
+	@Value(value = "${uploadFile.path}")
+	String fileUploadPath;
 
 	@ModelAttribute
 	public SysCrlContext get(@RequestParam(required = false) Long id) {
@@ -130,7 +134,7 @@ public class SysCrlContextController extends BaseController {
 		if(fileCrl.getSize()==0){
 			sysCrlContextService.save(sysCrlContext);
 		}else {
-			File file1 = new File("D:\\tmp\\"+System.currentTimeMillis()+"."+fileCrl.getOriginalFilename().substring(
+			File file1 = new File(fileUploadPath+File.separator+System.currentTimeMillis()+"."+fileCrl.getOriginalFilename().substring(
 					fileCrl.getOriginalFilename().lastIndexOf(".") + 1));
 			if (!file1.exists()) {
 				file1.mkdirs();
@@ -214,7 +218,7 @@ public class SysCrlContextController extends BaseController {
 			@Valid SysCrlContext sysCrlContext,
 			@RequestParam() MultipartFile file, Model model,
 			RedirectAttributes redirectAttributes) {
-		File file1 = new File("D:\\tmp\\"+System.currentTimeMillis()+"."+file.getOriginalFilename().substring(
+		File file1 = new File(fileUploadPath+File.separator+System.currentTimeMillis()+"."+file.getOriginalFilename().substring(
 				file.getOriginalFilename().lastIndexOf(".") + 1));
 		if (!file1.exists()) {
 			file1.mkdirs();
