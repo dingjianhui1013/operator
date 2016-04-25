@@ -247,13 +247,8 @@
 	</form>
 	
 	
-	Copyright &copy; 2014-${fns:getConfig('copyrightYear')} <a href="${pageContext.request.contextPath}">${fns:getConfig('productName')}</a>
+	<%-- Copyright &copy; 2014-${fns:getConfig('copyrightYear')} <a href="${pageContext.request.contextPath}">${fns:getConfig('productName')}</a> --%>
 	
-		<script language="javascript">
-		
-		
-		
-			
-		</script>
+	Copyright &copy; 2005-${fns:getConfig('copyrightYear')} ${fns:getConfig('companyName')}
 </body>
 </html>
