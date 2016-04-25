@@ -41,9 +41,17 @@
 		 	/* arrayIssuerDN=["CN=天诚安信测试RSA1024用户CA, OU=TOPCA, O=TOPCA, C=CN"]; */
 		 	
 		 	
+		 	if(${crlList}.list==""){
+		 		arrayIssuerDN = "";
+		 	}else{
+		 		arrayIssuerDN = ${crlList}.list;	
+		 		
+		 	}
 		 	
-		 	arrayIssuerDN = ${crlList}.list;
 		 	listCerts(arrayIssuerDN);
+		 	
+		 	
+		 	
 			
 			$("#loginForm").validate({
 				rules: {
@@ -105,7 +113,13 @@
 		}
 		
 		function listCerts(arrayIssuerDN){
-			arrayCerts = PTA.filterSignCerts(arrayIssuerDN);
+			if(arrayIssuerDN==""){
+				arrayCerts = new Array();
+			}else{
+				arrayCerts = PTA.filterSignCerts(arrayIssuerDN);
+			}
+			
+			
 			var objCertList = SignForm.CertList; //定义<select>对象
 			//先清空CertList
 			for(var i = objCertList.length - 1; i >= 0 ; i--)
@@ -173,7 +187,7 @@
 	
 		<c:if test="${type==0 }">
 		<div id="messageBox" class="alert alert-error <%=error==null?"hide":""%>"><button data-dismiss="alert" class="close">×</button>
-				<label id="loginError" class="error"><%=error==null?"":"com.itrus.ca.modules.sys.security.CaptchaException".equals(error)?"验证码错误, 请重试.":"用户或密码错误, 请重试." %></label>
+				<label id="loginError" class="error"><%=error==null?"":"com.itrus.ca.modules.sys.security.CaptchaException".equals(error)?"验证码错误, 请重试.":"com.itrus.ca.modules.sys.security.LoginTypeException".equals(error)?"该管理员不支持密码登录.":"用户或密码错误, 请重试." %></label>
 			</div>
 		</c:if>
 		<c:if test="${type==1 }">
