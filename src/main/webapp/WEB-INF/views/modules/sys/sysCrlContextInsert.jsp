@@ -28,8 +28,8 @@
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li><a href="${ctx}/sys/sysCrlContext/list">信任源管理列表</a></li>
-		<li class="active"><a href="${ctx}/sys/sysCrlContext/insertFrom">信任源管理添加</a></li>
+		<li><a href="${ctx}/sys/sysCrlContext/list">证书登录配置列表</a></li>
+		<li class="active"><a href="${ctx}/sys/sysCrlContext/insertFrom">证书登录配置添加</a></li>
 	</ul><br/>
 	<form:form id="inputForm" action="${ctx}/sys/sysCrlContext/save" method="post" enctype="multipart/form-data" class="form-horizontal" >
 		<tags:message content="${message}"/>
