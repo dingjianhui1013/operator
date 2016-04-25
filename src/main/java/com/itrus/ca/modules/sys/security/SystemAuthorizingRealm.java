@@ -11,9 +11,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
-import javax.servlet.http.HttpSession;
-
-import com.itrus.ca.modules.sys.service.SysCrlContextService;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
@@ -30,13 +27,10 @@ import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.SimplePrincipalCollection;
 import org.apache.shiro.util.ByteSource;
-import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Service;
-
-import com.itrus.ca.common.config.Global;
 import com.itrus.ca.common.servlet.ValidateCodeServlet;
+import com.itrus.ca.common.utils.CacheUtils;
 import com.itrus.ca.common.utils.Encodes;
 import com.itrus.ca.common.utils.SpringContextHolder;
 import com.itrus.ca.modules.sys.entity.Menu;
@@ -73,26 +67,37 @@ public class SystemAuthorizingRealm extends AuthorizingRealm {
 		UsernamePasswordToken token = (UsernamePasswordToken) authcToken;
 		
 		if(token.getLoginType()!=null&&token.getLoginType().equals("1")){
-			HttpSession session = token.getSession();
+			/*HttpSession session = token.getSession();
 			 if(session==null){
 				 throw new CaptchaException("session过期,请重新登录");
-			 }
+			 }*/
 			
 			try {
 				
-				
-				String randomString = (String)session.getAttribute("randomString");
+				String randomString = (String)CacheUtils.get("randomString");
+				//String randomString = (String)session.getAttribute("randomString");
 				if(randomString==null){
 					 throw new CaptchaException("session过期,请重新登录");
-			}
+				}
 				
 				String toSign = "LOGONDATA:"+randomString;
 				
 				byte[] signedDate = Base64.decodeBase64(token.getSignedData());
 				X509Certificate certificate = SVM.verifyPKCS7SignedData(signedDate, toSign.getBytes());
 			
+				User user = getSystemService().getUserByLoginName(certificate.getCertSubjectNames().getItem("CN"));
+				if (user==null) {
+					throw new CaptchaException("用户不存在！");
+				}
+				if(user.getLoginType()==null||!user.getLoginType().equals("1")){
+					throw new CaptchaException("用户无法进行证书登录，请检查登录类型！");
+					//return null;
+				}	
+				if (user.getOffice().getDelFlag().equals(Office.DEL_FLAG_DELETE)) {
+					throw new CaptchaException("用户所在网点已删除！");
+					//return null;
+				}
 				
-
 				CVM cvm = SingleCvm.getInstance().getCVM();
 				int status = cvm.verifyCertificate(certificate);
 			
@@ -103,6 +108,10 @@ public class SystemAuthorizingRealm extends AuthorizingRealm {
 					if(status==-1){
 						throw new CaptchaException("严重系统错误,CVM初始化失败,请检查配置文件和日志！");
 					}
+					if(status==2){
+						throw new CaptchaException("证书已吊销！");
+					}
+					
 					if(status==3){
 						throw new CaptchaException("不支持的颁发者=["+certificate.getCertSubjectNames()+"]");
 					}
@@ -116,13 +125,7 @@ public class SystemAuthorizingRealm extends AuthorizingRealm {
 					throw new CaptchaException("认证证书失败！");
 				}
 
-				//certificate.getCertSubjectNames().getItem("CN");
-				//String userName = "wang_xiaoxue"; 
-				User user = getSystemService().getUserByLoginName(certificate.getCertSubjectNames().getItem("CN"));
 				
-				if (user.getOffice().getDelFlag().equals(Office.DEL_FLAG_DELETE)) {
-					return null;
-				}
 				String password = SystemService.entryptPassword("certLogin");
 				
 				byte[] salt = Encodes.decodeHex(password.substring(0,16));
@@ -148,8 +151,12 @@ public class SystemAuthorizingRealm extends AuthorizingRealm {
 			
 	
 			User user = getSystemService().getUserByLoginName(token.getUsername());
-			if (user==null) 
+			if (user==null){
 				return null;
+			} 
+			if(user.getLoginType()==null||!user.getLoginType().equals("0")){
+				throw new LoginTypeException("登录类型错误.");
+			}	
 			if (user.getOffice().getDelFlag().equals(Office.DEL_FLAG_DELETE)) {
 				return null;
 			}

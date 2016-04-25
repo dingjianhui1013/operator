@@ -32,16 +32,9 @@ public class SingleCvm {
 	synchronized public static SingleCvm getInstance() throws CertificateException, NoSuchProviderException, CRLException, IOException{
 		if(singleCvm==null)
 			singleCvm = new SingleCvm();
-		
-		
-		
-		
 		if(!singleCvm.init()){
 			return null;	
 		}
-			
-		
-		
 		return singleCvm;
 	}
    	private boolean init() throws CertificateException, NoSuchProviderException, CRLException, IOException {

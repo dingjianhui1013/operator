@@ -70,13 +70,21 @@ public class LoginController extends BaseController{
 			return "redirect:"+Global.getAdminPath();
 		}
 		String randomString = UUID.randomUUID().toString();
-		HttpSession session = request.getSession();
-		session.setAttribute("randomString", randomString);
+		
+		CacheUtils.put("randomString", randomString);
+		
+		//改用cache
+		/*HttpSession session = request.getSession();
+		session.setAttribute("randomString", randomString);*/
 		model.addAttribute("randomString", randomString);
 		
 		try {
 			JSONObject dd = new JSONObject();
-			dd.put("list", SingleCvm.getInstance().getCVM().getCRLContexts().keySet());
+			if(SingleCvm.getInstance()==null){
+				dd.put("list", "");	
+			}else{
+				dd.put("list", SingleCvm.getInstance().getCVM().getCRLContexts().keySet());
+			}
 			model.addAttribute("crlList", dd.toString());
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -116,11 +124,13 @@ public class LoginController extends BaseController{
 		String type = request.getParameter("type");
 		if(StringUtils.isNotEmpty(type)&&"1".equals(type)){
 			model.addAttribute("sccaError", "error");
-			HttpSession session = request.getSession();
-			String randomString = (String)session.getAttribute("randomString");	
+			/*HttpSession session = request.getSession();
+			String randomString = (String)session.getAttribute("randomString");*/
+			String randomString = (String)CacheUtils.get("randomString");
+			
 			if(randomString==null){
 				randomString = UUID.randomUUID().toString();
-				session.setAttribute("randomString", randomString);
+				CacheUtils.put("randomString", randomString);
 			}
 			model.addAttribute("randomString", randomString);	
 		}else{
@@ -147,7 +157,11 @@ public class LoginController extends BaseController{
 		
 		try {
 			JSONObject dd = new JSONObject();
-			dd.put("list", SingleCvm.getInstance().getCVM().getCRLContexts().keySet());
+			if(SingleCvm.getInstance()==null){
+				dd.put("list", "");	
+			}else{
+				dd.put("list", SingleCvm.getInstance().getCVM().getCRLContexts().keySet());
+			}
 			model.addAttribute("crlList", dd.toString());
 		} catch (Exception e) {
 			e.printStackTrace();

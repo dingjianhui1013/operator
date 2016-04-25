@@ -29,7 +29,7 @@ public class FormAuthenticationFilter extends org.apache.shiro.web.filter.authc.
 
 	private String captchaParam = DEFAULT_CAPTCHA_PARAM;
 
-	public String getCaptchaParam() {
+	public String getCaptchaParam(){
 		return captchaParam;
 	}
 
@@ -43,10 +43,10 @@ public class FormAuthenticationFilter extends org.apache.shiro.web.filter.authc.
 		
 		String signedData = request.getParameter("signedData");
 		
-		HttpSession session = ((HttpServletRequest)request).getSession();
+		//之前将随机数放到session,现在改放到cache
+		//HttpSession session = ((HttpServletRequest)request).getSession();
 		
 		if(loginType!=null&&loginType.equals("1")){
-			
 			
 			//String signedData = request.getParameter("signedData");
 			
@@ -57,7 +57,7 @@ public class FormAuthenticationFilter extends org.apache.shiro.web.filter.authc.
 			String host = getHost(request);
 			String captcha = getCaptcha(request);
 			
-			return new UsernamePasswordToken(username, password.toCharArray(), rememberMe, host, captcha,session,signedData,loginType);
+			return new UsernamePasswordToken(username, password.toCharArray(), rememberMe, host, captcha,signedData,loginType);
 		}
 		String username = getUsername(request);
 		String password = getPassword(request);
@@ -73,8 +73,21 @@ public class FormAuthenticationFilter extends org.apache.shiro.web.filter.authc.
 
 	protected boolean onLoginFailure(AuthenticationToken token, AuthenticationException e,
             ServletRequest request, ServletResponse response) {
-		request.setAttribute(getFailureKeyAttribute(), e.getMessage());
-		//login failed, let request continue back to the login page:
-		return true;
+		
+		UsernamePasswordToken upToken = (UsernamePasswordToken) token;
+		
+		if(upToken.getLoginType()!=null&&upToken.getLoginType().equals("1")){
+			request.setAttribute(getFailureKeyAttribute(), e.getMessage());
+			//login failed, let request continue back to the login page:
+			return true;
+		}else{
+			request.setAttribute(getFailureKeyAttribute(), e.getClass().getName());
+			//login failed, let request continue back to the login page:
+			return true;
+
+		}
+		
+		
+		
 	}
 }
