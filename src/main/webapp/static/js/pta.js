@@ -1529,7 +1529,7 @@ decryptFile:function (encFile,destFile,cert){
 filterSignCerts:function (arrayIssuerDN) {
 	this.Init();
 	var arrayCerts = this.filterCerts(arrayIssuerDN, 1, "");
-	this.filterCertsByItem(arrayCerts, arrayIssuerDN[0], "OU="+ProjectName);
+	//this.filterCertsByItem(arrayCerts, arrayIssuerDN[0], "OU="+ProjectName);
 	this.filterCertsByKeyUsageSignature(arrayCerts);
 	return arrayCerts;
 },
