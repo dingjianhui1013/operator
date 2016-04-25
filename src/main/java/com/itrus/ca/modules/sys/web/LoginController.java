@@ -126,17 +126,20 @@ public class LoginController extends BaseController{
 			model.addAttribute("sccaError", "error");
 			/*HttpSession session = request.getSession();
 			String randomString = (String)session.getAttribute("randomString");*/
-			String randomString = (String)CacheUtils.get("randomString");
 			
-			if(randomString==null){
-				randomString = UUID.randomUUID().toString();
-				CacheUtils.put("randomString", randomString);
-			}
-			model.addAttribute("randomString", randomString);	
 		}else{
 			model.addAttribute(FormAuthenticationFilter.DEFAULT_USERNAME_PARAM, username);
 			model.addAttribute("isValidateCodeLogin", isValidateCodeLogin(username, true, false));
 		}
+		
+		String randomString = (String)CacheUtils.get("randomString");
+		
+		if(randomString==null){
+			randomString = UUID.randomUUID().toString();
+			CacheUtils.put("randomString", randomString);
+		}
+		model.addAttribute("randomString", randomString);	
+		
 		model.addAttribute("type", type);
 		
 		/*StringBuffer subjects = new StringBuffer();
