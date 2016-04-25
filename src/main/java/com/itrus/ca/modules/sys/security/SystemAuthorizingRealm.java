@@ -27,6 +27,7 @@ import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.SimplePrincipalCollection;
 import org.apache.shiro.util.ByteSource;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Service;
 import com.itrus.ca.common.servlet.ValidateCodeServlet;
@@ -58,6 +59,12 @@ public class SystemAuthorizingRealm extends AuthorizingRealm {
 	//private SysCrlContextService sysCrlContextService;
 
 	private SystemService systemService;
+	
+	@Value(value = "${isCheckRevoked}")
+	String isCheckRevoked;
+	
+	@Value(value = "${isCheckValidPeriod}")
+	String isCheckValidPeriod;
 
 	/**
 	 * 认证回调函数, 登录时调用
@@ -90,7 +97,7 @@ public class SystemAuthorizingRealm extends AuthorizingRealm {
 					throw new CaptchaException("用户不存在！");
 				}
 				if(user.getLoginType()==null||!user.getLoginType().equals("1")){
-					throw new CaptchaException("用户无法进行证书登录，请检查登录类型！");
+					throw new CaptchaException("用户不支持证书登录！");
 					//return null;
 				}	
 				if (user.getOffice().getDelFlag().equals(Office.DEL_FLAG_DELETE)) {
@@ -99,7 +106,7 @@ public class SystemAuthorizingRealm extends AuthorizingRealm {
 				}
 				
 				CVM cvm = SingleCvm.getInstance().getCVM();
-				int status = cvm.verifyCertificate(certificate);
+				int status = cvm.verifyCertificate(certificate,Boolean.parseBoolean(isCheckRevoked),Boolean.parseBoolean(isCheckValidPeriod));
 			    
 				if(status!=0){
 					if(status==-1){
