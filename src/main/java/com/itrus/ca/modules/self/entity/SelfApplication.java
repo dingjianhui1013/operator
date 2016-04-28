@@ -29,7 +29,7 @@ import com.itrus.ca.modules.work.entity.WorkCertInfo;
  * SelfApplication entity. @author MyEclipse Persistence Tools
  */
 @Entity
-@Table(name = "SELF_APPLICATION", schema = "OPERATOR_SC")
+@Table(name = "SELF_APPLICATION")
 public class SelfApplication implements java.io.Serializable {
 
     // Fields

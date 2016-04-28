@@ -21,7 +21,7 @@ import javax.persistence.TemporalType;
  * SelfImage entity. @author MyEclipse Persistence Tools
  */
 @Entity
-@Table(name = "SELF_IMAGE", schema = "OPERATOR_SC")
+@Table(name = "SELF_IMAGE")
 public class SelfImage implements java.io.Serializable {
 
     // Fields
