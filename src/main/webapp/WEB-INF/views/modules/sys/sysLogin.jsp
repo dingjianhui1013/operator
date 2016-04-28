@@ -22,8 +22,8 @@
       .btnBox{margin-bottom:15px; }
       .selectzsBox{background:#fff;width:350px;padding:15px 10px; margin:0px auto 10px; overflow:hidden;border:1px solid #e5e5e5;-webkit-border-radius:5px;-moz-border-radius:5px;border-radius:5px;}
       .selectzsBox form{margin-bottom:5px;}
-      .caInfo{ text-align:left; padding:10px 10px 0px; border-top:1px solid #ddd; margin-bottom:10px;}
-      .caInfo p{margin-bottom:5px; display:block}
+      /* .caInfo{ text-align:left; padding:10px 10px 0px; border-top:1px solid #ddd; margin-bottom:10px;}
+      .caInfo p{margin-bottom:5px; display:block} */
     </style>
     <script src="${ctxStatic}/js/pta.js" type="text/javascript"></script>
 	<script type="text/javascript">
@@ -93,12 +93,12 @@
 		function getCertInfo(){
 			var index = SignForm.CertList.value;
 			var CurCert = arrayCerts[index];
-			$("#caInfo").show();
+			/* $("#caInfo").show();
 			$("#qfz").html(CurCert.Issuer);
 			$("#zt").html(CurCert.Subject);
 			$("#xlh").html(CurCert.SerialNumber);
 			$("#ks").html(CurCert.ValidFrom+"");
-			$("#js").html(CurCert.ValidTo+"");
+			$("#js").html(CurCert.ValidTo+""); */
 		}
 		
 		function tabSccaLogin(){
@@ -106,7 +106,7 @@
 			$("#sub").css("display","none");
 			$("#sccaLoginId").show();
 			$("#passlogin").show();
-			$("#caInfo").show();
+			/* $("#caInfo").show(); */
 			$("#certLogin").show();
 			$("#caInfo").show();
 			$(".selectzsBox").show();
@@ -139,14 +139,14 @@
 					objCertList.add(el);
 				}
 				var CurCert = arrayCerts[0];
-				$("#caInfo").show();
+				/* $("#caInfo").show();
 				$("#qfz").html(CurCert.Issuer);
 				$("#zt").html(CurCert.Subject);
 				$("#xlh").html(CurCert.SerialNumber);
 				$("#ks").html(CurCert.ValidFrom+"");
-				$("#js").html(CurCert.ValidTo+"");
+				$("#js").html(CurCert.ValidTo+""); */
 			}
-			//return arrayCerts;
+			
 		}
 		
 		function sccaLogin(){	
@@ -154,7 +154,7 @@
 			$("#sub").css("display","none");
 			$("#sccaLoginId").show();
 			$("#passlogin").show();
-			$("#caInfo").show();
+			/* $("#caInfo").show(); */
 			$("#certLogin").show();
 			
 		 	if(logonSign()){
@@ -175,7 +175,7 @@
 		$("#sub").css("display","block");
 		$("#sccaLoginId").hide();
 		$("#passlogin").hide();
-		$("#caInfo").hide();
+		/* $("#caInfo").hide(); */
 		$(".selectzsBox").hide();
 		$("#certLogin").hide();
 	}
@@ -206,13 +206,13 @@
 				
 			
 		</form>
-		<div id="caInfo" class="caInfo">
+		<!-- <div id="caInfo" class="caInfo">
 			<p>颁发者:<span id="qfz"></span></p>
 			<p>主题:<span id="zt"></span></p>
 			<p>序列号:<span id="xlh"></span></p>
 			<p>开始:<span id="ks"></span></p>
 			<p>结束:<span id="js"></span></p>
-		</div>	
+		</div>	 -->
 	</div>
 	<form id="loginForm" class="form-signin" action="${ctx}/login" method="post">
 		
