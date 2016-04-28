@@ -51,7 +51,7 @@
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">信任源名称：</label>
+			<label class="control-label">名称：</label>
 			<div class="controls">
 				<input id="crlName" name="crlName" type="text" size="100"
 					value="${sysCrlContext.crlName }">

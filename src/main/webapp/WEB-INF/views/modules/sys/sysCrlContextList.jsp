@@ -30,7 +30,7 @@
 	<table id="contentTable" class="table table-striped table-bordered table-condensed">
 		<thead>
 			<tr>
-				<th >信任源名称</th>
+				<th >名称</th>
     			<th >主题</th>
     			<th >序号</th>
     			<th >颁发者</th>
