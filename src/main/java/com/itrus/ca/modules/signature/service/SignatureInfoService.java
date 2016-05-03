@@ -55,6 +55,7 @@ import com.itrus.ca.modules.work.dao.WorkCertInfoDao;
  * @version 2014-06-16
  */
 @Component
+
 @Transactional(readOnly = true)
 public class SignatureInfoService extends BaseService {
 

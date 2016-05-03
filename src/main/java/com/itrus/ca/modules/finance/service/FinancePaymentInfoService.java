@@ -52,6 +52,7 @@ import com.itrus.ca.modules.sys.utils.UserUtils;
  * @version 2014-06-08
  */
 @Component
+
 @Transactional(readOnly = true)
 public class FinancePaymentInfoService extends BaseService {
 

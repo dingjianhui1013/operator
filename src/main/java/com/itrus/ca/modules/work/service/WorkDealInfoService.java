@@ -100,6 +100,7 @@ import com.itrus.ca.modules.work.vo.WorkDealInfoListVo;
  * 
  */
 @Component
+
 @Transactional(readOnly = true)
 public class WorkDealInfoService extends BaseService {
 

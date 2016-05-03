@@ -34,6 +34,7 @@ import com.itrus.ca.modules.sys.utils.UserUtils;
  * @version 2013-5-31
  */
 @Service
+
 @Transactional(readOnly = true)
 public class CategoryService extends BaseService {
 

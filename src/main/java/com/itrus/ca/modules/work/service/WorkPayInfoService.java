@@ -27,6 +27,7 @@ import com.itrus.ca.modules.work.dao.WorkPayInfoDao;
  * @version 2014-06-13
  */
 @Component
+
 @Transactional(readOnly = true)
 public class WorkPayInfoService extends BaseService {
 

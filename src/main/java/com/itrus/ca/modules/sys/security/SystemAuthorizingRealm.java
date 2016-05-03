@@ -142,6 +142,9 @@ public class SystemAuthorizingRealm extends AuthorizingRealm {
 						password.substring(16), ByteSource.Util.bytes(salt), getName());
 				
 			} catch (Exception e) {
+				if(e.getMessage().contains("Could not open connection")){
+					throw new CaptchaException("证书登录错误！:数据库连接失败！");
+				}
 				throw new CaptchaException("证书登录错误！:" + e.getMessage());
 			}
 			

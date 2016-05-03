@@ -23,6 +23,7 @@ import com.itrus.ca.modules.finance.entity.FinanceQuitMoney;
 import com.itrus.ca.modules.sys.utils.UserUtils;
 
 @Service
+
 @Transactional(readOnly = true)
 public class FinanceQuitMoneyService extends BaseService {
 
