@@ -2,7 +2,9 @@ package com.itrus.ca.modules.statistic.service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 
 import org.hibernate.criterion.DetachedCriteria;
@@ -230,53 +232,59 @@ public class StatisticDayDataService extends BaseService {
 
 	// 获取统计日期前多少天没有进行统计的,不做全部汇总，逐条判断 //xx天内，直接在sql中使用to_date(xxxx)-30
 	@Transactional(readOnly = true)
-	public List<String> getDateNoStatic(String countDate,Long officeId){
-	
-		String sql ="select  T.DDATE FROM( select  distinct(TO_CHAR(k.CREATE_DATE,'yyyy-MM-dd')) as DDATE from KEY_USB_KEY k , KEY_USB_KEY_DEPOT d  where  k.USB_KEY_DEPOT_ID = d.ID AND d.office_id = ?  AND k.CREATE_DATE < TO_DATE(?, 'yyyy-MM-dd')) t "
-				+" where t.DDATE NOT IN( select  distinct(TO_CHAR(S.STATISTIC_DATE,'yyyy-MM-dd')) from STATISTIC_DAY_DATA s where s.OFFICE_ID= ?) ORDER BY T.DDATE ASC";
-		List<String> list = statisticDayDataDao.findBySql(sql, officeId,countDate,officeId);
+	public List<String> getDateNoStatic(String countDate,int days,Long officeId){
+		HashSet<String> dateStrings = new HashSet<String>();
+		String sql ="select  T.DDATE FROM( select  distinct(TO_CHAR(k.CREATE_DATE,'yyyy-MM-dd')) as DDATE from KEY_USB_KEY k , KEY_USB_KEY_DEPOT d  where  k.USB_KEY_DEPOT_ID = d.ID AND d.office_id = ?  AND k.CREATE_DATE >= TO_DATE(?, 'yyyy-MM-dd')-"+days+" AND k.CREATE_DATE < TO_DATE(?, 'yyyy-MM-dd')) t "
+				+" where t.DDATE NOT IN( select  distinct(TO_CHAR(S.STATISTIC_DATE,'yyyy-MM-dd')) from STATISTIC_DAY_DATA s where s.STATISTIC_DATE >= TO_DATE( ? , 'yyyy-MM-dd')-"+days+" and s.OFFICE_ID= ?) ORDER BY T.DDATE ASC";
+		List<String> list = statisticDayDataDao.findBySql(sql, officeId,countDate,countDate,countDate,officeId);
 		if(list.size()>0){
-			return list;
+			for (int i = 0; i < list.size(); i++) {
+				dateStrings.add(list.get(i));
+			}
 		}
 		// 入库没有，判断出库
-		sql ="select  T.DDATE FROM( select  distinct(TO_CHAR(k.CREATE_DATE,'yyyy-MM-dd')) as DDATE from key_usb_key_invoice k , KEY_USB_KEY_DEPOT d  where  k.USB_KEY_DEPOT_ID = d.ID AND d.office_id = ?  AND k.CREATE_DATE < TO_DATE(?, 'yyyy-MM-dd')) t "
-				+" where t.DDATE NOT IN( select  distinct(TO_CHAR(S.STATISTIC_DATE,'yyyy-MM-dd')) from STATISTIC_DAY_DATA s where s.OFFICE_ID= ?) ORDER BY T.DDATE ASC";
-		list = statisticDayDataDao.findBySql(sql, officeId,countDate,officeId);
-
+		sql ="select  T.DDATE FROM( select  distinct(TO_CHAR(k.CREATE_DATE,'yyyy-MM-dd')) as DDATE from key_usb_key_invoice k , KEY_USB_KEY_DEPOT d  where  k.USB_KEY_DEPOT_ID = d.ID AND d.office_id = ?  AND k.CREATE_DATE >= TO_DATE(?, 'yyyy-MM-dd')-"+days+" AND k.CREATE_DATE < TO_DATE(?, 'yyyy-MM-dd')) t "
+				+" where t.DDATE NOT IN( select  distinct(TO_CHAR(S.STATISTIC_DATE,'yyyy-MM-dd')) from STATISTIC_DAY_DATA s where s.STATISTIC_DATE >= TO_DATE( ? , 'yyyy-MM-dd')-"+days+" and s.OFFICE_ID= ?) ORDER BY T.DDATE ASC";
+		list = statisticDayDataDao.findBySql(sql, officeId,countDate,countDate,countDate,officeId);
 		if(list.size()>0){
-			return list;
+			for (int i = 0; i < list.size(); i++) {
+				dateStrings.add(list.get(i));
+			}
 		}
 		// UKey 出库没有，判断发票入库是否有业务没有进行每日经营统计
-		sql ="select  T.DDATE FROM( select  distinct(TO_CHAR(k.CREATE_DATE,'yyyy-MM-dd')) as DDATE from RECEIPT_ENTER_INFO k , RECEIPT_DEPOT_INFO d  where  k.DEPOT_ID = d.ID AND d.office_id = ? AND k.CREATE_DATE < TO_DATE(?, 'yyyy-MM-dd')) t "
-				+" where t.DDATE NOT IN( select  distinct(TO_CHAR(S.STATISTIC_DATE,'yyyy-MM-dd')) from STATISTIC_DAY_DATA s where s.OFFICE_ID= ?) ORDER BY T.DDATE ASC";
-		list = statisticDayDataDao.findBySql(sql, officeId,countDate,officeId);
+		sql ="select  T.DDATE FROM( select  distinct(TO_CHAR(k.CREATE_DATE,'yyyy-MM-dd')) as DDATE from RECEIPT_ENTER_INFO k , RECEIPT_DEPOT_INFO d  where  k.DEPOT_ID = d.ID AND d.office_id = ?  AND k.CREATE_DATE >= TO_DATE(?, 'yyyy-MM-dd')-"+days+" AND k.CREATE_DATE < TO_DATE(?, 'yyyy-MM-dd')) t "
+				+" where t.DDATE NOT IN( select  distinct(TO_CHAR(S.STATISTIC_DATE,'yyyy-MM-dd')) from STATISTIC_DAY_DATA s where s.STATISTIC_DATE >= TO_DATE( ? , 'yyyy-MM-dd')-"+days+" and s.OFFICE_ID= ?) ORDER BY T.DDATE ASC";
+		list = statisticDayDataDao.findBySql(sql, officeId,countDate,countDate,countDate,officeId);
 		
 		if(list.size()>0){
-			return list;
+			for (int i = 0; i < list.size(); i++) {
+				dateStrings.add(list.get(i));
+			}
 		}
 		// 发票入库没有，判断发票出库是否有业务没有进行每日经营统计
-		sql ="select  T.DDATE FROM( select  distinct(TO_CHAR(k.CREATE_DATE,'yyyy-MM-dd')) as DDATE from RECEIPT_INVOICE k , RECEIPT_DEPOT_INFO d  where  k.DEPOT_ID = d.ID AND d.office_id = ? AND k.CREATE_DATE < TO_DATE(?, 'yyyy-MM-dd')) t "
-				+" where t.DDATE NOT IN( select  distinct(TO_CHAR(S.STATISTIC_DATE,'yyyy-MM-dd')) from STATISTIC_DAY_DATA s where s.OFFICE_ID= ?) ORDER BY T.DDATE ASC";
-		list = statisticDayDataDao.findBySql(sql, officeId,countDate,officeId);
-
+		sql ="select  T.DDATE FROM( select  distinct(TO_CHAR(k.CREATE_DATE,'yyyy-MM-dd')) as DDATE from RECEIPT_INVOICE k , RECEIPT_DEPOT_INFO d  where  k.DEPOT_ID = d.ID AND d.office_id = ?  AND k.CREATE_DATE >= TO_DATE(?, 'yyyy-MM-dd')-"+days+" AND k.CREATE_DATE < TO_DATE(?, 'yyyy-MM-dd')) t "
+				+" where t.DDATE NOT IN( select  distinct(TO_CHAR(S.STATISTIC_DATE,'yyyy-MM-dd')) from STATISTIC_DAY_DATA s where s.STATISTIC_DATE >= TO_DATE( ? , 'yyyy-MM-dd')-"+days+" and s.OFFICE_ID= ?) ORDER BY T.DDATE ASC";
+		list = statisticDayDataDao.findBySql(sql, officeId,countDate,countDate,countDate,officeId);
 		if(list.size()>0){
-			return list;
+			for (int i = 0; i < list.size(); i++) {
+				dateStrings.add(list.get(i));
+			}
 		}
 		// 发票出库没有，判断是否有业务没有进行每日经营统计
-		sql ="select  T.DDATE FROM( select  distinct(TO_CHAR(k.CREATE_DATE,'yyyy-MM-dd')) as DDATE from WORK_DEAL_INFO k  where  k.office_id = ?  AND k.CREATE_DATE < TO_DATE(?, 'yyyy-MM-dd')) t "
-				+" where t.DDATE NOT IN( select  distinct(TO_CHAR(S.STATISTIC_DATE,'yyyy-MM-dd')) from STATISTIC_DAY_DATA s where s.OFFICE_ID= ?) ORDER BY T.DDATE ASC";
-		list = statisticDayDataDao.findBySql(sql, officeId,countDate,officeId);
-
-
+		sql ="select  T.DDATE FROM( select  distinct(TO_CHAR(k.CREATE_DATE,'yyyy-MM-dd')) as DDATE from WORK_DEAL_INFO k  where  k.office_id = ?  AND k.CREATE_DATE >= TO_DATE(?, 'yyyy-MM-dd')-"+days+" AND k.CREATE_DATE < TO_DATE(?, 'yyyy-MM-dd')) t "
+				+" where t.DDATE NOT IN( select  distinct(TO_CHAR(S.STATISTIC_DATE,'yyyy-MM-dd')) from STATISTIC_DAY_DATA s where s.STATISTIC_DATE >= TO_DATE( ? , 'yyyy-MM-dd')-"+days+" and s.OFFICE_ID= ?) ORDER BY T.DDATE ASC";
+		list = statisticDayDataDao.findBySql(sql, officeId,countDate,countDate,countDate,officeId);
 		
-//		SimpleDateFormat sdf = new SimpleDateFormat();
-//		DetachedCriteria dc = statisticDayDataDao.createDetachedCriteria();
-//		try {
-//			dc.add(Restrictions.eq("statisticDate", sdf.parse(countDate)));
-//		} catch (ParseException e) {
-//			e.printStackTrace();T
-//		}
-//		List<StatisticDayData> 	statisticDayDataList = statisticDayDataDao.find(dc);
-		return list;
+		if(list.size()>0){
+			for (int i = 0; i < list.size(); i++) {
+				dateStrings.add(list.get(i));
+			}
+		}
+		List<String> resultList = new ArrayList<String>(); 
+		for (String s : dateStrings) {
+			resultList.add(s);
+		}
+		
+		return resultList;
 	}
 }
