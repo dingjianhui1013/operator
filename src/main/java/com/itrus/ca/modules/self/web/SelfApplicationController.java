@@ -179,8 +179,7 @@ public class SelfApplicationController extends BaseController {
         ConfigApp configApp = configAppService.findByAppname(selfApplication.getAppName());
         model.addAttribute("applyFlag1", configApp.getApplyFlag1() == null ? "" : configApp.getApplyFlag1());
         model.addAttribute("applyFlag2", configApp.getApplyFlag2() == null ? "" : configApp.getApplyFlag2());
-        ConfigProduct configProduct = configProductService.findByProductName(configApp.getId(),selfApplication.getProductName());
-        model.addAttribute("productLabel", configProduct.getProductLabel());
+        model.addAttribute("productLabel",selfApplication.getCertificateType());
 		model.addAttribute("selfApplication", selfApplication);
 		return "modules/self/selfApplicationForm";
 	}

@@ -37,7 +37,7 @@ public class SelfApplication implements java.io.Serializable {
     private Long id;
     private SelfApplication parent;
     private String appName;// 应用名称
-    private String certificateType;// 通用证书 还是专用证书
+    private String certificateType;//应用标识
     private String productName;// 产品名称
     private String applicationPeriod;// 申请年限
     private String companyName;// 单位名称
@@ -83,7 +83,7 @@ public class SelfApplication implements java.io.Serializable {
 
     /** full constructor */
     public SelfApplication(SelfApplication parent, String appName,
-            String certificateType, String productName,
+    		 String certificateType, String productName,
             String applicationPeriod, String companyName, String companyType,
             String companyTypeNumber, String companyNumber,
             String securityNumber, String securityAddress,
@@ -100,8 +100,8 @@ public class SelfApplication implements java.io.Serializable {
         super();
         this.parent = parent;
         this.appName = appName;
-        this.certificateType = certificateType;
         this.productName = productName;
+        this.certificateType = certificateType;
         this.applicationPeriod = applicationPeriod;
         this.companyName = companyName;
         this.companyType = companyType;
@@ -145,10 +145,6 @@ public class SelfApplication implements java.io.Serializable {
     public Long getId() {
         return this.id;
     }
-
-
-
-
 
     public void setId(Long id) {
         this.id = id;
