@@ -245,11 +245,11 @@
 				<tr>
 					<td >应用标识：</td>
 					<td>
-						<c:if test = "${productLabel=='0'}">
+						<c:if test = "${productLabel=='1'}">
 							专用证书
 						</c:if>
-						<c:if test = "${productLabel=='1'}">
-							'易证通'通用证书" 
+						<c:if test = "${productLabel=='0'}">
+							'易证通'通用证书 
 						</c:if>
 					</td>
 				</tr>
