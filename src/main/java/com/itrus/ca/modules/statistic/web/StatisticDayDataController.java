@@ -1456,7 +1456,7 @@ public class StatisticDayDataController extends BaseController {
 		User user = UserUtils.getUser();
 		Long officeId = user.getOffice().getId();
 		List<String> dates = statisticDayDataService.getDateNoStatic(countDate,
-				30, officeId);
+				 officeId);
 		if (dates.size() != 0) {// 有未进行的统计
 			jsonObject.put("status", "2");
 			StringBuffer bDates = new StringBuffer();
