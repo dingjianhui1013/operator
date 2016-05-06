@@ -136,6 +136,14 @@ public class ConfigProductService extends BaseService {
 	}
 	
 	
+	public List<ConfigProduct> findByAppAndProName(Long app,String productName){
+		DetachedCriteria dc = configProductDao.createDetachedCriteria();
+		dc.add(Restrictions.eq("configApp.id",app));
+		dc.add(Restrictions.like("productName","%" + EscapeUtil.escapeLike(productName) + "%"));
+		return configProductDao.find(dc);
+	}
+	
+	
 	
 	public List<ConfigProduct> findByAppId(ConfigProduct configProduct) {
 		DetachedCriteria dc = configProductDao.createDetachedCriteria();
@@ -198,6 +206,8 @@ public class ConfigProductService extends BaseService {
 		dc.createAlias("configApp", "configApp");
 		dc.add(Restrictions.eq("productName", product.getProductName()));
 //		dc.add(Restrictions.eq("productLabel", product.getProductLabel()));
+		
+		dc.add(Restrictions.eq("productLabel", product.getProductLabel()));
 		if (product.getId()!=null) {
 			dc.add(Restrictions.ne("id", product.getId()));
 		}
