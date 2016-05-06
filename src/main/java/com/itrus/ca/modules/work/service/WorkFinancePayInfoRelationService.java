@@ -74,25 +74,31 @@ public class WorkFinancePayInfoRelationService extends BaseService {
 	
 	@Transactional(readOnly = false)
 	public Page<WorkFinancePayInfoRelation> findByFinance(
-			Page<WorkFinancePayInfoRelation> page, Long idd,String appName) {
+			Page<WorkFinancePayInfoRelation> page, Long idd,String appName,Date startTime,Date endTime) {
 		
 		DetachedCriteria dc = workFinancePayInfoRelationDao.createDetachedCriteria();
 		dc.createAlias("financePaymentInfo", "financePaymentInfo");
 		dc.createAlias("workPayInfo", "workPayInfo");
 		
 		dc.add(Restrictions.eq("financePaymentInfo.id", idd));
-		if(appName!=null)
+		if(appName!=null&&!appName.equals(""))
 		{	dc.createAlias("financePaymentInfo.configApp", "configApp");
 			dc.add(Restrictions.eq("configApp.appName",appName));
 		}
-//		if(startTime!=null)
-//		{
-//			dc.add(Restrictions.ge("workPayInfo.createDate", startTime));
-//		}
-//		if(endTime!=null)
-//		{
-//			dc.add(Restrictions.le("workPayInfo.createDate", endTime));
-//		}
+		if(startTime!=null)
+		{
+			startTime.setHours(0);
+			startTime.setMinutes(0);
+			startTime.setSeconds(0);
+			dc.add(Restrictions.ge("workPayInfo.createDate", startTime));
+		}
+		if(endTime!=null)
+		{
+			endTime.setHours(23);
+			endTime.setMinutes(59);
+			endTime.setSeconds(59);
+			dc.add(Restrictions.le("workPayInfo.createDate", endTime));
+		}
 		dc.addOrder(Order.desc("id"));
 		return workFinancePayInfoRelationDao.find(page, dc);
 	}
