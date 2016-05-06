@@ -1286,7 +1286,7 @@ public class WorkDealInfoOperationController extends BaseController {
 			String remarks, Integer workType, String contactName,
 			String conCertType, String contacEmail, String conCertNumber,
 			String contactPhone, String contactTel, String recordContent,
-			
+			@RequestParam(value="product", required=false)Long productId,
 			Integer agentId,Long agentDetailId, //获取计费策略类型  获取计费策略模版
 			Integer dealInfoType2,Integer dealInfoType1,Boolean manMadeDamage,
 			
@@ -1373,7 +1373,10 @@ public class WorkDealInfoOperationController extends BaseController {
 		workDealInfo.setWorkCompany(workCompany);
 		workDealInfo.setWorkUserHis(userHis);
 		workDealInfo.setWorkCompanyHis(companyHis);
-		workDealInfo.setConfigProduct(workDealInfo1.getConfigProduct());
+		
+		ConfigProduct configProduct = configProductService.get(productId);
+		
+		workDealInfo.setConfigProduct(configProduct);
 		workDealInfo.setYear(0);
 	
 		
@@ -1428,7 +1431,7 @@ public class WorkDealInfoOperationController extends BaseController {
 		
 		ConfigChargeAgentBoundConfigProduct bound = configChargeAgentBoundConfigProductService.get(agentDetailId);
 		workDealInfo.setPayType(agentId);
-		workDealInfo.setConfigChargeAgentId(workDealInfo1.getConfigChargeAgentId());
+		workDealInfo.setConfigChargeAgentId(bound.getAgent().getId());
 		
 		workDealInfo.setInputUser(UserUtils.getUser());
 		workDealInfo.setInputUserDate(new Date());
@@ -1562,7 +1565,7 @@ public class WorkDealInfoOperationController extends BaseController {
 			String contactName,
 			String conCertType, String contacEmail, String conCertNumber,
 			String contactPhone, String contactTel,String contactSex, String recordContent,
-			
+			@RequestParam(value="product", required=true) Long productId,
 			Integer agentId,Long agentDetailId, //获取计费策略类型  获取计费策略模版
 			Integer dealInfoType1,
 			
@@ -1655,7 +1658,11 @@ public class WorkDealInfoOperationController extends BaseController {
 		workDealInfo.setWorkCompany(workCompany);
 		workDealInfo.setWorkUserHis(userHis);
 		workDealInfo.setWorkCompanyHis(companyHis);
-		workDealInfo.setConfigProduct(workDealInfo1.getConfigProduct());
+		
+		ConfigProduct configProduct = configProductService.get(productId);
+		
+		
+		workDealInfo.setConfigProduct(configProduct);
 		workDealInfo.setYear(0);
 		workDealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_ENTRY_SUCCESS);
 		
@@ -1774,7 +1781,7 @@ public class WorkDealInfoOperationController extends BaseController {
 			String companyName,String companyType,String organizationNumber,String orgExpirationTime,String selectLv,
 			String comCertificateType, String comCertficateNumber, String comCertficateTime,String legalName, String s_province, String s_city,
 			String s_county, String areaRemark,String address, String companyMobile,String remarks, 
-			
+			@RequestParam(value="product", required=false) Long productId ,
 			Integer year,
 			Integer dealInfoType,Integer dealInfoType1,Integer dealInfoType2 , 
 			Integer agentId,Long agentDetailId, //获取计费策略类型  获取计费策略模版
@@ -1949,7 +1956,10 @@ public class WorkDealInfoOperationController extends BaseController {
 		workDealInfo.setWorkCompany(workCompany);
 		workDealInfo.setWorkUserHis(userHis);
 		workDealInfo.setWorkCompanyHis(companyHis);
-		workDealInfo.setConfigProduct(workDealInfo1.getConfigProduct());
+		
+		ConfigProduct configProduct = configProductService.get(productId);
+		
+		workDealInfo.setConfigProduct(configProduct);
 	
 		if (year == null) {
 			workDealInfo.setYear(0);

@@ -438,12 +438,15 @@ public class WorkDealInfoController extends BaseController {
 
 	@RequiresPermissions("work:workDealInfo:view")
 	@RequestMapping(value = "financeList")
-	public String listFinancePaymentInfo(FinancePaymentInfo financePaymentInfo, String appName,
+	public String listFinancePaymentInfo(FinancePaymentInfo financePaymentInfo, 
+			String appName,
+			@RequestParam(value = "startTime", required = false) Date startTime,
+			@RequestParam(value = "endTime", required = false) Date endTime,
 			HttpServletRequest request, HttpServletResponse response, Long financePaymentInfoId, Model model) {
 
 		List<ConfigApp> appNames = configAppService.findall();
 		Page<WorkFinancePayInfoRelation> financePay = workFinancePayInfoRelationService
-				.findByFinance(new Page<WorkFinancePayInfoRelation>(request, response), financePaymentInfoId, appName);
+				.findByFinance(new Page<WorkFinancePayInfoRelation>(request, response), financePaymentInfoId, appName,startTime,endTime);
 		if (financePay.getCount() != 0) {
 			List<Long> idList = Lists.newArrayList();
 			if (financePay.getList().size() > 0) {
@@ -454,9 +457,6 @@ public class WorkDealInfoController extends BaseController {
 
 			Page<WorkDealInfo> page = workDealInfoService.findByFinanceId(new Page<WorkDealInfo>(request, response),
 					idList);
-
-			List<WorkDealInfo> list = workDealInfoService.findByFinanceId(idList);
-
 			for (int i = 0; i < page.getList().size(); i++) {
 				List<WorkFinancePayInfoRelation> financePayOne = workFinancePayInfoRelationService
 						.findByFinancePay(financePaymentInfoId, page.getList().get(i).getWorkPayInfo().getId());
@@ -470,18 +470,24 @@ public class WorkDealInfoController extends BaseController {
 					proNames += "(专用)";
 				} else {
 					proNames += "(通用)";
-
 				}
+				
+				page.getList().get(i).setCertSn(proNames);
+				
 				model.addAttribute("pro", ProductType.productTypeStrMap);
 				model.addAttribute("infoType", WorkDealInfoType.WorkDealInfoTypeMap);
 
 			}
-			model.addAttribute("count", list.size());
+			model.addAttribute("count", page.getCount());
 			model.addAttribute("page", page);
 		} else {
 			model.addAttribute("count", 0);
 			model.addAttribute("page", financePay);
 		}
+		
+		model.addAttribute("startTime", startTime);
+		model.addAttribute("endTime", endTime);
+		
 		model.addAttribute("appNames", appNames);
 		model.addAttribute("financePaymentInfoId", financePaymentInfoId);
 		return "modules/work/workDealInfoListForFinancePaymnetInfo";
@@ -4613,10 +4619,11 @@ public class WorkDealInfoController extends BaseController {
 			model.addAttribute("workCertApplyInfo", workDealInfo.getWorkCertInfo().getWorkCertApplyInfo());
 		}
 		model.addAttribute("pro", ProductType.productTypeStrMap);
+		
 		model.addAttribute("user", UserUtils.getUser());
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		model.addAttribute("date", sdf.format(new Date()));
-		model.addAttribute("workDealInfo", workDealInfo);
+		
 		ConfigChargeAgent chargeAgent = null;
 		if (workDealInfo.getConfigChargeAgentId() != null) {
 			chargeAgent = chargeAgentService.get(workDealInfo.getConfigChargeAgentId());
@@ -4624,6 +4631,24 @@ public class WorkDealInfoController extends BaseController {
 		}
 		// model.addAttribute("tempStyle", chargeAgent.getTempStyle());
 
+		
+		if(workDealInfo.getPayType()==null){
+			workDealInfo.setPayType(Integer.parseInt(chargeAgent.getTempStyle()));
+		}
+		
+		model.addAttribute("workDealInfo", workDealInfo);
+		
+		
+		//获得应用下的产品
+		List<ConfigProduct> products = configProductService.findByAppAndProName(workDealInfo.getConfigApp().getId(), workDealInfo.getConfigProduct().getProductName());
+		List<ProductTypeObj> listProductTypeObjs = new ArrayList<ProductTypeObj>();
+		for (int i = 0; i < products.size(); i++) {
+			String ssssi = ProductType.productTypeStrMap.get(products.get(i).getProductName())+"["+(products.get(i).getProductLabel()==0?"通用":"专用")+"]";
+			ProductTypeObj obj = new ProductTypeObj(products.get(i).getId().intValue(), ssssi);
+			listProductTypeObjs.add(obj);
+		}
+		model.addAttribute("proList", listProductTypeObjs);
+		
 		if (dealType.indexOf("1") >= 0) {
 
 			model.addAttribute("isOK", "isNo");
@@ -4670,8 +4695,11 @@ public class WorkDealInfoController extends BaseController {
 					nameSet.add(Integer.parseInt(boundList.get(i).getAgent().getTempStyle()));
 				}
 
+				
 				model.addAttribute("boundLabelList", nameSet);
 
+				
+				
 				List<WorkLog> list = workLogService.findByDealInfo(workDealInfo);
 				model.addAttribute("workLog", list);
 
@@ -7515,6 +7543,63 @@ public class WorkDealInfoController extends BaseController {
 		}
 		return json.toString();
 	}
+	
+	
+	
+	@RequiresPermissions("work:workDealInfo:view")
+	@RequestMapping(value = "setStyleList1")
+	@ResponseBody
+	public String setStyleList1(Long productId) {
+		JSONObject json = new JSONObject();
+		try {
+			
+			
+			ConfigProduct configProduct = configProductService.get(productId);
+			List<ConfigChargeAgentBoundConfigProduct> boundList = configChargeAgentBoundConfigProductService
+					.findByProIdAll(configProduct.getId());
+			
+			for (int i = 0; i < boundList.size(); i++) {
+				json.put(boundList.get(i).getAgent().getTempStyle(),boundList.get(i).getAgent().getTempStyle());
+			}
+			
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		return json.toString();
+	}
+	
+	
+	@RequiresPermissions("work:workDealInfo:view")
+	@RequestMapping(value = "setTemplateList")
+	@ResponseBody
+	public String setTemplateList(Long productId,Integer infoType,String style) {
+		JSONObject json = new JSONObject();
+		try {
+			ConfigProduct configProduct = configProductService.get(productId);
+			JSONArray array = new JSONArray();
+			List<ConfigChargeAgentBoundConfigProduct> boundStyleList = configChargeAgentBoundConfigProductService
+					.findByProIdAllByStyle(configProduct.getId(), style);
+			for (int i = 0; i < boundStyleList.size(); i++) {
+				JSONObject iter2 = new JSONObject();
+				iter2.put("id", boundStyleList.get(i).getId());// 关联表ID
+				iter2.put("name", boundStyleList.get(i).getAgent().getTempName());
+				iter2.put("agentId", boundStyleList.get(i).getAgent().getId());
+				array.put(iter2);
+			}
+
+			json.put("array", array);
+
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		return json.toString();
+	}
+	
+	
+	
 
 	@RequiresPermissions("work:workDealInfo:view")
 	@RequestMapping(value = "checkSurplusNum")
