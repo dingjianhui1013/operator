@@ -48,8 +48,9 @@
 						
 						if("${workDealInfo.id}"!=null && "${workDealInfo.id}"!=""){
 							var boundLabelList = "${boundLabelList}";
-							var lable = "${workDealInfo.configProduct.productLabel}";
-							$("#agentId").attr("onchange","setStyleList("+lable+")");
+							
+							$("#product").attr("onchange","setStyleList()");
+							$("#agentId").attr("onchange","setTemplateList()");
 							var agentHtml="";
 							var obj= $.parseJSON(boundLabelList);
 							$.each(obj, function(i, item){
@@ -81,9 +82,9 @@
 							
 							var product = $("#product").val();
 							var agentId = $("#agentId").val();
-							var appId = $("#appId").val();
+							
 							if (agentId!=0) {
-								var url = "${ctx}/work/workDealInfo/setStyleList?lable="+lable+"&productName="+product+"&app="+appId+"&infoType=0&style="+agentId+"&_="+new Date().getTime();
+								var url = "${ctx}/work/workDealInfo/setTemplateList?productId="+product+"&infoType=0&style="+agentId+"&_="+new Date().getTime();
 								$.getJSON(url,function(data){
 									var styleList = data.array;
 									var styleHtml="";
@@ -94,13 +95,7 @@
 											/* showYear(); */
 										}else{
 											styleHtml +="<option value='"+item.id+"'>" + item.name + "</option>";
-										}
-										
-										
-										
-										
-										
-										
+										}							
 										
 									});
 									$("#agentDetailId").html(styleHtml);
@@ -260,6 +255,17 @@
 <script type="text/javascript" src="${ctxStatic}/jquery/city.js"></script>
 <script type="text/javascript">	
 	function onSubmit(){
+		
+		if($("#agentId").val()==0){
+			top.$.jBox.tip("请选择计费策略类型！");
+			return false;
+		}else{
+			if($("#agentDetailId").val()==0){
+				top.$.jBox.tip("请选择计费策略模板！");
+				return false;
+			}
+		}
+		
 		$("#newInfoId").val(getCookie("work_deal_info_id"));
 		delCookie("work_deal_info_id");
 		
@@ -348,82 +354,16 @@
 		var mail = $("#contacEmail").val();
 		$("#pEmail").val(mail);
 	}
-	
-	
-	/* 
-	* 功能:根据产品带回年限
-	* 传参：lable+name
-	* 返回值：年限1，2，4，5是否为true
-	*/ 
-	/* function showYear(){
-		var agentId = $("#boundId").val();
-		//var url = "${ctx}/work/workDealInfo/showYear?lable="+lable+"&productName="+productName+"&app="+$("#appId").val()+"&infoType=0&_="+new Date().getTime();
-		var url = "${ctx}/work/workDealInfo/showYearNew?boundId="+agentId+"&infoType=1&_="+new Date().getTime();
 		
-		$.getJSON(url, function(data) {
-			if (data.year1) {
-				$("#year1").show();
-				$("#word1").show();
-			} else {
-				$("#year1").hide();
-				$("#word1").hide();
-			}
-			if (data.year2) {
-				$("#year2").show();
-				$("#word2").show();
-			} else {
-				$("#year2").hide();
-				$("#word2").hide();
-			}
-			if (data.year3) {
-				$("#year3").show();
-				$("#word3").show();
-			} else {
-				$("#year3").hide();
-				$("#word3").hide();
-			}
-			if (data.year4) {
-				$("#year4").show();
-				$("#word4").show();
-			} else {
-				$("#year4").hide();
-				$("#word4").hide();
-			}
-			if (data.year5) {
-				$("#year5").show();
-				$("#word5").show();
-			} else {
-				$("#year5").hide();
-				$("#word5").hide();
-			}			
-			var boundId =  $("#agentDetailId").val(); 
-			var url="${ctx}/work/workDealInfo/checkSurplusNum?boundId="+boundId+"&_="+new Date().getTime();
-			$.getJSON(url,function(data){
-				$("#surplusNum").val(data.surplusNum);
-				if($("#surplusNum").val()==0 && $("#agentId").val()!=1){
-					top.$.jBox.tip("此计费策略模版剩余数量为零，不能进行业务办理！");
-					$("#agentMes").show();
-				}else{
-					$("#agentMes").hide();
-				}
-			});
-			
-			
-			
-		});
-		
-	} */
-	
 	/*
 	* 给计费策略模版配置赋值
 	*/
-	function setStyleList(obj){
-		var lable = obj;
+	function setTemplateList(){
 		var product = $("#product").val();
 		var agentId = $("#agentId").val();
 		var appId = $("#appId").val();
 		if (agentId!=0) {
-			var url = "${ctx}/work/workDealInfo/setStyleList?lable="+lable+"&productName="+product+"&app="+appId+"&infoType=0&style="+agentId+"&_="+new Date().getTime();
+			var url = "${ctx}/work/workDealInfo/setTemplateList?productId="+product+"&infoType=0&style="+agentId+"&_="+new Date().getTime();
 			$.getJSON(url,function(data){
 				var styleList = data.array;
 				var styleHtml="";
@@ -437,8 +377,47 @@
 				$("#agentDetailId").html(styleHtml);
 			});
 		}else{
-			top.$.jBox.tip("请您选择产品！");
+			top.$.jBox.tip("请您选择计费策略类型！");
 			
+		}
+	}
+	
+	
+	
+	/*
+	* 给计费策略类型配置赋值
+	*/
+	function setStyleList(){
+		var product = $("#product").val();
+		var agentHtml="";
+		var styleHtml="";
+		if (product!=0) {
+			var url = "${ctx}/work/workDealInfo/setStyleList1?productId="+product+"&_="+new Date().getTime();
+			$.getJSON(url,function(data){
+				agentHtml+="<option value='0'>请选择</option>";
+				$.each(data, function(i, item){					 
+					 if(item=="1"){	
+							agentHtml+="<option value='"+item+"'>标准</option>";
+					}else if(item=="2"){
+							agentHtml+="<option value='"+item+"'>政府统一采购</option>";
+					}else if(item=="3"){
+							agentHtml+="<option value='"+item+"'>合同采购</option>";
+					}
+				});	
+				$("#agentId").html(agentHtml);
+				$("#agentDetailId").html("");
+				styleHtml+="<option value='0'>请选择</option>";
+				$("#agentDetailId").html(styleHtml);
+				
+				if($("#agentId option").length==1){
+					top.$.jBox.tip("请先配置计费策略！");
+					return;
+				}
+				
+				}); 
+			
+			
+				
 		}
 	}
 	
@@ -593,30 +572,24 @@
 						</tr>
 						<tr>
 							<th><span class="prompt" style="color: red; display: none;">*</span>应用名称：</th>
-							<td colspan="3" class="tdWidth"><input type="text" name="configApp" disabled="disabled"
+							<td class="tdWidth"><input type="text" name="configApp" disabled="disabled"
 								value="${workDealInfo.configApp.appName }" id="4" />
 								
 								<input type="hidden" id="appId" value="${workDealInfo.configApp.id }" />
 								
 								</td>
 							<th><span class="prompt" style="color: red; display: none;">*</span>选择产品：</th>
-							<td colspan="3"><input type="text" name="product"  disabled="disabled"
-								value="${pro[workDealInfo.configProduct.productName] }" />
-								
-								<input type="hidden" id="product" value="${workDealInfo.configProduct.productName }" />
-								
-								</td>
-						</tr>
-						<tr>
-							<th><span class="prompt" style="color: red; display: none;">*</span>应用标识：</th>
-							<td colspan="3" class="tdWidth"><input type="radio" disabled="disabled" name="lable"
-								<c:if test="${workDealInfo.configProduct.productLabel==0}">checked="checked"</c:if>
-								id="lable0" value="0">通用 &nbsp; &nbsp; <input
-								type="radio" disabled="disabled" name="lable"
-								<c:if test="${workDealInfo.configProduct.productLabel==1}">checked="checked"</c:if>
-								id="lable1" value="1">专用</td>
+							<td>
+							<select name="product"  id="product">
+									<c:forEach items="${proList}" var="product">
+										<option value="${product.id}" <c:if test="${product.id==workDealInfo.configProduct.id }">selected="selected"</c:if> >${product.name}</option>
+									</c:forEach>
+							</select>		
+							</td>
+							
+							
 							<th><span class="prompt" style="color: red; display: none;">*</span>业务类型：</th>
-							<td colspan="3">
+							<td>
 							<input type="checkbox" disabled="disabled" checked="checked" value="0" name="dealInfoType">
 							<font color="red" style="font-weight:bold;">更新证书</font>
 							<input type="hidden" value="0" name="dealInfoType">
@@ -628,8 +601,8 @@
 							&nbsp;&nbsp;
 								<input class="btn btn-primary" type="button" value="更改业务类型" onclick="changeDealInfoType()"  />
 							</td>
-							
 						</tr>
+					
 						<tr>
 
 							<th><span class="prompt"
@@ -637,7 +610,9 @@
 							<td class="tdWidth"><select id="agentId"
 								name="agentId">
 									<option value="0">请选择</option>
-							</select> <input type="hidden" id="boundId"></td>
+							</select> <input type="hidden" id="boundId">
+							<input type="hidden" value="${workDealInfo.payType}" id="payType" />
+							</td>
 							<th style="width: 100px;"><span class="prompt"
 								style="color: red; display: none;">*</span>计费策略模版：</th>
 							<td style="width: 270px;"><select
