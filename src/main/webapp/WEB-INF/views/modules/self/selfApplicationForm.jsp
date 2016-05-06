@@ -241,18 +241,19 @@
 					</c:if>
 				</td>
 			</tr>
+			<tr>
+				<td >应用标识：</td>
+				<td>
+					<c:if test = "${productLabel=='1'}">
+						专用证书
+					</c:if>
+					<c:if test = "${productLabel=='0'}">
+						'易证通'通用证书 
+					</c:if>
+				</td>
+			</tr>
 			<c:if test = "${applyFlag1 eq true }">
-				<tr>
-					<td >应用标识：</td>
-					<td>
-						<c:if test = "${productLabel=='1'}">
-							专用证书
-						</c:if>
-						<c:if test = "${productLabel=='0'}">
-							'易证通'通用证书 
-						</c:if>
-					</td>
-				</tr>
+				
 				<tr>
 					<td>地税管理部门:</td>
 					<td>
