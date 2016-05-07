@@ -9,6 +9,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -463,7 +464,8 @@ public class StatisticSealDayDataController extends BaseController {
 		User user = UserUtils.getUser();
 		Long officeId = user.getOffice().getId();
 		List<String> dates = statisticSealDayDataService.getDateNoStatic(countDate,
-				30, officeId);
+				365, officeId);
+		Collections.sort(dates);
 		if (dates.size() != 0) {// 有未进行的统计
 			jsonObject.put("status", "2");
 			StringBuffer bDates = new StringBuffer();
