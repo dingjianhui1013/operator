@@ -1286,7 +1286,7 @@ public class WorkDealInfoOperationController extends BaseController {
 			String remarks, Integer workType, String contactName,
 			String conCertType, String contacEmail, String conCertNumber,
 			String contactPhone, String contactTel, String recordContent,
-			@RequestParam(value="product", required=false)Long productId,
+			@RequestParam(value="product", required=true)Long productId,
 			Integer agentId,Long agentDetailId, //获取计费策略类型  获取计费策略模版
 			Integer dealInfoType2,Integer dealInfoType1,Boolean manMadeDamage,
 			
@@ -1781,7 +1781,7 @@ public class WorkDealInfoOperationController extends BaseController {
 			String companyName,String companyType,String organizationNumber,String orgExpirationTime,String selectLv,
 			String comCertificateType, String comCertficateNumber, String comCertficateTime,String legalName, String s_province, String s_city,
 			String s_county, String areaRemark,String address, String companyMobile,String remarks, 
-			@RequestParam(value="product", required=false) Long productId ,
+			@RequestParam(value="product", required=true) Long productId ,
 			Integer year,
 			Integer dealInfoType,Integer dealInfoType1,Integer dealInfoType2 , 
 			Integer agentId,Long agentDetailId, //获取计费策略类型  获取计费策略模版

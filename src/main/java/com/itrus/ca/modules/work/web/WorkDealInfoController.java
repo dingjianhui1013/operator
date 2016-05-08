@@ -2473,14 +2473,21 @@ public class WorkDealInfoController extends BaseController {
 			for (int i = 0; i < products.size(); i++) {
 				// products.get(i).getProductName();
 
-				String ssssi = ProductType.productTypeStrMap.get(products.get(i).getProductName());
-				ProductTypeObj obj = new ProductTypeObj(Integer.parseInt(products.get(i).getProductName()), ssssi);
-				listProductTypeObjs.add(obj);
+			
+					String ssssi = ProductType.productTypeStrMap.get(products.get(i).getProductName())+"["+(products.get(i).getProductLabel()==0?"通用":"专用")+"]";
+					ProductTypeObj obj = new ProductTypeObj(products.get(i).getId().intValue(), ssssi);
+					listProductTypeObjs.add(obj);
+				
+				
 			}
 			model.addAttribute("proList", listProductTypeObjs);
 		} else {
 
-			model.addAttribute("proList", ProductType.getProductTypeList());
+			//model.addAttribute("proList", ProductType.getProductTypeList());
+			
+			model.addAttribute("proList", ProductType.getProductList());
+
+			
 		}
 		return "modules/work/workDealInfoForm";
 	}
@@ -3702,28 +3709,42 @@ public class WorkDealInfoController extends BaseController {
 			Set set = new HashSet();
 			ArrayList lis = new ArrayList();
 			for (ConfigProduct con : list) {
-				lis.add(con.getProductName());
+				lis.add(con.getProductName()+con.getProductLabel()+con.getId());
+				
 			}
 			set.addAll(lis);
 			for (Iterator it = set.iterator(); it.hasNext();) {
-				String productName = (String) it.next();
-				if (productName.equals("1")) {
-					json.put("product1", true);
+				String product = (String) it.next();
+				
+				if (product.startsWith("10")) {
+					json.put("product10", product.substring(2));
 				}
-				if (productName.equals("2")) {
-					json.put("product2", true);
+				if (product.startsWith("11")) {
+					json.put("product11", product.substring(2));
 				}
-				if (productName.equals("3")) {
-					json.put("product3", true);
+				if (product.startsWith("20")) {
+					json.put("product20", product.substring(2));
 				}
-				if (productName.equals("4")) {
-					json.put("product4", true);
+				if (product.startsWith("21")) {
+					json.put("product21", product.substring(2));
 				}
-				if (productName.equals("5")) {
-					json.put("product5", true);
+				if (product.startsWith("30")) {
+					json.put("product30", product.substring(2));
 				}
-				if (productName.equals("6")) {
-					json.put("product6", true);
+				if (product.startsWith("31")) {
+					json.put("product31", product.substring(2));
+				}
+				if (product.startsWith("40")) {
+					json.put("product40", product.substring(2));
+				}
+				if (product.startsWith("41")) {
+					json.put("product41", product.substring(2));
+				}
+				if (product.startsWith("60")) {
+					json.put("product60", product.substring(2));
+				}
+				if (product.startsWith("61")) {
+					json.put("product61", product.substring(2));
 				}
 			}
 		} catch (Exception e) {
@@ -7509,6 +7530,86 @@ public class WorkDealInfoController extends BaseController {
 		}
 		return json.toString();
 	}
+	
+	
+	/**
+	 * 
+	 * @Title: showAgentProduct @Description:
+	 *         TODO(新增选中应用、产品后带回年限、缴费方式、证书模版项配置) @param app 应用ID @param
+	 *         productName 产品名称 @param infoType 业务类型 @param lable 专用、通用 @return
+	 *         设定文件 @return String 返回类型 @throws
+	 */
+	@RequiresPermissions("work:workDealInfo:view")
+	@RequestMapping(value = "showAgentProductById")
+	@ResponseBody
+	public String showAgentProduct(Long productId, Integer infoType) {
+		JSONObject json = new JSONObject();
+		try {
+			ConfigProduct configProduct = configProductService.get(productId);
+
+			JSONArray array = new JSONArray();
+
+			List<ConfigChargeAgentBoundConfigProduct> boundList = configChargeAgentBoundConfigProductService
+					.findByProIdAll(configProduct.getId());
+
+			Set<String> nameSet = new HashSet<String>();
+			for (int i = 0; i < boundList.size(); i++) {
+				nameSet.add(boundList.get(i).getAgent().getTempStyle());
+			}
+			if (nameSet.size() > 0) {
+				json.put("tempStyle", 1);
+				Iterator<String> itName = nameSet.iterator();
+				while (itName.hasNext()) {
+					JSONObject iter = new JSONObject();
+					String str = itName.next();
+					if (str.endsWith("1")) {
+						iter = new JSONObject();
+						iter.put("id", str);
+						iter.put("name", "标准");
+						array.put(iter);
+					} else if (str.endsWith("2")) {
+						iter = new JSONObject();
+						iter.put("id", str);
+						iter.put("name", "政府统一采购");
+						array.put(iter);
+					} else {
+						iter = new JSONObject();
+						iter.put("id", str);
+						iter.put("name", "合同采购");
+						array.put(iter);
+					}
+				}
+
+				JSONObject jsonMap = (JSONObject) array.get(0);
+				List<ConfigChargeAgentBoundConfigProduct> boundStyleList = configChargeAgentBoundConfigProductService
+						.findByProIdAllByStyle(configProduct.getId(), jsonMap.get("id").toString());
+
+				JSONArray iterList2 = new JSONArray();
+
+				for (int i = 0; i < boundStyleList.size(); i++) {
+					JSONObject iter2 = new JSONObject();
+					iter2.put("id", boundStyleList.get(i).getId());
+					iter2.put("name", boundStyleList.get(i).getAgent().getTempName());
+					iterList2.put(iter2);
+				}
+
+				json.put("boundStyleList", iterList2);
+
+				json.put("typeMap", array);
+
+			} else {
+
+				json.put("tempStyle", -1);
+			}
+
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		return json.toString();
+	}
+	
+	
 
 	/**
 	 * 
