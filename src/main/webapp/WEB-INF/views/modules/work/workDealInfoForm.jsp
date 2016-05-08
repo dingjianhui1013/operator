@@ -40,114 +40,54 @@ var selected = false;
 						
 						
 						var url = "${ctx}/work/workDealInfo/app?_="+new Date().getTime();
-						$
-								.getJSON(
-										url,
-										function(d) {
+						$.getJSON(url,function(d) {
 											appData = d;
-											$("#app")
-													.bigAutocomplete(
+											$("#app").bigAutocomplete(
 															{
 																data : d.lis,
-																callback : function(
-																		data) {
-																	$("#pro1").removeAttr("disabled");
-																	$("#pro2").removeAttr("disabled");
-																	$("#pro3").removeAttr("disabled");
-																	$("#pro4").removeAttr("disabled");
-																	$("#pro5").removeAttr("disabled");
-																	$("#pro6").removeAttr("disabled");
+																callback : function(data) {
+																	$("#product").html("");
+																	$("#product").attr("onchange","setStyleList()");
 																	var url1 = "${ctx}/work/workDealInfo/product?appId=";
-
-																	$
-																			.getJSON(
-																					url1
-																							+ data.result+"&_="+new Date().getTime(),
-																					function(
-																							da) {
-																						$(
-																								"#appId")
-																								.val(
-																										da.appId);
-																						if (!da.product1) {
-																							$(
-																									"#product1")
-																									.attr(
-																											"style",
-																											"display:none");
-																						} else {
-																							$(
-																									"#product1")
-																									.attr(
-																											"style",
-																											"display:");
+																	var productHtml="";
+																	productHtml+="<option value='0'>请选择</option>";
+																	$.getJSON(url1 + data.result+"&_="+new Date().getTime(),
+																					function(da) {
+																						$("#appId").val(da.appId);
+																						if (da.product10!=null) {
+																							productHtml+="<option value='"+da.product10+"'>企业证书[通用]</option>";
+																						} 
+																						if (da.product11!=null) {
+																							productHtml+="<option value='"+da.product11+"'>企业证书[专用]</option>";
 																						}
-																						if (!da.product2) {
-																							$(
-																									"#product2")
-																									.attr(
-																											"style",
-																											"display:none");
-																						} else {
-																							$(
-																									"#product2")
-																									.attr(
-																											"style",
-																											"display:");
+																						if (da.product20!=null) {
+																							productHtml+="<option value='"+da.product20+"'>个人证书(企业)[通用]</option>";
+																						} 
+																						if (da.product21!=null) {
+																							productHtml+="<option value='"+da.product21+"'>个人证书(企业)[专用]</option>";
 																						}
-																						if (!da.product3) {
-																							$(
-																									"#product3")
-																									.attr(
-																											"style",
-																											"display:none");
-																						} else {
-																							$(
-																									"#product3")
-																									.attr(
-																											"style",
-																											"display:");
+																						if (da.product30!=null) {
+																							productHtml+="<option value='"+da.product30+"'>机构证书[通用]</option>";
+																						} 
+																						if (da.product31!=null) {
+																							productHtml+="<option value='"+da.product31+"'>机构证书[专用]</option>";
 																						}
-																						if (!da.product4) {
-																							$(
-																									"#product4")
-																									.attr(
-																											"style",
-																											"display:none");
-																						} else {
-																							$(
-																									"#product4")
-																									.attr(
-																											"style",
-																											"display:");
+																						if (da.product40!=null) {
+																							productHtml+="<option value='"+da.product40+"'>可信移动设备[通用]</option>";
+																						} 
+																						if (da.product41!=null) {
+																							productHtml+="<option value='"+da.product41+"'>可信移动设备[专用]</option>";
 																						}
-																						if (!da.product5) {
-																							$(
-																									"#product5")
-																									.attr(
-																											"style",
-																											"display:none");
-																						} else {
-																							$(
-																									"#product5")
-																									.attr(
-																											"style",
-																											"display:");
+																						if (da.product60!=null) {
+																							productHtml+="<option value='"+da.product60+"'>个人证书(机构)[通用]</option>";
+																						} 
+																						if (da.product61!=null) {
+																							productHtml+="<option value='"+da.product61+"'>个人证书(机构)[专用]</option>";
 																						}
-																						if (!da.product6) {
-																							$(
-																									"#product6")
-																									.attr(
-																											"style",
-																											"display:none");
-																						} else {
-																							$(
-																									"#product6s")
-																									.attr(
-																											"style",
-																											"display:");
-																						}
+																						
+																						$("#product").html(productHtml);
 																					});
+																	
 																}
 															});
 										});
@@ -155,8 +95,8 @@ var selected = false;
 
 						if("${workDealInfo.id}"!=null && "${workDealInfo.id}"!=""){
 							var boundLabelList = "${boundLabelList}";
-							var lable = "${workDealInfo.configProduct.productLabel}";
-							$("#agentId").attr("onchange","setStyleList("+lable+")");
+							
+							$("#agentId").attr("onchange","setTemplateList()");
 							var agentHtml="";
 							var obj= $.parseJSON(boundLabelList);
 							$.each(obj, function(i, item){
@@ -185,10 +125,10 @@ var selected = false;
 							
 							
 							
-							var productName = $("input[name='product']:checked").val();
+							var product = $("#product").val();
 							var agentId = $("#agentId").val();
 							if (agentId!=0) {
-								var url = "${ctx}/work/workDealInfo/setStyleList?lable="+lable+"&productName="+productName+"&app="+$("#appId").val()+"&infoType=0&style="+agentId+"&_="+new Date().getTime();
+								var url = "${ctx}/work/workDealInfo/setTemplateList?productId="+product+"&infoType=0&style="+agentId+"&_="+new Date().getTime();
 								$.getJSON(url,function(data){
 									var styleList = data.array;
 									var styleHtml="";
@@ -228,16 +168,19 @@ var selected = false;
 	}
 	function onSubmit(){
 		
-		var productLength = $("#productTdId").find("[name='product']").length;
-		for (var a = 0; a <productLength; a++) {
-			var radioIndex = $($("#productTdId").find("[name='product']")[a]);
-			if(radioIndex.is(":checked")){
-				selected = true;
-			}
-		}
-		if(!selected){
-			top.$.jBox.tip("请选择要办理的产品!");
+		if($("#product").val()==0){
+			top.$.jBox.tip("请选择要办理的产品！");
 			return false;
+		}
+		
+		if($("#agentId").val()==0){
+			top.$.jBox.tip("请选择计费策略类型！");
+			return false;
+		}else{
+			if($("#agentDetailId").val()==0){
+				top.$.jBox.tip("请选择计费策略模板！");
+				return false;
+			}
 		}
 		if($("#tt").val()!="" && !checkDwmc($("#tt"))){
 			top.$.jBox.tip("单位名称格式有误!");
@@ -340,17 +283,23 @@ var selected = false;
 	rel="stylesheet" />
 <script type="text/javascript">
 	function os(obj) {
-		var productLength = $("#productTdId").find("[name='product']").length;
-		for (var a = 0; a <productLength; a++) {
-			var radioIndex = $($("#productTdId").find("[name='product']")[a]);
-			if(radioIndex.is(":checked")){
-				selected = true;
-			}
-		}
-		if(!selected){
-			top.$.jBox.tip("请选择要办理的产品!");
+		
+		if($("#product").val()==0){
+			top.$.jBox.tip("请选择要办理的产品！");
 			return false;
 		}
+		
+		if($("#agentId").val()==0){
+			top.$.jBox.tip("请选择计费策略类型！");
+			return false;
+		}else{
+			if($("#agentDetailId").val()==0){
+				top.$.jBox.tip("请选择计费策略模板！");
+				return false;
+			}
+		}
+		
+		
 		if($("#tt").val()!="" && !checkDwmc($("#tt"))){
 			top.$.jBox.tip("单位名称格式有误!");
 			return false;
@@ -890,29 +839,7 @@ var selected = false;
 		
 	}
 	
-	//根据商品获取引用标识
-	function productLabel(data) {
-		selected = true;
-		var appId = $("#appId").val();
-		var url = "${ctx}/work/workDealInfo/type?name=" + data + "&appId="
-				+ appId+"&_="+new Date().getTime();
-		$.getJSON(url, function(da) {
-			if (da.type0&&da.type1){
-				$("#lable0").removeAttr("disabled");
-				$("#lable1").removeAttr("disabled");
-			}
-			if (da.type1) {
-				$("#lable1").attr("checked", "checked");
-				//showYear(1);
-				showAgent(1);
-			}else if (da.type0) {
-				$("#lable0").attr("checked", "checked");
-				//showYear(0);
-				showAgent(0)
-			}
-			
-		});
-	}
+	
 
 	
 	/* 
@@ -921,16 +848,15 @@ var selected = false;
 	* 返回值：年限1，2，4，5是否为true
 	*/ 
 	function showAgent(obj){
-		var lable = obj;
-		var productName = $("input[name='product']:checked").val();
-		var url = "${ctx}/work/workDealInfo/showAgentProduct?lable="+lable+"&productName="+productName+"&app="+$("#appId").val()+"&infoType=0&_="+new Date().getTime();
+		var product = obj;
+		var url = "${ctx}/work/workDealInfo/showAgentProductById?productId="+product+"&infoType=0&_="+new Date().getTime();
 		$.getJSON(url,function(data){
 			if(data.tempStyle!=-1){
 				var map = data.typeMap;
 				var agentHtml="";
-				$("#agentId").attr("onchange","setStyleList("+lable+")");
+				$("#agentId").attr("onchange","setTemplateList()");
 				$.each(map, function(i, item){
-					agentHtml+="<option onchange=setStyleList("+lable+")  value='"+item.id+"'>" + item.name + "</option>";
+					agentHtml+="<option onchange=setTemplateList()  value='"+item.id+"'>" + item.name + "</option>";
 				});
 				$("#agentId").html(agentHtml);
 				var styleList = data.boundStyleList;
@@ -966,14 +892,48 @@ var selected = false;
 	}
 	
 	/*
+	* 给计费策略类型配置赋值
+	*/
+	function setStyleList(){
+		var product = $("#product").val();
+		var agentHtml="";
+		var styleHtml="";
+		if (product!=0) {
+			var url = "${ctx}/work/workDealInfo/setStyleList1?productId="+product+"&_="+new Date().getTime();
+			$.getJSON(url,function(data){
+				showAgent(product);
+				
+				agentHtml+="<option value='0'>请选择</option>";
+				$.each(data, function(i, item){					 
+					 if(item=="1"){	
+							agentHtml+="<option value='"+item+"'>标准</option>";
+					}else if(item=="2"){
+							agentHtml+="<option value='"+item+"'>政府统一采购</option>";
+					}else if(item=="3"){
+							agentHtml+="<option value='"+item+"'>合同采购</option>";
+					}
+				});	
+				$("#agentId").html(agentHtml);
+				$("#agentDetailId").html("");
+				styleHtml+="<option value='0'>请选择</option>";
+				$("#agentDetailId").html(styleHtml);
+				
+				
+				if($("#agentId option").length==1){
+					top.$.jBox.tip("请先配置计费策略！");
+					return;
+				}
+				}); 	
+		}
+	}
+	/*
 	* 给计费策略模版配置赋值
 	*/
-	function setStyleList(obj){
-		var lable = obj;
-		var productName = $("input[name='product']:checked").val();
+	function setTemplateList(){
+		var product = $("#product").val();
 		var agentId = $("#agentId").val();
 		if (agentId!=0) {
-			var url = "${ctx}/work/workDealInfo/setStyleList?lable="+lable+"&productName="+productName+"&app="+$("#appId").val()+"&infoType=0&style="+agentId+"&_="+new Date().getTime();
+			var url = "${ctx}/work/workDealInfo/setTemplateList?productId="+product+"&infoType=0&style="+agentId+"&_="+new Date().getTime();
 			$.getJSON(url,function(data){
 				var styleList = data.array;
 				var styleHtml="";
@@ -982,16 +942,12 @@ var selected = false;
 						$("#boundId").val(item.id);
 						showYear();
 					}
-					
 					styleHtml +="<option value='"+item.id+"'>" + item.name + "</option>";
-					
-					
-					
 				});
 				$("#agentDetailId").html(styleHtml);
 			});
 		}else{
-			top.$.jBox.tip("请您选择产品！");
+			top.$.jBox.tip("请您选择计费策略类型！");
 			
 		}
 	}
@@ -1012,7 +968,7 @@ var selected = false;
 	*/ 
 	function showYear(){
 		var agentId = $("#boundId").val();
-		//var url = "${ctx}/work/workDealInfo/showYear?lable="+lable+"&productName="+productName+"&app="+$("#appId").val()+"&infoType=0&_="+new Date().getTime();
+		
 		var url = "${ctx}/work/workDealInfo/showYearNew?boundId="+agentId+"&infoType=0&_="+new Date().getTime();
 		
 		$.getJSON(url, function(data) {
@@ -1039,9 +995,6 @@ var selected = false;
 				$("#year3").hide();
 				$("#word3").hide();
 			}
-			
-			
-			
 			
 			if (data.year4) {
 				$("#year4").show();
@@ -1156,32 +1109,23 @@ var selected = false;
 						</tr>
 						<tr>
 							<th><span class="prompt" style="color: red; display: none;">*</span>应用名称：</th>
-							<td colspan="3"><input type="text" name="configApp"
+							<td><input type="text" name="configApp"
 								value="${workDealInfo.configApp.appName }" id="app" /></td>
 							<th><span class="prompt" style="color: red; display: none;">*</span>选择产品：</th>
-							<td id="productTdId"><c:forEach items="${proList }"
-									var="pro">
-									<div id="product${pro.id }">
-										<input type="radio" name="product" id="pro${pro.id }"
-											onclick="productLabel(${pro.id})"
-											<c:if test="${workDealInfo.configProduct.productName==pro.id}">checked</c:if>
-											value="${pro.id}">${pro.name }&nbsp;&nbsp;&nbsp;
-									</div>
-								</c:forEach></td>
-						</tr>
-						<tr>
-							<th><span class="prompt" style="color: red; display: none;">*</span>应用标识：</th>
-							<td colspan="3"><input type="radio" name="lable" id="lable0"
-								value="0" disabled="disabled" onclick="showAgent(0)"
-								<c:if test="${workDealInfo.configProduct.productLabel==0}">checked</c:if>>通用&nbsp;
-								&nbsp; <input type="radio" name="lable" id="lable1" value="1"
-								disabled="disabled" onclick="showAgent(1)"
-								<c:if test="${workDealInfo.configProduct.productLabel==1}">checked</c:if>>专用</td>
+							<td id="productTdId">
+									<select name="product"  id="product">
+									<c:forEach items="${proList}" var="product">
+										<option value="${product.id}" <c:if test="${product.id==workDealInfo.configProduct.id }">selected="selected"</c:if> >${product.name}</option>
+									</c:forEach>
+							</select>	
+							</td>
+							
 							<th><span class="prompt" style="color: red; display: none;">*</span>业务类型：</th>
 							<td><input type="checkbox" checked="checked"
 								disabled="disabled"><font color="red" style="font-weight:bold;">新增证书 </font><input type="hidden"
 								name="dealInfoType" value="0"></td>
 						</tr>
+				
 						<tr>
 
 							<th style="width: 100px;"><span class="prompt"
@@ -1244,8 +1188,6 @@ var selected = false;
 										<c:if test="${workCompany.companyType==1 }">selected</c:if>>企业</option>
 									<option value="2" id="companyType2"
 										<c:if test="${workCompany.companyType==2 }">selected</c:if>>事业单位</option>
-<!-- 									<option value="3" id="companyType3" -->
-<%-- 										<c:if test="${workCompany.companyType==3 }">selected</c:if>>政府机关</option> --%>
 									<option value="4" id="companyType4"
 										<c:if test="${workCompany.companyType==4 }">selected</c:if>>社会团体</option>
 									<option value="5" id="companyType5"
