@@ -29,19 +29,26 @@
 	<div style="margin-top:9px">
 	<lable>选择应用：</lable>
 	<select name="appName">
-		<option>请选择</option>
+		<option value="">请选择</option>
 		<c:forEach items="${appNames}" var="appNames">
 			<option value="${appNames.appName }">${appNames.appName }</option>
 		</c:forEach>
 	</select>
-<!-- 	&nbsp;&nbsp; -->
-<!-- 	<label>起始时间：</label> -->
-<!-- 	<input type="text" readonly="readonly" name="endTime" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});" -->
-<%-- 			value="<fmt:formatDate value="${startTime}" pattern="yyyy-MM-dd"/>" /> --%>
-<!-- 	<label>结束时间：</label> -->
-<!-- 	&nbsp;&nbsp; -->
-<!-- 	<input type="text" readonly="readonly" name="startTime" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});" -->
-<%-- 			value="<fmt:formatDate value="${startTime}" pattern="yyyy-MM-dd"/>" /> --%>
+	
+	
+	<label>付款时间：</label>
+
+		<input id="startTime" name="startTime" type="text" readonly="readonly"
+			maxlength="20" class="Wdate required"
+			onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"
+			value="<fmt:formatDate value="${startTime}" pattern="yyyy-MM-dd"/>" />
+					&nbsp;-&nbsp;
+
+				<input id="endTime" name="endTime" type="text" readonly="readonly"
+			maxlength="20" class="Wdate required"
+			onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false,minDate:'#F{$dp.$D(\'startTime\')}'});"
+			value="<fmt:formatDate value="${endTime}" pattern="yyyy-MM-dd"/>" />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 	&nbsp; <input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/>
 	</div>
 	</form:form>
@@ -69,7 +76,7 @@
 					<td>${workDealInfo.workCompany.companyName}</td>
 					<td>${workDealInfo.configApp.appName}</td>
 					<td>${workDealInfo.moneyDouble}</td>
-					<td>${pro[workDealInfo.configProduct]}</td>
+					<td>${workDealInfo.certSn}</td>
 					<td>${infoType[workDealInfo.dealInfoType]}&nbsp; ${infoType[workDealInfo.dealInfoType1]}&nbsp; ${infoType[workDealInfo.dealInfoType2]}&nbsp;${infoType[workDealInfo.dealInfoType3]}</td>
 					<td>
 					<fmt:formatDate value="${workDealInfo.workPayInfo.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
