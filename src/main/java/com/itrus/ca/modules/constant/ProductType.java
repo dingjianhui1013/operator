@@ -86,6 +86,19 @@ public class ProductType {
 		}
 		return list;
 	}
+	
+	
+	public static List<ProductTypeObj> getProductList(){
+		List<ProductTypeObj> list = new ArrayList<ProductTypeObj>();
+		for (Integer id: productTypeMap.keySet()) {
+			ProductTypeObj obj = new ProductTypeObj(id+"0", productTypeMap.get(id)+"[通用]");
+			list.add(obj);
+			ProductTypeObj obj1 = new ProductTypeObj(id+"1", productTypeMap.get(id)+"[专用]");
+			list.add(obj1);
+		}
+		return list;
+	}
+	
 
 	public static List<ProductTypeObj> getProTypeList(){
 		List<ProductTypeObj> list = new ArrayList<ProductTypeObj>();
