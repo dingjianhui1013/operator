@@ -9,15 +9,11 @@
 <title>业务办理管理</title>
 <meta name="decorator" content="default" />
 <script type="text/javascript">
-$(document)
-.ready(
+$(document).ready(
 		function() {
 			$("#app").focus();
 			var url = "${ctx}/work/workDealInfo/app?_="+new Date().getTime();
-			$
-					.getJSON(
-							url,
-							function(d) {
+			$.getJSON(url,function(d) {
 								appData = d;
 								$("#app").bigAutocomplete(
 												{data : d.lis,

@@ -468,8 +468,8 @@ var selected = false;
 
 	}
 	
-	function showCert(companyId) {
-		var productId=$('input[name="product"]:checked ').val();
+	function showCert(companyId,productId) {
+		//var productId=$('input[name="product"]:checked ').val();
 		if(productId!=null)
 			{
 				if(productId==1||productId==3||productId==4)
@@ -1070,18 +1070,19 @@ var selected = false;
 	function obtainCompanyInformation()
 	{
 		var companyName=$("#tt").val();
+		var productId = $("#product").val();
 		if(companyName!=null&&companyName!="")
 			{
 				var url = "${ctx}/work/workDealInfo/completeCompanyName";
 				$.ajax({
 					type:"POST",
 					url:url,
-					data:{"companyname":companyName,_:new Date().getTime()},
+					data:{"companyname":companyName,"productId":productId,_:new Date().getTime()},
 					dataType:'json',
 					success:function(data){
 						if(data.Idlis.length>0&&data.Idlis!=null)
 							{
-								showCert(data.Idlis);
+								showCert(data.Idlis,data.productId);
 							}
 					}
 				});	
@@ -1110,7 +1111,7 @@ var selected = false;
 						<tr>
 							<th><span class="prompt" style="color: red; display: none;">*</span>应用名称：</th>
 							<td><input type="text" name="configApp"
-								value="${workDealInfo.configApp.appName }" id="app" /></td>
+								value="${workDealInfo.configApp.appName}" id="app" /></td>
 							<th><span class="prompt" style="color: red; display: none;">*</span>选择产品：</th>
 							<td id="productTdId">
 									<select name="product"  id="product">
