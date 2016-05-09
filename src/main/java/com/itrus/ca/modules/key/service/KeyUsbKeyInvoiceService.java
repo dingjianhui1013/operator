@@ -72,6 +72,16 @@ public class KeyUsbKeyInvoiceService extends BaseService {
 		dc.addOrder(Order.desc("id"));
 		return keyUsbKeyInvoiceDao.find(page, dc);
 	}
+	
+	
+	public List<KeyUsbKeyInvoice> find(KeyUsbKeyInvoice keyUsbKeyInvoice){
+		DetachedCriteria dc = keyUsbKeyInvoiceDao.createDetachedCriteria();
+		dc.add(Restrictions.eq("keyUsbKeyDepot.id", keyUsbKeyInvoice
+				.getKeyUsbKeyDepot().getId()));
+		dc.addOrder(Order.desc("id"));
+		return keyUsbKeyInvoiceDao.find(dc);
+	}
+	
 
 	public Page<KeyUsbKeyInvoice> findStartEnd(Page<KeyUsbKeyInvoice> page,
 			KeyUsbKeyInvoice keyUsbKeyInvoice,Date start,Date end,Long supplierId ,Long keyId) {
