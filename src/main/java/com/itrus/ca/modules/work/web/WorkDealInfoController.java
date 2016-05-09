@@ -3765,7 +3765,7 @@ public class WorkDealInfoController extends BaseController {
 	@RequiresPermissions("work:workDealInfo:edit")
 	@RequestMapping(value = "completeCompanyName")
 	@ResponseBody
-	public String completeCompanyName(HttpServletRequest request, HttpServletResponse response, String companyname) {
+	public String completeCompanyName(HttpServletRequest request, HttpServletResponse response, String companyname,Long productId) {
 		JSONObject json = new JSONObject();
 		try {
 			List<WorkCompany> workCompany = workCompanyService.findByCompanyName(companyname);
@@ -3774,6 +3774,10 @@ public class WorkDealInfoController extends BaseController {
 				lis.add(workCompany.get(i).getId());
 			}
 			json.put("Idlis", lis);
+			
+			ConfigProduct product = configProductService.get(productId);
+			json.put("productId", product.getProductName());
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
