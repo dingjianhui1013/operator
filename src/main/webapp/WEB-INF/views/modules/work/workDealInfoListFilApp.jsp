@@ -49,7 +49,12 @@
 				<td>${workDealInfo.svn}</td>
 				<td>${workDealInfo.configApp.appName}</td>
 				<td>${proType[workDealInfo.configProduct.productName]}</td>
-				<td>${wdiType[workDealInfo.dealInfoType]}&nbsp;&nbsp;${wdiType[workDealInfo.dealInfoType1]}&nbsp;&nbsp;${wdiType[workDealInfo.dealInfoType2]}&nbsp;&nbsp;${wdiType[workDealInfo.dealInfoType3]}</td>
+				<td>
+				<c:if test="${wdiType[workDealInfo.dealInfoType]!=null}">${wdiType[workDealInfo.dealInfoType]}&nbsp;&nbsp;</c:if>
+				<c:if test="${wdiType[workDealInfo.dealInfoType1]!=null}">${wdiType[workDealInfo.dealInfoType1]}&nbsp;&nbsp;</c:if>
+				<c:if test="${wdiType[workDealInfo.dealInfoType2]!=null}">${wdiType[workDealInfo.dealInfoType2]}&nbsp;&nbsp;</c:if>
+				<c:if test="${wdiType[workDealInfo.dealInfoType3]!=null}">${wdiType[workDealInfo.dealInfoType3]}&nbsp;&nbsp;</c:if>
+				</td>
 				<td>${wdiStatus[workDealInfo.dealInfoStatus]}</td>
 				<td><fmt:formatDate value="${workDealInfo.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
 				<td>${workDealInfo.workUserHis.contactName}</td>
