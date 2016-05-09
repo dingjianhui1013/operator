@@ -249,7 +249,7 @@ $(document)
 		if($("#appId").val() == ""){
 			top.$.jBox.tip("请输入应用名称！");
 		}
-		var product = $("input[name='product']:checked").val()
+		/* var product = $("input[name='product']:checked").val()
 		$("#productT").val(product);
 		if(product == null || product == ''){
 			top.$.jBox.tip("请选择产品！");
@@ -267,7 +267,24 @@ $(document)
 		if($("#agentId").val() == "0"){
 			top.$.jBox.tip("请配置产品的计费策略模板！");
         	return false;
+		} */
+		
+		if($("#product").val()==0){
+			top.$.jBox.tip("请选择要办理的产品！");
+			return false;
 		}
+		
+		if($("#agentId").val()==0){
+			top.$.jBox.tip("请选择计费策略类型！");
+			return false;
+		}else{
+			if($("#agentDetailId").val()==0){
+				top.$.jBox.tip("请选择计费策略模板！");
+				return false;
+			}
+		}
+		
+		
 		$("#agentIdT").val($("#agentId").val());
 		$("#agentDetailIdT").val($("#agentDetailId").val());
 		var year = $("input[name='year']:checked").val()
