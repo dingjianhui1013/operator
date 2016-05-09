@@ -232,7 +232,10 @@
 		var nextInput = $(obj).parent().next().find("input")[0];
 		var nextButton = $(nextInput).parent().next().find("input")[0];
 		if ($(obj).prop("checked")) {
-			$(nextInput).removeAttr("readonly");
+			/* $(nextInput).removeAttr("readonly"); */
+			
+			$(nextInput).attr("readonly", "readonly");
+			$(nextInput).val(${workDealInfo.keySn});
 			if (nextButton != "") {
 				$(nextButton).show();
 			}
