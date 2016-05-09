@@ -83,6 +83,9 @@ public class KeyUsbKeyInvoiceController extends BaseController {
 		Page<KeyUsbKeyInvoice> page = keyUsbKeyInvoiceService
 				.find(new Page<KeyUsbKeyInvoice>(request, response),
 						keyUsbKeyInvoice);
+		
+		List<KeyUsbKeyInvoice> keyInvoices = keyUsbKeyInvoiceService.find(keyUsbKeyInvoice);
+		
 		if (page.getList().size() > 0) {
 			for (int i = 0; i < page.getList().size(); i++) {
 				int inReason = page.getList().get(i).getOutReason();
@@ -110,14 +113,14 @@ public class KeyUsbKeyInvoiceController extends BaseController {
 		}
 		Integer count=0;
 		int dayCount=0;
-		for(int i=0;i<page.getList().size();i++)
+		for(int i=0;i<keyInvoices.size();i++)
 		{
-			count+=((int)page.getList().get(i).getDeliveryNum());
-			String oldDate=new SimpleDateFormat("yyyy-MM-dd").format(page.getList().get(i).getStartDate());
+			count+=((int)keyInvoices.get(i).getDeliveryNum());
+			String oldDate=new SimpleDateFormat("yyyy-MM-dd").format(keyInvoices.get(i).getStartDate());
 			String newDate=new SimpleDateFormat("yyyy-MM-dd").format(new Date()).toString();
 			if(oldDate.indexOf(newDate)>-1)
 			{
-				dayCount+=page.getList().get(i).getDeliveryNum();
+				dayCount+=keyInvoices.get(i).getDeliveryNum();
 			}
 			
 		}
