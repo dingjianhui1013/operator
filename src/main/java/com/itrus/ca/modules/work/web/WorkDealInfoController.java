@@ -302,8 +302,10 @@ public class WorkDealInfoController extends BaseController {
 
 		model.addAttribute("workType", workDealInfo.getDealInfoStatus());
 
-		model.addAttribute("proList", ProductType.getProductTypeList());
-
+		//model.addAttribute("proList", ProductType.getProductTypeList());
+		model.addAttribute("proList", ProductType.getProductList());
+		
+		
 		model.addAttribute("proType", ProductType.productTypeStrMap);
 		model.addAttribute("wdiType", WorkDealInfoType.WorkDealInfoTypeMap);
 		model.addAttribute("wdiStatus", WorkDealInfoStatus.WorkDealInfoStatusMap);
