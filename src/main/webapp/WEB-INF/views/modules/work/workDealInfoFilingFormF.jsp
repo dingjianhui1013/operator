@@ -31,7 +31,12 @@
 			<tr>
 				<th>业务类型:</th>
 				<td>
-					${wdiType[workDealInfo.dealInfoType]}&nbsp;&nbsp;${wdiType[workDealInfo.dealInfoType1]}&nbsp;&nbsp;${wdiType[workDealInfo.dealInfoType2]}&nbsp;&nbsp;${wdiType[workDealInfo.dealInfoType3]}
+					<c:if test="${wdiType[workDealInfo.dealInfoType]!=null}">${wdiType[workDealInfo.dealInfoType]}&nbsp;&nbsp;</c:if>
+					<c:if test="${wdiType[workDealInfo.dealInfoType1]!=null}">${wdiType[workDealInfo.dealInfoType1]}&nbsp;&nbsp;</c:if>
+					<c:if test="${wdiType[workDealInfo.dealInfoType2]!=null}">${wdiType[workDealInfo.dealInfoType2]}&nbsp;&nbsp;</c:if>
+					<c:if test="${wdiType[workDealInfo.dealInfoType3]!=null}">${wdiType[workDealInfo.dealInfoType3]}&nbsp;&nbsp;</c:if>
+					
+					
 				</td>
 				<th>申请年数:</th>
 				<td>${workDealInfo.year}年</td>
