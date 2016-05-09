@@ -45,6 +45,18 @@
 		}
 		
 		
+		function judgeCommon(){
+			if($('#supportCommon').is(':checked')){
+				
+			}else{
+				if($("#hasCommon").val()==1){
+					$("#supportCommon").attr("checked",true);
+					top.$.jBox.tip("该应用已办理过通用类型的业务,无法改变此状态！");	
+				}
+			}
+		}
+		
+		
 	</script>
 </head>
 <body>
@@ -55,6 +67,9 @@
 	<form:form id="inputForm"  modelAttribute="configApp" action="${ctx}/profile/configApp/save" method="post" class="form-horizontal">
 		<form:hidden path="id"/>
 		<tags:message content="${message}"/>
+		
+		<input type="hidden" id="hasCommon" value="${hasCommon}" />
+		
 		<div class="control-group">
 			<label class="control-label"><span style="color:red;">*</span>应用名称:</label>
 			<div class="controls">
@@ -70,7 +85,7 @@
 		<div class="control-group">
 			<label class="control-label">是否支持通用:</label>
 			<div class="controls">
-				<form:checkbox path="supportCommon"/>支持
+				<form:checkbox  id="supportCommon" onclick="judgeCommon()" path="supportCommon"/>支持
 			</div>
 		</div>
 		
