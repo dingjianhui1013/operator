@@ -51,6 +51,8 @@ import com.itrus.ca.modules.sys.entity.User;
 import com.itrus.ca.modules.sys.service.CommonAttachService;
 import com.itrus.ca.modules.sys.service.OfficeService;
 import com.itrus.ca.modules.sys.utils.UserUtils;
+import com.itrus.ca.modules.work.entity.WorkDealInfo;
+import com.itrus.ca.modules.work.service.WorkDealInfoService;
 
 /**
  * 应用Controller
@@ -69,7 +71,8 @@ public class ConfigAppController extends BaseController {
 	@Autowired
 	private ConfigProductService configProductService;
 	
-	
+	@Autowired
+	private WorkDealInfoService workDealInfoService;
 	@Autowired
 	private ConfigProjectTypeService configProjectTypeService;
 
@@ -169,6 +172,17 @@ public class ConfigAppController extends BaseController {
 	@RequiresPermissions("profile:configApp:view")
 	@RequestMapping(value = "form")
 	public String form(ConfigApp configApp, Model model) {
+		
+		if(configApp.getId()!=null){
+			List<WorkDealInfo> dealInfos = workDealInfoService.findByAppId(configApp.getId());
+			for(WorkDealInfo info:dealInfos){
+				if(info.getConfigProduct().getProductLabel()==0){
+					model.addAttribute("hasCommon", 1);
+				}
+			}
+			
+		}
+		
 		model.addAttribute("configApp", configApp);
 		
 		List<ConfigProjectType> proJectTypes = configProjectTypeService.findProjectTypeList();
