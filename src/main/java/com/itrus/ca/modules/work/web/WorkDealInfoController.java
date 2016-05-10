@@ -418,6 +418,7 @@ public class WorkDealInfoController extends BaseController {
 			@RequestParam(value = "agentIdT", required = true) Integer agentIdT,
 			@RequestParam(value = "agentDetailIdT", required = true) Long agentDetailIdT,
 			@RequestParam(value = "yearT", required = true) Integer yearT,
+			@RequestParam(value = "payMethodT", required = true) Integer payMethodT,
 			@RequestParam(value = "fileName", required = true) MultipartFile file)
 					throws IllegalStateException, IOException, JSONException {
 		JSONObject json = new JSONObject();
@@ -429,7 +430,7 @@ public class WorkDealInfoController extends BaseController {
 		}
 		try {
 			json = workDealInfoService.saveExcelDate(appId, dealInfoType, productT, lableT, agentIdT, agentDetailIdT,
-					yearT, file, ifExcel);// 解析存储excel文件
+					yearT,payMethodT, file, ifExcel);// 解析存储excel文件
 		} catch (Exception ex) {
 			json.put("status", -1);
 			json.put("msg", json.toString());

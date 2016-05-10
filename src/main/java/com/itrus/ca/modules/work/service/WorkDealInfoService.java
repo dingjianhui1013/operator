@@ -5681,13 +5681,13 @@ public class WorkDealInfoService extends BaseService {
 	@Transactional(readOnly = false)
 	public JSONObject saveExcelDate(Long appId, String dealInfoType,
 			String productT, String lableT, Integer agentIdT,
-			Long agentDetailIdT, Integer yearT, MultipartFile file,
+			Long agentDetailIdT, Integer yearT,Integer payMethodT, MultipartFile file,
 			String ifExcel) {
 		StringBuffer ifErr = new StringBuffer();
 		ConfigChargeAgentBoundConfigProduct bound = configChargeAgentBoundConfigProductService
 				.get(agentDetailIdT);
 		ConfigChargeAgent agent = bound.getAgent();
-		int pos = 0;
+		/*int pos = 0;
 		int money = 0;
 		int bank = 0;
 		if (agent.getChargeMethodPos()) {
@@ -5704,7 +5704,7 @@ public class WorkDealInfoService extends BaseService {
 		if (total != 1) {
 			ifErr.append("该应用计费策略模板配置缴费方式不为一种，请确认！");
 			return ifErr(-1, ifErr.toString());
-		}
+		}*/
 		/*
 		 * 创建临时路径
 		 */
@@ -6281,13 +6281,13 @@ public class WorkDealInfoService extends BaseService {
 				workPayInfo.setOldLostReplaceCert(0d);
 				workPayInfo.setOldInfoChange(0d);
 				double bindMoney = openAccountMoney + addCert;// 开户加新增的费用
-				if (agent.getChargeMethodPos()) {
+				if (payMethodT==0) {
 					workPayInfo.setMethodPos(true);
 					workPayInfo.setPosMoney(bindMoney);
-				} else if (agent.getChargeMethodMoney()) {
+				} else if (payMethodT==1) {
 					workPayInfo.setMethodMoney(true);
 					workPayInfo.setMoney(bindMoney);
-				} else if (agent.getChargeMethodBank()) {
+				} else if (payMethodT==2) {
 					workPayInfo.setMethodBank(true);
 					workPayInfo.setBankMoney(bindMoney);
 				}
