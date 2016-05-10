@@ -283,12 +283,20 @@ $(document).ready(
 		
 		$("#agentIdT").val($("#agentId").val());
 		$("#agentDetailIdT").val($("#agentDetailId").val());
-		var year = $("input[name='year']:checked").val()
+		
+		var year = $("input[name='year']:checked").val();
 		$("#yearT").val(year);
 		if(year == null || year == ''){
 			top.$.jBox.tip("请选择申请年数！");
         	return false;
 		}
+		
+		var payMethod = $("input[name='payMethod']:checked").val();
+		if(payMethod == null || payMethod == ''){
+			top.$.jBox.tip("请选择缴费方式！");
+        	return false;
+		}
+		$("#payMethodT").val(payMethod);
 		
 		if($("#fileName").val() == ""){
 			top.$.jBox.tip("导入文件格式有误，导入文件应为Excel文件，请确认");
@@ -885,6 +893,31 @@ $(document).ready(
 				$("#word5").hide();
 			}
 			
+			
+			if(data.pos){
+				$("#payPos").show();
+				$("#payMethod1").show();
+			}else{
+				$("#payPos").hide();
+				$("#payMethod1").hide();
+			}
+			if(data.money){
+				$("#payCash").show();
+				$("#payMethod2").show();
+			}else{
+				$("#payCash").hide();
+				$("#payMethod2").hide();
+			}
+			if(data.bank){
+				$("#payBank").show();
+				$("#payMethod3").show();
+			}else{
+				$("#payBank").hide();
+				$("#payMethod3").hide();
+			}	
+			
+			
+			
 			var boundId =  $("#agentDetailId").val(); 
 			var url="${ctx}/work/workDealInfo/checkSurplusNum?boundId="+boundId+"&_="+new Date().getTime();
 			$.getJSON(url,function(data){
@@ -901,6 +934,10 @@ $(document).ready(
 		});
 		
 	}
+	
+	
+	
+	
 	Array.prototype.unique = function(){
 		 this.sort(); //先排序
 		 var res = [this[0]];
@@ -1191,6 +1228,7 @@ $(document).ready(
 			<input type="hidden" name="agentIdT" id="agentIdT"/>
 			<input type="hidden" name="agentDetailIdT" id="agentDetailIdT"/>
 			<input type="hidden" name="yearT" id="yearT"/>
+			<input type="hidden" name="payMethodT"  id="payMethodT"/>
 			
 			<table class="table table-striped table-bordered table-condensed">
 				<tbody>
@@ -1259,6 +1297,20 @@ $(document).ready(
 					</tr>
 					
 					<tr >
+						
+						<th>缴费方式：</th>
+						<td >
+							<input type="radio" name="payMethod" value="0"
+								id="payPos">
+							<span id="payMethod1">pos</span>
+							<input type="radio" name="payMethod" value="1"
+								id="payCash">
+							<span id="payMethod2">现金缴费</span>
+							<input type="radio" name="payMethod" value="2"
+								id="payBank">
+							<span id="payMethod3">银行转账</span>
+						</td>
+						
 						
 						<th>导入文件：</th>
 						<td id="productTdId">
