@@ -11,7 +11,8 @@
 <script type="text/javascript">
 $(document).ready(
 		function() {
-			
+
+
 			var url = "${ctx}/work/workDealInfo/app?_="+new Date().getTime();
 			$.getJSON(url,function(d) {
 								appData = d;
