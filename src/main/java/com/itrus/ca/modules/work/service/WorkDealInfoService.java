@@ -5708,7 +5708,7 @@ public class WorkDealInfoService extends BaseService {
 		/*
 		 * 创建临时路径
 		 */
-		StringBuffer tempPath = new StringBuffer("F:/temp/");
+		StringBuffer tempPath = new StringBuffer("E:/temp/");
 		tempPath.append(System.currentTimeMillis()); // 获取系统以毫秒为单位的当前时间
 		tempPath.append(ifExcel);// 获取参数@Param file的路径
 
@@ -5723,7 +5723,7 @@ public class WorkDealInfoService extends BaseService {
 			tempFile.createNewFile(); // 创建文件
 			file.transferTo(tempFile); // 收到文件传输到目标文件
 		} catch (IOException e) {
-			ifErr.append("本地目录  F:/temp/ 不存在<br>");
+			ifErr.append("本地目录  E:/temp/ 不存在<br>");
 			return ifErr(-1, ifErr.toString());
 		}
 
@@ -6205,23 +6205,24 @@ public class WorkDealInfoService extends BaseService {
 				if (pName != null && !pName.equals("")) {
 					workCertApplyInfo.setName(pName);
 				}
-				String pEmail = ""; // 身份证号
+				String pIDCard = ""; // 身份证号
 				if (row.getCell(24) != null
 						&& !row.getCell(24).toString().replace(" ", "")
 								.equals("")) {
-					pEmail = row.getCell(24).toString().replace(" ", "");
-				}
-				if (pEmail != null && !pEmail.equals("")) {
-					workCertApplyInfo.setEmail(pEmail);
-				}
-				String pIDCard = "";// 经办人邮箱
-				if (row.getCell(25) != null
-						&& !row.getCell(25).toString().replace(" ", "")
-								.equals("")) {
-					pIDCard = row.getCell(25).toString().replace(" ", "");
+					pIDCard = row.getCell(24).toString().replace(" ", "");
 				}
 				if (pIDCard != null && !pIDCard.equals("")) {
 					workCertApplyInfo.setIdCard(pIDCard);
+				}
+				String pEmail = "";// 经办人邮箱
+				if (row.getCell(25) != null
+						&& !row.getCell(25).toString().replace(" ", "")
+								.equals("")) {
+					pEmail = row.getCell(25).toString().replace(" ", "");
+				}
+				if (pEmail != null && !pEmail.equals("")) {
+					
+					workCertApplyInfo.setEmail(pEmail);
 				}
 				workCertApplyInfoService.save(workCertApplyInfo);
 				WorkCertInfo workCertInfo = new WorkCertInfo();
