@@ -26,24 +26,15 @@
 					}
 				}
 			});
-			productLabel();
+			var productLabel = ${selfApplication.certificateType} ;
+			if(productLabel=='0'){
+				showAgent(0);
+			}
+			if(productLabel=='1'){
+				showAgent(1);
+			}
+			
 		});
-		
-		//根据商品获取引用标识
-		function productLabel() {
-			selected = true;
-			var productName =${selfApplication.productName} ;
-			var appId = ${appId};
-			var url = "${ctx}/work/workDealInfo/type?name=" + productName + "&appId="
-					+ appId+"&_="+new Date().getTime();
-			$.getJSON(url, function(da) {
-				if (da.type1) {
-					showAgent(1);
-				}else if (da.type0) {
-					showAgent(0);
-				}
-			});
-		}
 		
 		/* 
 		* 功能:根据产品带回计费模版
@@ -54,7 +45,14 @@
 			var lable = obj;
 			var productName =${selfApplication.productName} ;
 			var appId = ${appId};
-			var url = "${ctx}/work/workDealInfo/showAgentProduct?lable="+lable+"&productName="+productName+"&app="+appId+"&infoType=0&_="+new Date().getTime();
+			var workType = ${selfApplication.businessType};
+			var infoType = 0;
+			if(workType=="1"){
+				infoType = 1;
+			}else if(workType=="2"){
+				infoType = 3;
+			}
+			var url = "${ctx}/work/workDealInfo/showAgentProduct?lable="+lable+"&productName="+productName+"&app="+appId+"&infoType="+infoType+"&_="+new Date().getTime();
 			$.getJSON(url,function(data){
 				if(data.tempStyle!=-1){
 					var map = data.typeMap;
@@ -98,10 +96,17 @@
 		function setStyleList(obj){
 			var lable = obj;
 			var agentId = $("#agentId").val();
-			var productName =${selfApplication.productName} ;
+			var productName =${selfApplication.productName};
+			var workType = ${selfApplication.businessType};
+			var infoType = 0;
+			if(workType=="1"){
+				infoType = 1;
+			}else if(workType=="2"){
+				infoType = 3;
+			}
 			var appId = ${appId};
 			if (agentId!=0) {
-				var url = "${ctx}/work/workDealInfo/setStyleList?lable="+lable+"&productName="+productName+"&app="+appId+"&infoType=0&style="+agentId+"&_="+new Date().getTime();
+				var url = "${ctx}/work/workDealInfo/setStyleList?lable="+lable+"&productName="+productName+"&app="+appId+"&infoType="+infoType+"&style="+agentId+"&_="+new Date().getTime();
 				$.getJSON(url,function(data){
 					var styleList = data.array;
 					var styleHtml="";
@@ -113,6 +118,7 @@
 						styleHtml +="<option value='"+item.id+"'>" + item.name + "</option>";
 					});
 					$("#agentDetailId").html(styleHtml);
+					showYear();
 				});
 			}else{
 				top.$.jBox.tip("请选择计费策略模版");
@@ -120,7 +126,7 @@
 				$("#agentDetailId").html(styleHtml);
 			}
 		}
-		
+		var flag = false;
 		/* 
 		* 功能:根据产品带回年限
 		* 传参：lable+name
@@ -128,7 +134,14 @@
 		*/ 
 		function showYear(){
 			var boundId = $("#agentDetailId").val();
-			var url = "${ctx}/work/workDealInfo/showYearNew?boundId="+boundId+"&infoType=0&_="+new Date().getTime();
+			var workType = ${selfApplication.businessType};
+			var infoType = 0;
+			if(workType=="1"){
+				infoType = 1;
+			}else if(workType=="2"){
+				infoType = 3;
+			}
+			var url = "${ctx}/work/workDealInfo/showYearNew?boundId="+boundId+"&infoType="+infoType+"&_="+new Date().getTime();
 			$.getJSON(url, function(data) {
 				var a = new Array(5);
 				if (data.year1) {
@@ -154,7 +167,7 @@
 				}else{
 					a[4] = '0';
 				}
-				var flag = false;
+				
 				for (var i = 0; i < a.length; i++) {
 					if('${selfApplication.applicationPeriod}'==a[i]){
 						flag = true;
@@ -163,7 +176,6 @@
 				}
 				if(!flag){
 					top.$.jBox.tip("此计费策略模版没有对应的年限费用，请重新选择模板");
-					productLabel();
 				}
 				var url="${ctx}/work/workDealInfo/checkSurplusNum?boundId="+boundId+"&_="+new Date().getTime();
 				$.getJSON(url,function(data){
@@ -183,7 +195,11 @@
 			}else if (agentDetailId ==0){
 				top.$.jBox.tip("请选择计费策略模版");
 				return false;
+			}else if(!flag){
+				top.$.jBox.tip("此计费策略模版没有对应的年限费用，请重新选择模板");
+				return false;
 			}else{
+				
 				$("#btnSubmit").attr("disabled","disabled");
 				$("#inputForm").submit();
 				return true;
