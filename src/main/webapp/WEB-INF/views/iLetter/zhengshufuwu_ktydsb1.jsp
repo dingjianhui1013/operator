@@ -88,7 +88,7 @@ function backToMain(){
   <div class="zsfw_gxgx_top">
     <div class="zsfw_gxgx_top_T fl"><img src="${ctxStatic}/iLetter/images/btn_ydsb_T.png" width="154" height="54" /></div>
     <div class="zsfw_ydsb_step1 fl"></div>
-    <div class="btn_fanhuizsfw fl btn_fanhuiydsb"><a href="javascript:backToMain()"></a></div>
+    <div class="btn_fanhuizsfw fl btn_fanhuiydsb"><a href="javascript:window.history.back()"></a></div>
   </div>
   <div class="clear"></div>
   <div class="zsfw_gxgx_bd">

@@ -78,7 +78,7 @@ function openSCCA(){
    <div class="zsfw_js_top">
       <div class="zsfw_js_top_T fl"><img src="${ctxStatic}/iLetter/images/btn_js_T.png" width="157" height="46" /></div>
       <div class="zsfw_js_step1 fl"></div>
-    <div class="btn_fanhuizsfw fl"><a href="javascript:backToMain()"></a></div>
+    <div class="btn_fanhuizsfw fl"><a href="javascript:window.history.back()"></a></div>
    </div>
    <div class="clear"></div>
    <div class="zsfw_js_bd">
