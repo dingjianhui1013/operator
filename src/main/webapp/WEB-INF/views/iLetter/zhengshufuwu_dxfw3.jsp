@@ -28,7 +28,7 @@ function backToMain(){
 			</div>
 			<div class="zsfw_bbfw_step3 fl"></div>
 			<div class="btn_fanhuizsfw fl">
-				<a href="javascript:window.history.back()"></a>
+				<a href="javascript:window.history.go(-3)"></a>
 			</div>
 		</div>
 		<div class="clear"></div>
