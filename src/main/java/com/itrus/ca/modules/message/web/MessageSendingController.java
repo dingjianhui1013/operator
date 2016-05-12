@@ -247,6 +247,9 @@ public class MessageSendingController extends BaseController {
 			HttpServletResponse response) throws JSONException {
 			JSONObject json = new JSONObject();
 			DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			
+			DateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
+			
 		// List<WorkCertInfo> certInfoList = new ArrayList<WorkCertInfo>();
 		// String
 		// messageAddress=smsConfigurationService.get(smsId).getMessageAddress();
@@ -327,8 +330,8 @@ public class MessageSendingController extends BaseController {
 			   context.put("consigner", consigner);
 			   context.put("businessStatus", businessStatus);
 			   context.put("alias", alias);
-			   context.put("endDate", endDate);
-			   context.put("date", new Date());
+			   context.put("endDate", format1.format(endDate));
+			   context.put("date", format1.format(new Date()));
 			   StringWriter writer = new StringWriter();
 			   ve.evaluate(context, writer, "", content); 
 			   json.put("status", 1);
@@ -356,6 +359,7 @@ public class MessageSendingController extends BaseController {
 			HttpServletResponse response) throws JSONException {
 		JSONObject json = new JSONObject();
 		DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		DateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
 		// List<WorkCertInfo> certInfoList = new ArrayList<WorkCertInfo>();
 		// String
 		// messageAddress=smsConfigurationService.get(smsId).getMessageAddress();
@@ -436,8 +440,8 @@ public class MessageSendingController extends BaseController {
 			   context.put("consigner", consigner);
 			   context.put("businessStatus", businessStatus);
 			   context.put("alias", alias);
-			   context.put("endDate", endDate);
-			   context.put("date", new Date());
+			   context.put("endDate", format1.format(endDate));
+			   context.put("date", format1.format(new Date()));
 			   StringWriter writer = new StringWriter();
 			   ve.evaluate(context, writer, "", content); 
 			 

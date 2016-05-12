@@ -78,9 +78,19 @@ public class MessageSendingService extends BaseService {
 		if (apply != null) {
 			dc.add(Restrictions.eq("configApp.id", apply));
 		}
-		if(messageSending.getReturnStatus()!=null&& !messageSending.getReturnStatus().equals("")){
+		/*if(messageSending.getReturnStatus()!=null&& !messageSending.getReturnStatus().equals("")){
+			dc.add(Restrictions.eq("returnStatus", messageSending.getReturnStatus()));
+		}*/
+		
+		if(messageSending.getReturnStatus()!=null&&messageSending.getReturnStatus().equals("1")){
 			dc.add(Restrictions.eq("returnStatus", messageSending.getReturnStatus()));
 		}
+		
+		if(messageSending.getReturnStatus()!=null&&messageSending.getReturnStatus().equals("0")){
+			dc.add(Restrictions.ne("returnStatus", "1"));
+		}
+		
+		
 		//dc.add(Restrictions.eq(MessageSending.DEL_FLAG, MessageSending.DEL_FLAG_NORMAL));
 		dc.addOrder(Order.desc("id"));
 		return messageSendingDao.find(page, dc);
