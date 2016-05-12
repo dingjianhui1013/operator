@@ -99,8 +99,8 @@
 					<td>${checkMessage.smsSendDate }</td>
 					<td>${checkMessage.smsConfiguration.messageName}</td>
 					<td>
-					<c:if test="${checkMessage.returnStatus==1}">成功</c:if>
-					<c:if test="${checkMessage.returnStatus==0}">失败 ；原因：${checkMessage.returnStatus}</c:if>
+					<c:if test="${checkMessage.returnStatus=='1'}">成功</c:if>
+					<c:if test="${checkMessage.returnStatus!='1'}">失败 ；原因：${checkMessage.returnStatus}</c:if>
 					</td>
 					
 					<td><a href="javaScript:alarmValue( ${checkMessage.id} )">查看 </a></td>
