@@ -32,7 +32,7 @@ import com.itrus.ca.modules.work.entity.WorkDealInfo;
  * @version 2015-11-18
  */
 @Entity
-@Table(name = "settle_projectCertificationDetails")
+@Table(name = "project_cert_details")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class ProjectCertificationDetails extends DataEntity {
 	
@@ -57,8 +57,8 @@ public class ProjectCertificationDetails extends DataEntity {
 
 	@Id
 	//@GeneratedValue(strategy = GenerationType.AUTO)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_settle_projectCertificationDetails")
-	@SequenceGenerator(name = "seq_settle_projectCertificationDetails", sequenceName = "seq_settle_projectCertificationDetails")
+	//@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_settle_projectCertificationDetails")
+	//@SequenceGenerator(name = "seq_settle_projectCertificationDetails", sequenceName = "seq_settle_projectCertificationDetails")
 	public Long getId() {
 		return id;
 	}

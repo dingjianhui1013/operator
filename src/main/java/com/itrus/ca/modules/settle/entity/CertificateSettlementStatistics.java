@@ -29,7 +29,7 @@ import com.itrus.ca.modules.sys.entity.Office;
  * @version 2015-11-22
  */
 @Entity
-@Table(name = "settle_certificateSettlementStatistics")
+@Table(name = "cert_Settlement_Statistics")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class CertificateSettlementStatistics implements java.io.Serializable {
 	
@@ -107,8 +107,8 @@ public class CertificateSettlementStatistics implements java.io.Serializable {
 
 	@Id
 	//@GeneratedValue(strategy = GenerationType.AUTO)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_settle_certificateSettlementStatistics")
-	@SequenceGenerator(name = "seq_settle_certificateSettlementStatistics", sequenceName = "seq_settle_certificateSettlementStatistics")
+	//@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_settle_certificateSettlementStatistics")
+	//@SequenceGenerator(name = "seq_settle_certificateSettlementStatistics", sequenceName = "seq_settle_certificateSettlementStatistics")
 	public Long getId() {
 		return id;
 	}

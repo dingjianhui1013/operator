@@ -29,7 +29,7 @@ import com.itrus.ca.modules.sys.entity.User;
  * @version 2016-01-31
  */
 @Entity
-@Table(name = "settle_paymethodCertificateSettle")
+@Table(name = "paymethod_cert_settle")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class PaymethodCertificateSettle extends DataEntity {
 	
