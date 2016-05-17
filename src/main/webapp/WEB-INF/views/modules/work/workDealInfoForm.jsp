@@ -48,6 +48,7 @@ var selected = false;
 																callback : function(data) {
 																	$("#product").html("");
 																	$("#product").attr("onchange","setStyleList()");
+																	$("#agentId").attr("onchange","setTemplateList()");
 																	var url1 = "${ctx}/work/workDealInfo/product?appId=";
 																	var productHtml="";
 																	productHtml+="<option value='0'>请选择</option>";
@@ -847,7 +848,7 @@ var selected = false;
 	* 传参：lable+name
 	* 返回值：年限1，2，4，5是否为true
 	*/ 
-	function showAgent(obj){
+	/* function showAgent(obj){
 		var product = obj;
 		var url = "${ctx}/work/workDealInfo/showAgentProductById?productId="+product+"&infoType=0&_="+new Date().getTime();
 		$.getJSON(url,function(data){
@@ -889,7 +890,7 @@ var selected = false;
 			
 			
 		});
-	}
+	} */
 	
 	/*
 	* 给计费策略类型配置赋值
@@ -901,7 +902,7 @@ var selected = false;
 		if (product!=0) {
 			var url = "${ctx}/work/workDealInfo/setStyleList1?productId="+product+"&_="+new Date().getTime();
 			$.getJSON(url,function(data){
-				showAgent(product);
+				/* showAgent(product); */
 				
 				agentHtml+="<option value='0'>请选择</option>";
 				$.each(data, function(i, item){					 
