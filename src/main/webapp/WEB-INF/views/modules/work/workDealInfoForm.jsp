@@ -47,7 +47,7 @@ var selected = false;
 																data : d.lis,
 																callback : function(data) {
 																	$("#product").html("");
-																	$("#product").attr("onchange","setStyleList()");
+																	$("#product").attr("onChange","setStyleList()");
 																	$("#agentId").attr("onchange","setTemplateList()");
 																	var url1 = "${ctx}/work/workDealInfo/product?appId=";
 																	var productHtml="";
@@ -896,6 +896,7 @@ var selected = false;
 	* 给计费策略类型配置赋值
 	*/
 	function setStyleList(){
+		alert();
 		var product = $("#product").val();
 		var agentHtml="";
 		var styleHtml="";
