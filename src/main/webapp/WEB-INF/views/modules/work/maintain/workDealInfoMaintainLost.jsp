@@ -532,7 +532,7 @@
 								id="organizationNumber1"
 								onkeyup="value=value.replace(/[^\w\.\/]/ig,'')"
 								value="${workDealInfo.workCompany.organizationNumber}"
-								maxlength="9" /></td>
+								maxlength="18" /></td>
 							<th>组织机构代码有效期：</th>
 							<td><input class="input-medium Wdate" disabled="disabled"
 								

@@ -389,12 +389,12 @@ function revoke(dealInfoId){
 							<th><span class="prompt" style="color:red; display: none;">*</span>组织机构代码：</th>
 							<td><input type="text" name="organizationNumber" id="organizationNumber1"  onkeyup="value=value.replace(/[^\w\.\/]/ig,'')" 
 								 <c:if test="${empty change && empty update }">disabled="disabled"</c:if>
-								value="${workDealInfo.workCompany.organizationNumber}" maxlength="20"/>
+								value="${workDealInfo.workCompany.organizationNumber}" maxlength="18"/>
 								
 								
 								<input type="hidden" name="organizationNumber" id="organizationNumber" onkeyup="value=value.replace(/[^\w\.\/]/ig,'')" 
 								 <c:if test="${empty change && empty update }">disabled="disabled"</c:if> disabled="disabled"
-								value="${workDealInfo.workCompany.organizationNumber}" maxlength="20"/>
+								value="${workDealInfo.workCompany.organizationNumber}"/>
 								
 								
 								
