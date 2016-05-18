@@ -7658,7 +7658,7 @@ public class WorkDealInfoController extends BaseController {
 	@RequestMapping(value = "setStyleList1")
 	@ResponseBody
 	public String setStyleList1(Long productId) {
-		JSONObject json = new JSONObject();
+		JSONArray array = new JSONArray();
 		try {
 			
 			
@@ -7667,7 +7667,17 @@ public class WorkDealInfoController extends BaseController {
 					.findByProIdAll(configProduct.getId());
 			
 			for (int i = 0; i < boundList.size(); i++) {
-				json.put(boundList.get(i).getAgent().getTempStyle(),boundList.get(i).getAgent().getTempStyle());
+				
+				JSONObject obj = new JSONObject();
+				
+				obj.put("styleId",boundList.get(i).getAgent().getTempStyle());
+				
+				if(i==0){
+					obj.put("agentId",boundList.get(i).getId());
+					obj.put("agentName",boundList.get(i).getAgent().getTempName());
+				}
+				
+				array.put(obj);
 			}
 			
 			
@@ -7675,7 +7685,7 @@ public class WorkDealInfoController extends BaseController {
 			// TODO: handle exception
 			e.printStackTrace();
 		}
-		return json.toString();
+		return array.toString();
 	}
 	
 	
