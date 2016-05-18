@@ -15,7 +15,7 @@
 <script type="text/javascript" src="${ctxStatic }/js/common.js"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
-						$('div.small_pic a').fancyZoom({scaleImg: true, closeOnClick: true});
+						$('div.small_pic a').fancyZoom({scaleImg: true, closeOnClick: false});
 						$("#name").focus();
 						$("#inputForm").validate(
 								{
@@ -195,7 +195,6 @@
 									}
 									
 									$("#agentId").html(agentHtml);
-									showYear();
 									$("#agentDetailId").html("");
 									$("#agentDetailId").html(styleHtml);
 									

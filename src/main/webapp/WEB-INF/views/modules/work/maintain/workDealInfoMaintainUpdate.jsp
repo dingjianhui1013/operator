@@ -241,7 +241,6 @@
 									}
 									
 									$("#agentId").html(agentHtml);
-									showYear();
 									$("#agentDetailId").html("");
 									$("#agentDetailId").html(styleHtml);
 									
