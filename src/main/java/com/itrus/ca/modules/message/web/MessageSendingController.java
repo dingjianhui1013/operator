@@ -474,7 +474,7 @@ public class MessageSendingController extends BaseController {
 					messageSending.setPhone(phone);
 					messageSending.setMessageContext(writer.toString());
 					messageSending.setSmsSendDate(smsSendDate);
-					messageSending.setReturnStatus(returnStatus);
+					messageSending.setReturnStatus(returnStatus.equals("1")?returnStatus:returnStatus.substring(1));
 					messageSending.setWorkDealInfo(dealInfo);
 					messageSending.setSmsConfiguration(smsConfiguration);
 					messageSending.setWorkCompany(company);
