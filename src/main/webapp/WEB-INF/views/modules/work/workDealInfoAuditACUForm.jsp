@@ -608,10 +608,13 @@ value="${workDealInfo.workCompany.comCertficateTime }"  pattern="yyyy-MM-dd"/>">
 						</tr>
 						<tr>
 							<th>行政所属区：</th>
-							<td>${workDealInfo.workCompany.province}&nbsp;
+							<td>
+					
+							${workDealInfo.workCompany.province}&nbsp;
 								${workDealInfo.workCompany.city}&nbsp;
 								${workDealInfo.workCompany.district}&nbsp;
-								区域备注：${workDealInfo.workCompany.areaRemark}
+								<c:if test="${workDealInfo.workCompany.areaRemark!=null}">区域备注：${workDealInfo.workCompany.areaRemark}</c:if>
+								
 								
 							
 							</td>
