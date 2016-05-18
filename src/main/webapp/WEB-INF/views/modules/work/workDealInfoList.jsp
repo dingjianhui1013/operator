@@ -1200,8 +1200,9 @@ $(document).ready(
 					
 					<td>
 						<c:if test="${workDealInfo.dealInfoStatus==7 }">
-
+						<shiro:hasPermission name="signature:signatureInfo:grant">
  								<a href="javascript:checkAdd(${workDealInfo.id})">印章授权</a>
+ 								</shiro:hasPermission>
 						</c:if>
 					</td>
 					
