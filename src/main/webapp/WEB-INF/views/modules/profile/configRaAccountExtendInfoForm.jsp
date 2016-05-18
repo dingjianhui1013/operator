@@ -87,7 +87,7 @@ $(document).ready(
 		<tags:message content="${message}" />
 		<input type="hidden"  id="extendId"  value="${configRaAccountExtendInfo.id }">
 		<div class="control-group">
-			<label class="control-label">证书名称:</label>
+			<label class="control-label">模板名称:</label>
 			<div class="controls">					
 					<form:input path="certName" htmlEscape="false" onblur="repeatName()" maxlength="50" class="required"  />
 			</div>
