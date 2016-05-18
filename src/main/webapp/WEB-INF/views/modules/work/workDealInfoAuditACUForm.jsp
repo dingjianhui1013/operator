@@ -385,7 +385,7 @@ $(document)
 	<ul class="nav nav-tabs">
 		<li><a href="${ctx}/work/workDealInfoAudit/list">业务审核列表</a></li>
 		<li class="active"><a
-			href="${ctx}/work/workDealInfoAudit/auditForm?id=${workDealInfo.id}">业务审核
+			href="${ctx}/work/workDealInfoAudit/auditFrom?id=${workDealInfo.id}">业务审核
 
 		</a></li>
 	</ul>
