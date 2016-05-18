@@ -15,9 +15,7 @@
 <script type="text/javascript" src="${ctxStatic }/js/content_zoom.js"></script>
 <script type="text/javascript" src="${ctxStatic }/js/common.js"></script>
 <script type="text/javascript">
-	$(document)
-			.ready(
-					function() {
+	$(document).ready(function() {
 						$('div.small_pic a').fancyZoom({scaleImg: true, closeOnClick: true});
 						$("#name").focus();
 						$("#inputForm").validate(
@@ -121,9 +119,6 @@
 						
 						if("${workDealInfo.id}"!=null && "${workDealInfo.id}"!=""){
 							var boundLabelList = "${boundLabelList}";
-							
-							$("#product").attr("onchange","setStyleList()");
-							$("#agentId").attr("onchange","setTemplateList()");
 							var agentHtml="";
 							var obj= $.parseJSON(boundLabelList);
 							$.each(obj, function(i, item){
@@ -173,6 +168,79 @@
 								});
 							}
 						}
+						
+						
+							$("#product").change(function(){
+							
+							var product = $("#product").val();
+							var agentHtml="";
+							var styleHtml="";
+							if (product!=0) {
+								var url = "${ctx}/work/workDealInfo/setStyleList1?productId="+product+"&_="+new Date().getTime();
+								$.getJSON(url,function(data){
+									
+									$.each(data, function(i, item){					 
+										 if(item.styleId=="1"){	
+												agentHtml+="<option value='"+item.styleId+"'>标准</option>";
+										}else if(item.styleId=="2"){
+												agentHtml+="<option value='"+item.styleId+"'>政府统一采购</option>";
+										}else if(item.styleId=="3"){
+												agentHtml+="<option value='"+item.styleId+"'>合同采购</option>";
+										}
+										 
+										 if(item.agentId!=null){
+											 $("#boundId").val(item.agentId);
+											 styleHtml +="<option value='"+item.agentId+"'>" + item.agentName + "</option>"; 
+										 }
+											
+										
+									});	
+									
+									if(agentHtml==""){
+										
+										agentHtml+="<option value='0'>请选择</option>";
+										$("#agentId").html(agentHtml);
+										styleHtml+="<option value='0'>请选择</option>";
+										$("#agentDetailId").html(styleHtml);
+										top.$.jBox.tip("请先配置计费策略！");
+										return;
+									}
+									
+									$("#agentId").html(agentHtml);
+									showYear();
+									$("#agentDetailId").html("");
+									$("#agentDetailId").html(styleHtml);
+									
+									
+									
+									}); 	
+							}
+							
+						});
+						
+						
+						$("#agentId").change(function(){
+							var product = $("#product").val();
+							var agentId = $("#agentId").val();
+							if (agentId!=0) {
+								var url = "${ctx}/work/workDealInfo/setTemplateList?productId="+product+"&infoType=0&style="+agentId+"&_="+new Date().getTime();
+								$.getJSON(url,function(data){
+									var styleList = data.array;
+									var styleHtml="";
+									$.each(styleList,function(i,item){
+										if(i==0){
+											$("#boundId").val(item.id);
+										}
+										styleHtml +="<option value='"+item.id+"'>" + item.name + "</option>";
+									});
+									$("#agentDetailId").html(styleHtml);
+								});
+							}else{
+								top.$.jBox.tip("请您选择计费策略类型！");
+								
+							}
+							
+						});
 
 					});
 	Array.prototype.unique = function() {
@@ -212,74 +280,6 @@
 			}
 		}
 	};
-	
-	
-
-	/*
-	* 给计费策略模版配置赋值
-	*/
-	function setTemplateList(){
-		
-		var product = $("#product").val();
-		var agentId = $("#agentId").val();
-		var appId = $("#appId").val();
-		if (agentId!=0) {
-			var url = "${ctx}/work/workDealInfo/setTemplateList?productId="+product+"&infoType=0&style="+agentId+"&_="+new Date().getTime();
-			$.getJSON(url,function(data){
-				var styleList = data.array;
-				var styleHtml="";
-				$.each(styleList,function(i,item){
-					if(i==0){
-						$("#boundId").val(item.id);
-					}
-					styleHtml +="<option value='"+item.id+"'>" + item.name + "</option>";
-				});
-				$("#agentDetailId").html(styleHtml);
-			});
-		}else{
-			top.$.jBox.tip("请您选择计费策略类型！");
-			
-		}
-	}
-	
-	
-	/*
-	* 给计费策略类型配置赋值
-	*/
-	function setStyleList(){
-		var product = $("#product").val();
-		var agentHtml="";
-		var styleHtml="";
-		if (product!=0) {
-			var url = "${ctx}/work/workDealInfo/setStyleList1?productId="+product+"&_="+new Date().getTime();
-			$.getJSON(url,function(data){
-				agentHtml+="<option value='0'>请选择</option>";
-				$.each(data, function(i, item){					 
-					 if(item=="1"){	
-							agentHtml+="<option value='"+item+"'>标准</option>";
-					}else if(item=="2"){
-							agentHtml+="<option value='"+item+"'>政府统一采购</option>";
-					}else if(item=="3"){
-							agentHtml+="<option value='"+item+"'>合同采购</option>";
-					}
-				});	
-				$("#agentId").html(agentHtml);
-				$("#agentDetailId").html("");
-				styleHtml+="<option value='0'>请选择</option>";
-				$("#agentDetailId").html(styleHtml);
-				
-				if($("#agentId option").length==1){
-					top.$.jBox.tip("请先配置计费策略！");
-					return;
-				}
-				
-				}); 
-			
-			
-				
-		}
-	}
-	
 	
 	
 </script>
