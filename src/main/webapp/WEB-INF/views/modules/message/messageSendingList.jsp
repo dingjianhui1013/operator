@@ -394,7 +394,7 @@
 		<a href="javascript:send()" class="btn btn-primary" id="send">发送</a> <input
 			type="hidden" name="checkIds" id="checkIds" value="${checkIds }" />
 			<input id="btnSubmit" class="btn btn-primary" type="button" onclick="selectData()"
-				value="选择全部数据" />
+				value="全选" />
 			
 		</div>
 	
