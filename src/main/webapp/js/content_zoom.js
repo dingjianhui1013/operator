@@ -27,7 +27,7 @@
     $(document).keyup(function(event){
         if (event.keyCode == 27 && $('#zoom:visible').length > 0) hide();
     });
-    
+    $('#zoom_close').hide();
     $('#zoom_close').click(hide);
   }
   
