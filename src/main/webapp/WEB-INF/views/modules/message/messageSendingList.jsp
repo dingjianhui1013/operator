@@ -324,9 +324,7 @@
 						</c:if>>${off.name}</option>
 				</c:forEach>
 			</select>
-			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			<input id="btnSubmit" class="btn btn-primary" type="button" onclick="selectData()"
-				value="选择全部数据" />
+			
 		</div>
 		<br>
 		<div>
@@ -395,6 +393,9 @@
 			value="查询" />
 		<a href="javascript:send()" class="btn btn-primary" id="send">发送</a> <input
 			type="hidden" name="checkIds" id="checkIds" value="${checkIds }" />
+			<input id="btnSubmit" class="btn btn-primary" type="button" onclick="selectData()"
+				value="选择全部数据" />
+			
 		</div>
 	
 	</form:form>
