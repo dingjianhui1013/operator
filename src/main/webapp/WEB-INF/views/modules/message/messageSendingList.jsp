@@ -194,24 +194,22 @@
 					if (data.status == '1') {
 						top.$.jBox.tip("发送完成");
 						setTimeout(function() {
-							//something you want delayed
+							
 							$("#searchForm").submit();
-// 							window.location.reload();
+
 							window.location.href="${ctx}/message/messageSending/";
-						}, 1500); // how long do you want the delay to be? 
+						}, 1500); 
 
 					} else if (data.status == '-1') {
 						top.$.jBox.tip("发送失败!");
 						var info = "失败信息:<br>" + data.msg;
 						top.$.jBox.info(info);
-						//top.$.jBox.tip("上传失败"+data.msg);
-						//$("#searchForm").submit();
+				
 					} else {
 						top.$.jBox.tip("上传失败!");
 						var info = "失败信息:<br>" + data.msg;
 						top.$.jBox.info(info);
-						//top.$.jBox.tip("上传失败："+data.errorMsg);
-						//$("#searchForm").submit();
+					
 					}
 
 				});
