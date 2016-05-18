@@ -45,8 +45,10 @@ var selected = false;
 																data : d.lis,
 																callback : function(data) {
 																	$("#product").html("");
+
 																	/* $("#product").attr("onChange","setStyleList()"); */
 																	/* $("#agentId").attr("onchange","setTemplateList()"); */
+
 																	var url1 = "${ctx}/work/workDealInfo/product?appId=";
 																	var productHtml="";
 																	productHtml+="<option value='0'>请选择</option>";
