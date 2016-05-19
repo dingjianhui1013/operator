@@ -40,7 +40,7 @@
 								});
 						
 						
-							if(navigator.userAgent.indexOf("ie")!=-1){
+							if(navigator.userAgent.indexOf("IE")!=-1){
 							
 							
 							$("#conCertNumber1").attr("onpropertychange","count('conCertNumber1','zjmcount')");

@@ -39,7 +39,7 @@
 								});
 						
 						
-						if(navigator.userAgent.indexOf("ie")!=-1){
+						if(navigator.userAgent.indexOf("IE")!=-1){
 							
 							$("#organizationNumber1").attr("onpropertychange","count('organizationNumber1','zzcount')");
 							$("#comCertficateNumber1").attr("onpropertychange","count('comCertficateNumber1','zjcount')");
@@ -52,6 +52,9 @@
 							
 							
 						}else{
+							
+							
+							
 							$("#organizationNumber1").attr("oninput","count('organizationNumber1','zzcount')");
 							$("#comCertficateNumber1").attr("oninput","count('comCertficateNumber1','zjcount')");
 							$("#companyMobile").attr("oninput","count('companyMobile','dwcount')");

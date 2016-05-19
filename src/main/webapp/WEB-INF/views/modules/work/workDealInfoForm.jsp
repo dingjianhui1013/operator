@@ -33,8 +33,13 @@ var selected = false;
 										}
 									}
 								});
+						
+						
 
-						if(navigator.userAgent.indexOf("ie")!=-1){
+						if(navigator.userAgent.indexOf("IE")!=-1){
+							
+							
+							
 							$("#organizationNumber").attr("onpropertychange","count('organizationNumber','zdcount')");
 							$("#comCertficateNumber").attr("onpropertychange","count('comCertficateNumber','zjcount')");
 							$("#companyMobile").attr("onpropertychange","count('companyMobile','dwcount')");
