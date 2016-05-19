@@ -56,7 +56,7 @@
 				<label class="control-label"><span style="color: red;">*</span>&nbsp;短信模板内容:</label>
 				<div class="controls">
 					<form:textarea path="messageContent" cols="20" rows="15"
-						maxlength="150" style="resize: none;" readonly="true"></form:textarea>
+						 style="resize: none;" readonly="true"></form:textarea>
 				</div>
 			</div>
 

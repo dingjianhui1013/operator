@@ -88,7 +88,7 @@
 				<div class="control-group">
 			<label class="control-label"><span style="color:red;">*</span>&nbsp;短信模板内容:</label>
 			<div class="controls">
-				<form:textarea path="messageContent"  cols="20" rows="15" maxlength="500" style="resize: none;" ></form:textarea>
+				<form:textarea path="messageContent"  cols="20" rows="15"  style="resize: none;" ></form:textarea>
 			</div>
 		</div>
 				
