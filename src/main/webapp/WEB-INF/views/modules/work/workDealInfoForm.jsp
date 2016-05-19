@@ -34,7 +34,26 @@ var selected = false;
 									}
 								});
 
-						
+						if(navigator.userAgent.indexOf("ie")!=-1){
+							$("#organizationNumber").attr("onpropertychange","count('organizationNumber','zdcount')");
+							$("#comCertficateNumber").attr("onpropertychange","count('comCertficateNumber','zjcount')");
+							$("#companyMobile").attr("onpropertychange","count('companyMobile','dwcount')");
+							$("#conCertNumber").attr("onpropertychange","count('conCertNumber','zjhcount')");
+							$("#contactPhone").attr("onpropertychange","count('contactPhone','zjmcount')");
+							$("#contactTel").attr("onpropertychange","count('contactTel','ywidcount')");
+							$("#pIDCard").attr("onpropertychange","count('pIDCard','IDcount')");
+							
+							
+							
+						}else{
+							$("#organizationNumber").attr("oninput","count('organizationNumber','zdcount')");
+							$("#comCertficateNumber").attr("oninput","count('comCertficateNumber','zjcount')");
+							$("#companyMobile").attr("oninput","count('companyMobile','dwcount')");
+							$("#conCertNumber").attr("oninput","count('conCertNumber','zjhcount')");
+							$("#contactPhone").attr("oninput","count('contactPhone','zjmcount')");
+							$("#contactTel").attr("oninput","count('contactTel','ywidcount')");
+							$("#pIDCard").attr("oninput","count('pIDCard','IDcount')");
+						}
 						
 						
 						var url = "${ctx}/work/workDealInfo/app?_="+new Date().getTime();
@@ -1236,11 +1255,11 @@ var selected = false;
 						</tr>
 						<tr>
 							<th><span class="prompt" style="color: red; display: none;">*</span>组织机构代码：</th>
-							<td><input type="text" name="organizationNumber"
+							<td><input  type="text" name="organizationNumber"
 								onkeyup="value=value.replace(/[^\w\.\/]/ig,'')"
 								value="${workCompany.organizationNumber }" maxlength="18"
 								id="organizationNumber"
-								oninput="count('organizationNumber','zdcount')"
+								
 								onblur="qxCount('zdcount')"
 								onfocus="hqcount('organizationNumber','zdcount')" /><span
 								id="zdcount" style="color: red; margin-left: 10px"></span></td>
@@ -1277,7 +1296,7 @@ var selected = false;
 							<td><input type="text" name="comCertficateNumber"
 								value="${workCompany.comCertficateNumber }" maxlength="18"
 								id="comCertficateNumber"
-								oninput="count('comCertficateNumber','zjcount')"
+								
 								onblur="qxCount('zjcount')"
 								onfocus="hqcount('comCertficateNumber','zjcount')" /><span
 								id="zjcount" style="color: red; margin-left: 10px"></span></td>
@@ -1316,7 +1335,7 @@ var selected = false;
 							<th><span class="prompt" style="color: red; display: none;">*</span>单位联系电话：</th>
 							<td><input type="text" name="companyMobile"
 								id="companyMobile" value="${workCompany.companyMobile }"
-								 oninput="count('companyMobile','dwcount')"
+								 
 								
 								onblur="checkContactMobil(this,'dwcount')"
 								onfocus="hqcount('companyMobile','dwcount')" /><span
@@ -1359,7 +1378,7 @@ var selected = false;
 							<td><input type="text" name="conCertNumber" maxlength="18"
 								id="conCertNumber" value="${workUser.conCertNumber }"
 								onkeyup="numberFill()" 
-								oninput="count('conCertNumber','zjhcount')"
+								
 								onblur="qxCount('zjhcount')"
 								onfocus="hqcount('conCertNumber','zjhcount')" /><span
 								id="zjhcount" style="color: red; margin-left: 10px"></span></td>
@@ -1374,13 +1393,13 @@ var selected = false;
 								maxlength="11" value="${workUser.contactPhone }"
 								onkeyup="value=value.replace(/[^\w\.\/]/ig,'')" 
 								onblur="checkMobile(this,'zjmcount')"
-								oninput="count('contactPhone','zjmcount')"
+								
 								onfocus="hqcount('contactPhone','zjmcount')" /><span
 								id="zjmcount" style="color: red; margin-left: 10px"></span></td>
 							<th><span class="prompt" style="color: red; display: none;">*</span>业务系统UID:</th>
 							<td><input type="text" name="contactTel" id="contactTel"
 								maxlength="20" value="${workUser.contactTel }"
-								oninput="count('contactTel','ywidcount')"
+								
 								onblur="qxCount('ywidcount')"
 								onfocus="hqcount('contactTel','ywidcount')" /><span
 								id="ywidcount" style="color: red; margin-left: 10px"></span></td>
@@ -1416,7 +1435,7 @@ var selected = false;
 							<th><span class="prompt" style="color: red;">*</span>身份证号:</th>
 							<td><input type="text" name="pIDCard" id="pIDCard"
 								maxlength="18" value="${workCertApplyInfo.idCard }"
-								oninput="count('pIDCard','IDcount')" onblur="qxCount('IDcount')"
+								onblur="qxCount('IDcount')"
 								onfocus="hqcount('pIDCard','IDcount')" /><span id="IDcount"
 								style="color: red; margin-left: 10px"></span></td>
 						</tr>

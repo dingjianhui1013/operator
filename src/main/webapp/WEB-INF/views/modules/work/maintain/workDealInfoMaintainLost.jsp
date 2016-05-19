@@ -38,6 +38,26 @@
 										}
 									}
 								});
+						
+						
+							if(navigator.userAgent.indexOf("ie")!=-1){
+							
+							
+							$("#conCertNumber1").attr("onpropertychange","count('conCertNumber1','zjmcount')");
+							$("#contactPhone1").attr("onpropertychange","count('contactPhone1','zjtcount')");
+							$("#contactTel1").attr("onpropertychange","count('contactTel1','ywidcount')");
+							
+							
+							
+							
+						}else{
+							
+							$("#conCertNumber1").attr("oninput","count('conCertNumber1','zjmcount')");
+							$("#contactPhone1").attr("oninput","count('contactPhone1','zjtcount')");
+							$("#contactTel1").attr("oninput","count('contactTel1','ywidcount')");
+						
+						}
+						
 
 						var url = "${ctx}/work/workDealInfo/showYear?lable=${workDealInfo.configProduct.productLabel}&productName=${workDealInfo.configProduct.productName}&app=${workDealInfo.configApp.id}&infoType=${empty update?'':1}&_="
 								+ new Date().getTime();
@@ -670,7 +690,7 @@
 								onblur="setJBRCard('zjmcount')"
 								id="conCertNumber1" 
 								onkeyup="value=value.replace(/[^\w\.\/]/ig,'')" maxlength="18"
-								value="${workDealInfo.workUser.conCertNumber }" oninput="count('conCertNumber1','zjmcount')" onfocus="hqcount('conCertNumber1','zjmcount')"/><span id="zjmcount" style="color: red; margin-left: 10px"></span></td>
+								value="${workDealInfo.workUser.conCertNumber }"  onfocus="hqcount('conCertNumber1','zjmcount')"/><span id="zjmcount" style="color: red; margin-left: 10px"></span></td>
 							<th><span class="prompt" style="color: red; display: none;">*</span>证书持有人电子邮件:</th>
 							<td><input type="text" name="contacEmail" id="contacEmail" onblur="setJBRMail()"
 								class="email" maxlength="30"
@@ -681,11 +701,11 @@
 							<td class="tdWidth"><input type="text" name="contactPhone"
 								id="contactPhone1" maxlength="11" class="number"
 								onkeyup="this.value=this.value.replace(/\D/g,'')"
-								value="<fmt:formatNumber pattern="#">${workDealInfo.workUser.contactPhone }</fmt:formatNumber>" oninput="count('contactPhone1','zjtcount')" onblur="qxCount('zjtcount')" onfocus="hqcount('contactPhone1','zjtcount')"/><span id="zjtcount" style="color: red; margin-left: 10px"></span> 
+								value="<fmt:formatNumber pattern="#">${workDealInfo.workUser.contactPhone }</fmt:formatNumber>"  onblur="qxCount('zjtcount')" onfocus="hqcount('contactPhone1','zjtcount')"/><span id="zjtcount" style="color: red; margin-left: 10px"></span> 
 							</td>
 							<th><span class="prompt" style="color: red; display: none;">*</span>业务系统UID:</th>
 							<td><input type="text" name="contactTel" id="contactTel1"
-								maxlength="20" value="${workDealInfo.workUser.contactTel }" oninput="count('contactTel1','ywIDcount')" onblur="qxCount('ywIDcount')" onfocus="hqcount('contactTel1','ywIDcount')"/><span id="ywIDcount" style="color: red; margin-left: 10px"></span>
+								maxlength="20" value="${workDealInfo.workUser.contactTel }"  onblur="qxCount('ywIDcount')" onfocus="hqcount('contactTel1','ywIDcount')"/><span id="ywIDcount" style="color: red; margin-left: 10px"></span>
 							</td>
 						</tr>
 						<tr>

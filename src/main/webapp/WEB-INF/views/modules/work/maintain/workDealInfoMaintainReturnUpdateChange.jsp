@@ -10,9 +10,7 @@
 <script type="text/javascript" src="${ctxStatic }/js/content_zoom.js"></script>
 <script type="text/javascript" src="${ctxStatic }/js/common.js"></script>
 <script type="text/javascript">
-	$(document)
-			.ready(
-					function() {
+	$(document).ready(function() {
 						$('div.small_pic a').fancyZoom({scaleImg: true, closeOnClick: true});
 						$("#name").focus();
 						$("#inputForm").validate(
@@ -36,6 +34,33 @@
 									}
 								});
 
+						
+						
+							if(navigator.userAgent.indexOf("ie")!=-1){
+							
+							$("#organizationNumber1").attr("onpropertychange","count('organizationNumber1','zzcount')");
+							$("#comCertficateNumber1").attr("onpropertychange","count('comCertficateNumber1','zjcount')");
+							$("#companyMobile").attr("onpropertychange","count('companyMobile','dwtcount')");
+							$("#conCertNumber1").attr("onpropertychange","count('conCertNumber1','zjmcount')");
+							$("#contactPhone1").attr("onpropertychange","count('contactPhone1','zstcount')");
+							$("#contactTel1").attr("onpropertychange","count('contactTel1','ywIDcount')");
+							$("#pIDCard").attr("onpropertychange","count('pIDCard','pIDcount')");
+							
+							
+							
+						}else{
+							$("#organizationNumber1").attr("oninput","count('organizationNumber1','zzcount')");
+							$("#comCertficateNumber1").attr("oninput","count('comCertficateNumber1','zjcount')");
+							$("#companyMobile").attr("oninput","count('companyMobile','dwtcount')");
+							$("#conCertNumber1").attr("oninput","count('conCertNumber1','zjmcount')");
+							$("#contactPhone1").attr("oninput","count('contactPhone1','zstcount')");
+							$("#contactTel1").attr("oninput","count('contactTel1','ywIDcount')");
+							$("#pIDCard").attr("oninput","count('pIDCard','pIDcount')");
+						}
+						
+						
+						
+						
 						var url = "${ctx}/work/workDealInfo/showYear?lable=${workDealInfo.configProduct.productLabel}&productName=${workDealInfo.configProduct.productName}&app=${workDealInfo.configApp.id}&infoType=${empty update?'':1}&_="
 								+ new Date().getTime();
 						$.getJSON(url, function(data) {
@@ -624,7 +649,7 @@
 								id="organizationNumber1"
 								onkeyup="value=value.replace(/[^\w\.\/]/ig,'')"
 								value="${workDealInfo.workCompany.organizationNumber}"
-								maxlength="18" oninput="count('organizationNumber1','zzcount')" onblur="qxCount('zzcount')" onfocus="hqcount('organizationNumber1','zzcount')"/><span id="zzcount" style="color: red; margin-left: 10px"></span></td>
+								maxlength="18"  onblur="qxCount('zzcount')" onfocus="hqcount('organizationNumber1','zzcount')"/><span id="zzcount" style="color: red; margin-left: 10px"></span></td>
 							<th>组织机构代码有效期：</th>
 							<td><input class="input-medium Wdate"
 								
@@ -658,7 +683,7 @@
 							<th><span class="prompt" style="color: red; display: none;">*</span>证件号：</th>
 							<td><input type="text" name="comCertficateNumber"
 								id="comCertficateNumber1" maxlength="18"
-								value="${workDealInfo.workCompany.comCertficateNumber}" oninput="count('comCertficateNumber1','zjcount')" onblur="qxCount('zjcount')" onfocus="hqcount('comCertficateNumber1','zjcount')"/><span id="zjcount" style="color: red; margin-left: 10px"></span></td>
+								value="${workDealInfo.workCompany.comCertficateNumber}"  onblur="qxCount('zjcount')" onfocus="hqcount('comCertficateNumber1','zjcount')"/><span id="zjcount" style="color: red; margin-left: 10px"></span></td>
 							<th>单位证照有效期：</th>
 							<td><input class="input-medium Wdate" type="text"
 								onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});" maxlength="20"
@@ -703,7 +728,7 @@
 							<th><span class="prompt" style="color: red; display: none;">*</span>单位联系电话：</th>
 							<td><input type="text" name="companyMobile" class="number"
 								id="companyMobile"
-								value="${workDealInfo.workCompany.companyMobile }" oninput="count('companyMobile','dwtcount')" onblur="qxCount('dwtcount')" onfocus="hqcount('companyMobile','dwtcount')"/><span id="dwtcount" style="color: red; margin-left: 10px"></span></td>
+								value="${workDealInfo.workCompany.companyMobile }"  onblur="qxCount('dwtcount')" onfocus="hqcount('companyMobile','dwtcount')"/><span id="dwtcount" style="color: red; margin-left: 10px"></span></td>
 						</tr>
 						<tr>
 							<th><span class="prompt" style="color: red; display: none;">*</span>备注信息：</th>
@@ -757,7 +782,7 @@
 							<td><input type="text" name="conCertNumber"
 								id="conCertNumber1" onblur="setJBRCard('zjmcount')"
 								onkeyup="value=value.replace(/[^\w\.\/]/ig,'')" maxlength="18"
-								value="${workDealInfo.workUser.conCertNumber }" oninput="count('conCertNumber1','zjmcount')" onfocus="hqcount('conCertNumber1','zjmcount')"/><span id="zjmcount" style="color: red; margin-left: 10px"></span></td>
+								value="${workDealInfo.workUser.conCertNumber }"  onfocus="hqcount('conCertNumber1','zjmcount')"/><span id="zjmcount" style="color: red; margin-left: 10px"></span></td>
 							<th><span class="prompt" style="color: red; display: none;">*</span>证书持有人电子邮件:</th>
 							<td><input type="text" name="contacEmail" id="contacEmail" onblur="setJBRMail()"
 								class="email" maxlength="30"
@@ -768,13 +793,13 @@
 							<td><input type="text" name="contactPhone"
 								id="contactPhone1" maxlength="11" class="number"
 								onkeyup="this.value=this.value.replace(/\D/g,'')"
-								value="<fmt:formatNumber pattern="#">${workDealInfo.workUser.contactPhone }</fmt:formatNumber>" oninput="count('contactPhone1','zstcount')" onblur="qxCount('zstcount')" onfocus="hqcount('contactPhone1','zstcount')"/><span id="zstcount" style="color: red; margin-left: 10px"></span> <input
+								value="<fmt:formatNumber pattern="#">${workDealInfo.workUser.contactPhone }</fmt:formatNumber>"  onblur="qxCount('zstcount')" onfocus="hqcount('contactPhone1','zstcount')"/><span id="zstcount" style="color: red; margin-left: 10px"></span> <input
 								type="hidden" name="contactPhone" id="contactPhone"
 								maxlength="11" class="number" disabled="disabled"
 								value="<fmt:formatNumber pattern="#">${workDealInfo.workUser.contactPhone }</fmt:formatNumber>" /></td>
 							<th><span class="prompt" style="color: red; display: none;">*</span>业务系统UID:</th>
 							<td><input type="text" name="contactTel" id="contactTel1"
-								maxlength="20" value="${workDealInfo.workUser.contactTel }" oninput="count('contactTel1','ywIDcount')" onblur="qxCount('ywIDcount')" onfocus="hqcount('contactTel1','ywIDcount')"/><span id="ywIDcount" style="color: red; margin-left: 10px"></span>
+								maxlength="20" value="${workDealInfo.workUser.contactTel }"  onblur="qxCount('ywIDcount')" onfocus="hqcount('contactTel1','ywIDcount')"/><span id="ywIDcount" style="color: red; margin-left: 10px"></span>
 							</td>
 						</tr>
 						<tr>
@@ -824,7 +849,7 @@
 						<tr>
 							<th><span class="prompt" style="color: red; display: none;">*</span>经办人身份证号:</th>
 							<td><input type="text" name="pIDCard" id="pIDCard" 
-								value="${workDealInfo.workCertInfo.workCertApplyInfo.idCard }" oninput="count('pIDCard','pIDcount')" onblur="qxCount('pIDcount')" onfocus="hqcount('pIDCard','pIDcount')"/><span id="pIDcount" style="color: red; margin-left: 10px"></span></td>
+								value="${workDealInfo.workCertInfo.workCertApplyInfo.idCard }"  onblur="qxCount('pIDcount')" onfocus="hqcount('pIDCard','pIDcount')"/><span id="pIDcount" style="color: red; margin-left: 10px"></span></td>
 						</tr>
 						<tr>
 							<th><span class="prompt" style="color: red; display: none;">*</span>经办人邮箱:</th>
