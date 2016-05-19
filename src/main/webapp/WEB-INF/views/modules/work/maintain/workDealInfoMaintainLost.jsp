@@ -42,10 +42,22 @@
 						
 							if(navigator.userAgent.indexOf("IE")!=-1){
 							
-							
-							$("#conCertNumber1").attr("onpropertychange","count('conCertNumber1','zjmcount')");
-							$("#contactPhone1").attr("onpropertychange","count('contactPhone1','zjtcount')");
-							$("#contactTel1").attr("onpropertychange","count('contactTel1','ywidcount')");
+							if(navigator.userAgent.indexOf("IE 8")!=-1){
+								$("#conCertNumber1").bind("propertychange", function() {
+									count('conCertNumber1','zjmcount')
+								});
+								$("#contactPhone1").bind("propertychange", function() {
+									count('contactPhone1','zjtcount')
+								});
+								$("#contactTel1").bind("propertychange", function() {
+									count('contactTel1','ywidcount')
+								});
+							}else{
+								$("#conCertNumber1").attr("onpropertychange","count('conCertNumber1','zjmcount')");
+								$("#contactPhone1").attr("onpropertychange","count('contactPhone1','zjtcount')");
+								$("#contactTel1").attr("onpropertychange","count('contactTel1','ywidcount')");
+									
+							}
 							
 							
 							

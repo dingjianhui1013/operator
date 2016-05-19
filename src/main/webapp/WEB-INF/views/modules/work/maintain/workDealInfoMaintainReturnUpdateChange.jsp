@@ -38,13 +38,38 @@
 						
 							if(navigator.userAgent.indexOf("IE")!=-1){
 							
-							$("#organizationNumber1").attr("onpropertychange","count('organizationNumber1','zzcount')");
-							$("#comCertficateNumber1").attr("onpropertychange","count('comCertficateNumber1','zjcount')");
-							$("#companyMobile").attr("onpropertychange","count('companyMobile','dwtcount')");
-							$("#conCertNumber1").attr("onpropertychange","count('conCertNumber1','zjmcount')");
-							$("#contactPhone1").attr("onpropertychange","count('contactPhone1','zstcount')");
-							$("#contactTel1").attr("onpropertychange","count('contactTel1','ywIDcount')");
-							$("#pIDCard").attr("onpropertychange","count('pIDCard','pIDcount')");
+							if(navigator.userAgent.indexOf("IE 8")!=-1){
+								$("#organizationNumber1").bind("propertychange", function() {
+									count('organizationNumber1','zzcount')
+								});
+								$("#comCertficateNumber1").bind("propertychange", function() {
+									count('comCertficateNumber1','zjcount')
+								});
+								$("#companyMobile").bind("propertychange", function() {
+									count('companyMobile','dwtcount')
+								});
+								$("#conCertNumber1").bind("propertychange", function() {
+									count('conCertNumber1','zjmcount')
+								});
+								$("#contactPhone1").bind("propertychange", function() {
+									count('contactPhone1','zstcount')
+								});
+								$("#contactTel1").bind("propertychange", function() {
+									count('contactTel1','ywIDcount')
+								});
+								$("#pIDCard").bind("propertychange", function() {
+									count('pIDCard','pIDcount')
+								});
+							}else{
+								$("#organizationNumber1").attr("onpropertychange","count('organizationNumber1','zzcount')");
+								$("#comCertficateNumber1").attr("onpropertychange","count('comCertficateNumber1','zjcount')");
+								$("#companyMobile").attr("onpropertychange","count('companyMobile','dwtcount')");
+								$("#conCertNumber1").attr("onpropertychange","count('conCertNumber1','zjmcount')");
+								$("#contactPhone1").attr("onpropertychange","count('contactPhone1','zstcount')");
+								$("#contactTel1").attr("onpropertychange","count('contactTel1','ywIDcount')");
+								$("#pIDCard").attr("onpropertychange","count('pIDCard','pIDcount')");
+									
+							}	
 							
 							
 							

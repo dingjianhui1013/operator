@@ -38,15 +38,44 @@ var selected = false;
 
 						if(navigator.userAgent.indexOf("IE")!=-1){
 							
+							if(navigator.userAgent.indexOf("IE 8")!=-1){
+								
+								$("#organizationNumber").bind("propertychange", function() {
+									count('organizationNumber','zdcount')
+								});
+								$("#comCertficateNumber").bind("propertychange", function() {
+									count('comCertficateNumber','zjcount')
+								});
+								$("#companyMobile").bind("propertychange", function() {
+									count('companyMobile','dwcount')
+								});
+								$("#conCertNumber").bind("propertychange", function() {
+									count('conCertNumber','zjhcount')
+								});
+								$("#contactPhone").bind("propertychange", function() {
+									count('contactPhone','zjmcount')
+								});
+								$("#contactTel").bind("propertychange", function() {
+									count('contactTel','ywidcount')
+								});
+								$("#pIDCard").bind("propertychange", function() {
+									count('pIDCard','IDcount')
+								});
+								
+								
+							}else{
+								$("#organizationNumber").attr("onpropertychange","count('organizationNumber','zdcount')");
+								$("#comCertficateNumber").attr("onpropertychange","count('comCertficateNumber','zjcount')");
+								$("#companyMobile").attr("onpropertychange","count('companyMobile','dwcount')");
+								$("#conCertNumber").attr("onpropertychange","count('conCertNumber','zjhcount')");
+								$("#contactPhone").attr("onpropertychange","count('contactPhone','zjmcount')");
+								$("#contactTel").attr("onpropertychange","count('contactTel','ywidcount')");
+								$("#pIDCard").attr("onpropertychange","count('pIDCard','IDcount')");
+									
+							}
+							 
 							
 							
-							$("#organizationNumber").attr("onpropertychange","count('organizationNumber','zdcount')");
-							$("#comCertficateNumber").attr("onpropertychange","count('comCertficateNumber','zjcount')");
-							$("#companyMobile").attr("onpropertychange","count('companyMobile','dwcount')");
-							$("#conCertNumber").attr("onpropertychange","count('conCertNumber','zjhcount')");
-							$("#contactPhone").attr("onpropertychange","count('contactPhone','zjmcount')");
-							$("#contactTel").attr("onpropertychange","count('contactTel','ywidcount')");
-							$("#pIDCard").attr("onpropertychange","count('pIDCard','IDcount')");
 							
 							
 							
