@@ -71,6 +71,17 @@ public abstract class AbstractService {
      * @return the first provider in the list
      * @throws NoSuchAlgorithmException
      */
+    /*private static Provider getFirstProvider(String service, String algorithm) throws NoSuchAlgorithmException {
+        Provider[] providers = Security.getProviders(service + "." + algorithm);
+        if (providers != null && providers.length > 0) {
+            for (Provider p : providers) {
+                //if (p instanceof ServiceProvider.Delegate)
+                    return p;
+            }
+        }
+        throw new NoSuchAlgorithmException(algorithm + " " + service + " not available");
+    }*/
+    
     private static ServiceProvider.Delegate getFirstProvider(String service, String algorithm) throws NoSuchAlgorithmException {
         Provider[] providers = Security.getProviders(service + "." + algorithm);
         if (providers != null && providers.length > 0) {
@@ -184,7 +195,8 @@ public abstract class AbstractService {
      */
     private static ServiceEngine getServiceEngine(String service, String algorithm, Provider provider) throws NoSuchAlgorithmException {
         Provider.Service s = getProviderService(service, algorithm, provider);
-        ServiceProviderInterface spi = (ServiceProviderInterface) s.newInstance(null);
+        Object obj = s.newInstance(null);
+        ServiceProviderInterface spi = (ServiceProviderInterface) obj;
         return new ServiceEngine(spi, provider.getVersion(), s.getAlgorithm(), provider);
     }
 
