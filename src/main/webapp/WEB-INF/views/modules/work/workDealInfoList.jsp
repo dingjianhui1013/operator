@@ -307,8 +307,9 @@ $(document).ready(
         	top.$.jBox.tip("导入文件格式有误，导入文件应为Excel文件，请确认");
             return false;
         }
-        top.$.jBox.tip("正在批量导入新增数据...", 'loading');
        
+        top.$.jBox.tip("正在批量导入新增数据...", 'loading');
+        
 		var options = {
 			type : 'post',
 			dataType : 'json',
@@ -345,6 +346,8 @@ $(document).ready(
 			}
 		};
 		$('#materialImport').ajaxSubmit(options);
+		
+		
 	}
 	
 
