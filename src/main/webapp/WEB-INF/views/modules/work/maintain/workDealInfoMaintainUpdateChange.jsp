@@ -210,7 +210,7 @@
 										var arrList = arr.unique();
 										//清除所有必填项显示
 										$(".prompt").css("display", "none");
-										for (var i = 0; i < arrList.length; i++) {
+						 				for (var i = 0; i < arrList.length; i++) {
 											if (arrList[i] != "product") {
 												$("input[name='" + arrList[i] + "']").attr(
 														"required", "required");
@@ -219,7 +219,7 @@
 														.show();
 												if(arrList[i] != "contacEmail"){
 													
-													$("input[name='" + arrList[i] + "']").attr("disabled","disabled");
+													/* $("input[name='" + arrList[i] + "']").attr("disabled","disabled"); */
 												}
 												
 												
@@ -682,7 +682,7 @@
 
 						</tr>
 						<tr>
-							<th><span class="prompt" style="color: red; display: none;">*</span>组织机构代码：</th>
+							<th><span class="prompt" style="color: red; display: none;">*</span>组织机构代码111111：</th>
 							<td class="tdWidth"><input type="text" name="organizationNumber"
 								id="organizationNumber1"
 								onkeyup="value=value.replace(/[^\w\.\/]/ig,'')"
@@ -721,7 +721,8 @@
 							<th><span class="prompt" style="color: red; display: none;">*</span>证件号：</th>
 							<td class="tdWidth"><input type="text" name="comCertficateNumber"
 								id="comCertficateNumber1" maxlength="18"
-								value="${workDealInfo.workCompany.comCertficateNumber}" onblur="qxCount('zjcount')" onfocus="hqcount('comCertficateNumber1','zjcount')"/><span id="zjcount" style="color: red; margin-left: 10px"></span></td>
+								value="${workDealInfo.workCompany.comCertficateNumber}" onblur="qxCount('zjcount')" onfocus="hqcount('comCertficateNumber1','zjcount')"/>
+								<span id="zjcount" style="color: red; margin-left: 10px"></span></td>
 							<th>单位证照有效期：</th>
 							<td><input class="input-medium Wdate" type="text"
 								onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});" maxlength="20"
