@@ -209,7 +209,7 @@
 												data.addtionalField8DisplayName ]
 										var arrList = arr.unique();
 										//清除所有必填项显示
-										$(".prompt").css("display", "none");
+									$(".prompt").css("display", "none");
 						 				for (var i = 0; i < arrList.length; i++) {
 											if (arrList[i] != "product") {
 												$("input[name='" + arrList[i] + "']").attr(
@@ -219,11 +219,12 @@
 														.show();
 												if(arrList[i] != "contacEmail"){
 													
-													/* $("input[name='" + arrList[i] + "']").attr("disabled","disabled"); */
+													 /*  $("input[name='" + arrList[i] + "']").attr("disabled","disabled");  */
 												}
 												
-												
-												
+												$("#zzcount").hide();
+												$("#zjmcount").hide();
+												$("#pIDcount").hide();
 												
 												
 											} else {
@@ -233,7 +234,7 @@
 														.parent().parent().prev().find(
 																"span").show();
 											}
-										}
+										} 
 									});
 									
 									
@@ -440,7 +441,7 @@
 		$("#pName").val(name);
 	}
 	
-	function setJBRCard(){
+	function setJBRCard(o){
 		var card = $("#conCertNumber1").val();
 		$("#pIDCard").val(card);
 		$("#"+o).hide();
@@ -682,7 +683,7 @@
 
 						</tr>
 						<tr>
-							<th><span class="prompt" style="color: red; display: none;">*</span>组织机构代码111111：</th>
+							<th><span class="prompt" style="color: red; display: none;">*</span>组织机构代码：</th>
 							<td class="tdWidth"><input type="text" name="organizationNumber"
 								id="organizationNumber1"
 								onkeyup="value=value.replace(/[^\w\.\/]/ig,'')"
