@@ -49,7 +49,7 @@
 									count('comCertficateNumber1','zjcount')
 								});
 								$("#companyMobile").bind("propertychange", function() {
-									count('companyMobile','dwcount')
+									count('companyMobile','dwtcount')
 								});
 								$("#conCertNumber1").bind("propertychange", function() {
 									count('conCertNumber1','zjmcount')
@@ -66,7 +66,7 @@
 							}else{
 								$("#organizationNumber1").attr("onpropertychange","count('organizationNumber1','zzcount')");
 								$("#comCertficateNumber1").attr("onpropertychange","count('comCertficateNumber1','zjcount')");
-								$("#companyMobile").attr("onpropertychange","count('companyMobile','dwcount')");
+								$("#companyMobile").attr("onpropertychange","count('companyMobile','dwtcount')");
 								$("#conCertNumber1").attr("onpropertychange","count('conCertNumber1','zjmcount')");
 								$("#contactPhone1").attr("onpropertychange","count('contactPhone1','zjtcount')");
 								$("#contactTel1").attr("onpropertychange","count('contactTel1','ywidcount')");
@@ -84,7 +84,7 @@
 							
 							$("#organizationNumber1").attr("oninput","count('organizationNumber1','zzcount')");
 							$("#comCertficateNumber1").attr("oninput","count('comCertficateNumber1','zjcount')");
-							$("#companyMobile").attr("oninput","count('companyMobile','dwcount')");
+							$("#companyMobile").attr("oninput","count('companyMobile','dwtcount')");
 							$("#conCertNumber1").attr("oninput","count('conCertNumber1','zjmcount')");
 							$("#contactPhone1").attr("oninput","count('contactPhone1','zjtcount')");
 							$("#contactTel1").attr("oninput","count('contactTel1','ywidcount')");
