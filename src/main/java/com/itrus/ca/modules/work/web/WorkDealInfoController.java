@@ -7917,7 +7917,7 @@ public class WorkDealInfoController extends BaseController {
 
 			// 保存经办人信息
 			WorkUser workUser = new WorkUser();
-			workUser.setId(workuserId);
+			//workUser.setId(workuserId);
 			workUser.setStatus(1);
 			workUser.setContactName(contactName);
 			workUser.setConCertType(conCertType);
