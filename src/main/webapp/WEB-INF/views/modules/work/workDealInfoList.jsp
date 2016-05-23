@@ -1111,7 +1111,7 @@ $(document).ready(
 				<th>业务编号</th>
 				<th>应用名称</th>
 				<th>单位名称</th>
-<!-- 				<th>证书持有人</th> -->
+ 				
 				<th>经办人</th>
 				<th>产品名称</th>
 				<th>证书类型</th>
@@ -1142,6 +1142,7 @@ $(document).ready(
 					<td><a
 						href="${ctx}/work/workDealInfoFiling/formF?id=${workDealInfo.id}">${workDealInfo.companyName}</a></td>
 
+					
 					<td>${workDealInfo.certApplyInfoName }</td>
 					<td>${proType[workDealInfo.productName]}</td>
 					<td>
