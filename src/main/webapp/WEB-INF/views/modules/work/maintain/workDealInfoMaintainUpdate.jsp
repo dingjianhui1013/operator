@@ -433,7 +433,7 @@
 							top.$.jBox.tip("请选择您想要更新的年限！");
 						}else{
 						if($("#expirationDate").val() != null&&$("#expirationDate").val() != ""){
-							top.$.jBox.confirm("指定到期时间为&nbsp;'&nbsp;<b>"+$("#expirationDate").val()+"</b>&nbsp;'&nbsp;年吗？",'系统提示',function(v,h,f){
+							top.$.jBox.confirm("指定到期时间为&nbsp;'&nbsp;<b>"+$("#expirationDate").val()+"</b>&nbsp;'&nbsp;吗？",'系统提示',function(v,h,f){
 								if(v=='ok'){
 									$("#inputForm").submit(); 
 								}
