@@ -275,6 +275,7 @@
 										 
 										 if(item.agentId!=null){
 											 $("#boundId").val(item.agentId);
+											 showYear();
 											 styleHtml +="<option value='"+item.agentId+"'>" + item.agentName + "</option>"; 
 										 }
 											
@@ -314,6 +315,7 @@
 									$.each(styleList,function(i,item){
 										if(i==0){
 											$("#boundId").val(item.id);
+											showYear();
 										}
 										styleHtml +="<option value='"+item.id+"'>" + item.name + "</option>";
 									});
@@ -519,10 +521,13 @@
 	function setYearByBoundId(){
 		var boundId = $("#agentDetailId").val();
 		$("#boundId").val(boundId);
-		
+		showYear();
+	} 
+	
+	
+	
+	function showYear(){
 		var agentBountId = $("#boundId").val();
-		
-		
 		var url = "${ctx}/work/workDealInfo/showYearNew?boundId="+agentBountId+"&infoType=1&_="+new Date().getTime();
 				
 		$.getJSON(url, function(data) {
@@ -584,9 +589,9 @@
 				}
 			});
 		});
-		
-		
-	} 
+	
+	}
+	
 	
 	
 	function changeDealInfoType(){
