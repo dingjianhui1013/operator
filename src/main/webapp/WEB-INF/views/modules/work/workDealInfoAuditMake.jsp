@@ -10,13 +10,13 @@
 <script type="text/javascript">
 	var sn;
 	var ukeyadmin = null;
-	var baseDay = 0;
+	var baseDay = parseInt("${workDealInfo.year*365+workDealInfo.lastDays}");	
 	
-	if(${validiteDays==null}){
-		baseDay = parseInt("${workDealInfo.year*365+workDealInfo.lastDays  }");	
-	}else{
-		baseDay = parseInt("${validiteDays}");
-	}
+	
+		
+	
+	
+
 	
 	
 	$(document).ready(function() {

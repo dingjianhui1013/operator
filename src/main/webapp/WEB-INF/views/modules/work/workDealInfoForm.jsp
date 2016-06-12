@@ -359,7 +359,7 @@ var selected = false;
 			$("#app").focus(); //让手机文本框获得焦点 
 			return false;
 		} else if ($("input[name='year']").val() == null || $("input[name='year']").val() == "" || $("#expirationDate").val() == null || $("#expirationDate").val() == ""){
-			top.$.jBox.tip("请选择申请年限或具体到期时间!"); 
+			top.$.jBox.tip("请选择申请年限或指定具体到期时间!"); 
 			$("input[name='year']").focus(); //让手机文本框获得焦点 
 			return false;
 		} 
@@ -988,76 +988,6 @@ var selected = false;
 	}
 	
 	
-
-	
-	/* 
-	* 功能:根据产品带回计费模版
-	* 传参：lable+name
-	* 返回值：年限1，2，4，5是否为true
-	*/ 
-	/* function showAgent(obj){
-		var product = obj;
-		var url = "${ctx}/work/workDealInfo/showAgentProductById?productId="+product+"&infoType=0&_="+new Date().getTime();
-		$.getJSON(url,function(data){
-			if(data.tempStyle!=-1){
-				var map = data.typeMap;
-				var agentHtml="";
-				$("#agentId").attr("onchange","setTemplateList()");
-				$.each(map, function(i, item){
-					agentHtml+="<option onchange=setTemplateList()  value='"+item.id+"'>" + item.name + "</option>";
-				});
-				$("#agentId").html(agentHtml);
-				var styleList = data.boundStyleList;
-				var styleHtml="";
-				$.each(styleList, function(i, item2){
-					if(i==0){
-						$("#boundId").val(item2.id);
-						showYear();
-					}
-					styleHtml +="<option value='"+item2.id+"'>" + item2.name + "</option>";
-				});
-				$("#agentDetailId").html(styleHtml);
-			}else{
-				var agentHtml="<option value='0'>请选择</option>";
-				$("#agentId").html(agentHtml);
-				var styleHtml="<option value='0'>请选择</option>";
-				$("#agentDetailId").html(styleHtml);
-				
-				$("#year1").show();
-				$("#word1").show();
-				$("#year2").show();
-				$("#word2").show();
-				$("#year4").show();
-				$("#word4").show();
-				$("#year5").show();
-				$("#word5").show();
-				$(".prompt").css("display","none");
-				top.$.jBox.tip("请先配置计费策略！"); 
-			}
-			
-			
-		});
-	} */
-	
-	/*
-	* 给计费策略类型配置赋值
-	*/
-	
-	
-	
-	
-	
-	function setStyleList(){
-		
-	
-	}
-	/*
-	* 给计费策略模版配置赋值
-	*/
-	function setTemplateList(){
-		
-	}
-	
 	
 	//获取计费模版相对应的年限
 	function setYearByBoundId(){
@@ -1207,15 +1137,7 @@ var selected = false;
 	
 	
 	
-	function deleteChecked(){
-		
-		$("#year1").removeAttr("checked");
-		$("#year2").removeAttr("checked");
-		$("#year3").removeAttr("checked");
-		$("#year4").removeAttr("checked");
-		$("#year5").removeAttr("checked");
-
-	}
+	
 		
 	
 	
