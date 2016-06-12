@@ -32,6 +32,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.itrus.ca.common.config.Global;
 import com.itrus.ca.common.persistence.BaseEntity;
 import com.itrus.ca.common.utils.RaAccountUtil;
+import com.itrus.ca.common.utils.StringHelper;
 import com.itrus.ca.common.web.BaseController;
 import com.itrus.ca.modules.constant.ProductType;
 import com.itrus.ca.modules.constant.WorkDealInfoStatus;
@@ -1782,7 +1783,7 @@ public class WorkDealInfoOperationController extends BaseController {
 			String comCertificateType, String comCertficateNumber, String comCertficateTime,String legalName, String s_province, String s_city,
 			String s_county, String areaRemark,String address, String companyMobile,String remarks, 
 			@RequestParam(value="product", required=true) Long productId ,
-			Integer year,
+			Integer year,Date expirationDate,//经信委
 			Integer dealInfoType,Integer dealInfoType1,Integer dealInfoType2 , 
 			Integer agentId,Long agentDetailId, //获取计费策略类型  获取计费策略模版
 			String contactName,String conCertType, String contacEmail, String conCertNumber,
@@ -1961,10 +1962,12 @@ public class WorkDealInfoOperationController extends BaseController {
 		
 		workDealInfo.setConfigProduct(configProduct);
 	
-		if (year == null) {
-			workDealInfo.setYear(0);
-		} else {
-			workDealInfo.setYear(year);
+		//经信委
+		if(year!=null){
+				workDealInfo.setYear(year);
+		}else{
+				workDealInfo.setYear(StringHelper.getDvalueYear(expirationDate));
+				workDealInfo.setExpirationDate(expirationDate);
 		}
 	
 		workDealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_ENTRY_SUCCESS);
