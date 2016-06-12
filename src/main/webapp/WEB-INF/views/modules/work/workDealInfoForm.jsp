@@ -280,7 +280,21 @@ var selected = false;
 						});
 						
 						
-
+						//经信委
+						$("input[name='year']").change(function(){
+							$("#expirationDate").val("");						
+						});
+						
+						$("#expirationDate").blur(function(){
+							
+							$("#year1").removeAttr("checked");
+							$("#year2").removeAttr("checked");
+							$("#year3").removeAttr("checked");
+							$("#year4").removeAttr("checked");
+							$("#year5").removeAttr("checked");
+						});
+						
+						
 	});
 	function nameFill(obj){
 		var a = checkJbrxm(obj);
@@ -344,8 +358,8 @@ var selected = false;
 			top.$.jBox.tip("该应用不存在!"); 
 			$("#app").focus(); //让手机文本框获得焦点 
 			return false;
-		} else if ($("input[name='year']").val() == null || $("input[name='year']").val() == ""){
-			top.$.jBox.tip("请选择申请年限!"); 
+		} else if ($("input[name='year']").val() == null || $("input[name='year']").val() == "" || $("#expirationDate").val() == null || $("#expirationDate").val() == ""){
+			top.$.jBox.tip("请选择申请年限或具体到期时间!"); 
 			$("input[name='year']").focus(); //让手机文本框获得焦点 
 			return false;
 		} 
@@ -1102,6 +1116,16 @@ var selected = false;
 				$("#year5").hide();
 				$("#word5").hide();
 			}
+			
+			
+			//经信委
+			if(data.support){
+				$("#supportDate").show();
+			}
+			if(!data.support){
+				$("#supportDate").hide();
+			}
+			
 			var arr = [data.nameDisplayName,data.orgunitDisplayName,data.emailDisplayName,data.commonNameDisplayName,data.addtionalField1DisplayName,data.addtionalField2DisplayName,data.addtionalField3DisplayName,data.addtionalField4DisplayName,data.addtionalField5DisplayName,data.addtionalField6DisplayName,data.addtionalField7DisplayName,data.addtionalField8DisplayName]
 			var arrList = arr.unique();
 			//清除所有必填项显示
@@ -1180,6 +1204,22 @@ var selected = false;
 				});	
 			}
 	}
+	
+	
+	
+	function deleteChecked(){
+		
+		$("#year1").removeAttr("checked");
+		$("#year2").removeAttr("checked");
+		$("#year3").removeAttr("checked");
+		$("#year4").removeAttr("checked");
+		$("#year5").removeAttr("checked");
+
+	}
+		
+	
+	
+	
 </script>
 
 </head>
@@ -1197,7 +1237,7 @@ var selected = false;
 				<table class="table table-striped table-bordered table-condensed">
 					<tbody>
 						<tr>
-							<th colspan="6" style="font-size: 20px;"><span
+							<th colspan="7" style="font-size: 20px;"><span
 								class="prompt" style="color: red; display: none;">*</span>基本信息</th>
 						</tr>
 						<tr>
@@ -1240,10 +1280,14 @@ var selected = false;
 
 							<th style="width: 100px;"><span class="prompt"
 								style="color: red; display: none;">*</span>申请年数：</th>
-							<td><input type="radio" name="year" value="1" id="year1"
+							
+							<td colspan="1">
+								<input type="radio" name="year" value="1" id="year1"
 								<c:if test="${empty workDealInfo.year}">checked</c:if>
 								<c:if test="${workDealInfo.year==1}">checked</c:if>><span
-								id="word1">1年</span> <input type="radio" name="year" value="2"
+								id="word1">1年</span> 
+								
+								<input type="radio" name="year" value="2"
 								id="year2" <c:if test="${workDealInfo.year==2}">checked</c:if>><span
 								id="word2">2年 </span>
 								
@@ -1253,9 +1297,19 @@ var selected = false;
 								
 								<input type="radio" name="year" value="4"
 								id="year4" <c:if test="${workDealInfo.year==4}">checked</c:if>><span
-								id="word4">4年</span><input type="radio" name="year" value="5"
+								id="word4">4年</span>
+								
+								<input type="radio" name="year" value="5"
 								id="year5" <c:if test="${workDealInfo.year==5}">checked</c:if>><span
 								id="word5">5年</span></td>
+								
+							<td colspan="1" style="display: none" id="supportDate">
+								<input class="input-medium Wdate" type="text"
+							required="required" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});"
+							 maxlength="20" readonly="readonly"
+							name="expirationDate" id="expirationDate"/>
+							</td>
+								
 
 						</tr>
 					</tbody>

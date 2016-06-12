@@ -521,6 +521,17 @@
 					</div></td>
 			</tr>
 			
+			
+			<tr>
+					<td><div class="control-group">
+							<label class="control-label">支持指定截止日期:</label>
+							<div class="controls">
+								<input type="radio"  name="isSupportExpirationDate" <c:if test="${configChargeAgent.isSupportExpirationDate==1 }">checked="checked"</c:if> value="1" />是
+								<input type="radio"  name="isSupportExpirationDate" <c:if test="${configChargeAgent.isSupportExpirationDate!=1 }">checked="checked"</c:if> value="0" />否
+							</div>
+						</div></td>
+				</tr>
+			
 
 			<c:if test="${id!=null && configChargeAgent.tempStyle!=1 }">
 				<tr>

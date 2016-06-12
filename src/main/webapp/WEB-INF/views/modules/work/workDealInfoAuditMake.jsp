@@ -10,7 +10,15 @@
 <script type="text/javascript">
 	var sn;
 	var ukeyadmin = null;
-	var baseDay = parseInt("${workDealInfo.year*365+workDealInfo.lastDays  }");
+	var baseDay = 0;
+	
+	if(${validiteDays==null}){
+		baseDay = parseInt("${workDealInfo.year*365+workDealInfo.lastDays  }");	
+	}else{
+		baseDay = parseInt("${validiteDays}");
+	}
+	
+	
 	$(document).ready(function() {
 		//itrusukeyadmin.CAB,检测KEY序列号
 		var urlArray = new Array();
@@ -23,6 +31,17 @@
 			$("#provider").append("<option value='1'>" + idx + "</option>");
 		});
 		checkKeyGene();
+		
+		
+		
+		if(${addCertDays!=null}){
+			$("#addCertDays").val(${addCertDays});
+			$("#donate").hide();
+			$("#addCertDays").hide();
+			$("#expirationDate").show();
+		}
+		
+		
 	});
 
 	
@@ -468,9 +487,16 @@
 			</thead>
 			<tr>
 				<td>证书有效期</td>
-				<td>${workDealInfo.year*365+workDealInfo.lastDays }&nbsp;赠送<input
+				<td><c:if test="${workDealInfo.year==0&&workDealInfo.expirationDate==null }">${workDealInfo.year*365+workDealInfo.lastDays}</c:if>
+					<c:if test="${workDealInfo.year!=0&&workDealInfo.expirationDate==null }">${workDealInfo.year*365+workDealInfo.lastDays}</c:if>
+					<c:if test="${workDealInfo.expirationDate!=null }">${validiteDays}</c:if>
+				&nbsp;
+				<span id="donate">赠送</span><input
 					type="text" style="width: 100px" id="addCertDays"
 					class="num required" onblur="addCertDaysCheck()" value="0" onkeyup="value=value.replace(/[^\- \d.]/g,'')" >天
+				&nbsp; &nbsp; &nbsp; &nbsp;	
+					<span id="expirationDate" style="display: none">指定截止日期为:<fmt:formatDate pattern="yyyy-MM-dd" value="${expirationDate}"/></span>
+					
 					<span id="negative"></span>
 				</td>
 			</tr>
