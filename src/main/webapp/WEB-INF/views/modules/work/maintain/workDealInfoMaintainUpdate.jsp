@@ -143,8 +143,7 @@
 									
 									
 									var agentBountId = $("#boundId").val();
-									/* var url = "${ctx}/work/workDealInfo/showYear?lable=${workDealInfo.configProduct.productLabel}&productName=${workDealInfo.configProduct.productName}&app=${workDealInfo.configApp.id}&infoType=${empty update?'':1}&_="
-											+ new Date().getTime(); */
+									
 									
 									var url = "${ctx}/work/workDealInfo/showYearNew?boundId="+agentBountId+"&infoType=1&_="+new Date().getTime();
 											
@@ -520,7 +519,73 @@
 	function setYearByBoundId(){
 		var boundId = $("#agentDetailId").val();
 		$("#boundId").val(boundId);
-		/* showYear(); */
+		
+		var agentBountId = $("#boundId").val();
+		
+		
+		var url = "${ctx}/work/workDealInfo/showYearNew?boundId="+agentBountId+"&infoType=1&_="+new Date().getTime();
+				
+		$.getJSON(url, function(data) {
+			if (data.year1) {
+				$("#year1").show();
+				$("#word1").show();
+			} else {
+				$("#year1").hide();
+				$("#word1").hide();
+			}
+			if (data.year2) {
+				$("#year2").show();
+				$("#word2").show();
+			} else {
+				$("#year2").hide();
+				$("#word2").hide();
+			}
+			if (data.year3) {
+				$("#year3").show();
+				$("#word3").show();
+			} else {
+				$("#year3").hide();
+				$("#word3").hide();
+			}
+			if (data.year4) {
+				$("#year4").show();
+				$("#word4").show();
+			} else {
+				$("#year4").hide();
+				$("#word4").hide();
+			}
+			if (data.year5) {
+				$("#year5").show();
+				$("#word5").show();
+			} else {
+				$("#year5").hide();
+				$("#word5").hide();
+			}
+			
+			
+			//经信委
+			if(data.support){
+				$("#supportDate").show();
+			}
+			if(!data.support){
+				$("#supportDate").hide();
+			}
+			
+			
+			var boundId =  $("#agentDetailId").val(); 
+			var url="${ctx}/work/workDealInfo/checkSurplusNum?boundId="+boundId+"&_="+new Date().getTime();
+			$.getJSON(url,function(data){
+				$("#surplusNum").val(data.surplusNum);
+				if($("#surplusNum").val()==0 && $("#agentId").val()!=1){
+					top.$.jBox.tip("此计费策略模版剩余数量为零，不能进行业务办理！");
+					$("#agentMes").show();
+				}else{
+					$("#agentMes").hide();
+				}
+			});
+		});
+		
+		
 	} 
 	
 	
