@@ -186,6 +186,15 @@
 										}
 										
 										
+										//经信委
+										if(data.support){
+											$("#supportDate").show();
+										}
+										if(!data.support){
+											$("#supportDate").hide();
+										}
+										
+										
 										var boundId =  $("#agentDetailId").val(); 
 										var url="${ctx}/work/workDealInfo/checkSurplusNum?boundId="+boundId+"&_="+new Date().getTime();
 										$.getJSON(url,function(data){
@@ -321,6 +330,24 @@
 						
 						
 						
+						
+						//经信委
+						$("input[name='year']").change(function(){
+							$("#expirationDate").val("");						
+						});
+						
+						$("#expirationDate").blur(function(){
+							
+							$("#year1").removeAttr("checked");
+							$("#year2").removeAttr("checked");
+							$("#year3").removeAttr("checked");
+							$("#year4").removeAttr("checked");
+							$("#year5").removeAttr("checked");
+						});
+						
+						
+						
+						
 
 					});
 	Array.prototype.unique = function() {
@@ -401,15 +428,26 @@
 								}
 						     }
 						 });
-						if(!isCheck){
+						if(!isCheck && ($("#expirationDate").val() == null || $("#expirationDate").val() == "")){
 							top.$.jBox.tip("请选择您想要更新的年限！");
 						}else{
+						if($("#expirationDate").val() != null&&$("#expirationDate").val() != ""){
+							top.$.jBox.confirm("指定到期时间为&nbsp;'&nbsp;<b>"+$("#expirationDate").val()+"</b>&nbsp;'&nbsp;年吗？",'系统提示',function(v,h,f){
+								if(v=='ok'){
+									$("#inputForm").submit(); 
+								}
+							},{buttonsFocus:1});
+							top.$('.jbox-body .jbox-icon').css('top','55px');
+						}	
+						if(isCheck){
 							top.$.jBox.confirm("更新年限确认为&nbsp;'&nbsp;<b>"+year+"</b>&nbsp;'&nbsp;年吗？",'系统提示',function(v,h,f){
 								if(v=='ok'){
 									$("#inputForm").submit(); 
 								}
 							},{buttonsFocus:1});
 							top.$('.jbox-body .jbox-icon').css('top','55px');
+						}
+							
 						}
 					}
 				});
@@ -428,15 +466,25 @@
 					}
 			     }
 			 });
-			if(!isCheck){
+			if(!isCheck && ($("#expirationDate").val() == null || $("#expirationDate").val() == "")){
 				top.$.jBox.tip("请选择您想要更新的年限！");
 			}else{
-				top.$.jBox.confirm("更新年限确认为&nbsp;'&nbsp;<b>"+year+"</b>&nbsp;'&nbsp;年吗？",'系统提示',function(v,h,f){
-					if(v=='ok'){
-						$("#inputForm").submit(); 
-					}
-				},{buttonsFocus:1});
-				top.$('.jbox-body .jbox-icon').css('top','55px');
+				if($("#expirationDate").val() != null&&$("#expirationDate").val() != ""){
+					top.$.jBox.confirm("指定到期时间为&nbsp;'&nbsp;<b>"+$("#expirationDate").val()+"</b>&nbsp;'&nbsp;吗？",'系统提示',function(v,h,f){
+						if(v=='ok'){
+							$("#inputForm").submit(); 
+						}
+					},{buttonsFocus:1});
+					top.$('.jbox-body .jbox-icon').css('top','55px');
+				}	
+				if(isCheck){
+					top.$.jBox.confirm("更新年限确认为&nbsp;'&nbsp;<b>"+year+"</b>&nbsp;'&nbsp;年吗？",'系统提示',function(v,h,f){
+						if(v=='ok'){
+							$("#inputForm").submit(); 
+						}
+					},{buttonsFocus:1});
+					top.$('.jbox-body .jbox-icon').css('top','55px');
+				}
 			}
 			
 		}
@@ -614,7 +662,7 @@
 				<table class="table table-striped table-bordered table-condensed">
 					<tbody>
 						<tr>
-							<th colspan="6" style="font-size: 20px;">基本信息</th>
+							<th colspan="7" style="font-size: 20px;">基本信息</th>
 						</tr>
 						<tr>
 							<th><span class="prompt" style="color: red; display: none;">*</span>应用名称：</th>
@@ -672,7 +720,7 @@
 
 							<th style="width: 100px;"><span class="prompt"
 								style="color: red; display: none;">*</span>申请年数：</th>
-							<td>
+							<td colspan="1">
 								<input type="radio" name="year" value="1" id="year1">
 								<span id="word1">1年</span>
 								<input type="radio" name="year" value="2" id="year2">
@@ -685,6 +733,14 @@
 								<span id="word4">4年</span>
 								<input type="radio" name="year" value="5" id="year5">
 								<span id="word5">5年</span>
+							</td>
+							
+							
+							<td colspan="1" style="display: none" id="supportDate">
+								<input class="input-medium Wdate" type="text"
+							required="required" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});"
+							 maxlength="20" readonly="readonly"
+							name="expirationDate" id="expirationDate"/>
 							</td>
 
 						</tr>
