@@ -3403,13 +3403,14 @@ public class WorkDealInfoController extends BaseController {
 		workDealInfo.setDealInfoType(WorkDealInfoType.TYPE_ADD_CERT);
 		workDealInfo.setDealInfoType1(dealInfType1);
 
-		if (year == null && expirationDate !=null) {
-			workDealInfo.setYear(0);
-		    workDealInfo.setExpirationDate(expirationDate);
-		} else {
-			workDealInfo.setYear(year);
-			workDealInfo.setExpirationDate(null);
+		//经信委
+		if(year!=null){
+				workDealInfo.setYear(year);
+		}else{
+				workDealInfo.setYear(StringHelper.getDvalueYear(expirationDate));
+				workDealInfo.setExpirationDate(expirationDate);
 		}
+		
 		workDealInfo.setClassifying(classifying);
 		workDealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_CERT_TEMPED);
 		workDealInfo.setCreateBy(UserUtils.getUser());
@@ -7998,13 +7999,14 @@ public class WorkDealInfoController extends BaseController {
 			workDealInfo.setDealInfoType(WorkDealInfoType.TYPE_ADD_CERT);
 			workDealInfo.setDealInfoType1(dealInfType1);
 
-			if (year == null && expirationDate!=null) {
-				workDealInfo.setYear(0);
-				workDealInfo.setExpirationDate(expirationDate);
-			} else {
-				workDealInfo.setYear(year);
-				workDealInfo.setExpirationDate(null);
+			//经信委
+			if(year!=null){
+					workDealInfo.setYear(year);
+			}else{
+					workDealInfo.setYear(StringHelper.getDvalueYear(expirationDate));
+					workDealInfo.setExpirationDate(expirationDate);
 			}
+			
 			workDealInfo.setClassifying(classifying);
 			workDealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_ENTRY_SUCCESS);
 			workDealInfo.setCreateBy(UserUtils.getUser());
