@@ -38,6 +38,49 @@ public class StringHelper{
     private StringHelper(){
 
     }
+    
+    
+    
+    /*
+     *得到指定日期和当前日期之间相差多少天 
+     * 
+     * 
+     */
+    public static Integer getDvalueDay(Date currentDate,Date expirationDate){
+    	try {
+    		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");  
+       	 currentDate=sdf.parse(sdf.format(currentDate));  
+       	 expirationDate=sdf.parse(sdf.format(expirationDate));  
+            Calendar cal = Calendar.getInstance();    
+            cal.setTime(currentDate);    
+            long time1 = cal.getTimeInMillis();                 
+            cal.setTime(expirationDate);    
+            long time2 = cal.getTimeInMillis();         
+       	
+       	
+       	return Integer.parseInt(String.valueOf((time2-time1)/(3600*24*1000)));	
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    	
+    	return 0;
+    }
+    
+    
+    /*
+     *得到指定日期和当前日期之间相差多少年 
+     * 小于365天按一年算
+     * param expirationDate 制定日期
+     */
+    public static Integer getDvalueYear(Date expirationDate){
+    	
+    	Date currentDate = new Date();
+    	Integer days = getDvalueDay(currentDate,expirationDate);
+    	
+    	return (days / 365) + ((days % 365)>0?1:0);
+    }
+    
+    
 
     /**
      * 得到系统当前时间
