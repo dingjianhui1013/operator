@@ -70,6 +70,7 @@ import com.itrus.ca.common.utils.AdminPinEncKey;
 import com.itrus.ca.common.utils.DateUtils;
 import com.itrus.ca.common.utils.PayinfoUtil;
 import com.itrus.ca.common.utils.RaAccountUtil;
+import com.itrus.ca.common.utils.StringHelper;
 import com.itrus.ca.common.utils.excel.ExportExcel;
 import com.itrus.ca.common.web.BaseController;
 import com.itrus.ca.modules.constant.ProductType;
@@ -2535,7 +2536,8 @@ public class WorkDealInfoController extends BaseController {
 	@RequiresPermissions("work:workDealInfo:edit")
 	@RequestMapping(value = "save")
 	public String save(Model model, RedirectAttributes redirectAttributes, Long appId, String product,
-			Integer dealInfoType, Integer year, Long workDealInfoId, Integer yar, Long companyId, String companyName,
+			Integer dealInfoType, Integer year,Date expirationDate,  //经信委到期时间 和年限二选一 
+			Long workDealInfoId, Integer yar, Long companyId, String companyName,
 			String companyType, String organizationNumber, String orgExpirationTime, String selectLv,
 			String comCertificateType, String comCertficateNumber, String comCertficateTime, String legalName,
 			String s_province, String s_city, String s_county, String address, String companyMobile, String remarks,
@@ -2648,11 +2650,18 @@ public class WorkDealInfoController extends BaseController {
 		}
 		workDealInfo.setConfigChargeAgentId(bound.getAgent().getId());
 		workDealInfo.setDealInfoType(WorkDealInfoType.TYPE_ADD_CERT);
-		if (year == null) {
-			workDealInfo.setYear(0);
-		} else {
+		
+		//经信委
+		if(year!=null){
 			workDealInfo.setYear(year);
+		}else{
+			workDealInfo.setYear(StringHelper.getDvalueYear(expirationDate));
+			workDealInfo.setExpirationDate(expirationDate);
 		}
+		
+		
+		
+		
 		workDealInfo.setClassifying(classifying);
 		workDealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_ENTRY_SUCCESS);
 		workDealInfo.setCreateBy(UserUtils.getUser());
@@ -3296,7 +3305,8 @@ public class WorkDealInfoController extends BaseController {
 	@RequiresPermissions("work:workDealInfo:edit")
 	@RequestMapping(value = "temporarySave")
 	public String temporarySave(Model model, Long workDealInfoId, RedirectAttributes redirectAttributes, Long appId,
-			String product, Integer dealInfType1, Integer year, Integer yar, Long companyId, String companyName,
+			String product, Integer dealInfType1, Integer year, Date expirationDate, //到期时间  和年限二选一
+			Integer yar, Long companyId, String companyName,
 			String companyType, String organizationNumber, String orgExpirationTime, String selectLv,
 			String comCertificateType, String comCertficateNumber, String comCertficateTime, String legalName,
 			String s_province, String s_city, String s_county, String address, String companyMobile, String remarks,
@@ -3393,10 +3403,12 @@ public class WorkDealInfoController extends BaseController {
 		workDealInfo.setDealInfoType(WorkDealInfoType.TYPE_ADD_CERT);
 		workDealInfo.setDealInfoType1(dealInfType1);
 
-		if (year == null) {
+		if (year == null && expirationDate !=null) {
 			workDealInfo.setYear(0);
+		    workDealInfo.setExpirationDate(expirationDate);
 		} else {
 			workDealInfo.setYear(year);
+			workDealInfo.setExpirationDate(null);
 		}
 		workDealInfo.setClassifying(classifying);
 		workDealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_CERT_TEMPED);
@@ -7805,6 +7817,18 @@ public class WorkDealInfoController extends BaseController {
 			json.put("bank", bound.getAgent().getChargeMethodBank());
 			json.put("money", bound.getAgent().getChargeMethodMoney());
 			
+			if(bound.getAgent().getIsSupportExpirationDate()==null){
+				json.put("support", false);
+			}else{
+				if(bound.getAgent().getIsSupportExpirationDate()==1){
+					json.put("support", true);
+				}else{
+					json.put("support", false);	
+				}
+				
+			}
+			
+			
 			if (bound.getAgent().getSurplusUpdateNum()==null) {
 				json.put("avaNum", 0);
 			}else{
@@ -7869,7 +7893,8 @@ public class WorkDealInfoController extends BaseController {
 	@RequestMapping(value = "manySave")
 	@ResponseBody
 	public String manySave(Model model, Long workDealInfoId, RedirectAttributes redirectAttributes, Long appId,
-			String product, Integer dealInfType1, Integer year, Integer yar, Long companyId, String companyName,
+			String product, Integer dealInfType1, Integer year,Date expirationDate,   //到期时间  和年限二选一 
+			Integer yar, Long companyId, String companyName,
 			String companyType, String organizationNumber, String orgExpirationTime, String selectLv,
 			String comCertificateType, String comCertficateNumber, String comCertficateTime, String legalName,
 			String s_province, String s_city, String s_county, String address, String companyMobile, String remarks,
@@ -7973,10 +7998,12 @@ public class WorkDealInfoController extends BaseController {
 			workDealInfo.setDealInfoType(WorkDealInfoType.TYPE_ADD_CERT);
 			workDealInfo.setDealInfoType1(dealInfType1);
 
-			if (year == null) {
+			if (year == null && expirationDate!=null) {
 				workDealInfo.setYear(0);
+				workDealInfo.setExpirationDate(expirationDate);
 			} else {
 				workDealInfo.setYear(year);
+				workDealInfo.setExpirationDate(null);
 			}
 			workDealInfo.setClassifying(classifying);
 			workDealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_ENTRY_SUCCESS);

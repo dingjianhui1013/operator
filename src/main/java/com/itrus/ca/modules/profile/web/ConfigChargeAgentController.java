@@ -628,7 +628,7 @@ public class ConfigChargeAgentController extends BaseController {
 			Double[] updateMoney,Double changeMoney,Double openAccountMoney,
 			Double[] trustDeviceMoney,String tempName,String tempStyle,
 			Integer configureNum,Integer configureUpdateNum,
-			Date htStartTime,Date htEndTime
+			Date htStartTime,Date htEndTime,Integer isSupportExpirationDate
 			
 			) {
 		
@@ -734,29 +734,6 @@ public class ConfigChargeAgentController extends BaseController {
 					configChargeAgent.setHtEndTime(htEndTime);
 			}
 			
-			
-			
-			
-			
-//		}
-//		else{
-//			configChargeAgent.setChargeMethodPos(false);
-//			configChargeAgent.setChargeMethodMoney(false);
-//			configChargeAgent.setChargeMethodBank(false);
-//
-//		}
-
-//		ConfigProduct product = new ConfigProduct();
-//
-//		product.setId(productId);
-//		configChargeAgent.setConfigProduct(product);
-//		ConfigApp configApp = new ConfigApp();
-//		configApp.setId(appId);
-//		ConfigCommercialAgent configCommercialAgent= configAgentAppRelationService.findAgentByApp(configApp);
-//		configChargeAgent.setConfigCommercialAgent(configCommercialAgent);
-//
-//		configChargeAgent.setConfigApp(configApp);
-		
 		String detail = "";
 		if(configChargeAgentId==null){
 			detail = "添加应用"+configChargeAgent.getTempName()+"下的计费策略成功";
@@ -764,7 +741,8 @@ public class ConfigChargeAgentController extends BaseController {
 			detail = "更新应用"+configChargeAgent.getTempName()+"下的计费策略成功";
 		}
 		
-		
+		//经信委
+		configChargeAgent.setIsSupportExpirationDate(isSupportExpirationDate);
 		
 		configChargeAgentService.save(configChargeAgent);
 		
@@ -837,17 +815,12 @@ public class ConfigChargeAgentController extends BaseController {
 				continue;
 			}
 			ConfigChargeAgentDetail configChargeAgentDetail = new ConfigChargeAgentDetail();
-			/*if(year==3){
-				configChargeAgentDetail.setChargeYear(4);
-			}else if(year == 4){
-				configChargeAgentDetail.setChargeYear(5);
-			}else{*/
+			
 				configChargeAgentDetail.setChargeYear(year);
-			/*}*/
+		
 			configChargeAgentDetail.setConfigChargeAgent(configChargeAgent);
 			configChargeAgentDetail.setMoney(double1);
 			configChargeAgentDetail.setWorkType(WorkType.TYPE_ADD);
-			//configChargeAgentDetail.setProductType(productLabel);
 			configChargeAgentDetailService.save(configChargeAgentDetail);
 			
 			ConfigChargeAgentDetailHistory agentDetailHistory = new ConfigChargeAgentDetailHistory();

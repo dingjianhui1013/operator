@@ -34,6 +34,7 @@ import com.itrus.ca.common.config.Global;
 import com.itrus.ca.common.persistence.Page;
 import com.itrus.ca.common.utils.PayinfoUtil;
 import com.itrus.ca.common.utils.RaAccountUtil;
+import com.itrus.ca.common.utils.StringHelper;
 import com.itrus.ca.common.web.BaseController;
 import com.itrus.ca.modules.constant.ProductType;
 import com.itrus.ca.modules.constant.WorkDealInfoStatus;
@@ -1307,6 +1308,13 @@ public class WorkDealInfoAuditController extends BaseController {
 		workDealInfo.setAttestationUser(UserUtils.getUser());
 		workDealInfo.setAttestationUserDate(new Date());
 		workDealInfoService.save(workDealInfo);
+		
+		
+		if(workDealInfo.getExpirationDate()!=null){
+			model.addAttribute("expirationDate", workDealInfo.getExpirationDate());
+			model.addAttribute("addCertDays",StringHelper.getDvalueDay(new Date(), workDealInfo.getExpirationDate())-workDealInfo.getYear()*365);
+			model.addAttribute("validiteDays",StringHelper.getDvalueDay(new Date(), workDealInfo.getExpirationDate()));
+		}
 
 		model.addAttribute("pt", ProductType.productTypeStrMap);
 		model.addAttribute("wdiType", WorkDealInfoType.WorkDealInfoTypeMap);

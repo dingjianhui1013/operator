@@ -58,6 +58,9 @@ public class ConfigChargeAgent implements java.io.Serializable {
 	private Integer reserveNum;//预留数量
 	private Integer reserveUpdateNum;//预留更新数量
 	
+	//16.6.11
+	private Integer isSupportExpirationDate;//是否支持指定证书到期时间
+	
 	private String isBind;
 
 	// Constructors
@@ -332,15 +335,29 @@ public class ConfigChargeAgent implements java.io.Serializable {
 	public void setReserveUpdateNum(Integer reserveUpdateNum) {
 		this.reserveUpdateNum = reserveUpdateNum;
 	}
+	
+	
+	
+	
+	@Column(name = "is_support_expiration_date")
+	public void setIsSupportExpirationDate(Integer isSupportExpirationDate) {
+		this.isSupportExpirationDate = isSupportExpirationDate;
+	}
+
+	public void setIsBind(String isBind) {
+		this.isBind = isBind;
+	}
 
 	@Transient
 	public String getIsBind() {
 		return isBind;
 	}
 
-	public void setIsBind(String isBind) {
-		this.isBind = isBind;
+	public Integer getIsSupportExpirationDate() {
+		return isSupportExpirationDate;
 	}
+
+	
 
 	
 }

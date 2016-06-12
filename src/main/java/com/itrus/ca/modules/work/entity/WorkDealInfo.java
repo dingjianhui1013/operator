@@ -61,6 +61,12 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 	private Integer dealInfoType3;
 	private String dealInfoStatus;
 	private Integer year;
+	
+	//2016.06.06  具体到期时间 经信委
+	private Date expirationDate;
+	
+	
+	
 	private ConfigProduct configProduct;
 	private String certSn;
 	private String keySn;
@@ -822,6 +828,15 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 
 	public void setSelfImage(SelfImage selfImage) {
 		this.selfImage = selfImage;  
+	}
+
+	@Column(name="expiration_date")
+	public Date getExpirationDate() {
+		return expirationDate;
+	}
+
+	public void setExpirationDate(Date expirationDate) {
+		this.expirationDate = expirationDate;
 	}
 
 	
