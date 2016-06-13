@@ -182,6 +182,15 @@
 										}
 										
 										
+										//经信委
+										if(data.support){
+											$("#supportDate").show();
+										}
+										if(!data.support){
+											$("#supportDate").hide();
+										}
+										
+										
 										var boundId =  $("#agentDetailId").val(); 
 										var url="${ctx}/work/workDealInfo/checkSurplusNum?boundId="+boundId+"&_="+new Date().getTime();
 										$.getJSON(url,function(data){
@@ -264,6 +273,7 @@
 										 
 										 if(item.agentId!=null){
 											 $("#boundId").val(item.agentId);
+											 showYear();
 											 styleHtml +="<option value='"+item.agentId+"'>" + item.agentName + "</option>"; 
 										 }
 											
@@ -303,6 +313,7 @@
 									$.each(styleList,function(i,item){
 										if(i==0){
 											$("#boundId").val(item.id);
+											showYear();
 										}
 										styleHtml +="<option value='"+item.id+"'>" + item.name + "</option>";
 									});
@@ -313,6 +324,23 @@
 								
 							}
 							
+						});
+						
+						
+						
+						
+						//经信委
+						$("input[name='year']").change(function(){
+							$("#expirationDate").val("");						
+						});
+						
+						$("#expirationDate").blur(function(){
+							
+							$("#year1").removeAttr("checked");
+							$("#year2").removeAttr("checked");
+							$("#year3").removeAttr("checked");
+							$("#year4").removeAttr("checked");
+							$("#year5").removeAttr("checked");
 						});
 						
 
@@ -394,15 +422,25 @@
 								}
 						     }
 						 });
-						if(!isCheck){
+						if(!isCheck && ($("#expirationDate").val() == null || $("#expirationDate").val() == "")){
 							top.$.jBox.tip("请选择您想要更新的年限！");
 						}else{
-							top.$.jBox.confirm("更新年限确认为&nbsp;'&nbsp;<b>"+year+"</b>&nbsp;'&nbsp;年吗？",'系统提示',function(v,h,f){
-								if(v=='ok'){
-									$("#inputForm").submit(); 
-								}
-							},{buttonsFocus:1});
-							top.$('.jbox-body .jbox-icon').css('top','55px');
+							if($("#expirationDate").val() != null&&$("#expirationDate").val() != ""){
+								top.$.jBox.confirm("指定到期时间为&nbsp;'&nbsp;<b>"+$("#expirationDate").val()+"</b>&nbsp;'&nbsp;吗？",'系统提示',function(v,h,f){
+									if(v=='ok'){
+										$("#inputForm").submit(); 
+									}
+								},{buttonsFocus:1});
+								top.$('.jbox-body .jbox-icon').css('top','55px');
+							}	
+							if(isCheck){
+								top.$.jBox.confirm("更新年限确认为&nbsp;'&nbsp;<b>"+year+"</b>&nbsp;'&nbsp;年吗？",'系统提示',function(v,h,f){
+									if(v=='ok'){
+										$("#inputForm").submit(); 
+									}
+								},{buttonsFocus:1});
+								top.$('.jbox-body .jbox-icon').css('top','55px');
+							}
 						}
 					}
 				});
@@ -421,15 +459,25 @@
 					}
 			     }
 			 });
-			if(!isCheck){
+			if(!isCheck && ($("#expirationDate").val() == null || $("#expirationDate").val() == "")){
 				top.$.jBox.tip("请选择您想要更新的年限！");
 			}else{
-				top.$.jBox.confirm("更新年限确认为&nbsp;'&nbsp;<b>"+year+"</b>&nbsp;'&nbsp;年吗？",'系统提示',function(v,h,f){
-					if(v=='ok'){
-						$("#inputForm").submit(); 
-					}
-				},{buttonsFocus:1});
-				top.$('.jbox-body .jbox-icon').css('top','55px');
+				if($("#expirationDate").val() != null&&$("#expirationDate").val() != ""){
+					top.$.jBox.confirm("指定到期时间为&nbsp;'&nbsp;<b>"+$("#expirationDate").val()+"</b>&nbsp;'&nbsp;吗？",'系统提示',function(v,h,f){
+						if(v=='ok'){
+							$("#inputForm").submit(); 
+						}
+					},{buttonsFocus:1});
+					top.$('.jbox-body .jbox-icon').css('top','55px');
+				}	
+				if(isCheck){
+					top.$.jBox.confirm("更新年限确认为&nbsp;'&nbsp;<b>"+year+"</b>&nbsp;'&nbsp;年吗？",'系统提示',function(v,h,f){
+						if(v=='ok'){
+							$("#inputForm").submit(); 
+						}
+					},{buttonsFocus:1});
+					top.$('.jbox-body .jbox-icon').css('top','55px');
+				}
 			}
 			
 		}
@@ -460,6 +508,76 @@
 		$("#boundId").val(boundId);
 		showYear();
 	} 
+	
+	
+	
+	function showYear(){
+		var agentBountId = $("#boundId").val();
+		var url = "${ctx}/work/workDealInfo/showYearNew?boundId="+agentBountId+"&infoType=1&_="+new Date().getTime();
+				
+		$.getJSON(url, function(data) {
+			if (data.year1) {
+				$("#year1").show();
+				$("#word1").show();
+			} else {
+				$("#year1").hide();
+				$("#word1").hide();
+			}
+			if (data.year2) {
+				$("#year2").show();
+				$("#word2").show();
+			} else {
+				$("#year2").hide();
+				$("#word2").hide();
+			}
+			if (data.year3) {
+				$("#year3").show();
+				$("#word3").show();
+			} else {
+				$("#year3").hide();
+				$("#word3").hide();
+			}
+			if (data.year4) {
+				$("#year4").show();
+				$("#word4").show();
+			} else {
+				$("#year4").hide();
+				$("#word4").hide();
+			}
+			if (data.year5) {
+				$("#year5").show();
+				$("#word5").show();
+			} else {
+				$("#year5").hide();
+				$("#word5").hide();
+			}
+			
+			
+			//经信委
+			if(data.support){
+				$("#supportDate").show();
+			}
+			if(!data.support){
+				$("#supportDate").hide();
+			}
+			
+			
+			var boundId =  $("#agentDetailId").val(); 
+			var url="${ctx}/work/workDealInfo/checkSurplusNum?boundId="+boundId+"&_="+new Date().getTime();
+			$.getJSON(url,function(data){
+				$("#surplusNum").val(data.surplusNum);
+				if($("#surplusNum").val()==0 && $("#agentId").val()!=1){
+					top.$.jBox.tip("此计费策略模版剩余数量为零，不能进行业务办理！");
+					$("#agentMes").show();
+				}else{
+					$("#agentMes").hide();
+				}
+			});
+		});
+	
+	}
+	
+	
 	
 	
 	function changeDealInfoType(){
@@ -567,7 +685,7 @@
 				<table class="table table-striped table-bordered table-condensed">
 					<tbody>
 						<tr>
-							<th colspan="6" style="font-size: 20px;">基本信息</th>
+							<th colspan="7" style="font-size: 20px;">基本信息</th>
 						</tr>
 						<tr>
 							<th><span class="prompt" style="color: red; display: none;">*</span>应用名称：</th>
@@ -628,7 +746,7 @@
 
 							<th style="width: 100px;"><span class="prompt"
 								style="color: red; display: none;">*</span>申请年数：</th>
-							<td>
+							<td colspan="1">
 								<input type="radio" name="year" value="1" id="year1">
 								<span id="word1">1年</span>
 								<input type="radio" name="year" value="2" id="year2">
@@ -640,6 +758,15 @@
 								<input type="radio" name="year" value="5" id="year5">
 								<span id="word5">5年</span>
 							</td>
+							
+							
+							<td colspan="1" style="display: none" id="supportDate">
+								<input class="input-medium Wdate" type="text"
+							required="required" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});"
+							 maxlength="20" readonly="readonly"
+							name="expirationDate" id="expirationDate"/>
+							</td>
+							
 
 						</tr>
 						<c:if test="${reissue==2}">

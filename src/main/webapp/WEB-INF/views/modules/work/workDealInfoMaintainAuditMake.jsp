@@ -33,6 +33,15 @@
 		if("${workDealInfo.dealInfoType}" == "0" || "${workDealInfo.dealInfoType1}" == "2" || "${workDealInfo.dealInfoType1}" == "3" ){
 			checkKeyGene();
 		}
+		
+		//经信委
+		if(${addCertDays!=null}){
+			$("#addCertDays").val(${addCertDays});
+			$("#donate").hide();
+			$("#addCertDays").hide();
+			$("#expirationDate").show();
+		}
+		
 	});
 	
 	
@@ -491,9 +500,14 @@
 			</thead>
 			<tr>
 				<td>证书有效期</td>
-				<td>${workDealInfo.year*365+workDealInfo.lastDays }&nbsp;赠送<input
+				<td><c:if test="${workDealInfo.expirationDate==null }">${workDealInfo.year*365+workDealInfo.lastDays }</c:if>
+				<c:if test="${workDealInfo.expirationDate!=null }">${validiteDays}</c:if>
+				&nbsp;
+				<span id="donate">赠送</span><input
 					type="text" style="width: 100px" id="addCertDays"
 					class="num required" onblur="addCertDaysCheck()" value="0" onkeyup="value=value.replace(/[^\- \d.]/g,'')">天
+					&nbsp; &nbsp; &nbsp; &nbsp;	
+					<span id="expirationDate" style="display: none">指定截止日期为:<fmt:formatDate pattern="yyyy-MM-dd" value="${expirationDate}"/></span>
 					<span id="negative"></span>
 				</td>
 			</tr>

@@ -33,7 +33,7 @@
 		checkKeyGene();
 		
 		
-		
+		//经信委
 		if(${addCertDays!=null}){
 			$("#addCertDays").val(${addCertDays});
 			$("#donate").hide();
