@@ -685,7 +685,7 @@
 				<table class="table table-striped table-bordered table-condensed">
 					<tbody>
 						<tr>
-							<th colspan="7" style="font-size: 20px;">基本信息</th>
+							<th colspan="6" style="font-size: 20px;">基本信息</th>
 						</tr>
 						<tr>
 							<th><span class="prompt" style="color: red; display: none;">*</span>应用名称：</th>
@@ -746,7 +746,7 @@
 
 							<th style="width: 100px;"><span class="prompt"
 								style="color: red; display: none;">*</span>申请年数：</th>
-							<td colspan="1">
+							<td>
 								<input type="radio" name="year" value="1" id="year1">
 								<span id="word1">1年</span>
 								<input type="radio" name="year" value="2" id="year2">
@@ -758,17 +758,25 @@
 								<input type="radio" name="year" value="5" id="year5">
 								<span id="word5">5年</span>
 							</td>
-							
-							
-							<td colspan="1" style="display: none" id="supportDate">
+						
+
+						</tr>
+						
+						<tr  id="supportDate" style="display: none">
+						<th></th>
+						<td></td>
+						<th></th>
+						<td></td>
+						<th>选择截止日期：</th>
+						<td>
 								<input class="input-medium Wdate" type="text"
 							required="required" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});"
 							 maxlength="20" readonly="readonly"
 							name="expirationDate" id="expirationDate"/>
 							</td>
-							
-
+						
 						</tr>
+						
 						<c:if test="${reissue==2}">
 						<tr id="manMade">
 							<th>人为损坏：</th>

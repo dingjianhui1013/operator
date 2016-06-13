@@ -1159,7 +1159,7 @@ var selected = false;
 				<table class="table table-striped table-bordered table-condensed">
 					<tbody>
 						<tr>
-							<th colspan="7" style="font-size: 20px;"><span
+							<th colspan="6" style="font-size: 20px;"><span
 								class="prompt" style="color: red; display: none;">*</span>基本信息</th>
 						</tr>
 						<tr>
@@ -1203,7 +1203,7 @@ var selected = false;
 							<th style="width: 100px;"><span class="prompt"
 								style="color: red; display: none;">*</span>申请年数：</th>
 							
-							<td colspan="1">
+							<td>
 								<input type="radio" name="year" value="1" id="year1"
 								<c:if test="${empty workDealInfo.year}">checked</c:if>
 								<c:if test="${workDealInfo.year==1}">checked</c:if>><span
@@ -1225,15 +1225,28 @@ var selected = false;
 								id="year5" <c:if test="${workDealInfo.year==5}">checked</c:if>><span
 								id="word5">5年</span></td>
 								
-							<td colspan="1" style="display: none" id="supportDate">
+							
+								
+
+						</tr>
+						
+						
+						<tr  id="supportDate" style="display: none">
+						<th></th>
+						<td></td>
+						<th></th>
+						<td></td>
+						<th>选择截止日期：</th>
+						<td>
 								<input class="input-medium Wdate" type="text"
 							required="required" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});"
 							 maxlength="20" readonly="readonly"
 							name="expirationDate" id="expirationDate"/>
 							</td>
-								
-
+						
 						</tr>
+						
+						
 					</tbody>
 				</table>
 			</div>
