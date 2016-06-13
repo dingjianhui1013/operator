@@ -658,6 +658,17 @@ public class WorkDealInfoOperationController extends BaseController {
 			}
 		}
 		
+		
+		//经信委
+		if(workDealInfo.getExpirationDate()!=null){
+			model.addAttribute("expirationDate", workDealInfo.getExpirationDate());
+			model.addAttribute("addCertDays",StringHelper.getDvalueDay(new Date(), workDealInfo.getExpirationDate())-workDealInfo.getYear()*365);
+			model.addAttribute("validiteDays",StringHelper.getDvalueDay(new Date(), workDealInfo.getExpirationDate()));
+		}
+
+		
+		
+		
 		if (workDealInfo.getPrevId()!=null) {
 			//获取上一张证书的签名证书序列号
 			WorkDealInfo oldDealInfo = workDealInfoService.get(workDealInfo.getPrevId());
@@ -1963,7 +1974,7 @@ public class WorkDealInfoOperationController extends BaseController {
 		workDealInfo.setConfigProduct(configProduct);
 	
 		//经信委
-		if(year!=null){
+		if(year!=null&&expirationDate==null){
 				workDealInfo.setYear(year);
 		}else{
 				workDealInfo.setYear(StringHelper.getDvalueYear(expirationDate));
