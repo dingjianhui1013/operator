@@ -33,6 +33,7 @@ import com.itrus.ca.common.persistence.BaseEntity;
 import com.itrus.ca.common.persistence.Page;
 import com.itrus.ca.common.utils.PayinfoUtil;
 import com.itrus.ca.common.utils.RaAccountUtil;
+import com.itrus.ca.common.utils.StringHelper;
 import com.itrus.ca.common.web.BaseController;
 import com.itrus.ca.modules.constant.ProductType;
 import com.itrus.ca.modules.constant.WorkDealInfoStatus;
@@ -612,6 +613,16 @@ public class WorkPayInfoController extends BaseController {
 			}
 
 		}
+		
+		
+		//经信委
+				if(workDealInfo.getExpirationDate()!=null){
+					model.addAttribute("expirationDate", workDealInfo.getExpirationDate());
+					model.addAttribute("addCertDays",StringHelper.getDvalueDay(new Date(), workDealInfo.getExpirationDate())-workDealInfo.getYear()*365-workDealInfo.getLastDays());
+					model.addAttribute("validiteDays",StringHelper.getDvalueDay(new Date(), workDealInfo.getExpirationDate()));
+				}
+		
+		
 		if (workDealInfo.getDealInfoType() != null) {
 			if (workDealInfo.getDealInfoType().equals(WorkDealInfoType.TYPE_UPDATE_CERT)
 					|| (workDealInfo.getDealInfoType().equals(WorkDealInfoType.TYPE_INFORMATION_REROUTE))) {
