@@ -662,7 +662,7 @@ public class WorkDealInfoOperationController extends BaseController {
 		//经信委
 		if(workDealInfo.getExpirationDate()!=null){
 			model.addAttribute("expirationDate", workDealInfo.getExpirationDate());
-			model.addAttribute("addCertDays",StringHelper.getDvalueDay(new Date(), workDealInfo.getExpirationDate())-workDealInfo.getYear()*365);
+			model.addAttribute("addCertDays",StringHelper.getDvalueDay(new Date(), workDealInfo.getExpirationDate())-workDealInfo.getYear()*365-workDealInfo.getLastDays());
 			model.addAttribute("validiteDays",StringHelper.getDvalueDay(new Date(), workDealInfo.getExpirationDate()));
 		}
 
