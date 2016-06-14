@@ -272,14 +272,16 @@
 			<div class="controls">
 					<form:input path="keyType" htmlEscape="false" maxlength="50"/>
 			</div>
-		</div>
+		</div>-->
 		<div class="control-group">
-			<label class="control-label">key长度:</label>
+			<label class="control-label">秘钥长度:</label>
 			<div class="controls">
-					<form:input path="keyLen" htmlEscape="false" maxlength="50"/>
+					<form:input path="keyLen" type="radio" htmlEscape="false" value="256"/><span>256</span>
+					<form:input path="keyLen" type="radio" htmlEscape="false" value="1024"/><span>1024</span>
+					<form:input path="keyLen" type="radio" htmlEscape="false" value="2048"/><span>2048</span>
 			</div>
 		</div>
-		<div class="control-group">
+		<!--<div class="control-group">
 			<label class="control-label">证书默认有效期:</label>
 			<div class="controls">
 				<form:input path="defaultOverrideValidity" htmlEscape="false" readonly="" maxlength="50"
