@@ -36,7 +36,8 @@ public class ConfigRaAccount implements java.io.Serializable {
 	private String crlListUrl;
 	private String aaPassword;
 	private Integer defaultOverrideValidity;
-
+	
+	
 	// Constructors
 
 	/** default constructor */
