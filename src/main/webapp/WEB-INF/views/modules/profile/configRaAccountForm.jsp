@@ -130,6 +130,12 @@
 			top.$.jBox.tip("RA发证机构单位不能为空");
 			return false;
 		}
+		
+		if(!$("#key1").is(":checked")&&!$("#key2").is(":checked")&&!$("#key3").is(":checked")){
+			top.$.jBox.tip("请选择秘钥长度");
+			return false;
+		}
+		
 		$.ajax({
 			url:"${ctx}/profile/configRaAccount/checkRa?raId="+raId+"&_="+new Date().getTime(),
 			type:'POST',
@@ -274,11 +280,11 @@
 			</div>
 		</div>-->
 		<div class="control-group">
-			<label class="control-label">秘钥长度:</label>
-			<div class="controls">
-					<form:input path="keyLen" type="radio" htmlEscape="false" value="256"/><span>256</span>
-					<form:input path="keyLen" type="radio" htmlEscape="false" value="1024"/><span>1024</span>
-					<form:input path="keyLen" type="radio" htmlEscape="false" value="2048"/><span>2048</span>
+			<label class="control-label"><span style="color : red">*</span>&nbsp;秘钥长度:</label>
+			<div class="controls" >
+					<input name="keyLen" type="radio" id="key1" value="256"  <c:if test="${configRaAccount.keyLen==256}">checked="checked"</c:if> /><span>256</span>
+					<input name="keyLen" type="radio" id="key2" value="1024" <c:if test="${configRaAccount.keyLen==1024 }">checked="checked"</c:if> /><span>1024</span>
+					<input name="keyLen" type="radio" id="key3" value="2048" <c:if test="${configRaAccount.keyLen==2048 }">checked="checked"</c:if> /><span>2048</span>
 			</div>
 		</div>
 		<!--<div class="control-group">
