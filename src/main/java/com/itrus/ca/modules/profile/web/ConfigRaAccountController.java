@@ -97,6 +97,11 @@ public class ConfigRaAccountController extends BaseController {
 	@RequestMapping(value = "form")
 	public String form(ConfigRaAccount configRaAccount, Model model) {
 		model.addAttribute("configRaAccount", configRaAccount);
+		
+		if(configRaAccount.getId()!=null){
+			model.addAttribute("canModify", configRaAccountService.checkUsedByDeal(configRaAccount.getId()));
+		}
+		
 		return "modules/profile/configRaAccountForm";
 	}
 

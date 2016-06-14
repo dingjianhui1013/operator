@@ -6,7 +6,7 @@ package com.itrus.ca.modules.profile.service;
 import java.util.List;
 
 import com.itrus.ca.modules.profile.dao.ConfigProductDao;
-import com.itrus.ca.modules.profile.entity.ConfigProduct;
+
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
@@ -22,7 +22,9 @@ import com.itrus.ca.common.service.BaseService;
 import com.itrus.ca.common.utils.EscapeUtil;
 import com.itrus.ca.modules.profile.entity.ConfigRaAccount;
 import com.itrus.ca.modules.profile.dao.ConfigRaAccountDao;
-import com.itrus.ca.modules.receipt.entity.ReceiptDepotInfo;
+
+import com.itrus.ca.modules.work.dao.WorkDealInfoDao;
+import com.itrus.ca.modules.work.entity.WorkDealInfo;
 
 /**
  * RA配置Service
@@ -40,6 +42,11 @@ public class ConfigRaAccountService extends BaseService {
 	private ConfigRaAccountDao configRaAccountDao;
 	@Autowired
 	private ConfigProductDao configProductDao;
+	
+	@Autowired
+	private WorkDealInfoDao WorkDealInfoDao;
+	
+	
 	
 	public ConfigRaAccount get(Long id) {
 		return configRaAccountDao.findOne(id);
@@ -119,5 +126,29 @@ public class ConfigRaAccountService extends BaseService {
 				return false;
 			}
 		}
+	
+	
+	
+	/**
+	 * 检测模板是否制过证书
+	 * @param raId
+	 * @return
+	 */
+	@Transactional(readOnly = true)
+		public boolean checkUsedByDeal(Long raId){
+			DetachedCriteria dc = WorkDealInfoDao.createDetachedCriteria();
+			dc.createAlias("configProduct", "configProduct");
+			
+			dc.add(Restrictions.eq("configProduct.raAccountId", raId));
+			List<WorkDealInfo> list = WorkDealInfoDao.find(dc);
+			if(list.size() > 0 ){
+				return true;
+			}else{
+				return false;
+			}
+		}
+	
+	
+	
 	
 }
