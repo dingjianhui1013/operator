@@ -31,102 +31,47 @@
 
 						var url = "${ctx}/work/workDealInfo/app?_="+new Date().getTime();
 						$
-								.getJSON(
-										url,
-										function(d) {
-											$("#app")
-													.bigAutocomplete(
-															{
+								.getJSON(url,function(d) {$("#app").bigAutocomplete({
 																data : d.lis,
-																callback : function(
-																		data) {
+																callback : function(data) {
 
 																	var url1 = "${ctx}/work/workDealInfo/product?appId=";
-
-																	$
-																			.getJSON(
-																					url1
-																							+ data.result+"&_="+new Date().getTime(),
-																					function(
-																							da) {
-																						$(
-																								"#appId")
-																								.val(
-																										da.appId);
-																						if (!da.product1) {
-																							$(
-																									"#product1")
-																									.attr(
-																											"style",
-																											"display:none");
-																						} else {
-																							$(
-																									"#product1")
-																									.attr(
-																											"style",
-																											"display:");
-																						}
-																						if (!da.product2) {
-																							$(
-																									"#product2")
-																									.attr(
-																											"style",
-																											"display:none");
-																						} else {
-																							$("#product2").attr("style","display:");
-																						}
-																						if (!da.product3) {
-																							$(
-																									"#product3")
-																									.attr(
-																											"style",
-																											"display:none");
-																						} else {
-																							$(
-																									"#product3")
-																									.attr(
-																											"style",
-																											"display:");
-																						}
-																						if (!da.product4) {
-																							$(
-																									"#product4")
-																									.attr(
-																											"style",
-																											"display:none");
-																						} else {
-																							$(
-																									"#product4")
-																									.attr(
-																											"style",
-																											"display:");
-																						}
-																						if (!da.product5) {
-																							$(
-																									"#product5")
-																									.attr(
-																											"style",
-																											"display:none");
-																						} else {
-																							$(
-																									"#product5")
-																									.attr(
-																											"style",
-																											"display:");
-																						}
-																						if (!da.product6) {
-																							$(
-																									"#product6")
-																									.attr(
-																											"style",
-																											"display:none");
-																						} else {
-																							$(
-																									"#product6s")
-																									.attr(
-																											"style",
-																											"display:");
-																						}
+																	var productHtml="";
+																	productHtml+="<option value='0'>请选择</option>";
+																	$.getJSON(url1 + data.result+"&_="+new Date().getTime(),function(da) {
+																		$("#appId").val(da.appId);
+																		if (da.product10!=null) {
+																			productHtml+="<option value='"+da.product10+"'>企业证书[通用]</option>";
+																		} 
+																		if (da.product11!=null) {
+																			productHtml+="<option value='"+da.product11+"'>企业证书[专用]</option>";
+																		}
+																		if (da.product20!=null) {
+																			productHtml+="<option value='"+da.product20+"'>个人证书(企业)[通用]</option>";
+																		} 
+																		if (da.product21!=null) {
+																			productHtml+="<option value='"+da.product21+"'>个人证书(企业)[专用]</option>";
+																		}
+																		if (da.product30!=null) {
+																			productHtml+="<option value='"+da.product30+"'>机构证书[通用]</option>";
+																		} 
+																		if (da.product31!=null) {
+																			productHtml+="<option value='"+da.product31+"'>机构证书[专用]</option>";
+																		}
+																		if (da.product40!=null) {
+																			productHtml+="<option value='"+da.product40+"'>可信移动设备[通用]</option>";
+																		} 
+																		if (da.product41!=null) {
+																			productHtml+="<option value='"+da.product41+"'>可信移动设备[专用]</option>";
+																		}
+																		if (da.product60!=null) {
+																			productHtml+="<option value='"+da.product60+"'>个人证书(机构)[通用]</option>";
+																		} 
+																		if (da.product61!=null) {
+																			productHtml+="<option value='"+da.product61+"'>个人证书(机构)[专用]</option>";
+																		}
+																		
+																		$("#product").html(productHtml);
 																					});
 																}
 															});
@@ -134,29 +79,12 @@
 
 						var url = "${ctx}/work/workDealInfo/tt?_="+new Date().getTime();
 						$
-								.getJSON(
-										url,
-										function(da) {
-											$("#tt")
-													.bigAutocomplete(
-															{
-																data : da.lis,
-																callback : function(
-																		data) {
+								.getJSON(url,function(da) {$("#tt").bigAutocomplete(
+															{data : da.lis,callback : function(data) {
 																	var url1 = "${ctx}/work/workDealInfo/cert?id=";
-																	$
-																			.getJSON(
-																					url1
-																							+ data.result+"&_="+new Date().getTime(),
-																					function(
-																							d) {
-																						$("#companyId")
-																								.val(
-																										d.companyId);
-																						$(
-																								"#companyName")
-																								.val(
-																										d.companyName);
+																	$.getJSON(url1 + data.result+"&_="+new Date().getTime(),function(d) {
+																						$("#companyId").val(d.companyId);
+																						$("#companyName").val(d.companyName);
 																						if (d.workCompany.companyType == 1) {
 																							$("#companyType1").attr("selected","selected");
 																						}
@@ -164,9 +92,7 @@
 																							$("#companyType2").attr("selected","selected");
 																						}
 																						if (d.companyType == 3) {
-																							$(
-																									"#companyType3")
-																									.attr("selected","selected");
+																							$("#companyType3").attr("selected","selected");
 																						}
 																						if (d.companyType == 4) {
 																							$("#companyType4").attr("selected","selected");
@@ -174,14 +100,8 @@
 																						if (d.companyType == 5) {
 																							$("#companyType5").attr("selected","selected");
 																						}
-																						$(
-																								"#organizationNumber")
-																								.val(
-																										d.organizationNumber);
-																						$(
-																								"#orgExpirationTime")
-																								.val(
-																										d.orgExpirationTime);
+																						$("#organizationNumber").val(d.organizationNumber);
+																						$("#orgExpirationTime").val(d.orgExpirationTime);
 																						if (d.selectLv==0) {
 																							$("#selectLv0").attr("selected","selected");
 																						}
@@ -189,38 +109,22 @@
 																							$("#selectLv1").attr("selected","selected");
 																						}
 																						if (d.comCertificateType == 0) {
-																							$(
-																									"#comCertificateType0")
-																									.attr("selected","selected");
+																							$("#comCertificateType0").attr("selected","selected");
 																						}
 																						if (d.comCertificateType == 1) {
-																							$(
-																									"#comCertificateType1")
-																									.attr("selected","selected");
+																							$("#comCertificateType1").attr("selected","selected");
 																						}
 																						if (d.comCertificateType == 2) {
-																							$(
-																									"#comCertificateType2")
-																									.attr("selected","selected");
+																							$("#comCertificateType2").attr("selected","selected");
 																						}
 																						if (d.comCertificateType == 3) {
-																							$(
-																									"#comCertificateType3")
-																									.attr("selected","selected");
+																							$("#comCertificateType3").attr("selected","selected");
 																						}
 																						if (d.comCertificateType == 4) {
-																							$(
-																									"#comCertificateType4")
-																									.attr("selected","selected");
+																							$("#comCertificateType4").attr("selected","selected");
 																						}
-																						$(
-																								"#comCertficateNumber")
-																								.val(
-																										d.comCertficateNumber);
-																						$(
-																								"#comCertficateTime")
-																								.val(
-																										d.comCertficateTime);
+																						$("#comCertficateNumber").val(d.comCertficateNumber);
+																						$("#comCertficateTime").val(d.comCertficateTime);
 																						$("#legalName").val(d.legalName);
 																						$("#address").val(d.address);
 																						$("#companyMobile").val(d.companyMobile);
@@ -256,8 +160,8 @@
 										});
 						if("${workDealInfo.id}"!=null && "${workDealInfo.id}"!=""){
 							var boundLabelList = "${boundLabelList}";
-							var lable = "${workDealInfo.configProduct.productLabel}";
-							$("#agentId").attr("onchange","setStyleList("+lable+")");
+							
+							
 							var agentHtml="";
 							var obj= $.parseJSON(boundLabelList);
 							$.each(obj, function(i, item){
@@ -286,10 +190,10 @@
 						
 						}
 						
-						var productName = $("input[name='product']:checked").val();
+						var product = $("#product").val();
 						var agentId = $("#agentId").val();
 						if (agentId!=0) {
-							var url = "${ctx}/work/workDealInfo/setStyleList?lable="+lable+"&productName="+productName+"&app="+$("#appId").val()+"&infoType=0&style="+agentId+"&_="+new Date().getTime();
+							var url = "${ctx}/work/workDealInfo/setTemplateList?productId="+product+"&infoType=0&style="+agentId+"&_="+new Date().getTime();
 							$.getJSON(url,function(data){
 								var styleList = data.array;
 								var styleHtml="";
@@ -309,6 +213,83 @@
 								
 							});
 						}
+						
+						
+$("#product").change(function(){
+							
+							var product = $("#product").val();
+							var agentHtml="";
+							var styleHtml="";
+							if (product!=0) {
+								var url = "${ctx}/work/workDealInfo/setStyleList1?productId="+product+"&_="+new Date().getTime();
+								$.getJSON(url,function(data){
+									/* showAgent(product); */
+									
+									
+									$.each(data, function(i, item){					 
+										 if(item.styleId=="1"){	
+												agentHtml+="<option value='"+item.styleId+"'>标准</option>";
+										}else if(item.styleId=="2"){
+												agentHtml+="<option value='"+item.styleId+"'>政府统一采购</option>";
+										}else if(item.styleId=="3"){
+												agentHtml+="<option value='"+item.styleId+"'>合同采购</option>";
+										}
+										 
+										 if(item.agentId!=null){
+											 $("#boundId").val(item.agentId);
+											 styleHtml +="<option value='"+item.agentId+"'>" + item.agentName + "</option>"; 
+										 }
+											
+										
+									});	
+									
+									if(agentHtml==""){
+										
+										agentHtml+="<option value='0'>请选择</option>";
+										$("#agentId").html(agentHtml);
+										styleHtml+="<option value='0'>请选择</option>";
+										$("#agentDetailId").html(styleHtml);
+										top.$.jBox.tip("请先配置计费策略！");
+										return;
+									}
+									
+									$("#agentId").html(agentHtml);
+									showYear();
+									$("#agentDetailId").html("");
+									$("#agentDetailId").html(styleHtml);
+									
+									
+									
+									}); 	
+							}
+							
+						});
+						
+						
+						
+$("#agentId").change(function(){
+	var product = $("#product").val();
+	var agentId = $("#agentId").val();
+	if (agentId!=0) {
+		var url = "${ctx}/work/workDealInfo/setTemplateList?productId="+product+"&infoType=0&style="+agentId+"&_="+new Date().getTime();
+		$.getJSON(url,function(data){
+			var styleList = data.array;
+			var styleHtml="";
+			$.each(styleList,function(i,item){
+				if(i==0){
+					$("#boundId").val(item.id);
+					showYear();
+				}
+				styleHtml +="<option value='"+item.id+"'>" + item.name + "</option>";
+			});
+			$("#agentDetailId").html(styleHtml);
+		});
+	}else{
+		top.$.jBox.tip("请您选择计费策略类型！");
+		
+	}
+	
+});
 						
 						
 						//经信委
@@ -491,10 +472,12 @@
 			
 			//经信委
 			if(data.support){
-				$("#supportDate").show();
+				$("#supportDateTh").show();
+				$("#supportDateTd").show();
 			}
 			if(!data.support){
-				$("#supportDate").hide();
+				$("#supportDateTh").hide();
+				$("#supportDateTd").hide();
 			}
 			
 			
@@ -609,49 +592,25 @@
 						</tr>
 						<tr>
 							<th><span class="prompt" style="color:red; display: none;">*</span>代办应用：</th>
-							<td colspan="3"><input type="text" name="configApp" 
+							<td ><input type="text" name="configApp" 
 								value="${workDealInfo.configApp.appName }" id="app" /></td>
-							<th><span class="prompt" style="color:red; display: none;">*</span>选择产品：</th>
-								<td>
-								<c:forEach items="${proList }" var="pro">
-									<div id="product${pro.id }" <c:if test="${workDealInfo.configProduct.productName!=pro.id}">style="display:none;"</c:if>>
-									<input type="radio" name="product" id="product"
-										onclick="productLabel(${pro.id})"
-										<c:if test="${workDealInfo.configProduct.productName==pro.id}">checked</c:if>
-										
-										value="${pro.id}">${pro.name }&nbsp;&nbsp;&nbsp;
-									</div>
-								</c:forEach>
-								</td>
-						</tr>
-						<tr>
-							<th><span class="prompt" style="color:red; display: none;">*</span>应用标识：</th>
-							<td colspan="3"><input type="radio" name="lable" id="lable0" value="0" disabled="disabled"
-							<c:if test="${workDealInfo.configProduct.productLabel==0}">checked</c:if>>通用&nbsp;
-								&nbsp; <input type="radio" name="lable" id="lable1" value="1" disabled="disabled"
-								<c:if test="${workDealInfo.configProduct.productLabel==1}">checked</c:if>>专用</td>
+							
 							<th><span class="prompt" style="color:red; display: none;">*</span>业务类型：</th>
 							<td><input type="checkbox" name="dealInfoType" value="0" checked="checked" disabled="disabled"
 								<c:if test="${workDealInfo.dealInfoType==0}">checked</c:if>>新增证书
 							</td>
 						</tr>
 						<tr>
+							<th><span class="prompt" style="color:red; display: none;">*</span>选择产品：</th>
+							<td>
 							
-							<th style="width: 100px;"><span class="prompt"
-								style="color: red; display: none;">*</span>计费策略类型：</th>
-							<td  style="width: 250px;"><select id="agentId"
-								name="agentId">
-									<option value="0">请选择</option>
-							</select> <input type="hidden" id="boundId"></td>
-							<th style="width: 100px;"><span class="prompt"
-								style="color: red; display: none;">*</span>计费策略模版：</th>
-							<td style="width: 250px;"><select
-								onchange="setYearByBoundId()" id="agentDetailId"
-								name="agentDetailId">
-									<option value="0">请选择</option>
-							</select>
+							<select name="product"  id="product">
+									<c:forEach items="${proList}" var="product">
+										<option value="${product.id}" <c:if test="${product.id==workDealInfo.configProduct.id }">selected="selected"</c:if> >${product.name}</option>
+									</c:forEach>
+							</select>	
 							</td>
-							
+						
 							<th style="width: 100px;"><span class="prompt" style="color:red; display: none;">*</span>申请年数：</th>
 							<td><input type="radio" name="year" value="1" id="year1"
 								<c:if test="${empty workDealInfo.year}">checked</c:if>
@@ -670,21 +629,42 @@
 								<c:if test="${workDealInfo.year==5}">checked</c:if>><span id="word5">5年</span>
 							</td>
 						
-						
+							
 						</tr>
 						
-						<tr  id="supportDate" style="display: none">
-						<th></th>
-						<td></td>
-						<th></th>
-						<td></td>
-						<th>选择截止日期：</th>
-						<td>
+						
+						<tr>
+						<th style="width: 100px;"><span class="prompt"
+								style="color: red; display: none;">*</span>计费策略类型：</th>
+							<td  style="width: 250px;"><select id="agentId"
+								name="agentId">
+									<option value="0">请选择</option>
+							</select> <input type="hidden" id="boundId"></td>
+						
+						<th   id="supportDateTh" style="display: none">选择截止日期：</th>
+						<td   id="supportDateTd" style="display: none">
 								<input class="input-medium Wdate" type="text"
 							required="required" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});"
 							 maxlength="20" readonly="readonly" value="<fmt:formatDate value="${expirationDate}" pattern="yyyy-MM-dd"/>"
 							name="expirationDate" id="expirationDate"/>
 							</td>
+						
+						</tr>
+						
+						<tr>
+							
+							
+							<th style="width: 100px;"><span class="prompt"
+								style="color: red; display: none;">*</span>计费策略模版：</th>
+							<td style="width: 500px;"><select
+								onchange="setYearByBoundId()" id="agentDetailId"
+								name="agentDetailId">
+									<option value="0">请选择</option>
+							</select>
+							</td>
+							
+							<th></th>
+							<td></td>
 						
 						</tr>
 						

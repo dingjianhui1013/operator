@@ -94,13 +94,8 @@ var selected = false;
 						$.getJSON(url,function(d) {
 											appData = d;
 											$("#app").bigAutocomplete(
-															{
-																data : d.lis,
-																callback : function(data) {
+															{data : d.lis,callback : function(data) {
 																	$("#product").html("");
-
-																	/* $("#product").attr("onChange","setStyleList()"); */
-																	/* $("#agentId").attr("onchange","setTemplateList()"); */
 
 																	var url1 = "${ctx}/work/workDealInfo/product?appId=";
 																	var productHtml="";
