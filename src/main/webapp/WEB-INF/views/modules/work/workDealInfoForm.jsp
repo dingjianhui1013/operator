@@ -359,7 +359,7 @@ var selected = false;
 			top.$.jBox.tip("该应用不存在!"); 
 			$("#app").focus(); //让手机文本框获得焦点 
 			return false;
-		} else if ($("input[name='year']").val() == null || $("input[name='year']").val() == "" || $("#expirationDate").val() == null || $("#expirationDate").val() == ""){
+		} else if (($("input[name='year']").val() == null || $("input[name='year']").val() == "") && ($("#expirationDate").val() == null || $("#expirationDate").val() == "")){
 			top.$.jBox.tip("请选择申请年限或指定具体到期时间!"); 
 			$("input[name='year']").focus(); //让手机文本框获得焦点 
 			return false;
@@ -1178,6 +1178,9 @@ var selected = false;
 						</tr>
 				
 						<tr>
+
+
+						
 						    <th><span class="prompt" style="color: red; display: none;">*</span>选择产品：</th>
 							<td id="productTdId">
 									<select name="product"  id="product">
@@ -1185,6 +1188,7 @@ var selected = false;
 										<option value="${product.id}" <c:if test="${product.id==workDealInfo.configProduct.id }">selected="selected"</c:if> >${product.name}</option>
 									</c:forEach>
 							</select>	
+
 							</td>
 
 							
