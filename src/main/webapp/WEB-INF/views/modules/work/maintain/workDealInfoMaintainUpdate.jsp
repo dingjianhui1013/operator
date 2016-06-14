@@ -774,10 +774,14 @@
 									</c:forEach>
 							</select>		
 							</td>
+
+							
+
 							
 							
 
-							<th style="width: 100px;"><span class="prompt"
+
+							<th style="width: 40px;"><span class="prompt"
 								style="color: red; display: none;">*</span>申请年数：</th>
 							<td>
 								<input type="radio" name="year" value="1" id="year1">
