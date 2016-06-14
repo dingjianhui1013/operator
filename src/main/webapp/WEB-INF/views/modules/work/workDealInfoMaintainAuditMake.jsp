@@ -136,7 +136,7 @@
 	function quick(keySN) {
 		var day = baseDay;
 		var csr;
-		var len = 1024;
+		var len = parseInt("${keyLen }");
 		var selectedItem = $("option:selected", $("[name=provider]")[0]);
 		cspStr = selectedItem.text();
 		if (cspStr.indexOf("软证书") > -1) {
