@@ -496,15 +496,7 @@
 								value="${workDealInfo.configApp.appName }" id="app" />
 								<input type="hidden" id="appId" value="${workDealInfo.configApp.id }" />
 								</td>
-							<th><span class="prompt" style="color: red; display: none;">*</span>选择产品：</th>
-							<td>
 							
-							<select name="product"  id="product">
-									<c:forEach items="${proList}" var="product">
-										<option value="${product.id}" <c:if test="${product.id==workDealInfo.configProduct.id }">selected="selected"</c:if> >${product.name}</option>
-									</c:forEach>
-							</select>	
-							</td>
 							
 							<th><span class="prompt" style="color: red; display: none;">*</span>业务类型：</th>
 							<td>
@@ -524,11 +516,28 @@
 							
 						</tr>
 						<tr>
+						
+							<th><span class="prompt" style="color: red; display: none;">*</span>选择产品：</th>
+							<td>
+							
+							<select name="product"  id="product">
+									<c:forEach items="${proList}" var="product">
+										<option value="${product.id}" <c:if test="${product.id==workDealInfo.configProduct.id }">selected="selected"</c:if> >${product.name}</option>
+									</c:forEach>
+							</select>	
+							</td>
+							
 							<th><span class="prompt" style="color: red; display: none;">*</span>申请年数：</th>
 							<td class="tdWidth"><input type="radio" id="delay" checked="checked"
 								name="year" disabled="disabled"> <span>不延期</span>
 
 							</td>
+							
+			
+							
+						</tr>
+						
+						<tr>
 							<th><span class="prompt" style="color: red; display: none;">*</span>计费策略类型：</th>
 							<td>
 							
@@ -539,7 +548,18 @@
 							
 							<input type="hidden" value="${workDealInfo.payType}" id="payType" />
 							</td>
-			
+							
+							
+							<c:if test="${reissue==2}">
+						
+							<th>人为损坏：</th>
+							<td><input type="radio" name="manMadeDamage" value="true">是
+							 <input type="radio" name="manMadeDamage"value="false">否</td>
+						
+						</c:if>
+						</tr>
+						
+						<tr>
 							<th><span class="prompt" style="color: red; display: none;">*</span>计费策略模版：</th>
 							<td>
 							
@@ -548,14 +568,11 @@
 							</select> 
 							
 							</td>
+							
+							<th></th>
+							<td></td>
 						</tr>
-						<c:if test="${reissue==2}">
-						<tr id="manMade">
-							<th>人为损坏：</th>
-							<td><input type="radio" name="manMadeDamage" value="true">是
-							 <input type="radio" name="manMadeDamage"value="false">否</td>
-						</tr>
-						</c:if>
+						
 					</tbody>
 				</table>
 			</div>

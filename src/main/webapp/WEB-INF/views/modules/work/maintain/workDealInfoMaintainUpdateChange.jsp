@@ -184,10 +184,12 @@
 										
 										//经信委
 										if(data.support){
-											$("#supportDate").show();
+											$("#supportDateTh").show();
+											$("#supportDateTd").show();
 										}
 										if(!data.support){
-											$("#supportDate").hide();
+											$("#supportDateTh").hide();
+											$("#supportDateTd").hide();
 										}
 										
 										
@@ -555,10 +557,12 @@
 			
 			//经信委
 			if(data.support){
-				$("#supportDate").show();
+				$("#supportDateTh").show();
+				$("#supportDateTd").show();
 			}
 			if(!data.support){
-				$("#supportDate").hide();
+				$("#supportDateTh").hide();
+				$("#supportDateTd").hide();
 			}
 			
 			
@@ -695,15 +699,7 @@
 								<input type="hidden" id="appId" value="${workDealInfo.configApp.id }" on/>
 								
 								</td>
-							<th><span class="prompt" style="color: red; display: none;">*</span>选择产品：</th>
-							<td>
-							<select name="product"  id="product">
-									<c:forEach items="${proList}" var="product">
-										<option value="${product.id}" <c:if test="${product.id==workDealInfo.configProduct.id }">selected="selected"</c:if> >${product.name}</option>
-									</c:forEach>
-							</select>	
-								
-							</td>
+							
 							
 							<th><span class="prompt" style="color: red; display: none;">*</span>业务类型：</th>
 							<td colspan="3">
@@ -726,22 +722,15 @@
 							</td>
 						</tr>
 						<tr>
-
-							<th><span class="prompt"
-								style="color: red; display: none;">*</span>计费策略类型：</th>
-							<td class="tdWidth"><select id="agentId"
-								name="agentId">
-									<option value="0">请选择</option>
-							</select> <input type="hidden" id="boundId"></td>
-							<th style="width: 100px;"><span class="prompt"
-								style="color: red; display: none;">*</span>计费策略模版：</th>
-							<td style="width: 270px;"><select
-								onchange="setYearByBoundId()" id="agentDetailId"
-								name="agentDetailId">
-									<option value="0">请选择</option>
-							</select>  &nbsp;<label id="agentMes" style="color: red;display: none;">不可用</label>
-							<input type="hidden" id="surplusNum" />
-
+						
+							<th><span class="prompt" style="color: red; display: none;">*</span>选择产品：</th>
+							<td>
+							<select name="product"  id="product">
+									<c:forEach items="${proList}" var="product">
+										<option value="${product.id}" <c:if test="${product.id==workDealInfo.configProduct.id }">selected="selected"</c:if> >${product.name}</option>
+									</c:forEach>
+							</select>	
+								
 							</td>
 
 							<th style="width: 100px;"><span class="prompt"
@@ -762,13 +751,16 @@
 
 						</tr>
 						
-						<tr  id="supportDate" style="display: none">
-						<th></th>
-						<td></td>
-						<th></th>
-						<td></td>
-						<th>选择截止日期：</th>
-						<td>
+						<tr>
+						<th><span class="prompt"
+								style="color: red; display: none;">*</span>计费策略类型：</th>
+							<td class="tdWidth"><select id="agentId"
+								name="agentId">
+									<option value="0">请选择</option>
+							</select> <input type="hidden" id="boundId"></td>
+						
+						<th id="supportDateTh" style="display: none">选择截止日期：</th>
+						<td id="supportDateTd" style="display: none">
 								<input class="input-medium Wdate" type="text"
 							required="required" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});"
 							 maxlength="20" readonly="readonly"
@@ -777,13 +769,29 @@
 						
 						</tr>
 						
+						<tr>
+							<th style="width: 100px;"><span class="prompt"
+								style="color: red; display: none;">*</span>计费策略模版：</th>
+							<td style="width: 500px;"><select
+								onchange="setYearByBoundId()" id="agentDetailId"
+								name="agentDetailId">
+									<option value="0">请选择</option>
+							</select>  &nbsp;<label id="agentMes" style="color: red;display: none;">不可用</label>
+							<input type="hidden" id="surplusNum" />
+
+							</td>
+						
+						
 						<c:if test="${reissue==2}">
-						<tr id="manMade">
+						
 							<th>人为损坏：</th>
 							<td><input type="radio" name="manMadeDamage" value="true">是
 							 <input type="radio" name="manMadeDamage"value="false">否</td>
-						</tr>
+						
 						</c:if>
+						</tr>
+						
+						
 					</tbody>
 				</table>
 			</div>
