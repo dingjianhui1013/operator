@@ -1302,7 +1302,7 @@ public class WorkDealInfoAuditController extends BaseController {
 	@RequestMapping("makeDealInfo")
 	public String makeDealInfo(WorkDealInfo workDealInfo, HttpServletRequest request, HttpServletResponse response,
 			Model model) {
-		ConfigRaAccount raAccount = raAccountService.get(workDealInfo.getConfigProduct().getRaAccountId());
+		ConfigRaAccount raAccount = raAccountService.get(workDealInfo.getConfigProduct().getRaAccountId());	
 		List<String[]> list = RaAccountUtil.outPageLine(workDealInfo, raAccount.getConfigRaAccountExtendInfo());
 		model.addAttribute("list", list);
 		model.addAttribute("workDealInfo", workDealInfo);
@@ -1313,7 +1313,13 @@ public class WorkDealInfoAuditController extends BaseController {
 		workDealInfo.setAttestationUserDate(new Date());
 		workDealInfoService.save(workDealInfo);
 		
+		//秘钥长度
+		if(raAccount.getKeyLen()!=null){
+			model.addAttribute("keyLen", raAccount.getKeyLen());
+		}
+	   
 		
+		//经信委
 		if(workDealInfo.getExpirationDate()!=null){
 			model.addAttribute("expirationDate", workDealInfo.getExpirationDate());
 			model.addAttribute("addCertDays",StringHelper.getDvalueDay(new Date(), workDealInfo.getExpirationDate())-workDealInfo.getYear()*365);
