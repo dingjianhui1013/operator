@@ -667,7 +667,10 @@ public class WorkDealInfoOperationController extends BaseController {
 			model.addAttribute("validiteDays",StringHelper.getDvalueDay(new Date(), workDealInfo.getExpirationDate()));
 		}
 
-		
+		//秘钥长度可选
+		if(raAccount.getKeyLen()!=null){
+			model.addAttribute("keyLen", raAccount.getKeyLen());
+		}
 		
 		
 		if (workDealInfo.getPrevId()!=null) {
