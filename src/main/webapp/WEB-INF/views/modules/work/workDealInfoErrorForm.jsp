@@ -6,9 +6,7 @@
 <title>业务办理管理</title>
 <meta name="decorator" content="default" />
 <script type="text/javascript">
-	$(document)
-			.ready(
-					function() {
+	$(document).ready(function() {
 						$("#name").focus();
 						$("#inputForm").validate(
 								{
@@ -75,11 +73,7 @@
 																											"style",
 																											"display:none");
 																						} else {
-																							$(
-																									"#product2")
-																									.attr(
-																											"style",
-																											"display:");
+																							$("#product2").attr("style","display:");
 																						}
 																						if (!da.product3) {
 																							$(
@@ -227,75 +221,32 @@
 																								"#comCertficateTime")
 																								.val(
 																										d.comCertficateTime);
-																						$(
-																								"#legalName")
-																								.val(
-																										d.legalName);
-																						$(
-																								"#address")
-																								.val(
-																										d.address);
-																						$(
-																								"#companyMobile")
-																								.val(
-																										d.companyMobile);
-																						$(
-																								"#remarks")
-																								.val(
-																										d.remarks);
-																						$(
-																								"#s_province")
-																								.val(
-																										d.province);
-																						$(
-																								"#contactName")
-																								.val(
-																										d.contactName);
+																						$("#legalName").val(d.legalName);
+																						$("#address").val(d.address);
+																						$("#companyMobile").val(d.companyMobile);
+																						$("#remarks").val(d.remarks);
+																						$("#s_province").val(d.province);
+																						$("#contactName").val(d.contactName);
 																						if ('男' == d.conCertSex) {
-																							$(
-																									"#sex0")
-																									.attr("checked","checked");
+																							$("#sex0").attr("checked","checked");
 																						}
 																						if (d.conCertSex =='女') {
-																							$(
-																									"#sex1")
-																									.attr("checked","checked");
+																							$("#sex1").attr("checked","checked");
 																						}
 																						if (d.conCertType == 0) {
-																							$(
-																									"#conCertType0")
-																									.attr("selected","selected");
+																							$("#conCertType0").attr("selected","selected");
 																						}
 																						if (d.conCertType == 1) {
-																							$(
-																									"#conCertType1")
-																									.attr("selected","selected");
+																							$("#conCertType1").attr("selected","selected");
 																						}
 																						if (d.conCertType == 2) {
-																							$(
-																									"#conCertType2")
-																									.attr("selected","selected");
+																							$("#conCertType2").attr("selected","selected");
 																						}
-																						$(
-																								"#contacEmail")
-																								.val(
-																										d.contacEmail);
-																						$(
-																								"#contactPhone")
-																								.val(
-																										d.contactPhone);
-																						$(
-																								"#contactTel")
-																								.val(
-																										d.contactTel);
-																						$(
-																								"#workuserId")
-																								.val(
-																										d.workuserId);
-																						$(
-																								"#conCertNumber")
-																								.val(
-																										d.conCertNumber);
+																						$("#contacEmail").val(d.contacEmail);
+																						$("#contactPhone").val(d.contactPhone);
+																						$("#contactTel").val(d.contactTel);
+																						$("#workuserId").val(d.workuserId);
+																						$("#conCertNumber").val(d.conCertNumber);
 																						$("#s_city").append('<option value="'+d.city+'" selected="selected">'+d.city+'</option>');
 																						$("#s_county").append('<option value="'+d.district+'" selected="selected">'+d.district+'</option>');
 																						showCert(d.companyId);
@@ -360,77 +311,20 @@
 						}
 						
 						
-										
-						/* var url = "${ctx}/work/workDealInfo/showYear?lable=${workDealInfo.configProduct.productLabel}&productName=${workDealInfo.configProduct.productName}&app=${workDealInfo.configApp.id}&infoType=${workDealInfo.dealInfoType}&_="+new Date().getTime();
-						$.getJSON(url, function(data) {
-							if (data.year1) {
-								$("#year1").show();
-								$("#word1").show();
-							} else {
-								$("#year1").hide();
-								$("#word1").hide();
-							}
-							if (data.year2) {
-								$("#year2").show();
-								$("#word2").show();
-							} else {
-								$("#year2").hide();
-								$("#word2").hide();
-							}
-							if (data.year4) {
-								$("#year4").show();
-								$("#word4").show();
-							} else {
-								$("#year4").hide();
-								$("#word4").hide();
-							}
-							if (data.year5) {
-								$("#year5").show();
-								$("#word5").show();
-							} else {
-								$("#year5").hide();
-								$("#word5").hide();
-							}
+						//经信委
+						$("input[name='year']").change(function(){
+							$("#expirationDate").val("");						
+						});
+						
+						$("#expirationDate").blur(function(){
 							
-							
-							if (data.tempStyle == 1) {
-								$("#payType1").attr("checked","checked");
-								$("#payType1").removeAttr("disabled");
-								$("#payType2").attr("disabled","disabled");
-								$("#payType3").attr("disabled","disabled");
-							}else if (data.tempStyle == 2) {
-								$("#payType2").attr("checked","checked");
-								$("#payType2").removeAttr("disabled");
-								$("#payType1").attr("disabled","disabled");
-								$("#payType3").attr("disabled","disabled");
-							}else if (data.tempStyle == 3) {
-								$("#payType3").attr("checked","checked");
-								$("#payType3").removeAttr("disabled");
-								$("#payType1").attr("disabled","disabled");
-								$("#payType2").attr("disabled","disabled");
-							} else {
-								top.$.jBox.tip("请先配置计费策略！"); 
-							}
-							
-							
-							
-							
-							
-							var arr = [data.nameDisplayName,data.orgunitDisplayName,data.emailDisplayName,data.commonNameDisplayName,data.addtionalField1DisplayName,data.addtionalField2DisplayName,data.addtionalField3DisplayName,data.addtionalField4DisplayName,data.addtionalField5DisplayName,data.addtionalField6DisplayName,data.addtionalField7DisplayName,data.addtionalField8DisplayName]
-							var arrList = arr.unique();
-							//清除所有必填项显示
-							$(".prompt").css("display","none");
-							for (var i = 0; i < arrList.length; i++) {
-								if (arrList[i] != "product") {
-									$("input[name='"+arrList[i]+"']").attr("required","required");
-									$("input[name='"+arrList[i]+"']").parent().prev().find("span").show();
-								} else {
-									$("input[name='"+arrList[i]+"']").attr("required","required");
-									$("input[name='"+arrList[i]+"']").parent().parent().prev().find("span").show();
-								}
-							}
-						}); */
-
+							$("#year1").removeAttr("checked");
+							$("#year2").removeAttr("checked");
+							$("#year3").removeAttr("checked");
+							$("#year4").removeAttr("checked");
+							$("#year5").removeAttr("checked");
+						});				
+						
 					});
 	
 </script>
@@ -553,11 +447,10 @@
 	* 返回值：年限1，2，4，5是否为true
 	*/ 
 	function showYear(){
-		//var lable = obj;
-		//var productName = $("input[name='product']:checked").val();
+		
 		var agentId = $("#boundId").val();
 		var url = "${ctx}/work/workDealInfo/showYearNew?boundId="+agentId+"&infoType=0&_="+new Date().getTime();
-		//var url = "${ctx}/work/workDealInfo/showYear?lable="+lable+"&productName="+productName+"&app="+$("#appId").val()+"&infoType=0&_="+new Date().getTime();
+		
 		$.getJSON(url, function(data) {
 			if (data.year1) {
 				$("#year1").show();
@@ -594,6 +487,19 @@
 				$("#year5").hide();
 				$("#word5").hide();
 			}
+			
+			
+			//经信委
+			if(data.support){
+				$("#supportDate").show();
+			}
+			if(!data.support){
+				$("#supportDate").hide();
+			}
+			
+			
+			
+			
 			var arr = [data.nameDisplayName,data.orgunitDisplayName,data.emailDisplayName,data.commonNameDisplayName,data.addtionalField1DisplayName,data.addtionalField2DisplayName,data.addtionalField3DisplayName,data.addtionalField4DisplayName,data.addtionalField5DisplayName,data.addtionalField6DisplayName,data.addtionalField7DisplayName,data.addtionalField8DisplayName]
 			var arrList = arr.unique();
 			//清除所有必填项显示
@@ -765,12 +671,23 @@
 							</td>
 						
 						
+						</tr>
 						
-						
-						
-						
+						<tr  id="supportDate" style="display: none">
+						<th></th>
+						<td></td>
+						<th></th>
+						<td></td>
+						<th>选择截止日期：</th>
+						<td>
+								<input class="input-medium Wdate" type="text"
+							required="required" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});"
+							 maxlength="20" readonly="readonly" value="<fmt:formatDate value="${expirationDate}" pattern="yyyy-MM-dd"/>"
+							name="expirationDate" id="expirationDate"/>
+							</td>
 						
 						</tr>
+						
 					</tbody>
 				</table>
 			</div>

@@ -408,14 +408,12 @@ $(document)
 								<input type="hidden" id="appId" value="${workDealInfo.configApp.id }" />
 								</td>
 							<th>选择产品：</th>
-							<td colspan="3"><input type="text" name="product" disabled="disabled" 
+							<td><input type="text" name="product" disabled="disabled" 
 								value="${proType[workDealInfo.configProduct.productName] }" />
-								
 								<input type="hidden" id="product" value="${workDealInfo.configProduct.productName }" />	
-<%-- 								<input type="hidden" id="productId" value="${workDealInfo.configProduct.productName}" />	 --%>
-								</td>
-						</tr>
-						<tr>
+							</td>
+								
+								
 							<th>应用标识：</th>
 							<td><input type="radio" disabled="disabled" name="lable"
 								<c:if test="${workDealInfo.configProduct.productLabel==0 }">checked="checked"</c:if>
@@ -423,8 +421,11 @@ $(document)
 								type="radio" disabled="disabled" name="lable"
 								<c:if test="${workDealInfo.configProduct.productLabel==1 }">checked="checked"</c:if>
 								id="lable1" value="1">专用</td>
+						</tr>
+						<tr>
+							
 							<th>业务类型：</th>
-							<td colspan="3"><c:if test="${workDealInfo.dealInfoType==0 }">
+							<td><c:if test="${workDealInfo.dealInfoType==0 }">
 									<input type="checkbox" disabled="disabled" checked="checked"
 										name="dealInfType">新增证书</c:if> <input type="hidden"
 								id="dealInfoType" value="${workDealInfo.dealInfoType }">
@@ -434,28 +435,8 @@ $(document)
 									test="${workDealInfo.dealInfoType==1 }">
 									<input type="checkbox" disabled="disabled" checked="checked"
 										name="dealInfType">更新证书</c:if></td>
-						</tr>
-						<tr>
-							<th>申请年数：</th>
-
-							<td><c:if test="${workDealInfo.dealInfoType!=0 }">
-									<input type="radio" name="year" value="1" id="year1">
-								<span id="word1">1年</span>
-								<input type="radio" name="year" value="2" id="year2">
-								<span id="word2">2年 </span>
-								<input type="radio" name="year" value="3" id="year3">
-								<span id="word3">3年</span>
-								<input type="radio" name="year" value="4" id="year4">
-								<span id="word4">4年</span>
-								<input type="radio" name="year" value="5" id="year5">
-								<span id="word5">5年</span>
-									<span style="color: red" id="mmsg"></span>
-								</c:if> <c:if test="${workDealInfo.dealInfoType==0 }">
-									&nbsp;&nbsp;${workDealInfo.year}年
-								</c:if></td>
-								
-								
-								<c:if test="${empty workDealInfo.isIxin}"> 
+										
+							<c:if test="${empty workDealInfo.isIxin}"> 
 								<th><span class="prompt" style="color: red; display: none;">*</span>计费策略类型：</th>
 							<td style="width: 100px;">
 							
@@ -492,20 +473,42 @@ $(document)
 
 							</td>
 								</c:if>
-								
-								
-							<%-- 
-							1.0版本注释掉。
+										
+										
+						</tr>
+						<tr>
+							<th>申请年数：</th>
+
+							<td><c:if test="${workDealInfo.dealInfoType!=0 }">
+									<input type="radio" name="year" value="1" id="year1">
+								<span id="word1">1年</span>
+								<input type="radio" name="year" value="2" id="year2">
+								<span id="word2">2年 </span>
+								<input type="radio" name="year" value="3" id="year3">
+								<span id="word3">3年</span>
+								<input type="radio" name="year" value="4" id="year4">
+								<span id="word4">4年</span>
+								<input type="radio" name="year" value="5" id="year5">
+								<span id="word5">5年</span>
+									<span style="color: red" id="mmsg"></span>
+								</c:if> <c:if test="${workDealInfo.dealInfoType==0 }">
+									&nbsp;&nbsp;${workDealInfo.year}年
+								</c:if></td>
 							
-							<th>用户分类：</th>
-							<td><input type="radio" name="yar" value="1"
-								disabled="disabled"
-								<c:if test="${workDealInfo.classifying==0}">checked</c:if>>
-
-								内资 <input type="radio" name="yar" value="2" disabled="disabled"
-								<c:if test="${workDealInfo.classifying==1}">checked</c:if>>
-
-								外资</td> --%>
+							<c:if test="${expirationDate!=null }">
+							<th>指定截止日期：</th>
+							<td>
+								<input class="input-medium Wdate" type="text" 
+							required="required" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});"
+							 maxlength="20" readonly="readonly" value="<fmt:formatDate value="${expirationDate}" pattern="yyyy-MM-dd"/>"
+							name="expirationDate" id="expirationDate"/>
+							</td>
+							</c:if>	
+							
+							
+																
+								
+							
 						</tr>
 					</tbody>
 				</table>
