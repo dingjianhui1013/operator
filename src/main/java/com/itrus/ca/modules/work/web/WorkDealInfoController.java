@@ -2471,6 +2471,18 @@ public class WorkDealInfoController extends BaseController {
 			List<WorkLog> list = workLogService.findByDealInfo(workDealInfo);
 			model.addAttribute("workLog", list);
 			ConfigChargeAgent chargeAgent = chargeAgentService.get(workDealInfo.getConfigChargeAgentId());
+			
+			
+			//经信委
+			if(chargeAgent.getIsSupportExpirationDate()!=null&&chargeAgent.getIsSupportExpirationDate()==1){
+				model.addAttribute("isSupport", true);
+				
+				if(workDealInfo.getExpirationDate()!=null){
+					model.addAttribute("expirationDate", workDealInfo.getExpirationDate());	
+				}
+			}
+			
+			
 			model.addAttribute("tempStyle", chargeAgent.getTempStyle());
 			List<ConfigProduct> products = configProductService.findByApp(workDealInfo.getConfigApp().getId());
 			List<ProductTypeObj> listProductTypeObjs = new ArrayList<ProductTypeObj>();

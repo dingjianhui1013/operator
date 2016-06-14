@@ -318,6 +318,10 @@ public class WorkDealInfoAuditController extends BaseController {
 			model.addAttribute("jfMB", agent.getTempName());
 
 		}
+		
+		if(workDealInfo.getExpirationDate()!=null){
+			model.addAttribute("expirationDate", workDealInfo.getExpirationDate());
+		}
 
 		return "modules/work/workDealInfoAuditACUForm";
 	}

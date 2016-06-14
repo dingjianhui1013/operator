@@ -784,16 +784,15 @@ public class WorkDealInfoOperationController extends BaseController {
 		}
 		
 		model.addAttribute("boundLabelList", nameSet);
-		
-		
-		
-		
-		
-		
 		model.addAttribute("tempStyle", chargeAgent.getTempStyle());
 		model.addAttribute("workLog", list);
 		model.addAttribute("workDealInfo", workDealInfo);
 		model.addAttribute("proList", ProductType.getProductTypeList());
+		
+		if(workDealInfo.getExpirationDate()!=null){
+			model.addAttribute("expirationDate", workDealInfo.getExpirationDate());	
+		}		
+		
 		return "modules/work/workDealInfoErrorForm";
 	}
 
