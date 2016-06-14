@@ -47,6 +47,7 @@ import com.itrus.ca.modules.profile.entity.ConfigChargeAgentBoundConfigProduct;
 import com.itrus.ca.modules.profile.entity.ConfigCommercialAgent;
 import com.itrus.ca.modules.profile.entity.ConfigProduct;
 import com.itrus.ca.modules.profile.entity.ConfigRaAccount;
+import com.itrus.ca.modules.profile.entity.ProductTypeObj;
 import com.itrus.ca.modules.profile.service.ConfigAgentAppRelationService;
 import com.itrus.ca.modules.profile.service.ConfigAgentBoundDealInfoService;
 import com.itrus.ca.modules.profile.service.ConfigAgentOfficeRelationService;
@@ -787,7 +788,15 @@ public class WorkDealInfoOperationController extends BaseController {
 		model.addAttribute("tempStyle", chargeAgent.getTempStyle());
 		model.addAttribute("workLog", list);
 		model.addAttribute("workDealInfo", workDealInfo);
-		model.addAttribute("proList", ProductType.getProductTypeList());
+		//获得应用下的产品
+				List<ConfigProduct> products = configProductService.findByApp(workDealInfo.getConfigApp().getId());
+				List<ProductTypeObj> listProductTypeObjs = new ArrayList<ProductTypeObj>();
+				for (int i = 0; i < products.size(); i++) {
+					String ssssi = ProductType.productTypeStrMap.get(products.get(i).getProductName())+"["+(products.get(i).getProductLabel()==0?"通用":"专用")+"]";
+					ProductTypeObj obj = new ProductTypeObj(products.get(i).getId().intValue(), ssssi);
+					listProductTypeObjs.add(obj);
+				}
+				model.addAttribute("proList", listProductTypeObjs);
 		
 		if(workDealInfo.getExpirationDate()!=null){
 			model.addAttribute("expirationDate", workDealInfo.getExpirationDate());	
