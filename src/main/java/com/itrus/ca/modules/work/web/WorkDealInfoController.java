@@ -2997,6 +2997,17 @@ public class WorkDealInfoController extends BaseController {
 			model.addAttribute("imgUrl",Global.getConfig("images.path"));
 		}
 		
+		//获得应用下的产品
+				List<ConfigProduct> products = configProductService.findByAppAndProName(workDealInfo.getConfigApp().getId(), workDealInfo.getConfigProduct().getProductName());
+				List<ProductTypeObj> listProductTypeObjs = new ArrayList<ProductTypeObj>();
+				for (int i = 0; i < products.size(); i++) {
+					String ssssi = ProductType.productTypeStrMap.get(products.get(i).getProductName())+"["+(products.get(i).getProductLabel()==0?"通用":"专用")+"]";
+					ProductTypeObj obj = new ProductTypeObj(products.get(i).getId().intValue(), ssssi);
+					listProductTypeObjs.add(obj);
+				}
+				model.addAttribute("proList", listProductTypeObjs);
+		
+		
 		
 		if (dealInfoTypes.size() == 1) {
 			if (dealInfoTypes.get(0).equals(4)) {// 变更

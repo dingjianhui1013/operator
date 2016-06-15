@@ -98,7 +98,7 @@ public class ConfigRaAccountController extends BaseController {
 	public String form(ConfigRaAccount configRaAccount, Model model) {
 		model.addAttribute("configRaAccount", configRaAccount);
 		
-		if(configRaAccount.getId()!=null){
+		if(configRaAccount.getId()!=null&&configRaAccount.getKeyLen()!=null){
 			model.addAttribute("canModify", configRaAccountService.checkUsedByDeal(configRaAccount.getId()));
 		}
 		
