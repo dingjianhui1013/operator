@@ -50,11 +50,13 @@ import com.itrus.ca.modules.profile.entity.ConfigChargeAgent;
 import com.itrus.ca.modules.profile.entity.ConfigChargeAgentBoundConfigProduct;
 import com.itrus.ca.modules.profile.entity.ConfigProduct;
 import com.itrus.ca.modules.profile.entity.ConfigRaAccount;
+import com.itrus.ca.modules.profile.entity.ProductTypeObj;
 import com.itrus.ca.modules.profile.service.ConfigAgentBoundDealInfoService;
 import com.itrus.ca.modules.profile.service.ConfigAppOfficeRelationService;
 import com.itrus.ca.modules.profile.service.ConfigChargeAgentBoundConfigProductService;
 import com.itrus.ca.modules.profile.service.ConfigChargeAgentDetailService;
 import com.itrus.ca.modules.profile.service.ConfigChargeAgentService;
+import com.itrus.ca.modules.profile.service.ConfigProductService;
 import com.itrus.ca.modules.profile.service.ConfigRaAccountService;
 import com.itrus.ca.modules.receipt.entity.ReceiptDepotInfo;
 import com.itrus.ca.modules.receipt.entity.ReceiptEnterInfo;
@@ -137,6 +139,10 @@ public class WorkPayInfoController extends BaseController {
 
 	@Autowired
 	private SelfApplicationService selfApplicationService;
+	
+	@Autowired
+	private ConfigProductService configProductService;
+	
 	
 	
 	@ModelAttribute
@@ -1549,6 +1555,17 @@ public class WorkPayInfoController extends BaseController {
 		if (dealInfo.getDealInfoType3() != null) {
 			dealInfoTypes.add(dealInfo.getDealInfoType3());
 		}
+		
+		//获得应用下的产品
+		List<ConfigProduct> products = configProductService.findByAppAndProName(dealInfo.getConfigApp().getId(), dealInfo.getConfigProduct().getProductName());
+		List<ProductTypeObj> listProductTypeObjs = new ArrayList<ProductTypeObj>();
+		for (int i = 0; i < products.size(); i++) {
+			String ssssi = ProductType.productTypeStrMap.get(products.get(i).getProductName())+"["+(products.get(i).getProductLabel()==0?"通用":"专用")+"]";
+			ProductTypeObj obj = new ProductTypeObj(products.get(i).getId().intValue(), ssssi);
+			listProductTypeObjs.add(obj);
+		}
+		model.addAttribute("proList", listProductTypeObjs);
+		
 
 		if (dealInfoTypes.size() == 1) {
 			if (dealInfoTypes.get(0).equals(4)) {// 变更
