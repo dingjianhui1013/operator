@@ -164,7 +164,7 @@
 			<tr>
 				<th>移动电话:</th>
 				<td>${workDealInfo.workUserHis.contactPhone}</td>
-				<th>固定电话:</th>
+				<th>业务系统UID:</th>
 				<td>${workDealInfo.workUserHis.contactTel}</td>
 			</tr>
 			<tr>
