@@ -132,7 +132,7 @@
 										if(item.agentId=="${workDealInfo.configChargeAgentId}"){
 											styleHtml +="<option selected='selected'  value='"+item.id+"'>" + item.name + "</option>";
 											$("#boundId").val(item.id);
-											/* showYear(); */
+											
 										}else{
 											styleHtml +="<option value='"+item.id+"'>" + item.name + "</option>";
 										}							
@@ -814,7 +814,7 @@
 						<th id="supportDateTh" style="display: none">选择截止日期：</th>
 						<td id="supportDateTd" style="display: none">
 								<input class="input-medium Wdate" type="text"
-							required="required" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});"
+							 onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});"
 							 maxlength="20" readonly="readonly"
 							name="expirationDate" id="expirationDate"/>
 							</td>

@@ -1162,7 +1162,7 @@ var selected = false;
 				<table class="table table-striped table-bordered table-condensed">
 					<tbody>
 						<tr>
-							<th colspan="6" style="font-size: 20px;"><span
+							<th colspan="4" style="font-size: 20px;"><span
 								class="prompt" style="color: red; display: none;">*</span>基本信息</th>
 						</tr>
 						<tr>
@@ -1193,7 +1193,7 @@ var selected = false;
 
 							
 							
-							<th style="width: 100px;"><span class="prompt"
+							<th style="width: 195px;"><span class="prompt"
 								style="color: red; display: none;">*</span>申请年数：</th>
 							
 							<td>
@@ -1226,9 +1226,9 @@ var selected = false;
 						
 						<tr>
 						
-						<th style="width: 100px;"><span class="prompt"
+						<th style="width: 140px;"><span class="prompt"
 								style="color: red; display: none;">*</span>计费策略类型：</th>
-							<td style="width: 500px;"><select id="agentId"
+							<td style="width: 340px;"><select id="agentId"
 								name="agentId">
 									<option value="0">请选择</option>
 							</select> <input type="hidden" id="boundId"></td>
@@ -1239,7 +1239,7 @@ var selected = false;
 						<th id="supportDateTh" style="display: none" >选择截止日期：</th>
 						<td id="supportDateTd" style="display: none">
 								<input class="input-medium Wdate" type="text"
-							required="required" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});"
+							 onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});"
 							 maxlength="20" readonly="readonly" value="<fmt:formatDate value="${expirationDate}" pattern="yyyy-MM-dd"/>"
 							name="expirationDate" id="expirationDate"/>
 							</td>

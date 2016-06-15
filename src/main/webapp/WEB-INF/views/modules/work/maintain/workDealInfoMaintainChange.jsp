@@ -159,9 +159,6 @@
 						
 						if("${workDealInfo.id}"!=null && "${workDealInfo.id}"!=""){
 							var boundLabelList = "${boundLabelList}";
-							
-							/* $("#product").attr("onchange","setStyleList()");
-							$("#agentId").attr("onchange","setTemplateList()"); */
 							var agentHtml="";
 							var obj= $.parseJSON(boundLabelList);
 							$.each(obj, function(i, item){

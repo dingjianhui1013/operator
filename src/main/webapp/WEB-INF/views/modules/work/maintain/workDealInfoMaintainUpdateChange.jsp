@@ -15,10 +15,8 @@
 <script type="text/javascript" src="${ctxStatic }/js/content_zoom.js"></script>
 <script type="text/javascript" src="${ctxStatic }/js/common.js"></script>
 <script type="text/javascript">
-	$(document)
-			.ready(
-					function() {
-						$('div.small_pic a').fancyZoom({scaleImg: true, closeOnClick: true});
+	$(document).ready(function() {
+		$('div.small_pic a').fancyZoom({scaleImg: true, closeOnClick: true});
 						$("#name").focus();
 						$("#inputForm").validate(
 								{
@@ -762,7 +760,7 @@
 						<th id="supportDateTh" style="display: none">选择截止日期：</th>
 						<td id="supportDateTd" style="display: none">
 								<input class="input-medium Wdate" type="text"
-							required="required" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});"
+							 onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});"
 							 maxlength="20" readonly="readonly"
 							name="expirationDate" id="expirationDate"/>
 							</td>

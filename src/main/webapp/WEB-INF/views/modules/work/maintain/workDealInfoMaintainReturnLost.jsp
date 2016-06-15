@@ -68,84 +68,9 @@
 						}
 						
 						
-						
-
-						var url = "${ctx}/work/workDealInfo/showYear?lable=${workDealInfo.configProduct.productLabel}&productName=${workDealInfo.configProduct.productName}&app=${workDealInfo.configApp.id}&infoType=${empty update?'':1}&_="
-								+ new Date().getTime();
-						$.getJSON(url, function(data) {
-							if (data.year1) {
-								$("#year1").show();
-								$("#word1").show();
-							} else {
-								$("#year1").hide();
-								$("#word1").hide();
-							}
-							cc
-							if (data.year4) {
-								$("#year4").show();
-								$("#word4").show();
-							} else {
-								$("#year4").hide();
-								$("#word4").hide();
-							}
-							if (data.year5) {
-								$("#year5").show();
-								$("#word5").show();
-							} else {
-								$("#year5").hide();
-								$("#word5").hide();
-							}
-							var arr = [ data.nameDisplayName,
-									data.orgunitDisplayName,
-									data.emailDisplayName,
-									data.commonNameDisplayName,
-									data.addtionalField1DisplayName,
-									data.addtionalField2DisplayName,
-									data.addtionalField3DisplayName,
-									data.addtionalField4DisplayName,
-									data.addtionalField5DisplayName,
-									data.addtionalField6DisplayName,
-									data.addtionalField7DisplayName,
-									data.addtionalField8DisplayName ]
-							var arrList = arr.unique();
-							//清除所有必填项显示
-							$(".prompt").css("display", "none");
-							for (var i = 0; i < arrList.length; i++) {
-								if (arrList[i] != "product") {
-									$("input[name='" + arrList[i] + "']").attr(
-											"required", "required");
-									$("input[name='" + arrList[i] + "']")
-											.parent().prev().find("span")
-											.show();
-									if(arrList[i] == "contactName"){
-										$("#contactName1").attr("disabled","disabled");
-									}else if(arrList[i] == "conCertType"){
-										$("#conCertType1").attr("disabled","disabled");
-									}else if(arrList[i] == "conCertNumber"){
-										$("#conCertNumber1").attr("disabled","disabled");
-									}else if(arrList[i] == "contactPhone"){
-										$("#contactPhone1").attr("disabled","disabled");
-									}else if(arrList[i] == "contactTel"){
-										$("#contactTel1").attr("disabled","disabled");
-									}else if(arrList[i] == "contactSex"){
-										$("#sex0").attr("disabled","disabled");
-										$("#sex1").attr("disabled","disabled");
-									}
-								}else {
-									$("input[name='" + arrList[i] + "']").attr(
-											"required", "required");
-									$("input[name='" + arrList[i] + "']")
-											.parent().parent().prev().find(
-													"span").show();
-								}
-							}
-						});
-						
-						
+				
 						if("${workDealInfo.id}"!=null && "${workDealInfo.id}"!=""){
 							var boundLabelList = "${boundLabelList}";
-							var lable = "${workDealInfo.configProduct.productLabel}";
-							$("#agentId").attr("onchange","setStyleList("+lable+")");
 							var agentHtml="";
 							var obj= $.parseJSON(boundLabelList);
 							$.each(obj, function(i, item){
@@ -177,9 +102,9 @@
 							
 							var product = $("#product").val();
 							var agentId = $("#agentId").val();
-							var appId = $("#appId").val();
+						
 							if (agentId!=0) {
-								var url = "${ctx}/work/workDealInfo/setStyleList?lable="+lable+"&productName="+product+"&app="+appId+"&infoType=0&style="+agentId+"&_="+new Date().getTime();
+								var url = "${ctx}/work/workDealInfo/setTemplateList?productId="+product+"&infoType=0&style="+agentId+"&_="+new Date().getTime();
 								$.getJSON(url,function(data){
 									var styleList = data.array;
 									var styleHtml="";
@@ -195,6 +120,82 @@
 								});
 							}
 						}
+						
+						
+						
+						
+							$("#product").change(function(){
+							
+							var product = $("#product").val();
+							var agentHtml="";
+							var styleHtml="";
+							if (product!=0) {
+								var url = "${ctx}/work/workDealInfo/setStyleList1?productId="+product+"&_="+new Date().getTime();
+								$.getJSON(url,function(data){
+									
+									$.each(data, function(i, item){					 
+										 if(item.styleId=="1"){	
+												agentHtml+="<option value='"+item.styleId+"'>标准</option>";
+										}else if(item.styleId=="2"){
+												agentHtml+="<option value='"+item.styleId+"'>政府统一采购</option>";
+										}else if(item.styleId=="3"){
+												agentHtml+="<option value='"+item.styleId+"'>合同采购</option>";
+										}
+										 
+										 if(item.agentId!=null){
+											 $("#boundId").val(item.agentId);
+											 styleHtml +="<option value='"+item.agentId+"'>" + item.agentName + "</option>"; 
+										 }
+											
+										
+									});	
+									
+									if(agentHtml==""){
+										
+										agentHtml+="<option value='0'>请选择</option>";
+										$("#agentId").html(agentHtml);
+										styleHtml+="<option value='0'>请选择</option>";
+										$("#agentDetailId").html(styleHtml);
+										top.$.jBox.tip("请先配置计费策略！");
+										return;
+									}
+									
+									$("#agentId").html(agentHtml);
+									$("#agentDetailId").html("");
+									$("#agentDetailId").html(styleHtml);
+									
+									
+									
+									}); 	
+							}
+							
+						});
+						
+						
+						$("#agentId").change(function(){
+							var product = $("#product").val();
+							var agentId = $("#agentId").val();
+							if (agentId!=0) {
+								var url = "${ctx}/work/workDealInfo/setTemplateList?productId="+product+"&infoType=0&style="+agentId+"&_="+new Date().getTime();
+								$.getJSON(url,function(data){
+									var styleList = data.array;
+									var styleHtml="";
+									$.each(styleList,function(i,item){
+										if(i==0){
+											$("#boundId").val(item.id);
+										}
+										styleHtml +="<option value='"+item.id+"'>" + item.name + "</option>";
+									});
+									$("#agentDetailId").html(styleHtml);
+								});
+							}else{
+								top.$.jBox.tip("请您选择计费策略类型！");
+								
+							}
+							
+						});
+						
+						
 
 					});
 	Array.prototype.unique = function() {
@@ -386,46 +387,52 @@
 				<table class="table table-striped table-bordered table-condensed">
 					<tbody>
 						<tr>
-							<th colspan="6" style="font-size: 20px;">基本信息</th>
+							<th colspan="4" style="font-size: 20px;">基本信息</th>
 						</tr>
 						<tr>
 							<th><span class="prompt" style="color: red; display: none;">*</span>应用名称：</th>
 							<td><input type="text" name="configApp" disabled="disabled"
 								value="${workDealInfo.configApp.appName }" id="app" />
 								<input type="hidden" id="appId" value="${workDealInfo.configApp.id }" />
-								</td>
-							<th><span class="prompt" style="color: red; display: none;">*</span>选择产品：</th>
-							<td colspan="3"><input type="text" name="product" disabled="disabled"
-								value="${pro[workDealInfo.configProduct.productName] }" />
-								<input type="hidden" id="product" value="${workDealInfo.configProduct.productName }" />	
-								</td>
-						</tr>
-						<tr>
-							<th><span class="prompt" style="color: red; display: none;">*</span>应用标识：</th>
-							<td><input type="radio" disabled="disabled" name="lable"
-								<c:if test="${workDealInfo.configProduct.productLabel==0}">checked="checked"</c:if>
-								id="lable0" value="0">通用 &nbsp; &nbsp; <input
-								type="radio" disabled="disabled" name="lable"
-								<c:if test="${workDealInfo.configProduct.productLabel==1}">checked="checked"</c:if>
-								id="lable1" value="1">专用</td>
+							</td>
+								
+								
 							<th><span class="prompt" style="color: red; display: none;">*</span>业务类型：</th>
-							<td colspan="3">
+							<td >
 								
 								<c:if test="${reissue==2}"><input type="checkbox" disabled="disabled" checked="checked" value = "1"
 								name="dealInfoType1"><font color="red" style="font-weight:bold;">遗失补办</font><input type="hidden" value="1" name="dealInfoType1"></c:if>
 								<c:if test="${reissue==3}"><input type="checkbox" disabled="disabled" checked="checked" value = "2"
 								name="dealInfoType1"><font color="red" style="font-weight:bold;">损坏更换</font><input type="hidden" value="2" name="dealInfoType1"></c:if>
 								
-							</td>
+							</td>	
+								
+							
 						</tr>
 						<tr>
-							<th><span class="prompt" style="color: red; display: none;">*</span>申请年数：</th>
+						
+						
+							<th style="width: 100px"><span class="prompt" style="color: red; display: none;">*</span>选择产品：</th>
+							<td>
+									<select name="product"  id="product">
+									<c:forEach items="${proList}" var="product">
+										<option value="${product.id}" <c:if test="${product.id==workDealInfo.configProduct.id }">selected="selected"</c:if> >${product.name}</option>
+									</c:forEach>
+							</select>	
+							</td>
+						
+						
+							<th style="width: 100px"><span class="prompt" style="color: red; display: none;">*</span>申请年数：</th>
 							<td><input type="radio" id="delay" checked="checked"
 								name="year" disabled="disabled"> <span>不延期</span>
 
 							</td>
+							
+						</tr>
+						<tr>
+							
 							<th><span class="prompt" style="color: red; display: none;">*</span>计费策略类型：</th>
-							<td style="width: 100px;">
+							<td style="width: 400px;">
 							
 							<select id="agentId"
 								name="agentId">
@@ -434,7 +441,20 @@
 							
 							</td>
 			
-								<th><span class="prompt" style="color: red; display: none;">*</span>计费策略模版：</th>
+						<c:if test="${reissue==2}">
+						
+							<th>人为损坏：</th>
+							<td><input type="radio" name="manMadeDamage" value="true"/>是
+							 <input type="radio" name="manMadeDamage"value="false">否</td>
+						
+						</c:if>
+								
+						</tr>
+						
+						
+						
+						<tr>
+						<th><span class="prompt" style="color: red; display: none;">*</span>计费策略模版：</th>
 							<td>
 							
 							<select	 id="agentDetailId" name="agentDetailId">
@@ -443,14 +463,10 @@
 							
 							
 							</td>
+						
 						</tr>
-						<c:if test="${reissue==2}">
-						<tr id="manMade">
-							<th>人为损坏：</th>
-							<td><input type="radio" name="manMadeDamage" value="true">是
-							 <input type="radio" name="manMadeDamage"value="false">否</td>
-						</tr>
-						</c:if>
+						
+						
 					</tbody>
 				</table>
 			</div>

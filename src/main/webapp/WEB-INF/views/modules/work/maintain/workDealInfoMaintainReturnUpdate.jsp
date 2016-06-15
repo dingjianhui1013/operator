@@ -81,94 +81,11 @@
 						}
 						
 						
-						
-						
-						var url = "${ctx}/work/workDealInfo/showYear?lable=${workDealInfo.configProduct.productLabel}&productName=${workDealInfo.configProduct.productName}&app=${workDealInfo.configApp.id}&infoType=${empty update?'':1}&_="
-								+ new Date().getTime();
-						$.getJSON(url, function(data) {
-							if (data.year1) {
-								$("#year1").show();
-								$("#word1").show();
-							} else {
-								$("#year1").hide();
-								$("#word1").hide();
-							}
-							if (data.year2) {
-								$("#year2").show();
-								$("#word2").show();
-							} else {
-								$("#year2").hide();
-								$("#word2").hide();
-							}
-							if (data.year3) {
-								$("#year3").show();
-								$("#word3").show();
-							} else {
-								$("#year3").hide();
-								$("#word3").hide();
-							}
-							if (data.year4) {
-								$("#year4").show();
-								$("#word4").show();
-							} else {
-								$("#year4").hide();
-								$("#word4").hide();
-							}
-							if (data.year5) {
-								$("#year5").show();
-								$("#word5").show();
-							} else {
-								$("#year5").hide();
-								$("#word5").hide();
-							}
-							var arr = [ data.nameDisplayName,
-									data.orgunitDisplayName,
-									data.emailDisplayName,
-									data.commonNameDisplayName,
-									data.addtionalField1DisplayName,
-									data.addtionalField2DisplayName,
-									data.addtionalField3DisplayName,
-									data.addtionalField4DisplayName,
-									data.addtionalField5DisplayName,
-									data.addtionalField6DisplayName,
-									data.addtionalField7DisplayName,
-									data.addtionalField8DisplayName ]
-							var arrList = arr.unique();
-							//清除所有必填项显示
-							$(".prompt").css("display", "none");
-							for (var i = 0; i < arrList.length; i++) {
-								if (arrList[i] != "product") {
-									$("input[name='" + arrList[i] + "']").attr(
-											"required", "required");
-									$("input[name='" + arrList[i] + "']")
-											.parent().prev().find("span")
-											.show();
-									if(arrList[i] != "contacEmail"){
-										
-										$("input[name='" + arrList[i] + "']").attr("disabled","disabled");
-									}
-									
-									
-									
-									
-									
-								} else {
-									$("input[name='" + arrList[i] + "']").attr(
-											"required", "required");
-									$("input[name='" + arrList[i] + "']")
-											.parent().parent().prev().find(
-													"span").show();
-								}
-							}
-						});
-						
-						
-						
+		
 						
 						if("${workDealInfo.id}"!=null && "${workDealInfo.id}"!=""){
 							var boundLabelList = "${boundLabelList}";
-							var lable = "${workDealInfo.configProduct.productLabel}";
-							$("#agentId").attr("onchange","setStyleList("+lable+")");
+							
 							var agentHtml="";
 							var obj= $.parseJSON(boundLabelList);
 							$.each(obj, function(i, item){
@@ -200,9 +117,9 @@
 							
 							var product = $("#product").val();
 							var agentId = $("#agentId").val();
-							var appId = $("#appId").val();
+						
 							if (agentId!=0) {
-								var url = "${ctx}/work/workDealInfo/setStyleList?lable="+lable+"&productName="+product+"&app="+appId+"&infoType=0&style="+agentId+"&_="+new Date().getTime();
+								var url = "${ctx}/work/workDealInfo/setTemplateList?productId="+product+"&infoType=0&style="+agentId+"&_="+new Date().getTime();
 								$.getJSON(url,function(data){
 									var styleList = data.array;
 									var styleHtml="";
@@ -216,13 +133,217 @@
 										}
 									});
 									$("#agentDetailId").html(styleHtml);
+									
+									var agentBountId = $("#boundId").val();
+									
+									var url = "${ctx}/work/workDealInfo/showYearNew?boundId="+agentBountId+"&infoType=1&_="+new Date().getTime();
+									
+									$.getJSON(url, function(data) {
+										if (data.year1) {
+											$("#year1").show();
+											$("#word1").show();
+										} else {
+											$("#year1").hide();
+											$("#word1").hide();
+										}
+										if (data.year2) {
+											$("#year2").show();
+											$("#word2").show();
+										} else {
+											$("#year2").hide();
+											$("#word2").hide();
+										}
+										if (data.year3) {
+											$("#year3").show();
+											$("#word3").show();
+										} else {
+											$("#year3").hide();
+											$("#word3").hide();
+										}
+										if (data.year4) {
+											$("#year4").show();
+											$("#word4").show();
+										} else {
+											$("#year4").hide();
+											$("#word4").hide();
+										}
+										if (data.year5) {
+											$("#year5").show();
+											$("#word5").show();
+										} else {
+											$("#year5").hide();
+											$("#word5").hide();
+										}
+										
+										
+										//经信委
+										if(data.support){
+											$("#supportDateTh").show();
+											$("#supportDateTd").show();
+										}
+										if(!data.support){
+											$("#supportDateTh").hide();
+											$("#supportDateTd").hide();
+										}
+										
+										
+										var boundId =  $("#agentDetailId").val(); 
+										var url="${ctx}/work/workDealInfo/checkSurplusNum?boundId="+boundId+"&_="+new Date().getTime();
+										$.getJSON(url,function(data){
+											$("#surplusNum").val(data.surplusNum);
+											if($("#surplusNum").val()==0 && $("#agentId").val()!=1){
+												top.$.jBox.tip("此计费策略模版剩余数量为零，不能进行业务办理！");
+												$("#agentMes").show();
+											}else{
+												$("#agentMes").hide();
+											}
+										});
+										
+										
+										var arr = [ data.nameDisplayName,
+												data.orgunitDisplayName,
+												data.emailDisplayName,
+												data.commonNameDisplayName,
+												data.addtionalField1DisplayName,
+												data.addtionalField2DisplayName,
+												data.addtionalField3DisplayName,
+												data.addtionalField4DisplayName,
+												data.addtionalField5DisplayName,
+												data.addtionalField6DisplayName,
+												data.addtionalField7DisplayName,
+												data.addtionalField8DisplayName ]
+										var arrList = arr.unique();
+										//清除所有必填项显示
+										$(".prompt").css("display", "none");
+										for (var i = 0; i < arrList.length; i++) {
+											if (arrList[i] != "product") {
+												$("input[name='" + arrList[i] + "']").attr(
+														"required", "required");
+												$("input[name='" + arrList[i] + "']")
+														.parent().prev().find("span")
+														.show();
+												if(arrList[i] != "contacEmail"){
+													
+													$("input[name='" + arrList[i] + "']").attr("disabled","disabled");
+												}
+												
+												
+												
+												
+												
+											} else {
+												$("input[name='" + arrList[i] + "']").attr(
+														"required", "required");
+												$("input[name='" + arrList[i] + "']")
+														.parent().parent().prev().find(
+																"span").show();
+											}
+										}
+									});
+									
+									
+									
+									
+									
 								});
 							}
 						}
 						
 						
 						
-						
+							$("#product").change(function(){
+							
+							var product = $("#product").val();
+							var agentHtml="";
+							var styleHtml="";
+							if (product!=0) {
+								var url = "${ctx}/work/workDealInfo/setStyleList1?productId="+product+"&_="+new Date().getTime();
+								$.getJSON(url,function(data){
+									
+									$.each(data, function(i, item){					 
+										 if(item.styleId=="1"){	
+												agentHtml+="<option value='"+item.styleId+"'>标准</option>";
+										}else if(item.styleId=="2"){
+												agentHtml+="<option value='"+item.styleId+"'>政府统一采购</option>";
+										}else if(item.styleId=="3"){
+												agentHtml+="<option value='"+item.styleId+"'>合同采购</option>";
+										}
+										 
+										 if(item.agentId!=null){
+											 $("#boundId").val(item.agentId);
+											 showYear();
+											 styleHtml +="<option value='"+item.agentId+"'>" + item.agentName + "</option>"; 
+										 }
+											
+										
+									});	
+									
+									if(agentHtml==""){
+										
+										agentHtml+="<option value='0'>请选择</option>";
+										$("#agentId").html(agentHtml);
+										styleHtml+="<option value='0'>请选择</option>";
+										$("#agentDetailId").html(styleHtml);
+										top.$.jBox.tip("请先配置计费策略！");
+										return;
+									}
+									
+									$("#agentId").html(agentHtml);
+									$("#agentDetailId").html("");
+									$("#agentDetailId").html(styleHtml);
+									
+									
+									
+									}); 	
+							}
+							
+						});
+							
+							
+							
+							
+							
+							$("#agentId").change(function(){
+								var product = $("#product").val();
+								var agentId = $("#agentId").val();
+								if (agentId!=0) {
+									var url = "${ctx}/work/workDealInfo/setTemplateList?productId="+product+"&infoType=0&style="+agentId+"&_="+new Date().getTime();
+									$.getJSON(url,function(data){
+										var styleList = data.array;
+										var styleHtml="";
+										$.each(styleList,function(i,item){
+											if(i==0){
+												$("#boundId").val(item.id);
+												showYear();
+											}
+											styleHtml +="<option value='"+item.id+"'>" + item.name + "</option>";
+										});
+										$("#agentDetailId").html(styleHtml);
+									});
+								}else{
+									top.$.jBox.tip("请您选择计费策略类型！");
+									
+								}
+								
+							});
+							
+							
+							
+							
+							//经信委
+							$("input[name='year']").change(function(){
+								$("#expirationDate").val("");						
+							});
+							
+							$("#expirationDate").blur(function(){
+								
+								$("#year1").removeAttr("checked");
+								$("#year2").removeAttr("checked");
+								$("#year3").removeAttr("checked");
+								$("#year4").removeAttr("checked");
+								$("#year5").removeAttr("checked");
+							});
+							
 						
 
 					});
@@ -288,15 +409,25 @@
 								}
 						     }
 						 });
-						if(!isCheck){
+						if(!isCheck && ($("#expirationDate").val() == null || $("#expirationDate").val() == "")){
 							top.$.jBox.tip("请选择您想要更新的年限！");
 						}else{
-							top.$.jBox.confirm("更新年限确认为&nbsp;'&nbsp;<b>"+year+"</b>&nbsp;'&nbsp;年吗？",'系统提示',function(v,h,f){
-								if(v=='ok'){
-									$("#inputForm").submit(); 
-								}
-							},{buttonsFocus:1});
-							top.$('.jbox-body .jbox-icon').css('top','55px');
+							if($("#expirationDate").val() != null&&$("#expirationDate").val() != ""){
+								top.$.jBox.confirm("指定到期时间为&nbsp;'&nbsp;<b>"+$("#expirationDate").val()+"</b>&nbsp;'&nbsp;吗？",'系统提示',function(v,h,f){
+									if(v=='ok'){
+										$("#inputForm").submit(); 
+									}
+								},{buttonsFocus:1});
+								top.$('.jbox-body .jbox-icon').css('top','55px');
+							}	
+							if(isCheck){
+								top.$.jBox.confirm("更新年限确认为&nbsp;'&nbsp;<b>"+year+"</b>&nbsp;'&nbsp;年吗？",'系统提示',function(v,h,f){
+									if(v=='ok'){
+										$("#inputForm").submit(); 
+									}
+								},{buttonsFocus:1});
+								top.$('.jbox-body .jbox-icon').css('top','55px');
+							}
 						}
 					}
 				});
@@ -312,15 +443,25 @@
 					}
 			     }
 			 });
-			if(!isCheck){
+			if(!isCheck && ($("#expirationDate").val() == null || $("#expirationDate").val() == "")){
 				top.$.jBox.tip("请选择您想要更新的年限！");
 			}else{
-				top.$.jBox.confirm("更新年限确认为&nbsp;'&nbsp;<b>"+year+"</b>&nbsp;'&nbsp;年吗？",'系统提示',function(v,h,f){
-					if(v=='ok'){
-						$("#inputForm").submit(); 
-					}
-				},{buttonsFocus:1});
-				top.$('.jbox-body .jbox-icon').css('top','55px');
+				if($("#expirationDate").val() != null&&$("#expirationDate").val() != ""){
+					top.$.jBox.confirm("指定到期时间为&nbsp;'&nbsp;<b>"+$("#expirationDate").val()+"</b>&nbsp;'&nbsp;吗？",'系统提示',function(v,h,f){
+						if(v=='ok'){
+							$("#inputForm").submit(); 
+						}
+					},{buttonsFocus:1});
+					top.$('.jbox-body .jbox-icon').css('top','55px');
+				}	
+				if(isCheck){
+					top.$.jBox.confirm("更新年限确认为&nbsp;'&nbsp;<b>"+year+"</b>&nbsp;'&nbsp;年吗？",'系统提示',function(v,h,f){
+						if(v=='ok'){
+							$("#inputForm").submit(); 
+						}
+					},{buttonsFocus:1});
+					top.$('.jbox-body .jbox-icon').css('top','55px');
+				}
 			}
 			
 		}
@@ -394,7 +535,20 @@
 			} else {
 				$("#year5").hide();
 				$("#word5").hide();
-			}			
+			}	
+			
+			
+			//经信委
+			if(data.support){
+				$("#supportDateTh").show();
+				$("#supportDateTd").show();
+			}
+			if(!data.support){
+				$("#supportDateTh").hide();
+				$("#supportDateTd").hide();
+			}
+			
+			
 			var boundId =  $("#agentDetailId").val(); 
 			var url="${ctx}/work/workDealInfo/checkSurplusNum?boundId="+boundId+"&_="+new Date().getTime();
 			$.getJSON(url,function(data){
@@ -559,29 +713,15 @@
 						</tr>
 						<tr>
 							<th><span class="prompt" style="color: red; display: none;">*</span>代办应用：</th>
-							<td colspan="3"><input type="text" name="configApp" disabled="disabled"
+							<td ><input type="text" name="configApp" disabled="disabled"
 								value="${workDealInfo.configApp.appName }" id="4" />
 								
 								<input type="hidden" id="appId" value="${workDealInfo.configApp.id }" />
 								
 								</td>
-							<th><span class="prompt" style="color: red; display: none;">*</span>选择产品：</th>
-							<td colspan="3"><input type="text" name="product"  disabled="disabled"
-								value="${pro[workDealInfo.configProduct.productName] }" />
+							
 								
-								<input type="hidden" id="product" value="${workDealInfo.configProduct.productName }" />
-								
-								</td>
-						</tr>
-						<tr>
-							<th><span class="prompt" style="color: red; display: none;">*</span>应用标识：</th>
-							<td colspan="3"><input type="radio" disabled="disabled" name="lable"
-								<c:if test="${workDealInfo.configProduct.productLabel==0}">checked="checked"</c:if>
-								id="lable0" value="0">通用 &nbsp; &nbsp; <input
-								type="radio" disabled="disabled" name="lable"
-								<c:if test="${workDealInfo.configProduct.productLabel==1}">checked="checked"</c:if>
-								id="lable1" value="1">专用</td>
-							<th><span class="prompt" style="color: red; display: none;">*</span>业务类型：</th>
+								<th><span class="prompt" style="color: red; display: none;">*</span>业务类型：</th>
 							<td colspan="3">
 							
 							
@@ -600,17 +740,64 @@
 							<input type="hidden" value="0" name="dealInfoType">
 							
 							</td>
+								
+						</tr>
+						<tr>
+							
+							<th><span class="prompt" style="color: red; display: none;">*</span>选择产品：</th>
+							<td >
+							<select name="product"  id="product">
+									<c:forEach items="${proList}" var="product">
+										<option value="${product.id}" <c:if test="${product.id==workDealInfo.configProduct.id }">selected="selected"</c:if> >${product.name}</option>
+									</c:forEach>
+							</select>		
+							</td>
+							
+							
+							<th style="width: 100px;"><span class="prompt"
+								style="color: red; display: none;">*</span>申请年数：</th>
+							<td>
+								<input type="radio" name="year" value="1" id="year1" <c:if test="${workDealInfo.year==1 }">checked</c:if> />
+								<span id="word1">1年</span>
+								<input type="radio" name="year" value="2" id="year2" <c:if test="${workDealInfo.year==2 }">checked</c:if> />
+								<span id="word2">2年 </span>
+								<input type="radio" name="year" value="3" id="year3" <c:if test="${workDealInfo.year==3 }">checked</c:if> />
+								<span id="word3">3年 </span>
+								<input type="radio" name="year" value="4" id="year4" <c:if test="${workDealInfo.year==4 }">checked</c:if> />
+								<span id="word4">4年</span>
+								<input type="radio" name="year" value="5" id="year5" <c:if test="${workDealInfo.year==5 }">checked</c:if> />
+								<span id="word5">5年</span>
+							</td>
 							
 						</tr>
 						<tr>
 
 							<th style="width: 100px;"><span class="prompt"
 								style="color: red; display: none;">*</span>计费策略类型：</th>
-							<td style="width: 250px;"><select id="agentId"
+							<td style="width: 400px;"><select id="agentId"
 								name="agentId">
 									<option value="0">请选择</option>
 							</select> <input type="hidden" id="boundId"></td>
-							<th style="width: 100px;"><span class="prompt"
+							
+							
+							
+							<th id="supportDateTh" style="display: none">选择截止日期：</th>
+						<td id="supportDateTd" style="display: none">
+								<input class="input-medium Wdate" type="text"
+							 onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});"
+							 maxlength="20" readonly="readonly" value="<fmt:formatDate value="${expirationDate}" pattern="yyyy-MM-dd"/>"
+							name="expirationDate" id="expirationDate"/>
+							</td>
+							
+						
+							
+
+						</tr>
+						
+						
+						
+						<tr>
+						<th style="width: 100px;"><span class="prompt"
 								style="color: red; display: none;">*</span>计费策略模版：</th>
 							<td style="width: 270px;"><select
 								onchange="setYearByBoundId()" id="agentDetailId"
@@ -620,30 +807,17 @@
 							<input type="hidden" id="surplusNum" />
 
 							</td>
-
-							<th style="width: 100px;"><span class="prompt"
-								style="color: red; display: none;">*</span>申请年数：</th>
-							<td>
-								<input type="radio" name="year" value="1" id="year1">
-								<span id="word1">1年</span>
-								<input type="radio" name="year" value="2" id="year2">
-								<span id="word2">2年 </span>
-								<input type="radio" name="year" value="3" id="year3">
-								<span id="word3">3年 </span>
-								<input type="radio" name="year" value="4" id="year4">
-								<span id="word4">4年</span>
-								<input type="radio" name="year" value="5" id="year5">
-								<span id="word5">5年</span>
-							</td>
-
-						</tr>
-						<c:if test="${reissue==2}">
-						<tr id="manMade">
+							
+							
+							
+							<c:if test="${reissue==2}">
 							<th>人为损坏：</th>
 							<td><input type="radio" name="manMadeDamage" value="true">是
 							 <input type="radio" name="manMadeDamage"value="false">否</td>
-						</tr>
 						</c:if>
+							
+						</tr>
+						
 					</tbody>
 				</table>
 			</div>

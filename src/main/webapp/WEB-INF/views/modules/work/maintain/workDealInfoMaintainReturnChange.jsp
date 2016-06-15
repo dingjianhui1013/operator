@@ -125,8 +125,7 @@
 						
 						if("${workDealInfo.id}"!=null && "${workDealInfo.id}"!=""){
 							var boundLabelList = "${boundLabelList}";
-							var lable = "${workDealInfo.configProduct.productLabel}";
-							$("#agentId").attr("onchange","setStyleList("+lable+")");
+							
 							var agentHtml="";
 							var obj= $.parseJSON(boundLabelList);
 							$.each(obj, function(i, item){
@@ -158,9 +157,9 @@
 							
 							var product = $("#product").val();
 							var agentId = $("#agentId").val();
-							var appId = $("#appId").val();
+						
 							if (agentId!=0) {
-								var url = "${ctx}/work/workDealInfo/setStyleList?lable="+lable+"&productName="+product+"&app="+appId+"&infoType=0&style="+agentId+"&_="+new Date().getTime();
+								var url = "${ctx}/work/workDealInfo/setTemplateList?productId="+product+"&infoType=0&style="+agentId+"&_="+new Date().getTime();
 								$.getJSON(url,function(data){
 									var styleList = data.array;
 									var styleHtml="";
@@ -179,7 +178,76 @@
 						
 						
 						
+						$("#product").change(function(){
+							
+							var product = $("#product").val();
+							var agentHtml="";
+							var styleHtml="";
+							if (product!=0) {
+								var url = "${ctx}/work/workDealInfo/setStyleList1?productId="+product+"&_="+new Date().getTime();
+								$.getJSON(url,function(data){
+									
+									$.each(data, function(i, item){					 
+										 if(item.styleId=="1"){	
+												agentHtml+="<option value='"+item.styleId+"'>标准</option>";
+										}else if(item.styleId=="2"){
+												agentHtml+="<option value='"+item.styleId+"'>政府统一采购</option>";
+										}else if(item.styleId=="3"){
+												agentHtml+="<option value='"+item.styleId+"'>合同采购</option>";
+										}
+										 
+										 if(item.agentId!=null){
+											 $("#boundId").val(item.agentId);
+											 styleHtml +="<option value='"+item.agentId+"'>" + item.agentName + "</option>"; 
+										 }
+											
+										
+									});	
+									
+									if(agentHtml==""){
+										
+										agentHtml+="<option value='0'>请选择</option>";
+										$("#agentId").html(agentHtml);
+										styleHtml+="<option value='0'>请选择</option>";
+										$("#agentDetailId").html(styleHtml);
+										top.$.jBox.tip("请先配置计费策略！");
+										return;
+									}
+									
+									$("#agentId").html(agentHtml);
+									$("#agentDetailId").html("");
+									$("#agentDetailId").html(styleHtml);
+									
+									
+									
+									}); 	
+							}
+							
+						});
 						
+						
+						$("#agentId").change(function(){
+							var product = $("#product").val();
+							var agentId = $("#agentId").val();
+							if (agentId!=0) {
+								var url = "${ctx}/work/workDealInfo/setTemplateList?productId="+product+"&infoType=0&style="+agentId+"&_="+new Date().getTime();
+								$.getJSON(url,function(data){
+									var styleList = data.array;
+									var styleHtml="";
+									$.each(styleList,function(i,item){
+										if(i==0){
+											$("#boundId").val(item.id);
+										}
+										styleHtml +="<option value='"+item.id+"'>" + item.name + "</option>";
+									});
+									$("#agentDetailId").html(styleHtml);
+								});
+							}else{
+								top.$.jBox.tip("请您选择计费策略类型！");
+								
+							}
+							
+						});	
 						
 						
 						
@@ -310,7 +378,7 @@
 				<table class="table table-striped table-bordered table-condensed">
 					<tbody>
 						<tr>
-							<th colspan="6" style="font-size: 20px;">基本信息</th>
+							<th colspan="4" style="font-size: 20px;">基本信息</th>
 						</tr>
 						<tr>
 							<th><span class="prompt" style="color: red; display: none;">*</span>应用名称：</th>
@@ -318,22 +386,10 @@
 								value="${workDealInfo.configApp.appName }" id="app" />
 								<input type="hidden" id="appId" value="${workDealInfo.configApp.id }" />
 								</td>
-							<th><span class="prompt" style="color: red; display: none;">*</span>选择产品：</th>
-							<td colspan="3"><input type="text" name="product" disabled="disabled"
-								value="${pro[workDealInfo.configProduct.productName] }" />
-							<input type="hidden" id="product" value="${workDealInfo.configProduct.productName }" />	
-							</td>
-						</tr>
-						<tr>
-							<th><span class="prompt" style="color: red; display: none;">*</span>应用标识：</th>
-							<td><input type="radio" disabled="disabled" name="lable"
-								<c:if test="${workDealInfo.configProduct.productLabel==0}">checked="checked"</c:if>
-								id="lable0" value="0">通用 &nbsp; &nbsp; <input
-								type="radio" disabled="disabled" name="lable"
-								<c:if test="${workDealInfo.configProduct.productLabel==1}">checked="checked"</c:if>
-								id="lable1" value="1">专用</td>
+								
+								
 							<th><span class="prompt" style="color: red; display: none;">*</span>业务类型：</th>
-							<td colspan="3">
+							<td>
 								
 									<input type="checkbox" disabled="disabled" checked="checked"
 										value="3" name="dealInfoType2">
@@ -349,24 +405,56 @@
 								name="dealInfoType1">
 								<font color="red" style="font-weight:bold;">损坏更换</font>
 								<input type="hidden" value="3" name="dealInfoType1"></c:if>
+							</td>	
+								
+							
+						</tr>
+						<tr>
+							
+							<th><span class="prompt" style="color: red; display: none;">*</span>选择产品：</th>
+							<td>
+							
+							<select name="product"  id="product">
+									<c:forEach items="${proList}" var="product">
+										<option value="${product.id}" <c:if test="${product.id==workDealInfo.configProduct.id }">selected="selected"</c:if> >${product.name}</option>
+									</c:forEach>
+							</select>	
 							</td>
+							
+							<th style="width: 100px;"><span class="prompt" style="color: red; display: none;">*</span>申请年数：</th>
+							<td><input type="radio" id="delay" checked="checked"
+								name="year" disabled="disabled"> <span>不延期</span>
+								</td>
 										
 						</tr>
 						<tr>
-							<th><span class="prompt" style="color: red; display: none;">*</span>申请年数：</th>
-							<td><input type="radio" id="delay" checked="checked"
-								name="year" disabled="disabled"> <span>不延期</span>
+							
 
-							</td>
-							<th><span class="prompt" style="color: red; display: none;">*</span>计费策略类型：</th>
-							<td style="width: 100px;">
+							
+							<th style="width: 100px;"><span class="prompt" style="color: red; display: none;">*</span>计费策略类型：</th>
+							<td style="width: 400px;">
 							
 							<select id="agentId"
 								name="agentId">
 									<option value="0">请选择</option>
 							</select>
 			
-								<th><span class="prompt" style="color: red; display: none;">*</span>计费策略模版：</th>
+			</td>
+			<c:if test="${reissue==2}">
+						
+							<th>人为损坏：</th>
+							<td><input type="radio" name="manMadeDamage" value="true">是
+							 <input type="radio" name="manMadeDamage"value="false">否</td>
+						
+						</c:if>
+			
+								
+						</tr>
+						
+						
+						
+						<tr>
+						<th><span class="prompt" style="color: red; display: none;">*</span>计费策略模版：</th>
 							<td>
 							
 							<select	 id="agentDetailId" name="agentDetailId">
@@ -374,14 +462,12 @@
 							</select> 
 							
 							</td>
+							
+							<th></th>
+							<td></td>
+							
 						</tr>
-						<c:if test="${reissue==2}">
-						<tr id="manMade">
-							<th>人为损坏：</th>
-							<td><input type="radio" name="manMadeDamage" value="true">是
-							 <input type="radio" name="manMadeDamage"value="false">否</td>
-						</tr>
-						</c:if>
+						
 					</tbody>
 				</table>
 			</div>
