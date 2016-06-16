@@ -31,7 +31,7 @@ import com.itrus.ca.modules.work.entity.WorkUser;
  * @version 2015-11-30
  */
 @Entity
-@Table(name = "message_messageSending")
+@Table(name = "message_message_sending")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class MessageSending extends DataEntity {
 	

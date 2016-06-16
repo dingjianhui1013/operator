@@ -35,7 +35,7 @@ import com.itrus.ca.modules.work.entity.WorkUser;
  * @version 2015-11-27
  */
 @Entity
-@Table(name = "message_smsConfiguration")
+@Table(name = "message_sms_configuration")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class SmsConfiguration extends DataEntity {
 

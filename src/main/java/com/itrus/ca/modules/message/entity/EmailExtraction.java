@@ -27,7 +27,7 @@ import com.itrus.ca.modules.work.entity.WorkDealInfo;
  * @version 2015-11-30
  */
 @Entity
-@Table(name = "message_emailExtraction")
+@Table(name = "message_email_Extraction")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class EmailExtraction extends DataEntity {
 	
