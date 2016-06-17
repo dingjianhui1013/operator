@@ -4341,7 +4341,10 @@ public class WorkDealInfoController extends BaseController {
 		List<Long> dealInfoByAreaIds = Lists.newArrayList();
 		List<Long> officeids = Lists.newArrayList();
 		if (officeId != null && officeId != 0) {
+			
 			officeids.add(officeId);
+			
+			/*officeids.add(officeId);
 			List<Long> appids = Lists.newArrayList();
 			List<ConfigAppOfficeRelation> appOffices = configAppOfficeRelationService.findAllByOfficeId(officeId);// 通过网店获取引用的id
 			if (appOffices.size() > 0) {
@@ -4358,11 +4361,11 @@ public class WorkDealInfoController extends BaseController {
 				for (int i = 0; i < deals.size(); i++) {
 					dealInfoByOfficeAreaIds.add(deals.get(i).getId());
 				}
-			}
+			}*/
 		} else {
 			if (area != null) {
-				List<Long> appids = Lists.newArrayList();
-				// List<Long> officeids = Lists.newArrayList();
+				/*List<Long> appids = Lists.newArrayList();*/
+				/* List<Long> officeids = Lists.newArrayList();*/
 				List<Office> offices = officeService.findByParentId(area);// 根据区域id获取网店id
 				if (offices.size() > 0) {
 					for (int i = 0; i < offices.size(); i++) {
@@ -4372,7 +4375,7 @@ public class WorkDealInfoController extends BaseController {
 					officeids.add(-1l);
 				}
 
-				List<ConfigAppOfficeRelation> appOffices = configAppOfficeRelationService.findAllByOfficeId(officeids);// 根据网店id获取应用id
+	/*			List<ConfigAppOfficeRelation> appOffices = configAppOfficeRelationService.findAllByOfficeId(officeids);// 根据网店id获取应用id
 				if (appOffices.size() > 0) {
 					for (int i = 0; i < appOffices.size(); i++) {
 						appids.add(appOffices.get(i).getConfigApp().getId());
@@ -4388,7 +4391,7 @@ public class WorkDealInfoController extends BaseController {
 					for (int i = 0; i < deals.size(); i++) {
 						dealInfoByAreaIds.add(deals.get(i).getId());
 					}
-				}
+				}*/
 			}
 		}
 		ProductType productType = new ProductType();
@@ -4413,7 +4416,7 @@ public class WorkDealInfoController extends BaseController {
 		if(workType!=null&&workType==5)
 		{
 			Page<WorkDealInfo> page = workDealInfoService.findCX(new Page<WorkDealInfo>(request, response), workDealInfo,
-					dealInfoByOfficeAreaIds, dealInfoByAreaIds, officeids, apply, certType, workType, year, luruStartTime,
+					/*dealInfoByOfficeAreaIds, dealInfoByAreaIds,*/ officeids, apply, certType, workType, year, luruStartTime,
 					luruEndTime, officeIds, daoqiStartTime, daoqiEndTime, jianzhengStartTime, jianzhengEndTime,
 					certInfoList);
 			model.addAttribute("proType", ProductType.productTypeStrMap);
@@ -4467,7 +4470,7 @@ public class WorkDealInfoController extends BaseController {
 			return "modules/work/workDealInfoBusinessQueryList";
 		}
 		Page<WorkDealInfo> page = workDealInfoService.find(new Page<WorkDealInfo>(request, response), workDealInfo,
-				dealInfoByOfficeAreaIds, dealInfoByAreaIds, officeids, apply, certType, workType, year, luruStartTime,
+				/*dealInfoByOfficeAreaIds, dealInfoByAreaIds,*/ officeids, apply, certType, workType, year, luruStartTime,
 				luruEndTime, officeIds, daoqiStartTime, daoqiEndTime, jianzhengStartTime, jianzhengEndTime,
 				certInfoList);
 		model.addAttribute("proType", ProductType.productTypeStrMap);

@@ -1429,8 +1429,8 @@ public class WorkDealInfoService extends BaseService {
 	}
 
 	public Page<WorkDealInfo> find(Page<WorkDealInfo> page,
-			WorkDealInfo workDealInfo, List<Long> dealInfoByAreaIds,
-			List<Long> dealInfoByOfficeAreaIds, List<Long> officeIds,
+			WorkDealInfo workDealInfo, /*List<Long> dealInfoByAreaIds,
+			List<Long> dealInfoByOfficeAreaIds,*/ List<Long> officeIds,
 			Long apply, String certType, Integer workType, Integer year,
 			Date luruStartTime, Date luruEndTime, List<Long> offices,
 			Date daoqiStartTime, Date daoqiEndTime, Date jianzhengStartTime,
@@ -1593,13 +1593,13 @@ public class WorkDealInfoService extends BaseService {
 		if (certInfoList.size() > 0) {
 			dc.add(Restrictions.in("workCertInfo", certInfoList));
 		}
-		if (dealInfoByAreaIds != null && dealInfoByAreaIds.size() > 0) {
+		/*if (dealInfoByAreaIds != null && dealInfoByAreaIds.size() > 0) {
 			dc.add(Restrictions.in("id", dealInfoByAreaIds));
 		}
 		if (dealInfoByOfficeAreaIds != null
 				&& dealInfoByOfficeAreaIds.size() > 0) {
 			dc.add(Restrictions.in("id", dealInfoByOfficeAreaIds));
-		}
+		}*/
 		if (officeIds != null && officeIds.size() > 0) {
 			dc.add(Restrictions.in("officeId", officeIds));
 		}
@@ -1636,8 +1636,8 @@ public class WorkDealInfoService extends BaseService {
 	
 
 	public Page<WorkDealInfo> findCX(Page<WorkDealInfo> page,
-			WorkDealInfo workDealInfo, List<Long> dealInfoByAreaIds,
-			List<Long> dealInfoByOfficeAreaIds, List<Long> officeIds,
+			WorkDealInfo workDealInfo, /*List<Long> dealInfoByAreaIds,
+			List<Long> dealInfoByOfficeAreaIds,*/ List<Long> officeIds,
 			Long apply, String certType, Integer workType, Integer year,
 			Date luruStartTime, Date luruEndTime, List<Long> offices,
 			Date daoqiStartTime, Date daoqiEndTime, Date jianzhengStartTime,
@@ -1800,13 +1800,13 @@ public class WorkDealInfoService extends BaseService {
 		if (certInfoList.size() > 0) {
 			dc.add(Restrictions.in("workCertInfo", certInfoList));
 		}
-		if (dealInfoByAreaIds != null && dealInfoByAreaIds.size() > 0) {
+		/*if (dealInfoByAreaIds != null && dealInfoByAreaIds.size() > 0) {
 			dc.add(Restrictions.in("id", dealInfoByAreaIds));
 		}
 		if (dealInfoByOfficeAreaIds != null
 				&& dealInfoByOfficeAreaIds.size() > 0) {
 			dc.add(Restrictions.in("id", dealInfoByOfficeAreaIds));
-		}
+		}*/
 		if (officeIds != null && officeIds.size() > 0) {
 			dc.add(Restrictions.in("officeId", officeIds));
 		}
