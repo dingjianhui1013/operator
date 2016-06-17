@@ -194,7 +194,7 @@
 			<form:input path="workUser.conCertNumber" htmlEscape="false"
 				maxlength="18" class="input-medium" id="conCertNumber"/>
 				 <input id="btnSubmit" class="btn btn-primary"
-				onclick="return onSubmit();" type="submit" value="查询" />
+				 type="submit" value="查询" />
 				<input id="resetTOP" type="button" class="btn btn-primary" onclick="javascript:resetAll()" value="重置"/>
 				<input id="gjcx" style="text-align:center" class="btn btn-info" onclick="show()" type="button" value="高级">
 				<input id="exportZS" style="text-align:center" class="btn btn-info" onclick="dcZS()" type="button" value="导出">
@@ -390,7 +390,7 @@
 				<br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				&nbsp;&nbsp;&nbsp;&nbsp;
-				<input id="btnSubmit" class="btn btn-primary" onclick="return onSubmit()" type="submit"
+				<input id="btnSubmit" class="btn btn-primary"  type="submit"
 				value="查询" />
 				<input onclick="javascript:resetAllTwo()" type="button" class="btn btn-primary" value="重置"/>
 				<input style="text-align:center" class="btn btn-info" onclick="hidde()" type="button" value="收起">

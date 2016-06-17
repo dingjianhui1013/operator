@@ -48,12 +48,28 @@
 					$("#tStyle").val(v);
 				});
 
-				if ($("#tStyle").val() == 1) {
-					$("#configureNumDiv").hide();
-					$("#htStartTimeDiv").hide();
-					$("#htEndTimeDiv").hide();
-					$("#configureUpdateNumDiv").hide();
+				
+				if(${id==null}){
+					if ($("#tStyle").val() == 1) {
+						$("#configureNumDiv").hide();
+						$("#htStartTimeDiv").hide();
+						$("#htEndTimeDiv").hide();
+						$("#configureUpdateNumDiv").hide();
+					}	
 				}
+				
+				
+				if(${id!=null}){
+					if ($("#tStyleH").val() == 1) {
+						$("#configureNumDiv").hide();
+						$("#htStartTimeDiv").hide();
+						$("#htEndTimeDiv").hide();
+						$("#configureUpdateNumDiv").hide();
+					}	
+				}
+				
+				
+				
 
 			});
 	function checkUsed() {
@@ -241,7 +257,7 @@
 							政府统一采购
 							<form:radiobutton disabled="true" path="tempStyle" value="3" onclick="checkBZ()" />
 							合同采购 
-								<input type="hidden" name="tempStyle" value="${configChargeAgent.tempStyle }">
+								<input type="hidden" name="tempStyle" id="tStyleH" value="${configChargeAgent.tempStyle }">
 						</div>
 					</div>
 				</td>
