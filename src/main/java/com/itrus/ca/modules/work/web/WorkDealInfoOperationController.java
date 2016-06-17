@@ -812,8 +812,12 @@ public class WorkDealInfoOperationController extends BaseController {
 	@RequestMapping(value = "errorSave")
 	public String errorSave(Model model, RedirectAttributes redirectAttributes,
 			Long appId, String product, Integer dealInfType,
-			Integer dealInfType1, Integer year, Date expirationDate,  //经信委到期时间 和年限二选一 
+
+			Integer dealInfType1, Integer year, Date expirationDate,   //到期时间  和年限二选一 
 			Long workDealInfoId,
+
+			
+
 			Integer yar, Long companyId, String companyName,
 			String companyType, String organizationNumber,
 			String orgExpirationTime, String selectLv,
@@ -900,12 +904,19 @@ public class WorkDealInfoOperationController extends BaseController {
 		workDealInfo.setDealInfoType(dealInfType);
 		workDealInfo.setDealInfoType1(dealInfType1);
 
+
+	
+
 		//经信委
-		if(year!=null){
+		if(year!=null&&expirationDate==null){
+
 			workDealInfo.setYear(year);
+
+			workDealInfo.setExpirationDate(null);
 		}else{
 			workDealInfo.setYear(StringHelper.getDvalueYear(expirationDate));
 			workDealInfo.setExpirationDate(expirationDate);
+
 		}
 		workDealInfo.setClassifying(classifying);
 		workDealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_ENTRY_SUCCESS);
@@ -2140,7 +2151,7 @@ public class WorkDealInfoOperationController extends BaseController {
 			String comCertificateType, String comCertficateNumber, String comCertficateTime,String legalName, String s_province, String s_city,
 			String s_county, String areaRemark,String address, String companyMobile,String remarks, 
 			
-			Integer year,
+			Integer year, Date expirationDate,  //经信委到期时间 和年限二选一 
 			Integer dealInfoType,Integer dealInfoType1,Integer dealInfoType2 , 
 			Integer agentId,Long agentDetailId, //获取计费策略类型  获取计费策略模版
 			String contactName,String conCertType, String contacEmail, String conCertNumber,
@@ -2280,11 +2291,14 @@ public class WorkDealInfoOperationController extends BaseController {
 		workDealInfo1.setWorkUserHis(userHis);
 		workDealInfo1.setWorkCompanyHis(companyHis);
 	
-		if (year == null) {
-			workDealInfo1.setYear(0);
-		} else {
-			workDealInfo1.setYear(year);
-		}
+		//经信委
+				if(year!=null&&expirationDate==null){
+					workDealInfo1.setYear(year);
+					workDealInfo1.setExpirationDate(null);
+				}else{
+					workDealInfo1.setYear(StringHelper.getDvalueYear(expirationDate));
+					workDealInfo1.setExpirationDate(expirationDate);
+				}
 	
 		workDealInfo1.setDealInfoStatus(WorkDealInfoStatus.STATUS_ENTRY_SUCCESS);
 		workDealInfo1.setDealInfoType(WorkDealInfoType.TYPE_UPDATE_CERT);
