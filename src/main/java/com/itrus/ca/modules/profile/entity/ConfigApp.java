@@ -31,17 +31,17 @@ public class ConfigApp extends DataEntity implements java.io.Serializable {
 	// Fields
 
 	private Long id;
-	private String appName;
-	private String alias;
+	private String appName;//应用名称
+	private String alias;//别名
 	
 	private Integer appType;
-	private String appDescription;
+	private String appDescription;//应用描述
 	private String appImg;
 	private String productName;
 	private List<WorkDealInfo> workDealInfos;
 	private Long govDeviceAmount;//政府统一采购设备证书最大数量  该字段已停用
 	
-	private ConfigProjectType configProjectType;
+	private ConfigProjectType configProjectType;//应用类型
 	
 	private List<SignatureAgentBoundConfigApp> bounds;
 	
