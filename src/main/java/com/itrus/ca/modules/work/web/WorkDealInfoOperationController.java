@@ -812,7 +812,8 @@ public class WorkDealInfoOperationController extends BaseController {
 	@RequestMapping(value = "errorSave")
 	public String errorSave(Model model, RedirectAttributes redirectAttributes,
 			Long appId, String product, Integer dealInfType,
-			Integer dealInfType1, Integer year, Long workDealInfoId,
+			Integer dealInfType1, Integer year, Date expirationDate,  //经信委到期时间 和年限二选一 
+			Long workDealInfoId,
 			Integer yar, Long companyId, String companyName,
 			String companyType, String organizationNumber,
 			String orgExpirationTime, String selectLv,
@@ -899,10 +900,12 @@ public class WorkDealInfoOperationController extends BaseController {
 		workDealInfo.setDealInfoType(dealInfType);
 		workDealInfo.setDealInfoType1(dealInfType1);
 
-		if (year==null) {
-			workDealInfo.setYear(0);
-		} else {
+		//经信委
+		if(year!=null){
 			workDealInfo.setYear(year);
+		}else{
+			workDealInfo.setYear(StringHelper.getDvalueYear(expirationDate));
+			workDealInfo.setExpirationDate(expirationDate);
 		}
 		workDealInfo.setClassifying(classifying);
 		workDealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_ENTRY_SUCCESS);

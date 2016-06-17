@@ -2503,7 +2503,8 @@ public class WorkDealInfoController extends BaseController {
 			
 			model.addAttribute("proList", ProductType.getProductList());
 
-			
+			//经信委
+			model.addAttribute("expirationDate", StringHelper.getLastDateOfCurrentYear());
 		}
 		return "modules/work/workDealInfoForm";
 	}
@@ -4712,6 +4713,9 @@ public class WorkDealInfoController extends BaseController {
 			listProductTypeObjs.add(obj);
 		}
 		model.addAttribute("proList", listProductTypeObjs);
+		
+		
+		model.addAttribute("expirationDate", StringHelper.getLastDateOfCurrentYear());
 		
 		if (dealType.indexOf("1") >= 0) {
 

@@ -42,6 +42,25 @@ public class StringHelper{
     
     
     /*
+     * 得到当前年的最后一天
+     */
+    
+    
+    public static Date getLastDateOfCurrentYear(){
+    	Calendar currCal=Calendar.getInstance();    
+        int currentYear = currCal.get(Calendar.YEAR);
+        Calendar calendar = Calendar.getInstance();  
+        calendar.clear();  
+        calendar.set(Calendar.YEAR, currentYear);  
+        calendar.roll(Calendar.DAY_OF_YEAR, -1);  
+        Date currYearLast = calendar.getTime();  
+          
+        return currYearLast;  
+    }
+    
+    
+    
+    /*
      *得到指定日期和当前日期之间相差多少天 
      * 
      * 
