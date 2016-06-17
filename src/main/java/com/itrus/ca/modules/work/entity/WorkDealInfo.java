@@ -206,7 +206,8 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
+	//@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "app_id", nullable = false)
 	public ConfigApp getConfigApp() {
 		return this.configApp;
@@ -236,7 +237,8 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 		this.configCommercialAgent = configCommercialAgent;
 	}
 	
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
+	//@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "work_user_id")
 	public WorkUser getWorkUser() {
 		return this.workUser;
@@ -310,7 +312,8 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 		this.workLogs = workLogs;
 	}
 	
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
+	//@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "pay_id")
 	public WorkPayInfo getWorkPayInfo() {
 		return workPayInfo;
@@ -329,7 +332,8 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 	public void setWorkCertInfo(WorkCertInfo workCertInfo) {
 		this.workCertInfo = workCertInfo;
 	}
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
+	//@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "product_id")
 	public ConfigProduct getConfigProduct() {
 		return configProduct;
