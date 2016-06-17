@@ -344,7 +344,13 @@
 						$("#year5").removeAttr("checked");
 					});
 					
-						
+					if(${workDealInfo.expirationDate!=null}){
+						$("#year1").removeAttr("checked");
+						$("#year2").removeAttr("checked");
+						$("#year3").removeAttr("checked");
+						$("#year4").removeAttr("checked");
+						$("#year5").removeAttr("checked");
+					}	
 						
 						
 

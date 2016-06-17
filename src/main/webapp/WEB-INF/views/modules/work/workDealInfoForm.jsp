@@ -296,6 +296,17 @@ var selected = false;
 						});
 						
 						
+						if(${expirationDate!=null}){
+							$("#year1").removeAttr("checked");
+							$("#year2").removeAttr("checked");
+							$("#year3").removeAttr("checked");
+							$("#year4").removeAttr("checked");
+							$("#year5").removeAttr("checked");
+						}
+						
+						
+						
+						
 	});
 	function nameFill(obj){
 		var a = checkJbrxm(obj);

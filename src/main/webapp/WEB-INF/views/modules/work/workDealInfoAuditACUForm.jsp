@@ -8,9 +8,7 @@
 <link href="${ctxStatic}/jquery/jquery.bigautocomplete.css"
 	rel="stylesheet" />
 <script type="text/javascript">
-$(document)
-.ready(
-		function() {
+$(document).ready(function() {
 			
 			if("${workDealInfo.id}"!=null && "${workDealInfo.id}"!="" && "${workDealInfo.isIxin}"){
 				var boundLabelList = "${boundLabelList}";
@@ -65,6 +63,14 @@ $(document)
 				});
 			}
 			showAgent();
+			
+			
+			
+			if(${expirationDate!=null}){
+				$("#applyYear").hide();
+			}
+			
+			
 		});
 	function showAgent(){
 		var lable=$('input[name="lable"]:checked ').val();
@@ -492,7 +498,7 @@ $(document)
 								<span id="word5">5年</span>
 									<span style="color: red" id="mmsg"></span>
 								</c:if> <c:if test="${workDealInfo.dealInfoType==0 }">
-									&nbsp;&nbsp;${workDealInfo.year}年
+									&nbsp;&nbsp;<span id="applyYear">${workDealInfo.year}年</span>
 								</c:if></td>
 							
 							<c:if test="${expirationDate!=null }">
