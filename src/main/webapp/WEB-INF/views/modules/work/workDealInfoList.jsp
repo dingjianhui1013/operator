@@ -995,6 +995,48 @@ $(document).ready(
 	}
 	
 	
+	
+	function selectData()
+	{
+		var alias = $("#alias").val();
+		var productName = $("#productName").val();
+		var dealInfoStatus = $("#dealInfoStatus").val();
+		var organizationNumber = $("#organizationNumber").val();
+		var keySn = $("#keySn").val();
+		var companyName = $("#companyName").val();
+		var startTime = $("#startTime").val();
+		var endTime = $("#endTime").val();
+		var makeCertStartTime = $("#makeCertStartTime").val();
+		var makeCertEndTime = $("#makeCertEndTime").val();
+		
+		var url="${ctx}/work/workDealInfo/selectAllDataToUpdate";
+					$.ajax({
+						url:url,
+						type:"POST",
+						data:{"alias":alias,"productName":productName,"organizationNumber":organizationNumber,
+								"dealInfoStatus":dealInfoStatus,"keySn":keySn,"companyName":companyName,
+								"startTime":startTime,"endTime":endTime,"makeCertStartTime":makeCertStartTime,"makeCertEndTime":makeCertEndTime,_:new Date().getTime()},
+						dataType:"text",
+						success:function(data)
+						{
+							$("#checkIds").val(data);
+							var xz = $("#contentTable").find("[name='oneDealCheck']");
+							for (var a = 0; a < xz.length; a++) {
+								var check = $($("#contentTable").find("[name='oneDealCheck']")[a]);
+								if (check.is(":checked") == false) {
+									check.attr("checked","true");
+								}
+							}
+						
+							$("#checkAll").attr("checked","true");
+						}
+					});
+			
+	}
+	
+	
+	
+	
 </script>
 
 
@@ -1054,13 +1096,13 @@ $(document).ready(
 <%-- 			<form:input path="workUser.contactName" htmlEscape="false" --%>
 <%-- 				maxlength="50" class="input-medium" /> --%>
 			&nbsp;&nbsp;<label>组代码号：</label>
-			&nbsp;&nbsp; <form:input path="workCompany.organizationNumber" htmlEscape="false"
+			&nbsp;&nbsp; <form:input path="workCompany.organizationNumber" htmlEscape="false" id="organizationNumber"
 				maxlength="50" class="input-medium" />
 		<label>&nbsp;&nbsp;KEY编码：</label>
-			<form:input path="keySn" htmlEscape="false" maxlength="50"
+			<form:input path="keySn" htmlEscape="false" maxlength="50" id="keySn"
 				class="input-medium" />
 			<label>单位名称：</label>
-			<form:input path="workCompany.companyName" htmlEscape="false"
+			<form:input path="workCompany.companyName" htmlEscape="false" id="companyName"
 				maxlength="50" class="input-medium" />
 				
 		</div>
@@ -1071,14 +1113,14 @@ $(document).ready(
 				name="startTime" id="startTime"/> 至 <input class="input-medium Wdate" type="text"
 				required="required" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'startTime\')}'});"
 				value="<fmt:formatDate value="${endTime}" pattern="yyyy-MM-dd"/>" maxlength="20" readonly="readonly"
-				name="endTime" /> 
+				name="endTime"  id="endTime"/> 
 			&nbsp;&nbsp;<label>制证日期：</label> <input class="input-medium Wdate" type="text"
 				required="required" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});"
 				value="<fmt:formatDate value="${makeCertStartTime}" pattern="yyyy-MM-dd"/>" maxlength="20" readonly="readonly"
 				name="makeCertStartTime" id="makeCertStartTime"/> 至 <input class="input-medium Wdate" type="text"
 				required="required" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'startTime\')}'});"
 				value="<fmt:formatDate value="${makeCertEndTime}" pattern="yyyy-MM-dd"/>" maxlength="20" readonly="readonly"
-				name="makeCertEndTime" /> 
+				name="makeCertEndTime" id="makeCertEndTime" /> 
 				<br />
 				<br />
 				<div style="padding-left:100px;">
@@ -1094,6 +1136,10 @@ $(document).ready(
 				<input type="hidden"  name="checkIds"  id="checkIds"  value="${checkIds }"/>&nbsp;&nbsp;&nbsp;&nbsp;
 				<input id="btnSubmit"
 				class="btn btn-primary" type="submit" onclick="replaceChecks()" value="查询" />
+				&nbsp;&nbsp;&nbsp;&nbsp;
+				<input id="btnSubmit"
+				class="btn btn-primary" type="button" onclick="selectData()" value="全选" />
+				
 				</div>
 		</div>
 	</form:form>
@@ -1127,7 +1173,7 @@ $(document).ready(
 				<tr>
 					<td>
 					
-					<c:if test="${workDealInfo.dealInfoStatus==7 && (workDealInfo.year*365+workDealInfo.lastDays+workDealInfo.addCertDays)<61 }">
+					<c:if test="${workDealInfo.dealInfoStatus==7 && workDealInfo.canUpdate==1 }">
 						<input type="checkbox" name="oneDealCheck" value = "${workDealInfo.id}" 
 						<c:forEach items="${ids }" var="id">
 							<c:if test="${id==workDealInfo.id }"> checked="checked"</c:if>
