@@ -239,13 +239,13 @@
 							<td><input type="text" id="sumMoney" name="workTotalMoney"
 								disabled="disabled"
 								value="${workDealInfo.workPayInfo.workTotalMoney }"></td>
-							<td><input type="hidden" name="workPayedMoney" 
-								id="collectMoney" disabled="disabled" value="${workDealInfo.workPayInfo.workReceivaMoney }"></td>
+							<td><%-- <input type="hidden" name="workPayedMoney" 
+								id="collectMoney" disabled="disabled" value="${workDealInfo.workPayInfo.workReceivaMoney }"> --%></td>
 
 						</tr>
 						<tr>
 							<td>本次实收金额：</td>
-							<td><input type="text" name="workReceivaMoney"
+							<td><input type="text" name="workPayedMoney"
 								id="shouldMoney" disabled="disabled"
 								value="${workDealInfo.workPayInfo.workPayedMoney }"></td>
 							<td></td>

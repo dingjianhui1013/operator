@@ -115,6 +115,9 @@
 	}
 
 	function quick(keySN) {
+		
+		var result = false;
+		
 		var day = baseDay;
 		var csr;
 		var len = parseInt("${keyLen }");
@@ -142,8 +145,7 @@
 		var url = "${ctx}/ca/makeCert?reqOverrideValidity=" + day
 		+ "&certProvider=" + cspStr + "&keySn=" + keySN + "&csr=" + csr
 		+ "&dealInfoId=${workDealInfo.id}&addCertDays="+$("#addCertDays").val()+"&_="+new Date().getTime();
-		$
-				.ajax({
+		$.ajax({
 					url : url,
 					async : false,
 					dataType : 'json',
@@ -159,8 +161,7 @@
 									top.$.jBox.info("证书获取失败,请检查您的证书是否输入,有误或是否已插入USB KEY");
 								}
 							} catch (e) {
-								top.$.jBox
-										.info("证书获取失败,请检查您的证书是否输入,有误或是否已插入USB KEY");
+								top.$.jBox.info("证书获取失败,请检查您的证书是否输入,有误或是否已插入USB KEY");
 							}
 							var t = 0;
 							if(result){
