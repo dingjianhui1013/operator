@@ -2,7 +2,7 @@
  * 安装证书方法
  * @param data
  */
-var result = false;
+/*var result = false;*/
 function DoInstallCert(data) {
 	var certSignBufP7 = data.signBufP7;
 	if (certSignBufP7.length > 0) {
