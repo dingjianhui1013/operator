@@ -186,8 +186,7 @@
 								t = 1;
 							}
 							var updateUrl = "${ctx}/ca/installResult?dealInfoId=${workDealInfo.id}&result="+t+"&_="+new Date().getTime();
-							$
-									.getJSON(
+							$.getJSON(
 											updateUrl+"&_="+new Date().getTime(),
 											function(res) {
 												if (res.status == 1) {

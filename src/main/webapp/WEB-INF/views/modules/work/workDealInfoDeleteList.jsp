@@ -114,6 +114,42 @@
 		
 	}
 	
+	
+	
+	
+	function selectData()
+	{
+		var companyName = $("#companyName").val();
+		var startTime = $("#startTime").val();
+		var endTime = $("#endTime").val();
+		var agentId = $("#agentId").val();
+		
+		var url="${ctx}/work/workDealInfo/deleteAllData";
+					$.ajax({
+						url:url,
+						type:"POST",
+						data:{"companyName":companyName,"startTime":startTime,"endTime":endTime,"agentId":agentId,_:new Date().getTime()},
+						dataType:"text",
+						success:function(data)
+						{
+							$("#checkIds").val(data);
+							$("#isSelectedAll").val(1);
+							var xz = $("#contentTable").find("[name='oneDealCheck']");
+							for (var a = 0; a < xz.length; a++) {
+								var check = $($("#contentTable").find("[name='oneDealCheck']")[a]);
+								if (check.is(":checked") == false) {
+									check.attr("checked","true");
+								}
+							}
+							
+							 $("#checkAll").attr("checked","true"); 
+						}
+					});
+			
+	}
+	
+	
+	
 </script>
 
 </head>
@@ -134,7 +170,7 @@
 		<div>
 			
 			&nbsp;&nbsp; <label>单位名称：</label>
-			<form:input path="workCompany.companyName" htmlEscape="false"
+			<form:input path="workCompany.companyName" htmlEscape="false"  id="companyName"
 				maxlength="50" class="input-medium" />
 				
 				
@@ -145,7 +181,7 @@
 				name="startTime" id="startTime"/> 至 <input class="input-medium Wdate" type="text"
 				required="required" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'startTime\')}'});"
 				value="<fmt:formatDate value="${endTime}" pattern="yyyy-MM-dd"/>" maxlength="20" readonly="readonly"
-				name="endTime" />
+				name="endTime"  id="endTime"/>
 			
 			
 			
@@ -165,6 +201,9 @@
 				class="btn btn-primary" type="submit" value="查询" />
 				&nbsp;&nbsp;&nbsp;&nbsp;
 				
+				<input id="btnSubmit"
+				class="btn btn-primary" type="button" onclick="selectData()" value="全选" />
+				<input type="hidden"  name="isSelectedAll"  id="isSelectedAll"  value="${isSelectedAll }"/>
 				<a id="manyUpdate" data-toggle="modal" href="javaScript:deleteDealInfoIds();" class="btn btn-primary">批量删除</a>
 				
 				
@@ -177,12 +216,19 @@
 		class="table table-striped table-bordered table-condensed">
 		<thead>
 			<tr>
-				<th><input type="checkbox" id="checkAll" name="oneDealCheck" value="${page.pageNo}" 
+				<%-- <th><input type="checkbox" id="checkAll" name="oneDealCheck" value="${page.pageNo}" 
 				<c:forEach items="${ids }" var="id">
 					<c:if test="${id==page.pageNo}"> checked="checked"</c:if>
 				</c:forEach>
 				onchange="checkAll(this)"
-				/> </th>
+				/> </th> --%>
+				
+				<th><input type="checkbox" id="checkAll" name="checkAll"
+				
+				<c:if test="${isSelectedAll==1}"> checked="checked"</c:if>
+					 value="" onchange="checkAll(this)" /></th>
+				
+				
 				<th>业务编号</th>
 				<th>别名</th>
 				<th>单位名称</th>

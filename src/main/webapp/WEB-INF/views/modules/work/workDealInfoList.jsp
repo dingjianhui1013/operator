@@ -1029,17 +1029,7 @@ $(document).ready(
 								}
 							}
 							
-							
-							var xzy = $("#contentTable").find("[name='checkAll']");
-							for (var a = 0; a < xzy.length; a++) {
-								var check = $($("#contentTable").find("[name='checkAll']")[a]);
-								if (check.is(":checked") == false) {
-									check.attr("checked","true");
-								}
-							}
-							
-						
-							/* $("#checkAll").attr("checked","true"); */
+							 $("#checkAll").attr("checked","true"); 
 						}
 					});
 			
@@ -1139,6 +1129,9 @@ $(document).ready(
 				&nbsp;&nbsp;&nbsp;&nbsp;
 				<a id="manyAdd" data-toggle="modal" href="#declareDiv" class="btn btn-primary">批量新增导入</a>&nbsp;&nbsp;&nbsp;&nbsp;
 				&nbsp;&nbsp;&nbsp;&nbsp;
+				<input id="btnSubmit"
+				class="btn btn-primary" type="button" onclick="selectData()" value="全选" />
+				<input type="hidden"  name="isSelectedAll"  id="isSelectedAll"  value="${isSelectedAll }"/>
 				<a id="manyUpdate" data-toggle="modal" href="javaScript:updateCertOK();" class="btn btn-primary">批量更新证书</a>
 			 
 			
@@ -1148,9 +1141,7 @@ $(document).ready(
 				<input id="btnSubmit"
 				class="btn btn-primary" type="submit" onclick="replaceChecks()" value="查询" />
 				&nbsp;&nbsp;&nbsp;&nbsp;
-				<input id="btnSubmit"
-				class="btn btn-primary" type="button" onclick="selectData()" value="全选" />
-				<input type="hidden"  name="isSelectedAll"  id="isSelectedAll"  value="${isSelectedAll }"/>
+				
 				
 				</div>
 		</div>
