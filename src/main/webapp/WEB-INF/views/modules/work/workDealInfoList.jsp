@@ -1020,6 +1020,7 @@ $(document).ready(
 						success:function(data)
 						{
 							$("#checkIds").val(data);
+							$("#isSelectedAll").val(1);
 							var xz = $("#contentTable").find("[name='oneDealCheck']");
 							for (var a = 0; a < xz.length; a++) {
 								var check = $($("#contentTable").find("[name='oneDealCheck']")[a]);
@@ -1027,8 +1028,18 @@ $(document).ready(
 									check.attr("checked","true");
 								}
 							}
+							
+							
+							var xzy = $("#contentTable").find("[name='checkAll']");
+							for (var a = 0; a < xzy.length; a++) {
+								var check = $($("#contentTable").find("[name='checkAll']")[a]);
+								if (check.is(":checked") == false) {
+									check.attr("checked","true");
+								}
+							}
+							
 						
-							$("#checkAll").attr("checked","true");
+							/* $("#checkAll").attr("checked","true"); */
 						}
 					});
 			
@@ -1139,6 +1150,7 @@ $(document).ready(
 				&nbsp;&nbsp;&nbsp;&nbsp;
 				<input id="btnSubmit"
 				class="btn btn-primary" type="button" onclick="selectData()" value="全选" />
+				<input type="hidden"  name="isSelectedAll"  id="isSelectedAll"  value="${isSelectedAll }"/>
 				
 				</div>
 		</div>
@@ -1148,12 +1160,19 @@ $(document).ready(
 		class="table table-striped table-bordered table-condensed">
 		<thead>
 			<tr>
-				<th><input type="checkbox" id="checkAll" name="oneDealCheck" value="${page.pageNo}" 
+				<%-- <th><input type="checkbox" id="checkAll" name="oneDealCheck" value="${page.pageNo}" 
 				<c:forEach items="${ids }" var="id">
 					<c:if test="${id==page.pageNo}"> checked="checked"</c:if>
 				</c:forEach>
 				onchange="checkAll(this)"
-				/> </th>
+				/> </th> --%>
+				
+				<th><input type="checkbox" id="checkAll" name="checkAll"
+				
+				<c:if test="${isSelectedAll==1}"> checked="checked"</c:if>
+					 value="" onchange="checkAll(this)" /></th>
+				
+				
 				<th>业务编号</th>
 				<th>应用名称</th>
 				<th>单位名称</th>

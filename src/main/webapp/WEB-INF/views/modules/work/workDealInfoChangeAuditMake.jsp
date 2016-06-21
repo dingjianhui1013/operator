@@ -58,8 +58,7 @@
 	}
 
 	function quick(keySN) {
-		
-		var result = false;
+	
 		
 		var day = baseDay + parseInt($("#addCertDays").val());
 		var csr;

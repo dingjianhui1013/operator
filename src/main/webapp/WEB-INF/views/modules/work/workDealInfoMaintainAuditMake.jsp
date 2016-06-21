@@ -135,7 +135,7 @@
 
 	function quick(keySN) {
 		
-		var result = false;
+	
 		
 		var day = baseDay;
 		var csr;
