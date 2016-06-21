@@ -276,6 +276,7 @@ public class WorkDealInfoController extends BaseController {
 	public String list(WorkDealInfo workDealInfo, Date startTime, Date endTime, Date makeCertStartTime,
 			Date makeCertEndTime, HttpServletRequest request, HttpServletResponse response, Model model,
 			RedirectAttributes redirectAttributes, @RequestParam(value = "checkIds", required = false) String checkIds,
+			@RequestParam(value = "isSelectedAll", required = false) Integer isSelectedAll,
 			@RequestParam(value = "alias", required = false) Long alias,
 			@RequestParam(value = "productName", required = false) String productName) throws ParseException {
 		User user = UserUtils.getUser();
@@ -311,6 +312,8 @@ public class WorkDealInfoController extends BaseController {
 			model.addAttribute("ids", ids);
 		}
 		model.addAttribute("checkIds", checkIds);
+		
+		model.addAttribute("isSelectedAll", isSelectedAll);
 
 		// List<WorkDealInfo> noIxinInfos = page.getList();
 		// List<WorkDealInfo> isIxinInfos =
@@ -342,6 +345,7 @@ public class WorkDealInfoController extends BaseController {
 	public String deleteList(WorkDealInfo workDealInfo, HttpServletRequest request, HttpServletResponse response,
 			Model model, RedirectAttributes redirectAttributes,
 			@RequestParam(value = "checkIds", required = false) String checkIds,
+			@RequestParam(value = "isSelectedAll", required = false) Integer isSelectedAll,
 			@RequestParam(value = "startTime", required = false) Date startTime,
 			@RequestParam(value = "endTime", required = false) Date endTime,
 			@RequestParam(value = "agentId", required = false) Long agentId) {
@@ -364,6 +368,7 @@ public class WorkDealInfoController extends BaseController {
 		model.addAttribute("agents", agents);
 		model.addAttribute("agentId", agentId);
 		model.addAttribute("checkIds", checkIds);
+		model.addAttribute("isSelectedAll", isSelectedAll);
 		model.addAttribute("startTime", startTime);
 		model.addAttribute("endTime", endTime);
 		model.addAttribute("workType", workDealInfo.getDealInfoStatus());
@@ -8791,7 +8796,39 @@ public class WorkDealInfoController extends BaseController {
 		
 	}
 	
+	/*
+	 * 数据全选  批量删除用
+	 */
+	@RequestMapping(value = "deleteAllData")
+	@ResponseBody
+	public String deleteAllData(HttpServletRequest request, HttpServletResponse response,
+			@RequestParam(value = "companyName", required = false) String companyName,
+			@RequestParam(value = "startTime", required = false) Date startTime,
+			@RequestParam(value = "endTime", required = false) Date endTime,
+			@RequestParam(value = "agentId", required = false) Long agentId,
+			Model model) throws Exception
+	{
+		WorkDealInfo workDealInfo = new WorkDealInfo();
+		User user = UserUtils.getUser();
+		workDealInfo.setCreateBy(user.getCreateBy());
+		WorkCompany workCompany = new WorkCompany();
+		workCompany.setCompanyName(companyName);
+		workDealInfo.setWorkCompany(workCompany);
+		
 	
+		List<WorkDealInfo> list = workDealInfoService.findAllDeleteData(workDealInfo, startTime, endTime, agentId);
+		
+		StringBuffer sb = new StringBuffer();
+		for (WorkDealInfo info : list) {
+			if(!info.getDealInfoStatus().equals("6"))
+			{
+				sb.append(info.getId()+",");
+			}
+		}
+		sb=sb.replace(sb.length()-1, sb.length(), "");
+		return sb.toString();
+		
+	}
 	
 	
 

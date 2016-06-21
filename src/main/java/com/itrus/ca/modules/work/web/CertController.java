@@ -789,7 +789,7 @@ public class CertController extends BaseController {
 				revokeList.add(WorkDealInfoType.TYPE_LOST_CHILD);
 				revokeList.add(WorkDealInfoType.TYPE_DAMAGED_REPLACED);
 				// 吊销证书
-				if (dealInfo.getPrevId() != null && revokeList.contains(dealInfo.getDealInfoType())) {
+				if (dealInfo.getPrevId() != null /*&& revokeList.contains(dealInfo.getDealInfoType())*/) {
 					WorkDealInfo old = workDealInfoService.get(dealInfo.getPrevId());
 					revokeOldCert(old.getId());
 					old.setDealInfoStatus(WorkDealInfoStatus.STATUS_CERT_REVOKE);

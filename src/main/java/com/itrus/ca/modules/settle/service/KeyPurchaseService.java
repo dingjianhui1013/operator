@@ -143,10 +143,23 @@ public class KeyPurchaseService extends BaseService {
 		if(keyName !=null){
 			dc.add(Restrictions.like("appName", "%"+keyName+"%"));
 		}
-		if (startDate != null && endDate != null) {
+		if (startDate != null) {
+			startDate.setHours(0);
+			startDate.setMinutes(0);
+			startDate.setSeconds(00);
 			dc.add(Restrictions.ge("storageDate", startDate));
+			
+		}
+		
+		if (endDate != null) {
+			endDate.setHours(23);
+			endDate.setMinutes(59);
+			endDate.setSeconds(59);
 			dc.add(Restrictions.le("storageDate", endDate));
 		}
+		
+		
+		
 		dc.add(Restrictions.eq(KeyPurchase.DEL_FLAG, KeyPurchase.DEL_FLAG_NORMAL));
 		dc.addOrder(Order.desc("id"));
 		return keyPurchaseDao.find(page,dc);

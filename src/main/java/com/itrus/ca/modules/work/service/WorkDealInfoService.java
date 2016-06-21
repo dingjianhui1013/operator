@@ -7324,5 +7324,51 @@ public class WorkDealInfoService extends BaseService {
 	}
 	
 	
+	
+	
+	public List<WorkDealInfo> findAllDeleteData(WorkDealInfo workDealInfo , Date startTime, Date endTime, Long agentId) {
+		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
+		dc.createAlias("createBy", "createBy");
+		dc.createAlias("createBy.office", "office");
+		dc.createAlias("workCompany", "workCompany");
+		dc.add(dataScopeFilter(UserUtils.getUser(), "office", "createBy"));
+		if (workDealInfo.getWorkCompany() != null) {
+			if (workDealInfo.getWorkCompany().getCompanyName() != null
+					&& !workDealInfo.getWorkCompany().getCompanyName()
+							.equals("")) {
+				dc.add(Restrictions.like(
+						"workCompany.companyName",
+						"%"
+								+ EscapeUtil.escapeLike(workDealInfo
+										.getWorkCompany().getCompanyName())
+								+ "%"));
+			}
+		}
+		
+		if (startTime!=null) {
+			dc.add(Restrictions.ge("createDate", startTime));
+		}
+		if (endTime!=null) {
+			endTime.setHours(23);
+			endTime.setMinutes(59);
+			endTime.setSeconds(59);
+			dc.add(Restrictions.le("createDate", endTime));
+		}
+		
+		if (agentId != null) {
+			dc.add(Restrictions.le("configChargeAgentId", agentId));
+		}
+		
+		
+		dc.add(Restrictions.eq("isSJQY", 2));
+		dc.add(Restrictions.eq("dealInfoStatus",
+				WorkDealInfoStatus.STATUS_APPROVE_WAIT));
+		dc.add(Restrictions.isNull("isIxin"));
+		dc.add(Restrictions.eq(WorkDealInfo.DEL_FLAG,
+				WorkDealInfo.DEL_FLAG_NORMAL));
+		dc.addOrder(Order.desc("createDate"));
+		return workDealInfoDao.find(dc);
+	}
+	
 
 }
