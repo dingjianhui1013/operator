@@ -287,6 +287,24 @@ public class WorkDealInfoController extends BaseController {
 
 		Page<WorkDealInfoListVo> page = workDealInfoService.find4Apply(new Page<WorkDealInfoListVo>(request, response),
 				workDealInfo, startTime, endTime, alias, productName, makeCertStartTime, makeCertEndTime);
+		
+		List<WorkDealInfoListVo> vos = page.getList();
+		
+		for(WorkDealInfoListVo vo: vos){
+			if(vo.getNotafter()!=null){
+				if(StringHelper.getDvalueDay(new Date(), vo.getNotafter())<=60){
+					vo.setCanUpdate(1);
+				}else{
+					vo.setCanUpdate(0);
+				}
+			}else{
+				vo.setCanUpdate(0);
+			}
+			
+		}
+		
+		page.setList(vos);
+		
 
 		if (checkIds != null) {
 			String[] ids = checkIds.split(",");
@@ -5426,7 +5444,7 @@ public class WorkDealInfoController extends BaseController {
 		List<Long> officeids = Lists.newArrayList();
 		if (officeId != null && officeId != 0) {
 			officeids.add(officeId);
-			List<Long> appids = Lists.newArrayList();
+			/*List<Long> appids = Lists.newArrayList();
 			List<ConfigAppOfficeRelation> appOffices = configAppOfficeRelationService.findAllByOfficeId(officeId);// 通过网店获取引用的id
 			if (appOffices.size() > 0) {
 				for (int i = 0; i < appOffices.size(); i++) {
@@ -5442,7 +5460,7 @@ public class WorkDealInfoController extends BaseController {
 				for (int i = 0; i < deals.size(); i++) {
 					dealInfoByOfficeAreaIds.add(deals.get(i).getId());
 				}
-			}
+			}*/
 		} else {
 			if (area != null) {
 				List<Long> appids = Lists.newArrayList();
@@ -5456,7 +5474,7 @@ public class WorkDealInfoController extends BaseController {
 					officeids.add(-1l);
 				}
 
-				List<ConfigAppOfficeRelation> appOffices = configAppOfficeRelationService.findAllByOfficeId(officeids);// 根据网店id获取应用id
+/*				List<ConfigAppOfficeRelation> appOffices = configAppOfficeRelationService.findAllByOfficeId(officeids);// 根据网店id获取应用id
 				if (appOffices.size() > 0) {
 					for (int i = 0; i < appOffices.size(); i++) {
 						appids.add(appOffices.get(i).getConfigApp().getId());
@@ -5472,7 +5490,7 @@ public class WorkDealInfoController extends BaseController {
 					for (int i = 0; i < deals.size(); i++) {
 						dealInfoByAreaIds.add(deals.get(i).getId());
 					}
-				}
+				}*/
 			}
 		}
 		ProductType productType = new ProductType();
@@ -5493,12 +5511,12 @@ public class WorkDealInfoController extends BaseController {
 			if(workType!=null&&workType==5)
 			{
 				list = workDealInfoService.findCX(workDealInfo,
-						dealInfoByOfficeAreaIds, dealInfoByAreaIds, officeids, apply, certType, workType, year, luruStartTime,
+						/*dealInfoByOfficeAreaIds, dealInfoByAreaIds,*/ officeids, apply, certType, workType, year, luruStartTime,
 						luruEndTime, officeIds, daoqiStartTime, daoqiEndTime, jianzhengStartTime, jianzhengEndTime,
 						certInfoList);
 			}
-			list = workDealInfoService.find(workDealInfo, dealInfoByOfficeAreaIds,
-					dealInfoByAreaIds, officeids, apply, certType, workType, year, luruStartTime, luruEndTime,
+			list = workDealInfoService.find(workDealInfo, /*dealInfoByOfficeAreaIds,
+					dealInfoByAreaIds,*/ officeids, apply, certType, workType, year, luruStartTime, luruEndTime,
 					officeIds, daoqiStartTime, daoqiEndTime, jianzhengStartTime, jianzhengEndTime, certInfoList);
 			final String fileName = "WorkDealInfos.csv";
 			final List<WorkDealInfoVo> workDealInfoVos = new ArrayList<WorkDealInfoVo>();
@@ -8718,5 +8736,63 @@ public class WorkDealInfoController extends BaseController {
 
 		return "redirect:" + Global.getAdminPath() + "/work/workDealInfoAudit/";
 	}
+	
+	
+	
+	
+	
+	/*
+	 * 数据全选  批量更新用
+	 */
+	@RequestMapping(value = "selectAllDataToUpdate")
+	@ResponseBody
+	public String selectAllDataToUpdate(HttpServletRequest request, HttpServletResponse response,
+			@RequestParam(value = "alias", required = false) Long alias,
+			@RequestParam(value = "productName", required = false) String productName,
+			@RequestParam(value = "dealInfoStatus", required = false) String dealInfoStatus,
+			@RequestParam(value = "organizationNumber", required = false) String organizationNumber,
+			@RequestParam(value = "keySn", required = false) String keySn,
+			@RequestParam(value = "companyName", required = false) String companyName,
+			@RequestParam(value = "startTime", required = false) Date startTime,
+			@RequestParam(value = "endTime", required = false) Date endTime,
+			@RequestParam(value = "makeCertStartTime", required = false) Date makeCertStartTime,
+			@RequestParam(value = "makeCertEndTime", required = false) Date makeCertEndTime,
+			Model model
+			) throws Exception
+	{
+		
+		/*List<WorkDealInfo> list = workDealInfoService.selectAllDateToUpdate(alias,
+				productName, dealInfoStatus, organizationNumber, keySn, companyName,startTime,endTime,makeCertStartTime,makeCertEndTime);*/
+		
+		WorkDealInfo workDealInfo = new WorkDealInfo();
+		
+		workDealInfo.setDealInfoStatus(dealInfoStatus);
+		workDealInfo.setKeySn(keySn);
+		WorkCompany workCompany = new WorkCompany();
+		workCompany.setCompanyName(companyName);
+		workCompany.setOrganizationNumber(organizationNumber);
+		workDealInfo.setWorkCompany(workCompany);
+		
+		Page<WorkDealInfoListVo> page = workDealInfoService.findAllDataToUpdate(new Page<WorkDealInfoListVo>(request, response),
+				workDealInfo, startTime, endTime, alias, productName, makeCertStartTime, makeCertEndTime);
+		
+		List<WorkDealInfoListVo> list = page.getList();
+		
+		
+		StringBuffer sb = new StringBuffer();
+		for (WorkDealInfoListVo vo : list) {
+			if(vo.getDealInfoStatus().equals("7")&&StringHelper.getDvalueDay(new Date(), vo.getNotafter())<=60)
+			{
+				sb.append(vo.getId()+",");
+			}
+		}
+		sb=sb.replace(sb.length()-1, sb.length(), "");
+		return sb.toString();
+		
+	}
+	
+	
+	
+	
 
 }

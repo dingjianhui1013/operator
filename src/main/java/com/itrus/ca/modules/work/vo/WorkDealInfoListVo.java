@@ -22,6 +22,10 @@ public class WorkDealInfoListVo {
 	private Integer dealInfoType3;
 	private Integer lastDays;
 	private Integer year;
+	
+	
+	private Integer canUpdate;
+	
 	public Long getId() {
 		return id;
 	}
@@ -132,6 +136,12 @@ public class WorkDealInfoListVo {
 	}
 	public void setYear(Integer year) {
 		this.year = year;
+	}
+	public Integer getCanUpdate() {
+		return canUpdate;
+	}
+	public void setCanUpdate(Integer canUpdate) {
+		this.canUpdate = canUpdate;
 	}
 	
 	

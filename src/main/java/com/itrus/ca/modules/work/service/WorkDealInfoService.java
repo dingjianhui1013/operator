@@ -1837,8 +1837,8 @@ public class WorkDealInfoService extends BaseService {
 	}
 	
 	public List<WorkDealInfo> findCX(
-			WorkDealInfo workDealInfo, List<Long> dealInfoByAreaIds,
-			List<Long> dealInfoByOfficeAreaIds, List<Long> officeIds,
+			WorkDealInfo workDealInfo, /*List<Long> dealInfoByAreaIds,
+			List<Long> dealInfoByOfficeAreaIds,*/ List<Long> officeIds,
 			Long apply, String certType, Integer workType, Integer year,
 			Date luruStartTime, Date luruEndTime, List<Long> offices,
 			Date daoqiStartTime, Date daoqiEndTime, Date jianzhengStartTime,
@@ -2001,13 +2001,13 @@ public class WorkDealInfoService extends BaseService {
 		if (certInfoList.size() > 0) {
 			dc.add(Restrictions.in("workCertInfo", certInfoList));
 		}
-		if (dealInfoByAreaIds != null && dealInfoByAreaIds.size() > 0) {
+		/*if (dealInfoByAreaIds != null && dealInfoByAreaIds.size() > 0) {
 			dc.add(Restrictions.in("id", dealInfoByAreaIds));
 		}
 		if (dealInfoByOfficeAreaIds != null
 				&& dealInfoByOfficeAreaIds.size() > 0) {
 			dc.add(Restrictions.in("id", dealInfoByOfficeAreaIds));
-		}
+		}*/
 		if (officeIds != null && officeIds.size() > 0) {
 			dc.add(Restrictions.in("officeId", officeIds));
 		}
@@ -2038,8 +2038,8 @@ public class WorkDealInfoService extends BaseService {
 	}
 	
 	public List<WorkDealInfo> find(
-			WorkDealInfo workDealInfo, List<Long> dealInfoByAreaIds,
-			List<Long> dealInfoByOfficeAreaIds, List<Long> officeIds,
+			WorkDealInfo workDealInfo, /*List<Long> dealInfoByAreaIds,
+			List<Long> dealInfoByOfficeAreaIds,*/ List<Long> officeIds,
 			Long apply, String certType, Integer workType, Integer year,
 			Date luruStartTime, Date luruEndTime, List<Long> offices,
 			Date daoqiStartTime, Date daoqiEndTime, Date jianzhengStartTime,
@@ -2203,13 +2203,13 @@ public class WorkDealInfoService extends BaseService {
 		if (certInfoList.size() > 0) {
 			dc.add(Restrictions.in("workCertInfo", certInfoList));
 		}
-		if (dealInfoByAreaIds != null && dealInfoByAreaIds.size() > 0) {
+		/*if (dealInfoByAreaIds != null && dealInfoByAreaIds.size() > 0) {
 			dc.add(Restrictions.in("id", dealInfoByAreaIds));
 		}
 		if (dealInfoByOfficeAreaIds != null
 				&& dealInfoByOfficeAreaIds.size() > 0) {
 			dc.add(Restrictions.in("id", dealInfoByOfficeAreaIds));
-		}
+		}*/
 		if (officeIds != null && officeIds.size() > 0) {
 			dc.add(Restrictions.in("officeId", officeIds));
 		}
@@ -7119,5 +7119,210 @@ public class WorkDealInfoService extends BaseService {
 		}
 		
 	}
+	
+	
+	
+	public List<WorkDealInfo> selectAllDateToUpdate(Long alias, String productName, String dealInfoStatus, String organizationNumber, 
+			String keySn, String companyName, Date startTime, Date endTime, Date makeCertStartTime, Date makeCertEndTime){
+		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
+		dc.createAlias("configApp", "configApp");
+		dc.createAlias("configProduct", "configProduct");
+		dc.createAlias("workCompany", "workCompany");
+		dc.createAlias("workCertInfo", "workCertInfo");
+		
+		if(alias!=null){
+			dc.add(Restrictions.eq("configApp.id", alias));
+		}
+		
+		if(productName!=null&&!productName.equals("")){	
+			dc.add(Restrictions.eq("configProduct.productName", productName));
+		}
+		
+		if(dealInfoStatus!=null&&!dealInfoStatus.equals("")){
+			dc.add(Restrictions.eq("dealInfoStatus", dealInfoStatus));
+		}
+		
+		if(organizationNumber!=null&&!organizationNumber.equals("")){
+			dc.add(Restrictions.eq("workCompany.organizationNumber", organizationNumber));
+		}
+		
+		if(keySn!=null&&!keySn.equals("")){
+			dc.add(Restrictions.eq("keySn", keySn));
+		}
+		
+		if(companyName!=null&&!companyName.equals("")){
+			dc.add(Restrictions.eq("workCompany.companyName", companyName));
+		}
+		
+		if(startTime!=null){
+			startTime.setHours(0);
+			startTime.setMinutes(0);
+			startTime.setSeconds(00);
+			
+			dc.add(Restrictions.ge("notafter", startTime));
+		}
+		
+		if(endTime != null)
+		{
+			endTime.setHours(23);
+			endTime.setMinutes(59);
+			endTime.setSeconds(59);
+			
+			dc.add(Restrictions.le("notafter", endTime));
+		}
+		
+		if(makeCertStartTime!=null){
+			makeCertStartTime.setHours(0);
+			makeCertStartTime.setMinutes(0);
+			makeCertStartTime.setSeconds(00);
+			
+			dc.add(Restrictions.ge("workCertInfo.signDate", makeCertStartTime));
+		}
+		
+		if(makeCertEndTime != null){
+			makeCertEndTime.setHours(23);
+			makeCertEndTime.setMinutes(59);
+			makeCertEndTime.setSeconds(59);
+			
+			dc.add(Restrictions.le("workCertInfo.signDate", makeCertEndTime));
+		}
+		
+	    dc.add(Restrictions.eq("dealInfoStatus", "7"));
+	    
+	    
+	    
+	    Calendar cal = Calendar.getInstance();
+	    cal.setTime(new Date());
+	    cal.add(Calendar.DAY_OF_MONTH,60);
+	    Date notafer = cal.getTime();
+	    dc.add(Restrictions.le("notafter", notafer));
+		
+		
+		return workDealInfoDao.find(dc);
+		
+	}
+	
+	
+	
+	
+	
+	public Page<WorkDealInfoListVo> findAllDataToUpdate(Page<WorkDealInfoListVo> page,
+			WorkDealInfo workDealInfo, Date startTime, Date endTime,
+			Long apply, String productName, Date makeCertStartTime,
+			Date makeCertEndTime) throws ParseException {
+
+		
+
+		String sql = "select * "
+				+ getFind4ApplySql(page, workDealInfo, startTime, endTime,
+						apply, productName, makeCertStartTime, makeCertEndTime);
+
+		Page<WorkDealInfoListVo> res = new Page<WorkDealInfoListVo>(page.getPageNo(),
+				page.getPageSize());
+		List<Map> lst = null;
+		
+		try {
+			lst = workDealInfoDao.findBySQLListMap(sql,
+					0, 0);
+		
+		} catch (IllegalAccessException | IllegalArgumentException
+				| InvocationTargetException | ClassNotFoundException
+				| InstantiationException e1) {
+		
+			e1.printStackTrace();
+		}
+		
+		List<WorkDealInfoListVo> resLst = new ArrayList<WorkDealInfoListVo>();
+		for (Map e : lst) {
+			WorkDealInfoListVo vo = new WorkDealInfoListVo();
+			Iterator<String> it = e.keySet().iterator();
+			while (it.hasNext()) {
+				String k = it.next();
+				if (k.equals("ID")) {
+					if (e.get("ID") != null)
+						vo.setId(new Long(e.get("ID").toString()));
+
+				}
+				if (k.equals("COMPANYNAME")) {
+					if (e.get("COMPANYNAME") != null)
+						vo.setCompanyName(e.get("COMPANYNAME").toString());
+				}
+				if (k.equals("CERTAPPLYINFONAME")) {
+					if (e.get("CERTAPPLYINFONAME") != null)
+						vo.setCertApplyInfoName(e.get("CERTAPPLYINFONAME").toString());
+				}
+				
+				if (k.equals("CONFIGAPPNAME")) {
+					if (e.get("CONFIGAPPNAME") != null)
+						vo.setConfigAppName(e.get("CONFIGAPPNAME").toString());
+				}
+				if (k.equals("PRODUCTNAME")) {
+					if (e.get("PRODUCTNAME") != null)
+						vo.setProductName(e.get("PRODUCTNAME").toString());
+				}
+				if (k.equals("DEALINFOTYPE")) {
+					if (e.get("DEALINFOTYPE") != null)
+						vo.setDealInfoType(new Integer(e.get("DEALINFOTYPE").toString()));
+				}
+				if (k.equals("DEALINFOTYPE2")) {
+					if (e.get("DEALINFOTYPE2") != null)
+						vo.setDealInfoType2(new Integer(e.get("DEALINFOTYPE2").toString()));
+				}
+				if (k.equals("DEALINFOTYPE3")) {
+					if (e.get("DEALINFOTYPE3") != null)
+						vo.setDealInfoType3(new Integer(e.get("DEALINFOTYPE3").toString()));
+				}
+				if (k.equals("DEALINFOTYPE1")) {
+					if (e.get("DEALINFOTYPE1") != null)
+						vo.setDealInfoType1(new Integer(e.get("DEALINFOTYPE1").toString()));
+				}
+				if (k.equals("NOTAFTER")) {
+					if (e.get("NOTAFTER") != null)
+						vo.setNotafter(new SimpleDateFormat("yyyy-MM-dd").parse(e.get("NOTAFTER").toString()));
+				}
+				if (k.equals("NOTBEFORE")) {
+					if (e.get("NOTBEFORE") != null)
+						vo.setNotbefore(new SimpleDateFormat("yyyy-MM-dd").parse(e.get("NOTBEFORE").toString()));
+				}
+				if (k.equals("KEYSN")) {
+					if (e.get("KEYSN") != null)
+						vo.setKeySn(e.get("KEYSN").toString());
+				}
+				if (k.equals("SIGNDATE")) {
+					if (e.get("SIGNDATE") != null)
+						vo.setSignDate(new SimpleDateFormat("yyyy-MM-dd").parse(e.get("SIGNDATE").toString()));
+				}
+				if (k.equals("ADDCERTDAYS")) {
+					if (e.get("ADDCERTDAYS") != null)
+						vo.setAddCertDays(new Integer(e.get("ADDCERTDAYS").toString()));
+				}
+				if (k.equals("LASTDAYS")) {
+					if (e.get("LASTDAYS") != null)
+						vo.setLastDays(new Integer(e.get("LASTDAYS").toString()));
+				}
+				if (k.equals("SVN")) {
+					if (e.get("SVN") != null)
+						vo.setSvn(e.get("SVN").toString());
+				}
+				if (k.equals("YEAR")) {
+					if (e.get("YEAR") != null)
+						vo.setYear(new Integer(e.get("YEAR").toString()));
+				}
+				if (k.equals("DEALINFOSTATUS")) {
+					if (e.get("DEALINFOSTATUS") != null)
+						vo.setDealInfoStatus(e.get("DEALINFOSTATUS").toString());
+				}
+				if (k.equals("NAME")) {
+					if (e.get("NAME") != null)
+						vo.setCertApplyInfoName(e.get("NAME").toString());
+				}
+			}
+			resLst.add(vo);
+		}
+		res.setList(resLst);
+		return res;
+	}
+	
+	
 
 }
