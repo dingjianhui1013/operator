@@ -22,6 +22,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
+import com.itrus.ca.common.utils.StringUtils;
 import com.itrus.ca.modules.connection.CaConnectionPoolProvider;
 import com.itrus.ca.modules.profile.entity.ConfigRaAccount;
 import com.itrus.cert.X509Certificate;
@@ -416,8 +417,11 @@ public class CaService {
 			raCertManager.addRaService(raAccount.getServiceUrl());
 			certSn = getICAValidSerialNumber(certSn).toUpperCase();
 			try {
+				String challenge = raAccount.getAaPassword();
+				
 				revokeResult = raCertManager.revokeCert(certSn,
-				raAccount.getAaPassword()==null||raAccount.getAaPassword().equals("")? PASSWORD:raAccount.getAaPassword(), reason==null? RevokeRequest.certificateHold:reason);
+				(challenge!=null && !challenge.isEmpty())? challenge:PASSWORD, 
+				(reason!=null && !reason.isEmpty())? reason:RevokeRequest.certificateHold);
 				System.out.println(revokeResult.getBaseMessage());
 				System.out.println(revokeResult.getExtMessage());
 			} catch (RaServiceUnavailable e) {
