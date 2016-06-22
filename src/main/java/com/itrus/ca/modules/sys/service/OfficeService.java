@@ -19,6 +19,7 @@ import org.springframework.scheduling.quartz.AdaptableJobFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.itrus.ca.common.persistence.DataEntity;
 import com.itrus.ca.common.persistence.Page;
 import com.itrus.ca.common.service.BaseService;
 import com.itrus.ca.common.utils.EscapeUtil;
@@ -74,6 +75,8 @@ public class OfficeService extends BaseService {
 		if (StringUtils.isNotEmpty(office.getName())){
 			dc.add(Restrictions.like("name", "%"+EscapeUtil.escapeLike(office.getName())+"%"));
 		}
+		
+		dc.add(Restrictions.eq("delFlag", DataEntity.DEL_FLAG_NORMAL));
 		Office off = new Office();
 		off.setId(1L);
 		dc.add(Restrictions.eq("parent", off));
@@ -244,7 +247,7 @@ public class OfficeService extends BaseService {
 		//UserUtils.removeCache(UserUtils.CACHE_OFFICE_LIST);
 	}
 	public void deleteL(Office office){
-		officeDao.delete(office);
+		officeDao.deleteById(office.getId());
 	}
 	
 	

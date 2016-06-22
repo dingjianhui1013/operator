@@ -23,6 +23,7 @@ import com.itrus.ca.modules.receipt.entity.ReceiptAllocateApply;
 import com.itrus.ca.modules.receipt.entity.ReceiptDepotInfo;
 import com.itrus.ca.modules.receipt.entity.ReceiptInvoice;
 import com.itrus.ca.modules.receipt.dao.ReceiptAllocateApplyDao;
+import com.itrus.ca.modules.sys.entity.Office;
 import com.itrus.ca.modules.sys.utils.UserUtils;
 
 /**
@@ -70,7 +71,7 @@ public class ReceiptAllocateApplyService extends BaseService {
 	
 	
 	
-	public Page<ReceiptAllocateApply> findT(Page<ReceiptAllocateApply> page, ReceiptAllocateApply receiptAllocateApply, Date startTime, Date endTime) {
+	public Page<ReceiptAllocateApply> findT(Page<ReceiptAllocateApply> page, ReceiptAllocateApply receiptAllocateApply,List<Long> officeIds, Date startTime, Date endTime) {
 		DetachedCriteria dc = receiptAllocateApplyDao.createDetachedCriteria();
 //		if (StringUtils.isNotEmpty(receiptAllocateApply.getName())){
 //			dc.add(Restrictions.like("name", "%"+receiptAllocateApply.getName()+"%"));
@@ -86,6 +87,8 @@ public class ReceiptAllocateApplyService extends BaseService {
 			if(receiptAllocateApply.getOffice().getId()!=null){
 				dc.add(Restrictions.eq("officeId", receiptAllocateApply.getOffice().getId()));
 			}
+		}else{
+			dc.add(Restrictions.in("officeId", officeIds));
 		}
 		if (receiptAllocateApply.getState()!=null) {
 			dc.add(Restrictions.eq("state", receiptAllocateApply.getState()));

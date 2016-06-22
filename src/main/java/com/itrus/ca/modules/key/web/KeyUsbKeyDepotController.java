@@ -456,7 +456,7 @@ public class KeyUsbKeyDepotController extends BaseController {
 					if (depotGeneStatistics.size() < 1) {
 						// 所属仓库+KEY类型没查到记录，不去查KEY管理的类型标识，直接返回没类型标识
 						json.put("status", "4");
-						json.put("msg", "当前网点库房KEY余量为0");
+						json.put("msg", /*"当前网点库房此类型KEY余量为0"*/"当前库房此类型KEY余量不足");
 					} else {
 						if (depotGeneStatistics.get(0).getInCount() > 0) {
 							// 查到记录，且库存数量大于0，提示正常
@@ -464,7 +464,7 @@ public class KeyUsbKeyDepotController extends BaseController {
 						} else {
 							// 查到记录，且库存小于等于0，提示余量为0
 							json.put("status", "4");
-							json.put("msg", "当前网点库房KEY余量为0");
+							json.put("msg", /*"当前网点库房此类型KEY余量为0"*/"当前库房此类型KEY余量不足");
 						}
 					}
 				}else{

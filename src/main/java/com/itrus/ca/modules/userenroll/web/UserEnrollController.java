@@ -1006,6 +1006,10 @@ public class UserEnrollController extends BaseController {
 			new_dealInfo.setNotafter(new Timestamp(afterDate.getTime()));
 			new_dealInfo.setPayType(workDealInfo.getPayType());
 			
+		
+			
+			
+			
 			new_dealInfo.setConfigChargeAgentId(workDealInfo.getConfigChargeAgentId());
 			
 			new_dealInfo.setOfficeId(workDealInfo.getOfficeId());

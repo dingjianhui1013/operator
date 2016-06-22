@@ -133,12 +133,19 @@ public class ReceiptAllocateApplyController extends BaseController {
 			receiptAllocateApply.setCreateBy(user);
 		}
 		List<Office> offices = officeService.getOfficeByType(UserUtils.getUser(),2);
+		List<Long> officeids = Lists.newArrayList();
+		if (offices.size() > 0) {
+			for (int i = 0; i < offices.size(); i++) {
+				officeids.add(offices.get(i).getId());
+			}
+		}
+		
 		model.addAttribute("offices", offices);
 		model.addAttribute("startTime", startTime);
 		model.addAttribute("state", state);
 		model.addAttribute("endTime", endTime);
 		receiptAllocateApply.setState(state);
-        Page<ReceiptAllocateApply> page = receiptAllocateApplyService.findT(new Page<ReceiptAllocateApply>(request, response), receiptAllocateApply, startTime, endTime); 
+        Page<ReceiptAllocateApply> page = receiptAllocateApplyService.findT(new Page<ReceiptAllocateApply>(request, response), receiptAllocateApply, officeids,startTime, endTime); 
         for (int i = 0; i < page.getList().size(); i++) {
         	List<ReceiptAllocateApplyDetail> details = receiptAllocateApplyDetailService.getByApplyId(page.getList().get(i).getId());
         	page.getList().get(i).setReceiptApplyDetails(details);
