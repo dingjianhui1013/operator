@@ -385,7 +385,7 @@ public class CaService {
 	 * 
 	 * @return
 	 */
-	public boolean revokeCaCert(String certSn,String reason,ConfigRaAccount raAccount) {
+	public boolean revokeCaCert(String certSn,String reason,ConfigRaAccount raAccount) throws Exception{
 		log.info("请求CA吊销证书");
 		
 		if (raAccount.getRaProtocol().equals("TCA")) {
@@ -408,7 +408,7 @@ public class CaService {
 				e.printStackTrace();
 			}
 			
-		}else {
+		}else if(raAccount.getRaProtocol().equals("ICA")) {
 			RevokeResult revokeResult = null;
 			
 			RaCertManager raCertManager = RaFactory.getRaCertManager(raAccount.getAccountOrganization(),
@@ -431,6 +431,16 @@ public class CaService {
 					return false;
 				}
 			}
+		}else{
+			
+			try {
+				UserAPIService ss = new UserAPIService(new URL(raAccount.getServiceUrl()));
+				ss.getUserAPIServicePort().revokeCert(certSn, raAccount.getAaPassword(), reason==null? RevokeRequest.certificateHold:reason, raAccount.getAccountHash(), null);
+
+			} catch (RaServiceUnavailable_Exception e) {
+				e.printStackTrace();
+			}
+			
 		}
 		return true;
 	}
