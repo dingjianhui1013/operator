@@ -11,6 +11,15 @@
 <script type="text/javascript">
 $(document).ready(
 		function() {
+			
+			
+			if(${isSelectedAll==0||isSelectedAll==null}){
+				$("#selectAllData").val("全选");
+				$("#selectAllData").attr("onclick","selectData()");	
+			}else{
+				$("#selectAllData").val("取消");
+				$("#selectAllData").attr("onclick","deleteSelect()");	
+			}
 
 
 			var url = "${ctx}/work/workDealInfo/app?_="+new Date().getTime();

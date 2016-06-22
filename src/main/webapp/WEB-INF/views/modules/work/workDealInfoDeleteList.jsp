@@ -7,6 +7,16 @@
 <meta name="decorator" content="default" />
 <script type="text/javascript">
 	$(document).ready(function() {
+		
+		if(${isSelectedAll==0||isSelectedAll==null}){
+			$("#selectAllData").val("全选");
+			$("#selectAllData").attr("onclick","selectData()");	
+		}else{
+			$("#selectAllData").val("取消");
+			$("#selectAllData").attr("onclick","deleteSelect()");	
+		}
+		
+		
 	});
 	function page(n, s) {
 		$("#pageNo").val(n);
