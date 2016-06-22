@@ -143,10 +143,27 @@
 							}
 							
 							 $("#checkAll").attr("checked","true"); 
+							 
+							 
+							 $("#selectAllData").val("取消");
+							$("#selectAllData").attr("onclick","deleteSelect()");	 
 						}
 					});
 			
 	}
+	
+	
+	 function deleteSelect(){
+			
+			$('input:checkbox').each(function () {
+		        $(this).attr('checked',false);
+			});
+			
+			$("#checkIds").val("");
+			$("#isSelectedAll").val(0);
+			$("#selectAllData").val("全选");
+			$("#selectAllData").attr("onclick","selectData()");	
+		} 
 	
 	
 	
@@ -201,8 +218,7 @@
 				class="btn btn-primary" type="submit" value="查询" />
 				&nbsp;&nbsp;&nbsp;&nbsp;
 				
-				<input id="btnSubmit"
-				class="btn btn-primary" type="button" onclick="selectData()" value="全选" />
+				<input id="selectAllData" class="btn btn-primary" type="button" onclick="selectData()" value="全选" />
 				<input type="hidden"  name="isSelectedAll"  id="isSelectedAll"  value="${isSelectedAll }"/>
 				<a id="manyUpdate" data-toggle="modal" href="javaScript:deleteDealInfoIds();" class="btn btn-primary">批量删除</a>
 				

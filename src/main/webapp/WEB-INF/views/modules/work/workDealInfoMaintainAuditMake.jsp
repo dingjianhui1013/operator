@@ -214,11 +214,7 @@
 													
 													if(res.isChange==true){top.$.jBox.tip("请及时完成印章变更操作！");}
 													
-												
-												
-												
-												
-												
+									
 												} else {
 													top.$.jBox
 															.tip("出库失败，请检查是否有该类型库存");

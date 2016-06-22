@@ -1030,10 +1030,27 @@ $(document).ready(
 							}
 							
 							 $("#checkAll").attr("checked","true"); 
+							 
+							 
+							 $("#selectAllData").val("取消");
+							$("#selectAllData").attr("onclick","deleteSelect()");	 
 						}
-					});
-			
+					}); 
 	}
+	
+	
+	
+	 function deleteSelect(){
+		
+		$('input:checkbox').each(function () {
+	        $(this).attr('checked',false);
+		});
+		
+		$("#checkIds").val("");
+		$("#isSelectedAll").val(0);
+		$("#selectAllData").val("全选");
+		$("#selectAllData").attr("onclick","selectData()");	
+	} 
 	
 	
 	
@@ -1129,8 +1146,8 @@ $(document).ready(
 				&nbsp;&nbsp;&nbsp;&nbsp;
 				<a id="manyAdd" data-toggle="modal" href="#declareDiv" class="btn btn-primary">批量新增导入</a>&nbsp;&nbsp;&nbsp;&nbsp;
 				&nbsp;&nbsp;&nbsp;&nbsp;
-				<input id="btnSubmit"
-				class="btn btn-primary" type="button" onclick="selectData()" value="全选" />
+				<input
+				class="btn btn-primary" type="button" onclick="selectData()" id="selectAllData" value="全选" />
 				<input type="hidden"  name="isSelectedAll"  id="isSelectedAll"  value="${isSelectedAll }"/>
 				<a id="manyUpdate" data-toggle="modal" href="javaScript:updateCertOK();" class="btn btn-primary">批量更新证书</a>
 			 
