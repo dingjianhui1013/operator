@@ -439,7 +439,7 @@ public class CaService {
 			
 			try {
 				UserAPIService ss = new UserAPIService(new URL(raAccount.getServiceUrl()));
-				ss.getUserAPIServicePort().revokeCert(certSn, raAccount.getAaPassword(), reason==null? RevokeRequest.certificateHold:reason, raAccount.getAccountHash(), null);
+				ss.getUserAPIServicePort().revokeCert(certSn, raAccount.getAaPassword(), (reason!=null && !reason.isEmpty())? reason:RevokeRequest.certificateHold, raAccount.getAccountHash(), null);
 
 			} catch (RaServiceUnavailable_Exception e) {
 				e.printStackTrace();
