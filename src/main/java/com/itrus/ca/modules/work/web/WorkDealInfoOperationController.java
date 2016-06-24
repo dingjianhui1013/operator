@@ -438,7 +438,7 @@ public class WorkDealInfoOperationController extends BaseController {
 		}
 		if (!inOffice) {
 			redirectAttributes.addAttribute("fd", UUID.randomUUID().toString());
-			addMessage(redirectAttributes, "请到业务办理网点补办！");
+			addMessage(redirectAttributes, "此业务应用未授权给当前网点，请到业务办理网点补办！");
 			return "redirect:" + Global.getAdminPath() + "/work/workDealInfo/?repage";
 		}
 //		List<WorkLog> list = workLogService.findByDealInfo(workDealInfo);

@@ -4611,7 +4611,7 @@ public class WorkDealInfoController extends BaseController {
 				model.addAttribute("change", "1");
 				if (!inOffice) {
 					redirectAttributes.addAttribute("fd", UUID.randomUUID().toString());
-					addMessage(redirectAttributes, "请到业务办理网点变更！");
+					addMessage(redirectAttributes, "此业务应用未授权给当前网点，请到业务办理网点变更！");
 					return "redirect:" + Global.getAdminPath() + "/work/workDealInfo/?repage";
 				}
 			} else if (type[i].equals("2")) {
@@ -4622,7 +4622,7 @@ public class WorkDealInfoController extends BaseController {
 				}
 				if (!inOffice) {
 					redirectAttributes.addAttribute("fd", UUID.randomUUID().toString());
-					addMessage(redirectAttributes, "请到业务办理网点补办！");
+					addMessage(redirectAttributes, "此业务应用未授权给当前网点，请到业务办理网点补办！");
 					return "redirect:" + Global.getAdminPath() + "/work/workDealInfo/?repage";
 				}
 			} else if (type[i].equals("3")) {
@@ -4657,7 +4657,7 @@ public class WorkDealInfoController extends BaseController {
 				model.addAttribute("revoke", "4");
 				if (!inOffice) {
 					redirectAttributes.addAttribute("fd", UUID.randomUUID().toString());
-					addMessage(redirectAttributes, "请到业务办理网点吊销！");
+					addMessage(redirectAttributes, "此业务应用未授权给当前网点，请到业务办理网点吊销！");
 					return "redirect:" + Global.getAdminPath() + "/work/workDealInfo/?repage";
 				}
 			}

@@ -1819,7 +1819,10 @@ public class WorkDealInfoService extends BaseService {
 		}
 
 		if (workType != null) {
-			dc.add(Restrictions.ne("dealInfoType", 11));
+			
+			dc.add(Restrictions.or(Restrictions.ne("dealInfoType", 11), Restrictions.isNull("dealInfoType")));
+			
+			/*dc.add(Restrictions.ne("dealInfoType", 11));*/
 		}
 		
 
