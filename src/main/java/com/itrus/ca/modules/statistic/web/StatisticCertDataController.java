@@ -5,9 +5,7 @@ package com.itrus.ca.modules.statistic.web;
 
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -18,7 +16,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.http.impl.cookie.DateParseException;
+
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFFont;
@@ -44,9 +42,9 @@ import com.itrus.ca.modules.bean.StaticCertDay;
 import com.itrus.ca.modules.bean.StaticCertMonth;
 import com.itrus.ca.modules.constant.ProductType;
 import com.itrus.ca.modules.profile.entity.ConfigApp;
-import com.itrus.ca.modules.profile.service.ConfigAppOfficeRelationService;
+
 import com.itrus.ca.modules.profile.service.ConfigAppService;
-import com.itrus.ca.modules.profile.service.ConfigProductService;
+
 import com.itrus.ca.modules.statistic.entity.StatisticCertData;
 import com.itrus.ca.modules.statistic.service.StatisticCertDataService;
 import com.itrus.ca.modules.sys.entity.Office;
@@ -108,8 +106,12 @@ public class StatisticCertDataController extends BaseController {
 		if (areaId != null) {
 			List<Office> offices = officeService.findByParentId(areaId);
 			model.addAttribute("offices", offices);
+		}else{
+			List<Office> offices = officeService.getOfficeByType(UserUtils.getUser(), 2);
+			model.addAttribute("offices", offices);
 		}
 
+		
 		/* 应用查询列表显示 */
 		List<ConfigApp> configAppList = configAppService.selectAll();
 		model.addAttribute("configAppList", configAppList);
@@ -1144,120 +1146,7 @@ public class StatisticCertDataController extends BaseController {
 			scdd.setCertDays((scdList));
 			sumList.add(scdd);
 
-			// List<StaticCertDay> zCertDays = new ArrayList<StaticCertDay>();
-			// List<StatisticCertData> zList =
-			// statisticCertDataService.getSum1(configApp,
-			// Integer.parseInt(productId), office, start, end, 2);
-			// List<StatisticCertData> zList =
-			// statisticCertDataService.getSum(configApp, office, months, end,
-			// 0);
-			// StaticCertDay scd3 = new StaticCertDay();
-			// Integer add1 = 0;
-			// Integer add2 = 0;
-			// Integer add4 = 0;
-			// Integer add5 = 0;
-			// Integer renew1 = 0;
-			// Integer renew2 = 0;
-			// Integer renew4 = 0;
-			// Integer renew5 = 0;
-			// if(zList.size()!=0){
-			// for (StatisticCertData statisticCertData2 : zList) {
-			// StaticCertDay scd = new StaticCertDay();
-			// scd.setAdd1(statisticCertData2.getAdd1());
-			// scd.setAdd2(statisticCertData2.getAdd2());
-			// scd.setAdd4(statisticCertData2.getAdd4());
-			// scd.setAdd5(statisticCertData2.getAdd5());
-			// scd.setRenew1(statisticCertData2.getRenew1());
-			// scd.setRenew2(statisticCertData2.getRenew2());
-			// scd.setRenew4(statisticCertData2.getRenew4());
-			// scd.setRenew5(statisticCertData2.getRenew5());
-			// scd.setDay(statisticCertData2.getCountDate());
-			// zCertDays.add(scd);
-			// }
-			// }else{
-			// scd3.setAdd1(add1);
-			// scd3.setAdd2(add2);
-			// scd3.setAdd4(add4);
-			// scd3.setAdd5(add5);
-			// scd3.setRenew1(renew1);
-			// scd3.setRenew2(renew2);
-			// scd3.setRenew4(renew4);
-			// scd3.setRenew5(renew5);
-			// zCertDays.add(scd3);
-			// }
-			// //合同企业
-			// List<StaticCertDay> hCertDays = new ArrayList<StaticCertDay>();
-			// // List<StatisticCertData> hList =
-			// statisticCertDataService.getSum(configApp, office, months, end,
-			// 1);
-			// List<StatisticCertData> hList =
-			// statisticCertDataService.getSum1(configApp,
-			// Integer.parseInt(productId), office, start, end, 2);
-			// if(hList.size()!=0){
-			// for(StatisticCertData scd : hList) {
-			// StaticCertDay scd1 = new StaticCertDay();
-			// scd1.setAdd1(scd.getAdd1());
-			// scd1.setAdd2(scd.getAdd2());
-			// scd1.setAdd4(scd.getAdd4());
-			// scd1.setAdd5(scd.getAdd5());
-			// scd1.setRenew1(scd.getRenew1());
-			// scd1.setRenew2(scd.getRenew2());
-			// scd1.setRenew4(scd.getRenew4());
-			// scd1.setRenew5(scd.getRenew5());
-			// hCertDays.add(scd1);
-			// }
-			// }else{
-			// scd3.setAdd1(add1);
-			// scd3.setAdd2(add2);
-			// scd3.setAdd4(add4);
-			// scd3.setAdd5(add5);
-			// scd3.setRenew1(renew1);
-			// scd3.setRenew2(renew2);
-			// scd3.setRenew4(renew4);
-			// scd3.setRenew5(renew5);
-			// hCertDays.add(scd3);
-			// }
-			//
-			// //政府统一采购
-			// List<StaticCertDay> zfCertDays = new ArrayList<StaticCertDay>();
-			// // List<StatisticCertData> zfList =
-			// statisticCertDataService.getSum(configApp, office, months, end,
-			// 2);
-			// List<StatisticCertData> zfList =
-			// statisticCertDataService.getSum1(configApp,
-			// Integer.parseInt(productId), office, start, end, 2);
-			// if(zfList.size()!=0){
-			// for (StatisticCertData scd1 : zfList) {
-			// StaticCertDay scd2 = new StaticCertDay();
-			// scd2.setAdd1(scd1.getAdd1());
-			// scd2.setAdd2(scd1.getAdd2());
-			// scd2.setAdd4(scd1.getAdd4());
-			// scd2.setAdd5(scd1.getAdd5());
-			// scd2.setRenew1(scd1.getRenew1());
-			// scd2.setRenew2(scd1.getRenew2());
-			// scd2.setRenew4(scd1.getRenew4());
-			// scd2.setRenew5(scd1.getRenew5());
-			// zfCertDays.add(scd2);
-			// }
-			// }else{
-			// scd3.setAdd1(add1);
-			// scd3.setAdd2(add2);
-			// scd3.setAdd4(add4);
-			// scd3.setAdd5(add5);
-			// scd3.setRenew1(renew1);
-			// scd3.setRenew2(renew2);
-			// scd3.setRenew4(renew4);
-			// scd3.setRenew5(renew5);
-			// zfCertDays.add(scd3);
-			// }
-			// scdd.setzCertDays(zCertDays);
-			// scdd.sethCertDays(hCertDays);
-			// scdd.setZfCertDays(zfCertDays);
-			// sumList.add(scdd);
-			// } catch (Exception e) {
-			// // TODO: handle exception
-			// }
-			// }
+			
 		}
 		model.addAttribute("dayList", dayLists);
 		model.addAttribute("sumList", sumList);

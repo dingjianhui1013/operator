@@ -2819,94 +2819,11 @@ public class WorkDealInfoService extends BaseService {
 		return workDealInfoDao.find(dc);
 	}
 
-	// public Page<WorkDealInfo> findByDealPay(Page<WorkDealInfo> page,
-	// WorkDealInfo workDealInfo, Date startTime,
-	// Date endTime, List<Long> idList, List<Long> dealInfoByAreaIds, List<Long>
-	// dealInfoByOfficeAreaIds,
-	// Long appId) {
-	// DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
-	// dc.createAlias("workPayInfo", "workPayInfo");
-	// dc.add(Restrictions.isNotNull("workPayInfo"));
-	// dc.add(Restrictions.eq("workPayInfo.delFlag",
-	// WorkPayInfo.DEL_FLAG_NORMAL));
-	// dc.add(Restrictions.eq("dealInfoStatus",
-	// WorkDealInfoStatus.STATUS_CERT_OBTAINED));
-	// if (workDealInfo.getWorkPayInfo() != null) {
-	// if (workDealInfo.getWorkPayInfo().getMethodMoney() == true) {
-	// dc.add(Restrictions.eq("workPayInfo.methodMoney", true));
-	// }
-	// if (workDealInfo.getWorkPayInfo().getMethodPos() == true) {
-	// dc.add(Restrictions.eq("workPayInfo.methodPos", true));
-	// }
-	// if (workDealInfo.getWorkPayInfo().getMethodBank() == true) {
-	// dc.add(Restrictions.eq("workPayInfo.methodBank", true));
-	// }
-	// if (workDealInfo.getWorkPayInfo().getMethodAlipay() == true) {
-	// dc.add(Restrictions.eq("workPayInfo.methodAlipay", true));
-	// }
-	// if (workDealInfo.getWorkPayInfo().getMethodGov() == true) {
-	// dc.add(Restrictions.eq("workPayInfo.methodGov", true));
-	// }
-	// if (workDealInfo.getWorkPayInfo().getMethodContract() == true) {
-	// dc.add(Restrictions.eq("workPayInfo.methodContract", true));
-	// }
-	// }
-	//
-	// // if(workDealInfo.getWorkPayInfo()!=null){
-	// // List<Criterion> expressions = new ArrayList<Criterion>();
-	// // SimpleExpression money = null;
-	// // SimpleExpression pos = null;
-	// // SimpleExpression bank = null;
-	// // SimpleExpression alipay = null;
-	// //
-	// // if (workDealInfo.getWorkPayInfo().getMethodMoney()!=null) {
-	// // money = Restrictions.eq("workPayInfo.methodMoney", true);
-	// // }
-	// // if (workDealInfo.getWorkPayInfo().getMethodPos()!=null) {
-	// // pos = Restrictions.eq("workPayInfo.methodPos", true);
-	// // }
-	// // if (workDealInfo.getWorkPayInfo().getMethodBank()!=null) {
-	// // bank = Restrictions.eq("workPayInfo.methodBank", true);
-	// // }
-	// // if (workDealInfo.getWorkPayInfo().getMethodAlipay()!=null) {
-	// // alipay = Restrictions.eq("workPayInfo.methodAlipay", true);
-	// // }
-	// // dc.add(Restrictions.or(money==null? Restrictions.eq("id",-1l):money,
-	// // pos==null? Restrictions.eq("id",-2l):pos,
-	// // bank==null? Restrictions.eq("id",-3l):bank,
-	// // alipay==null? Restrictions.eq("id",-4l):alipay));
-	// // }
-	// if (startTime != null) {
-	// dc.add(Restrictions.ge("workPayInfo.createDate", startTime));
-	// }
-	// if (endTime != null) {
-	// Calendar calendar = Calendar.getInstance();
-	// calendar.setTime(endTime);
-	// calendar.add(Calendar.DATE, 1);
-	// dc.add(Restrictions.le("workPayInfo.createDate", calendar.getTime()));
-	// }
-	// if (idList != null && idList.size() > 0) {
-	// dc.add(Restrictions.in("id", idList));
-	// }
-	// if (dealInfoByAreaIds != null && dealInfoByAreaIds.size() > 0) {
-	// dc.add(Restrictions.in("id", dealInfoByAreaIds));
-	// }
-	// if (dealInfoByOfficeAreaIds != null && dealInfoByOfficeAreaIds.size() >
-	// 0) {
-	// dc.add(Restrictions.in("id", dealInfoByOfficeAreaIds));
-	// }
-	// if (appId != null) {
-	// dc.add(Restrictions.eq("configApp.id", appId));
-	// }
-	//
-	// dc.addOrder(Order.desc("id"));
-	// return workDealInfoDao.find(page, dc);
-	// }
+	
 
 	public Page<WorkDealInfo> findByDealPay(Page<WorkDealInfo> page,
 			WorkDealInfo workDealInfo, Date startTime, Date endTime,
-			List<Long> idList, List<Long> dealInfoByAreaIds,
-			List<Long> dealInfoByOfficeAreaIds, Long appId, List<Long> officeIds) {
+			 Long appId, List<Long> officeIds) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("workPayInfo", "workPayInfo");
 		dc.add(Restrictions.isNotNull("workPayInfo"));
@@ -2944,16 +2861,7 @@ public class WorkDealInfoService extends BaseService {
 			calendar.add(Calendar.DATE, 1);
 			dc.add(Restrictions.le("workPayInfo.createDate", calendar.getTime()));
 		}
-		if (idList != null && idList.size() > 0) {
-			dc.add(Restrictions.in("id", idList));
-		}
-		if (dealInfoByAreaIds != null && dealInfoByAreaIds.size() > 0) {
-			dc.add(Restrictions.in("id", dealInfoByAreaIds));
-		}
-		if (dealInfoByOfficeAreaIds != null
-				&& dealInfoByOfficeAreaIds.size() > 0) {
-			dc.add(Restrictions.in("id", dealInfoByOfficeAreaIds));
-		}
+		
 		if (appId != null) {
 			dc.add(Restrictions.eq("configApp.id", appId));
 		}
@@ -2965,14 +2873,13 @@ public class WorkDealInfoService extends BaseService {
 	}
 
 	public List<WorkDealInfo> findByDealPay(WorkDealInfo workDealInfo,
-			Date startTime, Date endTime, List<Long> idList,
-			List<Long> dealInfoByAreaIds, List<Long> dealInfoByOfficeAreaIds,
+			Date startTime, Date endTime, 
 			Long appId, List<Long> officeIds) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("workPayInfo", "workPayInfo");
 		dc.add(Restrictions.isNotNull("workPayInfo"));
-		dc.createAlias("createBy", "createBy");
-		dc.createAlias("createBy.office", "office");
+		/*dc.createAlias("createBy", "createBy");
+		dc.createAlias("createBy.office", "office");*/
 		dc.add(Restrictions.eq("workPayInfo.delFlag",
 				WorkPayInfo.DEL_FLAG_NORMAL));
 		dc.add(Restrictions.eq("dealInfoStatus",
@@ -2997,34 +2904,10 @@ public class WorkDealInfoService extends BaseService {
 				dc.add(Restrictions.eq("workPayInfo.methodContract", true));
 			}
 			if (officeIds != null && officeIds.size() > 0) {
-				dc.add(Restrictions.in("office.id", officeIds));
+				dc.add(Restrictions.in("officeId", officeIds));
 			}
 		}
 
-		// if(workDealInfo.getWorkPayInfo()!=null){
-		// List<Criterion> expressions = new ArrayList<Criterion>();
-		// SimpleExpression money = null;
-		// SimpleExpression pos = null;
-		// SimpleExpression bank = null;
-		// SimpleExpression alipay = null;
-		//
-		// if (workDealInfo.getWorkPayInfo().getMethodMoney()!=null) {
-		// money = Restrictions.eq("workPayInfo.methodMoney", true);
-		// }
-		// if (workDealInfo.getWorkPayInfo().getMethodPos()!=null) {
-		// pos = Restrictions.eq("workPayInfo.methodPos", true);
-		// }
-		// if (workDealInfo.getWorkPayInfo().getMethodBank()!=null) {
-		// bank = Restrictions.eq("workPayInfo.methodBank", true);
-		// }
-		// if (workDealInfo.getWorkPayInfo().getMethodAlipay()!=null) {
-		// alipay = Restrictions.eq("workPayInfo.methodAlipay", true);
-		// }
-		// dc.add(Restrictions.or(money==null? Restrictions.eq("id",-1l):money,
-		// pos==null? Restrictions.eq("id",-2l):pos,
-		// bank==null? Restrictions.eq("id",-3l):bank,
-		// alipay==null? Restrictions.eq("id",-4l):alipay));
-		// }
 		if (startTime != null) {
 			dc.add(Restrictions.ge("workPayInfo.createDate", startTime));
 		}
@@ -3034,16 +2917,7 @@ public class WorkDealInfoService extends BaseService {
 			calendar.add(Calendar.DATE, 1);
 			dc.add(Restrictions.le("workPayInfo.createDate", calendar.getTime()));
 		}
-		if (idList != null && idList.size() > 0) {
-			dc.add(Restrictions.in("id", idList));
-		}
-		if (dealInfoByAreaIds != null && dealInfoByAreaIds.size() > 0) {
-			dc.add(Restrictions.in("id", dealInfoByAreaIds));
-		}
-		if (dealInfoByOfficeAreaIds != null
-				&& dealInfoByOfficeAreaIds.size() > 0) {
-			dc.add(Restrictions.in("id", dealInfoByOfficeAreaIds));
-		}
+		
 		if (appId != null) {
 			dc.add(Restrictions.eq("configApp.id", appId));
 		}
@@ -4394,8 +4268,8 @@ public class WorkDealInfoService extends BaseService {
 		dc.createAlias("configApp", "configApp");
 		dc.add(Restrictions.eq("officeId", officeId));
 		dc.add(Restrictions.eq("configApp.id", appId));
-		dc.add(Restrictions.ge("updateDate", date));
-		dc.add(Restrictions.lt("updateDate", calendar.getTime()));
+		dc.add(Restrictions.ge("businessCardUserDate", date));                  //改正  之前用updatedate查  改为制证时间
+		dc.add(Restrictions.lt("businessCardUserDate", calendar.getTime()));
 		dc.add(Restrictions.or(Restrictions.ne("isSJQY", 1),
 				Restrictions.isNull("isSJQY")));
 		if (year != 0) {

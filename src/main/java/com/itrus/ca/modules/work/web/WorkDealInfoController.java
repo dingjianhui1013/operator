@@ -315,16 +315,10 @@ public class WorkDealInfoController extends BaseController {
 		
 		model.addAttribute("isSelectedAll", isSelectedAll);
 
-		// List<WorkDealInfo> noIxinInfos = page.getList();
-		// List<WorkDealInfo> isIxinInfos =
-		// workDealInfoService.find4ApplyIsIxin(workDealInfo, startTime,
-		// endTime, alias);
-		// noIxinInfos.addAll(isIxinInfos);
-		// page.setList(noIxinInfos);
+		
 
 		model.addAttribute("workType", workDealInfo.getDealInfoStatus());
 
-		//model.addAttribute("proList", ProductType.getProductTypeList());
 		model.addAttribute("proList", ProductType.getProductList());
 		
 		
@@ -337,6 +331,8 @@ public class WorkDealInfoController extends BaseController {
 		model.addAttribute("productName", productName);
 		model.addAttribute("makeCertStartTime", makeCertStartTime);
 		model.addAttribute("makeCertEndTime", makeCertEndTime);
+		//经信委
+		model.addAttribute("expirationDate", StringHelper.getLastDateOfCurrentYear());
 		return "modules/work/workDealInfoList";
 	}
 
@@ -531,17 +527,11 @@ public class WorkDealInfoController extends BaseController {
 			@RequestParam(value = "officeId", required = false) Long officeId,
 			@RequestParam(value = "appId", required = false) Long appId, Model model) {
 		User user = UserUtils.getUser();
-		// 获取前台的付款方式
-		// List<Long> method = Lists.newArrayList();
+		
 		if (payMethod != null) {
-			// String[] methods = payMethod.split(",");
-			// method = Lists.newArrayList();
-			// for (int i = 0; i < methods.length; i++) {
-			// method.add(Long.parseLong(methods[i]));
-			// }
-
+	
 			WorkPayInfo workPayInfo = new WorkPayInfo();
-			// for (int i = 0; i < methods.length; i++) {
+
 			if (payMethod.equals("1")) {
 				workPayInfo.setMethodMoney(true);
 				// continue;
@@ -566,37 +556,17 @@ public class WorkDealInfoController extends BaseController {
 				workPayInfo.setMethodContract(true);
 				// continue;
 			}
-			// }
+			
 			workDealInfo.setWorkPayInfo(workPayInfo);
 		}
 
-		List<Long> dealInfoByOfficeAreaIds = Lists.newArrayList();
-		List<Long> dealInfoByAreaIds = Lists.newArrayList();
 		List<Long> officeids = Lists.newArrayList();
 		Map<Long, Set<String>> Id_paymethod = new HashMap<Long, Set<String>>();
 		if (officeId != null && officeId != 0) {
 			officeids.add(officeId);
-			List<Long> appids = Lists.newArrayList();
-			List<ConfigAppOfficeRelation> appOffices = configAppOfficeRelationService.findAllByOfficeId(officeId);// 通过网店获取引用的id
-			if (appOffices.size() > 0) {
-				for (int i = 0; i < appOffices.size(); i++) {
-					appids.add(appOffices.get(i).getConfigApp().getId());
-				}
-			} else {
-				appids.add(-1l);
-			}
-			List<WorkDealInfo> deals = workDealInfoService.findByAppId(appids);// 根据应用id获取dealInfo信息
-			if (deals.size() < 1) {
-				dealInfoByOfficeAreaIds.add(-1l);
-			} else {
-				for (int i = 0; i < deals.size(); i++) {
-					dealInfoByOfficeAreaIds.add(deals.get(i).getId());
-				}
-			}
 		} else {
 			if (area != null) {
-				List<Long> appids = Lists.newArrayList();
-				// List<Long> officeids = Lists.newArrayList();
+				
 				List<Office> offices = officeService.findByParentId(area);// 根据区域id获取网店id
 				if (offices.size() > 0) {
 					for (int i = 0; i < offices.size(); i++) {
@@ -605,30 +575,12 @@ public class WorkDealInfoController extends BaseController {
 				} else {
 					officeids.add(-1l);
 				}
-
-				List<ConfigAppOfficeRelation> appOffices = configAppOfficeRelationService.findAllByOfficeId(officeids);// 根据网店id获取应用id
-				if (appOffices.size() > 0) {
-					for (int i = 0; i < appOffices.size(); i++) {
-						appids.add(appOffices.get(i).getConfigApp().getId());
-					}
-				} else {
-					appids.add(-1l);
-				}
-
-				List<WorkDealInfo> deals = workDealInfoService.findByAppId(appids);// 根据应用id获取dealInfo信息
-				if (deals.size() < 1) {
-					dealInfoByAreaIds.add(-1l);
-				} else {
-					for (int i = 0; i < deals.size(); i++) {
-						dealInfoByAreaIds.add(deals.get(i).getId());
-					}
-				}
 			}
 		}
 
-		List<Long> idList = Lists.newArrayList();// 根据产品名称查询出支付信息
+	
 		Page<WorkDealInfo> page = workDealInfoService.findByDealPay(new Page<WorkDealInfo>(request, response),
-				workDealInfo, startTime, endTime, idList, dealInfoByAreaIds, dealInfoByOfficeAreaIds, appId, officeids);
+				workDealInfo, startTime, endTime, appId, officeids);
 		if (page.getList().size() > 0) {
 			for (int i = 0; i < page.getList().size(); i++) {
 				if (page.getList().get(i).getWorkPayInfo().getRelationMethod() != null) {
@@ -826,6 +778,8 @@ public class WorkDealInfoController extends BaseController {
 			if (officeId != null) {
 				model.addAttribute("office", officeId);
 			}
+		}else if(officeId != null){
+			model.addAttribute("office", officeId);
 		}
 
 		List<ConfigApp> appList = configAppService.findAllConfigApp();
@@ -4959,17 +4913,11 @@ public class WorkDealInfoController extends BaseController {
 		font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
 		font.setFontHeightInPoints((short) 14);
 		style.setFont(font);
-		// 获取前台的付款方式
-		// List<Long> method = Lists.newArrayList();
+		
 		if (payMethod != null) {
-			// String[] methods = payMethod.split(",");
-			// method = Lists.newArrayList();
-			// for (int i = 0; i < methods.length; i++) {
-			// method.add(Long.parseLong(methods[i]));
-			// }
-
+			
 			WorkPayInfo workPayInfo = new WorkPayInfo();
-			// for (int i = 0; i < methods.length; i++) {
+			
 			if (payMethod.equals("1")) {
 				workPayInfo.setMethodMoney(true);
 				// continue;
@@ -4994,37 +4942,18 @@ public class WorkDealInfoController extends BaseController {
 				workPayInfo.setMethodContract(true);
 				// continue;
 			}
-			// }
+			
 			workDealInfo.setWorkPayInfo(workPayInfo);
 		}
 
-		List<Long> dealInfoByOfficeAreaIds = Lists.newArrayList();
-		List<Long> dealInfoByAreaIds = Lists.newArrayList();
+		
 		List<Long> officeids = Lists.newArrayList();
 		Map<Long, Set<String>> Id_paymethod = new HashMap<Long, Set<String>>();
 		int index = 0;
 		if (officeId != null && officeId != 0) {
 			officeids.add(officeId);
-			List<Long> appids = Lists.newArrayList();
-			List<ConfigAppOfficeRelation> appOffices = configAppOfficeRelationService.findAllByOfficeId(officeId);// 通过网店获取引用的id
-			if (appOffices.size() > 0) {
-				for (int i = 0; i < appOffices.size(); i++) {
-					appids.add(appOffices.get(i).getConfigApp().getId());
-				}
-			} else {
-				appids.add(-1l);
-			}
-			List<WorkDealInfo> deals = workDealInfoService.findByAppId(appids);// 根据应用id获取dealInfo信息
-			if (deals.size() < 1) {
-				dealInfoByOfficeAreaIds.add(-1l);
-			} else {
-				for (int i = 0; i < deals.size(); i++) {
-					dealInfoByOfficeAreaIds.add(deals.get(i).getId());
-				}
-			}
 		} else {
 			if (area != null) {
-				List<Long> appids = Lists.newArrayList();
 				List<Office> offices = officeService.findByParentId(area);// 根据区域id获取网店id
 				if (offices.size() > 0) {
 					for (int i = 0; i < offices.size(); i++) {
@@ -5034,59 +4963,12 @@ public class WorkDealInfoController extends BaseController {
 					officeids.add(-1l);
 				}
 
-				List<ConfigAppOfficeRelation> appOffices = configAppOfficeRelationService.findAllByOfficeId(officeids);// 根据网店id获取应用id
-				if (appOffices.size() > 0) {
-					for (int i = 0; i < appOffices.size(); i++) {
-						appids.add(appOffices.get(i).getConfigApp().getId());
-					}
-				} else {
-					appids.add(-1l);
-				}
-
-				List<WorkDealInfo> deals = workDealInfoService.findByAppId(appids);// 根据应用id获取dealInfo信息
-				if (deals.size() < 1) {
-					dealInfoByAreaIds.add(-1l);
-				} else {
-					for (int i = 0; i < deals.size(); i++) {
-						dealInfoByAreaIds.add(deals.get(i).getId());
-					}
-				}
 			}
 		}
-		List<Long> idList = Lists.newArrayList();// 根据产品名称查询出支付信息
-		// if (appId != null) {
-		// List<WorkDealInfo> dealInfos = workDealInfoService
-		// .findByAppId(appId);
-		//
-		// if (dealInfos != null && dealInfos.size() > 0) {
-		// for (int i = 0; i < dealInfos.size(); i++) {
-		// idList.add(dealInfos.get(i).getId());
-		// }
-		// }
-		// if (dealInfos == null || dealInfos.size() < 1) {
-		// idList.add(-1l);
-		// }
-		// }
-		List<WorkDealInfo> list = workDealInfoService.findByDealPay(workDealInfo, startTime, endTime, idList,
-				dealInfoByAreaIds, dealInfoByOfficeAreaIds, appId, officeids);
-		// 除去合同采购和统一采购的信息
-		// for (int i = 0; i < page.getList().size(); i++) {
-		// if (page.getList().get(i).getWorkPayInfo().getMethodGov() != null) {
-		// if (page.getList().get(i).getWorkPayInfo().getMethodGov() == true) {
-		// page.getList().remove(i);
-		// continue;
-		// }
-		// }
-		// if (page.getList().get(i).getWorkPayInfo().getMethodContract() !=
-		// null) {
-		// if (page.getList().get(i).getWorkPayInfo().getMethodContract() ==
-		// true) {
-		// page.getList().remove(i);
-		// continue;
-		// }
-		// }
-		//
-		// }
+		
+		List<WorkDealInfo> list = workDealInfoService.findByDealPay(workDealInfo, startTime, endTime,
+				 appId, officeids);
+	
 
 		if (list.size() > 0) {
 			for (int i = 0; i < list.size(); i++) {
@@ -5330,34 +5212,7 @@ public class WorkDealInfoController extends BaseController {
 		bos.write(bytes);
 		bos.close();
 		baos.close();
-		// List<Office> offsList = officeService.selectAreaList();
-		//
-		// if (area != null) {
-		// model.addAttribute("areaId", area);
-		// List<Office> offices = officeService.findByParentId(area);
-		// model.addAttribute("offices", offices);
-		// if (officeId != null) {
-		// model.addAttribute("officeId", officeId);
-		// }
-		// }
-
-		// List<Office> offsList = officeService.getOfficeByType(user, 1);
-		//
-		// List<Office> offices = officeService.getOfficeByType(user, 2);
-		// if (offices.size() == 1) {
-		// // model.addAttribute("offsListSize", 1);
-		// // model.addAttribute("offices", offices);
-		// }
-		//
-		// if (area != null) {
-		// // model.addAttribute("areaId", area);
-		//
-		// List<Office> offs = officeService.findByParentId(area);
-		// // model.addAttribute("offices", offs);
-		// if (officeId != null) {
-		// // model.addAttribute("office", officeId);
-		// }
-		// }
+		
 	}
 
 	@RequestMapping(value = "exportZS")
@@ -8534,14 +8389,11 @@ public class WorkDealInfoController extends BaseController {
 	}
 
 	@RequestMapping(value = "updateDealInfos")
-	public String updateDealInfos(String dealInfoIds, Integer year,Long bounddId,String methodPay) {
+	public String updateDealInfos(String dealInfoIds, Integer yearU,Date expirationDate,//经信委 年限和日期二选一
+			Long bounddId,String methodPay) {
 		
 		ConfigChargeAgentBoundConfigProduct bound =  configChargeAgentBoundConfigProductService.get(bounddId);
 		ConfigChargeAgent agent = bound.getAgent();
-		
-		
-		
-		
 		String[] infoIds = dealInfoIds.split(",");
 		for (int i = 0; i < infoIds.length; i++) {
 			try {
@@ -8587,7 +8439,16 @@ public class WorkDealInfoController extends BaseController {
 				workDealInfo.setWorkUserHis(userHis);
 				workDealInfo.setWorkCompanyHis(companyHis);
 				workDealInfo.setConfigProduct(workDealInfo1.getConfigProduct());
-				workDealInfo.setYear(year);
+				
+				//经信委
+				if(yearU!=null&&expirationDate==null){
+					workDealInfo.setYear(yearU);
+					workDealInfo.setExpirationDate(null);
+				}else{
+					workDealInfo.setYear(StringHelper.getDvalueYear(expirationDate));
+					workDealInfo.setExpirationDate(expirationDate);
+				}
+				
 				workDealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_ENTRY_SUCCESS);
 				workDealInfo.setDealInfoType(WorkDealInfoType.TYPE_UPDATE_CERT);
 				workDealInfo.setCreateBy(UserUtils.getUser());
@@ -8642,7 +8503,7 @@ public class WorkDealInfoController extends BaseController {
 				workPayInfo.setAddCert(0d);
 
 				Double money = configChargeAgentDetailService.getChargeMoney(agent.getId(), 1,
-						year);
+						yearU);
 			
 				if (methodPay.equals("0")) {
 					workPayInfo.setMethodPos(true);
