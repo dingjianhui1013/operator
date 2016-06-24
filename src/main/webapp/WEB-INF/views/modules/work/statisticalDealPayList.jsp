@@ -229,42 +229,7 @@
 											</c:if>
 										</c:forEach>
 						</c:if>
-				<%-- 	<c:choose>
-							<c:when test="${configDealPay.workPayInfo.methodPos==true}">
-							POS收款
-						</c:when>
-							<c:when test="${configDealPay.workPayInfo.methodMoney==true}">
-							现金
-						</c:when>
-							<c:when test="${configDealPay.workPayInfo.methodBank==true}">
-							银行转账
-						</c:when>
-							<c:when test="${configDealPay.workPayInfo.methodAlipay==true}">
-							支付宝
-						</c:when>
-							<c:when test="${configDealPay.workPayInfo.methodContract==true}">
-							合同采购
-						</c:when>
-							<c:when test="${configDealPay.workPayInfo.methodGov==true}">
-							政府统一采购
-						</c:when>
-							<c:otherwise>
-								<c:choose>
-									<c:when test="${configDealPay.workPayInfo.relationMethod>0}">
-										<c:forEach items="${Id_paymethod}" var="Id_paymethod">
-											<c:if test="${Id_paymethod.key==configDealPay.id}">
-												<c:forEach items="${Id_paymethod.value}" var="payMethod">
-													${payMethod}
-												</c:forEach>
-											</c:if>
-										</c:forEach>
-								</c:when>
-									<c:otherwise>
-									未知付款方式
-								</c:otherwise>
-								</c:choose>
-							</c:otherwise>
-						</c:choose> --%>
+				
 						</td>
 						<c:set var="index" value="0"/>
 						<c:set var="index1" value="0"/>

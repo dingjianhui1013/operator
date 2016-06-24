@@ -750,7 +750,7 @@ var selected = false;
 											});
 								}
 						});
-					}else if(productId==2||productId==5)
+					}else if(productId==2||productId==6)
 					{
 						var urlajax = "${ctx}/work/workDealInfo/ajaxPersonalCount?companyIds=" + companyId+"&productId="+productId+"&_="+new Date().getTime();
 						$.getJSON(urlajax,function(data){

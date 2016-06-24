@@ -34,24 +34,7 @@
 			
 		 }
 
-		//应用和产品级联
-//		function addProduct(){
-//			var applyId = $("#applyId").prop('value');
-//			var url = "${ctx}/profile/configProduct/addProduct?applyId=";
-//			 $.getJSON(url+applyId+"&_="+new Date().getTime(),function(data){
-//				var html = "";
-//				//console.log(data);
-//				html += "<option value=\""+""+"\">请选择</ooption>";
-//				$.each(data,function(idx,ele){
-//					//console.log(idx);
-//					//console.log(ele);
-//					html += "<option value=\""+ele.id+"\">"+ele.name	+"</ooption>"
-//				});
-//				$("#productId").html(html);
-//			});
-//		 }
-		
-		
+
 		function showDays(applyId,productId,startDate,endDate,month,officeId){
 			var url = "${ctx}/statistic/statisticCertData/showDays?applyId="+applyId+"&productId="+productId+"&startDate="+startDate+"&endDate="+endDate+"&month="+month+"&officeId="+officeId;
 			top.$.jBox.open("iframe:" + url, "业务明细", 800 , 420 , {

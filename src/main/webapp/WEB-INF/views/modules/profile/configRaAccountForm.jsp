@@ -43,12 +43,12 @@
 				}
 				
 				
-				if(${canModify==true}){
+				/* if(${canModify==true}){
 					$("#key1").attr("disabled", "disabled");
 					$("#key2").attr("disabled", "disabled");
 					$("#key3").attr("disabled", "disabled");
 				}
-				
+ */				
 			});
 	
 	function caCertOn() {

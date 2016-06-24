@@ -555,7 +555,7 @@ $(document).ready(
 	*/ 
 	function showYearByUpdate(){
 		var agentId = $("#bounddId").val();
-		//var url = "${ctx}/work/workDealInfo/showYear?lable="+lable+"&productName="+productName+"&app="+$("#appId").val()+"&infoType=0&_="+new Date().getTime();
+		
 		var url = "${ctx}/work/workDealInfo/showYearNew?boundId="+agentId+"&infoType=1&_="+new Date().getTime();
 		
 		$.getJSON(url, function(data) {
@@ -594,6 +594,19 @@ $(document).ready(
 				$("#year5U").hide();
 				$("#word5U").hide();
 			}
+			
+			
+			//经信委
+			if(data.support){
+				$("#supportDate").show();
+			
+			}
+			if(!data.support){
+				$("#supportDate").hide();
+				
+			}
+			
+			
 			
 			if(data.pos){
 				$("#pay1").show();
@@ -651,8 +664,8 @@ $(document).ready(
 		}
 		
 		var year = $("input[name='yearU']:checked").val()
-		if(year == null || year == ''){
-			top.$.jBox.tip("请选择更新年数！");
+		if((year == null || year == '')&&($("#expirationDate").val() == null || $("#expirationDate").val() == "")){
+			top.$.jBox.tip("请选择更新年数或指定截至日期！");
         	return false;
 		}
 		var methodPay = $("input[name='methodPay']:checked").val()
@@ -661,12 +674,17 @@ $(document).ready(
         	return false;
 		}
 		
-		var bounddId = $("#bounddId").val();
+		/* var bounddId = $("#bounddId").val();
 		var checkIds = $("#checkIds").val();
+		var expirationDate = $("#expirationDate").val(); */
+		
+		$("#dealInfoIds").val($("#checkIds").val());
 		
 		 top.$.jBox.tip("正在批量更新业务...", 'loading');
-			window.location.href = "${ctx}/work/workDealInfo/updateDealInfos?dealInfoIds="
-			+ checkIds + "&year=" + year + "&bounddId=" + bounddId + "&methodPay="+methodPay ;
+			/*  window.location.href = "${ctx}/work/workDealInfo/updateDealInfos?dealInfoIds="
+			+ checkIds + "&year=" + year + "&expirationDate=" + expirationDate +  "&bounddId=" + bounddId + "&methodPay="+methodPay ; */ 
+			
+			$("#updateBatch").submit();
 		
 	}
 	
@@ -1430,6 +1448,9 @@ $(document).ready(
 			<h3>批量更新</h3>
 		</div>
 		<div class="modal-body">
+			<form id="updateBatch"
+				action="${ctx}/work/workDealInfo/updateDealInfos"
+				enctype="multipart/form-data">
 			<div class="row-fluid">
 			<table class="table table-striped table-bordered table-condensed">
 				<tbody>
@@ -1451,7 +1472,8 @@ $(document).ready(
 							<input type="hidden" id="updateSize">
 							<input type="hidden" id="productNamee">
 							<input type="hidden" id="labell">
-							<input type="hidden" id="bounddId">
+							<input type="hidden" id="bounddId" name="bounddId">
+							<input type="hidden" id="dealInfoIds" name="dealInfoIds">
 							
 						</td>
 					</tr>
@@ -1495,9 +1517,29 @@ $(document).ready(
 						</td>
 						
 					</tr>
+					
+					 <tr id="supportDate" style="display: none">
+					
+					<th>选择截止日期：</th>
+						<td>
+								<input class="input-medium Wdate" type="text"
+							 onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});"
+							 maxlength="20" readonly="readonly" value="<fmt:formatDate value="${expirationDate}" pattern="yyyy-MM-dd"/>"
+							name="expirationDate" id="expirationDate"/>
+							</td>
+						
+					<th></th>
+					<td></td>
+					
+					</tr> 
+					
+					
+					
 				</tbody>
 			</table>
 		</div>
+		</form>
+		
 		</div>
 		<div class="modal-footer">
 			<a href="javascript:void(0)" data-dismiss="modal" 
