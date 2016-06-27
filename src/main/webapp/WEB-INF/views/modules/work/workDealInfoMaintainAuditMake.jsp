@@ -145,9 +145,14 @@
 		if (cspStr.indexOf("软证书") > -1) {
 			keySN = "rzs";
 		}
+		
+		
+		
 		if (cspStr.indexOf("SM2") > -1) {
 			len = 256;
 		}
+		
+		
 		//如果是更新的:
 		if("${workDealInfo.dealInfoType}"=="0" || "${workDealInfo.dealInfoType1}"=="2" || "${workDealInfo.dealInfoType1}"=="3"){
 			//新增的生成csr
@@ -167,8 +172,7 @@
 		var url = "${ctx}/ca/makeCert?reqOverrideValidity=" + day
 				+ "&certProvider=" + cspStr + "&keySn=" + keySN + "&csr=" + csr
 				+ "&dealInfoId=${workDealInfo.id}&addCertDays="+$("#addCertDays").val()+"&_="+new Date().getTime();
-		$
-				.ajax({
+		$.ajax({
 					url : url,
 					async : false,
 					dataType : 'json',
@@ -333,17 +337,20 @@
 	function getCsrByOldCert(len) {
 		useOldKey = true;
 		var certArray = filterCerts("", 0, "${signSerialNumber}");//查找当前第一张证书,被更新的
+		alert(typeof len);
 		var objOldCert;
 		var csp = legibleNameMap[cspStr];
+		
 		for (var i = 0; i < certArray.length; i++) {
+			
 			if (certArray[i].CSP == csp) {
 				objOldCert = certArray[i];
 				break;
 			}
 		}
 		try {
-			var csr = genRenewCSR(csp, 1, len, objOldCert,useOldKey);
 			
+			var csr = genRenewCSR(csp, 1, len, objOldCert,useOldKey);
 			if (csr.length == 0) {
 				return "";
 			}
