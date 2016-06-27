@@ -149,7 +149,9 @@ function blurFilterCerts(subjectDN, dateFlag, serialNumber) {
  * @return Array(), PTALib.Certificate
  */
 function filterCerts(arrayIssuerDN, dateFlag, serialNumber) {
-    var m_certs = new Array();
+	  
+	
+	var m_certs = new Array();
     var i = 0;
     if (arrayIssuerDN == null) {
         arrayIssuerDN = new Array("");
@@ -158,6 +160,8 @@ function filterCerts(arrayIssuerDN, dateFlag, serialNumber) {
     }
     if (typeof(serialNumber) == "undefined")
         serialNumber = "";
+  
+    
     for (i = 0; i < arrayIssuerDN.length; i++) {
         var CertFilter = iTrusPTA.Filter;
         CertFilter.Clear();
