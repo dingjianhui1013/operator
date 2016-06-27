@@ -4278,8 +4278,8 @@ public class WorkDealInfoController extends BaseController {
 			@RequestParam(value = "luruEndTime", required = false) Date luruEndTime,
 			@RequestParam(value = "daoqiStartTime", required = false) Date daoqiStartTime,
 			@RequestParam(value = "daoqiEndTime", required = false) Date daoqiEndTime,
-			@RequestParam(value = "jianzhengStartTime", required = false) Date jianzhengStartTime,
-			@RequestParam(value = "jianzhengEndTime", required = false) Date jianzhengEndTime,
+			@RequestParam(value = "paymentStartTime", required = false) Date paymentStartTime,
+			@RequestParam(value = "paymentEndTime", required = false) Date paymentEndTime,
 			@RequestParam(value = "zhizhengStartTime", required = false) Date zhizhengStartTime,
 			@RequestParam(value = "zhizhengEndTime", required = false) Date zhizhengEndTime, Model model) {
 
@@ -4394,7 +4394,7 @@ public class WorkDealInfoController extends BaseController {
 		{
 			Page<WorkDealInfo> page = workDealInfoService.findCX(new Page<WorkDealInfo>(request, response), workDealInfo,
 					/*dealInfoByOfficeAreaIds, dealInfoByAreaIds,*/ officeids, apply, certType, workType, year, luruStartTime,
-					luruEndTime, officeIds, daoqiStartTime, daoqiEndTime, jianzhengStartTime, jianzhengEndTime,
+					luruEndTime, officeIds, daoqiStartTime, daoqiEndTime, paymentStartTime, paymentEndTime,
 					certInfoList);
 			model.addAttribute("proType", ProductType.productTypeStrMap);
 			model.addAttribute("wdiType", WorkDealInfoType.WorkDealInfoTypeMap);
@@ -4436,8 +4436,8 @@ public class WorkDealInfoController extends BaseController {
 			model.addAttribute("daoqiStartTime", daoqiStartTime);
 			model.addAttribute("daoqiEndTime", daoqiEndTime);
 	
-			model.addAttribute("jianzhengStartTime", jianzhengStartTime);
-			model.addAttribute("jianzhengEndTime", jianzhengEndTime);
+			model.addAttribute("paymentStartTime", paymentStartTime);
+			model.addAttribute("paymentEndTime", paymentEndTime);
 	
 			model.addAttribute("zhizhengStartTime", zhizhengStartTime);
 			model.addAttribute("zhizhengEndTime", zhizhengEndTime);
@@ -4448,7 +4448,7 @@ public class WorkDealInfoController extends BaseController {
 		}
 		Page<WorkDealInfo> page = workDealInfoService.find(new Page<WorkDealInfo>(request, response), workDealInfo,
 				/*dealInfoByOfficeAreaIds, dealInfoByAreaIds,*/ officeids, apply, certType, workType, year, luruStartTime,
-				luruEndTime, officeIds, daoqiStartTime, daoqiEndTime, jianzhengStartTime, jianzhengEndTime,
+				luruEndTime, officeIds, daoqiStartTime, daoqiEndTime, paymentStartTime, paymentEndTime,
 				certInfoList);
 		model.addAttribute("proType", ProductType.productTypeStrMap);
 		model.addAttribute("wdiType", WorkDealInfoType.WorkDealInfoTypeMap);
@@ -4490,8 +4490,8 @@ public class WorkDealInfoController extends BaseController {
 		model.addAttribute("daoqiStartTime", daoqiStartTime);
 		model.addAttribute("daoqiEndTime", daoqiEndTime);
 
-		model.addAttribute("jianzhengStartTime", jianzhengStartTime);
-		model.addAttribute("jianzhengEndTime", jianzhengEndTime);
+		model.addAttribute("paymentStartTime", paymentStartTime);
+		model.addAttribute("paymentEndTime", paymentEndTime);
 
 		model.addAttribute("zhizhengStartTime", zhizhengStartTime);
 		model.addAttribute("zhizhengEndTime", zhizhengEndTime);
@@ -5240,8 +5240,8 @@ public class WorkDealInfoController extends BaseController {
 			@RequestParam(value = "luruEndTime", required = false) Date luruEndTime,
 			@RequestParam(value = "daoqiStartTime", required = false) Date daoqiStartTime,
 			@RequestParam(value = "daoqiEndTime", required = false) Date daoqiEndTime,
-			@RequestParam(value = "jianzhengStartTime", required = false) Date jianzhengStartTime,
-			@RequestParam(value = "jianzhengEndTime", required = false) Date jianzhengEndTime,
+			@RequestParam(value = "paymentStartTime", required = false) Date paymentStartTime,
+			@RequestParam(value = "paymentEndTime", required = false) Date paymentEndTime,
 			@RequestParam(value = "zhizhengStartTime", required = false) Date zhizhengStartTime,
 			@RequestParam(value = "zhizhengEndTime", required = false) Date zhizhengEndTime)
 					throws UnsupportedEncodingException {
@@ -5372,12 +5372,12 @@ public class WorkDealInfoController extends BaseController {
 			{
 				list = workDealInfoService.findCX(workDealInfo,
 						/*dealInfoByOfficeAreaIds, dealInfoByAreaIds,*/ officeids, apply, certType, workType, year, luruStartTime,
-						luruEndTime, officeIds, daoqiStartTime, daoqiEndTime, jianzhengStartTime, jianzhengEndTime,
+						luruEndTime, officeIds, daoqiStartTime, daoqiEndTime, paymentStartTime, paymentEndTime,
 						certInfoList);
 			}
 			list = workDealInfoService.find(workDealInfo, /*dealInfoByOfficeAreaIds,
 					dealInfoByAreaIds,*/ officeids, apply, certType, workType, year, luruStartTime, luruEndTime,
-					officeIds, daoqiStartTime, daoqiEndTime, jianzhengStartTime, jianzhengEndTime, certInfoList);
+					officeIds, daoqiStartTime, daoqiEndTime, paymentStartTime, paymentEndTime, certInfoList);
 			final String fileName = "WorkDealInfos.csv";
 			final List<WorkDealInfoVo> workDealInfoVos = new ArrayList<WorkDealInfoVo>();
 			String dealInfoType = null;

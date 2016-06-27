@@ -160,15 +160,22 @@ public class ReceiptAllocateApplyController extends BaseController {
 	@RequiresPermissions("receipt:receiptAllocateApply:view")
 	@RequestMapping(value = "form")
 	public String form(ReceiptAllocateApply receiptAllocateApply, Model model) {
+		
+		User user = UserUtils.getUser();
+		
 		List<Office> offices = officeService.getOfficeByType(UserUtils.getUser(), 2);
 		//List<ReceiptType> types = receiptTypeService.getAll();
+		
+		ReceiptDepotInfo depot = getDeoptByOfficeId(user.getOffice().getId());
+		
 		List<ReceiptType> types = new ArrayList<ReceiptType>();
 		List<ReceiptDepotTypeStatistics> stas = receiptDepotTypeStatisticsService.findByDepot(KeyDepotId.RECEIPT_DEPOT_ID);
 		for (int i = 0; i < stas.size(); i++) {
 			types.add(stas.get(i).getReceiptType());
 		}
+		model.addAttribute("depot", depot);
 		model.addAttribute("types",types);
-		model.addAttribute("offices", offices);
+		model.addAttribute("office", user.getOffice());
 		model.addAttribute("receiptAllocateApply", receiptAllocateApply);
 		return "modules/receipt/receiptAllocateApplyForm";
 	}

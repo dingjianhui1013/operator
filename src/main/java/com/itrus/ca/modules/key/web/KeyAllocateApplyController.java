@@ -471,9 +471,19 @@ public class KeyAllocateApplyController extends BaseController {
 	public String form(KeyAllocateApply keyAllocateApply, Model model) {
 
 		User user = UserUtils.getUser();
-		List<Office> offices = officeService.getOfficeByType(user, 2);
+		/*List<Office> offices = officeService.getOfficeByType(user, 2);
+		List<KeyUsbKeyDepot> depots = keyUsbKeyDepotService
+				.findByOfficeIds(offices);*/
+		
+		//改:之前是user所能看到的网点，现在改为user所属网点
+		
+		List<Office> offices = Lists.newArrayList();
+		
+		offices.add(user.getOffice());
+		
 		List<KeyUsbKeyDepot> depots = keyUsbKeyDepotService
 				.findByOfficeIds(offices);
+		
 		if (depots.size() < 1) {
 			model.addAttribute("message", "您所属的网点没有仓库，请您添加仓库后，再进行调拨申请！");
 		} else {

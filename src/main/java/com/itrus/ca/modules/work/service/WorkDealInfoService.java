@@ -1433,8 +1433,8 @@ public class WorkDealInfoService extends BaseService {
 			List<Long> dealInfoByOfficeAreaIds,*/ List<Long> officeIds,
 			Long apply, String certType, Integer workType, Integer year,
 			Date luruStartTime, Date luruEndTime, List<Long> offices,
-			Date daoqiStartTime, Date daoqiEndTime, Date jianzhengStartTime,
-			Date jianzhengEndTime, List<WorkCertInfo> certInfoList
+			Date daoqiStartTime, Date daoqiEndTime, Date paymentStartTime,
+			Date paymentEndTime, List<WorkCertInfo> certInfoList
 
 	) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
@@ -1560,7 +1560,7 @@ public class WorkDealInfoService extends BaseService {
 			}
 		}
 
-		if (jianzhengStartTime != null) {
+		/*if (jianzhengStartTime != null) {
 			dc.add(Restrictions.ge("updateDate", jianzhengStartTime));
 		}
 		if (jianzhengEndTime != null) {
@@ -1568,8 +1568,20 @@ public class WorkDealInfoService extends BaseService {
 			jianzhengEndTime.setMinutes(59);
 			jianzhengEndTime.setSeconds(59);
 			dc.add(Restrictions.le("updateDate", jianzhengEndTime));
-		}
+		}*/
 
+		
+		if (paymentStartTime != null) {
+			dc.add(Restrictions.ge("payUserDate", paymentStartTime));
+		}
+		if (paymentEndTime != null) {
+			paymentEndTime.setHours(23);
+			paymentEndTime.setMinutes(59);
+			paymentEndTime.setSeconds(59);
+			dc.add(Restrictions.le("payUserDate", paymentEndTime));
+		}
+		
+		
 		if (luruStartTime != null) {
 			dc.add(Restrictions.ge("inputUserDate", luruStartTime));
 		}
@@ -1640,8 +1652,8 @@ public class WorkDealInfoService extends BaseService {
 			List<Long> dealInfoByOfficeAreaIds,*/ List<Long> officeIds,
 			Long apply, String certType, Integer workType, Integer year,
 			Date luruStartTime, Date luruEndTime, List<Long> offices,
-			Date daoqiStartTime, Date daoqiEndTime, Date jianzhengStartTime,
-			Date jianzhengEndTime, List<WorkCertInfo> certInfoList
+			Date daoqiStartTime, Date daoqiEndTime, Date paymentStartTime,
+			Date paymentEndTime, List<WorkCertInfo> certInfoList
 
 	) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
@@ -1767,7 +1779,7 @@ public class WorkDealInfoService extends BaseService {
 			}
 		}
 
-		if (jianzhengStartTime != null) {
+		/*if (jianzhengStartTime != null) {
 			dc.add(Restrictions.ge("updateDate", jianzhengStartTime));
 		}
 		if (jianzhengEndTime != null) {
@@ -1775,7 +1787,19 @@ public class WorkDealInfoService extends BaseService {
 			jianzhengEndTime.setMinutes(59);
 			jianzhengEndTime.setSeconds(59);
 			dc.add(Restrictions.le("updateDate", jianzhengEndTime));
+		}*/
+		
+		//查询条件由之前的鉴证时间改为缴费时间
+		if (paymentStartTime != null) {
+			dc.add(Restrictions.ge("payUserDate", paymentStartTime));
 		}
+		if (paymentEndTime != null) {
+			paymentEndTime.setHours(23);
+			paymentEndTime.setMinutes(59);
+			paymentEndTime.setSeconds(59);
+			dc.add(Restrictions.le("payUserDate", paymentEndTime));
+		}
+		
 
 		if (luruStartTime != null) {
 			dc.add(Restrictions.ge("inputUserDate", luruStartTime));
@@ -1844,8 +1868,8 @@ public class WorkDealInfoService extends BaseService {
 			List<Long> dealInfoByOfficeAreaIds,*/ List<Long> officeIds,
 			Long apply, String certType, Integer workType, Integer year,
 			Date luruStartTime, Date luruEndTime, List<Long> offices,
-			Date daoqiStartTime, Date daoqiEndTime, Date jianzhengStartTime,
-			Date jianzhengEndTime, List<WorkCertInfo> certInfoList
+			Date daoqiStartTime, Date daoqiEndTime, Date paymentStartTime,
+			Date paymentEndTime, List<WorkCertInfo> certInfoList
 
 	) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
@@ -1971,14 +1995,14 @@ public class WorkDealInfoService extends BaseService {
 			}
 		}
 
-		if (jianzhengStartTime != null) {
-			dc.add(Restrictions.ge("updateDate", jianzhengStartTime));
+		if (paymentStartTime != null) {
+			dc.add(Restrictions.ge("payUserDate", paymentStartTime));
 		}
-		if (jianzhengEndTime != null) {
-			jianzhengEndTime.setHours(23);
-			jianzhengEndTime.setMinutes(59);
-			jianzhengEndTime.setSeconds(59);
-			dc.add(Restrictions.le("updateDate", jianzhengEndTime));
+		if (paymentEndTime != null) {
+			paymentEndTime.setHours(23);
+			paymentEndTime.setMinutes(59);
+			paymentEndTime.setSeconds(59);
+			dc.add(Restrictions.le("payUserDate", paymentEndTime));
 		}
 
 		if (luruStartTime != null) {
@@ -2045,8 +2069,8 @@ public class WorkDealInfoService extends BaseService {
 			List<Long> dealInfoByOfficeAreaIds,*/ List<Long> officeIds,
 			Long apply, String certType, Integer workType, Integer year,
 			Date luruStartTime, Date luruEndTime, List<Long> offices,
-			Date daoqiStartTime, Date daoqiEndTime, Date jianzhengStartTime,
-			Date jianzhengEndTime, List<WorkCertInfo> certInfoList
+			Date daoqiStartTime, Date daoqiEndTime, Date paymentStartTime,
+			Date paymentEndTime, List<WorkCertInfo> certInfoList
 
 	) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
@@ -2173,14 +2197,14 @@ public class WorkDealInfoService extends BaseService {
 			}
 		}
 
-		if (jianzhengStartTime != null) {
-			dc.add(Restrictions.ge("updateDate", jianzhengStartTime));
+		if (paymentStartTime != null) {
+			dc.add(Restrictions.ge("payUserDate", paymentStartTime));
 		}
-		if (jianzhengEndTime != null) {
-			jianzhengEndTime.setHours(23);
-			jianzhengEndTime.setMinutes(59);
-			jianzhengEndTime.setSeconds(59);
-			dc.add(Restrictions.le("updateDate", jianzhengEndTime));
+		if (paymentEndTime != null) {
+			paymentEndTime.setHours(23);
+			paymentEndTime.setMinutes(59);
+			paymentEndTime.setSeconds(59);
+			dc.add(Restrictions.le("payUserDate", paymentEndTime));
 		}
 
 		if (luruStartTime != null) {
