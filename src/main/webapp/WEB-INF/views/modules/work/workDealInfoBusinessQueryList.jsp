@@ -88,8 +88,8 @@
 		var s_county=$("#s_county").val();
 		var luruStartTime =$("#luruStartTime").val();
 		var luruEndTime=$("#luruEndTime").val();
-		var jianzhengStartTime =$("#jianzhengStartTime").val();
-		var jianzhengEndTime = $("#jianzhengEndTime").val();
+		var paymentStartTime =$("#paymentStartTime").val();
+		var paymentEndTime = $("#paymentEndTime").val();
 		var zhizhengStartTime=$("#zhizhengStartTime").val();
 		var zhizhengEndTime =$("#zhizhengEndTime").val();
 		var daoqiStartTime=$("#daoqiStartTime").val();
@@ -99,7 +99,7 @@
 		window.open("${ctx}/work/workDealInfo/exportZS?certType="+certType+"&workType="+workType+"&apply="+apply+"&area="+area+"&officeId="+officeId+"&companyName="+companyName+
 		"&organizationNumber="+organizationNumber+"&contactName="+contactName+"&conCertNumber="+conCertNumber+"&keySn="+keySn+"&createByname="+createByname+"&zhizhengname="+zhizhengname+
 		"&updateByname="+updateByname+"&payType="+payType+"&s_province="+s_province+"&s_city="+s_city+"&s_county="+s_county+"&luruStartTime="+luruStartTime+
-		"&jianzhengStartTime="+jianzhengStartTime+"&jianzhengEndTime="+jianzhengEndTime+"&zhizhengStartTime="+zhizhengStartTime+"&zhizhengEndTime="+zhizhengEndTime+
+		"&paymentStartTime="+paymentStartTime+"&paymentEndTime="+paymentEndTime+"&zhizhengStartTime="+zhizhengStartTime+"&zhizhengEndTime="+zhizhengEndTime+
 		"&daoqiStartTime="+daoqiStartTime+"&daoqiEndTime="+daoqiEndTime+"&luruEndTime="+luruEndTime+"&payMethod="+payMethod+"&year="+year);
 	}
 	
@@ -135,8 +135,8 @@
 		$("#luruEndTime").val("");
 		$("#daoqiStartTime").val("");
 		$("#daoqiEndTime").val("");
-		$("#jianzhengStartTime").val("");
-		$("#jianzhengEndTime").val("");
+		$("#paymentStartTime").val("");
+		$("#paymentEndTime").val("");
 		$("#zhizhengStartTime").val("");
 		$("#zhizhengEndTime").val("");
 		$("#year").val("");
@@ -353,17 +353,17 @@
 			
 		
 			
-			<label>鉴证日期：</label> 
-			<input id="jianzhengStartTime" name="jianzhengStartTime"
+			<label>缴费日期：</label> 
+			<input id="paymentStartTime" name="paymentStartTime"
 				type="text" readonly="readonly" maxlength="20"
 				class="required Wdate"
 				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"
-				value="<fmt:formatDate value="${jianzhengStartTime}" pattern="yyyy-MM-dd"/>" />
+				value="<fmt:formatDate value="${paymentStartTime}" pattern="yyyy-MM-dd"/>" />
 				&nbsp;-&nbsp;
-				<input id="jianzhengEndTime" name="jianzhengEndTime" type="text"
+				<input id="paymentEndTime" name="paymentEndTime" type="text"
 				readonly="readonly" maxlength="20" class="Wdate required"
-				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false,minDate:'#F{$dp.$D(\'jianzhengStartTime\')}'});"
-				value="<fmt:formatDate value="${jianzhengEndTime}" pattern="yyyy-MM-dd"/>" />
+				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false,minDate:'#F{$dp.$D(\'paymentStartTime\')}'});"
+				value="<fmt:formatDate value="${paymentEndTime}" pattern="yyyy-MM-dd"/>" />
 				<br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			<label>制证日期：</label> 
 			<input id="zhizhengStartTime" name="zhizhengStartTime"

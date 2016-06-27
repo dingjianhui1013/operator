@@ -41,13 +41,13 @@
 			
 		});
 		
-		function addOffice(){
+		/* function addOffice(){
 			var areaId = $("#areaId").val();
 			var url = "${ctx}/receipt/receiptAllocateApply/selectDepotByOfficeId?officeId=";
 			$.getJSON(url+areaId+"&_="+new Date().getTime(),function(data){
 				$("#depotName").attr("value",data.status);
 			});
-		 }
+		 } */
 		
 		function multiply(){
 			var table = $("#contentTable").find("tr");
@@ -102,17 +102,19 @@
 			<label class="control-label"><span style="color : red">*</span>采购网点:</label>
 			<div class="controls">
 				<select name="officeId" id="areaId"  class="required" onchange="addOffice()" >
-					<option value="">请选择</option>
+					<%-- <option value="">请选择</option>
 					<c:forEach items="${offices}" var="office">
 						<option value="${office.id }" >${office.name }</option>
-					</c:forEach>
+					</c:forEach> --%>
+					<option value="${office.id}">${office.name}</option>
+					
 				</select>
 			</div>
 		</div>
 		<div class="control-group">
 			<label class="control-label"><span style="color : red">*</span>采购库房:</label>
 			<div class="controls">
-				<input type = "text" id = "depotName" readonly="readonly"/> 
+				<input type = "text" id = "depotName"  value="${depot.receiptName }" readonly="readonly"/> 
 			</div>
 		</div>
 		<div class="control-group">	
