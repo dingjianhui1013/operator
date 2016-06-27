@@ -4284,7 +4284,7 @@ public class WorkDealInfoController extends BaseController {
 			@RequestParam(value = "zhizhengEndTime", required = false) Date zhizhengEndTime, Model model) {
 
 		// 获取前台的付款方式
-		List<Long> method = Lists.newArrayList();
+		/*List<Long> method = Lists.newArrayList();*/
 		if (payMethod != null) {
 			WorkPayInfo workPayInfo = new WorkPayInfo();
 			if (payMethod.equals("1")) {
@@ -4314,8 +4314,32 @@ public class WorkDealInfoController extends BaseController {
 			// }
 			workDealInfo.setWorkPayInfo(workPayInfo);
 		}
-		List<Long> dealInfoByOfficeAreaIds = Lists.newArrayList();
-		List<Long> dealInfoByAreaIds = Lists.newArrayList();
+		/*List<Long> dealInfoByOfficeAreaIds = Lists.newArrayList();
+		List<Long> dealInfoByAreaIds = Lists.newArrayList();*/
+		
+		
+		//更改:之前前台展示所以的app 现改为user的数据权限下的所有应用
+		List<Office> officeList = officeService.getOfficeByType(UserUtils.getUser(), 2);
+
+		List<ConfigApp> configAppList = Lists.newArrayList();
+		
+		List<Long> officeIds = new ArrayList<Long>();
+		for (int i = 0; i < officeList.size(); i++) {
+			officeIds.add(officeList.get(i).getId());
+			List<ConfigAppOfficeRelation> appOffices = configAppOfficeRelationService.findAllByOfficeId(officeList.get(i).getId());
+			
+			for(ConfigAppOfficeRelation appOffice:appOffices){
+				if(!configAppList.contains(appOffice.getConfigApp())){
+					configAppList.add(appOffice.getConfigApp());	
+				}
+				
+			}
+		}
+		
+		
+		
+		
+		
 		List<Long> officeids = Lists.newArrayList();
 		if (officeId != null && officeId != 0) {
 			
@@ -4373,12 +4397,7 @@ public class WorkDealInfoController extends BaseController {
 		}
 		ProductType productType = new ProductType();
 		WorkDealInfoType workDealInfoType = new WorkDealInfoType();
-		List<Office> officeList = officeService.getOfficeByType(UserUtils.getUser(), 2);
-
-		List<Long> officeIds = new ArrayList<Long>();
-		for (int i = 0; i < officeList.size(); i++) {
-			officeIds.add(officeList.get(i).getId());
-		}
+		
 
 		Calendar calendar = Calendar.getInstance();
 		/*
@@ -4423,7 +4442,7 @@ public class WorkDealInfoController extends BaseController {
 	
 			model.addAttribute("offsList", offsList);
 	
-			List<ConfigApp> configAppList = configAppService.selectAll();
+			
 			model.addAttribute("configAppList", configAppList);
 			model.addAttribute("apply", apply);
 			model.addAttribute("certType", certType);
@@ -4477,7 +4496,7 @@ public class WorkDealInfoController extends BaseController {
 
 		model.addAttribute("offsList", offsList);
 
-		List<ConfigApp> configAppList = configAppService.selectAll();
+	
 		model.addAttribute("configAppList", configAppList);
 		model.addAttribute("apply", apply);
 		model.addAttribute("certType", certType);

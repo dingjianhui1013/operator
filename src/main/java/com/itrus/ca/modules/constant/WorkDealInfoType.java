@@ -37,11 +37,11 @@ public class WorkDealInfoType {
 		WorkDealInfoTypeMap.put(TYPE_DAMAGED_REPLACED, "损坏更换");
 		WorkDealInfoTypeMap.put(TYPE_INFORMATION_REROUTE, "信息变更");
 		WorkDealInfoTypeMap.put(TYPE_REVOKE_CERT, "证书吊销");
-		WorkDealInfoTypeMap.put(TYPE_ELECTRONIC_SEAL, "电子签章");
-		WorkDealInfoTypeMap.put(TYPE_TRUST_MOBILE, "可信移动设备");
+		/*WorkDealInfoTypeMap.put(TYPE_ELECTRONIC_SEAL, "电子签章");
+		WorkDealInfoTypeMap.put(TYPE_TRUST_MOBILE, "可信移动设备");*/
 		WorkDealInfoTypeMap.put(TYPE_UNLOCK_CERT, "key解锁");
-		WorkDealInfoTypeMap.put(TYPE_UNLOCK_CERT, "开户费");
-		WorkDealInfoTypeMap.put(TYPE_RETURN_MONEY, "退费");
+		/*WorkDealInfoTypeMap.put(TYPE_UNLOCK_CERT, "开户费");
+		WorkDealInfoTypeMap.put(TYPE_RETURN_MONEY, "退费");*/
 		WorkDealInfoTypeMap.put(TYPE_RETURN_WORK, "业务撤销");
 		WorkDealInfoTypeMap.put(TYPE_PAY_REPLACED, "变更缴费方式");
 		
