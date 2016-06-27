@@ -337,7 +337,7 @@
 	function getCsrByOldCert(len) {
 		useOldKey = true;
 		var certArray = filterCerts("", 0, "${signSerialNumber}");//查找当前第一张证书,被更新的
-		alert(typeof len);
+		
 		var objOldCert;
 		var csp = legibleNameMap[cspStr];
 		
