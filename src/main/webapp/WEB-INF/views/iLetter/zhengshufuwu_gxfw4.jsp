@@ -31,7 +31,7 @@ function backToMain(){
                 <td width="40%"></td>
                 <!-- <td width="9%" valign="top">更新后证书：</td> -->
                 <td width="60%" valign="top">证书序列号：${sn }<br />
-                经办人邮箱：${email }<br /> 证书有效期：从${notbefore} 到 ${notafter }</td>
+                证书CN：${certCN }<br /> 证书有效期：从${notbefore} 到 ${notafter }</td>
               </tr>
             </table>
         </div>
