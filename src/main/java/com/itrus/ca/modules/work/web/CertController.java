@@ -674,6 +674,9 @@ public class CertController extends BaseController {
 				dealInfo.setCertSn(caCert.getSerialnumber());
 				dealInfo.setKeySn(keySn);
 				dealInfo.setNotafter(caCert.getNotafter());
+				
+				//新增制证时间
+				dealInfo.setBusinessCardUserDate(new Date());
 				workDealInfoService.save(dealInfo);
 				Integer type = getDealInfoAddType(dealInfo);
 				if (raAccount.getIsTest()) {

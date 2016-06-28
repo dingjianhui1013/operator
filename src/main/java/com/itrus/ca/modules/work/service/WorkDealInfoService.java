@@ -1447,6 +1447,31 @@ public class WorkDealInfoService extends BaseService {
 		dc.createAlias("configApp", "configApp");
 		dc.createAlias("configProduct", "configProduct");
 		
+		
+		if(workDealInfo.getInputUser()!=null&&workDealInfo.getInputUser().getName()!=null){
+			if(workDealInfo.getInputUser().getName().trim().replace(" ", "").equals("客户端")){
+				   
+				   dc.add(Restrictions.isNull("inputUser"));
+				}
+			else if(!workDealInfo.getInputUser().getName().trim().replace(" ", "").equals("")){
+				dc.createAlias("inputUser", "inputUser");
+				dc.add(Restrictions.like("inputUser.name", "%"
+						+ workDealInfo.getInputUser().getName() + "%"));
+			}
+		}
+		
+		//此条件只能查出在客户端制证的业务,但并不包含全部的客户端业务，因为有的客户端业务是通过平台制证的
+		if(workDealInfo.getBusinessCardUser()!=null&&workDealInfo.getBusinessCardUser().getName()!=null){
+			if(workDealInfo.getBusinessCardUser().getName().trim().replace(" ", "").equals("客户端")){
+				dc.add(Restrictions.isNull("businessCardUser"));
+			}else if(!workDealInfo.getBusinessCardUser().getName().trim().replace(" ", "").equals("")){
+				dc.createAlias("businessCardUser", "businessCardUser");
+				dc.add(Restrictions.like("businessCardUser.name", "%"
+						+ workDealInfo.getBusinessCardUser().getName() + "%"));
+			}
+		}
+		
+		
 
 		dc.add(Restrictions.in("officeId", offices));
 
@@ -1486,25 +1511,14 @@ public class WorkDealInfoService extends BaseService {
 			dc.add(Restrictions.eq("payType", workDealInfo.getPayType()));
 		}
 
-		if (workDealInfo.getInputUser() != null
-				&& !workDealInfo.getInputUser().getName().equals("")) {
-			dc.createAlias("inputUser", "inputUser");
-			dc.add(Restrictions.like("inputUser.name", "%"
-					+ workDealInfo.getInputUser().getName() + "%"));
-		}
+		
 		if (workDealInfo.getAttestationUser() != null
 				&& !workDealInfo.getAttestationUser().getName().equals("")) {
 			dc.createAlias("attestationUser", "attestationUser");
 			dc.add(Restrictions.like("attestationUser.name", "%"
 					+ workDealInfo.getAttestationUser().getName() + "%"));
 		}
-		// businessCardUser
-		if (workDealInfo.getBusinessCardUser() != null
-				&& !workDealInfo.getBusinessCardUser().getName().equals("")) {
-			dc.createAlias("businessCardUser", "businessCardUser");
-			dc.add(Restrictions.like("businessCardUser.name", "%"
-					+ workDealInfo.getBusinessCardUser().getName() + "%"));
-		}
+		
 
 		// workCompany.province
 		// workCompany.city
@@ -1667,6 +1681,30 @@ public class WorkDealInfoService extends BaseService {
 		dc.createAlias("configProduct", "configProduct");
 		// workDealInfoDao.createDetachedCriteria();
 		dc.add(Restrictions.in("officeId", offices));
+		
+		
+		if(workDealInfo.getInputUser()!=null&&workDealInfo.getInputUser().getName()!=null){
+			if(workDealInfo.getInputUser().getName().trim().replace(" ", "").equals("客户端")){
+				   
+				   dc.add(Restrictions.isNull("inputUser"));
+				}
+			else if(!workDealInfo.getInputUser().getName().trim().replace(" ", "").equals("")){
+				dc.createAlias("inputUser", "inputUser");
+				dc.add(Restrictions.like("inputUser.name", "%"
+						+ workDealInfo.getInputUser().getName() + "%"));
+			}
+		}
+		
+		//此条件只能查出在客户端制证的业务,但并不包含全部的客户端业务，因为有的客户端业务是通过平台制证的
+		if(workDealInfo.getBusinessCardUser()!=null&&workDealInfo.getBusinessCardUser().getName()!=null){
+			if(workDealInfo.getBusinessCardUser().getName().trim().replace(" ", "").equals("客户端")){
+				dc.add(Restrictions.isNull("businessCardUser"));
+			}else if(!workDealInfo.getBusinessCardUser().getName().trim().replace(" ", "").equals("")){
+				dc.createAlias("businessCardUser", "businessCardUser");
+				dc.add(Restrictions.like("businessCardUser.name", "%"
+						+ workDealInfo.getBusinessCardUser().getName() + "%"));
+			}
+		}
 
 		// workUser.contactName
 		// workUser.conCertNumber
@@ -1705,25 +1743,14 @@ public class WorkDealInfoService extends BaseService {
 			dc.add(Restrictions.eq("payType", workDealInfo.getPayType()));
 		}
 
-		if (workDealInfo.getInputUser() != null
-				&& !workDealInfo.getInputUser().getName().equals("")) {
-			dc.createAlias("inputUser", "inputUser");
-			dc.add(Restrictions.like("inputUser.name", "%"
-					+ workDealInfo.getInputUser().getName() + "%"));
-		}
+	
 		if (workDealInfo.getAttestationUser() != null
 				&& !workDealInfo.getAttestationUser().getName().equals("")) {
 			dc.createAlias("attestationUser", "attestationUser");
 			dc.add(Restrictions.like("attestationUser.name", "%"
 					+ workDealInfo.getAttestationUser().getName() + "%"));
 		}
-		// businessCardUser
-		if (workDealInfo.getBusinessCardUser() != null
-				&& !workDealInfo.getBusinessCardUser().getName().equals("")) {
-			dc.createAlias("businessCardUser", "businessCardUser");
-			dc.add(Restrictions.like("businessCardUser.name", "%"
-					+ workDealInfo.getBusinessCardUser().getName() + "%"));
-		}
+	
 
 		// workCompany.province
 		// workCompany.city
@@ -1884,6 +1911,32 @@ public class WorkDealInfoService extends BaseService {
 		// workDealInfoDao.createDetachedCriteria();
 		dc.add(Restrictions.in("officeId", offices));
 
+		
+		if(workDealInfo.getInputUser()!=null&&workDealInfo.getInputUser().getName()!=null){
+			if(workDealInfo.getInputUser().getName().trim().replace(" ", "").equals("客户端")){
+				   
+				   dc.add(Restrictions.isNull("inputUser"));
+				}
+			else if(!workDealInfo.getInputUser().getName().trim().replace(" ", "").equals("")){
+				dc.createAlias("inputUser", "inputUser");
+				dc.add(Restrictions.like("inputUser.name", "%"
+						+ workDealInfo.getInputUser().getName() + "%"));
+			}
+		}
+		
+		//此条件只能查出在客户端制证的业务,但并不包含全部的客户端业务，因为有的客户端业务是通过平台制证的
+		if(workDealInfo.getBusinessCardUser()!=null&&workDealInfo.getBusinessCardUser().getName()!=null){
+			if(workDealInfo.getBusinessCardUser().getName().trim().replace(" ", "").equals("客户端")){
+				dc.add(Restrictions.isNull("businessCardUser"));
+			}else if(!workDealInfo.getBusinessCardUser().getName().trim().replace(" ", "").equals("")){
+				dc.createAlias("businessCardUser", "businessCardUser");
+				dc.add(Restrictions.like("businessCardUser.name", "%"
+						+ workDealInfo.getBusinessCardUser().getName() + "%"));
+			}
+		}
+		
+		
+		
 		// workUser.contactName
 		// workUser.conCertNumber
 		if (workDealInfo.getWorkCompany() != null
@@ -1921,25 +1974,14 @@ public class WorkDealInfoService extends BaseService {
 			dc.add(Restrictions.eq("payType", workDealInfo.getPayType()));
 		}
 
-		if (workDealInfo.getInputUser() != null
-				&& !workDealInfo.getInputUser().getName().equals("")) {
-			dc.createAlias("inputUser", "inputUser");
-			dc.add(Restrictions.like("inputUser.name", "%"
-					+ workDealInfo.getInputUser().getName() + "%"));
-		}
+		
 		if (workDealInfo.getAttestationUser() != null
 				&& !workDealInfo.getAttestationUser().getName().equals("")) {
 			dc.createAlias("attestationUser", "attestationUser");
 			dc.add(Restrictions.like("attestationUser.name", "%"
 					+ workDealInfo.getAttestationUser().getName() + "%"));
 		}
-		// businessCardUser
-		if (workDealInfo.getBusinessCardUser() != null
-				&& !workDealInfo.getBusinessCardUser().getName().equals("")) {
-			dc.createAlias("businessCardUser", "businessCardUser");
-			dc.add(Restrictions.like("businessCardUser.name", "%"
-					+ workDealInfo.getBusinessCardUser().getName() + "%"));
-		}
+		
 
 		// workCompany.province
 		// workCompany.city
@@ -2086,6 +2128,30 @@ public class WorkDealInfoService extends BaseService {
 
 		dc.add(Restrictions.in("officeId", offices));
 
+		if(workDealInfo.getInputUser()!=null&&workDealInfo.getInputUser().getName()!=null){
+			if(workDealInfo.getInputUser().getName().trim().replace(" ", "").equals("客户端")){
+				   
+				   dc.add(Restrictions.isNull("inputUser"));
+				}
+			else if(!workDealInfo.getInputUser().getName().trim().replace(" ", "").equals("")){
+				dc.createAlias("inputUser", "inputUser");
+				dc.add(Restrictions.like("inputUser.name", "%"
+						+ workDealInfo.getInputUser().getName() + "%"));
+			}
+		}
+		
+		//此条件只能查出在客户端制证的业务,但并不包含全部的客户端业务，因为有的客户端业务是通过平台制证的
+		if(workDealInfo.getBusinessCardUser()!=null&&workDealInfo.getBusinessCardUser().getName()!=null){
+			if(workDealInfo.getBusinessCardUser().getName().trim().replace(" ", "").equals("客户端")){
+				dc.add(Restrictions.isNull("businessCardUser"));
+			}else if(!workDealInfo.getBusinessCardUser().getName().trim().replace(" ", "").equals("")){
+				dc.createAlias("businessCardUser", "businessCardUser");
+				dc.add(Restrictions.like("businessCardUser.name", "%"
+						+ workDealInfo.getBusinessCardUser().getName() + "%"));
+			}
+		}
+		
+		
 		// workUser.contactName
 		// workUser.conCertNumber
 		if (workDealInfo.getWorkCompany() != null
@@ -2123,25 +2189,14 @@ public class WorkDealInfoService extends BaseService {
 			dc.add(Restrictions.eq("payType", workDealInfo.getPayType()));
 		}
 
-		if (workDealInfo.getInputUser() != null
-				&& !workDealInfo.getInputUser().getName().equals("")) {
-			dc.createAlias("inputUser", "inputUser");
-			dc.add(Restrictions.like("inputUser.name", "%"
-					+ workDealInfo.getInputUser().getName() + "%"));
-		}
+		
 		if (workDealInfo.getAttestationUser() != null
 				&& !workDealInfo.getAttestationUser().getName().equals("")) {
 			dc.createAlias("attestationUser", "attestationUser");
 			dc.add(Restrictions.like("attestationUser.name", "%"
 					+ workDealInfo.getAttestationUser().getName() + "%"));
 		}
-		// businessCardUser
-		if (workDealInfo.getBusinessCardUser() != null
-				&& !workDealInfo.getBusinessCardUser().getName().equals("")) {
-			dc.createAlias("businessCardUser", "businessCardUser");
-			dc.add(Restrictions.like("businessCardUser.name", "%"
-					+ workDealInfo.getBusinessCardUser().getName() + "%"));
-		}
+	
 
 		// workCompany.province
 		// workCompany.city
