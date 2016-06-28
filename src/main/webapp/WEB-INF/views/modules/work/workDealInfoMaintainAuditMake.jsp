@@ -214,7 +214,7 @@
 														window.location.href = "${ctx}/work/workDealInfo/list";
 													    return true;
 													};
-													top.$.jBox(html, { title: "证书信息", submit: submit });
+													top.$.jBox(html, {persistent: true, title: "证书信息", submit: submit });
 													
 													if(res.isChange==true){top.$.jBox.tip("请及时完成印章变更操作！");}
 													

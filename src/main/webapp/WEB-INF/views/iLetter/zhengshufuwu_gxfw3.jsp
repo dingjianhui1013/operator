@@ -208,7 +208,7 @@ function setCount() {
    		        <div class="zsfw_gxgx_3info3" id="keySnDiv">
         	Key序列号：${workDealInfo.keySn }
         </div>    <div class="zsfw_gxgx_3info3">
-        	经办人邮箱：${workDealInfo.workUser.contactEmail }
+        	经办人邮箱：${certCN }
         </div>    <div class="zsfw_gxgx_3info3">
         	审核状态：${status}
         </div>

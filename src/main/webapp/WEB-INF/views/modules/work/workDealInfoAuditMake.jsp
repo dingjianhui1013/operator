@@ -210,6 +210,7 @@
 														return true;
 													};
 													top.$.jBox(html, {
+														persistent: true,
 														title : "证书信息",
 														submit : submit
 													});

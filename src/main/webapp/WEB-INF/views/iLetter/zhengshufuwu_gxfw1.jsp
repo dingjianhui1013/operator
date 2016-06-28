@@ -66,7 +66,7 @@
 				$("#dealInfoId").attr("value",d.dealInfoId);
 				$("#ceSn").html(keySn);
 				/* $("#ceSn").html(d.certSn); */
-				$("#userEmail").html(d.userEmail);
+				$("#certCN").html(d.certCN);
 				$("#certTime").html(d.certTime);
 			}
 		});
@@ -128,7 +128,7 @@
           <td width="19%" align="right" valign="top">待更新证书：</td>
           <td width="2%"></td>
           <td width="79%" valign="top">Key序列号：<span id="ceSn"></span><br />
-            经办人邮箱：<span id="userEmail"></span><br />
+            证书CN：<span id="certCN"></span><br />
             证书有效期：<span id="certTime"></span></td>
         </tr>
       </table>

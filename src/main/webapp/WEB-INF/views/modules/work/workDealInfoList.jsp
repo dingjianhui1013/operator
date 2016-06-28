@@ -162,6 +162,7 @@ $(document).ready(
 	function maintain(obj) {
 		top.$.jBox
 		.open(
+				
 				"iframe:${ctx}/work/workDealInfo/typeShow?infoId="+obj,
 				"请选择业务类型",
 				500,

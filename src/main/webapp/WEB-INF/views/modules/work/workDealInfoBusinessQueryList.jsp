@@ -7,7 +7,7 @@
 <meta name="decorator" content="default" />
 <script type="text/javascript">
 	$(document).ready(function() {
-
+		
 	});
 	function page(n, s) {
 		$("#pageNo").val(n);
@@ -16,6 +16,34 @@
 		return false;
 	}
 
+	
+	function testMsg1(){
+		
+		var html = '';
+		
+		top.$.jBox(html, {
+			top: '0%',
+			showType: 'slide',
+			showSpeed: 'slow',
+			title : "查询注意事项",
+			persistent: true
+		});
+		
+	}
+	
+	
+	$(document).keypress(function(e)    
+		    {    
+		         switch(e.which)    
+		        {    
+		            case 90:    testMsg1();    
+		            break;      
+		        }
+		         
+		        $("#attention").hide(); 
+	});  
+	
+	
 	function addOffice() {
 		var areaId = $("#area").prop('value');
 		var url = "${ctx}/sys/office/addOffices?areaId=";
@@ -174,6 +202,8 @@
 					</c:if>>${app.appName}</option>
 				</c:forEach>
 			</select>
+			
+			<p id="attention" style="float: right;color: red">shift+z快捷键可查看注意事项</p>
 			
 		</div>
 		<br>
@@ -402,6 +432,9 @@
 		
 			<br />
 		</div>
+		
+		
+		
 
 	</form:form>
 	<tags:message content="${message}" />
