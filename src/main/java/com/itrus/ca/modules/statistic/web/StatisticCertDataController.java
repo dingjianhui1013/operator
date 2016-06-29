@@ -5,7 +5,6 @@ package com.itrus.ca.modules.statistic.web;
 
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -13,9 +12,10 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import javassist.expr.NewArray;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
@@ -42,9 +42,7 @@ import com.itrus.ca.modules.bean.StaticCertDay;
 import com.itrus.ca.modules.bean.StaticCertMonth;
 import com.itrus.ca.modules.constant.ProductType;
 import com.itrus.ca.modules.profile.entity.ConfigApp;
-
 import com.itrus.ca.modules.profile.service.ConfigAppService;
-
 import com.itrus.ca.modules.statistic.entity.StatisticCertData;
 import com.itrus.ca.modules.statistic.service.StatisticCertDataService;
 import com.itrus.ca.modules.sys.entity.Office;
@@ -103,6 +101,15 @@ public class StatisticCertDataController extends BaseController {
 			}
 		}
 
+		if(startDate==null&&endDate==null)//首次进入将产品设置为全部产品
+		{
+			productType="-1";
+//			officeId=UserUtils.getUser().getId();
+		}
+		if(officeId==null)
+		{
+			officeId=UserUtils.getUser().getOffice().getId();
+		}
 		if (areaId != null) {
 			List<Office> offices = officeService.findByParentId(areaId);
 			model.addAttribute("offices", offices);
@@ -151,16 +158,19 @@ public class StatisticCertDataController extends BaseController {
 			model.addAttribute("yingyong", yingyong);
 		}
 
+		
+		if (startDate == null && endDate == null) {
+//			return "modules/statistic/statisticCertDataList";
+			startDate=new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+			endDate=new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+			
+		}
 		model.addAttribute("productId", productType);
 		model.addAttribute("offsList", offsList);
 		model.addAttribute("areaId", areaId);
 		model.addAttribute("startDate", startDate);
 		model.addAttribute("endDate", endDate);
 		model.addAttribute("officeId", officeId);
-
-		if (startDate == null && endDate == null) {
-			return "modules/statistic/statisticCertDataList";
-		}
 		Office office = officeService.get(officeId);
 		List<String> monthList = getMonthList(startDate, endDate);
 		model.addAttribute("monthList", getMoList(startDate, endDate));

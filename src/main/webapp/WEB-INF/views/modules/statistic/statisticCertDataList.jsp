@@ -47,19 +47,19 @@
 				}
 			});
 		}
-		function onSubmit(){
-			if ($("#startTime").val()==""||$("#endTime").val()=="") {
-				top.$.jBox.tip("请选定时间范围");
-				return false;
-			} else {
-				if ($("#officeId").val()==""){
-					top.$.jBox.tip("请选定网点");
-					return false;
-				} else {
-					return true;
-				}
-			}
-		}
+// 		function onSubmit(){
+// 			if ($("#startTime").val()==""||$("#endTime").val()=="") {
+// 				top.$.jBox.tip("请选定时间范围");
+// 				return false;
+// 			} else {
+// 				if ($("#officeId").val()==""){
+// 					top.$.jBox.tip("请选定网点");
+// 					return false;
+// 				} else {
+// 					return true;
+// 				}
+// 			}
+// 		}
 
 		function dcZS()
 		{
@@ -145,7 +145,8 @@
 			value="${endDate}" />
 		&nbsp;&nbsp;
 		
-		<input id="btnSubmit" class="btn btn-primary" onclick="return onSubmit();" type="submit" value="查询"/>
+<!-- 		<input id="btnSubmit" class="btn btn-primary" onclick="return onSubmit();" type="submit" value="查询"/> -->
+			<input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/>	
 		<input id="exportZS" class="btn btn-primary" onclick="dcZS()" type="button" value="导出"/>
 		
 		</div>

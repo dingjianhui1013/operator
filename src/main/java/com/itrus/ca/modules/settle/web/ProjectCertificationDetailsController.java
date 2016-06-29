@@ -138,7 +138,6 @@ public class ProjectCertificationDetailsController extends BaseController {
 		// User user = UserUtils.getUser();
 		List<ConfigApp> configAppList = configAppService.selectAll();
 		model.addAttribute("configAppList", configAppList);
-		model.addAttribute("alias", alias);
 	
 			if (startTime == null) {
 				startTime = DateUtils.firstDayOfMonth(new Date());
@@ -150,8 +149,11 @@ public class ProjectCertificationDetailsController extends BaseController {
 		model.addAttribute("startTime", startTime);
 		model.addAttribute("endTime", endTime);
 		if (alias == null) { // 没有选择应用，直接返回查询条件输入页面
-			return "modules/settle/projectCertificationDetailsList";
+			//没有选择应用，自动选择用户对应网点的第一个应用id
+			alias = (configAppOfficeRelationService.findAllByOfficeId(UserUtils.getUser().getOffice().getId()).get(0)).getConfigApp().getId();
+//			return "modules/settle/projectCertificationDetailsList";
 		}
+		model.addAttribute("alias", alias);
 
 		Page<WorkDealInfo> page = workDealInfoService.findPage4CertList(new Page<WorkDealInfo>(request, response),
 				alias, startTime,endTime);

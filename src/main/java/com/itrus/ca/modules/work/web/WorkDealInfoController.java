@@ -822,14 +822,26 @@ public class WorkDealInfoController extends BaseController {
 		// List<Double> money = Lists.newArrayList();
 		Map<String, List<String>> office_payMethod = new HashMap<>();
 		Map<String, List<Double>> office_money = new HashMap<>();
-		if (appId == null || startTime == null || endTime == null) {// 首次进入，或者条件不全
+//		if (appId == null || startTime == null || endTime == null) {// 首次进入，或者条件不全
+//			List<Office> offsList = officeService.getOfficeByType(user, 1);
+//			model.addAttribute("offsList", offsList);
+//			List<ConfigApp> appList = configAppService.findAllConfigApp();
+//			model.addAttribute("appList", appList);
+//			model.addAttribute("startTime", startTime == null ? DateUtils.firstDayOfMonth(new Date()) : startTime);
+//			model.addAttribute("endTime", endTime == null ? new Date() : endTime);
+//			return "modules/work/statisticalDayList";
+//		}
+		if (appId == null || startTime == null || endTime == null)
+		{
+			appId=configAppOfficeRelationService.findAllByOfficeId(UserUtils.getUser().getOffice().getId()).get(0).getConfigApp().getId();
 			List<Office> offsList = officeService.getOfficeByType(user, 1);
 			model.addAttribute("offsList", offsList);
 			List<ConfigApp> appList = configAppService.findAllConfigApp();
 			model.addAttribute("appList", appList);
-			model.addAttribute("startTime", startTime == null ? DateUtils.firstDayOfMonth(new Date()) : startTime);
-			model.addAttribute("endTime", endTime == null ? new Date() : endTime);
-			return "modules/work/statisticalDayList";
+			startTime = new Date();
+			endTime = new Date();
+			model.addAttribute("startTime", startTime);
+			model.addAttribute("endTime", endTime);
 		}
 		if (area != null && office != null) {
 			List<Office> offices = officeService.findByParentId(area);// 根据区域id获取网点id
@@ -1159,14 +1171,35 @@ public class WorkDealInfoController extends BaseController {
 		Map<String, Double> officeMoneys = new HashMap<>();
 		Map<String, List<String>> office_payMethod = new HashMap<>();
 		Map<String, List<Double>> office_money = new HashMap<>();
-		if (appId == null || startTime == null || endTime == null) {// 首次进入，或者条件不全
+//		if (appId == null || startTime == null || endTime == null) {// 首次进入，或者条件不全
+//			List<Office> offsList = officeService.getOfficeByType(user, 1);
+//			model.addAttribute("offsList", offsList);
+//			List<ConfigApp> appList = configAppService.findAllConfigApp();
+//			model.addAttribute("appList", appList);
+//			model.addAttribute("startTime", startTime == null ? DateUtils.firstDayOfMonth(new Date()) : startTime);
+//			model.addAttribute("endTime", endTime == null ? new Date() : endTime);
+//			return "modules/work/statisticalMonthList";
+//		}
+		if (appId == null || startTime == null || endTime == null)
+		{
+			appId=configAppOfficeRelationService.findAllByOfficeId(UserUtils.getUser().getOffice().getId()).get(0).getConfigApp().getId();
 			List<Office> offsList = officeService.getOfficeByType(user, 1);
 			model.addAttribute("offsList", offsList);
 			List<ConfigApp> appList = configAppService.findAllConfigApp();
 			model.addAttribute("appList", appList);
-			model.addAttribute("startTime", startTime == null ? DateUtils.firstDayOfMonth(new Date()) : startTime);
-			model.addAttribute("endTime", endTime == null ? new Date() : endTime);
-			return "modules/work/statisticalMonthList";
+			startTime = new SimpleDateFormat("yyyy-MM").format( new Date());
+			endTime = new SimpleDateFormat("yyyy-MM").format( new Date());
+			StringBuffer startt = new StringBuffer(startTime);
+			startt.append("-1");
+			StringBuffer endtt = new StringBuffer(endTime);
+			endtt.append("-31");
+			try {
+				start = new SimpleDateFormat("yyyy-MM-dd").parse(startt.toString());
+				end = new SimpleDateFormat("yyyy-MM-dd").parse(endtt.toString());
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		if (area != null && office != null) {
 			List<Office> offices = officeService.findByParentId(area);// 根据区域id获取网点id
@@ -1217,7 +1250,10 @@ public class WorkDealInfoController extends BaseController {
 			if (officeids != null) {
 				for (int i = 0; i < list.size(); i++) {
 					// offices.add(list.get(i).getUpdateBy().getOffice().getId());
-					offices.add(list.get(i).getOfficeId());
+					if(list.get(i).getOfficeId()!=null)
+					{
+						offices.add(list.get(i).getOfficeId());
+					}
 				}
 			}
 			Object offs[] = offices.toArray();
@@ -1238,91 +1274,95 @@ public class WorkDealInfoController extends BaseController {
 					for (int i = 0; i < list.size(); i++) {
 						String mo = new SimpleDateFormat("yyyy-MM")
 								.format(list.get(i).getWorkPayInfo().getCreateDate());
-						if (list.get(i).getOfficeId().equals(offs[o]) && ((String) months[m]).indexOf(mo) != -1) {
-							double postMoney = 0L;
-							double bankMoney = 0L;
-							double xjMoney = 0L;
-							double alipayMoney = 0L;
-							if (list.get(i).getWorkPayInfo().getRelationMethod() == null) {
-								if (list.get(i).getWorkPayInfo().getMethodPos() == true) {
-									if (list.get(i).getWorkPayInfo().getPosMoney() >= 0) {
-										postMoney = list.get(i).getWorkPayInfo().getPosMoney();
-									} else {
-										postMoney = (-list.get(i).getWorkPayInfo().getPosMoney());
-									}
-								}
-								if (list.get(i).getWorkPayInfo().getMethodBank() == true) {
-									if (list.get(i).getWorkPayInfo().getBankMoney() >= 0) {
-										bankMoney = list.get(i).getWorkPayInfo().getBankMoney();
-									} else {
-										bankMoney = (-list.get(i).getWorkPayInfo().getBankMoney());
-									}
-								}
-								if (list.get(i).getWorkPayInfo().getMethodMoney() == true) {
-									if (list.get(i).getWorkPayInfo().getMoney() >= 0) {
-										xjMoney = list.get(i).getWorkPayInfo().getMoney();
-									} else {
-										xjMoney = (-list.get(i).getWorkPayInfo().getMoney());
-									}
-
-								}
-								if (list.get(i).getWorkPayInfo().getMethodAlipay() == true) {
-									if (list.get(i).getWorkPayInfo().getAlipayMoney() >= 0) {
-										alipayMoney = list.get(i).getWorkPayInfo().getAlipayMoney();
-									} else {
-										alipayMoney = (-list.get(i).getWorkPayInfo().getAlipayMoney());
-									}
-
-								}
-							} else {
-								List<WorkFinancePayInfoRelation> workfinancePayinfos = workFinancePayInfoRelationService
-										.findByPayInfoId(list.get(i).getWorkPayInfo().getId());
-								for (int w = 0; w < workfinancePayinfos.size(); w++) {
-									if (workfinancePayinfos.get(w).getMoney() >= 0) {
-										if (workfinancePayinfos.get(w).getFinancePaymentInfo()
-												.getPaymentMethod() == 1) {
-											if (workfinancePayinfos.get(w).getMoney() >= 0) {
-												xjMoney = workfinancePayinfos.get(w).getMoney();
-											} else {
-												xjMoney = (-workfinancePayinfos.get(w).getMoney());
-											}
-
-										}
-										if (workfinancePayinfos.get(w).getFinancePaymentInfo()
-												.getPaymentMethod() == 2) {
-											if (workfinancePayinfos.get(w).getMoney() >= 0) {
-												postMoney = workfinancePayinfos.get(w).getMoney();
-											} else {
-												postMoney = (-workfinancePayinfos.get(w).getMoney());
-											}
-
-										}
-										if (workfinancePayinfos.get(w).getFinancePaymentInfo()
-												.getPaymentMethod() == 3) {
-											if (workfinancePayinfos.get(w).getMoney() >= 0) {
-												bankMoney = workfinancePayinfos.get(w).getMoney();
-											} else {
-												bankMoney = (-workfinancePayinfos.get(w).getMoney());
-											}
-
-										}
-										if (workfinancePayinfos.get(w).getFinancePaymentInfo()
-												.getPaymentMethod() == 4) {
-											if (workfinancePayinfos.get(w).getMoney() >= 0) {
-												alipayMoney = workfinancePayinfos.get(w).getMoney();
-											} else {
-												alipayMoney = (-workfinancePayinfos.get(w).getMoney());
-											}
-
+						if(list.get(i).getOfficeId()!=null)
+						{
+							
+							if (list.get(i).getOfficeId().equals(offs[o]) && ((String) months[m]).indexOf(mo) != -1) {
+								double postMoney = 0L;
+								double bankMoney = 0L;
+								double xjMoney = 0L;
+								double alipayMoney = 0L;
+								if (list.get(i).getWorkPayInfo().getRelationMethod() == null) {
+									if (list.get(i).getWorkPayInfo().getMethodPos() == true) {
+										if (list.get(i).getWorkPayInfo().getPosMoney() >= 0) {
+											postMoney = list.get(i).getWorkPayInfo().getPosMoney();
+										} else {
+											postMoney = (-list.get(i).getWorkPayInfo().getPosMoney());
 										}
 									}
+									if (list.get(i).getWorkPayInfo().getMethodBank() == true) {
+										if (list.get(i).getWorkPayInfo().getBankMoney() >= 0) {
+											bankMoney = list.get(i).getWorkPayInfo().getBankMoney();
+										} else {
+											bankMoney = (-list.get(i).getWorkPayInfo().getBankMoney());
+										}
+									}
+									if (list.get(i).getWorkPayInfo().getMethodMoney() == true) {
+										if (list.get(i).getWorkPayInfo().getMoney() >= 0) {
+											xjMoney = list.get(i).getWorkPayInfo().getMoney();
+										} else {
+											xjMoney = (-list.get(i).getWorkPayInfo().getMoney());
+										}
+										
+									}
+									if (list.get(i).getWorkPayInfo().getMethodAlipay() == true) {
+										if (list.get(i).getWorkPayInfo().getAlipayMoney() >= 0) {
+											alipayMoney = list.get(i).getWorkPayInfo().getAlipayMoney();
+										} else {
+											alipayMoney = (-list.get(i).getWorkPayInfo().getAlipayMoney());
+										}
+										
+									}
+								} else {
+									List<WorkFinancePayInfoRelation> workfinancePayinfos = workFinancePayInfoRelationService
+											.findByPayInfoId(list.get(i).getWorkPayInfo().getId());
+									for (int w = 0; w < workfinancePayinfos.size(); w++) {
+										if (workfinancePayinfos.get(w).getMoney() >= 0) {
+											if (workfinancePayinfos.get(w).getFinancePaymentInfo()
+													.getPaymentMethod() == 1) {
+												if (workfinancePayinfos.get(w).getMoney() >= 0) {
+													xjMoney = workfinancePayinfos.get(w).getMoney();
+												} else {
+													xjMoney = (-workfinancePayinfos.get(w).getMoney());
+												}
+												
+											}
+											if (workfinancePayinfos.get(w).getFinancePaymentInfo()
+													.getPaymentMethod() == 2) {
+												if (workfinancePayinfos.get(w).getMoney() >= 0) {
+													postMoney = workfinancePayinfos.get(w).getMoney();
+												} else {
+													postMoney = (-workfinancePayinfos.get(w).getMoney());
+												}
+												
+											}
+											if (workfinancePayinfos.get(w).getFinancePaymentInfo()
+													.getPaymentMethod() == 3) {
+												if (workfinancePayinfos.get(w).getMoney() >= 0) {
+													bankMoney = workfinancePayinfos.get(w).getMoney();
+												} else {
+													bankMoney = (-workfinancePayinfos.get(w).getMoney());
+												}
+												
+											}
+											if (workfinancePayinfos.get(w).getFinancePaymentInfo()
+													.getPaymentMethod() == 4) {
+												if (workfinancePayinfos.get(w).getMoney() >= 0) {
+													alipayMoney = workfinancePayinfos.get(w).getMoney();
+												} else {
+													alipayMoney = (-workfinancePayinfos.get(w).getMoney());
+												}
+												
+											}
+										}
+									}
 								}
+								countPostMoney += postMoney;
+								countBankMoney += bankMoney;
+								countXjMoney += xjMoney;
+								countAlipayMoney += alipayMoney;
+								countMoney += (postMoney + bankMoney + xjMoney + alipayMoney);
 							}
-							countPostMoney += postMoney;
-							countBankMoney += bankMoney;
-							countXjMoney += xjMoney;
-							countAlipayMoney += alipayMoney;
-							countMoney += (postMoney + bankMoney + xjMoney + alipayMoney);
 						}
 					}
 					String officeName = (officeService.findById((Long) offs[o])).getName();
@@ -1478,14 +1518,27 @@ public class WorkDealInfoController extends BaseController {
 		Map<String, List<String>> district_payMethod = new HashMap<>();
 		Map<String, List<Double>> district_Moneys = new HashMap<>();
 		List<Long> appids = Lists.newArrayList();
-		if (appId == null || startTime == null || endTime == null) {// 首次进入，或者条件不全
+//		if (appId == null || startTime == null || endTime == null) {// 首次进入，或者条件不全
+//			List<Office> offsList = officeService.getOfficeByType(user, 1);
+//			model.addAttribute("offsList", offsList);
+//			List<ConfigApp> appList = configAppService.findAllConfigApp();
+//			model.addAttribute("appList", appList);
+//			model.addAttribute("startTime", startTime == null ? DateUtils.firstDayOfMonth(new Date()) : startTime);
+//			model.addAttribute("endTime", endTime == null ? new Date() : endTime);
+//			return "modules/work/statisticalProjectList";
+//		}
+		if (appId == null || startTime == null || endTime == null)
+		{
+			appId=configAppOfficeRelationService.findAllByOfficeId(UserUtils.getUser().getOffice().getId()).get(0).getConfigApp().getId();
 			List<Office> offsList = officeService.getOfficeByType(user, 1);
 			model.addAttribute("offsList", offsList);
 			List<ConfigApp> appList = configAppService.findAllConfigApp();
 			model.addAttribute("appList", appList);
-			model.addAttribute("startTime", startTime == null ? DateUtils.firstDayOfMonth(new Date()) : startTime);
-			model.addAttribute("endTime", endTime == null ? new Date() : endTime);
-			return "modules/work/statisticalProjectList";
+			startTime = new Date();
+			endTime = new Date();
+			model.addAttribute("startTime", startTime);
+			model.addAttribute("endTime", endTime);
+			
 		}
 		if (area != null && office != null) {
 			List<Office> offices = officeService.findByParentId(area);// 根据区域id获取网点id
@@ -1903,11 +1956,16 @@ public class WorkDealInfoController extends BaseController {
 	public String statisticalAdjustment(FinancePaymentInfo financePaymentInfo, Date dkstartTime, Date dkendTime,
 			Date zzstartTime, Date zzendTime, HttpServletRequest request, String companyName,
 			HttpServletResponse response, Model model) throws ParseException {
-		if (dkstartTime == null && dkstartTime == null && companyName == null
-				&& financePaymentInfo.getCompany() == null) {
+		if (dkstartTime == null && dkendTime == null && companyName == null
+				&& financePaymentInfo.getCompany() == null && zzstartTime==null && zzendTime ==null) {
 			List<ConfigApp> configApps = configAppService.findAllConfigApp();
 			model.addAttribute("companys", configApps);
-			return "modules/work/statisticalAdjustmentList";
+			zzstartTime=new Date();
+			zzendTime=new Date();
+			model.addAttribute("zzstartTime", zzstartTime);
+			model.addAttribute("zzendTime", zzendTime);
+			companyName=configAppOfficeRelationService.findAllByOfficeId(UserUtils.getUser().getOffice().getId()).get(0).getConfigApp().getAppName();
+//			return "modules/work/statisticalAdjustmentList";
 		}
 		if (dkendTime != null) {
 			dkendTime.setHours(23);
