@@ -51,33 +51,33 @@
 		});
 
 	}
-	function sub()
-	{
-		var area =$("#area").val();
-		var endTime=$("#endTime").val();
-		var appId = $("#appId").val();
-		var startTime = $("#startTime").val();
-		if(endTime=="")
-			{
-				$("#endTime").val(startTime);
-			}
-// 		if(area=="")
-// 		{
-// 			top.$.jBox.tip("请选择区域");
-// 			return false;
-// 		}
-		if(appId=="")
-			{
-				top.$.jBox.tip("请选择项目");
-				return false;
-			}
-		if(startTime=="")
-			{
-				top.$.jBox.tip("请选择统计时间");
-				return false;
-			}
-		return true;
-	}
+// 	function sub()
+// 	{
+// 		var area =$("#area").val();
+// 		var endTime=$("#endTime").val();
+// 		var appId = $("#appId").val();
+// 		var startTime = $("#startTime").val();
+// 		if(endTime=="")
+// 			{
+// 				$("#endTime").val(startTime);
+// 			}
+// // 		if(area=="")
+// // 		{
+// // 			top.$.jBox.tip("请选择区域");
+// // 			return false;
+// // 		}
+// 		if(appId=="")
+// 			{
+// 				top.$.jBox.tip("请选择项目");
+// 				return false;
+// 			}
+// 		if(startTime=="")
+// 			{
+// 				top.$.jBox.tip("请选择统计时间");
+// 				return false;
+// 			}
+// 		return true;
+// 	}
 	function dc()
 	{
 		var area = $("#area").val();
@@ -162,7 +162,7 @@
 			maxlength="10" class="input-medium Wdate"
 			onclick="WdatePicker({dateFmt:'yyyy-MM',isShowClear:false,minDate:'#F{$dp.$D(\'startTime\')}'});"
 			value="<fmt:formatDate value="${endTime}" pattern="yyyy-MM"/>"/>
-			<input id="btnSubmit" class="btn btn-primary" type="submit" onclick="return sub()"
+			<input id="btnSubmit" class="btn btn-primary" type="submit" 
 			value="查询" />
 			<a href="javascript:dc()" class="btn btn-primary">导出</a>
 		</div>
