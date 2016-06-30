@@ -43,6 +43,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.alibaba.druid.sql.visitor.functions.If;
 import com.google.common.collect.Lists;
 import com.itrus.ca.common.persistence.Page;
 import com.itrus.ca.common.service.BaseService;
@@ -78,6 +79,7 @@ import com.itrus.ca.modules.sys.utils.UserUtils;
 import com.itrus.ca.modules.work.dao.WorkCertInfoDao;
 import com.itrus.ca.modules.work.dao.WorkCertTrustApplyDao;
 import com.itrus.ca.modules.work.dao.WorkDealInfoDao;
+import com.itrus.ca.modules.work.entity.MonthPayment;
 import com.itrus.ca.modules.work.entity.WorkCertApplyInfo;
 import com.itrus.ca.modules.work.entity.WorkCertInfo;
 import com.itrus.ca.modules.work.entity.WorkCompany;
@@ -3092,41 +3094,155 @@ public class WorkDealInfoService extends BaseService {
 
 	}
 
-	public List<WorkDealInfo> findByDayPay(Date startTime, Date endTime,
-			List<Long> officeids, Long appId) {
-		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
-		dc.createAlias("workPayInfo", "workPayInfo");
-		dc.add(Restrictions.isNotNull("workPayInfo"));
-		dc.add(Restrictions.eq("workPayInfo.delFlag",
-				WorkPayInfo.DEL_FLAG_NORMAL));
-		List<String> status = Lists.newArrayList();
-		status.add(WorkDealInfoStatus.STATUS_CERT_OBTAINED);
-		status.add(WorkDealInfoStatus.STATUS_CERT_WAIT);
-		dc.add(Restrictions.in("dealInfoStatus", status));
-		if (startTime != null) {
-			endTime.setHours(23);
-			endTime.setMinutes(59);
-			endTime.setSeconds(59);
-			if (startTime != null) {
-				dc.add(Restrictions.ge("workPayInfo.createDate", startTime));
-				dc.add(Restrictions.le("workPayInfo.createDate", endTime));
-			}
-			// if (dealInfoByAreaIds != null && dealInfoByAreaIds.size() > 0) {
-			// dc.add(Restrictions.in("id", dealInfoByAreaIds));
-			// }
-			if (appId != null) {
-				dc.add(Restrictions.eq("configApp.id", appId));
-			}
+//	public List<WorkDealInfo> findByDayPay(Date startTime, Date endTime,
+//			List<Long> officeids, Long appId) {
+//		long s = System.currentTimeMillis();
+//		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
+//		dc.createAlias("workPayInfo", "workPayInfo");
+//		dc.add(Restrictions.isNotNull("workPayInfo"));
+//		dc.add(Restrictions.eq("workPayInfo.delFlag",
+//				WorkPayInfo.DEL_FLAG_NORMAL));
+//		List<String> status = Lists.newArrayList();
+//		status.add(WorkDealInfoStatus.STATUS_CERT_OBTAINED);
+//		status.add(WorkDealInfoStatus.STATUS_CERT_WAIT);
+//		dc.add(Restrictions.in("dealInfoStatus", status));
+//		if (startTime != null) {
+//			endTime.setHours(23);
+//			endTime.setMinutes(59);
+//			endTime.setSeconds(59);
+//			if (startTime != null) {
+//				dc.add(Restrictions.ge("workPayInfo.createDate", startTime));
+//				dc.add(Restrictions.le("workPayInfo.createDate", endTime));
+//			}
+//			// if (dealInfoByAreaIds != null && dealInfoByAreaIds.size() > 0) {
+//			// dc.add(Restrictions.in("id", dealInfoByAreaIds));
+//			// }
+//			if (appId != null) {
+//				dc.add(Restrictions.eq("configApp.id", appId));
+//			}
+//
+//			if (officeids != null && officeids.size() > 0) {
+//				dc.add(Restrictions.in("officeId", officeids));
+//			}
+//			dc.addOrder(Order.asc("workPayInfo.createDate"));
+//			return workDealInfoDao.find(dc);
+//		} else {
+//			return null;
+//		}
+//
+//	}
 
-			if (officeids != null && officeids.size() > 0) {
-				dc.add(Restrictions.in("officeId", officeids));
-			}
-			dc.addOrder(Order.asc("workPayInfo.createDate"));
-			return workDealInfoDao.find(dc);
-		} else {
-			return null;
-		}
-
+	public List<MonthPayment> findByDayPay(Date startTime, Date endTime,List<Long> officeids, Long appId) throws ParseException
+	{
+		StringBuffer sqlBuffer = new StringBuffer();
+		String  sqlString="SELECT p.id as workPayInfoId,"
+				+ " w.office_id as officeId,"
+				+ " p.CREATE_DATE as createDate,"
+				+ " p.RELATION_METHOD as realtionMethod,"
+				+ " p.method_pos as methodPos,"
+				+ " p.POS_MONEY as posMoney,"
+				+ " p.METHOD_BANK as methodBank,"
+				+ " p.BANK_MONEY as bankMoney,"
+				+ " p.METHOD_MONEY as methodMoney,"
+				+ " p.MONEY as money,"
+				+ " p.METHOD_ALIPAY as methodAlipay,"
+				+ " p.ALIPAY_MONEY as alipayMoney"
+				+ " FROM work_deal_info w"
+				+ " INNER JOIN work_pay_info p"
+				+ " ON w.pay_id =p.id"
+				+ " WHERE w.pay_id IS NOT NULL"
+				+ " AND p.del_flag =0"
+				+ " AND w.deal_info_status  IN (7,9)";
+				sqlBuffer.append(sqlString);
+				if(startTime!=null)
+				{
+					endTime.setHours(23);
+					endTime.setMinutes(59);
+					endTime.setSeconds(59);
+					sqlBuffer.append(" AND p.create_date>=to_date('"+new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(startTime)+"','yyyy-MM-dd HH24:mi:ss')");
+					sqlBuffer.append(" AND p.create_date<=to_date('"+new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(endTime)+"','yyyy-MM-dd HH24:mi:ss')");
+				}
+				if(appId!=null)
+				{
+					sqlBuffer.append(" AND w.app_id="+appId);
+				}
+				if(officeids != null && officeids.size() > 0)
+				{
+					sqlBuffer.append( " AND w.office_id in ("+officeids.toString().substring(1, (officeids.toString().length()-1))+")");
+				}
+				sqlBuffer.append( " ORDER BY p.create_date ASC");
+				List<Object[]> list = workDealInfoDao.findBySql(sqlBuffer.toString());
+				List<MonthPayment> lst = new ArrayList<MonthPayment>();
+				for(int i=0;i<list.size();i++)
+				{
+					MonthPayment monthPayment = new MonthPayment();
+					if(list.get(i)[0]!=null)
+					{
+						monthPayment.setWorkPayInfoId(Long.parseLong(list.get(i)[0].toString()));
+						
+					}
+					if(list.get(i)[1]!=null)
+					{
+						
+						monthPayment.setOfficeId(Long.parseLong(list.get(i)[1].toString()));
+					}
+					if(list.get(i)[2]!=null)
+					{
+						
+						monthPayment.setCreateDate(new SimpleDateFormat("yyyy-MM-dd").parse(list.get(i)[2].toString()));
+					}
+					if(list.get(i)[3]!=null)
+					{
+						
+						monthPayment.setRealtionMethod(list.get(i)[3].toString());
+					}
+					if(list.get(i)[4]!=null)
+					{
+						monthPayment.setMethodPos(Integer.parseInt(list.get(i)[4].toString()));
+						
+					}
+					if(list.get(i)[5]!=null)
+					{
+						monthPayment.setPosMoney(Integer.parseInt(list.get(i)[5].toString()));
+						
+					}
+					if(list.get(i)[6]!=null)
+					{
+						monthPayment.setMethodBank(Integer.parseInt(list.get(i)[6].toString()));
+						
+					}
+					if(list.get(i)[7]!=null)
+					{
+						
+						monthPayment.setBankMoney(Integer.parseInt(list.get(i)[7].toString()));
+					}
+					if(list.get(i)[8]!=null)
+					{
+						
+						monthPayment.setMethodMoney(Integer.parseInt(list.get(i)[8].toString()));
+					}
+					if(list.get(i)[9]!=null)
+					{
+						
+						monthPayment.setMoney(Integer.parseInt(list.get(i)[9].toString()));
+					}
+					if(list.get(i)[10]!=null)
+					{
+						monthPayment.setMethodAlipay(Integer.parseInt(list.get(i)[10].toString()));
+						
+					}
+					if(list.get(i)[11]!=null)
+					{
+						monthPayment.setAlipayMoney(Integer.parseInt(list.get(i)[11].toString()));
+						
+					}
+					lst.add(monthPayment);
+				}
+				 
+		        
+				return lst;
+		
+		
 	}
 
 	public Page<WorkDealInfo> findByProjectPay(Page<WorkDealInfo> page,
