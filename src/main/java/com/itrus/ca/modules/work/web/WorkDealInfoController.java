@@ -13,6 +13,7 @@ import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Timestamp;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -2538,8 +2539,8 @@ public class WorkDealInfoController extends BaseController {
 			
 			model.addAttribute("proList", ProductType.getProductList());
 
-			//经信委
-			model.addAttribute("expirationDate", StringHelper.getLastDateOfCurrentYear());
+			/*//经信委
+			model.addAttribute("expirationDate", StringHelper.getLastDateOfCurrentYear());*/
 		}
 		return "modules/work/workDealInfoForm";
 	}
@@ -7799,6 +7800,7 @@ public class WorkDealInfoController extends BaseController {
 	@ResponseBody
 	public String showYearNew(Long boundId, Integer infoType) {
 		JSONObject json = new JSONObject();
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");  
 		try {
 			ConfigChargeAgentBoundConfigProduct bound = configChargeAgentBoundConfigProductService.get(boundId);
 			json.put("pos", bound.getAgent().getChargeMethodPos());
@@ -7810,8 +7812,10 @@ public class WorkDealInfoController extends BaseController {
 			}else{
 				if(bound.getAgent().getIsSupportExpirationDate()==1){
 					json.put("support", true);
+					json.put("expirationDate", df.format(StringHelper.getLastDateOfCurrentYear()));
 				}else{
-					json.put("support", false);	
+					json.put("support", false);
+					
 				}
 				
 			}
