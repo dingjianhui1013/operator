@@ -189,10 +189,12 @@
 										if(data.support){
 											$("#supportDateTh").show();
 											$("#supportDateTd").show();
+											$("#expirationDate").val(data.expirationDate);
 										}
 										if(!data.support){
 											$("#supportDateTh").hide();
 											$("#supportDateTd").hide();
+											$("#expirationDate").val(null);
 										}
 										
 										
