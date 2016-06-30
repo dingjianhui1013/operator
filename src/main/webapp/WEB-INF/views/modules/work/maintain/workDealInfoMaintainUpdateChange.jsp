@@ -557,10 +557,12 @@
 			if(data.support){
 				$("#supportDateTh").show();
 				$("#supportDateTd").show();
+				$("#expirationDate").val(data.expirationDate);
 			}
 			if(!data.support){
 				$("#supportDateTh").hide();
 				$("#supportDateTd").hide();
+				$("#expirationDate").val(null);
 			}
 			
 			
@@ -761,7 +763,7 @@
 						<td id="supportDateTd" style="display: none">
 								<input class="input-medium Wdate" type="text"
 							 onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});"
-							 maxlength="20" readonly="readonly" value="<fmt:formatDate value="${expirationDate}" pattern="yyyy-MM-dd"/>"
+							 maxlength="20" readonly="readonly" <%-- value="<fmt:formatDate value="${expirationDate}" pattern="yyyy-MM-dd"/>" --%>
 							name="expirationDate" id="expirationDate"/>
 							</td>
 						

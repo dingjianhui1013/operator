@@ -335,7 +335,21 @@ $(document).ready(function() {
 			} else {
 				$("#year5").hide();
 				$("#word5").hide();
-			}			
+			}
+			
+			//经信委
+			if(data.support){
+				$("#supportDateTh").show();
+				$("#supportDateTd").show();
+				$("#expirationDate").val(data.expirationDate);
+			}
+			if(!data.support){
+				$("#supportDateTh").hide();
+				$("#supportDateTd").hide();
+				$("#expirationDate").val(null);
+			}
+			
+			
 			var boundId =  $("#agentDetailId").val(); 
 			var url="${ctx}/work/workDealInfo/checkSurplusNum?boundId="+boundId+"&_="+new Date().getTime();
 			$.getJSON(url,function(data){
@@ -502,8 +516,8 @@ $(document).ready(function() {
 								</c:if></td>
 							
 							<c:if test="${expirationDate!=null }">
-							<th>指定截止日期：</th>
-							<td>
+							<th id="supportDateTh">指定截止日期：</th>
+							<td id="supportDateTd">
 								<input class="input-medium Wdate" type="text" 
 							required="required" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});"
 							 maxlength="20" readonly="readonly" value="<fmt:formatDate value="${expirationDate}" pattern="yyyy-MM-dd"/>"

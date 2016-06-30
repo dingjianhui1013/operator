@@ -327,7 +327,7 @@ var selected = false;
 		document.all["pIDCard"].value=document.all["conCertNumber"].value;
 	}
 	function onSubmit(){
-		
+		alert($("input[name='year']").val());
 		if($("#product").val()==0){
 			top.$.jBox.tip("请选择要办理的产品！");
 			return false;
@@ -370,13 +370,13 @@ var selected = false;
 			top.$.jBox.tip("该应用不存在!"); 
 			$("#app").focus(); //让手机文本框获得焦点 
 			return false;
-		} else if (($("input[name='year']").val() == null || $("input[name='year']").val() == "") && ($("#expirationDate").val() == null || $("#expirationDate").val() == "")){
+		} else if (($("input[name='year']").val() == null || $("input[name='year']").val() == "")  && ($("#expirationDate").val() == null || $("#expirationDate").val() == "") ){
 			top.$.jBox.tip("请选择申请年限或指定具体到期时间!"); 
 			$("input[name='year']").focus(); //让手机文本框获得焦点 
 			return false;
 		} 
 		
-		else if($("#agentDetailId").val()==0){
+		 if($("#agentDetailId").val()==0){
 			top.$.jBox.tip("请配置计费策略"); 
 			$("#agentDetailId").focus(); 
 			return false;
@@ -1064,10 +1064,12 @@ var selected = false;
 			if(data.support){
 				$("#supportDateTh").show();
 				$("#supportDateTd").show();
+				$("#expirationDate").val(data.expirationDate);
 			}
 			if(!data.support){
 				$("#supportDateTh").hide();
 				$("#supportDateTd").hide();
+				$("#expirationDate").val(null);
 			}
 			
 			var arr = [data.nameDisplayName,data.orgunitDisplayName,data.emailDisplayName,data.commonNameDisplayName,data.addtionalField1DisplayName,data.addtionalField2DisplayName,data.addtionalField3DisplayName,data.addtionalField4DisplayName,data.addtionalField5DisplayName,data.addtionalField6DisplayName,data.addtionalField7DisplayName,data.addtionalField8DisplayName]
@@ -1209,7 +1211,7 @@ var selected = false;
 							
 							<td>
 								<input type="radio" name="year" value="1" id="year1"
-								<c:if test="${empty workDealInfo.year}">checked</c:if>
+								 <c:if test="${empty workDealInfo.year}">checked</c:if>
 								<c:if test="${workDealInfo.year==1}">checked</c:if>><span
 								id="word1">1年</span> 
 								
@@ -1251,7 +1253,7 @@ var selected = false;
 						<td id="supportDateTd" style="display: none">
 								<input class="input-medium Wdate" type="text"
 							 onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});"
-							 maxlength="20" readonly="readonly" value="<fmt:formatDate value="${expirationDate}" pattern="yyyy-MM-dd"/>"
+							 maxlength="20" readonly="readonly" <%-- value="<fmt:formatDate value="${expirationDate}" pattern="yyyy-MM-dd"/>" --%>
 							name="expirationDate" id="expirationDate"/>
 							</td>
 						
