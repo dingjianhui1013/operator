@@ -64,10 +64,10 @@
 		<label>记录时间：</label> 
 		
 		<input id="createStart" name="createStart"	type="text" readonly="readonly" maxlength="20" class="input-medium Wdate"
-				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});" value="<fmt:formatDate value="${createStart}" pattern="yyyy-MM-dd"/>" />
+				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:true});" value="<fmt:formatDate value="${createStart}" pattern="yyyy-MM-dd"/>" />
 			&nbsp;-&nbsp;
 			<input id="createEnd" name="createEnd" type="text"  readonly="readonly" maxlength="20" class="input-medium Wdate"
-				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false,minDate:'#F{$dp.$D(\'createStart\')}'});"
+				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:true,minDate:'#F{$dp.$D(\'createStart\')}'});"
 				value="<fmt:formatDate value="${createEnd}" pattern="yyyy-MM-dd"/>" />		
 		
 		&nbsp;<input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/>

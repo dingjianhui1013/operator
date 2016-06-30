@@ -372,13 +372,13 @@
 			<input id="luruStartTime" name="luruStartTime"
 				type="text" readonly="readonly" maxlength="20"
 				class="required Wdate"
-				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"
+				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:true});"
 				value="<fmt:formatDate value="${luruStartTime}" pattern="yyyy-MM-dd"/>" />
 			&nbsp;-&nbsp;
 			<input id="luruEndTime" name="luruEndTime"
 				type="text" readonly="readonly" maxlength="20"
 				class="required Wdate"
-				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false,minDate:'#F{$dp.$D(\'luruStartTime\')}'});"
+				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:true,minDate:'#F{$dp.$D(\'luruStartTime\')}'});"
 				value="<fmt:formatDate value="${luruEndTime}" pattern="yyyy-MM-dd"/>" />
 			
 		
@@ -387,35 +387,35 @@
 			<input id="paymentStartTime" name="paymentStartTime"
 				type="text" readonly="readonly" maxlength="20"
 				class="required Wdate"
-				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"
+				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:true});"
 				value="<fmt:formatDate value="${paymentStartTime}" pattern="yyyy-MM-dd"/>" />
 				&nbsp;-&nbsp;
 				<input id="paymentEndTime" name="paymentEndTime" type="text"
 				readonly="readonly" maxlength="20" class="Wdate required"
-				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false,minDate:'#F{$dp.$D(\'paymentStartTime\')}'});"
+				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:true,minDate:'#F{$dp.$D(\'paymentStartTime\')}'});"
 				value="<fmt:formatDate value="${paymentEndTime}" pattern="yyyy-MM-dd"/>" />
 				<br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			<label>制证日期：</label> 
 			<input id="zhizhengStartTime" name="zhizhengStartTime"
 				type="text" readonly="readonly" maxlength="20"
 				class="required Wdate"
-				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"
+				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:true});"
 				value="<fmt:formatDate value="${zhizhengStartTime}" pattern="yyyy-MM-dd"/>" />
 			&nbsp;-&nbsp;
 			<input id="zhizhengEndTime" name="zhizhengEndTime" type="text"
 				readonly="readonly" maxlength="20" class="Wdate required"
-				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false,minDate:'#F{$dp.$D(\'zhizhengStartTime\')}'});"
+				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:true,minDate:'#F{$dp.$D(\'zhizhengStartTime\')}'});"
 				value="<fmt:formatDate value="${zhizhengEndTime}" pattern="yyyy-MM-dd"/>" />
 			<label>到期日期：</label> 
 			 <input id="daoqiStartTime" name="daoqiStartTime"
 				type="text" readonly="readonly" maxlength="20"
 				class="required Wdate"
-				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"
+				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:true});"
 				value="<fmt:formatDate value="${daoqiStartTime}" pattern="yyyy-MM-dd"/>" />
 			&nbsp;-&nbsp;
 			<input id="daoqiEndTime" name="daoqiEndTime" type="text"
 				readonly="readonly" maxlength="20" class="Wdate required"
-				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false,minDate:'#F{$dp.$D(\'daoqiStartTime\')}'});"
+				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:true,minDate:'#F{$dp.$D(\'daoqiStartTime\')}'});"
 				value="<fmt:formatDate value="${daoqiEndTime}" pattern="yyyy-MM-dd"/>" /> 
 				<br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;

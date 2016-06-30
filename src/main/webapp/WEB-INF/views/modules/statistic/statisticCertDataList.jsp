@@ -137,11 +137,11 @@
 		<label>统计时间 ：</label>
 		<input id="startTime" name="startDate" type="text" readonly="readonly"
 			maxlength="20" class="Wdate required"
-			onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"
+			onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:true});"
 			value="${startDate}"/>&nbsp;-&nbsp;
 				<input id="endTime" name="endDate" type="text" readonly="readonly"
 			maxlength="20" class="Wdate required"
-			onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false,minDate:'#F{$dp.$D(\'startTime\')}'});"
+			onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:true,minDate:'#F{$dp.$D(\'startTime\')}'});"
 			value="${endDate}" />
 		&nbsp;&nbsp;
 		

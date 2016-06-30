@@ -104,7 +104,7 @@
     <input id="countDate" name="countDate"
            type="text" readonly="readonly" maxlength="20"
            class="Wdate required"
-           onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"
+           onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:true});"
            value="<fmt:formatDate value="${countDate}" pattern="yyyy-MM-dd"/>"/>
     <input type="hidden" name="theDate" id="theDate" value="<fmt:formatDate value="${countDate}" pattern="yyyy-MM-dd"/>" id="countDateHidden"/>
     &nbsp;&nbsp;&nbsp;&nbsp;

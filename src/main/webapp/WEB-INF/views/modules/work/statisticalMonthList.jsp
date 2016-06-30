@@ -155,12 +155,12 @@
 		<label>统计时间&nbsp;：</label>
 		<input id="startTime" name="startTime" type="text" readonly="readonly"
 			maxlength="10" class="input-medium Wdate"
-			onclick="WdatePicker({dateFmt:'yyyy-MM',isShowClear:false});"
+			onclick="WdatePicker({dateFmt:'yyyy-MM',isShowClear:true});"
 			value="<fmt:formatDate value="${startTime}" pattern="yyyy-MM"/>"/>
 			-
 			<input id="endTime" name="endTime" type="text" readonly="readonly"
 			maxlength="10" class="input-medium Wdate"
-			onclick="WdatePicker({dateFmt:'yyyy-MM',isShowClear:false,minDate:'#F{$dp.$D(\'startTime\')}'});"
+			onclick="WdatePicker({dateFmt:'yyyy-MM',isShowClear:true,minDate:'#F{$dp.$D(\'startTime\')}'});"
 			value="<fmt:formatDate value="${endTime}" pattern="yyyy-MM"/>"/>
 			<input id="btnSubmit" class="btn btn-primary" type="submit" 
 			value="查询" />

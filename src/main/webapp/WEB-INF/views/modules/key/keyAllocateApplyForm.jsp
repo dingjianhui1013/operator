@@ -195,7 +195,7 @@
 			<div class="controls">
 				<input id="warehouseDate" name="warehouseDate" type="text"
 					readonly="readonly" maxlength="20" class="Wdate required"
-					onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"
+					onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:true});"
 					value="<fmt:formatDate value="${startTime}" pattern="yyyy-MM-dd"/>" />
 			</div>
 		</div>
