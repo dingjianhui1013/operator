@@ -203,7 +203,7 @@
 				</c:forEach>
 			</select>
 			
-			<p id="attention" style="float: right;color: red">shift+z快捷键可查看注意事项</p>
+			<p id="attention" style="float: right;color: gray;">shift+z快捷键可查看注意事项</p>
 			
 		</div>
 		<br>
