@@ -114,7 +114,7 @@
 			<div class="controls"> 
 				<input type="text" name="storageDate" readonly="readonly"
 				maxlength="20" class="Wdate required" 
-				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"
+				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:true});"
 				value="<fmt:formatDate value="${startdate}" pattern="yyyy-MM-dd HH-mm-SS"/>" />
 			</div>
 		</div>

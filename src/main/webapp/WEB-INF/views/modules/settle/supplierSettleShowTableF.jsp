@@ -72,12 +72,12 @@
 		<label>结算时间 ：</label>
 		<input id="startTime" name="startTime" type="text" readonly="readonly"
 			maxlength="10" class="input-medium Wdate"
-			onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"
+			onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:true});"
 			value="${startTime}" required="required" />
 		<label id="startmes" style="color: red;"></label>&nbsp;-&nbsp;
 				<input id="endTime" name="endTime" type="text" readonly="readonly"
 			maxlength="10" class="Wdate required"
-			onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false,minDate:'#F{$dp.$D(\'startTime\')}'});"
+			onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:true,minDate:'#F{$dp.$D(\'startTime\')}'});"
 			value="${endTime}" required="required" />
 		<label id="endmes" style="color: red;"></label>
 		&nbsp;<input id="btnSubmit" class="btn btn-primary" type="submit"

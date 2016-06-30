@@ -274,11 +274,11 @@ $(document).ready(function() {
 				<label>统计时间 ：</label> <input
 					id="startTime" name="startDate" type="text" readonly="readonly"
 					maxlength="20" class="Wdate required"
-					onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"
+					onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:true});"
 					value="<fmt:formatDate value="${startDate}" pattern="yyyy-MM-dd"/>" />&nbsp;-&nbsp;
 				<input id="endTime" name="endDate" type="text" readonly="readonly"
 					maxlength="20" class="Wdate required"
-					onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false,minDate:'#F{$dp.$D(\'startTime\')}'});"
+					onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:true,minDate:'#F{$dp.$D(\'startTime\')}'});"
 					value="<fmt:formatDate value="${endDate}" pattern="yyyy-MM-dd"/>" />
 
 				

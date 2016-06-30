@@ -111,7 +111,7 @@
 			<input id="changeTwoTime" name="changeTwoTime"
 				type="text" readonly="readonly" maxlength="20"
 				class="required Wdate"
-				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false,maxDate:'#F{$dp.$D(\'pdate\')}'});"
+				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:true,maxDate:'#F{$dp.$D(\'pdate\')}'});"
 				value="<fmt:formatDate value="${pDate}" pattern="yyyy-MM-dd"/>"
 				/>
 				<input type="hidden"  id="pdDepotId" name="pdDepotId" />

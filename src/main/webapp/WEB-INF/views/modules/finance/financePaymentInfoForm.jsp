@@ -255,7 +255,7 @@
 			<div class="controls">
 				<input id="payDate" name="payDate" type="text"
 					readonly="readonly" maxlength="10" class="Wdate required"
-					onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false,maxDate:'%y-%M-%d'});"
+					onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:true,maxDate:'%y-%M-%d'});"
 					value="<fmt:formatDate value="${financePaymentInfo.payDate}" pattern="yyyy-MM-dd"/>" />
 			</div>
 		</div>

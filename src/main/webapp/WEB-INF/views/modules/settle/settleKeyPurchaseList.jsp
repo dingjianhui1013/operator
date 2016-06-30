@@ -66,7 +66,7 @@
 		<label>入库时间：</label> 
 			<input id="storageDate" name="storageDate" type="text" readonly="readonly"
 			maxlength="10" class="input-medium Wdate"
-			onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"
+			onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:true});"
 			value="${storageDate}" required="required" />
 		<label>状态：</label>
 		<form:select path="status">

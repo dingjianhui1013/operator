@@ -25,12 +25,12 @@
 		服务时间：
 		<input id="startTime" name="startDate" type="text" readonly="readonly"
 			maxlength="10" class="Wdate required"
-			onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"
+			onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:true});"
 			value="<fmt:formatDate value="${startDate}" pattern="yyyy-MM-dd"/>" />&nbsp;-&nbsp;
 
 				<input id="endTime" name="endDate" type="text" readonly="readonly"
 			maxlength="10" class="Wdate required"
-			onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false,minDate:'#F{$dp.$D(\'startDate\')}'});"
+			onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:true,minDate:'#F{$dp.$D(\'startDate\')}'});"
 			value="<fmt:formatDate value="${endDate}" pattern="yyyy-MM-dd"/>" />
 		&nbsp;<input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/>
 	</form:form>

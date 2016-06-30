@@ -272,21 +272,21 @@
 		<input id="startTime" name="startTime"
 				type="text" readonly="readonly" maxlength="20"
 				class="required Wdate"
-				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"
+				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:true});"
 				value="<fmt:formatDate value="${startTime}" pattern="yyyy-MM-dd"/>" />
 			&nbsp;-&nbsp;<input id="endTime" name="endTime" type="text"
 				readonly="readonly" maxlength="20" class="Wdate required"
-				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false,minDate:'#F{$dp.$D(\'startTime\')}'});"
+				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:true,minDate:'#F{$dp.$D(\'startTime\')}'});"
 				value="<fmt:formatDate value="${endTime}" pattern="yyyy-MM-dd"/>" />
 		<label>返修时间：</label>
 		<input id="startBackTime" name="startBackTime"
 				type="text" readonly="readonly" maxlength="20"
 				class="required Wdate"
-				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"
+				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:true});"
 				value="<fmt:formatDate value="${startBackTime}" pattern="yyyy-MM-dd"/>" />
 			&nbsp;-&nbsp;<input id="endBackTime" name="endBackTime" type="text"
 				readonly="readonly" maxlength="20" class="Wdate required"
-				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false,minDate:'#F{$dp.$D(\'startTime\')}'});"
+				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:true,minDate:'#F{$dp.$D(\'startTime\')}'});"
 				value="<fmt:formatDate value="${endBackTime}" pattern="yyyy-MM-dd"/>" />
 				&nbsp; &nbsp; &nbsp; &nbsp;
 				<br/><br/>
@@ -373,7 +373,7 @@
 			<input id="changeTime" name="changeTime"
 				type="text" readonly="readonly" maxlength="20"
 				class="required Wdate"
-				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"
+				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:true});"
 				/>
 		</div>
 		<div class="control-group" align="center">
@@ -396,7 +396,7 @@
 			<input id="changeBackTime" name="changeBackTime"
 				type="text" readonly="readonly" maxlength="20"
 				class="required Wdate"
-				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"
+				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:true});"
 				/>
 		</div>
 		<div class="control-group" align="center">
@@ -420,7 +420,7 @@
 			<input id="changeTwoTime" name="changeTwoTime"
 				type="text" readonly="readonly" maxlength="20"
 				class="required Wdate"
-				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"
+				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:true});"
 				/>
 		</div>
 		<div class="control-group" align="center">
@@ -444,7 +444,7 @@
 			<input id="changeBackTime1" name="changeBackTime1"
 				type="text" readonly="readonly" maxlength="20"
 				class="required Wdate"
-				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"
+				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:true});"
 				/>
 		</div>
 		<div class="control-group" align="center">

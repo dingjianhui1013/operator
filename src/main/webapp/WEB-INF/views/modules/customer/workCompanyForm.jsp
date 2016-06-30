@@ -158,7 +158,7 @@
 						<div class="controls">
 							<input id="endTime" name="endTime" type="text"
 								readonly="readonly" maxlength="10" class="Wdate"
-								onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});" />
+								onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:true});" />
 						</div>
 					</div>
 				</td>

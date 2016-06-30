@@ -497,7 +497,7 @@
 						<label class="control-label"><font color="red">*</font>开始时间:</label>
 						<div class="controls">
 							<input class="input-medium Wdate" type="text" required="required"
-								onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"
+								onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:true});"
 								value="<fmt:formatDate value="${configChargeAgent.htStartTime}" pattern="yyyy-MM-dd"/>"
 								name="htStartTime" id="htStartTime" maxlength="20"
 								readonly="readonly" />
@@ -508,7 +508,7 @@
 						<label class="control-label"><font color="red">*</font>截止时间:</label>
 						<div class="controls">
 							<input class="input-medium Wdate" type="text" required="required"
-								onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false,minDate:'#F{$dp.$D(\'htStartTime\')}'});"
+								onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:true,minDate:'#F{$dp.$D(\'htStartTime\')}'});"
 								value="<fmt:formatDate value="${configChargeAgent.htEndTime}" pattern="yyyy-MM-dd"/>"
 								name="htEndTime" id="htEndTime" maxlength="20"
 								readonly="readonly" />

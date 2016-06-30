@@ -369,20 +369,20 @@
 		<label>制证时间：</label> 
 		
 		<input id="makeCertStart" name="makeCertStart"	type="text" readonly="readonly" maxlength="20" class="input-medium Wdate"
-				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});" value="<fmt:formatDate value="${makeCertStart}" pattern="yyyy-MM-dd"/>" />
+				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:true});" value="<fmt:formatDate value="${makeCertStart}" pattern="yyyy-MM-dd"/>" />
 			&nbsp;-&nbsp;
 			<input id="makeCertEnd" name="makeCertEnd" type="text"  readonly="readonly" maxlength="20" class="input-medium Wdate"
-				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false,minDate:'#F{$dp.$D(\'makeCertStart\')}'});"
+				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:true,minDate:'#F{$dp.$D(\'makeCertStart\')}'});"
 				value="<fmt:formatDate value="${makeCertEnd}" pattern="yyyy-MM-dd"/>" />
 		
 		
 		<label>到期时间：</label> 
 		
 		<input id="expiredStart" name="expiredStart"	type="text" readonly="readonly" maxlength="20" class="input-medium Wdate"
-				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});" value="<fmt:formatDate value="${expiredStart}" pattern="yyyy-MM-dd"/>" />
+				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:true});" value="<fmt:formatDate value="${expiredStart}" pattern="yyyy-MM-dd"/>" />
 			&nbsp;-&nbsp;
 			<input id="expiredEnd" name="expiredEnd" type="text"  readonly="readonly" maxlength="20" class="input-medium Wdate"
-				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false,minDate:'#F{$dp.$D(\'expiredStart\')}'});"
+				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:true,minDate:'#F{$dp.$D(\'expiredStart\')}'});"
 				value="<fmt:formatDate value="${expiredEnd}" pattern="yyyy-MM-dd"/>" />
 			
 		&nbsp; &nbsp; &nbsp; &nbsp; 

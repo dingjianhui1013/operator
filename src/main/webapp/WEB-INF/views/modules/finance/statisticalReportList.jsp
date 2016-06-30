@@ -117,13 +117,13 @@
 
 		<input id="startTime" name="startTime" type="text" readonly="readonly"
 			maxlength="20" class="Wdate required"
-			onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"
+			onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:true});"
 			value="<fmt:formatDate value="${startTime}" pattern="yyyy-MM-dd"/>" />
 					&nbsp;-&nbsp;
 
 				<input id="endTime" name="endTime" type="text" readonly="readonly"
 			maxlength="20" class="Wdate required"
-			onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false,minDate:'#F{$dp.$D(\'startTime\')}'});"
+			onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:true,minDate:'#F{$dp.$D(\'startTime\')}'});"
 			value="<fmt:formatDate value="${endTime}" pattern="yyyy-MM-dd"/>" />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			
