@@ -327,7 +327,7 @@ var selected = false;
 		document.all["pIDCard"].value=document.all["conCertNumber"].value;
 	}
 	function onSubmit(){
-		alert($("input[name='year']").val());
+	
 		if($("#product").val()==0){
 			top.$.jBox.tip("请选择要办理的产品！");
 			return false;
