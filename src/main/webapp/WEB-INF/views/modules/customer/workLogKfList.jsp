@@ -19,7 +19,7 @@
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li class="active"><a href="${ctx}/work/workLog/">客服记录</a></li>
+		<li class="active"><a href="${ctx}/work/workLog/kflist?distinguish=0">客服记录</a></li>
 	</ul>
 	<form:form id="searchForm" modelAttribute="workLog" action="${ctx}/work/workLog/kflist?distinguish=0" method="post" class="breadcrumb form-search">
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
@@ -78,7 +78,7 @@
 		<tbody>
 		<c:forEach items="${page.list}" var="workLog">
 			<tr>
-				<td><a href="${ctx}/work/workDealInfoFiling/formF?id=${workLog.workDealInfo.id}">${workLog.workCompany.companyName}</a></td>
+				<td width="25%"><a href="${ctx}/work/workDealInfoFiling/formF?id=${workLog.workDealInfo.id}">${workLog.workCompany.companyName}</a></td>
 				<td>${workLog.configApp.appName}</td>
 				<td>${workLog.access }</td>
 				<td>${workLog.serType }</td>

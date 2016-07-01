@@ -96,7 +96,7 @@
 			<c:forEach items="${page.list}" var="workDealInfo">
 				<tr>
 					<td>${workDealInfo.id}</td>
-					<td><a
+					<td width="20%"><a
 						href="${ctx}/work/workDealInfoFiling/formF?id=${workDealInfo.id}">${workDealInfo.workCompany.companyName}</a></td>
 					<td>
 					<c:if test="${workDealInfo.workCompany.companyType==1}">企业</c:if>
