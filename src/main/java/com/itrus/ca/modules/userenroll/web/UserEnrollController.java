@@ -276,7 +276,11 @@ public class UserEnrollController extends BaseController {
 				WorkCertApplyInfo applyInfo = certInfo.getWorkCertApplyInfo();
 				WorkUser user = dealInfos.get(0).getWorkUser();
 				json.put("certSn", certInfo.getSerialnumber());
-				json.put("email", user.getContactEmail());
+				
+				ConfigRaAccountExtendInfo extendInfo = configRaAccountExtendInfoService.get(dealInfos.get(0).getConfigProduct().getRaAccountExtedId());		
+				json.put("certCN", extendInfo.getCommonNameDisplayName().equals("0")?dealInfos.get(0).getWorkCompany().getCompanyName():(extendInfo.getCommonNameDisplayName().equals("1")?dealInfos.get(0).getWorkUser().getContactName():dealInfos.get(0).getWorkUserHis().getContactName()));
+				
+				
 				json.put("startDate", sdf.format(certInfo.getNotbefore()));
 				json.put("endDate", sdf.format(certInfo.getNotafter()));
 
@@ -1087,7 +1091,15 @@ public class UserEnrollController extends BaseController {
 			//证书CN
 			ConfigRaAccountExtendInfo extendInfo = configRaAccountExtendInfoService.get(workDealInfo.getConfigProduct().getRaAccountExtedId());		
 	
-			model.addAttribute("certCN", extendInfo.getCommonNameDisplayName().equals("0")?workDealInfo.getWorkCompany().getCompanyName():(extendInfo.getCommonNameDisplayName().equals("1")?workDealInfo.getWorkUser().getContactName():workDealInfo.getWorkUserHis().getContactName()));
+			String certCN = extendInfo.getCommonNameDisplayName().equals("0")?workDealInfo.getWorkCompany().getCompanyName():(extendInfo.getCommonNameDisplayName().equals("1")?workDealInfo.getWorkUser().getContactName():workDealInfo.getWorkUserHis().getContactName());
+			
+			model.addAttribute("certCN", certCN);
+			
+			model.addAttribute("certCNOmit", certCN.length()>20?certCN.substring(0, 20)+"...":certCN);
+			
+			model.addAttribute("keySN", workDealInfo.getKeySn());
+			model.addAttribute("notbefore", workDealInfo.getWorkCertInfo().getNotbefore());
+			model.addAttribute("notafter", workDealInfo.getWorkCertInfo().getNotafter());
 			model.addAttribute("status", workDealInfo.getDealInfoStatus().equals(WorkDealInfoStatus.STATUS_CERT_WAIT)?"等待更新":WorkDealInfoStatus.WorkDealInfoStatusMap.get(workDealInfo.getDealInfoStatus()));
 			if (workDealInfo.getPrevId() != null) {
 				// 获取上一张证书的签名证书序列号
@@ -1115,11 +1127,12 @@ public class UserEnrollController extends BaseController {
 
 	@RequestMapping(value = "gxfw3Nextform")
 	public String gxfw3Nextform(Model model, Long id) {
-		WorkDealInfo dealInfo = workDealInfoService.get(id);
+		WorkDealInfo dealInfo1 = workDealInfoService.get(id);
+		WorkDealInfo dealInfo = workDealInfoService.findDealInfo(dealInfo1.getPrevId());
 		WorkCertInfo certInfo = dealInfo.getWorkCertInfo();
 		if (certInfo != null) {
-			model.addAttribute("sn", certInfo.getSerialnumber());
-			SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			model.addAttribute("sn", dealInfo.getKeySn());
+			SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
 			model.addAttribute("notbefore", sdf1.format(certInfo.getNotbefore()));
 			model.addAttribute("notafter", sdf1.format(certInfo.getNotafter()));// 有效期
 			
@@ -1127,7 +1140,10 @@ public class UserEnrollController extends BaseController {
 			
 			ConfigRaAccountExtendInfo extendInfo = configRaAccountExtendInfoService.get(dealInfo.getConfigProduct().getRaAccountExtedId());		
 	
-			model.addAttribute("certCN", extendInfo.getCommonNameDisplayName().equals("0")?dealInfo.getWorkCompany().getCompanyName():(extendInfo.getCommonNameDisplayName().equals("1")?dealInfo.getWorkUser().getContactName():dealInfo.getWorkUserHis().getContactName()));
+			String certCN = extendInfo.getCommonNameDisplayName().equals("0")?dealInfo.getWorkCompany().getCompanyName():(extendInfo.getCommonNameDisplayName().equals("1")?dealInfo.getWorkUser().getContactName():dealInfo.getWorkUserHis().getContactName());
+			
+			model.addAttribute("certCN", certCN);
+			model.addAttribute("certCNOmit", certCN.length()>20?certCN.substring(0, 20)+"...":certCN);
 			
 		}
 		return "iLetter/zhengshufuwu_gxfw4";

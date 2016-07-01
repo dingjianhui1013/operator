@@ -22,6 +22,8 @@ import com.itrus.ca.common.utils.StringUtils;
 import com.itrus.ca.common.web.BaseController;
 import com.itrus.ca.modules.key.service.KeyUsbKeyService;
 import com.itrus.ca.modules.log.service.LogUtil;
+import com.itrus.ca.modules.profile.entity.ConfigRaAccountExtendInfo;
+import com.itrus.ca.modules.profile.service.ConfigRaAccountExtendInfoService;
 import com.itrus.ca.modules.sys.entity.Office;
 import com.itrus.ca.modules.sys.entity.User;
 import com.itrus.ca.modules.sys.service.SystemService;
@@ -43,6 +45,10 @@ public class UkeyUnlockController extends BaseController{
 	@Autowired
 	KeyUnlockService unlockService;
 
+	@Autowired
+	private ConfigRaAccountExtendInfoService configRaAccountExtendInfoService;
+
+	
 	@Autowired
 	private KeyUnlockService keyUnlockService;	
 	
@@ -113,7 +119,9 @@ public class UkeyUnlockController extends BaseController{
     		return json.toJSONString();
 		}else {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-			json.put("email", all.get(0).getWorkUser().getContactEmail());
+			ConfigRaAccountExtendInfo extendInfo = configRaAccountExtendInfoService.get(all.get(0).getConfigProduct().getRaAccountExtedId());		
+			json.put("certCN", extendInfo.getCommonNameDisplayName().equals("0")?all.get(0).getWorkCompany().getCompanyName():(extendInfo.getCommonNameDisplayName().equals("1")?all.get(0).getWorkUser().getContactName():all.get(0).getWorkUserHis().getContactName()));
+			
 			json.put("start", sdf.format(all.get(0).getWorkCertInfo().getNotbefore()));
 			json.put("end", sdf.format(all.get(0).getWorkCertInfo().getNotafter()));
 		}
