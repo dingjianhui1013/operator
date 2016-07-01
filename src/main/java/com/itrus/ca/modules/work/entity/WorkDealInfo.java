@@ -130,6 +130,7 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 	private Long selfApplyId;
 	private String IsMainTain;
 	
+	private Timestamp openTime; //证书首次签发日期
 	
 	
 	/** default constructor */
@@ -424,6 +425,15 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 		this.creactDate = creactDate;
 	}
 	
+	@Column(name ="OPEN_TIME")
+	public Timestamp getOpenTime() {
+		return openTime;
+	}
+
+	public void setOpenTime(Timestamp openTime) {
+		this.openTime = openTime;
+	}
+
 	@Column(name ="down_load")
 	public Integer getDownLoad() {
 		return downLoad;
