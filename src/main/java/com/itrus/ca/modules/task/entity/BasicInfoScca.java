@@ -3,7 +3,8 @@ package com.itrus.ca.modules.task.entity;
 import java.sql.Timestamp;
 
 import javax.persistence.Column;
-import javax.persistence.Embeddable;import javax.persistence.Entity;
+import javax.persistence.Embeddable;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -15,7 +16,7 @@ import javax.persistence.Transient;
  **
  ** @author Zhang Jingtao
  **
- ** date:2014年8月18日 下午3:20:33
+ **         date:2014年8月18日 下午3:20:33
  ** 
  ** @describe:四川CA数据导入中间表
  **
@@ -72,16 +73,19 @@ public class BasicInfoScca implements java.io.Serializable {
 	private String certType;
 	private String appName;
 	private String certCounts;
-	//private String 专用or通用;
+	// private String 专用or通用;
 	private Integer multiCertSns;
 	private String keyAndUsbSn;
 	private Integer certValidDays;
 	private Boolean used;
-	
+
 	private Long times;
 	private String svnNum;
-	
-	
+
+	private String openTime; //证书首次签发日期
+	private Integer usedCount; // 证书导入前已使用次数(年限)
+	private Integer availableCount; // 证书剩余使用次数
+
 	// Constructors
 
 	/** default constructor */
@@ -102,7 +106,8 @@ public class BasicInfoScca implements java.io.Serializable {
 			String issuerDn, String subjectDn, String notafter,
 			String notbefore, String serialnumber, String keySn,
 			String certType, String appName, String certCounts, String 专用or通用,
-			Integer multiCertSns, String keyAndUsbSn, Integer certValidDays ,Boolean used,Long agentId) {
+			Integer multiCertSns, String keyAndUsbSn, Integer certValidDays,
+			Boolean used, Long agentId) {
 		this.id = id;
 		this.appId = appId;
 		this.productId = productId;
@@ -142,7 +147,7 @@ public class BasicInfoScca implements java.io.Serializable {
 		this.certType = certType;
 		this.appName = appName;
 		this.certCounts = certCounts;
-		//this.专用or通用 = 专用or通用;
+		// this.专用or通用 = 专用or通用;
 		this.multiCertSns = multiCertSns;
 		this.keyAndUsbSn = keyAndUsbSn;
 		this.certValidDays = certValidDays;
@@ -505,14 +510,14 @@ public class BasicInfoScca implements java.io.Serializable {
 		this.certCounts = 单证or双证;
 	}
 
-//	@Column(name = "专用or通用")
-//	public String get专用or通用() {
-//		return this.专用or通用;
-//	}
-//
-//	public void set专用or通用(String 专用or通用) {
-//		this.专用or通用 = 专用or通用;
-//	}
+	// @Column(name = "专用or通用")
+	// public String get专用or通用() {
+	// return this.专用or通用;
+	// }
+	//
+	// public void set专用or通用(String 专用or通用) {
+	// this.专用or通用 = 专用or通用;
+	// }
 
 	@Column(name = "multiCertSns")
 	public Integer getMultiCertSns() {
@@ -567,7 +572,7 @@ public class BasicInfoScca implements java.io.Serializable {
 	public void setTimes(Long times) {
 		this.times = times;
 	}
-	
+
 	@Transient
 	public String getSvnNum() {
 		return svnNum;
@@ -577,7 +582,32 @@ public class BasicInfoScca implements java.io.Serializable {
 		this.svnNum = svnNum;
 	}
 
+	@Column(name = "OPEN_TIME")
+	public String getOpenTime() {
+		return openTime;
+	}
 
+	@Column(name = "USED_COUNT")
+	public Integer getUsedCount() {
+		return usedCount;
+	}
+
+	@Column(name = "AVAILABLE_COUNT")
+	public Integer getAvailableCount() {
+		return availableCount;
+	}
+
+	public void setOpenTime(String openTime) {
+		this.openTime = openTime;
+	}
+
+	public void setUsedCount(Integer usedCount) {
+		this.usedCount = usedCount;
+	}
+
+	public void setAvailableCount(Integer availableCount) {
+		this.availableCount = availableCount;
+	}
 
 	public boolean equals(Object other) {
 		if ((this == other))
@@ -734,36 +764,40 @@ public class BasicInfoScca implements java.io.Serializable {
 				&& ((this.getKeySn() == castOther.getKeySn()) || (this
 						.getKeySn() != null && castOther.getKeySn() != null && this
 						.getKeySn().equals(castOther.getKeySn())))
-				&& ((this.getCertType() == castOther.getCertType()) || (this.getCertType() != null
-						&& castOther.getCertType() != null && this.getCertType()
-						.equals(castOther.getCertType())))
-				&& ((this.getAppName() == castOther.getAppName()) || (this.getAppName() != null
-						&& castOther.getAppName() != null && this.getAppName().equals(
-						castOther.getAppName())))
+				&& ((this.getCertType() == castOther.getCertType()) || (this
+						.getCertType() != null
+						&& castOther.getCertType() != null && this
+						.getCertType().equals(castOther.getCertType())))
+				&& ((this.getAppName() == castOther.getAppName()) || (this
+						.getAppName() != null && castOther.getAppName() != null && this
+						.getAppName().equals(castOther.getAppName())))
 				&& ((this.getCertCounts() == castOther.getCertCounts()) || (this
-						.getCertCounts() != null && castOther.getCertCounts() != null && this
+						.getCertCounts() != null
+						&& castOther.getCertCounts() != null && this
 						.getCertCounts().equals(castOther.getCertCounts())))
-//				&& ((this.get专用or通用() == castOther.get专用or通用()) || (this
-//						.get专用or通用() != null && castOther.get专用or通用() != null && this
-//						.get专用or通用().equals(castOther.get专用or通用())))
+				// && ((this.get专用or通用() == castOther.get专用or通用()) || (this
+				// .get专用or通用() != null && castOther.get专用or通用() != null && this
+				// .get专用or通用().equals(castOther.get专用or通用())))
 				&& ((this.getMultiCertSns() == castOther.getMultiCertSns()) || (this
-						.getMultiCertSns() != null && castOther.getMultiCertSns() != null && this
+						.getMultiCertSns() != null
+						&& castOther.getMultiCertSns() != null && this
 						.getMultiCertSns().equals(castOther.getMultiCertSns())))
 				&& ((this.getKeyAndUsbSn() == castOther.getKeyAndUsbSn()) || (this
 						.getKeyAndUsbSn() != null
 						&& castOther.getKeyAndUsbSn() != null && this
 						.getKeyAndUsbSn().equals(castOther.getKeyAndUsbSn())))
-				&& ((this.getCertValidDays() == castOther.getCertValidDays()) || (this.getCertValidDays() != null
-						&& castOther.getCertValidDays() != null && this.getCertValidDays()
+				&& ((this.getCertValidDays() == castOther.getCertValidDays()) || (this
+						.getCertValidDays() != null
+						&& castOther.getCertValidDays() != null && this
+						.getCertValidDays()
 						.equals(castOther.getCertValidDays())))
 				&& ((this.getAgentId() == castOther.getAgentId()) || (this
-								.getAgentId() != null && castOther.getAgentId() != null && this
-								.getAgentId().equals(castOther.getAgentId())))
-						
-						;
+						.getAgentId() != null && castOther.getAgentId() != null && this
+						.getAgentId().equals(castOther.getAgentId())))
+
+		;
 	}
 
-	
 	public int hashCode() {
 		int result = 17;
 
@@ -878,18 +912,24 @@ public class BasicInfoScca implements java.io.Serializable {
 				+ (getCertType() == null ? 0 : this.getCertType().hashCode());
 		result = 37 * result
 				+ (getAppName() == null ? 0 : this.getAppName().hashCode());
-		result = 37 * result
-				+ (getCertCounts() == null ? 0 : this.getCertCounts().hashCode());
-//		result = 37 * result
-//				+ (get专用or通用() == null ? 0 : this.get专用or通用().hashCode());
-		result = 37 * result
-				+ (getMultiCertSns() == null ? 0 : this.getMultiCertSns().hashCode());
+		result = 37
+				* result
+				+ (getCertCounts() == null ? 0 : this.getCertCounts()
+						.hashCode());
+		// result = 37 * result
+		// + (get专用or通用() == null ? 0 : this.get专用or通用().hashCode());
+		result = 37
+				* result
+				+ (getMultiCertSns() == null ? 0 : this.getMultiCertSns()
+						.hashCode());
 		result = 37
 				* result
 				+ (getKeyAndUsbSn() == null ? 0 : this.getKeyAndUsbSn()
 						.hashCode());
-		result = 37 * result
-				+ (getCertValidDays() == null ? 0 : this.getCertValidDays().hashCode());
+		result = 37
+				* result
+				+ (getCertValidDays() == null ? 0 : this.getCertValidDays()
+						.hashCode());
 		result = 37 * result
 				+ (getAgentId() == null ? 0 : this.getAgentId().hashCode());
 		return result;
