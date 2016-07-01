@@ -431,7 +431,7 @@
 
 					<td>${status.index+1 }</td>
 					<td>${messageSend.configApp.alias}</td>
-					<td>${messageSend.workCompany.companyName}</td>
+					<td width="30%">${messageSend.workCompany.companyName}</td>
 					<td>${messageSend.workCertInfo.workCertApplyInfo.name}</td>
 					<td>${messageSend.workUser.contactPhone}</td>
 					<td>${messageSend.workCertInfo.workCertApplyInfo.email}</td>
