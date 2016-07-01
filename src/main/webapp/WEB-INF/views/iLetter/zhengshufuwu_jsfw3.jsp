@@ -70,6 +70,9 @@ function backToMain(){
     <div class="btn_fanhuizsfw fl"><a href="javascript:window.history.go(-3)"></a></div>
    </div>
    <div class="clear"></div>
+   
+   <div style="height: 5px"></div>
+   
    <div class="zsfw_js_bd" style="height:auto;">
      <div class="zsfw_js_step3_c2">
          <table width="100%" border="0" cellspacing="0" cellpadding="0">
@@ -92,6 +95,9 @@ function backToMain(){
           
          </table>
      </div>
+     
+     <div style="height: 5px"></div>
+     
      <div class="zsfw_js_step3_c2">
      <table width="100%" border="0" cellspacing="0" cellpadding="0">
       <tr>

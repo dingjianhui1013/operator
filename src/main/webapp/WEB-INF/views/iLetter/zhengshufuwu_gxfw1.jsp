@@ -6,6 +6,8 @@
 <meta name="decorator" content="default" />
 <link href="${ctxStatic}/iLetter/css/main.css" type="text/css" rel="stylesheet"/>
 <script type="text/javascript" src="${ctxStatic}/iLetter/js/jquery-1.8.3.min.js"></script>
+<link href="http://libs.baidu.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
+<script src="http://libs.baidu.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
 <script type="text/javascript">
  	var dealInfoId ;
  	var keySn = external.ukeyserial;
@@ -66,7 +68,8 @@
 				$("#dealInfoId").attr("value",d.dealInfoId);
 				$("#ceSn").html(keySn);
 				/* $("#ceSn").html(d.certSn); */
-				$("#certCN").html(d.certCN);
+				$("#certCN").html(d.certCN.length>20?d.certCN.substring(0,20)+"...":d.certCN);
+				$("#certA").attr("title",d.certCN);
 				$("#certTime").html(d.certTime);
 			}
 		});
@@ -128,7 +131,9 @@
           <td width="19%" align="right" valign="top">待更新证书：</td>
           <td width="2%"></td>
           <td width="79%" valign="top">Key序列号：<span id="ceSn"></span><br />
-            证书CN：<span id="certCN"></span><br />
+           <a id="certA" href="#" data-toggle="tooltip" data-placement="top" 
+   title="">
+            证书CN：</a><span id="certCN"></span><br />
             证书有效期：<span id="certTime"></span></td>
         </tr>
       </table>

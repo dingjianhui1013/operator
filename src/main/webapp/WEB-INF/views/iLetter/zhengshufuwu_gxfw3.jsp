@@ -9,6 +9,8 @@
 <script type="text/javascript" src="${ctxStatic}/cert/pta_topca.js"></script>
 <script type="text/javascript" src="${ctxStatic}/cert/xenroll.js"></script>
 <script type="text/javascript" src="${ctxStatic}/msg/msg.js"></script>
+<link href="http://libs.baidu.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
+<script src="http://libs.baidu.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
 <script type="text/javascript">
 	var sn;
 	var keySn = external.ukeyserial;
@@ -205,17 +207,39 @@ function setCount() {
 			<div id="play4" style="margin-top:-19px;margin-left:340px;"></div>
 	</div>
    <div id="show_key" >
-   		        <div class="zsfw_gxgx_3info3" id="keySnDiv">
+   
+   
+   <table  width="100%" border="0" cellspacing="0" cellpadding="0">
+     		<tr>
+         		<td height="10" colspan="3"></td>
+        	</tr>
+        	<tr>
+        		<td width="24%"></td>
+        		<td width="2%"></td>
+        		<td width="74%" valign="top">
+					Key序列号：${keySN } <br />
+					  <a id="certA" href="#" data-toggle="tooltip" data-placement="top" title="${certCN }">
+   证书CN：</a> ${certCNOmit } <br />
+					证书有效期：${notbefore }到  ${notafter }<br />
+					审核状态：<span style="font-weight:bold;">${status}</span>
+        		</td>
+        	</tr>
+     	</table>
+   
+   
+   		<%--  <div class="zsfw_gxgx_3info3" id="keySnDiv">
         	Key序列号：${workDealInfo.keySn }
         </div>    <div class="zsfw_gxgx_3info3">
         	证书CN：${certCN }
         </div>    <div class="zsfw_gxgx_3info3">
-        	审核状态：<p style="font-weight:bold;">${status}</p>
-        </div>
+        	审核状态：<span style="font-weight:bold;">${status}</span>
+        </div> --%>
+        
+        
 		</div>
         <div class="btn_nextStep">
 			<div class="n-tispsBox"  id = "msg"  style="color: red"></div>
-			<div class="btn_nextStep">
+			<div class="btn_gxzs">
 				<a id ="close_a" href="javascript:void(0)" onclick="close_show()" ></a>
 			</div>
 		 </div>

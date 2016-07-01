@@ -6,6 +6,8 @@
 <meta name="decorator" content="default" />
 <link href="${ctxStatic}/iLetter/css/main.css" type="text/css" rel="stylesheet"/>
 <script type="text/javascript" src="${ctxStatic}/iLetter/js/jquery-1.8.3.min.js"></script>
+<link href="http://libs.baidu.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
+<script src="http://libs.baidu.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
 <%-- <!-- [if IE 6] -->
 <script src="${ctxStatic}/iLetter/js/DD_belatedPNG.js" type="text/javascript"></script>
 <script>
@@ -16,6 +18,8 @@ DD_belatedPNG.fix('.nav1 a,.nav2 a,.nav3 a,.nav4 a,.nav5 a,.nav6 a,.nav1_cur a,.
 	var flag = false;
 	$(document).ready(function(){
 		var keySn = external.ukeyserial;
+		$("#serNo").html(keySn);
+		
 		var certSn; 
 		if(external. certcount>0)
 		{
@@ -26,7 +30,8 @@ DD_belatedPNG.fix('.nav1 a,.nav2 a,.nav3 a,.nav4 a,.nav5 a,.nav6 a,.nav1_cur a,.
 		 $.getJSON(url,function(data){
 			if(data.status=="1"){
 				$("#appName").html(data.appName);
-				$("#email").html(data.email);
+				$("#certCN").html(data.certCN.length>20?data.certCN.substring(0,20)+"...":data.certCN);
+				$("#certA").attr("title",data.certCN);
 				$("#certdate").html("从"+data.startDate+"到"+data.endDate);
 				flag = true;
 			}else{
@@ -76,11 +81,13 @@ DD_belatedPNG.fix('.nav1 a,.nav2 a,.nav3 a,.nav4 a,.nav5 a,.nav6 a,.nav1_cur a,.
           <td height="10" colspan="3"></td>
         </tr>
         <tr>
-          <td width="19%" align="right" valign="top">待补办证书：</td>
+          <td width="19%" align="right" valign="top">待吊销证书：</td>
           <td width="2%"></td>
           <td width="79%" valign="top">	
-          		证书序列号：<span id="certsn"> </span><br />
-	            经办人邮箱：<span id="email"></span><br />
+          		key序列号：<span id="serNo"> </span><br />
+          		<a id="certA" href="#" data-toggle="tooltip" data-placement="top" 
+   title="">
+	            证书CN：</a><span id="certCN"></span><br />
 	            证书有效期：<span id="certdate"></span>
 	      </td>
         </tr>

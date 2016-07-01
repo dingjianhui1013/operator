@@ -49,6 +49,7 @@
     <div class="btn_fanhuizsfw fl"><a href="javascript:window.history.go(-2)"></a></div>
    </div>
    <div class="clear"></div>
+     <div style="height: 5px"></div>
    <div class="zsfw_js_bd">
      <div class="zsfw_js_step2_c hong" id="mmssgg">
      ${status}<br /><c:if test="${msg!=null }">${msg }<br/></c:if> 如有疑问可直接联系客服！
@@ -58,7 +59,7 @@
 			请下载<a href="${ctxILetter}/enroll/downloadDoc?fileName=apply.docx" target="_blank" class="ablue">《数字证书业务申请表》</a>填写，并加盖公章。<br />传真至四川省数字证书认证管理中心（028-85336171-808）。
      	</div>
      </div>
-     
+     <div style="height: 5px"></div>
      
      <c:if test="${msg==null }">
 	     <div class="btn_cxsqpj" style="margin-top:10px;"><a href="javascript:void(0)" onclick="nextStep()"></a></div>
@@ -72,6 +73,7 @@
      </c:if>
      
    </div>
+ 
    <div class="clear"></div>
    <div class="zsfw_js_bot"><span class="lv">为确保安全，解锁过程需在同一台计算机上操作</span></div>
 </div>

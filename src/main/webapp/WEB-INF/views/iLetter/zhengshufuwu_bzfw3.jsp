@@ -26,7 +26,7 @@ function backToMain(){
 				<img src="${ctxStatic}/iLetter/images/btn_gx_T.png" width="165"
 					height="51" />
 			</div>
-			<div class="zsfw_bbfw_step3 fl"></div>
+			<div class="zsfw_bgfw_step3 fl"></div>
 			<div class="btn_fanhuizsfw fl">
 				<a href="javascript:window.history.go(-3)"></a>
 			</div>

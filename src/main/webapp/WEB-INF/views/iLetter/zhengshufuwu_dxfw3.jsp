@@ -23,10 +23,10 @@ function backToMain(){
 	<div class="main2">
 		<div class="zsfw_gxgx_top">
 			<div class="zsfw_gxgx_top_T fl">
-				<img src="${ctxStatic}/iLetter/images/btn_bb_T.png" width="165"
+				<img src="${ctxStatic}/iLetter/images/btn_dx_T.png" width="165"
 					height="51" />
 			</div>
-			<div class="zsfw_bbfw_step3 fl"></div>
+			<div class="zsfw_dxfw_step3 fl"></div>
 			<div class="btn_fanhuizsfw fl">
 				<a href="javascript:window.history.go(-3)"></a>
 			</div>

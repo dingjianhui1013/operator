@@ -84,7 +84,7 @@ function backToMain(){
 <body  oncontextmenu="return false"   onselect="return false"  oncanplay="return false">
 <!--body中加入了禁止复制功能 可根据需求删除-->
 <form action="${ctxILetter}/enroll/ktydsb1Nextform" id="ktydsb1form" name="ktydsb1form">
-<div class="main2">
+<%-- <div class="main2">
   <div class="zsfw_gxgx_top">
     <div class="zsfw_gxgx_top_T fl"><img src="${ctxStatic}/iLetter/images/btn_ydsb_T.png" width="154" height="54" /></div>
     <div class="zsfw_ydsb_step1 fl"></div>
@@ -141,7 +141,11 @@ function backToMain(){
   </div>
   <div class="clear"></div>
 	    <div class="n-tispsBox"  id = "msg"  style="color: red;margin-top: -42px"></div>
-</div>
+</div> --%>
+
+
+<div></div>
+
 </form>
 </body>
 </html>

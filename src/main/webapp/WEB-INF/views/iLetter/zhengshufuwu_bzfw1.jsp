@@ -6,6 +6,8 @@
 <meta name="decorator" content="default" />
 <link href="${ctxStatic}/iLetter/css/main.css" type="text/css" rel="stylesheet"/>
 <script type="text/javascript" src="${ctxStatic}/iLetter/js/jquery-1.8.3.min.js"></script>
+<link href="http://libs.baidu.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
+<script src="http://libs.baidu.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
 <%-- <!-- [if IE 6] -->
 <script src="${ctxStatic}/iLetter/js/DD_belatedPNG.js" type="text/javascript"></script>
 <script>
@@ -16,6 +18,9 @@ DD_belatedPNG.fix('.nav1 a,.nav2 a,.nav3 a,.nav4 a,.nav5 a,.nav6 a,.nav1_cur a,.
 	var flag = false;
 $(document).ready(function(){
 	var keySn = external.ukeyserial;
+	
+	$("#serNo").html(keySn);
+	
 	var certSn; 
 	if(external. certcount>0)
 	{
@@ -27,7 +32,8 @@ $(document).ready(function(){
 		if(data.status=="1"){
 			$("#money").html(data.money);
 			$("#appName").html(data.appName);
-			$("#email").html(data.email);
+			$("#certCN").html(data.certCN.length>20?data.certCN.substring(0,20)+"...":data.certCN);
+			$("#certA").attr("title",data.certCN);
 			$("#certdate").html("从"+data.startDate+"到"+data.endDate);
 			flag = true;
 		}else{
@@ -67,7 +73,7 @@ function openSCCA(){
     <div class="btn_fanhuizsfw fl"><a href="javascript:window.history.back()"></a></div>
   </div>
   <div class="clear"></div>
- 
+  <div style="height: 5px"></div>
   <div class="zsfw_gxgx_bd">
     <div class="blank10"></div>
  <div class="zsfw_gxgx_info1" style="margin-top: -10px;">
@@ -76,15 +82,18 @@ function openSCCA(){
           <td height="10" colspan="3"></td>
         </tr>
         <tr>
-          <td width="19%" align="right" valign="top">待变更证书：</td>
-          <td width="2%"></td>
-          <td width="79%" valign="top"> 	
-          		证书序列号：<span id="certsn"> </span><br />
-	            经办人邮箱：<span id="email"></span><br />
-	            证书有效期：<span id="certdate"></span></td>
+          <td  width="19%" align="right" valign="top">待变更证书：</td>
+          <td  width="2%"></td>
+          <td  width="79%" valign="top"> 	
+          		key序列号：<span id="serNo"> </span><br />
+	  <a id="certA" href="#" data-toggle="tooltip" data-placement="top" 
+   title="">
+   证书CN：</a><span  id="certCN"></span><br />
+  证书有效期：<span id="certdate"></span></td>
         </tr>
       </table>
     </div> 
+     <div style="height: 5px"></div>
     <div class="blank10" style="margin-top: -10px;"></div>
       <div class="zsfw_gxgx_info1">
       <table width="100%" border="0" cellspacing="0" cellpadding="0">
@@ -107,6 +116,7 @@ function openSCCA(){
         </tr>
       </table>
     </div>
+     <div style="height: 5px"></div>
     <div class="btn_sqjd" style="padding-top:7px;margin-top: -5px;">
 	    <div id="nextt" class="btn_nextStep">
 	    	<a href="javascript:bzfw_from();"  id="aHref"></a>
