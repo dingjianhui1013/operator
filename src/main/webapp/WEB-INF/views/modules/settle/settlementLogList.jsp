@@ -22,10 +22,15 @@
 		function page(n,s){
 			$("#pageNo").val(n);
 			$("#pageSize").val(s);
-			loading('正在提交，请稍等...');
 			$("#searchForm").submit();
         	return false;
         }
+		
+		function sub()
+		{
+			loading('正在提交，请稍等...');
+			$("#searchForm").submit();
+		}
 		
 		function setApp(obj){
 			var comAgentId = obj.value;
@@ -84,7 +89,7 @@
 				name="endTime" id="endTime"/>
 <!-- 				<input id="btnExport" class="btn btn-primary" onclick="searchForm()" -->
 <!-- 				type="button" value="查询" /> -->
-		&nbsp;<input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/>
+		&nbsp;<input id="btnSubmit" class="btn btn-primary" type="button" onclick="sub()" value="查询"/>
 		</div>
 	</form:form>
 	<tags:message content="${message}"/>

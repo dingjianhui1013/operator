@@ -24,8 +24,8 @@
                 top.$.jBox.tip("只能统计"+countDatehide+"(含)之前的数据");
                 return false;
             }
-
             var url = "${ctx}/statistic/statisticSealDayData/checkDate?countDate="+countDate+"&_="+new Date().getTime();
+            loading('正在提交，请稍等...');
             $.ajax({
                 //type: 'POST',
                 url: url,

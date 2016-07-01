@@ -26,6 +26,7 @@
 				top.$.jBox.tip("请选定网点");
 				return false;
 			} else {
+				loading('正在提交，请稍等...');
 				$("#searchForm").submit();
 				//return true;
 			}

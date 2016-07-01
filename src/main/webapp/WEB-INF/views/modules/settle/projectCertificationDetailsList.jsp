@@ -50,6 +50,11 @@
 				}
 			}
 		}
+		function sub()
+		{
+			loading('正在提交，请稍等...');
+			$("#searchForm").submit();
+		}
 		function alarmValue(dealInfoId) {
 			var url = "${ctx}/work/workDealInfo/showWorkDeal?dealInfoId="
 					+ dealInfoId;
@@ -96,7 +101,7 @@
 				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:true,minDate:'#F{$dp.$D(\'startTime\')}'});"
 				value="<fmt:formatDate value="${endTime}" pattern="yyyy-MM-dd"/>" />
 		
-		&nbsp;<input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/>
+		&nbsp;<input id="btnSubmit" class="btn btn-primary" type="button" onclick="sub()" value="查询"/>
 		&nbsp;&nbsp;&nbsp;&nbsp;
 		<a href="javascript:dca()" class="btn btn-primary">导出</a>
 			</div>

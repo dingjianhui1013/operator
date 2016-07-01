@@ -14,6 +14,11 @@
 			$("#searchForm").submit();
         	return false;
         }
+		function sub()
+		{
+			loading('正在提交，请稍等...');
+			$("#searchForm").submit();
+		}
 	</script>
 </head>
 <body>
@@ -42,7 +47,7 @@
 				required="required" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'startTime\')}'});"
 				value="<fmt:formatDate value="${endTime}" pattern="yyyy-MM-dd"/>" maxlength="20" readonly="readonly"
 				name="endTime" /> 
-		&nbsp;<input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/>
+		&nbsp;<input id="btnSubmit" class="btn btn-primary" type="button" onclick="sub()" value="查询"/>
 	</form:form>
 	<tags:message content="${message}"/>
 	<table id="contentTable" class="table table-striped table-bordered table-condensed">

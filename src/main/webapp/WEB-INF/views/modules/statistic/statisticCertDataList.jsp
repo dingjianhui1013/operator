@@ -61,6 +61,11 @@
 // 			}
 // 		}
 
+		function sub()
+		{
+			loading('正在提交，请稍等...');
+			$("#searchForm").submit();
+		}
 		function dcZS()
 		{
 			if ($("#startTime").val()==""||$("#endTime").val()=="") {
@@ -146,7 +151,7 @@
 		&nbsp;&nbsp;
 		
 <!-- 		<input id="btnSubmit" class="btn btn-primary" onclick="return onSubmit();" type="submit" value="查询"/> -->
-			<input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/>	
+			<input id="btnSubmit" class="btn btn-primary" type="button" onclick="sub()" value="查询"/>	
 		<input id="exportZS" class="btn btn-primary" onclick="dcZS()" type="button" value="导出"/>
 		
 		</div>
