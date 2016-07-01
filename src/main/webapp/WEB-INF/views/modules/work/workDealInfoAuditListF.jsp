@@ -70,7 +70,7 @@
 		<c:forEach items="${page.list}" var="workDealInfo" varStatus="status">
 			<tr>
 				<td>${workDealInfo.svn}</td>
-				<td><a href="${ctx}/work/workDealInfoFiling/formF?id=${workDealInfo.id}">${workDealInfo.workCompany.companyName}</a></td>
+				<td width="18%"><a href="${ctx}/work/workDealInfoFiling/formF?id=${workDealInfo.id}">${workDealInfo.workCompany.companyName}</a></td>
 				<td>
 								${workDealInfo.workUser.contactName}
 					</td>
