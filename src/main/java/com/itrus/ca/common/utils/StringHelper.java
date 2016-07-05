@@ -344,6 +344,20 @@ public class StringHelper{
 
         return sTime;
     }
+    
+    
+    
+    /**
+     * 前月第一天 
+     */
+    public static Date getFirstDayOfLastMonth(){
+    	
+    	Calendar cal_1=Calendar.getInstance();//获取当前日期
+        cal_1.add(Calendar.MONTH, -1);
+        cal_1.set(Calendar.DAY_OF_MONTH,1);//设置为1号,当前日期既为本月第一天
+        return cal_1.getTime();
+    }
+    
 
     /**
      * 当月最后一天
@@ -360,6 +374,19 @@ public class StringHelper{
         String eTime = datef.format(endTime) + " 23:59:59";
 
         return eTime;
+    }
+    
+    
+    
+    /**
+     * 前月最后一天 
+     */
+    public static Date getLastDayOfLastMonth(){
+    	
+    	Calendar cale = Calendar.getInstance();  
+        cale.set(Calendar.DAY_OF_MONTH,0);//设置为1号,当前日期既为本月第一天
+        return  cale.getTime();
+
     }
 
     /**
