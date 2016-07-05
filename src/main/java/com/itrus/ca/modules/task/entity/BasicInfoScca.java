@@ -82,9 +82,11 @@ public class BasicInfoScca implements java.io.Serializable {
 	private Long times;
 	private String svnNum;
 
-	private String openTime; //证书首次签发日期
+	private String openTime; // 证书首次签发日期
 	private Integer usedCount; // 证书导入前已使用次数(年限)
 	private Integer availableCount; // 证书剩余使用次数
+	private String firstCertSN; // 首个证书序列号，用来串起需要明细的导入数据
+	private String processTime; // 当前记录的办理时间
 
 	// Constructors
 
@@ -607,6 +609,22 @@ public class BasicInfoScca implements java.io.Serializable {
 
 	public void setAvailableCount(Integer availableCount) {
 		this.availableCount = availableCount;
+	}
+
+	public String getFirstCertSN() {
+		return firstCertSN;
+	}
+
+	public String getProcessTime() {
+		return processTime;
+	}
+
+	public void setFirstCertSN(String firstCertSN) {
+		this.firstCertSN = firstCertSN;
+	}
+
+	public void setProcessTime(String processTime) {
+		this.processTime = processTime;
 	}
 
 	public boolean equals(Object other) {
