@@ -114,7 +114,7 @@ public class WorkDealInfoType {
 	public List<WorkDealInfoTypeObj> getProductTypeListNew(){
 		List<WorkDealInfoTypeObj> list = new ArrayList<WorkDealInfoTypeObj>();
 		for (Integer id: WorkDealInfoTypeMapNew.keySet()) {
-			WorkDealInfoTypeObj obj = new WorkDealInfoTypeObj(id, WorkDealInfoTypeMap.get(id));
+			WorkDealInfoTypeObj obj = new WorkDealInfoTypeObj(id, WorkDealInfoTypeMapNew.get(id));
 			list.add(obj);
 		}
 		return list;
