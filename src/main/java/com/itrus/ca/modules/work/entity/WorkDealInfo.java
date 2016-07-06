@@ -61,12 +61,10 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 	private Integer dealInfoType3;
 	private String dealInfoStatus;
 	private Integer year;
-	
-	//2016.06.06  具体到期时间 经信委
+
+	// 2016.06.06 具体到期时间 经信委
 	private Date expirationDate;
-	
-	
-	
+
 	private ConfigProduct configProduct;
 	private String certSn;
 	private String keySn;
@@ -83,56 +81,56 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 	private Timestamp creactDate;
 	private Integer downLoad;
 	private Integer trustDeviceCount;
-	private ConfigCommercialAgent configCommercialAgent;//市场推广代理商
+	private ConfigCommercialAgent configCommercialAgent;// 市场推广代理商
 	private String svn;
 	private Boolean canSettle;
 	private String refuse;
 	private Boolean manMadeDamage;
-	private Integer lastDays;//信息变更时，记录原有证书剩余的时间
-	private String userSn;//归档编号
-	private Long prevId;//上笔业务的id
-	private Integer physicalLife;//实际年限
-	private ConfigCommercialAgent commercialAgent;//劳务关系代理商
+	private Integer lastDays;// 信息变更时，记录原有证书剩余的时间
+	private String userSn;// 归档编号
+	private Long prevId;// 上笔业务的id
+	private Integer physicalLife;// 实际年限
+	private ConfigCommercialAgent commercialAgent;// 劳务关系代理商
 	private Date obtainedDate;
 	private Double moneyDouble;
-	private Integer payType;//支付方式暂存（只为代入）1.通用;2.政府;3.合同
-	private Integer settledLife;//已经结算年限
-	private Integer residualLife;//剩余年限
-//	private Integer dealInfoOffice;//业务归属
-	private Date notafter;//证书到期时间（业务办理列表大数据流已被关闭的问题）
-	private Integer addCertDays;//赠送天数
-	private Boolean isIxin;//i信端更新标识
-	private Integer isSJQY;//是否是数据迁移的数据  是为1 否为null or 0 2批量导入数据
+	private Integer payType;// 支付方式暂存（只为代入）1.通用;2.政府;3.合同
+	private Integer settledLife;// 已经结算年限
+	private Integer residualLife;// 剩余年限
+	// private Integer dealInfoOffice;//业务归属
+	private Date notafter;// 证书到期时间（业务办理列表大数据流已被关闭的问题）
+	private Integer addCertDays;// 赠送天数
+	private Boolean isIxin;// i信端更新标识
+	private Integer isSJQY;// 是否是数据迁移的数据 是为1 否为null or 0 2批量导入数据
 	// Constructors
 	private Long configChargeAgentId;
 	private User inputUser;// 录入人
-	private User payUser;//缴费人
-	private User attestationUser;//鉴证人
-	private User businessCardUser;//制证人
-	
+	private User payUser;// 缴费人
+	private User attestationUser;// 鉴证人
+	private User businessCardUser;// 制证人
+
 	private Date inputUserDate;// 录入人时间
-	private Date payUserDate;//缴费人时间
-	private Date attestationUserDate;//鉴证人时间
-	private Date businessCardUserDate;//制证人时间
-	
+	private Date payUserDate;// 缴费人时间
+	private Date attestationUserDate;// 鉴证人时间
+	private Date businessCardUserDate;// 制证人时间
+
 	private List<PayableDetailVo> detailList;
-	
+
 	private Integer yyNum;
 	private Integer totalNum;
 	private Integer lastNum;
-	
+
 	private Integer occupy;
-	
-	
+
 	private Long officeId;
 	private Long areaId;
-	
+
 	private Long selfApplyId;
 	private String IsMainTain;
-	
-	private Timestamp openTime; //证书首次签发日期
-	
-	
+
+	private Timestamp openTime; // 证书首次签发日期
+
+	private String firstCertSN; // 首个证书序列号，用来串起需要明细的导入数据
+
 	/** default constructor */
 	public WorkDealInfo() {
 	}
@@ -147,23 +145,15 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 
 	/** full constructor */
 	public WorkDealInfo(ConfigApp configApp, WorkCompany workCompany,
-			WorkUser workUser,
-			Integer dealInfoType, String dealInfoStatus, ConfigProduct configProduct, WorkCertInfo workCertInfo,
-			Integer year, String certSn, String keySn, Integer certSort,Integer trustDeviceCount,
-			Set<WorkLog> workLogs,Long configChargeAgentId,Integer isSJQY,
-			User inputUser,
-			User payUser,
-			User attestationUser,
-			User businessCardUser,
-			Date inputUserDate,
-			Date payUserDate,
-			Date attestationUserDate,
-			Date businessCardUserDate,
-			Long officeId,
-			Long areaId,
-			Long selfApplyId,
-			String IsMainTain
-			) {
+			WorkUser workUser, Integer dealInfoType, String dealInfoStatus,
+			ConfigProduct configProduct, WorkCertInfo workCertInfo,
+			Integer year, String certSn, String keySn, Integer certSort,
+			Integer trustDeviceCount, Set<WorkLog> workLogs,
+			Long configChargeAgentId, Integer isSJQY, User inputUser,
+			User payUser, User attestationUser, User businessCardUser,
+			Date inputUserDate, Date payUserDate, Date attestationUserDate,
+			Date businessCardUserDate, Long officeId, Long areaId,
+			Long selfApplyId, String IsMainTain) {
 		this.configApp = configApp;
 		this.workCompany = workCompany;
 		this.workUser = workUser;
@@ -179,8 +169,8 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 		this.trustDeviceCount = trustDeviceCount;
 		this.configChargeAgentId = configChargeAgentId;
 		this.isSJQY = isSJQY;
-		this.inputUser=inputUser;
-		this.payUser=payUser;
+		this.inputUser = inputUser;
+		this.payUser = payUser;
 		this.attestationUser = attestationUser;
 		this.businessCardUser = businessCardUser;
 		this.inputUserDate = inputUserDate;
@@ -191,14 +181,13 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 		this.areaId = areaId;
 		this.selfApplyId = selfApplyId;
 		this.IsMainTain = IsMainTain;
-		
-		
+
 	}
 
 	// Property accessors
-	@SequenceGenerator(name="COMMON_SEQUENCE",sequenceName="COMMON_SEQUENCE")
-	@Id 
-	@GeneratedValue(generator = "COMMON_SEQUENCE",strategy=GenerationType.SEQUENCE)
+	@SequenceGenerator(name = "COMMON_SEQUENCE", sequenceName = "COMMON_SEQUENCE")
+	@Id
+	@GeneratedValue(generator = "COMMON_SEQUENCE", strategy = GenerationType.SEQUENCE)
 	public Long getId() {
 		return this.id;
 	}
@@ -208,7 +197,7 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	//@ManyToOne(fetch = FetchType.EAGER)
+	// @ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "app_id", nullable = false)
 	public ConfigApp getConfigApp() {
 		return this.configApp;
@@ -227,24 +216,24 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 	public void setWorkCompany(WorkCompany workCompany) {
 		this.workCompany = workCompany;
 	}
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "agent_id")
 	public ConfigCommercialAgent getConfigCommercialAgent() {
 		return configCommercialAgent;
 	}
 
-	public void setConfigCommercialAgent(ConfigCommercialAgent configCommercialAgent) {
+	public void setConfigCommercialAgent(
+			ConfigCommercialAgent configCommercialAgent) {
 		this.configCommercialAgent = configCommercialAgent;
 	}
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
-	//@ManyToOne(fetch = FetchType.EAGER)
+	// @ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "work_user_id")
 	public WorkUser getWorkUser() {
 		return this.workUser;
 	}
-
 
 	public void setWorkUser(WorkUser workUser) {
 		this.workUser = workUser;
@@ -312,9 +301,9 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 	public void setWorkLogs(Set<WorkLog> workLogs) {
 		this.workLogs = workLogs;
 	}
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
-	//@ManyToOne(fetch = FetchType.EAGER)
+	// @ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "pay_id")
 	public WorkPayInfo getWorkPayInfo() {
 		return workPayInfo;
@@ -333,8 +322,9 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 	public void setWorkCertInfo(WorkCertInfo workCertInfo) {
 		this.workCertInfo = workCertInfo;
 	}
+
 	@ManyToOne(fetch = FetchType.LAZY)
-	//@ManyToOne(fetch = FetchType.EAGER)
+	// @ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "product_id")
 	public ConfigProduct getConfigProduct() {
 		return configProduct;
@@ -387,8 +377,7 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 	public void setArchiveNo(String archiveNo) {
 		this.archiveNo = archiveNo;
 	}
-	
-	
+
 	@Column(name = "classifying")
 	public Integer getClassifying() {
 		return classifying;
@@ -416,7 +405,7 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 		this.archiveDate = archiveDate;
 	}
 
-	@Column(name ="creact_date")
+	@Column(name = "creact_date")
 	public Timestamp getCreactDate() {
 		return creactDate;
 	}
@@ -424,8 +413,8 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 	public void setCreactDate(Timestamp creactDate) {
 		this.creactDate = creactDate;
 	}
-	
-	@Column(name ="OPEN_TIME")
+
+	@Column(name = "OPEN_TIME")
 	public Timestamp getOpenTime() {
 		return openTime;
 	}
@@ -434,7 +423,7 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 		this.openTime = openTime;
 	}
 
-	@Column(name ="down_load")
+	@Column(name = "down_load")
 	public Integer getDownLoad() {
 		return downLoad;
 	}
@@ -442,8 +431,8 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 	public void setDownLoad(Integer downLoad) {
 		this.downLoad = downLoad;
 	}
-	
-	@Column(name ="trust_device_count")
+
+	@Column(name = "trust_device_count")
 	public Integer getTrustDeviceCount() {
 		return trustDeviceCount;
 	}
@@ -451,8 +440,8 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 	public void setTrustDeviceCount(Integer trustDeviceCount) {
 		this.trustDeviceCount = trustDeviceCount;
 	}
-	
-	@Column(name ="deal_info_type3")
+
+	@Column(name = "deal_info_type3")
 	public Integer getDealInfoType3() {
 		return dealInfoType3;
 	}
@@ -460,7 +449,8 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 	public void setDealInfoType3(Integer dealInfoType3) {
 		this.dealInfoType3 = dealInfoType3;
 	}
-	@Column(name ="svn")
+
+	@Column(name = "svn")
 	public String getSvn() {
 		return svn;
 	}
@@ -468,6 +458,7 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 	public void setSvn(String svn) {
 		this.svn = svn;
 	}
+
 	@Column(name = "can_settle")
 	public Boolean getCanSettle() {
 		return canSettle;
@@ -476,6 +467,7 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 	/**
 	 * 能否结算，新建、更新业务
 	 * 新增一定结算，更新是否结算由以下条件判断：①新增时在当前代理商合同范围内②新增时间到现在时间<代理商合同范围③付款方式不是政府采购和合同采购
+	 * 
 	 * @param canSettle
 	 */
 	public void setCanSettle(Boolean canSettle) {
@@ -490,10 +482,10 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 	public void setRefuse(String refuse) {
 		this.refuse = refuse;
 	}
-	
+
 	@Column(name = "man_made_damage")
 	public Boolean getManMadeDamage() {
-		return manMadeDamage==null? false:manMadeDamage;
+		return manMadeDamage == null ? false : manMadeDamage;
 	}
 
 	public void setManMadeDamage(Boolean manMadeDamage) {
@@ -502,7 +494,7 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 
 	@Column(name = "last_days")
 	public Integer getLastDays() {
-		return lastDays==null? 0:lastDays;
+		return lastDays == null ? 0 : lastDays;
 	}
 
 	public void setLastDays(Integer lastDays) {
@@ -546,6 +538,7 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 	public void setPrevId(Long prevId) {
 		this.prevId = prevId;
 	}
+
 	@Column(name = "physical_life")
 	public Integer getPhysicalLife() {
 		return physicalLife;
@@ -554,7 +547,7 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 	public void setPhysicalLife(Integer physicalLife) {
 		this.physicalLife = physicalLife;
 	}
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "commercial_agent_id")
 	public ConfigCommercialAgent getCommercialAgent() {
@@ -565,7 +558,6 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 		this.commercialAgent = commercialAgent;
 	}
 
-	
 	@Column(name = "obtained_date")
 	public Date getObtainedDate() {
 		return obtainedDate;
@@ -574,7 +566,7 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 	public void setObtainedDate(Date obtainedDate) {
 		this.obtainedDate = obtainedDate;
 	}
-	
+
 	@Transient
 	public Double getMoneyDouble() {
 		return moneyDouble;
@@ -592,7 +584,7 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 	public void setPayType(Integer payType) {
 		this.payType = payType;
 	}
-	
+
 	@Column(name = "settled_life")
 	public Integer getSettledLife() {
 		return settledLife;
@@ -601,7 +593,7 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 	public void setSettledLife(Integer settledLife) {
 		this.settledLife = settledLife;
 	}
-	
+
 	@Column(name = "residual_life")
 	public Integer getResidualLife() {
 		return residualLife;
@@ -610,16 +602,14 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 	public void setResidualLife(Integer residualLife) {
 		this.residualLife = residualLife;
 	}
-/*
-	@Column(name = "deal_info_office")
-	public Integer getDealInfoOffice() {
-		return dealInfoOffice;
-	}
 
-	public void setDealInfoOffice(Integer dealInfoOffice) {
-		this.dealInfoOffice = dealInfoOffice;
-	}
-*/
+	/*
+	 * @Column(name = "deal_info_office") public Integer getDealInfoOffice() {
+	 * return dealInfoOffice; }
+	 * 
+	 * public void setDealInfoOffice(Integer dealInfoOffice) {
+	 * this.dealInfoOffice = dealInfoOffice; }
+	 */
 	@Column(name = "notafter")
 	public Date getNotafter() {
 		return notafter;
@@ -637,7 +627,7 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 	public void setAddCertDays(Integer addCertDays) {
 		this.addCertDays = addCertDays;
 	}
-	
+
 	@Column(name = "is_ixin")
 	public Boolean getIsIxin() {
 		return isIxin;
@@ -665,7 +655,6 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 		this.isSJQY = isSJQY;
 	}
 
-	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "input_user")
 	public User getInputUser() {
@@ -715,7 +704,7 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 	public void setInputUserDate(Date inputUserDate) {
 		this.inputUserDate = inputUserDate;
 	}
-	
+
 	@Temporal(TemporalType.DATE)
 	@Column(name = "pay_user_date")
 	public Date getPayUserDate() {
@@ -781,12 +770,7 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 	public void setLastNum(Integer lastNum) {
 		this.lastNum = lastNum;
 	}
-	
-	
-	
-	
-	
-	
+
 	@Transient
 	public Integer getOccupy() {
 		return occupy;
@@ -831,8 +815,8 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 	public void setIsMainTain(String isMainTain) {
 		IsMainTain = isMainTain;
 	}
-	
-	private  SelfImage selfImage;
+
+	private SelfImage selfImage;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "self_Image")
@@ -841,10 +825,19 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 	}
 
 	public void setSelfImage(SelfImage selfImage) {
-		this.selfImage = selfImage;  
+		this.selfImage = selfImage;
 	}
 
-	@Column(name="expiration_date")
+	@Column(name = "FIRST_CERT_SN")
+	public String getFirstCertSN() {
+		return firstCertSN;
+	}
+
+	public void setFirstCertSN(String firstCertSN) {
+		this.firstCertSN = firstCertSN;
+	}
+
+	@Column(name = "expiration_date")
 	public Date getExpirationDate() {
 		return expirationDate;
 	}
@@ -853,7 +846,4 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 		this.expirationDate = expirationDate;
 	}
 
-	
-	
-	
 }
