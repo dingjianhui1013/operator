@@ -87,6 +87,12 @@ public class BasicInfoScca implements java.io.Serializable {
 	private Integer availableCount; // 证书剩余使用次数
 	private String firstCertSN; // 首个证书序列号，用来串起需要明细的导入数据
 	private String processTime; // 当前记录的办理时间
+	/**
+	 * 业务类型：0:新增证书 |1:更新证书 |2:遗失补办 |3:损坏更换<br>
+	 * |4:信息变更 |5:证书吊销 |6:电子签章 |7:可信移动设备<br>
+	 * |8:key解锁 |9:开户费 |10:退费 |11:业务撤销 |12:变更缴费方式<br>
+	 */
+	private String dealInfoType;
 
 	// Constructors
 
@@ -625,6 +631,14 @@ public class BasicInfoScca implements java.io.Serializable {
 
 	public void setProcessTime(String processTime) {
 		this.processTime = processTime;
+	}
+
+	public String getDealInfoType() {
+		return dealInfoType;
+	}
+
+	public void setDealInfoType(String dealInfoType) {
+		this.dealInfoType = dealInfoType;
 	}
 
 	public boolean equals(Object other) {
