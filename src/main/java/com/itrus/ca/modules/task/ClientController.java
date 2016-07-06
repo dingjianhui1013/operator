@@ -7,10 +7,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import javassist.expr.NewArray;
-
 import org.apache.log4j.Logger;
-import org.apache.log4j.lf5.LogLevel;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +53,7 @@ import com.itrus.ca.modules.sys.service.OfficeService;
 import com.itrus.ca.modules.sys.utils.UserUtils;
 import com.itrus.ca.modules.task.entity.BasicInfoScca;
 import com.itrus.ca.modules.task.service.BasicInfoSccaService;
+import com.itrus.ca.modules.task.service.TaskDataService;
 import com.itrus.ca.modules.work.entity.WorkCertApplyInfo;
 import com.itrus.ca.modules.work.entity.WorkCertInfo;
 import com.itrus.ca.modules.work.entity.WorkCompany;
@@ -182,17 +180,20 @@ public class ClientController {
 	@Autowired
 	private WorkCertApplyInfoService workCertApplyInfoService;
 
+	@Autowired
+	private TaskDataService taskDataService;
+
 	private LogUtil logUtil = new LogUtil();
 
 	static Long MILL = 86400000L;
 
 	Logger log = Logger.getLogger(ClientController.class);
-	
-	Boolean  isRunning;
-	int  count;
-	
-	public ClientController(){
-		isRunning  = false;
+
+	Boolean isRunning;
+	int count;
+
+	public ClientController() {
+		isRunning = false;
 		count = 0;
 	}
 
@@ -201,36 +202,38 @@ public class ClientController {
 	 * @param productId
 	 * @param officeId
 	 * @throws JSONException
-	 * @date:2014年8月18日 
+	 * @date:2014年8月18日
 	 * @user:Zhang Jingtao
 	 * @return_type:String
 	 */
 	@RequestMapping(value = "makeCertDealInfo")
 	@ResponseBody
-	public String makeAddCertDealInfo(Long officeId,@RequestParam(defaultValue = "yyyy-MM-dd HH:mm:ss",required = false)String pattern)
+	public String makeAddCertDealInfo(
+			Long officeId,
+			@RequestParam(defaultValue = "yyyy-MM-dd HH:mm:ss", required = false) String pattern)
 			throws JSONException {
 		Date startDATE = new Date();
 		SimpleDateFormat certTimeFormat = new SimpleDateFormat(pattern);
 		JSONObject json = new JSONObject();
 		if (isRunning) {
 			json.put("statu", "0");
-			json.put("msg", "有一个任务进行中，请勿重复操作"+count);
+			json.put("msg", "有一个任务进行中，请勿重复操作" + count);
 			return json.toString();
 		}
 		isRunning = true;
-		
+
 		try {
 			certTimeFormat.format(new Date());
 		} catch (Exception e) {
 			json.put("statu", "0");
-			json.put("msg", "日期格式错误:"+pattern);
+			json.put("msg", "日期格式错误:" + pattern);
 			return json.toString();
 		}
 		try {
 			count = 0;
 			json.put("status", -1);
 			User createBy = new User(1L);
-			//User createBy = UserUtils.getUser();
+			// User createBy = UserUtils.getUser();
 			if (officeId != 1L) {
 				Office office = officeService.get(officeId);
 				List<User> users = office.getUserList();
@@ -244,61 +247,63 @@ public class ClientController {
 			}
 			List<BasicInfoScca> all = basicInfoSccaService.findAll();
 			// 保存企业信息work_company--以name为准,Long 保存company的Id
- 			HashMap<String, WorkCompany> companyHash = new HashMap<String, WorkCompany>();
+			HashMap<String, WorkCompany> companyHash = new HashMap<String, WorkCompany>();
 			// 保存经办人信息，以concert_num（经办人证件号）为准
 			HashMap<String, WorkUser> userHash = new HashMap<String, WorkUser>();
-			//存储开户费  产品id为key
+			// 存储开户费 产品id为key
 			HashMap<Long, Double> openAccountHash = new HashMap<Long, Double>();
-			//存储 新增证书费用
+			// 存储 新增证书费用
 			HashMap<Long, Double> addMoneyHash = new HashMap<Long, Double>();
-			//存储 代理商  appId --key
+			// 存储 代理商 appId --key
 			HashMap<Long, ConfigCommercialAgent> commercialAgentHash = new HashMap<Long, ConfigCommercialAgent>();
-			
-			Office  office  = createBy.getOffice();
+
+			Office office = createBy.getOffice();
 			List<ConfigAgentOfficeRelation> configAgentOfficeRelations = configAgentOfficeRelationService
 					.findByOffice(office);
-			
-			String  firstSvn  = workDealInfoService.getSVN(office.getName());
-			//C-四川CA网点-1408-0826
-			
+
+			String firstSvn = workDealInfoService.getSVN(office.getName());
+			// C-四川CA网点-1408-0826
+
 			Integer num = Integer.valueOf(firstSvn.split("-")[3]);
-			String head = firstSvn.replace("-"+firstSvn.split("-")[3], "");
-			//批量  存储  basicInfoScca和业务
-			List<BasicInfoScca> usedBasicInfo = new  ArrayList<BasicInfoScca>();
+			String head = firstSvn.replace("-" + firstSvn.split("-")[3], "");
+			// 批量 存储 basicInfoScca和业务
+			List<BasicInfoScca> usedBasicInfo = new ArrayList<BasicInfoScca>();
 			List<WorkDealInfo> unSavedDealInfos = new ArrayList<WorkDealInfo>();
-			List<WorkPayInfo>  payInfos =  new ArrayList<WorkPayInfo>();
-			List<WorkCertApplyInfo> certApplyInfos = new  ArrayList<WorkCertApplyInfo>();
-			List<WorkCertInfo>  certInfos = new  ArrayList<WorkCertInfo>();
-			List<WorkCompanyHis>  companyHisList = new ArrayList<WorkCompanyHis>();
+			List<WorkPayInfo> payInfos = new ArrayList<WorkPayInfo>();
+			List<WorkCertApplyInfo> certApplyInfos = new ArrayList<WorkCertApplyInfo>();
+			List<WorkCertInfo> certInfos = new ArrayList<WorkCertInfo>();
+			List<WorkCompanyHis> companyHisList = new ArrayList<WorkCompanyHis>();
 			List<WorkUserHis> userHisList = new ArrayList<WorkUserHis>();
 			List<WorkUser> userList = new ArrayList<WorkUser>();
-			List<WorkCompany>  companyList = new  ArrayList<WorkCompany>();
+			List<WorkCompany> companyList = new ArrayList<WorkCompany>();
 			SimpleDateFormat dnf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-			
+
 			for (BasicInfoScca s1 : all) {
-				log.error("开始创建第" + (count + 1) + "条数据,中间表id："+s1.getId());
+				log.error("开始创建第" + (count + 1) + "条数据,中间表id：" + s1.getId());
 				WorkCompany company = new WorkCompany();
 				WorkUser user = new WorkUser();
 				WorkCertInfo certInfo = new WorkCertInfo();
 				WorkCertApplyInfo certApplyInfo = new WorkCertApplyInfo();
 				WorkCompanyHis companyHis = new WorkCompanyHis();
 				WorkUserHis userHis = new WorkUserHis();
-				
+
 				String productName = s1.getCertType();
 				String appName = s1.getAppName();
-				
-				productName = ProductType.productTypeIdMap.get(productName).toString();
-				
-				ConfigProduct product = configProductService.findByNamesLabel(s1.getProductLabel(), appName, productName);
-				if (product==null) {
-					log.error(appName+"下产品名称'"+s1.getCertType()+"'对应的产品不存在...跳过，中间表id:"+s1.getId());
+
+				productName = ProductType.productTypeIdMap.get(productName)
+						.toString();
+
+				ConfigProduct product = configProductService.findByNamesLabel(
+						s1.getProductLabel(), appName, productName);
+				if (product == null) {
+					log.error(appName + "下产品名称'" + s1.getCertType()
+							+ "'对应的产品不存在...跳过，中间表id:" + s1.getId());
 					continue;
 				}
 
 				if (companyHash.get(s1.getCompanyName()) != null) {// 存在企业信息
 					log.error("找到已存在的企业:" + s1.getCompanyName());
-					company = companyHash.get(s1
-							.getCompanyName());
+					company = companyHash.get(s1.getCompanyName());
 					// his信息不再查询。每次自动生成新的his--实际业务中也是这样处理的
 					companyHis = change(company);
 				} else {
@@ -306,21 +311,23 @@ public class ClientController {
 					company.setCompanyName(s1.getCompanyName());
 					company.setCompanyType(String.valueOf(s1.getCompanyType()));
 					company.setOrganizationNumber(s1.getOrganizationNumber());
-					
-					if (s1.getOrgExpirationTime()!=null&&!s1.getOrgExpirationTime().equals("")) {
-						company.setOrgExpirationTime(new Timestamp(dnf.parse(s1.getOrgExpirationTime()).getTime()));
+
+					if (s1.getOrgExpirationTime() != null
+							&& !s1.getOrgExpirationTime().equals("")) {
+						company.setOrgExpirationTime(new Timestamp(dnf.parse(
+								s1.getOrgExpirationTime()).getTime()));
 					}
-					
-					
-					
+
 					company.setSelectLv(String.valueOf(s1.getSelectLv()));
 					company.setComCertficateNumber(s1.getComCertficateNumber());
-					
-					if (s1.getComCertificateTime()!=null&&!s1.getComCertificateTime().equals("")) {
-					company.setComCertficateTime(new Timestamp(dnf.parse(s1.getComCertificateTime()).getTime()));
+
+					if (s1.getComCertificateTime() != null
+							&& !s1.getComCertificateTime().equals("")) {
+						company.setComCertficateTime(new Timestamp(dnf.parse(
+								s1.getComCertificateTime()).getTime()));
 					}
-					
-					//company.setComCertficateTime(s1.getComCertificateTime());
+
+					// company.setComCertficateTime(s1.getComCertificateTime());
 					company.setComCertificateType(String.valueOf(s1
 							.getComCertificateType()));
 					company.setLegalName(s1.getLegalName());
@@ -329,22 +336,24 @@ public class ClientController {
 					company.setDistrict(s1.getSCounty());
 					company.setAddress(s1.getAddress());
 					company.setCompanyIp(s1.getCompanyMobile());
-					if (company.getCompanyType()==null||company.getCompanyType().equals("null")) {
+					if (company.getCompanyType() == null
+							|| company.getCompanyType().equals("null")) {
 						company.setCompanyType("-1");
 					}
-					if (company.getSelectLv()==null||company.getSelectLv().equals("null")) {
+					if (company.getSelectLv() == null
+							|| company.getSelectLv().equals("null")) {
 						company.setSelectLv(null);
 					}
-//					workCompanyService.save(company);
+					// workCompanyService.save(company);
 					companyList.add(company);
-					
+
 					companyHash.put(company.getCompanyName(), company);
 					companyHis = change(company);
 				}
 				log.error("保存company_his信息");
-//				workCompanyHisService.save(companyHis);
+				// workCompanyHisService.save(companyHis);
 				companyHisList.add(companyHis);
-				
+
 				String conCerNum = s1.getConCertNumber();// 经办人证件号
 				if (userHash.get(conCerNum) != null) {
 					user = userHash.get(conCerNum);
@@ -360,75 +369,73 @@ public class ClientController {
 					user.setContactTel(s1.getContactTel());
 					user.setContactSex(s1.getContactSex());
 					user.setWorkCompany(company);
-//					workUserService.save(user);
+					// workUserService.save(user);
 					userList.add(user);
 					userHash.put(user.getContactName(), user);
 					log.error("创建新的 workUserHis ");
 					userHis = change(user, companyHis);
 				}
-//				workUserHisService.save(userHis);
+				// workUserHisService.save(userHis);
 				userHisList.add(userHis);
-				
-//				log.error("保存 workUserHis ");
+
+				// log.error("保存 workUserHis ");
 				certApplyInfo.setName(s1.getName());
 				certApplyInfo.setIdCard(s1.getIdCard());
 				certApplyInfo.setEmail(s1.getEmail());
-//				workCertApplyInfoService.save(certApplyInfo);
+				// workCertApplyInfoService.save(certApplyInfo);
 				certApplyInfos.add(certApplyInfo);
 				certInfo.setIssuerDn(s1.getIssuerDn());
 				certInfo.setSubjectDn(s1.getSubjectDn());
-				
-				//String notafter = s1.getNotafter();
-				
-				
+
+				// String notafter = s1.getNotafter();
+
 				certInfo.setNotafter(dnf.parse(s1.getNotafter()));
 				certInfo.setNotbefore(dnf.parse(s1.getNotbefore()));
 				certInfo.setKeySn("");// 这次不需要keySn即使有也不记录
-				certInfo.setTrustDeviceCount(1);//默认送1个
-				certInfo.setTrustDeviceDate(dnf.parse(s1.getNotafter()));//可信设备时间
+				certInfo.setTrustDeviceCount(1);// 默认送1个
+				certInfo.setTrustDeviceDate(dnf.parse(s1.getNotafter()));// 可信设备时间
 				String serNum = s1.getSerialnumber();
-				if (serNum!=null) {
+				if (serNum != null) {
 					serNum = serNum.trim();
 				}
 				certInfo.setSerialnumber(serNum);
-				
+
 				certInfo.setWorkCertApplyInfo(certApplyInfo);
-//				workCertInfoService.save(certInfo);
+				// workCertInfoService.save(certInfo);
 				certInfos.add(certInfo);
-				
+
 				log.error("证书信息、企业信息、个人信息生成完毕，开始生成业务信息...");
 				try {
-					log.error("证书:"+certInfo.getSerialnumber());
+					log.error("证书:" + certInfo.getSerialnumber());
 					Date start = certInfo.getNotbefore();
 					Date end = certInfo.getNotafter();
-					//Integer year = (int) ((s1.get证书天数()) / 365);// 新增业务的年限
+					// Integer year = (int) ((s1.get证书天数()) / 365);// 新增业务的年限
 					Integer year = s1.getYear();
-					
-					
-					
-					
-					log.error("业务年限："+year);
+
+					log.error("业务年限：" + year);
 					WorkDealInfo workDealInfo = new WorkDealInfo();
 					WorkPayInfo workPayInfo = new WorkPayInfo();
-					
+
 					ConfigApp app = product.getConfigApp();
 					workDealInfo.setSvn(getSvn(head, num));
-					num ++;
-					log.error("业务编号:"+workDealInfo.getSvn());
-					
-					if (commercialAgentHash.get(app.getId())==null) {
+					num++;
+					log.error("业务编号:" + workDealInfo.getSvn());
+
+					if (commercialAgentHash.get(app.getId()) == null) {
 						ConfigCommercialAgent commercialAgent = configAgentAppRelationService
 								.findAgentByApp(app);
 						workDealInfo.setConfigCommercialAgent(commercialAgent);
-					}else {
-						workDealInfo.setConfigCommercialAgent(commercialAgentHash.get(app.getId()));
+					} else {
+						workDealInfo
+								.setConfigCommercialAgent(commercialAgentHash
+										.get(app.getId()));
 					}
-					
+
 					if (configAgentOfficeRelations.size() > 0) {
 						workDealInfo
 								.setCommercialAgent(configAgentOfficeRelations
 										.get(0).getConfigCommercialAgent());// 劳务关系外键
-					}else {
+					} else {
 						log.error("无劳务关系代理商，未设置劳务关系...");
 					}
 					workDealInfo.setConfigApp(app);
@@ -438,19 +445,18 @@ public class ClientController {
 					workDealInfo
 							.setDealInfoType(WorkDealInfoType.TYPE_ADD_CERT);
 					workDealInfo.setYear(year);
-					
-					if(year*365>s1.getCertValidDays()){
-						
-						Integer certDayNum = s1.getCertValidDays()-year*365;
+
+					if (year * 365 > s1.getCertValidDays()) {
+
+						Integer certDayNum = s1.getCertValidDays() - year * 365;
 						workDealInfo.setAddCertDays(certDayNum);
-					}else if(year*365==s1.getCertValidDays()){
+					} else if (year * 365 == s1.getCertValidDays()) {
 						workDealInfo.setAddCertDays(0);
-					}else {
-						Integer certDayNum = s1.getCertValidDays()-year*365;
+					} else {
+						Integer certDayNum = s1.getCertValidDays() - year * 365;
 						workDealInfo.setAddCertDays(certDayNum);
 					}
-					
-					
+
 					workDealInfo
 							.setDealInfoStatus(WorkDealInfoStatus.STATUS_CERT_OBTAINED);
 					workDealInfo.setCreateBy(createBy);
@@ -464,30 +470,30 @@ public class ClientController {
 					workDealInfo.setWorkCertInfo(certInfo);
 					workDealInfo.setObtainedDate(new Date());
 					workDealInfo.setStatus(0);
-					
+
 					workDealInfo.setNotafter(dnf.parse(s1.getNotafter()));
-					
+
 					workDealInfo.setKeySn(s1.getKeyAndUsbSn());
 					Double openAccountMoney = 0d;
 					Double addCert = 0d;
-					if (openAccountHash.get(product.getId())==null) {
-//						ConfigChargeAgent chargeAgent = configChargeAgentService
-//								.get(workDealInfo.getConfigProduct().getChargeAgentId());
+					if (openAccountHash.get(product.getId()) == null) {
+						// ConfigChargeAgent chargeAgent =
+						// configChargeAgentService
+						// .get(workDealInfo.getConfigProduct().getChargeAgentId());
 						ConfigChargeAgent chargeAgent = configChargeAgentService
 								.get(s1.getAgentId());
-						
+
 						openAccountMoney = configChargeAgentDetailService
 								.selectMoney(chargeAgent,
-										WorkDealInfoType.TYPE_OPEN_ACCOUNT, null,
-										workDealInfo.getConfigProduct()
+										WorkDealInfoType.TYPE_OPEN_ACCOUNT,
+										null, workDealInfo.getConfigProduct()
 												.getProductLabel());
 
 						workPayInfo.setOpenAccountMoney(openAccountMoney);
-						addCert = configChargeAgentDetailService
-								.selectMoney(chargeAgent, WorkType.TYPE_ADD,
-										workDealInfo.getYear(), workDealInfo
-												.getConfigProduct()
-												.getProductLabel());
+						addCert = configChargeAgentDetailService.selectMoney(
+								chargeAgent, WorkType.TYPE_ADD, workDealInfo
+										.getYear(), workDealInfo
+										.getConfigProduct().getProductLabel());
 						workPayInfo.setAddCert(addCert);
 						if (openAccountMoney == null) {
 							openAccountMoney = 0d;
@@ -497,17 +503,17 @@ public class ClientController {
 						}
 						openAccountHash.put(product.getId(), openAccountMoney);
 						addMoneyHash.put(product.getId(), addCert);
-					}else {
+					} else {
 						log.error("从map中得到费用信息 ");
 						openAccountMoney = openAccountHash.get(product.getId());
 						addCert = addMoneyHash.get(product.getId());
 						workPayInfo.setOpenAccountMoney(openAccountMoney);
 						workPayInfo.setAddCert(addCert);
 					}
-					
+
 					workPayInfo.setMethodGov(true);
-					log.error("开户费:"+openAccountMoney);
-					log.error("新增证书费用:"+addCert);
+					log.error("开户费:" + openAccountMoney);
+					log.error("新增证书费用:" + addCert);
 					// 证书序列号
 					workDealInfo.setCertSort(s1.getMultiCertSns());
 
@@ -519,7 +525,7 @@ public class ClientController {
 					workPayInfo.setSn(PayinfoUtil.getPayInfoNo());
 					workPayInfo.setCreateBy(createBy);
 					workPayInfo.setUpdateBy(createBy);
-					log.error("付款流水:"+workPayInfo.getSn());
+					log.error("付款流水:" + workPayInfo.getSn());
 					payInfos.add(workPayInfo);
 					workDealInfo.setWorkPayInfo(workPayInfo);
 					workDealInfo
@@ -527,106 +533,104 @@ public class ClientController {
 					workDealInfo.setCanSettle(false);
 					count++;
 					s1.setUsed(true);
-					
+
 					usedBasicInfo.add(s1);
 					unSavedDealInfos.add(workDealInfo);
-					
-					if (companyHisList.size()>3000) {
+
+					if (companyHisList.size() > 3000) {
 						log.error("保存 企业历史 数据+实时数据");
 						workCompanyService.save(companyList);
 						companyList = new ArrayList<WorkCompany>();
 						workCompanyHisService.save(companyHisList);
-						companyHisList =  new ArrayList<WorkCompanyHis>();
+						companyHisList = new ArrayList<WorkCompanyHis>();
 					}
-					
-					if (userHisList.size()>3000) {
+
+					if (userHisList.size() > 3000) {
 						log.error("保存 用户历史 数据+实时数据 ");
 						workUserService.save(userList);
 						userList = new ArrayList<WorkUser>();
 						workUserHisService.save(userHisList);
-						userHisList =  new ArrayList<WorkUserHis>();
+						userHisList = new ArrayList<WorkUserHis>();
 					}
-					
-					
-					if (certApplyInfos.size()>3000) {
+
+					if (certApplyInfos.size() > 3000) {
 						log.info("保存申请人信息 ");
 						workCertApplyInfoService.save(certApplyInfos);
-						certApplyInfos =  new ArrayList<WorkCertApplyInfo>();
+						certApplyInfos = new ArrayList<WorkCertApplyInfo>();
 					}
-					
-					if (certInfos.size()>3000) {
+
+					if (certInfos.size() > 3000) {
 						log.info("保存证书信息");
 						workCertInfoService.save(certInfos);
-						certInfos = new  ArrayList<WorkCertInfo>();
+						certInfos = new ArrayList<WorkCertInfo>();
 					}
-					
-					if (payInfos.size()>3000) {
+
+					if (payInfos.size() > 3000) {
 						log.info("批量保存支付信息");
 						workPayInfoService.save(payInfos);
 						payInfos = new ArrayList<WorkPayInfo>();
 					}
-					
-					if (unSavedDealInfos.size()>3000) {
+
+					if (unSavedDealInfos.size() > 3000) {
 						workDealInfoService.save(unSavedDealInfos);
 						unSavedDealInfos = new ArrayList<WorkDealInfo>();
 						log.info("批量存储workDealinfo");
 					}
-					if (usedBasicInfo.size()>3000) {
+					if (usedBasicInfo.size() > 3000) {
 						basicInfoSccaService.saveList(usedBasicInfo);
-						usedBasicInfo  =  new ArrayList<BasicInfoScca>();
+						usedBasicInfo = new ArrayList<BasicInfoScca>();
 					}
-					
-					log.error("新增业务数据生成完毕...当前第"+count+"条...");
+
+					log.error("新增业务数据生成完毕...当前第" + count + "条...");
 					log.error("------------------------------------------------");
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
-			if (companyHisList.size()!=0) {
+			if (companyHisList.size() != 0) {
 				log.error("最后一次保存 企业历史 数据+实时数据 ");
 				workCompanyService.save(companyList);
 				companyList = new ArrayList<WorkCompany>();
 				workCompanyHisService.save(companyHisList);
-				companyHisList =  new ArrayList<WorkCompanyHis>();
+				companyHisList = new ArrayList<WorkCompanyHis>();
 			}
-			
-			if (userHisList.size()!=0) {
+
+			if (userHisList.size() != 0) {
 				log.error("最后一次保存 用户历史 数据+实时数据");
 				workUserService.save(userList);
 				userList = new ArrayList<WorkUser>();
 				workUserHisService.save(userHisList);
-				userHisList =  new ArrayList<WorkUserHis>();
+				userHisList = new ArrayList<WorkUserHis>();
 			}
-			
-			if (certApplyInfos.size()!=0) {
+
+			if (certApplyInfos.size() != 0) {
 				log.info("最后一次保存申请人信息 ");
 				workCertApplyInfoService.save(certApplyInfos);
-				certApplyInfos =  new ArrayList<WorkCertApplyInfo>();
+				certApplyInfos = new ArrayList<WorkCertApplyInfo>();
 			}
-			
-			if (certInfos.size()!=0) {
+
+			if (certInfos.size() != 0) {
 				log.info("最后一次保存证书信息");
 				workCertInfoService.save(certInfos);
-				certInfos = new  ArrayList<WorkCertInfo>();
+				certInfos = new ArrayList<WorkCertInfo>();
 			}
-			
-			if (payInfos.size()!=0) {
+
+			if (payInfos.size() != 0) {
 				log.info("最后一次批量保存支付信息");
 				workPayInfoService.save(payInfos);
 				payInfos = new ArrayList<WorkPayInfo>();
 			}
-			
-			
-			if (unSavedDealInfos.size()!=0) {
+
+			if (unSavedDealInfos.size() != 0) {
 				workDealInfoService.save(unSavedDealInfos);
 			}
-			if (usedBasicInfo.size()!=0) {
+			if (usedBasicInfo.size() != 0) {
 				basicInfoSccaService.saveList(usedBasicInfo);
 			}
-			
+
 			basicInfoSccaService.saveList(usedBasicInfo);
 			workDealInfoService.save(unSavedDealInfos);
-			
+
 			json.put("status", 1);
 			json.put("msg", "操作成功,生成：" + count);
 		} catch (Exception e) {
@@ -634,7 +638,8 @@ public class ClientController {
 			json.put("msg", e.getMessage());
 		}
 		isRunning = false;
-		System.out.println("使用时间 :"+(System.currentTimeMillis()-startDATE.getTime()));
+		System.out.println("使用时间 :"
+				+ (System.currentTimeMillis() - startDATE.getTime()));
 		return json.toString();
 	}
 
@@ -700,31 +705,30 @@ public class ClientController {
 		return workCompanyHis;
 	}
 
-	
-	
-	public static String getSvn(String head,Integer num){
-		String  numStr = "000"+num;
-		return  head + "-"+ numStr.substring(numStr.length()-4, numStr.length());
+	public static String getSvn(String head, Integer num) {
+		String numStr = "000" + num;
+		return head + "-"
+				+ numStr.substring(numStr.length() - 4, numStr.length());
 	}
+
 	/**
 	 * 
 	 * @param year
 	 * @param autoPass
 	 * @return
 	 * @throws JSONException
-	 * @date:2014年8月18日 
+	 * @date:2014年8月18日
 	 * @user:Zhang Jingtao
 	 * @return_type:String
 	 */
 	@RequestMapping(value = "autoWriteUpdate")
 	@ResponseBody
-	public String autoWriteUpdateDealInfo()
-			throws JSONException {
+	public String autoWriteUpdateDealInfo() throws JSONException {
 		Date startDATE = new Date();
 		JSONObject json = new JSONObject();
 		if (isRunning) {
 			json.put("statu", "0");
-			json.put("msg", "有一个任务进行中，请勿重复操作:"+count);
+			json.put("msg", "有一个任务进行中，请勿重复操作:" + count);
 			return json.toString();
 		}
 		isRunning = true;
@@ -734,24 +738,24 @@ public class ClientController {
 			List<WorkDealInfo> dealInfos = workDealInfoService
 					.getCurValidAddDealInfo();
 			String status = WorkDealInfoStatus.STATUS_UPDATE_USER;
-			log.debug("共获取到:"+dealInfos.size()+"笔可生成更新服务的证书");
-			
+			log.debug("共获取到:" + dealInfos.size() + "笔可生成更新服务的证书");
+
 			List<ConfigAgentOfficeRelation> configAgentOfficeRelations = configAgentOfficeRelationService
 					.findByOffice(UserUtils.getUser().getOffice());
-			User createBy  =  UserUtils.getUser();
-			Office curOffice =  createBy.getOffice();
-			
-			List<WorkDealInfo> unSaveDealInfos  = new ArrayList<WorkDealInfo>();
-			List<WorkDealInfo> unDeleteDealInfos  = new ArrayList<WorkDealInfo>();
-			List<WorkCertInfo> unSaveCertInfos =  new ArrayList<WorkCertInfo>();
-			List<WorkCertInfo> unSaveOldCertInfos  = new ArrayList<WorkCertInfo>();
-			List<WorkLog> unSaveWorkLogs  = new ArrayList<WorkLog>();
+			User createBy = UserUtils.getUser();
+			Office curOffice = createBy.getOffice();
+
+			List<WorkDealInfo> unSaveDealInfos = new ArrayList<WorkDealInfo>();
+			List<WorkDealInfo> unDeleteDealInfos = new ArrayList<WorkDealInfo>();
+			List<WorkCertInfo> unSaveCertInfos = new ArrayList<WorkCertInfo>();
+			List<WorkCertInfo> unSaveOldCertInfos = new ArrayList<WorkCertInfo>();
+			List<WorkLog> unSaveWorkLogs = new ArrayList<WorkLog>();
 			String first = workDealInfoService.getSVN(1);
 			Integer num = Integer.valueOf(first.split("-")[3]);
-			String head = first.replace("-"+first.split("-")[3], "");
-			
+			String head = first.replace("-" + first.split("-")[3], "");
+
 			for (WorkDealInfo oldDealInfo : dealInfos) {
-				log.debug("开始第"+(count+1)+"笔");
+				log.debug("开始第" + (count + 1) + "笔");
 				// 新建业务信息
 				WorkDealInfo workDealInfo = new WorkDealInfo();
 				workDealInfo.setKeySn(oldDealInfo.getKeySn());
@@ -759,12 +763,12 @@ public class ClientController {
 				ConfigCommercialAgent commercialAgent = configAgentAppRelationService
 						.findAgentByApp(workDealInfo.getConfigApp());
 				workDealInfo.setConfigCommercialAgent(commercialAgent);
-				
+
 				if (configAgentOfficeRelations.size() > 0) {
 					workDealInfo.setCommercialAgent(configAgentOfficeRelations
 							.get(0).getConfigCommercialAgent());// 劳务关系外键
-				}else {
-					log.error("无劳务关系,ID:"+oldDealInfo.getId());
+				} else {
+					log.error("无劳务关系,ID:" + oldDealInfo.getId());
 				}
 				workDealInfo.setWorkUser(oldDealInfo.getWorkUser());
 				workDealInfo.setWorkCompany(oldDealInfo.getWorkCompany());
@@ -785,10 +789,10 @@ public class ClientController {
 					int day = getLastCertDay(oldDealInfo.getWorkCertInfo()
 							.getNotafter());
 					workDealInfo.setLastDays(day);
-					log.error("原有证书剩余天数:"+day);
+					log.error("原有证书剩余天数:" + day);
 				} else {
 					workDealInfo.setLastDays(0);
-					log.error("原有证书剩余天数:"+0);
+					log.error("原有证书剩余天数:" + 0);
 				}
 
 				WorkCertInfo oldCertInfo = oldDealInfo.getWorkCertInfo();
@@ -797,21 +801,22 @@ public class ClientController {
 				WorkCertInfo workCertInfo = new WorkCertInfo();
 				workCertInfo.setWorkCertApplyInfo(workCertApplyInfo);
 				workCertInfo.setRenewalPrevId(oldCertInfo.getId());
-				workCertInfo.setCreateDate( workCertInfoService.getCreateDate(oldCertInfo.getId()));
-//				workCertInfoService.save(workCertInfo);
+				workCertInfo.setCreateDate(workCertInfoService
+						.getCreateDate(oldCertInfo.getId()));
+				// workCertInfoService.save(workCertInfo);
 				unSaveCertInfos.add(workCertInfo);
-				
+
 				// 给上张证书存nextId
-//				oldCertInfo.setRenewalNextId(workCertInfo.getId());
-//				workCertInfoService.save(oldCertInfo);
+				// oldCertInfo.setRenewalNextId(workCertInfo.getId());
+				// workCertInfoService.save(oldCertInfo);
 				unSaveOldCertInfos.add(oldCertInfo);
 				workDealInfo.setWorkCertInfo(workCertInfo);
 				oldDealInfo.setDelFlag(WorkDealInfo.DEL_FLAG_DELETE);
-//				workDealInfoService.delete(oldDealInfo.getId());
+				// workDealInfoService.delete(oldDealInfo.getId());
 				oldDealInfo.setUpdateBy(createBy);
 				unDeleteDealInfos.add(oldDealInfo);
-				
-//				workDealInfoService.save(workDealInfo);
+
+				// workDealInfoService.save(workDealInfo);
 				// 保存日志信息
 				WorkLog workLog = new WorkLog();
 				workLog.setRecordContent("自动创建成功");
@@ -823,70 +828,74 @@ public class ClientController {
 				workLog.setWorkCompany(workDealInfo.getWorkCompany());
 				workLog.setOffice(curOffice);
 				unSaveWorkLogs.add(workLog);
-//				workLogService.save(workLog);
-				
-//				logUtil.saveSysLog("业务中心", "业务更新：编号" + workDealInfo.getId()
-//						+ "单位名称："
-//						+ workDealInfo.getWorkCompany().getCompanyName(), "");
+				// workLogService.save(workLog);
+
+				// logUtil.saveSysLog("业务中心", "业务更新：编号" + workDealInfo.getId()
+				// + "单位名称："
+				// + workDealInfo.getWorkCompany().getCompanyName(), "");
 
 				workDealInfo.setCanSettle(false);
 				workDealInfo.setCreateBy(createBy);
 				workDealInfo.setUpdateBy(createBy);
-//				workDealInfoService.save(workDealInfo);
+				// workDealInfoService.save(workDealInfo);
 				unSaveDealInfos.add(workDealInfo);
 
-				
-//				List<WorkDealInfo> unSaveDealInfos  = new ArrayList<WorkDealInfo>();
-//				List<WorkDealInfo> unDeleteDealInfos  = new ArrayList<WorkDealInfo>();
-//				List<WorkCertInfo> unSaveCertInfos =  new ArrayList<WorkCertInfo>();
-//				List<WorkCertInfo> unSaveOldCertInfos  = new ArrayList<WorkCertInfo>();
-//				List<WorkLog> unSaveWorkLogs  = new ArrayList<WorkLog>();
-				
-				if (unSaveDealInfos.size()>10000) {
+				// List<WorkDealInfo> unSaveDealInfos = new
+				// ArrayList<WorkDealInfo>();
+				// List<WorkDealInfo> unDeleteDealInfos = new
+				// ArrayList<WorkDealInfo>();
+				// List<WorkCertInfo> unSaveCertInfos = new
+				// ArrayList<WorkCertInfo>();
+				// List<WorkCertInfo> unSaveOldCertInfos = new
+				// ArrayList<WorkCertInfo>();
+				// List<WorkLog> unSaveWorkLogs = new ArrayList<WorkLog>();
+
+				if (unSaveDealInfos.size() > 10000) {
 					log.info("批量保存信息...");
 					workCertInfoService.save(unSaveCertInfos);
 					for (int i = 0; i < unSaveCertInfos.size(); i++) {
-						unSaveOldCertInfos.get(i).setRenewalNextId(unSaveCertInfos.get(i).getId());
+						unSaveOldCertInfos.get(i).setRenewalNextId(
+								unSaveCertInfos.get(i).getId());
 					}
 					workCertInfoService.save(unSaveOldCertInfos);
 					workDealInfoService.save(unSaveDealInfos);
 					workDealInfoService.save(unDeleteDealInfos);
 					workLogService.save(unSaveWorkLogs);
-					
-					unSaveDealInfos  = new ArrayList<WorkDealInfo>();
-					unDeleteDealInfos  = new ArrayList<WorkDealInfo>();
-					unSaveCertInfos =  new ArrayList<WorkCertInfo>();
-					unSaveOldCertInfos  = new ArrayList<WorkCertInfo>();
-					unSaveWorkLogs  = new ArrayList<WorkLog>();
+
+					unSaveDealInfos = new ArrayList<WorkDealInfo>();
+					unDeleteDealInfos = new ArrayList<WorkDealInfo>();
+					unSaveCertInfos = new ArrayList<WorkCertInfo>();
+					unSaveOldCertInfos = new ArrayList<WorkCertInfo>();
+					unSaveWorkLogs = new ArrayList<WorkLog>();
 					log.info("批量 保存完毕");
 				}
 				log.error("创建更新业务完成");
 				log.error("-------------------------------------------");
 				count++;
 			}
-			
-			if (unSaveDealInfos.size()!=0) {
+
+			if (unSaveDealInfos.size() != 0) {
 				log.info("最后一次 批量保存信息");
 				workCertInfoService.save(unSaveCertInfos);
 				for (int i = 0; i < unSaveCertInfos.size(); i++) {
-					unSaveOldCertInfos.get(i).setRenewalNextId(unSaveCertInfos.get(i).getId());
+					unSaveOldCertInfos.get(i).setRenewalNextId(
+							unSaveCertInfos.get(i).getId());
 				}
 				workCertInfoService.save(unSaveOldCertInfos);
 				workDealInfoService.save(unSaveDealInfos);
 				workDealInfoService.save(unDeleteDealInfos);
 				workLogService.save(unSaveWorkLogs);
 			}
-			
-			
+
 			json.put("status", 1);
 			json.put("msg", "操作成功,生成更新数据:" + count);
 		} catch (Exception e) {
 			e.printStackTrace();
 			json.put("msg", e.getMessage());
 		}
-		
-		isRunning  = false;
-		log.debug("使用时间 :"+(System.currentTimeMillis()-startDATE.getTime()));
+
+		isRunning = false;
+		log.debug("使用时间 :" + (System.currentTimeMillis() - startDATE.getTime()));
 		return json.toString();
 	}
 
@@ -896,14 +905,14 @@ public class ClientController {
 		if (notAfterLong < nowLong) {
 			return 0;
 		}
-		long d = (notAfterLong - nowLong)/MILL;
-		long hour1=(notAfterLong - nowLong)%MILL;
-		if (hour1>0) {
-			d+=1;
+		long d = (notAfterLong - nowLong) / MILL;
+		long hour1 = (notAfterLong - nowLong) % MILL;
+		if (hour1 > 0) {
+			d += 1;
 		}
 		return (int) d;
 	}
-	
+
 	public static void main(String[] args) {
 		System.out.println(getSvn("O-四川", 11));
 		List<Thread> allThread = new ArrayList<Thread>();
@@ -926,27 +935,27 @@ public class ClientController {
 		}
 		System.out.println("555555555555");
 	}
-	
+
 	/**
 	 * 
 	 * @param productId
 	 * @param officeId
 	 * @throws JSONException
-	 * @date:2014年8月18日 
+	 * @date:2014年8月18日
 	 * @user:Zhang Jingtao
 	 * @return_type:String
 	 */
 	@RequestMapping(value = "importNewDealInfo")
 	@ResponseBody
-	public String importNewDealInfo(Long officeId,@RequestParam(defaultValue = "yyyy-MM-dd HH:mm:ss",required = false)String pattern)
+	public String importNewDealInfo(
+			Long officeId,
+			@RequestParam(defaultValue = "yyyy-MM-dd HH:mm:ss", required = false) String pattern)
 			throws JSONException {
 		JSONObject json = new JSONObject();
 		Date startDATE = new Date();
-		
+
 		Long dealInfoId = workDealInfoService.findDealInfoMax();
-		
-		
-		
+
 		SimpleDateFormat certTimeFormat = new SimpleDateFormat(pattern);
 		if (isRunning) {
 			json.put("statu", "0");
@@ -954,20 +963,20 @@ public class ClientController {
 			return json.toString();
 		}
 		isRunning = true;
-		
+
 		try {
 			certTimeFormat.format(new Date());
 		} catch (Exception e) {
 			json.put("statu", "0");
-			json.put("msg", "日期格式错误:"+pattern);
+			json.put("msg", "日期格式错误:" + pattern);
 			isRunning = false;
 			return json.toString();
 		}
 		count = 0;
 		json.put("status", -1);
 		User createBy = new User(1L);
-		//User createBy = UserUtils.getUser();
-		String  firstSvn = "";
+		// User createBy = UserUtils.getUser();
+		String firstSvn = "";
 		if (officeId != 1L) {
 			Office office = officeService.get(officeId);
 			List<User> users = office.getUserList();
@@ -979,7 +988,7 @@ public class ClientController {
 			} else {
 				createBy = users.get(0);
 			}
-			firstSvn  = workDealInfoService.getSVN(office.getName());
+			firstSvn = workDealInfoService.getSVN(office.getName());
 		}
 		List<BasicInfoScca> all = basicInfoSccaService.findAll();
 		if (all.size() == 0) {
@@ -987,53 +996,54 @@ public class ClientController {
 			json.put("msg", "要导入的数据为空，请检查");
 			isRunning = false;
 			return json.toString();
-		} 
+		}
 		Integer num = Integer.valueOf(firstSvn.split("-")[3]);
-		String head = firstSvn.replace("-"+firstSvn.split("-")[3], "");
+		String head = firstSvn.replace("-" + firstSvn.split("-")[3], "");
 		for (int i = 0; i < all.size(); i++) {
 			String svn = getSvn(head, num);
 			num++;
 			all.get(i).setSvnNum(svn);
 		}
-			
+
 		List<Thread> allThread = new ArrayList<Thread>();
-		
+
 		int loopTime = 100;
 		int tempSize = all.size();
-		if (tempSize<=loopTime) {
+		if (tempSize <= loopTime) {
 			List<BasicInfoScca> transToTrheads = new ArrayList<BasicInfoScca>();
-			for (int i = 0; i < tempSize; i++) {				
-				transToTrheads.add(all.get(i));				
+			for (int i = 0; i < tempSize; i++) {
+				transToTrheads.add(all.get(i));
 			}
-			MutiProcess mp = new MutiProcess(transToTrheads , officeId , createBy , 1);
+			MutiProcess mp = new MutiProcess(transToTrheads, officeId,
+					createBy, 1);
 			Thread thread = new Thread(mp);
 			thread.start();
 			allThread.add(thread);
-		}else {
-			int divisor	 = tempSize/loopTime;
-			int remainder = tempSize%loopTime;
-			
+		} else {
+			int divisor = tempSize / loopTime;
+			int remainder = tempSize % loopTime;
+
 			for (int i = 0; i < loopTime; i++) {
-				
-				int newSize=divisor;
-				if (i<remainder) {
-					newSize = divisor+1;
+
+				int newSize = divisor;
+				if (i < remainder) {
+					newSize = divisor + 1;
 				}
 				List<BasicInfoScca> transToTrheads = new ArrayList<BasicInfoScca>();
-				for (int j = newSize-1; j >=0 ; j--) {
+				for (int j = newSize - 1; j >= 0; j--) {
 					transToTrheads.add(all.get(j));
 					all.remove(j);
 				}
-				MutiProcess mp = new MutiProcess(transToTrheads , officeId , createBy , (i+1));
+				MutiProcess mp = new MutiProcess(transToTrheads, officeId,
+						createBy, (i + 1));
 				Thread thread = new Thread(mp);
 				thread.start();
 				allThread.add(thread);
-				
+
 			}
-			
+
 		}
-		
-		
+
 		for (Thread thread1 : allThread) {
 			try {
 				thread1.join();
@@ -1042,18 +1052,16 @@ public class ClientController {
 				e.printStackTrace();
 			}
 		}
-		
-		Integer dealInfoCount =  workDealInfoService.afterDealInfoId(dealInfoId);
-		
-		
+
+		Integer dealInfoCount = workDealInfoService.afterDealInfoId(dealInfoId);
+
+		taskDataService.processPreId(all);
 		json.put("msg", "本次成功提交数据：" + dealInfoCount + "条！");
-		
-		
-		System.out.println("使用时间 :"+(System.currentTimeMillis()-startDATE.getTime()));
+
+		System.out.println("使用时间 :"
+				+ (System.currentTimeMillis() - startDATE.getTime()));
 		isRunning = false;
 		return json.toString();
 	}
-	
-	
-	
+
 }
