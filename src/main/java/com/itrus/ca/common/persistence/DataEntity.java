@@ -55,8 +55,12 @@ public abstract class DataEntity extends BaseEntity implements Serializable {
 	
 	@PrePersist
 	public void prePersist(){
-		this.updateDate = new Date();
-		this.createDate = this.updateDate;
+		if(this.updateDate==null){
+			this.updateDate = new Date();
+		}
+		if(this.createDate==null){
+			this.createDate = this.updateDate;
+		}
 		if (this.updateBy==null) {
 			this.updateBy = UserUtils.getUser();
 		}
