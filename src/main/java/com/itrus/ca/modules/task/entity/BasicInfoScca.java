@@ -617,6 +617,7 @@ public class BasicInfoScca implements java.io.Serializable {
 		this.availableCount = availableCount;
 	}
 
+	@Column(name = "FIRST_CERT_SN")
 	public String getFirstCertSN() {
 		return firstCertSN;
 	}
