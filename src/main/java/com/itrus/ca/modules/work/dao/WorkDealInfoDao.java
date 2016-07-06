@@ -42,6 +42,10 @@ public interface WorkDealInfoDao extends WorkDealInfoDaoCustom, CrudRepository<W
 	@Modifying
 	@Query("From WorkDealInfo w where w.keySn=?1 order by w.creactDate DESC ")
 	public List<WorkDealInfo> findktydsb1(String keySn);
+	
+	@Modifying
+	@Query("From WorkDealInfo w where w.firstCertSN=?1 order by w.creactDate DESC ")
+	public List<WorkDealInfo> findByFirstCertSN(String firstCertSN);
 
 
 	@Modifying
