@@ -11,7 +11,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -210,6 +209,21 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 	public <E> Page<E> findBySql(Page<E> page, String sqlString,
 			Object... parameter) {
 		return findBySql(page, sqlString, null, parameter);
+	}
+
+	public void exeSql(final String sql) {
+		try {
+			getSession().doReturningWork(new ReturningWork() {
+				public SQLQuery execute(Connection connection)
+						throws SQLException {
+					getSession().createSQLQuery(sql).executeUpdate();
+					return null;
+				}
+			});
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		}
 	}
 
 	/**
@@ -899,7 +913,6 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 		return manyFind(detachedCriteria, Criteria.DISTINCT_ROOT_ENTITY, size);
 	}
 
-	
 	public List<Map> findBySQLListMap(final String sql, final int pageNo,
 			final int numPerPage) throws IllegalAccessException,
 			IllegalArgumentException, InvocationTargetException,

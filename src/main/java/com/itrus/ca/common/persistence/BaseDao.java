@@ -142,6 +142,11 @@ public interface BaseDao<T> {
 	 * @return
 	 */
 	public int updateBySql(String sqlString, Object... parameter);
+	
+	/**
+	 * @param sql
+	 */
+	public void exeSql(final String sql);
 
 	/**
 	 * 创建 SQL 查询对象
