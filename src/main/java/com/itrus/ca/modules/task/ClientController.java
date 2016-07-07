@@ -5,7 +5,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.json.JSONException;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.itrus.ca.common.service.SendMsgService;
 import com.itrus.ca.common.utils.PayinfoUtil;
+import com.itrus.ca.common.utils.StringHelper;
 import com.itrus.ca.modules.constant.ProductType;
 import com.itrus.ca.modules.constant.WorkDealInfoStatus;
 import com.itrus.ca.modules.constant.WorkDealInfoType;
@@ -53,7 +56,6 @@ import com.itrus.ca.modules.sys.service.OfficeService;
 import com.itrus.ca.modules.sys.utils.UserUtils;
 import com.itrus.ca.modules.task.entity.BasicInfoScca;
 import com.itrus.ca.modules.task.service.BasicInfoSccaService;
-import com.itrus.ca.modules.task.service.TaskDataService;
 import com.itrus.ca.modules.work.entity.WorkCertApplyInfo;
 import com.itrus.ca.modules.work.entity.WorkCertInfo;
 import com.itrus.ca.modules.work.entity.WorkCompany;
@@ -179,9 +181,6 @@ public class ClientController {
 
 	@Autowired
 	private WorkCertApplyInfoService workCertApplyInfoService;
-
-	@Autowired
-	private TaskDataService taskDataService;
 
 	private LogUtil logUtil = new LogUtil();
 
@@ -999,10 +998,17 @@ public class ClientController {
 		}
 		Integer num = Integer.valueOf(firstSvn.split("-")[3]);
 		String head = firstSvn.replace("-" + firstSvn.split("-")[3], "");
+		// 最后处理preId用，暂存firstCertSN，排重
+		Set<String> firstSnAll = new HashSet<String>();
 		for (int i = 0; i < all.size(); i++) {
 			String svn = getSvn(head, num);
 			num++;
 			all.get(i).setSvnNum(svn);
+
+			// 最后处理preId用
+			String firstCertSn = all.get(i).getFirstCertSN();
+			if (!StringHelper.isNull(firstCertSn))
+				firstSnAll.add(firstCertSn);
 		}
 
 		List<Thread> allThread = new ArrayList<Thread>();
@@ -1055,7 +1061,8 @@ public class ClientController {
 
 		Integer dealInfoCount = workDealInfoService.afterDealInfoId(dealInfoId);
 
-		taskDataService.processPreId(all);
+		workDealInfoService.processPreId(firstSnAll);
+
 		json.put("msg", "本次成功提交数据：" + dealInfoCount + "条！");
 
 		System.out.println("使用时间 :"
