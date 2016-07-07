@@ -202,8 +202,7 @@
 															+ "至"
 															+ data.notafter
 															+ "</div></div>";
-													var submit = function(v, h,
-															f) {
+													var submit = function(v, h, f) {
 														window.location.href = "${ctx}/work/workDealInfo/list";
 														return true;
 													};
