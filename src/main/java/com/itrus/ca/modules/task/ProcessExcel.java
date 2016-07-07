@@ -146,7 +146,7 @@ public class ProcessExcel {
 
 	private static String getMaybeNull(Object o, boolean isString) {
 		String res = o == null || o.toString().length() <= 0 ? "NULL" : o
-				.toString();
+				.toString().trim();
 		if (isString && !StringHelper.isNull(res) && !res.equals("NULL"))
 			res = "'" + res + "'";
 		return res;
@@ -154,7 +154,7 @@ public class ProcessExcel {
 
 	private static String getTimeString(Object o) {
 		String res = o == null || o.toString().length() <= 0 ? "" : o
-				.toString();
+				.toString().trim();
 		if (!StringHelper.isNull(res)) {
 			res = "'"
 					+ StringHelper.getSystime("yyyy/MM/dd HH:mm:ss", new Long(
@@ -164,7 +164,7 @@ public class ProcessExcel {
 	}
 
 	private static String getMaybeNulltoString(Object o) {
-		return o == null ? "NULL" : o.toString();
+		return o == null ? "NULL" : o.toString().trim();
 	}
 
 	private static Long getMaybeNulltoLong(Object o) {
