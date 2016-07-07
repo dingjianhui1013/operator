@@ -4354,21 +4354,32 @@ public class WorkDealInfoService extends BaseService {
 
 	public void processSinglePreid(String firstCertSN) {
 		List<WorkDealInfo> lst = findByFirstCertSN(firstCertSN);
-		for (WorkDealInfo e : lst) {
-			WorkDealInfo pre = findPreByFirstCertSN(e);
+		for (int i = 0; i < lst.size(); i++) {
+			WorkDealInfo pre = findPreByFirstCertSN(lst.get(i));
 			if (pre == null)
 				continue;
-			e.setPrevId(pre.getId());
-			updatePreId(e);
-			// save(e);
+			lst.get(i).setPrevId(pre.getId());
+			updatePreId(lst.get(i));
+			// 只有最后一条是0，前面的都是1
+			if (i != 0) {
+				lst.get(i).setDelFlag("1");
+				updateDelflag(lst.get(i));
+			}
 		}
 	}
 
 	@Transactional(readOnly = false)
 	public void updatePreId(WorkDealInfo old) {
 		String sql = "update work_deal_info set prev_id=" + old.getPrevId()
-				+ " where id="+old.getId();
+				+ " where id=" + old.getId();
 		// workDealInfoDao.update(sql, old.getPrevId(), old.getId());
+		workDealInfoDao.exeSql(sql);
+	}
+
+	@Transactional(readOnly = false)
+	public void updateDelflag(WorkDealInfo old) {
+		String sql = "update work_deal_info set del_flag=" + old.getDelFlag()
+				+ " where id=" + old.getId();
 		workDealInfoDao.exeSql(sql);
 	}
 
