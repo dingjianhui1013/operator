@@ -43,7 +43,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.alibaba.druid.sql.visitor.functions.If;
 import com.google.common.collect.Lists;
 import com.itrus.ca.common.persistence.Page;
 import com.itrus.ca.common.service.BaseService;
@@ -51,6 +50,7 @@ import com.itrus.ca.common.utils.DateUtils;
 import com.itrus.ca.common.utils.EscapeUtil;
 import com.itrus.ca.common.utils.PayinfoUtil;
 import com.itrus.ca.common.utils.RaAccountUtil;
+import com.itrus.ca.common.utils.StringHelper;
 import com.itrus.ca.modules.constant.WorkDealInfoStatus;
 import com.itrus.ca.modules.constant.WorkDealInfoType;
 import com.itrus.ca.modules.finance.service.FinancePaymentInfoService;
@@ -4345,11 +4345,46 @@ public class WorkDealInfoService extends BaseService {
 		dc.add(Restrictions.ge("obtainedDate", date));
 		return (int) workDealInfoDao.count(dc);
 	}
-	
-	public int getCountByFirstCertSN(String firstCertSN){
+
+	public int getCountByFirstCertSN(String firstCertSN) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.add(Restrictions.eq("firstCertSN", firstCertSN));
 		return (int) workDealInfoDao.count(dc);
+	}
+
+	public void processSinglePreid(String firstCertSN) {
+		List<WorkDealInfo> lst = findByFirstCertSN(firstCertSN);
+		for (WorkDealInfo e : lst) {
+			WorkDealInfo pre = findPreByFirstCertSN(e);
+			if (pre == null)
+				continue;
+			e.setPrevId(pre.getId());
+			updatePreId(e);
+			// save(e);
+		}
+	}
+
+	@Transactional(readOnly = false)
+	public void updatePreId(WorkDealInfo old) {
+		String sql = "update work_deal_info set prev_id=" + old.getPrevId()
+				+ " where id="+old.getId();
+		// workDealInfoDao.update(sql, old.getPrevId(), old.getId());
+		workDealInfoDao.exeSql(sql);
+	}
+
+	public void processPreId(Set<String> all) {
+		for (String e : all) {
+			// 根据首张证书序列判定是否需要处理workDealInfo表内的preId字段
+			if (StringHelper.isNull(e))
+				continue;
+			// 只1条记录也不处理
+			int c = getCountByFirstCertSN(e);
+			if (c <= 1)
+				continue;
+			// 处理每个唯一证书序列号
+			processSinglePreid(e);
+		}
+
 	}
 
 	public int getCertPublishCount(Date date, Long officeId) {
@@ -5056,6 +5091,26 @@ public class WorkDealInfoService extends BaseService {
 		dc.add(Restrictions.in("dealInfoStatus", status));
 		dc.addOrder(Order.desc("id"));
 		return workDealInfoDao.find(dc);
+	}
+
+	/**
+	 * 导入任务，根据首次证书的序列号查前一条记录
+	 * 
+	 * @param curretPo
+	 * @return WorkDealInfo
+	 */
+	public WorkDealInfo findPreByFirstCertSN(WorkDealInfo current) {
+
+		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
+		dc.add(Restrictions.lt("createDate", current.getCreateDate()));
+		dc.add(Restrictions.eq("firstCertSN", current.getFirstCertSN()));
+		dc.addOrder(Order.desc("createDate"));
+
+		List<WorkDealInfo> lst = workDealInfoDao.find(dc);
+		if (lst == null || lst.size() <= 0) {
+			return null;
+		}
+		return lst.get(0);
 	}
 
 	/**
