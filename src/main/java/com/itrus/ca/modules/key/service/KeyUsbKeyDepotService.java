@@ -164,6 +164,7 @@ public class KeyUsbKeyDepotService extends BaseService {
 		}
 		if (office!=null) {
 			dc.add(Restrictions.eq("office.id",office));
+			//dc.add(Restrictions.in("office.id",office));
 		}
 		if (StringUtils.isNotEmpty(depotName)){
 			dc.add(Restrictions.like("depotName", "%"+EscapeUtil.escapeLike(depotName)+"%"));
@@ -172,6 +173,48 @@ public class KeyUsbKeyDepotService extends BaseService {
 		dc.addOrder(Order.desc("id"));
 		return keyUsbKeyDepotDao.find(page, dc);
 	}
+	
+	public Page<KeyUsbKeyDepot> findAllPage(Page<KeyUsbKeyDepot> page,Long area,Long office,String depotName,List<Long> officeIds) {
+		DetachedCriteria dc = keyUsbKeyDepotDao.createDetachedCriteria();
+		dc.createAlias("office", "office");
+		if (area!=null) {
+			dc.add(Restrictions.eq("office.parent.id",area));
+		}
+		if (office!=null) {
+			dc.add(Restrictions.eq("office.id",office));
+		}
+		if(null != officeIds){
+			dc.add(Restrictions.in("office.id",officeIds));
+		}
+		if (StringUtils.isNotEmpty(depotName)){
+			dc.add(Restrictions.like("depotName", "%"+EscapeUtil.escapeLike(depotName)+"%"));
+		}
+		dc.add(Restrictions.eq(KeyUsbKeyDepot.DEL_FLAG, KeyUsbKeyDepot.DEL_FLAG_NORMAL));
+		dc.addOrder(Order.desc("id"));
+		return keyUsbKeyDepotDao.find(page, dc);
+	}
+	
+	//根据条件查询仓库
+	public List<KeyUsbKeyDepot> findAllQuery(Long area,Long office,String depotName,List<Long> officeIds){
+		DetachedCriteria dc = keyUsbKeyDepotDao.createDetachedCriteria();
+		dc.createAlias("office", "office");
+		if (area!=null) {
+			dc.add(Restrictions.eq("office.parent.id",area));
+		}
+		if (office!=null) {
+			dc.add(Restrictions.eq("office.id",office));
+		}
+		if (StringUtils.isNotEmpty(depotName)){
+			dc.add(Restrictions.like("depotName", "%"+EscapeUtil.escapeLike(depotName)+"%"));
+		}
+		if(null!=officeIds){
+			dc.add(Restrictions.in("office.id", officeIds));
+		}
+		dc.add(Restrictions.eq(KeyUsbKeyDepot.DEL_FLAG, KeyUsbKeyDepot.DEL_FLAG_NORMAL));
+		dc.addOrder(Order.desc("id"));
+		return keyUsbKeyDepotDao.find(dc);
+	}
+	
 	public List<KeyUsbKeyDepot> findAll() {
 		DetachedCriteria dc = keyUsbKeyDepotDao.createDetachedCriteria();
 		dc.add(Restrictions.eq(KeyUsbKeyDepot.DEL_FLAG, KeyUsbKeyDepot.DEL_FLAG_NORMAL));

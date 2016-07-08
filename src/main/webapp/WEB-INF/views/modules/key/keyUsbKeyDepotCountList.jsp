@@ -9,10 +9,27 @@
 	$(document).ready(function() {
 		$("#searchForm").validate({
 			submitHandler : function(form) {
+				//if($("#startTime").val().length==0 && $("#endTime").val().length==0){
+				//	
+				//}
 				loading('正在提交，请稍等...');
 				form.submit();
 			}
 		});
+		//汇总信息展示
+		if($("#startTime").val().length==0&&$("#endTime").val().length==0){
+			$("#huizong").hide();
+		}else{
+			var s = "";
+			if($("#endTime").val().length==0){
+				$("#start").show();
+			}else if($("#startTime").val().length==0){
+				$("#end").show();
+			}else{
+				$("#between").show();
+			}
+		}
+		
 	});
 	function page(n, s) {
 		$("#pageNo").val(n);
@@ -125,9 +142,6 @@
 					</option>
 				</c:forEach>
 			</select>
-		</div>
-		<br/>
-		<div>
 			<label>KEY 厂商：</label> <select name="supplierId"
 				id="supplierId" onchange="addGene()">
 				<option value="">请选择</option>
@@ -147,7 +161,7 @@
 				</c:forEach>
 			</select>
 		</div>
-		<br />
+		<br/>
 
 		<div>
 			<label>选择区域 ：</label>
@@ -176,23 +190,31 @@
 			</c:forEach>
 
 		</select>
-
-		</div>
-		<br />
 		<label><font color="red">*</font>统计时间：</label> <input id="startTime" name="startTime"
+				style="width:90px;"
 				type="text" readonly="readonly" maxlength="20"
-				class="required Wdate"
-				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:true});"
+				class="Wdate"
+				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:true,maxDate:'#F{$dp.$D(\'endTime\')}'});"
 				value="<fmt:formatDate value="${startTime}" pattern="yyyy-MM-dd"/>" />
 			&nbsp;-&nbsp;<input id="endTime" name="endTime" type="text"
-				readonly="readonly" maxlength="20" class="Wdate required"
+				style="width:87px;"
+				readonly="readonly" maxlength="20" class="Wdate"
 				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:true,minDate:'#F{$dp.$D(\'startTime\')}'});"
 				value="<fmt:formatDate value="${endTime}" pattern="yyyy-MM-dd"/>" />
-		&nbsp; &nbsp; &nbsp; &nbsp; <input id="btnSubmit"
+				<span id="tongji" style="color: red" hidden="true">请选择统计时间</span>
+		 <input id="btnSubmit"
 			class="btn btn-primary" type="submit" 
 			value="查询" />
+		</div>
+		<input name="que" type="hidden" value="1"></input>
 	</form:form>
 	<tags:message content="${message}" />
+	
+	<div id="huizong" class="breadcrumb form-search">
+		<span id="between" hidden="true">当前所有库房 <fmt:formatDate value="${startTime}" pattern="yyyy-MM-dd"/>到<fmt:formatDate value="${endTime}" pattern="yyyy-MM-dd"/> 内的入库总量为：<font style="font-weight:bold;">${ruKuZongliang}</font>只，出库总量为：<font style="font-weight:bold;">${chuKuZongling}</font>只</span>
+		<span id="start" hidden="true">当前所有库房 <fmt:formatDate value="${startTime}" pattern="yyyy-MM-dd"/>之后的入库总量为：<font style="font-weight:bold;">${ruKuZongliang}</font>只，出库总量为：<font style="font-weight:bold;">${chuKuZongling}</font>只</span>
+		<span id="end" hidden="true">当前所有库房 <fmt:formatDate value="${endTime}" pattern="yyyy-MM-dd"/> 之前的入库总量为：<font style="font-weight:bold;">${ruKuZongliang}</font>只，出库总量为：<font style="font-weight:bold;">${chuKuZongling}</font>只</span>
+	</div>
 	<table id="contentTable"
 		class="table table-striped table-bordered table-condensed">
 		<thead>
@@ -200,7 +222,7 @@
 				<th>库房名称</th>
 				<th>所在区域</th>
 				<th>所属网点</th>
-				<th>key类型名称</th>
+				<!-- <th>key类型名称</th> -->
 				<th>起始数量</th>
 				<th>入库数量</th>
 				<th>出库数量</th>
@@ -215,37 +237,39 @@
 					<td><a href="${ctx}/key/keyUsbKeyDepot/form?id=${keyUsbKeyDepot.id}">${keyUsbKeyDepot.depotName}</a></td>
 					<td>${keyUsbKeyDepot.office.parent.name}</td>
 					<td>${keyUsbKeyDepot.office.name}</td>
-					<td><c:forEach
+					<%-- <td><c:forEach
 							items="${keyUsbKeyDepot.keyDepotGeneralStatisticsList}"
 							var="statis">
 					        	${statis.keyGeneralInfo.name}
 						</c:forEach>
-					</td>
-					<td><c:forEach
+					</td> --%>
+					<td><%-- <c:forEach
 							items="${keyUsbKeyDepot.keyDepotGeneralStatisticsList}"
 							var="statis">
 					        	${statis.totalCount}
-						</c:forEach>
+						</c:forEach> --%>
+						${keyUsbKeyDepot.totolCount}
 						</td>
-					<td><c:forEach
+					<td><%-- <c:forEach
 							items="${keyUsbKeyDepot.keyDepotGeneralStatisticsList}"
 							var="statis">
 					        	${statis.inCount}
-						</c:forEach>
-						
+						</c:forEach> --%>
+						${keyUsbKeyDepot.inCount}
 						</td>
-					<td><c:forEach
+					<td><%-- <c:forEach
 							items="${keyUsbKeyDepot.keyDepotGeneralStatisticsList}"
 							var="statis">
 					        	${statis.outCount}
-						</c:forEach>
-						
+						</c:forEach> --%>
+						${keyUsbKeyDepot.outCount}
 						</td>
-					<td> <c:forEach
+					<td> <%-- <c:forEach
 							items="${keyUsbKeyDepot.keyDepotGeneralStatisticsList}"
 							var="statis">
 					        	${statis.totalEndCount}
-						</c:forEach>
+						</c:forEach> --%>
+						${keyUsbKeyDepot.totalEndCount}
 						</td>
 					<td><a
 						href="javascript:showIn(${keyUsbKeyDepot.id})"  >入库详情</a>
@@ -254,7 +278,7 @@
 					</td>
 
 				</tr>
-			<tr>
+			<%-- <tr>
 				<td></td>
 				<td></td>
 				<td></td>
@@ -264,7 +288,7 @@
 				<td>${keyUsbKeyDepot.outCount}</td>
 				<td>${keyUsbKeyDepot.totalEndCount} </td>
 				<td></td>
-			</tr>
+			</tr> --%>
 			</c:forEach>
 		</tbody>
 	</table>

@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -151,9 +152,14 @@ public class KeyUsbKeyDepotController extends BaseController {
 			@RequestParam(value = "depotName", required = false) String depotName,
 			@RequestParam(value = "keyId", required = false) Long keyId,
 			@RequestParam(value = "supplierId", required = false) Long supplierId,
+			@RequestParam(value = "que", required = false) Long query,
 			Model model) {
+		
+
 		  List<KeyUsbKeyDepot> list = keyUsbKeyDepotService.findAll();
 		  model.addAttribute("KeyUsbKeyDepot",list);
+		  int ruKuZongliang = 0;//入库总量汇总
+		  int chuKuZongling = 0;//入库总量汇总
 		User user = UserUtils.getUser();
 		if (endTime!=null) {
 			endTime.setHours(23);
@@ -166,23 +172,107 @@ public class KeyUsbKeyDepotController extends BaseController {
 			}
 			keyUsbKeyDepot.setCreateBy(user);
 		}
-		
-		if (startTime==null&&endTime==null) {
-		
+		if(null==query){
+			
+//		if (startTime==null&&endTime==null) {
+			 
 			
 			List<Office> offsList =  officeService.getOfficeByType(user, 1);
     		
 			List<Office> offices =  officeService.getOfficeByType(user, 2);
+			
+			
 			if (offices.size()==1) {
 				model.addAttribute("offsListSize",1);
 				model.addAttribute("offices",offices);
 			}
 			List<ConfigSupplier> suppliers = configSupplierService.findByKey();
+			
 		    model.addAttribute("suppliers", suppliers);
 			model.addAttribute("offsList",offsList);
+//			model.addAttribute("startTime", startTime);
+//			model.addAttribute("endTime", endTime);
+//			model.addAttribute("ruKuZongliang", ruKuZongliang);
+//			model.addAttribute("chuKuZongling",chuKuZongling);
 			return "modules/key/keyUsbKeyDepotCountList";
 		}else{
-			  Page<KeyUsbKeyDepot> page = keyUsbKeyDepotService.findAll(new Page<KeyUsbKeyDepot>(request, response),area,office,depotName);
+			List<Office> offices =  officeService.getOfficeByType(user, 2);
+			List<Long> officeIds = new  ArrayList();
+			for(Office o:offices){
+				officeIds.add(o.getId());
+			}
+			if (startTime==null&&endTime==null){
+				//默认今天数据
+				Calendar now = Calendar.getInstance();
+				now.set(Calendar.HOUR_OF_DAY, 0);
+				now.set(Calendar.MINUTE, 0);
+				now.set(Calendar.SECOND, 0);
+				startTime = now.getTime();
+				now.set(Calendar.HOUR_OF_DAY, 23);
+				now.set(Calendar.MINUTE, 59);
+				now.set(Calendar.SECOND, 59);
+				endTime = now.getTime();
+			}
+			//汇总
+			List<KeyUsbKeyDepot> cangku = keyUsbKeyDepotService.findAllQuery(area,office,depotName,officeIds);
+//			ruKuZongliang = keyUsbKeyService.ruKuZongliang(startTime, endTime,cangku,supplierId,keyId);//入库
+//			chuKuZongling = keyUsbKeyInvoiceService.chuKuZongliang(startTime, endTime);//出库
+			for (int i = 0; i <  cangku.size(); i++) {
+				  int in =0;
+				  int out = 0;
+		    	   Long depotId =   cangku.get(i).getId();//获取库存的id
+		    		List<KeyUsbKey> kuksKeys = keyUsbKeyService.findByDepotIdEndTime(depotId,endTime,supplierId,keyId);// 获取该仓库下的入库信息
+					List<Long> geneIds = Lists.newArrayList();
+					for (int j = 0; j < kuksKeys.size(); j++) {
+						geneIds.add(kuksKeys.get(j).getKeyGeneralInfo().getId());   //获取endtime时间下所有入库的key类型信息
+					}
+					List<KeyDepotGeneralStatistics> statisticList = Lists
+							.newArrayList();
+					if (geneIds.size() > 0) {
+						List<KeyGeneralInfo> geneList = keyGeneralInfoService
+								.findByGeneIds(geneIds);// 获取该仓库下的类型
+						for (int j = 0; j < geneList.size(); j++) {
+							KeyDepotGeneralStatistics sta = new KeyDepotGeneralStatistics();
+							sta.setKeyGeneralInfo(geneList.get(j));
+							sta.setKeyUsbKeyDepot(cangku.get(i));
+							statisticList.add(sta);
+						}
+						//兼容统计时间只输入一项
+						List<KeyUsbKey> kukBefores = new ArrayList();
+						List<KeyUsbKeyInvoice> kukiBefores = new ArrayList();
+						if(startTime!=null){
+							kukBefores = keyUsbKeyService.findByDepotIdStartTime(depotId,startTime,supplierId,keyId);//获取开始时间之前的入库信息
+							kukiBefores = keyUsbKeyInvoiceService.findByDepotId(depotId,startTime,supplierId,keyId);//获取开始之前的出库信息
+						}
+						List<KeyUsbKey> kukBetween = keyUsbKeyService.findByDepotIdStartTimeEndTime(depotId,startTime,endTime,supplierId,keyId);//获取开始时间到结束时间之间的入库信息
+						List<KeyUsbKeyInvoice> kukiBetween = keyUsbKeyInvoiceService.findByDepotId(depotId,startTime,endTime,supplierId,keyId);//获取开始之前的出库信息
+						for (int j = 0; j < statisticList.size(); j++) {
+							int inCount = 0;
+							int outCount = 0;
+							for (int k = 0; k < kukBetween.size(); k++) {
+								if (statisticList.get(j).getKeyGeneralInfo().getId().equals(kukBetween.get(k).getKeyGeneralInfo().getId())) {
+									inCount+=kukBetween.get(k).getCount();
+								}
+							}
+							for (int k = 0; k < kukiBetween.size(); k++) {
+								if (statisticList.get(j).getKeyGeneralInfo().getId().equals(kukiBetween.get(k).getKeyGeneralInfo().getId())) {
+									outCount += kukiBetween.get(k).getDeliveryNum();
+								}
+							}
+							in += inCount;
+							out += outCount;
+							statisticList.get(j).setInCount(inCount);
+							statisticList.get(j).setOutCount(outCount);
+						}
+			    	   if (statisticList.size()>0) {
+			    		   cangku.get(i).setKeyDepotGeneralStatisticsList(statisticList);
+			    	   }
+					}
+					ruKuZongliang += in;
+					chuKuZongling += out;
+			  }
+			
+			  Page<KeyUsbKeyDepot> page = keyUsbKeyDepotService.findAllPage(new Page<KeyUsbKeyDepot>(request, response),area,office,depotName,officeIds);
 			  for (int i = 0; i <  page.getList().size(); i++) {
 				  int total =0;
 				  int in =0;
@@ -205,8 +295,13 @@ public class KeyUsbKeyDepotController extends BaseController {
 							sta.setKeyUsbKeyDepot(page.getList().get(i));
 							statisticList.add(sta);
 						}
-						List<KeyUsbKey> kukBefores = keyUsbKeyService.findByDepotIdStartTime(depotId,startTime,supplierId,keyId);//获取开始时间之前的入库信息
-						List<KeyUsbKeyInvoice> kukiBefores = keyUsbKeyInvoiceService.findByDepotId(depotId,startTime,supplierId,keyId);//获取开始之前的出库信息
+						//兼容统计时间只输入一项
+						List<KeyUsbKey> kukBefores = new ArrayList();
+						List<KeyUsbKeyInvoice> kukiBefores = new ArrayList();
+						if(startTime!=null){
+							kukBefores = keyUsbKeyService.findByDepotIdStartTime(depotId,startTime,supplierId,keyId);//获取开始时间之前的入库信息
+							kukiBefores = keyUsbKeyInvoiceService.findByDepotId(depotId,startTime,supplierId,keyId);//获取开始之前的出库信息
+						}
 						List<KeyUsbKey> kukBetween = keyUsbKeyService.findByDepotIdStartTimeEndTime(depotId,startTime,endTime,supplierId,keyId);//获取开始时间到结束时间之间的入库信息
 						List<KeyUsbKeyInvoice> kukiBetween = keyUsbKeyInvoiceService.findByDepotId(depotId,startTime,endTime,supplierId,keyId);//获取开始之前的出库信息
 						for (int j = 0; j < statisticList.size(); j++) {
@@ -292,6 +387,8 @@ public class KeyUsbKeyDepotController extends BaseController {
 		model.addAttribute("depotName", depotName);
 		model.addAttribute("keyId", keyId);
 		model.addAttribute("supplierId", supplierId);
+		model.addAttribute("ruKuZongliang", ruKuZongliang);
+		model.addAttribute("chuKuZongling",chuKuZongling);
 		return "modules/key/keyUsbKeyDepotCountList";
 	}  
 	
