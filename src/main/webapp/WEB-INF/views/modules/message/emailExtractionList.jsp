@@ -16,21 +16,31 @@
         	return false;
         }
 		function dca() {
-			
-				
-					var apply = $("#apply").val();
-					var workType = $("#workType").val();
-					var dealInfoStatus = $("#dealInfoStatus").val();
-					var companyName=$("#companyName").val();
-					
-					window.location.href = "${ctx }/message/emailExtraction/export?apply="
-							+ apply
-							+ "&workType="
-							+ workType
-							+ "&dealInfoStatus="
-							+ dealInfoStatus
-							+"&companyName="
-							+companyName;
+			var apply = $("#apply").val();
+			var workType = $("#workType").val();
+			var dealInfoStatus = $("#dealInfoStatus").val();
+			var companyName=$("#companyName").val();
+			var makeCertStart=$("#makeCertStart").val();
+			var makeCertEnd=$("#makeCertEnd").val();
+			var expiredStart=$("#expiredStart").val();
+			var expiredEnd=$("#expiredEnd").val();
+			window.location.href = "${ctx }/message/emailExtraction/export?apply="
+					+ apply
+					+ "&workType="
+					+ workType
+					+ "&dealInfoStatus="
+					+ dealInfoStatus
+					+"&companyName="
+					+companyName
+					+"&makeCertStart="
+					+makeCertStart
+					+"&makeCertEnd="
+					+makeCertEnd
+					+"&expiredStart="
+					+expiredStart
+					+"&expiredEnd="
+					+expiredEnd
+					;
 				}
 			
 		function onSubmit() {

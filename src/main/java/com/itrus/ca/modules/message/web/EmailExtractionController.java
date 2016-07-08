@@ -104,10 +104,10 @@ public class EmailExtractionController extends BaseController {
 		model.addAttribute("wdiType", WorkDealInfoType.WorkDealInfoTypeMap);
 		model.addAttribute("wdiStatus", WorkDealInfoStatus.WorkDealInfoStatusMap);
 		
-		/*model.addAttribute("makeCertStart", makeCertStart);
+		model.addAttribute("makeCertStart", makeCertStart);
 		model.addAttribute("makeCertEnd", makeCertEnd);
 		model.addAttribute("expiredStart", expiredStart);
-		model.addAttribute("expiredEnd", expiredEnd);*/
+		model.addAttribute("expiredEnd", expiredEnd);
 
 		if (apply == null && workType == null) {
 
@@ -152,7 +152,11 @@ public class EmailExtractionController extends BaseController {
 	public void export(HttpServletRequest request, HttpServletResponse response, WorkDealInfo workDealInfo,
 			@RequestParam(value = "apply", required = false) Long apply,
 			@RequestParam(value = "workType", required = false) Integer workType,
-			@RequestParam(value = "companyName", required = false) String companyName)
+			@RequestParam(value = "companyName", required = false) String companyName,
+			@RequestParam(value = "makeCertStart", required = false) Date makeCertStart,
+			@RequestParam(value = "makeCertEnd", required = false) Date makeCertEnd,
+			@RequestParam(value = "expiredStart", required = false) Date expiredStart,
+			@RequestParam(value = "expiredEnd", required = false) Date expiredEnd)
 
 	{
 		try {
@@ -183,7 +187,7 @@ public class EmailExtractionController extends BaseController {
 			WorkCompany workCompany = new WorkCompany();
 			workCompany.setCompanyName(companyName);
 			workDealInfo.setWorkCompany(workCompany);
-			List<WorkDealInfo> list = workDealInfoService.find12(workDealInfo, apply, workType);
+			List<WorkDealInfo> list = workDealInfoService.find12(workDealInfo, apply, workType,makeCertStart,makeCertEnd,expiredStart,expiredEnd);
 			for (int i = 0; i < list.size(); i++) {
 				HSSFRow rown = sheet.createRow(i + 2);
 				rown.createCell(0).setCellValue(list.get(i).getWorkCompany().getCompanyName());

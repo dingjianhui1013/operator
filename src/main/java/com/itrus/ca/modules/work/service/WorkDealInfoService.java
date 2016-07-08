@@ -471,7 +471,7 @@ public class WorkDealInfoService extends BaseService {
 	}
 
 	public List<WorkDealInfo> find12(WorkDealInfo workDealInfo, Long apply,
-			Integer workType) {
+			Integer workType , Date makeCertStart,Date makeCertEnd,Date expiredStart,Date expiredEnd ) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("workUser", "workUser");
 		dc.createAlias("workCompany", "workCompany");
@@ -517,6 +517,33 @@ public class WorkDealInfoService extends BaseService {
 								.getOrganizationNumber())));
 
 			}
+		}
+		if (makeCertStart != null) {
+			makeCertStart.setHours(0);
+			makeCertStart.setMinutes(0);
+			makeCertStart.setSeconds(0);
+			dc.add(Restrictions.ge("businessCardUserDate", makeCertStart));
+		}
+
+		if (makeCertEnd != null) {
+			makeCertEnd.setHours(23);
+			makeCertEnd.setMinutes(59);
+			makeCertEnd.setSeconds(59);
+			dc.add(Restrictions.le("businessCardUserDate", makeCertEnd));
+		}
+
+		if (expiredStart != null) {
+			expiredStart.setHours(0);
+			expiredStart.setMinutes(0);
+			expiredStart.setSeconds(0);
+			dc.add(Restrictions.ge("notafter", expiredStart));
+		}
+
+		if (expiredEnd != null) {
+			expiredEnd.setHours(23);
+			expiredEnd.setMinutes(59);
+			expiredEnd.setSeconds(59);
+			dc.add(Restrictions.le("notafter", expiredEnd));
 		}
 		dc.add(Restrictions.isNull("isIxin"));
 		dc.add(Restrictions.eq(WorkDealInfo.DEL_FLAG,
@@ -1933,18 +1960,15 @@ public class WorkDealInfoService extends BaseService {
 
 	}
 
-	public List<WorkDealInfo> findCX(WorkDealInfo workDealInfo, /*
-																 * List<Long>
-																 * dealInfoByAreaIds
-																 * , List<Long>
-																 * dealInfoByOfficeAreaIds
-																 * ,
-																 */
-			List<Long> officeIds, Long apply, String certType,
-			Integer workType, Integer year, Date luruStartTime,
-			Date luruEndTime, List<Long> offices, Date daoqiStartTime,
-			Date daoqiEndTime, Date paymentStartTime, Date paymentEndTime,
-			List<WorkCertInfo> certInfoList
+	public List<WorkDealInfo> findCX(
+			WorkDealInfo workDealInfo, /*
+										 * List<Long> dealInfoByAreaIds,
+										 * List<Long> dealInfoByOfficeAreaIds,
+										 */List<Long> officeIds, Long apply,
+			String certType, Integer workType, Integer year,
+			Date luruStartTime, Date luruEndTime, List<Long> offices,
+			Date daoqiStartTime, Date daoqiEndTime, Date paymentStartTime,
+			Date paymentEndTime, List<WorkCertInfo> certInfoList
 
 	) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
@@ -2085,6 +2109,15 @@ public class WorkDealInfoService extends BaseService {
 			}
 		}
 
+		/*
+		 * if (jianzhengStartTime != null) {
+		 * dc.add(Restrictions.ge("updateDate", jianzhengStartTime)); } if
+		 * (jianzhengEndTime != null) { jianzhengEndTime.setHours(23);
+		 * jianzhengEndTime.setMinutes(59); jianzhengEndTime.setSeconds(59);
+		 * dc.add(Restrictions.le("updateDate", jianzhengEndTime)); }
+		 */
+
+		// 查询条件由之前的鉴证时间改为缴费时间
 		if (paymentStartTime != null) {
 			dc.add(Restrictions.ge("payUserDate", paymentStartTime));
 		}
@@ -2136,7 +2169,11 @@ public class WorkDealInfoService extends BaseService {
 		}
 
 		if (workType != null) {
-			dc.add(Restrictions.ne("dealInfoType", 11));
+
+			dc.add(Restrictions.or(Restrictions.ne("dealInfoType", 11),
+					Restrictions.isNull("dealInfoType")));
+
+			/* dc.add(Restrictions.ne("dealInfoType", 11)); */
 		}
 
 		if (year != null) {
