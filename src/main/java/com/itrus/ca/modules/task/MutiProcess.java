@@ -194,8 +194,9 @@ public class MutiProcess implements Runnable {
 					}
 
 					// company.setComCertficateTime(s1.getComCertificateTime());
-					company.setComCertificateType(String.valueOf(s1
-							.getComCertificateType()));
+					if (s1.getComCertificateType() != null)
+						company.setComCertificateType(String.valueOf(s1
+								.getComCertificateType()));
 					company.setLegalName(s1.getLegalName());
 					company.setProvince(s1.getSProvince());
 					company.setCity(s1.getSCity());
