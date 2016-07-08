@@ -4,10 +4,15 @@
  */
 var result = false;
 function DoInstallCert(data) {
+	var _result = false;
 	var certSignBufP7 = data.signBufP7;
 	if (certSignBufP7.length > 0) {
-		result = installCert(certSignBufP7);
+		_result = installCert(certSignBufP7);
+		result = _result;
 	}
+	if(!_result)
+		return false;
+		
 	var certSignBuf = data.signBuf;
 	if (!certSignBuf || certSignBuf.length == 0) {
 		throw ("");
@@ -18,8 +23,10 @@ function DoInstallCert(data) {
 		var certKmcRep2 = data.certKmcRep2;
 		var installMode = data.installMode;
 		if (certKmcRep1.length > 0) {
-			installCertKmc(certSignBuf, certKmcBuf, null, null, null,
+			_result = installCertKmc(certSignBuf, certKmcBuf, null, null, null,
 					certKmcRep1, certKmcRep2, null, installMode);
+			result = _result;
 		}
 	}
+	return _result;
 }
