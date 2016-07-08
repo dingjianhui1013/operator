@@ -12,7 +12,7 @@
       .form-signin{position:relative;text-align:left;width:330px;padding:15px 20px 5px;margin:0 auto 20px;background-color:#fff;border:1px solid #e5e5e5;
         	-webkit-border-radius:5px;-moz-border-radius:5px;border-radius:5px;-webkit-box-shadow:0 1px 2px rgba(0,0,0,.05);-moz-box-shadow:0 1px 2px rgba(0,0,0,.05);box-shadow:0 1px 2px rgba(0,0,0,.05);}
       .form-signin .checkbox{margin-bottom:10px;color:#0663a2;} .form-signin .input-label{font-size:16px;line-height:23px;color:#999;}
-      .form-signin .input-block-level{font-size:16px;height:auto;margin-bottom:15px;padding:7px;*width:283px;*padding-bottom:0;_padding:7px 7px 9px 7px;}
+      .form-signin .input-block-level{font-size:16px;height:auto;margin-bottom:15px;padding:7px;*width:310px;*padding-bottom:0;_padding:7px 7px 9px 7px;}
       .form-signin .btn.btn-large{font-size:16px;} .form-signin #themeSwitch{position:absolute;right:15px;bottom:10px;}
       .form-signin div.validateCode {padding-bottom:15px;} .mid{vertical-align:middle;}
       .header{height:60px;padding-top:30px;} .alert{position:relative;width:300px;margin:0 auto;*padding-bottom:0px;}
@@ -238,7 +238,7 @@
 		</div>
 		<div style="display:none" id="sub">
 			<div class="btnBox">
-				<input class="btn btn-large btn-primary" type="submit" value="登  录"  style="width:45%;margin-right:25px;"/>
+				<input class="btn btn-large btn-primary" type="submit" value="登  录"  style="width:45%;margin-right:25px;*margin-right:20px"/>
 				<input class="btn btn-large btn-primary" type="button" onclick="tabSccaLogin();" value="证书登录" id="sccaLoginId" style="width:45%;"/>
 			</div>
 			<label for="rememberMe" title="下次不需要再登录"><input type="checkbox" id="rememberMe" name="rememberMe"/> 记住我（公共场所慎用）</label>
