@@ -361,7 +361,12 @@ public class SelfApplicationController extends BaseController {
 		workLogService.save(workLog);
 		logUtil.saveSysLog("业务办理", "新增业务保存：编号" + workDealInfo.getId() + "单位名称："+ workDealInfo.getWorkCompany().getCompanyName(), "");
 		// 改变申请表的状态
-		selfApplication.setStatus(SelfApplicationStatus.downApply);
+		if(selfApplication.getBusinessType().equals(SelfApplicationStatus.renovateApply)){
+		    
+		    selfApplication.setStatus(SelfApplicationStatus.payApply); 
+		}else{
+		    selfApplication.setStatus(SelfApplicationStatus.downApply); 
+		}
 		selfApplication.setMoney(configChargeAgentDetail.getMoney());
 		selfApplication.setWorkCertInfo(workCertInfo);
 		selfApplicationService.save(selfApplication);
