@@ -185,7 +185,11 @@ public class MutiProcess implements Runnable {
 					}
 
 					company.setSelectLv(String.valueOf(s1.getSelectLv()));
-					company.setComCertficateNumber(s1.getComCertficateNumber());
+					if (StringHelper.isDigit(s1.getComCertficateNumber()))
+						company.setComCertficateNumber(s1
+								.getComCertficateNumber());
+					else
+						company.setComCertficateNumber("1");
 
 					if (s1.getComCertificateTime() != null
 							&& !s1.getComCertificateTime().equals("")) {
@@ -507,8 +511,11 @@ public class MutiProcess implements Runnable {
 		workCompanyHis.setAnnualInspection(workCompany.getAnnualInspection());
 		workCompanyHis.setBusinessNumber(workCompany.getBusinessNumber());
 		workCompanyHis.setCity(workCompany.getCity());
-		workCompanyHis.setComCertficateNumber(workCompany
-				.getComCertficateNumber());
+		if (StringHelper.isDigit(workCompany.getComCertficateNumber()))
+			workCompanyHis.setComCertficateNumber(workCompany
+					.getComCertficateNumber());
+		else
+			workCompanyHis.setComCertficateNumber("1");
 		workCompanyHis.setComCertficateTime(workCompany.getComCertficateTime());
 		workCompanyHis.setComCertificateType(workCompany
 				.getComCertificateType());
