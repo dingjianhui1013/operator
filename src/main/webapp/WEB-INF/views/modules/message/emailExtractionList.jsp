@@ -4,6 +4,7 @@
 <head>
 	<title>邮箱提取管理</title>
 	<meta name="decorator" content="default"/>
+	<%@include file="/WEB-INF/views/include/dialog.jsp"%>
 	<script type="text/javascript">
 		$(document).ready(function() {
 			
@@ -59,8 +60,8 @@
 		<div>
 			<label>代办应用：</label> 
 				<select name="apply"
-					id="apply">
-					<option value="">请选择应用</option>
+					id="apply" data-placeholder="选择应用" class="editable-select">
+					<option value=""></option>
 					<c:forEach items="${configAppList}" var="app">
 						<option value="${app.id}"
 							<c:if test="${app.id==applyId}">
@@ -120,6 +121,11 @@
 		</div>
 		</form:form>
 		<tags:message content="${message}" />
+		<script type="text/javascript">
+		$(function(){
+		    $('.editable-select').chosen();
+		});
+		</script>
 	<table id="contentTable"
 		class="table table-striped table-bordered table-condensed">
 		<thead>

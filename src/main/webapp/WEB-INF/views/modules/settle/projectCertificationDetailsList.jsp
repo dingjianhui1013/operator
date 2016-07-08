@@ -4,6 +4,7 @@
 <head>
 	<title>项目发证明细管理</title>
 	<meta name="decorator" content="default"/>
+	<%@include file="/WEB-INF/views/include/dialog.jsp"%>
 	<script type="text/javascript">
 		$(document).ready(function() {
 			
@@ -81,8 +82,8 @@
 		<div>
 			<label>项目名称：</label> 
 			<select name="alias"
-				id="alias">
-				<option value="">请选择项目</option>
+				id="alias" data-placeholder="选择应用" class="editable-select">
+				<option value=""></option>
 				<c:forEach items="${configAppList}" var="app">
 					<option value="${app.id}"
 						<c:if test="${app.id==alias}">
@@ -106,6 +107,11 @@
 		<a href="javascript:dca()" class="btn btn-primary">导出</a>
 			</div>
 	</form:form>
+	<script type="text/javascript">
+	$(function(){
+	    $('.editable-select').chosen();
+	});
+	</script>
 	<tags:message content="${message}"/>
 		
 		<c:if test="${projectcount!=null}">

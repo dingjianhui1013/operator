@@ -5,6 +5,7 @@
 <head>
 <title>项目调整统计</title>
 <meta name="decorator" content="default" />
+<%@include file="/WEB-INF/views/include/dialog.jsp"%>
 <script type="text/javascript">
 	$(document).ready(function() {
 		$("#searchForm").validate({
@@ -60,8 +61,8 @@
 		<form:input path="company" htmlEscape="false"
 			maxlength="50" class="input-medium" id="company"/>
 		<label>应用名称 ：</label>
-		<select name="companyName" id="companyName">
-				<option value="">请选择</option>
+		<select name="companyName" id="companyName" data-placeholder="选择应用" class="editable-select">
+				<option value=""></option>
 			<c:forEach items="${companys}" var="companys">
 				<option value="${companys.appName}"
 					<c:if test="${companys.appName==companyName}">
@@ -117,6 +118,12 @@
 		</c:forEach>
 		</tbody>
 	</table>
+	<script type="text/javascript">
+	$(function(){
+	    $('.editable-select').chosen();
+	});
+	</script>
+	
 <%-- 	<div class="pagination">${page}</div> --%>
 </body>
 </html>

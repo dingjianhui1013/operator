@@ -5,6 +5,7 @@
 <head>
 <title>证书结算统计表-缴费统计</title>
 <meta name="decorator" content="default" />
+<%@include file="/WEB-INF/views/include/dialog.jsp"%>
 <style type="text/css">
 	.table th,.table td{
 		text-align: center;
@@ -195,8 +196,8 @@ $(document).ready(function() {
 			<div style="margin-top: 9px;" >
 				<label>应&nbsp; &nbsp;
 					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 用：</label> <select
-					name="applyId" id="applyId">
-					<option value="">请选择应用</option>
+					name="applyId" id="applyId" data-placeholder="选择应用" class="editable-select">
+					<option value=""></option>
 					<c:forEach items="${configAppList}" var="app">
 						<option value="${app.id}"
 							<c:if test="${app.id == applyId}">
@@ -295,6 +296,11 @@ $(document).ready(function() {
 
 		</form:form>
 		<tags:message content="${message}" />
+		<script type="text/javascript">
+			$(function(){
+			    $('.editable-select').chosen();
+			});
+		</script>
 
 		<div class="form-horizontal" style="margin-right:0px;">
 

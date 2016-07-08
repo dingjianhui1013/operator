@@ -5,6 +5,7 @@
 <head>
 	<title>证书发放量统计</title>
 	<meta name="decorator" content="default"/>
+	<%@include file="/WEB-INF/views/include/dialog.jsp"%> 
 	<script type="text/javascript">
 		$(document).ready(function() {
 			
@@ -98,8 +99,8 @@
 
 		<div>
 		<label>应&nbsp; &nbsp; &nbsp; 用 ：</label> 
-			<select name="applyId" id="applyId">
-				<option value="">请选择应用</option>
+			<select name="applyId" id="applyId" data-placeholder="选择应用" class="editable-select">
+				<option value=""></option>
 				<c:forEach items="${configAppList}" var="app">
 					<option value="${app.id}"
 						<c:if test="${app.id == applyId}">
@@ -385,6 +386,11 @@
 				<td>${allCountNew}</td>
 			</tr>
 		</table>
+		<script type="text/javascript">
+		$(function(){
+		    $('.editable-select').chosen();
+		});
+		</script>
 		</div>
 </body>
 </html>

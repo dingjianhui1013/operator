@@ -4,6 +4,7 @@
 <head>
 	<title>查看短信返回信息管理</title>
 	<meta name="decorator" content="default"/>
+	<%@include file="/WEB-INF/views/include/dialog.jsp"%>
 	<script type="text/javascript">
 		$(document).ready(function() {
 			
@@ -36,8 +37,8 @@
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
 		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
 		<div>
-		<label>应用名称：</label> <select name="apply" id="apply">
-				<option value="">请选择应用</option>
+		<label>应用名称：</label> <select name="apply" id="apply" data-placeholder="选择应用" class="editable-select">
+				<option value=""></option>
 				<c:forEach items="${configAppList}" var="app">
 					<option value="${app.id}"
 						<c:if test="${app.id==apply}">
@@ -74,6 +75,11 @@
 		<input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/>
 	</form:form>
 	<tags:message content="${message}"/>
+	<script type="text/javascript">
+	$(function(){
+	    $('.editable-select').chosen();
+	});
+	</script>
 	<table id="contentTable" class="table table-striped table-bordered table-condensed">
 		<thead>
 			<tr>

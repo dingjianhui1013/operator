@@ -5,6 +5,7 @@
 <head>
 <title>代理商管理</title>
 <meta name="decorator" content="default" />
+<%@include file="/WEB-INF/views/include/dialog.jsp"%>
 <script type="text/javascript">
 	$(document).ready(function() {
 	
@@ -141,8 +142,8 @@
 			</select>
 		</div>
 		<div  class="control-group" >
-	    <label>应用名称 ：</label> <select name="congifApplyId" id="congifApplyId" onchange="products()">
-				<option value="">请选择</option>
+	    <label>应用名称 ：</label> <select name="congifApplyId" id="congifApplyId" onchange="products()" data-placeholder="选择应用" class="editable-select">
+				<option value=""></option>
 				<c:forEach items="${configApps}" var="app">
 					<option value="${app.id}"
 						<c:if test="${app.id==congifApplyId}">
@@ -355,6 +356,7 @@
 					id="mes" style="color: red;"></label></td>
 			</tr>
 			<tr>
+
 				<th>应付款</th>
 				<td colspan='${colsTotl}' ><label  id="accountsMoney" >${total }</label>&nbsp;元</td>
 			</tr>
@@ -362,6 +364,11 @@
 		<input type="hidden" value="${startTime }" id="startDate">
 		<input type="hidden" value="${endTime }" id="endDate">
 		<input type="hidden" value="${agentName }" id="agent">
+		<script type="text/javascript">
+		$(function(){
+		    $('.editable-select').chosen();
+		});
+		</script>
 	</div>
 </body>
 </html>

@@ -4,6 +4,7 @@
 <head>
 <title>业务办理管理</title>
 <meta name="decorator" content="default" />
+<%@include file="/WEB-INF/views/include/dialog.jsp"%>
 <script type="text/javascript">
 	$(document).ready(function() {
 		$("#searchForm").validate({
@@ -50,8 +51,8 @@
 		<form:input path="workUser.contactName" htmlEscape="false"
 			maxlength="50" class="input-medium" />
 		<label>应用名称:</label>
-		<form:select path="configApp.appName">
-			<form:option value="" label="请选择"/>
+		<form:select path="configApp.appName" data-placeholder="选择应用" class="editable-select">
+			<form:option value="" label=""/>
 			<c:forEach items="${apps}" var="app">
 				<form:option value="${app.appName }">${appName }</form:option>
 			</c:forEach>
@@ -77,6 +78,11 @@
 		</div>
 	</form:form>
 	<tags:message content="${message}" />
+	<script type="text/javascript">
+	$(function(){
+	    $('.editable-select').chosen();
+	});
+	</script>	
 	<table id="contentTable"
 		class="table table-striped table-bordered table-condensed">
 		<thead>

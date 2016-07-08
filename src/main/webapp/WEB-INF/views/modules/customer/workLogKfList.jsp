@@ -16,6 +16,7 @@
         	return false;
         }
 	</script>
+	
 </head>
 <body>
 	<ul class="nav nav-tabs">

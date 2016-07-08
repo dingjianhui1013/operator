@@ -8,6 +8,7 @@
 </style>
 <title>业务办理管理</title>
 <meta name="decorator" content="default" />
+<%@include file="/WEB-INF/views/include/dialog.jsp"%>
 <script type="text/javascript">
 $(document).ready(
 		function() {
@@ -1106,8 +1107,8 @@ $(document).ready(
 		<div>
 			<label>&nbsp;&nbsp;应用名称 ：&nbsp;&nbsp;</label>
 			<select name="alias"
-				id="alias">
-				<option value="">请选择应用</option>
+				id="alias" data-placeholder="选择应用" class="editable-select">
+				<option value=""></option>
 				<c:forEach items="${configAppList}" var="app">
 					<option value="${app.id}"
 						<c:if test="${app.id==alias}">
@@ -1550,14 +1551,10 @@ $(document).ready(
 				onclick="updateSubmit()" class="btn btn-primary">更新</a>
 		</div>
 	</div>
-	
-	
-	
-	
-	
-	
-	
-	
-	
+<script type="text/javascript">
+	$(function(){
+	    $('.editable-select').chosen();
+	});
+	</script>
 </body>
 </html>

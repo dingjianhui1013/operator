@@ -5,6 +5,7 @@
 <head>
 	<title>新建记录</title>
 	<meta name="decorator" content="default"/>
+	<%@include file="/WEB-INF/views/include/dialog.jsp"%>
 	<script type="text/javascript">
 		$(document).ready(function() {
 			$("#name").focus();
@@ -81,14 +82,19 @@
 		<div class="control-group">
 			<label class="control-label">应用项目名称:</label>
 			<div class="controls">
-				<select name="configAppId">
-				<option value="">  </option>
+				<select name="configAppId" data-placeholder="选择应用" class="editable-select">
+				<option value=""></option>
 					<c:forEach items="${configApp}" var="configApp">
 						<option value="${configApp.id}" <c:if test="${configApp.appName==workDealInfo.configApp.appName}">selected="selected"</c:if>>${configApp.appName}</option>
 					</c:forEach>
 				</select>
 			</div>
 		</div>
+		<script type="text/javascript">
+		$(function(){
+		    $('.editable-select').chosen();
+		});
+		</script>
 		<div class="control-group">
 			<label class="control-label">客服接入:</label>
 			<div class="controls">

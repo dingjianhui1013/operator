@@ -278,8 +278,8 @@
 			value="${page.pageSize}" />
 		<div>
 
-			<label>应用名称：</label> <select name="apply" id="apply">
-				<option value="">请选择应用</option>
+			<label>应用名称：</label> <select name="apply" id="apply" data-placeholder="选择应用" class="editable-select">
+				<option value=""></option>
 				<c:forEach items="${configAppList}" var="app">
 					<option value="${app.id}"
 						<c:if test="${app.id==apply}">
@@ -398,6 +398,12 @@
 	
 	</form:form>
 	<tags:message content="${message}" />
+	<script type="text/javascript">
+	$(function(){
+	    $('.editable-select').chosen();
+	});
+	</script>
+	
 	<table id="contentTable"
 		class="table table-striped table-bordered table-condensed">
 		<thead>

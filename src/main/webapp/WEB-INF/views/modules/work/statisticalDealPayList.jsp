@@ -5,6 +5,7 @@
 <head>
 <title>统计信息</title>
 <meta name="decorator" content="default" />
+<%@include file="/WEB-INF/views/include/dialog.jsp"%>
 <script type="text/javascript">
 	$(document).ready(function() {
 
@@ -86,8 +87,8 @@
 					</c:if>>${off.name}</option>
 				</c:forEach>
 			
-			</select> <label>应用名称 ：</label> <select name="appId" id="appId">
-				<option value="">请选择</option>
+			</select> <label>应用名称 ：</label> <select name="appId" id="appId" data-placeholder="请选择应用" class="editable-select">
+				<option value=""></option>
 				<c:forEach items="${appList}" var="app">
 					<option value="${app.id}"
 						<c:if test="${app.id==appId}">
@@ -250,6 +251,11 @@
 			</c:forEach>
 		</tbody>
 	</table>
+	<script type="text/javascript">
+	$(function(){
+	    $('.editable-select').chosen();
+	});
+	</script>
 	<div class="pagination">${page}</div>
 </body>
 </html>

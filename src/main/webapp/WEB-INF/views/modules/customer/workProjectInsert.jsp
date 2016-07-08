@@ -5,6 +5,8 @@
 <head>
 	<title>新建记录</title>
 	<meta name="decorator" content="default"/>
+	<%@include file="/WEB-INF/views/include/dialog.jsp"%>
+	
 	<script type="text/javascript">
 		$(document).ready(function() {
 			$("#serType").change(function(){
@@ -90,13 +92,18 @@
 <!-- 			</div> -->
 			<label class="control-label">应用项目名称:</label>
 			<div class="controls">
-				<select name="configApp.id">
+				<select name="configApp.id" class="editable-select">
 					<c:forEach items="${configApp}" var="configApp">
 						<option value="${configApp.id}">${configApp.appName}</option>
 					</c:forEach>
 				</select>
 			</div>
 		</div>
+		<script type="text/javascript">
+		$(function(){
+		    $('.editable-select').chosen();
+		});
+		</script>
 		<div class="control-group">
 			<label class="control-label">服务方式:</label>
 			<div class="controls">

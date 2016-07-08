@@ -5,6 +5,7 @@
 <head>
 	<title>业务办理管理</title>
 	<meta name="decorator" content="default"/>
+	<%@include file="/WEB-INF/views/include/dialog.jsp"%>	
 	<script type="text/javascript">
 		$(document).ready(function() {
 			
@@ -26,14 +27,19 @@
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
 		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
 		<label>应用项目名称 ：</label>
-		<select name="configApp.id">
-		<option value="">请选择</option>
+		<select name="configApp.id" data-placeholder="选择应用" class="editable-select">
+		<option value=""></option>
 					<c:forEach items="${configApp}" var="configApp">
 						<option value="${configApp.id}">${configApp.appName}</option>
 					</c:forEach>
 		</select>
 <%-- 		<form:input path="configApp" htmlEscape="false" maxlength="50" class="input-medium"/> --%>
 <%-- 		<label>服务主题 ：</label><form:input path="serTitle" htmlEscape="false" maxlength="50" class="input-medium"/> --%>
+		<script type="text/javascript">
+		$(function(){
+		    $('.editable-select').chosen();
+		});
+		</script>
 		<label>服务方式 ：</label>
 		<form:select path="access"  class="input-medium">
 			<form:option value="">请选择接入方式</form:option>

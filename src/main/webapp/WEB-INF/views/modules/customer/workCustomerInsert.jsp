@@ -5,6 +5,7 @@
 <head>
 	<title>新建记录</title>
 	<meta name="decorator" content="default"/>
+	<%@include file="/WEB-INF/views/include/dialog.jsp"%>
 	<script type="text/javascript">
 		$(document).ready(function() {
 			$("#serType").change(function(){
@@ -87,7 +88,8 @@
 		<div class="control-group">
 			<label class="control-label">应用项目名称:</label>
 			<div class="controls">
-				<select name="appName">
+				<select name="appName" id="editable-select" data-placeholder="选择应用" class="form-control">
+				<option value=""></option>
 					<c:forEach items="${configApp}" var="configApp">
 						<option value="${configApp.appName}"  <c:if test="${configApp.appName==workDealInfo.configApp.appName}">selected="selected"</c:if>>${configApp.appName}</option>
 					</c:forEach>
@@ -201,5 +203,10 @@
 			<input id="btnCancel" class="btn" type="button" value="返 回" onclick="history.go(-1)"/>
 		</div>
 	</form>
+	<script type="text/javascript">
+	$(function(){
+	    $('#editable-select').chosen();
+	});
+	</script>
 </body>
 </html>
