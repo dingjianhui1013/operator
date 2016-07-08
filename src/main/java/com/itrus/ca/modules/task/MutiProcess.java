@@ -1,6 +1,5 @@
 package com.itrus.ca.modules.task;
 
-import java.lang.reflect.InvocationTargetException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -31,6 +30,7 @@ import com.itrus.ca.modules.profile.service.ConfigChargeAgentService;
 import com.itrus.ca.modules.profile.service.ConfigProductService;
 import com.itrus.ca.modules.sys.entity.Office;
 import com.itrus.ca.modules.sys.entity.User;
+import com.itrus.ca.modules.sys.service.OfficeService;
 import com.itrus.ca.modules.task.entity.BasicInfoScca;
 import com.itrus.ca.modules.task.service.BasicInfoSccaService;
 import com.itrus.ca.modules.work.entity.WorkCertApplyInfo;
@@ -83,6 +83,9 @@ public class MutiProcess implements Runnable {
 	ConfigChargeAgentDetailService configChargeAgentDetailService = SpringContextHolder
 			.getBean(ConfigChargeAgentDetailService.class);
 
+	OfficeService officeService = SpringContextHolder
+			.getBean(OfficeService.class);
+
 	Logger log = Logger.getLogger(MutiProcess.class);
 	private List<BasicInfoScca> sccaList;
 	private Long officeId;
@@ -121,7 +124,8 @@ public class MutiProcess implements Runnable {
 			// 存储 代理商 appId --key
 			HashMap<Long, ConfigCommercialAgent> commercialAgentHash = new HashMap<Long, ConfigCommercialAgent>();
 
-			Office office = createBy.getOffice();
+			// Office office = createBy.getOffice();
+			Office office = officeService.get(officeId);
 			List<ConfigAgentOfficeRelation> configAgentOfficeRelations = configAgentOfficeRelationService
 					.findByOffice(office);
 
@@ -300,6 +304,8 @@ public class MutiProcess implements Runnable {
 						log.debug("证书:" + certInfo.getSerialnumber()
 								+ "\t无劳务关系代理商，未设置劳务关系...");
 					}
+					workDealInfo.setOfficeId(this.officeId);
+					workDealInfo.setAreaId(office.getParent().getId());
 					workDealInfo.setConfigApp(app);
 					workDealInfo.setWorkUser(user);
 					workDealInfo.setWorkCompany(company);
