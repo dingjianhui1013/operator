@@ -472,7 +472,8 @@ public class WorkDealInfoService extends BaseService {
 	}
 
 	public List<WorkDealInfo> find12(WorkDealInfo workDealInfo, Long apply,
-			Integer workType , Date makeCertStart,Date makeCertEnd,Date expiredStart,Date expiredEnd ) {
+			Integer workType, Date makeCertStart, Date makeCertEnd,
+			Date expiredStart, Date expiredEnd) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("workUser", "workUser");
 		dc.createAlias("workCompany", "workCompany");
@@ -1961,15 +1962,18 @@ public class WorkDealInfoService extends BaseService {
 
 	}
 
-	public List<WorkDealInfo> findCX(
-			WorkDealInfo workDealInfo, /*
-										 * List<Long> dealInfoByAreaIds,
-										 * List<Long> dealInfoByOfficeAreaIds,
-										 */List<Long> officeIds, Long apply,
-			String certType, Integer workType, Integer year,
-			Date luruStartTime, Date luruEndTime, List<Long> offices,
-			Date daoqiStartTime, Date daoqiEndTime, Date paymentStartTime,
-			Date paymentEndTime, List<WorkCertInfo> certInfoList
+	public List<WorkDealInfo> findCX(WorkDealInfo workDealInfo, /*
+																 * List<Long>
+																 * dealInfoByAreaIds
+																 * , List<Long>
+																 * dealInfoByOfficeAreaIds
+																 * ,
+																 */
+			List<Long> officeIds, Long apply, String certType,
+			Integer workType, Integer year, Date luruStartTime,
+			Date luruEndTime, List<Long> offices, Date daoqiStartTime,
+			Date daoqiEndTime, Date paymentStartTime, Date paymentEndTime,
+			List<WorkCertInfo> certInfoList
 
 	) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
@@ -4418,6 +4422,13 @@ public class WorkDealInfoService extends BaseService {
 	public void updateDelflag(WorkDealInfo old) {
 		String sql = "update work_deal_info set del_flag=" + old.getDelFlag()
 				+ " where id=" + old.getId();
+		workDealInfoDao.exeSql(sql);
+	}
+
+	@Transactional(readOnly = false)
+	public void udateFirstCertSN(WorkDealInfo old) {
+		String sql = "update work_deal_info set FIRST_CERT_SN='"
+				+ old.getFirstCertSN() + "' where id=" + old.getId();
 		workDealInfoDao.exeSql(sql);
 	}
 
@@ -7582,19 +7593,19 @@ public class WorkDealInfoService extends BaseService {
 		return workDealInfoDao.find(dc);
 	}
 
-	
 	/**
 	 * @author 萧龙纳云
 	 */
 	public List<WorkDealInfo> findDealInfoCollectAdds(Long appId,
-			List<Long> productIds, Date start, Date end,Date contractStart, Date contractEnd ) {
+			List<Long> productIds, Date start, Date end, Date contractStart,
+			Date contractEnd) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("configApp", "configApp");
 		if (appId != null) {
 
 			dc.add(Restrictions.eq("configApp.id", appId));
 		}
-		
+
 		if (productIds.size() > 0) {
 			dc.createAlias("configProduct", "configProduct");
 			dc.add(Restrictions.in("configProduct.id", productIds));
@@ -7611,21 +7622,21 @@ public class WorkDealInfoService extends BaseService {
 			end.setSeconds(59);
 			dc.add(Restrictions.le("businessCardUserDate", end));
 		}
-		
-		if(contractStart != null){
+
+		if (contractStart != null) {
 			contractStart.setHours(0);
 			contractStart.setMinutes(0);
 			contractStart.setSeconds(00);
 			dc.add(Restrictions.ge("businessCardUserDate", contractStart));
 		}
-		
-		if(contractEnd != null){
+
+		if (contractEnd != null) {
 			contractEnd.setHours(23);
 			contractEnd.setMinutes(59);
 			contractEnd.setSeconds(59);
 			dc.add(Restrictions.le("businessCardUserDate", contractEnd));
 		}
-		
+
 		dc.add(Restrictions.eq("dealInfoType", 0));
 		dc.addOrder(Order.desc("id"));
 		dc.add(Restrictions.eq("dealInfoStatus",
@@ -7633,10 +7644,7 @@ public class WorkDealInfoService extends BaseService {
 		dc.add(Restrictions.eq("delFlag", DataEntity.DEL_FLAG_NORMAL));
 		return workDealInfoDao.find(dc);
 	}
-	
-	
-	
-	
+
 	/**
 	 * @author 萧龙纳云
 	 */
@@ -7648,7 +7656,7 @@ public class WorkDealInfoService extends BaseService {
 
 			dc.add(Restrictions.eq("configApp.id", appId));
 		}
-		
+
 		if (productIds.size() > 0) {
 			dc.createAlias("configProduct", "configProduct");
 			dc.add(Restrictions.in("configProduct.id", productIds));
@@ -7665,7 +7673,7 @@ public class WorkDealInfoService extends BaseService {
 			end.setSeconds(59);
 			dc.add(Restrictions.le("businessCardUserDate", end));
 		}
-		
+
 		dc.add(Restrictions.eq("dealInfoType", 1));
 		dc.addOrder(Order.desc("id"));
 		dc.add(Restrictions.eq("dealInfoStatus",
@@ -7673,41 +7681,44 @@ public class WorkDealInfoService extends BaseService {
 		dc.add(Restrictions.eq("delFlag", DataEntity.DEL_FLAG_NORMAL));
 		return workDealInfoDao.find(dc);
 	}
-	
-	
-	
+
 	/**
 	 * 数据迁移导入后所调接口
-	 * @param workDealInfo  业务链最后一条info数据
+	 * 
+	 * @param workDealInfo
+	 *            业务链最后一条info数据
 	 * 
 	 */
-	
-	public WorkDealInfo setValueForSettle(WorkDealInfo info){
-		
-		Integer settleYear = info.getConfigCommercialAgent().getSettlementPeriod();
-		
-		List<WorkDealInfo> infoChain = findChainByFirstCertSN(info.getFirstCertSN());
-		
+
+	public WorkDealInfo setValueForSettle(WorkDealInfo info) {
+
+		Integer settleYear = info.getConfigCommercialAgent()
+				.getSettlementPeriod();
+
+		List<WorkDealInfo> infoChain = findChainByFirstCertSN(info
+				.getFirstCertSN());
+
 		Integer dealYear = 0;
-		
-		for(int i=0;i<infoChain.size()-1;i++){
+
+		for (int i = 0; i < infoChain.size() - 1; i++) {
 			dealYear += infoChain.get(i).getYear();
 		}
-		
-		info.setSettledLife(settleYear-dealYear>0?dealYear:settleYear);
-		info.setResidualLife(settleYear-dealYear>0?settleYear-dealYear:0);
-		
+
+		info.setSettledLife(settleYear - dealYear > 0 ? dealYear : settleYear);
+		info.setResidualLife(settleYear - dealYear > 0 ? settleYear - dealYear
+				: 0);
+
 		return info;
-	} 
-	
-	
-	public List<WorkDealInfo> findChainByFirstCertSN(String firstCertSN){
+	}
+
+	public List<WorkDealInfo> findChainByFirstCertSN(String firstCertSN) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.add(Restrictions.eq("firstCertSN", firstCertSN));
-		dc.add(Restrictions.or(Restrictions.eq("dealInfoType", WorkDealInfoType.TYPE_ADD_CERT), Restrictions.eq("dealInfoType", WorkDealInfoType.TYPE_UPDATE_CERT)));
+		dc.add(Restrictions.or(Restrictions.eq("dealInfoType",
+				WorkDealInfoType.TYPE_ADD_CERT), Restrictions.eq(
+				"dealInfoType", WorkDealInfoType.TYPE_UPDATE_CERT)));
 		dc.addOrder(Order.asc("createDate"));
 		return workDealInfoDao.find(dc);
 	}
-	
-	
+
 }
