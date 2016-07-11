@@ -2,6 +2,7 @@
  */
 package com.itrus.ca.modules.self.web;
 
+import java.io.StringWriter;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -10,6 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.velocity.VelocityContext;
+import org.apache.velocity.app.VelocityEngine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,6 +27,7 @@ import com.itrus.ca.common.web.BaseController;
 import com.itrus.ca.modules.constant.WorkDealInfoStatus;
 import com.itrus.ca.modules.constant.WorkDealInfoType;
 import com.itrus.ca.modules.log.service.LogUtil;
+import com.itrus.ca.modules.message.service.SmsService;
 import com.itrus.ca.modules.profile.entity.ConfigAgentBoundDealInfo;
 import com.itrus.ca.modules.profile.entity.ConfigAgentOfficeRelation;
 import com.itrus.ca.modules.profile.entity.ConfigApp;
@@ -122,7 +126,8 @@ public class SelfApplicationController extends BaseController {
 
 	@Autowired
 	private ConfigChargeAgentBoundConfigProductService configChargeAgentBoundConfigProductService;
-
+	@Autowired
+	private SmsService smsService;
 	private LogUtil logUtil = new LogUtil();
 
 	@ModelAttribute
@@ -191,6 +196,22 @@ public class SelfApplicationController extends BaseController {
 		selfApplication.setStatus(SelfApplicationStatus.denyApply);
 		selfApplication.setDenyText(denyText);
 		selfApplicationService.save(selfApplication);
+		String phone = selfApplication.getTransactorPhone();
+		if (phone!=null&&!"".equals(phone)) {
+			String messageString = "您在四川省数字证书认证管理中心申请的数字证书业务审核未通过，拒绝原因："+denyText+"请登录系统进行修改并重新提交。";
+			VelocityEngine ve = new VelocityEngine();
+			ve.init();
+			VelocityContext context = new VelocityContext();
+			StringWriter writer = new StringWriter();
+			ve.evaluate(context, writer, "", messageString);
+			String sendStatus =smsService.sendSms(System.currentTimeMillis() + "", phone,writer.toString());
+			if(sendStatus.equals("0"))
+			{
+				logUtil.saveSysLog("业务办理", "新增业务审核拒绝：编号" + selfApplication.getNo() + "短信发送失败","");
+			}else if(sendStatus.equals("1")){
+				logUtil.saveSysLog("业务办理", "新增业务审核拒绝：编号" + selfApplication.getNo() + "短信发送成功","");
+			}
+		}
 		return "redirect:" + Global.getAdminPath()+ "/self/selfApplication/?repage";
 	}
 
@@ -367,6 +388,45 @@ public class SelfApplicationController extends BaseController {
 		}else{
 		    selfApplication.setStatus(SelfApplicationStatus.downApply); 
 		}
+		//发送短信
+		String phone = selfApplication.getTransactorPhone();
+		if (phone!=null&&!"".equals(phone)) {
+			String messageString =null;
+			if(selfApplication.getBusinessType().equals("0"))
+			{
+				messageString = "您在四川省数字证书认证管理中心申请的数字证书业务已通过审核，请再次登录系统下载申请表进行盖章邮寄并完成业务缴费。";
+			}
+			if (selfApplication.getBusinessType().equals("1")) {
+				messageString = "您在四川省数字证书认证管理中心申请的数字证书业务已通过审核，请再次登录系统完成业务缴费。";
+			}
+			VelocityEngine ve = new VelocityEngine();
+			ve.init();
+			VelocityContext context = new VelocityContext();
+			StringWriter writer = new StringWriter();
+			ve.evaluate(context, writer, "", messageString);
+			String sendStatus =smsService.sendSms(System.currentTimeMillis() + "", phone,writer.toString());
+			
+			if(sendStatus.equals("0"))
+			{
+				if(selfApplication.getBusinessType().equals("0"))
+				{
+					logUtil.saveSysLog("业务办理", "更新业务保存：编号" + workDealInfo.getId() + "短信发送失败","");
+				}
+				if(selfApplication.getBusinessType().equals("1"))
+				{
+					logUtil.saveSysLog("业务办理", "更新业务保存：编号" + workDealInfo.getId() + "短信发送失败","");
+				}
+			}else if(sendStatus.equals("1")){
+				if(selfApplication.getBusinessType().equals("0"))
+				{
+					logUtil.saveSysLog("业务办理", "更新业务保存：编号" + workDealInfo.getId() + "短信发送成功","");
+				}else if(selfApplication.getBusinessType().equals("1"))
+				{
+					logUtil.saveSysLog("业务办理", "更新业务保存：编号" + workDealInfo.getId() + "短信发送成功","");
+				}
+			}
+		}
+		//发送结束
 		selfApplication.setMoney(configChargeAgentDetail.getMoney());
 		selfApplication.setWorkCertInfo(workCertInfo);
 		selfApplicationService.save(selfApplication);
