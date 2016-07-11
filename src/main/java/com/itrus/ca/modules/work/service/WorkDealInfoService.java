@@ -4426,7 +4426,7 @@ public class WorkDealInfoService extends BaseService {
 	}
 
 	@Transactional(readOnly = false)
-	public void udateFirstCertSN(WorkDealInfo old) {
+	public void updateFirstCertSN(WorkDealInfo old) {
 		String sql = "update work_deal_info set FIRST_CERT_SN='"
 				+ old.getFirstCertSN() + "' where id=" + old.getId();
 		workDealInfoDao.exeSql(sql);
