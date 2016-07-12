@@ -41,68 +41,48 @@
 	<table id="contentTable"
 					class="table table-striped table-bordered table-condensed" style="width: 60%" >
 					<tr>
-						<th colspan="${7+lenth*5 }" >统计周期：<fmt:formatDate pattern="yyyy-MM-dd" value="${settlementLogs.startTime}"/>&nbsp;-&nbsp;<fmt:formatDate pattern="yyyy-MM-dd" value="${settlementLogs.endTime}"/></th>
+						<th colspan="11" >统计周期：<fmt:formatDate pattern="yyyy-MM-dd" value="${settlementLog.startTime}"/>&nbsp;-&nbsp;<fmt:formatDate pattern="yyyy-MM-dd" value="${settlementLog.endTime}"/></th>
 					</tr>
 					<tr>
-						<th colspan="${7+lenth*5 }">本期结算证书年限：（本次结算年数总数）代理商：${settlementLog.comagentName} 应用名称：${settlementLog.appName}</th>
+						<th colspan="11">本期结算证书年限：（本次结算年数总数）代理商：${settlementLog.comagentName} 应用名称：${settlementLog.appName}</th>
 					</tr>
 					<tr>
-						<th rowspan="2">序号</th>
-						<th rowspan="2">单位名称</th>
-						<th rowspan="2">经办人姓名</th>
-						<th rowspan="2">产品名称</th>
-						<c:forEach var="a" begin="1" end="${lenth}">
-						
-						<th colspan="5">第${a}次结算</th>
-						</c:forEach>
-						
-						<th colspan="3">结算年限统计</th>
-					</tr>
-					<tr>
-						
-						<c:forEach begin="1" end="${lenth}">
-						<th>缴费类型</th>
-						<th>起始时间</th>
-						<th>结束时间</th>
 						<th>业务类型</th>
-						<th>结算(年)</th>
-						</c:forEach>
-						<th>已结算（年）</th>
-						<th>本期结算（年）</th>
-						<th>剩余结算（年）</th>
+						<th colspan="5">新增</th>
+						<th colspan="5">更新</th>
 					</tr>
-					<c:forEach items="${dealInfos }" var="dealInfo" varStatus="status">
-						<tr>
-							<td>${status.index + 1}</td>
-							<td>${dealInfo.workCompany.companyName}</td>
-							<td>${dealInfo.workCertInfo.workCertApplyInfo.name}</td>
-							<td>${proType[dealInfo.configProduct.productName]}</td>
-							<c:forEach items="${dealInfo.detailList }" var="detail">
-
-									<c:if test="${detail.method==1}"><td>标准</td></c:if> 
-	 								<c:if test="${detail.method==2}"><td>政府统一采购</td></c:if> 
-	 								<c:if test="${detail.method==3}"><td>合同采购</td></c:if> 
-								<td><fmt:formatDate	value="${detail.startDate }" pattern="yyyy-MM-dd" /></td>
-								<td><fmt:formatDate value="${detail.endDate }" pattern="yyyy-MM-dd" /></td>
-								<td><c:if test="${detail.dealInfoType=='null '}"> </c:if> 
-								<c:if test="${detail.dealInfoType!='null '}">${detail.dealInfoType}</c:if> </td>
-								<td>${detail.settleYear }</td>
-							</c:forEach>
-							<c:forEach begin="1" end="${lenth - dealInfo.detailList.size() }">
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-							</c:forEach>
-							<td>${dealInfo.yyNum}</td>
-							<td>${dealInfo.lastNum}</td>
-							<td><c:if test="${dealInfo.totalNum - dealInfo.yyNum - dealInfo.lastNum-dealInfo.occupy<0}">0</c:if>
-							
-								<c:if test="${dealInfo.totalNum - dealInfo.yyNum - dealInfo.lastNum-dealInfo.occupy>=0}">${dealInfo.totalNum - dealInfo.yyNum - dealInfo.lastNum-dealInfo.occupy}</c:if>
-							</td>
-						</tr>
-					</c:forEach>
+					<tr>
+						<th>结算年限</th>
+						<th>1年期</th>
+						<th>2年期</th>
+						<th>3年期</th>
+						<th>4年期</th>
+						<th>5年期</th>
+						<th>1年期</th>
+						<th>2年期</th>
+						<th>3年期</th>
+						<th>4年期</th>
+						<th>5年期</th>
+					</tr>
+				<tbody>
+			<c:forEach items="${collect}" var="collect">
+				<tr>
+					<td>${collect.productName }</td>
+					<td>${collect.add1 }</td>
+					<td>${collect.add2 }</td>
+					<td>${collect.add3 }</td>
+					<td>${collect.add4 }</td>
+					<td>${collect.add5 }</td>
+					<td>${collect.update1 }</td>
+					<td>${collect.update2 }</td>
+					<td>${collect.update3 }</td>
+					<td>${collect.update4 }</td>
+					<td>${collect.update5 }</td>
+						
+				</tr>
+			</c:forEach>
+		</tbody>
+					
 				</table>
 				</div>
 </body>

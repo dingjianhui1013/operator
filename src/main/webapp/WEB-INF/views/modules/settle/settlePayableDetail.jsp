@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8"%>
+<%@ page contentType="text/html;charset=UTF-8" import="java.util.*"%>
 <%@ include file="/WEB-INF/views/include/taglib.jsp"%>
 <!DOCTYPE html>
 <html>
@@ -66,6 +66,9 @@
 			});
 		var startTime=$("#startTime").val();
 		var endTime=$("#endTime").val();
+		
+		
+		
 		if(comAgentId==0){
 			top.$.jBox.tip("代理商不能为空！");
 		}else{
@@ -90,7 +93,9 @@
 										success:function(data){
 											if(data.status==1)
 												{
-													top.$.jBox.confirm(data.msg,'系统提示',function(v,h,f){
+												top.$.jBox.tip("不允许再次保存");
+												
+													/* top.$.jBox.confirm(data.msg,'系统提示',function(v,h,f){
 						                            	if(v=='ok'){
 						                            		loading('正在提交，请稍等...');
 						                            		$.ajax({
@@ -108,7 +113,7 @@
 						        								}
 						                            		});
 						                            	}
-													});
+													}); */
 											}else{
 														
 													// 	$("#remarks").val(f.remarks);
@@ -259,6 +264,66 @@
 		
 	</form:form>
 	<tags:message content="${message}" />	
+	
+	
+		<div class="form-horizontal" >
+		<table id="contentTable"
+					class="table table-striped table-bordered table-condensed" style="width: 60%" >
+					<tr>
+						<th colspan="11" >结算时间：<fmt:formatDate pattern="yyyy-MM-dd" value="<%=new Date() %>"/></th>
+					</tr>
+					<tr>
+						<th colspan="11">结算周期：<fmt:formatDate pattern="yyyy-MM-dd" value="${startTime}"/>&nbsp;-&nbsp;<fmt:formatDate pattern="yyyy-MM-dd" value="${endTime}"/></th>
+					</tr>
+					<tr>
+						<th>业务类型</th>
+						<th colspan="5">新增</th>
+						<th colspan="5">更新</th>
+					</tr>
+					<tr>
+						<th>结算年限</th>
+						<th>1年期</th>
+						<th>2年期</th>
+						<th>3年期</th>
+						<th>4年期</th>
+						<th>5年期</th>
+						<th>1年期</th>
+						<th>2年期</th>
+						<th>3年期</th>
+						<th>4年期</th>
+						<th>5年期</th>
+					</tr>
+		<tbody>
+			<c:forEach items="${collect}" var="collect">
+				<tr>
+					<td>${collect.productName }</td>
+					<td>${collect.add1 }</td>
+					<td>${collect.add2 }</td>
+					<td>${collect.add3 }</td>
+					<td>${collect.add4 }</td>
+					<td>${collect.add5 }</td>
+					<td>${collect.update1 }</td>
+					<td>${collect.update2 }</td>
+					<td>${collect.update3 }</td>
+					<td>${collect.update4 }</td>
+					<td>${collect.update5 }</td>
+						
+				</tr>
+			</c:forEach>
+		</tbody>
+					
+	</table>
+		
+	
+	
+		
+	</div>
+	
+	
+	
+	
+	
+	
 	<div class="form-horizontal" >
 		<table id="contentTable"
 					class="table table-striped table-bordered table-condensed" style="width: 60%" >
