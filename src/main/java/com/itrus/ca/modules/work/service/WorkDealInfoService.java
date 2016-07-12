@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -7235,7 +7236,8 @@ public class WorkDealInfoService extends BaseService {
 	}
 
 	public List<WorkDealInfo> findDealInfoByAdd(Long appId, List<Long> appIds,
-			List<Long> productIds, Date start, Date end,Date contractStart,Date contractEnd) {
+			List<Long> productIds, Date start, Date end, Date contractStart,
+			Date contractEnd) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("configApp", "configApp");
 		if (appId != null) {
@@ -7261,22 +7263,21 @@ public class WorkDealInfoService extends BaseService {
 			end.setSeconds(59);
 			dc.add(Restrictions.le("businessCardUserDate", end));
 		}
-			
-		if(contractStart != null){
+
+		if (contractStart != null) {
 			contractStart.setHours(0);
 			contractStart.setMinutes(0);
 			contractStart.setSeconds(00);
 			dc.add(Restrictions.ge("businessCardUserDate", contractStart));
 		}
-		
-		if(contractEnd != null){
+
+		if (contractEnd != null) {
 			contractEnd.setHours(23);
 			contractEnd.setMinutes(59);
 			contractEnd.setSeconds(59);
 			dc.add(Restrictions.le("businessCardUserDate", contractEnd));
 		}
-		
-		
+
 		dc.add(Restrictions.eq("dealInfoType", 0));
 		dc.addOrder(Order.desc("id"));
 		dc.add(Restrictions.eq("dealInfoStatus",
@@ -7313,7 +7314,8 @@ public class WorkDealInfoService extends BaseService {
 		}
 		dc.add(Restrictions.eq("dealInfoType", 1));
 		dc.addOrder(Order.desc("id"));
-		dc.add(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED));
+		dc.add(Restrictions.eq("dealInfoStatus",
+				WorkDealInfoStatus.STATUS_CERT_OBTAINED));
 
 		return workDealInfoDao.find(dc);
 	}
@@ -7612,7 +7614,6 @@ public class WorkDealInfoService extends BaseService {
 		return workDealInfoDao.find(dc);
 	}
 
-
 	/**
 	 * @author 萧龙纳云
 	 */
@@ -7702,20 +7703,20 @@ public class WorkDealInfoService extends BaseService {
 		return workDealInfoDao.find(dc);
 	}
 
-
-
-	
 	/**
 	 * @author 萧龙纳云
 	 * 
-	 * 根据业务链首条业务的证书序列号查找到日期参数之前的整个业务链
-	 * @param firstCertSN 首张证书序列号
-	 * @param endTime 前台输入日期
-	 * @param endLastTime 截止日期
+	 *         根据业务链首条业务的证书序列号查找到日期参数之前的整个业务链
+	 * @param firstCertSN
+	 *            首张证书序列号
+	 * @param endTime
+	 *            前台输入日期
+	 * @param endLastTime
+	 *            截止日期
 	 */
 
-
-	public List<WorkDealInfo> findChainByFirstCertSN(String firstCertSN,Date endTime,Date endLastDate) {
+	public List<WorkDealInfo> findChainByFirstCertSN(String firstCertSN,
+			Date endTime, Date endLastDate) {
 
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.add(Restrictions.eq("firstCertSN", firstCertSN));
@@ -7724,38 +7725,109 @@ public class WorkDealInfoService extends BaseService {
 		endTime.setMinutes(59);
 		endTime.setSeconds(59);
 		dc.add(Restrictions.le("businessCardUserDate", endTime));
-		
-		
+
 		endLastDate.setHours(23);
 		endLastDate.setMinutes(59);
 		endLastDate.setSeconds(59);
 		dc.add(Restrictions.le("businessCardUserDate", endLastDate));
-		
 
 		dc.add(Restrictions.or(Restrictions.eq("dealInfoType",
 				WorkDealInfoType.TYPE_ADD_CERT), Restrictions.eq(
 				"dealInfoType", WorkDealInfoType.TYPE_UPDATE_CERT)));
 
 		dc.addOrder(Order.asc("createDate"));
-		
+
 		return workDealInfoDao.find(dc);
 	}
 
-	
 	/**
 	 * @author 萧龙纳云
 	 * 
-	 *  根据firstCertSN字段得到业务链首张证书业务
-	 * @param   首张证书序列号
-	 * @return  WorkDealInfo  业务链首条业务
+	 *         根据firstCertSN字段得到业务链首张证书业务
+	 * @param 首张证书序列号
+	 * @return WorkDealInfo 业务链首条业务
 	 */
-	
-	public WorkDealInfo findFirstByFirstCertSN(String firstCertSN){
+
+	public WorkDealInfo findFirstByFirstCertSN(String firstCertSN) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.add(Restrictions.eq("certSn", firstCertSN));
 		dc.add(Restrictions.eq("dealInfoType", WorkDealInfoType.TYPE_ADD_CERT));
-		
+
 		return workDealInfoDao.find(dc).get(0);
 	}
-	
+
+	/**
+	 * 找出所有没有first_cert_sn的记录
+	 * 
+	 * @return Long
+	 */
+	public void fixAllDataFirstCertSN() {
+		String sql = "select id from WORK_DEAL_INFO where FIRST_CERT_SN is null";
+		List<BigDecimal> lst = workDealInfoDao.findBySql(sql);
+		for (BigDecimal e : lst) {
+			Long id = e.longValue();
+			WorkDealInfo po = get(id);
+			if (StringHelper.isNull(po.getFirstCertSN())) {
+				fixFirstCertSN(po.getId());
+			}
+		}
+	}
+
+	/**
+	 * 根据指定ID，按照preid查出一条完整业务链
+	 * 
+	 * @param workDealInfoId
+	 * @return List<WorkDealInfo>
+	 */
+	public void fixFirstCertSN(Long workDealInfoId) {
+		// 当以prev_id查询有数据时，则不是最后一条
+		String sql = "select id,PREV_ID,CREATE_DATE,CERT_SN,FIRST_CERT_SN";
+		sql += " from WORK_DEAL_INFO start with ";
+		sql += "PREV_ID=";
+		sql += workDealInfoId;
+		sql += " connect by prior PREV_ID = id order by CREATE_DATE desc";
+
+		// 当以prev_id查询无数据时，则认为是最后一条的ID，以这个ID为起点拉出所有业务链数据
+		String sql2 = "select id,PREV_ID,CREATE_DATE,CERT_SN,FIRST_CERT_SN";
+		sql2 += " from WORK_DEAL_INFO start with ";
+		sql2 += "id=";
+		sql2 += workDealInfoId;
+		sql2 += " connect by prior PREV_ID = id order by CREATE_DATE desc";
+
+		try {
+			List<Map> lst = workDealInfoDao.findBySQLListMap(sql, 0, 0);
+
+			if (lst != null && lst.size() > 0) {
+				fixFirstCertSN(new Long(lst.get(0).get("ID").toString()));
+				return;
+			}
+			// 以prev_id为基准查询时如果无数据，则认为这是最后一条，可以以这条为基准拉出所有业务链数据
+			lst = workDealInfoDao.findBySQLListMap(sql2, 0, 0);
+			if (lst == null || lst.size() <= 0)
+				return;
+			// 最后一条数据就是首条数据
+			Map end = lst.get(lst.size() - 1);
+			String first_cert_sn = end.get("CERT_SN") == null ? "" : end.get(
+					"CERT_SN").toString();
+
+			if (StringHelper.isNull(first_cert_sn)) {
+				return;
+			}
+			for (Map e : lst) {
+				String id = e.get("ID").toString();
+
+				WorkDealInfo po = new WorkDealInfo();
+				po.setId(new Long(id));
+				po.setFirstCertSN(first_cert_sn);
+				// updateFirstCertSN(po);
+				workDealInfoDao.modifyFirstCertSN(new Long(id), first_cert_sn);
+			}
+		} catch (IllegalAccessException | IllegalArgumentException
+				| InvocationTargetException | ClassNotFoundException
+				| InstantiationException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	}
+
 }
