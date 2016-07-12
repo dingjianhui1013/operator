@@ -35,6 +35,16 @@
 		});
 	}
 	
+	function updateFirstCertSN(){
+		$("#make").hide();
+		$("#returnJsonData").html("正在生成...........");
+		var url = "test/updateFirstCertSN?&_="+new Date().getTime();
+		$.getJSON(url,function(data){
+			$("#make").show();
+			$("#returnJsonData").html(data.msg);
+		});
+	}
+	
 	function makeUpdateData(){
 		$("#update").hide();
 		var autoPass = 0;
@@ -67,6 +77,7 @@
 					<ul class="nav nav-tabs">
 						<li class="active"><a href="#panel-98562" data-toggle="tab">新增业务</a></li>
 						<li><a href="#panel-489367" data-toggle="tab">更新业务</a></li>
+						<li><a href="#panel-4893681" data-toggle="tab">更新首张证书序列号</a></li>
 					</ul>
 					<div class="tab-content">
 						<div class="tab-pane active" id="panel-98562">
@@ -106,8 +117,20 @@
 									</div>
 								</div>
 							</div>
-
-
+						</div>
+						<div class="tab-pane" id="panel-4893681">
+							<div class="container-fluid">
+								<div class="row-fluid">
+									<div class="span12">
+										<blockquote>
+											<p>更新首张证书数据</p>
+										</blockquote>
+										<br>
+										<button class="btn btn-warning" type="button"
+											onclick="updateFirstCertSN()" id="update">更新首张证书数据</button>
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
