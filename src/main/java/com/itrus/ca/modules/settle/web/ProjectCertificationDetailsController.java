@@ -85,8 +85,7 @@ public class ProjectCertificationDetailsController extends BaseController {
 	@Autowired
 	private OfficeService officeService;
 
-	@Autowired
-	private WorkCertInfoService workCertInfoService;
+	
 	
 	@Autowired
 	private ConfigAppOfficeRelationService configAppOfficeRelationService;

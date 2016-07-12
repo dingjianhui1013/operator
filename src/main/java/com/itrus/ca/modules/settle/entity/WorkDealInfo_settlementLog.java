@@ -4,33 +4,22 @@
 package com.itrus.ca.modules.settle.entity;
 
 import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
+
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.NotFound;
-import org.hibernate.annotations.NotFoundAction;
-import org.hibernate.validator.constraints.Length;
 
 import com.itrus.ca.common.persistence.DataEntity;
-import com.itrus.ca.modules.sys.entity.User;
 import com.itrus.ca.modules.work.entity.WorkDealInfo;
-import com.itrus.ca.modules.work.entity.WorkLog;
+
 
 /**
  * 年限结算保存Entity
@@ -64,8 +53,7 @@ public class WorkDealInfo_settlementLog extends DataEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	//@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_settle_settlementLog")
-	//@SequenceGenerator(name = "seq_settle_settlementLog", sequenceName = "seq_settle_settlementLog")
+	
 	public Long getId() {
 		return id;
 	}
