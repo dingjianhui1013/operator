@@ -7762,8 +7762,21 @@ public class WorkDealInfoService extends BaseService {
 	 * @return Long
 	 */
 	public void fixAllDataFirstCertSN() {
+
+		String ct = "select count(*) from WORK_DEAL_INFO where FIRST_CERT_SN is null";
+
+		List l = workDealInfoDao.findBySql(ct);
+		int c = new Integer(l.get(0).toString());
+
 		String sql = "select id from WORK_DEAL_INFO where FIRST_CERT_SN is null";
+		boolean loop = false;
+		if (c > 10) {
+			sql += " and rownum<10";
+			loop = true;
+		}
+
 		List<BigDecimal> lst = workDealInfoDao.findBySql(sql);
+
 		for (BigDecimal e : lst) {
 			Long id = e.longValue();
 			WorkDealInfo po = get(id);
@@ -7771,6 +7784,9 @@ public class WorkDealInfoService extends BaseService {
 				fixFirstCertSN(po.getId());
 			}
 		}
+
+		if (loop)
+			fixAllDataFirstCertSN();
 	}
 
 	/**
@@ -7785,7 +7801,7 @@ public class WorkDealInfoService extends BaseService {
 		sql += " from WORK_DEAL_INFO start with ";
 		sql += "PREV_ID=";
 		sql += workDealInfoId;
-		sql += " connect by prior PREV_ID = id order by CREATE_DATE desc";
+		sql += " connect by prior PREV_ID = id order by CREATE_DATE asc";
 
 		// 当以prev_id查询无数据时，则认为是最后一条的ID，以这个ID为起点拉出所有业务链数据
 		String sql2 = "select id,PREV_ID,CREATE_DATE,CERT_SN,FIRST_CERT_SN";
@@ -7806,7 +7822,7 @@ public class WorkDealInfoService extends BaseService {
 			if (lst == null || lst.size() <= 0)
 				return;
 			// 最后一条数据就是首条数据
-			Map end = lst.get(lst.size() - 1);
+			Map end = lst.get(0);
 			String first_cert_sn = end.get("CERT_SN") == null ? "" : end.get(
 					"CERT_SN").toString();
 
@@ -7819,8 +7835,9 @@ public class WorkDealInfoService extends BaseService {
 				WorkDealInfo po = new WorkDealInfo();
 				po.setId(new Long(id));
 				po.setFirstCertSN(first_cert_sn);
-				// updateFirstCertSN(po);
-				workDealInfoDao.modifyFirstCertSN(new Long(id), first_cert_sn);
+				updateFirstCertSN(po);
+				// workDealInfoDao.modifyFirstCertSN(new Long(id),
+				// first_cert_sn);
 			}
 		} catch (IllegalAccessException | IllegalArgumentException
 				| InvocationTargetException | ClassNotFoundException
