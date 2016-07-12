@@ -937,13 +937,10 @@ public class ClientController {
 
 	@RequestMapping(value = "updateFirstCertSN")
 	@ResponseBody
-	public String updateFirstCertSN(
-			Long officeId,
-			@RequestParam(defaultValue = "yyyy-MM-dd HH:mm:ss", required = false) String pattern)
-			throws JSONException {
+	public String updateFirstCertSN(Integer updateCount) throws JSONException {
 		JSONObject json = new JSONObject();
 		// 修复所有现有数据里，没有firstCertSn字段的记录
-		workDealInfoService.fixAllDataFirstCertSN();
+		workDealInfoService.fixAllDataFirstCertSN(updateCount);
 
 		json.put("msg", "完成");
 
