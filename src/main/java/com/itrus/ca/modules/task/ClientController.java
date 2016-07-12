@@ -935,6 +935,21 @@ public class ClientController {
 		System.out.println("555555555555");
 	}
 
+	@RequestMapping(value = "updateFirstCertSN")
+	@ResponseBody
+	public String updateFirstCertSN(
+			Long officeId,
+			@RequestParam(defaultValue = "yyyy-MM-dd HH:mm:ss", required = false) String pattern)
+			throws JSONException {
+		JSONObject json = new JSONObject();
+		// 修复所有现有数据里，没有firstCertSn字段的记录
+		workDealInfoService.fixAllDataFirstCertSN();
+
+		json.put("msg", "完成");
+
+		return json.toString();
+	}
+
 	/**
 	 * 
 	 * @param productId
@@ -1061,6 +1076,7 @@ public class ClientController {
 
 		Integer dealInfoCount = workDealInfoService.afterDealInfoId(dealInfoId);
 
+		// 业务链中，只有最后一条是0，前面的都是1
 		workDealInfoService.processPreId(firstSnAll);
 
 		json.put("msg", "本次成功提交数据：" + dealInfoCount + "条！");
