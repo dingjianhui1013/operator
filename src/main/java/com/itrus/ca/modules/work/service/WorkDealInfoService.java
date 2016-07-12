@@ -7235,7 +7235,7 @@ public class WorkDealInfoService extends BaseService {
 	}
 
 	public List<WorkDealInfo> findDealInfoByAdd(Long appId, List<Long> appIds,
-			List<Long> productIds, Date start, Date end) {
+			List<Long> productIds, Date start, Date end,Date contractStart,Date contractEnd) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("configApp", "configApp");
 		if (appId != null) {
@@ -7250,11 +7250,33 @@ public class WorkDealInfoService extends BaseService {
 			dc.add(Restrictions.in("configProduct.id", productIds));
 		}
 		if (start != null) {
+			start.setHours(0);
+			start.setMinutes(0);
+			start.setSeconds(00);
 			dc.add(Restrictions.ge("businessCardUserDate", start));
 		}
 		if (end != null) {
+			end.setHours(23);
+			end.setMinutes(59);
+			end.setSeconds(59);
 			dc.add(Restrictions.le("businessCardUserDate", end));
 		}
+			
+		if(contractStart != null){
+			contractStart.setHours(0);
+			contractStart.setMinutes(0);
+			contractStart.setSeconds(00);
+			dc.add(Restrictions.ge("businessCardUserDate", contractStart));
+		}
+		
+		if(contractEnd != null){
+			contractEnd.setHours(23);
+			contractEnd.setMinutes(59);
+			contractEnd.setSeconds(59);
+			dc.add(Restrictions.le("businessCardUserDate", contractEnd));
+		}
+		
+		
 		dc.add(Restrictions.eq("dealInfoType", 0));
 		dc.addOrder(Order.desc("id"));
 		dc.add(Restrictions.eq("dealInfoStatus",
@@ -7278,23 +7300,20 @@ public class WorkDealInfoService extends BaseService {
 			dc.add(Restrictions.in("configProduct.id", productIds));
 		}
 		if (start != null) {
-			dc.add(Restrictions.ge("payUserDate", start));
+			start.setHours(0);
+			start.setMinutes(0);
+			start.setSeconds(00);
+			dc.add(Restrictions.ge("businessCardUserDate", start));
 		}
 		if (end != null) {
-			dc.add(Restrictions.le("payUserDate", end));
+			end.setHours(23);
+			end.setMinutes(59);
+			end.setSeconds(59);
+			dc.add(Restrictions.le("businessCardUserDate", end));
 		}
 		dc.add(Restrictions.eq("dealInfoType", 1));
 		dc.addOrder(Order.desc("id"));
-		/*
-		 * dc.add(Restrictions.eq("dealInfoStatus",
-		 * WorkDealInfoStatus.STATUS_CERT_OBTAINED));
-		 */
-
-		List<String> statusIntegers = new ArrayList<String>();
-		statusIntegers.add(WorkDealInfoStatus.STATUS_CERT_WAIT);
-		statusIntegers.add(WorkDealInfoStatus.STATUS_CERT_OBTAINED);
-
-		dc.add(Restrictions.in("dealInfoStatus", statusIntegers));
+		dc.add(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED));
 
 		return workDealInfoDao.find(dc);
 	}
@@ -7593,6 +7612,7 @@ public class WorkDealInfoService extends BaseService {
 		return workDealInfoDao.find(dc);
 	}
 
+
 	/**
 	 * @author 萧龙纳云
 	 */
@@ -7682,43 +7702,60 @@ public class WorkDealInfoService extends BaseService {
 		return workDealInfoDao.find(dc);
 	}
 
+
+
+	
 	/**
-	 * 数据迁移导入后所调接口
+	 * @author 萧龙纳云
 	 * 
-	 * @param workDealInfo
-	 *            业务链最后一条info数据
-	 * 
+	 * 根据业务链首条业务的证书序列号查找到日期参数之前的整个业务链
+	 * @param firstCertSN 首张证书序列号
+	 * @param endTime 前台输入日期
+	 * @param endLastTime 截止日期
 	 */
 
-	public WorkDealInfo setValueForSettle(WorkDealInfo info) {
 
-		Integer settleYear = info.getConfigCommercialAgent()
-				.getSettlementPeriod();
+	public List<WorkDealInfo> findChainByFirstCertSN(String firstCertSN,Date endTime,Date endLastDate) {
 
-		List<WorkDealInfo> infoChain = findChainByFirstCertSN(info
-				.getFirstCertSN());
-
-		Integer dealYear = 0;
-
-		for (int i = 0; i < infoChain.size() - 1; i++) {
-			dealYear += infoChain.get(i).getYear();
-		}
-
-		info.setSettledLife(settleYear - dealYear > 0 ? dealYear : settleYear);
-		info.setResidualLife(settleYear - dealYear > 0 ? settleYear - dealYear
-				: 0);
-
-		return info;
-	}
-
-	public List<WorkDealInfo> findChainByFirstCertSN(String firstCertSN) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.add(Restrictions.eq("firstCertSN", firstCertSN));
+
+		endTime.setHours(23);
+		endTime.setMinutes(59);
+		endTime.setSeconds(59);
+		dc.add(Restrictions.le("businessCardUserDate", endTime));
+		
+		
+		endLastDate.setHours(23);
+		endLastDate.setMinutes(59);
+		endLastDate.setSeconds(59);
+		dc.add(Restrictions.le("businessCardUserDate", endLastDate));
+		
+
 		dc.add(Restrictions.or(Restrictions.eq("dealInfoType",
 				WorkDealInfoType.TYPE_ADD_CERT), Restrictions.eq(
 				"dealInfoType", WorkDealInfoType.TYPE_UPDATE_CERT)));
+
 		dc.addOrder(Order.asc("createDate"));
+		
 		return workDealInfoDao.find(dc);
 	}
 
+	
+	/**
+	 * @author 萧龙纳云
+	 * 
+	 *  根据firstCertSN字段得到业务链首张证书业务
+	 * @param   首张证书序列号
+	 * @return  WorkDealInfo  业务链首条业务
+	 */
+	
+	public WorkDealInfo findFirstByFirstCertSN(String firstCertSN){
+		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
+		dc.add(Restrictions.eq("certSn", firstCertSN));
+		dc.add(Restrictions.eq("dealInfoType", WorkDealInfoType.TYPE_ADD_CERT));
+		
+		return workDealInfoDao.find(dc).get(0);
+	}
+	
 }

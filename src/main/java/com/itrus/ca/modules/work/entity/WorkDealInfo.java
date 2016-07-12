@@ -115,11 +115,10 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 
 	private List<PayableDetailVo> detailList;
 
-	private Integer yyNum;
-	private Integer totalNum;
-	private Integer lastNum;
-
-	private Integer occupy;
+	private Integer yyNum;      //已经结算
+	private Integer totalNum;   //总结算
+	private Integer lastNum;    //本次结算
+	private Integer waitNum;    //待结算
 
 	private Long officeId;
 	private Long areaId;
@@ -772,12 +771,12 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 	}
 
 	@Transient
-	public Integer getOccupy() {
-		return occupy;
+	public Integer getWaitNum() {
+		return waitNum;
 	}
 
-	public void setOccupy(Integer occupy) {
-		this.occupy = occupy;
+	public void setWaitNum(Integer waitNum) {
+		this.waitNum = waitNum;
 	}
 
 	@Column(name = "office_id")
