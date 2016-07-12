@@ -38,7 +38,7 @@
 	function updateFirstCertSN(){
 		$("#make").hide();
 		$("#returnJsonData").html("正在生成...........");
-		var url = "test/updateFirstCertSN?&_="+new Date().getTime();
+		var url = "test/updateFirstCertSN?updateCount="+$("#updateCount").val()+"&_="+new Date().getTime();
 		$.getJSON(url,function(data){
 			$("#make").show();
 			$("#returnJsonData").html(data.msg);
@@ -125,6 +125,8 @@
 										<blockquote>
 											<p>更新首张证书数据</p>
 										</blockquote>
+										<br>
+										更新记录数(填0为更新全部，数据多时不建议全部更新):<input id="updateCount" />
 										<br>
 										<button class="btn btn-warning" type="button"
 											onclick="updateFirstCertSN()" id="update">更新首张证书数据</button>
