@@ -222,7 +222,7 @@
 				<th>库房名称</th>
 				<th>所在区域</th>
 				<th>所属网点</th>
-				<!-- <th>key类型名称</th> -->
+				<th>key类型名称</th>
 				<th>起始数量</th>
 				<th>入库数量</th>
 				<th>出库数量</th>
@@ -234,42 +234,42 @@
 		<tbody id="tbody">
 			<c:forEach items="${page.list}" var="keyUsbKeyDepot">
 				<tr>
-					<td><a href="${ctx}/key/keyUsbKeyDepot/form?id=${keyUsbKeyDepot.id}">${keyUsbKeyDepot.depotName}</a></td>
-					<td>${keyUsbKeyDepot.office.parent.name}</td>
-					<td>${keyUsbKeyDepot.office.name}</td>
-					<%-- <td><c:forEach
+					<td rowspan=2><a href="${ctx}/key/keyUsbKeyDepot/form?id=${keyUsbKeyDepot.id}">${keyUsbKeyDepot.depotName}</a></td>
+					<td rowspan=2>${keyUsbKeyDepot.office.parent.name}</td>
+					<td rowspan=2>${keyUsbKeyDepot.office.name}</td>
+					<td><c:forEach
 							items="${keyUsbKeyDepot.keyDepotGeneralStatisticsList}"
 							var="statis">
-					        	${statis.keyGeneralInfo.name}
+					        	${statis.keyGeneralInfo.name}<br>
 						</c:forEach>
-					</td> --%>
-					<td><%-- <c:forEach
+					</td> 
+					<td> <c:forEach
 							items="${keyUsbKeyDepot.keyDepotGeneralStatisticsList}"
 							var="statis">
-					        	${statis.totalCount}
-						</c:forEach> --%>
-						${keyUsbKeyDepot.totolCount}
+					        	${statis.totalCount}<br>
+						</c:forEach> 
+						<%-- ${keyUsbKeyDepot.totolCount} --%>
 						</td>
-					<td><%-- <c:forEach
+					<td><c:forEach
 							items="${keyUsbKeyDepot.keyDepotGeneralStatisticsList}"
 							var="statis">
-					        	${statis.inCount}
-						</c:forEach> --%>
-						${keyUsbKeyDepot.inCount}
+					        	${statis.inCount}<br>
+						</c:forEach> 
+						<%-- ${keyUsbKeyDepot.inCount} --%>
 						</td>
-					<td><%-- <c:forEach
+					<td><c:forEach
 							items="${keyUsbKeyDepot.keyDepotGeneralStatisticsList}"
 							var="statis">
-					        	${statis.outCount}
-						</c:forEach> --%>
-						${keyUsbKeyDepot.outCount}
+					        	${statis.outCount}<br>
+						</c:forEach> 
+						<%-- ${keyUsbKeyDepot.outCount} --%>
 						</td>
-					<td> <%-- <c:forEach
+					<td> <c:forEach
 							items="${keyUsbKeyDepot.keyDepotGeneralStatisticsList}"
 							var="statis">
-					        	${statis.totalEndCount}
-						</c:forEach> --%>
-						${keyUsbKeyDepot.totalEndCount}
+					        	${statis.totalEndCount}<br>
+						</c:forEach> 
+						<%-- ${keyUsbKeyDepot.totalEndCount} --%>
 						</td>
 					<td><a
 						href="javascript:showIn(${keyUsbKeyDepot.id})"  >入库详情</a>
@@ -278,17 +278,14 @@
 					</td>
 
 				</tr>
-			<%-- <tr>
-				<td></td>
-				<td></td>
-				<td></td>
+			<tr>
 				<td>${keyUsbKeyDepot.totolName}</td>
 				<td>${keyUsbKeyDepot.totolCount}</td>
 				<td>${keyUsbKeyDepot.inCount} </td>
 				<td>${keyUsbKeyDepot.outCount}</td>
 				<td>${keyUsbKeyDepot.totalEndCount} </td>
 				<td></td>
-			</tr> --%>
+			</tr> 
 			</c:forEach>
 		</tbody>
 	</table>
