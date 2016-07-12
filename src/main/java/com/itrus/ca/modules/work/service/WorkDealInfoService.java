@@ -7761,18 +7761,20 @@ public class WorkDealInfoService extends BaseService {
 	 * 
 	 * @return Long
 	 */
-	public void fixAllDataFirstCertSN() {
+	public void fixAllDataFirstCertSN(int maxCount) {
 
-		String ct = "select count(*) from WORK_DEAL_INFO where FIRST_CERT_SN is null";
+		String ct = "select count(*) from WORK_DEAL_INFO where FIRST_CERT_SN is null ";
+		if (maxCount > 0) {
+			ct += " and rownum<" + maxCount;
+		}
 
 		List l = workDealInfoDao.findBySql(ct);
 		int c = new Integer(l.get(0).toString());
 
 		String sql = "select id from WORK_DEAL_INFO where FIRST_CERT_SN is null";
 		boolean loop = false;
-		if (c > 10) {
-			sql += " and rownum<10";
-			loop = true;
+		if (maxCount > 0) {
+			sql += " and rownum<" + maxCount;
 		}
 
 		List<BigDecimal> lst = workDealInfoDao.findBySql(sql);
@@ -7785,8 +7787,6 @@ public class WorkDealInfoService extends BaseService {
 			}
 		}
 
-		if (loop)
-			fixAllDataFirstCertSN();
 	}
 
 	/**
@@ -7801,34 +7801,43 @@ public class WorkDealInfoService extends BaseService {
 		sql += " from WORK_DEAL_INFO start with ";
 		sql += "PREV_ID=";
 		sql += workDealInfoId;
-		sql += " connect by prior PREV_ID = id order by CREATE_DATE asc";
+		sql += " connect by prior PREV_ID = id order by id desc";
 
-		// 当以prev_id查询无数据时，则认为是最后一条的ID，以这个ID为起点拉出所有业务链数据
+		// // 当以prev_id查询无数据时，则认为是最后一条的ID，以这个ID为起点拉出所有业务链数据
 		String sql2 = "select id,PREV_ID,CREATE_DATE,CERT_SN,FIRST_CERT_SN";
 		sql2 += " from WORK_DEAL_INFO start with ";
 		sql2 += "id=";
 		sql2 += workDealInfoId;
-		sql2 += " connect by prior PREV_ID = id order by CREATE_DATE desc";
+		sql2 += " connect by prior PREV_ID = id order by id asc";
 
 		try {
 			List<Map> lst = workDealInfoDao.findBySQLListMap(sql, 0, 0);
+			if (lst == null || lst.size()<=0) {
+				lst = workDealInfoDao.findBySQLListMap(sql2, 0, 0);
+			}
+			if (lst == null || lst.size() <= 0)
+				return;
 
-			if (lst != null && lst.size() > 0) {
+			// 如果该列表内存在prev_id是空的记录，则认为是首条
+			boolean hasFirst = false;
+			String first_cert_sn = null;
+			for (Map e : lst) {
+				Object tempid = e.get("PREV_ID");
+				if (tempid == null) {
+					hasFirst = true;
+					first_cert_sn = e.get("CERT_SN") == null ? "0" : e.get(
+							"CERT_SN").toString();
+					break;
+				}
+			}
+
+			if (!hasFirst) {
 				fixFirstCertSN(new Long(lst.get(0).get("ID").toString()));
 				return;
 			}
-			// 以prev_id为基准查询时如果无数据，则认为这是最后一条，可以以这条为基准拉出所有业务链数据
-			lst = workDealInfoDao.findBySQLListMap(sql2, 0, 0);
 			if (lst == null || lst.size() <= 0)
 				return;
-			// 最后一条数据就是首条数据
-			Map end = lst.get(0);
-			String first_cert_sn = end.get("CERT_SN") == null ? "" : end.get(
-					"CERT_SN").toString();
 
-			if (StringHelper.isNull(first_cert_sn)) {
-				return;
-			}
 			for (Map e : lst) {
 				String id = e.get("ID").toString();
 
