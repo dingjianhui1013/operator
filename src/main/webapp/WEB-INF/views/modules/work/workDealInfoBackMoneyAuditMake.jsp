@@ -95,8 +95,8 @@
 						if (data.status == 1) {
 							try {
 								$("#sort").html(data.sort);
-								DoInstallCert(data);
-								if (result) {
+								var install_result = DoInstallCert(data);
+								if (install_result) {
 									top.$.jBox.tip("安装证书成功!");
 
 								} else {

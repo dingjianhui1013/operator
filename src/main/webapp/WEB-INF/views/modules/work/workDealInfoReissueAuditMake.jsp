@@ -150,21 +150,19 @@
 					dataType : 'json',
 					success : function(data) {
 						if (data.status == 1) {
+							var t = 0;
 							try {
 								$("#sort").html(data.sort);
-								DoInstallCert(data);
-								if(result){
+								var install_result = DoInstallCert(data);
+								if (install_result) {
+									t = 1;
 									top.$.jBox.tip("安装证书成功!");
-									
-								}else{
-									top.$.jBox.info("证书获取失败,请检查您的证书是否输入,有误或是否已插入USB KEY");
+
+								} else {
+									top.$.jBox
+											.info("证书获取失败,请检查您的证书是否输入,有误或是否已插入USB KEY");
 								}
 							} catch (e) {
-								top.$.jBox.info("证书获取失败,请检查您的证书是否输入,有误或是否已插入USB KEY");
-							}
-							var t = 0;
-							if(result){
-								t = 1;
 							}
 							var updateUrl = "${ctx}/ca/installResult?dealInfoId=${workDealInfo.id}&result="+t+"&_="+new Date().getTime();
 							$.getJSON(updateUrl,function(res) {
