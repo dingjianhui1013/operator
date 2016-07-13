@@ -31,7 +31,11 @@ public class SettlementCollectData extends DataEntity{
 	private Integer update3;      //更新3
 	private Integer update4;      //更新4
 	private Integer update5;      //更新5
+
 	
+	public SettlementCollectData(){
+		
+	}
 	
 	public SettlementCollectData(String productId,Integer productLabel){
 		this.productId = productId;

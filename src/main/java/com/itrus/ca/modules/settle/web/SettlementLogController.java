@@ -434,10 +434,17 @@ public class SettlementLogController extends BaseController {
 			//结算年限
 			int totalAgentYear = comAgent.getSettlementPeriod();
 			
+			Calendar firstCalendar = Calendar.getInstance();
+			firstCalendar.setTime(dealInfo.getBusinessCardUserDate());
+			firstCalendar.set(Calendar.HOUR_OF_DAY, 0);
+			firstCalendar.set(Calendar.SECOND, 0);
+			firstCalendar.set(Calendar.MINUTE, 0);
+			
+			Date firstDealBusiness = firstCalendar.getTime();
 			
 			// endLastDate 最终截止时间:业务链首条的办理时间+代理商的结算年限
 			Calendar calendar = Calendar.getInstance();
-			calendar.setTime(dealInfo.getBusinessCardUserDate());
+			calendar.setTime(firstDealBusiness);
 			calendar.add(Calendar.YEAR, totalAgentYear);
 			Date endLastDate = calendar.getTime();
 			int lastNum = 0;   //本次结算
@@ -452,21 +459,37 @@ public class SettlementLogController extends BaseController {
 			ConfigChargeAgent agent = configChargeAgentService.get(currentDealInfo.getConfigChargeAgentId());
 			
 			
+			Calendar currentBussinessCalendar = Calendar.getInstance();
+			currentBussinessCalendar.setTime(currentDealInfo.getBusinessCardUserDate());
+			currentBussinessCalendar.set(Calendar.HOUR_OF_DAY, 0);
+			currentBussinessCalendar.set(Calendar.SECOND, 0);
+			currentBussinessCalendar.set(Calendar.MINUTE, 0);
+			
+			Date currentDealBusiness = currentBussinessCalendar.getTime();
+			
+			Calendar currentNotAfterCalendar = Calendar.getInstance();
+			currentNotAfterCalendar.setTime(currentDealInfo.getNotafter());
+			currentNotAfterCalendar.set(Calendar.HOUR_OF_DAY, 0);
+			currentNotAfterCalendar.set(Calendar.SECOND, 0);
+			currentNotAfterCalendar.set(Calendar.MINUTE, 0);
+			
+			Date currentDealNotAfter = currentNotAfterCalendar.getTime();
+			
 			//如果模板类型不是标准, 则结算年限为0
 			if (!agent.getTempStyle().equals("1")) {
 					continue;
 			}
 			//如果业务到期时间在最终截止日期之内,则参与结算  结算年限为证书办理年限	
-			else if (currentDealInfo.getNotafter().getTime() < endLastDate.getTime()) {
+			else if (currentDealNotAfter.getTime() < endLastDate.getTime()) {
 				
 					lastNum += currentDealInfo.getYear();
 					
 			} 
 			
 			//如果业务制证时间在最终截止日期之内而业务到期时间在最终截止日期之外,结算年限为
-			else if (currentDealInfo.getBusinessCardUserDate().getTime() < endLastDate.getTime()
-					&& currentDealInfo.getNotafter().getTime() > endLastDate.getTime()) {
-				    long between = endLastDate.getTime() - currentDealInfo.getBusinessCardUserDate().getTime();
+			else if (currentDealBusiness.getTime() < endLastDate.getTime()
+					&& currentDealNotAfter.getTime() > endLastDate.getTime()) {
+				    long between = endLastDate.getTime() - currentDealBusiness.getTime();
 					long a = between / 31536000000L;
 					int yy = (int) Math.ceil(a);
 					lastNum += yy;

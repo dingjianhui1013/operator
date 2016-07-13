@@ -42,7 +42,7 @@ import com.itrus.ca.common.web.BaseController;
 import com.itrus.ca.modules.constant.ProductType;
 import com.itrus.ca.modules.constant.WorkDealInfoType;
 import com.itrus.ca.modules.profile.entity.ConfigAgentAppRelation;
-import com.itrus.ca.modules.profile.entity.ConfigApp;
+
 import com.itrus.ca.modules.profile.entity.ConfigChargeAgent;
 import com.itrus.ca.modules.profile.entity.ConfigCommercialAgent;
 import com.itrus.ca.modules.profile.entity.ConfigProduct;
@@ -53,9 +53,9 @@ import com.itrus.ca.modules.profile.service.ConfigProductService;
 import com.itrus.ca.modules.settle.vo.PayableDetailVo;
 import com.itrus.ca.modules.settle.vo.SettleCollectVO;
 import com.itrus.ca.modules.work.entity.WorkDealInfo;
-import com.itrus.ca.modules.work.entity.WorkFinancePayInfoRelation;
+
 import com.itrus.ca.modules.work.service.WorkDealInfoService;
-import com.itrus.ca.modules.work.service.WorkFinancePayInfoRelationService;
+
 
 /**
  * 年限结算表
@@ -194,11 +194,19 @@ public class SettlePayableDetailController extends BaseController {
 			//结算年限
 			int totalAgentYear = comAgent.getSettlementPeriod();
 			
+			Calendar firstCalendar = Calendar.getInstance();
+			firstCalendar.setTime(dealInfo.getBusinessCardUserDate());
+			firstCalendar.set(Calendar.HOUR_OF_DAY, 0);
+			firstCalendar.set(Calendar.SECOND, 0);
+			firstCalendar.set(Calendar.MINUTE, 0);
+			
+			Date firstDealBusiness = firstCalendar.getTime();
+				
 			
 			// endLastDate 最终截止时间:业务链首条的办理时间+代理商的结算年限
 			Calendar calendar = Calendar.getInstance();
-			calendar.setTime(dealInfo.getBusinessCardUserDate());
-			calendar.add(Calendar.YEAR, totalAgentYear);
+			calendar.setTime(firstDealBusiness);
+			calendar.add(Calendar.DAY_OF_YEAR, totalAgentYear*365);
 			Date endLastDate = calendar.getTime();
 
 			
@@ -221,6 +229,17 @@ public class SettlePayableDetailController extends BaseController {
 					continue;
 				}
 
+				Calendar preNotAfterCalendar = Calendar.getInstance();
+				preNotAfterCalendar.setTime(prvedDealInfo.getNotafter());
+				preNotAfterCalendar.set(Calendar.HOUR_OF_DAY, 0);
+				preNotAfterCalendar.set(Calendar.SECOND, 0);
+				preNotAfterCalendar.set(Calendar.MINUTE, 0);
+				
+				Date prvedDealNotAfter = preNotAfterCalendar.getTime();
+				
+				
+				
+				
 				PayableDetailVo detailVo = new PayableDetailVo();
 				
 				//通过业务绑定的计费策略模板得到是标准,政府统一采购还是合同采购
@@ -275,7 +294,7 @@ public class SettlePayableDetailController extends BaseController {
 				}
 				
 				//如果业务到期时间在最终截止日期之内,则参与结算  结算年限为证书办理年限	
-				if (prvedDealInfo.getNotafter().getTime() < endLastDate.getTime()) {
+				if (prvedDealNotAfter.getTime() < endLastDate.getTime()) {
 						yjNum += prvedDealInfo.getYear();
 						detailVo.setSettleYear(prvedDealInfo.getYear().toString());
 						detailList.add(detailVo);
@@ -290,20 +309,64 @@ public class SettlePayableDetailController extends BaseController {
 			
 			//本期需要结算的 首先肯定是新增或者更新的
 			WorkDealInfo currentDealInfo = infos.get(infos.size()-1);
+			
+			Calendar currentBussinessCalendar = Calendar.getInstance();
+			currentBussinessCalendar.setTime(currentDealInfo.getBusinessCardUserDate());
+			currentBussinessCalendar.set(Calendar.HOUR_OF_DAY, 0);
+			currentBussinessCalendar.set(Calendar.SECOND, 0);
+			currentBussinessCalendar.set(Calendar.MINUTE, 0);
+			
+			Date currentDealBusiness = currentBussinessCalendar.getTime();
+			
+			Calendar currentNotAfterCalendar = Calendar.getInstance();
+			currentNotAfterCalendar.setTime(currentDealInfo.getNotafter());
+			currentNotAfterCalendar.set(Calendar.HOUR_OF_DAY, 0);
+			currentNotAfterCalendar.set(Calendar.SECOND, 0);
+			currentNotAfterCalendar.set(Calendar.MINUTE, 0);
+			
+			Date currentDealNotAfter = currentNotAfterCalendar.getTime();
+			
+			
+			
 			PayableDetailVo detailVo = new PayableDetailVo();
 			ConfigChargeAgent agent = configChargeAgentService.get(currentDealInfo.getConfigChargeAgentId());
+			
+			
+		
+			if(agent!=null){
+				detailVo.setMethod(Integer.parseInt(agent.getTempStyle()));
+			}
+			 
+			
+			//得到业务类型
+			String dealInfoType = "";
+			if (currentDealInfo.getDealInfoType() != null) {
+				dealInfoType = WorkDealInfoType.WorkDealInfoTypeMapNew.get(currentDealInfo.getDealInfoType()) + " ";
+			}
+			if (currentDealInfo.getDealInfoType1() != null) {
+				dealInfoType += WorkDealInfoType.WorkDealInfoTypeMapNew.get(currentDealInfo.getDealInfoType1()) + " ";
+			}
+			if (currentDealInfo.getDealInfoType2() != null) {
+				dealInfoType += WorkDealInfoType.WorkDealInfoTypeMapNew.get(currentDealInfo.getDealInfoType2()) + " ";
+			}
+			if (currentDealInfo.getDealInfoType3() != null) {
+				dealInfoType += WorkDealInfoType.WorkDealInfoTypeMapNew.get(currentDealInfo.getDealInfoType3());
+			}
+			detailVo.setDealInfoType(dealInfoType);                              //业务类型
+			detailVo.setStartDate(currentDealInfo.getBusinessCardUserDate());       //起始时间
+			detailVo.setEndDate(currentDealInfo.getNotafter());                     //到期时间
 			
 			
 			//如果模板类型不是标准, 则结算年限为0
 			if (!agent.getTempStyle().equals("1")) {
 				
-				if (currentDealInfo.getBusinessCardUserDate() != null) {
-					if (currentDealInfo.getNotafter().getTime() < endLastDate.getTime()) {
-						long between = endLastDate.getTime() - currentDealInfo.getNotafter().getTime();
+				if (currentDealBusiness != null) {
+					if (currentDealNotAfter.getTime() < endLastDate.getTime()) {
+						long between = endLastDate.getTime() - currentDealNotAfter.getTime();
 						long a = between / 31536000000L;
-						waitNum += (int) Math.ceil(a);
-					}else if (currentDealInfo.getBusinessCardUserDate().getTime() < endLastDate.getTime()
-						&& currentDealInfo.getNotafter().getTime() > endLastDate.getTime()) {
+						waitNum += (int) Math.ceil(a+1);
+					}else if (currentDealBusiness.getTime() < endLastDate.getTime()
+						&& currentDealNotAfter.getTime() >= endLastDate.getTime()) {
 					    waitNum = 0;	
 					}
 				
@@ -314,21 +377,21 @@ public class SettlePayableDetailController extends BaseController {
 			
 			}
 			//如果业务到期时间在最终截止日期之内,则参与结算  结算年限为证书办理年限	
-			else if (currentDealInfo.getNotafter().getTime() < endLastDate.getTime()) {
-					long between = endLastDate.getTime() - currentDealInfo.getNotafter().getTime();
+			else if (currentDealNotAfter.getTime() < endLastDate.getTime()) {
+					long between = endLastDate.getTime() - currentDealNotAfter.getTime();
 					long a = between / 31536000000L;
-					waitNum += (int) Math.ceil(a);
+					waitNum += (int) Math.ceil(a+1);
 					lastNum += currentDealInfo.getYear();
 					detailVo.setSettleYear(currentDealInfo.getYear().toString());
 					detailList.add(detailVo);
 			} 
 			
 			//如果业务制证时间在最终截止日期之内而业务到期时间在最终截止日期之外,结算年限为
-			else if (currentDealInfo.getBusinessCardUserDate().getTime() < endLastDate.getTime()
-					&& currentDealInfo.getNotafter().getTime() > endLastDate.getTime()) {
-				    long between = endLastDate.getTime() - currentDealInfo.getBusinessCardUserDate().getTime();
+			else if (currentDealBusiness.getTime() < endLastDate.getTime()
+					&& currentDealNotAfter.getTime() >= endLastDate.getTime()) {
+				    long between = endLastDate.getTime() - currentDealBusiness.getTime();
 					long a = between / 31536000000L;
-					int yy = (int) Math.ceil(a);
+					int yy = (int) Math.ceil(a+1);
 					lastNum += yy;
 					waitNum = 0;
 					detailVo.setSettleYear(yy + "");
@@ -473,33 +536,7 @@ public class SettlePayableDetailController extends BaseController {
 						endTime,new Date(comAgent.getAgentContractStart().getTime()),
 						new Date(comAgent.getAgentContractEnd().getTime()));
 		
-		//新增汇总
-				for(WorkDealInfo dealInfo:dealInfos){
-					for(SettleCollectVO vo:collect){
-						if(dealInfo.getConfigProduct().getProductName().equals(vo.getProductId())&&dealInfo.getConfigProduct().getProductLabel()==vo.getProductLabel()){
-							
-							if(dealInfo.getYear()==1){
-								vo.setAdd1(vo.getAdd1()+1);
-							}
-							if(dealInfo.getYear()==2){
-								vo.setAdd2(vo.getAdd2()+1);
-							}
-							if(dealInfo.getYear()==3){
-								vo.setAdd3(vo.getAdd3()+1);
-							}
-							if(dealInfo.getYear()==4){
-								vo.setAdd4(vo.getAdd4()+1);
-							}
-							if(dealInfo.getYear()==5){
-								vo.setAdd5(vo.getAdd5()+1);
-							}
-							
-						}
-					}
-				}
-				
-				
-		
+	
 		
 		//得到此时间段内更新的业务
 		List<WorkDealInfo> dealInfoUpdates = workDealInfoService.findDealInfoByUpdate(appId, appIds, productIdList,
@@ -524,11 +561,19 @@ public class SettlePayableDetailController extends BaseController {
 			//结算年限
 			int totalAgentYear = comAgent.getSettlementPeriod();
 			
+			Calendar firstCalendar = Calendar.getInstance();
+			firstCalendar.setTime(dealInfo.getBusinessCardUserDate());
+			firstCalendar.set(Calendar.HOUR_OF_DAY, 0);
+			firstCalendar.set(Calendar.SECOND, 0);
+			firstCalendar.set(Calendar.MINUTE, 0);
+			
+			Date firstDealBusiness = firstCalendar.getTime();
+				
 			
 			// endLastDate 最终截止时间:业务链首条的办理时间+代理商的结算年限
 			Calendar calendar = Calendar.getInstance();
-			calendar.setTime(dealInfo.getBusinessCardUserDate());
-			calendar.add(Calendar.YEAR, totalAgentYear);
+			calendar.setTime(firstDealBusiness);
+			calendar.add(Calendar.DAY_OF_YEAR, totalAgentYear*365);
 			Date endLastDate = calendar.getTime();
 
 			
@@ -551,6 +596,17 @@ public class SettlePayableDetailController extends BaseController {
 					continue;
 				}
 
+				Calendar preNotAfterCalendar = Calendar.getInstance();
+				preNotAfterCalendar.setTime(prvedDealInfo.getNotafter());
+				preNotAfterCalendar.set(Calendar.HOUR_OF_DAY, 0);
+				preNotAfterCalendar.set(Calendar.SECOND, 0);
+				preNotAfterCalendar.set(Calendar.MINUTE, 0);
+				
+				Date prvedDealNotAfter = preNotAfterCalendar.getTime();
+				
+				
+				
+				
 				PayableDetailVo detailVo = new PayableDetailVo();
 				
 				//通过业务绑定的计费策略模板得到是标准,政府统一采购还是合同采购
@@ -605,7 +661,7 @@ public class SettlePayableDetailController extends BaseController {
 				}
 				
 				//如果业务到期时间在最终截止日期之内,则参与结算  结算年限为证书办理年限	
-				if (prvedDealInfo.getNotafter().getTime() < endLastDate.getTime()) {
+				if (prvedDealNotAfter.getTime() < endLastDate.getTime()) {
 						yjNum += prvedDealInfo.getYear();
 						detailVo.setSettleYear(prvedDealInfo.getYear().toString());
 						detailList.add(detailVo);
@@ -620,20 +676,64 @@ public class SettlePayableDetailController extends BaseController {
 			
 			//本期需要结算的 首先肯定是新增或者更新的
 			WorkDealInfo currentDealInfo = infos.get(infos.size()-1);
+			
+			Calendar currentBussinessCalendar = Calendar.getInstance();
+			currentBussinessCalendar.setTime(currentDealInfo.getBusinessCardUserDate());
+			currentBussinessCalendar.set(Calendar.HOUR_OF_DAY, 0);
+			currentBussinessCalendar.set(Calendar.SECOND, 0);
+			currentBussinessCalendar.set(Calendar.MINUTE, 0);
+			
+			Date currentDealBusiness = currentBussinessCalendar.getTime();
+			
+			Calendar currentNotAfterCalendar = Calendar.getInstance();
+			currentNotAfterCalendar.setTime(currentDealInfo.getNotafter());
+			currentNotAfterCalendar.set(Calendar.HOUR_OF_DAY, 0);
+			currentNotAfterCalendar.set(Calendar.SECOND, 0);
+			currentNotAfterCalendar.set(Calendar.MINUTE, 0);
+			
+			Date currentDealNotAfter = currentNotAfterCalendar.getTime();
+			
+			
+			
 			PayableDetailVo detailVo = new PayableDetailVo();
 			ConfigChargeAgent agent = configChargeAgentService.get(currentDealInfo.getConfigChargeAgentId());
+			
+			
+		
+			if(agent!=null){
+				detailVo.setMethod(Integer.parseInt(agent.getTempStyle()));
+			}
+			 
+			
+			//得到业务类型
+			String dealInfoType = "";
+			if (currentDealInfo.getDealInfoType() != null) {
+				dealInfoType = WorkDealInfoType.WorkDealInfoTypeMapNew.get(currentDealInfo.getDealInfoType()) + " ";
+			}
+			if (currentDealInfo.getDealInfoType1() != null) {
+				dealInfoType += WorkDealInfoType.WorkDealInfoTypeMapNew.get(currentDealInfo.getDealInfoType1()) + " ";
+			}
+			if (currentDealInfo.getDealInfoType2() != null) {
+				dealInfoType += WorkDealInfoType.WorkDealInfoTypeMapNew.get(currentDealInfo.getDealInfoType2()) + " ";
+			}
+			if (currentDealInfo.getDealInfoType3() != null) {
+				dealInfoType += WorkDealInfoType.WorkDealInfoTypeMapNew.get(currentDealInfo.getDealInfoType3());
+			}
+			detailVo.setDealInfoType(dealInfoType);                              //业务类型
+			detailVo.setStartDate(currentDealInfo.getBusinessCardUserDate());       //起始时间
+			detailVo.setEndDate(currentDealInfo.getNotafter());                     //到期时间
 			
 			
 			//如果模板类型不是标准, 则结算年限为0
 			if (!agent.getTempStyle().equals("1")) {
 				
-				if (currentDealInfo.getBusinessCardUserDate() != null) {
-					if (currentDealInfo.getNotafter().getTime() < endLastDate.getTime()) {
-						long between = endLastDate.getTime() - currentDealInfo.getNotafter().getTime();
+				if (currentDealBusiness != null) {
+					if (currentDealNotAfter.getTime() < endLastDate.getTime()) {
+						long between = endLastDate.getTime() - currentDealNotAfter.getTime();
 						long a = between / 31536000000L;
-						waitNum += (int) Math.ceil(a);
-					}else if (currentDealInfo.getBusinessCardUserDate().getTime() < endLastDate.getTime()
-						&& currentDealInfo.getNotafter().getTime() > endLastDate.getTime()) {
+						waitNum += (int) Math.ceil(a+1);
+					}else if (currentDealBusiness.getTime() < endLastDate.getTime()
+						&& currentDealNotAfter.getTime() >= endLastDate.getTime()) {
 					    waitNum = 0;	
 					}
 				
@@ -644,21 +744,21 @@ public class SettlePayableDetailController extends BaseController {
 			
 			}
 			//如果业务到期时间在最终截止日期之内,则参与结算  结算年限为证书办理年限	
-			else if (currentDealInfo.getNotafter().getTime() < endLastDate.getTime()) {
-					long between = endLastDate.getTime() - currentDealInfo.getNotafter().getTime();
+			else if (currentDealNotAfter.getTime() < endLastDate.getTime()) {
+					long between = endLastDate.getTime() - currentDealNotAfter.getTime();
 					long a = between / 31536000000L;
-					waitNum += (int) Math.ceil(a);
+					waitNum += (int) Math.ceil(a+1);
 					lastNum += currentDealInfo.getYear();
 					detailVo.setSettleYear(currentDealInfo.getYear().toString());
 					detailList.add(detailVo);
 			} 
 			
 			//如果业务制证时间在最终截止日期之内而业务到期时间在最终截止日期之外,结算年限为
-			else if (currentDealInfo.getBusinessCardUserDate().getTime() < endLastDate.getTime()
-					&& currentDealInfo.getNotafter().getTime() > endLastDate.getTime()) {
-				    long between = endLastDate.getTime() - currentDealInfo.getBusinessCardUserDate().getTime();
+			else if (currentDealBusiness.getTime() < endLastDate.getTime()
+					&& currentDealNotAfter.getTime() >= endLastDate.getTime()) {
+				    long between = endLastDate.getTime() - currentDealBusiness.getTime();
 					long a = between / 31536000000L;
-					int yy = (int) Math.ceil(a);
+					int yy = (int) Math.ceil(a+1);
 					lastNum += yy;
 					waitNum = 0;
 					detailVo.setSettleYear(yy + "");
@@ -666,10 +766,27 @@ public class SettlePayableDetailController extends BaseController {
 			}
 			
 			
-			
+			//汇总
 			for(SettleCollectVO vo:collect){
 				if(currentDealInfo.getConfigProduct().getProductName().equals(vo.getProductId())&&currentDealInfo.getConfigProduct().getProductLabel()==vo.getProductLabel()){
-					
+				
+				if(currentDealInfo.getDealInfoType().equals(WorkDealInfoType.TYPE_ADD_CERT)){
+					if(lastNum== 1){
+						vo.setAdd1(vo.getAdd1()+1);
+					}
+					if(lastNum== 2){
+						vo.setAdd2(vo.getAdd2()+1);
+					}
+					if(lastNum== 3){
+						vo.setAdd3(vo.getAdd3()+1);
+					}
+					if(lastNum== 4){
+						vo.setAdd4(vo.getAdd4()+1);
+					}
+					if(lastNum== 5){
+						vo.setAdd5(vo.getAdd5()+1);
+					}
+				}else if(currentDealInfo.getDealInfoType().equals(WorkDealInfoType.TYPE_UPDATE_CERT)){
 					if(lastNum== 1){
 						vo.setUpdate1(vo.getUpdate1()+1);
 					}
@@ -685,6 +802,9 @@ public class SettlePayableDetailController extends BaseController {
 					if(lastNum== 5){
 						vo.setUpdate5(vo.getUpdate5()+1);
 					}
+				}
+					
+					
 					
 				}
 			}
@@ -862,9 +982,9 @@ public class SettlePayableDetailController extends BaseController {
 								: dealInfos.get(i - startrow).getDetailList().get(j).getSettleYear());
 			}
 
-			rowi.createCell(5 * lenth + 4).setCellValue(dealInfos.get(i - 4).getYyNum());
-			rowi.createCell(5 * lenth + 4 + 1).setCellValue(dealInfos.get(i - 4).getLastNum());
-			rowi.createCell(5 * lenth + 4 + 2).setCellValue(dealInfos.get(i - 4).getWaitNum());
+			rowi.createCell(5 * lenth + 4).setCellValue(dealInfos.get(i - startrow).getYyNum());
+			rowi.createCell(5 * lenth + 4 + 1).setCellValue(dealInfos.get(i -startrow).getLastNum());
+			rowi.createCell(5 * lenth + 4 + 2).setCellValue(dealInfos.get(i - startrow).getWaitNum());
 		}
 
 		try {
