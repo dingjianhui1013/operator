@@ -801,11 +801,14 @@ public class CertController extends BaseController {
 						workDealInfoService.save(old);	
 					}
 				}
+				json.put("status", 1);
 			} else {
+				System.out.println("installCertResult : cert install failed. dealInfo id = "+ dealInfoId + ",result = " + result);
 				dealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_ABNORMAL_USER);// 异常业务
 				workDealInfoService.save(dealInfo);
+				json.put("status", -1);
 			}
-			json.put("status", 1);
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			json.put("status", -1);
@@ -857,11 +860,13 @@ public class CertController extends BaseController {
 				// old.setDealInfoStatus(WorkDealInfoStatus.STATUS_CERT_UNABLE);
 				// workDealInfoService.save(old);
 				// }
+				json.put("status", 1);
 			} else {
+				System.out.println("installResult4Enroll : cert install failed. dealInfo id = "+ dealInfoId + ",result = " + result);
 				dealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_ABNORMAL_USER);// 异常业务
 				workDealInfoService.save(dealInfo);
+				json.put("status", -1);
 			}
-			json.put("status", 1);
 		} catch (Exception e) {
 			e.printStackTrace();
 			json.put("status", -1);
