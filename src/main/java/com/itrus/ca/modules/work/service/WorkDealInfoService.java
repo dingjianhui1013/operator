@@ -3709,6 +3709,10 @@ public class WorkDealInfoService extends BaseService {
 
 	@Transactional(readOnly = false)
 	public void save(WorkDealInfo workDealInfo) {
+		if (StringHelper.isNull(workDealInfo.getFirstCertSN())) {
+			workDealInfo.setFirstCertSN(findFirstCertSNById(workDealInfo
+					.getId()));
+		}
 		workDealInfoDao.save(workDealInfo);
 	}
 
