@@ -7765,7 +7765,7 @@ public class WorkDealInfoService extends BaseService {
 
 		String ct = "select count(*) from WORK_DEAL_INFO where FIRST_CERT_SN is null ";
 		if (maxCount > 0) {
-			ct += " and rownum<" + maxCount;
+			ct += " and rownum<=" + maxCount;
 		}
 
 		List l = workDealInfoDao.findBySql(ct);
@@ -7774,7 +7774,7 @@ public class WorkDealInfoService extends BaseService {
 		String sql = "select id from WORK_DEAL_INFO where FIRST_CERT_SN is null";
 		boolean loop = false;
 		if (maxCount > 0) {
-			sql += " and rownum<" + maxCount;
+			sql += " and rownum<=" + maxCount;
 		}
 
 		List<BigDecimal> lst = workDealInfoDao.findBySql(sql);
@@ -7790,12 +7790,12 @@ public class WorkDealInfoService extends BaseService {
 	}
 
 	/**
-	 * 根据指定ID，按照preid查出一条完整业务链
+	 * 根据传入ID查业务链首条记录，如果首条记录没有cert_sn则返回null
 	 * 
 	 * @param workDealInfoId
-	 * @return List<WorkDealInfo>
+	 * @return String
 	 */
-	public void fixFirstCertSN(Long workDealInfoId) {
+	public String findFirstCertSNById(Long workDealInfoId) {
 		// 当以prev_id查询有数据时，则不是最后一条
 		String sql = "select id,PREV_ID,CREATE_DATE,CERT_SN,FIRST_CERT_SN";
 		sql += " from WORK_DEAL_INFO start with ";
@@ -7812,11 +7812,11 @@ public class WorkDealInfoService extends BaseService {
 
 		try {
 			List<Map> lst = workDealInfoDao.findBySQLListMap(sql, 0, 0);
-			if (lst == null || lst.size()<=0) {
+			if (lst == null || lst.size() <= 0) {
 				lst = workDealInfoDao.findBySQLListMap(sql2, 0, 0);
 			}
 			if (lst == null || lst.size() <= 0)
-				return;
+				return null;
 
 			// 如果该列表内存在prev_id是空的记录，则认为是首条
 			boolean hasFirst = false;
@@ -7827,33 +7827,33 @@ public class WorkDealInfoService extends BaseService {
 					hasFirst = true;
 					first_cert_sn = e.get("CERT_SN") == null ? "0" : e.get(
 							"CERT_SN").toString();
-					break;
+					return first_cert_sn;
 				}
 			}
 
 			if (!hasFirst) {
-				fixFirstCertSN(new Long(lst.get(0).get("ID").toString()));
-				return;
+				return findFirstCertSNById(new Long(lst.get(0).get("ID")
+						.toString()));
 			}
-			if (lst == null || lst.size() <= 0)
-				return;
 
-			for (Map e : lst) {
-				String id = e.get("ID").toString();
-
-				WorkDealInfo po = new WorkDealInfo();
-				po.setId(new Long(id));
-				po.setFirstCertSN(first_cert_sn);
-				updateFirstCertSN(po);
-				// workDealInfoDao.modifyFirstCertSN(new Long(id),
-				// first_cert_sn);
-			}
-		} catch (IllegalAccessException | IllegalArgumentException
-				| InvocationTargetException | ClassNotFoundException
-				| InstantiationException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
 		}
+		return null;
+	}
+
+	/**
+	 * 根据指定ID，按照preid查出一条完整业务链
+	 * 
+	 * @param workDealInfoId
+	 * @return List<WorkDealInfo>
+	 */
+	public void fixFirstCertSN(Long workDealInfoId) {
+
+		WorkDealInfo po = get(workDealInfoId);
+		po.setFirstCertSN(findFirstCertSNById(workDealInfoId));
+		updateFirstCertSN(po);
 	}
 
 }
