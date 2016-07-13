@@ -4278,6 +4278,10 @@ public class WorkDealInfoController extends BaseController {
 			List<WorkDealInfo> list = workDealInfoService.findPersonal(companyIds, productId);
 			List<Long> workdealinfoIds = new ArrayList<Long>();
 			List<Long> previds = new ArrayList<Long>();
+			
+			System.out.println("workdealinfoIds长度为:"+workdealinfoIds.size());
+			System.out.println("previds长度为:"+previds.size());
+			
 			for (WorkDealInfo workDealInfo : list) {
 				
 				workdealinfoIds.add(workDealInfo.getId());
@@ -4293,6 +4297,8 @@ public class WorkDealInfoController extends BaseController {
 				{
 					if(!previds.isEmpty())
 					{
+						System.out.println("j==="+j);
+						System.out.println("i==="+i);
 						if(workdealinfoIds.get(j).equals(previds.get(i)))
 						{
 							workdealinfoIds.remove(j);
