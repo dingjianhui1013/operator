@@ -384,9 +384,7 @@
 							</c:forEach>
 							<td>${dealInfo.yyNum}</td>
 							<td>${dealInfo.lastNum}</td>
-							<td><c:if test="${dealInfo.totalNum - dealInfo.yyNum - dealInfo.lastNum-dealInfo.occupy<0}">0</c:if>
-							
-								<c:if test="${dealInfo.totalNum - dealInfo.yyNum - dealInfo.lastNum-dealInfo.occupy>=0}">${dealInfo.totalNum - dealInfo.yyNum - dealInfo.lastNum-dealInfo.occupy}</c:if>
+							<td>${dealInfo.waitNum}
 							</td>
 						</tr>
 					</c:forEach>
