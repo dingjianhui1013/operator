@@ -916,7 +916,7 @@ public class SettlePayableDetailController extends BaseController {
 			json.put("id", products.get(i).getId());
 			System.out.println(products.get(i).getId() + "===="
 					+ ProductType.productTypeStrMap.get(products.get(i).getProductName()));
-			json.put("name", ProductType.productTypeStrMap.get(products.get(i).getProductName()));
+			json.put("name",  ProductType.productTypeStrMap.get(products.get(i).getProductName())+"["+(products.get(i).getProductLabel()==0?"通用":"专用")+"]");
 			array.put(json);
 		}
 		return array.toString();
