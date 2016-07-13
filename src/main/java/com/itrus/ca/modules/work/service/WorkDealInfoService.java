@@ -3710,8 +3710,14 @@ public class WorkDealInfoService extends BaseService {
 	@Transactional(readOnly = false)
 	public void save(WorkDealInfo workDealInfo) {
 		if (StringHelper.isNull(workDealInfo.getFirstCertSN())) {
-			workDealInfo.setFirstCertSN(findFirstCertSNById(workDealInfo
-					.getId()));
+			// 如果是首条
+			if (workDealInfo.getPrevId() == null
+					&& !StringHelper.isNull(workDealInfo.getCertSn())) {
+				workDealInfo.setFirstCertSN(workDealInfo.getCertSn());
+			} else {
+				workDealInfo.setFirstCertSN(findFirstCertSNById(workDealInfo
+						.getId()));
+			}
 		}
 		workDealInfoDao.save(workDealInfo);
 	}
