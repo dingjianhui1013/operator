@@ -234,7 +234,7 @@
 								checked="checked"
 							</c:if>
 						</c:forEach>
-					 value="${product.id }">${proType[product.productName ]}
+					 value="${product.id }">${proType[product.productName ]}[${product.productLabel==0?"通用":"专用"}]
 				</c:forEach>
 			</label>
 		</div>
