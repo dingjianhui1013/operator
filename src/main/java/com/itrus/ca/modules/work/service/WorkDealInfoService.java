@@ -1509,11 +1509,11 @@ public class WorkDealInfoService extends BaseService {
 	}
 
 	public Page<WorkDealInfo> find(Page<WorkDealInfo> page,
-			WorkDealInfo workDealInfo,List<Long> officeIds, Long apply,
+			WorkDealInfo workDealInfo, List<Long> officeIds, Long apply,
 			String certType, Integer workType, Integer year,
 			Date luruStartTime, Date luruEndTime, List<Long> offices,
 			Date daoqiStartTime, Date daoqiEndTime, Date paymentStartTime,
-			Date paymentEndTime,Date zhizhengStartTime,Date zhizhengEndTime
+			Date paymentEndTime, Date zhizhengStartTime, Date zhizhengEndTime
 
 	) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
@@ -1682,20 +1682,21 @@ public class WorkDealInfoService extends BaseService {
 			dc.add(Restrictions.le("notafter", daoqiEndTime));
 		}
 
-		if(zhizhengStartTime!=null){
+		if (zhizhengStartTime != null) {
 			dc.add(Restrictions.ge("businessCardUserDate", zhizhengStartTime));
 		}
-		
-		if(zhizhengEndTime!=null){
+
+		if (zhizhengEndTime != null) {
 			Calendar zhizhengEndCalendar = Calendar.getInstance();
 			zhizhengEndCalendar.setTime(zhizhengEndTime);
 			zhizhengEndCalendar.set(Calendar.HOUR_OF_DAY, 23);
 			zhizhengEndCalendar.set(Calendar.MINUTE, 59);
 			zhizhengEndCalendar.set(Calendar.SECOND, 59);
-			
-			dc.add(Restrictions.le("businessCardUserDate", zhizhengEndCalendar.getTime()));
+
+			dc.add(Restrictions.le("businessCardUserDate",
+					zhizhengEndCalendar.getTime()));
 		}
-		
+
 		if (officeIds != null && officeIds.size() > 0) {
 			dc.add(Restrictions.in("officeId", officeIds));
 		}
@@ -1728,11 +1729,11 @@ public class WorkDealInfoService extends BaseService {
 	}
 
 	public Page<WorkDealInfo> findCX(Page<WorkDealInfo> page,
-			WorkDealInfo workDealInfo,List<Long> officeIds, Long apply,
+			WorkDealInfo workDealInfo, List<Long> officeIds, Long apply,
 			String certType, Integer workType, Integer year,
 			Date luruStartTime, Date luruEndTime, List<Long> offices,
 			Date daoqiStartTime, Date daoqiEndTime, Date paymentStartTime,
-			Date paymentEndTime,Date zhizhengStartTime,Date zhizhengEndTime) {
+			Date paymentEndTime, Date zhizhengStartTime, Date zhizhengEndTime) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("workPayInfo", "workPayInfo");
 		dc.createAlias("workCompany", "workCompany");
@@ -1899,23 +1900,22 @@ public class WorkDealInfoService extends BaseService {
 			daoqiEndTime.setSeconds(59);
 			dc.add(Restrictions.le("notafter", daoqiEndTime));
 		}
-		
-		
-		if(zhizhengStartTime!=null){
+
+		if (zhizhengStartTime != null) {
 			dc.add(Restrictions.ge("businessCardUserDate", zhizhengStartTime));
 		}
-		
-		if(zhizhengEndTime!=null){
+
+		if (zhizhengEndTime != null) {
 			Calendar zhizhengEndCalendar = Calendar.getInstance();
 			zhizhengEndCalendar.setTime(zhizhengEndTime);
 			zhizhengEndCalendar.set(Calendar.HOUR_OF_DAY, 23);
 			zhizhengEndCalendar.set(Calendar.MINUTE, 59);
 			zhizhengEndCalendar.set(Calendar.SECOND, 59);
-			
-			dc.add(Restrictions.le("businessCardUserDate", zhizhengEndCalendar.getTime()));
+
+			dc.add(Restrictions.le("businessCardUserDate",
+					zhizhengEndCalendar.getTime()));
 		}
 
-		
 		if (officeIds != null && officeIds.size() > 0) {
 			dc.add(Restrictions.in("officeId", officeIds));
 		}
@@ -1939,18 +1939,17 @@ public class WorkDealInfoService extends BaseService {
 
 		dc.add(Restrictions.or(Restrictions.eq("dealInfoStatus",
 				WorkDealInfoStatus.STATUS_CERT_REVOKE)));
-		
 
 		return workDealInfoDao.find(page, dc);
 
 	}
 
-	public List<WorkDealInfo> findCX(WorkDealInfo workDealInfo, 
+	public List<WorkDealInfo> findCX(WorkDealInfo workDealInfo,
 			List<Long> officeIds, Long apply, String certType,
 			Integer workType, Integer year, Date luruStartTime,
 			Date luruEndTime, List<Long> offices, Date daoqiStartTime,
 			Date daoqiEndTime, Date paymentStartTime, Date paymentEndTime,
-			Date zhizhengStartTime,Date zhizhengEndTime
+			Date zhizhengStartTime, Date zhizhengEndTime
 
 	) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
@@ -2091,8 +2090,6 @@ public class WorkDealInfoService extends BaseService {
 			}
 		}
 
-		
-
 		// 查询条件由之前的鉴证时间改为缴费时间
 		if (paymentStartTime != null) {
 			dc.add(Restrictions.ge("payUserDate", paymentStartTime));
@@ -2124,20 +2121,21 @@ public class WorkDealInfoService extends BaseService {
 			dc.add(Restrictions.le("notafter", daoqiEndTime));
 		}
 
-		if(zhizhengStartTime!=null){
+		if (zhizhengStartTime != null) {
 			dc.add(Restrictions.ge("businessCardUserDate", zhizhengStartTime));
 		}
-		
-		if(zhizhengEndTime!=null){
+
+		if (zhizhengEndTime != null) {
 			Calendar zhizhengEndCalendar = Calendar.getInstance();
 			zhizhengEndCalendar.setTime(zhizhengEndTime);
 			zhizhengEndCalendar.set(Calendar.HOUR_OF_DAY, 23);
 			zhizhengEndCalendar.set(Calendar.MINUTE, 59);
 			zhizhengEndCalendar.set(Calendar.SECOND, 59);
-			
-			dc.add(Restrictions.le("businessCardUserDate", zhizhengEndCalendar.getTime()));
+
+			dc.add(Restrictions.le("businessCardUserDate",
+					zhizhengEndCalendar.getTime()));
 		}
-		
+
 		if (officeIds != null && officeIds.size() > 0) {
 			dc.add(Restrictions.in("officeId", officeIds));
 		}
@@ -2171,12 +2169,12 @@ public class WorkDealInfoService extends BaseService {
 
 	}
 
-	public List<WorkDealInfo> find(WorkDealInfo workDealInfo, 
+	public List<WorkDealInfo> find(WorkDealInfo workDealInfo,
 			List<Long> officeIds, Long apply, String certType,
 			Integer workType, Integer year, Date luruStartTime,
 			Date luruEndTime, List<Long> offices, Date daoqiStartTime,
 			Date daoqiEndTime, Date paymentStartTime, Date paymentEndTime,
-			Date zhizhengStartTime,Date zhizhengEndTime
+			Date zhizhengStartTime, Date zhizhengEndTime
 
 	) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
@@ -2347,21 +2345,22 @@ public class WorkDealInfoService extends BaseService {
 			daoqiEndTime.setSeconds(59);
 			dc.add(Restrictions.le("notafter", daoqiEndTime));
 		}
-		
-		if(zhizhengStartTime!=null){
+
+		if (zhizhengStartTime != null) {
 			dc.add(Restrictions.ge("businessCardUserDate", zhizhengStartTime));
 		}
-		
-		if(zhizhengEndTime!=null){
+
+		if (zhizhengEndTime != null) {
 			Calendar zhizhengEndCalendar = Calendar.getInstance();
 			zhizhengEndCalendar.setTime(zhizhengEndTime);
 			zhizhengEndCalendar.set(Calendar.HOUR_OF_DAY, 23);
 			zhizhengEndCalendar.set(Calendar.MINUTE, 59);
 			zhizhengEndCalendar.set(Calendar.SECOND, 59);
-			
-			dc.add(Restrictions.le("businessCardUserDate", zhizhengEndCalendar.getTime()));
+
+			dc.add(Restrictions.le("businessCardUserDate",
+					zhizhengEndCalendar.getTime()));
 		}
-		
+
 		if (officeIds != null && officeIds.size() > 0) {
 			dc.add(Restrictions.in("officeId", officeIds));
 		}
@@ -4381,14 +4380,28 @@ public class WorkDealInfoService extends BaseService {
 
 	public void processSinglePreid(String firstCertSN) {
 		List<WorkDealInfo> lst = findByFirstCertSN(firstCertSN);
+
+		// 只有一条的情况
+		if (lst != null && lst.size() == 1) {
+			lst.get(0).setDelFlag("0");
+			updateDelflag(lst.get(0));
+			return;
+		}
+
 		for (int i = 0; i < lst.size(); i++) {
 			WorkDealInfo pre = findPreByFirstCertSN(lst.get(i));
-			if (pre == null)
+			if (pre == null && i != (lst.size() - 1)) {
 				continue;
-			lst.get(i).setPrevId(pre.getId());
-			updatePreId(lst.get(i));
-			// 只有最后一条是0，前面的都是1
-			if (i != 0) {
+			}
+			if (pre != null) {
+				lst.get(i).setPrevId(pre.getId());
+				updatePreId(lst.get(i));
+			}
+
+			if (i == 0) {
+				lst.get(i).setDelFlag("0");
+				updateDelflag(lst.get(i));
+			} else {
 				lst.get(i).setDelFlag("1");
 				updateDelflag(lst.get(i));
 			}
