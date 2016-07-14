@@ -11,14 +11,6 @@
 	var sn;
 	var ukeyadmin = null;
 	var baseDay = parseInt("${workDealInfo.year*365+workDealInfo.lastDays}");	
-	
-	
-		
-	
-	
-
-	
-	
 	$(document).ready(function() {
 		//itrusukeyadmin.CAB,检测KEY序列号
 		var urlArray = new Array();
@@ -71,9 +63,6 @@
 				}
 			}
 		});
-		
-		
-		
 	}
 	
 	function buttonFrom() {
@@ -124,7 +113,6 @@
 					}
 				});
 				
-				
 			  }
 			}
 		} catch (e) {
@@ -134,9 +122,6 @@
 	}
 
 	function quick(keySN) {
-		
-		
-		
 		var day = baseDay;
 		var csr;
 		var len = parseInt("${keyLen}");
@@ -290,14 +275,6 @@
 			alert("没有检测到UKEY");
 			return false;
 		}
-		
-		
-		
-		
-		
-		
-		
-		
 		
 	}
 

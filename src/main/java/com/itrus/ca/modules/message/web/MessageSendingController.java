@@ -3,35 +3,24 @@
  */
 package com.itrus.ca.modules.message.web;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Reader;
 import java.io.StringWriter;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
-import org.apache.velocity.app.Velocity;
 import org.apache.velocity.app.VelocityEngine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.velocity.VelocityEngineUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -48,13 +37,10 @@ import com.itrus.ca.modules.constant.WorkDealInfoStatus;
 import com.itrus.ca.modules.constant.WorkDealInfoType;
 import com.itrus.ca.modules.message.entity.MessageSending;
 import com.itrus.ca.modules.message.entity.SmsConfiguration;
-import com.itrus.ca.modules.message.entity.readFileByChars;
 import com.itrus.ca.modules.message.service.MessageSendingService;
 import com.itrus.ca.modules.message.service.SmsConfigurationService;
 import com.itrus.ca.modules.message.service.SmsService;
 import com.itrus.ca.modules.profile.entity.ConfigApp;
-import com.itrus.ca.modules.profile.entity.ConfigChargeAgent;
-import com.itrus.ca.modules.profile.entity.ConfigChargeAgentDetail;
 import com.itrus.ca.modules.profile.service.ConfigAppService;
 import com.itrus.ca.modules.sys.entity.Office;
 import com.itrus.ca.modules.sys.entity.User;
@@ -162,7 +148,7 @@ public class MessageSendingController extends BaseController {
 		model.addAttribute("expiredStart", expiredStart);
 		model.addAttribute("expiredEnd", expiredEnd);
 		
-		if(areaId==null&&officeId==null&&apply==null&&workType==null&&workDealInfo.getWorkCompany()==null){
+		/*if(areaId==null&&officeId==null&&apply==null&&workType==null&&workDealInfo.getWorkCompany()==null){
 			return "modules/message/messageSendingList";
 		}
 		if(workDealInfo.getWorkCompany()!=null)
@@ -170,6 +156,21 @@ public class MessageSendingController extends BaseController {
 			if(areaId==null&&officeId==null&&apply==null&&workType==null&&workDealInfo.getWorkCompany().getDistrict()==""){
 				return "modules/message/messageSendingList";
 			}
+		}*/
+				
+		if(workType ==null&&areaId==null&&officeId==null&&apply==null&&certInfoList.size()==0
+		        &&makeCertStart==null&&makeCertEnd==null&&workDealInfo.getStatus()==null&&StringUtils.isEmpty(workDealInfo.getDealInfoStatus())
+		        &&(workDealInfo.getWorkCompany() == null|| (workDealInfo.getWorkCompany() != null&& StringUtils.isEmpty(workDealInfo.getWorkCompany().getCompanyName())&&
+		                StringUtils.isEmpty(workDealInfo.getWorkCompany().getOrganizationNumber())&&StringUtils.isEmpty(workDealInfo.getWorkCompany().getProvince())
+                   && StringUtils.isEmpty(workDealInfo.getWorkCompany().getCity())
+                           && StringUtils.isEmpty(workDealInfo.getWorkCompany().getDistrict())))
+                           
+		        &&(workDealInfo.getWorkUser() == null||(workDealInfo.getWorkUser() != null
+                && StringUtils.isEmpty(workDealInfo.getWorkUser().getContactName())&& StringUtils.isEmpty(workDealInfo.getWorkUser()
+                        .getConCertNumber())))
+		        &&makeCertStart==null &&makeCertStart==null
+		        ){
+		    workDealInfo.setDealInfoStatus("5");
 		}
 		Page<WorkDealInfo> page = workDealInfoService.find14(new Page<WorkDealInfo>(request, response), workDealInfo,
 				areaId, officeId, apply, workType, certInfoList,makeCertStart,makeCertEnd,expiredStart,expiredEnd);
@@ -186,9 +187,6 @@ public class MessageSendingController extends BaseController {
 			}
 			model.addAttribute("count", ids.length-index);
 		}
-		
-		
-		
 		model.addAttribute("page", page);
 		return "modules/message/messageSendingList";
 	}
@@ -221,6 +219,16 @@ public class MessageSendingController extends BaseController {
 		workDealInfo.setWorkUser(workUser);
 		workDealInfo.setDealInfoStatus(dealInfoStatus);
 		List<WorkCertInfo> certInfoList = new ArrayList<WorkCertInfo>();
+		
+		if(workType ==null&&areaId==null&&officeId==null&&apply==null&&StringUtils.isEmpty(companyName)
+               &&StringUtils.isEmpty(contactName)&&StringUtils.isEmpty(dealInfoStatus)
+               &&StringUtils.isEmpty(province)&&StringUtils.isEmpty(city) &&StringUtils.isEmpty(district) 
+                ){
+            workDealInfo.setDealInfoStatus("5");
+        }
+		
+		
+		
 		List<WorkDealInfo> list = workDealInfoService.find14(workDealInfo,
 				areaId, officeId, apply, workType, certInfoList);
 		StringBuffer sb = new StringBuffer();
@@ -234,6 +242,7 @@ public class MessageSendingController extends BaseController {
 		return sb.toString();
 		
 	}
+	
 	@RequiresPermissions("message:messageSending:view")
 	@RequestMapping(value = "checkone")
 	@ResponseBody
@@ -246,8 +255,6 @@ public class MessageSendingController extends BaseController {
 			@RequestParam(value = "smsId", required = false) Long smsId, HttpServletRequest request,
 			HttpServletResponse response) throws JSONException {
 			JSONObject json = new JSONObject();
-			DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-			
 			DateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
 			
 		// List<WorkCertInfo> certInfoList = new ArrayList<WorkCertInfo>();
@@ -269,7 +276,6 @@ public class MessageSendingController extends BaseController {
 		}
 		;
 		messageAddress += "/WEB-INF/template/";
-		String newMessageAddress = messageAddress + messageName;
 		System.out.println(messageAddress);
 		if(checkIds==""||checkIds.equals("")||checkIds==null){
 			json.put("status", -1);
@@ -277,7 +283,6 @@ public class MessageSendingController extends BaseController {
 			return json.toString();
 		}
 		String[] dealInfos = checkIds.split(",");
-		short s[] = new short[dealInfos.length];
 		for (int i = 0; i < dealInfos.length; i++) {
 			//System.out.println(dealInfos[i]);
 
@@ -287,24 +292,40 @@ public class MessageSendingController extends BaseController {
 			long dealInfoId = Long.parseLong(dealInfos[i]);
 			WorkDealInfo dealInfo = workDealInfoService.get(dealInfoId);
 			if(dealInfo!=null){
-			WorkCompany company = dealInfo.getWorkCompany();
-			WorkUser workUser = dealInfo.getWorkUser();
-			ConfigApp configApp = dealInfo.getConfigApp();
-			WorkCertInfo workCertInfo = dealInfo.getWorkCertInfo();
+			 // 经办人姓名
+	            String consigner = dealInfo.getWorkCertInfo().getWorkCertApplyInfo().getName();
 			// 组织机构代码
 			String companyCode = dealInfo.getWorkCompany().getOrganizationNumber();
+			if(StringUtils.isEmpty(companyCode)){
+			    json.put("status", -1);
+	            json.put("meg", consigner+"的组织代码为空");
+	            return json.toString();
+			}
 			// 机构名称
 			String companyName = dealInfo.getWorkCompany().getCompanyName();
 			//System.out.println(companyName);
 			// 法人姓名
 			String legalName = dealInfo.getWorkCompany().getLegalName();
+			if(StringUtils.isEmpty(legalName)){
+                json.put("status", -1);
+                json.put("meg", consigner+"的法人姓名为空");
+                return json.toString();
+            }
 			// key编码
 			String keySn = dealInfo.getKeySn();
+			if(StringUtils.isEmpty(keySn)){
+                json.put("status", -1);
+                json.put("meg", consigner+"的key序列号为空");
+                return json.toString();
+            }
 			// 机构地址
 			String organizationAddress = dealInfo.getWorkCompany().getProvince() + dealInfo.getWorkCompany().getCity()
 					+ dealInfo.getWorkCompany().getDistrict() + dealInfo.getWorkCompany().getAddress();
-			// 经办人姓名
-			String consigner = dealInfo.getWorkCertInfo().getWorkCertApplyInfo().getName();
+			if(StringUtils.isEmpty(organizationAddress)){
+                json.put("status", -1);
+                json.put("meg", consigner+"的机构地址为空");
+                return json.toString();
+            }
 			//System.out.println(consigner);
 			// 业务状态
 			WorkDealInfoStatus workDealInfoStatus = new WorkDealInfoStatus();
@@ -314,10 +335,13 @@ public class MessageSendingController extends BaseController {
 			//System.out.println(alias);
 			// 证书到期时间
 			Date endDate = dealInfo.getNotafter();
+			if(endDate==null){
+                json.put("status", -1);
+                json.put("meg", consigner+"的证书到期时间为空");
+                return json.toString();
+            }
 			//System.out.println(endDate);
 			// 证书持有人电话
-			String phone = dealInfo.getWorkUser().getContactPhone();
-		
 			VelocityEngine ve = new VelocityEngine();
 			   ve.init();
 			   String content = messageContent;
@@ -330,7 +354,7 @@ public class MessageSendingController extends BaseController {
 			   context.put("consigner", consigner);
 			   context.put("businessStatus", businessStatus);
 			   context.put("alias", alias);
-			   context.put("endDate", format1.format(endDate));
+			   context.put("endDate", endDate ==null?"":format1.format(endDate));
 			   context.put("date", format1.format(new Date()));
 			   StringWriter writer = new StringWriter();
 			   ve.evaluate(context, writer, "", content); 

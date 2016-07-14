@@ -320,8 +320,6 @@ function setReceiptMoneyNull(){
 		action="${ctx}/work/workPayInfo/maintainSavePayInfo" method="POST"
 		class="form-horizontal">
 		<tags:message content="${message}" />
-		<div class="container-fluid"
-			style="width: 80%; margin: 0px auto; float: center">
 			<div class="row-fluid">
 				<div class="span12">
 					<table class="table table-striped table-bordered table-condensed">
@@ -352,9 +350,8 @@ function setReceiptMoneyNull(){
 
 				</div>
 			</div>
-		</div>
 		<div class="row-fluid" id="view"
-			style="display: none; width: 80%; margin: 0px auto; float: center">
+			style="display: none;">
 			<div class="span12">
 				<table id="contentTable"
 					class="table table-striped table-bordered table-condensed">
@@ -376,8 +373,7 @@ function setReceiptMoneyNull(){
 
 			</div>
 		</div>
-		<div class="row-fluid"
-			style="width: 80%; margin: 0px auto; float: center">
+		<div class="row-fluid">
 			<div class="span12">
 				<table id="contentTable"
 					class="table table-striped table-bordered table-condensed">
@@ -426,8 +422,8 @@ function setReceiptMoneyNull(){
 		</div>
 
 		<div class="control-group">
-			<label class="control-label">收费查询：</label>
-			<div class="controls">
+			<label class="control-label" style="width:70px;text-align:left">收费查询：</label>
+			<div class="controls" style="margin-left:70px;">
 				<input type="text" id="loadValue">
 				<input class="input-medium Wdate" type="text"
 								onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});"
@@ -443,7 +439,7 @@ function setReceiptMoneyNull(){
 			</div>
 		</div>
 		<div class="row-fluid" id="payTable"
-			style="display: none; width: 80%; margin: 0px auto; float: center">
+			style="display: none; ">
 			<div class="span12">
 				<table id="contentTable"
 					class="table table-striped table-bordered table-condensed">
@@ -467,7 +463,6 @@ function setReceiptMoneyNull(){
 				</table>
 			</div>
 		</div>
-		<div class="container-fluid">
 			<div class="row-fluid">
 				<div class="span12">
 					<table class="table table-striped table-bordered table-condensed"
@@ -481,11 +476,13 @@ function setReceiptMoneyNull(){
 								<td><c:if test="${!chargeAgent.chargeMethodMoney }"><input type="checkbox" disabled="disabled"/></c:if>
 								<c:if test="${chargeAgent.chargeMethodMoney }"><input type="checkbox" value="1" id="mc" onclick="changeInputStatus(this)" name="methodMoney"></c:if>现金<input
 									type="text" readonly="readonly" id="money" name="money" value="0"></td>
+									
 								<td><c:if test="${!chargeAgent.chargeMethodPos }"><input type="checkbox" disabled="disabled"/></c:if>
 								<c:if test="${chargeAgent.chargeMethodPos}"><input type="checkbox"  id="pc" value="1" onclick="changeInputStatus(this)" name="methodPos"></c:if>pos
 								<input type="text" id="pos" name="posMoney"
 									readonly="readonly"  value="0"></td>
-								<td><input type="button" onclick="addPayInfoToList()"
+									
+								<td style="text-align:center"><input type="button" onclick="addPayInfoToList()"
 									class="btn btn-primary" id="settle" value="确认" /> 
 									<input
 									type="hidden" id="officeNameHid" value="${officeName }">
@@ -531,10 +528,9 @@ function setReceiptMoneyNull(){
 					</table>
 				</div>
 			</div>
-		</div>
 		<input type="hidden" id="paymentMoney1" value="0" />
 		<input type="hidden" name="workDealInfoId" value="${workDealInfo.id }">
-		<div class="form-actions" style="text-align: center;">
+		<div class="form-actions" style="text-align: center;padding-left:0px;">
 			<shiro:hasPermission name="work:workDealInfo:edit">
 				<input id="btnSubmit" class="btn btn-primary" type="button"
 					onclick="onSubmit()" value="提交" />&nbsp;</shiro:hasPermission>

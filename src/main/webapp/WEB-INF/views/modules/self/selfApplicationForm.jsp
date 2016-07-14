@@ -214,7 +214,6 @@
 			}else{
 				window.location.href = "${ctx}/self/selfApplication/denyApply?id=${selfApplication.id}&denyText="+denyText;
 			}
-			
 		}
 	</script>
 </head>

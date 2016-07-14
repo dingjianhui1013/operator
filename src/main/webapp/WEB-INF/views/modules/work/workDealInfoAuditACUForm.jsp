@@ -7,6 +7,13 @@
 <meta name="decorator" content="default" />
 <link href="${ctxStatic}/jquery/jquery.bigautocomplete.css"
 	rel="stylesheet" />
+<style type="text/css">
+.accordion-heading, .table th{width:140px;}
+.table-condensed td{width:485px;}
+.Wdate{width:206px;}
+.btmBorder{border-bottom:1px solid #ddd}
+.accordion-heading,.table th,.accordion-heading,.table td{ vertical-align: middle;}
+</style>
 <script type="text/javascript">
 $(document).ready(function() {
 			
@@ -419,7 +426,7 @@ $(document).ready(function() {
 				<table class="table table-striped table-bordered table-condensed">
 					<tbody>
 						<tr>
-							<th colspan="7" style="font-size: 20px;">基本信息</th>
+							<th colspan="4" style="font-size: 20px;">基本信息</th>
 						</tr>
 						<tr>
 							<th>代办应用：</th>
@@ -433,7 +440,8 @@ $(document).ready(function() {
 								<input type="hidden" id="product" value="${workDealInfo.configProduct.productName }" />	
 							</td>
 								
-								
+							</tr>
+						<tr>	
 							<th>应用标识：</th>
 							<td><input type="radio" disabled="disabled" name="lable"
 								<c:if test="${workDealInfo.configProduct.productLabel==0 }">checked="checked"</c:if>
@@ -441,8 +449,7 @@ $(document).ready(function() {
 								type="radio" disabled="disabled" name="lable"
 								<c:if test="${workDealInfo.configProduct.productLabel==1 }">checked="checked"</c:if>
 								id="lable1" value="1">专用</td>
-						</tr>
-						<tr>
+						
 							
 							<th>业务类型：</th>
 							<td><c:if test="${workDealInfo.dealInfoType==0 }">
@@ -455,10 +462,11 @@ $(document).ready(function() {
 									test="${workDealInfo.dealInfoType==1 }">
 									<input type="checkbox" disabled="disabled" checked="checked"
 										name="dealInfType">更新证书</c:if></td>
-										
+								</tr>
+						<tr>		
 							<c:if test="${empty workDealInfo.isIxin}"> 
 								<th><span class="prompt" style="color: red; display: none;">*</span>计费策略类型：</th>
-							<td style="width: 100px;">
+							<td>
 							
 							<select  disabled="disabled" >
 								<option <c:if test="${workDealInfo.payType==1 }">selected</c:if> value="1" >标准</option>
@@ -466,8 +474,10 @@ $(document).ready(function() {
 								<option <c:if test="${workDealInfo.payType==3 }">selected</c:if> value="3" >合同采购</option>
 							</select>
 							</td>
-								<th><span class="prompt" style="color: red; display: none;">*</span>计费策略模版：</th>
-							<td>
+							</tr>
+						<tr>
+							<th class="btmBorder"><span class="prompt" style="color: red; display: none;">*</span>计费策略模版：</th>
+							<td class="btmBorder">
 							
 							<select id="agentId"
 								name="agentId" disabled="disabled">
@@ -476,15 +486,16 @@ $(document).ready(function() {
 							</td>
 							</c:if>
 								<c:if test="${workDealInfo.isIxin eq true}"> 
-								<th style="width: 100px;"><span class="prompt"
+								<th><span class="prompt"
 								style="color: red; display: none;">*</span>计费策略类型：</th>
-							<td style="width: 250px;"><select id="agentId"
+							<td><select id="agentId"
 								name="agentId">
 									<option value="0">请选择</option>
 							</select> <input type="hidden" id="boundId"></td>
-							<th style="width: 100px;"><span class="prompt"
+							
+							<th class="btmBorder"><span class="prompt"
 								style="color: red; display: none;">*</span>计费策略模版：</th>
-							<td style="width: 250px;"><select
+							<td class="btmBorder"><select
 								onchange="setYearByBoundId()" id="agentDetailId"
 								name="agentDetailId">
 									<option value="0">请选择</option>
@@ -494,9 +505,9 @@ $(document).ready(function() {
 							</td>
 								</c:if>
 										
-										
-						</tr>
-						<tr>
+							</tr>
+						<tr>			
+						
 							<th>申请年数：</th>
 
 							<td><c:if test="${workDealInfo.dealInfoType!=0 }">
@@ -650,8 +661,8 @@ value="${workDealInfo.workCompany.comCertficateTime }"  pattern="yyyy-MM-dd"/>">
 							<td><input type="text" name="comCertficateNumber"
 								disabled="disabled"
 								value="${workDealInfo.workCompany.comCertficateNumber}" /></td>
-							<th>单位联系电话：</th>
-							<td><input type="text" name="companyMobile"
+							<th class="btmBorder">单位联系电话：</th>
+							<td class="btmBorder"><input type="text" name="companyMobile"
 								disabled="disabled" id="companyMobile"
 								value="${workDealInfo.workCompany.companyMobile }"></td>
 						</tr>
@@ -717,8 +728,8 @@ test="${workDealInfo.workUser.conCertType==2 }">selected</c:if>>其他</option>
 								<c:if test="${!canEdit }">disabled="disabled"</c:if>
 								value="${workDealInfo.workUser.contactPhone }"
 								onblur="checkMobile(this)" /></td>
-							<th><span class="prompt" style="color: red; display: none;">*</span>业务系统UID:</th>
-							<td><input type="text" name="contactTel" id="contactTel"
+							<th class="btmBorder"><span class="prompt" style="color: red; display: none;">*</span>业务系统UID:</th>
+							<td class="btmBorder"><input type="text" name="contactTel" id="contactTel"
 								<c:if test="${!canEdit }">disabled="disabled"</c:if>
 								value="${workDealInfo.workUser.contactTel }" /></td>
 						</tr>
@@ -757,10 +768,8 @@ style="display:none"</c:if> --%>>
 
 }">disabled="disabled"</c:if>
 								value="${workCertApplyInfo.name }" /></td>
-						</tr>
-						<tr>
-							<th><span class="prompt" style="color: red; display: none;">*</span>经办人身份证号:</th>
-							<td><input type="text" name="pIDCard"
+							<th class="btmBorder"><span class="prompt" style="color: red; display: none;">*</span>经办人身份证号:</th>
+							<td class="btmBorder"><input type="text" name="pIDCard"
 								<c:if test="${!canEdit 
 
 }">disabled="disabled"</c:if>

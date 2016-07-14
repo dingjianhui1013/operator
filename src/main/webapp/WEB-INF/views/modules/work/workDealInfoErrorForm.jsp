@@ -5,6 +5,14 @@
 <head>
 <title>业务办理管理</title>
 <meta name="decorator" content="default" />
+<style type="text/css">
+.accordion-heading, .table th{width:140px;}
+.table-condensed td{width:485px;}
+.Wdate{width:206px;}
+.btmBorder{border-bottom:1px solid #ddd}
+.accordion-heading,.table th,.accordion-heading,.table td{ vertical-align: middle;}
+
+</style>
 <script type="text/javascript">
 	$(document).ready(function() {
 						$("#name").focus();
@@ -596,7 +604,7 @@ $("#agentId").change(function(){
 				<table class="table table-striped table-bordered table-condensed">
 					<tbody>
 						<tr>
-							<th colspan="6" style="font-size: 20px;"><span class="prompt" style="color:red; display: none;">*</span>基本信息</th>
+							<th colspan="4" style="font-size: 20px;"><span class="prompt" style="color:red; display: none;">*</span>基本信息</th>
 						</tr>
 						<tr>
 							<th><span class="prompt" style="color:red; display: none;">*</span>代办应用：</th>
@@ -642,40 +650,32 @@ $("#agentId").change(function(){
 						
 						
 						<tr>
-						<th style="width: 100px;"><span class="prompt"
+						<th ><span class="prompt"
 								style="color: red; display: none;">*</span>计费策略类型：</th>
 							<td  style="width: 250px;"><select id="agentId"
 								name="agentId">
 									<option value="0">请选择</option>
 							</select> <input type="hidden" id="boundId"></td>
+						<th class="btmBorder"><span class="prompt"
+								style="color: red; display: none;">*</span>计费策略模版：</th>
+							<td class="btmBorder"><select
+								onchange="setYearByBoundId()" id="agentDetailId"
+								name="agentDetailId">
+									<option value="0">请选择</option>
+							</select>
+							</td>
+						</tr>
 						
-						<th   id="supportDateTh" style="display: none">选择截止日期：</th>
+						<tr>
+								<th   id="supportDateTh" style="display: none">选择截止日期：</th>
 						<td   id="supportDateTd" style="display: none">
 								<input class="input-medium Wdate" type="text"
 							 onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});"
 							 maxlength="20" readonly="readonly" value="<fmt:formatDate value="${expirationDate}" pattern="yyyy-MM-dd"/>"
 							name="expirationDate" id="expirationDate"/>
 							</td>
-						
+							
 						</tr>
-						
-						<tr>
-							
-							
-							<th style="width: 100px;"><span class="prompt"
-								style="color: red; display: none;">*</span>计费策略模版：</th>
-							<td style="width: 500px;"><select
-								onchange="setYearByBoundId()" id="agentDetailId"
-								name="agentDetailId">
-									<option value="0">请选择</option>
-							</select>
-							</td>
-							
-							<th></th>
-							<td></td>
-						
-						</tr>
-						
 					</tbody>
 				</table>
 			</div>
@@ -750,8 +750,8 @@ $("#agentId").change(function(){
 								id="comCertficateTime" /></td>
 						</tr>
 						<tr>
-							<th><span class="prompt" style="color:red; display: none;">*</span>法人姓名：</th>
-							<td><input type="text" name="legalName" id="legalName" 
+							<th><span class="prompt" style="color:red; display: none; ">*</span>法人姓名：</th>
+							<td style="vertical-align: middle;"><input type="text" name="legalName" id="legalName" 
 								value="${workCompany.legalName }"></td>
 							<th><span class="prompt" style="color:red; display: none;">*</span>行政所属区：</th>
 							<td><select id="s_province" name="s_province"
@@ -762,9 +762,8 @@ $("#agentId").change(function(){
 									_init_area();
 								</script>
 								<div style="margin-top: 8px;">
-									<span class="prompt" style="color: red; display: none;">*</span>区域备注：<input
-										type="text" name="areaRemark"
-										value="${workDealInfo.workCompany.areaRemark }">
+									<span class="prompt" style="color: red; display: none;">*</span>区域备注：
+									<input type="text" name="areaRemark" value="${workDealInfo.workCompany.areaRemark }" style="width:242px">
 								</div>
 								<div id="show"></div></td>
 						</tr>
@@ -772,8 +771,8 @@ $("#agentId").change(function(){
 							<th><span class="prompt" style="color:red; display: none;">*</span>街道地址：</th>
 							<td><input type="text" name="address" id="address"
 								value="${workCompany.address }"></td>
-							<th><span class="prompt" style="color:red; display: none;">*</span>单位联系电话：</th>
-							<td><input type="text" name="companyMobile" 
+							<th class="btmBorder"><span class="prompt" style="color:red; display: none;">*</span>单位联系电话：</th>
+							<td class="btmBorder"><input type="text" name="companyMobile" 
 								id="companyMobile" value="${workCompany.companyMobile }"></td>
 
 						</tr>
@@ -824,8 +823,8 @@ $("#agentId").change(function(){
 								value="${workUser.contactPhone }" 
 								onblur="checkMobile(this)"
 								/></td>
-							<th><span class="prompt" style="color:red; display: none;">*</span>业务系统UID:</th>
-							<td><input type="text" name="contactTel" id="contactTel" maxlength="20"
+							<th class="btmBorder"><span class="prompt" style="color:red; display: none;">*</span>业务系统UID:</th>
+							<td class="btmBorder"><input type="text" name="contactTel" id="contactTel" maxlength="20"
 								value="${workUser.contactTel }" /></td>
 						</tr>
 						<tr>
@@ -852,10 +851,8 @@ $("#agentId").change(function(){
 							<th><span class="prompt" style="color:red; display: none;">*</span>经办人姓名:</th>
 							<td><input type="text" name="pName" id="pName" maxlength="20"
 								value="${workDealInfo.workCertInfo.workCertApplyInfo.name }" onchange="checkSqr(this);"/></td>
-						</tr>
-						<tr>
-							<th><span class="prompt" style="color:red; display: none;">*</span>身份证号:</th>
-							<td><input type="text" name="pIDCard" maxlength="18" id="pIDCard"
+							<th class="btmBorder"><span class="prompt" style="color:red; display: none;">*</span>身份证号:</th>
+							<td class="btmBorder"><input type="text" name="pIDCard" maxlength="18" id="pIDCard"
 								value="${workDealInfo.workCertInfo.workCertApplyInfo.idCard }" /></td>
 						</tr>
 						<tr>

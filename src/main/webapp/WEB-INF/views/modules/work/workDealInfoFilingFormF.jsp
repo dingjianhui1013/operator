@@ -7,6 +7,12 @@
 <meta name="decorator" content="default" />
 <link href="${ctxStatic}/jquery/jquery.bigautocomplete.css"
 	rel="stylesheet" />
+<script type="text/javascript">
+	$(document).ready(
+		function() {
+			$('div.small_pic a').fancyZoom({scaleImg: true, closeOnClick: true});
+	});
+</script>
 </head>
 <body>
 	<table class="table table-striped table-bordered table-condensed">
@@ -135,6 +141,23 @@
 						value="${workDealInfo.workCompanyHis.comCertficateTime}"
 						pattern="yyyy-MM-dd" /></td>
 			</tr>
+			<c:if test="${workDealInfo.selfImage.id!=null }">
+			<tr>
+				<th>单位电子证件:</th>
+				<td class ="small_pic">
+					<div class="col-sm-9">
+                         <div class="previewImg" id="preview">
+                         	<div class="small_pic">
+							<a href="#picBigBox" >
+								<img id="imghead" style = "width:100px;height:75px" src="${imgUrl}/${workDealInfo.selfImage.companyImage }" >
+                             		</a> 
+                             </div>
+                         </div>
+					</div>
+				</td>
+				</tr>
+			</c:if>
+			
 			<tr>
 				<th>法人姓名:</th>
 				<td>${workDealInfo.workCompanyHis.legalName}</td>
@@ -176,6 +199,22 @@
 				<th>证件号码:</th>
 				<td>${workDealInfo.workUserHis.conCertNumber }</td>
 			</tr>
+			
+			
+			<c:if test="${workDealInfo.selfImage.id!=null }">
+				<tr>
+					<th >个人电子证件:</th>
+					<td class = "small_pic">
+						<div class="col-sm-9">
+                          		<div class="small_pic">
+                           		<a href="#picBigBox1" >
+                           		   <img id="imghead1" style = "width:100px;height:75px"  src="${imgUrl }/${workDealInfo.selfImage.transactorImage}" >
+                           		</a>
+                          		</div>
+                          	</div>
+					</td>
+				</tr>	
+			</c:if>	
 			<tr>
 				<th>部门名称:</th>
 				<td>${workDealInfo.workUserHis.department}</td>
@@ -216,6 +255,12 @@
 	<div class="form-actions">
 		<input id="btnCancel" class="btn" type="button" value="返 回"
 			onclick="history.go(-1)" />
+	</div>
+	<div id="picBigBox" style="display:none;">
+		<img src="${imgUrl }/${workDealInfo.selfImage.companyImage }"  >
+	</div>
+	<div id="picBigBox1" style="display:none;">
+		<img src="${imgUrl }/${workDealInfo.selfImage.transactorImage }" >
 	</div>
 </body>
 </html>

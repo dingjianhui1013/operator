@@ -9,6 +9,14 @@
 	rel="stylesheet" />
 <script type="text/javascript" src="${ctxStatic }/js/content_zoom.js"></script>
 <script type="text/javascript" src="${ctxStatic }/js/common.js"></script>
+<style type="text/css">
+.accordion-heading, .table th{width:140px;}
+.table-condensed td{width:485px;}
+.Wdate{width:206px;}
+.btmBorder{border-bottom:1px solid #ddd}
+.accordion-heading,.table th,.accordion-heading,.table td{ vertical-align: middle;}
+
+</style>
 <script type="text/javascript">
 	$(document).ready(function() {
 						$('div.small_pic a').fancyZoom({scaleImg: true, closeOnClick: true});
@@ -717,7 +725,7 @@
 				<table class="table table-striped table-bordered table-condensed">
 					<tbody>
 						<tr>
-							<th colspan="6" style="font-size: 20px;">基本信息</th>
+							<th colspan="4" style="font-size: 20px;">基本信息</th>
 						</tr>
 						<tr>
 							<th><span class="prompt" style="color: red; display: none;">*</span>应用名称：</th>
@@ -779,28 +787,15 @@
 						</tr>
 						<tr>
 
-							<th style="width: 100px;"><span class="prompt"
+							<th><span class="prompt"
 								style="color: red; display: none;">*</span>计费策略类型：</th>
-							<td style="width: 400px;"><select id="agentId"
+							<td><select id="agentId"
 								name="agentId">
 									<option value="0">请选择</option>
 							</select> <input type="hidden" id="boundId"></td>
-							
-							<th id="supportDateTh" style="display: none">选择截止日期：</th>
-						<td id="supportDateTd" style="display: none">
-								<input class="input-medium Wdate" type="text"
-							 onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});"
-							 maxlength="20" readonly="readonly"  value="<fmt:formatDate value="${workDealInfo.expirationDate}" pattern="yyyy-MM-dd"/>"
-							name="expirationDate" id="expirationDate"/>
-							</td>
-
-						</tr>
-						
-						
-						<tr>
-						<th style="width: 100px;"><span class="prompt"
+							<th class="btmBorder"><span class="prompt"
 								style="color: red; display: none;">*</span>计费策略模版：</th>
-							<td style="width: 270px;"><select
+							<td class="btmBorder"><select
 								onchange="setYearByBoundId()" id="agentDetailId"
 								name="agentDetailId">
 									<option value="0">请选择</option>
@@ -808,8 +803,12 @@
 							<input type="hidden" id="surplusNum" />
 
 							</td>
-						
-						
+							
+							
+							
+						</tr>
+						<tr>
+							
 						<c:if test="${reissue==2}">
 						
 							<th>人为损坏：</th>
@@ -818,6 +817,13 @@
 						
 						</c:if>
 						
+						<th id="supportDateTh" style="display: none">选择截止日期：</th>
+						<td id="supportDateTd" style="display: none">
+								<input class="input-medium Wdate" type="text"
+							 onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});"
+							 maxlength="20" readonly="readonly"  value="<fmt:formatDate value="${workDealInfo.expirationDate}" pattern="yyyy-MM-dd"/>"
+							name="expirationDate" id="expirationDate"/>
+							</td>
 						</tr>
 						
 						
@@ -904,7 +910,7 @@
 						</tr>
 						<tr>
 							<th><span class="prompt" style="color: red; display: none;">*</span>法人姓名：</th>
-							<td><input type="text" name="legalName"
+							<td style="vertical-align:middle"><input type="text" name="legalName"
 								value="${workDealInfo.workCompany.legalName}"></td>
 							<th>行政所属区：</th>
 							<td><select id="s_province" name="s_province"
@@ -927,7 +933,7 @@
 								<div style="margin-top: 8px;">
 									<span class="prompt" style="color: red; display: none;">*</span>区域备注：<input
 										type="text" name="areaRemark"
-										value="${workDealInfo.workCompany.areaRemark }">
+										value="${workDealInfo.workCompany.areaRemark }" style="width:242px;">
 								</div></td>
 
 
@@ -936,8 +942,8 @@
 							<th><span class="prompt" style="color: red; display: none;">*</span>街道地址：</th>
 							<td><input type="text" name="address"
 								value="${workDealInfo.workCompany.address}"></td>
-							<th><span class="prompt" style="color: red; display: none;">*</span>单位联系电话：</th>
-							<td><input type="text" name="companyMobile" class="number"
+							<th class="btmBorder"><span class="prompt" style="color: red; display: none;">*</span>单位联系电话：</th>
+							<td class="btmBorder"><input type="text" name="companyMobile" class="number"
 								id="companyMobile"
 								value="${workDealInfo.workCompany.companyMobile }"  onblur="qxCount('dwtcount')" onfocus="hqcount('companyMobile','dwtcount')"/><span id="dwtcount" style="color: red; margin-left: 10px"></span></td>
 						</tr>
@@ -1008,8 +1014,8 @@
 								type="hidden" name="contactPhone" id="contactPhone"
 								maxlength="11" class="number" disabled="disabled"
 								value="<fmt:formatNumber pattern="#">${workDealInfo.workUser.contactPhone }</fmt:formatNumber>" /></td>
-							<th><span class="prompt" style="color: red; display: none;">*</span>业务系统UID:</th>
-							<td><input type="text" name="contactTel" id="contactTel1"
+							<th class="btmBorder"><span class="prompt" style="color: red; display: none;">*</span>业务系统UID:</th>
+							<td class="btmBorder"><input type="text" name="contactTel" id="contactTel1"
 								maxlength="20" value="${workDealInfo.workUser.contactTel }"  onblur="qxCount('ywIDcount')" onfocus="hqcount('contactTel1','ywIDcount')"/><span id="ywIDcount" style="color: red; margin-left: 10px"></span>
 							</td>
 						</tr>
@@ -1056,10 +1062,9 @@
 							<th><span class="prompt" style="color: red; display: none;">*</span>经办人姓名:</th>
 							<td><input type="text" name="pName" id="pName" 
 								value="${workDealInfo.workCertInfo.workCertApplyInfo.name }" /></td>
-						</tr>
-						<tr>
-							<th><span class="prompt" style="color: red; display: none;">*</span>经办人身份证号:</th>
-							<td><input type="text" name="pIDCard" id="pIDCard" 
+						
+							<th class="btmBorder"><span class="prompt" style="color: red; display: none;">*</span>经办人身份证号:</th>
+							<td class="btmBorder"><input type="text" name="pIDCard" id="pIDCard" 
 								value="${workDealInfo.workCertInfo.workCertApplyInfo.idCard }"  onblur="qxCount('pIDcount')" onfocus="hqcount('pIDCard','pIDcount')"/><span id="pIDcount" style="color: red; margin-left: 10px"></span></td>
 						</tr>
 						<tr>

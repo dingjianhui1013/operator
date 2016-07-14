@@ -126,8 +126,10 @@ public class SelfApplicationController extends BaseController {
 
 	@Autowired
 	private ConfigChargeAgentBoundConfigProductService configChargeAgentBoundConfigProductService;
+	
 	@Autowired
 	private SmsService smsService;
+	
 	private LogUtil logUtil = new LogUtil();
 
 	@ModelAttribute
@@ -198,7 +200,8 @@ public class SelfApplicationController extends BaseController {
 		selfApplicationService.save(selfApplication);
 		String phone = selfApplication.getTransactorPhone();
 		if (phone!=null&&!"".equals(phone)) {
-			String messageString = "您在四川省数字证书认证管理中心申请的数字证书业务审核未通过，拒绝原因："+denyText+"请登录系统进行修改并重新提交。";
+			String messageString = Global.getConfig("sms.count.denyApply");
+			messageString = messageString.replace("{0}", denyText);
 			VelocityEngine ve = new VelocityEngine();
 			ve.init();
 			VelocityContext context = new VelocityContext();
@@ -281,6 +284,12 @@ public class SelfApplicationController extends BaseController {
 			workDealInfo.setCommercialAgent(configAgentOfficeRelations.get(0)
 					.getConfigCommercialAgent());// 劳务关系外键
 		}
+        Set<SelfImage> set = selfApplication.getSelfImages();
+        for (SelfImage selfImage : set) {
+            if (selfImage.getStatus().equalsIgnoreCase("1")) {
+                workDealInfo.setSelfImage(selfImage);
+            }
+        }
 		workDealInfo.setConfigApp(configApp);
 		workDealInfo.setWorkUser(workUser);
 		workDealInfo.setWorkCompany(workCompany);
@@ -298,8 +307,6 @@ public class SelfApplicationController extends BaseController {
 			} else {
 				workDealInfo.setLastDays(0);
 			}
-			
-			
 		}
 		// 新增时扣减计费策略数量 
 		ConfigChargeAgent agent = bound.getAgent();
@@ -394,10 +401,10 @@ public class SelfApplicationController extends BaseController {
 			String messageString =null;
 			if(selfApplication.getBusinessType().equals("0"))
 			{
-				messageString = "您在四川省数字证书认证管理中心申请的数字证书业务已通过审核，请再次登录系统下载申请表进行盖章邮寄并完成业务缴费。";
+				messageString = Global.getConfig("sms.count.agreeApply");
 			}
 			if (selfApplication.getBusinessType().equals("1")) {
-				messageString = "您在四川省数字证书认证管理中心申请的数字证书业务已通过审核，请再次登录系统完成业务缴费。";
+				messageString = Global.getConfig("sms.count.agreeRenovateApply");
 			}
 			VelocityEngine ve = new VelocityEngine();
 			ve.init();

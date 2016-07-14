@@ -9,6 +9,14 @@
 	rel="stylesheet" />
 <script type="text/javascript" src="${ctxStatic }/js/content_zoom.js"></script>
 <script type="text/javascript" src="${ctxStatic }/js/common.js"></script>
+<style type="text/css">
+.accordion-heading, .table th{width:140px;}
+.table-condensed td{width:485px;}
+.Wdate{width:206px;}
+.btmBorder{border-bottom:1px solid #ddd}
+.accordion-heading,.table th,.accordion-heading,.table td{ vertical-align: middle;}
+
+</style>	
 <script type="text/javascript">
 	$(document)
 			.ready(
@@ -412,7 +420,7 @@
 						<tr>
 						
 						
-							<th style="width: 100px"><span class="prompt" style="color: red; display: none;">*</span>选择产品：</th>
+							<th><span class="prompt" style="color: red; display: none;">*</span>选择产品：</th>
 							<td>
 									<select name="product"  id="product">
 									<c:forEach items="${proList}" var="product">
@@ -422,7 +430,7 @@
 							</td>
 						
 						
-							<th style="width: 100px"><span class="prompt" style="color: red; display: none;">*</span>申请年数：</th>
+							<th><span class="prompt" style="color: red; display: none;">*</span>申请年数：</th>
 							<td><input type="radio" id="delay" checked="checked"
 								name="year" disabled="disabled"> <span>不延期</span>
 
@@ -432,7 +440,7 @@
 						<tr>
 							
 							<th><span class="prompt" style="color: red; display: none;">*</span>计费策略类型：</th>
-							<td style="width: 400px;">
+							<td>
 							
 							<select id="agentId"
 								name="agentId">
@@ -443,8 +451,8 @@
 			
 						<c:if test="${reissue==2}">
 						
-							<th>人为损坏：</th>
-							<td><input type="radio" name="manMadeDamage" value="true"/>是
+							<th class="btmBorder">人为损坏：</th>
+							<td class="btmBorder"><input type="radio" name="manMadeDamage" value="true"/>是
 							 <input type="radio" name="manMadeDamage"value="false">否</td>
 						
 						</c:if>
@@ -550,14 +558,12 @@
 						</tr>
 						<tr>
 							<th><span class="prompt" style="color: red; display: none;">*</span>法人姓名：</th>
-							<td><input type="text" name="legalName" disabled="disabled"
+							<td style="vertical-align: middle;"><input type="text" name="legalName" disabled="disabled"
 								value="${workDealInfo.workCompany.legalName}"></td>
 							<th>行政所属区：</th>
-							<td><select id="s_province" name="s_province" disabled="disabled"
-								style="width: 100px;">
-							</select>&nbsp;&nbsp; <select id="s_city" name="s_city" disabled="disabled"
-								style="width: 100px;"></select>&nbsp;&nbsp; <select disabled="disabled"
-								id="s_county" name="s_county" style="width: 100px;"></select> <script
+							<td><select id="s_province" name="s_province" disabled="disabled" style="width:100px;">
+							</select>&nbsp;&nbsp; <select id="s_city" name="s_city" disabled="disabled" style="width:100px;"></select>&nbsp;&nbsp; <select disabled="disabled"
+								id="s_county" name="s_county" style="width:100px;"></select> <script
 									type="text/javascript">
 									_init_area();
 									$("#s_province")
@@ -573,7 +579,7 @@
 								<div style="margin-top: 8px;">
 									<span class="prompt" style="color: red; display: none;">*</span>区域备注：<input
 										type="text" name="areaRemark" disabled="disabled"
-										value="${workDealInfo.workCompany.areaRemark }">
+										value="${workDealInfo.workCompany.areaRemark }" style="width:242px;">
 								</div></td>
 
 
@@ -582,8 +588,8 @@
 							<th><span class="prompt" style="color: red; display: none;">*</span>街道地址：</th>
 							<td><input type="text" name="address" disabled="disabled"
 								value="${workDealInfo.workCompany.address}"></td>
-							<th><span class="prompt" style="color: red; display: none;">*</span>单位联系电话：</th>
-							<td><input type="text" name="companyMobile" class="number" disabled="disabled"
+							<th class="btmBorder"><span class="prompt" style="color: red; display: none;">*</span>单位联系电话：</th>
+							<td class="btmBorder"><input type="text" name="companyMobile" class="number" disabled="disabled"
 								id="companyMobile"
 								value="${workDealInfo.workCompany.companyMobile }"></td>
 						</tr>
@@ -656,8 +662,8 @@
 								onkeyup="this.value=this.value.replace(/\D/g,'')"
 								value="<fmt:formatNumber pattern="#">${workDealInfo.workUser.contactPhone }</fmt:formatNumber>"  onblur="qxCount('zjtcount')" onfocus="hqcount('contactPhone1','zjtcount')"/><span id="zjtcount" style="color: red; margin-left: 10px"></span> 
 							</td>
-							<th><span class="prompt" style="color: red; display: none;">*</span>业务系统UID:</th>
-							<td><input type="text" name="contactTel" id="contactTel1"
+							<th class="btmBorder"><span class="prompt" style="color: red; display: none;">*</span>业务系统UID:</th>
+							<td class="btmBorder"><input type="text" name="contactTel" id="contactTel1"
 								maxlength="20" value="${workDealInfo.workUser.contactTel }"  onblur="qxCount('ywIDcount')" onfocus="hqcount('contactTel1','ywIDcount')"/><span id="ywIDcount" style="color: red; margin-left: 10px"></span>
 							</td>
 						</tr>
@@ -704,10 +710,9 @@
 							<th><span class="prompt" style="color: red; display: none;">*</span>经办人姓名:</th>
 							<td><input type="text" name="pName" id="pName" disabled="disabled"
 								value="${workDealInfo.workCertInfo.workCertApplyInfo.name }" /></td>
-						</tr>
-						<tr>
-							<th><span class="prompt" style="color: red; display: none;">*</span>经办人身份证号:</th>
-							<td><input type="text" name="pIDCard" id="pIDCard" disabled="disabled"
+						
+							<th class="btmBorder"><span class="prompt" style="color: red; display: none;">*</span>经办人身份证号:</th>
+							<td class="btmBorder"><input type="text" name="pIDCard" id="pIDCard" disabled="disabled"
 								value="${workDealInfo.workCertInfo.workCertApplyInfo.idCard }" /></td>
 						</tr>
 						<tr>

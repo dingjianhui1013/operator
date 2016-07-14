@@ -8,9 +8,12 @@
 <link href="${ctxStatic}/jquery/jquery.bigautocomplete.css"
 	rel="stylesheet" />
 <style type="text/css">
-.accordion-heading, .table th{width:118px;}
-.tdWidth{width:230px;}
+.accordion-heading, .table th{width:140px;}
+.table-condensed td{width:485px;}
 .Wdate{width:206px;}
+.btmBorder{border-bottom:1px solid #ddd}
+.accordion-heading,.table th,.accordion-heading,.table td{ vertical-align: middle;}
+
 </style>	
 <script type="text/javascript" src="${ctxStatic }/js/content_zoom.js"></script>
 <script type="text/javascript" src="${ctxStatic }/js/common.js"></script>
@@ -691,7 +694,7 @@
 				<table class="table table-striped table-bordered table-condensed">
 					<tbody>
 						<tr>
-							<th colspan="6" style="font-size: 20px;">基本信息</th>
+							<th colspan="4" style="font-size: 20px;">基本信息</th>
 						</tr>
 						<tr>
 							<th><span class="prompt" style="color: red; display: none;">*</span>应用名称：</th>
@@ -702,11 +705,8 @@
 								
 								</td>
 							
-							
 							<th><span class="prompt" style="color: red; display: none;">*</span>业务类型：</th>
-							<td colspan="3">
-							
-							
+							<td>
 							<input type="checkbox" disabled="disabled" checked="checked"
 										value="3" name="dealInfoType2"><font color="red" style="font-weight:bold;">变更证书</font><input
 										type="hidden" value="3" name="dealInfoType2">
@@ -724,7 +724,6 @@
 							</td>
 						</tr>
 						<tr>
-						
 							<th><span class="prompt" style="color: red; display: none;">*</span>选择产品：</th>
 							<td>
 							<select name="product"  id="product">
@@ -735,7 +734,7 @@
 								
 							</td>
 
-							<th style="width: 100px;"><span class="prompt"
+							<th><span class="prompt"
 								style="color: red; display: none;">*</span>申请年数：</th>
 							<td>
 								<input type="radio" name="year" value="1" id="year1">
@@ -761,20 +760,9 @@
 									<option value="0">请选择</option>
 							</select> <input type="hidden" id="boundId"></td>
 						
-						<th id="supportDateTh" style="display: none">选择截止日期：</th>
-						<td id="supportDateTd" style="display: none">
-								<input class="input-medium Wdate" type="text"
-							 onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});"
-							 maxlength="20" readonly="readonly" <%-- value="<fmt:formatDate value="${expirationDate}" pattern="yyyy-MM-dd"/>" --%>
-							name="expirationDate" id="expirationDate"/>
-							</td>
-						
-						</tr>
-						
-						<tr>
-							<th style="width: 100px;"><span class="prompt"
+						<th class="btmBorder"><span class="prompt"
 								style="color: red; display: none;">*</span>计费策略模版：</th>
-							<td style="width: 500px;"><select
+							<td class="btmBorder"><select
 								onchange="setYearByBoundId()" id="agentDetailId"
 								name="agentDetailId">
 									<option value="0">请选择</option>
@@ -782,8 +770,9 @@
 							<input type="hidden" id="surplusNum" />
 
 							</td>
+						</tr>
 						
-						
+						<tr>
 						<c:if test="${reissue==2}">
 						
 							<th>人为损坏：</th>
@@ -791,6 +780,14 @@
 							 <input type="radio" name="manMadeDamage"value="false">否</td>
 						
 						</c:if>
+							<th id="supportDateTh" style="display: none">选择截止日期：</th>
+						<td id="supportDateTd" style="display: none">
+								<input class="input-medium Wdate" type="text"
+							 onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});"
+							 maxlength="20" readonly="readonly" <%-- value="<fmt:formatDate value="${expirationDate}" pattern="yyyy-MM-dd"/>" --%>
+							name="expirationDate" id="expirationDate"/>
+							</td>
+						
 						</tr>
 						
 						
@@ -878,14 +875,14 @@
 						</tr>
 						<tr>
 							<th><span class="prompt" style="color: red; display: none;">*</span>法人姓名：</th>
-							<td class="tdWidth"><input type="text" name="legalName"
+							<td class="tdWidth" style="vertical-align: middle;"><input type="text" name="legalName"
 								value="${workDealInfo.workCompany.legalName}"></td>
 							<th>行政所属区：</th>
 							<td><select id="s_province" name="s_province"
-								style="width: 105px;">
+								style="width: 103px;">
 							</select>&nbsp;&nbsp; <select id="s_city" name="s_city"
-								style="width: 105px;"></select>&nbsp;&nbsp; <select
-								id="s_county" name="s_county" style="width: 105px;"></select> <script
+								style="width: 103px;"></select>&nbsp;&nbsp; <select
+								id="s_county" name="s_county" style="width: 103px;"></select> <script
 									type="text/javascript">
 									_init_area();
 									$("#s_province")
@@ -900,7 +897,7 @@
 								</script>
 								<div style="margin-top: 8px;">
 									<span class="prompt" style="color: red; display: none;">*</span>区域备注：<input
-										type="text" name="areaRemark" style="width:258px;"
+										type="text" name="areaRemark" style="width:256px;"
 										value="${workDealInfo.workCompany.areaRemark }">
 								</div></td>
 
@@ -910,8 +907,8 @@
 							<th><span class="prompt" style="color: red; display: none;">*</span>街道地址：</th>
 							<td class="tdWidth"><input type="text" name="address"
 								value="${workDealInfo.workCompany.address}"></td>
-							<th><span class="prompt" style="color: red; display: none;">*</span>单位联系电话：</th>
-							<td><input type="text" name="companyMobile" class="number"
+							<th class="btmBorder"><span class="prompt" style="color: red; display: none;">*</span>单位联系电话：</th>
+							<td class="btmBorder"><input type="text" name="companyMobile" class="number"
 								id="companyMobile"
 								value="${workDealInfo.workCompany.companyMobile }"  onblur="qxCount('dwtcount')" onfocus="hqcount('companyMobile','dwtcount')"/><span id="dwtcount" style="color: red; margin-left: 10px"></span></td>
 						</tr>
@@ -986,8 +983,8 @@
 								type="hidden" name="contactPhone" id="contactPhone"
 								maxlength="11" class="number" disabled="disabled"
 								value="<fmt:formatNumber pattern="#">${workDealInfo.workUser.contactPhone }</fmt:formatNumber>" /></td>
-							<th><span class="prompt" style="color: red; display: none;">*</span>业务系统UID:</th>
-							<td><input type="text" name="contactTel" id="contactTel1"
+							<th class="btmBorder"><span class="prompt" style="color: red; display: none;">*</span>业务系统UID:</th>
+							<td class="btmBorder"><input type="text" name="contactTel" id="contactTel1"
 								maxlength="20" value="${workDealInfo.workUser.contactTel }" onblur="qxCount('ywIDcount')" onfocus="hqcount('contactTel1','ywIDcount')"/><span id="ywIDcount" style="color: red; margin-left: 10px"></span>
 							</td>
 						</tr>
@@ -1037,10 +1034,8 @@
 							<th><span class="prompt" style="color: red; display: none;">*</span>经办人姓名:</th>
 							<td><input type="text" name="pName" id="pName" 
 								value="${workDealInfo.workCertInfo.workCertApplyInfo.name }" /></td>
-						</tr>
-						<tr>
-							<th><span class="prompt" style="color: red; display: none;">*</span>经办人身份证号:</th>
-							<td><input type="text" name="pIDCard" id="pIDCard" maxlength="18"
+							<th class="btmBorder"><span class="prompt" style="color: red; display: none;">*</span>经办人身份证号:</th>
+							<td class="btmBorder"><input type="text" name="pIDCard" id="pIDCard" maxlength="18"
 								value="${workDealInfo.workCertInfo.workCertApplyInfo.idCard }" onblur="qxCount('pIDcount')" onfocus="hqcount('pIDCard','pIDcount')"/><span id="pIDcount" style="color: red; margin-left: 10px"></span></td>
 						</tr>
 						<tr>

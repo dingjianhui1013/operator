@@ -3,7 +3,8 @@
 <meta name="author" content="http://thinkgem.iteye.com"/><meta http-equiv="X-UA-Compatible" content="IE=7,IE=9,IE=10" />
 <style type="text/css">
 /*解决ie9 border不显示*/
-.accordion-heading, .table th{background-clip: padding-box;position:relative;}
+.accordion-heading,.table th{background-clip: padding-box;position:relative;}
+.table th,.table td{background-clip:padding-box;position:relative\9;z-index:-1\9;}
 </style>
 <script src="${ctxStatic}/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
 <script src="${ctxStatic}/jquery/jquery-migrate-1.1.1.min.js" type="text/javascript"></script>

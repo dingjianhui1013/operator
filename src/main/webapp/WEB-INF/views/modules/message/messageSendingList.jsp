@@ -4,10 +4,12 @@
 <head>
 <title>消息发送管理</title>
 <meta name="decorator" content="default" />
+<style type="text/css">
+/* .Wdate{width:113px;} */
+</style>
 <%@include file="/WEB-INF/views/include/dialog.jsp"%>
 <script type="text/javascript">
 	$(document).ready(function() {
-		
 	
 	});
 	function selectedAll()
@@ -25,12 +27,14 @@
 				$("#checkAll").attr("checked","true");
 			}
 	}
+	
 	function page(n, s) {
 		$("#pageNo").val(n);
 		$("#pageSize").val(s);
 		$("#searchForm").submit();
 		return false;
 	}
+	
 	function addOffice() {
 		var areaId = $("#areaId").prop('value');
 		var url = "${ctx}/sys/office/addOffices?areaId=";
@@ -47,8 +51,9 @@
 
 			$("#officeId").html(html);
 		});
-
 	}
+	
+	//选择当前页面全部
 	function checkAll(obj) {
 		var check = $($("#contentTable").find("#checkAll"));
 		var checkIds = $("#checkIds").val();
@@ -97,6 +102,7 @@
 		}
 	}
 
+	//单条数据选择
 	function changeCheck(obj) {
 		var checkIds = $("#checkIds").val();
 		var xz = $("#contentTable").find("[name='oneDealCheck']");
@@ -123,47 +129,57 @@
 			$("#checkIds").val(checkIds);
 		}
 	}
+	
+	//选择全部数据
 	function selectData()
 	{
-		var apply = $("#apply").val();
-		var companyName = $("#companyName").val();
-		var contactName = $("#contactName").val();
-		var workType = $("#workType").val();
-		var dealInfoStatus = $("#dealInfoStatus").val();
-		var areaId = $("#areaId").val();
-		var officeId = $("#officeId").val();
-		var province = $("#s_province").val();
-		var city = $("#s_city").val();
-		var district = $("#s_county").val();
-		if(apply==null || apply=="")
-			{
-				$.jBox.tip("请选择应用！");
-			}else{
-					$("#send").removeAttr("href");
-					var url="${ctx}/message/messageSending/selectData";
-					$.ajax({
-						url:url,
-						type:"POST",
-						data:{"apply":apply,"companyName":companyName,"contactName":contactName,"workType":workType,
-								"dealInfoStatus":dealInfoStatus,"areaId":areaId,"officeId":officeId,
-								"province":province,"city":city,"district":district,_:new Date().getTime()},
-						dataType:"text",
-						success:function(data)
-						{
-							$("#checkIds").val(data);
-							var xz = $("#contentTable").find("[name='oneDealCheck']");
-							for (var a = 0; a < xz.length; a++) {
-								var check = $($("#contentTable").find("[name='oneDealCheck']")[a]);
-								if (check.is(":checked") == false) {
-									check.attr("checked","true");
-								}
-							}
-							$("#send").attr("href","javascript:send()");
-							$("#checkAll").attr("checked","true");
+		if($("#checkIds").val()==''||$("#checkIds").val()==null){
+			var apply = $("#apply").val();
+			var companyName = $("#companyName").val();
+			var contactName = $("#contactName").val();
+			var workType = $("#workType").val();
+			var dealInfoStatus = $("#dealInfoStatus").val();
+			var areaId = $("#areaId").val();
+			var officeId = $("#officeId").val();
+			var province = $("#s_province").val();
+			var city = $("#s_city").val();
+			var district = $("#s_county").val();
+			$("#send").removeAttr("href");
+			var url="${ctx}/message/messageSending/selectData";
+			$.ajax({
+				url:url,
+				type:"POST",
+				data:{"apply":apply,"companyName":companyName,"contactName":contactName,"workType":workType,
+						"dealInfoStatus":dealInfoStatus,"areaId":areaId,"officeId":officeId,
+						"province":province,"city":city,"district":district,_:new Date().getTime()},
+				dataType:"text",
+				success:function(data)
+				{
+					$("#checkIds").val(data);
+					var xz = $("#contentTable").find("[name='oneDealCheck']");
+					for (var a = 0; a < xz.length; a++) {
+						var check = $($("#contentTable").find("[name='oneDealCheck']")[a]);
+						if (check.is(":checked") == false) {
+							check.attr("checked","true");
 						}
-					});
+					}
+					$("#send").attr("href","javascript:send()");
+					$("#checkAll").attr("checked","true");
+				}
+			});
+		}else{
+			$("#checkIds").val("");
+			var xz = $("#contentTable").find("[name='oneDealCheck']");
+			for (var a = 0; a < xz.length; a++) {
+				var check = $($("#contentTable").find("[name='oneDealCheck']")[a]);
+					check.attr("checked",false);
 			}
+			$("#checkAll").attr("checked",false);
+		}
+		
 	}
+	
+	//发送
 	function send() {
 		var checkIds = $("#checkIds").val();
 		var apply = $("#apply").val();
@@ -217,6 +233,7 @@
 			}
 
 		};
+		
 		var updateUrl = "${ctx}/message/messageSending/checkone?checkIds="
 				+ checkIds + "&apply=" + apply + "&companyName=" + companyName
 				+ "&contactName=" + contactName + "&workType=" + workType
@@ -229,24 +246,31 @@
 
 							var html = "";
 							if (data.status == 1) {
-
 								html = "<label class='control-label'>总共条数:</label><div class='controls'>"
 										+ data.size + "</div>";
 								html += "<label class='control-label'>短信内容:</label><div class='controls'>"
 										+ data.content + "</div>";
-
+								top.$.jBox.confirm(html, "短信内容", submit, {
+									buttons : {
+										'确认发送' : true,
+										'返回' : false
+									}
+								});	
+										
+							}else{
+								top.$.jBox.tip(data.meg);
 							}
 
-							top.$.jBox.confirm(html, "短信内容", submit, {
-								buttons : {
-									'确认发送' : true,
-									'返回' : false
-								}
-							});
+							
 						});
 				}
 		
-		
+	}
+	
+	//查询提交
+	function querySubmit(){
+		$("#checkIds").val();
+		$("#searchForm").submit();
 	}
 </script>
 <script type="text/javascript">
@@ -387,7 +411,7 @@
 			
 		&nbsp; &nbsp; &nbsp; &nbsp; 
 		
-		<input id="btnSubmit" class="btn btn-primary" type="submit"
+		<input id="btnSubmit" class="btn btn-primary" type="button" onclick = "querySubmit()"
 			value="查询" />
 		<a href="javascript:send()" class="btn btn-primary" id="send">发送</a> <input
 			type="hidden" name="checkIds" id="checkIds" value="${checkIds }" />

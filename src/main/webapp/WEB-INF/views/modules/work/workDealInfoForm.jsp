@@ -5,6 +5,13 @@
 <head>
 <title>业务办理管理</title>
 <meta name="decorator" content="default" />
+<style type="text/css">
+.table-condensed th{width:140px;}
+.table-condensed td{width:275px;}
+input[readonly]{width:206px;}
+.btmBorder{border-bottom:1px solid #ddd}
+.accordion-heading,.table th,.accordion-heading,.table td{ vertical-align: middle;}
+</style>
 <script type="text/javascript">
 var appData;
 var selected = false;
@@ -1206,7 +1213,7 @@ var selected = false;
 
 							
 							
-							<th style="width: 195px;"><span class="prompt"
+							<th ><span class="prompt"
 								style="color: red; display: none;">*</span>申请年数：</th>
 							
 							<td>
@@ -1239,31 +1246,15 @@ var selected = false;
 						
 						<tr>
 						
-						<th style="width: 140px;"><span class="prompt"
+						<th ><span class="prompt"
 								style="color: red; display: none;">*</span>计费策略类型：</th>
-							<td style="width: 340px;"><select id="agentId"
+							<td ><select id="agentId"
 								name="agentId">
 									<option value="0">请选择</option>
 							</select> <input type="hidden" id="boundId"></td>
-						
-						
-
-						
-						<th id="supportDateTh" style="display: none" >选择截止日期：</th>
-						<td id="supportDateTd" style="display: none">
-								<input class="input-medium Wdate" type="text"
-							 onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});"
-							 maxlength="20" readonly="readonly" <%-- value="<fmt:formatDate value="${expirationDate}" pattern="yyyy-MM-dd"/>" --%>
-							name="expirationDate" id="expirationDate"/>
-							</td>
-						
-						</tr>
-						
-						
-						<tr>
-						<th style="width: 100px;"><span class="prompt"
+						<th ><span class="prompt"
 								style="color: red; display: none;">*</span>计费策略模版：</th>
-							<td style="width: 270px;"><select
+							<td ><select
 								onchange="setYearByBoundId()" id="agentDetailId"
 								name="agentDetailId">
 									<option value="0">请选择</option>
@@ -1271,10 +1262,19 @@ var selected = false;
 								<input type="hidden" id="surplusNum" />
 
 							</td>
-							
-							<th></th>
-							<td></td>
+						
+
+						<tr>
+						<th id="supportDateTh" style="display: none" >选择截止日期：</th>
+						<td id="supportDateTd" style="display: none">
+								<input class="input-medium Wdate" type="text"
+							 onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});"
+							 maxlength="20" readonly="readonly" value="<fmt:formatDate value="${expirationDate}" pattern="yyyy-MM-dd"/>"
+							name="expirationDate" id="expirationDate"/>
+							</td> 
+						
 						</tr>
+						
 						
 						
 					</tbody>
@@ -1362,13 +1362,13 @@ var selected = false;
 						</tr>
 						<tr>
 							<th><span class="prompt" style="color: red; display: none;">*</span>法人姓名：</th>
-							<td><input type="text" name="legalName" id="legalName"
+							<td style="vertical-align:middle"><input type="text" name="legalName" id="legalName"
 								value="${workCompany.legalName }" maxlength="20"></td>
-							<th><span class="prompt" style="color: red; display: none;">*</span>行政所属区：</th>
+							<th style="vertical-align:middle"><span class="prompt" style="color: red; display: none;">*</span>行政所属区：</th>
 							<td><select id="s_province" name="s_province"
-								style="width: 100px;"></select>&nbsp;&nbsp; <select id="s_city"
-								name="s_city" style="width: 100px;"></select>&nbsp;&nbsp; <select
-								id="s_county" name="s_county" style="width: 100px;"></select> <script
+								style="width: 100px;*width:77px"></select>&nbsp;&nbsp; <select id="s_city"
+								name="s_city" style="width: 100px;*width:77px"></select>&nbsp;&nbsp; <select
+								id="s_county" name="s_county" style="width: 100px;*width:77px"></select> <script
 									type="text/javascript">
 									_init_area();
 									$("#s_province").append('<option value="${workDealInfo.workCompany.province}" selected="selected">${workDealInfo.workCompany.province}</option>');
@@ -1378,15 +1378,15 @@ var selected = false;
 								<div id="show"></div>
 								<div style="margin-top: 8px;">
 									区域备注：<input type="text" name="areaRemark"
-										value="${workCompany.areaRemark }" maxlength="50">
+										value="${workCompany.areaRemark }" maxlength="50" style="width:242px">
 								</div></td>
 						</tr>
 						<tr>
 							<th><span class="prompt" style="color: red; display: none;">*</span>街道地址：</th>
 							<td><input type="text" name="address" id="address"
 								value="${workCompany.address }" maxlength="50"></td>
-							<th><span class="prompt" style="color: red; display: none;">*</span>单位联系电话：</th>
-							<td><input type="text" name="companyMobile"
+							<th class="btmBorder"><span class="prompt" style="color: red; display: none;">*</span>单位联系电话：</th>
+							<td class="btmBorder"><input type="text" name="companyMobile"
 								id="companyMobile" value="${workCompany.companyMobile }"
 								 
 								
@@ -1449,8 +1449,8 @@ var selected = false;
 								
 								onfocus="hqcount('contactPhone','zjmcount')" /><span
 								id="zjmcount" style="color: red; margin-left: 10px"></span></td>
-							<th><span class="prompt" style="color: red; display: none;">*</span>业务系统UID:</th>
-							<td><input type="text" name="contactTel" id="contactTel"
+							<th class="btmBorder"><span class="prompt" style="color: red; display: none;">*</span>业务系统UID:</th>
+							<td class="btmBorder"><input type="text" name="contactTel" id="contactTel"
 								maxlength="20" value="${workUser.contactTel }"
 								
 								onblur="qxCount('ywidcount')"
@@ -1458,7 +1458,7 @@ var selected = false;
 								id="ywidcount" style="color: red; margin-left: 10px"></span></td>
 						</tr>
 						<tr>
-							<th><span class="prompt" style="color: red; display: none;">*</span>证书持有人性别:</th>
+							<th  style="background:#f9f9f9"><span class="prompt" style="color: red; display: none;">*</span>证书持有人性别:</th>
 							<td><input name="contactSex" id="sex0"
 								<c:if test="${workUser.contactSex=='男' }">checked</c:if>
 								type="radio" value="男">男&nbsp;&nbsp;&nbsp;&nbsp; <input
@@ -1482,18 +1482,15 @@ var selected = false;
 							<td><input type="text" name="pName" id="pName"
 								maxlength="20" value="${workCertApplyInfo.name }"
 								onchange="checkSqr(this);" /></td>
-						</tr>
-
-						<tr>
-							<th><span class="prompt" style="color: red;">*</span>身份证号:</th>
-							<td><input type="text" name="pIDCard" id="pIDCard"
+							<th class="btmBorder"><span class="prompt" style="color: red;">*</span>身份证号:</th>
+							<td class="btmBorder"><input type="text" name="pIDCard" id="pIDCard"
 								maxlength="18" value="${workCertApplyInfo.idCard }"
 								onblur="qxCount('IDcount')"
 								onfocus="hqcount('pIDCard','IDcount')" /><span id="IDcount"
 								style="color: red; margin-left: 10px"></span></td>
 						</tr>
 						<tr>
-							<th><span class="prompt" style="color: red; display: none;">*</span>经办人邮箱:</th>
+							<th style="background:#f9f9f9"><span class="prompt" style="color: red; display: none;">*</span>经办人邮箱:</th>
 							<td><input type="text" name="pEmail" id="pEmail"
 								value="${workCertApplyInfo.email }" onchange="form_check(this)" /></td>
 						</tr>
