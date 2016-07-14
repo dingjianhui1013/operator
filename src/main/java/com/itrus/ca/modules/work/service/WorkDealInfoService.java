@@ -1509,14 +1509,11 @@ public class WorkDealInfoService extends BaseService {
 	}
 
 	public Page<WorkDealInfo> find(Page<WorkDealInfo> page,
-			WorkDealInfo workDealInfo, /*
-										 * List<Long> dealInfoByAreaIds,
-										 * List<Long> dealInfoByOfficeAreaIds,
-										 */List<Long> officeIds, Long apply,
+			WorkDealInfo workDealInfo,List<Long> officeIds, Long apply,
 			String certType, Integer workType, Integer year,
 			Date luruStartTime, Date luruEndTime, List<Long> offices,
 			Date daoqiStartTime, Date daoqiEndTime, Date paymentStartTime,
-			Date paymentEndTime, List<WorkCertInfo> certInfoList
+			Date paymentEndTime,Date zhizhengStartTime,Date zhizhengEndTime
 
 	) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
@@ -1655,14 +1652,6 @@ public class WorkDealInfoService extends BaseService {
 			}
 		}
 
-		/*
-		 * if (jianzhengStartTime != null) {
-		 * dc.add(Restrictions.ge("updateDate", jianzhengStartTime)); } if
-		 * (jianzhengEndTime != null) { jianzhengEndTime.setHours(23);
-		 * jianzhengEndTime.setMinutes(59); jianzhengEndTime.setSeconds(59);
-		 * dc.add(Restrictions.le("updateDate", jianzhengEndTime)); }
-		 */
-
 		if (paymentStartTime != null) {
 			dc.add(Restrictions.ge("payUserDate", paymentStartTime));
 		}
@@ -1693,15 +1682,20 @@ public class WorkDealInfoService extends BaseService {
 			dc.add(Restrictions.le("notafter", daoqiEndTime));
 		}
 
-		if (certInfoList.size() > 0) {
-			dc.add(Restrictions.in("workCertInfo", certInfoList));
+		if(zhizhengStartTime!=null){
+			dc.add(Restrictions.ge("businessCardUserDate", zhizhengStartTime));
 		}
-		/*
-		 * if (dealInfoByAreaIds != null && dealInfoByAreaIds.size() > 0) {
-		 * dc.add(Restrictions.in("id", dealInfoByAreaIds)); } if
-		 * (dealInfoByOfficeAreaIds != null && dealInfoByOfficeAreaIds.size() >
-		 * 0) { dc.add(Restrictions.in("id", dealInfoByOfficeAreaIds)); }
-		 */
+		
+		if(zhizhengEndTime!=null){
+			Calendar zhizhengEndCalendar = Calendar.getInstance();
+			zhizhengEndCalendar.setTime(zhizhengEndTime);
+			zhizhengEndCalendar.set(Calendar.HOUR_OF_DAY, 23);
+			zhizhengEndCalendar.set(Calendar.MINUTE, 59);
+			zhizhengEndCalendar.set(Calendar.SECOND, 59);
+			
+			dc.add(Restrictions.le("businessCardUserDate", zhizhengEndCalendar.getTime()));
+		}
+		
 		if (officeIds != null && officeIds.size() > 0) {
 			dc.add(Restrictions.in("officeId", officeIds));
 		}
@@ -1734,26 +1728,19 @@ public class WorkDealInfoService extends BaseService {
 	}
 
 	public Page<WorkDealInfo> findCX(Page<WorkDealInfo> page,
-			WorkDealInfo workDealInfo, /*
-										 * List<Long> dealInfoByAreaIds,
-										 * List<Long> dealInfoByOfficeAreaIds,
-										 */List<Long> officeIds, Long apply,
+			WorkDealInfo workDealInfo,List<Long> officeIds, Long apply,
 			String certType, Integer workType, Integer year,
 			Date luruStartTime, Date luruEndTime, List<Long> offices,
 			Date daoqiStartTime, Date daoqiEndTime, Date paymentStartTime,
-			Date paymentEndTime, List<WorkCertInfo> certInfoList
-
-	) {
+			Date paymentEndTime,Date zhizhengStartTime,Date zhizhengEndTime) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("workPayInfo", "workPayInfo");
 		dc.createAlias("workCompany", "workCompany");
 		dc.createAlias("workUser", "workUser");
 		dc.createAlias("createBy", "createBy");
 		dc.createAlias("updateBy", "updateBy");
-		// dc.createAlias("createBy.office", "office");
 		dc.createAlias("configApp", "configApp");
 		dc.createAlias("configProduct", "configProduct");
-		// workDealInfoDao.createDetachedCriteria();
 		dc.add(Restrictions.in("officeId", offices));
 
 		if (workDealInfo.getInputUser() != null
@@ -1882,14 +1869,6 @@ public class WorkDealInfoService extends BaseService {
 			}
 		}
 
-		/*
-		 * if (jianzhengStartTime != null) {
-		 * dc.add(Restrictions.ge("updateDate", jianzhengStartTime)); } if
-		 * (jianzhengEndTime != null) { jianzhengEndTime.setHours(23);
-		 * jianzhengEndTime.setMinutes(59); jianzhengEndTime.setSeconds(59);
-		 * dc.add(Restrictions.le("updateDate", jianzhengEndTime)); }
-		 */
-
 		// 查询条件由之前的鉴证时间改为缴费时间
 		if (paymentStartTime != null) {
 			dc.add(Restrictions.ge("payUserDate", paymentStartTime));
@@ -1920,16 +1899,23 @@ public class WorkDealInfoService extends BaseService {
 			daoqiEndTime.setSeconds(59);
 			dc.add(Restrictions.le("notafter", daoqiEndTime));
 		}
-
-		if (certInfoList.size() > 0) {
-			dc.add(Restrictions.in("workCertInfo", certInfoList));
+		
+		
+		if(zhizhengStartTime!=null){
+			dc.add(Restrictions.ge("businessCardUserDate", zhizhengStartTime));
 		}
-		/*
-		 * if (dealInfoByAreaIds != null && dealInfoByAreaIds.size() > 0) {
-		 * dc.add(Restrictions.in("id", dealInfoByAreaIds)); } if
-		 * (dealInfoByOfficeAreaIds != null && dealInfoByOfficeAreaIds.size() >
-		 * 0) { dc.add(Restrictions.in("id", dealInfoByOfficeAreaIds)); }
-		 */
+		
+		if(zhizhengEndTime!=null){
+			Calendar zhizhengEndCalendar = Calendar.getInstance();
+			zhizhengEndCalendar.setTime(zhizhengEndTime);
+			zhizhengEndCalendar.set(Calendar.HOUR_OF_DAY, 23);
+			zhizhengEndCalendar.set(Calendar.MINUTE, 59);
+			zhizhengEndCalendar.set(Calendar.SECOND, 59);
+			
+			dc.add(Restrictions.le("businessCardUserDate", zhizhengEndCalendar.getTime()));
+		}
+
+		
 		if (officeIds != null && officeIds.size() > 0) {
 			dc.add(Restrictions.in("officeId", officeIds));
 		}
@@ -1945,8 +1931,6 @@ public class WorkDealInfoService extends BaseService {
 
 			dc.add(Restrictions.or(Restrictions.ne("dealInfoType", 11),
 					Restrictions.isNull("dealInfoType")));
-
-			/* dc.add(Restrictions.ne("dealInfoType", 11)); */
 		}
 
 		if (year != null) {
@@ -1955,26 +1939,18 @@ public class WorkDealInfoService extends BaseService {
 
 		dc.add(Restrictions.or(Restrictions.eq("dealInfoStatus",
 				WorkDealInfoStatus.STATUS_CERT_REVOKE)));
-		// ProjectionList projectionList1 = Projections.projectionList();
-		// projectionList1.add(Projections.sqlGroupProjection("dealInfoType",
-		// "dealInfoType", null, null));
+		
 
 		return workDealInfoDao.find(page, dc);
 
 	}
 
-	public List<WorkDealInfo> findCX(WorkDealInfo workDealInfo, /*
-																 * List<Long>
-																 * dealInfoByAreaIds
-																 * , List<Long>
-																 * dealInfoByOfficeAreaIds
-																 * ,
-																 */
+	public List<WorkDealInfo> findCX(WorkDealInfo workDealInfo, 
 			List<Long> officeIds, Long apply, String certType,
 			Integer workType, Integer year, Date luruStartTime,
 			Date luruEndTime, List<Long> offices, Date daoqiStartTime,
 			Date daoqiEndTime, Date paymentStartTime, Date paymentEndTime,
-			List<WorkCertInfo> certInfoList
+			Date zhizhengStartTime,Date zhizhengEndTime
 
 	) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
@@ -2115,13 +2091,7 @@ public class WorkDealInfoService extends BaseService {
 			}
 		}
 
-		/*
-		 * if (jianzhengStartTime != null) {
-		 * dc.add(Restrictions.ge("updateDate", jianzhengStartTime)); } if
-		 * (jianzhengEndTime != null) { jianzhengEndTime.setHours(23);
-		 * jianzhengEndTime.setMinutes(59); jianzhengEndTime.setSeconds(59);
-		 * dc.add(Restrictions.le("updateDate", jianzhengEndTime)); }
-		 */
+		
 
 		// 查询条件由之前的鉴证时间改为缴费时间
 		if (paymentStartTime != null) {
@@ -2154,15 +2124,20 @@ public class WorkDealInfoService extends BaseService {
 			dc.add(Restrictions.le("notafter", daoqiEndTime));
 		}
 
-		if (certInfoList.size() > 0) {
-			dc.add(Restrictions.in("workCertInfo", certInfoList));
+		if(zhizhengStartTime!=null){
+			dc.add(Restrictions.ge("businessCardUserDate", zhizhengStartTime));
 		}
-		/*
-		 * if (dealInfoByAreaIds != null && dealInfoByAreaIds.size() > 0) {
-		 * dc.add(Restrictions.in("id", dealInfoByAreaIds)); } if
-		 * (dealInfoByOfficeAreaIds != null && dealInfoByOfficeAreaIds.size() >
-		 * 0) { dc.add(Restrictions.in("id", dealInfoByOfficeAreaIds)); }
-		 */
+		
+		if(zhizhengEndTime!=null){
+			Calendar zhizhengEndCalendar = Calendar.getInstance();
+			zhizhengEndCalendar.setTime(zhizhengEndTime);
+			zhizhengEndCalendar.set(Calendar.HOUR_OF_DAY, 23);
+			zhizhengEndCalendar.set(Calendar.MINUTE, 59);
+			zhizhengEndCalendar.set(Calendar.SECOND, 59);
+			
+			dc.add(Restrictions.le("businessCardUserDate", zhizhengEndCalendar.getTime()));
+		}
+		
 		if (officeIds != null && officeIds.size() > 0) {
 			dc.add(Restrictions.in("officeId", officeIds));
 		}
@@ -2196,18 +2171,12 @@ public class WorkDealInfoService extends BaseService {
 
 	}
 
-	public List<WorkDealInfo> find(WorkDealInfo workDealInfo, /*
-															 * List<Long>
-															 * dealInfoByAreaIds
-															 * , List<Long>
-															 * dealInfoByOfficeAreaIds
-															 * ,
-															 */
+	public List<WorkDealInfo> find(WorkDealInfo workDealInfo, 
 			List<Long> officeIds, Long apply, String certType,
 			Integer workType, Integer year, Date luruStartTime,
 			Date luruEndTime, List<Long> offices, Date daoqiStartTime,
 			Date daoqiEndTime, Date paymentStartTime, Date paymentEndTime,
-			List<WorkCertInfo> certInfoList
+			Date zhizhengStartTime,Date zhizhengEndTime
 
 	) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
@@ -2378,16 +2347,21 @@ public class WorkDealInfoService extends BaseService {
 			daoqiEndTime.setSeconds(59);
 			dc.add(Restrictions.le("notafter", daoqiEndTime));
 		}
-
-		if (certInfoList.size() > 0) {
-			dc.add(Restrictions.in("workCertInfo", certInfoList));
+		
+		if(zhizhengStartTime!=null){
+			dc.add(Restrictions.ge("businessCardUserDate", zhizhengStartTime));
 		}
-		/*
-		 * if (dealInfoByAreaIds != null && dealInfoByAreaIds.size() > 0) {
-		 * dc.add(Restrictions.in("id", dealInfoByAreaIds)); } if
-		 * (dealInfoByOfficeAreaIds != null && dealInfoByOfficeAreaIds.size() >
-		 * 0) { dc.add(Restrictions.in("id", dealInfoByOfficeAreaIds)); }
-		 */
+		
+		if(zhizhengEndTime!=null){
+			Calendar zhizhengEndCalendar = Calendar.getInstance();
+			zhizhengEndCalendar.setTime(zhizhengEndTime);
+			zhizhengEndCalendar.set(Calendar.HOUR_OF_DAY, 23);
+			zhizhengEndCalendar.set(Calendar.MINUTE, 59);
+			zhizhengEndCalendar.set(Calendar.SECOND, 59);
+			
+			dc.add(Restrictions.le("businessCardUserDate", zhizhengEndCalendar.getTime()));
+		}
+		
 		if (officeIds != null && officeIds.size() > 0) {
 			dc.add(Restrictions.in("officeId", officeIds));
 		}
