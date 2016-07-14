@@ -549,12 +549,19 @@ public class MutiProcess implements Runnable {
 		Integer[][] res = findByTypeName(typeName);
 		if (res[0][0].intValue() >= 0) {
 			copy.setDealInfoType(res[0][0].intValue());
-		} else if (res[1][0].intValue() > 0) {
+		}
+		if (res[1][0].intValue() > 0) {
 			copy.setDealInfoType1(res[1][0].intValue());
-		} else if (res[2][0].intValue() > 0) {
+		}
+		if (res[2][0].intValue() > 0) {
 			copy.setDealInfoType2(res[2][0].intValue());
-		} else if (res[3][0].intValue() > 0) {
+		}
+		if (res[3][0].intValue() > 0) {
 			copy.setDealInfoType3(res[3][0].intValue());
+		}
+		if (res[4][0].intValue() > 0) {
+			// 吊销业务特殊处理
+			copy.setDealInfoStatus(WorkDealInfoStatus.STATUS_CERT_REVOKE);
 		}
 		return copy;
 	}
@@ -566,9 +573,13 @@ public class MutiProcess implements Runnable {
 	 * @return Integer[][]
 	 */
 	private Integer[][] findByTypeName(String typeName) {
-		Integer[][] res = { { -1 }, { -1 }, { -1 }, { -1 } };
+		if (typeName.indexOf("新增") > -1 && typeName.indexOf("更新") > -1) {
+			typeName = "新增证书";
+		}
+		Integer[][] res = { { -1 }, { -1 }, { -1 }, { -1 }, { -1 } };
 		String[] lst = com.itrus.ca.common.utils.StringHelper.splitStr(
 				typeName, ",");
+
 		for (String e : lst) {
 			Integer type = findDealInfoTypeByName(e);
 			if (type == null || type.intValue() < 0) {
@@ -577,34 +588,33 @@ public class MutiProcess implements Runnable {
 				// 新增,更新,type
 				res[0] = new Integer[] { type };
 			} else if (type.intValue() == 2 || type.intValue() == 3) {
-				// 遗失补办,type1
+				// 遗失补办,损坏更换,type1
 				res[1] = new Integer[] { type };
-			} else if (type.intValue() == 4) {
+			} else if (type.intValue() == 4 || type.intValue() == 6
+					|| type.intValue() == 7 || type.intValue() == 8
+					|| type.intValue() == 9 || type.intValue() == 10
+					|| type.intValue() == 11) {
 				// 变更,type2
 				res[2] = new Integer[] { type };
 			} else if (type.intValue() == 12) {
 				// 变更缴费类型,type3
 				res[3] = new Integer[] { type };
+			} else if (type.intValue() == 5) {
+				res[4] = new Integer[] { type };
 			}
 		}
 		return res;
 	}
 
-	/**
-	 * 导入数据时用
-	 * 
-	 * @param typeName
-	 * @return Integer
-	 */
 	private Integer findDealInfoTypeByName(String typeName) {
 
-		if (typeName.equals("新增证书")) {
+		if (typeName.indexOf("新增") > -1) {
 			return WorkDealInfoType.TYPE_ADD_CERT;
 		} else if (typeName.indexOf("更新") > -1) {
 			return WorkDealInfoType.TYPE_UPDATE_CERT;
 		} else if (typeName.equals("遗失补办")) {
 			return WorkDealInfoType.TYPE_LOST_CHILD;
-		} else if (typeName.equals("损坏更换")) {
+		} else if (typeName.indexOf("损坏") > -1) {
 			return WorkDealInfoType.TYPE_DAMAGED_REPLACED;
 		} else if (typeName.equals("信息变更")) {
 			return WorkDealInfoType.TYPE_INFORMATION_REROUTE;
