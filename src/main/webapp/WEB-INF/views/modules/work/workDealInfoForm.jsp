@@ -1547,7 +1547,7 @@ var selected = false;
 			<div class="span12">
 				<table class="table">
 					<tbody>
-						<tr class="form-actions">
+						<tr class="">
 							<td style="text-align: center; width: 100%; border-top: none;"
 								colspan="2">&nbsp; <shiro:hasPermission
 									name="work:workDealInfo:edit">
