@@ -795,7 +795,7 @@ public class CertController extends BaseController {
 				if (dealInfo.getPrevId() != null && revokeList.contains(dealInfo.getDealInfoType1())) {
 					WorkDealInfo old = workDealInfoService.get(dealInfo.getPrevId());
 					
-					if(old.getNotafter().before(new Date())){
+					if(old.getNotafter().after(new Date())){
 						revokeOldCert(old.getId());
 						old.setDealInfoStatus(WorkDealInfoStatus.STATUS_CERT_REVOKE);
 						workDealInfoService.save(old);	
