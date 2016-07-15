@@ -180,7 +180,7 @@ public class FinancePaymentInfo extends DataEntity implements
 		this.paymentMethodName = paymentMethodName;
 	}
 
-	@Column(name = "residue_money", precision = 10, scale = 2)
+	@Column(name = "residue_money", precision = 10, scale = 2,columnDefinition = "NUMBER")
 	public Double getResidueMoney() {
 		return residueMoney;
 	}
