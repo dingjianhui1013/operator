@@ -57,6 +57,8 @@
 			<label>&nbsp;&nbsp;应用名称 ：&nbsp;&nbsp;<b>${appName }</b></label>
 			<label>&nbsp;&nbsp;时间范围 ：&nbsp;&nbsp;<b>${startTime } - ${endTime }</b></label>&nbsp;&nbsp;&nbsp;&nbsp;
 			<input style="text-align:center" class="btn btn-info" onclick="exportDetail()" type="button" value="导出">
+			&nbsp;&nbsp;
+			<input class="btn btn-primary" type="button" onclick=" window.history.back()"  value="返回" />
 		</div>
 
 	</form:form>
@@ -93,6 +95,7 @@
 			</c:forEach>
 		</tbody>
 	</table>
+	
 	<div class="pagination">${page}</div>
 
 

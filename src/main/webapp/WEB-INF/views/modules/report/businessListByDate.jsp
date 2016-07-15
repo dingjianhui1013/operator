@@ -57,6 +57,8 @@
 				type="submit" value="查询" />
 				&nbsp;&nbsp;&nbsp;&nbsp;
 				<input  style="text-align:center" class="btn btn-info" onclick="exportCollect()" type="button" value="导出">
+				
+			<label style="float: right"><b>注:点击蓝色数字可查看明细</b></label>	
 		</div>
 	</form:form>
 	<tags:message content="${message}" />
@@ -75,30 +77,46 @@
 				<tr>
 					<td>${dealInfoVO.appName }</td>
 					<td><c:if test="${dealInfoVO.validCount ne 0}">
-							<a
+							<a style="width:100px;height:20px;display:block;"
 								href="${ctx}/report/businessReport/listDetailDealInfo?appId=${dealInfoVO.appId }&&startTime=${start}&&endTime=${end}&&method=0">${dealInfoVO.validCount }</a>
 						</c:if> <c:if test="${dealInfoVO.validCount eq 0}">${dealInfoVO.validCount }</c:if></td>
 
 					<td><c:if test="${dealInfoVO.newCount ne 0}">
-							<a href="${ctx}/report/businessReport/listDetailDealInfo?appId=${dealInfoVO.appId }&&startTime=${start}&&endTime=${end}&&method=1">${dealInfoVO.newCount }</a>
+							<a  style="width:100px;height:20px;display:block;" href="${ctx}/report/businessReport/listDetailDealInfo?appId=${dealInfoVO.appId }&&startTime=${start}&&endTime=${end}&&method=1">${dealInfoVO.newCount }</a>
 						</c:if> <c:if test="${dealInfoVO.newCount eq 0}">${dealInfoVO.newCount }</c:if></td>
 
 					<td><c:if test="${dealInfoVO.updateCount ne 0}">
-							<a href="${ctx}/report/businessReport/listDetailDealInfo?appId=${dealInfoVO.appId }&&startTime=${start}&&endTime=${end}&&method=2">${dealInfoVO.updateCount }</a>
+							<a style="width:100px;height:20px;display:block;" href="${ctx}/report/businessReport/listDetailDealInfo?appId=${dealInfoVO.appId }&&startTime=${start}&&endTime=${end}&&method=2">${dealInfoVO.updateCount }</a>
 						</c:if> <c:if test="${dealInfoVO.updateCount eq 0}">${dealInfoVO.updateCount }</c:if></td>
 
 					<td><c:if test="${dealInfoVO.unUpdateCount ne 0}">
-							<a href="${ctx}/report/businessReport/listDetailDealInfo?appId=${dealInfoVO.appId }&&startTime=${start}&&endTime=${end}&&method=3">${dealInfoVO.unUpdateCount }</a>
+							<a style="width:100px;height:20px;display:block;" href="${ctx}/report/businessReport/listDetailDealInfo?appId=${dealInfoVO.appId }&&startTime=${start}&&endTime=${end}&&method=3">${dealInfoVO.unUpdateCount }</a>
 						</c:if> <c:if test="${dealInfoVO.unUpdateCount eq 0}">${dealInfoVO.unUpdateCount }</c:if></td>
 
 					<td><c:if test="${dealInfoVO.maintenanceCount ne 0}">
-							<a href="${ctx}/report/businessReport/listDetailDealInfo?appId=${dealInfoVO.appId }&&startTime=${start}&&endTime=${end}&&method=4">${dealInfoVO.maintenanceCount }</a>
+							<a style="width:100px;height:20px;display:block;" href="${ctx}/report/businessReport/listDetailDealInfo?appId=${dealInfoVO.appId }&&startTime=${start}&&endTime=${end}&&method=4">${dealInfoVO.maintenanceCount }</a>
 						</c:if> <c:if test="${dealInfoVO.maintenanceCount eq 0}">${dealInfoVO.maintenanceCount }</c:if></td>
 
 				</tr>
 			</c:forEach>
 		</tbody>
 	</table>
+	
+	
+	
+	
+	<div class="container-fluid breadcrumb">
+		<div class="row-fluid span12">
+			<span class="span4">有效数量: <b>用户证书状态有效数量</b></span>
+			<span class="span4">已更新数量: <b>办理的更新业务数量</b></span>
+			<span class="span4">维护数量: <b>办理的除新增,更新外的其他业务数量</b></span>
+		</div>
+		<div class="row-fluid span8">
+			<span class="span4">新增数量: <b>办理的新增业务数量</b></span>
+			
+			<span class="span4">未更新数量: <b>办理的更新业务,开权限未制证数量</b></span>
+		</div>
+	</div>
 	<div class="pagination">${page}</div>
 	<span id="msg" style="color: red;"></span>
 
