@@ -16,15 +16,15 @@ public class ConfigRaAccount implements java.io.Serializable {
 	private Long id;
 	private ConfigRaAccountExtendInfo configRaAccountExtendInfo;
 	private ConfigProduct configProduct;
-	private String accountOrgUnit;//RA发证机构单位
-	private String accountOrganization;//RA发证机构
+	private String accountOrgUnit;// RA发证机构单位
+	private String accountOrganization;// RA发证机构
 	private String accountHash;
-	private String raProtocol;//CA类型
-	private String raName;//RA模板名称
-	private String serviceUrl;//服务地址
-	private Boolean isSingleCert;//单双证标识
-	private String mobileDeviceUrl;//移动设备服务地址
-	private String caName;//CA名称
+	private String raProtocol;// CA类型
+	private String raName;// RA模板名称
+	private String serviceUrl;// 服务地址
+	private Boolean isSingleCert;// 单双证标识
+	private String mobileDeviceUrl;// 移动设备服务地址
+	private String caName;// CA名称
 	private Boolean isTest;
 	private String multiCaName;
 	private String ip;
@@ -36,8 +36,7 @@ public class ConfigRaAccount implements java.io.Serializable {
 	private String crlListUrl;
 	private String aaPassword;
 	private Integer defaultOverrideValidity;
-	
-	
+
 	// Constructors
 
 	/** default constructor */
@@ -86,10 +85,10 @@ public class ConfigRaAccount implements java.io.Serializable {
 	}
 
 	// Property accessors
-//	@SequenceGenerator(name="COMMON_SEQUENCE",sequenceName="COMMON_SEQUENCE")
-	@SequenceGenerator(name="CONFIG_RA_ACCOUNT_SEQUENCE",allocationSize=1,initialValue=1,sequenceName="CONFIG_RA_ACCOUNT_SEQUENCE")
-	@Id 
-	@GeneratedValue(generator = "CONFIG_RA_ACCOUNT_SEQUENCE",strategy=GenerationType.SEQUENCE)
+	// @SequenceGenerator(name="COMMON_SEQUENCE",sequenceName="COMMON_SEQUENCE")
+	@SequenceGenerator(name = "CONFIG_RA_ACCOUNT_SEQUENCE", allocationSize = 1, initialValue = 1, sequenceName = "CONFIG_RA_ACCOUNT_SEQUENCE")
+	@Id
+	@GeneratedValue(generator = "CONFIG_RA_ACCOUNT_SEQUENCE", strategy = GenerationType.SEQUENCE)
 	public Long getId() {
 		return this.id;
 	}
@@ -98,8 +97,8 @@ public class ConfigRaAccount implements java.io.Serializable {
 		this.id = id;
 	}
 
-	//@ManyToOne(fetch = FetchType.LAZY)
-	//@JoinColumn(name = "extend_info")
+	// @ManyToOne(fetch = FetchType.LAZY)
+	// @JoinColumn(name = "extend_info")
 	@Transient
 	public ConfigRaAccountExtendInfo getConfigRaAccountExtendInfo() {
 		return this.configRaAccountExtendInfo;
@@ -110,8 +109,8 @@ public class ConfigRaAccount implements java.io.Serializable {
 		this.configRaAccountExtendInfo = configRaAccountExtendInfo;
 	}
 
-//	@ManyToOne(fetch = FetchType.LAZY)
-//	@JoinColumn(name = "product_id")
+	// @ManyToOne(fetch = FetchType.LAZY)
+	// @JoinColumn(name = "product_id")
 	@Transient
 	public ConfigProduct getConfigProduct() {
 		return this.configProduct;
@@ -121,7 +120,7 @@ public class ConfigRaAccount implements java.io.Serializable {
 		this.configProduct = configProduct;
 	}
 
-	@Column(name = "account_org_unit", nullable = false)
+	@Column(name = "account_org_unit", nullable = false, columnDefinition = "NVARCHAR2(255)")
 	public String getAccountOrgUnit() {
 		return this.accountOrgUnit;
 	}
@@ -130,7 +129,7 @@ public class ConfigRaAccount implements java.io.Serializable {
 		this.accountOrgUnit = accountOrgUnit;
 	}
 
-	@Column(name = "account_organization", nullable = false)
+	@Column(name = "account_organization", nullable = false, columnDefinition = "NVARCHAR2(255)")
 	public String getAccountOrganization() {
 		return this.accountOrganization;
 	}
@@ -139,7 +138,7 @@ public class ConfigRaAccount implements java.io.Serializable {
 		this.accountOrganization = accountOrganization;
 	}
 
-	@Column(name = "account_hash")
+	@Column(name = "account_hash", columnDefinition = "NVARCHAR2(255)")
 	public String getAccountHash() {
 		return this.accountHash;
 	}
@@ -148,7 +147,7 @@ public class ConfigRaAccount implements java.io.Serializable {
 		this.accountHash = accountHash;
 	}
 
-	@Column(name = "ra_protocol", nullable = false)
+	@Column(name = "ra_protocol", nullable = false, columnDefinition = "NVARCHAR2(255)")
 	public String getRaProtocol() {
 		return this.raProtocol;
 	}
@@ -157,7 +156,7 @@ public class ConfigRaAccount implements java.io.Serializable {
 		this.raProtocol = raProtocol;
 	}
 
-	@Column(name = "ra_name", nullable = false)
+	@Column(name = "ra_name", nullable = false, columnDefinition = "NVARCHAR2(255)")
 	public String getRaName() {
 		return this.raName;
 	}
@@ -166,7 +165,7 @@ public class ConfigRaAccount implements java.io.Serializable {
 		this.raName = raName;
 	}
 
-	@Column(name = "service_url", nullable = false)
+	@Column(name = "service_url", nullable = false, columnDefinition = "NVARCHAR2(255)")
 	public String getServiceUrl() {
 		return this.serviceUrl;
 	}
@@ -177,14 +176,14 @@ public class ConfigRaAccount implements java.io.Serializable {
 
 	@Column(name = "is_test")
 	public Boolean getIsTest() {
-		return this.isTest==null? false:this.isTest;
+		return this.isTest == null ? false : this.isTest;
 	}
 
 	public void setIsTest(Boolean isTest) {
 		this.isTest = isTest;
 	}
 
-	@Column(name = "multi_ca_name")
+	@Column(name = "multi_ca_name", columnDefinition = "NVARCHAR2(255)")
 	public String getMultiCaName() {
 		return this.multiCaName;
 	}
@@ -202,7 +201,7 @@ public class ConfigRaAccount implements java.io.Serializable {
 		this.isSingleCert = isSingleCert;
 	}
 
-	@Column(name = "ip")
+	@Column(name = "ip", columnDefinition = "NVARCHAR2(255)")
 	public String getIp() {
 		return this.ip;
 	}
@@ -211,7 +210,7 @@ public class ConfigRaAccount implements java.io.Serializable {
 		this.ip = ip;
 	}
 
-	@Column(name = "port")
+	@Column(name = "port", columnDefinition = "NVARCHAR2(255)")
 	public String getPort() {
 		return this.port;
 	}
@@ -220,7 +219,7 @@ public class ConfigRaAccount implements java.io.Serializable {
 		this.port = port;
 	}
 
-	@Column(name = "aa_pass")
+	@Column(name = "aa_pass", columnDefinition = "NVARCHAR2(255)")
 	public String getAaPass() {
 		return this.aaPass;
 	}
@@ -229,7 +228,7 @@ public class ConfigRaAccount implements java.io.Serializable {
 		this.aaPass = aaPass;
 	}
 
-	@Column(name = "key_type")
+	@Column(name = "key_type", columnDefinition = "NVARCHAR2(255)")
 	public String getKeyType() {
 		return this.keyType;
 	}
@@ -247,7 +246,7 @@ public class ConfigRaAccount implements java.io.Serializable {
 		this.keyLen = keyLen;
 	}
 
-	@Column(name = "ra_version")
+	@Column(name = "ra_version", columnDefinition = "NVARCHAR2(255)")
 	public String getRaVersion() {
 		return this.raVersion;
 	}
@@ -256,7 +255,7 @@ public class ConfigRaAccount implements java.io.Serializable {
 		this.raVersion = raVersion;
 	}
 
-	@Column(name = "crl_list_url")
+	@Column(name = "crl_list_url", columnDefinition = "NVARCHAR2(255)")
 	public String getCrlListUrl() {
 		return this.crlListUrl;
 	}
@@ -274,7 +273,7 @@ public class ConfigRaAccount implements java.io.Serializable {
 		this.defaultOverrideValidity = defaultOverrideValidity;
 	}
 
-	@Column(name = "aa_password")
+	@Column(name = "aa_password", columnDefinition = "NVARCHAR2(255)")
 	public String getAaPassword() {
 		return aaPassword;
 	}
@@ -283,7 +282,7 @@ public class ConfigRaAccount implements java.io.Serializable {
 		this.aaPassword = aaPassword;
 	}
 
-	@Column(name = "mobile_device_url")
+	@Column(name = "mobile_device_url", columnDefinition = "NVARCHAR2(255)")
 	public String getMobileDeviceUrl() {
 		return mobileDeviceUrl;
 	}
@@ -291,7 +290,8 @@ public class ConfigRaAccount implements java.io.Serializable {
 	public void setMobileDeviceUrl(String mobileDeviceUrl) {
 		this.mobileDeviceUrl = mobileDeviceUrl;
 	}
-	@Column(name = "ca_name" ,nullable = false)
+
+	@Column(name = "ca_name", nullable = false)
 	public String getCaName() {
 		return caName;
 	}

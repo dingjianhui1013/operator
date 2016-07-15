@@ -15,6 +15,7 @@ import com.itrus.ca.common.persistence.DataEntity;
 
 /**
  * 消息配置
+ * 
  * @author ZhangJingtao
  *
  */
@@ -50,10 +51,10 @@ public class ConfigMsg extends DataEntity implements java.io.Serializable {
 	}
 
 	// Property accessors
-//	@SequenceGenerator(name="COMMON_SEQUENCE",sequenceName="COMMON_SEQUENCE")
-	@SequenceGenerator(name="CONFIG_MSG_SEQUENCE",allocationSize=1,initialValue=1,sequenceName="CONFIG_MSG_SEQUENCE")
-	@Id 
-	@GeneratedValue(generator = "CONFIG_MSG_SEQUENCE",strategy=GenerationType.SEQUENCE)
+	// @SequenceGenerator(name="COMMON_SEQUENCE",sequenceName="COMMON_SEQUENCE")
+	@SequenceGenerator(name = "CONFIG_MSG_SEQUENCE", allocationSize = 1, initialValue = 1, sequenceName = "CONFIG_MSG_SEQUENCE")
+	@Id
+	@GeneratedValue(generator = "CONFIG_MSG_SEQUENCE", strategy = GenerationType.SEQUENCE)
 	public Long getId() {
 		return this.id;
 	}
@@ -62,7 +63,7 @@ public class ConfigMsg extends DataEntity implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@Column(name = "msg_name")
+	@Column(name = "msg_name", columnDefinition = "NVARCHAR2(255)")
 	public String getMsgName() {
 		return this.msgName;
 	}
@@ -71,7 +72,7 @@ public class ConfigMsg extends DataEntity implements java.io.Serializable {
 		this.msgName = msgName;
 	}
 
-	@Column(name = "msg_title")
+	@Column(name = "msg_title", columnDefinition = "NVARCHAR2(255)")
 	public String getMsgTitle() {
 		return this.msgTitle;
 	}
@@ -107,7 +108,7 @@ public class ConfigMsg extends DataEntity implements java.io.Serializable {
 		this.msgSendTimeType = msgSendTimeType;
 	}
 
-	@Column(name = "msg_content")
+	@Column(name = "msg_content", columnDefinition = "NVARCHAR2(255)")
 	public String getMsgContent() {
 		return this.msgContent;
 	}

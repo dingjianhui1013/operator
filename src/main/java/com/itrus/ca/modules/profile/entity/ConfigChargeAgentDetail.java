@@ -48,10 +48,10 @@ public class ConfigChargeAgentDetail implements java.io.Serializable {
 	}
 
 	// Property accessors
-//	@SequenceGenerator(name="COMMON_SEQUENCE",sequenceName="COMMON_SEQUENCE")
-	@SequenceGenerator(name="CONFIG_CHARGE_AGENT__SEQUENCE",allocationSize=1,initialValue=1,sequenceName="CONFIG_CHARGE_AGENT__SEQUENCE")
-	@Id 
-	@GeneratedValue(generator = "CONFIG_CHARGE_AGENT__SEQUENCE",strategy=GenerationType.SEQUENCE)
+	// @SequenceGenerator(name="COMMON_SEQUENCE",sequenceName="COMMON_SEQUENCE")
+	@SequenceGenerator(name = "CONFIG_CHARGE_AGENT__SEQUENCE", allocationSize = 1, initialValue = 1, sequenceName = "CONFIG_CHARGE_AGENT__SEQUENCE")
+	@Id
+	@GeneratedValue(generator = "CONFIG_CHARGE_AGENT__SEQUENCE", strategy = GenerationType.SEQUENCE)
 	public Long getId() {
 		return this.id;
 	}
@@ -88,7 +88,7 @@ public class ConfigChargeAgentDetail implements java.io.Serializable {
 		this.chargeYear = chargeYear;
 	}
 
-	@Column(name = "money", precision = 20, scale = 3)
+	@Column(name = "money", precision = 20, scale = 3, columnDefinition = "NUMBER")
 	public Double getMoney() {
 		return this.money;
 	}

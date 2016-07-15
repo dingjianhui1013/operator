@@ -95,7 +95,7 @@ public class ConfigProduct extends DataEntity implements java.io.Serializable {
 		this.configApp = configApp;
 	}
 
-	@Column(name = "product_name")
+	@Column(name = "product_name",columnDefinition = "NVARCHAR2(255)")
 	public String getProductName() {
 		return this.productName;
 	}

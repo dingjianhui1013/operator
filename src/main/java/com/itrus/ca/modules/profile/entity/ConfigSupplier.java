@@ -87,7 +87,7 @@ public class ConfigSupplier extends DataEntity implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@Column(name = "supplier_name")
+	@Column(name = "supplier_name",columnDefinition = "NVARCHAR2(255)")
 	public String getSupplierName() {
 		return this.supplierName;
 	}
@@ -114,7 +114,7 @@ public class ConfigSupplier extends DataEntity implements java.io.Serializable {
 		this.keyType = keyType;
 	}
 
-	@Column(name = "supplier_comm_username")
+	@Column(name = "supplier_comm_username",columnDefinition = "NVARCHAR2(255)")
 	public String getSupplierCommUsername() {
 		return this.supplierCommUsername;
 	}
@@ -123,7 +123,7 @@ public class ConfigSupplier extends DataEntity implements java.io.Serializable {
 		this.supplierCommUsername = supplierCommUsername;
 	}
 
-	@Column(name = "supplier_comm_mobile")
+	@Column(name = "supplier_comm_mobile",columnDefinition = "NVARCHAR2(255)")
 	public String getSupplierCommMobile() {
 		return this.supplierCommMobile;
 	}

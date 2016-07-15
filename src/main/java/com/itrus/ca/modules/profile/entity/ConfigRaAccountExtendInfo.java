@@ -19,7 +19,7 @@ public class ConfigRaAccountExtendInfo implements java.io.Serializable {
 	private Long id;
 	private String certName;
 	private String commonNameDisplayName;
-	private String nameDisplayName;//	3.组织机构代码 4.经办人身份证号
+	private String nameDisplayName;// 3.组织机构代码 4.经办人身份证号
 	private String orgunitDisplayName;
 	private String emailDisplayName;
 	private String addtionalField1DisplayName;
@@ -35,7 +35,7 @@ public class ConfigRaAccountExtendInfo implements java.io.Serializable {
 	private String personal;
 	private String organization;
 	private String organizationDisplayName;
-	
+
 	private Set<ConfigRaAccount> configRaAccounts = new HashSet<ConfigRaAccount>(
 			0);
 
@@ -46,12 +46,9 @@ public class ConfigRaAccountExtendInfo implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public ConfigRaAccountExtendInfo(
-			String certName,
-			String commonNameDisplayName,
-			String nameDisplayName,
-			String orgunitDisplayName,
-			String emailDisplayName,
+	public ConfigRaAccountExtendInfo(String certName,
+			String commonNameDisplayName, String nameDisplayName,
+			String orgunitDisplayName, String emailDisplayName,
 			String addtionalField1DisplayName,
 			String addtionalField2DisplayName,
 			String addtionalField3DisplayName,
@@ -61,13 +58,10 @@ public class ConfigRaAccountExtendInfo implements java.io.Serializable {
 			String addtionalField7DisplayName,
 			String addtionalField8DisplayName,
 			String addtionalField9DisplayName,
-			String addtionalField10DisplayName,
-			String personal,
-			String organization,
-			String organizationDisplayName,
-			Set<ConfigRaAccount> configRaAccounts 
-			) {
-		
+			String addtionalField10DisplayName, String personal,
+			String organization, String organizationDisplayName,
+			Set<ConfigRaAccount> configRaAccounts) {
+
 		this.personal = personal;
 		this.organization = organization;
 		this.certName = certName;
@@ -90,10 +84,10 @@ public class ConfigRaAccountExtendInfo implements java.io.Serializable {
 	}
 
 	// Property accessors
-//	@SequenceGenerator(name="COMMON_SEQUENCE",sequenceName="COMMON_SEQUENCE")
-	@SequenceGenerator(name="CONFIG_RA_ACCOUNT_EX_SEQUENCE",allocationSize=1,initialValue=1,sequenceName="CONFIG_RA_ACCOUNT_EX_SEQUENCE")
-	@Id 
-	@GeneratedValue(generator = "CONFIG_RA_ACCOUNT_EX_SEQUENCE",strategy=GenerationType.SEQUENCE)
+	// @SequenceGenerator(name="COMMON_SEQUENCE",sequenceName="COMMON_SEQUENCE")
+	@SequenceGenerator(name = "CONFIG_RA_ACCOUNT_EX_SEQUENCE", allocationSize = 1, initialValue = 1, sequenceName = "CONFIG_RA_ACCOUNT_EX_SEQUENCE")
+	@Id
+	@GeneratedValue(generator = "CONFIG_RA_ACCOUNT_EX_SEQUENCE", strategy = GenerationType.SEQUENCE)
 	public Long getId() {
 		return this.id;
 	}
@@ -101,7 +95,7 @@ public class ConfigRaAccountExtendInfo implements java.io.Serializable {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	
+
 	@Column(name = "cert_name")
 	public String getCertName() {
 		return certName;
@@ -111,7 +105,7 @@ public class ConfigRaAccountExtendInfo implements java.io.Serializable {
 		this.certName = certName;
 	}
 
-	@Column(name = "orgunit_display_name")
+	@Column(name = "orgunit_display_name", columnDefinition = "NVARCHAR2(255)")
 	public String getOrgunitDisplayName() {
 		return this.orgunitDisplayName;
 	}
@@ -120,7 +114,7 @@ public class ConfigRaAccountExtendInfo implements java.io.Serializable {
 		this.orgunitDisplayName = orgunitDisplayName;
 	}
 
-	@Column(name = "common_name_display_name")
+	@Column(name = "common_name_display_name", columnDefinition = "NVARCHAR2(1)")
 	public String getCommonNameDisplayName() {
 		return this.commonNameDisplayName;
 	}
@@ -129,7 +123,7 @@ public class ConfigRaAccountExtendInfo implements java.io.Serializable {
 		this.commonNameDisplayName = commonNameDisplayName;
 	}
 
-	@Column(name = "email_display_name")
+	@Column(name = "email_display_name", columnDefinition = "NVARCHAR2(255)")
 	public String getEmailDisplayName() {
 		return this.emailDisplayName;
 	}
@@ -138,7 +132,7 @@ public class ConfigRaAccountExtendInfo implements java.io.Serializable {
 		this.emailDisplayName = emailDisplayName;
 	}
 
-	@Column(name = "name_display_name")
+	@Column(name = "name_display_name", columnDefinition = "NVARCHAR2(2)")
 	public String getNameDisplayName() {
 		return this.nameDisplayName;
 	}
@@ -147,7 +141,7 @@ public class ConfigRaAccountExtendInfo implements java.io.Serializable {
 		this.nameDisplayName = nameDisplayName;
 	}
 
-	@Column(name = "addtional_field1_display_name")
+	@Column(name = "addtional_field1_display_name", columnDefinition = "NVARCHAR2(255)")
 	public String getAddtionalField1DisplayName() {
 		return this.addtionalField1DisplayName;
 	}
@@ -156,7 +150,7 @@ public class ConfigRaAccountExtendInfo implements java.io.Serializable {
 		this.addtionalField1DisplayName = addtionalField1DisplayName;
 	}
 
-	@Column(name = "addtional_field2_display_name")
+	@Column(name = "addtional_field2_display_name", columnDefinition = "NVARCHAR2(255)")
 	public String getAddtionalField2DisplayName() {
 		return this.addtionalField2DisplayName;
 	}
@@ -165,7 +159,7 @@ public class ConfigRaAccountExtendInfo implements java.io.Serializable {
 		this.addtionalField2DisplayName = addtionalField2DisplayName;
 	}
 
-	@Column(name = "addtional_field3_display_name")
+	@Column(name = "addtional_field3_display_name", columnDefinition = "NVARCHAR2(255)")
 	public String getAddtionalField3DisplayName() {
 		return this.addtionalField3DisplayName;
 	}
@@ -174,7 +168,7 @@ public class ConfigRaAccountExtendInfo implements java.io.Serializable {
 		this.addtionalField3DisplayName = addtionalField3DisplayName;
 	}
 
-	@Column(name = "addtional_field4_display_name")
+	@Column(name = "addtional_field4_display_name", columnDefinition = "NVARCHAR2(255)")
 	public String getAddtionalField4DisplayName() {
 		return this.addtionalField4DisplayName;
 	}
@@ -183,7 +177,7 @@ public class ConfigRaAccountExtendInfo implements java.io.Serializable {
 		this.addtionalField4DisplayName = addtionalField4DisplayName;
 	}
 
-	@Column(name = "addtional_field5_display_name")
+	@Column(name = "addtional_field5_display_name", columnDefinition = "NVARCHAR2(255)")
 	public String getAddtionalField5DisplayName() {
 		return this.addtionalField5DisplayName;
 	}
@@ -192,7 +186,7 @@ public class ConfigRaAccountExtendInfo implements java.io.Serializable {
 		this.addtionalField5DisplayName = addtionalField5DisplayName;
 	}
 
-	@Column(name = "addtional_field6_display_name")
+	@Column(name = "addtional_field6_display_name", columnDefinition = "NVARCHAR2(255)")
 	public String getAddtionalField6DisplayName() {
 		return this.addtionalField6DisplayName;
 	}
@@ -201,7 +195,7 @@ public class ConfigRaAccountExtendInfo implements java.io.Serializable {
 		this.addtionalField6DisplayName = addtionalField6DisplayName;
 	}
 
-	@Column(name = "addtional_field7_display_name")
+	@Column(name = "addtional_field7_display_name", columnDefinition = "NVARCHAR2(255)")
 	public String getAddtionalField7DisplayName() {
 		return this.addtionalField7DisplayName;
 	}
@@ -210,7 +204,7 @@ public class ConfigRaAccountExtendInfo implements java.io.Serializable {
 		this.addtionalField7DisplayName = addtionalField7DisplayName;
 	}
 
-	@Column(name = "addtional_field8_display_name")
+	@Column(name = "addtional_field8_display_name",columnDefinition = "NVARCHAR2(255)")
 	public String getAddtionalField8DisplayName() {
 		return this.addtionalField8DisplayName;
 	}
@@ -219,7 +213,7 @@ public class ConfigRaAccountExtendInfo implements java.io.Serializable {
 		this.addtionalField8DisplayName = addtionalField8DisplayName;
 	}
 
-	@Column(name = "addtional_field9_display_name")
+	@Column(name = "addtional_field9_display_name",columnDefinition = "NVARCHAR2(255)")
 	public String getAddtionalField9DisplayName() {
 		return this.addtionalField9DisplayName;
 	}
@@ -228,7 +222,7 @@ public class ConfigRaAccountExtendInfo implements java.io.Serializable {
 		this.addtionalField9DisplayName = addtionalField9DisplayName;
 	}
 
-	@Column(name = "addtional_field10_display_name")
+	@Column(name = "addtional_field10_display_name",columnDefinition = "NVARCHAR2(255)")
 	public String getAddtionalField10DisplayName() {
 		return this.addtionalField10DisplayName;
 	}
@@ -238,7 +232,8 @@ public class ConfigRaAccountExtendInfo implements java.io.Serializable {
 		this.addtionalField10DisplayName = addtionalField10DisplayName;
 	}
 
-	//@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "configRaAccountExtendInfo")
+	// @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy =
+	// "configRaAccountExtendInfo")
 	@Transient
 	public Set<ConfigRaAccount> getConfigRaAccounts() {
 		return this.configRaAccounts;
@@ -247,7 +242,6 @@ public class ConfigRaAccountExtendInfo implements java.io.Serializable {
 	public void setConfigRaAccounts(Set<ConfigRaAccount> configRaAccounts) {
 		this.configRaAccounts = configRaAccounts;
 	}
-
 
 	@Column(name = "personal")
 	public String getPersonal() {
@@ -275,5 +269,5 @@ public class ConfigRaAccountExtendInfo implements java.io.Serializable {
 	public void setOrganizationDisplayName(String organizationDisplayName) {
 		this.organizationDisplayName = organizationDisplayName;
 	}
-	
+
 }

@@ -19,6 +19,7 @@ import javax.persistence.Table;
 
 /**
  * 代理商
+ * 
  * @author ZhangJingtao
  *
  */
@@ -43,7 +44,7 @@ public class ConfigCommercialAgent implements java.io.Serializable {
 	 * 结算年限
 	 */
 	private Integer settlementPeriod;
-	
+
 	private Set<ConfigAgentOfficeRelation> configAgentOfficeRelations = new HashSet<ConfigAgentOfficeRelation>(
 			0);
 	private Set<ConfigAgentAppRelation> configAgentAppRelations = new HashSet<ConfigAgentAppRelation>(
@@ -84,10 +85,10 @@ public class ConfigCommercialAgent implements java.io.Serializable {
 	}
 
 	// Property accessors
-//	@SequenceGenerator(name="COMMON_SEQUENCE",sequenceName="COMMON_SEQUENCE")
-	@SequenceGenerator(name="CONFIG_COMMERCIAL_AG_SEQUENCE",allocationSize=1,initialValue=1,sequenceName="CONFIG_COMMERCIAL_AG_SEQUENCE")
-	@Id 
-	@GeneratedValue(generator = "CONFIG_COMMERCIAL_AG_SEQUENCE",strategy=GenerationType.SEQUENCE)
+	// @SequenceGenerator(name="COMMON_SEQUENCE",sequenceName="COMMON_SEQUENCE")
+	@SequenceGenerator(name = "CONFIG_COMMERCIAL_AG_SEQUENCE", allocationSize = 1, initialValue = 1, sequenceName = "CONFIG_COMMERCIAL_AG_SEQUENCE")
+	@Id
+	@GeneratedValue(generator = "CONFIG_COMMERCIAL_AG_SEQUENCE", strategy = GenerationType.SEQUENCE)
 	public Long getId() {
 		return this.id;
 	}
@@ -96,7 +97,7 @@ public class ConfigCommercialAgent implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@Column(name = "agent_name")
+	@Column(name = "agent_name", columnDefinition = "NVARCHAR2(255)")
 	public String getAgentName() {
 		return this.agentName;
 	}
@@ -123,7 +124,7 @@ public class ConfigCommercialAgent implements java.io.Serializable {
 		this.agentType2 = agentType2;
 	}
 
-	@Column(name = "agent_comm_user_name")
+	@Column(name = "agent_comm_user_name", columnDefinition = "NVARCHAR2(255)")
 	public String getAgentCommUserName() {
 		return this.agentCommUserName;
 	}
@@ -132,7 +133,7 @@ public class ConfigCommercialAgent implements java.io.Serializable {
 		this.agentCommUserName = agentCommUserName;
 	}
 
-	@Column(name = "agent_comm_mobile")
+	@Column(name = "agent_comm_mobile", columnDefinition = "NVARCHAR2(255)")
 	public String getAgentCommMobile() {
 		return this.agentCommMobile;
 	}
@@ -141,7 +142,7 @@ public class ConfigCommercialAgent implements java.io.Serializable {
 		this.agentCommMobile = agentCommMobile;
 	}
 
-	@Column(name = "agent_address")
+	@Column(name = "agent_address", columnDefinition = "NVARCHAR2(255)")
 	public String getAgentAddress() {
 		return this.agentAddress;
 	}
@@ -168,7 +169,7 @@ public class ConfigCommercialAgent implements java.io.Serializable {
 		this.agentContractEnd = agentContractEnd;
 	}
 
-	@Column(name = "agent_remark")
+	@Column(name = "agent_remark", columnDefinition = "NVARCHAR2(255)")
 	public String getAgentRemark() {
 		return this.agentRemark;
 	}
@@ -214,11 +215,5 @@ public class ConfigCommercialAgent implements java.io.Serializable {
 	public void setSettlementPeriod(Integer settlementPeriod) {
 		this.settlementPeriod = settlementPeriod;
 	}
-	
-	
-	
-	
-	
-	
-	
+
 }
