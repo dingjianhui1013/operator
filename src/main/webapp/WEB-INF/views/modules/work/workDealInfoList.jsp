@@ -14,6 +14,30 @@ $(document).ready(
 		function() {
 			
 			
+			//经信委
+			$("input[name='yearU']").change(function(){
+				$("#expirationDate").val("");						
+			});
+			
+			$("#expirationDate").blur(function(){
+				
+				$("#year1U").removeAttr("checked");
+				$("#year2U").removeAttr("checked");
+				$("#year3U").removeAttr("checked");
+				$("#year4U").removeAttr("checked");
+				$("#year5U").removeAttr("checked");
+			});
+			
+			
+			if(${expirationDate!=null}){
+				$("#year1U").removeAttr("checked");
+				$("#year2U").removeAttr("checked");
+				$("#year3U").removeAttr("checked");
+				$("#year4U").removeAttr("checked");
+				$("#year5U").removeAttr("checked");
+			}
+			
+			
 			if(${isSelectedAll==0||isSelectedAll==null}){
 				$("#selectAllData").val("全选");
 				$("#selectAllData").attr("onclick","selectData()");	
@@ -1528,7 +1552,7 @@ $(document).ready(
 							 onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});"
 							 maxlength="20" readonly="readonly" value="<fmt:formatDate value="${expirationDate}" pattern="yyyy-MM-dd"/>"
 							name="expirationDate" id="expirationDate"/>
-							</td>
+						</td>
 						
 					<th></th>
 					<td></td>
