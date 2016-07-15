@@ -4644,9 +4644,9 @@ public class WorkDealInfoService extends BaseService {
 		dc.createAlias("configApp", "configApp");
 		dc.add(Restrictions.eq("officeId", officeId));
 		dc.add(Restrictions.eq("configApp.id", appId));
-		dc.createAlias("workPayInfo", "workPayInfo");
-		dc.add(Restrictions.ge("workPayInfo.updateDate", date));
-		dc.add(Restrictions.lt("workPayInfo.updateDate", calendar.getTime()));
+		
+		dc.add(Restrictions.ge("businessCardUserDate", date));
+		dc.add(Restrictions.lt("businessCardUserDate", calendar.getTime()));
 		List<String> statusIntegers = new ArrayList<String>();
 		if (dealInfoType.equals(1)) {
 			dc.add(Restrictions.eq("dealInfoType", dealInfoType));
@@ -4686,9 +4686,9 @@ public class WorkDealInfoService extends BaseService {
 		dc.createAlias("configApp", "configApp");
 		dc.add(Restrictions.eq("officeId", officeId));
 		dc.add(Restrictions.eq("configApp.id", appId));
-		dc.createAlias("workPayInfo", "workPayInfo");
-		dc.add(Restrictions.ge("workPayInfo.updateDate", date));
-		dc.add(Restrictions.lt("workPayInfo.updateDate", calendar.getTime()));
+		
+		dc.add(Restrictions.ge("businessCardUserDate", date));
+		dc.add(Restrictions.lt("businessCardUserDate", calendar.getTime()));
 
 		dc.add(Restrictions.eq("dealInfoType", dealInfoTypeUpdate));
 		dc.add(Restrictions.isNull("dealInfoType1"));
@@ -4717,8 +4717,8 @@ public class WorkDealInfoService extends BaseService {
 		dc.createAlias("configApp", "configApp");
 		dc.add(Restrictions.eq("officeId", officeId));
 		dc.add(Restrictions.eq("configApp.id", appId));
-		dc.add(Restrictions.ge("updateDate", date));
-		dc.add(Restrictions.lt("updateDate", calendar.getTime()));
+		dc.add(Restrictions.ge("businessCardUserDate", date));
+		dc.add(Restrictions.lt("businessCardUserDate", calendar.getTime()));
 
 		dc.add(Restrictions.eq("dealInfoType", dealInfoTypeUpdate));
 		dc.add(Restrictions.eq("dealInfoType1", dealInfoTypeLost));
@@ -4746,8 +4746,8 @@ public class WorkDealInfoService extends BaseService {
 		dc.createAlias("configApp", "configApp");
 		dc.add(Restrictions.eq("officeId", officeId));
 		dc.add(Restrictions.eq("configApp.id", appId));
-		dc.add(Restrictions.ge("updateDate", date));
-		dc.add(Restrictions.lt("updateDate", calendar.getTime()));
+		dc.add(Restrictions.ge("businessCardUserDate", date));
+		dc.add(Restrictions.lt("businessCardUserDate", calendar.getTime()));
 
 		dc.add(Restrictions.eq("dealInfoType1", dealInfoTypeLostReplace));
 
@@ -4777,8 +4777,8 @@ public class WorkDealInfoService extends BaseService {
 		dc.createAlias("configApp", "configApp");
 		dc.add(Restrictions.eq("officeId", officeId));
 		dc.add(Restrictions.eq("configApp.id", appId));
-		dc.add(Restrictions.ge("updateDate", date));
-		dc.add(Restrictions.lt("updateDate", calendar.getTime()));
+		dc.add(Restrictions.ge("businessCardUserDate", date));
+		dc.add(Restrictions.lt("businessCardUserDate", calendar.getTime()));
 		dc.add(Restrictions.eq("dealInfoType", dealInfoTypeUpdate));
 		dc.add(Restrictions.eq("dealInfoType1", dealInfoTypeLostReplace));
 		dc.add(Restrictions.eq("dealInfoType2", dealInfoTypeChange));
@@ -5754,8 +5754,8 @@ public class WorkDealInfoService extends BaseService {
 						WorkDealInfoType.TYPE_LOST_CHILD)));
 		dc.add(Restrictions.eq("dealInfoStatus",
 				WorkDealInfoStatus.STATUS_CERT_OBTAINED));
-		dc.add(Restrictions.ge("updateDate", date));
-		dc.add(Restrictions.lt("updateDate", calendar.getTime()));
+		dc.add(Restrictions.ge("businessCardUserDate", date));
+		dc.add(Restrictions.lt("businessCardUserDate", calendar.getTime()));
 
 		List<WorkDealInfo> dealInfos = workDealInfoDao.find(dc);
 		List<String> keys = new ArrayList<String>();
