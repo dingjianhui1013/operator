@@ -33,7 +33,8 @@ import com.itrus.ca.modules.work.entity.WorkPayInfo;
  */
 @Entity
 @Table(name = "finance_payment_info")
-public class FinancePaymentInfo extends DataEntity implements java.io.Serializable {
+public class FinancePaymentInfo extends DataEntity implements
+		java.io.Serializable {
 
 	// Fields
 
@@ -49,16 +50,15 @@ public class FinancePaymentInfo extends DataEntity implements java.io.Serializab
 	private Integer bingdingTimes;
 	private String company;
 	private Date payDate;
-	private String serialNum;			//交易流水号
-	private String paymentAccount;		//付款账号
-	private String paymentBank;			//付款银行
-	private Integer quitMoneyStatus;		//退款状态      0：未退款      1：已退款
-	private String distinguish;			// 区别导入和手动添加  0为添加 null为导入
-	
+	private String serialNum; // 交易流水号
+	private String paymentAccount; // 付款账号
+	private String paymentBank; // 付款银行
+	private Integer quitMoneyStatus; // 退款状态 0：未退款 1：已退款
+	private String distinguish; // 区别导入和手动添加 0为添加 null为导入
+
 	private Long officeId;
 	private Long areaId;
-	
-	
+
 	// Constructors
 
 	/** default constructor */
@@ -66,12 +66,13 @@ public class FinancePaymentInfo extends DataEntity implements java.io.Serializab
 	}
 
 	/** full constructor */
-	public FinancePaymentInfo(ConfigApp configApp,
-			Double paymentMoney,
+	public FinancePaymentInfo(ConfigApp configApp, Double paymentMoney,
 			Integer paymentMethod, String commUserName, String commMobile,
 			String remark, Timestamp createDate, String delFlag,
-			String remarks, Timestamp updateDate, Integer bingdingTimes,String company,Date payDate,String serialNum,
-			String paymentAccount,String paymentBank,String distinguish,Long officeId,Long areaId) {
+			String remarks, Timestamp updateDate, Integer bingdingTimes,
+			String company, Date payDate, String serialNum,
+			String paymentAccount, String paymentBank, String distinguish,
+			Long officeId, Long areaId) {
 		this.configApp = configApp;
 		this.paymentMoney = paymentMoney;
 		this.paymentMethod = paymentMethod;
@@ -94,10 +95,10 @@ public class FinancePaymentInfo extends DataEntity implements java.io.Serializab
 	}
 
 	// Property accessors
-//	@SequenceGenerator(name="COMMON_SEQUENCE",sequenceName="COMMON_SEQUENCE")
-	@SequenceGenerator(name="FINANCE_PAYMENT_INFO_SEQUENCE",allocationSize=1,initialValue=1,sequenceName="FINANCE_PAYMENT_INFO_SEQUENCE")
-	@Id 
-	@GeneratedValue(generator = "FINANCE_PAYMENT_INFO_SEQUENCE",strategy=GenerationType.SEQUENCE)
+	// @SequenceGenerator(name="COMMON_SEQUENCE",sequenceName="COMMON_SEQUENCE")
+	@SequenceGenerator(name = "FINANCE_PAYMENT_INFO_SEQUENCE", allocationSize = 1, initialValue = 1, sequenceName = "FINANCE_PAYMENT_INFO_SEQUENCE")
+	@Id
+	@GeneratedValue(generator = "FINANCE_PAYMENT_INFO_SEQUENCE", strategy = GenerationType.SEQUENCE)
 	public Long getId() {
 		return this.id;
 	}
@@ -116,7 +117,7 @@ public class FinancePaymentInfo extends DataEntity implements java.io.Serializab
 		this.configApp = configApp;
 	}
 
-	@Column(name = "payment_money", precision = 12, scale = 3)
+	@Column(name = "payment_money", precision = 12, scale = 3, columnDefinition = "NUMBER")
 	public Double getPaymentMoney() {
 		return this.paymentMoney;
 	}
@@ -134,7 +135,7 @@ public class FinancePaymentInfo extends DataEntity implements java.io.Serializab
 		this.paymentMethod = paymentMethod;
 	}
 
-	@Column(name = "comm_user_name",columnDefinition = "NVARCHAR2(255)")
+	@Column(name = "comm_user_name", columnDefinition = "NVARCHAR2(255)")
 	public String getCommUserName() {
 		return this.commUserName;
 	}
@@ -143,7 +144,7 @@ public class FinancePaymentInfo extends DataEntity implements java.io.Serializab
 		this.commUserName = commUserName;
 	}
 
-	@Column(name = "comm_mobile",columnDefinition = "NVARCHAR2(255)")
+	@Column(name = "comm_mobile", columnDefinition = "NVARCHAR2(255)")
 	public String getCommMobile() {
 		return this.commMobile;
 	}
@@ -152,7 +153,7 @@ public class FinancePaymentInfo extends DataEntity implements java.io.Serializab
 		this.commMobile = commMobile;
 	}
 
-	@Column(name = "remark",columnDefinition = "NVARCHAR2(255)")
+	@Column(name = "remark", columnDefinition = "NVARCHAR2(255)")
 	public String getRemark() {
 		return this.remark;
 	}
@@ -161,10 +162,9 @@ public class FinancePaymentInfo extends DataEntity implements java.io.Serializab
 		this.remark = remark;
 	}
 
-
 	@Column(name = "bingding_times")
 	public Integer getBingdingTimes() {
-		return this.bingdingTimes==null? 0:this.bingdingTimes;
+		return this.bingdingTimes == null ? 0 : this.bingdingTimes;
 	}
 
 	public void setBingdingTimes(Integer bingdingTimes) {
@@ -180,7 +180,6 @@ public class FinancePaymentInfo extends DataEntity implements java.io.Serializab
 		this.paymentMethodName = paymentMethodName;
 	}
 
-
 	@Column(name = "residue_money", precision = 10, scale = 2)
 	public Double getResidueMoney() {
 		return residueMoney;
@@ -189,8 +188,8 @@ public class FinancePaymentInfo extends DataEntity implements java.io.Serializab
 	public void setResidueMoney(Double residueMoney) {
 		this.residueMoney = residueMoney;
 	}
-	
-	@Column(name = "company",columnDefinition = "NVARCHAR2(255)")
+
+	@Column(name = "company", columnDefinition = "NVARCHAR2(255)")
 	public String getCompany() {
 		return company;
 	}
@@ -198,7 +197,6 @@ public class FinancePaymentInfo extends DataEntity implements java.io.Serializab
 	public void setCompany(String company) {
 		this.company = company;
 	}
-
 
 	@Column(name = "pay_date")
 	public Date getPayDate() {
@@ -244,7 +242,7 @@ public class FinancePaymentInfo extends DataEntity implements java.io.Serializab
 	public void setQuitMoneyStatus(Integer quitMoneyStatus) {
 		this.quitMoneyStatus = quitMoneyStatus;
 	}
-	
+
 	@Column(name = "distinguish")
 	public String getDistinguish() {
 		return distinguish;
@@ -253,7 +251,7 @@ public class FinancePaymentInfo extends DataEntity implements java.io.Serializab
 	public void setDistinguish(String distinguish) {
 		this.distinguish = distinguish;
 	}
-	
+
 	@Column(name = "office_id")
 	public Long getOfficeId() {
 		return officeId;
@@ -271,7 +269,5 @@ public class FinancePaymentInfo extends DataEntity implements java.io.Serializab
 	public void setAreaId(Long areaId) {
 		this.areaId = areaId;
 	}
-	
-	
-	
+
 }
