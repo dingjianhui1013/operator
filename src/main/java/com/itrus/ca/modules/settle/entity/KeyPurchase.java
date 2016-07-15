@@ -106,7 +106,7 @@ public class KeyPurchase extends DataEntity implements java.io.Serializable{
 		public void setCount(Integer count) {
 			this.count = count;
 		}
-		@Column(name = "money")
+		@Column(name = "money",columnDefinition = "FLOAT(26)")
 		public Double getMoney() {
 			return money;
 		}
