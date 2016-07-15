@@ -8,6 +8,7 @@ package com.itrus.ca.common.persistence;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
@@ -79,6 +80,7 @@ public abstract class DataEntity extends BaseEntity implements Serializable {
 	}
 	
 	@Length(min=0, max=255)
+	@Column(name = "REMARKS",columnDefinition = "NVARCHAR2(255)")
 	public String getRemarks() {
 		return remarks;
 	}
@@ -132,6 +134,7 @@ public abstract class DataEntity extends BaseEntity implements Serializable {
 
 	@Length(min=1, max=1)
 	@Field(index=Index.YES, analyze=Analyze.NO, store=Store.YES)
+	@Column(name = "DEL_FLAG",columnDefinition = "NVARCHAR2(1)")
 	public String getDelFlag() {
 		return delFlag;
 	}
