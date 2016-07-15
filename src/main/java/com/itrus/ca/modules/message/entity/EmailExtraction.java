@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -54,6 +55,8 @@ public class EmailExtraction extends DataEntity {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	//@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_message_emailExtraction")
 	//@SequenceGenerator(name = "seq_message_emailExtraction", sequenceName = "seq_message_emailExtraction")
+//	@SequenceGenerator(name="MESSAGE_EMAIL_EXTRACTION_SEQUENCE",sequenceName="MESSAGE_EMAIL_EXTRACTION_SEQUENCE")
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "MESSAGE_EMAIL_EXTRACTION_SEQUENCE")
 	public Long getId() {
 		return id;
 	}

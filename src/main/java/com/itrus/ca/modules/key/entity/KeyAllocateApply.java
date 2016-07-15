@@ -86,9 +86,10 @@ public class KeyAllocateApply extends DataEntity implements java.io.Serializable
 	}
 
 	// Property accessors
-	@SequenceGenerator(name="COMMON_SEQUENCE",sequenceName="COMMON_SEQUENCE")
+//	@SequenceGenerator(name="COMMON_SEQUENCE",sequenceName="COMMON_SEQUENCE")
+	@SequenceGenerator(name="KEY_ALLOCATE_APPLY_SEQUENCE",allocationSize=1,initialValue=1,sequenceName="KEY_ALLOCATE_APPLY_SEQUENCE")
 	@Id 
-	@GeneratedValue(generator = "COMMON_SEQUENCE",strategy=GenerationType.SEQUENCE)
+	@GeneratedValue(generator = "KEY_ALLOCATE_APPLY_SEQUENCE",strategy=GenerationType.SEQUENCE)
 	public Long getId() {
 		return this.id;
 	}

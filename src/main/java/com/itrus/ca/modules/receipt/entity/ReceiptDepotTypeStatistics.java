@@ -55,9 +55,10 @@ public class ReceiptDepotTypeStatistics extends DataEntity implements java.io.Se
 	}
 
 	// Property accessors
-	@SequenceGenerator(name="COMMON_SEQUENCE",sequenceName="COMMON_SEQUENCE")
+//	@SequenceGenerator(name="COMMON_SEQUENCE",sequenceName="COMMON_SEQUENCE")
+	@SequenceGenerator(name="RECEIPT_DEPOT_TYPE_S_SEQUENCE",allocationSize=1,initialValue=1,sequenceName="RECEIPT_DEPOT_TYPE_S_SEQUENCE")
 	@Id 
-	@GeneratedValue(generator = "COMMON_SEQUENCE",strategy=GenerationType.SEQUENCE)
+	@GeneratedValue(generator = "RECEIPT_DEPOT_TYPE_S_SEQUENCE",strategy=GenerationType.SEQUENCE)
 	public Long getId() {
 		return this.id;
 	}

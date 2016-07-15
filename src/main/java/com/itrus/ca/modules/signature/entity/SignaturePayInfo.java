@@ -70,8 +70,9 @@ public class SignaturePayInfo extends DataEntity  implements java.io.Serializabl
 	
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "COMMON_SEQUENCE")
-	@SequenceGenerator(name = "COMMON_SEQUENCE", sequenceName = "COMMON_SEQUENCE")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SIGNATURE_PAY_INFO_SEQUENCE")
+//	@SequenceGenerator(name = "COMMON_SEQUENCE", sequenceName = "COMMON_SEQUENCE")
+	@SequenceGenerator(name="SIGNATURE_PAY_INFO_SEQUENCE",allocationSize=1,initialValue=1,sequenceName="SIGNATURE_PAY_INFO_SEQUENCE")
 	public Long getId() {
 		return id;
 	}

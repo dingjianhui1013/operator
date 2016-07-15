@@ -66,8 +66,9 @@ public class Area extends DataEntity {
 	}
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "COMMON_SEQUENCE")
-	@SequenceGenerator(name = "COMMON_SEQUENCE", sequenceName = "COMMON_SEQUENCE")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SYS_AREA_SEQUENCE")
+//	@SequenceGenerator(name = "COMMON_SEQUENCE", sequenceName = "COMMON_SEQUENCE")
+	@SequenceGenerator(name="SYS_AREA_SEQUENCE",allocationSize=1,initialValue=1,sequenceName="SYS_AREA_SEQUENCE")
 	public Long getId() {
 		return id;
 	}

@@ -45,9 +45,10 @@ public class KeyDisplaceDetail implements java.io.Serializable {
 	}
 
 	// Property accessors
-	@SequenceGenerator(name="COMMON_SEQUENCE",sequenceName="COMMON_SEQUENCE")
+//	@SequenceGenerator(name="COMMON_SEQUENCE",sequenceName="COMMON_SEQUENCE")
+	@SequenceGenerator(name="KEY_DISPLACE_DETAIL_SEQUENCE",allocationSize=1,initialValue=1,sequenceName="KEY_DISPLACE_DETAIL_SEQUENCE")
 	@Id 
-	@GeneratedValue(generator = "COMMON_SEQUENCE",strategy=GenerationType.SEQUENCE)
+	@GeneratedValue(generator = "KEY_DISPLACE_DETAIL_SEQUENCE",strategy=GenerationType.SEQUENCE)
 	public Long getId() {
 		return this.id;
 	}

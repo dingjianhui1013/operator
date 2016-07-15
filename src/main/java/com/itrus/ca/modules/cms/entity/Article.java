@@ -85,9 +85,10 @@ public class Article extends DataEntity {
 		this();
 		this.category = category;
 	}
-	@SequenceGenerator(name="COMMON_SEQUENCE",sequenceName="COMMON_SEQUENCE")
+	//@SequenceGenerator(name="COMMON_SEQUENCE",sequenceName="COMMON_SEQUENCE")
+	@SequenceGenerator(name="CMS_ARTICLE_SEQUENCE",allocationSize=1,initialValue=1,sequenceName="CMS_ARTICLE_SEQUENCE") 
 	@Id 
-	@GeneratedValue(generator = "COMMON_SEQUENCE",strategy=GenerationType.SEQUENCE)
+	@GeneratedValue(generator = "CMS_ARTICLE_SEQUENCE",strategy=GenerationType.SEQUENCE)
 //	@Id
 //	@GeneratedValue(strategy = GenerationType.AUTO)
 //	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_cms_article")

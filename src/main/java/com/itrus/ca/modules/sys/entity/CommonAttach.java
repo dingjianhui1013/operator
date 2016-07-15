@@ -79,8 +79,9 @@ public class CommonAttach implements java.io.Serializable {
 
 	// Property accessors
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "COMMON_SEQUENCE")
-	@SequenceGenerator(name = "COMMON_SEQUENCE", sequenceName = "COMMON_SEQUENCE")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "COMMON_ATTACH_SEQUENCE")
+//	@SequenceGenerator(name = "COMMON_SEQUENCE", sequenceName = "COMMON_SEQUENCE")
+	@SequenceGenerator(name="COMMON_ATTACH_SEQUENCE",allocationSize=1,initialValue=1,sequenceName="COMMON_ATTACH_SEQUENCE")
 	public Long getId() {
 		return this.id;
 	}

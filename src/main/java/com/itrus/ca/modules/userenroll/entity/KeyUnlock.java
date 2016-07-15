@@ -90,8 +90,9 @@ public class KeyUnlock extends DataEntity implements java.io.Serializable {
 
 	// Property accessors
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "COMMON_SEQUENCE")
-	@SequenceGenerator(name = "COMMON_SEQUENCE", sequenceName = "COMMON_SEQUENCE")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "KEY_UNLOCK_SEQUENCE")
+//	@SequenceGenerator(name = "COMMON_SEQUENCE", sequenceName = "COMMON_SEQUENCE")
+	@SequenceGenerator(name="KEY_UNLOCK_SEQUENCE",allocationSize=1,initialValue=1,sequenceName="KEY_UNLOCK_SEQUENCE")
 	public Long getId() {
 		return this.id;
 	}

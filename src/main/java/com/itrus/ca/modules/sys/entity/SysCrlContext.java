@@ -76,8 +76,9 @@ public class SysCrlContext extends DataEntity implements java.io.Serializable {
 
 	// Property accessors
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "COMMON_SEQUENCE")
-	@SequenceGenerator(name = "COMMON_SEQUENCE", sequenceName = "COMMON_SEQUENCE")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SYS_CRL_CONTEXT_SEQUENCE")
+//	@SequenceGenerator(name = "COMMON_SEQUENCE", sequenceName = "COMMON_SEQUENCE")
+	@SequenceGenerator(name="SYS_CRL_CONTEXT_SEQUENCE",allocationSize=1,initialValue=1,sequenceName="SYS_CRL_CONTEXT_SEQUENCE")
 	public Long getId() {
 		return this.id;
 	}

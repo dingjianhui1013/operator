@@ -13,6 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -72,9 +73,10 @@ public class StatisticSealDayData implements java.io.Serializable{
 	}
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	//@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_statistic_statisticSealDayData")
+//	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "STATISTIC_SEAL_DAY_D_SEQUENCE")
 	//@SequenceGenerator(name = "seq_statistic_statisticSealDayData", sequenceName = "seq_statistic_statisticSealDayData")
+	@SequenceGenerator(name="STATISTIC_SEAL_DAY_D_SEQUENCE",allocationSize=1,initialValue=1,sequenceName="STATISTIC_SEAL_DAY_D_SEQUENCE")
 	public Long getId() {
 		return id;
 	}

@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Cache;
@@ -26,7 +27,7 @@ import com.itrus.ca.modules.sys.entity.User;
  * @version 2015-11-12
  */
 @Entity
-@Table(name = "settle_keySettle")
+@Table(name = "settle_key_settle")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class KeySettle extends DataEntity {
 	
@@ -61,9 +62,10 @@ public class KeySettle extends DataEntity {
 		this.keyTotalAmount = keyTotalAmount;
 	}
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	//@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_settle_keySettle")
-	//@SequenceGenerator(name = "seq_settle_keySettle", sequenceName = "seq_settle_keySettle")
+//	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SETTLE_KEY_SETTLE_SEQUENCE")
+//	@SequenceGenerator(name = "seq_settle_keySettle", sequenceName = "seq_settle_keySettle")
+	@SequenceGenerator(name="SETTLE_KEY_SETTLE_SEQUENCE",allocationSize=1,initialValue=1,sequenceName="SETTLE_KEY_SETTLE_SEQUENCE")
 	public Long getId() {
 		return id;
 	}

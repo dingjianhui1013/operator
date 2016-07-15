@@ -84,8 +84,9 @@ public class Role extends DataEntity {
 	}
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "COMMON_SEQUENCE")
-	@SequenceGenerator(name = "COMMON_SEQUENCE", sequenceName = "COMMON_SEQUENCE")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SYS_ROLE_SEQUENCE")
+//	@SequenceGenerator(name = "COMMON_SEQUENCE", sequenceName = "COMMON_SEQUENCE")
+	@SequenceGenerator(name="SYS_ROLE_SEQUENCE",allocationSize=1,initialValue=1,sequenceName="SYS_ROLE_SEQUENCE")
 	public Long getId() {
 		return id;
 	}

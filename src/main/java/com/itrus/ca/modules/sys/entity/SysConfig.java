@@ -49,8 +49,9 @@ public class SysConfig extends DataEntity implements java.io.Serializable {
 
 	// Property accessors
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "COMMON_SEQUENCE")
-	@SequenceGenerator(name = "COMMON_SEQUENCE", sequenceName = "COMMON_SEQUENCE")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SYS_CONFIG_SEQUENCE")
+//	@SequenceGenerator(name = "COMMON_SEQUENCE", sequenceName = "COMMON_SEQUENCE")
+	@SequenceGenerator(name="SYS_CONFIG_SEQUENCE",allocationSize=1,initialValue=1,sequenceName="SYS_CONFIG_SEQUENCE")
 	public Long getId() {
 		return this.id;
 	}

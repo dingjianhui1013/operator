@@ -58,9 +58,10 @@ public class ArticleData extends BaseEntity {
 		this.id = id;
 	}
 	
-	@SequenceGenerator(name="COMMON_SEQUENCE",sequenceName="COMMON_SEQUENCE")
+	//@SequenceGenerator(name="COMMON_SEQUENCE",sequenceName="COMMON_SEQUENCE")
+	@SequenceGenerator(name="CMS_ARTICLE_DATA_SEQUENCE",allocationSize=1,initialValue=1,sequenceName="CMS_ARTICLE_DATA_SEQUENCE")
 	@Id 
-	@GeneratedValue(generator = "COMMON_SEQUENCE",strategy=GenerationType.SEQUENCE)
+	@GeneratedValue(generator = "CMS_ARTICLE_DATA_SEQUENCE",strategy=GenerationType.SEQUENCE)
 //	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_cms_article_data")
 //	@SequenceGenerator(name = "seq_cms_article_data", sequenceName = "seq_cms_article_data")
 	public Long getId() {

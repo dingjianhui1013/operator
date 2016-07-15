@@ -122,8 +122,9 @@ public class WorkPayInfo extends DataEntity implements java.io.Serializable {
 
 	// Property accessors
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "COMMON_SEQUENCE")
-	@SequenceGenerator(name = "COMMON_SEQUENCE", sequenceName = "COMMON_SEQUENCE")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "WORK_PAY_INFO_SEQUENCE")
+//	@SequenceGenerator(name = "COMMON_SEQUENCE", sequenceName = "COMMON_SEQUENCE")
+	@SequenceGenerator(name="WORK_PAY_INFO_SEQUENCE",allocationSize=1,initialValue=1,sequenceName="WORK_PAY_INFO_SEQUENCE")
 	public Long getId() {
 		return this.id;
 	}

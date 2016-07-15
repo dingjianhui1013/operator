@@ -52,9 +52,10 @@ public class ConfigAgentBoundDealInfo extends DataEntity {
 	}
 	
 	
-	@SequenceGenerator(name="COMMON_SEQUENCE",sequenceName="COMMON_SEQUENCE")
+//	@SequenceGenerator(name="COMMON_SEQUENCE",sequenceName="COMMON_SEQUENCE")
+	@SequenceGenerator(name="CONFIG_AGENT_BOUND_D_SEQUENCE",allocationSize=1,initialValue=1,sequenceName="CONFIG_AGENT_BOUND_D_SEQUENCE")
 	@Id 
-	@GeneratedValue(generator = "COMMON_SEQUENCE",strategy=GenerationType.SEQUENCE)
+	@GeneratedValue(generator = "CONFIG_AGENT_BOUND_D_SEQUENCE",strategy=GenerationType.SEQUENCE)
 	public Long getId() {
 		return id;
 	}

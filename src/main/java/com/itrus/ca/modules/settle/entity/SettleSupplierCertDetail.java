@@ -80,9 +80,10 @@ public class SettleSupplierCertDetail implements java.io.Serializable {
 	}
 
 	// Property accessors
-	@SequenceGenerator(name="COMMON_SEQUENCE",sequenceName="COMMON_SEQUENCE")
+//	@SequenceGenerator(name="COMMON_SEQUENCE",sequenceName="COMMON_SEQUENCE")
+	@SequenceGenerator(name="SETTLE_SUPPLIER_CERT_SEQUENCE",allocationSize=1,initialValue=1,sequenceName="SETTLE_SUPPLIER_CERT_SEQUENCE")
 	@Id 
-	@GeneratedValue(generator = "COMMON_SEQUENCE",strategy=GenerationType.SEQUENCE)
+	@GeneratedValue(generator = "SETTLE_SUPPLIER_CERT_SEQUENCE",strategy=GenerationType.SEQUENCE)
 	public Long getId() {
 		return this.id;
 	}

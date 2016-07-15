@@ -128,9 +128,10 @@ public class WorkCertApplyInfo implements java.io.Serializable {
 	}
 
 	// Property accessors
-	@SequenceGenerator(name="COMMON_SEQUENCE",sequenceName="COMMON_SEQUENCE")
+//	@SequenceGenerator(name="COMMON_SEQUENCE",sequenceName="COMMON_SEQUENCE")
+	@SequenceGenerator(name="WORK_CERT_APPLY_INFO_SEQUENCE",allocationSize=1,initialValue=1,sequenceName="WORK_CERT_APPLY_INFO_SEQUENCE")
 	@Id 
-	@GeneratedValue(generator = "COMMON_SEQUENCE",strategy=GenerationType.SEQUENCE)
+	@GeneratedValue(generator = "WORK_CERT_APPLY_INFO_SEQUENCE",strategy=GenerationType.SEQUENCE)
 	public Long getId() {
 		return this.id;
 	}

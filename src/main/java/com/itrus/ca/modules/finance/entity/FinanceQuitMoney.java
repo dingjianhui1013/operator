@@ -64,9 +64,10 @@ public class FinanceQuitMoney extends DataEntity implements Serializable{
 		this.ression = ression;
 	}
 
-	@SequenceGenerator(name = "COMMON_SEQUENCE", sequenceName = "COMMON_SEQUENCE")
+//	@SequenceGenerator(name = "COMMON_SEQUENCE", sequenceName = "COMMON_SEQUENCE")
+	@SequenceGenerator(name="FINANCE_QUIT_MONEY_SEQUENCE",allocationSize=1,initialValue=1,sequenceName="FINANCE_QUIT_MONEY_SEQUENCE")
 	@Id
-	@GeneratedValue(generator = "", strategy = GenerationType.SEQUENCE)
+	@GeneratedValue(generator = "FINANCE_QUIT_MONEY_SEQUENCE", strategy = GenerationType.SEQUENCE)
 	public Long getId() {
 		return id;
 	}

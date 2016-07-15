@@ -116,9 +116,10 @@ public class ConfigChargeAgent implements java.io.Serializable {
 	}
 
 	// Property accessors
-	@SequenceGenerator(name="COMMON_SEQUENCE",sequenceName="COMMON_SEQUENCE")
+//	@SequenceGenerator(name="COMMON_SEQUENCE",sequenceName="COMMON_SEQUENCE")
+	@SequenceGenerator(name="CONFIG_CHARGE_AGENT_SEQUENCE",allocationSize=1,initialValue=1,sequenceName="CONFIG_CHARGE_AGENT_SEQUENCE")
 	@Id 
-	@GeneratedValue(generator = "COMMON_SEQUENCE",strategy=GenerationType.SEQUENCE)
+	@GeneratedValue(generator = "CONFIG_CHARGE_AGENT_SEQUENCE",strategy=GenerationType.SEQUENCE)
 	public Long getId() {
 		return this.id;
 	}

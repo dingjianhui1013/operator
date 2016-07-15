@@ -56,9 +56,10 @@ public class KeyDepotGeneralStatistics implements java.io.Serializable {
 
 
 	// Property accessors
-	@SequenceGenerator(name="COMMON_SEQUENCE",sequenceName="COMMON_SEQUENCE")
+//	@SequenceGenerator(name="COMMON_SEQUENCE",sequenceName="COMMON_SEQUENCE")
+	@SequenceGenerator(name="KEY_DEPOT_GENERAL_ST_SEQUENCE",allocationSize=1,initialValue=1,sequenceName="KEY_DEPOT_GENERAL_ST_SEQUENCE")
 	@Id 
-	@GeneratedValue(generator = "COMMON_SEQUENCE",strategy=GenerationType.SEQUENCE)
+	@GeneratedValue(generator = "KEY_DEPOT_GENERAL_ST_SEQUENCE",strategy=GenerationType.SEQUENCE)
 	public Long getId() {
 		return this.id;
 	}

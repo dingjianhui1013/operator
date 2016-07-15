@@ -56,9 +56,10 @@ public class SignatureConfigChargeAgent extends DataEntity implements java.io.Se
 	}
 
 	// Property accessors
-	@SequenceGenerator(name = "COMMON_SEQUENCE", sequenceName = "COMMON_SEQUENCE")
+//	@SequenceGenerator(name = "COMMON_SEQUENCE", sequenceName = "COMMON_SEQUENCE")
+	@SequenceGenerator(name="SIGNATURE_CONFIG_CHA_SEQUENCE",allocationSize=1,initialValue=1,sequenceName="SIGNATURE_CONFIG_CHA_SEQUENCE")
 	@Id
-	@GeneratedValue(generator = "COMMON_SEQUENCE", strategy = GenerationType.SEQUENCE)
+	@GeneratedValue(generator = "SIGNATURE_CONFIG_CHA_SEQUENCE", strategy = GenerationType.SEQUENCE)
 	public Long getId() {
 		return this.id;
 	}

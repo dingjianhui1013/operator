@@ -52,8 +52,9 @@ public class Site extends DataEntity {
 	}
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "COMMON_SEQUENCE")
-	@SequenceGenerator(name = "COMMON_SEQUENCE", sequenceName = "COMMON_SEQUENCE")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CMS_SITE_SEQUENCE")
+//	@SequenceGenerator(name = "COMMON_SEQUENCE", sequenceName = "COMMON_SEQUENCE")
+	@SequenceGenerator(name="CMS_SITE_SEQUENCE",sequenceName="CMS_SITE_SEQUENCE")
 	public Long getId() {
 		return id;
 	}

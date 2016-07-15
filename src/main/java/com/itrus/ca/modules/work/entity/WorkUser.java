@@ -74,8 +74,9 @@ public class WorkUser implements java.io.Serializable {
 
 	// Property accessors
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "COMMON_SEQUENCE")
-	@SequenceGenerator(name = "COMMON_SEQUENCE", sequenceName = "COMMON_SEQUENCE")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "WORK_USER_SEQUENCE")
+//	@SequenceGenerator(name = "COMMON_SEQUENCE", sequenceName = "COMMON_SEQUENCE")
+	@SequenceGenerator(name="WORK_USER_SEQUENCE",allocationSize=1,initialValue=1,sequenceName="WORK_USER_SEQUENCE")
 	public Long getId() {
 		return this.id;
 	}

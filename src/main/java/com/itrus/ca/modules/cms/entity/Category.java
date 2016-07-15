@@ -90,10 +90,10 @@ public class Category extends DataEntity {
 		this.id = id;
 		this.setSite(site);
 	}
-	
-	@SequenceGenerator(name="COMMON_SEQUENCE",sequenceName="COMMON_SEQUENCE")
+	@SequenceGenerator(name="CMS_CATEGORY_SEQUENCE",allocationSize=1,initialValue=1,sequenceName="CMS_CATEGORY_SEQUENCE")
+//	@SequenceGenerator(name="COMMON_SEQUENCE",sequenceName="COMMON_SEQUENCE")
 	@Id 
-	@GeneratedValue(generator = "COMMON_SEQUENCE",strategy=GenerationType.SEQUENCE)
+	@GeneratedValue(generator = "CMS_CATEGORY_SEQUENCE",strategy=GenerationType.SEQUENCE)
 //	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_cms_category")
 //	@SequenceGenerator(name = "seq_cms_category", sequenceName = "seq_cms_category")
 	public Long getId() {
