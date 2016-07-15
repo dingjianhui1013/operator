@@ -134,7 +134,7 @@ public class FinancePaymentInfo extends DataEntity implements java.io.Serializab
 		this.paymentMethod = paymentMethod;
 	}
 
-	@Column(name = "comm_user_name")
+	@Column(name = "comm_user_name",columnDefinition = "NVARCHAR2(255)")
 	public String getCommUserName() {
 		return this.commUserName;
 	}
@@ -143,7 +143,7 @@ public class FinancePaymentInfo extends DataEntity implements java.io.Serializab
 		this.commUserName = commUserName;
 	}
 
-	@Column(name = "comm_mobile")
+	@Column(name = "comm_mobile",columnDefinition = "NVARCHAR2(255)")
 	public String getCommMobile() {
 		return this.commMobile;
 	}
@@ -152,7 +152,7 @@ public class FinancePaymentInfo extends DataEntity implements java.io.Serializab
 		this.commMobile = commMobile;
 	}
 
-	@Column(name = "remark")
+	@Column(name = "remark",columnDefinition = "NVARCHAR2(255)")
 	public String getRemark() {
 		return this.remark;
 	}
@@ -190,7 +190,7 @@ public class FinancePaymentInfo extends DataEntity implements java.io.Serializab
 		this.residueMoney = residueMoney;
 	}
 	
-	@Column(name = "company")
+	@Column(name = "company",columnDefinition = "NVARCHAR2(255)")
 	public String getCompany() {
 		return company;
 	}
