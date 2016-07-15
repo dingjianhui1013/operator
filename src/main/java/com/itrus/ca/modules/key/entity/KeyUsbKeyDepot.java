@@ -58,24 +58,23 @@ public class KeyUsbKeyDepot extends DataEntity implements java.io.Serializable {
 	private Long amountDelivery;
 	private Office office;
 	private List<KeyDepotGeneralStatistics> keyDepotGeneralStatisticsList;
-	private Integer totolCount; //上期结余
-	private List<Integer> inCounts; 
-	private List<Integer> outCounts; 
-	private List<Integer> startCounts; 
-	private List<Integer> endCounts; 
-	private Integer totalEndCount;//本期结余
+	private Integer totolCount; // 上期结余
+	private List<Integer> inCounts;
+	private List<Integer> outCounts;
+	private List<Integer> startCounts;
+	private List<Integer> endCounts;
+	private Integer totalEndCount;// 本期结余
 	private Integer afterIn;
 	private Date startDate;
 	private Date endDate;
-	private int  isReset;
+	private int isReset;
 	private int inCount;
 	private int outCount;
-	private String warningName;//预警人姓名
-	private String warningEmail;//预警人邮箱
-	
-	
+	private String warningName;// 预警人姓名
+	private String warningEmail;// 预警人邮箱
+
 	private String totolName;
-	
+
 	// Constructors
 
 	/** default constructor */
@@ -88,7 +87,7 @@ public class KeyUsbKeyDepot extends DataEntity implements java.io.Serializable {
 			Integer linkmanSex, String linkmanOrg, String linkmanMobilePhone,
 			String linkmanEmail, String linkmanLocation, String linkmanOffical,
 			String linkmanPost, String linkmanTel, Long amountTotal,
-			Long amountValid, Long amountDelivery,Office office,String company) {
+			Long amountValid, Long amountDelivery, Office office, String company) {
 		this.depotName = depotName;
 		this.manufacturerId = manufacturerId;
 		this.keyTypeId = keyTypeId;
@@ -106,14 +105,14 @@ public class KeyUsbKeyDepot extends DataEntity implements java.io.Serializable {
 		this.amountValid = amountValid;
 		this.amountDelivery = amountDelivery;
 		this.office = office;
-		
+
 	}
 
 	// Property accessors
-//	@SequenceGenerator(name="COMMON_SEQUENCE",sequenceName="COMMON_SEQUENCE")
-	@SequenceGenerator(name="KEY_USB_KEY_DEPOT_SEQUENCE",allocationSize=1,initialValue=1,sequenceName="KEY_USB_KEY_DEPOT_SEQUENCE")
-	@Id 
-	@GeneratedValue(generator = "KEY_USB_KEY_DEPOT_SEQUENCE",strategy=GenerationType.SEQUENCE)
+	// @SequenceGenerator(name="COMMON_SEQUENCE",sequenceName="COMMON_SEQUENCE")
+	@SequenceGenerator(name = "KEY_USB_KEY_DEPOT_SEQUENCE", allocationSize = 1, initialValue = 1, sequenceName = "KEY_USB_KEY_DEPOT_SEQUENCE")
+	@Id
+	@GeneratedValue(generator = "KEY_USB_KEY_DEPOT_SEQUENCE", strategy = GenerationType.SEQUENCE)
 	public Long getId() {
 		return this.id;
 	}
@@ -122,7 +121,7 @@ public class KeyUsbKeyDepot extends DataEntity implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@Column(name = "depot_name")
+	@Column(name = "depot_name", columnDefinition = "NVARCHAR2(255)")
 	public String getDepotName() {
 		return this.depotName;
 	}
@@ -149,7 +148,7 @@ public class KeyUsbKeyDepot extends DataEntity implements java.io.Serializable {
 		this.keyTypeId = keyTypeId;
 	}
 
-	@Column(name = "linkman_name")
+	@Column(name = "linkman_name", columnDefinition = "NVARCHAR2(255)")
 	public String getLinkmanName() {
 		return this.linkmanName;
 	}
@@ -158,7 +157,7 @@ public class KeyUsbKeyDepot extends DataEntity implements java.io.Serializable {
 		this.linkmanName = linkmanName;
 	}
 
-	@Column(name = "linkman_code")
+	@Column(name = "linkman_code", columnDefinition = "NVARCHAR2(255)")
 	public String getLinkmanCode() {
 		return this.linkmanCode;
 	}
@@ -166,6 +165,7 @@ public class KeyUsbKeyDepot extends DataEntity implements java.io.Serializable {
 	public void setLinkmanCode(String linkmanCode) {
 		this.linkmanCode = linkmanCode;
 	}
+
 	@Column(name = "linkman_sex")
 	public Integer getLinkmanSex() {
 		return this.linkmanSex;
@@ -175,7 +175,7 @@ public class KeyUsbKeyDepot extends DataEntity implements java.io.Serializable {
 		this.linkmanSex = linkmanSex;
 	}
 
-	@Column(name = "linkman_org")
+	@Column(name = "linkman_org", columnDefinition = "NVARCHAR2(255)")
 	public String getLinkmanOrg() {
 		return this.linkmanOrg;
 	}
@@ -184,7 +184,7 @@ public class KeyUsbKeyDepot extends DataEntity implements java.io.Serializable {
 		this.linkmanOrg = linkmanOrg;
 	}
 
-	@Column(name = "linkman_mobile_phone")
+	@Column(name = "linkman_mobile_phone", columnDefinition = "NVARCHAR2(255)")
 	public String getLinkmanMobilePhone() {
 		return this.linkmanMobilePhone;
 	}
@@ -193,7 +193,7 @@ public class KeyUsbKeyDepot extends DataEntity implements java.io.Serializable {
 		this.linkmanMobilePhone = linkmanMobilePhone;
 	}
 
-	@Column(name = "linkman_email")
+	@Column(name = "linkman_email", columnDefinition = "NVARCHAR2(255)")
 	public String getLinkmanEmail() {
 		return this.linkmanEmail;
 	}
@@ -202,7 +202,7 @@ public class KeyUsbKeyDepot extends DataEntity implements java.io.Serializable {
 		this.linkmanEmail = linkmanEmail;
 	}
 
-	@Column(name = "linkman_location")
+	@Column(name = "linkman_location", columnDefinition = "NVARCHAR2(255)")
 	public String getLinkmanLocation() {
 		return this.linkmanLocation;
 	}
@@ -211,7 +211,7 @@ public class KeyUsbKeyDepot extends DataEntity implements java.io.Serializable {
 		this.linkmanLocation = linkmanLocation;
 	}
 
-	@Column(name = "linkman_offical")
+	@Column(name = "linkman_offical", columnDefinition = "NVARCHAR2(255)")
 	public String getLinkmanOffical() {
 		return this.linkmanOffical;
 	}
@@ -220,7 +220,7 @@ public class KeyUsbKeyDepot extends DataEntity implements java.io.Serializable {
 		this.linkmanOffical = linkmanOffical;
 	}
 
-	@Column(name = "linkman_post", length = 10)
+	@Column(name = "linkman_post", length = 10, columnDefinition = "NVARCHAR2(10)")
 	public String getLinkmanPost() {
 		return this.linkmanPost;
 	}
@@ -229,7 +229,7 @@ public class KeyUsbKeyDepot extends DataEntity implements java.io.Serializable {
 		this.linkmanPost = linkmanPost;
 	}
 
-	@Column(name = "linkman_tel")
+	@Column(name = "linkman_tel",columnDefinition = "NVARCHAR2(255)")
 	public String getLinkmanTel() {
 		return this.linkmanTel;
 	}
@@ -238,14 +238,15 @@ public class KeyUsbKeyDepot extends DataEntity implements java.io.Serializable {
 		this.linkmanTel = linkmanTel;
 	}
 
-	@Column(name = "warning_name", length= 20)
+	@Column(name = "warning_name", length = 20)
 	public String getWarningName() {
 		return warningName;
 	}
-	
+
 	public void setWarningName(String warningName) {
 		this.warningName = warningName;
 	}
+
 	@Column(name = "warning_email")
 	public String getWarningEmail() {
 		return warningEmail;
@@ -281,7 +282,7 @@ public class KeyUsbKeyDepot extends DataEntity implements java.io.Serializable {
 	public void setAmountDelivery(Long amountDelivery) {
 		this.amountDelivery = amountDelivery;
 	}
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "office_id")
 	public Office getOffice() {
@@ -292,8 +293,6 @@ public class KeyUsbKeyDepot extends DataEntity implements java.io.Serializable {
 		this.office = office;
 	}
 
-
-	
 	@Transient
 	public Integer getTotolCount() {
 		return totolCount;
@@ -302,7 +301,7 @@ public class KeyUsbKeyDepot extends DataEntity implements java.io.Serializable {
 	public void setTotolCount(Integer totolCount) {
 		this.totolCount = totolCount;
 	}
-	
+
 	@Transient
 	public List<Integer> getInCounts() {
 		return inCounts;
@@ -311,7 +310,7 @@ public class KeyUsbKeyDepot extends DataEntity implements java.io.Serializable {
 	public void setInCounts(List<Integer> inCounts) {
 		this.inCounts = inCounts;
 	}
-	
+
 	@Transient
 	public List<Integer> getOutCounts() {
 		return outCounts;
@@ -320,7 +319,7 @@ public class KeyUsbKeyDepot extends DataEntity implements java.io.Serializable {
 	public void setOutCounts(List<Integer> outCounts) {
 		this.outCounts = outCounts;
 	}
-	
+
 	@Transient
 	public List<Integer> getStartCounts() {
 		return startCounts;
@@ -329,7 +328,7 @@ public class KeyUsbKeyDepot extends DataEntity implements java.io.Serializable {
 	public void setStartCounts(List<Integer> startCounts) {
 		this.startCounts = startCounts;
 	}
-	
+
 	@Transient
 	public List<Integer> getEndCounts() {
 		return endCounts;
@@ -357,7 +356,7 @@ public class KeyUsbKeyDepot extends DataEntity implements java.io.Serializable {
 	public void setAfterIn(Integer afterIn) {
 		this.afterIn = afterIn;
 	}
-	
+
 	@Transient
 	public Date getStartDate() {
 		return startDate;
@@ -366,7 +365,7 @@ public class KeyUsbKeyDepot extends DataEntity implements java.io.Serializable {
 	public void setStartDate(Date startDate) {
 		this.startDate = startDate;
 	}
-	
+
 	@Transient
 	public Date getEndDate() {
 		return endDate;
@@ -376,7 +375,6 @@ public class KeyUsbKeyDepot extends DataEntity implements java.io.Serializable {
 		this.endDate = endDate;
 	}
 
-	
 	@Transient
 	public Integer getTotalEndCount() {
 		return totalEndCount;
@@ -385,7 +383,7 @@ public class KeyUsbKeyDepot extends DataEntity implements java.io.Serializable {
 	public void setTotalEndCount(Integer totalEndCount) {
 		this.totalEndCount = totalEndCount;
 	}
-	
+
 	@Transient
 	public int getIsReset() {
 		return isReset;
@@ -422,23 +420,23 @@ public class KeyUsbKeyDepot extends DataEntity implements java.io.Serializable {
 		this.totolName = totolName;
 	}
 
-	public boolean canDel(){
+	public boolean canDel() {
 		List<Long> depotIds = new ArrayList<Long>();
 		depotIds.add(KeyDepotId.MAIN_DEPOT_ID);
 		depotIds.add(KeyDepotId.BAD_DEPOT_ID);
 		return !depotIds.contains(this.id);
 	}
 
-	public boolean canDelTotal(){
+	public boolean canDelTotal() {
 		List<Long> depotIds = new ArrayList<Long>();
 		depotIds.add(KeyDepotId.MAIN_DEPOT_ID);
 		return depotIds.contains(this.id);
 	}
-	public boolean canDelTotalBad(){
+
+	public boolean canDelTotalBad() {
 		List<Long> depotIds = new ArrayList<Long>();
 		depotIds.add(KeyDepotId.BAD_DEPOT_ID);
 		return depotIds.contains(this.id);
 	}
-	
-	
+
 }

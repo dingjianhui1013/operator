@@ -29,12 +29,14 @@ import com.itrus.ca.modules.sys.entity.Office;
 
 /**
  * 申请调拨
+ * 
  * @author ZhangJingtao
  *
  */
 @Entity
 @Table(name = "key_allocate_apply")
-public class KeyAllocateApply extends DataEntity implements java.io.Serializable {
+public class KeyAllocateApply extends DataEntity implements
+		java.io.Serializable {
 
 	// Fields
 
@@ -42,26 +44,25 @@ public class KeyAllocateApply extends DataEntity implements java.io.Serializable
 	private Office sysOffice;
 	private KeyUsbKeyDepot keyUsbKeyDepot;
 	private Integer applyType;
-	
+
 	private Date warehouseDate;
 	private Integer leavel;
 	private Integer isBadKeyIn;
 	private Integer approvalOpinion;
 	private String refusalReason;
-	
+
 	private Integer state;
 	private String stateName;
 	private String leavelName;
-	
+
 	private Long officeId;
 	private Long areaId;
-	
-	
-	
-	private List<KeyAllocateApplyDetailed> KeyApplyDetails; 	
-	
-//	private Set<KeyDisplaceDetail> keyDisplaceDetails = new HashSet<KeyDisplaceDetail>(
-//			0);
+
+	private List<KeyAllocateApplyDetailed> KeyApplyDetails;
+
+	// private Set<KeyDisplaceDetail> keyDisplaceDetails = new
+	// HashSet<KeyDisplaceDetail>(
+	// 0);
 
 	// Constructors
 
@@ -71,25 +72,26 @@ public class KeyAllocateApply extends DataEntity implements java.io.Serializable
 
 	/** full constructor */
 	public KeyAllocateApply(Office sysOffice, KeyUsbKeyDepot keyUsbKeyDepot,
-			Integer applyType, Integer applyNewNum, KeyGeneralInfo keyGeneralInfo,
-			Timestamp warehouseDate, Integer leavel,Long officeId, Long areaId) {
+			Integer applyType, Integer applyNewNum,
+			KeyGeneralInfo keyGeneralInfo, Timestamp warehouseDate,
+			Integer leavel, Long officeId, Long areaId) {
 		this.sysOffice = sysOffice;
 		this.keyUsbKeyDepot = keyUsbKeyDepot;
 		this.applyType = applyType;
-		
+
 		this.warehouseDate = warehouseDate;
 		this.leavel = leavel;
 		this.officeId = officeId;
 		this.areaId = areaId;
-		
-//		this.keyDisplaceDetails = keyDisplaceDetails;
+
+		// this.keyDisplaceDetails = keyDisplaceDetails;
 	}
 
 	// Property accessors
-//	@SequenceGenerator(name="COMMON_SEQUENCE",sequenceName="COMMON_SEQUENCE")
-	@SequenceGenerator(name="KEY_ALLOCATE_APPLY_SEQUENCE",allocationSize=1,initialValue=1,sequenceName="KEY_ALLOCATE_APPLY_SEQUENCE")
-	@Id 
-	@GeneratedValue(generator = "KEY_ALLOCATE_APPLY_SEQUENCE",strategy=GenerationType.SEQUENCE)
+	// @SequenceGenerator(name="COMMON_SEQUENCE",sequenceName="COMMON_SEQUENCE")
+	@SequenceGenerator(name = "KEY_ALLOCATE_APPLY_SEQUENCE", allocationSize = 1, initialValue = 1, sequenceName = "KEY_ALLOCATE_APPLY_SEQUENCE")
+	@Id
+	@GeneratedValue(generator = "KEY_ALLOCATE_APPLY_SEQUENCE", strategy = GenerationType.SEQUENCE)
 	public Long getId() {
 		return this.id;
 	}
@@ -98,17 +100,15 @@ public class KeyAllocateApply extends DataEntity implements java.io.Serializable
 		this.id = id;
 	}
 
-	
-	/*@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "apply_key_type")
-	public KeyGeneralInfo getKeyGeneralInfo() {
-		return this.keyGeneralInfo;
-	}
-
-	public void setKeyGeneralInfo(KeyGeneralInfo keyGeneralInfo) {
-		this.keyGeneralInfo = keyGeneralInfo;
-	}*/
-
+	/*
+	 * @ManyToOne(fetch = FetchType.LAZY)
+	 * 
+	 * @JoinColumn(name = "apply_key_type") public KeyGeneralInfo
+	 * getKeyGeneralInfo() { return this.keyGeneralInfo; }
+	 * 
+	 * public void setKeyGeneralInfo(KeyGeneralInfo keyGeneralInfo) {
+	 * this.keyGeneralInfo = keyGeneralInfo; }
+	 */
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "depot_id")
@@ -129,15 +129,14 @@ public class KeyAllocateApply extends DataEntity implements java.io.Serializable
 		this.applyType = applyType;
 	}
 
-	/*@Column(name = "apply_new_num")
-	public Integer getApplyNewNum() {
-		return this.applyNewNum;
-	}
+	/*
+	 * @Column(name = "apply_new_num") public Integer getApplyNewNum() { return
+	 * this.applyNewNum; }
+	 * 
+	 * public void setApplyNewNum(Integer applyNewNum) { this.applyNewNum =
+	 * applyNewNum; }
+	 */
 
-	public void setApplyNewNum(Integer applyNewNum) {
-		this.applyNewNum = applyNewNum;
-	}*/
-	
 	@Column(name = "leavel")
 	public Integer getLeavel() {
 		return this.leavel;
@@ -147,16 +146,16 @@ public class KeyAllocateApply extends DataEntity implements java.io.Serializable
 		this.leavel = leavel;
 	}
 
-	
-
-//	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "keyAllocateApply")
-//	public Set<KeyDisplaceDetail> getKeyDisplaceDetails() {
-//		return this.keyDisplaceDetails;
-//	}
-//
-//	public void setKeyDisplaceDetails(Set<KeyDisplaceDetail> keyDisplaceDetails) {
-//		this.keyDisplaceDetails = keyDisplaceDetails;
-//	}
+	// @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy =
+	// "keyAllocateApply")
+	// public Set<KeyDisplaceDetail> getKeyDisplaceDetails() {
+	// return this.keyDisplaceDetails;
+	// }
+	//
+	// public void setKeyDisplaceDetails(Set<KeyDisplaceDetail>
+	// keyDisplaceDetails) {
+	// this.keyDisplaceDetails = keyDisplaceDetails;
+	// }
 	@Column(name = "warehouse_date")
 	public Date getWarehouseDate() {
 		return warehouseDate;
@@ -176,9 +175,6 @@ public class KeyAllocateApply extends DataEntity implements java.io.Serializable
 		this.sysOffice = sysOffice;
 	}
 
-	
-
-	
 	@Transient
 	public String getLeavelName() {
 		return leavelName;
@@ -187,7 +183,6 @@ public class KeyAllocateApply extends DataEntity implements java.io.Serializable
 	public void setLeavelName(String leavelName) {
 		this.leavelName = leavelName;
 	}
-	
 
 	@Column(name = "is_bad_key_in")
 	public Integer getIsBadKeyIn() {
@@ -197,7 +192,7 @@ public class KeyAllocateApply extends DataEntity implements java.io.Serializable
 	public void setIsBadKeyIn(Integer isBadKeyIn) {
 		this.isBadKeyIn = isBadKeyIn;
 	}
-	
+
 	@Column(name = "approval_opinion")
 	public Integer getApprovalOpinion() {
 		return approvalOpinion;
@@ -207,7 +202,7 @@ public class KeyAllocateApply extends DataEntity implements java.io.Serializable
 		this.approvalOpinion = approvalOpinion;
 	}
 
-	@Column(name = "refusal_reason")
+	@Column(name = "refusal_reason", columnDefinition = "NVARCHAR2(255)")
 	public String getRefusalReason() {
 		return refusalReason;
 	}
@@ -215,19 +210,17 @@ public class KeyAllocateApply extends DataEntity implements java.io.Serializable
 	public void setRefusalReason(String refusalReason) {
 		this.refusalReason = refusalReason;
 	}
-	
-	
 
 	@Transient
 	public List<KeyAllocateApplyDetailed> getKeyApplyDetails() {
 		return KeyApplyDetails;
 	}
 
-	public void setKeyApplyDetails(List<KeyAllocateApplyDetailed> keyApplyDetails) {
+	public void setKeyApplyDetails(
+			List<KeyAllocateApplyDetailed> keyApplyDetails) {
 		KeyApplyDetails = keyApplyDetails;
 	}
 
-	
 	@Column(name = "state")
 	public Integer getState() {
 		return this.state;
@@ -236,7 +229,7 @@ public class KeyAllocateApply extends DataEntity implements java.io.Serializable
 	public void setState(Integer state) {
 		this.state = state;
 	}
-	
+
 	@Transient
 	public String getStateName() {
 		return stateName;
@@ -245,7 +238,7 @@ public class KeyAllocateApply extends DataEntity implements java.io.Serializable
 	public void setStateName(String stateName) {
 		this.stateName = stateName;
 	}
-	
+
 	@Column(name = "create_office_id")
 	public Long getOfficeId() {
 		return officeId;
@@ -263,7 +256,5 @@ public class KeyAllocateApply extends DataEntity implements java.io.Serializable
 	public void setAreaId(Long areaId) {
 		this.areaId = areaId;
 	}
-	
-	
-	
+
 }

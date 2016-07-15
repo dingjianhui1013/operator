@@ -89,7 +89,7 @@ public class KeyGeneralInfo extends DataEntity implements java.io.Serializable {
 		this.configSupplier = configSupplier;
 	}
 
-	@Column(name = "default_so_pin")
+	@Column(name = "default_so_pin",columnDefinition = "NVARCHAR2(255)")
 	public String getDefaultSoPin() {
 		return this.defaultSoPin;
 	}
@@ -98,7 +98,7 @@ public class KeyGeneralInfo extends DataEntity implements java.io.Serializable {
 		this.defaultSoPin = defaultSoPin;
 	}
 
-	@Column(name = "default_user_pin")
+	@Column(name = "default_user_pin",columnDefinition = "NVARCHAR2(255)")
 	public String getDefaultUserPin() {
 		return this.defaultUserPin;
 	}
@@ -107,7 +107,7 @@ public class KeyGeneralInfo extends DataEntity implements java.io.Serializable {
 		this.defaultUserPin = defaultUserPin;
 	}
 
-	@Column(name = "description")
+	@Column(name = "description",columnDefinition = "NVARCHAR2(255)")
 	public String getDescription() {
 		return this.description;
 	}
@@ -116,7 +116,7 @@ public class KeyGeneralInfo extends DataEntity implements java.io.Serializable {
 		this.description = description;
 	}
 
-	@Column(name = "model")
+	@Column(name = "model",columnDefinition = "NVARCHAR2(255)")
 	public String getModel() {
 		return this.model;
 	}
@@ -125,7 +125,7 @@ public class KeyGeneralInfo extends DataEntity implements java.io.Serializable {
 		this.model = model;
 	}
 
-	@Column(name = "name")
+	@Column(name = "name",columnDefinition = "NVARCHAR2(255)")
 	public String getName() {
 		return this.name;
 	}
@@ -134,7 +134,7 @@ public class KeyGeneralInfo extends DataEntity implements java.io.Serializable {
 		this.name = name;
 	}
 
-	@Column(name = "default_so_pin_type")
+	@Column(name = "default_so_pin_type",columnDefinition = "NVARCHAR2(255)")
 	public String getDefaultSoPinType() {
 		return this.defaultSoPinType;
 	}
@@ -142,7 +142,7 @@ public class KeyGeneralInfo extends DataEntity implements java.io.Serializable {
 	public void setDefaultSoPinType(String defaultSoPinType) {
 		this.defaultSoPinType = defaultSoPinType;
 	}
-	@Column(name = "linkman")
+	@Column(name = "linkman",columnDefinition = "NVARCHAR2(255)")
 	public String getLinkman() {
 		return linkman;
 	}
@@ -150,7 +150,7 @@ public class KeyGeneralInfo extends DataEntity implements java.io.Serializable {
 	public void setLinkman(String linkman) {
 		this.linkman = linkman;
 	}
-	@Column(name = "linkman_phone")
+	@Column(name = "linkman_phone",columnDefinition = "NVARCHAR2(255)")
 	public String getLinkmanPhone() {
 		return linkmanPhone;
 	}

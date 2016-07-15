@@ -76,7 +76,7 @@ public class FinanceQuitMoney extends DataEntity implements Serializable{
 		this.id = id;
 	}
 
-	@Column(name = "quit_money")
+	@Column(name = "quit_money",columnDefinition = "FLOAT(126)")
 	public Double getQuitMoney() {
 		return quitMoney;
 	}

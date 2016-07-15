@@ -69,7 +69,7 @@ public class KeyUsbKey extends DataEntity implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@Column(name = "description")
+	@Column(name = "description",columnDefinition = "NVARCHAR2(255)")
 	public String getDescription() {
 		return this.description;
 	}

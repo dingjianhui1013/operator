@@ -24,6 +24,7 @@ import com.itrus.ca.common.persistence.DataEntity;
 
 /**
  * 盘点记录
+ * 
  * @author ZhangJingtao
  *
  */
@@ -49,6 +50,7 @@ public class KeyCheckLog extends DataEntity implements java.io.Serializable {
 	private KeyUsbKeyDepot keyUsbKeyDepot;
 	private Boolean isReset;
 	private Integer checkNumber;
+
 	// Constructors
 
 	/** default constructor */
@@ -60,8 +62,7 @@ public class KeyCheckLog extends DataEntity implements java.io.Serializable {
 			Integer beforeTotal, Integer beforeOut, Integer beforeResidue,
 			Integer afterResidue, String fixRemark, Integer fixType,
 			Integer afterTotal, Integer afterOut, Date startDate, Date endDate,
-			KeyUsbKeyDepot keyUsbKeyDepot,
-			Boolean isReset,Integer checkNumber) {
+			KeyUsbKeyDepot keyUsbKeyDepot, Boolean isReset, Integer checkNumber) {
 		this.keyGeneralInfo = keyGeneralInfo;
 		this.checkTime = checkTime;
 		this.beforeTotal = beforeTotal;
@@ -74,16 +75,16 @@ public class KeyCheckLog extends DataEntity implements java.io.Serializable {
 		this.afterOut = afterOut;
 		this.startDate = startDate;
 		this.endDate = endDate;
-		this.keyUsbKeyDepot=keyUsbKeyDepot;
+		this.keyUsbKeyDepot = keyUsbKeyDepot;
 		this.isReset = isReset;
 		this.checkNumber = checkNumber;
 	}
 
 	// Property accessors
-//	@SequenceGenerator(name="COMMON_SEQUENCE",sequenceName="COMMON_SEQUENCE")
-	@SequenceGenerator(name="KEY_CHECK_LOG_SEQUENCE",allocationSize=1,initialValue=1,sequenceName="KEY_CHECK_LOG_SEQUENCE")
-	@Id 
-	@GeneratedValue(generator = "KEY_CHECK_LOG_SEQUENCE",strategy=GenerationType.SEQUENCE)
+	// @SequenceGenerator(name="COMMON_SEQUENCE",sequenceName="COMMON_SEQUENCE")
+	@SequenceGenerator(name = "KEY_CHECK_LOG_SEQUENCE", allocationSize = 1, initialValue = 1, sequenceName = "KEY_CHECK_LOG_SEQUENCE")
+	@Id
+	@GeneratedValue(generator = "KEY_CHECK_LOG_SEQUENCE", strategy = GenerationType.SEQUENCE)
 	public Long getId() {
 		return this.id;
 	}
@@ -147,7 +148,7 @@ public class KeyCheckLog extends DataEntity implements java.io.Serializable {
 		this.afterResidue = afterResidue;
 	}
 
-	@Column(name = "fix_remark")
+	@Column(name = "fix_remark", columnDefinition = "NVARCHAR2(255)")
 	public String getFixRemark() {
 		return this.fixRemark;
 	}
@@ -219,7 +220,7 @@ public class KeyCheckLog extends DataEntity implements java.io.Serializable {
 	public void setIsReset(Boolean isReset) {
 		this.isReset = isReset;
 	}
-	
+
 	@Column(name = "check_number")
 	public Integer getCheckNumber() {
 		return checkNumber;
