@@ -17,8 +17,8 @@ import javax.persistence.Table;
  * CommonAttach entity. @author MyEclipse Persistence Tools
  */
 /**
- * 附件表，可以存储所有业务表的附件，只要业务表中有groupId字段和本表中的groupid对应就行
- * groupId一定要用UUID生成
+ * 附件表，可以存储所有业务表的附件，只要业务表中有groupId字段和本表中的groupid对应就行 groupId一定要用UUID生成
+ * 
  * @author ZhangJingtao
  *
  */
@@ -53,12 +53,12 @@ public class CommonAttach implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public CommonAttach(String attachName, Long contentId,
-			String oldFileName, String path, String realPath, String remark,
-			Integer status, String suffix, String uploadCount,
-			Integer uploadModel, String uploadUserName,
-			String uploadUserOrgName, Integer uploadUserOrgid,
-			Integer uploadUserid, Timestamp uploadTime, String groupid) {
+	public CommonAttach(String attachName, Long contentId, String oldFileName,
+			String path, String realPath, String remark, Integer status,
+			String suffix, String uploadCount, Integer uploadModel,
+			String uploadUserName, String uploadUserOrgName,
+			Integer uploadUserOrgid, Integer uploadUserid,
+			Timestamp uploadTime, String groupid) {
 		this.attachName = attachName;
 		this.contentId = contentId;
 		this.oldFileName = oldFileName;
@@ -80,8 +80,9 @@ public class CommonAttach implements java.io.Serializable {
 	// Property accessors
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "COMMON_ATTACH_SEQUENCE")
-//	@SequenceGenerator(name = "COMMON_SEQUENCE", sequenceName = "COMMON_SEQUENCE")
-	@SequenceGenerator(name="COMMON_ATTACH_SEQUENCE",allocationSize=1,initialValue=1,sequenceName="COMMON_ATTACH_SEQUENCE")
+	// @SequenceGenerator(name = "COMMON_SEQUENCE", sequenceName =
+	// "COMMON_SEQUENCE")
+	@SequenceGenerator(name = "COMMON_ATTACH_SEQUENCE", allocationSize = 1, initialValue = 1, sequenceName = "COMMON_ATTACH_SEQUENCE")
 	public Long getId() {
 		return this.id;
 	}
@@ -90,7 +91,7 @@ public class CommonAttach implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@Column(name = "attach_name")
+	@Column(name = "attach_name", columnDefinition = "NVARCHAR2(255)")
 	public String getAttachName() {
 		return this.attachName;
 	}
@@ -108,7 +109,7 @@ public class CommonAttach implements java.io.Serializable {
 		this.contentId = contentId;
 	}
 
-	@Column(name = "oldFileName")
+	@Column(name = "oldFileName",columnDefinition = "NVARCHAR2(255)")
 	public String getOldFileName() {
 		return this.oldFileName;
 	}
@@ -117,7 +118,7 @@ public class CommonAttach implements java.io.Serializable {
 		this.oldFileName = oldFileName;
 	}
 
-	@Column(name = "path")
+	@Column(name = "path",columnDefinition = "NVARCHAR2(255)")
 	public String getPath() {
 		return this.path;
 	}
@@ -126,7 +127,7 @@ public class CommonAttach implements java.io.Serializable {
 		this.path = path;
 	}
 
-	@Column(name = "realPath")
+	@Column(name = "realPath",columnDefinition = "NVARCHAR2(255)")
 	public String getRealPath() {
 		return this.realPath;
 	}
@@ -135,7 +136,7 @@ public class CommonAttach implements java.io.Serializable {
 		this.realPath = realPath;
 	}
 
-	@Column(name = "remark")
+	@Column(name = "remark",columnDefinition = "NVARCHAR2(255)")
 	public String getRemark() {
 		return this.remark;
 	}
@@ -153,7 +154,7 @@ public class CommonAttach implements java.io.Serializable {
 		this.status = status;
 	}
 
-	@Column(name = "suffix")
+	@Column(name = "suffix",columnDefinition = "NVARCHAR2(255)")
 	public String getSuffix() {
 		return this.suffix;
 	}
@@ -162,7 +163,7 @@ public class CommonAttach implements java.io.Serializable {
 		this.suffix = suffix;
 	}
 
-	@Column(name = "upload_count")
+	@Column(name = "upload_count",columnDefinition = "NVARCHAR2(255)")
 	public String getUploadCount() {
 		return this.uploadCount;
 	}
@@ -180,7 +181,7 @@ public class CommonAttach implements java.io.Serializable {
 		this.uploadModel = uploadModel;
 	}
 
-	@Column(name = "upload_user_name")
+	@Column(name = "upload_user_name",columnDefinition = "NVARCHAR2(255)")
 	public String getUploadUserName() {
 		return this.uploadUserName;
 	}
@@ -189,7 +190,7 @@ public class CommonAttach implements java.io.Serializable {
 		this.uploadUserName = uploadUserName;
 	}
 
-	@Column(name = "upload_user_org_name")
+	@Column(name = "upload_user_org_name",columnDefinition = "NVARCHAR2(255)")
 	public String getUploadUserOrgName() {
 		return this.uploadUserOrgName;
 	}
@@ -225,7 +226,7 @@ public class CommonAttach implements java.io.Serializable {
 		this.uploadTime = uploadTime;
 	}
 
-	@Column(name = "groupid")
+	@Column(name = "groupid",columnDefinition = "NVARCHAR2(255)")
 	public String getGroupid() {
 		return this.groupid;
 	}
