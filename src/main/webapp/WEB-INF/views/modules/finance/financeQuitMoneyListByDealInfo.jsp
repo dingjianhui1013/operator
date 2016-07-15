@@ -105,6 +105,29 @@
 			
 		</div>
 	</form:form>
+	<div style="overflow-x: auto; overflow-y: auto;">
+	<table id="contentTable"
+		class="table table-striped table-bordered table-condensed">
+		<thead>
+			<tr>
+				<th>应用名称</th>
+				<c:forEach items="${huizong}" var="test">
+				<th>${test.key}</th>
+				</c:forEach>
+				<th>合计</th>
+			</tr>
+			<tr>
+				<th>退费金额</th>
+				<c:forEach items="${huizong}" var="test">
+				<th>${test.value}</th>
+				</c:forEach>
+				<th>${total}</th>
+			</tr>
+		</thead>
+		<tbody>
+		</tbody>
+	</table>
+	</div>
 	<table id="contentTable"
 		class="table table-striped table-bordered table-condensed">
 		<thead>

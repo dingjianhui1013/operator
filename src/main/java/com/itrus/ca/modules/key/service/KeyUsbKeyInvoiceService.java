@@ -3,8 +3,11 @@
  */
 package com.itrus.ca.modules.key.service;
 
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -90,9 +93,12 @@ public class KeyUsbKeyInvoiceService extends BaseService {
 		dc.add(Restrictions.eq("keyUsbKeyDepot.id", keyUsbKeyInvoice
 				.getKeyUsbKeyDepot().getId()));
 		
-
-		dc.add(Restrictions.le("startDate", end));
-		dc.add(Restrictions.gt("startDate", start));
+		if(end!=null){
+			dc.add(Restrictions.le("startDate", end));
+		}
+		if(start!=null){
+			dc.add(Restrictions.gt("startDate", start));
+		}
 		
 		if (supplierId!=null) {
 			dc.add(Restrictions.eq("keyGeneralInfo.configSupplier.id", supplierId));
@@ -226,8 +232,12 @@ public class KeyUsbKeyInvoiceService extends BaseService {
 		DetachedCriteria dc = keyUsbKeyInvoiceDao.createDetachedCriteria();
 		dc.createAlias("keyGeneralInfo", "keyGeneralInfo");
 		dc.add(Restrictions.eq("keyUsbKeyDepot.id", depotId));
-		dc.add(Restrictions.le("startDate", end));
-		dc.add(Restrictions.gt("startDate", start));
+		if(end!=null){
+			dc.add(Restrictions.le("startDate", end));
+		}
+		if(start!=null){
+			dc.add(Restrictions.gt("startDate", start));
+		}
 		if (supplierId!=null) {
 			dc.add(Restrictions.eq("keyGeneralInfo.configSupplier.id", supplierId));
 		}
@@ -451,5 +461,40 @@ public class KeyUsbKeyInvoiceService extends BaseService {
 		dc.addOrder(Order.desc("id"));
 		return keyUsbKeyInvoiceDao.find(dc);
 	}
-
+	/**
+	 * 所有仓库出库总量汇总
+	 * @return
+	 */
+	public int chuKuZongliang(Date startTime,Date endTime){
+		int total = 0;
+		StringBuffer sqlString = new StringBuffer();
+		sqlString.append("select SUM(delivery_num) from key_usb_key_invoice a where 1=1");
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yy-MM-dd");
+		
+		if(startTime!=null){
+			String start = simpleDateFormat.format(startTime);
+			sqlString.append(" and a.START_DATE>TO_DATE('");
+			sqlString.append(start);
+			sqlString.append("', 'yy-MM-dd')");
+		}
+		if(endTime!=null){
+			//endTime 日期+1
+			Calendar   calendar   =   new   GregorianCalendar(); 
+			calendar.setTime(endTime); 
+			calendar.add(calendar.DATE,1);//把日期往后增加一天.整数往后推,负数往前移动 
+			String end = simpleDateFormat.format(calendar.getTime());
+			
+			sqlString.append(" and a.START_DATE<TO_DATE('");
+			sqlString.append(end);
+			sqlString.append("', 'yy-MM-dd')");
+		}
+		
+		
+		List<Object> list = keyUsbKeyInvoiceDao.findBySql(sqlString.toString());
+		if(list.get(0)!=null){
+			BigDecimal b = (BigDecimal)list.get(0);
+			total = b.intValue();
+		}
+		return total;
+	}
 }

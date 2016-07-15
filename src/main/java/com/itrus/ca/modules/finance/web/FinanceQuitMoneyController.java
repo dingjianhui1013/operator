@@ -2,9 +2,13 @@ package com.itrus.ca.modules.finance.web;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -15,17 +19,23 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
 import com.itrus.ca.common.persistence.Page;
 import com.itrus.ca.modules.finance.entity.FinancePaymentInfo;
 import com.itrus.ca.modules.finance.entity.FinanceQuitMoney;
 import com.itrus.ca.modules.finance.service.FinancePaymentInfoService;
 import com.itrus.ca.modules.finance.service.FinanceQuitMoneyService;
+import com.itrus.ca.modules.sys.entity.Office;
+import com.itrus.ca.modules.sys.service.OfficeService;
+import com.itrus.ca.modules.sys.utils.UserUtils;
 import com.itrus.ca.modules.work.entity.WorkDealInfo;
 
 @Controller
 @RequestMapping(value = "${adminPath}/finance/financeQuitMoney")
 public class FinanceQuitMoneyController {
-
+	@Autowired
+	private OfficeService officeService; 
+	
 	@Autowired
 	FinanceQuitMoneyService financeQuitMoneyService;
 	
@@ -165,9 +175,15 @@ public class FinanceQuitMoneyController {
 
 		try {
 			
-	
-		Page<FinanceQuitMoney> page = financeQuitMoneyService.findAllDealInfo(new Page<FinanceQuitMoney>(request, response), companyName,contactName,quitStartTime, quitEndTime);
-		
+		//权限控制
+		List<Office> offices =  officeService.getOfficeByType(UserUtils.getUser(), 2);
+		List<Long> officeIds = new  ArrayList();
+		for(Office o:offices){
+			officeIds.add(o.getId());
+		}
+			
+//		Page<FinanceQuitMoney> page = financeQuitMoneyService.findAllDealInfo(new Page<FinanceQuitMoney>(request, response), companyName,contactName,quitStartTime, quitEndTime);
+		Page<FinanceQuitMoney> page = financeQuitMoneyService.findAllDealInfo(new Page<FinanceQuitMoney>(request, response), companyName,contactName,quitStartTime, quitEndTime,officeIds);
 		
 		
 	
@@ -200,7 +216,25 @@ public class FinanceQuitMoneyController {
 				}
 			}
 		}
-		List<FinanceQuitMoney> financeQuitMoney= financeQuitMoneyService.findAllDealInfo(companyName,contactName, quitStartTime, quitEndTime);
+//		List<FinanceQuitMoney> financeQuitMoney= financeQuitMoneyService.findAllDealInfo(companyName,contactName, quitStartTime, quitEndTime);
+		List<FinanceQuitMoney> financeQuitMoney= financeQuitMoneyService.findAllDealInfo(companyName,contactName, quitStartTime, quitEndTime,officeIds);
+		//汇总
+		Map<String,Double> huizong = new HashMap();
+		Double total = 0d;
+		for(FinanceQuitMoney a:financeQuitMoney){
+			total += a.getQuitMoney();
+			String appName = a.getWorkDealInfo().getConfigApp().getAppName();
+			if(huizong.containsKey(appName)){
+				Double money = huizong.get(appName);
+				money += a.getQuitMoney();
+				huizong.put(appName, money);
+			}else{
+				huizong.put(appName, a.getQuitMoney());
+			}
+		}
+		//汇总
+		model.addAttribute("huizong", huizong);
+		model.addAttribute("total", total);
 		
 		model.addAttribute("page", page);
 		model.addAttribute("companyName", companyName);

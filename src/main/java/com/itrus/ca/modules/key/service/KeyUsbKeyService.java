@@ -3,8 +3,11 @@
  */
 package com.itrus.ca.modules.key.service;
 
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -65,8 +68,12 @@ public class KeyUsbKeyService extends BaseService {
 		if (keyId!=null) {
 			dc.add(Restrictions.eq("keyGeneralInfo.id", keyId));
 		}
-		dc.add(Restrictions.le("startDate", end));
-		dc.add(Restrictions.gt("startDate", start));
+		if(end!=null){
+			dc.add(Restrictions.le("startDate", end));
+		}
+		if(start!=null){
+			dc.add(Restrictions.gt("startDate", start));
+		}
 		dc.addOrder(Order.desc("id"));
 		return keyUsbKeyDao.find(page, dc);
 	}
@@ -242,7 +249,9 @@ public class KeyUsbKeyService extends BaseService {
 		DetachedCriteria dc = keyUsbKeyDao.createDetachedCriteria();
 		dc.createAlias("keyGeneralInfo", "keyGeneralInfo");
 		dc.add(Restrictions.eq("keyUsbKeyDepot.id", depotId));
-		dc.add(Restrictions.le("startDate", endTime));
+		if(endTime!=null){
+			dc.add(Restrictions.le("startDate", endTime));
+		}
 		if (supplierId!=null) {
 			dc.add(Restrictions.eq("keyGeneralInfo.configSupplier.id", supplierId));
 		}
@@ -270,8 +279,12 @@ public class KeyUsbKeyService extends BaseService {
 		DetachedCriteria dc = keyUsbKeyDao.createDetachedCriteria();
 		dc.createAlias("keyGeneralInfo", "keyGeneralInfo");
 		dc.add(Restrictions.eq("keyUsbKeyDepot.id", depotId));
-		dc.add(Restrictions.le("startDate", endTime));
-		dc.add(Restrictions.gt("startDate", startTime));
+		if(startTime!=null){
+			dc.add(Restrictions.gt("startDate", startTime));
+		}
+		if(endTime!=null){
+			dc.add(Restrictions.le("startDate", endTime));
+		}
 		if (supplierId!=null) {
 			dc.add(Restrictions.eq("keyGeneralInfo.configSupplier.id", supplierId));
 		}
@@ -282,7 +295,55 @@ public class KeyUsbKeyService extends BaseService {
 		dc.addOrder(Order.desc("id"));
 		return keyUsbKeyDao.find(dc);
 	}
-	
+	/**
+	 * 所有仓库入库总量汇总
+	 * @return
+	 */
+	public int ruKuZongliang(Date startTime,Date endTime,List<KeyUsbKeyDepot> cangku,Long supplierId,Long keyId){
+		int total = 0;
+		StringBuffer sqlString = new StringBuffer();
+		sqlString.append("select SUM(count) from KEY_USB_KEY a where 1=1 ");
+		if(cangku.size()>=0){
+			sqlString.append("and usb_key_depot_id in (");
+			for(int i=0;i<cangku.size();i++){
+				sqlString.append(cangku.get(i).getId());
+				if(i!=(cangku.size()-1)){
+					sqlString.append(",");
+				}
+			}
+			sqlString.append(")");
+		}
+		sqlString.append(")");
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yy-MM-dd");
+		
+		if(startTime!=null){
+			String start = simpleDateFormat.format(startTime);
+			sqlString.append(" and a.START_DATE>TO_DATE('");
+			sqlString.append(start);
+			sqlString.append("', 'yy-MM-dd')");
+		}
+		if(endTime!=null){
+			//endTime 日期+1
+			Calendar   calendar   =   new   GregorianCalendar(); 
+			calendar.setTime(endTime); 
+			calendar.add(calendar.DATE,1);//把日期往后增加一天.整数往后推,负数往前移动 
+			String end = simpleDateFormat.format(calendar.getTime());
+			
+			sqlString.append(" and a.START_DATE<TO_DATE('");
+			sqlString.append(end);
+			sqlString.append("', 'yy-MM-dd')");
+		}
+//		if(supplierId!=null){
+//			sqlString.append(" and ");
+//		}
+		
+		List<Object> list = keyUsbKeyDao.findBySql(sqlString.toString());
+		if(list.get(0)!=null){
+			BigDecimal b = (BigDecimal)list.get(0);
+			total = b.intValue();
+		}
+		return total;
+	}
 	
 	
 	

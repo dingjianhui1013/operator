@@ -204,8 +204,15 @@ public class KeyUsbKeyController extends BaseController {
 		}
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-		Date start = (Date) sdf.parseObject(startTime);
-		Date end  = (Date) sdf.parseObject(endTime);
+		//兼容统计时间只输入一项
+		Date start = null;
+		Date end = null;
+		if(!"00:00:00".equals(startTime)){
+			start = (Date) sdf.parseObject(startTime);
+		}
+		if(!"23:59:59".equals(endTime)){
+			end  = (Date) sdf.parseObject(endTime);
+		}
 		KeyUsbKeyDepot keyUsbKeyDepot = new KeyUsbKeyDepot();
 		keyUsbKeyDepot.setId(depotId);
 		keyUsbKey.setKeyUsbKeyDepot(keyUsbKeyDepot);
