@@ -5,7 +5,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
+
 import java.util.Date;
 import java.util.List;
 
@@ -33,9 +33,9 @@ import com.itrus.ca.common.utils.DateUtils;
 import com.itrus.ca.common.utils.StringHelper;
 import com.itrus.ca.common.utils.excel.ExportExcel;
 import com.itrus.ca.common.web.BaseController;
-import com.itrus.ca.modules.constant.ProductType;
+
 import com.itrus.ca.modules.constant.ReportQueryType;
-import com.itrus.ca.modules.constant.WorkDealInfoStatus;
+
 import com.itrus.ca.modules.constant.WorkDealInfoType;
 import com.itrus.ca.modules.profile.entity.ConfigApp;
 import com.itrus.ca.modules.profile.entity.ConfigAppOfficeRelation;
@@ -44,16 +44,14 @@ import com.itrus.ca.modules.profile.service.ConfigAppService;
 import com.itrus.ca.modules.report.service.ReportService;
 import com.itrus.ca.modules.report.vo.WorkDealInfoVO;
 import com.itrus.ca.modules.sys.entity.Office;
-import com.itrus.ca.modules.sys.entity.User;
+
 import com.itrus.ca.modules.sys.service.OfficeService;
 import com.itrus.ca.modules.sys.utils.UserUtils;
-import com.itrus.ca.modules.work.entity.WorkCertInfo;
-import com.itrus.ca.modules.work.entity.WorkCompany;
+
 import com.itrus.ca.modules.work.entity.WorkDealInfo;
-import com.itrus.ca.modules.work.entity.WorkPayInfo;
-import com.itrus.ca.modules.work.entity.WorkUser;
+
 import com.itrus.ca.modules.work.service.WorkDealInfoService;
-import com.itrus.ca.modules.work.vo.WorkDealInfoVo;
+
 
 /**
  * 基于workdealinfo表的报表查询
@@ -267,7 +265,7 @@ public class reportController extends BaseController{
 				+ DateUtils.formatDate(formatter.parse(endTime), "yyyy-MM-dd"));
 		
 		
-		List<WorkDealInfo> list = reportService.findListByDate(appId, formatter.parse(startTime), formatter.parse(endTime), method);
+		List<WorkDealInfoVO> list = reportService.findListByDate(appId, formatter.parse(startTime), formatter.parse(endTime), method);
 		
 		HSSFRow row2= sheet.createRow(2);
 		row2.createCell(0).setCellValue("ID");
@@ -279,23 +277,23 @@ public class reportController extends BaseController{
 		for (int i = 0; i < list.size(); i++) {
 			HSSFRow rown = sheet.createRow(i + 3);
 			rown.createCell(0).setCellValue(i + 1);
-			if (list.get(i).getWorkCompany().getCompanyName() == null) {
+			if (list.get(i).getCompanyName() == null) {
 
 				rown.createCell(1).setCellValue("");
 			} else {
-				rown.createCell(1).setCellValue(list.get(i).getWorkCompany().getCompanyName());
+				rown.createCell(1).setCellValue(list.get(i).getCompanyName());
 			}
 			
-			if(list.get(i).getWorkUserHis().getContactName()==null){
+			if(list.get(i).getContactName()==null){
 				rown.createCell(2).setCellValue("");
 			}else{
-				rown.createCell(2).setCellValue(list.get(i).getWorkUserHis().getContactName());
+				rown.createCell(2).setCellValue(list.get(i).getContactName());
 			}
 			
-			if(list.get(i).getBusinessCardUserDate()==null){
+			if(list.get(i).getBusinessCardDate()==null){
 				rown.createCell(3).setCellValue("");
 			}else{
-				rown.createCell(3).setCellValue(DateUtils.formatDate(list.get(i).getBusinessCardUserDate(), "yyyy-MM-dd"));
+				rown.createCell(3).setCellValue(DateUtils.formatDate(list.get(i).getBusinessCardDate(), "yyyy-MM-dd"));
 			}
 			
 			StringBuffer dealType = new StringBuffer();
