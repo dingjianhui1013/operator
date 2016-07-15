@@ -94,7 +94,7 @@ public class ConfigChargeAgentDetailHistory implements java.io.Serializable {
 		this.chargeYear = chargeYear;
 	}
 
-	@Column(name = "money", precision = 20, scale = 3)
+	@Column(name = "money", precision = 20, scale = 3,columnDefinition = "FLOAT(126)")
 	public Double getMoney() {
 		return this.money;
 	}
