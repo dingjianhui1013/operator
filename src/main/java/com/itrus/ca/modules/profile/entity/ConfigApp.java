@@ -85,7 +85,7 @@ public class ConfigApp extends DataEntity implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@Column(name = "app_name")
+	@Column(name = "app_name",columnDefinition = "NVARCHAR2(255)")
 	public String getAppName() {
 		return this.appName;
 	}
@@ -103,7 +103,7 @@ public class ConfigApp extends DataEntity implements java.io.Serializable {
 		this.appType = appType;
 	}
 
-	@Column(name = "app_description")
+	@Column(name = "app_description",columnDefinition = "NVARCHAR2(255)")
 	public String getAppDescription() {
 		return this.appDescription;
 	}
@@ -112,7 +112,7 @@ public class ConfigApp extends DataEntity implements java.io.Serializable {
 		this.appDescription = appDescription;
 	}
 
-	@Column(name = "app_img")
+	@Column(name = "app_img",columnDefinition = "NVARCHAR2(255)")
 	public String getAppImg() {
 		return this.appImg;
 	}
@@ -157,7 +157,7 @@ public class ConfigApp extends DataEntity implements java.io.Serializable {
 		this.govDeviceAmount = govDeviceAmount;
 	}
 
-	@Column(name="alias")
+	@Column(name="alias",columnDefinition = "NVARCHAR2(255)")
 	public String getAlias() {
 		return alias;
 	}
