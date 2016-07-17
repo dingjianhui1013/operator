@@ -28,6 +28,7 @@
         </property>
 		<property name="filterChainDefinitions">
 			<value>
+				${adminPath}/ixin/ixinData/saveData=anon
 				/certSort/** = anon
 				/static/** = anon
 				/enroll/** = anon
