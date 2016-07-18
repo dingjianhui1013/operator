@@ -7,8 +7,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.SequenceGenerator;
 
-
-
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -23,10 +21,8 @@ public class SignatureConfigChargeAgentDetail implements java.io.Serializable {
 
 	// Fields
 
-	
 	private static final long serialVersionUID = 7357037691944741085L;
-	
-	
+
 	private Long id;
 	private SignatureConfigChargeAgent signatureConfigChargeAgent;
 	private Integer workType;
@@ -41,7 +37,8 @@ public class SignatureConfigChargeAgentDetail implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public SignatureConfigChargeAgentDetail(SignatureConfigChargeAgent signatureconfigChargeAgent,
+	public SignatureConfigChargeAgentDetail(
+			SignatureConfigChargeAgent signatureconfigChargeAgent,
 			Integer workType, Integer chargeYear, Double money,
 			Integer productType) {
 		this.signatureConfigChargeAgent = signatureconfigChargeAgent;
@@ -52,10 +49,10 @@ public class SignatureConfigChargeAgentDetail implements java.io.Serializable {
 	}
 
 	// Property accessors
-//	@SequenceGenerator(name="COMMON_SEQUENCE",sequenceName="COMMON_SEQUENCE")
-	@SequenceGenerator(name="SIGNATURE_AGENT_DETA_SEQUENCE",allocationSize=1,initialValue=1,sequenceName="SIGNATURE_AGENT_DETA_SEQUENCE")
-	@Id 
-	@GeneratedValue(generator = "SIGNATURE_AGENT_DETA_SEQUENCE",strategy=GenerationType.SEQUENCE)
+	// @SequenceGenerator(name="COMMON_SEQUENCE",sequenceName="COMMON_SEQUENCE")
+	@SequenceGenerator(name = "SIGNATURE_AGENT_DETA_SEQUENCE", allocationSize = 1, initialValue = 1, sequenceName = "SIGNATURE_AGENT_DETA_SEQUENCE")
+	@Id
+	@GeneratedValue(generator = "SIGNATURE_AGENT_DETA_SEQUENCE", strategy = GenerationType.SEQUENCE)
 	public Long getId() {
 		return this.id;
 	}
@@ -70,7 +67,8 @@ public class SignatureConfigChargeAgentDetail implements java.io.Serializable {
 		return this.signatureConfigChargeAgent;
 	}
 
-	public void setSignatureConfigChargeAgent(SignatureConfigChargeAgent signatureconfigChargeAgent) {
+	public void setSignatureConfigChargeAgent(
+			SignatureConfigChargeAgent signatureconfigChargeAgent) {
 		this.signatureConfigChargeAgent = signatureconfigChargeAgent;
 	}
 
@@ -92,7 +90,7 @@ public class SignatureConfigChargeAgentDetail implements java.io.Serializable {
 		this.chargeYear = chargeYear;
 	}
 
-	@Column(name = "money", precision = 20, scale = 3)
+	@Column(name = "money", precision = 20, scale = 3, columnDefinition = "FLOAT(126)")
 	public Double getMoney() {
 		return this.money;
 	}
