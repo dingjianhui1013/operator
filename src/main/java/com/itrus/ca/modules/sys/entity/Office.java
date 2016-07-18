@@ -173,6 +173,7 @@ public class Office extends DataEntity{
 	}
 
 	@Length(min=0, max=100)
+	@Column(name = "MASTER", columnDefinition = "NVARCHAR2(100)")
 	public String getMaster() {
 		return master;
 	}
@@ -182,6 +183,7 @@ public class Office extends DataEntity{
 	}
 
 	@Length(min=0, max=200)
+	@Column(name = "PHONE", columnDefinition = "NVARCHAR2(200)")
 	public String getPhone() {
 		return phone;
 	}
@@ -191,6 +193,7 @@ public class Office extends DataEntity{
 	}
 
 	@Length(min=0, max=200)
+	@Column(name = "FAX", columnDefinition = "NVARCHAR2(200)")
 	public String getFax() {
 		return fax;
 	}
