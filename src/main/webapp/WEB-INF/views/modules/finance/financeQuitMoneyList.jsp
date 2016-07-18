@@ -82,7 +82,10 @@
 			value="${page.pageSize }" />
 		<div>
 			<label>&nbsp;&nbsp;联系人&nbsp; ：</label> <input name="commUserName" value="${commUserName }"
-				class="input-medium" /> <label>&nbsp;&nbsp;支付时间&nbsp; ：</label> <input
+				class="input-medium" /> 
+				<label>&nbsp;&nbsp;付款单位&nbsp; ：</label>
+				<input name="companyName" value="${companyName }" class="input-medium"/>
+				<label>&nbsp;&nbsp;支付时间&nbsp; ：</label> <input
 				id="payStartTime" class="input-medium Wdate" type="text"
 				onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});"
 				value="${payStartTime }" maxlength="20" readonly="readonly"

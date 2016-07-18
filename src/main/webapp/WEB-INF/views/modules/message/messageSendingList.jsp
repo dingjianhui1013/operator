@@ -167,6 +167,7 @@
 					$("#checkAll").attr("checked","true");
 				}
 			});
+				$("#btnSubmitAll").val("取消");
 		}else{
 			$("#checkIds").val("");
 			var xz = $("#contentTable").find("[name='oneDealCheck']");
@@ -175,8 +176,8 @@
 					check.attr("checked",false);
 			}
 			$("#checkAll").attr("checked",false);
+			$("#btnSubmitAll").val("全选");
 		}
-		
 	}
 	
 	//发送
@@ -191,7 +192,8 @@
 		var officeId = $("#officeId").val();
 		var smsId = $("#smsId").val();
 		if (checkIds == "") {
-			$.jBox.tip("请选择需要发送信息的公司！");
+			//$.jBox.tip("请选择需要发送信息的公司！");
+			$.jBox.tip("请选择发送数据！");
 		}
 		if (checkIds != ""&&smsId == "") {
 				$.jBox.tip("请选择短信模板！");
@@ -415,7 +417,7 @@
 			value="查询" />
 		<a href="javascript:send()" class="btn btn-primary" id="send">发送</a> <input
 			type="hidden" name="checkIds" id="checkIds" value="${checkIds }" />
-			<input id="btnSubmit" class="btn btn-primary" type="button" onclick="selectData()"
+			<input id="btnSubmitAll" class="btn btn-primary" type="button" onclick="selectData()"
 				value="全选" />
 			
 		</div>

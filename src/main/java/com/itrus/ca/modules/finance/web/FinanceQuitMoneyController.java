@@ -54,6 +54,7 @@ public class FinanceQuitMoneyController {
 	@RequiresPermissions("finance:financeQuitMoney:view")
 	@RequestMapping(value = { "list", "" })
 	public String list(@RequestParam(value = "commUserName", required = false) String commUserName
+						,@RequestParam(value = "companyName", required = false) String companyName
 						,@RequestParam(value = "payStartTime", required = false) String payStartTime
 						,@RequestParam(value = "payEndTime", required = false) String payEndTime
 						,@RequestParam(value = "quitStartTime", required = false) String quitStartTime
@@ -65,8 +66,9 @@ public class FinanceQuitMoneyController {
 		try {
 			
 	
-		Page<FinanceQuitMoney> page = financeQuitMoneyService.findAllFinance(new Page<FinanceQuitMoney>(request, response), commUserName, payStartTime, payEndTime, quitStartTime, quitEndTime);
-		
+//		Page<FinanceQuitMoney> page = financeQuitMoneyService.findAllFinance(new Page<FinanceQuitMoney>(request, response), commUserName, payStartTime, payEndTime, quitStartTime, quitEndTime);
+		//增加付款单位条件
+		Page<FinanceQuitMoney> page = financeQuitMoneyService.findAllFinance(new Page<FinanceQuitMoney>(request, response), commUserName,companyName, payStartTime, payEndTime, quitStartTime, quitEndTime);
 		
 		
 	
@@ -99,11 +101,14 @@ public class FinanceQuitMoneyController {
 				}
 			}
 		}
-		List<FinanceQuitMoney> financeQuitMoney= financeQuitMoneyService.findAllFinance(commUserName, payStartTime, payEndTime, quitStartTime, quitEndTime);
+//		List<FinanceQuitMoney> financeQuitMoney= financeQuitMoneyService.findAllFinance(commUserName, payStartTime, payEndTime, quitStartTime, quitEndTime);
+		//增加付款单位条件
+		List<FinanceQuitMoney> financeQuitMoney= financeQuitMoneyService.findAllFinance(commUserName,companyName, payStartTime, payEndTime, quitStartTime, quitEndTime);
 		model.addAttribute("page", page);
 		model.addAttribute("count",financeQuitMoney.size());
 		
 		model.addAttribute("commUserName", commUserName);
+		model.addAttribute("companyName", companyName);
 		model.addAttribute("payStartTime", payStartTime);
 		model.addAttribute("payEndTime", payEndTime);
 		model.addAttribute("quitStartTime", quitStartTime);
