@@ -115,10 +115,10 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 
 	private List<PayableDetailVo> detailList;
 
-	private Integer yyNum;      //已经结算
-	private Integer totalNum;   //总结算
-	private Integer lastNum;    //本次结算
-	private Integer waitNum;    //待结算
+	private Integer yyNum; // 已经结算
+	private Integer totalNum; // 总结算
+	private Integer lastNum; // 本次结算
+	private Integer waitNum; // 待结算
 
 	private Long officeId;
 	private Long areaId;
@@ -184,8 +184,9 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 	}
 
 	// Property accessors
-//	@SequenceGenerator(name = "COMMON_SEQUENCE", sequenceName = "COMMON_SEQUENCE")
-	@SequenceGenerator(name="WORK_DEAL_INFO_SEQUENCE",allocationSize=1,initialValue=1,sequenceName="WORK_DEAL_INFO_SEQUENCE")
+	// @SequenceGenerator(name = "COMMON_SEQUENCE", sequenceName =
+	// "COMMON_SEQUENCE")
+	@SequenceGenerator(name = "WORK_DEAL_INFO_SEQUENCE", allocationSize = 1, initialValue = 1, sequenceName = "WORK_DEAL_INFO_SEQUENCE")
 	@Id
 	@GeneratedValue(generator = "WORK_DEAL_INFO_SEQUENCE", strategy = GenerationType.SEQUENCE)
 	public Long getId() {
@@ -248,7 +249,7 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 		this.dealInfoType = dealInfoType;
 	}
 
-	@Column(name = "deal_info_status", nullable = false, length = 100)
+	@Column(name = "deal_info_status", nullable = false, length = 100, columnDefinition = "NVARCHAR2(2)")
 	public String getDealInfoStatus() {
 		return this.dealInfoStatus;
 	}
@@ -266,7 +267,7 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 		this.year = year;
 	}
 
-	@Column(name = "cert_sn")
+	@Column(name = "cert_sn",columnDefinition = "NVARCHAR2(255)")
 	public String getCertSn() {
 		return this.certSn;
 	}
@@ -275,7 +276,7 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 		this.certSn = certSn;
 	}
 
-	@Column(name = "key_sn")
+	@Column(name = "key_sn",columnDefinition = "NVARCHAR2(255)")
 	public String getKeySn() {
 		return this.keySn;
 	}
@@ -369,7 +370,7 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 		this.dealInfoType2 = dealInfoType2;
 	}
 
-	@Column(name = "archive_no")
+	@Column(name = "archive_no",columnDefinition = "NVARCHAR2(255)")
 	public String getArchiveNo() {
 		return archiveNo;
 	}
@@ -387,7 +388,7 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 		this.classifying = classifying;
 	}
 
-	@Column(name = "dealInfoSn")
+	@Column(name = "dealInfoSn",columnDefinition = "NVARCHAR2(255)")
 	public String getDealInfoSn() {
 		return dealInfoSn;
 	}
@@ -450,7 +451,7 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 		this.dealInfoType3 = dealInfoType3;
 	}
 
-	@Column(name = "svn")
+	@Column(name = "svn",columnDefinition = "NVARCHAR2(255)")
 	public String getSvn() {
 		return svn;
 	}
@@ -474,7 +475,7 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 		this.canSettle = canSettle;
 	}
 
-	@Column(name = "refuse")
+	@Column(name = "refuse",columnDefinition = "NVARCHAR2(255)")
 	public String getRefuse() {
 		return refuse;
 	}
@@ -521,7 +522,7 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 		this.workUserHis = workUserHis;
 	}
 
-	@Column(name = "user_sn")
+	@Column(name = "user_sn",columnDefinition = "NVARCHAR2(255)")
 	public String getUserSn() {
 		return userSn;
 	}
