@@ -15,7 +15,15 @@
 	}
 	
 	
+	function sub()
+	{
+		loading('正在提交，请稍等...');
+		$("#searchForm").submit();
+	}
+	
 	function exportCollect(){
+		
+		
 		var startTime=$("#startTime").val();
 		var endTime=$("#endTime").val();
 		
@@ -54,7 +62,7 @@
 				maxlength="20" readonly="readonly" name="endTime" id="endTime"/>
 
 			&nbsp;&nbsp;&nbsp;&nbsp;<input id="btnSubmit" class="btn btn-primary"
-				type="submit" value="查询" />
+				type="submit" onclick="sub()" value="查询" />
 				&nbsp;&nbsp;&nbsp;&nbsp;
 				<input  style="text-align:center" class="btn btn-info" onclick="exportCollect()" type="button" value="导出">
 				

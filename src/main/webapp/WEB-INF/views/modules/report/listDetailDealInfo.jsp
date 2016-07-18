@@ -28,6 +28,18 @@
 		
 		window.open("${ctx}/report/businessReport/exportDetail?startTime="+startTime+"&endTime="+endTime+"&appId="+appId+"&method="+method);
 	}
+	
+	
+	function returnList(){
+		
+		loading('正在提交，请稍等...');
+		
+		var startTime=$("#startTime").val();
+		var endTime=$("#endTime").val();
+		
+		window.location.href = "${ctx}/report/businessReport/listByDate?startTime="+startTime+"&endTime="+endTime;
+	}
+	
 </script>
 
 
@@ -58,7 +70,7 @@
 			<label>&nbsp;&nbsp;时间范围 ：&nbsp;&nbsp;<b>${startTime } - ${endTime }</b></label>&nbsp;&nbsp;&nbsp;&nbsp;
 			<input style="text-align:center" class="btn btn-info" onclick="exportDetail()" type="button" value="导出">
 			&nbsp;&nbsp;
-			<input class="btn btn-primary" type="button" onclick=" window.history.back()"  value="返回" />
+			<input class="btn btn-primary" type="button" onclick="returnList()"  value="返回" />
 		</div>
 
 	</form:form>
