@@ -133,7 +133,7 @@ public class WorkPayInfo extends DataEntity implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@Column(name = "sn")
+	@Column(name = "sn",columnDefinition = "NVARCHAR2(255)")
 	public String getSn() {
 		return this.sn;
 	}
