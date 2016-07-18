@@ -130,9 +130,18 @@
 					</c:forEach>
 				</select>
 				<%-- <span>${message}</span> --%>
-				<input type="hidden" name="depotId" value="${depotId}">
+				<input type="hidden" name="depotId" value="${depotId}"  >
 			</div>
 		</div>
+		
+		<div class="control-group">
+			<label class="control-label"><span style="color : red">*</span>申请对象:</label>
+			<div class="controls">
+				<input type="text"  value="${parentDepot.depotName}" disabled="disabled">
+			</div>
+		</div>
+		
+		
 		<div class="control-group">
 			<label class="control-label"><span style="color : red">*</span>申请类型:</label>
 			<div class="controls">

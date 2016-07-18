@@ -82,6 +82,7 @@
 				<th>库房名称</th>
 				<th>所在区域</th>
 				<th>所属网点</th>
+				<th>管理网点</th>
 				<th>库房余量</th>
 				<th>key类型名称</th>
 				<th>key类型标识</th>
@@ -98,6 +99,9 @@
 						href="${ctx}/key/keyUsbKeyDepot/form?id=${keyUsbKeyDepot.id}">${keyUsbKeyDepot.depotName}</a></td>
 					<td>${keyUsbKeyDepot.office.parent.name}</td>
 					<td>${keyUsbKeyDepot.office.name}</td>
+					
+					<td>${keyUsbKeyDepot.parent.office.name}</td>
+					
 					<td>${keyUsbKeyDepot.inCount}</td>
 					<td>
 					<c:forEach items="${keyUsbKeyDepot.keyDepotGeneralStatisticsList}" var="statis">
@@ -137,6 +141,9 @@
 					</shiro:hasPermission>
 						<a
 							href="javascript:void(0)" onclick="alarmValue(${keyUsbKeyDepot.id})">预警值设置</a>
+
+						<c:if test="${isSysadmin ==true}"><a
+							href="${ctx}/key/keyUsbKeyDepot/assign?id=${keyUsbKeyDepot.id}">分配下级库房</a></c:if>
 							</td>
 				</tr>
 			</c:forEach>
