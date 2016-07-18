@@ -39,14 +39,14 @@ public class StatisticDayData implements java.io.Serializable {
 	private Double receiptOver;
 	private Double receiptStoreTotal;
 	private Date statisticDate;
-//	private Integer add1;
-//	private Integer add2;
-//	private Integer add4;
-//	private Integer renew1;
-//	private Integer renew2;
-//	private Integer renew4;
-//	private Integer modifyNum;
-//	private Integer reissueNum;
+	// private Integer add1;
+	// private Integer add2;
+	// private Integer add4;
+	// private Integer renew1;
+	// private Integer renew2;
+	// private Integer renew4;
+	// private Integer modifyNum;
+	// private Integer reissueNum;
 	private Integer certTotal;
 	private Integer keyTotal;
 	private Double receiptTotal;
@@ -74,14 +74,14 @@ public class StatisticDayData implements java.io.Serializable {
 		this.receiptOver = receiptOver;
 		this.receiptStoreTotal = receiptStoreTotal;
 		this.statisticDate = statisticDate;
-//		this.add1 = add1;
-//		this.add2 = add2;
-//		this.add4 = add4;
-//		this.renew1 = renew1;
-//		this.renew2 = renew2;
-//		this.renew4 = renew4;
-//		this.modifyNum = modifyNum;
-//		this.reissueNum = reissueNum;
+		// this.add1 = add1;
+		// this.add2 = add2;
+		// this.add4 = add4;
+		// this.renew1 = renew1;
+		// this.renew2 = renew2;
+		// this.renew4 = renew4;
+		// this.modifyNum = modifyNum;
+		// this.reissueNum = reissueNum;
 		this.certTotal = certTotal;
 		this.keyTotal = keyTotal;
 		this.receiptTotal = receiptTotal;
@@ -89,10 +89,10 @@ public class StatisticDayData implements java.io.Serializable {
 	}
 
 	// Property accessors
-//	@SequenceGenerator(name="COMMON_SEQUENCE",sequenceName="COMMON_SEQUENCE")
-	@SequenceGenerator(name="STATISTIC_DAY_DATA_SEQUENCE",allocationSize=1,initialValue=1,sequenceName="STATISTIC_DAY_DATA_SEQUENCE")
-	@Id 
-	@GeneratedValue(generator = "STATISTIC_DAY_DATA_SEQUENCE",strategy=GenerationType.SEQUENCE)
+	// @SequenceGenerator(name="COMMON_SEQUENCE",sequenceName="COMMON_SEQUENCE")
+	@SequenceGenerator(name = "STATISTIC_DAY_DATA_SEQUENCE", allocationSize = 1, initialValue = 1, sequenceName = "STATISTIC_DAY_DATA_SEQUENCE")
+	@Id
+	@GeneratedValue(generator = "STATISTIC_DAY_DATA_SEQUENCE", strategy = GenerationType.SEQUENCE)
 	public Long getId() {
 		return this.id;
 	}
@@ -138,7 +138,7 @@ public class StatisticDayData implements java.io.Serializable {
 		this.keyStoreTotal = keyStoreTotal;
 	}
 
-	@Column(name = "receipt_in", precision = 20, scale = 3)
+	@Column(name = "receipt_in", precision = 20, scale = 3,columnDefinition = "NUMBER")
 	public Double getReceiptIn() {
 		return this.receiptIn;
 	}
@@ -147,7 +147,7 @@ public class StatisticDayData implements java.io.Serializable {
 		this.receiptIn = receiptIn;
 	}
 
-	@Column(name = "receipt_over", precision = 20, scale = 3)
+	@Column(name = "receipt_over", precision = 20, scale = 3, columnDefinition = "NUMBER")
 	public Double getReceiptOver() {
 		return this.receiptOver;
 	}
@@ -156,7 +156,7 @@ public class StatisticDayData implements java.io.Serializable {
 		this.receiptOver = receiptOver;
 	}
 
-	@Column(name = "receipt_store_total", precision = 20, scale = 3)
+	@Column(name = "receipt_store_total", precision = 20, scale = 3, columnDefinition = "NUMBER")
 	public Double getReceiptStoreTotal() {
 		return this.receiptStoreTotal;
 	}
@@ -175,77 +175,77 @@ public class StatisticDayData implements java.io.Serializable {
 		this.statisticDate = statisticDate;
 	}
 
-//	@Column(name = "add1")
-//	public Integer getAdd1() {
-//		return this.add1;
-//	}
-//
-//	public void setAdd1(Integer add1) {
-//		this.add1 = add1;
-//	}
-//
-//	@Column(name = "add2")
-//	public Integer getAdd2() {
-//		return this.add2;
-//	}
-//
-//	public void setAdd2(Integer add2) {
-//		this.add2 = add2;
-//	}
-//
-//	@Column(name = "add4")
-//	public Integer getAdd4() {
-//		return this.add4;
-//	}
-//
-//	public void setAdd4(Integer add4) {
-//		this.add4 = add4;
-//	}
-//
-//	@Column(name = "renew1")
-//	public Integer getRenew1() {
-//		return this.renew1;
-//	}
-//
-//	public void setRenew1(Integer renew1) {
-//		this.renew1 = renew1;
-//	}
-//
-//	@Column(name = "renew2")
-//	public Integer getRenew2() {
-//		return this.renew2;
-//	}
-//
-//	public void setRenew2(Integer renew2) {
-//		this.renew2 = renew2;
-//	}
-//
-//	@Column(name = "renew4")
-//	public Integer getRenew4() {
-//		return this.renew4;
-//	}
-//
-//	public void setRenew4(Integer renew4) {
-//		this.renew4 = renew4;
-//	}
-//
-//	@Column(name = "modify_num")
-//	public Integer getModifyNum() {
-//		return this.modifyNum;
-//	}
-//
-//	public void setModifyNum(Integer modifyNum) {
-//		this.modifyNum = modifyNum;
-//	}
-//
-//	@Column(name = "reissue_num")
-//	public Integer getReissueNum() {
-//		return this.reissueNum;
-//	}
-//
-//	public void setReissueNum(Integer reissueNum) {
-//		this.reissueNum = reissueNum;
-//	}
+	// @Column(name = "add1")
+	// public Integer getAdd1() {
+	// return this.add1;
+	// }
+	//
+	// public void setAdd1(Integer add1) {
+	// this.add1 = add1;
+	// }
+	//
+	// @Column(name = "add2")
+	// public Integer getAdd2() {
+	// return this.add2;
+	// }
+	//
+	// public void setAdd2(Integer add2) {
+	// this.add2 = add2;
+	// }
+	//
+	// @Column(name = "add4")
+	// public Integer getAdd4() {
+	// return this.add4;
+	// }
+	//
+	// public void setAdd4(Integer add4) {
+	// this.add4 = add4;
+	// }
+	//
+	// @Column(name = "renew1")
+	// public Integer getRenew1() {
+	// return this.renew1;
+	// }
+	//
+	// public void setRenew1(Integer renew1) {
+	// this.renew1 = renew1;
+	// }
+	//
+	// @Column(name = "renew2")
+	// public Integer getRenew2() {
+	// return this.renew2;
+	// }
+	//
+	// public void setRenew2(Integer renew2) {
+	// this.renew2 = renew2;
+	// }
+	//
+	// @Column(name = "renew4")
+	// public Integer getRenew4() {
+	// return this.renew4;
+	// }
+	//
+	// public void setRenew4(Integer renew4) {
+	// this.renew4 = renew4;
+	// }
+	//
+	// @Column(name = "modify_num")
+	// public Integer getModifyNum() {
+	// return this.modifyNum;
+	// }
+	//
+	// public void setModifyNum(Integer modifyNum) {
+	// this.modifyNum = modifyNum;
+	// }
+	//
+	// @Column(name = "reissue_num")
+	// public Integer getReissueNum() {
+	// return this.reissueNum;
+	// }
+	//
+	// public void setReissueNum(Integer reissueNum) {
+	// this.reissueNum = reissueNum;
+	// }
 
 	@Column(name = "cert_total")
 	public Integer getCertTotal() {
@@ -265,7 +265,7 @@ public class StatisticDayData implements java.io.Serializable {
 		this.keyTotal = keyTotal;
 	}
 
-	@Column(name = "receipt_total", precision = 20, scale = 3)
+	@Column(name = "receipt_total", precision = 20, scale = 3,columnDefinition = "NUMBER")
 	public Double getReceiptTotal() {
 		return this.receiptTotal;
 	}
@@ -274,7 +274,7 @@ public class StatisticDayData implements java.io.Serializable {
 		this.receiptTotal = receiptTotal;
 	}
 
-	@Column(name = "cert_money_total", precision = 20, scale = 3)
+	@Column(name = "cert_money_total", precision = 20, scale = 3, columnDefinition = "NUMBER")
 	public Double getCertMoneyTotal() {
 		return this.certMoneyTotal;
 	}
@@ -291,6 +291,5 @@ public class StatisticDayData implements java.io.Serializable {
 	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
 	}
-	
 
 }
