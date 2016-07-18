@@ -26,6 +26,7 @@ import com.itrus.ca.modules.sys.entity.Office;
 
 /**
  * 发票盘点记录
+ * 
  * @author ZhangJingtao
  *
  */
@@ -36,29 +37,28 @@ public class ReceiptCheckLog implements java.io.Serializable {
 	// Fields
 
 	private Long id;
-	private Office sysOffice; //网点
-	private ReceiptDepotInfo receiptDepotInfo; //库房
-	private Timestamp checkTime; //检查时间
-	private Double beforeTotal; //之前总量
-	private Double beforeOut;	//之前出库量
-	private Double beforeResidue; //之前剩余量
-	private Long afterResidue; //以后剩余量
-	private String fixRemark;  //固定记录
-	private Integer fixType;  //固定类型
+	private Office sysOffice; // 网点
+	private ReceiptDepotInfo receiptDepotInfo; // 库房
+	private Timestamp checkTime; // 检查时间
+	private Double beforeTotal; // 之前总量
+	private Double beforeOut; // 之前出库量
+	private Double beforeResidue; // 之前剩余量
+	private Long afterResidue; // 以后剩余量
+	private String fixRemark; // 固定记录
+	private Integer fixType; // 固定类型
 	private Long afterTotal;
-	private Long afterOut; 
-	private Date startDate; //开始时间
-	private Date endDate;  //结束时间
-	private Integer status; //盘点状态
-	private Integer times;//盘点次数
-	private Double lastMoney; //上次盘点余额
-	
+	private Long afterOut;
+	private Date startDate; // 开始时间
+	private Date endDate; // 结束时间
+	private Integer status; // 盘点状态
+	private Integer times;// 盘点次数
+	private Double lastMoney; // 上次盘点余额
+
 	private List<ReceiptCheckLogDetail> lastsStrings = new ArrayList<ReceiptCheckLogDetail>();
 	private List<ReceiptCheckLogDetail> inStrings = new ArrayList<ReceiptCheckLogDetail>();
 	private List<ReceiptCheckLogDetail> outStrings = new ArrayList<ReceiptCheckLogDetail>();
 	private List<ReceiptCheckLogDetail> yuStrings = new ArrayList<ReceiptCheckLogDetail>();
 	private List<ReceiptCheckLogDetail> afterStrings = new ArrayList<ReceiptCheckLogDetail>();
-	
 
 	// Constructors
 
@@ -71,12 +71,11 @@ public class ReceiptCheckLog implements java.io.Serializable {
 			Double beforeTotal, Double beforeOut, Double beforeResidue,
 			Long afterResidue, String fixRemark, Integer fixType,
 			Long afterTotal, Long afterOut, Date startDate, Date endDate,
-			List<ReceiptCheckLogDetail> lastsStrings ,
-			List<ReceiptCheckLogDetail> inStrings ,
+			List<ReceiptCheckLogDetail> lastsStrings,
+			List<ReceiptCheckLogDetail> inStrings,
 			List<ReceiptCheckLogDetail> outStrings,
 			List<ReceiptCheckLogDetail> yuStrings,
-			List<ReceiptCheckLogDetail> afterStrings
-			) {
+			List<ReceiptCheckLogDetail> afterStrings) {
 		this.sysOffice = sysOffice;
 		this.checkTime = checkTime;
 		this.beforeTotal = beforeTotal;
@@ -97,10 +96,10 @@ public class ReceiptCheckLog implements java.io.Serializable {
 	}
 
 	// Property accessors
-//	@SequenceGenerator(name="COMMON_SEQUENCE",sequenceName="COMMON_SEQUENCE")
-	@SequenceGenerator(name="RECEIPT_CHECK_LOG_SEQUENCE",allocationSize=1,initialValue=1,sequenceName="RECEIPT_CHECK_LOG_SEQUENCE")
-	@Id 
-	@GeneratedValue(generator = "RECEIPT_CHECK_LOG_SEQUENCE",strategy=GenerationType.SEQUENCE)
+	// @SequenceGenerator(name="COMMON_SEQUENCE",sequenceName="COMMON_SEQUENCE")
+	@SequenceGenerator(name = "RECEIPT_CHECK_LOG_SEQUENCE", allocationSize = 1, initialValue = 1, sequenceName = "RECEIPT_CHECK_LOG_SEQUENCE")
+	@Id
+	@GeneratedValue(generator = "RECEIPT_CHECK_LOG_SEQUENCE", strategy = GenerationType.SEQUENCE)
 	public Long getId() {
 		return this.id;
 	}
@@ -128,7 +127,7 @@ public class ReceiptCheckLog implements java.io.Serializable {
 		this.checkTime = checkTime;
 	}
 
-	@Column(name = "before_total", precision = 11, scale = 3)
+	@Column(name = "before_total", precision = 11, scale = 3,columnDefinition = "FLOAT(126)")
 	public Double getBeforeTotal() {
 		return this.beforeTotal;
 	}
@@ -137,7 +136,7 @@ public class ReceiptCheckLog implements java.io.Serializable {
 		this.beforeTotal = beforeTotal;
 	}
 
-	@Column(name = "before_out", precision = 11, scale = 3)
+	@Column(name = "before_out", precision = 11, scale = 3,columnDefinition = "FLOAT(126)")
 	public Double getBeforeOut() {
 		return this.beforeOut;
 	}
@@ -146,7 +145,7 @@ public class ReceiptCheckLog implements java.io.Serializable {
 		this.beforeOut = beforeOut;
 	}
 
-	@Column(name = "before_residue", precision = 11, scale = 3)
+	@Column(name = "before_residue", precision = 11, scale = 3,columnDefinition = "FLOAT(126)")
 	public Double getBeforeResidue() {
 		return this.beforeResidue;
 	}
@@ -246,7 +245,7 @@ public class ReceiptCheckLog implements java.io.Serializable {
 		this.times = times;
 	}
 
-	@Column(name = "lastMoney")
+	@Column(name = "lastMoney",columnDefinition = "FLOAT(126)")
 	public Double getLastMoney() {
 		return lastMoney;
 	}
@@ -299,5 +298,5 @@ public class ReceiptCheckLog implements java.io.Serializable {
 	public void setAfterStrings(List<ReceiptCheckLogDetail> afterStrings) {
 		this.afterStrings = afterStrings;
 	}
-	
+
 }

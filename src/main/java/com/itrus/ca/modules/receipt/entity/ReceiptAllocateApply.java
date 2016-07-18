@@ -152,7 +152,7 @@ public class ReceiptAllocateApply extends DataEntity implements java.io.Serializ
 		this.receiptType = receiptType;
 	}
 
-	@Column(name ="money")
+	@Column(name ="money",columnDefinition = "NUMBER")
 	public Double getMoney() {
 		return money;
 	}
