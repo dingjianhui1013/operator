@@ -161,7 +161,7 @@ public class StatisticSealAppData  implements java.io.Serializable   {
 	public void setReceiptTotal(Double receiptTotal) {
 		this.receiptTotal = receiptTotal;
 	}
-	@Column(name="seal_money", precision = 20, scale = 3,columnDefinition = "NUMBER")
+	@Column(name="seal_money", precision = 20, scale = 3,columnDefinition = "FLOAT(126)")
 	public Double getSealMoney() {
 		return sealMoney;
 	}
