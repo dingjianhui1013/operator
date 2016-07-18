@@ -89,7 +89,7 @@ public class WorkUserHis implements java.io.Serializable {
 		this.workCompanyHis = workCompanyHis;
 	}
 
-	@Column(name = "address", length = 200)
+	@Column(name = "address", length = 200,columnDefinition = "NVARCHAR2(200)")
 	public String getAddress() {
 		return this.address;
 	}
@@ -98,7 +98,7 @@ public class WorkUserHis implements java.io.Serializable {
 		this.address = address;
 	}
 
-	@Column(name = "con_cert_number", length = 200)
+	@Column(name = "con_cert_number", length = 200,columnDefinition = "NVARCHAR2(200)")
 	public String getConCertNumber() {
 		return this.conCertNumber;
 	}
@@ -107,7 +107,7 @@ public class WorkUserHis implements java.io.Serializable {
 		this.conCertNumber = conCertNumber;
 	}
 
-	@Column(name = "con_cert_type", length = 100)
+	@Column(name = "con_cert_type", length = 100,columnDefinition = "NVARCHAR2(3)")
 	public String getConCertType() {
 		return this.conCertType;
 	}
@@ -116,7 +116,7 @@ public class WorkUserHis implements java.io.Serializable {
 		this.conCertType = conCertType;
 	}
 
-	@Column(name = "contact_email", length = 100)
+	@Column(name = "contact_email", length = 100,columnDefinition = "NVARCHAR2(100)")
 	public String getContactEmail() {
 		return this.contactEmail;
 	}
@@ -125,7 +125,7 @@ public class WorkUserHis implements java.io.Serializable {
 		this.contactEmail = contactEmail;
 	}
 
-	@Column(name = "contact_name", length = 100)
+	@Column(name = "contact_name", length = 100,columnDefinition = "NVARCHAR2(100)")
 	public String getContactName() {
 		return this.contactName;
 	}
@@ -134,7 +134,7 @@ public class WorkUserHis implements java.io.Serializable {
 		this.contactName = contactName;
 	}
 
-	@Column(name = "contact_phone", length = 100)
+	@Column(name = "contact_phone", length = 100,columnDefinition = "NVARCHAR2(100)")
 	public String getContactPhone() {
 		return this.contactPhone;
 	}
@@ -143,7 +143,7 @@ public class WorkUserHis implements java.io.Serializable {
 		this.contactPhone = contactPhone;
 	}
 
-	@Column(name = "contact_sex", length = 100)
+	@Column(name = "contact_sex", length = 100,columnDefinition = "NVARCHAR2(100)")
 	public String getContactSex() {
 		return this.contactSex;
 	}
@@ -152,7 +152,7 @@ public class WorkUserHis implements java.io.Serializable {
 		this.contactSex = contactSex;
 	}
 
-	@Column(name = "contact_tel", length = 100)
+	@Column(name = "contact_tel", length = 100,columnDefinition = "NVARCHAR2(100)")
 	public String getContactTel() {
 		return this.contactTel;
 	}
@@ -161,7 +161,7 @@ public class WorkUserHis implements java.io.Serializable {
 		this.contactTel = contactTel;
 	}
 
-	@Column(name = "department", length = 100)
+	@Column(name = "department", length = 100,columnDefinition = "NVARCHAR2(100)")
 	public String getDepartment() {
 		return this.department;
 	}
@@ -197,7 +197,7 @@ public class WorkUserHis implements java.io.Serializable {
 		this.workType = workType;
 	}
 
-	@Column(name = "user_sn")
+	@Column(name = "user_sn",columnDefinition = "NVARCHAR2(255)")
 	public String getUserSn() {
 		return this.userSn;
 	}
