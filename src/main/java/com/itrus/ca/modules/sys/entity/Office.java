@@ -102,6 +102,7 @@ public class Office extends DataEntity{
 	}
 
 	@Length(min=0, max=255)
+	@Column(name = "PARENT_IDS", columnDefinition = "NVARCHAR2(255)")
 	public String getParentIds() {
 		return parentIds;
 	}
@@ -122,6 +123,7 @@ public class Office extends DataEntity{
 	}
 
 	@Length(min=1, max=100)
+	@Column(name = "NAME", columnDefinition = "NVARCHAR2(127)")
 	public String getName() {
 		return name;
 	}
@@ -131,6 +133,7 @@ public class Office extends DataEntity{
 	}
 	
 	@Length(min=0, max=1)
+	@Column(name = "TYPE", columnDefinition = "NCHAR(1)")
 	public String getType() {
 		return type;
 	}
@@ -140,6 +143,7 @@ public class Office extends DataEntity{
 	}
 
 	@Length(min=0, max=1)
+	@Column(name = "GRADE", columnDefinition = "NCHAR(1)")
 	public String getGrade() {
 		return grade;
 	}
@@ -149,6 +153,7 @@ public class Office extends DataEntity{
 	}
 
 	@Length(min=0, max=255)
+	@Column(name = "ADDRESS", columnDefinition = "NVARCHAR2(127)")
 	public String getAddress() {
 		return address;
 	}
@@ -158,6 +163,7 @@ public class Office extends DataEntity{
 	}
 
 	@Length(min=0, max=100)
+	@Column(name = "ZIP_CODE", columnDefinition = "NVARCHAR2(127)")
 	public String getZipCode() {
 		return zipCode;
 	}
@@ -194,6 +200,7 @@ public class Office extends DataEntity{
 	}
 
 	@Length(min=0, max=200)
+	@Column(name = "EMAIL", columnDefinition = "NVARCHAR2(200)")
 	public String getEmail() {
 		return email;
 	}
@@ -203,6 +210,7 @@ public class Office extends DataEntity{
 	}
 
 	@Length(min=0, max=100)
+	@Column(name = "CODE", columnDefinition = "NVARCHAR2(100)")
 	public String getCode() {
 		return code;
 	}
@@ -279,7 +287,7 @@ public class Office extends DataEntity{
 		return serialVersionUID;
 	}
 
-	@Column(name = "area_name")
+	@Column(name = "AREA_NAME", columnDefinition = "NVARCHAR2(255)")
 	public String getAreaName() {
 		return areaName;
 	}
