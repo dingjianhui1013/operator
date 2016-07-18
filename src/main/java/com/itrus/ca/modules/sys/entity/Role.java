@@ -8,6 +8,7 @@ package com.itrus.ca.modules.sys.entity;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -131,6 +132,7 @@ public class Role extends DataEntity {
 	}*/
 
 	@Length(min=1, max=100)
+	@Column(name = "NAME", columnDefinition = "NVARCHAR2(127)")
 	public String getName() {
 		return name;
 	}
@@ -140,6 +142,7 @@ public class Role extends DataEntity {
 	}
 
 	@Length(min=1, max=100)
+	@Column(name = "ENNAME", columnDefinition = "NVARCHAR2(255)")
 	public String getEnname() {
 		return enname;
 	}
@@ -149,6 +152,7 @@ public class Role extends DataEntity {
 	}
 	
 	@Length(min=1, max=100)
+	@Column(name = "ROLE_TYPE", columnDefinition = "NVARCHAR2(255)")
 	public String getRoleType() {
 		return roleType;
 	}
@@ -157,6 +161,7 @@ public class Role extends DataEntity {
 		this.roleType = roleType;
 	}
 
+	@Column(name = "DATA_SCOPE", columnDefinition = "NCHAR(1)")
 	public String getDataScope() {
 		return dataScope;
 	}
