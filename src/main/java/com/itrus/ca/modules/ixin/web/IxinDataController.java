@@ -26,6 +26,7 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.CellRangeAddress;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.util.Region;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -346,7 +347,8 @@ public class IxinDataController extends BaseController {
         Cell cell = null;
         HSSFSheet sheet = wb.createSheet("I信采集数据");
         sheet.setDefaultColumnWidth(5);
-        sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, 4));// 合并单元格
+//        sheet.addMergedRegion(new CellRangeAddress(0, (short)0, 0, (short)4));// 合并单元格
+        sheet.addMergedRegion(new Region(0, (short)0, 0, (short)4));
         HSSFFont font = wb.createFont();
 
         // 第一行数据
@@ -362,9 +364,10 @@ public class IxinDataController extends BaseController {
         cell.setCellValue( "I信采集数据");
         
      // 第二行数据
-        sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, 4));
+//        sheet.addMergedRegion(new CellRangeAddress(1,(short)0, 1,(short)4));
+        sheet.addMergedRegion(new Region(1, (short)0, 1, (short)4));
         HSSFRow row1 = sheet.createRow(1);
-        cell = row1.createCell(1);
+        cell = row1.createCell(0);
         font.setFontHeightInPoints((short) 10);
         style.setFont(font);
         cell.setCellStyle(style);
@@ -372,9 +375,10 @@ public class IxinDataController extends BaseController {
                 + DateUtils.formatDate(endTime, "yyyy-MM-dd"));
         // 第三行数据
         if(StringUtils.isNotEmpty(configProjectTypeIds)){
-            sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, 4));
+//            sheet.addMergedRegion(new CellRangeAddress(2, (short)0, 2, (short)4));
+            sheet.addMergedRegion(new Region(2, (short)0, 2, (short)4));
             HSSFRow row3= sheet.createRow(2);
-            cell = row3.createCell(2);
+            cell = row3.createCell(0);
             font.setFontHeightInPoints((short) 10);
             style.setFont(font);
             cell.setCellStyle(style);
@@ -387,12 +391,14 @@ public class IxinDataController extends BaseController {
         
         if(StringUtils.isNotEmpty(configAppIds)){
             HSSFRow row4= sheet.createRow(3);
-            sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, 4));
-            cell = row4.createCell(3);
+//            sheet.addMergedRegion(new CellRangeAddress(3, (short)0, 3, (short)4));
+            sheet.addMergedRegion(new Region(3, (short)0, 3, (short)4));
+            cell = row4.createCell(0);
             if(StringUtils.isEmpty(configProjectTypeIds)){
                  row4= sheet.createRow(2);
-                 sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, 4));
-                 cell = row4.createCell(3);
+//                 sheet.addMergedRegion(new CellRangeAddress(2, (short)0, 2, (short)4));
+                 sheet.addMergedRegion(new Region(2, (short)0, 2, (short)4));
+                 cell = row4.createCell(0);
             }
             font.setFontHeightInPoints((short) 10);
             style.setFont(font);

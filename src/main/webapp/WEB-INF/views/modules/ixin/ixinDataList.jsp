@@ -4,6 +4,12 @@
 <head>
 	<title>IXIN数据采集管理</title>
 	<meta name="decorator" content="default"/>
+	<style type="text/css">
+	.applyNameBox ul{padding-left:94px; margin:0;}
+	.applyNameBox ul li{ list-style:none; float:left;width:33.3%}
+	.viewMoreBtn{clear:both;padding:10px 0;}
+	.userTimeBox{clear:both;padding-top:20px}
+	</style>
 	<script type="text/javascript">
 		function page(n,s){
 			$("#pageNo").val(n);
@@ -24,6 +30,7 @@
 		
 		//选择项目类型
 		function changeAppType(obj) {
+			$("#configProjectTypeIds").val("");
 			var checkIds = $("#configProjectTypeIds").val();
 			var xz = $("#appTypeContent").find("[name='appTypeName']");
 			if (checkIds.indexOf($(obj).val()) > -1) {
@@ -45,13 +52,90 @@
 			checkIds = checkIds.replace(",,", ",");
 			if (checkIds == ",") {
 				$("#configProjectTypeIds").val("");
+				$("#configAppIds").val("");
 			} else {
 				$("#configProjectTypeIds").val(checkIds);
+				$("#configAppIds").val("");
+				//根据项目类型得到应用
+				$.ajax({
+					url : "${ctx}/ixin/ixinData/findAppByType",
+					type : "post",
+					data:{"configProjectTypeIds":checkIds},
+					dataType : "JSON",
+					success : function(d) {
+						if (d.status == "1") {
+							var ss=checkIds.split(",");
+							var configAppIds = $("#configAppIds").val();
+							var appList="<label>&nbsp;&nbsp;应用名称 ：&nbsp;&nbsp;</label><ul>";
+							if(d.size>10){
+								$.each(d.list,function(idx, ele) {
+									if(idx<11){
+										appList+="<li><input type =\"checkBox\" name =\"appType\"";
+										for(var i = 0; i < ss.length; i++) {
+											if(ele.id==ss[i]){
+												appList+= "checked=\"checked\"";
+											}
+										}
+										appList+="value =\""+ele.id+"\"> "+ele.appName+"</li>";
+									}
+									
+								});
+								appList+="<div id = \"configAppList\" class=\"viewMoreBtn\"><p><input type = \"button\" onclick = \"checkMore();\" value = \"查看更多\" class=\"btn btn-default\"></p></div>";
+								appList+="<div id = \"configAppListAll\" style=\"display: none\" >";
+								$.each(d.list,function(idx, ele) {
+									if(idx>10){
+										appList+="<li><input type =\"checkBox\" name =\"appType\"";
+										for(var i = 0; i < ss.length; i++) {
+											if(ele.id==ss[i]){
+												appList+= "checked=\"checked\"";
+											}
+										}
+										appList+="value =\""+ele.id+"\"> "+ele.appName+"</li>";
+									}
+										if (configAppIds == '') {
+											configAppIds += ele.id;
+										} else {
+											configAppIds += "," + ele.id;
+										}
+								});
+								appList+="<p><input type = \"button\" onclick = \"checkLetter();\" value = \"隐藏应用\"></p></div>";
+								
+							}else{
+								$.each(d.list,function(idx, ele) {
+									appList+="<li><input type =\"checkBox\" name =\"appType\"";
+									for(var i = 0; i < ss.length; i++) {
+										if(ele.id==ss[i]){
+											appList+= "checked=\"checked\"";
+										}
+									}
+									appList+="value =\""+ele.id+"\"> "+ele.appName+"</li>";
+									
+										if (configAppIds == '') {
+											configAppIds += ele.id;
+										} else {
+											configAppIds += "," + ele.id;
+										}
+								});
+							}
+							appList +="</ul>";
+							configAppIds = configAppIds.replace(",,", ",");
+							if(checkIds!=""){
+								if (configAppIds == ",") {
+									$("#configAppIds").val("");
+								} else {
+									$("#configAppIds").val(configAppIds);
+								}
+							}
+							$("#appContent").html(appList);
+						}
+					}
+				});
 			}
 		}
 		
 		//选择应用
 		function changeApp(obj) {
+			$("#configAppIds").val("");
 			var checkIds = $("#configAppIds").val();
 			var xz = $("#appContent").find("[name='appName']");
 			if (checkIds.indexOf($(obj).val()) > -1) {
@@ -96,6 +180,7 @@
 	<form:form id="searchForm" modelAttribute="ixinData" action="${ctx}/ixin/ixinData/" method="post" class="breadcrumb form-search">
 		<input id ="configProjectTypeIds" name = "configProjectTypeIds" type ="hidden" value = "${configProjectTypeIds }">
 		<input id ="configAppIds" name = "configAppIds" type ="hidden"  value= "${configAppIds }">
+		
 		<div id = "appTypeContent">
 			<label>&nbsp;&nbsp;项目类型 ：&nbsp;&nbsp;</label>
 				<c:forEach items="${typesList}" var="typeList">
@@ -107,53 +192,68 @@
 					${typeList.projectName}
 				</c:forEach>
 		</div>
-		<div id = "appContent">
+		<div id = "appContent"  class="applyNameBox">
 			<label>&nbsp;&nbsp;应用名称 ：&nbsp;&nbsp;</label>
+			<ul>
 			<c:if test = "${appListSize>10 }">
-			<div >
 			<c:forEach items="${appList}" var="configApp"  end = "10">
+				<li>
 				<input type ="checkBox" name ="appName" onchange="changeApp(this)"
 				<c:forEach items="${configAppIds }" var="id">
 					<c:if test="${id==configApp.id }"> checked="checked"</c:if>
 				</c:forEach>
 				 value = "${configApp.id}">
 					${configApp.appName}
+				</li>	
 			</c:forEach>
-			<div id = "configAppList">
-			<p><input type = "button" onclick = "checkMore();" value = "查看更多"></p>
+			<div id = "configAppList" class="viewMoreBtn">
+			<p><input type = "button" onclick = "checkMore();" value = "查看更多" class="btn btn-default"></p>
 			</div>
 			
 			<div id = "configAppListAll" style="display: none" >
 			<c:forEach items="${appList}" var="configApp" begin = "11">
-				<input type ="checkBox" name ="appName" value = "${configApp.id}">
+				<li>
+					<input type ="checkBox" name ="appName"
+					<c:forEach items="${configAppIds }" var="id">
+					<c:if test="${id==configApp.id }"> checked="checked"</c:if>
+				</c:forEach>
+					 value = "${configApp.id}">
 					${configApp.appName}
+				</li>
 			</c:forEach>
 			<p>
 			<input type = "button" onclick = "checkLetter();" value = "隐藏应用"></p>
 			</div>
-			</div>
 			</c:if>
 			<c:if test = "${appListSize<=10 }">
 			<c:forEach items="${appList}" var="configApp">
-				<input type ="checkBox" name ="appType" value = "${configApp.id}">
+			<li>
+				<input type ="checkBox" name ="appType" 
+				<c:forEach items="${configAppIds }" var="id">
+					<c:if test="${id==configApp.id }"> checked="checked"</c:if>
+				</c:forEach>
+				value = "${configApp.id}">
 					${configApp.appName}
+					</li>
 			</c:forEach>
 			</c:if>
+			</ul>
 		</div>
-		<div>
-		<label>使用时间&nbsp;</label> &nbsp;&nbsp;<input class="input-medium Wdate" type="text"
+		<div class="userTimeBox">
+		<label>&nbsp;&nbsp;使用时间:&nbsp;&nbsp;&nbsp;&nbsp;</label> &nbsp;&nbsp;<input class="input-medium Wdate" type="text"
 				required="required" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});"
 				value="<fmt:formatDate value="${startTime}" pattern="yyyy-MM-dd"/>" maxlength="20" readonly="readonly"
 				name="startTime" id="startTime"/> 到 <input class="input-medium Wdate" type="text"
 				required="required" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'startTime\')}'});"
 				value="<fmt:formatDate value="${endTime}" pattern="yyyy-MM-dd"/>" maxlength="20" readonly="readonly"
 				name="endTime"  id="endTime"/> 
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/>
+			&nbsp;&nbsp;&nbsp;&nbsp;
+			<input  style="text-align:center" class="btn btn-info" onclick="exportCollect()" type="button" value="导出">
 		</div>
-	<div>
-		<input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/>
-		&nbsp;&nbsp;&nbsp;&nbsp;
-		<input  style="text-align:center" class="btn btn-info" onclick="exportCollect()" type="button" value="导出">
-	</div>
+	
+	
 	</form:form>
 	<tags:message content="${message}"/>
 	<table id="contentTable" class="table table-striped table-bordered table-condensed">
