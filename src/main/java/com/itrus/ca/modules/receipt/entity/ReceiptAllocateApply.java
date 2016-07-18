@@ -37,6 +37,10 @@ public class ReceiptAllocateApply extends DataEntity implements java.io.Serializ
 	private Long id;
 	private Office sysOffice;
 	private ReceiptDepotInfo receiptDepotInfo;
+	
+	private Long auditDepotId;        //新增   审核库房id
+	
+	
 	private Integer applyNewNum;
 	private Timestamp warehouseDate;
 	private Integer leavel;
@@ -188,6 +192,15 @@ public class ReceiptAllocateApply extends DataEntity implements java.io.Serializ
 
 	public void setAreaId(Long areaId) {
 		this.areaId = areaId;
+	}
+
+	@Column(name = "audit_depot_id")
+	public Long getAuditDepotId() {
+		return auditDepotId;
+	}
+
+	public void setAuditDepotId(Long auditDepotId) {
+		this.auditDepotId = auditDepotId;
 	}
 	
 	

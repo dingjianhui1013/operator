@@ -124,7 +124,7 @@ public class ReceiptAllocateApplyController extends BaseController {
 	 * @param model
 	 * @return
 	 */
-	@RequiresPermissions("receipt:receiptAllocateApply:edit")
+	@RequiresPermissions("receipt:receiptAllocateApply:view")
 	@RequestMapping("listT")
 	public String listT(ReceiptAllocateApply receiptAllocateApply, HttpServletRequest request, HttpServletResponse response, Model model,
 			Date startTime, Date endTime, Integer state) {
@@ -140,12 +140,15 @@ public class ReceiptAllocateApplyController extends BaseController {
 			}
 		}
 		
+		ReceiptDepotInfo depot = getDeoptByOfficeId(user.getOffice().getId());
+		
+		
 		model.addAttribute("offices", offices);
 		model.addAttribute("startTime", startTime);
 		model.addAttribute("state", state);
 		model.addAttribute("endTime", endTime);
 		receiptAllocateApply.setState(state);
-        Page<ReceiptAllocateApply> page = receiptAllocateApplyService.findT(new Page<ReceiptAllocateApply>(request, response), receiptAllocateApply, officeids,startTime, endTime); 
+        Page<ReceiptAllocateApply> page = receiptAllocateApplyService.findT(new Page<ReceiptAllocateApply>(request, response), receiptAllocateApply, officeids,startTime, endTime,depot); 
         for (int i = 0; i < page.getList().size(); i++) {
         	List<ReceiptAllocateApplyDetail> details = receiptAllocateApplyDetailService.getByApplyId(page.getList().get(i).getId());
         	page.getList().get(i).setReceiptApplyDetails(details);
@@ -159,17 +162,22 @@ public class ReceiptAllocateApplyController extends BaseController {
 	
 	@RequiresPermissions("receipt:receiptAllocateApply:view")
 	@RequestMapping(value = "form")
-	public String form(ReceiptAllocateApply receiptAllocateApply, Model model) {
+	public String form(ReceiptAllocateApply receiptAllocateApply, Model model,RedirectAttributes redirectAttributes) {
 		
 		User user = UserUtils.getUser();
 		
-		List<Office> offices = officeService.getOfficeByType(UserUtils.getUser(), 2);
-		//List<ReceiptType> types = receiptTypeService.getAll();
-		
 		ReceiptDepotInfo depot = getDeoptByOfficeId(user.getOffice().getId());
 		
+		if(depot.getParent()==null){
+			addMessage(redirectAttributes, "所在库房【"+depot.getReceiptName()+"】没有上级库房,无法进行调拨!");
+			return "redirect:" + Global.getAdminPath() + "/receipt/receiptAllocateApply/?repage";
+		}
+		
+		model.addAttribute("parentDepot", depot.getParent());
+		
+		
 		List<ReceiptType> types = new ArrayList<ReceiptType>();
-		List<ReceiptDepotTypeStatistics> stas = receiptDepotTypeStatisticsService.findByDepot(KeyDepotId.RECEIPT_DEPOT_ID);
+		List<ReceiptDepotTypeStatistics> stas = receiptDepotTypeStatisticsService.findByDepot(depot.getParent().getId());
 		for (int i = 0; i < stas.size(); i++) {
 			types.add(stas.get(i).getReceiptType());
 		}
@@ -253,12 +261,13 @@ public class ReceiptAllocateApplyController extends BaseController {
 			String receiptType,String applyNum,Double money
 			) {
 		if (!beanValidator(model, receiptAllocateApply)){
-			return form(receiptAllocateApply, model);
+			return form(receiptAllocateApply, model,redirectAttributes);
 		}
 		ReceiptDepotInfo receiptDepotInfo = getDeoptByOfficeId(officeId);
 		if(receiptDepotInfo!=null){
 			receiptAllocateApply.setState(0);
 			receiptAllocateApply.setReceiptDepotInfo(receiptDepotInfo);
+			receiptAllocateApply.setAuditDepotId(receiptDepotInfo.getParent().getId());
 			receiptAllocateApply.setOffice(receiptDepotInfo.getOffice());
 			receiptAllocateApply.setWarehouseDate(getTimestamp(reqDate));
 			receiptAllocateApply.setMoney(money);

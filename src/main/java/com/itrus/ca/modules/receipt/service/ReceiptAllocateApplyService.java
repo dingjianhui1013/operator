@@ -71,11 +71,9 @@ public class ReceiptAllocateApplyService extends BaseService {
 	
 	
 	
-	public Page<ReceiptAllocateApply> findT(Page<ReceiptAllocateApply> page, ReceiptAllocateApply receiptAllocateApply,List<Long> officeIds, Date startTime, Date endTime) {
+	public Page<ReceiptAllocateApply> findT(Page<ReceiptAllocateApply> page, ReceiptAllocateApply receiptAllocateApply,List<Long> officeIds, Date startTime, Date endTime,ReceiptDepotInfo auditDepot) {
 		DetachedCriteria dc = receiptAllocateApplyDao.createDetachedCriteria();
-//		if (StringUtils.isNotEmpty(receiptAllocateApply.getName())){
-//			dc.add(Restrictions.like("name", "%"+receiptAllocateApply.getName()+"%"));
-//		}
+
 		dc.createAlias("receiptDepotInfo", "receiptDepotInfo");
 		dc.createAlias("office", "office");
 		if(receiptAllocateApply.getReceiptDepotInfo()!=null){
@@ -97,6 +95,9 @@ public class ReceiptAllocateApplyService extends BaseService {
 			dc.add(Restrictions.ge("warehouseDate", startTime));
 			dc.add(Restrictions.le("warehouseDate", endTime));
 		}
+		
+		dc.add(Restrictions.eq("auditDepotId", auditDepot.getId()));
+		
 		dc.add(Restrictions.eq(ReceiptAllocateApply.DEL_FLAG, ReceiptAllocateApply.DEL_FLAG_NORMAL));
 		dc.addOrder(Order.desc("id"));
 		return receiptAllocateApplyDao.find(page, dc);

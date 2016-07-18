@@ -29,11 +29,13 @@ import com.itrus.ca.common.persistence.Page;
 import com.itrus.ca.common.web.BaseController;
 import com.itrus.ca.modules.sys.entity.Area;
 import com.itrus.ca.modules.sys.entity.Office;
+import com.itrus.ca.modules.sys.entity.Role;
 import com.itrus.ca.modules.sys.entity.User;
 import com.itrus.ca.modules.sys.service.OfficeService;
 import com.itrus.ca.modules.sys.utils.UserUtils;
 import com.itrus.ca.modules.constant.KeyDepotId;
 import com.itrus.ca.modules.key.entity.KeyDepotGeneralStatistics;
+import com.itrus.ca.modules.key.entity.KeyUsbKeyDepot;
 import com.itrus.ca.modules.log.service.LogUtil;
 import com.itrus.ca.modules.receipt.entity.ReceiptDepotInfo;
 import com.itrus.ca.modules.receipt.entity.ReceiptEnterInfo;
@@ -89,7 +91,20 @@ public class ReceiptDepotInfoController extends BaseController {
 	@RequiresPermissions("receipt:receiptDepotInfo:view")
 	@RequestMapping(value = {"list", ""})
 	public String list(ReceiptDepotInfo receiptDepotInfo, HttpServletRequest request, HttpServletResponse response, Model model) {
-		List<Office> offices =  officeService.getOfficeByType(UserUtils.getUser(), 2);
+		User user = UserUtils.getUser();
+		
+		List<Office> offices =  officeService.getOfficeByType(user, 2);
+		
+		model.addAttribute("isSysadmin", false);
+		
+		List<Role> roleList = user.getRoleList();
+		for(Role role:roleList){
+			if(role.getId()==1){
+				model.addAttribute("isSysadmin", true);
+				break;
+			}
+		}
+		
         Page<ReceiptDepotInfo> page = receiptDepotInfoService.find(new Page<ReceiptDepotInfo>(request, response), receiptDepotInfo,offices); 
         model.addAttribute("zkid",KeyDepotId.RECEIPT_DEPOT_ID);
         model.addAttribute("page", page);
@@ -349,5 +364,78 @@ public class ReceiptDepotInfoController extends BaseController {
 		return json.toString();
 	}
 	
+	
+	
+			//分配页面
+			@RequiresPermissions("receipt:receiptDepotInfo:show")
+			@RequestMapping(value = "assign")
+			public String assign(Long id, Model model) {
+				
+				ReceiptDepotInfo depot = receiptDepotInfoService.get(id);
+				
+				List<ReceiptDepotInfo> depots = receiptDepotInfoService.getDepotList(depot);
+				
+				
+				model.addAttribute("depot", depot);
+				model.addAttribute("depots", depots);
+				
+				return "modules/receipt/receiptDepotInfoAssign";
+			}
+			
+			//分配的iframe
+			@RequiresPermissions("receipt:receiptDepotInfo:show")
+			@RequestMapping(value = "depottodepot")
+			public String selectDepotToParent(Long id, Model model) {
+				ReceiptDepotInfo depot = receiptDepotInfoService.get(id);
+				model.addAttribute("depot", depot);
+				model.addAttribute("selectIds", receiptDepotInfoService.getDepotIds(depot));      //已选择的库房id
+				
+				
+				List<Office> offices =  officeService.getOfficeByType(UserUtils.getUser(), 2);
+				
+				model.addAttribute("depotList", receiptDepotInfoService.findListByOffices(depot,offices));              //所有的库房id(前提是权限内的并且除自己以外)
+				model.addAttribute("selectedList", receiptDepotInfoService.getDepotList(depot));
+				return "modules/receipt/selectDepotToParent";
+			}
+			
+			
+			@RequiresPermissions("receipt:receiptDepotInfo:show")
+			@RequestMapping(value = "assignDepot")
+			public String assignDepot(Long id, Long[] idsArr, RedirectAttributes redirectAttributes) {
+				
+				ReceiptDepotInfo depot = receiptDepotInfoService.get(id);
+				
+				StringBuilder msg = new StringBuilder();
+				int newNum = 0;
+				for (int i = 0; i < idsArr.length; i++) {
+					ReceiptDepotInfo child = receiptDepotInfoService.get(idsArr[i]);
+					if (null != child) {
+						
+						child.setParent(depot);
+						receiptDepotInfoService.save(child);
+						
+						msg.append("<br/>新增下级库房【" + child.getReceiptName() + "】！");
+						newNum++;
+					}
+				}
+				addMessage(redirectAttributes, "已成功分配 "+newNum+" 个下级库房"+msg);
+				return "redirect:"+Global.getAdminPath()+"/receipt/receiptDepotInfo/assign?id="+depot.getId();
+			}
+			
+			
+			@RequiresPermissions("receipt:receiptDepotInfo:show")
+			@RequestMapping(value = "outDepot")
+			public String outDepot(Long depotId,Long parentId, RedirectAttributes redirectAttributes) {
+				ReceiptDepotInfo depot = receiptDepotInfoService.get(depotId);
+				depot.setParent(null);
+				receiptDepotInfoService.save(depot);
+				
+					
+				addMessage(redirectAttributes, "下级库房【" + depot.getReceiptName() + "】移除成功！");
+					
+				
+				return "redirect:"+Global.getAdminPath()+"/receipt/receiptDepotInfo/assign?id="+parentId;
+			}
+			
 	
 }

@@ -20,6 +20,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.itrus.ca.common.persistence.DataEntity;
+import com.itrus.ca.modules.key.entity.KeyUsbKeyDepot;
 import com.itrus.ca.modules.sys.entity.Area;
 import com.itrus.ca.modules.sys.entity.Office;
 
@@ -34,6 +35,9 @@ public class ReceiptDepotInfo extends DataEntity implements
 	// Fields
 
 	private Long id;
+	
+	private ReceiptDepotInfo parent;
+	
 	private Office sysArea;
 	private Office sysOffice;
 	private String receiptName;
@@ -94,6 +98,18 @@ public class ReceiptDepotInfo extends DataEntity implements
 		this.id = id;
 	}
 
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="parent_id")
+	public ReceiptDepotInfo getParent() {
+		return parent;
+	}
+
+	public void setParent(ReceiptDepotInfo parent) {
+		this.parent = parent;
+	}
+	
+	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "area_id")
 	public Office getArea() {

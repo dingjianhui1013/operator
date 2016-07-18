@@ -21,6 +21,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.common.collect.Lists;
+import com.itrus.ca.common.persistence.DataEntity;
 import com.itrus.ca.common.persistence.Page;
 import com.itrus.ca.common.service.BaseService;
 import com.itrus.ca.common.utils.EscapeUtil;
@@ -81,6 +83,35 @@ public class ReceiptDepotInfoService extends BaseService {
 		dc.addOrder(Order.desc("id"));
 		return receiptDepotInfoDao.find(page, dc);
 	}
+	
+	
+	
+	public List<ReceiptDepotInfo> findListByOffices(ReceiptDepotInfo receiptDepotInfo,List<Office> office) {
+		DetachedCriteria dc = receiptDepotInfoDao.createDetachedCriteria();
+		dc.createAlias("office", "office");
+		
+		dc.add(Restrictions.in("office", office));
+		dc.add(Restrictions.ne("id", receiptDepotInfo.getId()));
+		
+		while (receiptDepotInfo.getParent() != null) {
+
+			receiptDepotInfo = receiptDepotInfo.getParent();
+		
+			if(receiptDepotInfo!=null){
+				dc.add(Restrictions.ne("id", receiptDepotInfo.getId()));		
+			
+			}
+		}
+		
+		
+		dc.add(Restrictions.isNull("parent"));
+		dc.add(Restrictions.eq(ReceiptDepotInfo.DEL_FLAG,
+				ReceiptDepotInfo.DEL_FLAG_NORMAL));
+		dc.addOrder(Order.desc("id"));
+		return receiptDepotInfoDao.find(dc);
+	}
+	
+	
 
 	/**
 	 * 统计列表显示页面
@@ -270,4 +301,26 @@ public class ReceiptDepotInfoService extends BaseService {
 		dc.addOrder(Order.desc("id"));
 		return receiptDepotInfoDao.find(dc);
 	}
+	
+	
+	public List<ReceiptDepotInfo> getDepotList(ReceiptDepotInfo depot){
+		DetachedCriteria dc = receiptDepotInfoDao.createDetachedCriteria();
+		dc.createAlias("parent", "parent");
+		dc.add(Restrictions.eq("parent",depot));
+		dc.add(Restrictions.eq("delFlag",DataEntity.DEL_FLAG_NORMAL));
+		dc.addOrder(Order.asc("id"));
+		return  receiptDepotInfoDao.find(dc);
+	} 
+	
+	
+	public String getDepotIds(ReceiptDepotInfo depot) {
+		List<ReceiptDepotInfo> depotList = getDepotList(depot);
+		List<Long> nameIdList = Lists.newArrayList();
+		for (ReceiptDepotInfo keyDepot : depotList) {
+			nameIdList.add(keyDepot.getId());
+		}
+		return StringUtils.join(nameIdList, ",");
+	}
+	
+	
 }
