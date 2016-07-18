@@ -66,6 +66,9 @@
 				<th>库房名称</th>
 				<th>所在区域</th>
 				<th>所属网点</th>
+				
+				<th>管理网点</th>
+				
 				<th>发票余量/元</th>
 				<th>联系人</th>
 				<th>电话</th>
@@ -78,6 +81,10 @@
 				<td><a href="${ctx}/receipt/receiptDepotInfo/updateFrom?id=${receiptDepotInfo.id}">${receiptDepotInfo.receiptName}</a></td>
 				<td>${receiptDepotInfo.area.name}</td>
 				<td>${receiptDepotInfo.office.name}</td>
+				
+				<td>${receiptDepotInfo.parent.office.name}</td>
+				
+				
 				<td>
 				<fmt:parseNumber parseLocale="#0.00">${receiptDepotInfo.receiptResidue}</fmt:parseNumber>
 				</td>
@@ -94,6 +101,8 @@
 						<a href="${ctx}/receipt/receiptDepotInfo/delete?id=${receiptDepotInfo.id}" onclick="return confirmx('确认要删除该发票信息吗？', this.href)">删除</a>
     				</c:if>
 					<a href="javascript:void(0)" onclick="alarmValue(${receiptDepotInfo.id})">预警值设置</a>
+					<c:if test="${isSysadmin == true}"><a
+							href="${ctx}/receipt/receiptDepotInfo/assign?id=${receiptDepotInfo.id}">分配下级库房</a></c:if>
 				</td>
 			</tr>
 		</c:forEach>

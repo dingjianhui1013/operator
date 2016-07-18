@@ -117,6 +117,15 @@
 				<input type = "text" id = "depotName"  value="${depot.receiptName }" readonly="readonly"/> 
 			</div>
 		</div>
+		
+		
+		<div class="control-group">
+			<label class="control-label"><span style="color : red">*</span>申请对象:</label>
+			<div class="controls">
+				<input type = "text"  value="${parentDepot.receiptName }" readonly="readonly"/> 
+			</div>
+		</div>
+		
 		<div class="control-group">	
 			<label class="control-label"><span style="color : red">*</span>申请详情:</label>
 			<div class="controls">
