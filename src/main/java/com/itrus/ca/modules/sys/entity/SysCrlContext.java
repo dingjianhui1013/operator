@@ -185,7 +185,7 @@ public class SysCrlContext extends DataEntity implements java.io.Serializable {
 		this.version = version;
 	}
 
-	@Column(name = "ca_cert")
+	@Column(name = "ca_cert",columnDefinition = "NVARCHAR2(1500)")
 	public String getCaCert() {
 		return caCert;
 	}
