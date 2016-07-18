@@ -76,7 +76,7 @@ public class ReceiptEnterInfo extends DataEntity implements java.io.Serializable
 		this.receiptDepotInfo = receiptDepotInfo;
 	}
 
-	@Column(name = "receipt_money", precision = 20, scale = 3)
+	@Column(name = "receipt_money", precision = 20, scale = 3,columnDefinition = "NUMBER")
 	public Double getReceiptMoney() {
 		return this.receiptMoney;
 	}
@@ -94,7 +94,7 @@ public class ReceiptEnterInfo extends DataEntity implements java.io.Serializable
 		this.receiptType = receiptType;
 	}
 
-	@Column(name = "befor_money")
+	@Column(name = "befor_money",columnDefinition = "NUMBER")
 	public Double getBeforMoney() {
 		return beforMoney;
 	}
@@ -103,7 +103,7 @@ public class ReceiptEnterInfo extends DataEntity implements java.io.Serializable
 		this.beforMoney = beforMoney;
 	}
 
-	@Column(name = "now_money")
+	@Column(name = "now_money",columnDefinition = "NUMBER")
 	public Double getNow_Money() {
 		return now_Money;
 	}
