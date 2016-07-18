@@ -5,6 +5,7 @@
  */
 package com.itrus.ca.modules.sys.entity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -62,6 +63,7 @@ public class Dict extends DataEntity {
 	}
 	
 	@Length(min=1, max=100)
+	@Column(name = "LABEL",columnDefinition = "NVARCHAR2(127)")
 	public String getLabel() {
 		return label;
 	}
@@ -71,6 +73,7 @@ public class Dict extends DataEntity {
 	}
 	
 	@Length(min=1, max=100)
+	@Column(name = "VALUE",columnDefinition = "NVARCHAR2(127)")
 	public String getValue() {
 		return value;
 	}
@@ -80,6 +83,7 @@ public class Dict extends DataEntity {
 	}
 
 	@Length(min=1, max=100)
+	@Column(name = "TYPE",columnDefinition = "NVARCHAR2(127)")
 	public String getType() {
 		return type;
 	}
@@ -89,6 +93,7 @@ public class Dict extends DataEntity {
 	}
 
 	@Length(min=0, max=100)
+	@Column(name = "DESCRIPTION",columnDefinition = "NVARCHAR2(127)")
 	public String getDescription() {
 		return description;
 	}
