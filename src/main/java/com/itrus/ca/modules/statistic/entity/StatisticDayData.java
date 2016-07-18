@@ -120,7 +120,7 @@ public class StatisticDayData implements java.io.Serializable {
 		this.keyIn = keyIn;
 	}
 
-	@Column(name = "key_over", precision = 20, scale = 3)
+	@Column(name = "key_over", precision = 20, scale = 3,columnDefinition = "NUMBER")
 	public Integer getKeyOver() {
 		return this.keyOver;
 	}
