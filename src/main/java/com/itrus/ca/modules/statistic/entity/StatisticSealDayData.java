@@ -95,7 +95,7 @@ public class StatisticSealDayData implements java.io.Serializable{
 		this.sysOffice = sysOffice;
 	}
 
-	@Column(name="receipt_ind")
+	@Column(name="receipt_ind",columnDefinition = "NUMBER")
 	public Double getReceiptIn() {
 		return receiptIn;
 	}
@@ -103,7 +103,7 @@ public class StatisticSealDayData implements java.io.Serializable{
 	public void setReceiptIn(Double receiptIn) {
 		this.receiptIn = receiptIn;
 	}
-	@Column(name="receipt_total")
+	@Column(name="receipt_total",columnDefinition = "NUMBER")
 	public Double getReceiptTotal() {
 		return receiptTotal;
 	}
@@ -119,7 +119,7 @@ public class StatisticSealDayData implements java.io.Serializable{
 	public void setSealDay(Integer sealDay) {
 		this.sealDay = sealDay;
 	}
-	@Column(name="seal_money")
+	@Column(name="seal_money",columnDefinition = "FLOAT(126)")
 	public Double getSealMoney() {
 		return sealMoney;
 	}
@@ -127,7 +127,7 @@ public class StatisticSealDayData implements java.io.Serializable{
 	public void setSealMoney(Double sealMoney) {
 		this.sealMoney = sealMoney;
 	}
-	@Column(name="receipt_day")
+	@Column(name="receipt_day",columnDefinition = "NUMBER")
 	public Double getReceiptDay() {
 		return receiptDay;
 	}
@@ -135,7 +135,7 @@ public class StatisticSealDayData implements java.io.Serializable{
 	public void setReceiptDay(Double receiptDay) {
 		this.receiptDay = receiptDay;
 	}
-	@Column(name="receipt_surplus")
+	@Column(name="receipt_surplus",columnDefinition = "NUMBER")
 	public Double getReceiptSurplus() {
 		return receiptSurplus;
 	}
