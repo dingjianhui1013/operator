@@ -116,7 +116,7 @@ public class WorkCompanyHis implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@Column(name = "company_name", length = 100)
+	@Column(name = "company_name", length = 100,columnDefinition = "NVARCHAR2(100)")
 	public String getCompanyName() {
 		return this.companyName;
 	}
@@ -125,7 +125,7 @@ public class WorkCompanyHis implements java.io.Serializable {
 		this.companyName = companyName;
 	}
 
-	@Column(name = "com_english_name", length = 100)
+	@Column(name = "com_english_name", length = 100,columnDefinition = "NVARCHAR2(100)")
 	public String getComEnglishName() {
 		return this.comEnglishName;
 	}
@@ -134,7 +134,7 @@ public class WorkCompanyHis implements java.io.Serializable {
 		this.comEnglishName = comEnglishName;
 	}
 
-	@Column(name = "company_type", length = 100)
+	@Column(name = "company_type", length = 100,columnDefinition = "NVARCHAR2(100)")
 	public String getCompanyType() {
 		return this.companyType;
 	}
@@ -143,7 +143,7 @@ public class WorkCompanyHis implements java.io.Serializable {
 		this.companyType = companyType;
 	}
 
-	@Column(name = "com_certificate_type", length = 100)
+	@Column(name = "com_certificate_type", length = 100,columnDefinition = "NVARCHAR2(100)")
 	public String getComCertificateType() {
 		return this.comCertificateType;
 	}
@@ -152,7 +152,7 @@ public class WorkCompanyHis implements java.io.Serializable {
 		this.comCertificateType = comCertificateType;
 	}
 
-	@Column(name = "com_certficate_number", length = 200)
+	@Column(name = "com_certficate_number", length = 200,columnDefinition = "NVARCHAR2(200)")
 	public String getComCertficateNumber() {
 		return this.comCertficateNumber;
 	}
@@ -161,7 +161,7 @@ public class WorkCompanyHis implements java.io.Serializable {
 		this.comCertficateNumber = comCertficateNumber;
 	}
 
-	@Column(name = "business_number", length = 200)
+	@Column(name = "business_number", length = 200,columnDefinition = "NVARCHAR2(200)")
 	public String getBusinessNumber() {
 		return this.businessNumber;
 	}
@@ -170,7 +170,7 @@ public class WorkCompanyHis implements java.io.Serializable {
 		this.businessNumber = businessNumber;
 	}
 
-	@Column(name = "select_lv", length = 100)
+	@Column(name = "select_lv", length = 100,columnDefinition = "NVARCHAR2(100)")
 	public String getSelectLv() {
 		return this.selectLv;
 	}
@@ -179,7 +179,7 @@ public class WorkCompanyHis implements java.io.Serializable {
 		this.selectLv = selectLv;
 	}
 
-	@Column(name = "organization_number", length = 100)
+	@Column(name = "organization_number", length = 100,columnDefinition = "NVARCHAR2(100)")
 	public String getOrganizationNumber() {
 		return this.organizationNumber;
 	}
@@ -197,7 +197,7 @@ public class WorkCompanyHis implements java.io.Serializable {
 		this.orgExpirationTime = orgExpirationTime;
 	}
 
-	@Column(name = "com_phone", length = 100)
+	@Column(name = "com_phone", length = 100,columnDefinition = "NVARCHAR2(100)")
 	public String getComPhone() {
 		return this.comPhone;
 	}
@@ -206,7 +206,7 @@ public class WorkCompanyHis implements java.io.Serializable {
 		this.comPhone = comPhone;
 	}
 
-	@Column(name = "zip_code", length = 100)
+	@Column(name = "zip_code", length = 100,columnDefinition = "NVARCHAR2(100)")
 	public String getZipCode() {
 		return this.zipCode;
 	}
@@ -215,7 +215,7 @@ public class WorkCompanyHis implements java.io.Serializable {
 		this.zipCode = zipCode;
 	}
 
-	@Column(name = "tcp_number", length = 200)
+	@Column(name = "tcp_number", length = 200,columnDefinition = "NVARCHAR2(200)")
 	public String getTcpNumber() {
 		return this.tcpNumber;
 	}
@@ -224,7 +224,7 @@ public class WorkCompanyHis implements java.io.Serializable {
 		this.tcpNumber = tcpNumber;
 	}
 
-	@Column(name = "age_dis_number")
+	@Column(name = "age_dis_number",columnDefinition = "NVARCHAR2(255)")
 	public String getAgeDisNumber() {
 		return this.ageDisNumber;
 	}
@@ -233,7 +233,7 @@ public class WorkCompanyHis implements java.io.Serializable {
 		this.ageDisNumber = ageDisNumber;
 	}
 
-	@Column(name = "legal_name", length = 100)
+	@Column(name = "legal_name", length = 100,columnDefinition = "NVARCHAR2(100)")
 	public String getLegalName() {
 		return this.legalName;
 	}
@@ -242,7 +242,7 @@ public class WorkCompanyHis implements java.io.Serializable {
 		this.legalName = legalName;
 	}
 
-	@Column(name = "province", length = 100)
+	@Column(name = "province", length = 100,columnDefinition = "NVARCHAR2(100)")
 	public String getProvince() {
 		return this.province;
 	}
@@ -251,7 +251,7 @@ public class WorkCompanyHis implements java.io.Serializable {
 		this.province = province;
 	}
 
-	@Column(name = "city", length = 100)
+	@Column(name = "city", length = 100,columnDefinition = "NVARCHAR2(100)")
 	public String getCity() {
 		return this.city;
 	}
@@ -260,7 +260,7 @@ public class WorkCompanyHis implements java.io.Serializable {
 		this.city = city;
 	}
 
-	@Column(name = "district", length = 100)
+	@Column(name = "district", length = 100,columnDefinition = "NVARCHAR2(100)")
 	public String getDistrict() {
 		return this.district;
 	}
@@ -269,7 +269,7 @@ public class WorkCompanyHis implements java.io.Serializable {
 		this.district = district;
 	}
 
-	@Column(name = "address", length = 200)
+	@Column(name = "address", length = 200,columnDefinition = "NVARCHAR2(200)")
 	public String getAddress() {
 		return this.address;
 	}
@@ -278,7 +278,7 @@ public class WorkCompanyHis implements java.io.Serializable {
 		this.address = address;
 	}
 
-	@Column(name = "company_mobile", length = 100)
+	@Column(name = "company_mobile", length = 100,columnDefinition = "NVARCHAR2(100)")
 	public String getCompanyMobile() {
 		return this.companyMobile;
 	}
@@ -287,7 +287,7 @@ public class WorkCompanyHis implements java.io.Serializable {
 		this.companyMobile = companyMobile;
 	}
 
-	@Column(name = "enterprise_type", length = 100)
+	@Column(name = "enterprise_type", length = 100,columnDefinition = "NVARCHAR2(100)")
 	public String getEnterpriseType() {
 		return this.enterpriseType;
 	}
@@ -296,7 +296,7 @@ public class WorkCompanyHis implements java.io.Serializable {
 		this.enterpriseType = enterpriseType;
 	}
 
-	@Column(name = "marketing_scope", length = 100)
+	@Column(name = "marketing_scope", length = 100,columnDefinition = "NVARCHAR2(100)")
 	public String getMarketingScope() {
 		return this.marketingScope;
 	}
@@ -305,7 +305,7 @@ public class WorkCompanyHis implements java.io.Serializable {
 		this.marketingScope = marketingScope;
 	}
 
-	@Column(name = "annual_inspection", length = 200)
+	@Column(name = "annual_inspection", length = 200,columnDefinition = "NVARCHAR2(200)")
 	public String getAnnualInspection() {
 		return this.annualInspection;
 	}
@@ -314,7 +314,7 @@ public class WorkCompanyHis implements java.io.Serializable {
 		this.annualInspection = annualInspection;
 	}
 
-	@Column(name = "industry", length = 100)
+	@Column(name = "industry", length = 100,columnDefinition = "NVARCHAR2(100)")
 	public String getIndustry() {
 		return this.industry;
 	}
@@ -323,7 +323,7 @@ public class WorkCompanyHis implements java.io.Serializable {
 		this.industry = industry;
 	}
 
-	@Column(name = "registered_capital", length = 100)
+	@Column(name = "registered_capital", length = 100,columnDefinition = "NVARCHAR2(100)")
 	public String getRegisteredCapital() {
 		return this.registeredCapital;
 	}
@@ -332,7 +332,7 @@ public class WorkCompanyHis implements java.io.Serializable {
 		this.registeredCapital = registeredCapital;
 	}
 
-	@Column(name = "actual_capital", length = 100)
+	@Column(name = "actual_capital", length = 100,columnDefinition = "NVARCHAR2(100)")
 	public String getActualCapital() {
 		return this.actualCapital;
 	}
@@ -341,7 +341,7 @@ public class WorkCompanyHis implements java.io.Serializable {
 		this.actualCapital = actualCapital;
 	}
 
-	@Column(name = "company_ip", length = 100)
+	@Column(name = "company_ip", length = 100,columnDefinition = "NVARCHAR2(100)")
 	public String getCompanyIp() {
 		return this.companyIp;
 	}
@@ -350,7 +350,7 @@ public class WorkCompanyHis implements java.io.Serializable {
 		this.companyIp = companyIp;
 	}
 
-	@Column(name = "company_web", length = 100)
+	@Column(name = "company_web", length = 100,columnDefinition = "NVARCHAR2(100)")
 	public String getCompanyWeb() {
 		return this.companyWeb;
 	}
@@ -359,7 +359,7 @@ public class WorkCompanyHis implements java.io.Serializable {
 		this.companyWeb = companyWeb;
 	}
 
-	@Column(name = "remarks")
+	@Column(name = "remarks",columnDefinition = "NVARCHAR2(255)")
 	public String getRemarks() {
 		return this.remarks;
 	}
