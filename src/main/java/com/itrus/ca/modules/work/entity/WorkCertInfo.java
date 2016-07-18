@@ -170,7 +170,7 @@ public class WorkCertInfo  implements java.io.Serializable {
 		this.isMaster = isMaster;
 	}
 
-	@Column(name = "issuer_dn")
+	@Column(name = "issuer_dn",columnDefinition = "NVARCHAR2(255)")
 	public String getIssuerDn() {
 		return this.issuerDn;
 	}
@@ -179,7 +179,7 @@ public class WorkCertInfo  implements java.io.Serializable {
 		this.issuerDn = issuerDn;
 	}
 
-	@Column(name = "issuer_hash_md5")
+	@Column(name = "issuer_hash_md5",columnDefinition = "NVARCHAR2(255)")
 	public String getIssuerHashMd5() {
 		return this.issuerHashMd5;
 	}
@@ -242,7 +242,7 @@ public class WorkCertInfo  implements java.io.Serializable {
 		this.renewalPrevId = renewalPrevId;
 	}
 
-	@Column(name = "req_buf")
+	@Column(name = "req_buf",columnDefinition = "VARCHAR2(4000)")
 	public String getReqBuf() {
 		return this.reqBuf;
 	}
@@ -251,7 +251,7 @@ public class WorkCertInfo  implements java.io.Serializable {
 		this.reqBuf = reqBuf;
 	}
 
-	@Column(name = "req_buf_type")
+	@Column(name = "req_buf_type",columnDefinition = "NVARCHAR2(255)")
 	public String getReqBufType() {
 		return this.reqBufType;
 	}
@@ -260,7 +260,7 @@ public class WorkCertInfo  implements java.io.Serializable {
 		this.reqBufType = reqBufType;
 	}
 
-	@Column(name = "req_challenge")
+	@Column(name = "req_challenge",columnDefinition = "NVARCHAR2(255)")
 	public String getReqChallenge() {
 		return this.reqChallenge;
 	}
@@ -269,7 +269,7 @@ public class WorkCertInfo  implements java.io.Serializable {
 		this.reqChallenge = reqChallenge;
 	}
 
-	@Column(name = "req_comment")
+	@Column(name = "req_comment",columnDefinition = "NVARCHAR2(255)")
 	public String getReqComment() {
 		return this.reqComment;
 	}
@@ -278,7 +278,7 @@ public class WorkCertInfo  implements java.io.Serializable {
 		this.reqComment = reqComment;
 	}
 
-	@Column(name = "req_nonce")
+	@Column(name = "req_nonce",columnDefinition = "NVARCHAR2(255)")
 	public String getReqNonce() {
 		return this.reqNonce;
 	}
@@ -305,7 +305,7 @@ public class WorkCertInfo  implements java.io.Serializable {
 		this.reqOverrideValidityExtend = reqOverrideValidityExtend;
 	}
 
-	@Column(name = "req_transid")
+	@Column(name = "req_transid",columnDefinition = "NVARCHAR2(255)")
 	public String getReqTransid() {
 		return this.reqTransid;
 	}
@@ -314,7 +314,7 @@ public class WorkCertInfo  implements java.io.Serializable {
 		this.reqTransid = reqTransid;
 	}
 
-	@Column(name = "serialnumber")
+	@Column(name = "serialnumber",columnDefinition = "NVARCHAR2(255)")
 	public String getSerialnumber() {
 		return this.serialnumber;
 	}
@@ -323,7 +323,7 @@ public class WorkCertInfo  implements java.io.Serializable {
 		this.serialnumber = serialnumber;
 	}
 
-	@Column(name = "sign_buf")
+	@Column(name = "sign_buf",columnDefinition = "VARCHAR2(4000)")
 	public String getSignBuf() {
 		return this.signBuf;
 	}
@@ -331,7 +331,7 @@ public class WorkCertInfo  implements java.io.Serializable {
 	public void setSignBuf(String signBuf) {
 		this.signBuf = signBuf;
 	}
-	@Column(name = "sign_buf_p7")
+	@Column(name = "sign_buf_p7",columnDefinition = "LONG")
 	public String getSignBufP7() {
 		return this.signBufP7;
 	}
@@ -349,7 +349,7 @@ public class WorkCertInfo  implements java.io.Serializable {
 		this.signDate = signDate;
 	}
 
-	@Column(name = "source")
+	@Column(name = "source",columnDefinition = "NVARCHAR2(255)")
 	public String getSource() {
 		return this.source;
 	}
@@ -367,7 +367,7 @@ public class WorkCertInfo  implements java.io.Serializable {
 		this.status = status;
 	}
 
-	@Column(name = "subject_dn")
+	@Column(name = "subject_dn",columnDefinition = "NVARCHAR2(255)")
 	public String getSubjectDn() {
 		return this.subjectDn;
 	}
@@ -376,7 +376,7 @@ public class WorkCertInfo  implements java.io.Serializable {
 		this.subjectDn = subjectDn;
 	}
 
-	@Column(name = "subject_hash_md5")
+	@Column(name = "subject_hash_md5",columnDefinition = "NVARCHAR2(255)")
 	public String getSubjectHashMd5() {
 		return this.subjectHashMd5;
 	}
@@ -439,7 +439,7 @@ public class WorkCertInfo  implements java.io.Serializable {
 		this.workDealInfos = workDealInfos;
 	}*/
 
-	@Column(name = "provider")
+	@Column(name = "provider",columnDefinition = "NVARCHAR2(255)")
 	public String getProvider() {
 		return provider;
 	}
@@ -457,7 +457,7 @@ public class WorkCertInfo  implements java.io.Serializable {
 		this.obtained = obtained;
 	}
 
-	@Column(name = "type")
+	@Column(name = "type",columnDefinition = "NVARCHAR2(255)")
 	public String getType() {
 		return type;
 	}
@@ -484,7 +484,7 @@ public class WorkCertInfo  implements java.io.Serializable {
 		this.workUserId = workUserId;
 	}
 
-	@Column(name = "key_sn")
+	@Column(name = "key_sn",columnDefinition = "NVARCHAR2(255)")
 	public String getKeySn() {
 		return keySn;
 	}
@@ -532,7 +532,7 @@ public class WorkCertInfo  implements java.io.Serializable {
 		this.certSignBufKmc = certSignBufKmc;
 	}
 
-	@Column(name = "cert_type_kmc")
+	@Column(name = "cert_type_kmc",columnDefinition = "NVARCHAR2(255)")
 	public String getCertTypeKmc() {
 		return certTypeKmc;
 	}
@@ -550,7 +550,7 @@ public class WorkCertInfo  implements java.io.Serializable {
 		this.certReqBufKmc = certReqBufKmc;
 	}
 
-	@Column(name = "cert_req_buf_type_kmc")
+	@Column(name = "cert_req_buf_type_kmc",columnDefinition = "NVARCHAR2(255)")
 	public String getCertReqBufTypeKmc() {
 		return certReqBufTypeKmc;
 	}
@@ -559,7 +559,7 @@ public class WorkCertInfo  implements java.io.Serializable {
 		this.certReqBufTypeKmc = certReqBufTypeKmc;
 	}
 
-	@Column(name = "cert_serialnumber_kmc")
+	@Column(name = "cert_serialnumber_kmc",columnDefinition = "NVARCHAR2(255)")
 	public String getCertSerialnumberKmc() {
 		return certSerialnumberKmc;
 	}
@@ -568,7 +568,7 @@ public class WorkCertInfo  implements java.io.Serializable {
 		this.certSerialnumberKmc = certSerialnumberKmc;
 	}
 
-	@Column(name = "install_mode")
+	@Column(name = "install_mode",columnDefinition = "NVARCHAR2(255)")
 	public String getInstallMode() {
 		return installMode;
 	}
