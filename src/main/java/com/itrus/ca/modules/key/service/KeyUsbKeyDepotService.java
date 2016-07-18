@@ -4,6 +4,7 @@
 package com.itrus.ca.modules.key.service;
 
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import com.itrus.ca.modules.key.dao.KeyUsbKeyDao;
@@ -19,6 +20,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.common.collect.Lists;
+import com.itrus.ca.common.persistence.DataEntity;
 import com.itrus.ca.common.persistence.Page;
 import com.itrus.ca.common.service.BaseService;
 import com.itrus.ca.common.utils.EscapeUtil;
@@ -32,6 +35,7 @@ import com.itrus.ca.modules.key.dao.KeyDepotGeneralStatisticsDao;
 import com.itrus.ca.modules.key.dao.KeyUsbKeyDepotDao;
 import com.itrus.ca.modules.sys.entity.Office;
 import com.itrus.ca.modules.sys.utils.UserUtils;
+
 
 /**
  * key入库信息Service
@@ -89,6 +93,32 @@ public class KeyUsbKeyDepotService extends BaseService {
 		dc.add(Restrictions.eq(KeyUsbKeyDepot.DEL_FLAG, KeyUsbKeyDepot.DEL_FLAG_NORMAL));
 		dc.addOrder(Order.desc("id"));
 		return keyUsbKeyDepotDao.find(page, dc);
+	}
+	
+	
+	
+	public List<KeyUsbKeyDepot> findListByOffices(KeyUsbKeyDepot keyUsbKeyDepot,List<Office> offices  ) {
+		DetachedCriteria dc = keyUsbKeyDepotDao.createDetachedCriteria();
+		dc.add(Restrictions.in("office", offices));
+		
+		dc.add(Restrictions.ne("id", keyUsbKeyDepot.getId()));
+		
+		while (keyUsbKeyDepot.getParent() != null) {
+
+			keyUsbKeyDepot = keyUsbKeyDepot.getParent();
+		
+			if(keyUsbKeyDepot!=null){
+				dc.add(Restrictions.ne("id", keyUsbKeyDepot.getId()));		
+			
+			}
+		}
+		
+		
+		dc.add(Restrictions.isNull("parent"));
+		
+		dc.add(Restrictions.eq(KeyUsbKeyDepot.DEL_FLAG, KeyUsbKeyDepot.DEL_FLAG_NORMAL));
+		dc.addOrder(Order.desc("id"));
+		return keyUsbKeyDepotDao.find(dc);
 	}
 	
 	
@@ -257,7 +287,7 @@ public class KeyUsbKeyDepotService extends BaseService {
 		DetachedCriteria dc = keyUsbKeyDepotDao.createDetachedCriteria();
 		dc.add(Restrictions.in("office", officeIds));
 		dc.add(Restrictions.eq(KeyUsbKeyDepot.DEL_FLAG, KeyUsbKeyDepot.DEL_FLAG_NORMAL));
-		dc.addOrder(Order.desc("id"));
+		dc.addOrder(Order.asc("id"));
 		return keyUsbKeyDepotDao.find(dc);
 	}
 	
@@ -382,5 +412,26 @@ public class KeyUsbKeyDepotService extends BaseService {
 		}
 	}
 
-
+	
+	public List<KeyUsbKeyDepot> getDepotList(KeyUsbKeyDepot depot){
+		DetachedCriteria dc = keyUsbKeyDepotDao.createDetachedCriteria();
+		dc.createAlias("parent", "parent");
+		dc.add(Restrictions.eq("parent",depot));
+		dc.add(Restrictions.eq("delFlag",DataEntity.DEL_FLAG_NORMAL));
+		dc.addOrder(Order.asc("id"));
+		return  keyUsbKeyDepotDao.find(dc);
+	} 
+	
+	
+	public String getDepotIds(KeyUsbKeyDepot depot) {
+		List<KeyUsbKeyDepot> depotList = getDepotList(depot);
+		List<Long> nameIdList = Lists.newArrayList();
+		for (KeyUsbKeyDepot keyDepot : depotList) {
+			nameIdList.add(keyDepot.getId());
+		}
+		return StringUtils.join(nameIdList, ",");
+	}
+	
+	
+	
 }

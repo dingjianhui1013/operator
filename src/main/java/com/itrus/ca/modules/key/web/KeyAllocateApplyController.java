@@ -175,6 +175,14 @@ public class KeyAllocateApplyController extends BaseController {
 		if (!user.isAdmin()) {
 			keyAllocateApply.setCreateBy(user);
 		}
+		
+		List<Office> officeList = Lists.newArrayList();
+		
+		officeList.add(user.getOffice());
+		List<KeyUsbKeyDepot> depots = keyUsbKeyDepotService
+				.findByOfficeIds(officeList);
+		
+		
 		model.addAttribute("state", state);
 		model.addAttribute("startTime", startTime);
 		model.addAttribute("endTime", endTime);
@@ -185,7 +193,7 @@ public class KeyAllocateApplyController extends BaseController {
 		keyAllocateApply.setState(state);
 		Page<KeyAllocateApply> page = keyAllocateApplyService
 				.assessmentFind(new Page<KeyAllocateApply>(request, response),
-						keyAllocateApply, startTime, endTime, office);
+						keyAllocateApply, startTime, endTime, office,depots.get(0));
 
 		for (int i = 0; i < page.getList().size(); i++) {
 			Long applyId = page.getList().get(i).getId();
@@ -278,7 +286,7 @@ public class KeyAllocateApplyController extends BaseController {
 			RedirectAttributes redirectAttributes, HttpServletRequest request,
 			HttpServletResponse response, Long applyId) throws JSONException {
 		if (!beanValidator(model, keyAllocateApply)) {
-			return form(keyAllocateApply, model);
+			return form(keyAllocateApply, model,redirectAttributes);
 		}
 		JSONObject json = new JSONObject();
 		try {
@@ -405,7 +413,7 @@ public class KeyAllocateApplyController extends BaseController {
 			RedirectAttributes redirectAttributes, HttpServletRequest request,
 			HttpServletResponse response, Long applyId) throws JSONException {
 		if (!beanValidator(model, keyAllocateApply)) {
-			return form(keyAllocateApply, model);
+			return form(keyAllocateApply, model,redirectAttributes);
 		}
 		JSONObject json = new JSONObject();
 		try {
@@ -468,7 +476,7 @@ public class KeyAllocateApplyController extends BaseController {
 
 	@RequiresPermissions("key:keyAllocateApply:view")
 	@RequestMapping(value = "form")
-	public String form(KeyAllocateApply keyAllocateApply, Model model) {
+	public String form(KeyAllocateApply keyAllocateApply, Model model,RedirectAttributes redirectAttributes) {
 
 		User user = UserUtils.getUser();
 		/*List<Office> offices = officeService.getOfficeByType(user, 2);
@@ -491,9 +499,21 @@ public class KeyAllocateApplyController extends BaseController {
 			model.addAttribute("depotId", depots.get(0).getId());
 		}
 
+		//实际情况是 一个网点下只有一个库房，所以我们可以得到调拨申请的库房
+		KeyUsbKeyDepot depot = depots.get(0);
+		if(depot.getParent()==null){
+			addMessage(redirectAttributes, "所在库房【"+depot.getDepotName()+"】没有上级库房,无法进行调拨!");
+			return "redirect:" + Global.getAdminPath() + "/key/keyAllocateApply/?repage";
+		}
+		
+		model.addAttribute("parentDepot", depot.getParent());
+		
 		List<Long> depotIdList = Lists.newArrayList();
-		depotIdList.add(KeyDepotId.MAIN_DEPOT_ID);
+		/*depotIdList.add(KeyDepotId.MAIN_DEPOT_ID);*/
 
+		//改：之前所有调拨都从四川CA总库房调拨，现在改为所在网点库房从上级库房调拨
+		depotIdList.add(depot.getParent().getId());
+		
 		List<KeyUsbKey> kuksKeys = keyUsbKeyService.findByDepotIds(depotIdList);
 		List<Long> geneIds = Lists.newArrayList();
 		for (int i = 0; i < kuksKeys.size(); i++) {
@@ -613,12 +633,11 @@ public class KeyAllocateApplyController extends BaseController {
 
 		}
 
-		KeyUsbKeyDepot depot = new KeyUsbKeyDepot();
-		depot.setId(depotId);
-		KeyGeneralInfo gene = new KeyGeneralInfo();
-		// gene.setId(applyKeyType);
+		
+		
+		KeyUsbKeyDepot depot = keyUsbKeyDepotService.get(depotId);
 		keyAllocateApply.setKeyUsbKeyDepot(depot);
-		// keyAllocateApply.setKeyGeneralInfo(gene);
+		keyAllocateApply.setAuditKeyDepotId(depot.getParent().getId());
 
 		keyAllocateApply.setState(1);
 		

@@ -17,12 +17,15 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Transient;
+import javax.validation.constraints.NotNull;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 import org.hibernate.mapping.Array;
 
 import com.itrus.ca.common.persistence.DataEntity;
@@ -40,6 +43,9 @@ public class KeyUsbKeyDepot extends DataEntity implements java.io.Serializable {
 
 	// Fields
 	private Long id;
+	
+	private KeyUsbKeyDepot parent;	// 新增   上级仓库
+	
 	private String depotName;
 	private Long manufacturerId;
 	private Long keyTypeId;
@@ -121,7 +127,23 @@ public class KeyUsbKeyDepot extends DataEntity implements java.io.Serializable {
 		this.id = id;
 	}
 
+
+	
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="parent_id")
+	public KeyUsbKeyDepot getParent() {
+		return parent;
+	}
+
+	public void setParent(KeyUsbKeyDepot parent) {
+		this.parent = parent;
+	}
+	
+	
+
 	@Column(name = "depot_name", columnDefinition = "NVARCHAR2(255)")
+
 	public String getDepotName() {
 		return this.depotName;
 	}

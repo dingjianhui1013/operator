@@ -38,11 +38,13 @@ import com.itrus.ca.modules.profile.entity.ConfigSupplier;
 import com.itrus.ca.modules.profile.service.ConfigAppOfficeRelationService;
 import com.itrus.ca.modules.profile.service.ConfigSupplierService;
 import com.itrus.ca.modules.sys.entity.Office;
+import com.itrus.ca.modules.sys.entity.Role;
 import com.itrus.ca.modules.sys.entity.User;
 import com.itrus.ca.modules.sys.service.OfficeService;
 import com.itrus.ca.modules.sys.utils.UserUtils;
 import com.itrus.ca.modules.work.entity.WorkFinancePayInfoRelation;
 import com.itrus.ca.modules.work.entity.WorkPayInfo;
+
 import com.itrus.ca.modules.finance.entity.FinancePaymentInfo;
 import com.itrus.ca.modules.finance.service.FinancePaymentInfoService;
 import com.itrus.ca.modules.key.entity.KeyDepotGeneralStatistics;
@@ -113,6 +115,22 @@ public class KeyUsbKeyDepotController extends BaseController {
 		if (!user.isAdmin()){
 			keyUsbKeyDepot.setCreateBy(user);
 		}
+		
+		
+		//只有系统管理员才具有分配库房的功能
+		model.addAttribute("isSysadmin", false);
+		
+		List<Role> roleList = user.getRoleList();
+		for(Role role:roleList){
+			if(role.getId() == 1){
+				
+				model.addAttribute("isSysadmin", true);
+				
+				break;
+			}
+		}
+		
+		
 		
 		List<Office> offices =  officeService.getOfficeByType(user, 2);
 		
@@ -459,7 +477,7 @@ public class KeyUsbKeyDepotController extends BaseController {
 		
 		List<KeyUsbKeyDepot> depotByOff =  keyUsbKeyDepotService.findByOfficeId(officeId);
 		if (depotByOff.size()>0) {
-			addMessage(redirectAttributes,depotByOff.get(0).getOffice().getName()+ "网点已添加库存！请勿重复添加库存！");
+			addMessage(redirectAttributes,depotByOff.get(0).getOffice().getName()+ "网点已添加库房！请勿重复添加库房！");
 			return "redirect:"+Global.getAdminPath()+"/key/keyUsbKeyDepot/?repage";
 		}
 		
@@ -607,4 +625,93 @@ public class KeyUsbKeyDepotController extends BaseController {
 	}
 	
 
+		//分配页面
+		@RequiresPermissions("key:keyUsbKeyDepot:edit")
+		@RequestMapping(value = "assign")
+		public String assign(Long id, Model model) {
+			
+			KeyUsbKeyDepot depot = keyUsbKeyDepotService.get(id);
+			
+			List<KeyUsbKeyDepot> depots = keyUsbKeyDepotService.getDepotList(depot);
+			
+			 for (int i = 0; i <  depots.size(); i++) {
+		    	   Long depotId =   depots.get(i).getId();//获取库存的id
+		    	   List<KeyDepotGeneralStatistics> depotGeneStatistics =   keyDepotGeneralStatisticsService.findByDepotId(depotId);
+		    	   
+		    	   int inCount = 0;
+		    	   for (int j = 0; j < depotGeneStatistics.size(); j++) {
+		    		   inCount += depotGeneStatistics.get(j).getInCount();//计算库存总量
+		    	   }
+		    	   depots.get(i).setInCount(inCount);
+		    	   if (depotGeneStatistics.size()>0) {
+		    		   depots.get(i).setKeyDepotGeneralStatisticsList(depotGeneStatistics);
+				}
+		       }
+			
+			
+			model.addAttribute("depot", depot);
+			model.addAttribute("depots", depots);
+			
+			return "modules/key/keyUsbKeyDepotAssign";
+		}
+		
+		
+		//分配的iframe
+		@RequiresPermissions("key:keyUsbKeyDepot:edit")
+		@RequestMapping(value = "depottodepot")
+		public String selectDepotToParent(Long id, Model model) {
+			KeyUsbKeyDepot depot = keyUsbKeyDepotService.get(id);
+			model.addAttribute("depot", depot);
+			model.addAttribute("selectIds", keyUsbKeyDepotService.getDepotIds(depot));      //已选择的库房id
+			
+			
+			List<Office> offices =  officeService.getOfficeByType(UserUtils.getUser(), 2);
+			
+			for (int i = 0; i < offices.size(); i++) {
+				System.out.print(offices.get(i).getId()+"-");
+			}
+			
+			model.addAttribute("depotList", keyUsbKeyDepotService.findListByOffices(depot,offices));              //所有的库房id(前提是权限内的并且除自己以外)
+			model.addAttribute("selectedList", keyUsbKeyDepotService.getDepotList(depot));
+			return "modules/key/selectDepotToParent";
+		}
+		
+		
+		@RequiresPermissions("key:keyUsbKeyDepot:edit")
+		@RequestMapping(value = "assignDepot")
+		public String assignDepot(Long id, Long[] idsArr, RedirectAttributes redirectAttributes) {
+			
+			KeyUsbKeyDepot depot = keyUsbKeyDepotService.get(id);
+			
+			StringBuilder msg = new StringBuilder();
+			int newNum = 0;
+			for (int i = 0; i < idsArr.length; i++) {
+				KeyUsbKeyDepot child = keyUsbKeyDepotService.get(idsArr[i]);
+				if (null != child) {
+					
+					child.setParent(depot);
+					keyUsbKeyDepotService.save(child);
+					
+					msg.append("<br/>新增下级库房【" + child.getDepotName() + "】！");
+					newNum++;
+				}
+			}
+			addMessage(redirectAttributes, "已成功分配 "+newNum+" 个下级库房"+msg);
+			return "redirect:"+Global.getAdminPath()+"/key/keyUsbKeyDepot/assign?id="+depot.getId();
+		}
+	
+		
+		@RequiresPermissions("key:keyUsbKeyDepot:edit")
+		@RequestMapping(value = "outDepot")
+		public String outDepot(Long depotId,Long parentId, RedirectAttributes redirectAttributes) {
+			KeyUsbKeyDepot depot = keyUsbKeyDepotService.get(depotId);
+			depot.setParent(null);
+			keyUsbKeyDepotService.save(depot);
+			
+				
+			addMessage(redirectAttributes, "下级库房【" + depot.getDepotName() + "】移除成功！");
+				
+			
+			return "redirect:"+Global.getAdminPath()+"/key/keyUsbKeyDepot/assign?id="+parentId;
+		}
 }

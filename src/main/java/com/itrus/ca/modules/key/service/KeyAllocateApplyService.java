@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.itrus.ca.common.persistence.Page;
 import com.itrus.ca.common.service.BaseService;
 import com.itrus.ca.modules.key.entity.KeyAllocateApply;
+import com.itrus.ca.modules.key.entity.KeyUsbKeyDepot;
 import com.itrus.ca.modules.key.dao.KeyAllocateApplyDao;
 import com.itrus.ca.modules.sys.utils.UserUtils;
 
@@ -65,7 +66,7 @@ public class KeyAllocateApplyService extends BaseService {
 	
 	
 	
-	public Page<KeyAllocateApply> assessmentFind(Page<KeyAllocateApply> page, KeyAllocateApply keyAllocateApply, Date startTime, Date endTime, Long office) {
+	public Page<KeyAllocateApply> assessmentFind(Page<KeyAllocateApply> page, KeyAllocateApply keyAllocateApply, Date startTime, Date endTime, Long office,KeyUsbKeyDepot auditDepot){
 		DetachedCriteria dc = keyAllocateApplyDao.createDetachedCriteria();
 		dc.createAlias("createBy.office", "office");
 		dc.createAlias("createBy", "createBy");
@@ -83,6 +84,9 @@ public class KeyAllocateApplyService extends BaseService {
 		if (office!=null) {
 			dc.add(Restrictions.eq("office.id", office));
 		}
+		
+		dc.add(Restrictions.eq("auditKeyDepotId", auditDepot.getId()));
+		
 		dc.add(Restrictions.eq(KeyAllocateApply.DEL_FLAG, KeyAllocateApply.DEL_FLAG_NORMAL));
 		dc.addOrder(Order.desc("id"));
 		return keyAllocateApplyDao.find(page, dc);

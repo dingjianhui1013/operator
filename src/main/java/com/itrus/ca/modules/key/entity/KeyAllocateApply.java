@@ -43,6 +43,10 @@ public class KeyAllocateApply extends DataEntity implements
 	private Long id;
 	private Office sysOffice;
 	private KeyUsbKeyDepot keyUsbKeyDepot;
+	
+	private Long auditKeyDepotId;//新增字段      审核库房的id
+	
+	
 	private Integer applyType;
 
 	private Date warehouseDate;
@@ -84,7 +88,10 @@ public class KeyAllocateApply extends DataEntity implements
 		this.officeId = officeId;
 		this.areaId = areaId;
 
+
+
 		// this.keyDisplaceDetails = keyDisplaceDetails;
+
 	}
 
 	// Property accessors
@@ -257,4 +264,14 @@ public class KeyAllocateApply extends DataEntity implements
 		this.areaId = areaId;
 	}
 
+
+	@Column(name = "audit_depot_id")
+	public Long getAuditKeyDepotId() {
+		return auditKeyDepotId;
+	}
+
+	public void setAuditKeyDepotId(Long auditKeyDepotId) {
+		this.auditKeyDepotId = auditKeyDepotId;
+	}
+	
 }
