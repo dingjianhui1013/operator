@@ -77,7 +77,7 @@ public class ReceiptLog implements java.io.Serializable {
 		this.receiptDepotInfo = receiptDepotInfo;
 	}
 
-	@Column(name = "receipt_total", precision = 255, scale = 0)
+	@Column(name = "receipt_total", precision = 255, scale = 0,columnDefinition = "NUMBER")
 	public Double getReceiptTotal() {
 		return this.receiptTotal;
 	}
@@ -86,7 +86,7 @@ public class ReceiptLog implements java.io.Serializable {
 		this.receiptTotal = receiptTotal;
 	}
 
-	@Column(name = "receipt_out", precision = 255, scale = 0)
+	@Column(name = "receipt_out", precision = 255, scale = 0,columnDefinition = "NUMBER")
 	public Double getReceiptOut() {
 		return this.receiptOut;
 	}
@@ -95,7 +95,7 @@ public class ReceiptLog implements java.io.Serializable {
 		this.receiptOut = receiptOut;
 	}
 
-	@Column(name = "receipt_residue", precision = 255, scale = 0)
+	@Column(name = "receipt_residue", precision = 255, scale = 0,columnDefinition = "NUMBER")
 	public Double getReceiptResidue() {
 		return this.receiptResidue;
 	}
