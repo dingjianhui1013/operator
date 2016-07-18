@@ -62,7 +62,7 @@ public class SysOperateLog extends DataEntity implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@Column(name = "type")
+	@Column(name = "type",columnDefinition = "NVARCHAR2(255)")
 	public String getType() {
 		return this.type;
 	}
@@ -71,7 +71,7 @@ public class SysOperateLog extends DataEntity implements java.io.Serializable {
 		this.type = type;
 	}
 
-	@Column(name = "remote_addr")
+	@Column(name = "remote_addr",columnDefinition = "NVARCHAR2(255)")
 	public String getRemoteAddr() {
 		return this.remoteAddr;
 	}
@@ -80,7 +80,7 @@ public class SysOperateLog extends DataEntity implements java.io.Serializable {
 		this.remoteAddr = remoteAddr;
 	}
 
-	@Column(name = "user_agent")
+	@Column(name = "user_agent",columnDefinition = "NVARCHAR2(255)")
 	public String getUserAgent() {
 		return this.userAgent;
 	}
@@ -89,7 +89,7 @@ public class SysOperateLog extends DataEntity implements java.io.Serializable {
 		this.userAgent = userAgent;
 	}
 
-	@Column(name = "request_uri")
+	@Column(name = "request_uri",columnDefinition = "NVARCHAR2(255)")
 	public String getRequestUri() {
 		return this.requestUri;
 	}
@@ -98,7 +98,7 @@ public class SysOperateLog extends DataEntity implements java.io.Serializable {
 		this.requestUri = requestUri;
 	}
 
-	@Column(name = "method", length = 5)
+	@Column(name = "method", length = 5,columnDefinition = "NVARCHAR2(5)")
 	public String getMethod() {
 		return this.method;
 	}
@@ -107,7 +107,7 @@ public class SysOperateLog extends DataEntity implements java.io.Serializable {
 		this.method = method;
 	}
 
-	@Column(name = "params")
+	@Column(name = "params",columnDefinition = "NCLOB")
 	public String getParams() {
 		return this.params;
 	}
@@ -116,7 +116,7 @@ public class SysOperateLog extends DataEntity implements java.io.Serializable {
 		this.params = params;
 	}
 
-	@Column(name = "exception")
+	@Column(name = "exception",columnDefinition = "NCLOB")
 	public String getException() {
 		return this.exception;
 	}
