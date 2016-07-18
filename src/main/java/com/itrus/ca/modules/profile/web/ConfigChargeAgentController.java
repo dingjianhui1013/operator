@@ -115,6 +115,13 @@ public class ConfigChargeAgentController extends BaseController {
 	@RequestMapping(value = {"list", ""})
 	public String list(ConfigProduct configProduct, HttpServletRequest request, HttpServletResponse response, Model model) {
         Page<ConfigProduct> page = configProductService.find(new Page<ConfigProduct>(request, response), configProduct);
+        for(ConfigProduct Product:page.getList()){
+        	List<ConfigChargeAgentBoundConfigProduct> findByProductId = configChargeAgentBoundConfigProductService.findByProductId(Product.getId());
+        	for(ConfigChargeAgentBoundConfigProduct ConfigChargeAgent:findByProductId){
+        		ConfigChargeAgent agent = ConfigChargeAgent.getAgent();
+        		Product.getConfigChargeAgents().add(agent);
+        	}
+        }
         model.addAttribute("page", page);
         model.addAttribute("typeMap", ProductType.productTypeStrMap);
 		return "modules/profile/configChargeAgentList";

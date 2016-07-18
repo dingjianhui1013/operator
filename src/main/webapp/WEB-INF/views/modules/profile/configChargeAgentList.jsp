@@ -68,6 +68,7 @@
 		<th>序号</th>
 		<th>应用名称</th>
 		<th>产品名称</th>
+		<th>已绑定的模板名称</th>
 		<shiro:hasPermission name="profile:configChargeAgent:edit"><th>操作</th></shiro:hasPermission>
 		</tr></thead>
 		<tbody>
@@ -80,6 +81,12 @@
 				<td>
 				${typeMap[configProduct.productName]}
 				<c:if test="${configProduct.productLabel==0 }">(通用)</c:if>	<c:if test="${configProduct.productLabel==1 }">(专用)</c:if>
+				</td>
+				<td>
+					 <c:forEach items="${configProduct.configChargeAgents}" var="chargeAgent" >
+						${chargeAgent.tempName}
+						<br/>
+					</c:forEach> 
 				</td>
 				<shiro:hasPermission name="profile:configChargeAgent:edit"><td>
     				<!--<a href="${ctx}/profile/configChargeAgent/form?id=${configProduct.id}">计费策略模板绑定</a>-->
