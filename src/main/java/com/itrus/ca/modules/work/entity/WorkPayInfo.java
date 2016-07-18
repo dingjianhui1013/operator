@@ -360,6 +360,7 @@ public class WorkPayInfo extends DataEntity implements java.io.Serializable {
 		this.receiptInvoices = receiptInvoices;
 	}
 
+	@Column(name = "work_receiva_money", precision = 20, scale = 3,columnDefinition = "NUMBER")
 	public Double getWorkReceivaMoney() {
 		return workReceivaMoney;
 	}
