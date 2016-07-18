@@ -7,6 +7,7 @@ package com.itrus.ca.modules.sys.entity;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -31,43 +32,46 @@ import com.itrus.ca.common.persistence.BaseEntity;
 
 /**
  * 日志Entity
+ * 
  * @author ThinkGem
  * @version 2013-05-30
  */
 @Entity
 @Table(name = "sys_log")
-@DynamicInsert @DynamicUpdate
+@DynamicInsert
+@DynamicUpdate
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Log extends BaseEntity {
 
 	private static final long serialVersionUID = 1L;
-	private Long id;			// 日志编号
-	private String type; 		// 日志类型（1：接入日志；2：错误日志）
-	private User createBy;		// 创建者
-	private Date createDate;	// 日志创建时间
-	private String remoteAddr; 	// 操作用户的IP地址
-	private String requestUri; 	// 操作的URI
-	private String method; 		// 操作的方式
-	private String params; 		// 操作提交的数据
-	private String userAgent;	// 操作用户代理信息
-	private String exception; 	// 异常信息
-	
+	private Long id; // 日志编号
+	private String type; // 日志类型（1：接入日志；2：错误日志）
+	private User createBy; // 创建者
+	private Date createDate; // 日志创建时间
+	private String remoteAddr; // 操作用户的IP地址
+	private String requestUri; // 操作的URI
+	private String method; // 操作的方式
+	private String params; // 操作提交的数据
+	private String userAgent; // 操作用户代理信息
+	private String exception; // 异常信息
+
 	public static final String TYPE_ACCESS = "1";
 	public static final String TYPE_EXCEPTION = "2";
-	
-	public Log(){
+
+	public Log() {
 		super();
 	}
-	
-	public Log(Long id){
+
+	public Log(Long id) {
 		this();
 		this.id = id;
 	}
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SYS_LOG_SEQUENCE")
-//	@SequenceGenerator(name = "COMMON_SEQUENCE", sequenceName = "COMMON_SEQUENCE")
-	@SequenceGenerator(name="SYS_LOG_SEQUENCE",allocationSize=1,initialValue=1,sequenceName="SYS_LOG_SEQUENCE")
+	// @SequenceGenerator(name = "COMMON_SEQUENCE", sequenceName =
+	// "COMMON_SEQUENCE")
+	@SequenceGenerator(name = "SYS_LOG_SEQUENCE", allocationSize = 1, initialValue = 1, sequenceName = "SYS_LOG_SEQUENCE")
 	public Long getId() {
 		return id;
 	}
@@ -76,6 +80,7 @@ public class Log extends BaseEntity {
 		this.id = id;
 	}
 	
+	@Column(name = "TYPE",columnDefinition = "NCHAR(1)")
 	public String getType() {
 		return type;
 	}
@@ -85,7 +90,7 @@ public class Log extends BaseEntity {
 	}
 
 	@JsonIgnore
-	@ManyToOne(fetch=FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@NotFound(action = NotFoundAction.IGNORE)
 	public User getCreateBy() {
 		return createBy;
@@ -104,7 +109,8 @@ public class Log extends BaseEntity {
 	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
 	}
-	
+
+	@Column(name = "REMOTE_ADDR", columnDefinition = "NVARCHAR2(255)")
 	public String getRemoteAddr() {
 		return remoteAddr;
 	}
@@ -112,7 +118,8 @@ public class Log extends BaseEntity {
 	public void setRemoteAddr(String remoteAddr) {
 		this.remoteAddr = remoteAddr;
 	}
-
+	
+	@Column(name = "USER_AGENT", columnDefinition = "NVARCHAR2(255)")
 	public String getUserAgent() {
 		return userAgent;
 	}
@@ -121,6 +128,7 @@ public class Log extends BaseEntity {
 		this.userAgent = userAgent;
 	}
 
+	@Column(name = "REQUEST_URI", columnDefinition = "NVARCHAR2(255)")
 	public String getRequestUri() {
 		return requestUri;
 	}
@@ -128,7 +136,8 @@ public class Log extends BaseEntity {
 	public void setRequestUri(String requestUri) {
 		this.requestUri = requestUri;
 	}
-
+	
+	@Column(name = "METHOD", columnDefinition = "NVARCHAR2(5)")
 	public String getMethod() {
 		return method;
 	}
@@ -137,6 +146,7 @@ public class Log extends BaseEntity {
 		this.method = method;
 	}
 
+	@Column(name = "PARAMS", columnDefinition = "NCLOB")
 	public String getParams() {
 		return params;
 	}
@@ -144,7 +154,8 @@ public class Log extends BaseEntity {
 	public void setParams(String params) {
 		this.params = params;
 	}
-	
+
+	@Column(name = "EXCEPTION", columnDefinition = "NCLOB")
 	public String getException() {
 		return exception;
 	}
