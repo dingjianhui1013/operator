@@ -8,6 +8,7 @@ package com.itrus.ca.modules.sys.entity;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -125,6 +126,7 @@ public class User extends DataEntity {
 
 	@Length(min=1, max=100)
 	@ExcelField(title="登录名", align=2, sort=30)
+	@Column(name = "LOGIN_NAME", columnDefinition = "NVARCHAR2(127)")
 	public String getLoginName() {
 		return loginName;
 	}
@@ -135,6 +137,7 @@ public class User extends DataEntity {
 
 	@JsonIgnore
 	@Length(min=1, max=100)
+	@Column(name = "PASSWORD", columnDefinition = "NVARCHAR2(127)")
 	public String getPassword() {
 		return password;
 	}
@@ -145,12 +148,14 @@ public class User extends DataEntity {
 
 	@Length(min=1, max=100)
 	@ExcelField(title="姓名", align=2, sort=40)
+	@Column(name = "NAME", columnDefinition = "NVARCHAR2(127)")
 	public String getName() {
 		return name;
 	}
 	
 	@Length(min=1, max=100)
 	//@ExcelField(title="工号", align=2, sort=45)
+	@Column(name = "NO", columnDefinition = "NVARCHAR2(127)")
 	public String getNo() {
 		return no;
 	}
@@ -158,7 +163,8 @@ public class User extends DataEntity {
 	public void setNo(String no) {
 		this.no = no;
 	}
-
+	
+	@Column(name = "LOGIN_TYPE", columnDefinition = "NVARCHAR2(1)")
 	public String getLoginType() {
 		return loginType;
 	}
@@ -173,6 +179,7 @@ public class User extends DataEntity {
 
 	@Email @Length(min=0, max=200)
 	@ExcelField(title="邮箱", align=1, sort=50)
+	@Column(name = "EMAIL", columnDefinition = "NVARCHAR2(255)")
 	public String getEmail() {
 		return email;
 	}
@@ -183,6 +190,7 @@ public class User extends DataEntity {
 	
 	@Length(min=0, max=200)
 	@ExcelField(title="电话", align=2, sort=60)
+	@Column(name = "PHONE", columnDefinition = "NVARCHAR2(255)")
 	public String getPhone() {
 		return phone;
 	}
@@ -193,6 +201,7 @@ public class User extends DataEntity {
 
 	@Length(min=0, max=200)
 	@ExcelField(title="手机", align=2, sort=70)
+	@Column(name = "MOBILE", columnDefinition = "NVARCHAR2(255)")
 	public String getMobile() {
 		return mobile;
 	}
@@ -203,12 +212,14 @@ public class User extends DataEntity {
 
 	@Transient
 	@ExcelField(title="备注", align=1, sort=900)
+	@Column(name = "REMARKS", columnDefinition = "NVARCHAR2(255)")
 	public String getRemarks() {
 		return remarks;
 	}
 	
 	@Length(min=0, max=100)
 	//@ExcelField(title="用户类型", align=2, sort=80, dictType="sys_user_type")
+	@Column(name = "USER_TYPE", columnDefinition = "NCHAR(1)")
 	public String getUserType() {
 		return userType;
 	}
@@ -224,6 +235,7 @@ public class User extends DataEntity {
 	}
 
 	@ExcelField(title="最后登录IP", type=1, align=1, sort=100)
+	@Column(name = "LOGIN_IP", columnDefinition = "NVARCHAR2(127)")
 	public String getLoginIp() {
 		return loginIp;
 	}
@@ -297,7 +309,7 @@ public class User extends DataEntity {
 	public static boolean isAdmin(Long id){
 		return id != null && id.equals(1L);
 	}
-
+	
 	public String getSccaNumber() {
 		return sccaNumber;
 	}
