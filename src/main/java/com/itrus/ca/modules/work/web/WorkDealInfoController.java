@@ -5338,16 +5338,13 @@ public class WorkDealInfoController extends BaseController {
 			// }
 			workDealInfo.setWorkPayInfo(workPayInfo);
 		}
-		List<Long> dealInfoByOfficeAreaIds = Lists.newArrayList();
-		List<Long> dealInfoByAreaIds = Lists.newArrayList();
 		List<Long> officeids = Lists.newArrayList();
 		if (officeId != null && officeId != 0) {
 			officeids.add(officeId);
 			
 		} else {
 			if (area != null) {
-				List<Long> appids = Lists.newArrayList();
-	
+				
 				List<Office> offices = officeService.findByParentId(area);// 根据区域id获取网店id
 				if (offices.size() > 0) {
 					for (int i = 0; i < offices.size(); i++) {
@@ -5367,7 +5364,6 @@ public class WorkDealInfoController extends BaseController {
 		for (int i = 0; i < officeList.size(); i++) {
 			officeIds.add(officeList.get(i).getId());
 		}
-		// Calendar calendar = Calendar.getInstance();
 		try {
 			
 			List<WorkDealInfo> list = new ArrayList<WorkDealInfo>();
