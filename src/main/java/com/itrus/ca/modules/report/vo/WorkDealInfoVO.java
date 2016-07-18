@@ -25,7 +25,7 @@ public class WorkDealInfoVO {
 	
 	private Date businessCardDate;
 	
-	@ExcelField(title="应用名称", align=2)
+	@ExcelField(title="应用名称", align=2,sort=1)
 	public String getAppName() {
 		return appName;
 	}
@@ -33,7 +33,7 @@ public class WorkDealInfoVO {
 		this.appName = appName;
 	}
 	
-	@ExcelField(title="有效数量", align=2)
+	@ExcelField(title="有效数量", align=2,sort=2)
 	public Integer getValidCount() {
 		return validCount;
 	}
@@ -41,7 +41,7 @@ public class WorkDealInfoVO {
 		this.validCount = validCount;
 	}
 	
-	@ExcelField(title="新增数量", align=2)
+	@ExcelField(title="新增数量", align=2,sort=3)
 	public Integer getNewCount() {
 		return newCount;
 	}
@@ -49,7 +49,7 @@ public class WorkDealInfoVO {
 		this.newCount = newCount;
 	}
 	
-	@ExcelField(title="已更新数量", align=2)
+	@ExcelField(title="已更新数量", align=2,sort=4)
 	public Integer getUpdateCount() {
 		return updateCount;
 	}
@@ -57,7 +57,7 @@ public class WorkDealInfoVO {
 		this.updateCount = updateCount;
 	}
 	
-	@ExcelField(title="待更新数量", align=2)
+	@ExcelField(title="待更新数量", align=2,sort=5)
 	public Integer getUnUpdateCount() {
 		return unUpdateCount;
 	}
@@ -65,7 +65,7 @@ public class WorkDealInfoVO {
 		this.unUpdateCount = unUpdateCount;
 	}
 	
-	@ExcelField(title="维护数量", align=2)
+	@ExcelField(title="维护数量", align=2,sort=6)
 	public Integer getMaintenanceCount() {
 		return maintenanceCount;
 	}
