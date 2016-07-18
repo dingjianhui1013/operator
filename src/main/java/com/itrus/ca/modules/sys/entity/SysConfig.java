@@ -60,7 +60,7 @@ public class SysConfig extends DataEntity implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@Column(name = "config", nullable = false)
+	@Column(name = "config", nullable = false,columnDefinition = "NVARCHAR2(255)")
 	public String getConfig() {
 		return this.config;
 	}
@@ -69,7 +69,7 @@ public class SysConfig extends DataEntity implements java.io.Serializable {
 		this.config = config;
 	}
 
-	@Column(name = "type", unique = true, nullable = false)
+	@Column(name = "type", unique = true, nullable = false,columnDefinition = "NVARCHAR2(255)")
 	public String getType() {
 		return this.type;
 	}
