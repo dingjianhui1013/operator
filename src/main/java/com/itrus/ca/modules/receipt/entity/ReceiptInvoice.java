@@ -77,7 +77,7 @@ public class ReceiptInvoice extends DataEntity implements java.io.Serializable {
 		this.workPayInfo = workPayInfo;
 	}
 
-	@Column(name = "receipt_money", precision = 20, scale = 3)
+	@Column(name = "receipt_money", precision = 20, scale = 3,columnDefinition = "NUMBER")
 	public Double getReceiptMoney() {
 		return this.receiptMoney;
 	}
@@ -86,7 +86,7 @@ public class ReceiptInvoice extends DataEntity implements java.io.Serializable {
 		this.receiptMoney = receiptMoney;
 	}
 
-	@Column(name = "companyName")
+	@Column(name = "companyName",columnDefinition = "NVARCHAR2(255)")
 	public String getCompanyName() {
 		return companyName;
 	}
