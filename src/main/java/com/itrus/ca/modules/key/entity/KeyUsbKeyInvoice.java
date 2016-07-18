@@ -24,13 +24,14 @@ import com.itrus.ca.common.persistence.DataEntity;
  */
 @Entity
 @Table(name = "key_usb_key_invoice")
-public class KeyUsbKeyInvoice extends DataEntity implements java.io.Serializable {
+public class KeyUsbKeyInvoice extends DataEntity implements
+		java.io.Serializable {
 
 	// Fields
 
 	private Long id;
 	private KeyUsbKeyDepot keyUsbKeyDepot;
-	private Integer  deliveryNum;	
+	private Integer deliveryNum;
 	private String description;
 	private int outReason;
 	private KeyGeneralInfo keyGeneralInfo;
@@ -39,20 +40,23 @@ public class KeyUsbKeyInvoice extends DataEntity implements java.io.Serializable
 	private String keySn;
 	private Date startDate;
 	private String companyName;
+
 	// Constructors
 
-	
 	@Override
 	public void setCreateDate(Date createDate) {
 		// TODO Auto-generated method stub
 		super.setCreateDate(createDate);
 	}
-	
+
 	/** default constructor */
 	public KeyUsbKeyInvoice() {
 	}
+
 	/** full constructor */
-	public KeyUsbKeyInvoice(Integer  deliveryNum,KeyUsbKeyDepot keyUsbKeyDepot,int outReason,KeyGeneralInfo keyGeneralInfo, String description,String keySn,Date startDate) {
+	public KeyUsbKeyInvoice(Integer deliveryNum, KeyUsbKeyDepot keyUsbKeyDepot,
+			int outReason, KeyGeneralInfo keyGeneralInfo, String description,
+			String keySn, Date startDate) {
 		this.deliveryNum = deliveryNum;
 		this.description = description;
 		this.keyUsbKeyDepot = keyUsbKeyDepot;
@@ -61,11 +65,12 @@ public class KeyUsbKeyInvoice extends DataEntity implements java.io.Serializable
 		this.keySn = keySn;
 		this.startDate = startDate;
 	}
+
 	// Property accessors
-//	@SequenceGenerator(name="COMMON_SEQUENCE",sequenceName="COMMON_SEQUENCE")
-	@SequenceGenerator(name="KEY_USB_KEY_INVOICE_SEQUENCE",allocationSize=1,initialValue=1,sequenceName="KEY_USB_KEY_INVOICE_SEQUENCE")
-	@Id 
-	@GeneratedValue(generator = "KEY_USB_KEY_INVOICE_SEQUENCE",strategy=GenerationType.SEQUENCE)
+	// @SequenceGenerator(name="COMMON_SEQUENCE",sequenceName="COMMON_SEQUENCE")
+	@SequenceGenerator(name = "KEY_USB_KEY_INVOICE_SEQUENCE", allocationSize = 1, initialValue = 1, sequenceName = "KEY_USB_KEY_INVOICE_SEQUENCE")
+	@Id
+	@GeneratedValue(generator = "KEY_USB_KEY_INVOICE_SEQUENCE", strategy = GenerationType.SEQUENCE)
 	public Long getId() {
 		return this.id;
 	}
@@ -74,10 +79,7 @@ public class KeyUsbKeyInvoice extends DataEntity implements java.io.Serializable
 		this.id = id;
 	}
 
-
-
-
-	@Column(name = "description")
+	@Column(name = "description", columnDefinition = "NVARCHAR2(255)")
 	public String getDescription() {
 		return this.description;
 	}
@@ -105,8 +107,6 @@ public class KeyUsbKeyInvoice extends DataEntity implements java.io.Serializable
 		this.outReason = outReason;
 	}
 
-	
-
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "key_general_info_id")
 	public KeyGeneralInfo getKeyGeneralInfo() {
@@ -116,38 +116,40 @@ public class KeyUsbKeyInvoice extends DataEntity implements java.io.Serializable
 	public void setKeyGeneralInfo(KeyGeneralInfo keyGeneralInfo) {
 		this.keyGeneralInfo = keyGeneralInfo;
 	}
-	
+
 	@Column(name = "delivery_num")
 	public Integer getDeliveryNum() {
 		return deliveryNum;
 	}
+
 	public void setDeliveryNum(Integer deliveryNum) {
 		this.deliveryNum = deliveryNum;
 	}
-	
+
 	@Transient
 	public String getOutReasonName() {
 		return outReasonName;
 	}
+
 	public void setOutReasonName(String outReasonName) {
 		this.outReasonName = outReasonName;
 	}
-	
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "usb_key_depot_receive")
 	public KeyUsbKeyDepot getKeyUsbKeyDepotReceive() {
 		return keyUsbKeyDepotReceive;
 	}
+
 	public void setKeyUsbKeyDepotReceive(KeyUsbKeyDepot keyUsbKeyDepotReceive) {
 		this.keyUsbKeyDepotReceive = keyUsbKeyDepotReceive;
 	}
-	
-	
-	@Column(name = "key_sn")
+
+	@Column(name = "key_sn", columnDefinition = "NVARCHAR2(255)")
 	public String getKeySn() {
 		return keySn;
 	}
+
 	public void setKeySn(String keySn) {
 		this.keySn = keySn;
 	}
@@ -161,7 +163,7 @@ public class KeyUsbKeyInvoice extends DataEntity implements java.io.Serializable
 		this.startDate = startDate;
 	}
 
-	@Column(name = "company_name")
+	@Column(name = "company_name", columnDefinition = "NVARCHAR2(255)")
 	public String getCompanyName() {
 		return companyName;
 	}
@@ -170,6 +172,4 @@ public class KeyUsbKeyInvoice extends DataEntity implements java.io.Serializable
 		this.companyName = companyName;
 	}
 
-	
-	
 }
