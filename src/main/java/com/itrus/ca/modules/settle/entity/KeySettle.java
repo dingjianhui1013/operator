@@ -3,6 +3,7 @@
  */
 package com.itrus.ca.modules.settle.entity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -23,6 +24,7 @@ import com.itrus.ca.modules.sys.entity.User;
 
 /**
  * key结算功能Entity
+ * 
  * @author qt
  * @version 2015-11-12
  */
@@ -30,29 +32,30 @@ import com.itrus.ca.modules.sys.entity.User;
 @Table(name = "settle_key_settle")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class KeySettle extends DataEntity {
-	
+
 	// Fields
-	
+
 	private static final long serialVersionUID = 1L;
-	private Long id; 		// 编号
+	private Long id; // 编号
 	private ConfigSupplier configSupplier;
 	private KeyGeneralInfo keyGeneralInfo;
 	private SettleKey settleKey;
 	private KeyPurchase keyPurchase;
-	private Double keySubtotal;//key小计
-    private Long keyTotalQuantity;//key总量
-    private Double keyTotalAmount;//key总金额
-	
-	public KeySettle(){}
-	public KeySettle(Long id){
+	private Double keySubtotal;// key小计
+	private Long keyTotalQuantity;// key总量
+	private Double keyTotalAmount;// key总金额
+
+	public KeySettle() {
+	}
+
+	public KeySettle(Long id) {
 		this.id = id;
 	}
-	
-	
-	
-	
-	public KeySettle( ConfigSupplier configSupplier, KeyGeneralInfo keyGeneralInfo, SettleKey settleKey,
-			KeyPurchase keyPurchase, Double keySubtotal, Long keyTotalQuantity, Double keyTotalAmount) {
+
+	public KeySettle(ConfigSupplier configSupplier,
+			KeyGeneralInfo keyGeneralInfo, SettleKey settleKey,
+			KeyPurchase keyPurchase, Double keySubtotal, Long keyTotalQuantity,
+			Double keyTotalAmount) {
 		this.configSupplier = configSupplier;
 		this.keyGeneralInfo = keyGeneralInfo;
 		this.settleKey = settleKey;
@@ -61,11 +64,13 @@ public class KeySettle extends DataEntity {
 		this.keyTotalQuantity = keyTotalQuantity;
 		this.keyTotalAmount = keyTotalAmount;
 	}
+
 	@Id
-//	@GeneratedValue(strategy = GenerationType.AUTO)
+	// @GeneratedValue(strategy = GenerationType.AUTO)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SETTLE_KEY_SETTLE_SEQUENCE")
-//	@SequenceGenerator(name = "seq_settle_keySettle", sequenceName = "seq_settle_keySettle")
-	@SequenceGenerator(name="SETTLE_KEY_SETTLE_SEQUENCE",allocationSize=1,initialValue=1,sequenceName="SETTLE_KEY_SETTLE_SEQUENCE")
+	// @SequenceGenerator(name = "seq_settle_keySettle", sequenceName =
+	// "seq_settle_keySettle")
+	@SequenceGenerator(name = "SETTLE_KEY_SETTLE_SEQUENCE", allocationSize = 1, initialValue = 1, sequenceName = "SETTLE_KEY_SETTLE_SEQUENCE")
 	public Long getId() {
 		return id;
 	}
@@ -73,7 +78,7 @@ public class KeySettle extends DataEntity {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "config_supplier_id")
 	public ConfigSupplier getConfigSupplier() {
@@ -84,7 +89,6 @@ public class KeySettle extends DataEntity {
 		this.configSupplier = configSupplier;
 	}
 
-	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "general_id")
 	public KeyGeneralInfo getKeyGeneralInfo() {
@@ -94,42 +98,51 @@ public class KeySettle extends DataEntity {
 	public void setKeyGeneralInfo(KeyGeneralInfo keyGeneralInfo) {
 		this.keyGeneralInfo = keyGeneralInfo;
 	}
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "settleKey_id")
 	public SettleKey getSettleKey() {
 		return settleKey;
 	}
+
 	public void setSettleKey(SettleKey settleKey) {
 		this.settleKey = settleKey;
 	}
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "purchase_id")
 	public KeyPurchase getKeyPurchase() {
 		return keyPurchase;
 	}
+
 	public void setKeyPurchase(KeyPurchase keyPurchase) {
 		this.keyPurchase = keyPurchase;
 	}
-	
+
+	@Column(name = "key_subtotal", precision = 20, scale = 3,columnDefinition = "FLOAT(126)")
 	public Double getKeySubtotal() {
 		return keySubtotal;
 	}
+
 	public void setKeySubtotal(Double keySubtotal) {
 		keySubtotal = keySubtotal;
 	}
+
 	public Long getKeyTotalQuantity() {
 		return keyTotalQuantity;
 	}
+
 	public void setKeyTotalQuantity(Long keyTotalQuantity) {
 		keyTotalQuantity = keyTotalQuantity;
 	}
+	
+	@Column(name = "key_total_amount", precision = 20, scale = 3,columnDefinition = "FLOAT(126)")
 	public Double getKeyTotalAmount() {
 		return keyTotalAmount;
 	}
+
 	public void setKeyTotalAmount(Double keyTotalAmount) {
 		keyTotalAmount = keyTotalAmount;
 	}
-	
+
 }
-
-

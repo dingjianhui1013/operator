@@ -59,8 +59,8 @@ public class SettleSupplierCertDetail implements java.io.Serializable {
 			Date settleDate, Integer productType, Integer totalAmount,
 			Integer replaceAmount, Integer revokeAmount, Integer testAmount,
 			Integer rwBbAmount, Integer frwBbAmount, Integer changeAmount,
-			Integer amountYear1, Integer amountYear2, Integer amountYear3,Integer amountYear4,Integer amountYear5,
-			String ou) {
+			Integer amountYear1, Integer amountYear2, Integer amountYear3,
+			Integer amountYear4, Integer amountYear5, String ou) {
 		this.configSupplier = configSupplier;
 		this.settleDate = settleDate;
 		this.productType = productType;
@@ -80,10 +80,10 @@ public class SettleSupplierCertDetail implements java.io.Serializable {
 	}
 
 	// Property accessors
-//	@SequenceGenerator(name="COMMON_SEQUENCE",sequenceName="COMMON_SEQUENCE")
-	@SequenceGenerator(name="SETTLE_SUPPLIER_CERT_SEQUENCE",allocationSize=1,initialValue=1,sequenceName="SETTLE_SUPPLIER_CERT_SEQUENCE")
-	@Id 
-	@GeneratedValue(generator = "SETTLE_SUPPLIER_CERT_SEQUENCE",strategy=GenerationType.SEQUENCE)
+	// @SequenceGenerator(name="COMMON_SEQUENCE",sequenceName="COMMON_SEQUENCE")
+	@SequenceGenerator(name = "SETTLE_SUPPLIER_CERT_SEQUENCE", allocationSize = 1, initialValue = 1, sequenceName = "SETTLE_SUPPLIER_CERT_SEQUENCE")
+	@Id
+	@GeneratedValue(generator = "SETTLE_SUPPLIER_CERT_SEQUENCE", strategy = GenerationType.SEQUENCE)
 	public Long getId() {
 		return this.id;
 	}
@@ -202,7 +202,6 @@ public class SettleSupplierCertDetail implements java.io.Serializable {
 		this.amountYear2 = amountYear2;
 	}
 
-	
 	@Column(name = "amount_year3")
 	public Integer getAmountYear3() {
 		return amountYear3;
@@ -220,7 +219,7 @@ public class SettleSupplierCertDetail implements java.io.Serializable {
 	public void setAmountYear4(Integer amountYear4) {
 		this.amountYear4 = amountYear4;
 	}
-	
+
 	@Column(name = "amount_year5")
 	public Integer getAmountYear5() {
 		return this.amountYear5;
@@ -230,7 +229,7 @@ public class SettleSupplierCertDetail implements java.io.Serializable {
 		this.amountYear5 = amountYear5;
 	}
 
-	@Column(name = "ou")
+	@Column(name = "ou", columnDefinition = "NVARCHAR2(255)")
 	public String getOu() {
 		return this.ou;
 	}
