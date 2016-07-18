@@ -8,6 +8,7 @@ package com.itrus.ca.modules.sys.entity;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -36,39 +37,42 @@ import com.itrus.ca.common.persistence.DataEntity;
 
 /**
  * 区域Entity
+ * 
  * @author ThinkGem
  * @version 2013-05-15
  */
 @Entity
 @Table(name = "sys_area")
-@DynamicInsert @DynamicUpdate
+@DynamicInsert
+@DynamicUpdate
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Area extends DataEntity {
 
 	private static final long serialVersionUID = 1L;
-	private Long id;		// 编号
-	private Area parent;	// 父级编号
+	private Long id; // 编号
+	private Area parent; // 父级编号
 	private String parentIds; // 所有父级编号
-	private String code; 	// 区域编码
-	private String name; 	// 区域名称
-	private String type; 	// 区域类型（1：国家；2：省份、直辖市；3：地市；4：区县）
-	
-	private List<Office> officeList = Lists.newArrayList(); // 部门列表
-	private List<Area> childList = Lists.newArrayList();	// 拥有子区域列表
+	private String code; // 区域编码
+	private String name; // 区域名称
+	private String type; // 区域类型（1：国家；2：省份、直辖市；3：地市；4：区县）
 
-	public Area(){
+	private List<Office> officeList = Lists.newArrayList(); // 部门列表
+	private List<Area> childList = Lists.newArrayList(); // 拥有子区域列表
+
+	public Area() {
 		super();
 	}
-	
-	public Area(Long id){
+
+	public Area(Long id) {
 		this();
 		this.id = id;
 	}
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SYS_AREA_SEQUENCE")
-//	@SequenceGenerator(name = "COMMON_SEQUENCE", sequenceName = "COMMON_SEQUENCE")
-	@SequenceGenerator(name="SYS_AREA_SEQUENCE",allocationSize=1,initialValue=1,sequenceName="SYS_AREA_SEQUENCE")
+	// @SequenceGenerator(name = "COMMON_SEQUENCE", sequenceName =
+	// "COMMON_SEQUENCE")
+	@SequenceGenerator(name = "SYS_AREA_SEQUENCE", allocationSize = 1, initialValue = 1, sequenceName = "SYS_AREA_SEQUENCE")
 	public Long getId() {
 		return id;
 	}
@@ -76,9 +80,9 @@ public class Area extends DataEntity {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="parent_id")
+	@JoinColumn(name = "parent_id")
 	@NotFound(action = NotFoundAction.IGNORE)
 	@NotNull
 	public Area getParent() {
@@ -89,7 +93,8 @@ public class Area extends DataEntity {
 		this.parent = parent;
 	}
 
-	@Length(min=1, max=255)
+	@Length(min = 1, max = 255)
+	@Column(name = "PARENT_IDS", columnDefinition = "NVARCHAR2(255)")
 	public String getParentIds() {
 		return parentIds;
 	}
@@ -97,8 +102,9 @@ public class Area extends DataEntity {
 	public void setParentIds(String parentIds) {
 		this.parentIds = parentIds;
 	}
-	
-	@Length(min=1, max=100)
+
+	@Length(min = 1, max = 100)
+	@Column(name = "NAME", columnDefinition = "NVARCHAR2(127)")
 	public String getName() {
 		return name;
 	}
@@ -107,7 +113,8 @@ public class Area extends DataEntity {
 		this.name = name;
 	}
 
-	@Length(min=1, max=1)
+	@Length(min = 1, max = 1)
+	@Column(name = "TYPE", columnDefinition = "NCHAR(1)")
 	public String getType() {
 		return type;
 	}
@@ -116,7 +123,8 @@ public class Area extends DataEntity {
 		this.type = type;
 	}
 
-	@Length(min=0, max=100)
+	@Length(min = 0, max = 100)
+	@Column(name = "CODE", columnDefinition = "NVARCHAR2(127)")
 	public String getCode() {
 		return code;
 	}
@@ -125,9 +133,10 @@ public class Area extends DataEntity {
 		this.code = code;
 	}
 
-	@OneToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE,CascadeType.REMOVE},fetch=FetchType.LAZY,mappedBy="area")
-	@Where(clause="del_flag='"+DEL_FLAG_NORMAL+"'")
-	@OrderBy(value="code")
+	@OneToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE,
+			CascadeType.REMOVE }, fetch = FetchType.LAZY, mappedBy = "area")
+	@Where(clause = "del_flag='" + DEL_FLAG_NORMAL + "'")
+	@OrderBy(value = "code")
 	@NotFound(action = NotFoundAction.IGNORE)
 	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	public List<Office> getOfficeList() {
@@ -138,9 +147,10 @@ public class Area extends DataEntity {
 		this.officeList = officeList;
 	}
 
-	@OneToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE,CascadeType.REMOVE},fetch=FetchType.LAZY,mappedBy="parent")
-	@Where(clause="del_flag='"+DEL_FLAG_NORMAL+"'")
-	@OrderBy(value="code")
+	@OneToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE,
+			CascadeType.REMOVE }, fetch = FetchType.LAZY, mappedBy = "parent")
+	@Where(clause = "del_flag='" + DEL_FLAG_NORMAL + "'")
+	@OrderBy(value = "code")
 	@NotFound(action = NotFoundAction.IGNORE)
 	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	public List<Area> getChildList() {
@@ -152,17 +162,19 @@ public class Area extends DataEntity {
 	}
 
 	@Transient
-	public static void sortList(List<Area> list, List<Area> sourcelist, Long parentId){
-		for (int i=0; i<sourcelist.size(); i++){
+	public static void sortList(List<Area> list, List<Area> sourcelist,
+			Long parentId) {
+		for (int i = 0; i < sourcelist.size(); i++) {
 			Area e = sourcelist.get(i);
-			if (e.getParent()!=null && e.getParent().getId()!=null
-					&& e.getParent().getId().equals(parentId)){
+			if (e.getParent() != null && e.getParent().getId() != null
+					&& e.getParent().getId().equals(parentId)) {
 				list.add(e);
 				// 判断是否还有子节点, 有则继续获取子节点
-				for (int j=0; j<sourcelist.size(); j++){
+				for (int j = 0; j < sourcelist.size(); j++) {
 					Area childe = sourcelist.get(j);
-					if (childe.getParent()!=null && childe.getParent().getId()!=null
-							&& childe.getParent().getId().equals(e.getId())){
+					if (childe.getParent() != null
+							&& childe.getParent().getId() != null
+							&& childe.getParent().getId().equals(e.getId())) {
 						sortList(list, sourcelist, e.getId());
 						break;
 					}
@@ -172,12 +184,12 @@ public class Area extends DataEntity {
 	}
 
 	@Transient
-	public boolean isAdmin(){
+	public boolean isAdmin() {
 		return isAdmin(this.id);
 	}
-	
+
 	@Transient
-	public static boolean isAdmin(Long id){
+	public static boolean isAdmin(Long id) {
 		return id != null && id.equals(1L);
 	}
 }
