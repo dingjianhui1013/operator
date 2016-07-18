@@ -2183,11 +2183,10 @@ public class WorkDealInfoService extends BaseService {
 		dc.createAlias("workUser", "workUser");
 		dc.createAlias("createBy", "createBy");
 		dc.createAlias("updateBy", "updateBy");
-		// dc.createAlias("createBy.office", "office");
+		
 		dc.createAlias("configApp", "configApp");
 		dc.createAlias("configProduct", "configProduct");
-		// workDealInfoDao.createDetachedCriteria();
-
+		
 		dc.add(Restrictions.in("officeId", offices));
 
 		if (workDealInfo.getInputUser() != null
