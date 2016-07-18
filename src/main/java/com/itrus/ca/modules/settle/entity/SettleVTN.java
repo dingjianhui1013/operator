@@ -1,6 +1,5 @@
 package com.itrus.ca.modules.settle.entity;
 
-
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -19,7 +18,7 @@ import com.itrus.ca.modules.profile.entity.ConfigSupplier;
  * SettleKey entity. @author MyEclipse Persistence Tools
  */
 @Entity
-@Table(name = "settle_vtn"/*, catalog = "caoperator"*/)
+@Table(name = "settle_vtn"/* , catalog = "caoperator" */)
 public class SettleVTN implements java.io.Serializable {
 
 	// Fields
@@ -32,8 +31,7 @@ public class SettleVTN implements java.io.Serializable {
 	private Double countPrice;
 	private Date createTime;
 	private ConfigSupplier configSupplier;
-	
-	
+
 	// Constructors
 	/** default constructor */
 	public SettleVTN() {
@@ -45,15 +43,9 @@ public class SettleVTN implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public SettleVTN(
-			String productName,
-			String appName,
-			Integer count,
-			Double price,
-			Double countPrice,
-			Date createTime,
-			ConfigSupplier configSupplier
-			) {
+	public SettleVTN(String productName, String appName, Integer count,
+			Double price, Double countPrice, Date createTime,
+			ConfigSupplier configSupplier) {
 		this.productName = productName;
 		this.appName = appName;
 		this.count = count;
@@ -64,10 +56,10 @@ public class SettleVTN implements java.io.Serializable {
 	}
 
 	// Property accessors
-//	@SequenceGenerator(name="COMMON_SEQUENCE",sequenceName="COMMON_SEQUENCE")
-	@SequenceGenerator(name="SETTLE_VTN_SEQUENCE",allocationSize=1,initialValue=1,sequenceName="SETTLE_VTN_SEQUENCE")
-	@Id 
-	@GeneratedValue(generator = "SETTLE_VTN_SEQUENCE",strategy=GenerationType.SEQUENCE)
+	// @SequenceGenerator(name="COMMON_SEQUENCE",sequenceName="COMMON_SEQUENCE")
+	@SequenceGenerator(name = "SETTLE_VTN_SEQUENCE", allocationSize = 1, initialValue = 1, sequenceName = "SETTLE_VTN_SEQUENCE")
+	@Id
+	@GeneratedValue(generator = "SETTLE_VTN_SEQUENCE", strategy = GenerationType.SEQUENCE)
 	public Long getId() {
 		return this.id;
 	}
@@ -103,7 +95,7 @@ public class SettleVTN implements java.io.Serializable {
 		this.count = count;
 	}
 
-	@Column(name = "price")
+	@Column(name = "price", columnDefinition = "FLOAT(126)")
 	public Double getPrice() {
 		return price;
 	}
@@ -112,7 +104,7 @@ public class SettleVTN implements java.io.Serializable {
 		this.price = price;
 	}
 
-	@Column(name = "count_price")
+	@Column(name = "count_price", columnDefinition = "FLOAT(126)")
 	public Double getCountPrice() {
 		return countPrice;
 	}
@@ -139,19 +131,5 @@ public class SettleVTN implements java.io.Serializable {
 	public void setConfigSupplier(ConfigSupplier configSupplier) {
 		this.configSupplier = configSupplier;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 
 }
