@@ -125,7 +125,7 @@ public class WorkLog extends DataEntity implements java.io.Serializable {
 		this.workDealInfo = workDealInfo;
 	}
 
-	@Column(name = "record_content")
+	@Column(name = "record_content",columnDefinition = "NVARCHAR2(255)")
 	public String getRecordContent() {
 		return this.recordContent;
 	}
@@ -134,7 +134,7 @@ public class WorkLog extends DataEntity implements java.io.Serializable {
 		this.recordContent = recordContent;
 	}
 
-	@Column(name = "ser_type", length = 100)
+	@Column(name = "ser_type", length = 100,columnDefinition = "NVARCHAR2(100)")
 	public String getSerType() {
 		return this.serType;
 	}
@@ -143,7 +143,7 @@ public class WorkLog extends DataEntity implements java.io.Serializable {
 		this.serType = serType;
 	}
 
-	@Column(name = "ser_title", length = 100)
+	@Column(name = "ser_title", length = 100,columnDefinition = "NVARCHAR2(100)")
 	public String getSerTitle() {
 		return this.serTitle;
 	}
@@ -161,7 +161,7 @@ public class WorkLog extends DataEntity implements java.io.Serializable {
 		this.completeType = completeType;
 	}
 
-	@Column(name = "leftover_problem")
+	@Column(name = "leftover_problem",columnDefinition = "NVARCHAR2(255)")
 	public String getLeftoverProblem() {
 		return this.leftoverProblem;
 	}
@@ -179,7 +179,7 @@ public class WorkLog extends DataEntity implements java.io.Serializable {
 		this.creatTime = creatTime;
 	}
 
-	@Column(name = "proble_type")
+	@Column(name = "proble_type",columnDefinition = "NVARCHAR2(255)")
 	public String getProbleType() {
 		return probleType;
 	}
@@ -188,7 +188,7 @@ public class WorkLog extends DataEntity implements java.io.Serializable {
 		this.probleType = probleType;
 	}
 
-	@Column(name = "customer_service_access")
+	@Column(name = "customer_service_access",columnDefinition = "NVARCHAR2(255)")
 	public String getAccess() {
 		return access;
 	}
