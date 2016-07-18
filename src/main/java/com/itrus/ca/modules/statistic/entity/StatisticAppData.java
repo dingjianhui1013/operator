@@ -215,7 +215,7 @@ public class StatisticAppData implements java.io.Serializable {
 	}
 
 
-	@Column(name = "key_over", precision = 20, scale = 3)
+	@Column(name = "key_over", precision = 20, scale = 3,columnDefinition = "NUMBER")
 	public Double getKeyOver() {
 		return this.keyOver;
 	}
@@ -225,7 +225,7 @@ public class StatisticAppData implements java.io.Serializable {
 	}
 
 
-	@Column(name = "receipt_over", precision = 20, scale = 3)
+	@Column(name = "receipt_over", precision = 20, scale = 3,columnDefinition = "NUMBER")
 	public Double getReceiptOver() {
 		return this.receiptOver;
 	}
@@ -244,7 +244,7 @@ public class StatisticAppData implements java.io.Serializable {
 		this.statisticDate = statisticDate;
 	}
 
-	@Column(name = "add1")
+	@Column(name = "add1",columnDefinition = "NUMBER(11)")
 	public Integer getAdd1() {
 		return this.add1;
 	}
@@ -253,7 +253,7 @@ public class StatisticAppData implements java.io.Serializable {
 		this.add1 = add1;
 	}
 
-	@Column(name = "add2")
+	@Column(name = "add2",columnDefinition = "NUMBER(11)")
 	public Integer getAdd2() {
 		return this.add2;
 	}
@@ -262,7 +262,7 @@ public class StatisticAppData implements java.io.Serializable {
 		this.add2 = add2;
 	}
 
-	@Column(name = "add3")
+	@Column(name = "add3",columnDefinition = "NUMBER(10)")
 	public Integer getAdd3() {
 		return add3;
 	}
@@ -271,7 +271,7 @@ public class StatisticAppData implements java.io.Serializable {
 		this.add3 = add3;
 	}
 
-	@Column(name = "add4")
+	@Column(name = "add4",columnDefinition = "NUMBER(11)")
 	public Integer getAdd4() {
 		return this.add4;
 	}
@@ -280,7 +280,7 @@ public class StatisticAppData implements java.io.Serializable {
 		this.add4 = add4;
 	}
 
-	@Column(name = "add5")
+	@Column(name = "add5",columnDefinition = "NUMBER(10)")
 	public Integer getAdd5() {
 		return add5;
 	}
@@ -289,7 +289,7 @@ public class StatisticAppData implements java.io.Serializable {
 		this.add5 = add5;
 	}
 	
-	@Column(name = "renew1")
+	@Column(name = "renew1",columnDefinition = "NUMBER(11)")
 	public Integer getRenew1() {
 		return this.renew1;
 	}
@@ -298,7 +298,7 @@ public class StatisticAppData implements java.io.Serializable {
 		this.renew1 = renew1;
 	}
 
-	@Column(name = "renew2")
+	@Column(name = "renew2",columnDefinition = "NUMBER(11)")
 	public Integer getRenew2() {
 		return this.renew2;
 	}
@@ -307,7 +307,7 @@ public class StatisticAppData implements java.io.Serializable {
 		this.renew2 = renew2;
 	}
 
-	@Column(name = "renew3")
+	@Column(name = "renew3",columnDefinition = "NUMBER(10)")
 	public Integer getRenew3() {
 		return renew3;
 	}
@@ -316,7 +316,7 @@ public class StatisticAppData implements java.io.Serializable {
 		this.renew3 = renew3;
 	}
 
-	@Column(name = "renew4")
+	@Column(name = "renew4",columnDefinition = "NUMBER(11)")
 	public Integer getRenew4() {
 		return this.renew4;
 	}
@@ -325,7 +325,7 @@ public class StatisticAppData implements java.io.Serializable {
 		this.renew4 = renew4;
 	}
 
-	@Column(name = "renew5")
+	@Column(name = "renew5",columnDefinition = "NUMBER(10)")
 	public Integer getRenew5() {
 		return renew5;
 	}
@@ -334,7 +334,7 @@ public class StatisticAppData implements java.io.Serializable {
 		this.renew5 = renew5;
 	}
 	
-	@Column(name = "modify_num")
+	@Column(name = "modify_num",columnDefinition = "NUMBER(11)")
 	public Integer getModifyNum() {
 		return this.modifyNum;
 	}
@@ -343,7 +343,7 @@ public class StatisticAppData implements java.io.Serializable {
 		this.modifyNum = modifyNum;
 	}
 
-	@Column(name = "reissue_num")
+	@Column(name = "reissue_num",columnDefinition = "NUMBER(11)")
 	public Integer getReissueNum() {
 		return this.reissueNum;
 	}
@@ -352,7 +352,7 @@ public class StatisticAppData implements java.io.Serializable {
 		this.reissueNum = reissueNum;
 	}
 
-	@Column(name = "cert_total")
+	@Column(name = "cert_total",columnDefinition = "NUMBER(11)")
 	public Integer getCertTotal() {
 		return this.certTotal;
 	}
@@ -370,7 +370,7 @@ public class StatisticAppData implements java.io.Serializable {
 		this.keyTotal = keyTotal;
 	}
 
-	@Column(name = "receipt_total", precision = 20, scale = 3)
+	@Column(name = "receipt_total", precision = 20, scale = 3,columnDefinition = "NUMBER")
 	public Double getReceiptTotal() {
 		return this.receiptTotal;
 	}
@@ -379,7 +379,7 @@ public class StatisticAppData implements java.io.Serializable {
 		this.receiptTotal = receiptTotal;
 	}
 
-	@Column(name = "cert_money_total", precision = 20, scale = 3)
+	@Column(name = "cert_money_total", precision = 20, scale = 3,columnDefinition = "NUMBER")
 	public Double getCertMoneyTotal() {
 		return this.certMoneyTotal;
 	}
