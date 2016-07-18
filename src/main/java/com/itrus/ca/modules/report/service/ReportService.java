@@ -79,7 +79,7 @@ public class ReportService extends BaseService {
 			
 			sql.append(" and wdi.cert_id = wci.id");
 			sql.append(" and wci.notbefore <= TO_DATE('"
-					+ DateUtils.formatDate(endTime, "yyyy-MM-dd 00:00:01")
+					+ DateUtils.formatDate(endTime, "yyyy-MM-dd 23:59:59")
 					+ "', 'yyyy-MM-dd hh24:mi:ss')");
 			sql.append(" and wdi.notafter >= TO_DATE('"
 					+ DateUtils.formatDate(endTime, "yyyy-MM-dd 00:00:01")
@@ -260,7 +260,7 @@ public class ReportService extends BaseService {
 			
 			sql.append(" and wdi.cert_id = wci.id");
 			sql.append(" and wci.notbefore <= TO_DATE('"
-					+ DateUtils.formatDate(endTime, "yyyy-MM-dd 00:00:01")
+					+ DateUtils.formatDate(endTime, "yyyy-MM-dd 23:59:59")
 					+ "', 'yyyy-MM-dd hh24:mi:ss')");
 			sql.append(" and wdi.notafter >= TO_DATE('"
 					+ DateUtils.formatDate(endTime, "yyyy-MM-dd 00:00:01")
