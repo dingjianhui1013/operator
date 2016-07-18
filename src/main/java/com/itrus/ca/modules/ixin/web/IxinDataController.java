@@ -41,6 +41,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.common.collect.Lists;
 import com.itrus.ca.common.utils.DateUtils;
+import com.itrus.ca.common.utils.Encodes;
 import com.itrus.ca.common.utils.StringHelper;
 import com.itrus.ca.common.web.BaseController;
 import com.itrus.ca.modules.ixin.entity.IxinData;
@@ -111,11 +112,6 @@ public class IxinDataController extends BaseController {
                 configTypelist.add(Long.parseLong(ss));
             }
         }
-        //所有的应用
-        List<ConfigApp> appsList = configAppService.findall();
-        model.addAttribute("appList", appsList);
-        model.addAttribute("appListSize", appsList.size());
-       
         List<ConfigApp> appList = Lists.newArrayList();
         if(StringUtils.isNotEmpty(configAppIds)){
             String ids[] = configAppIds.split(",");
@@ -127,7 +123,16 @@ public class IxinDataController extends BaseController {
             //选择类型下的应用
             appList = configAppService.findByconfigProjectTypes(configTypelist);
         }
-        
+        if(StringUtils.isNotEmpty(configProjectTypeIds)){
+            model.addAttribute("appList", appList);
+            model.addAttribute("appListSize", appList.size());
+        }else{
+            List<ConfigApp> appsList = configAppService.findall();
+            model.addAttribute("appList", appsList);
+            model.addAttribute("appListSize", appsList.size());
+           
+        }
+       
         //应用下所有的证书 的数量与存活数量
         List<Object> certNumberList = Lists.newArrayList();
         List<IxinDataVo> vos = Lists.newArrayList();
@@ -168,9 +173,8 @@ public class IxinDataController extends BaseController {
 
 	@ResponseBody
     @RequestMapping(value = "findAppByType", method = RequestMethod.POST )
-    public String findAppByType(@RequestBody String configProjectTypeIds,HttpServletRequest request){
+    public String findAppByType(String configProjectTypeIds,HttpServletRequest request){
         JSONObject json = new JSONObject();
-        
         List<Long> configTypelist = new ArrayList<Long>();
         if(StringUtils.isNotEmpty(configProjectTypeIds)){
             String ids[] = configProjectTypeIds.split(",");
@@ -194,7 +198,6 @@ public class IxinDataController extends BaseController {
             json.put("size", list.size());
             }
         } catch (JSONException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         return json.toString();
@@ -207,13 +210,17 @@ public class IxinDataController extends BaseController {
 	@ResponseBody
 	@RequestMapping(value = "saveData", method = RequestMethod.POST )
 	public String saveData(@RequestBody String jsonString,HttpServletRequest request){
-	    System.out.println(jsonString);
+	    System.out.println("转码前="+jsonString);
+	    jsonString =java.net.URLDecoder.decode(jsonString);
+	    System.out.println("转码后="+jsonString);
+	    jsonString = jsonString.substring(0, jsonString.indexOf("}")+1);
+	    System.out.println("截取后="+jsonString);
 	    JSONObject json = new JSONObject();
 	    try {
 	        JSONObject jsonObj = new JSONObject(jsonString);
 	        Integer dataSize = Integer.parseInt(jsonObj.getString("dataSize"));
 	        String ixinData = jsonObj.getString("ixinData");
-	        String[] ixinDatas = ixinData.split("&&");
+	        String[] ixinDatas = ixinData.split("||");
     	    if(dataSize==ixinDatas.length){
     	        List<IxinData> list = new ArrayList<IxinData>();
     	        for (int i = 0; i < ixinDatas.length; i++) {
