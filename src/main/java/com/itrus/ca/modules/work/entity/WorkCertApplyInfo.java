@@ -150,7 +150,7 @@ public class WorkCertApplyInfo implements java.io.Serializable {
 		this.Office = Office;
 	}
 
-	@Column(name = "addtional_field1")
+	@Column(name = "addtional_field1",columnDefinition = "NCLOB")
 	public String getAddtionalField1() {
 		return this.addtionalField1;
 	}
@@ -159,7 +159,7 @@ public class WorkCertApplyInfo implements java.io.Serializable {
 		this.addtionalField1 = addtionalField1;
 	}
 
-	@Column(name = "addtional_field2")
+	@Column(name = "addtional_field2",columnDefinition = "NCLOB")
 	public String getAddtionalField2() {
 		return this.addtionalField2;
 	}
@@ -168,7 +168,7 @@ public class WorkCertApplyInfo implements java.io.Serializable {
 		this.addtionalField2 = addtionalField2;
 	}
 
-	@Column(name = "addtional_field3")
+	@Column(name = "addtional_field3",columnDefinition = "NCLOB")
 	public String getAddtionalField3() {
 		return this.addtionalField3;
 	}
@@ -177,7 +177,7 @@ public class WorkCertApplyInfo implements java.io.Serializable {
 		this.addtionalField3 = addtionalField3;
 	}
 
-	@Column(name = "addtional_field4")
+	@Column(name = "addtional_field4",columnDefinition = "NCLOB")
 	public String getAddtionalField4() {
 		return this.addtionalField4;
 	}
@@ -186,7 +186,7 @@ public class WorkCertApplyInfo implements java.io.Serializable {
 		this.addtionalField4 = addtionalField4;
 	}
 
-	@Column(name = "addtional_field5")
+	@Column(name = "addtional_field5",columnDefinition = "NCLOB")
 	public String getAddtionalField5() {
 		return this.addtionalField5;
 	}
@@ -195,7 +195,7 @@ public class WorkCertApplyInfo implements java.io.Serializable {
 		this.addtionalField5 = addtionalField5;
 	}
 
-	@Column(name = "addtional_field6")
+	@Column(name = "addtional_field6",columnDefinition = "NCLOB")
 	public String getAddtionalField6() {
 		return this.addtionalField6;
 	}
@@ -204,7 +204,7 @@ public class WorkCertApplyInfo implements java.io.Serializable {
 		this.addtionalField6 = addtionalField6;
 	}
 
-	@Column(name = "addtional_field7")
+	@Column(name = "addtional_field7",columnDefinition = "NCLOB")
 	public String getAddtionalField7() {
 		return this.addtionalField7;
 	}
@@ -213,7 +213,7 @@ public class WorkCertApplyInfo implements java.io.Serializable {
 		this.addtionalField7 = addtionalField7;
 	}
 
-	@Column(name = "addtional_field8")
+	@Column(name = "addtional_field8",columnDefinition = "NCLOB")
 	public String getAddtionalField8() {
 		return this.addtionalField8;
 	}
@@ -222,7 +222,7 @@ public class WorkCertApplyInfo implements java.io.Serializable {
 		this.addtionalField8 = addtionalField8;
 	}
 
-	@Column(name = "addtional_field9")
+	@Column(name = "addtional_field9",columnDefinition = "NCLOB")
 	public String getAddtionalField9() {
 		return this.addtionalField9;
 	}
@@ -231,7 +231,7 @@ public class WorkCertApplyInfo implements java.io.Serializable {
 		this.addtionalField9 = addtionalField9;
 	}
 
-	@Column(name = "addtional_field10")
+	@Column(name = "addtional_field10",columnDefinition = "NCLOB")
 	public String getAddtionalField10() {
 		return this.addtionalField10;
 	}
@@ -240,7 +240,7 @@ public class WorkCertApplyInfo implements java.io.Serializable {
 		this.addtionalField10 = addtionalField10;
 	}
 
-	@Column(name = "country")
+	@Column(name = "country",columnDefinition = "NVARCHAR2(255)")
 	public String getCountry() {
 		return this.country;
 	}
@@ -249,7 +249,7 @@ public class WorkCertApplyInfo implements java.io.Serializable {
 		this.country = country;
 	}
 
-	@Column(name = "description")
+	@Column(name = "description",columnDefinition = "NVARCHAR2(255)")
 	public String getDescription() {
 		return this.description;
 	}
@@ -258,7 +258,7 @@ public class WorkCertApplyInfo implements java.io.Serializable {
 		this.description = description;
 	}
 
-	@Column(name = "dns")
+	@Column(name = "dns",columnDefinition = "NVARCHAR2(255)")
 	public String getDns() {
 		return this.dns;
 	}
@@ -267,7 +267,7 @@ public class WorkCertApplyInfo implements java.io.Serializable {
 		this.dns = dns;
 	}
 
-	@Column(name = "email")
+	@Column(name = "email",columnDefinition = "NVARCHAR2(255)")
 	public String getEmail() {
 		return this.email;
 	}
@@ -276,7 +276,7 @@ public class WorkCertApplyInfo implements java.io.Serializable {
 		this.email = email;
 	}
 
-	@Column(name = "id_random")
+	@Column(name = "id_random",columnDefinition = "NVARCHAR2(255)")
 	public String getIdRandom() {
 		return this.idRandom;
 	}
@@ -285,7 +285,7 @@ public class WorkCertApplyInfo implements java.io.Serializable {
 		this.idRandom = idRandom;
 	}
 
-	@Column(name = "ip")
+	@Column(name = "ip",columnDefinition = "NVARCHAR2(255)")
 	public String getIp() {
 		return this.ip;
 	}
@@ -294,7 +294,7 @@ public class WorkCertApplyInfo implements java.io.Serializable {
 		this.ip = ip;
 	}
 
-	@Column(name = "locality")
+	@Column(name = "locality",columnDefinition = "NVARCHAR2(255)")
 	public String getLocality() {
 		return this.locality;
 	}
@@ -303,7 +303,7 @@ public class WorkCertApplyInfo implements java.io.Serializable {
 		this.locality = locality;
 	}
 
-	@Column(name = "mobile_phone")
+	@Column(name = "mobile_phone",columnDefinition = "NVARCHAR2(255)")
 	public String getMobilePhone() {
 		return this.mobilePhone;
 	}
@@ -312,7 +312,7 @@ public class WorkCertApplyInfo implements java.io.Serializable {
 		this.mobilePhone = mobilePhone;
 	}
 
-	@Column(name = "name")
+	@Column(name = "name",columnDefinition = "NVARCHAR2(255)")
 	public String getName() {
 		return this.name;
 	}
@@ -321,7 +321,7 @@ public class WorkCertApplyInfo implements java.io.Serializable {
 		this.name = name;
 	}
 
-	@Column(name = "organization")
+	@Column(name = "organization",columnDefinition = "NVARCHAR2(255)")
 	public String getOrganization() {
 		return this.organization;
 	}
@@ -330,7 +330,7 @@ public class WorkCertApplyInfo implements java.io.Serializable {
 		this.organization = organization;
 	}
 
-	@Column(name = "orgunit")
+	@Column(name = "orgunit",columnDefinition = "NVARCHAR2(255)")
 	public String getOrgunit() {
 		return this.orgunit;
 	}
@@ -339,7 +339,7 @@ public class WorkCertApplyInfo implements java.io.Serializable {
 		this.orgunit = orgunit;
 	}
 
-	@Column(name = "serialnumber")
+	@Column(name = "serialnumber",columnDefinition = "NVARCHAR2(255)")
 	public String getSerialnumber() {
 		return this.serialnumber;
 	}
@@ -357,7 +357,7 @@ public class WorkCertApplyInfo implements java.io.Serializable {
 		this.state = state;
 	}
 
-	@Column(name = "street")
+	@Column(name = "street",columnDefinition = "NVARCHAR2(255)")
 	public String getStreet() {
 		return this.street;
 	}
@@ -366,7 +366,7 @@ public class WorkCertApplyInfo implements java.io.Serializable {
 		this.street = street;
 	}
 
-	@Column(name = "surname")
+	@Column(name = "surname",columnDefinition = "NVARCHAR2(255)")
 	public String getSurname() {
 		return this.surname;
 	}
@@ -375,7 +375,7 @@ public class WorkCertApplyInfo implements java.io.Serializable {
 		this.surname = surname;
 	}
 
-	@Column(name = "title")
+	@Column(name = "title",columnDefinition = "NVARCHAR2(255)")
 	public String getTitle() {
 		return this.title;
 	}
@@ -384,7 +384,7 @@ public class WorkCertApplyInfo implements java.io.Serializable {
 		this.title = title;
 	}
 
-	@Column(name = "province")
+	@Column(name = "province",columnDefinition = "NVARCHAR2(255)")
 	public String getProvince() {
 		return this.province;
 	}
@@ -393,7 +393,7 @@ public class WorkCertApplyInfo implements java.io.Serializable {
 		this.province = province;
 	}
 
-	@Column(name = "city")
+	@Column(name = "city",columnDefinition = "NVARCHAR2(255)")
 	public String getCity() {
 		return this.city;
 	}
@@ -402,7 +402,7 @@ public class WorkCertApplyInfo implements java.io.Serializable {
 		this.city = city;
 	}
 
-	@Column(name = "tel_phone")
+	@Column(name = "tel_phone",columnDefinition = "NVARCHAR2(255)")
 	public String getTelPhone() {
 		return this.telPhone;
 	}
@@ -411,7 +411,7 @@ public class WorkCertApplyInfo implements java.io.Serializable {
 		this.telPhone = telPhone;
 	}
 
-	@Column(name = "position")
+	@Column(name = "position",columnDefinition = "NVARCHAR2(255)")
 	public String getPosition() {
 		return this.position;
 	}
@@ -420,7 +420,7 @@ public class WorkCertApplyInfo implements java.io.Serializable {
 		this.position = position;
 	}
 
-	@Column(name = "fax")
+	@Column(name = "fax",columnDefinition = "NVARCHAR2(255)")
 	public String getFax() {
 		return this.fax;
 	}
@@ -429,7 +429,7 @@ public class WorkCertApplyInfo implements java.io.Serializable {
 		this.fax = fax;
 	}
 
-	@Column(name = "domain")
+	@Column(name = "domain",columnDefinition = "NVARCHAR2(255)")
 	public String getDomain() {
 		return this.domain;
 	}
@@ -438,7 +438,7 @@ public class WorkCertApplyInfo implements java.io.Serializable {
 		this.domain = domain;
 	}
 
-	@Column(name = "contact_email")
+	@Column(name = "contact_email",columnDefinition = "NVARCHAR2(255)")
 	public String getContactEmail() {
 		return this.contactEmail;
 	}
@@ -447,7 +447,7 @@ public class WorkCertApplyInfo implements java.io.Serializable {
 		this.contactEmail = contactEmail;
 	}
 
-	@Column(name = "common_name")
+	@Column(name = "common_name",columnDefinition = "NVARCHAR2(255)")
 	public String getCommonName() {
 		return this.commonName;
 	}
@@ -465,7 +465,7 @@ public class WorkCertApplyInfo implements java.io.Serializable {
 		this.workCertInfos = workCertInfos;
 	}
 	
-	@Column(name = "id_card")
+	@Column(name = "id_card",columnDefinition = "NVARCHAR2(255)")
 	public String getIdCard() {
 		return idCard;
 	}
