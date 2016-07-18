@@ -99,7 +99,7 @@ public class WorkFinancePayInfoRelation implements java.io.Serializable {
 	public void setBalance(BigDecimal balance) {
 		this.balance = balance;
 	}
-	
+	@Column(name = "SN",columnDefinition = "NVARCHAR2(255)")	
 	public String getSn() {
 		return sn;
 	}
