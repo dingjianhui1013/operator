@@ -108,7 +108,7 @@ public class SignaturePayInfo extends DataEntity  implements java.io.Serializabl
 		this.methodMoney = methodMoney;
 	}
 	
-	@Column(name = "pos_money", precision = 20, scale = 3)
+	@Column(name = "pos_money", precision = 20, scale = 3,columnDefinition = "FLOAT(126)")
 	public Double getPosMoney() {
 		return posMoney;
 	}
@@ -116,7 +116,7 @@ public class SignaturePayInfo extends DataEntity  implements java.io.Serializabl
 		this.posMoney = posMoney;
 	}
 	
-	@Column(name = "cash_money", precision = 20, scale = 3)
+	@Column(name = "cash_money", precision = 20, scale = 3,columnDefinition = "FLOAT(126)")
 	public Double getCashMoney() {
 		return cashMoney;
 	}
@@ -124,7 +124,7 @@ public class SignaturePayInfo extends DataEntity  implements java.io.Serializabl
 		this.cashMoney = cashMoney;
 	}
 	
-	@Column(name = "total_money", precision = 20, scale = 3)
+	@Column(name = "total_money", precision = 20, scale = 3,columnDefinition = "FLOAT(126)")
 	public Double getTotalMoney() {
 		return totalMoney;
 	}
@@ -149,7 +149,7 @@ public class SignaturePayInfo extends DataEntity  implements java.io.Serializabl
 		this.receiptInvoice = receiptInvoice;
 	}
 
-	@Column(name = "add_signature", precision = 20, scale = 3)
+	@Column(name = "add_signature", precision = 20, scale = 3,columnDefinition = "FLOAT(126)")
 	public Double getAddSignature() {
 		return addSignature;
 	}
@@ -158,7 +158,7 @@ public class SignaturePayInfo extends DataEntity  implements java.io.Serializabl
 		this.addSignature = addSignature;
 	}
 
-	@Column(name = "change_signature", precision = 20, scale = 3)
+	@Column(name = "change_signature", precision = 20, scale = 3,columnDefinition = "FLOAT(126)")
 	public Double getChangeSignature() {
 		return changeSignature;
 	}
@@ -167,7 +167,7 @@ public class SignaturePayInfo extends DataEntity  implements java.io.Serializabl
 		this.changeSignature = changeSignature;
 	}
 
-	@Column(name = "update_signature", precision = 20, scale = 3)
+	@Column(name = "update_signature", precision = 20, scale = 3,columnDefinition = "FLOAT(126)")
 	public Double getUpdateSignature() {
 		return updateSignature;
 	}
