@@ -142,7 +142,7 @@ public class WorkPayInfo extends DataEntity implements java.io.Serializable {
 		this.sn = sn;
 	}
 
-	@Column(name = "open_account_money", precision = 20, scale = 3)
+	@Column(name = "open_account_money", precision = 20, scale = 3,columnDefinition = "NUMBER")
 	public Double getOpenAccountMoney() {
 		return this.openAccountMoney;
 	}
@@ -151,7 +151,7 @@ public class WorkPayInfo extends DataEntity implements java.io.Serializable {
 		this.openAccountMoney = openAccountMoney;
 	}
 
-	@Column(name = "add_cert", precision = 20, scale = 3)
+	@Column(name = "add_cert", precision = 20, scale = 3,columnDefinition = "NUMBER")
 	public Double getAddCert() {
 		return this.addCert;
 	}
@@ -160,7 +160,7 @@ public class WorkPayInfo extends DataEntity implements java.io.Serializable {
 		this.addCert = addCert;
 	}
 
-	@Column(name = "update_cert", precision = 20, scale = 3)
+	@Column(name = "update_cert", precision = 20, scale = 3,columnDefinition = "NUMBER")
 	public Double getUpdateCert() {
 		return this.updateCert;
 	}
@@ -169,7 +169,7 @@ public class WorkPayInfo extends DataEntity implements java.io.Serializable {
 		this.updateCert = updateCert;
 	}
 
-	@Column(name = "error_replace_cert", precision = 20, scale = 3)
+	@Column(name = "error_replace_cert", precision = 20, scale = 3,columnDefinition = "NUMBER")
 	public Double getErrorReplaceCert() {
 		return this.errorReplaceCert;
 	}
@@ -178,7 +178,7 @@ public class WorkPayInfo extends DataEntity implements java.io.Serializable {
 		this.errorReplaceCert = errorReplaceCert;
 	}
 
-	@Column(name = "lost_replace_cert", precision = 20, scale = 3)
+	@Column(name = "lost_replace_cert", precision = 20, scale = 3,columnDefinition = "NUMBER")
 	public Double getLostReplaceCert() {
 		return this.lostReplaceCert;
 	}
@@ -187,7 +187,7 @@ public class WorkPayInfo extends DataEntity implements java.io.Serializable {
 		this.lostReplaceCert = lostReplaceCert;
 	}
 
-	@Column(name = "info_change", precision = 20, scale = 3)
+	@Column(name = "info_change", precision = 20, scale = 3,columnDefinition = "NUMBER")
 	public Double getInfoChange() {
 		return this.infoChange;
 	}
@@ -196,7 +196,7 @@ public class WorkPayInfo extends DataEntity implements java.io.Serializable {
 		this.infoChange = infoChange;
 	}
 
-	@Column(name = "electron", precision = 20, scale = 3)
+	@Column(name = "electron", precision = 20, scale = 3,columnDefinition = "NUMBER")
 	public Double getElectron() {
 		return this.electron;
 	}
@@ -259,7 +259,7 @@ public class WorkPayInfo extends DataEntity implements java.io.Serializable {
 		this.methodContract = methodContract;
 	}
 
-	@Column(name = "pos_money", precision = 20, scale = 3)
+	@Column(name = "pos_money", precision = 20, scale = 3,columnDefinition = "NUMBER")
 	public Double getPosMoney() {
 		return this.posMoney;
 	}
@@ -268,7 +268,7 @@ public class WorkPayInfo extends DataEntity implements java.io.Serializable {
 		this.posMoney = posMoney;
 	}
 
-	@Column(name = "money", precision = 20, scale = 3)
+	@Column(name = "money", precision = 20, scale = 3,columnDefinition = "NUMBER")
 	public Double getMoney() {
 		return this.money;
 	}
@@ -277,7 +277,7 @@ public class WorkPayInfo extends DataEntity implements java.io.Serializable {
 		this.money = money;
 	}
 
-	@Column(name = "bank_money", precision = 20, scale = 3)
+	@Column(name = "bank_money", precision = 20, scale = 3,columnDefinition = "NUMBER")
 	public Double getBankMoney() {
 		return this.bankMoney;
 	}
@@ -286,7 +286,7 @@ public class WorkPayInfo extends DataEntity implements java.io.Serializable {
 		this.bankMoney = bankMoney;
 	}
 
-	@Column(name = "alipay_money", precision = 20, scale = 3)
+	@Column(name = "alipay_money", precision = 20, scale = 3,columnDefinition = "NUMBER")
 	public Double getAlipayMoney() {
 		return this.alipayMoney;
 	}
@@ -295,7 +295,7 @@ public class WorkPayInfo extends DataEntity implements java.io.Serializable {
 		this.alipayMoney = alipayMoney;
 	}
 
-	@Column(name = "work_total_money", precision = 20, scale = 3)
+	@Column(name = "work_total_money", precision = 20, scale = 3,columnDefinition = "NUMBER")
 	public Double getWorkTotalMoney() {
 		return this.workTotalMoney;
 	}
@@ -304,7 +304,7 @@ public class WorkPayInfo extends DataEntity implements java.io.Serializable {
 		this.workTotalMoney = workTotalMoney;
 	}
 
-	@Column(name = "work_payed_money", precision = 20, scale = 3)
+	@Column(name = "work_payed_money", precision = 20, scale = 3,columnDefinition = "NUMBER")
 	public Double getWorkPayedMoney() {
 		return this.workPayedMoney;
 	}
@@ -324,7 +324,7 @@ public class WorkPayInfo extends DataEntity implements java.io.Serializable {
 		this.userReceipt = userReceipt;
 	}
 
-	@Column(name = "receipt_amount", precision = 20, scale = 3)
+	@Column(name = "receipt_amount", precision = 20, scale = 3,columnDefinition = "NUMBER")
 	public Double getReceiptAmount() {
 		return this.receiptAmount;
 	}
@@ -380,7 +380,7 @@ public class WorkPayInfo extends DataEntity implements java.io.Serializable {
 	/**
 	 * @return the oldOpenAccountMoney
 	 */
-	@Column(name = "old_open_account_money", precision = 20, scale = 3)
+	@Column(name = "old_open_account_money", precision = 20, scale = 3,columnDefinition = "NUMBER")
 	public Double getOldOpenAccountMoney() {
 		return oldOpenAccountMoney;
 	}
@@ -395,7 +395,7 @@ public class WorkPayInfo extends DataEntity implements java.io.Serializable {
 	/**
 	 * @return the oldAddCert
 	 */
-	@Column(name = "old_add_cert", precision = 20, scale = 3)
+	@Column(name = "old_add_cert", precision = 20, scale = 3,columnDefinition = "NUMBER")
 	public Double getOldAddCert() {
 		return oldAddCert;
 	}
@@ -410,7 +410,7 @@ public class WorkPayInfo extends DataEntity implements java.io.Serializable {
 	/**
 	 * @return the oldUpdateCert
 	 */
-	@Column(name = "old_update_cert", precision = 20, scale = 3)
+	@Column(name = "old_update_cert", precision = 20, scale = 3,columnDefinition = "NUMBER")
 	public Double getOldUpdateCert() {
 		return oldUpdateCert;
 	}
@@ -425,7 +425,7 @@ public class WorkPayInfo extends DataEntity implements java.io.Serializable {
 	/**
 	 * @return the oldErrorReplaceCert
 	 */
-	@Column(name = "old_error_replace_cert", precision = 20, scale = 3)
+	@Column(name = "old_error_replace_cert", precision = 20, scale = 3,columnDefinition = "NUMBER")
 	public Double getOldErrorReplaceCert() {
 		return oldErrorReplaceCert;
 	}
@@ -440,7 +440,7 @@ public class WorkPayInfo extends DataEntity implements java.io.Serializable {
 	/**
 	 * @return the oldLostReplaceCert
 	 */
-	@Column(name = "old_lost_replace_cert", precision = 20, scale = 3)
+	@Column(name = "old_lost_replace_cert", precision = 20, scale = 3,columnDefinition = "NUMBER")
 	public Double getOldLostReplaceCert() {
 		return oldLostReplaceCert;
 	}
@@ -455,7 +455,7 @@ public class WorkPayInfo extends DataEntity implements java.io.Serializable {
 	/**
 	 * @return the oldInfoChange
 	 */
-	@Column(name = "old_info_change", precision = 20, scale = 3)
+	@Column(name = "old_info_change", precision = 20, scale = 3,columnDefinition = "NUMBER")
 	public Double getOldInfoChange() {
 		return oldInfoChange;
 	}
@@ -470,7 +470,7 @@ public class WorkPayInfo extends DataEntity implements java.io.Serializable {
 	/**
 	 * @return the oldElectron
 	 */
-	@Column(name = "old_electron", precision = 20, scale = 3)
+	@Column(name = "old_electron", precision = 20, scale = 3,columnDefinition = "NUMBER")
 	public Double getOldElectron() {
 		return oldElectron;
 	}

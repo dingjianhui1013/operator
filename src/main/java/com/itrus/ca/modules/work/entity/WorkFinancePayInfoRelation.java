@@ -83,7 +83,7 @@ public class WorkFinancePayInfoRelation implements java.io.Serializable {
 		this.financePaymentInfo = financePaymentInfo;
 	}
 
-	@Column(name = "money", precision = 10, scale = 3)
+	@Column(name = "money", precision = 10, scale = 3,columnDefinition = "NUMBER")
 	public Double getMoney() {
 		return this.money;
 	}

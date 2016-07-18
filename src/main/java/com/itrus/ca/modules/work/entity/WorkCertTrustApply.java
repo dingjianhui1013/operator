@@ -97,7 +97,7 @@ public class WorkCertTrustApply implements java.io.Serializable {
 		this.applyCount = applyCount;
 	}
 
-	@Column(name = "money", precision = 10)
+	@Column(name = "money", precision = 10,columnDefinition = "FLOAT(126)")
 	public Double getMoney() {
 		return this.money;
 	}
