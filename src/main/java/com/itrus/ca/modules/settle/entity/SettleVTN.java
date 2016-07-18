@@ -86,7 +86,7 @@ public class SettleVTN implements java.io.Serializable {
 		this.appName = appName;
 	}
 
-	@Column(name = "count")
+	@Column(name = "count",columnDefinition = "FLOAT(126)")
 	public Integer getCount() {
 		return count;
 	}
