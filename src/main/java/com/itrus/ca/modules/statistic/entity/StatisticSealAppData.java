@@ -153,7 +153,7 @@ public class StatisticSealAppData  implements java.io.Serializable   {
 	public void setSealTotal(Integer sealTotal) {
 		this.sealTotal = sealTotal;
 	}
-	@Column(name="receipt_total")
+	@Column(name="receipt_total",columnDefinition = "NUMBER")
 	public Double getReceiptTotal() {
 		return receiptTotal;
 	}
