@@ -11,7 +11,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,6 +27,7 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.CellRangeAddress;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -163,6 +166,39 @@ public class IxinDataController extends BaseController {
 		return "modules/ixin/ixinDataList";
 	}
 
+	@ResponseBody
+    @RequestMapping(value = "findAppByType", method = RequestMethod.POST )
+    public String findAppByType(@RequestBody String configProjectTypeIds,HttpServletRequest request){
+        JSONObject json = new JSONObject();
+        
+        List<Long> configTypelist = new ArrayList<Long>();
+        if(StringUtils.isNotEmpty(configProjectTypeIds)){
+            String ids[] = configProjectTypeIds.split(",");
+            for (String ss : ids) {
+                configTypelist.add(Long.parseLong(ss));
+            }
+        }
+        try {
+        List<Object> list = new ArrayList<Object>();
+        //选择类型下的应用
+        List<ConfigApp> appList = configAppService.findByconfigProjectTypes(configTypelist);
+        if (appList.size()>0){
+            for (ConfigApp configApp : appList) {
+                Map<String, Object> map = new HashMap<String, Object>();
+                map.put("id",configApp.getId() );
+                map.put("appName", configApp.getAppName());
+                list.add(map);
+            }
+            json.put("status", "1");
+            json.put("list", list);
+            json.put("size", list.size());
+            }
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return json.toString();
+	}
 	
 	/**
 	 * @param ixinData
@@ -171,6 +207,7 @@ public class IxinDataController extends BaseController {
 	@ResponseBody
 	@RequestMapping(value = "saveData", method = RequestMethod.POST )
 	public String saveData(@RequestBody String jsonString,HttpServletRequest request){
+	    System.out.println(jsonString);
 	    JSONObject json = new JSONObject();
 	    try {
 	        JSONObject jsonObj = new JSONObject(jsonString);
