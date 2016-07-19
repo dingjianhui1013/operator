@@ -114,6 +114,20 @@ public class KeyAllocateApplyController extends BaseController {
 		if (!user.isAdmin()) {
 			keyAllocateApply.setCreateBy(user);
 		}
+		
+		
+		
+		List<Office> offices = Lists.newArrayList();
+		
+		offices.add(user.getOffice());
+		
+		List<KeyUsbKeyDepot> depots = keyUsbKeyDepotService
+				.findByOfficeIds(offices);
+		
+		
+		model.addAttribute("depot", depots.get(0));
+		
+		
 		model.addAttribute("state", state);
 		model.addAttribute("startTime", startTime);
 		model.addAttribute("endTime", endTime);
