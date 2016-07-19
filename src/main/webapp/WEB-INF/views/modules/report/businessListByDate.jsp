@@ -115,14 +115,14 @@
 	
 	<div class="container-fluid breadcrumb">
 		<div class="row-fluid span12">
-			<span class="span4">有效数量: <b>用户证书状态有效数量</b></span>
-			<span class="span4">已更新数量: <b>办理的更新业务数量</b></span>
-			<span class="span4">维护数量: <b>办理的除新增,更新外的其他业务数量</b></span>
+			<span class="span4">有效数量: <b>截止查询时间的有效证书数量</b></span>
+			<span class="span4">已更新数量: <b>期间办理的更新业务数量</b></span>
+			<span class="span4">维护数量: <b>期间办理的除新增,更新外的其他业务数量</b></span>
 		</div>
 		<div class="row-fluid span8">
-			<span class="span4">新增数量: <b>办理的新增业务数量</b></span>
+			<span class="span4">新增数量: <b>期间办理的新增业务数量</b></span>
 			
-			<span class="span4">未更新数量: <b>办理的更新业务,开权限未制证数量</b></span>
+			<span class="span4">未更新数量: <b>期间办理的更新业务,开权限未制证数量</b></span>
 		</div>
 	</div>
 	<div class="pagination">${page}</div>
