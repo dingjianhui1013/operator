@@ -130,7 +130,7 @@
 					ids=pre_ids.slice(0);
 					selectedNodes=pre_selectedNodes;
 					
-					$.fn.zTree.init($("#selectedTree"), setting, selectedNodes);
+					$.fn.zTree.init($("#selectedTree"), setting1, selectedNodes);
 			    	top.$.jBox.tip(tips, 'info');
 			    } else if (v == 'cancel'){
 			    	// 取消

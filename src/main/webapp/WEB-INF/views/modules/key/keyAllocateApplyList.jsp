@@ -136,7 +136,7 @@
 					
 						<td>
 						<shiro:hasPermission name="key:keyAllocateApply:edit">
-					        	<c:if test="${keyAllocateApply.state==2 }">
+					        	<c:if test="${keyAllocateApply.state==2 && keyAllocateApply.keyUsbKeyDepot.id==depot.id}">
 					     <a
 							href="javascript:void(0)" onclick="showAllocateApplyArrival(${keyAllocateApply.id})">确认到货</a>			
 						</c:if>
