@@ -113,7 +113,26 @@ public class OfficeService extends BaseService {
 		dc.addOrder(Order.desc("id"));
 		return officeDao.find(page, dc);
 	}
-	
+	/**
+	 * 
+	 * @param office
+	 * @return
+	 */
+	public List<Office> findAllByDel(Office office) {
+		User user = UserUtils.getUser();
+		DetachedCriteria dc = officeDao.createDetachedCriteria();
+		if (StringUtils.isNotEmpty(office.getName())){
+			dc.add(Restrictions.like("name", "%"+EscapeUtil.escapeLike(office.getName())+"%"));
+		}
+		Office off = new Office();
+		off.setId(1L);
+		dc.add(Restrictions.ne("parent", off));
+		dc.add(Restrictions.eq("delFlag", Office.DEL_FLAG_NORMAL));
+		dc.add(Restrictions.ne("id", 34L));
+		dc.addOrder(Order.asc("code"));
+		dc.addOrder(Order.desc("id"));
+		return officeDao.find(dc);
+	}
 	
 	
 	public Page<Office> findOffice(Page<Office> page,Office office) {

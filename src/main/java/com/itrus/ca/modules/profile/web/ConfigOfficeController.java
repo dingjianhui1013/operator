@@ -91,10 +91,19 @@ public class ConfigOfficeController extends BaseController {
 //			office.setId(user.getOffice().getId());
 //		}
 	   List<ConfigAppOfficeRelation> configAppOfficeRelations =  configAppOfficeRelationService.findAllByAppId(appId);
-			
-		
 		Page<Office> page = officeService.findByDel(new Page<Office>(request, response),office);
-	        model.addAttribute("page", page);
+		//得到应用所有授权网点
+		List<Office> findAllByDel = officeService.findAllByDel(office);
+		for(ConfigAppOfficeRelation configAppOfficeRelation:configAppOfficeRelations){
+			for(Office o:findAllByDel){
+				if (o.getId().equals(configAppOfficeRelation.getOffice().getId())) {
+					o.setOnfous(true);
+					break;
+				}
+			}
+		}	
+		
+	    model.addAttribute("page", page);
 		 
 	//	Office.sortList(list, sourcelist, office.getId());
 		 for (int i = 0; i < configAppOfficeRelations.size(); i++) {
@@ -105,6 +114,7 @@ public class ConfigOfficeController extends BaseController {
 				}
 			}
 		}
+		model.addAttribute("findAllByDel", findAllByDel); 
 		model.addAttribute("appId", appId);
         model.addAttribute("page", page);
 		return "modules/profile/configOfficeList";

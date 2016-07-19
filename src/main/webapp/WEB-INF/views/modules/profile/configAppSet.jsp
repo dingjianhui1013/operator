@@ -143,12 +143,39 @@
 				 $("[name='applyFlag2']").removeAttr("checked");
 			}
 		}
+		function testMsg1(){
+			
+			var html = '该功能为自助配置，现自助系统申请表内容分为社保和地税2种格式，在此配置申请表对应的应用，可实现办理应用时动态展示申请表';
+			
+			top.$.jBox(html, {
+				top: '0%',
+				showType: 'slide',
+				showSpeed: 'slow',
+				title : "注意事项",
+				persistent: true
+			});
+			
+		}
+		
+		
+		$(document).keypress(function(e)    
+			    {    
+			         switch(e.which)    
+			        {    
+			            case 90:    testMsg1();    
+			            break;      
+			        }
+			         
+			        $("#attention").hide(); 
+		});  
 	</script>
 </head>
 <body>
 	<ul class="nav nav-tabs">
 		<li class="active"><a href="#">地税和社保</a></li>
+	<p id="attention" style="float: right;color: gray;">shift+z快捷键可查看注意事项</p>
 	</ul>
+	
 	<tags:message content="${message}"/>
 	<form action="${ctx }/profile/configApp/saveApplyFlag" method="post" id="idsForm">
 		<input type = "hidden" name = "selectApplyFlag1" id = "applyFlag1" >
