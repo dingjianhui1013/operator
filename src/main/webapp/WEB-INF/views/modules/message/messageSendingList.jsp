@@ -210,14 +210,38 @@
 			if (v == true) {
 				$.getJSON(url, function(data) {
 					if (data.status == '1') {
-						top.$.jBox.tip("发送完成");
-						setTimeout(function() {
-							
-							$("#searchForm").submit();
+						var html = "";
+						html += "<label class='control-label'>总共条数:</label><div class='controls'>"
+								+ data.size+ "</div>";
+						html += "<label class='control-label'>发送成功条数:</label><div class='controls'>"
+							+ data.courentSize+ "</div>";
+						html += "<label class='control-label'>发送失败条数:</label><div class='controls'>"
+							+ data.errorSize+ "</div>";
+							if( data.errorSize>0){
+								html += "<div class='controls' id = \"reasonButton\"><input type = \"button\" value =\"查看原因\" onclick = \"checkWhy()\"></div>";	
+								html += "<div style =\"display:none\" id = \"errorReason\"><label class='control-label'>错误原因:</label>";
+								$.each(data.errorList,function(idx, ele) {
+									html += "<div class='controls'>"+ele.meg+ "</div>";
+									
+								});
+								html += "<div class='controls'><input type = \"button\" value =\"隐藏原因\" onclick = \"hideWhy()\"></div></div>";
+							}
+							$("#sendMessage").append(html);
+							var sendHtml = $("#sendMessage").html();
+						if(data.errorSize>0){
+							top.$.jBox.confirm(sendHtml, "短信内容", submit, {
+								buttons : {
+									'返回' : false
+								}
+							});		
+						}else{
+							top.$.jBox.tip("发送完成");
+							setTimeout(function() {
+								$("#searchForm").submit();
 
-							window.location.href="${ctx}/message/messageSending/";
-						}, 1500); 
-
+								window.location.href="${ctx}/message/messageSending/";
+							}, 1500); 
+						}
 					} else if (data.status == '-1') {
 						top.$.jBox.tip("发送失败!");
 						var info = "失败信息:<br>" + data.msg;
@@ -245,25 +269,42 @@
 
 		$.getJSON(	updateUrl,
 						function(data) {
-
 							var html = "";
-							if (data.status == 1) {
-								html = "<label class='control-label'>总共条数:</label><div class='controls'>"
-										+ data.size + "</div>";
+							html += "<label class='control-label'>总共条数:</label><div class='controls'>"
+									+ data.size+ "</div>";
+							html += "<label class='control-label'>正确条数:</label><div class='controls'>"
+								+ data.courentSize+ "</div>";
+							if(data.courentSize>0){
 								html += "<label class='control-label'>短信内容:</label><div class='controls'>"
-										+ data.content + "</div>";
-								top.$.jBox.confirm(html, "短信内容", submit, {
-									buttons : {
-										'确认发送' : true,
-										'返回' : false
-									}
-								});	
+									+ data.content + "</div>";	
+							}			
+							html += "<label class='control-label'>错误条数:</label><div class='controls'>"
+								+ data.errorSize+ "</div>";
+								if( data.errorSize>0){
+									html += "<div class='controls' id = \"reasonButton\"><input type = \"button\" value =\"查看原因\" onclick = \"checkWhy()\"></div>";	
+									html += "<div style =\"display:none\" id = \"errorReason\"><label class='control-label'>错误原因:</label>";
+									$.each(data.errorList,function(idx, ele) {
+										html += "<div class='controls'>"+ele.meg+ "</div>";
 										
-							}else{
-								top.$.jBox.tip(data.meg);
-							}
-
-							
+									});
+									html += "<div class='controls'><input type = \"button\" value =\"隐藏原因\" onclick = \"hideWhy()\"></div></div>";
+								}
+								$("#sendMessage").append(html);
+								var sendHtml = $("#sendMessage").html();
+						if(data.courentSize>0){
+							top.$.jBox.confirm(sendHtml, "短信内容", submit, {
+								buttons : {
+									'确认发送' : true,
+									'返回' : false
+								}
+							});		
+						}else{
+							top.$.jBox.confirm(sendHtml, "短信内容", submit, {
+								buttons : {
+									'返回' : false
+								}
+							});	
+						}
 						});
 				}
 		
@@ -484,8 +525,21 @@
 
 		</tbody>
 	</table>
-
-
+<div style = "display:none">
+<div id = "sendMessage">
+<script type="text/javascript">
+	function checkWhy(){
+		$("#errorReason").show();
+		$("#reasonButton").hide();
+	}
+	function hideWhy(){
+		$("#errorReason").hide();
+		$("#reasonButton").show();
+	}
+		
+	</script>
+</div>
+</div>
 	<div class="pagination">${page}</div>
 </body>
 </html>

@@ -9,7 +9,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -256,7 +258,7 @@ public class MessageSendingController extends BaseController {
 			HttpServletResponse response) throws JSONException {
 			JSONObject json = new JSONObject();
 			DateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
-			
+		
 		// List<WorkCertInfo> certInfoList = new ArrayList<WorkCertInfo>();
 		// String
 		// messageAddress=smsConfigurationService.get(smsId).getMessageAddress();
@@ -283,23 +285,36 @@ public class MessageSendingController extends BaseController {
 			return json.toString();
 		}
 		String[] dealInfos = checkIds.split(",");
+		 StringWriter writer = new StringWriter();
+		 long size= dealInfos.length;
+		 List<Object> errorList = new ArrayList<Object>();
 		for (int i = 0; i < dealInfos.length; i++) {
 			//System.out.println(dealInfos[i]);
 
 			// s[i]=Short.parseShort(dealInfos[i]);
 			// System.out.println(s[i]);
-			long size= dealInfos.length;
+			
 			long dealInfoId = Long.parseLong(dealInfos[i]);
 			WorkDealInfo dealInfo = workDealInfoService.get(dealInfoId);
 			if(dealInfo!=null){
 			 // 经办人姓名
 	            String consigner = dealInfo.getWorkCertInfo().getWorkCertApplyInfo().getName();
+	            if(StringUtils.isEmpty(consigner)){
+	                Map<String,Object> map = new HashMap<String,Object>();
+	                map.put("status", -1);
+	                map.put("meg", dealInfo.getSvn()+"的经办人姓名为空");
+	                errorList.add(map);
+	                continue;
+	            }
+	            
 			// 组织机构代码
 			String companyCode = dealInfo.getWorkCompany().getOrganizationNumber();
 			if(StringUtils.isEmpty(companyCode)){
-			    json.put("status", -1);
-	            json.put("meg", consigner+"的组织代码为空");
-	            return json.toString();
+			    Map<String,Object> map = new HashMap<String,Object>();
+			    map.put("status", -1);
+			    map.put("meg", dealInfo.getSvn()+"的组织代码为空");
+			    errorList.add(map);
+	            continue;
 			}
 			// 机构名称
 			String companyName = dealInfo.getWorkCompany().getCompanyName();
@@ -307,24 +322,30 @@ public class MessageSendingController extends BaseController {
 			// 法人姓名
 			String legalName = dealInfo.getWorkCompany().getLegalName();
 			if(StringUtils.isEmpty(legalName)){
-                json.put("status", -1);
-                json.put("meg", consigner+"的法人姓名为空");
-                return json.toString();
+			    Map<String,Object> map = new HashMap<String,Object>();
+			    map.put("status", -1);
+                map.put("meg", dealInfo.getSvn()+"的法人姓名为空");
+                errorList.add(map);
+                continue;
             }
 			// key编码
 			String keySn = dealInfo.getKeySn();
 			if(StringUtils.isEmpty(keySn)){
-                json.put("status", -1);
-                json.put("meg", consigner+"的key序列号为空");
-                return json.toString();
+			    Map<String,Object> map = new HashMap<String,Object>();
+			    map.put("status", -1);
+                map.put("meg", dealInfo.getSvn()+"的key序列号为空");
+                errorList.add(map);
+                continue;
             }
 			// 机构地址
 			String organizationAddress = dealInfo.getWorkCompany().getProvince() + dealInfo.getWorkCompany().getCity()
 					+ dealInfo.getWorkCompany().getDistrict() + dealInfo.getWorkCompany().getAddress();
 			if(StringUtils.isEmpty(organizationAddress)){
-                json.put("status", -1);
-                json.put("meg", consigner+"的机构地址为空");
-                return json.toString();
+			    Map<String,Object> map = new HashMap<String,Object>();
+			    map.put("status", -1);
+                map.put("meg", dealInfo.getSvn()+"的机构地址为空");
+                errorList.add(map);
+                continue;
             }
 			//System.out.println(consigner);
 			// 业务状态
@@ -336,9 +357,11 @@ public class MessageSendingController extends BaseController {
 			// 证书到期时间
 			Date endDate = dealInfo.getNotafter();
 			if(endDate==null){
-                json.put("status", -1);
-                json.put("meg", consigner+"的证书到期时间为空");
-                return json.toString();
+			    Map<String,Object> map = new HashMap<String,Object>();
+			    map.put("status", -1);
+                map.put("meg", dealInfo.getSvn()+"的证书到期时间为空");
+                errorList.add(map);
+                continue;
             }
 			//System.out.println(endDate);
 			// 证书持有人电话
@@ -356,13 +379,15 @@ public class MessageSendingController extends BaseController {
 			   context.put("alias", alias);
 			   context.put("endDate", endDate ==null?"":format1.format(endDate));
 			   context.put("date", format1.format(new Date()));
-			   StringWriter writer = new StringWriter();
 			   ve.evaluate(context, writer, "", content); 
-			   json.put("status", 1);
-			   json.put("size", size);
-			   json.put("content", writer.toString());
 			   }
 		}
+		 json.put("status", 1);
+         json.put("size", size);
+         json.put("courentSize", size-errorList.size());
+         json.put("content", writer.toString());
+         json.put("errorList", errorList);
+         json.put("errorSize", errorList.size());
 		return json.toString();
 		// return "redirect:" + Global.getAdminPath() +
 		// "/modules/message/messageSending/search";
@@ -411,7 +436,9 @@ public class MessageSendingController extends BaseController {
 			return json.toString();
 		}
 		String[] dealInfos = checkIds.split(",");
+		 long size= dealInfos.length;
 		short s[] = new short[dealInfos.length];
+		List<Object> errorList = new ArrayList<Object>();
 		for (int i = 0; i < dealInfos.length; i++) {
 			//System.out.println(dealInfos[i]);
 
@@ -427,30 +454,93 @@ public class MessageSendingController extends BaseController {
 			WorkCertInfo workCertInfo = dealInfo.getWorkCertInfo();
 			// 组织机构代码
 			String companyCode = dealInfo.getWorkCompany().getOrganizationNumber();
+			if(StringUtils.isEmpty(companyCode)){
+                Map<String,Object> map = new HashMap<String,Object>();
+                map.put("status", -1);
+                map.put("meg", dealInfo.getSvn()+"的经办人姓名为空");
+                errorList.add(map);
+                continue;
+            }
 			// 机构名称
 			String companyName = dealInfo.getWorkCompany().getCompanyName();
+			if(StringUtils.isEmpty(companyName)){
+                Map<String,Object> map = new HashMap<String,Object>();
+                map.put("status", -1);
+                map.put("meg", dealInfo.getSvn()+"的机构名称为空");
+                errorList.add(map);
+                continue;
+            }
 			//System.out.println(companyName);
 			// 法人姓名
 			String legalName = dealInfo.getWorkCompany().getLegalName();
+			if(StringUtils.isEmpty(legalName)){
+                Map<String,Object> map = new HashMap<String,Object>();
+                map.put("status", -1);
+                map.put("meg", dealInfo.getSvn()+"的法人姓名为空");
+                errorList.add(map);
+                continue;
+            }
 			// key编码
 			String keySn = dealInfo.getKeySn();
+			if(StringUtils.isEmpty(legalName)){
+                Map<String,Object> map = new HashMap<String,Object>();
+                map.put("status", -1);
+                map.put("meg", dealInfo.getSvn()+"的key为空");
+                errorList.add(map);
+                continue;
+            }
 			// 机构地址
 			String organizationAddress = dealInfo.getWorkCompany().getProvince() + dealInfo.getWorkCompany().getCity()
 					+ dealInfo.getWorkCompany().getDistrict() + dealInfo.getWorkCompany().getAddress();
+			if(StringUtils.isEmpty(organizationAddress)){
+                Map<String,Object> map = new HashMap<String,Object>();
+                map.put("status", -1);
+                map.put("meg", dealInfo.getSvn()+"的机构地址为空");
+                errorList.add(map);
+                continue;
+            }
 			// 经办人姓名
 			String consigner = dealInfo.getWorkCertInfo().getWorkCertApplyInfo().getName();
+			if(StringUtils.isEmpty(consigner)){
+                Map<String,Object> map = new HashMap<String,Object>();
+                map.put("status", -1);
+                map.put("meg", dealInfo.getSvn()+"的经办人姓名为空");
+                errorList.add(map);
+                continue;
+            }
 			//System.out.println(consigner);
 			// 业务状态
 			WorkDealInfoStatus workDealInfoStatus = new WorkDealInfoStatus();
 			String businessStatus = workDealInfoStatus.WorkDealInfoStatusMap.get(dealInfo.getDealInfoStatus());
 			// 项目名称
 			String alias = dealInfo.getConfigApp().getAlias();
+			if(StringUtils.isEmpty(alias)){
+                Map<String,Object> map = new HashMap<String,Object>();
+                map.put("status", -1);
+                map.put("meg", dealInfo.getSvn()+"的项目名称为空");
+                errorList.add(map);
+                continue;
+            }
 			//System.out.println(alias);
 			// 证书到期时间
 			Date endDate = dealInfo.getNotafter();
+			if(endDate==null){
+                Map<String,Object> map = new HashMap<String,Object>();
+                map.put("status", -1);
+                map.put("meg", dealInfo.getSvn()+"的证书到期时间为空");
+                errorList.add(map);
+                continue;
+            }
 			//System.out.println(endDate);
 			// 证书持有人电话
 			String phone = dealInfo.getWorkUser().getContactPhone();
+			if(StringUtils.isEmpty(phone)){
+                Map<String,Object> map = new HashMap<String,Object>();
+                map.put("status", -1);
+                map.put("meg", dealInfo.getSvn()+"的证书持有人电话为空");
+                errorList.add(map);
+                continue;
+            }
 			//System.out.println(phone);
 			VelocityEngine ve = new VelocityEngine();
 			   ve.init();
@@ -486,31 +576,37 @@ public class MessageSendingController extends BaseController {
 
 				returnStatus = smsService.sendSms(messId, phone, writer.toString());
 				if (returnStatus.equals("0")) {
-					json.put("status", -1);
-					json.put("msg", "发送失败");
-					return json.toString();
-				} 
-					json.put("status", 1);
-					json.put("msg", "发送完成");
-					MessageSending messageSending = new MessageSending();
-					messageSending.setMessId(messId);
-					messageSending.setpId(4);
-					messageSending.setPhone(phone);
-					messageSending.setMessageContext(writer.toString());
-					messageSending.setSmsSendDate(smsSendDate);
-					messageSending.setReturnStatus(returnStatus.equals("1")?returnStatus:returnStatus.substring(1));
-					messageSending.setWorkDealInfo(dealInfo);
-					messageSending.setSmsConfiguration(smsConfiguration);
-					messageSending.setWorkCompany(company);
-					messageSending.setWorkUser(workUser);
-					messageSending.setConfigApp(configApp);
-					messageSending.setWorkCertInfo(workCertInfo);
-					messageSendingService.save(messageSending);
+					 Map<String,Object> map = new HashMap<String,Object>();
+		                map.put("status", -1);
+		                map.put("msg", dealInfo.getSvn()+"发送失败");
+		                errorList.add(map);
+		                continue;
+				} else{
+				    json.put("status", 1);
+                    json.put("msg", "发送完成");
+                    MessageSending messageSending = new MessageSending();
+                    messageSending.setMessId(messId);
+                    messageSending.setpId(4);
+                    messageSending.setPhone(phone);
+                    messageSending.setMessageContext(writer.toString());
+                    messageSending.setSmsSendDate(smsSendDate);
+                    messageSending.setReturnStatus(returnStatus.equals("1")?returnStatus:returnStatus.substring(1));
+                    messageSending.setWorkDealInfo(dealInfo);
+                    messageSending.setSmsConfiguration(smsConfiguration);
+                    messageSending.setWorkCompany(company);
+                    messageSending.setWorkUser(workUser);
+                    messageSending.setConfigApp(configApp);
+                    messageSending.setWorkCertInfo(workCertInfo);
+                    messageSendingService.save(messageSending);
+				}
 					
-				
+			   }
 			}
 		}
-		}
+		 json.put("size", size);
+         json.put("courentSize", size-errorList.size());
+         json.put("errorList", errorList);
+         json.put("errorSize", errorList.size());
 		return json.toString();
 		// return "redirect:" + Global.getAdminPath() +
 		// "/modules/message/messageSending/search";
