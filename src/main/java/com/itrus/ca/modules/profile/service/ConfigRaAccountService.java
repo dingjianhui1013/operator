@@ -97,7 +97,14 @@ public class ConfigRaAccountService extends BaseService {
 		}
 		return configRaAccountDao.find(dc);
 	}
-	
+	//根据Id得到ra信息
+		public List<ConfigRaAccount> findById(Long Id) {
+			DetachedCriteria dc = configRaAccountDao.createDetachedCriteria();
+			if (StringUtils.isNotEmpty(Id.toString())) {
+				dc.add(Restrictions.eq("id",Id) );
+			}
+			return configRaAccountDao.find(dc);
+		}
 	
 	//判断ra是否关联证书
 		public ConfigRaAccount findByExtendId(Long extendId) {
@@ -109,6 +116,7 @@ public class ConfigRaAccountService extends BaseService {
 				return null;
 			}
 		}
+	
 
 	/**
 	 * 检测模板是否使用过

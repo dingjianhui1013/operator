@@ -3,7 +3,9 @@
  */
 package com.itrus.ca.modules.profile.web;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -90,23 +92,37 @@ public class ConfigProductController extends BaseController {
 		}
 		Long test=configProduct.getRaAccountExtedId();
 		List<ConfigProduct> page = configProductService.findByStart(configProduct); 
-        /*for (int i = 0; i < page.size(); i++) {
-        		List<ConfigRaAccount> configRaAccount = configRaAccountService.findByProductId(  page.get(i).getId());
-        		//通过Product获取raAccount对象
-        		if (configRaAccount.size()>0) {
-        			page.get(i).setRaAccountId(configRaAccount.get(0).getId());
-        			
-        			if (configRaAccount.get(0).getConfigRaAccountExtendInfo()!=null) {
-        				page.get(i).setRaAccountExtedId(configRaAccount.get(0).getConfigRaAccountExtendInfo().getId());
-					}else{
-						page.get(i).setRaAccountExtedId((long) 0);
-					}
-				}
-        		page.get(i).setProductName(ProductType.getProductTypeName(Integer.valueOf(page.get(i).getProductName())));
-		}*/
+//        for (int i = 0; i < page.size(); i++) {
+//        		List<ConfigRaAccount> configRaAccount = configRaAccountService.findByProductId(  page.get(i).getId());
+//        		//通过Product获取raAccount对象
+//        		if (configRaAccount.size()>0) {
+//        			page.get(i).setRaAccountId(configRaAccount.get(0).getId());
+//        			
+//        			if (configRaAccount.get(0).getConfigRaAccountExtendInfo()!=null) {
+//        				page.get(i).setRaAccountExtedId(configRaAccount.get(0).getConfigRaAccountExtendInfo().getId());
+//					}else{
+//						page.get(i).setRaAccountExtedId((long) 0);
+//					}
+//				}
+//        		page.get(i).setProductName(ProductType.getProductTypeName(Integer.valueOf(page.get(i).getProductName())));
+//		}
+		
+		Map map = new HashMap();
+		for(ConfigProduct product:page){
+//			添加ra模板
+//			List<ConfigRaAccount> configRaAccounts= configRaAccountService.findByProductId(product.getId());
+			List<ConfigRaAccount> configRaAccounts= configRaAccountService.findById(product.getRaAccountId());
+			for(ConfigRaAccount configRaAccount :configRaAccounts){
+				product.getConfigRaAccounts().add(configRaAccount);
+			}
+			//添加证书模板
+			List<ConfigRaAccountExtendInfo> raAccountExtendInfos=configRaAccountExtendInfoService.findById(product.getRaAccountExtedId());
+			map.put(product.getId(), raAccountExtendInfos.get(0));
+		}
 		 for (int i = 0; i < page.size(); i++) {
 		  page.get(i).setProductName(ProductType.getProductTypeName(Integer.valueOf(page.get(i).getProductName())));
 		  }
+		model.addAttribute("map", map);
         model.addAttribute("appId", appId);
         model.addAttribute("page", page);
         model.addAttribute("proList", ProductType.getProductTypeList());

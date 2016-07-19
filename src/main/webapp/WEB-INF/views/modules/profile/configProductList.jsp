@@ -92,6 +92,8 @@
 							<th>产品名称</th>
 							<th>产品标识</th>
 							<th>备注</th>
+							<th>RA模板</th>
+							<th>证书模板</th>
 							<shiro:hasPermission name="profile:configProduct:edit">
 							<th>操作</th>
 							</shiro:hasPermission></tr>
@@ -107,6 +109,19 @@
 				通用
 				</c:if></td>
 				<td>${configProduct.remarks}</td>
+				<td>
+					<c:forEach items="${configProduct.configRaAccounts}" var="ConfigRaAccount">
+						${ ConfigRaAccount.raName}
+					</c:forEach>
+				</td>
+				<td>
+					<c:forEach items="${map}" var="configRaAccountExtendInfo">
+						<c:if test="${configRaAccountExtendInfo.key== configProduct.id}">
+							${configRaAccountExtendInfo.value.certName }
+						</c:if>
+					
+					</c:forEach>
+				</td>
 				<td>
 			
 				<input type="hidden" name="id" id="id" value="${configProduct.id}"/>

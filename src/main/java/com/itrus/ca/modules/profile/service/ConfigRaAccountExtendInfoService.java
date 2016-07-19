@@ -70,8 +70,19 @@ public class ConfigRaAccountExtendInfoService extends BaseService {
 		
 		
 	}
-	
-	
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public List<ConfigRaAccountExtendInfo> findById(Long id)
+	{
+		DetachedCriteria dc =configRaAccountExtendInfoDao.createDetachedCriteria();
+		dc.add(Restrictions.eq("id", id));
+		return configRaAccountExtendInfoDao.find(dc);
+		
+		
+	}
 	@Transactional(readOnly = false)
 	public void save(ConfigRaAccountExtendInfo configRaAccountExtendInfo) {
 		configRaAccountExtendInfoDao.save(configRaAccountExtendInfo);

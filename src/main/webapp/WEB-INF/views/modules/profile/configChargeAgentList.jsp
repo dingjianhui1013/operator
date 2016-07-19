@@ -5,6 +5,9 @@
 <head>
 	<title>代理商应用计费策略管理</title>
 	<meta name="decorator" content="default"/>
+	<style type="text/css">
+	.table th,.table td{vertical-align:middle;}
+	</style>
 	<script type="text/javascript">
 		$(document).ready(function() {
 			
