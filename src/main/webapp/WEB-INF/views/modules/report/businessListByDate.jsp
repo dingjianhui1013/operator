@@ -53,11 +53,11 @@
 
 			&nbsp;&nbsp;<label>时间范围：&nbsp;</label> &nbsp;&nbsp;<input
 				class="input-medium Wdate" type="text" required="required"
-				onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});"
+				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"
 				value="<fmt:formatDate value="${startTime}" pattern="yyyy-MM-dd"/>"
 				maxlength="20" readonly="readonly" name="startTime" id="startTime" />
 			至 <input class="input-medium Wdate" type="text" required="required"
-				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'startTime\')}'});"
+				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'startTime\')}',isShowClear:false});"
 				value="<fmt:formatDate value="${endTime}" pattern="yyyy-MM-dd"/>"
 				maxlength="20" readonly="readonly" name="endTime" id="endTime"/>
 

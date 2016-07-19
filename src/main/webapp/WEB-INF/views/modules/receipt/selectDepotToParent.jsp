@@ -88,7 +88,9 @@
 		function treeOnClickRemove(event, treeId, treeNode, clickFlag){
 			var nodes = selectedTree.getNodes();
 			var array = new Array;
-			
+			if($.inArray(String(treeNode.id), pre_ids)>=0){
+				return false;
+			}
 			for(var i=nodes.length-1;i>=0;i--){
 				
 				console.log(array);
