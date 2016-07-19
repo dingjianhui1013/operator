@@ -24,9 +24,9 @@
 				success:function(data){
 					if(data[0].status!=0)
 						{
-							var html="<table class='table table-striped table-bordered table-condensed'><thead><th>项目名称</th></thead><tbody>";
+							var html="<table class='table table-striped table-bordered table-condensed'><thead><th style='z-index:1'>项目名称</th></thead><tbody>";
 							$.each(data,function(i,value){
-								html+="<tr><td>"+value.name+"</td></tr>";
+								html+="<tr><td style='z-index:1'>"+value.name+"</td></tr>";
 							});
 							html+="</tbody></table>";
 							top.$.jBox(html, { title: "绑定应用详细",buttons:{"确定":true,"关闭":true}});
