@@ -20,12 +20,15 @@
 				$("#type1").removeAttr("checked");
 				$("#type2").removeAttr("checked");
 				$("#type3").removeAttr("checked");
+				
+				$("#type5").removeAttr("checked");
 			} 
 			$("#reissueType").hide();
 		}
 		function onType1(obj) {
 			if ($(obj).prop("checked")) {
 				$("#type4").removeAttr("checked");
+				$("#type5").removeAttr("checked");
 			}
 			if ($("#type2").prop("checked")){
 				$("#reissueType").show();
@@ -33,6 +36,18 @@
 				$("#reissueType").hide();
 			}
 		}
+		
+		
+		
+		function onKeyUpgrade(obj){
+			if($(obj).prop("checked")){
+				$("#type1").removeAttr("checked");
+				$("#type2").removeAttr("checked");
+				$("#type3").removeAttr("checked");
+				$("#type4").removeAttr("checked");
+			}
+		}
+		
 		
 		
 	</script>
@@ -53,6 +68,9 @@
 		<input type="checkbox" onclick="javascript:onType1(this);" value="3"
 			id="type3" name="dealType" />更新<br> 
 		<input type="checkbox" onclick="javascript:onType(this);" id="type4" value="4" name="dealType" />吊销<br>
+		
+		<input type="checkbox" onclick="javascript:onKeyUpgrade(this);" id="type5" value="5" name="dealType" />key升级
+		
 	</div>
 	</form>
 </body>
