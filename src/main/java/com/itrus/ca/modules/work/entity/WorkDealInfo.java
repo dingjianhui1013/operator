@@ -102,6 +102,10 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 	private Boolean isIxin;// i信端更新标识
 	private Integer isSJQY;// 是否是数据迁移的数据 是为1 否为null or 0 2批量导入数据
 	// Constructors
+	
+	private Integer isRevokeBusiness;      //2016.7.18  是否为吊销业务              吊销的情况有多种(吊销业务,遗失补办,key升级等),只有吊销业务时才将此字段设为1
+	private Date revokeDate;               //2016.7.18  吊销时间
+	
 	private Long configChargeAgentId;
 	private User inputUser;// 录入人
 	private User payUser;// 缴费人
@@ -654,6 +658,26 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 
 	public void setIsSJQY(Integer isSJQY) {
 		this.isSJQY = isSJQY;
+	}
+	
+	@Column(name = "is_revoke_business")
+	public Integer getIsRevokeBusiness() {
+		return isRevokeBusiness;
+	}
+
+	public void setIsRevokeBusiness(Integer isRevokeBusiness) {
+		this.isRevokeBusiness = isRevokeBusiness;
+	}
+	
+	
+	
+	@Column(name = "revoke_Date")
+	public Date getRevokeDate() {
+		return revokeDate;
+	}
+
+	public void setRevokeDate(Date revokeDate) {
+		this.revokeDate = revokeDate;
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)

@@ -891,6 +891,8 @@ public class CertController extends BaseController {
 			caService.revokeCaCert(dealInfo.getCertSn(), "", raAccount);
 
 			dealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_CERT_REVOKE);
+			dealInfo.setIsRevokeBusiness(1);
+			dealInfo.setRevokeDate(new Date());
 			WorkCertInfo certInfo = dealInfo.getWorkCertInfo();
 			certInfo.setStatus(3);
 			certInfo.setRevokeDate(new Date());
