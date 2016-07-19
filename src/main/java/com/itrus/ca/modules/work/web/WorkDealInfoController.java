@@ -4699,6 +4699,15 @@ public class WorkDealInfoController extends BaseController {
 					addMessage(redirectAttributes, "此业务应用未授权给当前网点，请到业务办理网点吊销！");
 					return "redirect:" + Global.getAdminPath() + "/work/workDealInfo/?repage";
 				}
+			}  else if(type[i].equals("5")){
+				
+				model.addAttribute("reissue", "1");
+				
+				if (!inOffice) {
+					redirectAttributes.addAttribute("fd", UUID.randomUUID().toString());
+					addMessage(redirectAttributes, "此业务应用未授权给当前网点，请到业务办理网点补办！");
+					return "redirect:" + Global.getAdminPath() + "/work/workDealInfo/?repage";
+				}
 			}
 		}
 		if (workDealInfo.getWorkCertInfo() != null) {
@@ -4838,6 +4847,27 @@ public class WorkDealInfoController extends BaseController {
 				ConfigChargeAgent agent = configChargeAgentService.get(workDealInfo.getConfigChargeAgentId());
 				model.addAttribute("jfMB", agent.getTempName());
 				return "modules/work/maintain/workDealInfoMaintainRevoke";
+			} else if(dealInfoTypes.get(0).equals("5")){
+				ConfigProduct configProduct = workDealInfo.getConfigProduct();
+				List<ConfigChargeAgentBoundConfigProduct> boundList = configChargeAgentBoundConfigProductService
+						.findByProIdAll(configProduct.getId());
+				Set<Integer> nameSet = new HashSet<Integer>();
+				for (int i = 0; i < boundList.size(); i++) {
+					nameSet.add(Integer.parseInt(boundList.get(i).getAgent().getTempStyle()));
+				}
+
+				model.addAttribute("boundLabelList", nameSet);
+
+				List<WorkLog> list = workLogService.findByDealInfo(workDealInfo);
+				model.addAttribute("workLog", list);
+				if (chargeAgent != null) {
+					model.addAttribute("tempStyle", chargeAgent.getTempStyle());
+				}
+
+				//key升级
+				model.addAttribute("isKeyUpgrade",1);
+				return "modules/work/maintain/workDealInfoMaintainLost";
+				
 			}
 
 		} else if (dealInfoTypes.size() == 2) {

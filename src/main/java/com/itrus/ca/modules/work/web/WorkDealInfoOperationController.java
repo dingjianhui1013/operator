@@ -1605,7 +1605,7 @@ public class WorkDealInfoOperationController extends BaseController {
 			@RequestParam(value="product", required=true) Long productId,
 			Integer agentId,Long agentDetailId, //获取计费策略类型  获取计费策略模版
 			Integer dealInfoType1,
-			
+			Integer isKeyUpgrade,
 			Boolean manMadeDamage,Model model, RedirectAttributes redirectAttributes,
 			@RequestParam(value="companyImage", required=false) MultipartFile companyImage ,
 			 @RequestParam(value="transactorImage", required=false) MultipartFile transactorImage,
@@ -1708,6 +1708,13 @@ public class WorkDealInfoOperationController extends BaseController {
 		}else if(dealInfoType1==2){
 			workDealInfo.setDealInfoType1(WorkDealInfoType.TYPE_DAMAGED_REPLACED);
 		}
+		
+		//key升级
+		if(isKeyUpgrade == 1){
+			workDealInfo.setIsKeyUpgrade(1);
+		}
+		
+		
 		if (manMadeDamage!=null) {
 			workDealInfo.setManMadeDamage(manMadeDamage);
 		}
