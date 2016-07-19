@@ -102,6 +102,10 @@ public class ReceiptAllocateApplyController extends BaseController {
 	@RequestMapping(value = {"list", ""})
 	public String list(ReceiptAllocateApply receiptAllocateApply, HttpServletRequest request, HttpServletResponse response, Model model,
 			Date startTime, Date endTime, Integer state) {
+		
+		ReceiptDepotInfo depot = getDeoptByOfficeId(UserUtils.getUser().getOffice().getId());
+		
+		model.addAttribute("depot", depot);
 		model.addAttribute("startTime", startTime);
 		model.addAttribute("state", state);
 		model.addAttribute("endTime", endTime);
