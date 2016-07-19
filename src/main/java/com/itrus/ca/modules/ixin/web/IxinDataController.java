@@ -221,7 +221,7 @@ public class IxinDataController extends BaseController {
 	        JSONObject jsonObj = new JSONObject(jsonString);
 	        Integer dataSize = Integer.parseInt(jsonObj.getString("dataSize"));
 	        String ixinData = jsonObj.getString("ixinData");
-	        String[] ixinDatas = ixinData.split("||");
+	        String[] ixinDatas = ixinData.split("\\|\\|");
     	    if(dataSize==ixinDatas.length){
     	        List<IxinData> list = new ArrayList<IxinData>();
     	        for (int i = 0; i < ixinDatas.length; i++) {
