@@ -114,7 +114,7 @@
 					<c:if test="${receiptAllocateApply.state==3}">完成</c:if>
 				</td>
 				<td>
-    				<c:if test="${receiptAllocateApply.state==1}">
+    				<c:if test="${receiptAllocateApply.state==1 && receiptAllocateApply.receiptDepotInfo.id==depot.id}">
     					<a href="${ctx}/receipt/receiptAllocateApply/formQR?id=${receiptAllocateApply.id}" onclick="return confirmx('如果你已收到发票${receiptAllocateApply.money}元，请点击确认完成入库操作！', this.href)">到货确认</a>
     				</c:if>
     				<c:if test="${receiptAllocateApply.state==2}">
