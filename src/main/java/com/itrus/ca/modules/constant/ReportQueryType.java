@@ -16,6 +16,8 @@ public class ReportQueryType {
 	public static Integer TYPE_UNUPDATE_DEAL = 3;//未更新业务
 	public static Integer TYPE_MAINTENANCE_DEAL = 4;//维护业务
 	
+	
+	
 	public static HashMap<Integer,String> WorkDealInfoTypeMap = new HashMap<Integer, String>();
 	
 	static{
@@ -24,7 +26,8 @@ public class ReportQueryType {
 		WorkDealInfoTypeMap.put(TYPE_UPDATE_DEAL, "更新业务");
 		WorkDealInfoTypeMap.put(TYPE_UNUPDATE_DEAL, "未更新业务");
 		WorkDealInfoTypeMap.put(TYPE_MAINTENANCE_DEAL, "维护业务");
-	
+		
+		
 		
 	}
 

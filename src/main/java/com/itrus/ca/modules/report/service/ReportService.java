@@ -56,125 +56,109 @@ public class ReportService extends BaseService {
 	@SuppressWarnings("unused")
 	private static Logger logger = LoggerFactory.getLogger(ReportService.class);
 
-	
-	
 	/**
-	 *   由于是只查数量，为了提高效率，我们选择用sql语句来查
+	 * 由于是只查数量，为了提高效率，我们选择用sql语句来查
 	 */
 	public Integer findCountByDate(Long appId, Date startTime, Date endTime, Integer method) {
-		
+
 		StringBuffer sql = new StringBuffer();
-		
+
 		sql.append("select count(*) as ct from work_deal_info wdi");
 		sql.append(",config_app ca");
-		
-		if(method==ReportQueryType.TYPE_VALID_DEAL){
+
+		if (method == ReportQueryType.TYPE_VALID_DEAL) {
 			sql.append(",work_cert_info wci");
 		}
-		
+
 		sql.append(" where wdi.app_id = ca.id");
 		sql.append(" and ca.id = ").append(appId);
-		
-		if(method==ReportQueryType.TYPE_VALID_DEAL){
-			
+
+		if (method == ReportQueryType.TYPE_VALID_DEAL) {
+
 			sql.append(" and wdi.cert_id = wci.id");
-			sql.append(" and wci.notbefore <= TO_DATE('"
-					+ DateUtils.formatDate(endTime, "yyyy-MM-dd 23:59:59")
+			sql.append(" and wci.notbefore <= TO_DATE('" + DateUtils.formatDate(endTime, "yyyy-MM-dd 23:59:59")
 					+ "', 'yyyy-MM-dd hh24:mi:ss')");
-			sql.append(" and wdi.notafter >= TO_DATE('"
-					+ DateUtils.formatDate(endTime, "yyyy-MM-dd 00:00:01")
+			sql.append(" and wdi.notafter >= TO_DATE('" + DateUtils.formatDate(endTime, "yyyy-MM-dd 00:00:01")
 					+ "', 'yyyy-MM-dd hh24:mi:ss')");
-			
+
 			sql.append(" and wdi.deal_info_status = ").append(WorkDealInfoStatus.STATUS_CERT_OBTAINED);
-			
+
 			sql.append(" and wdi.del_flag = ").append(DataEntity.DEL_FLAG_NORMAL);
 		}
-		
-		
-		if(method==ReportQueryType.TYPE_NEW_DEAL){
+
+		if (method == ReportQueryType.TYPE_NEW_DEAL) {
 			sql.append(" and wdi.business_card_user_date >=TO_DATE('"
-					+ DateUtils.formatDate(startTime, "yyyy-MM-dd 00:00:01")
-					+ "', 'yyyy-MM-dd hh24:mi:ss')");
-			
+					+ DateUtils.formatDate(startTime, "yyyy-MM-dd 00:00:01") + "', 'yyyy-MM-dd hh24:mi:ss')");
+
 			sql.append(" and wdi.business_card_user_date <=TO_DATE('"
-					+ DateUtils.formatDate(endTime, "yyyy-MM-dd 23:59:59")
-					+ "', 'yyyy-MM-dd hh24:mi:ss')");
-			
-			sql.append(" and wdi.deal_info_status = ").append(WorkDealInfoStatus.STATUS_CERT_OBTAINED);
-			
+					+ DateUtils.formatDate(endTime, "yyyy-MM-dd 23:59:59") + "', 'yyyy-MM-dd hh24:mi:ss')");
+
+			sql.append(" and(wdi.deal_info_status = ").append(WorkDealInfoStatus.STATUS_CERT_OBTAINED)
+					.append(" or wdi.deal_info_status = ").append(WorkDealInfoStatus.STATUS_CERT_REVOKE).append(")");
+																								
 			sql.append(" and wdi.deal_info_type = ").append(WorkDealInfoType.TYPE_ADD_CERT);
-			
+
 		}
-		
-		
-		if(method == ReportQueryType.TYPE_UPDATE_DEAL){
+
+		if (method == ReportQueryType.TYPE_UPDATE_DEAL) {
 			sql.append(" and wdi.business_card_user_date >=TO_DATE('"
-					+ DateUtils.formatDate(startTime, "yyyy-MM-dd 00:00:01")
-					+ "', 'yyyy-MM-dd hh24:mi:ss')");
-			
+					+ DateUtils.formatDate(startTime, "yyyy-MM-dd 00:00:01") + "', 'yyyy-MM-dd hh24:mi:ss')");
+
 			sql.append(" and wdi.business_card_user_date <=TO_DATE('"
-					+ DateUtils.formatDate(endTime, "yyyy-MM-dd 23:59:59")
-					+ "', 'yyyy-MM-dd hh24:mi:ss')");
-			
-			sql.append(" and wdi.deal_info_status = ").append(WorkDealInfoStatus.STATUS_CERT_OBTAINED);
-			
+					+ DateUtils.formatDate(endTime, "yyyy-MM-dd 23:59:59") + "', 'yyyy-MM-dd hh24:mi:ss')");
+
+			sql.append(" and (wdi.deal_info_status = ").append(WorkDealInfoStatus.STATUS_CERT_OBTAINED)
+					.append(" or wdi.deal_info_status = ").append(WorkDealInfoStatus.STATUS_CERT_REVOKE).append(")");
+
 			sql.append(" and wdi.deal_info_type = ").append(WorkDealInfoType.TYPE_UPDATE_CERT);
 		}
-		
-		
-		if(method == ReportQueryType.TYPE_UNUPDATE_DEAL){
-			sql.append(" and wdi.pay_user_date >=TO_DATE('"
-					+ DateUtils.formatDate(startTime, "yyyy-MM-dd 00:00:01")
+
+		if (method == ReportQueryType.TYPE_UNUPDATE_DEAL) {
+			sql.append(" and wdi.pay_user_date >=TO_DATE('" + DateUtils.formatDate(startTime, "yyyy-MM-dd 00:00:01")
 					+ "', 'yyyy-MM-dd hh24:mi:ss')");
-			
-			sql.append(" and wdi.pay_user_date <=TO_DATE('"
-					+ DateUtils.formatDate(endTime, "yyyy-MM-dd 23:59:59")
+
+			sql.append(" and wdi.pay_user_date <=TO_DATE('" + DateUtils.formatDate(endTime, "yyyy-MM-dd 23:59:59")
 					+ "', 'yyyy-MM-dd hh24:mi:ss')");
-			
+
 			sql.append(" and wdi.business_card_user_date is null");
-			
+
 			sql.append(" and wdi.deal_info_type = ").append(WorkDealInfoType.TYPE_UPDATE_CERT);
-			
+
 			sql.append(" and wdi.deal_info_status != ").append(WorkDealInfoStatus.STATUS_CERT_OBTAINED);
 			sql.append(" and wdi.deal_info_status != ").append(WorkDealInfoStatus.STATUS_CERT_REVOKE);
-			
+
 		}
-		
-		
-		if(method == ReportQueryType.TYPE_MAINTENANCE_DEAL){
+
+		if (method == ReportQueryType.TYPE_MAINTENANCE_DEAL) {
 			sql.append(" and wdi.business_card_user_date >=TO_DATE('"
-					+ DateUtils.formatDate(startTime, "yyyy-MM-dd 00:00:01")
-					+ "', 'yyyy-MM-dd hh24:mi:ss')");
-			
+					+ DateUtils.formatDate(startTime, "yyyy-MM-dd 00:00:01") + "', 'yyyy-MM-dd hh24:mi:ss')");
+
 			sql.append(" and wdi.business_card_user_date <=TO_DATE('"
-					+ DateUtils.formatDate(endTime, "yyyy-MM-dd 23:59:59")
-					+ "', 'yyyy-MM-dd hh24:mi:ss')");
-			
-			sql.append(" and wdi.deal_info_status = ").append(WorkDealInfoStatus.STATUS_CERT_OBTAINED);
-			
+					+ DateUtils.formatDate(endTime, "yyyy-MM-dd 23:59:59") + "', 'yyyy-MM-dd hh24:mi:ss')");
+
+			sql.append(" and (wdi.deal_info_status = ").append(WorkDealInfoStatus.STATUS_CERT_OBTAINED)
+					.append(" or wdi.deal_info_status = ").append(WorkDealInfoStatus.STATUS_CERT_REVOKE).append(")");
+
 			sql.append(" and wdi.deal_info_type is null");
 		}
+
 		
 		
 		System.out.println(sql);
-		
+
 		List<Map> ct = null;
-		
+
 		try {
 			ct = workDealInfoDao.findBySQLListMap(sql.toString(), 0, 0);
-		} catch (IllegalAccessException | IllegalArgumentException
-				| InvocationTargetException | ClassNotFoundException
+		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | ClassNotFoundException
 				| InstantiationException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		
-		
-		
+
 		return new Integer(ct.get(0).get("CT").toString());
 	}
 
-	
 	public Page<WorkDealInfo> findPageByDate(Page<WorkDealInfo> page,Long appId, Date startTime, Date endTime, Integer method) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("configApp", "configApp");
@@ -191,12 +175,10 @@ public class ReportService extends BaseService {
 
 		if (method == ReportQueryType.TYPE_VALID_DEAL) {
 			dc.createAlias("workCertInfo", "workCertInfo");
-			
+			dc.add(Restrictions.lt("workCertInfo.notbefore", endTime));
 			endTime.setHours(0);
 			endTime.setMinutes(0);
 			endTime.setSeconds(00);
-			dc.add(Restrictions.lt("workCertInfo.notbefore", endTime));
-			
 			dc.add(Restrictions.gt("notafter", endTime));
 			dc.add(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED));
 			dc.add(Restrictions.eq("delFlag", DataEntity.DEL_FLAG_NORMAL));
@@ -204,7 +186,9 @@ public class ReportService extends BaseService {
 			dc.add(Restrictions.gt("businessCardUserDate", startTime));
 			dc.add(Restrictions.lt("businessCardUserDate", endTime));
 			dc.add(Restrictions.eq("dealInfoType", WorkDealInfoType.TYPE_ADD_CERT));
-			dc.add(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED));
+			
+			//新增的业务数量  包含以获取和吊销的     同时更新,维护
+			dc.add(Restrictions.or(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED), Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_REVOKE)));
 		} else if (method == ReportQueryType.TYPE_UPDATE_DEAL) { // 时间段内已更新数量
 			dc.add(Restrictions.gt("businessCardUserDate", startTime));
 			dc.add(Restrictions.lt("businessCardUserDate", endTime));
@@ -221,19 +205,20 @@ public class ReportService extends BaseService {
 			dc.add(Restrictions.gt("businessCardUserDate", startTime));
 			dc.add(Restrictions.lt("businessCardUserDate", endTime));
 			dc.add(Restrictions.isNull("dealInfoType")); // 不是新增也不是更新
-			dc.add(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED));
+			dc.add(Restrictions.or(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED), Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_REVOKE)));
+		
+			/*//维护业务数量  两种情况:1)制证时期在时间范围内的非新增非更新业务 2)吊销时间在时间范围内的吊销业务
+			dc.add(Restrictions.or(Restrictions.and(Restrictions.and(Restrictions.isNull("dealInfoType"), Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED)),Restrictions.between("businessCardUserDate", startTime, endTime) ), Restrictions.between("revokeDate", startTime, endTime)));
+			*/
 		}
 
 		return workDealInfoDao.find(page,dc);
 	}
-	
-	
-	
-	
-	
-	public List<WorkDealInfoVO> findListByDate(Long appId, Date startTime, Date endTime, Integer method) throws Exception{
+
+	public List<WorkDealInfoVO> findListByDate(Long appId, Date startTime, Date endTime, Integer method)
+			throws Exception {
 		StringBuffer sql = new StringBuffer();
-		
+
 		sql.append("select wdi.deal_info_type as type ");
 		sql.append(",wdi.deal_info_type1 as type1");
 		sql.append(",wdi.deal_info_type2 as type2");
@@ -245,110 +230,96 @@ public class ReportService extends BaseService {
 		sql.append(",config_app ca");
 		sql.append(",work_company wc");
 		sql.append(",work_user_his wuh");
-		
-		if(method==ReportQueryType.TYPE_VALID_DEAL){
+
+		if (method == ReportQueryType.TYPE_VALID_DEAL) {
 			sql.append(",work_cert_info wci");
 		}
-		
+
 		sql.append(" where wdi.app_id = ca.id");
 		sql.append(" and wdi.work_company_id = wc.id");
 		sql.append(" and wdi.work_user_his_id = wuh.id");
 		sql.append(" and ca.id = ").append(appId);
-		
-		
-		if(method==ReportQueryType.TYPE_VALID_DEAL){
-			
+
+		if (method == ReportQueryType.TYPE_VALID_DEAL) {
+
 			sql.append(" and wdi.cert_id = wci.id");
-			sql.append(" and wci.notbefore <= TO_DATE('"
-					+ DateUtils.formatDate(endTime, "yyyy-MM-dd 23:59:59")
+			sql.append(" and wci.notbefore <= TO_DATE('" + DateUtils.formatDate(endTime, "yyyy-MM-dd 23:59:59")
 					+ "', 'yyyy-MM-dd hh24:mi:ss')");
-			sql.append(" and wdi.notafter >= TO_DATE('"
-					+ DateUtils.formatDate(endTime, "yyyy-MM-dd 00:00:01")
+			sql.append(" and wdi.notafter >= TO_DATE('" + DateUtils.formatDate(endTime, "yyyy-MM-dd 00:00:01")
 					+ "', 'yyyy-MM-dd hh24:mi:ss')");
-			
+
 			sql.append(" and wdi.deal_info_status = ").append(WorkDealInfoStatus.STATUS_CERT_OBTAINED);
-			
+
 			sql.append(" and wdi.del_flag = ").append(DataEntity.DEL_FLAG_NORMAL);
 		}
-		
-		
-		if(method==ReportQueryType.TYPE_NEW_DEAL){
+
+		if (method == ReportQueryType.TYPE_NEW_DEAL) {
 			sql.append(" and wdi.business_card_user_date >=TO_DATE('"
-					+ DateUtils.formatDate(startTime, "yyyy-MM-dd 00:00:01")
-					+ "', 'yyyy-MM-dd hh24:mi:ss')");
-			
+					+ DateUtils.formatDate(startTime, "yyyy-MM-dd 00:00:01") + "', 'yyyy-MM-dd hh24:mi:ss')");
+
 			sql.append(" and wdi.business_card_user_date <=TO_DATE('"
-					+ DateUtils.formatDate(endTime, "yyyy-MM-dd 23:59:59")
-					+ "', 'yyyy-MM-dd hh24:mi:ss')");
-			
-			sql.append(" and wdi.deal_info_status = ").append(WorkDealInfoStatus.STATUS_CERT_OBTAINED);
-			
+					+ DateUtils.formatDate(endTime, "yyyy-MM-dd 23:59:59") + "', 'yyyy-MM-dd hh24:mi:ss')");
+
+			sql.append(" and(wdi.deal_info_status = ").append(WorkDealInfoStatus.STATUS_CERT_OBTAINED)
+			.append(" or wdi.deal_info_status = ").append(WorkDealInfoStatus.STATUS_CERT_REVOKE).append(")");
+
 			sql.append(" and wdi.deal_info_type = ").append(WorkDealInfoType.TYPE_ADD_CERT);
-			
+
 		}
-		
-		
-		if(method == ReportQueryType.TYPE_UPDATE_DEAL){
+
+		if (method == ReportQueryType.TYPE_UPDATE_DEAL) {
 			sql.append(" and wdi.business_card_user_date >=TO_DATE('"
-					+ DateUtils.formatDate(startTime, "yyyy-MM-dd 00:00:01")
-					+ "', 'yyyy-MM-dd hh24:mi:ss')");
-			
+					+ DateUtils.formatDate(startTime, "yyyy-MM-dd 00:00:01") + "', 'yyyy-MM-dd hh24:mi:ss')");
+
 			sql.append(" and wdi.business_card_user_date <=TO_DATE('"
-					+ DateUtils.formatDate(endTime, "yyyy-MM-dd 23:59:59")
-					+ "', 'yyyy-MM-dd hh24:mi:ss')");
-			
-			sql.append(" and wdi.deal_info_status = ").append(WorkDealInfoStatus.STATUS_CERT_OBTAINED);
-			
+					+ DateUtils.formatDate(endTime, "yyyy-MM-dd 23:59:59") + "', 'yyyy-MM-dd hh24:mi:ss')");
+
+			sql.append(" and(wdi.deal_info_status = ").append(WorkDealInfoStatus.STATUS_CERT_OBTAINED)
+			.append(" or wdi.deal_info_status = ").append(WorkDealInfoStatus.STATUS_CERT_REVOKE).append(")");
+
 			sql.append(" and wdi.deal_info_type = ").append(WorkDealInfoType.TYPE_UPDATE_CERT);
 		}
-		
-		
-		if(method == ReportQueryType.TYPE_UNUPDATE_DEAL){
-			sql.append(" and wdi.pay_user_date >=TO_DATE('"
-					+ DateUtils.formatDate(startTime, "yyyy-MM-dd 00:00:01")
+
+		if (method == ReportQueryType.TYPE_UNUPDATE_DEAL) {
+			sql.append(" and wdi.pay_user_date >=TO_DATE('" + DateUtils.formatDate(startTime, "yyyy-MM-dd 00:00:01")
 					+ "', 'yyyy-MM-dd hh24:mi:ss')");
-			
-			sql.append(" and wdi.pay_user_date <=TO_DATE('"
-					+ DateUtils.formatDate(endTime, "yyyy-MM-dd 23:59:59")
+
+			sql.append(" and wdi.pay_user_date <=TO_DATE('" + DateUtils.formatDate(endTime, "yyyy-MM-dd 23:59:59")
 					+ "', 'yyyy-MM-dd hh24:mi:ss')");
-			
+
 			sql.append(" and wdi.business_card_user_date is null");
-			
+
 			sql.append(" and wdi.deal_info_type = ").append(WorkDealInfoType.TYPE_UPDATE_CERT);
-			
+
 			sql.append(" and wdi.deal_info_status != ").append(WorkDealInfoStatus.STATUS_CERT_OBTAINED);
 			sql.append(" and wdi.deal_info_status != ").append(WorkDealInfoStatus.STATUS_CERT_REVOKE);
-			
+
 		}
-		
-		
-		if(method == ReportQueryType.TYPE_MAINTENANCE_DEAL){
+
+		if (method == ReportQueryType.TYPE_MAINTENANCE_DEAL) {
 			sql.append(" and wdi.business_card_user_date >=TO_DATE('"
-					+ DateUtils.formatDate(startTime, "yyyy-MM-dd 00:00:01")
-					+ "', 'yyyy-MM-dd hh24:mi:ss')");
-			
+					+ DateUtils.formatDate(startTime, "yyyy-MM-dd 00:00:01") + "', 'yyyy-MM-dd hh24:mi:ss')");
+
 			sql.append(" and wdi.business_card_user_date <=TO_DATE('"
-					+ DateUtils.formatDate(endTime, "yyyy-MM-dd 23:59:59")
-					+ "', 'yyyy-MM-dd hh24:mi:ss')");
-			
-			sql.append(" and wdi.deal_info_status = ").append(WorkDealInfoStatus.STATUS_CERT_OBTAINED);
-			
+					+ DateUtils.formatDate(endTime, "yyyy-MM-dd 23:59:59") + "', 'yyyy-MM-dd hh24:mi:ss')");
+
+			sql.append(" and(wdi.deal_info_status = ").append(WorkDealInfoStatus.STATUS_CERT_OBTAINED)
+			.append(" or wdi.deal_info_status = ").append(WorkDealInfoStatus.STATUS_CERT_REVOKE).append(")");
+
 			sql.append(" and wdi.deal_info_type is null");
 		}
-		
-		
+
 		List<Map> lst = null;
-		
+
 		try {
-			lst = workDealInfoDao.findBySQLListMap(sql.toString(),0,0);
-		
-		} catch (IllegalAccessException | IllegalArgumentException
-				| InvocationTargetException | ClassNotFoundException
+			lst = workDealInfoDao.findBySQLListMap(sql.toString(), 0, 0);
+
+		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | ClassNotFoundException
 				| InstantiationException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		
+
 		List<WorkDealInfoVO> resLst = new ArrayList<WorkDealInfoVO>();
 		for (Map e : lst) {
 			WorkDealInfoVO vo = new WorkDealInfoVO();
@@ -359,48 +330,43 @@ public class ReportService extends BaseService {
 					if (e.get("CYNAME") != null)
 						vo.setCompanyName(e.get("CYNAME").toString());
 				}
-				
-				
+
 				if (k.equals("CTNAME")) {
 					if (e.get("CTNAME") != null)
 						vo.setContactName(e.get("CTNAME").toString());
 
 				}
-				
+
 				if (k.equals("TYPE")) {
 					if (e.get("TYPE") != null)
 						vo.setDealInfoType(new Integer(e.get("TYPE").toString()));
 				}
-				
+
 				if (k.equals("TYPE1")) {
 					if (e.get("TYPE1") != null)
 						vo.setDealInfoType1(new Integer(e.get("TYPE1").toString()));
 				}
-				
+
 				if (k.equals("TYPE2")) {
 					if (e.get("TYPE2") != null)
 						vo.setDealInfoType2(new Integer(e.get("TYPE2").toString()));
 				}
-				
+
 				if (k.equals("TYPE3")) {
 					if (e.get("TYPE3") != null)
 						vo.setDealInfoType3(new Integer(e.get("TYPE3").toString()));
 				}
-				
+
 				if (k.equals("BUSIDATE")) {
 					if (e.get("BUSIDATE") != null)
 						vo.setBusinessCardDate(new SimpleDateFormat("yyyy-MM-dd").parse(e.get("BUSIDATE").toString()));
 				}
-				
-				
-				
+
 			}
 			resLst.add(vo);
 		}
 		return resLst;
-		
+
 	}
-	
-	
-	
+
 }

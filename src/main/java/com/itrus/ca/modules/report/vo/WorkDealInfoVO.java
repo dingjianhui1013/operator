@@ -23,6 +23,9 @@ public class WorkDealInfoVO {
 	private Integer dealInfoType2;
 	private Integer dealInfoType3;
 	
+	
+	
+	
 	private Date businessCardDate;
 	
 	@ExcelField(title="应用名称", align=2,sort=1)
@@ -122,9 +125,7 @@ public class WorkDealInfoVO {
 	public void setBusinessCardDate(Date businessCardDate) {
 		this.businessCardDate = businessCardDate;
 	}
-	
-	
-	
+
 	
 }
 

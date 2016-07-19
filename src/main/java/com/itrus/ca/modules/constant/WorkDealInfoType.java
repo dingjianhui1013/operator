@@ -13,14 +13,14 @@ import com.itrus.ca.modules.profile.entity.WorkDealInfoTypeObj;
  *
  */
 public class WorkDealInfoType {
-	public static Integer TYPE_ADD_CERT = 0;//新增证书
-	public static Integer TYPE_UPDATE_CERT = 1;//更新证书
-	public static Integer TYPE_LOST_CHILD = 2;//遗失补办
-	public static Integer TYPE_DAMAGED_REPLACED = 3;//损坏更换
-	public static Integer TYPE_INFORMATION_REROUTE = 4;//信息变更
-	public static Integer TYPE_REVOKE_CERT = 5;//证书吊销 
-	public static Integer TYPE_ELECTRONIC_SEAL = 6;//电子签章
-	public static Integer TYPE_TRUST_MOBILE = 7;//可信移动设备
+	public static Integer TYPE_ADD_CERT = 0;//新增证书                                           dealinfotype
+	public static Integer TYPE_UPDATE_CERT = 1;//更新证书                                     dealinfotype 
+	public static Integer TYPE_LOST_CHILD = 2;//遗失补办                                       dealinfotype1
+	public static Integer TYPE_DAMAGED_REPLACED = 3;//损坏更换                           dealinfotype1
+	public static Integer TYPE_INFORMATION_REROUTE = 4;//信息变更                     dealinfotype2
+	public static Integer TYPE_REVOKE_CERT = 5;//证书吊销                                     
+	public static Integer TYPE_ELECTRONIC_SEAL = 6;//电子签章				   
+	public static Integer TYPE_TRUST_MOBILE = 7;//可信移动设备                            
 	public static Integer TYPE_UNLOCK_CERT = 8;//key解锁
 	public static Integer TYPE_OPEN_ACCOUNT = 9;//开户费
 	public static Integer TYPE_RETURN_MONEY = 10;//退费

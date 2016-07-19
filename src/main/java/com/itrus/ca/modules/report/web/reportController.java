@@ -4,8 +4,6 @@ import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.text.SimpleDateFormat;
 
 import java.util.Date;
@@ -13,7 +11,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.sql.DataSource;
+
 
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFFont;
@@ -55,30 +53,28 @@ import com.itrus.ca.modules.work.entity.WorkDealInfo;
 
 import com.itrus.ca.modules.work.service.WorkDealInfoService;
 
-
 /**
  * 基于workdealinfo表的报表查询
  */
 @Controller
 @RequestMapping(value = "${adminPath}/report/businessReport")
-public class reportController extends BaseController{
+public class reportController extends BaseController {
 
 	@Autowired
 	private WorkDealInfoService workDealInfoService;
-	
+
 	@Autowired
 	private ConfigAppOfficeRelationService configAppOfficeRelationService;
 
 	@Autowired
 	private OfficeService officeService;
-	
+
 	@Autowired
 	private ReportService reportService;
-	
+
 	@Autowired
 	private ConfigAppService appService;
-	
-	
+
 	@ModelAttribute
 	public WorkDealInfo get(@RequestParam(required = false) Long id) {
 		if (id != null) {
@@ -87,10 +83,7 @@ public class reportController extends BaseController{
 			return new WorkDealInfo();
 		}
 	}
-	
-	
-	
-	
+
 	@RequiresPermissions("report:businessReport:view")
 	@RequestMapping(value = "listByDate")
 	public String deleteList(WorkDealInfo workDealInfo, HttpServletRequest request, HttpServletResponse response,
@@ -98,69 +91,73 @@ public class reportController extends BaseController{
 			@RequestParam(value = "startTime", required = false) Date startTime,
 			@RequestParam(value = "endTime", required = false) Date endTime) {
 
-		SimpleDateFormat formatter = new SimpleDateFormat( "yyyy-MM-dd");
-		
-		if(startTime==null&&endTime==null){
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+
+		if (startTime == null && endTime == null) {
 			startTime = StringHelper.getFirstDayOfLastMonth();
 			endTime = StringHelper.getLastDayOfLastMonth();
 		}
-		
-		//user对应的所有网点
+
+		// user对应的所有网点
 		List<Office> officeList = officeService.getOfficeByType(UserUtils.getUser(), 2);
 
-		//取出网点对应的所有应用
+		// 取出网点对应的所有应用
 		List<ConfigApp> configAppList = Lists.newArrayList();
-		
+
 		for (int i = 0; i < officeList.size(); i++) {
-			
-			List<ConfigAppOfficeRelation> appOffices = configAppOfficeRelationService.findAllByOfficeId(officeList.get(i).getId());
-			for(ConfigAppOfficeRelation appOffice:appOffices){
-				if(!configAppList.contains(appOffice.getConfigApp())){
+
+			List<ConfigAppOfficeRelation> appOffices = configAppOfficeRelationService
+					.findAllByOfficeId(officeList.get(i).getId());
+			for (ConfigAppOfficeRelation appOffice : appOffices) {
+				if (!configAppList.contains(appOffice.getConfigApp())) {
 					configAppList.add(appOffice.getConfigApp());
 				}
 			}
 		}
-		
+
 		List<WorkDealInfoVO> vos = Lists.newArrayList();
-		
-		for(int i = 0;i<configAppList.size();i++){
+
+		for (int i = 0; i < configAppList.size(); i++) {
 			WorkDealInfoVO vo = new WorkDealInfoVO();
 			vo.setAppId(configAppList.get(i).getId());
 			vo.setAppName(configAppList.get(i).getAppName());
-			vo.setValidCount(reportService.findCountByDate(configAppList.get(i).getId(), startTime, endTime,ReportQueryType.TYPE_VALID_DEAL));
-			vo.setNewCount(reportService.findCountByDate(configAppList.get(i).getId(), startTime, endTime,ReportQueryType.TYPE_NEW_DEAL));
-			vo.setUpdateCount(reportService.findCountByDate(configAppList.get(i).getId(), startTime, endTime,ReportQueryType.TYPE_UPDATE_DEAL));
-			vo.setUnUpdateCount(reportService.findCountByDate(configAppList.get(i).getId(), startTime, endTime,ReportQueryType.TYPE_UNUPDATE_DEAL));
-			vo.setMaintenanceCount(reportService.findCountByDate(configAppList.get(i).getId(), startTime, endTime,ReportQueryType.TYPE_MAINTENANCE_DEAL));
-		
-		    vos.add(vo);
+			vo.setValidCount(reportService.findCountByDate(configAppList.get(i).getId(), startTime, endTime,
+					ReportQueryType.TYPE_VALID_DEAL));
+			vo.setNewCount(reportService.findCountByDate(configAppList.get(i).getId(), startTime, endTime,
+					ReportQueryType.TYPE_NEW_DEAL));
+			vo.setUpdateCount(reportService.findCountByDate(configAppList.get(i).getId(), startTime, endTime,
+					ReportQueryType.TYPE_UPDATE_DEAL));
+			vo.setUnUpdateCount(reportService.findCountByDate(configAppList.get(i).getId(), startTime, endTime,
+					ReportQueryType.TYPE_UNUPDATE_DEAL));
+			vo.setMaintenanceCount(reportService.findCountByDate(configAppList.get(i).getId(), startTime, endTime,
+					ReportQueryType.TYPE_MAINTENANCE_DEAL));
+
+			vos.add(vo);
 		}
-		
+
 		model.addAttribute("startTime", startTime);
 		model.addAttribute("endTime", endTime);
-		
+
 		model.addAttribute("start", formatter.format(startTime));
 		model.addAttribute("end", formatter.format(endTime));
-		
+
 		model.addAttribute("list", vos);
-		
+
 		return "modules/report/businessListByDate";
 	}
-	
-	
-	
+
 	@RequiresPermissions("report:businessReport:view")
 	@RequestMapping(value = "listDetailDealInfo")
-	public String listDetailDealInfo(HttpServletRequest request, HttpServletResponse response,
-			Model model, RedirectAttributes redirectAttributes,
-			@RequestParam(value = "appId", required = true) Long appId,
+	public String listDetailDealInfo(HttpServletRequest request, HttpServletResponse response, Model model,
+			RedirectAttributes redirectAttributes, @RequestParam(value = "appId", required = true) Long appId,
 			@RequestParam(value = "startTime", required = true) String startTime,
 			@RequestParam(value = "endTime", required = true) String endTime,
-			@RequestParam(value = "method", required = true) Integer method)throws Exception {
-		
-		SimpleDateFormat formatter = new SimpleDateFormat( "yyyy-MM-dd");
-		
-		Page<WorkDealInfo> page = reportService.findPageByDate(new Page<WorkDealInfo>(request, response), appId, formatter.parse(startTime), formatter.parse(endTime), method);
+			@RequestParam(value = "method", required = true) Integer method) throws Exception {
+
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+
+		Page<WorkDealInfo> page = reportService.findPageByDate(new Page<WorkDealInfo>(request, response), appId,
+				formatter.parse(startTime), formatter.parse(endTime), method);
 		model.addAttribute("page", page);
 		model.addAttribute("wdiType", WorkDealInfoType.WorkDealInfoTypeMap);
 		model.addAttribute("appName", appService.findByAppId(appId).getAppName());
@@ -170,55 +167,54 @@ public class reportController extends BaseController{
 		model.addAttribute("method", method);
 		return "modules/report/listDetailDealInfo";
 	}
-	
-	
-	
-	
-	
+
 	@RequestMapping(value = "exportCollect")
 	public void exportCollect(HttpServletRequest request, HttpServletResponse response,
 			@RequestParam(value = "startTime", required = false) Date startTime,
-			@RequestParam(value = "endTime", required = false) Date endTime)
-					throws UnsupportedEncodingException {
-		
-	
-		
+			@RequestParam(value = "endTime", required = false) Date endTime) throws UnsupportedEncodingException {
+
 		try {
-			
-			//user对应的所有网点
+
+			// user对应的所有网点
 			List<Office> officeList = officeService.getOfficeByType(UserUtils.getUser(), 2);
 
-			//取出网点对应的所有应用
+			// 取出网点对应的所有应用
 			List<ConfigApp> configAppList = Lists.newArrayList();
-			
+
 			for (int i = 0; i < officeList.size(); i++) {
-				
-				List<ConfigAppOfficeRelation> appOffices = configAppOfficeRelationService.findAllByOfficeId(officeList.get(i).getId());
-				for(ConfigAppOfficeRelation appOffice:appOffices){
-					if(!configAppList.contains(appOffice.getConfigApp())){
+
+				List<ConfigAppOfficeRelation> appOffices = configAppOfficeRelationService
+						.findAllByOfficeId(officeList.get(i).getId());
+				for (ConfigAppOfficeRelation appOffice : appOffices) {
+					if (!configAppList.contains(appOffice.getConfigApp())) {
 						configAppList.add(appOffice.getConfigApp());
 					}
 				}
 			}
-			
+
 			List<WorkDealInfoVO> workDealInfoVos = Lists.newArrayList();
-			
-			for(int i = 0;i<configAppList.size();i++){
+
+			for (int i = 0; i < configAppList.size(); i++) {
 				WorkDealInfoVO vo = new WorkDealInfoVO();
-				
-				
-				vo.setValidCount(reportService.findCountByDate(configAppList.get(i).getId(), startTime, endTime,ReportQueryType.TYPE_VALID_DEAL));
-				vo.setNewCount(reportService.findCountByDate(configAppList.get(i).getId(), startTime, endTime,ReportQueryType.TYPE_NEW_DEAL));
-				vo.setUpdateCount(reportService.findCountByDate(configAppList.get(i).getId(), startTime, endTime,ReportQueryType.TYPE_UPDATE_DEAL));
-				vo.setUnUpdateCount(reportService.findCountByDate(configAppList.get(i).getId(), startTime, endTime,ReportQueryType.TYPE_UNUPDATE_DEAL));
-				vo.setMaintenanceCount(reportService.findCountByDate(configAppList.get(i).getId(), startTime, endTime,ReportQueryType.TYPE_MAINTENANCE_DEAL));
+
+				vo.setValidCount(reportService.findCountByDate(configAppList.get(i).getId(), startTime, endTime,
+						ReportQueryType.TYPE_VALID_DEAL));
+				vo.setNewCount(reportService.findCountByDate(configAppList.get(i).getId(), startTime, endTime,
+						ReportQueryType.TYPE_NEW_DEAL));
+				vo.setUpdateCount(reportService.findCountByDate(configAppList.get(i).getId(), startTime, endTime,
+						ReportQueryType.TYPE_UPDATE_DEAL));
+				vo.setUnUpdateCount(reportService.findCountByDate(configAppList.get(i).getId(), startTime, endTime,
+						ReportQueryType.TYPE_UNUPDATE_DEAL));
+				vo.setMaintenanceCount(reportService.findCountByDate(configAppList.get(i).getId(), startTime, endTime,
+						ReportQueryType.TYPE_MAINTENANCE_DEAL));
 				vo.setAppName(configAppList.get(i).getAppName());
 				workDealInfoVos.add(vo);
 			}
-			
+
 			final String fileName = "WorkDealInfo.csv";
-			
-			new ExportExcel("证书发放数据", WorkDealInfoVO.class).setDataList(workDealInfoVos).write(response, fileName).dispose();
+
+			new ExportExcel("证书发放数据", WorkDealInfoVO.class).setDataList(workDealInfoVos).write(response, fileName)
+					.dispose();
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -232,12 +228,11 @@ public class reportController extends BaseController{
 			@RequestParam(value = "appId", required = true) Long appId,
 			@RequestParam(value = "startTime", required = true) String startTime,
 			@RequestParam(value = "endTime", required = true) String endTime,
-			@RequestParam(value = "method", required = true) Integer method) throws Exception{
-		SimpleDateFormat formatter = new SimpleDateFormat( "yyyy-MM-dd");
-		
+			@RequestParam(value = "method", required = true) Integer method) throws Exception {
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+
 		ConfigApp configApp = appService.findByAppId(appId);
-		
-		
+
 		HSSFWorkbook wb = new HSSFWorkbook();// 定义工作簿
 		HSSFCellStyle style = wb.createCellStyle(); // 样式对象
 		Cell cell = null;
@@ -257,7 +252,7 @@ public class reportController extends BaseController{
 		style0.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
 		style0.setAlignment(HSSFCellStyle.ALIGN_CENTER);
 		cell.setCellStyle(style0);
-		cell.setCellValue(configApp.getAppName() + "项目发证明细");
+		cell.setCellValue(configApp.getAppName() + "项目业务明细");
 		// 第二行数据
 		sheet.addMergedRegion(new CellRangeAddress(1, 1, 1, 4));
 		HSSFRow row1 = sheet.createRow(1);
@@ -267,17 +262,23 @@ public class reportController extends BaseController{
 		cell.setCellStyle(style);
 		cell.setCellValue("统计时间：" + DateUtils.formatDate(formatter.parse(startTime), "yyyy-MM-dd") + "—"
 				+ DateUtils.formatDate(formatter.parse(endTime), "yyyy-MM-dd"));
+
+		List<WorkDealInfoVO> list = Lists.newArrayList();
+		
+	
+			list = reportService.findListByDate(appId, formatter.parse(startTime),
+					formatter.parse(endTime), method);	
 		
 		
-		List<WorkDealInfoVO> list = reportService.findListByDate(appId, formatter.parse(startTime), formatter.parse(endTime), method);
 		
-		HSSFRow row2= sheet.createRow(2);
+
+		HSSFRow row2 = sheet.createRow(2);
 		row2.createCell(0).setCellValue("ID");
 		row2.createCell(1).setCellValue("单位名称");
 		row2.createCell(2).setCellValue("经办人");
 		row2.createCell(3).setCellValue("制证日期");
 		row2.createCell(4).setCellValue("业务类型");
-		
+
 		for (int i = 0; i < list.size(); i++) {
 			HSSFRow rown = sheet.createRow(i + 3);
 			rown.createCell(0).setCellValue(i + 1);
@@ -287,39 +288,38 @@ public class reportController extends BaseController{
 			} else {
 				rown.createCell(1).setCellValue(list.get(i).getCompanyName());
 			}
-			
-			if(list.get(i).getContactName()==null){
+
+			if (list.get(i).getContactName() == null) {
 				rown.createCell(2).setCellValue("");
-			}else{
+			} else {
 				rown.createCell(2).setCellValue(list.get(i).getContactName());
 			}
-			
-			if(list.get(i).getBusinessCardDate()==null){
+
+			if (list.get(i).getBusinessCardDate() == null) {
 				rown.createCell(3).setCellValue("");
-			}else{
+			} else {
 				rown.createCell(3).setCellValue(DateUtils.formatDate(list.get(i).getBusinessCardDate(), "yyyy-MM-dd"));
 			}
-			
+
 			StringBuffer dealType = new StringBuffer();
-			
-			if(list.get(i).getDealInfoType()!=null){
+
+			if (list.get(i).getDealInfoType() != null) {
 				dealType.append(WorkDealInfoType.getDealInfoTypeName(list.get(i).getDealInfoType())).append(" ");
 			}
-			if(list.get(i).getDealInfoType1()!=null){
+			if (list.get(i).getDealInfoType1() != null) {
 				dealType.append(WorkDealInfoType.getDealInfoTypeName(list.get(i).getDealInfoType1())).append(" ");
 			}
-			if(list.get(i).getDealInfoType2()!=null){
+			if (list.get(i).getDealInfoType2() != null) {
 				dealType.append(WorkDealInfoType.getDealInfoTypeName(list.get(i).getDealInfoType2())).append(" ");
 			}
-			if(list.get(i).getDealInfoType3()!=null){
+			if (list.get(i).getDealInfoType3() != null) {
 				dealType.append(WorkDealInfoType.getDealInfoTypeName(list.get(i).getDealInfoType3()));
 			}
-			
+
 			rown.createCell(4).setCellValue(dealType.toString());
-			
+
 		}
-		
-		
+
 		try {
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			response.setContentType(response.getContentType());
@@ -335,9 +335,8 @@ public class reportController extends BaseController{
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			
+
 		}
 	}
-	
-	
+
 }
