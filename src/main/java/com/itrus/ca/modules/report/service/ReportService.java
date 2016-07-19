@@ -3,6 +3,7 @@ package com.itrus.ca.modules.report.service;
 import java.lang.reflect.InvocationTargetException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -165,6 +166,14 @@ public class ReportService extends BaseService {
 		
 		dc.add(Restrictions.eq("configApp.id", appId));
 
+		Calendar endCal = Calendar.getInstance();
+		
+		endCal.setTime(endTime);
+		
+		endCal.set(Calendar.HOUR,0);
+		endCal.set(Calendar.MINUTE,0);
+		endCal.set(Calendar.SECOND,0);
+		
 		startTime.setHours(0);
 		startTime.setMinutes(0);
 		startTime.setSeconds(00);
@@ -172,14 +181,17 @@ public class ReportService extends BaseService {
 		endTime.setHours(23);
 		endTime.setMinutes(59);
 		endTime.setSeconds(59);
+		
+		
+		
+		
 
 		if (method == ReportQueryType.TYPE_VALID_DEAL) {
 			dc.createAlias("workCertInfo", "workCertInfo");
 			dc.add(Restrictions.lt("workCertInfo.notbefore", endTime));
-			endTime.setHours(0);
-			endTime.setMinutes(0);
-			endTime.setSeconds(00);
-			dc.add(Restrictions.gt("notafter", endTime));
+			
+			
+			dc.add(Restrictions.gt("notafter", endCal.getTime()));
 			dc.add(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED));
 			dc.add(Restrictions.eq("delFlag", DataEntity.DEL_FLAG_NORMAL));
 		} else if (method == ReportQueryType.TYPE_NEW_DEAL) {
