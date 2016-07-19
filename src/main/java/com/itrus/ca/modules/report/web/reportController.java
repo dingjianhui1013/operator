@@ -172,7 +172,10 @@ public class reportController extends BaseController {
 	public void exportCollect(HttpServletRequest request, HttpServletResponse response,
 			@RequestParam(value = "startTime", required = false) Date startTime,
 			@RequestParam(value = "endTime", required = false) Date endTime) throws UnsupportedEncodingException {
-
+		
+		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");  
+		 
+		
 		try {
 
 			// user对应的所有网点
@@ -213,7 +216,7 @@ public class reportController extends BaseController {
 
 			final String fileName = "WorkDealInfo.csv";
 
-			new ExportExcel("证书发放数据", WorkDealInfoVO.class).setDataList(workDealInfoVos).write(response, fileName)
+			new ExportExcel( sdf.format(startTime)+"日-"+ sdf.format(endTime)+"日 业务办理数据汇总", WorkDealInfoVO.class).setDataList(workDealInfoVos).write(response, fileName)
 					.dispose();
 
 		} catch (Exception e) {
