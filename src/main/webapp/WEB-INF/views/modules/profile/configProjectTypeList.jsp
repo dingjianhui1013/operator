@@ -24,11 +24,11 @@
 				success:function(data){
 					if(data[0].status!=0)
 						{
-							var html="<table class='table table-striped table-bordered table-condensed'><thead><th style='z-index:1'>项目名称</th></thead><tbody>";
+							var html="<DIV style='OVERFLOW-Y: auto; OVERFLOW-X:auto; width:100%;height:300px'><table class='table table-striped table-bordered table-condensed'><thead><th style='z-index:1'>项目名称</th></thead><tbody>";
 							$.each(data,function(i,value){
 								html+="<tr><td style='z-index:1'>"+value.name+"</td></tr>";
 							});
-							html+="</tbody></table>";
+							html+="</tbody></table></DIV>";
 							top.$.jBox(html, { title: "绑定应用详细",buttons:{"确定":true,"关闭":true}});
 						}else
 							{
