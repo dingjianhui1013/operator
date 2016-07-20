@@ -6,6 +6,9 @@
 <meta name="decorator" content="default" />
 <style type="text/css">
 /* .Wdate{width:113px;} */
+.termBg{background-color: #5bc0de;}
+.messageBg{background-color: #5cb85c;}
+.errorBg{background-color: #eea236;}
 </style>
 <%@include file="/WEB-INF/views/include/dialog.jsp"%>
 <script type="text/javascript">
@@ -211,23 +214,20 @@
 				$.getJSON(url, function(data) {
 					if (data.status == '1') {
 						var html = "";
-						html += "<label class='control-label'>总共条数:</label><div class='controls'>"
-								+ data.size+ "</div>";
-						html += "<label class='control-label'>发送成功条数:</label><div class='controls'>"
-							+ data.courentSize+ "</div>";
-						html += "<label class='control-label'>发送失败条数:</label><div class='controls'>"
-							+ data.errorSize+ "</div>";
+						html += "<div class='termBg'><label class='control-label'>总共条数:</label>"+ data.size;+"</div>"
+						html += "<div class='termBg'><label class='control-label'>发送成功条数:</label>"+ data.courentSize+"</div>";
+						html += "<div class='termBg'><label class='control-label'>发送失败条数:</label>"+ data.errorSize+ "</div>";
 							if( data.errorSize>0){
 								html += "<div class='controls' id = \"reasonButton\"><input type = \"button\" value =\"查看原因\" onclick = \"checkWhy()\"></div>";	
-								html += "<div style =\"display:none\" id = \"errorReason\"><label class='control-label'>错误原因:</label>";
+								html += "<div style =\"display:none\" class='errorBg' id = \"errorReason\"><label class='control-label'>错误原因:</label>";
 								$.each(data.errorList,function(idx, ele) {
 									html += "<div class='controls'>"+ele.meg+ "</div>";
 									
 								});
 								html += "<div class='controls'><input type = \"button\" value =\"隐藏原因\" onclick = \"hideWhy()\"></div></div>";
 							}
-							$("#sendMessage").append(html);
-							var sendHtml = $("#sendMessage").html();
+							$("#sendMessage").html(html);
+							var sendHtml = $("#messageSend").html();
 						if(data.errorSize>0){
 							top.$.jBox.confirm(sendHtml, "短信内容", submit, {
 								buttons : {
@@ -270,19 +270,16 @@
 		$.getJSON(	updateUrl,
 						function(data) {
 							var html = "";
-							html += "<label class='control-label'>总共条数:</label><div class='controls'>"
-									+ data.size+ "</div>";
-							html += "<label class='control-label'>正确条数:</label><div class='controls'>"
-								+ data.courentSize+ "</div>";
+							html += "<div class='termBg'><label class='control-label'>总共条数:</label>"+ data.size+"</div>";
+							html += "<div class='termBg'><label class='control-label'>正确条数:</label>"+ data.courentSize+"</div>";
 							if(data.courentSize>0){
-								html += "<label class='control-label'>短信内容:</label><div class='controls'>"
-									+ data.content + "</div>";	
+								html += "<div class='messageBg'><label class='control-label'>短信内容:</label><div class='controls'>"
+									+ data.content + "</div></div>";	
 							}			
-							html += "<label class='control-label'>错误条数:</label><div class='controls'>"
-								+ data.errorSize+ "</div>";
+							html += "<div class='termBg'><label class='control-label'>错误条数:</label>"+ data.errorSize+"</div>";
 								if( data.errorSize>0){
 									html += "<div class='controls' id = \"reasonButton\"><input type = \"button\" value =\"查看原因\" onclick = \"checkWhy()\"></div>";	
-									html += "<div style =\"display:none\" id = \"errorReason\"><label class='control-label'>错误原因:</label>";
+									html += "<div class='errorBg' style =\"display:none\" id = \"errorReason\"><label class='control-label'>错误原因:</label>";
 									$.each(data.errorList,function(idx, ele) {
 										html += "<div class='controls'>"+ele.meg+ "</div>";
 										
@@ -526,6 +523,12 @@
 		</tbody>
 	</table>
 <div style = "display:none" id = "messageSend">
+<style type="text/css">
+/* .Wdate{width:113px;} */
+.termBg{background-color:rgba(91,192,222,0.2);padding:5px 10px; margin-bottom:2px;/* #5bc0de; */}
+.messageBg{background-color:rgba(92,184,92,0.1);padding:5px 10px;margin-bottom:2px; /* #5cb85c; */}
+.errorBg{background-color: rgba(238,162,54,0.1);padding:5px 10px;margin-top:10px;/* #eea236; */}
+</style>
 <script type="text/javascript">
 	function checkWhy(){
 		$("#errorReason").show();
