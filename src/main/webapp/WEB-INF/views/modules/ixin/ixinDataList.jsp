@@ -213,7 +213,7 @@
 			<div id = "configAppListAll" style="display: none" >
 			<c:forEach items="${appList}" var="configApp" begin = "11">
 				<li>
-					<input type ="checkBox" name ="appName"
+					<input type ="checkBox" name ="appName" onchange="changeApp(this)"
 					<c:forEach items="${configAppIds }" var="id">
 					<c:if test="${id==configApp.id }"> checked="checked"</c:if>
 				</c:forEach>
