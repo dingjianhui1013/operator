@@ -289,8 +289,8 @@
 									});
 									html += "<div class='controls'><input type = \"button\" value =\"隐藏原因\" onclick = \"hideWhy()\"></div></div>";
 								}
-								$("#sendMessage").append(html);
-								var sendHtml = $("#sendMessage").html();
+								$("#sendMessage").html(html);
+								var sendHtml = $("#messageSend").html();
 						if(data.courentSize>0){
 							top.$.jBox.confirm(sendHtml, "短信内容", submit, {
 								buttons : {
@@ -312,7 +312,7 @@
 	
 	//查询提交
 	function querySubmit(){
-		$("#checkIds").val();
+		$("#checkIds").val("");
 		$("#searchForm").submit();
 	}
 </script>
@@ -525,8 +525,7 @@
 
 		</tbody>
 	</table>
-<div style = "display:none">
-<div id = "sendMessage">
+<div style = "display:none" id = "messageSend">
 <script type="text/javascript">
 	function checkWhy(){
 		$("#errorReason").show();
@@ -538,6 +537,8 @@
 	}
 		
 	</script>
+<div id = "sendMessage">
+
 </div>
 </div>
 	<div class="pagination">${page}</div>

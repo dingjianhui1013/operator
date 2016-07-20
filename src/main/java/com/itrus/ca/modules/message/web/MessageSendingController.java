@@ -299,75 +299,112 @@ public class MessageSendingController extends BaseController {
 			if(dealInfo!=null){
 			 // 经办人姓名
 	            String consigner = dealInfo.getWorkCertInfo().getWorkCertApplyInfo().getName();
-	            if(StringUtils.isEmpty(consigner)){
-	                Map<String,Object> map = new HashMap<String,Object>();
-	                map.put("status", -1);
-	                map.put("meg", dealInfo.getSvn()+"的经办人姓名为空");
-	                errorList.add(map);
-	                continue;
+	            if(messageContent.contains("consigner")){
+	                if(StringUtils.isEmpty(consigner)){
+	                    Map<String,Object> map = new HashMap<String,Object>();
+	                    map.put("status", -1);
+	                    map.put("meg", dealInfo.getSvn()+"的经办人姓名为空");
+	                    errorList.add(map);
+	                    continue;
+	                }
 	            }
+	           
 	            
 			// 组织机构代码
 			String companyCode = dealInfo.getWorkCompany().getOrganizationNumber();
-			if(StringUtils.isEmpty(companyCode)){
-			    Map<String,Object> map = new HashMap<String,Object>();
-			    map.put("status", -1);
-			    map.put("meg", dealInfo.getSvn()+"的组织代码为空");
-			    errorList.add(map);
-	            continue;
+			if(messageContent.contains("companyCode")){
+			    if(StringUtils.isEmpty(companyCode)){
+	                Map<String,Object> map = new HashMap<String,Object>();
+	                map.put("status", -1);
+	                map.put("meg", dealInfo.getSvn()+"的组织代码为空");
+	                errorList.add(map);
+	                continue;
+	            }
 			}
+			
 			// 机构名称
 			String companyName = dealInfo.getWorkCompany().getCompanyName();
+			if(messageContent.contains("companyName")){
+                if(StringUtils.isEmpty(companyName)){
+                    Map<String,Object> map = new HashMap<String,Object>();
+                    map.put("status", -1);
+                    map.put("meg", dealInfo.getSvn()+"的机构名称为空");
+                    errorList.add(map);
+                    continue;
+                }
+            }
 			//System.out.println(companyName);
 			// 法人姓名
 			String legalName = dealInfo.getWorkCompany().getLegalName();
-			if(StringUtils.isEmpty(legalName)){
-			    Map<String,Object> map = new HashMap<String,Object>();
-			    map.put("status", -1);
-                map.put("meg", dealInfo.getSvn()+"的法人姓名为空");
-                errorList.add(map);
-                continue;
-            }
+			if(messageContent.contains("legalName")){
+			    if(StringUtils.isEmpty(legalName)){
+	                Map<String,Object> map = new HashMap<String,Object>();
+	                map.put("status", -1);
+	                map.put("meg", dealInfo.getSvn()+"的法人姓名为空");
+	                errorList.add(map);
+	                continue;
+	            }
+			}
+			
 			// key编码
 			String keySn = dealInfo.getKeySn();
-			if(StringUtils.isEmpty(keySn)){
-			    Map<String,Object> map = new HashMap<String,Object>();
-			    map.put("status", -1);
-                map.put("meg", dealInfo.getSvn()+"的key序列号为空");
-                errorList.add(map);
-                continue;
-            }
+			if(messageContent.contains("keySn")){
+			    if(StringUtils.isEmpty(keySn)){
+	                Map<String,Object> map = new HashMap<String,Object>();
+	                map.put("status", -1);
+	                map.put("meg", dealInfo.getSvn()+"的key序列号为空");
+	                errorList.add(map);
+	                continue;
+	            }
+			}
+			
 			// 机构地址
 			String organizationAddress = dealInfo.getWorkCompany().getProvince() + dealInfo.getWorkCompany().getCity()
 					+ dealInfo.getWorkCompany().getDistrict() + dealInfo.getWorkCompany().getAddress();
-			if(StringUtils.isEmpty(organizationAddress)){
-			    Map<String,Object> map = new HashMap<String,Object>();
-			    map.put("status", -1);
-                map.put("meg", dealInfo.getSvn()+"的机构地址为空");
-                errorList.add(map);
-                continue;
-            }
+			if(messageContent.contains("organizationAddress")){
+			    if(StringUtils.isEmpty(organizationAddress)){
+	                Map<String,Object> map = new HashMap<String,Object>();
+	                map.put("status", -1);
+	                map.put("meg", dealInfo.getSvn()+"的机构地址为空");
+	                errorList.add(map);
+	                continue;
+	            }
+			}
+			
 			//System.out.println(consigner);
 			// 业务状态
 			WorkDealInfoStatus workDealInfoStatus = new WorkDealInfoStatus();
 			String businessStatus = workDealInfoStatus.WorkDealInfoStatusMap.get(dealInfo.getDealInfoStatus());
 			// 项目名称
 			String alias = dealInfo.getConfigApp().getAlias();
+			if(messageContent.contains("alias")){
+                if(StringUtils.isEmpty(alias)){
+                    Map<String,Object> map = new HashMap<String,Object>();
+                    map.put("status", -1);
+                    map.put("meg", dealInfo.getSvn()+"的项目名称为空");
+                    errorList.add(map);
+                    continue;
+                }
+            }
 			//System.out.println(alias);
 			// 证书到期时间
 			Date endDate = dealInfo.getNotafter();
-			if(endDate==null){
-			    Map<String,Object> map = new HashMap<String,Object>();
-			    map.put("status", -1);
-                map.put("meg", dealInfo.getSvn()+"的证书到期时间为空");
-                errorList.add(map);
-                continue;
-            }
+			if(messageContent.contains("endDate")){
+			    if(endDate==null){
+	                Map<String,Object> map = new HashMap<String,Object>();
+	                map.put("status", -1);
+	                map.put("meg", dealInfo.getSvn()+"的证书到期时间为空");
+	                errorList.add(map);
+	                continue;
+	            }
+			}
+			
 			//System.out.println(endDate);
 			// 证书持有人电话
 			VelocityEngine ve = new VelocityEngine();
 			   ve.init();
 			   String content = messageContent;
+			   writer = new StringWriter();
 			   VelocityContext context = new VelocityContext();
 			   context.put("companyCode", companyCode);
 			   context.put("companyName", companyName);
@@ -454,93 +491,119 @@ public class MessageSendingController extends BaseController {
 			WorkCertInfo workCertInfo = dealInfo.getWorkCertInfo();
 			// 组织机构代码
 			String companyCode = dealInfo.getWorkCompany().getOrganizationNumber();
-			if(StringUtils.isEmpty(companyCode)){
-                Map<String,Object> map = new HashMap<String,Object>();
-                map.put("status", -1);
-                map.put("meg", dealInfo.getSvn()+"的经办人姓名为空");
-                errorList.add(map);
-                continue;
-            }
+			if(messageContent.contains("companyCode")){
+			    if(StringUtils.isEmpty(companyCode)){
+	                Map<String,Object> map = new HashMap<String,Object>();
+	                map.put("status", -1);
+	                map.put("meg", dealInfo.getSvn()+"的经办人姓名为空");
+	                errorList.add(map);
+	                continue;
+	            }
+			}
+			
 			// 机构名称
 			String companyName = dealInfo.getWorkCompany().getCompanyName();
-			if(StringUtils.isEmpty(companyName)){
-                Map<String,Object> map = new HashMap<String,Object>();
-                map.put("status", -1);
-                map.put("meg", dealInfo.getSvn()+"的机构名称为空");
-                errorList.add(map);
-                continue;
-            }
+			if(messageContent.contains("companyName")){
+			    if(StringUtils.isEmpty(companyName)){
+	                Map<String,Object> map = new HashMap<String,Object>();
+	                map.put("status", -1);
+	                map.put("meg", dealInfo.getSvn()+"的机构名称为空");
+	                errorList.add(map);
+	                continue;
+	            }
+			}
+			
 			//System.out.println(companyName);
 			// 法人姓名
 			String legalName = dealInfo.getWorkCompany().getLegalName();
-			if(StringUtils.isEmpty(legalName)){
-                Map<String,Object> map = new HashMap<String,Object>();
-                map.put("status", -1);
-                map.put("meg", dealInfo.getSvn()+"的法人姓名为空");
-                errorList.add(map);
-                continue;
-            }
+			if(messageContent.contains("legalName")){
+			    if(StringUtils.isEmpty(legalName)){
+	                Map<String,Object> map = new HashMap<String,Object>();
+	                map.put("status", -1);
+	                map.put("meg", dealInfo.getSvn()+"的法人姓名为空");
+	                errorList.add(map);
+	                continue;
+	            }
+			}
+			
 			// key编码
 			String keySn = dealInfo.getKeySn();
-			if(StringUtils.isEmpty(legalName)){
-                Map<String,Object> map = new HashMap<String,Object>();
-                map.put("status", -1);
-                map.put("meg", dealInfo.getSvn()+"的key为空");
-                errorList.add(map);
-                continue;
-            }
+			if(messageContent.contains("legalName")){
+			    if(StringUtils.isEmpty(legalName)){
+	                Map<String,Object> map = new HashMap<String,Object>();
+	                map.put("status", -1);
+	                map.put("meg", dealInfo.getSvn()+"的key为空");
+	                errorList.add(map);
+	                continue;
+	            }
+			}
+			
 			// 机构地址
 			String organizationAddress = dealInfo.getWorkCompany().getProvince() + dealInfo.getWorkCompany().getCity()
 					+ dealInfo.getWorkCompany().getDistrict() + dealInfo.getWorkCompany().getAddress();
-			if(StringUtils.isEmpty(organizationAddress)){
-                Map<String,Object> map = new HashMap<String,Object>();
-                map.put("status", -1);
-                map.put("meg", dealInfo.getSvn()+"的机构地址为空");
-                errorList.add(map);
-                continue;
-            }
+			if(messageContent.contains("organizationAddress")){
+			    if(StringUtils.isEmpty(organizationAddress)){
+	                Map<String,Object> map = new HashMap<String,Object>();
+	                map.put("status", -1);
+	                map.put("meg", dealInfo.getSvn()+"的机构地址为空");
+	                errorList.add(map);
+	                continue;
+	            }
+			}
+			
 			// 经办人姓名
 			String consigner = dealInfo.getWorkCertInfo().getWorkCertApplyInfo().getName();
-			if(StringUtils.isEmpty(consigner)){
-                Map<String,Object> map = new HashMap<String,Object>();
-                map.put("status", -1);
-                map.put("meg", dealInfo.getSvn()+"的经办人姓名为空");
-                errorList.add(map);
-                continue;
-            }
+			if(messageContent.contains("consigner")){
+			    if(StringUtils.isEmpty(consigner)){
+	                Map<String,Object> map = new HashMap<String,Object>();
+	                map.put("status", -1);
+	                map.put("meg", dealInfo.getSvn()+"的经办人姓名为空");
+	                errorList.add(map);
+	                continue;
+	            }
+			}
+			
 			//System.out.println(consigner);
 			// 业务状态
 			WorkDealInfoStatus workDealInfoStatus = new WorkDealInfoStatus();
 			String businessStatus = workDealInfoStatus.WorkDealInfoStatusMap.get(dealInfo.getDealInfoStatus());
 			// 项目名称
 			String alias = dealInfo.getConfigApp().getAlias();
-			if(StringUtils.isEmpty(alias)){
-                Map<String,Object> map = new HashMap<String,Object>();
-                map.put("status", -1);
-                map.put("meg", dealInfo.getSvn()+"的项目名称为空");
-                errorList.add(map);
-                continue;
-            }
+			if(messageContent.contains("alias")){
+			    if(StringUtils.isEmpty(alias)){
+	                Map<String,Object> map = new HashMap<String,Object>();
+	                map.put("status", -1);
+	                map.put("meg", dealInfo.getSvn()+"的项目名称为空");
+	                errorList.add(map);
+	                continue;
+	            }
+			}
+			
 			//System.out.println(alias);
 			// 证书到期时间
 			Date endDate = dealInfo.getNotafter();
-			if(endDate==null){
-                Map<String,Object> map = new HashMap<String,Object>();
-                map.put("status", -1);
-                map.put("meg", dealInfo.getSvn()+"的证书到期时间为空");
-                errorList.add(map);
-                continue;
-            }
+			if(messageContent.contains("endDate")){
+			    if(endDate==null){
+	                Map<String,Object> map = new HashMap<String,Object>();
+	                map.put("status", -1);
+	                map.put("meg", dealInfo.getSvn()+"的证书到期时间为空");
+	                errorList.add(map);
+	                continue;
+	            }
+			}
 			//System.out.println(endDate);
 			// 证书持有人电话
 			String phone = dealInfo.getWorkUser().getContactPhone();
-			if(StringUtils.isEmpty(phone)){
-                Map<String,Object> map = new HashMap<String,Object>();
-                map.put("status", -1);
-                map.put("meg", dealInfo.getSvn()+"的证书持有人电话为空");
-                errorList.add(map);
-                continue;
-            }
+			if(messageContent.contains("phone")){
+			    if(StringUtils.isEmpty(phone)){
+	                Map<String,Object> map = new HashMap<String,Object>();
+	                map.put("status", -1);
+	                map.put("meg", dealInfo.getSvn()+"的证书持有人电话为空");
+	                errorList.add(map);
+	                continue;
+	            }
+			}
+			
 			//System.out.println(phone);
 			VelocityEngine ve = new VelocityEngine();
 			   ve.init();
@@ -554,7 +617,7 @@ public class MessageSendingController extends BaseController {
 			   context.put("consigner", consigner);
 			   context.put("businessStatus", businessStatus);
 			   context.put("alias", alias);
-			   context.put("endDate", format1.format(endDate));
+			   context.put("endDate", endDate==null?"":format1.format(endDate));
 			   context.put("date", format1.format(new Date()));
 			   StringWriter writer = new StringWriter();
 			   ve.evaluate(context, writer, "", content); 
@@ -573,7 +636,6 @@ public class MessageSendingController extends BaseController {
 				// SmsService smsService=new SmsService();
 			String returnStatus = null;
 			if (phone != null) {
-
 				returnStatus = smsService.sendSms(messId, phone, writer.toString());
 				if (returnStatus.equals("0")) {
 					 Map<String,Object> map = new HashMap<String,Object>();
