@@ -57,11 +57,11 @@ public class IXINReportService extends BaseService {
 	        startTime.setMinutes(0);
 	        startTime.setSeconds(00);
 		    dc.add(Restrictions.gt("notafter", startTime));
-		}
-		if(endTime!=null){
+		}else if(endTime!=null){
 		    endTime.setHours(23);
 	        endTime.setMinutes(59);
 	        endTime.setSeconds(59);
+	        dc.add(Restrictions.lt("businessCardUserDate", endTime));
 		    dc.add(Restrictions.gt("notafter", endTime));
         }
 		dc.add(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED));
