@@ -24,7 +24,6 @@ import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.hssf.util.CellRangeAddress;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.util.Region;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -42,7 +41,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.common.collect.Lists;
 import com.itrus.ca.common.utils.DateUtils;
-import com.itrus.ca.common.utils.Encodes;
 import com.itrus.ca.common.utils.StringHelper;
 import com.itrus.ca.common.web.BaseController;
 import com.itrus.ca.modules.ixin.entity.IxinData;
@@ -79,7 +77,6 @@ public class IxinDataController extends BaseController {
     
     @Autowired
     private IXINReportService iXINReportService;
-	
     
 	@ModelAttribute
 	public IxinData get(@RequestParam(required=false) Long id) {
@@ -131,21 +128,24 @@ public class IxinDataController extends BaseController {
             List<ConfigApp> appsList = configAppService.findall();
             model.addAttribute("appList", appsList);
             model.addAttribute("appListSize", appsList.size());
-           
         }
-       
+        
         //应用下所有的证书 的数量与存活数量
         List<Object> certNumberList = Lists.newArrayList();
         List<IxinDataVo> vos = Lists.newArrayList();
         for (ConfigApp configApp : appList) {
            List<IxinData> certList =  ixinDataService.findByApp(configApp,startTime,endTime);
+           System.out.println(configApp.getAppName()+"应用的再用数量");
            if(certList.size()>0){
                for(IxinData ixinDatas:certList){
                    if(!certNumberList.contains(ixinDatas.getCertSn())){
                        certNumberList.add(ixinDatas.getCertSn());
+                       System.out.println("应用名称："+configApp.getAppName()+"***"+"证书序列号:"+ixinDatas.getCertSn());
                    }
                }
+               System.out.println(configApp.getAppName()+"应用的存活数量");
                int number = iXINReportService.findCountByDate(configApp.getId(),startTime,endTime);
+               System.out.println("");
                IxinDataVo vo = new IxinDataVo();
                if(number>0){
                    vo.setSurvivalNumber(number);

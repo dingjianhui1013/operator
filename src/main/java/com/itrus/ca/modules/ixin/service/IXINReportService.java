@@ -66,7 +66,13 @@ public class IXINReportService extends BaseService {
         }
 		dc.add(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED));
 		dc.add(Restrictions.eq("delFlag", DataEntity.DEL_FLAG_NORMAL));
-
+		
+		List<WorkDealInfo> list = workDealInfoDao.find(dc);
+		for (WorkDealInfo workDealInfo : list) {
+            System.out.println("应用名称"+workDealInfo.getConfigApp().getAppName()+"***证书序列号："+workDealInfo.getCertSn());
+        }
+		
+		
 		return workDealInfoDao.find(dc).size();
 	}
 
