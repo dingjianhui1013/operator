@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.common.collect.Lists;
 import com.itrus.ca.common.persistence.Page;
 import com.itrus.ca.common.service.BaseService;
 import com.itrus.ca.modules.profile.dao.ConfigAppOfficeRelationDao;
@@ -113,6 +114,25 @@ public class ConfigAppOfficeRelationService extends BaseService {
 			return true;
 		}
 		return false;
+	}
+	
+	
+	
+	public List<Long> findAllAppIdsByOffices(List<Office> offices){
+		DetachedCriteria dc = configAppOfficeRelationDao.createDetachedCriteria();
+		dc.createAlias("office", "office");
+		dc.add(Restrictions.in("office", offices));
+		
+		List<ConfigAppOfficeRelation> caors = configAppOfficeRelationDao.find(dc);
+		
+		List<Long> appIds = Lists.newArrayList();
+		
+		
+		for(ConfigAppOfficeRelation caor:caors){
+			appIds.add(caor.getConfigApp().getId());
+		}
+		
+		return appIds;
 	}
 	
 	

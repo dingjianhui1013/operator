@@ -48,9 +48,14 @@ import com.itrus.ca.modules.ixin.entity.Vo.IxinDataVo;
 import com.itrus.ca.modules.ixin.service.IXINReportService;
 import com.itrus.ca.modules.ixin.service.IxinDataService;
 import com.itrus.ca.modules.profile.entity.ConfigApp;
+import com.itrus.ca.modules.profile.entity.ConfigAppOfficeRelation;
 import com.itrus.ca.modules.profile.entity.ConfigProjectType;
+import com.itrus.ca.modules.profile.service.ConfigAppOfficeRelationService;
 import com.itrus.ca.modules.profile.service.ConfigAppService;
 import com.itrus.ca.modules.profile.service.ConfigProjectTypeService;
+import com.itrus.ca.modules.sys.entity.Office;
+import com.itrus.ca.modules.sys.service.OfficeService;
+import com.itrus.ca.modules.sys.utils.UserUtils;
 import com.itrus.ca.modules.work.entity.WorkDealInfo;
 import com.itrus.ca.modules.work.service.WorkDealInfoService;
 
@@ -76,7 +81,13 @@ public class IxinDataController extends BaseController {
     private ConfigAppService configAppService;
     
     @Autowired
+    private OfficeService officeService;
+    
+    @Autowired
     private IXINReportService iXINReportService;
+    
+    @Autowired
+    private ConfigAppOfficeRelationService configAppOfficeRelationService;
     
 	@ModelAttribute
 	public IxinData get(@RequestParam(required=false) Long id) {
@@ -110,6 +121,13 @@ public class IxinDataController extends BaseController {
                 configTypelist.add(Long.parseLong(ss));
             }
         }
+        
+        
+        List<Office> officeList = officeService.getOfficeByType(UserUtils.getUser(), 2);
+        
+        //首先得到数据范围内的应用id
+        List<Long> appIdsByOffice =  configAppOfficeRelationService.findAllAppIdsByOffices(officeList);
+        
         List<ConfigApp> appList = Lists.newArrayList();
         if(StringUtils.isNotEmpty(configAppIds)){
             String ids[] = configAppIds.split(",");
@@ -119,13 +137,15 @@ public class IxinDataController extends BaseController {
             }
         }else{
             //选择类型下的应用
-            appList = configAppService.findByconfigProjectTypes(configTypelist);
+            appList = configAppService.findByconfigProjectTypes(configTypelist,appIdsByOffice);
         }
         if(StringUtils.isNotEmpty(configProjectTypeIds)){
             model.addAttribute("appList", appList);
             model.addAttribute("appListSize", appList.size());
         }else{
-            List<ConfigApp> appsList = configAppService.findall();
+        	
+        	//得到权限下所有的app
+            List<ConfigApp> appsList = configAppService.findByAppIds(appIdsByOffice);
             model.addAttribute("appList", appsList);
             model.addAttribute("appListSize", appsList.size());
         }
@@ -183,8 +203,14 @@ public class IxinDataController extends BaseController {
         }
         try {
         List<Object> list = new ArrayList<Object>();
+        
+        List<Office> officeList = officeService.getOfficeByType(UserUtils.getUser(), 2);
+        
+        //首先得到数据范围内的应用id
+        List<Long> appIdsByOffice =  configAppOfficeRelationService.findAllAppIdsByOffices(officeList);
+        
         //选择类型下的应用
-        List<ConfigApp> appList = configAppService.findByconfigProjectTypes(configTypelist);
+        List<ConfigApp> appList = configAppService.findByconfigProjectTypes(configTypelist,appIdsByOffice);
         if (appList.size()>0){
             for (ConfigApp configApp : appList) {
                 Map<String, Object> map = new HashMap<String, Object>();
@@ -297,6 +323,12 @@ public class IxinDataController extends BaseController {
               typesList.add(configProjectType);
           }
       }
+      
+      List<Office> officeList = officeService.getOfficeByType(UserUtils.getUser(), 2);
+      
+      //首先得到数据范围内的应用id
+      List<Long> appIdsByOffice =  configAppOfficeRelationService.findAllAppIdsByOffices(officeList);
+      
       List<ConfigApp> appList = Lists.newArrayList();
       if(StringUtils.isNotEmpty(configAppIds)){
           String ids[] = configAppIds.split(",");
@@ -306,7 +338,7 @@ public class IxinDataController extends BaseController {
           }
       }else{
           //选择类型下的应用
-          appList = configAppService.findByconfigProjectTypes(configTypelist);
+          appList = configAppService.findByconfigProjectTypes(configTypelist,appIdsByOffice);
       }
       
       //应用下所有的证书 的数量与存活数量

@@ -78,13 +78,19 @@ public class ConfigAppService extends BaseService {
 		return configAppDao.find(dc);
 	}
 	public List<ConfigApp> findByconfigProjectTypes(
-			List<Long> configProjectTypeIds) {
+			List<Long> configProjectTypeIds,List<Long> appIds) {
 		DetachedCriteria dc = configAppDao.createDetachedCriteria();
 		dc.add(Restrictions.eq(ConfigApp.DEL_FLAG, ConfigApp.DEL_FLAG_NORMAL));
 		if(configProjectTypeIds!=null&&configProjectTypeIds.size()>0)
 		{
 			dc.add(Restrictions.in("configProjectType.id",configProjectTypeIds));
 		}
+		
+		if(appIds!=null&&appIds.size()>0)
+		{
+			dc.add(Restrictions.in("id",appIds));
+		}
+		
 		return configAppDao.find(dc);
 	}
 	public ConfigApp findByAppname(String appName) {
@@ -109,7 +115,15 @@ public class ConfigAppService extends BaseService {
 	}
 	
 	
-	
+	public List<ConfigApp> findByAppIds(List<Long> appIds){
+		DetachedCriteria dc = configAppDao.createDetachedCriteria();
+		if (appIds!=null&&appIds.size()>0){
+			dc.add(Restrictions.in("id", appIds));
+		}
+		dc.add(Restrictions.eq(ConfigApp.DEL_FLAG, ConfigApp.DEL_FLAG_NORMAL));
+		dc.addOrder(Order.desc("id"));
+		return configAppDao.find(dc);
+	}
 	
 	@Transactional(readOnly = false)
 	public void save(ConfigApp configApp) {
