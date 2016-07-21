@@ -9,6 +9,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -21,12 +23,17 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.CellRangeAddress;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.context.ContextLoader;
+import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.google.common.collect.Lists;
 import com.itrus.ca.common.persistence.Page;
@@ -93,6 +100,26 @@ public class reportController extends BaseController {
 
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 
+		 /*Configuration cfg = new Configuration().configure();  
+		SessionFactory factory = cfg.get
+		*/
+				
+				WebApplicationContext wac = ContextLoader.getCurrentWebApplicationContext();   
+				String[] names = wac.getBeanDefinitionNames();  
+				for(int i=0; i<names.length; i++){  
+				    System.out.println("---"+names[i]);  
+				      
+				}  
+				EntityManagerFactory factory = (EntityManagerFactory)wac.getBean("entityManagerFactory");
+				
+				System.out.println(factory);
+				
+				EntityManager em = factory.createEntityManager();
+				
+				Session session = em.unwrap(org.hibernate.Session.class);
+				
+				System.out.println(session);
+		
 		if (startTime == null && endTime == null) {
 			startTime = StringHelper.getFirstDayOfLastMonth();
 			endTime = StringHelper.getLastDayOfLastMonth();
