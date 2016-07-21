@@ -255,7 +255,7 @@
 	
 	
 	</form:form>
-	<tags:message content="注:存活证书数量为证书有效期范围内含此时间段中的任意一天便视为有效"/>
+	<%-- <tags:message content="注:存活证书数量为证书有效期范围内含此时间段中的任意一天便视为有效"/> --%>
 	<table id="contentTable" class="table table-striped table-bordered table-condensed">
 		<thead><tr><th>应用名</th><th>在用证书数量</th><th>存活证书数量</th><th>存活率</th></tr></thead>
 		<tbody>
@@ -269,5 +269,12 @@
 		</c:forEach>
 		</tbody>
 	</table>
+	
+	<div class="container-fluid breadcrumb">
+		<div class="row-fluid span12">
+			<span class="span4">注: <b>存活证书数量为证书有效期范围内含此时间段中任意一天便视为有效</b></span>
+			
+		</div>
+	</div>
 </body>
 </html>
