@@ -7,7 +7,7 @@ import java.util.HashMap;
 /**
  * 报表查询类型
  * @author ZhangJingtao
- *
+ * 
  */
 public class ReportQueryType {
 	public static Integer TYPE_VALID_DEAL = 0;//有效业务
