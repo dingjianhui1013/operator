@@ -134,6 +134,7 @@ public class IxinDataController extends BaseController {
         List<Object> certNumberList = Lists.newArrayList();
         List<IxinDataVo> vos = Lists.newArrayList();
         for (ConfigApp configApp : appList) {
+            certNumberList = Lists.newArrayList();
            List<IxinData> certList =  ixinDataService.findByApp(configApp,startTime,endTime);
            System.out.println(configApp.getAppName()+"应用的再用数量");
            if(certList.size()>0){
@@ -143,26 +144,23 @@ public class IxinDataController extends BaseController {
                        System.out.println("应用名称："+configApp.getAppName()+"***"+"证书序列号:"+ixinDatas.getCertSn());
                    }
                }
-               System.out.println(configApp.getAppName()+"应用的存活数量");
-               int number = iXINReportService.findCountByDate(configApp.getId(),startTime,endTime);
-               System.out.println("");
-               IxinDataVo vo = new IxinDataVo();
-               if(number>0){
-                   vo.setSurvivalNumber(number);
-                   Double rate = Double.valueOf(certNumberList.size())/Double.valueOf(number);
-                   NumberFormat nt = NumberFormat.getPercentInstance();
-                   //设置百分数精确度2即保留两位小数
-                   nt.setMinimumFractionDigits(2);
-                   //最后格式化并输出
-                   vo.setRate(nt.format(rate));
-               }else{
-                   vo.setSurvivalNumber(0);
-                   vo.setRate("0.00%");
-               }
+           }
+           System.out.println(configApp.getAppName()+"应用的存活数量");
+           int number = iXINReportService.findCountByDate(configApp.getId(),startTime,endTime);
+           IxinDataVo vo = new IxinDataVo();
+           if(number>0){
+               vo.setSurvivalNumber(number);
+               Double rate = Double.valueOf(certNumberList.size())/Double.valueOf(number);
+               NumberFormat nt = NumberFormat.getPercentInstance();
+               //设置百分数精确度2即保留两位小数
+               nt.setMinimumFractionDigits(2);
+               //最后格式化并输出
+               vo.setRate(nt.format(rate));
                vo.setAppName(configApp.getAppName());
                vo.setCertNumber(certNumberList.size());
                vos.add(vo);
            }
+           
         }
         model.addAttribute("list", vos);
         model.addAttribute("configProjectTypeIds", configProjectTypeIds==""?null:configProjectTypeIds);
@@ -315,6 +313,7 @@ public class IxinDataController extends BaseController {
       List<Object> certNumberList = Lists.newArrayList();
       List<IxinDataVo> vos = Lists.newArrayList();
       for (ConfigApp configApp : appList) {
+          certNumberList = Lists.newArrayList();
          List<IxinData> certList =  ixinDataService.findByApp(configApp,startTime,endTime);
          if(certList.size()>0){
              for(IxinData ixinDatas:certList){
@@ -322,20 +321,17 @@ public class IxinDataController extends BaseController {
                      certNumberList.add(ixinDatas.getCertSn());
                  }
              }
-             int number = iXINReportService.findCountByDate(configApp.getId(),startTime,endTime);
-             IxinDataVo vo = new IxinDataVo();
-             if(number>0){
-                 vo.setSurvivalNumber(number);
-                 Double rate = Double.valueOf(certNumberList.size())/Double.valueOf(number);
-                 NumberFormat nt = NumberFormat.getPercentInstance();
-                 //设置百分数精确度2即保留两位小数
-                 nt.setMinimumFractionDigits(2);
-                 //最后格式化并输出
-                 vo.setRate(nt.format(rate));
-             }else{
-                 vo.setSurvivalNumber(0);
-                 vo.setRate("0.00%");
-             }
+         }
+         int number = iXINReportService.findCountByDate(configApp.getId(),startTime,endTime);
+         IxinDataVo vo = new IxinDataVo();
+         if(number>0){
+             vo.setSurvivalNumber(number);
+             Double rate = Double.valueOf(certNumberList.size())/Double.valueOf(number);
+             NumberFormat nt = NumberFormat.getPercentInstance();
+             //设置百分数精确度2即保留两位小数
+             nt.setMinimumFractionDigits(2);
+             //最后格式化并输出
+             vo.setRate(nt.format(rate));
              vo.setAppName(configApp.getAppName());
              vo.setCertNumber(certNumberList.size());
              vos.add(vo);
