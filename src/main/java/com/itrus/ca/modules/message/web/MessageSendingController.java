@@ -484,11 +484,25 @@ public class MessageSendingController extends BaseController {
 
 			long dealInfoId = Long.parseLong(dealInfos[i]);
 			WorkDealInfo dealInfo = workDealInfoService.get(dealInfoId);
+			long mess = System.currentTimeMillis();
+            String smsSendDate1 = format.format(new Date());
+            String messId = "" + mess;
+            Date smsSendDate = null;
+                try {
+                    smsSendDate = format.parse(smsSendDate1);
+                } catch (ParseException e) {
+                    
+                    e.printStackTrace();
+                }
+            System.out.println(smsSendDate);
 			if(dealInfo!=null){
 			WorkCompany company = dealInfo.getWorkCompany();
 			WorkUser workUser = dealInfo.getWorkUser();
 			ConfigApp configApp = dealInfo.getConfigApp();
 			WorkCertInfo workCertInfo = dealInfo.getWorkCertInfo();
+			// 证书持有人电话
+            String phone = dealInfo.getWorkUser().getContactPhone();
+            
 			// 组织机构代码
 			String companyCode = dealInfo.getWorkCompany().getOrganizationNumber();
 			if(messageContent.contains("companyCode")){
@@ -497,6 +511,20 @@ public class MessageSendingController extends BaseController {
 	                map.put("status", -1);
 	                map.put("meg", dealInfo.getSvn()+"的经办人姓名为空");
 	                errorList.add(map);
+	                MessageSending messageSending = new MessageSending();
+                    messageSending.setMessId(messId);
+                    messageSending.setpId(4);
+                    messageSending.setPhone(phone);
+                    messageSending.setMessageContext("经办人姓名为空");
+                    messageSending.setSmsSendDate(smsSendDate);
+                    messageSending.setReturnStatus("0");
+                    messageSending.setWorkDealInfo(dealInfo);
+                    messageSending.setSmsConfiguration(smsConfiguration);
+                    messageSending.setWorkCompany(company);
+                    messageSending.setWorkUser(workUser);
+                    messageSending.setConfigApp(configApp);
+                    messageSending.setWorkCertInfo(workCertInfo);
+                    messageSendingService.save(messageSending);
 	                continue;
 	            }
 			}
@@ -509,6 +537,20 @@ public class MessageSendingController extends BaseController {
 	                map.put("status", -1);
 	                map.put("meg", dealInfo.getSvn()+"的机构名称为空");
 	                errorList.add(map);
+	                MessageSending messageSending = new MessageSending();
+                    messageSending.setMessId(messId);
+                    messageSending.setpId(4);
+                    messageSending.setPhone(phone);
+                    messageSending.setMessageContext("机构名称为空");
+                    messageSending.setSmsSendDate(smsSendDate);
+                    messageSending.setReturnStatus("0");
+                    messageSending.setWorkDealInfo(dealInfo);
+                    messageSending.setSmsConfiguration(smsConfiguration);
+                    messageSending.setWorkCompany(company);
+                    messageSending.setWorkUser(workUser);
+                    messageSending.setConfigApp(configApp);
+                    messageSending.setWorkCertInfo(workCertInfo);
+                    messageSendingService.save(messageSending);
 	                continue;
 	            }
 			}
@@ -522,6 +564,20 @@ public class MessageSendingController extends BaseController {
 	                map.put("status", -1);
 	                map.put("meg", dealInfo.getSvn()+"的法人姓名为空");
 	                errorList.add(map);
+	                MessageSending messageSending = new MessageSending();
+                    messageSending.setMessId(messId);
+                    messageSending.setpId(4);
+                    messageSending.setPhone(phone);
+                    messageSending.setMessageContext("法人姓名为空");
+                    messageSending.setSmsSendDate(smsSendDate);
+                    messageSending.setReturnStatus("0");
+                    messageSending.setWorkDealInfo(dealInfo);
+                    messageSending.setSmsConfiguration(smsConfiguration);
+                    messageSending.setWorkCompany(company);
+                    messageSending.setWorkUser(workUser);
+                    messageSending.setConfigApp(configApp);
+                    messageSending.setWorkCertInfo(workCertInfo);
+                    messageSendingService.save(messageSending);
 	                continue;
 	            }
 			}
@@ -534,6 +590,20 @@ public class MessageSendingController extends BaseController {
 	                map.put("status", -1);
 	                map.put("meg", dealInfo.getSvn()+"的key为空");
 	                errorList.add(map);
+	                MessageSending messageSending = new MessageSending();
+                    messageSending.setMessId(messId);
+                    messageSending.setpId(4);
+                    messageSending.setPhone(phone);
+                    messageSending.setMessageContext("key为空");
+                    messageSending.setSmsSendDate(smsSendDate);
+                    messageSending.setReturnStatus("0");
+                    messageSending.setWorkDealInfo(dealInfo);
+                    messageSending.setSmsConfiguration(smsConfiguration);
+                    messageSending.setWorkCompany(company);
+                    messageSending.setWorkUser(workUser);
+                    messageSending.setConfigApp(configApp);
+                    messageSending.setWorkCertInfo(workCertInfo);
+                    messageSendingService.save(messageSending);
 	                continue;
 	            }
 			}
@@ -547,6 +617,20 @@ public class MessageSendingController extends BaseController {
 	                map.put("status", -1);
 	                map.put("meg", dealInfo.getSvn()+"的机构地址为空");
 	                errorList.add(map);
+	                MessageSending messageSending = new MessageSending();
+                    messageSending.setMessId(messId);
+                    messageSending.setpId(4);
+                    messageSending.setPhone(phone);
+                    messageSending.setMessageContext("机构地址为空");
+                    messageSending.setSmsSendDate(smsSendDate);
+                    messageSending.setReturnStatus("0");
+                    messageSending.setWorkDealInfo(dealInfo);
+                    messageSending.setSmsConfiguration(smsConfiguration);
+                    messageSending.setWorkCompany(company);
+                    messageSending.setWorkUser(workUser);
+                    messageSending.setConfigApp(configApp);
+                    messageSending.setWorkCertInfo(workCertInfo);
+                    messageSendingService.save(messageSending);
 	                continue;
 	            }
 			}
@@ -559,6 +643,20 @@ public class MessageSendingController extends BaseController {
 	                map.put("status", -1);
 	                map.put("meg", dealInfo.getSvn()+"的经办人姓名为空");
 	                errorList.add(map);
+	                MessageSending messageSending = new MessageSending();
+                    messageSending.setMessId(messId);
+                    messageSending.setpId(4);
+                    messageSending.setPhone(phone);
+                    messageSending.setMessageContext("经办人姓名为空");
+                    messageSending.setSmsSendDate(smsSendDate);
+                    messageSending.setReturnStatus("0");
+                    messageSending.setWorkDealInfo(dealInfo);
+                    messageSending.setSmsConfiguration(smsConfiguration);
+                    messageSending.setWorkCompany(company);
+                    messageSending.setWorkUser(workUser);
+                    messageSending.setConfigApp(configApp);
+                    messageSending.setWorkCertInfo(workCertInfo);
+                    messageSendingService.save(messageSending);
 	                continue;
 	            }
 			}
@@ -575,6 +673,20 @@ public class MessageSendingController extends BaseController {
 	                map.put("status", -1);
 	                map.put("meg", dealInfo.getSvn()+"的项目名称为空");
 	                errorList.add(map);
+	                MessageSending messageSending = new MessageSending();
+                    messageSending.setMessId(messId);
+                    messageSending.setpId(4);
+                    messageSending.setPhone(phone);
+                    messageSending.setMessageContext("项目名称为空");
+                    messageSending.setSmsSendDate(smsSendDate);
+                    messageSending.setReturnStatus("0");
+                    messageSending.setWorkDealInfo(dealInfo);
+                    messageSending.setSmsConfiguration(smsConfiguration);
+                    messageSending.setWorkCompany(company);
+                    messageSending.setWorkUser(workUser);
+                    messageSending.setConfigApp(configApp);
+                    messageSending.setWorkCertInfo(workCertInfo);
+                    messageSendingService.save(messageSending);
 	                continue;
 	            }
 			}
@@ -588,21 +700,24 @@ public class MessageSendingController extends BaseController {
 	                map.put("status", -1);
 	                map.put("meg", dealInfo.getSvn()+"的证书到期时间为空");
 	                errorList.add(map);
+	                MessageSending messageSending = new MessageSending();
+                    messageSending.setMessId(messId);
+                    messageSending.setpId(4);
+                    messageSending.setPhone(phone);
+                    messageSending.setMessageContext("证书到期时间为空");
+                    messageSending.setSmsSendDate(smsSendDate);
+                    messageSending.setReturnStatus("0");
+                    messageSending.setWorkDealInfo(dealInfo);
+                    messageSending.setSmsConfiguration(smsConfiguration);
+                    messageSending.setWorkCompany(company);
+                    messageSending.setWorkUser(workUser);
+                    messageSending.setConfigApp(configApp);
+                    messageSending.setWorkCertInfo(workCertInfo);
+                    messageSendingService.save(messageSending);
 	                continue;
 	            }
 			}
 			//System.out.println(endDate);
-			// 证书持有人电话
-			String phone = dealInfo.getWorkUser().getContactPhone();
-			if(messageContent.contains("phone")){
-			    if(StringUtils.isEmpty(phone)){
-	                Map<String,Object> map = new HashMap<String,Object>();
-	                map.put("status", -1);
-	                map.put("meg", dealInfo.getSvn()+"的证书持有人电话为空");
-	                errorList.add(map);
-	                continue;
-	            }
-			}
 			
 			//System.out.println(phone);
 			VelocityEngine ve = new VelocityEngine();
@@ -621,18 +736,6 @@ public class MessageSendingController extends BaseController {
 			   context.put("date", format1.format(new Date()));
 			   StringWriter writer = new StringWriter();
 			   ve.evaluate(context, writer, "", content); 
-			 
-			   long mess = System.currentTimeMillis();
-			String smsSendDate1 = format.format(new Date());
-			String messId = "" + mess;
-			Date smsSendDate = null;
-				try {
-					smsSendDate = format.parse(smsSendDate1);
-				} catch (ParseException e) {
-					
-					e.printStackTrace();
-				}
-				System.out.println(smsSendDate);
 				// SmsService smsService=new SmsService();
 			String returnStatus = null;
 			if (phone != null) {
@@ -642,6 +745,21 @@ public class MessageSendingController extends BaseController {
 		                map.put("status", -1);
 		                map.put("msg", dealInfo.getSvn()+"发送失败");
 		                errorList.add(map);
+		                MessageSending messageSending = new MessageSending();
+	                    messageSending.setMessId(messId);
+	                    messageSending.setpId(4);
+	                    messageSending.setPhone(phone);
+	                    messageSending.setMessageContext(writer.toString());
+	                    messageSending.setSmsSendDate(smsSendDate);
+	                    messageSending.setReturnStatus(returnStatus.equals("1")?returnStatus:returnStatus.substring(1));
+	                    messageSending.setWorkDealInfo(dealInfo);
+	                    messageSending.setSmsConfiguration(smsConfiguration);
+	                    messageSending.setWorkCompany(company);
+	                    messageSending.setWorkUser(workUser);
+	                    messageSending.setConfigApp(configApp);
+	                    messageSending.setWorkCertInfo(workCertInfo);
+	                    messageSendingService.save(messageSending);
+		                
 		                continue;
 				} else{
 				    json.put("status", 1);
@@ -720,12 +838,15 @@ public class MessageSendingController extends BaseController {
 
 		return "modules/message/checkMessageList";
 	}
+	
+	@ResponseBody
 	@RequestMapping(value = "showWorkDeal")
 	public String showWorkDeal(Long checkMessageId, Model model, HttpServletRequest request, HttpServletResponse response) {
-
+	    JSONObject json = new JSONObject();
 		List<MessageSending> page = messageSendingService.findByDepotId(checkMessageId);
-		
-		model.addAttribute("dealInfo", page.get(0));
-		return "modules/message/checkMessageListF";
+		MessageSending messageSending= page.get(0);
+		json.put("status", messageSending.getReturnStatus());
+		json.put("content", messageSending.getMessageContext());
+		return json.toString();
 	}
 }

@@ -18,12 +18,20 @@
 		function alarmValue(checkMessageId){
 			
 			var url = "${ctx}/message/messageSending/showWorkDeal?checkMessageId="+checkMessageId;
-			top.$.jBox.open("iframe:"+url, "查看", 800, 200, {
-					buttons:{"关闭":true}, submit:function(v, h, f){
-						
-					}
-			});
-		}
+			$.getJSON(	url,
+					function(data) {
+						var html = "<div class=\"control-group\" style=\"padding:15px;\">";
+						if(data.status=='1'){
+							html+="<label class=\"control-label\">短信内容:</label>";
+						}else{
+							html+="<label class=\"control-label\">失败原因:</label>";
+						}
+						html+="<div class=\"controls\">"+data.content+"</div></div>";
+						top.$.jBox.open(html, "查看", 400, 'auto', {
+							buttons:{"关闭":true}
+					});
+				})
+			}
 	</script>
 </head>
 <body>
@@ -106,7 +114,7 @@
 					<td>${checkMessage.smsConfiguration.messageName}</td>
 					<td>
 					<c:if test="${checkMessage.returnStatus=='1'}">成功</c:if>
-					<c:if test="${checkMessage.returnStatus!='1'}">失败 ；原因：${checkMessage.returnStatus}</c:if>
+					<c:if test="${checkMessage.returnStatus!='1'}">失败 </c:if>
 					</td>
 					
 					<td><a href="javaScript:alarmValue( ${checkMessage.id} )">查看 </a></td>
