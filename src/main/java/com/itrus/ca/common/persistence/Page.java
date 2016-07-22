@@ -374,7 +374,11 @@ public class Page<T> {
 	 * @param pageSize
 	 */
 	public void setPageSize(int pageSize) {
-		this.pageSize = pageSize <= 0 ? 10 : pageSize > 500 ? 500 : pageSize;
+		if (pageSize != -1)
+			this.pageSize = pageSize <= 0 ? 10 : pageSize > 500 ? 500
+					: pageSize;
+		else
+			this.pageSize = pageSize;
 	}
 
 	/**
