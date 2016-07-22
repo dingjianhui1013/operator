@@ -46,6 +46,30 @@
 			
 			$("#roleDiv").find("span").append("<br/>");
 		});
+		
+		
+		
+		
+		function identityNumberValid(){
+			var code = $("#identityNumber").val();
+			
+			if(!code || !/^\d{6}(18|19|20)?\d{2}(0[1-9]|1[12])(0[1-9]|[12]\d|3[01])\d{3}(\d|X)$/i.test(code)){
+				
+				if($("#phonepro").text()!=""){
+
+					return false; 
+				}
+                $("#identityNumber").after("<span id='phonepro' style='color:red'>身份证号格式错误</span>");
+                return false;
+            }
+			
+			if($("#phonepro").text()!=""){
+				$("#phonepro").hide();
+			}
+			
+			
+		}
+		
 			
 	</script>
 </head>
@@ -105,6 +129,15 @@
 				<input id="sccaPasssword1" name="confirmNewPassword" type="password" value="" maxlength="50" minlength="3" equalTo="#sccaPasssword"/>
 			</div>
 		</div>
+		
+		<div class="control-group">
+			<label class="control-label"><font color="red">*</font>身份证号:</label>
+			<div class="controls">
+				<form:input path="identityNumber" onblur="javascript:identityNumberValid()" id="identityNumber" htmlEscape="false" maxlength="18" class="required"/>
+			</div>
+		</div>
+		
+		
 		<div class="control-group">
 			<label class="control-label">邮箱:</label>
 			<div class="controls">
