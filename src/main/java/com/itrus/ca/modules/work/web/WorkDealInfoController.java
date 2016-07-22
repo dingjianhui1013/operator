@@ -5564,7 +5564,7 @@ public class WorkDealInfoController extends BaseController {
 				}
 			} else if (type[i].equals("5")) {
 
-				model.addAttribute("reissue", "1");
+				model.addAttribute("reissue", "2");
 
 				if (!inOffice) {
 					redirectAttributes.addAttribute("fd", UUID.randomUUID()
