@@ -1710,7 +1710,7 @@ public class WorkDealInfoOperationController extends BaseController {
 		}
 		
 		//key升级
-		if(isKeyUpgrade == 1){
+		if(isKeyUpgrade!=null&&isKeyUpgrade == 1){
 			workDealInfo.setIsKeyUpgrade(1);
 		}
 		
