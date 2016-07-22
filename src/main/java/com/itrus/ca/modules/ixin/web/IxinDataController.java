@@ -121,13 +121,9 @@ public class IxinDataController extends BaseController {
                 configTypelist.add(Long.parseLong(ss));
             }
         }
-        
-        
         List<Office> officeList = officeService.getOfficeByType(UserUtils.getUser(), 2);
-        
         //首先得到数据范围内的应用id
         List<Long> appIdsByOffice =  configAppOfficeRelationService.findAllAppIdsByOffices(officeList);
-        
         List<ConfigApp> appList = Lists.newArrayList();
         if(StringUtils.isNotEmpty(configAppIds)){
             String ids[] = configAppIds.split(",");
@@ -165,8 +161,8 @@ public class IxinDataController extends BaseController {
                    }
                }
            }
-           System.out.println(configApp.getAppName()+"应用的存活数量");
            int number = iXINReportService.findCountByDate(configApp.getId(),startTime,endTime);
+           System.out.println(configApp.getAppName()+"应用的存活数量:"+number);
            IxinDataVo vo = new IxinDataVo();
            if(number>0){
                vo.setSurvivalNumber(number);

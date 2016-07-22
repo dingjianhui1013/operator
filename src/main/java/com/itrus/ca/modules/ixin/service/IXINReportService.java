@@ -1,7 +1,9 @@
 package com.itrus.ca.modules.ixin.service;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -16,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.itrus.ca.common.persistence.DataEntity;
 import com.itrus.ca.common.persistence.Page;
 import com.itrus.ca.common.service.BaseService;
+import com.itrus.ca.common.utils.DateUtils;
 import com.itrus.ca.modules.constant.ReportQueryType;
 import com.itrus.ca.modules.constant.WorkDealInfoStatus;
 import com.itrus.ca.modules.constant.WorkDealInfoType;
@@ -47,135 +50,32 @@ public class IXINReportService extends BaseService {
 	private static Logger logger = LoggerFactory.getLogger(IXINReportService.class);
 
 	public Integer findCountByDate(Long appId, Date startTime, Date endTime) {
-		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
-		dc.createAlias("configApp", "configApp");
-		if(appId!=null){
-		    dc.add(Restrictions.eq("configApp.id", appId));
-		}
-		if(startTime!=null){
-		    startTime.setHours(0);
-	        startTime.setMinutes(0);
-	        startTime.setSeconds(00);
-		    dc.add(Restrictions.gt("notafter", startTime));
-		}else if(endTime!=null){
-		    endTime.setHours(23);
-	        endTime.setMinutes(59);
-	        endTime.setSeconds(59);
-	        dc.add(Restrictions.lt("businessCardUserDate", endTime));
-		    dc.add(Restrictions.gt("notafter", endTime));
+
+        StringBuffer sql = new StringBuffer();
+        sql.append("select count(*) as ct from work_deal_info wdi");
+        sql.append(",config_app ca ,work_cert_info wci");
+        sql.append(" where wdi.app_id = ca.id");
+        sql.append(" and ca.id = ").append(appId);
+        sql.append(" and wdi.cert_id = wci.id");
+        sql.append(" and wci.notbefore <= TO_DATE('" + DateUtils.formatDate(endTime, "yyyy-MM-dd 23:59:59")
+                + "', 'yyyy-MM-dd hh24:mi:ss')");
+        sql.append(" and wdi.notafter >= TO_DATE('" + DateUtils.formatDate(endTime, "yyyy-MM-dd 00:00:01")
+                + "', 'yyyy-MM-dd hh24:mi:ss')");
+        sql.append(" and wdi.deal_info_status = ").append(WorkDealInfoStatus.STATUS_CERT_OBTAINED);
+        sql.append(" and wdi.del_flag = ").append(DataEntity.DEL_FLAG_NORMAL);
+        System.out.println(sql);
+        List<Map> ct = null;
+        try {
+            ct = workDealInfoDao.findBySQLListMap(sql.toString(), 0, 0);
+        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | ClassNotFoundException
+                | InstantiationException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
         }
-		dc.add(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED));
-		dc.add(Restrictions.eq("delFlag", DataEntity.DEL_FLAG_NORMAL));
-		
-		List<WorkDealInfo> list = workDealInfoDao.find(dc);
-		for (WorkDealInfo workDealInfo : list) {
-            System.out.println("应用名称"+workDealInfo.getConfigApp().getAppName()+"***证书序列号："+workDealInfo.getCertSn());
-        }
-		
-		
-		return workDealInfoDao.find(dc).size();
+
+        return new Integer(ct.get(0).get("CT").toString());
 	}
 
-	
-	public Page<WorkDealInfo> findPageByDate(Page<WorkDealInfo> page,Long appId, Date startTime, Date endTime, Integer method) {
-		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
-		dc.createAlias("configApp", "configApp");
-
-		dc.add(Restrictions.eq("configApp.id", appId));
-
-		startTime.setHours(0);
-		startTime.setMinutes(0);
-		startTime.setSeconds(00);
-
-		endTime.setHours(23);
-		endTime.setMinutes(59);
-		endTime.setSeconds(59);
-
-		if (method == ReportQueryType.TYPE_VALID_DEAL) {
-			dc.add(Restrictions.gt("notafter", startTime));
-			dc.add(Restrictions.lt("notafter", endTime));
-			dc.add(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED));
-		} else if (method == ReportQueryType.TYPE_NEW_DEAL) {
-			dc.add(Restrictions.gt("businessCardUserDate", startTime));
-			dc.add(Restrictions.lt("businessCardUserDate", endTime));
-			dc.add(Restrictions.eq("dealInfoType", WorkDealInfoType.TYPE_ADD_CERT));
-			dc.add(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED));
-		} else if (method == ReportQueryType.TYPE_UPDATE_DEAL) { // 时间段内已更新数量
-			dc.add(Restrictions.gt("businessCardUserDate", startTime));
-			dc.add(Restrictions.lt("businessCardUserDate", endTime));
-			dc.add(Restrictions.eq("dealInfoType", WorkDealInfoType.TYPE_UPDATE_CERT));
-			dc.add(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED));
-		} else if (method == ReportQueryType.TYPE_UNUPDATE_DEAL) { // 时间段内已缴费但未更新数量
-			dc.add(Restrictions.gt("payUserDate", startTime));
-			dc.add(Restrictions.lt("payUserDate", endTime));
-			dc.add(Restrictions.isNull("businessCardUserDate"));
-			dc.add(Restrictions.eq("dealInfoType", WorkDealInfoType.TYPE_UPDATE_CERT));
-			dc.add(Restrictions.and(Restrictions.ne("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED),
-					Restrictions.ne("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_REVOKE)));
-		} else if (method == ReportQueryType.TYPE_MAINTENANCE_DEAL) {
-			dc.add(Restrictions.gt("businessCardUserDate", startTime));
-			dc.add(Restrictions.lt("businessCardUserDate", endTime));
-			dc.add(Restrictions.isNull("dealInfoType")); // 不是新增也不是更新
-			dc.add(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED));
-		}
-
-		dc.add(Restrictions.eq("delFlag", DataEntity.DEL_FLAG_NORMAL));
-
-		return workDealInfoDao.find(page,dc);
-	}
-	
-	
-	
-	
-	
-	public List<WorkDealInfo> findListByDate(Long appId, Date startTime, Date endTime, Integer method) {
-		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
-		dc.createAlias("configApp", "configApp");
-		dc.createAlias("workCompany", "workCompany");
-		dc.createAlias("workUserHis", "workUserHis");
-		dc.add(Restrictions.eq("configApp.id", appId));
-
-		startTime.setHours(0);
-		startTime.setMinutes(0);
-		startTime.setSeconds(00);
-
-		endTime.setHours(23);
-		endTime.setMinutes(59);
-		endTime.setSeconds(59);
-
-		if (method == ReportQueryType.TYPE_VALID_DEAL) {
-			dc.add(Restrictions.gt("notafter", startTime));
-			dc.add(Restrictions.lt("notafter", endTime));
-			dc.add(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED));
-		} else if (method == ReportQueryType.TYPE_NEW_DEAL) {
-			dc.add(Restrictions.gt("businessCardUserDate", startTime));
-			dc.add(Restrictions.lt("businessCardUserDate", endTime));
-			dc.add(Restrictions.eq("dealInfoType", WorkDealInfoType.TYPE_ADD_CERT));
-			dc.add(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED));
-		} else if (method == ReportQueryType.TYPE_UPDATE_DEAL) { // 时间段内已更新数量
-			dc.add(Restrictions.gt("businessCardUserDate", startTime));
-			dc.add(Restrictions.lt("businessCardUserDate", endTime));
-			dc.add(Restrictions.eq("dealInfoType", WorkDealInfoType.TYPE_UPDATE_CERT));
-			dc.add(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED));
-		} else if (method == ReportQueryType.TYPE_UNUPDATE_DEAL) { // 时间段内已缴费但未更新数量
-			dc.add(Restrictions.gt("payUserDate", startTime));
-			dc.add(Restrictions.lt("payUserDate", endTime));
-			dc.add(Restrictions.isNull("businessCardUserDate"));
-			dc.add(Restrictions.eq("dealInfoType", WorkDealInfoType.TYPE_UPDATE_CERT));
-			dc.add(Restrictions.and(Restrictions.ne("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED),
-					Restrictions.ne("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_REVOKE)));
-		} else if (method == ReportQueryType.TYPE_MAINTENANCE_DEAL) {
-			dc.add(Restrictions.gt("businessCardUserDate", startTime));
-			dc.add(Restrictions.lt("businessCardUserDate", endTime));
-			dc.add(Restrictions.isNull("dealInfoType")); // 不是新增也不是更新
-			dc.add(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED));
-		}
-
-		dc.add(Restrictions.eq("delFlag", DataEntity.DEL_FLAG_NORMAL));
-
-		return workDealInfoDao.find(dc);
-	}
-	
 	
 	
 }
