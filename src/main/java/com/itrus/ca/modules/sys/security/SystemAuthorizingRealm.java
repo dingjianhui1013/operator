@@ -92,7 +92,12 @@ public class SystemAuthorizingRealm extends AuthorizingRealm {
 				byte[] signedDate = Base64.decodeBase64(token.getSignedData());
 				X509Certificate certificate = SVM.verifyPKCS7SignedData(signedDate, toSign.getBytes());
 			
-				User user = getSystemService().getUserByLoginName(certificate.getCertSubjectNames().getItem("CN"));
+				/*User user = getSystemService().getUserByLoginName(certificate.getCertSubjectNames().getItem("CN"));*/
+				
+				User user = getSystemService().getUserByIdentityNumber(certificate.getCertSubjectNames().getItem("SN"));
+				
+				
+				
 				if (user==null) {
 					throw new CaptchaException("用户不存在！");
 				}

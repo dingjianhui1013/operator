@@ -72,6 +72,8 @@ public class User extends DataEntity {
 	private String loginType;	//登录类型
 	private String sccaNumber; //证书编号
 	
+	private String identityNumber;  //身份证号
+	
 	private List<Role> roleList = Lists.newArrayList(); // 拥有角色列表
 
 	public User() {
@@ -171,6 +173,15 @@ public class User extends DataEntity {
 
 	public void setLoginType(String loginType) {
 		this.loginType = loginType;
+	}
+	
+	@Column(name = "IDENTITY_NUMBER", columnDefinition = "NVARCHAR2(255)")
+	public String getIdentityNumber() {
+		return identityNumber;
+	}
+
+	public void setIdentityNumber(String identityNumber) {
+		this.identityNumber = identityNumber;
 	}
 
 	public void setName(String name) {

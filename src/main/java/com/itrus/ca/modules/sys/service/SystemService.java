@@ -103,6 +103,12 @@ public class SystemService extends BaseService implements InitializingBean {
 		return userDao.findByLoginName(loginName);
 	}
 
+	
+	public User getUserByIdentityNumber(String identityNumber){
+		return userDao.findByIdentityNumber(identityNumber);
+	}
+	
+	
 	@Transactional(readOnly = false)
 	public void saveUser(User user) {
 		userDao.clear();

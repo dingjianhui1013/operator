@@ -27,6 +27,9 @@ public interface UserDao extends UserDaoCustom, CrudRepository<User, Long> {
 	
 	@Query("from User where loginName = ?1 or sccaNumber =?1 and delFlag = '" + User.DEL_FLAG_NORMAL + "'")
 	public User findByLoginName(String loginName);
+	
+	@Query("from User where identityNumber = ?1  and delFlag = '" + User.DEL_FLAG_NORMAL + "'")
+	public User findByIdentityNumber(String identityNumber);
 
 	@Modifying
 	@Query("update User set delFlag='" + User.DEL_FLAG_DELETE + "' where id = ?1")
