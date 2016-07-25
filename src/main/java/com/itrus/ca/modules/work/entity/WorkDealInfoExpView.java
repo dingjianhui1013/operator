@@ -160,6 +160,8 @@ public class WorkDealInfoExpView implements java.io.Serializable {
 	private String contactEmail;
 	@Column(name = "NOTBEFORE", length = 19)
 	private Date notbefore;
+	@Column(name = "APP_NAME",columnDefinition = "NVARCHAR2(255)")
+	private String appName;
 
 	public Long getId() {
 		return id;
@@ -647,6 +649,14 @@ public class WorkDealInfoExpView implements java.io.Serializable {
 
 	public void setNotbefore(Date notbefore) {
 		this.notbefore = notbefore;
+	}
+
+	public String getAppName() {
+		return appName;
+	}
+
+	public void setAppName(String appName) {
+		this.appName = appName;
 	}
 
 }
