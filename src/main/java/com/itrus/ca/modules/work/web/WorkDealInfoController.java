@@ -5062,7 +5062,7 @@ public class WorkDealInfoController extends BaseController {
 		// 单独处理吊销
 		if (workType != null && workType == 5) {
 			Page<WorkDealInfo> page = workDealInfoExpViewService.find(request,
-					response, query, false,true);
+					response, query, false, true);
 			model.addAttribute("proType", ProductType.productTypeStrMap);
 			model.addAttribute("wdiType", WorkDealInfoType.WorkDealInfoTypeMap);
 			model.addAttribute("wdiStatus",
@@ -5115,7 +5115,7 @@ public class WorkDealInfoController extends BaseController {
 		}
 
 		Page<WorkDealInfo> page = workDealInfoExpViewService.find(request,
-				response, query, false,false);
+				response, query, false, false);
 
 		model.addAttribute("proType", ProductType.productTypeStrMap);
 		model.addAttribute("wdiType", WorkDealInfoType.WorkDealInfoTypeMap);
@@ -6347,16 +6347,16 @@ public class WorkDealInfoController extends BaseController {
 		query.setOfficeIds(officeIds);
 		query.setOffices(officeids);
 		try {
-			List<WorkDealInfo> list = new ArrayList<WorkDealInfo>();
+			List<WorkDealInfoExpView> list = new ArrayList<WorkDealInfoExpView>();
 			if (workType != null && workType == 5) {
-				Page<WorkDealInfo> res = workDealInfoExpViewService.find(
-						request, response, query, true,true);
+				Page<WorkDealInfoExpView> res = workDealInfoExpViewService
+						.findByView(request, response, query, true, true);
 				if (res != null && res.getList() != null
 						&& res.getList().size() > 0)
 					list = res.getList();
 			} else {
-				Page<WorkDealInfo> res = workDealInfoExpViewService.find(
-						request, response, query, true,false);
+				Page<WorkDealInfoExpView> res = workDealInfoExpViewService
+						.findByView(request, response, query, true, false);
 				if (res != null && res.getList() != null
 						&& res.getList().size() > 0)
 					list = res.getList();
@@ -6368,76 +6368,217 @@ public class WorkDealInfoController extends BaseController {
 			String dealInfoType1 = null;
 			String dealInfoType2 = null;
 			String dealInfoType3 = null;
-			for (final WorkDealInfo dealInfo : list) {
+			for (final WorkDealInfoExpView dealInfo : list) {
 
 				final WorkDealInfoVo dealInfoVo = new WorkDealInfoVo();
-				dealInfoVo.setSvn(dealInfo.getSvn());
-				dealInfoVo.setAlias(dealInfo.getConfigApp().getAlias());
-				dealInfoVo.setCompanyName(dealInfo.getWorkCompany()
-						.getCompanyName());
-				dealInfoVo.setContactName(dealInfo.getWorkUser()
-						.getContactName());
-				dealInfoVo.setCertApplyInfoName(dealInfo.getWorkCertInfo()
-						.getWorkCertApplyInfo().getName());
-				dealInfoVo.setProductName(productType
-						.getProductTypeName(Integer.parseInt(dealInfo
-								.getConfigProduct().getProductName())));
-				if (dealInfo.getDealInfoType() == null) {
-					dealInfoType = "";
-				} else {
-					dealInfoType = workDealInfoType
-							.getDealInfoTypeName(dealInfo.getDealInfoType());
+				// 业务编号
+				if (information.indexOf(",ywbh") > -1)
+					dealInfoVo.setSvn(dealInfo.getSvn());
+				// 鉴证人
+				if (information.indexOf(",jzr") > -1)
+					dealInfoVo.setAttestAtionUserName(dealInfo
+							.getAttestationUserName());
+				// 产品名称
+				if (information.indexOf(",cpmc") > -1)
+					dealInfoVo.setProductName(dealInfo.getProductName());
+				// 产品标识
+				if (information.indexOf(",cpbs") > -1) {
+					if (dealInfo.getProductLabel() == 0) {
+						dealInfoVo.setProductLabel("通用");
+					} else {
+						dealInfoVo.setProductLabel("专用");
+					}
 				}
-				if (dealInfo.getDealInfoType1() == null) {
-					dealInfoType1 = "";
-				} else {
-					dealInfoType1 = workDealInfoType
-							.getDealInfoTypeName(dealInfo.getDealInfoType1());
+				// 业务类型
+				if (information.indexOf(",ywlx") > -1) {
+					if (dealInfo.getDealInfoType() == null) {
+						dealInfoType = "";
+					} else {
+						dealInfoType = workDealInfoType
+								.getDealInfoTypeName(dealInfo.getDealInfoType());
+					}
+					if (dealInfo.getDealInfoType1() == null) {
+						dealInfoType1 = "";
+					} else {
+						dealInfoType1 = workDealInfoType
+								.getDealInfoTypeName(dealInfo
+										.getDealInfoType1());
+					}
+					if (dealInfo.getDealInfoType2() == null) {
+						dealInfoType2 = "";
+					} else {
+						dealInfoType2 = workDealInfoType
+								.getDealInfoTypeName(dealInfo
+										.getDealInfoType2());
+					}
+					if (dealInfo.getDealInfoType3() == null) {
+						dealInfoType3 = "";
+					} else {
+						dealInfoType3 = workDealInfoType
+								.getDealInfoTypeName(dealInfo
+										.getDealInfoType3());
+					}
+					dealInfoVo.setDealInfoType(dealInfoType + ""
+							+ dealInfoType1 + "" + dealInfoType2 + ""
+							+ dealInfoType3);
 				}
-				if (dealInfo.getDealInfoType2() == null) {
-					dealInfoType2 = "";
-				} else {
-					dealInfoType2 = workDealInfoType
-							.getDealInfoTypeName(dealInfo.getDealInfoType2());
+				// 经办人姓名
+				if (information.indexOf(",jbrxm") > -1) {
+					dealInfoVo.setCertApplyInfoName(dealInfo
+							.getWorkUserHIsContactName());
 				}
-				if (dealInfo.getDealInfoType3() == null) {
-					dealInfoType3 = "";
-				} else {
-					dealInfoType3 = workDealInfoType
-							.getDealInfoTypeName(dealInfo.getDealInfoType3());
+				// 经办人手机号
+				if (information.indexOf(",jbrphone") > -1) {
+					dealInfoVo.setCertApplyInfoPhone(dealInfo
+							.getWorkUserHIsContactPhone());
 				}
-				dealInfoVo.setDealInfoType(dealInfoType + "" + dealInfoType1
-						+ "" + dealInfoType2 + "" + dealInfoType3);
-				dealInfoVo.setKeySn(dealInfo.getKeySn());
+				// key编码
+				if (information.indexOf(",keybm") > -1) {
+					dealInfoVo.setKeySn(dealInfo.getKeySN());
+				}
+				// 录入人
+				if (information.indexOf(",lrr") > -1) {
+					dealInfoVo.setInputUserName(dealInfo.getInputUserName());
+				}
+				// 单位名称
+				if (information.indexOf(",dwmcc") > -1) {
+					dealInfoVo.setCompanyName(dealInfo.getCompanyName());
+				}
+				// 收费方式
+				if (information.indexOf(",sffs") > -1) {
+					String payUserType = "";
+					if (dealInfo.getMethodPos()) {
+						payUserType = "POS机";
+					} else if (dealInfo.getMethodBank()) {
+						payUserType = "银行转账";
+					} else if (dealInfo.getMethodMoney()) {
+						payUserType = "现金";
+					} else if (dealInfo.getMethodAlipay()) {
+						payUserType = "支付宝";
+					} else if (dealInfo.getMethodContract()) {
+						payUserType = "合同采购";
+					} else if (dealInfo.getMethodGov()) {
+						payUserType = "政府采购";
+					}
+					dealInfoVo.setPayType(payUserType);
+				}
+				// 应用名称
+				if (information.indexOf(",yymc") > -1) {
+					dealInfoVo.setAppName(dealInfo.getAppName());
+				}
+				// 行政所属区
+				if (information.indexOf(",xzssq") > -1) {
+					dealInfoVo.setAreaName(dealInfo.getAreaName());
+				}
+				// 计费策略类型
+				if (information.indexOf(",jfcllx") > -1) {
+					String tempStyleName = "";
+					// 1标准 2政府统一采购 3合同采购
+					if (dealInfo.getTempStyle().equals("1")) {
+						tempStyleName = "标准";
+					} else if (dealInfo.getTempStyle().equals("2")) {
+						tempStyleName = "政府统一采购";
+					} else if (dealInfo.getTempStyle().equals("3")) {
+						tempStyleName = "合同采购";
+					}
+					dealInfoVo.setTempStyle(tempStyleName);
+				}
+				// 收费金额
+				if (information.indexOf(",sfje") > -1) {
+					dealInfoVo.setTotalMoney(StringHelper
+							.formartDecimalToStr(dealInfo.getWorkTotalMoney()));
+				}
+				// 收费人
+				if (information.indexOf(",sfr") > -1) {
+					dealInfoVo.setPayUserName(dealInfo.getPayUserName());
+				}
+				// 录入日期
+				if (information.indexOf(",lrdate") > -1) {
+					if (dealInfo.getInputUserDate() != null) {
+						dealInfoVo.setInputDate(StringHelper.getSystime(
+								"yyyy-MM-dd HH:mm:ss", dealInfo
+										.getInputUserDate().getTime()));
+					} else {
+						dealInfoVo.setInputDate("");
+					}
+				}
+				// 制证日期
+				if (information.indexOf(",zzdate") > -1) {
+					if (dealInfo.getSignDate() != null) {
+						String signDateString = dfm.format(dealInfo
+								.getSignDate());
+						dealInfoVo.setSignDateString(signDateString);
+					} else {
+						dealInfoVo.setSignDateString("");
 
-				if (dealInfo.getWorkCertInfo().getSignDate() != null) {
-					String signDateString = dfm.format(dealInfo
-							.getWorkCertInfo().getSignDate());
-					dealInfoVo.setSignDateString(signDateString);
-				} else {
-					dealInfoVo.setSignDateString("");
-
+					}
+				}
+				// 鉴证日期
+				if (information.indexOf(",jzdate") > -1) {
+					if (dealInfo.getAttestationUserDate() != null) {
+						dealInfoVo.setAttestAtionUserDate(StringHelper
+								.getSystime("yyyy-MM-dd HH:mm:ss", dealInfo
+										.getAttestationUserDate().getTime()));
+					} else {
+						dealInfoVo.setAttestAtionUserDate("");
+					}
+				}
+				// 持有人姓名
+				if (information.indexOf(",cyrxm") > -1) {
+					dealInfoVo.setContactName(dealInfo.getContactName());
+				}
+				// 计费策略模板
+				if (information.indexOf(",jfclmb") > -1) {
+					dealInfoVo.setTempName(dealInfo.getTempName());
+				}
+				// 到期日期
+				if (information.indexOf(",dqrq") > -1) {
+					String notafterString = dealInfo.getNotAfter() == null ? ""
+							: df.format(dealInfo.getNotAfter());
+					dealInfoVo.setNotAfter(notafterString);
+				}
+				// 制证人
+				if (information.indexOf(",zzr") > -1) {
+					dealInfoVo.setBusinessCardUserName(dealInfo
+							.getBusinessCardUserName());
+				}
+				// 业务状态
+				if (information.indexOf(",ywzt") > -1) {
+					dealInfoVo
+							.setDealInfoStatus(workDealInfoStatus.WorkDealInfoStatusMap
+									.get(dealInfo.getDealInfoStatus()));
+				}
+				// 收费日期
+				if (information.indexOf(",sfdate") > -1) {
+					if (dealInfo.getPayUserDate() != null) {
+						dealInfoVo.setPayDate(StringHelper.getSystime(
+								"yyyy-MM-dd HH:mm:ss", dealInfo
+										.getPayUserDate().getTime()));
+					} else {
+						dealInfoVo.setPayDate("");
+					}
+				}
+				// 有效期
+				if (information.indexOf(",yxq") > -1) {
+					if (dealInfo.getAddCertDays() == null) {
+						dealInfoVo.setCertDays((dealInfo.getYear() == null ? 0
+								: dealInfo.getYear())
+								* 365
+								+ (dealInfo.getLastDays() == null ? 0
+										: dealInfo.getLastDays()) + "（天）");
+					} else {
+						dealInfoVo.setCertDays(dealInfo.getYear() * 365
+								+ dealInfo.getLastDays()
+								+ dealInfo.getAddCertDays() + "（天）");
+					}
+				}
+				// 经办人邮箱
+				if (information.indexOf(",jbremail") > -1) {
+					dealInfoVo
+							.setCertApplyInfoEmail(dealInfo.getContactEmail());
 				}
 
-				if (dealInfo.getAddCertDays() == null) {
-					dealInfoVo.setCertDays((dealInfo.getYear() == null ? 0
-							: dealInfo.getYear())
-							* 365
-							+ (dealInfo.getLastDays() == null ? 0 : dealInfo
-									.getLastDays()) + "（天）");
-				} else {
-					dealInfoVo.setCertDays(dealInfo.getYear() * 365
-							+ dealInfo.getLastDays()
-							+ dealInfo.getAddCertDays() + "（天）");
-				}
-				String notafterString = dealInfo.getNotafter() == null ? ""
-						: df.format(dealInfo.getNotafter());
-				dealInfoVo.setNotAfter(notafterString);
-				dealInfoVo
-						.setDealInfoStatus(workDealInfoStatus.WorkDealInfoStatusMap
-								.get(dealInfo.getDealInfoStatus()));
 				workDealInfoVos.add(dealInfoVo);
-				// System.out.println(workDealInfoVos.size());
 			}
 
 			new ExportExcel("业务查询", WorkDealInfoVo.class)
