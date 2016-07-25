@@ -142,22 +142,24 @@ public class WorkDealInfoExpView implements java.io.Serializable {
 	private Integer productLabel;
 	@Column(name = "WORK_USER_HIS_ID")
 	private Long workUserHisId;
-	@Column(name = "WORK_USER_HIS_CONTACT_NAME", length = 100,columnDefinition = "NVARCHAR2(100)")
+	@Column(name = "WORK_USER_HIS_CONTACT_NAME", length = 100, columnDefinition = "NVARCHAR2(100)")
 	private String workUserHIsContactName;
-	@Column(name = "WORK_USER_HIS_CONTACT_PHONE", length = 100,columnDefinition = "NVARCHAR2(100)")
+	@Column(name = "WORK_USER_HIS_CONTACT_PHONE", length = 100, columnDefinition = "NVARCHAR2(100)")
 	private String workUserHIsContactPhone;
 	@Length(min = 1, max = 100)
 	@Column(name = "AREA_NAME", columnDefinition = "NVARCHAR2(127)")
 	private String areaName;
-	@Column(name = "WORK_TOTAL_MONEY", precision = 20, scale = 3,columnDefinition = "NUMBER")
+	@Column(name = "WORK_TOTAL_MONEY", precision = 20, scale = 3, columnDefinition = "NUMBER")
 	private Double workTotalMoney;
 	@Temporal(TemporalType.DATE)
 	@Column(name = "ATTESTATION_USER_DATE")
 	private Date attestationUserDate;
 	@Column(name = "TEMP_NAME")
 	private String tempName;
-	@Column(name = "CONTACT_EMAIL", length = 100,columnDefinition = "NVARCHAR2(100)")
+	@Column(name = "CONTACT_EMAIL", length = 100, columnDefinition = "NVARCHAR2(100)")
 	private String contactEmail;
+	@Column(name = "NOTBEFORE", length = 19)
+	private Date notbefore;
 
 	public Long getId() {
 		return id;
@@ -637,6 +639,14 @@ public class WorkDealInfoExpView implements java.io.Serializable {
 
 	public void setContactEmail(String contactEmail) {
 		this.contactEmail = contactEmail;
+	}
+
+	public Date getNotbefore() {
+		return notbefore;
+	}
+
+	public void setNotbefore(Date notbefore) {
+		this.notbefore = notbefore;
 	}
 
 }

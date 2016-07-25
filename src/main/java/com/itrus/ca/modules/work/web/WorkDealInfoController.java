@@ -5061,8 +5061,8 @@ public class WorkDealInfoController extends BaseController {
 
 		// 单独处理吊销
 		if (workType != null && workType == 5) {
-			Page<WorkDealInfo> page = workDealInfoExpViewService.findCX(request,
-					response, query, false);
+			Page<WorkDealInfo> page = workDealInfoExpViewService.find(request,
+					response, query, false,true);
 			model.addAttribute("proType", ProductType.productTypeStrMap);
 			model.addAttribute("wdiType", WorkDealInfoType.WorkDealInfoTypeMap);
 			model.addAttribute("wdiStatus",
@@ -5115,7 +5115,7 @@ public class WorkDealInfoController extends BaseController {
 		}
 
 		Page<WorkDealInfo> page = workDealInfoExpViewService.find(request,
-				response, query, false);
+				response, query, false,false);
 
 		model.addAttribute("proType", ProductType.productTypeStrMap);
 		model.addAttribute("wdiType", WorkDealInfoType.WorkDealInfoTypeMap);
@@ -6245,7 +6245,8 @@ public class WorkDealInfoController extends BaseController {
 			@RequestParam(value = "paymentStartTime", required = false) Date paymentStartTime,
 			@RequestParam(value = "paymentEndTime", required = false) Date paymentEndTime,
 			@RequestParam(value = "zhizhengStartTime", required = false) Date zhizhengStartTime,
-			@RequestParam(value = "zhizhengEndTime", required = false) Date zhizhengEndTime)
+			@RequestParam(value = "zhizhengEndTime", required = false) Date zhizhengEndTime,
+			@RequestParam(value = "information", required = false) String information)
 			throws UnsupportedEncodingException {
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 		SimpleDateFormat dfm = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -6348,14 +6349,14 @@ public class WorkDealInfoController extends BaseController {
 		try {
 			List<WorkDealInfo> list = new ArrayList<WorkDealInfo>();
 			if (workType != null && workType == 5) {
-				Page<WorkDealInfo> res = workDealInfoExpViewService.findCX(
-						request, response, query, true);
+				Page<WorkDealInfo> res = workDealInfoExpViewService.find(
+						request, response, query, true,true);
 				if (res != null && res.getList() != null
 						&& res.getList().size() > 0)
 					list = res.getList();
 			} else {
 				Page<WorkDealInfo> res = workDealInfoExpViewService.find(
-						request, response, query, true);
+						request, response, query, true,false);
 				if (res != null && res.getList() != null
 						&& res.getList().size() > 0)
 					list = res.getList();
