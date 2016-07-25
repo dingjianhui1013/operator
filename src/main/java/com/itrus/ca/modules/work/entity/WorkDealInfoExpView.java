@@ -11,6 +11,10 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import org.hibernate.validator.constraints.Length;
 
 import com.itrus.ca.common.persistence.DataEntity;
 
@@ -134,6 +138,26 @@ public class WorkDealInfoExpView implements java.io.Serializable {
 	private Integer relationMethod;
 	@Column(name = "PAY_USER_DATE")
 	private Date payUserDate;
+	@Column(name = "PRODUCT_LABEL")
+	private Integer productLabel;
+	@Column(name = "WORK_USER_HIS_ID")
+	private Long workUserHisId;
+	@Column(name = "WORK_USER_HIS_CONTACT_NAME", length = 100,columnDefinition = "NVARCHAR2(100)")
+	private String workUserHIsContactName;
+	@Column(name = "WORK_USER_HIS_CONTACT_PHONE", length = 100,columnDefinition = "NVARCHAR2(100)")
+	private String workUserHIsContactPhone;
+	@Length(min = 1, max = 100)
+	@Column(name = "AREA_NAME", columnDefinition = "NVARCHAR2(127)")
+	private String areaName;
+	@Column(name = "WORK_TOTAL_MONEY", precision = 20, scale = 3,columnDefinition = "NUMBER")
+	private Double workTotalMoney;
+	@Temporal(TemporalType.DATE)
+	@Column(name = "ATTESTATION_USER_DATE")
+	private Date attestationUserDate;
+	@Column(name = "TEMP_NAME")
+	private String tempName;
+	@Column(name = "CONTACT_EMAIL", length = 100,columnDefinition = "NVARCHAR2(100)")
+	private String contactEmail;
 
 	public Long getId() {
 		return id;
@@ -541,6 +565,78 @@ public class WorkDealInfoExpView implements java.io.Serializable {
 
 	public void setPayUserDate(Date payUserDate) {
 		this.payUserDate = payUserDate;
+	}
+
+	public Integer getProductLabel() {
+		return productLabel;
+	}
+
+	public void setProductLabel(Integer productLabel) {
+		this.productLabel = productLabel;
+	}
+
+	public Long getWorkUserHisId() {
+		return workUserHisId;
+	}
+
+	public void setWorkUserHisId(Long workUserHisId) {
+		this.workUserHisId = workUserHisId;
+	}
+
+	public String getWorkUserHIsContactName() {
+		return workUserHIsContactName;
+	}
+
+	public void setWorkUserHIsContactName(String workUserHIsContactName) {
+		this.workUserHIsContactName = workUserHIsContactName;
+	}
+
+	public String getWorkUserHIsContactPhone() {
+		return workUserHIsContactPhone;
+	}
+
+	public void setWorkUserHIsContactPhone(String workUserHIsContactPhone) {
+		this.workUserHIsContactPhone = workUserHIsContactPhone;
+	}
+
+	public String getAreaName() {
+		return areaName;
+	}
+
+	public void setAreaName(String areaName) {
+		this.areaName = areaName;
+	}
+
+	public Double getWorkTotalMoney() {
+		return workTotalMoney;
+	}
+
+	public void setWorkTotalMoney(Double workTotalMoney) {
+		this.workTotalMoney = workTotalMoney;
+	}
+
+	public Date getAttestationUserDate() {
+		return attestationUserDate;
+	}
+
+	public void setAttestationUserDate(Date attestationUserDate) {
+		this.attestationUserDate = attestationUserDate;
+	}
+
+	public String getTempName() {
+		return tempName;
+	}
+
+	public void setTempName(String tempName) {
+		this.tempName = tempName;
+	}
+
+	public String getContactEmail() {
+		return contactEmail;
+	}
+
+	public void setContactEmail(String contactEmail) {
+		this.contactEmail = contactEmail;
 	}
 
 }
