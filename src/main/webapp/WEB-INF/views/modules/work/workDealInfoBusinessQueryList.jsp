@@ -5,6 +5,7 @@
 <head>
 <title>业务查询</title>
 <meta name="decorator" content="default" />
+<%@include file="/WEB-INF/views/include/dialog.jsp"%>
 <script type="text/javascript">
 	$(document).ready(function() {
 		
@@ -179,6 +180,7 @@
 	
 	
 </script>
+	
 <script type="text/javascript" src="${ctxStatic}/jquery/city.js"></script>
 </head>
 <body onload=''>
@@ -198,8 +200,9 @@
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			<label>代办应用：</label> 
 			<select name="apply"
-				id="apply">
-				<option value="">请选择应用</option>
+				id="apply" data-placeholder="请选择应用" class="editable-select">
+				<!-- <option value="">请选择应用</option> -->
+				<option value=""></option>
 				<c:forEach items="${configAppList}" var="app">
 					<option value="${app.id}"
 						<c:if test="${app.id==apply}">
@@ -496,5 +499,10 @@
 		</tbody>
 	</table>
 	<div class="pagination">${page}</div>
+	<script type="text/javascript">
+	$(function(){
+	    $('.editable-select').chosen();
+	});
+	</script>
 </body>
 </html>
