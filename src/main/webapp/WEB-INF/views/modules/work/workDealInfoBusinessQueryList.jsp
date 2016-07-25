@@ -8,6 +8,8 @@
 <%@include file="/WEB-INF/views/include/dialog.jsp"%>
 <script type="text/javascript">
 	$(document).ready(function() {
+	
+		
 		
 	});
 	function page(n, s) {
@@ -102,7 +104,7 @@
 			show();
 		}
 	}
-	function dcZS(){
+	function dcZS(information){
 		var apply=$("#apply").val();
 		var companyName=$("#companyName").val();
 		var organizationNumber=$("#organizationNumber").val();
@@ -130,11 +132,15 @@
 		var daoqiEndTime=$("#daoqiEndTime").val();
 		var year= $("#year").val();
 		var payMethod=$("#payMethod").val();
-		window.open("${ctx}/work/workDealInfo/exportZS?certType="+certType+"&workType="+workType+"&apply="+apply+"&area="+area+"&officeId="+officeId+"&companyName="+companyName+
+		var information=information;
+		
+		var expurl =  "${ctx}/work/workDealInfo/exportZS?certType="+certType+"&workType="+workType+"&apply="+apply+"&area="+area+"&officeId="+officeId+"&companyName="+companyName+
 		"&organizationNumber="+organizationNumber+"&contactName="+contactName+"&conCertNumber="+conCertNumber+"&keySn="+keySn+"&createByname="+createByname+"&zhizhengname="+zhizhengname+
 		"&updateByname="+updateByname+"&payType="+payType+"&s_province="+s_province+"&s_city="+s_city+"&s_county="+s_county+"&luruStartTime="+luruStartTime+
 		"&paymentStartTime="+paymentStartTime+"&paymentEndTime="+paymentEndTime+"&zhizhengStartTime="+zhizhengStartTime+"&zhizhengEndTime="+zhizhengEndTime+
-		"&daoqiStartTime="+daoqiStartTime+"&daoqiEndTime="+daoqiEndTime+"&luruEndTime="+luruEndTime+"&payMethod="+payMethod+"&year="+year);
+		"&daoqiStartTime="+daoqiStartTime+"&daoqiEndTime="+daoqiEndTime+"&luruEndTime="+luruEndTime+"&payMethod="+payMethod+"&year="+year+"&information="+information;
+		//console.log(expurl);
+		window.open(expurl);
 	}
 	
 	function resetAll(){
@@ -178,9 +184,28 @@
 		
 	}
 	
+	function dc()
+	{
+		var html=$('#informationBox').html();
+		var submit = function(v,h,f)
+		{
+			if(v=='ok')
+				{
+					if(f.informations == '')
+						{
+							top.$.jBox.tip("请选择至少一项展示项", 'error', { focusId: "informations" });
+					        return false;
+						}else
+							{
+								dcZS(f.informations);
+							}
+							return true;
+				}
+		};
+		top.$.jBox(html, { title: "选择导出项",width :634,buttons:{"确定":"ok","关闭":true}, submit: submit});
+	}
 	
 </script>
-	
 <script type="text/javascript" src="${ctxStatic}/jquery/city.js"></script>
 </head>
 <body onload=''>
@@ -200,8 +225,7 @@
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			<label>代办应用：</label> 
 			<select name="apply"
-				id="apply" data-placeholder="请选择应用" class="editable-select">
-				<!-- <option value="">请选择应用</option> -->
+				id="apply" data-placeholder="选择应用" class="editable-select">
 				<option value=""></option>
 				<c:forEach items="${configAppList}" var="app">
 					<option value="${app.id}"
@@ -235,7 +259,7 @@
 				 type="button" onclick="sub()" value="查询" />
 				<input id="resetTOP" type="button" class="btn btn-primary" onclick="javascript:resetAll()" value="重置"/>
 				<input id="gjcx" style="text-align:center" class="btn btn-info" onclick="show()" type="button" value="高级">
-				<input id="exportZS" style="text-align:center" class="btn btn-info" onclick="dcZS()" type="button" value="导出">
+				<input id="exportZS" style="text-align:center" class="btn btn-info" onclick="dc()" type="button" value="导出">
 				<span id="tjjg">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;统计结果${page.count}条</span>
 				<br />
 		</div>
@@ -244,6 +268,85 @@
 			
 		<br>
 		<div id="advanced" style="display:none">
+		<div id="informationBox" style="display:none">
+			<script>
+			function changeDisplayItems(obj)
+			{
+				 var informationv = $("#information").val();
+				if(informationv.indexOf(obj)>=0)
+					{
+						informationv = informationv.replace(","+obj, "");
+						$("#information").val(informationv);
+					}else
+						{
+							informationv += ","+obj;
+							$("#information").val(informationv);
+						}
+			}
+			function changeAllRow()
+			{
+				var informationv = "";
+				if($("#changeAll").val()=="全选")
+					{
+						var rows = $("input[name='displayItems']");
+						$.each(rows,function(i){
+							$(rows[i]).attr("checked",true);
+							informationv += ","+rows[i].value;
+							$("#information").val(informationv);
+						});
+						$("#changeAll").val("取消全选");
+					}else if($("#changeAll").val()=="取消全选")
+					{
+						var rows = $("input[name='displayItems']");
+						$.each(rows,function(i){
+							$(rows[i]).attr("checked",false);
+							var informationv = $("#information").val("");
+						});
+						$("#changeAll").val("全选");
+					}
+			}
+			</script>
+			<input type="hidden" name="informations" id="information" value=",ywbh,cpmc,ywlx,jbrxm,keybm,dwmcc,yymc,zzdate,cyrxm,dqrq,ywzt,yxq">
+			<table cellpadding="3">
+				<tr>
+					<td><input type="checkbox"  onclick="changeDisplayItems(this.value)" value="ywbh" name="displayItems" checked="checked"/>业务编号</td>
+					<td><input type="checkbox"  onclick="changeDisplayItems(this.value)" value="jzr" name="displayItems"/>鉴证人</td>
+					<td><input type="checkbox"  onclick="changeDisplayItems(this.value)" value="cpmc" name="displayItems" checked="checked"/>产品名称</td>
+					<td><input type="checkbox"  onclick="changeDisplayItems(this.value)" value="cpbs" name="displayItems"/>产品标识</td>
+					<td><input type="checkbox"  onclick="changeDisplayItems(this.value)" value="ywlx" name="displayItems" checked="checked"/>业务类型</td>
+					
+					<td><input type="checkbox"  onclick="changeDisplayItems(this.value)" value="jbrxm" name="displayItems" checked="checked"/>经办人姓名</td>
+					<td><input type="checkbox"  onclick="changeDisplayItems(this.value)" value="jbrphone" name="displayItems"/>经办人手机号</td>
+				</tr>
+				<tr>
+					<td><input type="checkbox"  onclick="changeDisplayItems(this.value)" value="keybm" name="displayItems" checked="checked"/>key编码</td>
+					<td><input type="checkbox"  onclick="changeDisplayItems(this.value)" value="lrr" name="displayItems"/>录入人</td>
+					<td><input type="checkbox"  onclick="changeDisplayItems(this.value)" value="dwmcc" name="displayItems" checked="checked"/>单位名称</td>
+					<td><input type="checkbox"  onclick="changeDisplayItems(this.value)" value="sffs" name="displayItems"/>收费方式</td>
+					<td><input type="checkbox"  onclick="changeDisplayItems(this.value)" value="yymc" name="displayItems" checked="checked"/>应用名称</td>
+					<td><input type="checkbox"  onclick="changeDisplayItems(this.value)" value="xzssq" name="displayItems"/>行政所属区</td>
+					<td><input type="checkbox"  onclick="changeDisplayItems(this.value)" value="jfcllx" name="displayItems"/>计费策略类型</td>
+				</tr>
+				<tr>
+					<td><input type="checkbox"  onclick="changeDisplayItems(this.value)" value="sfje" name="displayItems"/>收费金额</td>
+					<td><input type="checkbox"  onclick="changeDisplayItems(this.value)" value="sfr" name="displayItems"/>收费人</td>
+					<td><input type="checkbox"  onclick="changeDisplayItems(this.value)" value="lrdate" name="displayItems"/>录入日期</td>
+					<td><input type="checkbox"  onclick="changeDisplayItems(this.value)" value="zzdate" name="displayItems" checked="checked"/>制证日期</td>
+					<td><input type="checkbox"  onclick="changeDisplayItems(this.value)" value="jzdate" name="displayItems"/>鉴证日期</td>
+					<td><input type="checkbox"  onclick="changeDisplayItems(this.value)" value="cyrxm" name="displayItems" checked="checked"/>持有人姓名</td>
+					<td><input type="checkbox"  onclick="changeDisplayItems(this.value)" value="jfclmb" name="displayItems"/>计费策略模板</td>
+				</tr>
+				<tr>
+					<td><input type="checkbox"  onclick="changeDisplayItems(this.value)" value="dqrq" name="displayItems" checked="checked"/>到期日期</td>
+					<td><input type="checkbox"  onclick="changeDisplayItems(this.value)" value="zzr" name="displayItems"/>制证人</td>
+					<td><input type="checkbox"  onclick="changeDisplayItems(this.value)" value="ywzt" name="displayItems" checked="checked"/>业务状态</td>
+					<td><input type="checkbox"  onclick="changeDisplayItems(this.value)" value="sfdate" name="displayItems"/>收费日期</td>
+					<td><input type="checkbox"  onclick="changeDisplayItems(this.value)" value="yxq" name="displayItems" checked="checked"/>有效期</td>
+					<td><input type="checkbox"  onclick="changeDisplayItems(this.value)" value="jbremail" name="displayItems"/>经办人邮箱</td>
+					<td><input type="button" value="全选" class="btn btn-primary" onclick="changeAllRow()" id="changeAll"/></td>
+				</tr>
+			</table>
+		</div>
 		<div>
 			<label>按受理信息查询：</label><br>
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -432,7 +535,7 @@
 				value="查询" />
 				<input onclick="javascript:resetAllTwo()" type="button" class="btn btn-primary" value="重置"/>
 				<input style="text-align:center" class="btn btn-info" onclick="hidde()" type="button" value="收起">
-				<input id="exportZS" style="text-align:center" class="btn btn-info" onclick="dcZS()" type="button" value="导出">
+				<input id="exportZS" style="text-align:center" class="btn btn-info" onclick="dc()" type="button" value="导出">
 				&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;统计结果${page.count }条
 		</div>
 		<br>
@@ -468,7 +571,6 @@
 		<tbody>
 			<c:forEach items="${page.list}" var="workDealInfo">
 				<tr>
-				
 					<td>${workDealInfo.svn}</td>
 					<td>${workDealInfo.configApp.alias}</td>
 					<td>${workDealInfo.workCompany.companyName}</td>
@@ -498,11 +600,11 @@
 			</c:forEach>
 		</tbody>
 	</table>
-	<div class="pagination">${page}</div>
 	<script type="text/javascript">
 	$(function(){
 	    $('.editable-select').chosen();
 	});
 	</script>
+	<div class="pagination">${page}</div>
 </body>
 </html>
