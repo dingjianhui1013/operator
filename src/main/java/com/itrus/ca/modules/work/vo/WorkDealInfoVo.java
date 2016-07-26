@@ -32,7 +32,7 @@ public class WorkDealInfoVo {
 	private String productLabel;
 	private String payType;
 
-	@ExcelField(title = "付费方式", align = 2)
+	@ExcelField(title = "付费方式", align = 2)	
 	public String getPayType() {
 		return payType;
 	}
