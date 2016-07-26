@@ -3,36 +3,61 @@ package com.itrus.ca.modules.work.vo;
 import com.itrus.ca.common.utils.excel.annotation.ExcelField;
 
 public class WorkDealInfoVo {
+	@ExcelField(title = "业务编号", align = 2, sort = 0)
 	private String svn;
-	private String alias;
-	private String companyName;
-	private String contactName;
-	private String certApplyInfoName;
-	private String productName;
-	private String dealInfoType;
-	private String keySn;
-	private String signDateString;
-	private String certDays;
-	private String notAfter;
-	private String dealInfoStatus;
-	private String attestAtionUserName;
-	private String certApplyInfoPhone;
-	private String inputUserName;
+	@ExcelField(title = "应用名称", align = 2, sort = 1)
 	private String appName;
-	private String areaName;
-	private String tempStyle;
-	private String totalMoney;
-	private String payUserName;
-	private String inputDate;
-	private String attestAtionUserDate;
-	private String tempName;
-	private String businessCardUserName;
-	private String payDate;
+	@ExcelField(title = "别名", align = 2, sort = 2)
+	private String alias;
+	@ExcelField(title = "单位名称", align = 2, sort = 3)
+	private String companyName;
+	@ExcelField(title = "证书持有人", align = 2, sort = 4)
+	private String contactName;
+	@ExcelField(title = "经办人姓名", align = 2, sort = 5)
+	private String certApplyInfoName;
+	@ExcelField(title = "经办人手机号", align = 2, sort = 6)
+	private String certApplyInfoPhone;
+	@ExcelField(title = "经办人邮箱", align = 2, sort = 7)
 	private String certApplyInfoEmail;
+	@ExcelField(title = "产品标识", align = 2, sort = 8)
 	private String productLabel;
+	@ExcelField(title = "产品名称", align = 2, sort = 9)
+	private String productName;
+	@ExcelField(title = "业务类型", align = 2, sort = 10)
+	private String dealInfoType;
+	@ExcelField(title = "key编码", align = 2, sort = 11)
+	private String keySn;
+	@ExcelField(title = "收费日期", align = 2, sort = 12)
+	private String payDate;
+	@ExcelField(title = "制证日期", align = 2, sort = 13)
+	private String signDateString;
+	@ExcelField(title = "有效期", align = 2, sort = 14)
+	private String certDays;
+	@ExcelField(title = "到期日期", align = 2, sort = 15)
+	private String notAfter;
+	@ExcelField(title = "业务状态", align = 2, sort = 16)
+	private String dealInfoStatus;
+	@ExcelField(title = "鉴证人", align = 2, sort = 17)
+	private String attestAtionUserName;
+	@ExcelField(title = "录入人", align = 2, sort = 18)
+	private String inputUserName;
+	@ExcelField(title = "收费人", align = 2, sort = 19)
+	private String payUserName;
+	@ExcelField(title = "制证人", align = 2, sort = 20)
+	private String businessCardUserName;
+	@ExcelField(title = "录入日期", align = 2, sort = 21)
+	private String inputDate;
+	@ExcelField(title = "行政所属区", align = 2, sort = 22)
+	private String areaName;
+	@ExcelField(title = "计费策略类型", align = 2, sort = 23)
+	private String tempStyle;
+	@ExcelField(title = "计费策略模板", align = 2, sort = 24)
+	private String tempName;
+	@ExcelField(title = "付费方式", align = 2, sort = 25)
 	private String payType;
+	@ExcelField(title = "收费金额", align = 2, sort = 26)
+	private String totalMoney;
 
-	@ExcelField(title = "付费方式", align = 2)	
 	public String getPayType() {
 		return payType;
 	}
@@ -41,7 +66,6 @@ public class WorkDealInfoVo {
 		this.payType = payType;
 	}
 
-	@ExcelField(title = "产品标识", align = 2)
 	public String getProductLabel() {
 		return productLabel;
 	}
@@ -50,7 +74,6 @@ public class WorkDealInfoVo {
 		this.productLabel = productLabel;
 	}
 
-	@ExcelField(title = "经办人邮箱", align = 2)
 	public String getCertApplyInfoEmail() {
 		return certApplyInfoEmail;
 	}
@@ -59,7 +82,6 @@ public class WorkDealInfoVo {
 		this.certApplyInfoEmail = certApplyInfoEmail;
 	}
 
-	@ExcelField(title = "收费日期", align = 2)
 	public String getPayDate() {
 		return payDate;
 	}
@@ -68,7 +90,6 @@ public class WorkDealInfoVo {
 		this.payDate = payDate;
 	}
 
-	@ExcelField(title = "制证人", align = 2)
 	public String getBusinessCardUserName() {
 		return businessCardUserName;
 	}
@@ -77,7 +98,6 @@ public class WorkDealInfoVo {
 		this.businessCardUserName = businessCardUserName;
 	}
 
-	@ExcelField(title = "计费策略模板", align = 2)
 	public String getTempName() {
 		return tempName;
 	}
@@ -86,16 +106,6 @@ public class WorkDealInfoVo {
 		this.tempName = tempName;
 	}
 
-	@ExcelField(title = "鉴定日期", align = 2)
-	public String getAttestAtionUserDate() {
-		return attestAtionUserDate;
-	}
-
-	public void setAttestAtionUserDate(String attestAtionUserDate) {
-		this.attestAtionUserDate = attestAtionUserDate;
-	}
-
-	@ExcelField(title = "录入日期", align = 2)
 	public String getInputDate() {
 		return inputDate;
 	}
@@ -104,7 +114,6 @@ public class WorkDealInfoVo {
 		this.inputDate = inputDate;
 	}
 
-	@ExcelField(title = "收费人", align = 2)
 	public String getPayUserName() {
 		return payUserName;
 	}
@@ -113,7 +122,6 @@ public class WorkDealInfoVo {
 		this.payUserName = payUserName;
 	}
 
-	@ExcelField(title = "收费金额", align = 2)
 	public String getTotalMoney() {
 		return totalMoney;
 	}
@@ -122,7 +130,6 @@ public class WorkDealInfoVo {
 		this.totalMoney = totalMoney;
 	}
 
-	@ExcelField(title = "计费策略类型", align = 2)
 	public String getTempStyle() {
 		return tempStyle;
 	}
@@ -131,7 +138,6 @@ public class WorkDealInfoVo {
 		this.tempStyle = tempStyle;
 	}
 
-	@ExcelField(title = "应用名称", align = 2)
 	public String getAppName() {
 		return appName;
 	}
@@ -140,7 +146,6 @@ public class WorkDealInfoVo {
 		this.appName = appName;
 	}
 
-	@ExcelField(title = "录入人", align = 2)
 	public String getInputUserName() {
 		return inputUserName;
 	}
@@ -149,7 +154,6 @@ public class WorkDealInfoVo {
 		this.inputUserName = inputUserName;
 	}
 
-	@ExcelField(title = "经办人手机号", align = 2)
 	public String getCertApplyInfoPhone() {
 		return certApplyInfoPhone;
 	}
@@ -158,7 +162,6 @@ public class WorkDealInfoVo {
 		this.certApplyInfoPhone = certApplyInfoPhone;
 	}
 
-	@ExcelField(title = "鉴证人", align = 2)
 	public String getAttestAtionUserName() {
 		return attestAtionUserName;
 	}
@@ -167,7 +170,6 @@ public class WorkDealInfoVo {
 		this.attestAtionUserName = attestAtionUserName;
 	}
 
-	@ExcelField(title = "业务编号", align = 2)
 	public String getSvn() {
 		return svn;
 	}
@@ -176,7 +178,6 @@ public class WorkDealInfoVo {
 		this.svn = svn;
 	}
 
-	@ExcelField(title = "别名", align = 2)
 	public String getAlias() {
 		return alias;
 	}
@@ -185,7 +186,6 @@ public class WorkDealInfoVo {
 		this.alias = alias;
 	}
 
-	@ExcelField(title = "单位名称", align = 2)
 	public String getCompanyName() {
 		return companyName;
 	}
@@ -194,7 +194,6 @@ public class WorkDealInfoVo {
 		this.companyName = companyName;
 	}
 
-	@ExcelField(title = "证书持有人", align = 2)
 	public String getContactName() {
 		return contactName;
 	}
@@ -203,7 +202,6 @@ public class WorkDealInfoVo {
 		this.contactName = contactName;
 	}
 
-	@ExcelField(title = "经办人姓名", align = 2)
 	public String getCertApplyInfoName() {
 		return certApplyInfoName;
 	}
@@ -212,7 +210,6 @@ public class WorkDealInfoVo {
 		this.certApplyInfoName = certApplyInfoName;
 	}
 
-	@ExcelField(title = "产品名称", align = 2)
 	public String getProductName() {
 		return productName;
 	}
@@ -221,7 +218,6 @@ public class WorkDealInfoVo {
 		this.productName = productName;
 	}
 
-	@ExcelField(title = "业务类型", align = 2)
 	public String getDealInfoType() {
 		return dealInfoType;
 	}
@@ -230,7 +226,6 @@ public class WorkDealInfoVo {
 		this.dealInfoType = dealInfoType;
 	}
 
-	@ExcelField(title = "key编码", align = 2)
 	public String getKeySn() {
 		return keySn;
 	}
@@ -239,7 +234,6 @@ public class WorkDealInfoVo {
 		this.keySn = keySn;
 	}
 
-	@ExcelField(title = "制证日期", align = 2)
 	public String getSignDateString() {
 		return signDateString;
 	}
@@ -248,7 +242,6 @@ public class WorkDealInfoVo {
 		this.signDateString = signDateString;
 	}
 
-	@ExcelField(title = "有效期", align = 2)
 	public String getCertDays() {
 		return certDays;
 	}
@@ -257,7 +250,6 @@ public class WorkDealInfoVo {
 		this.certDays = certDays;
 	}
 
-	@ExcelField(title = "到期日期", align = 2)
 	public String getNotAfter() {
 		return notAfter;
 	}
@@ -266,7 +258,6 @@ public class WorkDealInfoVo {
 		this.notAfter = notAfter;
 	}
 
-	@ExcelField(title = "业务状态", align = 2)
 	public String getDealInfoStatus() {
 		return dealInfoStatus;
 	}
@@ -275,7 +266,6 @@ public class WorkDealInfoVo {
 		this.dealInfoStatus = dealInfoStatus;
 	}
 
-	@ExcelField(title = "行政所属区", align = 2)
 	public String getAreaName() {
 		return areaName;
 	}
