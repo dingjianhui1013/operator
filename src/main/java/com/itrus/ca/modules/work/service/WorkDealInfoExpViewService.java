@@ -426,10 +426,10 @@ public class WorkDealInfoExpViewService extends BaseService {
 				dealInfoVo.setAttestAtionUserName(dealInfo
 						.getAttestationUserName());
 			// 产品名称
-			if (information.indexOf(",cpmc") > -1){
-				//ProductType p = new ProductType();
-				//p.getProductTypeName(dealInfo.getProductName());
-				dealInfoVo.setProductName(dealInfo.getProductName());
+			if (information.indexOf(",cpmc") > -1) {
+				ProductType p = new ProductType();
+				dealInfoVo.setProductName(p.getProductTypeName(new Integer(
+						dealInfo.getProductName())));
 			}
 			// 产品标识
 			if (information.indexOf(",cpbs") > -1) {
@@ -559,15 +559,15 @@ public class WorkDealInfoExpViewService extends BaseService {
 				}
 			}
 			// 鉴证日期
-			if (information.indexOf(",jzdate") > -1) {
-				if (dealInfo.getAttestationUserDate() != null) {
-					dealInfoVo.setAttestAtionUserDate(StringHelper.getSystime(
-							"yyyy-MM-dd HH:mm:ss", dealInfo
-									.getAttestationUserDate().getTime()));
-				} else {
-					dealInfoVo.setAttestAtionUserDate("");
-				}
-			}
+			// if (information.indexOf(",jzdate") > -1) {
+			// if (dealInfo.getAttestationUserDate() != null) {
+			// dealInfoVo.setAttestAtionUserDate(StringHelper.getSystime(
+			// "yyyy-MM-dd HH:mm:ss", dealInfo
+			// .getAttestationUserDate().getTime()));
+			// } else {
+			// dealInfoVo.setAttestAtionUserDate("");
+			// }
+			// }
 			// 持有人姓名
 			if (information.indexOf(",cyrxm") > -1) {
 				dealInfoVo.setContactName(dealInfo.getContactName());
@@ -621,6 +621,10 @@ public class WorkDealInfoExpViewService extends BaseService {
 			if (information.indexOf(",jbremail") > -1) {
 				dealInfoVo.setCertApplyInfoEmail(dealInfo.getContactEmail());
 			}
+			// 别名
+			if (information.indexOf(",bm") > -1) {
+				dealInfoVo.setAlias(dealInfo.getAppAlias());
+			}
 
 			workDealInfoVos.add(dealInfoVo);
 		}
@@ -642,7 +646,7 @@ public class WorkDealInfoExpViewService extends BaseService {
 		}
 		// 产品名称
 		if (information.indexOf(",cpmc") > -1) {
-			
+
 			varNameList.add("productName");
 		}
 		// 产品标识
@@ -740,6 +744,10 @@ public class WorkDealInfoExpViewService extends BaseService {
 		// 经办人邮箱
 		if (information.indexOf(",jbremail") > -1) {
 			varNameList.add("certApplyInfoEmail");
+		}
+		// 别名
+		if (information.indexOf(",bm") > -1) {
+			varNameList.add("alias");
 		}
 		return varNameList;
 	}
