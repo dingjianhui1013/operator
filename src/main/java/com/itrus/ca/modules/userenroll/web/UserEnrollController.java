@@ -51,6 +51,7 @@ import com.itrus.ca.modules.profile.entity.ConfigChargeAgent;
 import com.itrus.ca.modules.profile.entity.ConfigChargeAgentBoundConfigProduct;
 import com.itrus.ca.modules.profile.entity.ConfigChargeAgentDetail;
 import com.itrus.ca.modules.profile.entity.ConfigProduct;
+import com.itrus.ca.modules.profile.entity.ConfigRaAccount;
 import com.itrus.ca.modules.profile.entity.ConfigRaAccountExtendInfo;
 import com.itrus.ca.modules.profile.service.ConfigAgentBoundDealInfoService;
 import com.itrus.ca.modules.profile.service.ConfigAppOfficeRelationService;
@@ -60,6 +61,7 @@ import com.itrus.ca.modules.profile.service.ConfigChargeAgentDetailService;
 import com.itrus.ca.modules.profile.service.ConfigChargeAgentService;
 import com.itrus.ca.modules.profile.service.ConfigProductService;
 import com.itrus.ca.modules.profile.service.ConfigRaAccountExtendInfoService;
+import com.itrus.ca.modules.profile.service.ConfigRaAccountService;
 import com.itrus.ca.modules.sys.entity.Log;
 import com.itrus.ca.modules.sys.entity.Office;
 import com.itrus.ca.modules.sys.entity.User;
@@ -117,6 +119,10 @@ public class UserEnrollController extends BaseController {
 	@Autowired
 	private ConfigProductService configProductService;
 
+	@Autowired
+	ConfigRaAccountService raAccountService;
+
+	
 	@Autowired
 	private SystemService systemService;
 
@@ -203,19 +209,6 @@ public class UserEnrollController extends BaseController {
 		return json.toString();
 	}
 
-	//
-	// List<WorkDealInfo> dealInfos =
-	// workDealInfoService.findgxfw1(keySn,certSn);
-	// if (dealInfos.size()>0) {
-	// SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日");
-	// WorkCertInfo certInfo = dealInfos.get(0).getWorkCertInfo();
-	// WorkCertApplyInfo applyInfo = certInfo.getWorkCertApplyInfo();
-	// WorkUser user = dealInfos.get(0).getWorkUser();
-	// json.put("email", user.getContactEmail());
-	// json.put("startDate", sdf.format(certInfo.getNotbefore()));
-	// json.put("endDate", sdf.format(certInfo.getNotafter()));
-	// }
-	//
 
 	@RequestMapping("changeApp")
 	@ResponseBody
@@ -272,21 +265,27 @@ public class UserEnrollController extends BaseController {
 			List<WorkDealInfo> dealInfos = dealInfoService.findgxfw1(certSn);
 			if (dealInfos.size() > 0) {
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日");
-				WorkCertInfo certInfo = dealInfos.get(0).getWorkCertInfo();
-				WorkCertApplyInfo applyInfo = certInfo.getWorkCertApplyInfo();
-				WorkUser user = dealInfos.get(0).getWorkUser();
-				json.put("certSn", certInfo.getSerialnumber());
+				WorkCertInfo certInfo = dealInfos.get(0).getWorkCertInfo();	
 				
+				//证书序列号 证书CN 证书起始日期和结束日期
+				json.put("certSn", certInfo.getSerialnumber());
 				ConfigRaAccountExtendInfo extendInfo = configRaAccountExtendInfoService.get(dealInfos.get(0).getConfigProduct().getRaAccountExtedId());		
 				json.put("certCN", extendInfo.getCommonNameDisplayName().equals("0")?dealInfos.get(0).getWorkCompany().getCompanyName():(extendInfo.getCommonNameDisplayName().equals("1")?dealInfos.get(0).getWorkUser().getContactName():dealInfos.get(0).getWorkUserHis().getContactName()));
-				
-				
 				json.put("startDate", sdf.format(certInfo.getNotbefore()));
 				json.put("endDate", sdf.format(certInfo.getNotafter()));
 
+				// 如果业务已经到达待制证状态,返回业务的id
+				if ( WorkDealInfoType.TYPE_UPDATE_CERT.equals(dealInfos.get(0).getDealInfoType())
+						&& WorkDealInfoStatus.STATUS_CERT_WAIT.equals(dealInfos.get(0).getDealInfoStatus())) {
+					json.put("updateStatus", 106);
+					json.put("dealInfoId", dealInfos.get(0).getId());
+					return json.toString();
+				}
+				
+				
 				ConfigChargeAgent configChargeAgent = configChargeAgentService
 						.get(dealInfos.get(0).getConfigChargeAgentId());
-				Long product = dealInfos.get(0).getConfigProduct().getId();
+
 				int i = dealInfos.get(0).getConfigProduct().getProductLabel();
 				int year = 0;
 				if (dealInfoType == 2) {
@@ -472,24 +471,7 @@ public class UserEnrollController extends BaseController {
 		return "iLetter/zhengshufuwu_ktydsb1";
 	}
 
-	// @RequestMapping(value = "ktydsb1")
-	// @ResponseBody
-	// public String ktydsb1(String keySn,String certSn) {
-	// Map<String, Object> map = new HashMap<String, Object>();
-	// try {
-	// List<WorkDealInfo> dealInfos = workDealInfoService
-	// .findgxfw1(keySn,certSn);
-	// if (dealInfos.size() != 0) {
-	// WorkDealInfo workDealInfo = dealInfos.get(0);
-	// }
-	// WorkCertTrustApply workCertTrustApply =
-	// workCertTrustApplyService.findByKeySn(keySn);
-	// } catch (Exception e) {
-	// e.printStackTrace();
-	// }
-	//
-	// return JSON.toJSONString("");
-	// }
+
 
 	// 通过AJAX判断
 	@RequestMapping(value = "ktydsb1Submit")
@@ -1111,6 +1093,48 @@ public class UserEnrollController extends BaseController {
 		}
 		return "iLetter/zhengshufuwu_gxfw3";
 	}
+	
+	
+	//跳转到变更服务第四个页面
+	@RequestMapping(value = "bgfw3Nextform")
+	public String bgfw3Nextform(Model model, Long id) {
+		try {
+			WorkDealInfo workDealInfo = workDealInfoService.get(new Long(id));
+			model.addAttribute("workDealInfo", workDealInfo);
+			
+			ConfigRaAccount raAccount = raAccountService.get(workDealInfo.getConfigProduct().getRaAccountId());	
+			
+			//证书CN
+			ConfigRaAccountExtendInfo extendInfo = configRaAccountExtendInfoService.get(workDealInfo.getConfigProduct().getRaAccountExtedId());		
+	
+			String certCN = extendInfo.getCommonNameDisplayName().equals("0")?workDealInfo.getWorkCompany().getCompanyName():(extendInfo.getCommonNameDisplayName().equals("1")?workDealInfo.getWorkUser().getContactName():workDealInfo.getWorkUserHis().getContactName());
+			
+			model.addAttribute("certCN", certCN);
+			
+			model.addAttribute("certCNOmit", certCN.length()>20?certCN.substring(0, 20)+"...":certCN);
+			SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
+			model.addAttribute("keySN", workDealInfo.getKeySn());
+			model.addAttribute("notbefore", sdf1.format(workDealInfo.getWorkCertInfo().getNotbefore()));
+			model.addAttribute("notafter", sdf1.format(workDealInfo.getWorkCertInfo().getNotafter()));
+			model.addAttribute("status", workDealInfo.getDealInfoStatus().equals(WorkDealInfoStatus.STATUS_CERT_WAIT)?"等待变更":WorkDealInfoStatus.WorkDealInfoStatusMap.get(workDealInfo.getDealInfoStatus()));
+			if (workDealInfo.getPrevId() != null) {
+				// 获取上一张证书的签名证书序列号
+				WorkDealInfo oldDealInfo = workDealInfoService.get(workDealInfo.getPrevId());
+				model.addAttribute("signSerialNumber", oldDealInfo.getWorkCertInfo().getSerialnumber().toLowerCase());
+			}
+			
+			//秘钥长度
+			if(raAccount.getKeyLen()!=null){
+				model.addAttribute("keyLen", raAccount.getKeyLen());
+			}
+		   
+		} catch (Exception e) {
+			
+		}
+		return "iLetter/zhengshufuwu_bzfw4";
+	}
+	
+	
 
 	// 通过AJAX判断
 	@RequestMapping(value = "gxfw3Submit")
@@ -1149,6 +1173,33 @@ public class UserEnrollController extends BaseController {
 		return "iLetter/zhengshufuwu_gxfw4";
 	}
 
+	
+	//变更4跳转到变更5页面(变更成功后)
+	@RequestMapping(value = "bgfw4Nextform")
+	public String bgfw4Nextform(Model model, Long id) {
+		WorkDealInfo dealInfo1 = workDealInfoService.get(id);
+		WorkDealInfo dealInfo = workDealInfoService.findDealInfo(dealInfo1.getPrevId());
+		WorkCertInfo certInfo = dealInfo.getWorkCertInfo();
+		if (certInfo != null) {
+			model.addAttribute("sn", dealInfo.getKeySn());
+			SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
+			model.addAttribute("notbefore", sdf1.format(certInfo.getNotbefore()));
+			model.addAttribute("notafter", sdf1.format(certInfo.getNotafter()));// 有效期
+			
+			//证书CN
+			
+			ConfigRaAccountExtendInfo extendInfo = configRaAccountExtendInfoService.get(dealInfo.getConfigProduct().getRaAccountExtedId());		
+	
+			String certCN = extendInfo.getCommonNameDisplayName().equals("0")?dealInfo.getWorkCompany().getCompanyName():(extendInfo.getCommonNameDisplayName().equals("1")?dealInfo.getWorkUser().getContactName():dealInfo.getWorkUserHis().getContactName());
+			
+			model.addAttribute("certCN", certCN);
+			model.addAttribute("certCNOmit", certCN.length()>20?certCN.substring(0, 20)+"...":certCN);
+			
+		}
+		return "iLetter/zhengshufuwu_bgfw5";
+	}
+	
+	
 	@RequestMapping(value = "gxfw3falseNextform")
 	public String gxfw3errorNextform(Model model) {
 		return "iLetter/zhengshufuwu_gxfw4error";
