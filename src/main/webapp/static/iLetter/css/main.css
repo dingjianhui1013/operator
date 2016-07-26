@@ -1137,6 +1137,23 @@ background:url(../images/bgfw_step.png) 0 -185px no-repeat;
 margin:20px 50px 0px 25px;
 overflow:hidden;
 }
+
+.zsfw_bgfw_step4{width:270px;
+height:85px;
+padding:0;
+background:url(../images/gx_step.png) 0 -362px no-repeat;
+margin:20px 50px 0px 25px;
+overflow:hidden;
+}
+
+.zsfw_bgfw_step5{width:270px;
+height:85px;
+padding:0;
+background:url(../images/bgfw_step.png) 0 -455px no-repeat;
+margin:20px 50px 0px 25px;
+overflow:hidden;
+}
+
 .zsfw_gxgx_step1{width:379px;
 height:85px;
 padding:0;
@@ -1587,6 +1604,20 @@ height:37px;
 background:url(../images/btn_icon.png) -397px -143px no-repeat;
 overflow:hidden;
 }
+
+.btn_bgzs a{ display:block;
+width:116px;
+height:37px;
+background:url(../images/btn_icon.png) 0px -441px no-repeat;
+overflow:hidden;
+}
+.btn_bgzs a:hover{ display:block;
+width:116px;
+height:37px;
+background:url(../images/btn_icon.png) 0px -483px no-repeat;
+overflow:hidden;
+}
+
 
 /*进度条*/
 .jc_jindutiao{330px;
