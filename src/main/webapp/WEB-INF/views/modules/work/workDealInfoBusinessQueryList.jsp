@@ -332,17 +332,17 @@
 					<td><input type="checkbox"  onclick="changeDisplayItems(this.value)" value="sfr" name="displayItems"/>收费人</td>
 					<td><input type="checkbox"  onclick="changeDisplayItems(this.value)" value="lrdate" name="displayItems"/>录入日期</td>
 					<td><input type="checkbox"  onclick="changeDisplayItems(this.value)" value="zzdate" name="displayItems" checked="checked"/>制证日期</td>
-					<td><input type="checkbox"  onclick="changeDisplayItems(this.value)" value="jzdate" name="displayItems"/>鉴证日期</td>
 					<td><input type="checkbox"  onclick="changeDisplayItems(this.value)" value="cyrxm" name="displayItems" checked="checked"/>持有人姓名</td>
 					<td><input type="checkbox"  onclick="changeDisplayItems(this.value)" value="jfclmb" name="displayItems"/>计费策略模板</td>
+					<td><input type="checkbox"  onclick="changeDisplayItems(this.value)" value="dqrq" name="displayItems" checked="checked"/>到期日期</td>
 				</tr>
 				<tr>
-					<td><input type="checkbox"  onclick="changeDisplayItems(this.value)" value="dqrq" name="displayItems" checked="checked"/>到期日期</td>
 					<td><input type="checkbox"  onclick="changeDisplayItems(this.value)" value="zzr" name="displayItems"/>制证人</td>
 					<td><input type="checkbox"  onclick="changeDisplayItems(this.value)" value="ywzt" name="displayItems" checked="checked"/>业务状态</td>
 					<td><input type="checkbox"  onclick="changeDisplayItems(this.value)" value="sfdate" name="displayItems"/>收费日期</td>
 					<td><input type="checkbox"  onclick="changeDisplayItems(this.value)" value="yxq" name="displayItems" checked="checked"/>有效期</td>
 					<td><input type="checkbox"  onclick="changeDisplayItems(this.value)" value="jbremail" name="displayItems"/>经办人邮箱</td>
+					<td><input type="checkbox"  onclick="changeDisplayItems(this.value)" value="bm" name="displayItems"/>别名</td>
 					<td><input type="button" value="全选" class="btn btn-primary" onclick="changeAllRow()" id="changeAll"/></td>
 				</tr>
 			</table>
