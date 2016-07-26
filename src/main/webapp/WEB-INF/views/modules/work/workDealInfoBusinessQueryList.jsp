@@ -139,7 +139,7 @@
 		"&updateByname="+updateByname+"&payType="+payType+"&s_province="+s_province+"&s_city="+s_city+"&s_county="+s_county+"&luruStartTime="+luruStartTime+
 		"&paymentStartTime="+paymentStartTime+"&paymentEndTime="+paymentEndTime+"&zhizhengStartTime="+zhizhengStartTime+"&zhizhengEndTime="+zhizhengEndTime+
 		"&daoqiStartTime="+daoqiStartTime+"&daoqiEndTime="+daoqiEndTime+"&luruEndTime="+luruEndTime+"&payMethod="+payMethod+"&year="+year+"&information="+information;
-		//console.log(expurl);
+		console.log(expurl);
 		window.open(expurl);
 	}
 	
