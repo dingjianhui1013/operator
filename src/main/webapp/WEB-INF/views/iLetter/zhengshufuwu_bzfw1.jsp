@@ -29,6 +29,13 @@ $(document).ready(function(){
 	}
 	var url = "${ctxILetter}/enroll/bbfw?keySn="+keySn+"&certSn="+certSn+"&dealInfoType="+4+"&"+new Date().getTime();
 	 $.getJSON(url,function(data){
+		 
+		//如果状态为待制证,跳转到第四个页面 
+		if (d.updateStatus == 106){
+				window.location.href="${ctxILetter}/enroll/bgfw3Nextform?id="+d.dealInfoId;
+		} 
+		 
+		 
 		if(data.status=="1"){
 			$("#money").html(data.money);
 			$("#appName").html(data.appName);

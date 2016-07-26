@@ -16,7 +16,7 @@
 	var keySn = external.ukeyserial;
 	var cspStr;
 	var baseDay = parseInt("${workDealInfo.year*365+workDealInfo.lastDays }");
-	var vProgressTimeTAG ; 
+	var vProgressTimeTAG; 
 	var timeout = 1;
 	var keystutus = 1;
 	var jinduStatus=1;
@@ -61,7 +61,7 @@ function setCount() {
 			success : function(data) {
 				if (data.status == 1) {
 					DoInstallCert1(data);
-					//$("#msg").html("制证成功");
+					
 					zzStatus=0;
 				} else {
 					show_msg(data.msg);
