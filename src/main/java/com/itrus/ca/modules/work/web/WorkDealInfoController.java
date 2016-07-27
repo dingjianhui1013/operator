@@ -6248,6 +6248,52 @@ public class WorkDealInfoController extends BaseController {
 			@RequestParam(value = "zhizhengEndTime", required = false) Date zhizhengEndTime,
 			@RequestParam(value = "information", required = false) String information)
 			throws UnsupportedEncodingException {
+		Map<String, String> queryStr = new HashMap<String, String>();
+		queryStr.put("area", area == null ? "" : area.toString());
+		queryStr.put("officeId", officeId == null ? "" : officeId.toString());
+		queryStr.put("apply", apply == null ? "" : apply.toString());
+
+		queryStr.put("certType", certType == null ? "" : certType.toString());
+		queryStr.put("workType", workType == null ? "" : workType.toString());
+		queryStr.put("companyName",
+				companyName == null ? "" : companyName.toString());
+		queryStr.put("organizationNumber", organizationNumber == null ? ""
+				: organizationNumber.toString());
+		queryStr.put("contactName",
+				contactName == null ? "" : contactName.toString());
+		queryStr.put("conCertNumber", conCertNumber == null ? ""
+				: conCertNumber.toString());
+		queryStr.put("keySn", keySn == null ? "" : keySn.toString());
+		queryStr.put("createByname",
+				createByname == null ? "" : createByname.toString());
+		queryStr.put("zhizhengname",
+				zhizhengname == null ? "" : zhizhengname.toString());
+
+		queryStr.put("updateByname",
+				updateByname == null ? "" : updateByname.toString());
+		queryStr.put("payType", payType == null ? "" : payType.toString());
+		queryStr.put("s_province", province == null ? "" : province.toString());
+		queryStr.put("s_city", city == null ? "" : city.toString());
+		queryStr.put("s_county", county == null ? "" : county.toString());
+		queryStr.put("year", year == null ? "" : year.toString());
+		queryStr.put("payMethod", payMethod == null ? "" : payMethod.toString());
+		queryStr.put("luruStartTime", luruStartTime == null ? ""
+				: luruStartTime.toString());
+		queryStr.put("luruEndTime",
+				luruEndTime == null ? "" : luruEndTime.toString());
+		queryStr.put("daoqiStartTime", daoqiStartTime == null ? ""
+				: daoqiStartTime.toString());
+		queryStr.put("daoqiEndTime",
+				daoqiEndTime == null ? "" : daoqiEndTime.toString());
+		queryStr.put("paymentStartTime", paymentStartTime == null ? ""
+				: paymentStartTime.toString());
+		queryStr.put("paymentEndTime", paymentEndTime == null ? ""
+				: paymentEndTime.toString());
+		queryStr.put("zhizhengStartTime", zhizhengStartTime == null ? ""
+				: zhizhengStartTime.toString());
+		queryStr.put("zhizhengEndTime", zhizhengEndTime == null ? ""
+				: zhizhengEndTime.toString());
+
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 		SimpleDateFormat dfm = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		WorkDealInfo workDealInfo = new WorkDealInfo();
@@ -6362,8 +6408,8 @@ public class WorkDealInfoController extends BaseController {
 
 			final String fileName = "WorkDealInfos.csv";
 
-			workDealInfoExpViewService.exportExcel(list, fileName, information,
-					response);
+			workDealInfoExpViewService.exportExcel(queryStr, list, fileName,
+					information, response);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
