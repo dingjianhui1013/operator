@@ -5,6 +5,9 @@
 <head>
 	<title>地税和社保</title>
 	<meta name="decorator" content="default"/>
+	<style type="text/css">
+	.table th,.table td{z-index:0\9;}
+	</style>
 	<%@include file="/WEB-INF/views/include/treetable.jsp" %>
 	<script type="text/javascript">
 		$(document).ready(function() {
@@ -180,6 +183,7 @@
 	<form action="${ctx }/profile/configApp/saveApplyFlag" method="post" id="idsForm">
 		<input type = "hidden" name = "selectApplyFlag1" id = "applyFlag1" >
 		<input type = "hidden" name = "selectApplyFlag2" id = "applyFlag2" >
+		
 		<table id="treeTable" class="table table-striped table-bordered table-condensed">
 			<tbody>
 				<tr id="all_applyFlag1" pId="0">
