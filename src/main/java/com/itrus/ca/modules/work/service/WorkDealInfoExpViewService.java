@@ -7,7 +7,9 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -399,7 +401,8 @@ public class WorkDealInfoExpViewService extends BaseService {
 	 * @param fileName
 	 * @throws IOException
 	 */
-	public void exportExcel(List<WorkDealInfoExpView> list, String fileName,
+	public void exportExcel(Map<String, String> query,
+			List<WorkDealInfoExpView> list, String fileName,
 			String information, HttpServletResponse response)
 			throws IOException {
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
@@ -629,11 +632,34 @@ public class WorkDealInfoExpViewService extends BaseService {
 			workDealInfoVos.add(dealInfoVo);
 		}
 
-		new ExportExcel("业务查询", WorkDealInfoVo.class, varNameList)
+		String queryContent = "业务查询"; // getQueryContent(query);
+		new ExportExcel(queryContent, WorkDealInfoVo.class, varNameList)
 				.setDataList(workDealInfoVos).write(response, fileName)
 				.dispose();
 	}
 
+	/**
+	 * 根据输入的查询条件把他输出到excel文件内
+	 * 
+	 * @param query
+	 * @return String
+	 */
+	private String getQueryContent(Map<String, String> query) {
+		StringBuffer sb = new StringBuffer("业务查询\r\n");
+		Iterator<String> it = query.keySet().iterator();
+		while (it.hasNext()) {
+			String k = it.next();
+			sb.append(k).append(":").append(query.get(k)).append("|");
+		}
+		return sb.toString();
+	}
+
+	/**
+	 * 查出EXCEL需要导出的列对应的变量名
+	 * 
+	 * @param information
+	 * @return List<String>
+	 */
 	private List<String> getVarNameList(String information) {
 		List<String> varNameList = new ArrayList<String>();
 		// 业务编号
