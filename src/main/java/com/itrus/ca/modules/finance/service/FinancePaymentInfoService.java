@@ -442,25 +442,43 @@ public class FinancePaymentInfoService extends BaseService {
 			FinancePaymentInfo financePaymentInfo = new FinancePaymentInfo();
 			for(int j = 0; j < 10; j++){
 				Cell cell = row.getCell(j);
-				if (j==1||j==2||j==3||j==6) {
-					if(cell== null || "".equals(cell.getStringCellValue())){
-						switch (j){
-							case 1:
-								ifErr.append("第"+i+"行交易时间为空，请重新录入！");
-								break;
-							case 2:
-								ifErr.append("第"+i+"行付款金额为空，请重新录入！");
-								break;
-							case 3:
-								ifErr.append("第"+i+"行付款方式为空，请重新录入！");
-								break;
-							case 6:
-								ifErr.append("第"+i+"行付款单位名称为空，请重新录入！");
-								break;
-
+				try {
+					if (j==1||j==2||j==3||j==6) {
+						if(cell== null || "".equals(cell.getStringCellValue())){
+							switch (j){
+								case 1:
+									ifErr.append("第"+i+"行交易时间为空，请重新录入！");
+									break;
+								case 2:
+									ifErr.append("第"+i+"行付款金额为空，请重新录入！");
+									break;
+								case 3:
+									ifErr.append("第"+i+"行付款方式为空，请重新录入！");
+									break;
+								case 6:
+									ifErr.append("第"+i+"行付款单位名称为空，请重新录入！");
+									break;
+	
+							}
+							return ifErr(-1, ifErr.toString());
 						}
-						return ifErr(-1, ifErr.toString());
 					}
+				} catch (Exception e) {
+					switch (j){
+						case 1:
+							ifErr.append("第"+i+"行交易时间格式不对，请重新录入！");
+							break;
+						case 2:
+							ifErr.append("第"+i+"行付款金额格式不对，请重新录入！");
+							break;
+						case 3:
+							ifErr.append("第"+i+"行付款方式格式不对，请重新录入！");
+							break;
+						case 6:
+							ifErr.append("第"+i+"行付款单位名称格式不对，请重新录入！");
+							break;
+					}
+					return ifErr(-1, ifErr.toString());
 				}
 				try{
 					switch(j){
@@ -539,7 +557,7 @@ public class FinancePaymentInfoService extends BaseService {
 				ifErr.append("第"+i+"条数据付款方式为支付宝转账，付款账号不能为空，导入失败！");
 				return ifErr(-1, ifErr.toString());
 			}
-				for (int j = 0; j < listDate.size(); j++) {
+			for (int j = 0; j < listDate.size(); j++) {
 				if (financePaymentInfo.getPaymentBank().equals(listDate.get(j).getPaymentBank())
 						&&financePaymentInfo.getSerialNum().equals(listDate.get(j).getSerialNum())) {
 					ifErr.append("第"+i+"条数据流水号重复，导入失败！");

@@ -40,10 +40,10 @@
 	            		   }, 3000); // how long do you want the delay to be? 
 	            
 				}else if(data.status=='-1'){
-					top.$.jBox.tip("上传失败"+data.msg);
+					top.$.jBox.tip("导入失败："+data.msg);
 					//$("#searchForm").submit();
 				}else{
-					top.$.jBox.tip("上传失败："+data.errorMsg);
+					top.$.jBox.tip("上传失败");
 					//$("#searchForm").submit();
 				}
 			}
