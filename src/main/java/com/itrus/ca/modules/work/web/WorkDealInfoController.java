@@ -4355,6 +4355,40 @@ public class WorkDealInfoController extends BaseController {
 
 		return json.toString();
 	}
+	
+	
+	
+	/**
+	 * 判断app是地税还是社保
+	 * 
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequiresPermissions("work:workDealInfo:edit")
+	@RequestMapping(value = "appApplay")
+	@ResponseBody
+	public String appApplay(HttpServletRequest request, HttpServletResponse response,Long appId) {
+		JSONObject json = new JSONObject();
+		try {
+			ConfigApp app = configAppService.findByAppId(appId);
+			
+			json.put("appName", app.getAppName());
+			
+			if(app.getApplyFlag1()!=null&&app.getApplyFlag1()==true){
+				json.put("isLandTax", true);
+			}else{
+				json.put("isLandTax", false);
+			}
+			
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+
+		return json.toString();
+	}
+	
 
 	/**
 	 * 根据带回的app查询应有的product
