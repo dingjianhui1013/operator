@@ -461,6 +461,18 @@ public class FinancePaymentInfoService extends BaseService {
 	
 							}
 							return ifErr(-1, ifErr.toString());
+						}else{
+							//校验付款方式
+							if(j==3){
+								if(!"1".equals(cell.getStringCellValue())
+									||!"2".equals(cell.getStringCellValue())
+									||!"3".equals(cell.getStringCellValue())
+									||!"4".equals(cell.getStringCellValue())
+									){
+									ifErr.append("第"+i+"行付款方式填写有误，请检查！");
+									return ifErr(-1, ifErr.toString());
+									}
+							}
 						}
 					}
 				} catch (Exception e) {
