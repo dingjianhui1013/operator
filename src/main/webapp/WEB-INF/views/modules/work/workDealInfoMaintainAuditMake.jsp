@@ -244,13 +244,7 @@
 					top.$.jBox.tip("赠送天数填写有误请重新填写");
 					$("#addCertDays").val("0");
 				}
-// 			var submit = function( v, h, f){
-// 				if( v != 'ok'){
-// 					$("#addCertDays").val(0);
-// 				}				
-// 				return true;
-// 			}
-// 			top.$.jBox.confirm("您确定赠送的时间是："+$("#addCertDays").val()+"天么？","提示",submit);
+
 			
 		}else
 			{

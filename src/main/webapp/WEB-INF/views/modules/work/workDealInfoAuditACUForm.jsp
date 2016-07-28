@@ -643,11 +643,26 @@ value="${workDealInfo.workCompany.comCertficateTime }"  pattern="yyyy-MM-dd"/>">
 						<tr>
 							<th>行政所属区：</th>
 							<td>
-					
-							${workDealInfo.workCompany.province}&nbsp;
-								${workDealInfo.workCompany.city}&nbsp;
-								${workDealInfo.workCompany.district}&nbsp;
-								<c:if test="${workDealInfo.workCompany.areaRemark!=null}">区域备注：${workDealInfo.workCompany.areaRemark}</c:if>
+							
+							
+							<select id="s_province" name="s_province" disabled="disabled"
+								style="width: 100px;">
+							</select>&nbsp;&nbsp; <select id="s_city" name="s_city" disabled="disabled"
+								style="width: 100px;"></select>&nbsp;&nbsp; <select
+								id="s_county" name="s_county" style="width: 100px;" disabled="disabled"></select> 
+								<script type="text/javascript">
+								$("#s_province").append('<option value="${workDealInfo.workCompany.province}" selected="selected">${workDealInfo.workCompany.province}</option>');
+								$("#s_city").append('<option value="${workDealInfo.workCompany.city}" selected="selected">${workDealInfo.workCompany.city}</option>');
+								$("#s_county").append('<option value="${workDealInfo.workCompany.district}" selected="selected">${workDealInfo.workCompany.district}</option>');
+								</script>
+								
+								<c:if test="${workDealInfo.workCompany.areaRemark!=null}">
+								<div style="margin-top: 8px;">
+									区域备注：<input type="text" name="areaRemark"
+									value="${workDealInfo.workCompany.areaRemark }" disabled="disabled" style="width:242px">
+								</div>
+							</c:if>
+						
 								
 								
 							

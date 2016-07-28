@@ -1449,13 +1449,7 @@ var selected = false;
 							<td><select id="s_province" name="s_province"
 								style="width: 100px;*width:77px"></select>&nbsp;&nbsp; <select id="s_city"
 								name="s_city" style="width: 100px;*width:77px"></select>&nbsp;&nbsp; <select
-								id="s_county" name="s_county" style="width: 100px;*width:77px"></select>
-									 <script type="text/javascript">
-									/* _init_area(); */
-									$("#s_province").append('<option value="${workDealInfo.workCompany.province}" selected="selected">${workDealInfo.workCompany.province}</option>');
-									$("#s_city").append('<option value="${workDealInfo.workCompany.city}" selected="selected">${workDealInfo.workCompany.city}</option>');
-									$("#s_county").append('<option value="${workDealInfo.workCompany.district}" selected="selected">${workDealInfo.workCompany.district}</option>');
-								</script> 
+								id="s_county" name="s_county" style="width: 100px;*width:77px"></select>	
 								<div id="show"></div>
 								<div style="margin-top: 8px;">
 									区域备注：<input type="text" name="areaRemark"
