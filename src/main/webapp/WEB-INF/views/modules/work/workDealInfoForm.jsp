@@ -12,6 +12,10 @@ input[readonly]{width:206px;}
 .btmBorder{border-bottom:1px solid #ddd}
 .accordion-heading,.table th,.accordion-heading,.table td{ vertical-align: middle;}
 </style>
+
+
+
+
 <script type="text/javascript">
 var appData;
 var selected = false;
@@ -19,6 +23,10 @@ var selected = false;
 
 
 	$(document).ready(function() {
+		
+						getPrivince();
+    	
+		
 						$("#name").focus();
 						$("#inputForm").validate(
 								{
@@ -102,49 +110,55 @@ var selected = false;
 											appData = d;
 											$("#app").bigAutocomplete(
 															{data : d.lis,callback : function(data) {
-																	$("#product").html("");
+																 
+																    	        				$("#product").html("");
 
-																	var url1 = "${ctx}/work/workDealInfo/product?appId=";
-																	var productHtml="";
-																	productHtml+="<option value='0'>请选择</option>";
-																	$.getJSON(url1 + data.result+"&_="+new Date().getTime(),
-																					function(da) {
-																						$("#appId").val(da.appId);
-																						if (da.product10!=null) {
-																							productHtml+="<option value='"+da.product10+"'>企业证书[通用]</option>";
-																						} 
-																						if (da.product11!=null) {
-																							productHtml+="<option value='"+da.product11+"'>企业证书[专用]</option>";
-																						}
-																						if (da.product20!=null) {
-																							productHtml+="<option value='"+da.product20+"'>个人证书(企业)[通用]</option>";
-																						} 
-																						if (da.product21!=null) {
-																							productHtml+="<option value='"+da.product21+"'>个人证书(企业)[专用]</option>";
-																						}
-																						if (da.product30!=null) {
-																							productHtml+="<option value='"+da.product30+"'>机构证书[通用]</option>";
-																						} 
-																						if (da.product31!=null) {
-																							productHtml+="<option value='"+da.product31+"'>机构证书[专用]</option>";
-																						}
-																						if (da.product40!=null) {
-																							productHtml+="<option value='"+da.product40+"'>可信移动设备[通用]</option>";
-																						} 
-																						if (da.product41!=null) {
-																							productHtml+="<option value='"+da.product41+"'>可信移动设备[专用]</option>";
-																						}
-																						if (da.product60!=null) {
-																							productHtml+="<option value='"+da.product60+"'>个人证书(机构)[通用]</option>";
-																						} 
-																						if (da.product61!=null) {
-																							productHtml+="<option value='"+da.product61+"'>个人证书(机构)[专用]</option>";
-																						}
-																						
-																						$("#product").html(productHtml);
-																					});
+																								var url1 = "${ctx}/work/workDealInfo/product?appId=";
+																								var productHtml="";
+																								productHtml+="<option value='0'>请选择</option>";
+																								$.getJSON(url1 + data.result+"&_="+new Date().getTime(),
+																												function(da) {
+																													$("#appId").val(da.appId);
+																													if (da.product10!=null) {
+																														productHtml+="<option value='"+da.product10+"'>企业证书[通用]</option>";
+																													} 
+																													if (da.product11!=null) {
+																														productHtml+="<option value='"+da.product11+"'>企业证书[专用]</option>";
+																													}
+																													if (da.product20!=null) {
+																														productHtml+="<option value='"+da.product20+"'>个人证书(企业)[通用]</option>";
+																													} 
+																													if (da.product21!=null) {
+																														productHtml+="<option value='"+da.product21+"'>个人证书(企业)[专用]</option>";
+																													}
+																													if (da.product30!=null) {
+																														productHtml+="<option value='"+da.product30+"'>机构证书[通用]</option>";
+																													} 
+																													if (da.product31!=null) {
+																														productHtml+="<option value='"+da.product31+"'>机构证书[专用]</option>";
+																													}
+																													if (da.product40!=null) {
+																														productHtml+="<option value='"+da.product40+"'>可信移动设备[通用]</option>";
+																													} 
+																													if (da.product41!=null) {
+																														productHtml+="<option value='"+da.product41+"'>可信移动设备[专用]</option>";
+																													}
+																													if (da.product60!=null) {
+																														productHtml+="<option value='"+da.product60+"'>个人证书(机构)[通用]</option>";
+																													} 
+																													if (da.product61!=null) {
+																														productHtml+="<option value='"+da.product61+"'>个人证书(机构)[专用]</option>";
+																													}
+																													
+																													$("#product").html(productHtml);
+																												});
+																    	                    	
+																    	                    }
+																    	
+																                  
 																	
-																}
+													
+																
 															});
 										});
 
@@ -441,6 +455,73 @@ var selected = false;
 			}
 		}
 	};
+	
+	
+	
+	//得到省
+	function getPrivince(){
+		$.ajax({
+			url : "${ctx}/selfArea/findAllPrivince",
+			type : "GET",
+			dataType : "JSON",
+			success : function(d) {
+				var privinceHtml = "<option onclick = \"getCity('0');\" value = ''>省份</option>";
+				$.each(d.list,function(idx, ele) {
+					privinceHtml += "<option onclick = \"getCity('"+ele.area_id+"');\" id = \""+ele.area_id +"\" value ='"+ele.area_name+"'>"+ele.area_name+"</option>";
+				});
+				$("#s_province").html(privinceHtml);
+			}
+		});
+	}
+	
+	
+	
+	
+	//得到第二级
+	function getCity(privinceId){
+		if(privinceId!= "0"){
+			$.ajax({
+				url : "${ctx}/selfArea/findLower?higher="+ privinceId,
+				type : "GET",
+				dataType : "JSON",
+				success : function(d) {
+					var cityHtml = "<option onclick = \"getTown('0');\" value = ''>地级市</option>";
+					$.each(d.list,function(idx, ele) {
+						cityHtml += "<option onclick = \"getTown('"+ele.area_id+"');\" id = \""+ele.area_id+"\" value = '"+ele.area_name+"'>"+ele.area_name+"</option>";
+					});
+					$("#s_city").html(cityHtml);
+					
+				}
+			});
+		}else{
+			$("#s_city").html("<option value = ''>地级市</option>");
+			$("#s_county").html("<option value = ''>市、县级市</option>");
+		}
+	}
+	
+	
+	//得到第三级
+	function getTown(cityId){
+		if(cityId!= "0"){
+			$.ajax({
+				url : "${ctx}/selfArea/findLower?higher="+ cityId,
+				type : "GET",
+				dataType : "JSON",
+				success : function(d) {
+					var townHtml = "<option value = ''>市、县级市</option>";
+					$.each(d.list,function(idx, ele) {
+						townHtml += "<option id = \""+ele.area_id+"\" value = '"+ele.area_name+"'>"+ele.area_name+"</option>";
+					});
+					$("#s_county").html(townHtml);
+					
+				}
+			});
+		}else{
+			$("#s_county").html("<option value = ''>市、县级市</option>");
+		}
+	}
+	
+	
 </script>
 <script type="text/javascript"
 	src="${ctxStatic}/jquery/jquery.bigautocomplete.js"></script>
@@ -1368,18 +1449,20 @@ var selected = false;
 							<td><select id="s_province" name="s_province"
 								style="width: 100px;*width:77px"></select>&nbsp;&nbsp; <select id="s_city"
 								name="s_city" style="width: 100px;*width:77px"></select>&nbsp;&nbsp; <select
-								id="s_county" name="s_county" style="width: 100px;*width:77px"></select> <script
-									type="text/javascript">
-									_init_area();
+								id="s_county" name="s_county" style="width: 100px;*width:77px"></select>
+									 <script type="text/javascript">
+									/* _init_area(); */
 									$("#s_province").append('<option value="${workDealInfo.workCompany.province}" selected="selected">${workDealInfo.workCompany.province}</option>');
 									$("#s_city").append('<option value="${workDealInfo.workCompany.city}" selected="selected">${workDealInfo.workCompany.city}</option>');
 									$("#s_county").append('<option value="${workDealInfo.workCompany.district}" selected="selected">${workDealInfo.workCompany.district}</option>');
-								</script>
+								</script> 
 								<div id="show"></div>
 								<div style="margin-top: 8px;">
 									区域备注：<input type="text" name="areaRemark"
 										value="${workCompany.areaRemark }" maxlength="50" style="width:242px">
-								</div></td>
+								</div>
+								
+								</td>
 						</tr>
 						<tr>
 							<th><span class="prompt" style="color: red; display: none;">*</span>街道地址：</th>
@@ -1569,6 +1652,9 @@ var selected = false;
 			</div>
 		</div>
 	</form:form>
-</body>
+	
+	<script type="text/javascript" src="${ctxStatic}/jquery/areaCheck.js"></script>
 
+</body>
+ 
 </html>
