@@ -3320,15 +3320,7 @@ public class WorkDealInfoService extends BaseService {
 			endTime.setHours(23);
 			endTime.setMinutes(59);
 			endTime.setSeconds(59);
-			// DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
-			// dc.createAlias("workPayInfo", "workPayInfo");
-			// dc.createAlias("createBy", "createBy");
-			// dc.createAlias("createBy.office", "office");
-			// dc.add(Restrictions.isNotNull("workPayInfo"));
-			// dc.add(Restrictions.eq("workPayInfo.delFlag",
-			// WorkPayInfo.DEL_FLAG_NORMAL));
-			// dc.add(Restrictions.eq("dealInfoStatus",
-			// WorkDealInfoStatus.STATUS_CERT_OBTAINED));
+		
 			if (startTime != null) {
 				dc.add(Restrictions.ge("workPayInfo.createDate", startTime));
 				dc.add(Restrictions.le("workPayInfo.createDate", endTime));

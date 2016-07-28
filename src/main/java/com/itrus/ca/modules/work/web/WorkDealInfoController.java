@@ -35,6 +35,7 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
+import javax.management.relation.RoleList;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -115,6 +116,7 @@ import com.itrus.ca.modules.self.entity.SelfImage;
 import com.itrus.ca.modules.self.service.SelfImageService;
 import com.itrus.ca.modules.service.ItrustProxyUtil;
 import com.itrus.ca.modules.sys.entity.Office;
+import com.itrus.ca.modules.sys.entity.Role;
 import com.itrus.ca.modules.sys.entity.User;
 import com.itrus.ca.modules.sys.service.OfficeService;
 import com.itrus.ca.modules.sys.utils.UserUtils;
@@ -913,28 +915,29 @@ public class WorkDealInfoController extends BaseController {
 			@RequestParam(value = "office", required = false) Long office,
 			Model model) throws ParseException {
 		User user = UserUtils.getUser();
-		List<Long> dealInfoByAreaIds = Lists.newArrayList();
+		
+		//是否为管理员
+		boolean isAdmin = false;
+		
+		//判断是否有管理员权限
+		List<Role> roleList = user.getRoleList();
+		
+		for(Role role: roleList){
+			if(role.getId()==1){
+				isAdmin = true;
+				break;
+			}
+		}
+		
+		
+		
 		List<Long> officeids = Lists.newArrayList();
-		// List<String> payMethod = Lists.newArrayList();
-		// List<Double> money = Lists.newArrayList();
+		
 		Map<String, List<String>> office_payMethod = new HashMap<>();
-		Map<String, List<Double>> office_money = new HashMap<>();
-		// if (appId == null || startTime == null || endTime == null) {//
-		// 首次进入，或者条件不全
-		// List<Office> offsList = officeService.getOfficeByType(user, 1);
-		// model.addAttribute("offsList", offsList);
-		// List<ConfigApp> appList = configAppService.findAllConfigApp();
-		// model.addAttribute("appList", appList);
-		// model.addAttribute("startTime", startTime == null ?
-		// DateUtils.firstDayOfMonth(new Date()) : startTime);
-		// model.addAttribute("endTime", endTime == null ? new Date() :
-		// endTime);
-		// return "modules/work/statisticalDayList";
-		// }
+		
+		
 		if (appId == null || startTime == null || endTime == null) {
-			appId = configAppOfficeRelationService
-					.findAllByOfficeId(UserUtils.getUser().getOffice().getId())
-					.get(0).getConfigApp().getId();
+			appId = configAppOfficeRelationService.findAllByOfficeId(UserUtils.getUser().getOffice().getId()).get(0).getConfigApp().getId();
 			List<Office> offsList = officeService.getOfficeByType(user, 1);
 			model.addAttribute("offsList", offsList);
 			List<ConfigApp> appList = configAppService.findAllConfigApp();
@@ -984,16 +987,13 @@ public class WorkDealInfoController extends BaseController {
 			List<Workoffice_MoneyVo> o_m = new ArrayList<Workoffice_MoneyVo>();
 			Set<String> month = new LinkedHashSet<String>();
 			for (int i = 0; i < list.size(); i++) {
-				String a = new SimpleDateFormat("yyyy-MM-dd").format(list
-						.get(i).getCreateDate());
+				String a = new SimpleDateFormat("yyyy-MM-dd").format(list.get(i).getCreateDate());
 				month.add(a);
 			}
 			Object months[] = month.toArray();
 			Set<Long> offices = new LinkedHashSet<Long>();
 			if (officeids != null) {
-				// for (int i = 0; i < list.size(); i++) {
-				// offices.add(list.get(i).getUpdateBy().getOffice().getId());
-				// }
+				
 				for (int i = 0; i < list.size(); i++) {
 					offices.add(list.get(i).getOfficeId());
 				}
@@ -1008,15 +1008,10 @@ public class WorkDealInfoController extends BaseController {
 					double countXjMoney = 0L;
 					double countAlipayMoney = 0L;
 					double countMoney = 0L;
-					// double postMoney = 0L;
-					// double bankMoney = 0L;
-					// double xjMoney = 0L;
-					// double alipayMoney = 0L;
+					
 					for (int i = 0; i < list.size(); i++) {
-						String mo = new SimpleDateFormat("yyyy-MM-dd")
-								.format(list.get(i).getCreateDate());
-						if (list.get(i).getOfficeId().equals(offs[o])
-								&& ((String) months[m]).indexOf(mo) != -1) {
+						String mo = new SimpleDateFormat("yyyy-MM-dd").format(list.get(i).getCreateDate());
+						if (list.get(i).getOfficeId().equals(offs[o]) && ((String) months[m]).indexOf(mo) != -1) {
 							double postMoney = 0L;
 							double bankMoney = 0L;
 							double xjMoney = 0L;
@@ -1033,8 +1028,7 @@ public class WorkDealInfoController extends BaseController {
 									if (list.get(i).getBankMoney() >= 0) {
 										bankMoney = list.get(i).getBankMoney();
 									} else {
-										bankMoney = (-list.get(i)
-												.getBankMoney());
+										bankMoney = (-list.get(i).getBankMoney());
 									}
 								}
 								if (list.get(i).getMethodMoney() == 1) {
@@ -1047,69 +1041,46 @@ public class WorkDealInfoController extends BaseController {
 								}
 								if (list.get(i).getMethodAlipay() == 1) {
 									if (list.get(i).getAlipayMoney() >= 0) {
-										alipayMoney = list.get(i)
-												.getAlipayMoney();
+										alipayMoney = list.get(i).getAlipayMoney();
 									} else {
-										alipayMoney = (-list.get(i)
-												.getAlipayMoney());
+										alipayMoney = (-list.get(i).getAlipayMoney());
 									}
 
 								}
 							} else {
 								List<WorkFinancePayInfoRelation> workfinancePayinfos = workFinancePayInfoRelationService
-										.findByPayInfoId(list.get(i)
-												.getWorkPayInfoId());
+										.findByPayInfoId(list.get(i).getWorkPayInfoId());
 								for (int w = 0; w < workfinancePayinfos.size(); w++) {
 									if (workfinancePayinfos.get(w).getMoney() >= 0) {
-										if (workfinancePayinfos.get(w)
-												.getFinancePaymentInfo()
-												.getPaymentMethod() == 1) {
-											if (workfinancePayinfos.get(w)
-													.getMoney() >= 0) {
-												xjMoney = workfinancePayinfos
-														.get(w).getMoney();
+										if (workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod() == 1) {
+											if (workfinancePayinfos.get(w).getMoney() >= 0) {
+												xjMoney = workfinancePayinfos.get(w).getMoney();
 											} else {
-												xjMoney = (-workfinancePayinfos
-														.get(w).getMoney());
+												xjMoney = (-workfinancePayinfos.get(w).getMoney());
 											}
 
 										}
-										if (workfinancePayinfos.get(w)
-												.getFinancePaymentInfo()
-												.getPaymentMethod() == 2) {
-											if (workfinancePayinfos.get(w)
-													.getMoney() >= 0) {
-												postMoney = workfinancePayinfos
-														.get(w).getMoney();
+										if (workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod() == 2) {
+											if (workfinancePayinfos.get(w).getMoney() >= 0) {
+												postMoney = workfinancePayinfos.get(w).getMoney();
 											} else {
-												postMoney = (-workfinancePayinfos
-														.get(w).getMoney());
+												postMoney = (-workfinancePayinfos.get(w).getMoney());
 											}
 
 										}
-										if (workfinancePayinfos.get(w)
-												.getFinancePaymentInfo()
-												.getPaymentMethod() == 3) {
-											if (workfinancePayinfos.get(w)
-													.getMoney() >= 0) {
-												bankMoney = workfinancePayinfos
-														.get(w).getMoney();
+										if (workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod() == 3) {
+											if (workfinancePayinfos.get(w).getMoney() >= 0) {
+												bankMoney = workfinancePayinfos.get(w).getMoney();
 											} else {
-												bankMoney = (-workfinancePayinfos
-														.get(w).getMoney());
+												bankMoney = (-workfinancePayinfos.get(w).getMoney());
 											}
 
 										}
-										if (workfinancePayinfos.get(w)
-												.getFinancePaymentInfo()
-												.getPaymentMethod() == 4) {
-											if (workfinancePayinfos.get(w)
-													.getMoney() >= 0) {
-												alipayMoney = workfinancePayinfos
-														.get(w).getMoney();
+										if (workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod() == 4) {
+											if (workfinancePayinfos.get(w).getMoney() >= 0) {
+												alipayMoney = workfinancePayinfos.get(w).getMoney();
 											} else {
-												alipayMoney = (-workfinancePayinfos
-														.get(w).getMoney());
+												alipayMoney = (-workfinancePayinfos.get(w).getMoney());
 											}
 
 										}
@@ -1123,8 +1094,7 @@ public class WorkDealInfoController extends BaseController {
 							countMoney += (postMoney + bankMoney + xjMoney + alipayMoney);
 						}
 					}
-					String officeName = (officeService.findById((Long) offs[o]))
-							.getName();
+					String officeName = (officeService.findById((Long) offs[o])).getName();
 					Workoffice_MoneyVo workoffice_MoneyVo = new Workoffice_MoneyVo();
 					workoffice_MoneyVo.setOfficeName(officeName);
 					workoffice_MoneyVo.setDate((String) months[m]);
@@ -1147,10 +1117,7 @@ public class WorkDealInfoController extends BaseController {
 				int xj = 0;
 				int alipay = 0;
 				for (int of = 0; of < o_m.size(); of++) {
-					if (o_m.get(of)
-							.getOfficeName()
-							.equals(officeService.findById((Long) offs[ofs])
-									.getName())) {
+					if (o_m.get(of).getOfficeName().equals(officeService.findById((Long) offs[ofs]).getName())) {
 						if (o_m.get(of).getCountPostMoney() > 0) {
 							post++;
 						}
@@ -1168,10 +1135,7 @@ public class WorkDealInfoController extends BaseController {
 				List<String> payMethods = Lists.newArrayList();
 				if (post > 0) {
 					for (int of = 0; of < o_m.size(); of++) {
-						if (o_m.get(of)
-								.getOfficeName()
-								.equals(officeService
-										.findById((Long) offs[ofs]).getName())) {
+						if (o_m.get(of).getOfficeName().equals(officeService.findById((Long) offs[ofs]).getName())) {
 							o_m.get(of).setPostMoney(true);
 						}
 					}
@@ -1179,10 +1143,7 @@ public class WorkDealInfoController extends BaseController {
 				}
 				if (bank > 0) {
 					for (int of = 0; of < o_m.size(); of++) {
-						if (o_m.get(of)
-								.getOfficeName()
-								.equals(officeService
-										.findById((Long) offs[ofs]).getName())) {
+						if (o_m.get(of).getOfficeName().equals(officeService.findById((Long) offs[ofs]).getName())) {
 							o_m.get(of).setBankMoney(true);
 						}
 					}
@@ -1190,10 +1151,7 @@ public class WorkDealInfoController extends BaseController {
 				}
 				if (xj > 0) {
 					for (int of = 0; of < o_m.size(); of++) {
-						if (o_m.get(of)
-								.getOfficeName()
-								.equals(officeService
-										.findById((Long) offs[ofs]).getName())) {
+						if (o_m.get(of).getOfficeName().equals(officeService.findById((Long) offs[ofs]).getName())) {
 							o_m.get(of).setXjMoney(true);
 						}
 					}
@@ -1201,23 +1159,18 @@ public class WorkDealInfoController extends BaseController {
 				}
 				if (alipay > 0) {
 					for (int of = 0; of < o_m.size(); of++) {
-						if (o_m.get(of)
-								.getOfficeName()
-								.equals(officeService
-										.findById((Long) offs[ofs]).getName())) {
+						if (o_m.get(of).getOfficeName().equals(officeService.findById((Long) offs[ofs]).getName())) {
 							o_m.get(of).setAlipayMoney(true);
 						}
 					}
 					payMethods.add("支付宝");
 				}
-				office_payMethod.put(officeService.findById((Long) offs[ofs])
-						.getName(), payMethods);
+				office_payMethod.put(officeService.findById((Long) offs[ofs]).getName(), payMethods);
 			}
 
 			List<Double> payMethodMoneys = Lists.newArrayList();
 			double moneys = 0L;
-			Iterator<Map.Entry<String, List<String>>> it = office_payMethod
-					.entrySet().iterator();
+			Iterator<Map.Entry<String, List<String>>> it = office_payMethod.entrySet().iterator();
 			while (it.hasNext()) {
 				Entry<String, List<String>> entry = it.next();
 				double post = 0.0;
@@ -1245,11 +1198,9 @@ public class WorkDealInfoController extends BaseController {
 					payMethodMoneys.add(post);
 				}
 				if (entry.getValue().indexOf("银行转账") != -1) {
-
 					payMethodMoneys.add(bank);
 				}
 				if (entry.getValue().indexOf("现金付款") != -1) {
-
 					payMethodMoneys.add(xj);
 				}
 				if (entry.getValue().indexOf("支付宝") != -1) {
