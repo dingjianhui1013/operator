@@ -115,9 +115,7 @@ public class FinancePaymentInfoService extends BaseService {
 	}
 	public List<FinancePaymentInfo> findAdjustment(FinancePaymentInfo financePaymentInfo) {
 		DetachedCriteria dc = financePaymentInfoDao.createDetachedCriteria();
-//		dc.createAlias("createBy", "createBy");
-//		dc.createAlias("createBy.office", "office");
-//		dc.add(dataScopeFilter(UserUtils.getUser(),"office", "createBy")); 
+
 		dc.add(dataScopeFilterByWorkDealInfo(UserUtils.getUser(), "areaId", "officeId"));
 		if (financePaymentInfo.getCompany()!=null) {
 			if (StringUtils.isNotEmpty(financePaymentInfo.getCompany())){
@@ -127,7 +125,7 @@ public class FinancePaymentInfoService extends BaseService {
 		if (StringUtils.isNotEmpty(financePaymentInfo.getCommUserName())) {
 			dc.add(Restrictions.like("commUserName", "%"+EscapeUtil.escapeLike(financePaymentInfo.getCommUserName())+"%"));
 		}
-		dc.add(Restrictions.not(Restrictions.eq("quitMoneyStatus", 1)));
+		//dc.add(Restrictions.not(Restrictions.eq("quitMoneyStatus", 1)));
 		dc.add(Restrictions.eq(FinancePaymentInfo.DEL_FLAG, FinancePaymentInfo.DEL_FLAG_NORMAL));
 		dc.addOrder(Order.desc("id"));
 		return financePaymentInfoDao.find(dc);

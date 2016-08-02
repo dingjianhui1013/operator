@@ -3160,43 +3160,43 @@ public class WorkDealInfoService extends BaseService {
 
 	}
 
-	// public List<WorkDealInfo> findByDayPay(Date startTime, Date endTime,
-	// List<Long> officeids, Long appId) {
-	// long s = System.currentTimeMillis();
-	// DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
-	// dc.createAlias("workPayInfo", "workPayInfo");
-	// dc.add(Restrictions.isNotNull("workPayInfo"));
-	// dc.add(Restrictions.eq("workPayInfo.delFlag",
-	// WorkPayInfo.DEL_FLAG_NORMAL));
-	// List<String> status = Lists.newArrayList();
-	// status.add(WorkDealInfoStatus.STATUS_CERT_OBTAINED);
-	// status.add(WorkDealInfoStatus.STATUS_CERT_WAIT);
-	// dc.add(Restrictions.in("dealInfoStatus", status));
-	// if (startTime != null) {
-	// endTime.setHours(23);
-	// endTime.setMinutes(59);
-	// endTime.setSeconds(59);
-	// if (startTime != null) {
-	// dc.add(Restrictions.ge("workPayInfo.createDate", startTime));
-	// dc.add(Restrictions.le("workPayInfo.createDate", endTime));
-	// }
-	// // if (dealInfoByAreaIds != null && dealInfoByAreaIds.size() > 0) {
-	// // dc.add(Restrictions.in("id", dealInfoByAreaIds));
-	// // }
-	// if (appId != null) {
-	// dc.add(Restrictions.eq("configApp.id", appId));
-	// }
-	//
-	// if (officeids != null && officeids.size() > 0) {
-	// dc.add(Restrictions.in("officeId", officeids));
-	// }
-	// dc.addOrder(Order.asc("workPayInfo.createDate"));
-	// return workDealInfoDao.find(dc);
-	// } else {
-	// return null;
-	// }
-	//
-	// }
+	 public List<WorkDealInfo> findByDayPay1(Date startTime, Date endTime,
+	 List<Long> officeids, Long appId) {
+	long s = System.currentTimeMillis();
+	 DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
+	 dc.createAlias("workPayInfo", "workPayInfo");
+	 dc.add(Restrictions.isNotNull("workPayInfo"));
+	 dc.add(Restrictions.eq("workPayInfo.delFlag",
+	 WorkPayInfo.DEL_FLAG_NORMAL));
+	 List<String> status = Lists.newArrayList();
+	 status.add(WorkDealInfoStatus.STATUS_CERT_OBTAINED);
+	 status.add(WorkDealInfoStatus.STATUS_CERT_WAIT);
+	 dc.add(Restrictions.in("dealInfoStatus", status));
+	 if (startTime != null) {
+	 endTime.setHours(23);
+	 endTime.setMinutes(59);
+	 endTime.setSeconds(59);
+	 if (startTime != null) {
+	 dc.add(Restrictions.ge("workPayInfo.createDate", startTime));
+	 dc.add(Restrictions.le("workPayInfo.createDate", endTime));
+	 }
+	 // if (dealInfoByAreaIds != null && dealInfoByAreaIds.size() > 0) {
+	 // dc.add(Restrictions.in("id", dealInfoByAreaIds));
+	 // }
+	 if (appId != null) {
+	 dc.add(Restrictions.eq("configApp.id", appId));
+	 }
+	
+	 if (officeids != null && officeids.size() > 0) {
+	 dc.add(Restrictions.in("officeId", officeids));
+	 }
+	 dc.addOrder(Order.asc("workPayInfo.createDate"));
+	 return workDealInfoDao.find(dc);
+	 } else {
+	 return null;
+	 }
+	
+	 }
 
 	public List<MonthPayment> findByDayPay(Date startTime, Date endTime,
 			List<Long> officeids, Long appId) throws ParseException {
@@ -3215,16 +3215,25 @@ public class WorkDealInfoService extends BaseService {
 				+ " AND w.deal_info_status  IN (7,9)";
 		sqlBuffer.append(sqlString);
 		if (startTime != null) {
-			endTime.setHours(23);
-			endTime.setMinutes(59);
-			endTime.setSeconds(59);
+			startTime.setHours(0);
+			startTime.setMinutes(0);
+			startTime.setSeconds(00);
 			sqlBuffer.append(" AND p.create_date>=to_date('"
 					+ new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
 							.format(startTime) + "','yyyy-MM-dd HH24:mi:ss')");
+			
+		}
+		
+		
+		if(endTime !=null){
+			endTime.setHours(23);
+			endTime.setMinutes(59);
+			endTime.setSeconds(59);
 			sqlBuffer.append(" AND p.create_date<=to_date('"
 					+ new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
 							.format(endTime) + "','yyyy-MM-dd HH24:mi:ss')");
 		}
+		
 		if (appId != null) {
 			sqlBuffer.append(" AND w.app_id=" + appId);
 		}
@@ -3465,8 +3474,7 @@ public class WorkDealInfoService extends BaseService {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("workPayInfo", "workPayInfo");
 		dc.add(Restrictions.isNotNull("workPayInfo"));
-		// dc.createAlias("createBy", "createBy");
-		// dc.createAlias("createBy.office", "office");
+		
 		dc.add(Restrictions.eq("workPayInfo.delFlag",
 				WorkPayInfo.DEL_FLAG_NORMAL));
 		List<String> status = Lists.newArrayList();
@@ -3477,15 +3485,7 @@ public class WorkDealInfoService extends BaseService {
 			endTime.setHours(23);
 			endTime.setMinutes(59);
 			endTime.setSeconds(59);
-			// DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
-			// dc.createAlias("workPayInfo", "workPayInfo");
-			// dc.createAlias("createBy", "createBy");
-			// dc.createAlias("createBy.office", "office");
-			// dc.add(Restrictions.isNotNull("workPayInfo"));
-			// dc.add(Restrictions.eq("workPayInfo.delFlag",
-			// WorkPayInfo.DEL_FLAG_NORMAL));
-			// dc.add(Restrictions.eq("dealInfoStatus",
-			// WorkDealInfoStatus.STATUS_CERT_OBTAINED));
+			
 			if (startTime != null) {
 				dc.add(Restrictions.ge("workPayInfo.createDate", startTime));
 				dc.add(Restrictions.le("workPayInfo.createDate", endTime));
