@@ -19,7 +19,7 @@
 <script type="text/javascript">
 	$(document).ready(function() {
 		
-		getPrivince();
+		
 		    
 						$('div.small_pic a').fancyZoom({scaleImg: true, closeOnClick: true});
 						$("#name").focus();
@@ -317,71 +317,6 @@
 		}
 	};
 	
-	
-	
-	
-	//得到省
-	function getPrivince(){
-		$.ajax({
-			url : "${ctx}/selfArea/findAllPrivince",
-			type : "GET",
-			dataType : "JSON",
-			success : function(d) {
-				var privinceHtml = "<option onclick = \"getCity('0');\" value = ''>省份</option>";
-				$.each(d.list,function(idx, ele) {
-					privinceHtml += "<option onclick = \"getCity('"+ele.area_id+"');\" id = \""+ele.area_id +"\" value ='"+ele.area_name+"'>"+ele.area_name+"</option>";
-				});
-				$("#s_province").html(privinceHtml);
-			}
-		});
-	}
-	
-	
-	
-	
-	//得到第二级
-	function getCity(privinceId){
-		if(privinceId!= "0"){
-			$.ajax({
-				url : "${ctx}/selfArea/findLower?higher="+ privinceId,
-				type : "GET",
-				dataType : "JSON",
-				success : function(d) {
-					var cityHtml = "<option onclick = \"getTown('0');\" value = ''>地级市</option>";
-					$.each(d.list,function(idx, ele) {
-						cityHtml += "<option onclick = \"getTown('"+ele.area_id+"');\" id = \""+ele.area_id+"\" value = '"+ele.area_name+"'>"+ele.area_name+"</option>";
-					});
-					$("#s_city").html(cityHtml);
-					
-				}
-			});
-		}else{
-			$("#s_city").html("<option value = ''>地级市</option>");
-			$("#s_county").html("<option value = ''>市、县级市</option>");
-		}
-	}
-	
-	
-	//得到第三级
-	function getTown(cityId){
-		if(cityId!= "0"){
-			$.ajax({
-				url : "${ctx}/selfArea/findLower?higher="+ cityId,
-				type : "GET",
-				dataType : "JSON",
-				success : function(d) {
-					var townHtml = "<option value = ''>市、县级市</option>";
-					$.each(d.list,function(idx, ele) {
-						townHtml += "<option id = \""+ele.area_id+"\" value = '"+ele.area_name+"'>"+ele.area_name+"</option>";
-					});
-					$("#s_county").html(townHtml);
-					
-				}
-			});
-		}else{
-			$("#s_county").html("<option value = ''>市、县级市</option>");
-		}
-	}
 	
 	
 </script>
@@ -694,29 +629,45 @@
 							</select>&nbsp;&nbsp; <select id="s_city" name="s_city" disabled="disabled"
 								style="width: 103px;"></select>&nbsp;&nbsp; <select disabled="disabled"
 								id="s_county" name="s_county" style="width: 103px;"></select> 
-								<div style="margin-top: 8px;">
-									<span class="prompt" style="color: red; display: none;">*</span>区域备注：<input
-										type="text" name="areaRemark" disabled="disabled" style="width:256px;"
-										value="${workDealInfo.workCompany.areaRemark }">
-								</div></td>
+								<script type="text/javascript">
+								$("#s_province").append('<option value="${workDealInfo.workCompany.province}" selected="selected">${workDealInfo.workCompany.province}</option>');
+								$("#s_city").append('<option value="${workDealInfo.workCompany.city}" selected="selected">${workDealInfo.workCompany.city}</option>');
+								$("#s_county").append('<option value="${workDealInfo.workCompany.district}" selected="selected">${workDealInfo.workCompany.district}</option>');
+
+								</script>
+								
+								
+								</td>
 
 
 						</tr>
 						<tr>
+						
+						<th>区域备注：</th>
+						<td><input type="text" name="areaRemark" disabled="disabled"  value="${workDealInfo.workCompany.areaRemark }"></td>
+						
 							<th><span class="prompt" style="color: red; display: none;">*</span>街道地址：</th>
 							<td class="tdWidth"><input type="text" name="address" disabled="disabled"
 								value="${workDealInfo.workCompany.address}"></td>
-							<th  class="btmBorder"><span class="prompt" style="color: red; display: none;">*</span>单位联系电话：</th>
+							
+						</tr>
+						<tr>
+						<th  class="btmBorder"><span class="prompt" style="color: red; display: none;">*</span>单位联系电话：</th>
 							<td  class="btmBorder"><input type="text" name="companyMobile" class="number" disabled="disabled"
 								id="companyMobile"
 								value="${workDealInfo.workCompany.companyMobile }"></td>
-						</tr>
-						<tr>
+						
+						
 							<th><span class="prompt" style="color: red; display: none;">*</span>备注信息：</th>
 							<td class="tdWidth"><input type="text" name="remarks" id="remarks" disabled="disabled"
 								value="${workDealInfo.workCompany.remarks }"></td>
-								
+										
+						</tr>
+						
 							<c:if test="${workDealInfo.selfImage.id!=null }">
+							
+							<tr>
+							
 							<th>单位电子证件:</th>
 							<td class ="small_pic">
 								
@@ -733,9 +684,12 @@
 			                            </div>
 									</div>
 							</td>
-								</c:if>
-								
-						</tr>
+							
+							</tr>
+							</c:if>
+						
+						
+						
 
 					</tbody>
 				</table>

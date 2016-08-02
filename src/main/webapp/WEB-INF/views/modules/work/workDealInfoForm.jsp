@@ -1451,28 +1451,37 @@ var selected = false;
 								name="s_city" style="width: 100px;*width:77px"></select>&nbsp;&nbsp; <select
 								id="s_county" name="s_county" style="width: 100px;*width:77px"></select>	
 								<div id="show"></div>
-								<div style="margin-top: 8px;">
+							<%-- 	<div style="margin-top: 8px;">
 									区域备注：<input type="text" name="areaRemark"
 										value="${workCompany.areaRemark }" maxlength="50" style="width:242px">
-								</div>
+								</div> --%>
 								
 								</td>
 						</tr>
+						
+						
 						<tr>
+						    <th>区域备注：</th> 
+							<td><input type="text" name="areaRemark"
+										value="${workCompany.areaRemark }" maxlength="50" ></td>
 							<th><span class="prompt" style="color: red; display: none;">*</span>街道地址：</th>
 							<td><input type="text" name="address" id="address"
 								value="${workCompany.address }" maxlength="50"></td>
-							<th class="btmBorder"><span class="prompt" style="color: red; display: none;">*</span>单位联系电话：</th>
-							<td class="btmBorder"><input type="text" name="companyMobile"
+							
+
+						</tr>
+						<tr>
+						
+								<th class="btmBorder"><span class="prompt" style="color: red; display: none;">*</span>单位联系电话：</th>
+								<td class="btmBorder"><input type="text" name="companyMobile"
 								id="companyMobile" value="${workCompany.companyMobile }"
 								 
 								
 								onblur="checkContactMobil(this,'dwcount')"
 								onfocus="hqcount('companyMobile','dwcount')" /><span
 								id="dwcount" style="color: red; margin-left: 10px"></span></td>
-
-						</tr>
-						<tr>
+						
+						
 							<th><span class="prompt" style="color: red; display: none;">*</span>备注信息：</th>
 							<td><input type="text" name="remarks" id="remarks"
 								value="${workCompany.remarks }"></td>

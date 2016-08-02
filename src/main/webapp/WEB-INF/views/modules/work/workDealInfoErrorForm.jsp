@@ -833,22 +833,25 @@ $("#agentId").change(function(){
 									$("#s_city").append('<option value="${workDealInfo.workCompany.city}" selected="selected">${workDealInfo.workCompany.city}</option>');
 									$("#s_county").append('<option value="${workDealInfo.workCompany.district}" selected="selected">${workDealInfo.workCompany.district}</option>');
 								</script>
-								<div style="margin-top: 8px;">
-									<span class="prompt" style="color: red; display: none;">*</span>区域备注：
-									<input type="text" name="areaRemark" value="${workDealInfo.workCompany.areaRemark }" style="width:242px">
-								</div>
+								
 								<div id="show"></div></td>
 						</tr>
 						<tr>
+							<th>区域备注：</th>
+							<td><input type="text" name="areaRemark" value="${workDealInfo.workCompany.areaRemark }" ></td>
+						
 							<th><span class="prompt" style="color:red; display: none;">*</span>街道地址：</th>
 							<td><input type="text" name="address" id="address"
 								value="${workCompany.address }"></td>
-							<th class="btmBorder"><span class="prompt" style="color:red; display: none;">*</span>单位联系电话：</th>
-							<td class="btmBorder"><input type="text" name="companyMobile" 
-								id="companyMobile" value="${workCompany.companyMobile }"></td>
+							
 
 						</tr>
 						<tr>
+							<th class="btmBorder"><span class="prompt" style="color:red; display: none;">*</span>单位联系电话：</th>
+							<td class="btmBorder"><input type="text" name="companyMobile" 
+								id="companyMobile" value="${workCompany.companyMobile }"></td>
+						
+						
 							<th><span class="prompt" style="color:red; display: none;">*</span>备注信息：</th>
 							<td><input type="text" name="remarks" id="remarks"
 								value="${workCompany.remarks }"></td>

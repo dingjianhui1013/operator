@@ -344,6 +344,8 @@
 					privinceHtml += "<option onclick = \"getCity('"+ele.area_id+"');\" id = \""+ele.area_id +"\" value ='"+ele.area_name+"'>"+ele.area_name+"</option>";
 				});
 				$("#s_province").html(privinceHtml);
+				$("#s_province").append('<option value="${workDealInfo.workCompany.province}" selected="selected">${workDealInfo.workCompany.province}</option>');
+
 			}
 		});
 	}
@@ -731,30 +733,36 @@
 							</select>&nbsp;&nbsp; <select id="s_city" name="s_city"
 								style="width: 105px;"></select>&nbsp;&nbsp; <select
 								id="s_county" name="s_county" style="width: 105px;"></select>
-							
-								<div style="margin-top: 8px;">
-									<span class="prompt" style="color: red; display: none;">*</span>区域备注：<input
-										type="text" name="areaRemark" style="width:258px"
-										value="${workDealInfo.workCompany.areaRemark }">
-								</div></td>
-
-
+							<script type="text/javascript">
+									$("#s_city").append('<option value="${workDealInfo.workCompany.city}" selected="selected">${workDealInfo.workCompany.city}</option>');
+									$("#s_county").append('<option value="${workDealInfo.workCompany.district}" selected="selected">${workDealInfo.workCompany.district}</option>');
+								</script>
+							</td>
 						</tr>
 						<tr>
+						
+						<th>区域备注：</th>
+						<td><input type="text" name="areaRemark"  value="${workDealInfo.workCompany.areaRemark }"></td>
 							<th><span class="prompt" style="color: red; display: none;">*</span>街道地址：</th>
 							<td class=" "><input type="text" name="address"
 								value="${workDealInfo.workCompany.address}"></td>
+						</tr>
+						<tr>
+						
 							<th class="btmBorder"><span class="prompt" style="color: red; display: none;">*</span>单位联系电话：</th>
 							<td class="btmBorder" ><input type="text" name="companyMobile" class="number"
 								id="companyMobile"
 								value="${workDealInfo.workCompany.companyMobile }"  onblur="qxCount('dwtcount')"  onfocus="hqcount('companyMobile','dwtcount')"/><span id="dwtcount" style="color : red; margin-left: 10px"></span></td>
-						</tr>
-						<tr>
+						
+						
 							<th><span class="prompt" style="color: red; display: none;">*</span>备注信息：</th>
 							<td class=" "><input type="text" name="remarks" id="remarks"
-								value="${workDealInfo.workCompany.remarks }"></td>
-								
-							<c:if test="${workDealInfo.selfImage.id!=null }">
+								value="${workDealInfo.workCompany.remarks }"></td>		
+						</tr>
+						
+						
+						<c:if test="${workDealInfo.selfImage.id!=null }">
+							<tr>
 							<th>单位电子证件:</th>
 							<td class ="small_pic  " >
 								
@@ -770,10 +778,10 @@
 			                            </div>
 									</div>
 							</td>
-								</c:if>
-								
-								
-						</tr>
+							
+							</tr>
+						</c:if>
+						
 
 					</tbody>
 				</table>

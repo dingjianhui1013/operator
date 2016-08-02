@@ -53,9 +53,7 @@
 	<form:form id="searchForm" modelAttribute="financePaymentInfo"
 		action="${ctx}/work/workDealInfo/statisticalAdjustment" method="post"
 		class="breadcrumb form-search">
-<%-- 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}" /> --%>
-<!-- 		<input id="pageSize" name="pageSize" type="hidden" -->
-<%-- 			value="${page.pageSize}" /> --%>
+
 		<div>
 		<label>单位名称 ：</label>
 		<form:input path="company" htmlEscape="false"
@@ -70,7 +68,7 @@
 					</c:if>>${companys.appName}</option>
 			</c:forEach>
 		</select>
-<%-- 		<input type="text" value="${companyName}" name="companyName" class="input-medium" id="companyName"/> --%>
+
 		<label>到款日期 ：</label>
 		<input id="dkstartTime" class="input-medium Wdate" type="text"  onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});"
 								value="<fmt:formatDate value="${dkstartTime}" pattern="yyyy-MM-dd"/>"

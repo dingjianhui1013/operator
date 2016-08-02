@@ -50,11 +50,10 @@
 		var url = "${ctx}/sys/office/addOffices?areaId=";
 		$.getJSON(url + areaId+"&_="+new Date().getTime(), function(data) {
 			var html = "";
-			//console.log(data);
+			
 			html += "<option value=\""+""+"\">请选择</ooption>";
 			$.each(data, function(idx, ele) {
-				//console.log(idx);
-				//console.log(ele);
+				
 				html += "<option value=\""+ele.id+"\">" + ele.name
 						+ "</ooption>"
 			});
@@ -63,27 +62,7 @@
 		});
 
 	}
-// 	function sub()
-// 	{
-// 		var endTime=$("#endTime").val();
-// 		var appId=$("#appId").val();
-// 		var startTime=$("#startTime").val();
-// 		if(endTime=="")
-// 			{
-// 				$("#endTime").val(startTime);
-// 			}
-// 		if(appId=="")
-// 			{
-// 				top.$.jBox.tip("请选择项目");
-// 				return false;
-// 			}
-// 		if(startTime=="")
-// 			{
-// 				top.$.jBox.tip("请选择统计时间");
-// 				return false;
-// 			}
-// 		return true;
-// 	}
+
 	function dc()
 	{
 		var area = $("#area").val();
@@ -172,16 +151,19 @@
 		</div>
 	</form:form>
 	<tags:message content="${message}" />
-	<table id="contentTable" class="table table-striped table-bordered table-condensed">
+	
+	
+	<c:forEach items="${receivedPayments }" var="receivedPayment">
+		<table id="contentTable" class="table table-striped table-bordered table-condensed">
 		<thead>
 			<tr>
 				<th  rowspan="3" style="text-align:center;">统计日期</th>
 				<th  rowspan="3" style="text-align:center;">项目名称</th>
-				<c:forEach items="${office_District}" var="office_District">
+				<c:forEach items="${receivedPayment.officeDistrict}" var="office_District">
 					<c:set var="index" value="0" />
 					<c:set var="qu" value="0" />
 					<c:forEach items="${office_District.value}" var="district">
-						<c:forEach items="${district_payMethod}" var="district_payMethod">
+						<c:forEach items="${receivedPayment.districtPayMethod}" var="district_payMethod">
 								<c:if test="${district_payMethod.key==district}">
 									<c:forEach items="${district_payMethod.value}" var="dpv">
 										<c:set var="qu" value="${qu+1}" />
@@ -190,9 +172,7 @@
 								</c:if>
 						</c:forEach>
 					</c:forEach>
-<%-- 					<c:forEach items="${district_payMethod}" var="district_payMethod"> --%>
-<%-- 						<c:set var="qu" value="${qu+1}" /> --%>
-<%-- 					</c:forEach> --%>
+
 					<c:if test="${index==1}">
 						<c:if test="${qu==1}">
 							<th rowspan="2" style="text-align:center;">${office_District.key}</th>
@@ -204,7 +184,7 @@
 					<c:if test="${index>1}">
 					<c:set var="pays" value="0"/>
 						<c:forEach items="${office_District.value}" var="district">
-							<c:forEach items="${district_payMethod}" var="district_payMethod">
+							<c:forEach items="${receivedPayment.districtPayMethod}" var="district_payMethod">
 								<c:if test="${district_payMethod.key==district}">
 								<c:if test="${fn:length(district_payMethod.value)==1}">
 									<c:set var="pays" value="${pays+1}" />
@@ -223,11 +203,11 @@
 				<th rowspan="3" style="text-align:center;">合计</th>
 			</tr>
 			<tr>
-				<c:forEach items="${office_District}" var="office_District">
+				<c:forEach items="${receivedPayment.officeDistrict}" var="office_District">
 					<c:set var="index" value="0" />
 					<c:set var="qu" value="0" />
 					<c:forEach items="${office_District.value}" var="district">
-						<c:forEach items="${district_payMethod}" var="district_payMethod">
+						<c:forEach items="${receivedPayment.districtPayMethod}" var="district_payMethod">
 								<c:if test="${district_payMethod.key==district}">
 									<c:forEach items="${district_payMethod.value}" var="dpv">
 										<c:set var="index" value="${index+1}" />
@@ -236,9 +216,7 @@
 								</c:if>
 						</c:forEach>
 					</c:forEach>
-<%-- 					<c:forEach items="${district_payMethod}" var="district_payMethod"> --%>
-<%-- 						<c:set var="qu" value="${qu+1}" /> --%>
-<%-- 					</c:forEach> --%>
+
 					<c:if test="${index==1}">
 						<c:if test="${qu>1}">
 								<th style="text-align:center;">${district}</th>
@@ -247,7 +225,7 @@
 					<c:if test="${index>1}">
 					<c:forEach items="${office_District.value}" var="district">
 					<c:set var="count" value="0" />
-						<c:forEach items="${district_payMethod}" var="district_payMethod">
+						<c:forEach items="${receivedPayment.districtPayMethod}" var="district_payMethod">
 								<c:if test="${district_payMethod.key==district}">
 									<c:forEach items="${district_payMethod.value}" var="dpv">
 										<c:set var="count" value="${count+1}" />
@@ -265,9 +243,9 @@
 				</c:forEach>
 			</tr>
 			<tr>
-				<c:forEach items="${office_District}" var="office_District">
+				<c:forEach items="${receivedPayment.officeDistrict}" var="office_District">
 					<c:forEach items="${office_District.value}" var="district">
-						<c:forEach items="${district_payMethod}" var="district_payMethod">
+						<c:forEach items="${receivedPayment.districtPayMethod}" var="district_payMethod">
 								<c:if test="${district_payMethod.key==district}">
 									<c:forEach items="${district_payMethod.value}" var="dpv">
 										<th>${dpv}</th>
@@ -279,14 +257,14 @@
 			</tr> 
 		</thead>
 		<tbody>
-		<c:forEach items="${dates}" var = "dates">
+		<c:forEach items="${receivedPayment.dates}" var = "dates">
 		<c:set var="countMoneys" value="0"/>
 			<tr>
 				<td>${dates}</td>
-				<td>${appName}</td>
-				<c:forEach items="${office_District}" var="od">
+				<td>${receivedPayment.appName}</td>
+				<c:forEach items="${receivedPayment.officeDistrict}" var="od">
 					<c:forEach items="${od.value}" var="odv">
-						<c:forEach items="${odms}" var="odms" >
+						<c:forEach items="${receivedPayment.officeDistrictMoneyVo}" var="odms" >
 							<c:if test = "${odms.date == dates&&odms.districtName==odv}">
 								<c:if test="${odms.postMoney}">
 										<td>${odms.countPostMoney}</td>
@@ -309,11 +287,7 @@
 					
 					</c:forEach>
 				</c:forEach>
-<%-- 				<c:forEach items="${workDate_Mone}" var="workDate_Mone"> --%>
-<%-- 						<c:if test="${workDate_Mone.date==dates}"> --%>
-<%-- 							<td>${workDate_Mone.countMoney}</td> --%>
-<%-- 						</c:if> --%>
-<%-- 				</c:forEach> --%>
+
 					<td>${countMoneys}</td>
 			<tr>
 		</c:forEach>
@@ -321,9 +295,9 @@
 		<td>合计</td>
 		<td></td>
 		<c:set var="money" value="0"/>
-		<c:forEach items="${office_District}" var="office_District">
+		<c:forEach items="${receivedPayment.officeDistrict}" var="office_District">
 			<c:forEach items="${office_District.value}" var="odv">
-				<c:forEach items="${district_Moneys}" var="district_Moneys">
+				<c:forEach items="${receivedPayment.districtMoneys}" var="district_Moneys">
 					<c:if test="${district_Moneys.key==odv}">
 					<c:forEach items="${district_Moneys.value}" var="dmv">
 						<td>${dmv}</td>
@@ -337,6 +311,9 @@
 		</tr>
 		</tbody>
 	</table>
+	</c:forEach>
+	
+
 	</div>
 	<script type="text/javascript">
 	$(function(){

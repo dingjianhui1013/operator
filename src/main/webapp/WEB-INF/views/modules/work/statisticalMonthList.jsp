@@ -39,11 +39,10 @@
 		var url = "${ctx}/sys/office/addOffices?areaId=";
 		$.getJSON(url + areaId+"&_="+new Date().getTime(), function(data) {
 			var html = "";
-			//console.log(data);
+			
 			html += "<option value=\""+""+"\">请选择</ooption>";
 			$.each(data, function(idx, ele) {
-				//console.log(idx);
-				//console.log(ele);
+				
 				html += "<option value=\""+ele.id+"\">" + ele.name
 						+ "</ooption>"
 			});
@@ -52,33 +51,7 @@
 		});
 
 	}
-// 	function sub()
-// 	{
-// 		var area =$("#area").val();
-// 		var endTime=$("#endTime").val();
-// 		var appId = $("#appId").val();
-// 		var startTime = $("#startTime").val();
-// 		if(endTime=="")
-// 			{
-// 				$("#endTime").val(startTime);
-// 			}
-// // 		if(area=="")
-// // 		{
-// // 			top.$.jBox.tip("请选择区域");
-// // 			return false;
-// // 		}
-// 		if(appId=="")
-// 			{
-// 				top.$.jBox.tip("请选择项目");
-// 				return false;
-// 			}
-// 		if(startTime=="")
-// 			{
-// 				top.$.jBox.tip("请选择统计时间");
-// 				return false;
-// 			}
-// 		return true;
-// 	}
+
 	function dc()
 	{
 		var area = $("#area").val();
@@ -90,11 +63,7 @@
 		{
 			$("#endTime").val(startTime);
 		}
-// 		else
-// 		if(area=="")
-// 		{
-// 			top.$.jBox.tip("请选择区域");
-// 		}
+
 		else
 		if(appId=="")
 		{
@@ -123,17 +92,17 @@
 		<label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;项目名称：</label>
 		<select name="appId" id="appId" data-placeholder="选择应用" class="editable-select">
 				<option value=""></option>
-			<c:forEach items="${appList}" var="app">
+			 <c:forEach items="${appList}" var="app">
 				<option value="${app.id}"
 					<c:if test="${app.id==appId}">
 					selected="selected"
 					</c:if>>${app.appName}</option>
-			</c:forEach>
+			</c:forEach> 
 		</select>
 		<label>选择区域 ：</label>
 		<select name="area" id="area" onchange="addOffice()">
 			<option value="">请选择</option>
-			<c:forEach items="${offsList}" var="off">
+			 <c:forEach items="${offsList}" var="off">
 				<option value="${off.id}"
 					<c:if test="${off.id==area}">
 					selected="selected"
@@ -143,12 +112,12 @@
 		<label>选择网点 ：</label>
 		<select name="office" id="office">
 			<option value="">请选择</option>
-			<c:forEach items="${offices}" var="off">
+			 <c:forEach items="${offices}" var="off">
 					<option value="${off.id}"
 						<c:if test="${off.id==officeId}">
 						selected="selected"
 						</c:if>>${off.name}</option>
-				</c:forEach>
+				</c:forEach> 
 		</select>
 		</div>
 		<div style="margin-top: 9px">
@@ -169,13 +138,16 @@
 		</div>
 	</form:form>
 	<tags:message content="${message}" />
-	<table id="contentTable" 
+	
+	<c:forEach items="${receivedPayments }" var="receivedPayment">
+	
+ 		<table id="contentTable" 
 		class="table table-striped table-bordered table-condensed">
 		<thead>
 			<tr>
 				<th  rowspan="2" style="text-align:center;">统计日期</th>
 				<th  rowspan="2" style="text-align:center;">项目名称</th>
-				<c:forEach items="${office_payMethod}" var="office_payMethod">
+				<c:forEach items="${receivedPayment.officePayMethod}" var="office_payMethod">
 					<c:set var="index" value="0" />
 					<c:forEach items="${office_payMethod.value}">
 						<c:set var="index" value="${index+1}" />
@@ -190,7 +162,7 @@
 				<th rowspan="2" style="text-align:center;">合计</th>
 			</tr>
 			<tr>
-				<c:forEach items="${office_payMethod}" var="office_payMethod">
+				<c:forEach items="${receivedPayment.officePayMethod}" var="office_payMethod">
 					<c:set var="index" value="0" />
 					<c:forEach items="${office_payMethod.value}">
 						<c:set var="index" value="${index+1}" />
@@ -209,7 +181,7 @@
 				<c:set var="xj" value="0" />
 				<c:set var="alipay" value="0" />
 				<c:set var="index" value="0" />
-				<c:forEach items="${workoffice_MoneyVo}" var="workoffice_MoneyVo">
+				<c:forEach items="${receivedPayment.officeMoneyVo}" var="workoffice_MoneyVo">
 						<c:if test="${workoffice_MoneyVo.countPostMoney>0}">
 							<c:set var="post" value="${post+1}" />
 						</c:if>
@@ -228,12 +200,12 @@
 		<c:set var="xjMoney" value="0" />
 		<c:set var="alipaymoney" value="0" />
 		<c:set var="zj" value="0" />
-		<c:forEach items="${dates}" var = "dates">
+		<c:forEach items="${receivedPayment.dates}" var = "dates">
 			<tr>
 				<td>${dates}</td>
-				<td>${appName}</td>
-				<c:forEach items="${office_payMethod }" var="office_payMethod">
-					<c:forEach items="${workoffice_MoneyVo}" var="workoffice_MoneyVo" >
+				<td>${receivedPayment.appName}</td>
+				<c:forEach items="${receivedPayment.officePayMethod }" var="office_payMethod">
+					<c:forEach items="${receivedPayment.officeMoneyVo}" var="workoffice_MoneyVo" >
 						<c:if test = "${workoffice_MoneyVo.date == dates &&workoffice_MoneyVo.officeName==office_payMethod.key}">
 							<c:if test="${workoffice_MoneyVo.postMoney}">
 								<c:set var="postMoney" value="${postMoney+workoffice_MoneyVo.countPostMoney}"/>
@@ -254,27 +226,32 @@
 						</c:if>
 						</c:forEach>
 					</c:forEach>
-					<c:forEach items="${workDate_Mone}" var="workDate_Mone">
+					<c:forEach items="${receivedPayment.dateMoneyVo}" var="workDate_Mone">
 						<c:if test="${workDate_Mone.date==dates}">
 							<td>${workDate_Mone.countMoney}</td>
 						</c:if>
 					</c:forEach>
 			<tr>
 		</c:forEach>
-		<tr>
+		 <tr>
 			<td>合计</td>
 			<td></td>
-			<c:if test="${moneys==null}">
+			<c:if test="${receivedPayment.payMethodMoneys==null}">
 				<td>0.0</td>
 			</c:if>
-			<c:if test="${moneys!=null}">
-				<c:forEach items="${moneys}" var="moneys">
+			<c:if test="${receivedPayment.payMethodMoneys!=null}">
+				<c:forEach items="${receivedPayment.payMethodMoneys}" var="moneys">
 					<td>${moneys}</td>
 				</c:forEach>
 			</c:if>
-		</tr>
+		</tr> 
 		</tbody>
-	</table>
+	</table> 
+	
+	</c:forEach>
+	
+	
+
 	<script type="text/javascript">
 	$(function(){
 	    $('.editable-select').chosen();
