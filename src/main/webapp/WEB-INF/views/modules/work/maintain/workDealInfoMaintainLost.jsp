@@ -624,11 +624,9 @@
 							<td class="tdWidth" style="vertical-align:middle"><input type="text" name="legalName" disabled="disabled"
 								value="${workDealInfo.workCompany.legalName}"></td>
 							<th>行政所属区：</th>
-							<td><select id="s_province" name="s_province" disabled="disabled"
-								style="width: 103px;">
-							</select>&nbsp;&nbsp; <select id="s_city" name="s_city" disabled="disabled"
-								style="width: 103px;"></select>&nbsp;&nbsp; <select disabled="disabled"
-								id="s_county" name="s_county" style="width: 103px;"></select> 
+							<td><select id="s_province" name="s_province" disabled="disabled" style="width: 103px;"></select>&nbsp;&nbsp;
+								<select id="s_city" name="s_city" disabled="disabled" style="width: 103px;"></select>&nbsp;&nbsp; 
+								<select disabled="disabled" id="s_county" name="s_county" style="width: 103px;"></select> 
 								<script type="text/javascript">
 								$("#s_province").append('<option value="${workDealInfo.workCompany.province}" selected="selected">${workDealInfo.workCompany.province}</option>');
 								$("#s_city").append('<option value="${workDealInfo.workCompany.city}" selected="selected">${workDealInfo.workCompany.city}</option>');

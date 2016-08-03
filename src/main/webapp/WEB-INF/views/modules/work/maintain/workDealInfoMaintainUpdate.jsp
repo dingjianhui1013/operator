@@ -17,6 +17,14 @@
 </style>
 <script type="text/javascript" src="${ctxStatic }/js/content_zoom.js"></script>
 <script type="text/javascript" src="${ctxStatic }/js/common.js"></script>
+
+<script type="text/javascript">
+    var ctx = "${ctx}";
+    var province = "${workDealInfo.workCompany.province}";
+    var city = "${workDealInfo.workCompany.city}";
+    var district = "${workDealInfo.workCompany.district}";
+</script>
+
 <script type="text/javascript">
 	$(document).ready(function() {
 		
@@ -399,77 +407,10 @@
 		}
 	};
 	
-	
-	
-	//得到省
-	function getPrivince(){
-		$.ajax({
-			url : "${ctx}/selfArea/findAllPrivince",
-			type : "GET",
-			dataType : "JSON",
-			success : function(d) {
-				var privinceHtml = "<option onclick = \"getCity('0');\" value = ''>省份</option>";
-				$.each(d.list,function(idx, ele) {
-					privinceHtml += "<option onclick = \"getCity('"+ele.area_id+"');\" id = \""+ele.area_id +"\" value ='"+ele.area_name+"'>"+ele.area_name+"</option>";
-				});
-				$("#s_province").html(privinceHtml);
-				$("#s_province").append('<option value="${workDealInfo.workCompany.province}" selected="selected">${workDealInfo.workCompany.province}</option>');
-
-			}
-		});
-	}
-	
-	
-	
-	
-	//得到第二级
-	function getCity(privinceId){
-		if(privinceId!= "0"){
-			$.ajax({
-				url : "${ctx}/selfArea/findLower?higher="+ privinceId,
-				type : "GET",
-				dataType : "JSON",
-				success : function(d) {
-					var cityHtml = "<option onclick = \"getTown('0');\" value = ''>地级市</option>";
-					$.each(d.list,function(idx, ele) {
-						cityHtml += "<option onclick = \"getTown('"+ele.area_id+"');\" id = \""+ele.area_id+"\" value = '"+ele.area_name+"'>"+ele.area_name+"</option>";
-					});
-					$("#s_city").html(cityHtml);
-					
-				}
-			});
-		}else{
-			$("#s_city").html("<option value = ''>地级市</option>");
-			$("#s_county").html("<option value = ''>市、县级市</option>");
-		}
-	}
-	
-	
-	//得到第三级
-	function getTown(cityId){
-		if(cityId!= "0"){
-			$.ajax({
-				url : "${ctx}/selfArea/findLower?higher="+ cityId,
-				type : "GET",
-				dataType : "JSON",
-				success : function(d) {
-					var townHtml = "<option value = ''>市、县级市</option>";
-					$.each(d.list,function(idx, ele) {
-						townHtml += "<option id = \""+ele.area_id+"\" value = '"+ele.area_name+"'>"+ele.area_name+"</option>";
-					});
-					$("#s_county").html(townHtml);
-					
-				}
-			});
-		}else{
-			$("#s_county").html("<option value = ''>市、县级市</option>");
-		}
-	}
-	
-	
-	
 </script>
 <script type="text/javascript" src="${ctxStatic}/jquery/city.js"></script>
+<script type="text/javascript" src="${ctxStatic}/jquery/area.js"></script>
+
 <script type="text/javascript">	
 	function onSubmit(){
 		
@@ -1009,14 +950,16 @@
 							<td class="tdWidth" style="vertical-align: middle;"><input type="text" name="legalName"
 								value="${workDealInfo.workCompany.legalName}"></td>
 							<th>行政所属区：</th>
-							<td><select id="s_province" name="s_province"
-								style="width: 105px;">
-							</select>&nbsp;&nbsp; <select id="s_city" name="s_city"
-								style="width: 105px;"></select>&nbsp;&nbsp; <select
-								id="s_county" name="s_county" style="width: 105px;"></select> 
+							<td><select id="s_province" name="s_province" onchange="getCity(this.options[this.options.selectedIndex].id)" style="width: 105px;"></select>&nbsp;&nbsp; 
+								<select id="s_city" name="s_city" onchange="getTown(this.options[this.options.selectedIndex].id)" style="width: 105px;"></select>&nbsp;&nbsp; 
+								<select id="s_county" name="s_county" style="width: 105px;"></select> 
 								<script type="text/javascript">
-									$("#s_city").append('<option value="${workDealInfo.workCompany.city}" selected="selected">${workDealInfo.workCompany.city}</option>');
-									$("#s_county").append('<option value="${workDealInfo.workCompany.district}" selected="selected">${workDealInfo.workCompany.district}</option>');
+								if(${provinceId!=null}){
+									getCity(${provinceId});
+								}
+								if(${cityId!=null}){
+									getTown(${cityId});
+								}	
 								</script>
 								</td>
 
