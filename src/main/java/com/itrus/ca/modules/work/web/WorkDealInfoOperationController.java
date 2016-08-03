@@ -59,6 +59,7 @@ import com.itrus.ca.modules.profile.service.ConfigChargeAgentService;
 import com.itrus.ca.modules.profile.service.ConfigProductService;
 import com.itrus.ca.modules.profile.service.ConfigRaAccountService;
 import com.itrus.ca.modules.self.entity.SelfImage;
+import com.itrus.ca.modules.self.service.SelfAreaService;
 import com.itrus.ca.modules.self.service.SelfImageService;
 import com.itrus.ca.modules.sys.utils.UserUtils;
 import com.itrus.ca.modules.work.entity.WorkCertApplyInfo;
@@ -157,6 +158,9 @@ public class WorkDealInfoOperationController extends BaseController {
 	
 	@Autowired
 	private SelfImageService selfImageService;
+	
+	@Autowired
+	private SelfAreaService selfAreaService;
 	
 	private LogUtil logUtil = new LogUtil();
 
@@ -804,6 +808,19 @@ public class WorkDealInfoOperationController extends BaseController {
 		if(workDealInfo.getExpirationDate()!=null){
 			model.addAttribute("expirationDate", workDealInfo.getExpirationDate());	
 		}		
+		
+		
+		//获得省和市对应self_area表中的id
+		if(workDealInfo.getWorkCompany().getProvince()!=null&&!workDealInfo.getWorkCompany().getProvince().isEmpty()){
+			String provinceId = selfAreaService.findByAreaName(workDealInfo.getWorkCompany().getProvince()).getAreaId();
+			model.addAttribute("provinceId", provinceId);
+		}
+				
+		if(workDealInfo.getWorkCompany().getProvince()!=null&&!workDealInfo.getWorkCompany().getProvince().isEmpty()){
+			String cityId = selfAreaService.findByAreaName(workDealInfo.getWorkCompany().getCity()).getAreaId();
+			model.addAttribute("cityId", cityId);
+		}
+				
 		
 		return "modules/work/workDealInfoErrorForm";
 	}

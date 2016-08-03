@@ -93,4 +93,15 @@ public class SelfAreaService extends BaseService {
         dc.addOrder(Order.asc("areaId"));
         return selfAreaDao.find(dc);
     }
+    
+    
+    public SelfArea findByAreaName(String areaName){
+    	List<SelfArea> list = selfAreaDao.findByAreaName(areaName);
+    	if(list.size()==1){
+    		return list.get(0);
+        }else{
+        	return null;
+        }
+    }
+    
 }

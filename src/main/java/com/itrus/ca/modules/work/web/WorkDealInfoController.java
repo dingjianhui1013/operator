@@ -114,6 +114,7 @@ import com.itrus.ca.modules.receipt.service.ReceiptDepotInfoService;
 import com.itrus.ca.modules.receipt.service.ReceiptEnterInfoService;
 import com.itrus.ca.modules.receipt.service.ReceiptInvoiceService;
 import com.itrus.ca.modules.self.entity.SelfImage;
+import com.itrus.ca.modules.self.service.SelfAreaService;
 import com.itrus.ca.modules.self.service.SelfImageService;
 import com.itrus.ca.modules.service.ItrustProxyUtil;
 import com.itrus.ca.modules.sys.entity.Office;
@@ -262,6 +263,9 @@ public class WorkDealInfoController extends BaseController {
 
 	@Autowired
 	private WorkDealInfoExpViewService workDealInfoExpViewService;
+	
+	@Autowired
+	private SelfAreaService selfAreaService;
 
 	@Value(value = "${ixin.url}")
 	private String ixinUrl;
@@ -3649,8 +3653,21 @@ public class WorkDealInfoController extends BaseController {
 					.intValue(), ssssi);
 			listProductTypeObjs.add(obj);
 		}
+		
 		model.addAttribute("proList", listProductTypeObjs);
 
+		
+		//获得省和市对应self_area表中的id
+		if(workDealInfo.getWorkCompany().getProvince()!=null&&!workDealInfo.getWorkCompany().getProvince().isEmpty()){
+			String provinceId = selfAreaService.findByAreaName(workDealInfo.getWorkCompany().getProvince()).getAreaId();
+			model.addAttribute("provinceId", provinceId);
+		}
+						
+		if(workDealInfo.getWorkCompany().getProvince()!=null&&!workDealInfo.getWorkCompany().getProvince().isEmpty()){
+			String cityId = selfAreaService.findByAreaName(workDealInfo.getWorkCompany().getCity()).getAreaId();
+			model.addAttribute("cityId", cityId);
+		}
+		
 		if (dealInfoTypes.size() == 1) {
 			if (dealInfoTypes.get(0).equals(4)) {// 变更
 				return "modules/work/maintain/workDealInfoMaintainReturnChange";
@@ -5665,12 +5682,12 @@ public class WorkDealInfoController extends BaseController {
 					}
 				}
 
-				/*
-				 * if (!inOffice) { redirectAttributes.addAttribute("fd",
-				 * UUID.randomUUID().toString()); addMessage(redirectAttributes,
-				 * "请到业务办理网点更新！"); return "redirect:" + Global.getAdminPath() +
-				 * "/work/workDealInfo/?repage"; }
-				 */
+					
+				 if (!inOffice) { redirectAttributes.addAttribute("fd",
+				UUID.randomUUID().toString()); addMessage(redirectAttributes,
+				"请到业务办理网点更新！"); return "redirect:" + Global.getAdminPath() +
+						"/work/workDealInfo/?repage"; }
+					 
 			} else if (type[i].equals("4")) {
 				model.addAttribute("revoke", "4");
 				if (!inOffice) {
@@ -5735,9 +5752,22 @@ public class WorkDealInfoController extends BaseController {
 		}
 		model.addAttribute("proList", listProductTypeObjs);
 
-		model.addAttribute("expirationDate",
-				StringHelper.getLastDateOfCurrentYear());
-
+		model.addAttribute("expirationDate",StringHelper.getLastDateOfCurrentYear());
+		
+		//获得省和市对应self_area表中的id
+		if(workDealInfo.getWorkCompany().getProvince()!=null&&!workDealInfo.getWorkCompany().getProvince().isEmpty()){
+			String provinceId = selfAreaService.findByAreaName(workDealInfo.getWorkCompany().getProvince()).getAreaId();
+			model.addAttribute("provinceId", provinceId);
+		}
+		
+		if(workDealInfo.getWorkCompany().getProvince()!=null&&!workDealInfo.getWorkCompany().getProvince().isEmpty()){
+			String cityId = selfAreaService.findByAreaName(workDealInfo.getWorkCompany().getCity()).getAreaId();
+			model.addAttribute("cityId", cityId);
+		}
+		
+		
+		
+		
 		if (dealType.indexOf("1") >= 0) {
 
 			model.addAttribute("isOK", "isNo");

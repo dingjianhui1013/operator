@@ -66,6 +66,7 @@ import com.itrus.ca.modules.receipt.service.ReceiptEnterInfoService;
 import com.itrus.ca.modules.receipt.service.ReceiptInvoiceService;
 import com.itrus.ca.modules.self.entity.SelfApplication;
 import com.itrus.ca.modules.self.service.SelfApplicationService;
+import com.itrus.ca.modules.self.service.SelfAreaService;
 import com.itrus.ca.modules.self.utils.SelfApplicationStatus;
 import com.itrus.ca.modules.sys.entity.Office;
 import com.itrus.ca.modules.sys.entity.User;
@@ -142,6 +143,9 @@ public class WorkPayInfoController extends BaseController {
 	
 	@Autowired
 	private ConfigProductService configProductService;
+	
+	@Autowired
+	private SelfAreaService selfAreaService;
 	
 	
 	
@@ -1565,6 +1569,17 @@ public class WorkPayInfoController extends BaseController {
 			listProductTypeObjs.add(obj);
 		}
 		model.addAttribute("proList", listProductTypeObjs);
+		
+		//获得省和市对应self_area表中的id
+		if(dealInfo.getWorkCompany().getProvince()!=null&&!dealInfo.getWorkCompany().getProvince().isEmpty()){
+			String provinceId = selfAreaService.findByAreaName(dealInfo.getWorkCompany().getProvince()).getAreaId();
+			model.addAttribute("provinceId", provinceId);
+		}
+				
+		if(dealInfo.getWorkCompany().getProvince()!=null&&!dealInfo.getWorkCompany().getProvince().isEmpty()){
+			String cityId = selfAreaService.findByAreaName(dealInfo.getWorkCompany().getCity()).getAreaId();
+			model.addAttribute("cityId", cityId);
+		}
 		
 
 		if (dealInfoTypes.size() == 1) {
