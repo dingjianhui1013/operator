@@ -1,18 +1,20 @@
 //得到省
 	function getPrivince(){
-
+		$("#s_province").html("");
 		$.ajax({
 			url : ctx+"/selfArea/findAllPrivince",
 			type : "GET",
 			dataType : "JSON",
 			success : function(d) {
 				
-				var opt = new Option('省份','');
+				
+				var opt = document.createElement("OPTION");
+				opt.innerText='省份';
 				$("#s_province").append(opt);
 				$.each(d.list,function(idx, ele) {
 					
 					var var_Option = document.createElement("OPTION");
-					var_Option.text=ele.area_name;
+					var_Option.innerText=ele.area_name;
 					var_Option.value=ele.area_name;
 					var_Option.id=ele.area_id;
 					if(ele.area_name == province){
@@ -41,11 +43,13 @@
 				type : "GET",
 				dataType : "JSON",
 				success : function(d) {
-					var opt = new Option('地级市','');
+					
+					var opt = document.createElement("OPTION");
+					opt.innerText='地级市';
 					$("#s_city").append(opt);
 					$.each(d.list,function(idx, ele) {
 						var var_Option = document.createElement("OPTION");
-						var_Option.text=ele.area_name;
+						var_Option.innerText=ele.area_name;
 						var_Option.value=ele.area_name;
 						var_Option.id=ele.area_id;
 						if(ele.area_name ==city){
@@ -74,11 +78,12 @@
 				type : "GET",
 				dataType : "JSON",
 				success : function(d) {
-					var opt = new Option('市、县级市','');
+					var opt = document.createElement("OPTION");
+					opt.innerText='市、县级市';
 					$("#s_county").append(opt);
 					$.each(d.list,function(idx, ele) {
 						var var_Option = document.createElement("OPTION");
-						var_Option.text=ele.area_name;
+						var_Option.innerText=ele.area_name;
 						var_Option.value=ele.area_name;
 						var_Option.id=ele.area_id;
 						if(ele.area_name ==district){
