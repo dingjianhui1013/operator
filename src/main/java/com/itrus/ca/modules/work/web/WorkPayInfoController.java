@@ -1576,7 +1576,7 @@ public class WorkPayInfoController extends BaseController {
 			model.addAttribute("provinceId", provinceId);
 		}
 				
-		if(dealInfo.getWorkCompany().getProvince()!=null&&!dealInfo.getWorkCompany().getProvince().isEmpty()){
+		if(dealInfo.getWorkCompany().getCity()!=null&&!dealInfo.getWorkCompany().getCity().isEmpty()){
 			String cityId = selfAreaService.findByAreaName(dealInfo.getWorkCompany().getCity()).getAreaId();
 			model.addAttribute("cityId", cityId);
 		}

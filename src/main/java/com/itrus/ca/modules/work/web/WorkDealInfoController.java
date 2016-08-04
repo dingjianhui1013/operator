@@ -3663,7 +3663,7 @@ public class WorkDealInfoController extends BaseController {
 			model.addAttribute("provinceId", provinceId);
 		}
 						
-		if(workDealInfo.getWorkCompany().getProvince()!=null&&!workDealInfo.getWorkCompany().getProvince().isEmpty()){
+		if(workDealInfo.getWorkCompany().getCity()!=null&&!workDealInfo.getWorkCompany().getCity().isEmpty()){
 			String cityId = selfAreaService.findByAreaName(workDealInfo.getWorkCompany().getCity()).getAreaId();
 			model.addAttribute("cityId", cityId);
 		}
@@ -4748,7 +4748,7 @@ public class WorkDealInfoController extends BaseController {
 					json.put("provinceId", provinceId);
 				}
 				
-				if(workCompany.getProvince()!=null&&!workCompany.getProvince().isEmpty()){
+				if(workCompany.getCity()!=null&&!workCompany.getCity().isEmpty()){
 					String cityId = selfAreaService.findByAreaName(workCompany.getCity()).getAreaId();
 					json.put("cityId", cityId);
 				}
@@ -5773,7 +5773,7 @@ public class WorkDealInfoController extends BaseController {
 			model.addAttribute("provinceId", provinceId);
 		}
 		
-		if(workDealInfo.getWorkCompany().getProvince()!=null&&!workDealInfo.getWorkCompany().getProvince().isEmpty()){
+		if(workDealInfo.getWorkCompany().getCity()!=null&&!workDealInfo.getWorkCompany().getCity().isEmpty()){
 			String cityId = selfAreaService.findByAreaName(workDealInfo.getWorkCompany().getCity()).getAreaId();
 			model.addAttribute("cityId", cityId);
 		}

@@ -816,7 +816,7 @@ public class WorkDealInfoOperationController extends BaseController {
 			model.addAttribute("provinceId", provinceId);
 		}
 				
-		if(workDealInfo.getWorkCompany().getProvince()!=null&&!workDealInfo.getWorkCompany().getProvince().isEmpty()){
+		if(workDealInfo.getWorkCompany().getCity()!=null&&!workDealInfo.getWorkCompany().getCity().isEmpty()){
 			String cityId = selfAreaService.findByAreaName(workDealInfo.getWorkCompany().getCity()).getAreaId();
 			model.addAttribute("cityId", cityId);
 		}
