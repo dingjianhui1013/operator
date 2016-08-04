@@ -412,7 +412,7 @@
 	};
 		
 </script>
-<script type="text/javascript" src="${ctxStatic}/jquery/city.js"></script>
+<script type="text/javascript" src="${ctxStatic}/jquery/area.js"></script>
 <script type="text/javascript">	
 	function onSubmit(){
 		$("#newInfoId").val(getCookie("work_deal_info_id"));
