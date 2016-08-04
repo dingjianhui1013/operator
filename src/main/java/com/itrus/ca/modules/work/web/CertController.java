@@ -1058,7 +1058,7 @@ public class CertController extends BaseController {
 		user.getOffice().getName();
 		String sn = sdf.format(date).toString().substring(2);
 		List<WorkDealInfo> list = workDealInfoService.findNum(workDealInfo, "%" + sn + "%");
-		int num = list.size() + 1;
+		int num =  (list == null?0:list.size()) + 1;
 		String numstr = "";
 		if (num > 0 && num < 10) {
 			numstr = "00" + num;
