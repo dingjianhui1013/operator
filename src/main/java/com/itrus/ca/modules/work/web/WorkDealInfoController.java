@@ -4741,6 +4741,19 @@ public class WorkDealInfoController extends BaseController {
 				json.put("city", workCompany.getCity());
 				json.put("province", workCompany.getProvince());
 				json.put("district", workCompany.getDistrict());
+				
+				//获得省和市对应self_area表中的id
+				if(workCompany.getProvince()!=null&&!workCompany.getProvince().isEmpty()){
+					String provinceId = selfAreaService.findByAreaName(workCompany.getProvince()).getAreaId();
+					json.put("provinceId", provinceId);
+				}
+				
+				if(workCompany.getProvince()!=null&&!workCompany.getProvince().isEmpty()){
+					String cityId = selfAreaService.findByAreaName(workCompany.getCity()).getAreaId();
+					json.put("cityId", cityId);
+				}
+				
+				
 				json.put("companyMobile", workCompany.getCompanyMobile());
 
 				if (workCompany.getOrgExpirationTime() != null) {
