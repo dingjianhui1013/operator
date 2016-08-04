@@ -18,9 +18,9 @@ input[readonly]{width:206px;}
 
 <script type="text/javascript">
 var ctx = "${ctx}";
-var province = "${workDealInfo.workCompany.province}";
-var city = "${workDealInfo.workCompany.city}";
-var district = "${workDealInfo.workCompany.district}";
+var province;
+var city;
+var district;
 var appData;
 var selected = false;
 
@@ -733,7 +733,7 @@ var selected = false;
 																			$("#address").val(d.address);
 																			$("#companyMobile").val(d.companyMobile);
 																			$("#remarks").val(d.remarks);
-																			$("#s_province").val(d.province);
+																			//$("#s_province").val(d.province);
 																			$("#contactName").val(d.contactName);
 																			if (d.conCertType == 0) {
 																				$("#conCertType0").attr("selected","selected");
@@ -760,11 +760,26 @@ var selected = false;
 																				$("#pIDCard").val(d.conCertNumber);
 																			}
 																			$("#pEmail").val(d.contacEmail);
-																			if(d.province != null){
+																			/* if(d.province != null){
 																				$("#s_province").append('<option value="'+d.province+'" selected="selected">'+d.province+'</option>');
 																				$("#s_city").append('<option value="'+d.city+'" selected="selected">'+d.city+'</option>');
 																				$("#s_county").append('<option value="'+d.district+'" selected="selected">'+d.district+'</option>');
+																			} */
+																			
+																			province = d.province;
+																			city = d.city;
+																			district = d.district;
+																			
+																			getPrivince();
+																			
+																			if(province.length>0){
+																				getCity(d.provinceId);	
 																			}
+																			if(city.length>0){
+																				getTown(d.cityId);	
+																			}
+																			
+																			
 																	});
 																}else
 																	{
@@ -850,7 +865,7 @@ var selected = false;
 																			$("#address").val(d.address);
 																			$("#companyMobile").val(d.companyMobile);
 																			$("#remarks").val(d.remarks);
-																			$("#s_province").val(d.province);
+																			//$("#s_province").val(d.province);
 																			$("#contactName").val(d.contactName);
 																			if (d.conCertType == 0) {
 																				$("#conCertType0").attr("selected","selected");
@@ -877,11 +892,26 @@ var selected = false;
 																				$("#pIDCard").val(d.conCertNumber);
 																			}
 																			$("#pEmail").val(d.contacEmail);
-																			if(d.province != null){
+																			/* if(d.province != null){
 																				$("#s_province").append('<option value="'+d.province+'" selected="selected">'+d.province+'</option>');
 																				$("#s_city").append('<option value="'+d.city+'" selected="selected">'+d.city+'</option>');
 																				$("#s_county").append('<option value="'+d.district+'" selected="selected">'+d.district+'</option>');
+																			} */
+																			
+																			
+																			province = d.province;
+																			city = d.city;
+																			district = d.district;
+																			
+																			getPrivince();
+																			
+																			if(province.length>0){
+																				getCity(d.provinceId);	
 																			}
+																			if(city.length>0){
+																				getTown(d.cityId);	
+																			}
+																			
 																	});
 																}
 															
@@ -1598,7 +1628,7 @@ var selected = false;
 		</div>
 	</form:form>
 	
-	<script type="text/javascript" src="${ctxStatic}/jquery/areaCheck.js"></script>
+
 
 </body>
  
