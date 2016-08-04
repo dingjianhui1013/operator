@@ -31,8 +31,8 @@ $(document).ready(function(){
 	 $.getJSON(url,function(data){
 		 
 		//如果状态为待制证,跳转到第四个页面 
-		if (d.updateStatus == 106){
-				window.location.href="${ctxILetter}/enroll/bgfw3Nextform?id="+d.dealInfoId;
+		if (data.updateStatus == 106){
+				window.location.href="${ctxILetter}/enroll/bgfw3Nextform?id="+data.dealInfoId;
 		} 
 		 
 		 
