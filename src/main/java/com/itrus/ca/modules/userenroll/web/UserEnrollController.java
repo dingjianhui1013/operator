@@ -274,13 +274,20 @@ public class UserEnrollController extends BaseController {
 				json.put("startDate", sdf.format(certInfo.getNotbefore()));
 				json.put("endDate", sdf.format(certInfo.getNotafter()));
 
+				
+				WorkDealInfo current = workDealInfoService.findDealInfo(dealInfos.get(0).getId());
+				
 				// 如果业务已经到达待制证状态,返回业务的id
-				if ( WorkDealInfoType.TYPE_UPDATE_CERT.equals(dealInfos.get(0).getDealInfoType())
-						&& WorkDealInfoStatus.STATUS_CERT_WAIT.equals(dealInfos.get(0).getDealInfoStatus())) {
-					json.put("updateStatus", 106);
-					json.put("dealInfoId", dealInfos.get(0).getId());
-					return json.toString();
+				if(current!=null){
+					if ( WorkDealInfoType.TYPE_INFORMATION_REROUTE.equals(current.getDealInfoType2())
+							&& WorkDealInfoStatus.STATUS_CERT_WAIT.equals(current.getDealInfoStatus())) {
+						json.put("updateStatus", 106);
+						json.put("dealInfoId", current.getId());
+						return json.toString();
+					}
 				}
+				
+				
 				
 				
 				ConfigChargeAgent configChargeAgent = configChargeAgentService
@@ -1102,10 +1109,19 @@ public class UserEnrollController extends BaseController {
 			WorkDealInfo workDealInfo = workDealInfoService.get(new Long(id));
 			model.addAttribute("workDealInfo", workDealInfo);
 			
-			ConfigRaAccount raAccount = raAccountService.get(workDealInfo.getConfigProduct().getRaAccountId());	
+			WorkDealInfo oldDealInfo = null;
+			
+			if (workDealInfo.getPrevId() != null) {
+				// 获取上一张证书的签名证书序列号
+				oldDealInfo = workDealInfoService.get(workDealInfo.getPrevId());
+				model.addAttribute("signSerialNumber", oldDealInfo.getWorkCertInfo().getSerialnumber().toLowerCase());
+			}
+			
+			
+			ConfigRaAccount raAccount = raAccountService.get(oldDealInfo.getConfigProduct().getRaAccountId());	
 			
 			//证书CN
-			ConfigRaAccountExtendInfo extendInfo = configRaAccountExtendInfoService.get(workDealInfo.getConfigProduct().getRaAccountExtedId());		
+			ConfigRaAccountExtendInfo extendInfo = configRaAccountExtendInfoService.get(oldDealInfo.getConfigProduct().getRaAccountExtedId());		
 	
 			String certCN = extendInfo.getCommonNameDisplayName().equals("0")?workDealInfo.getWorkCompany().getCompanyName():(extendInfo.getCommonNameDisplayName().equals("1")?workDealInfo.getWorkUser().getContactName():workDealInfo.getWorkUserHis().getContactName());
 			
@@ -1113,15 +1129,11 @@ public class UserEnrollController extends BaseController {
 			
 			model.addAttribute("certCNOmit", certCN.length()>20?certCN.substring(0, 20)+"...":certCN);
 			SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
-			model.addAttribute("keySN", workDealInfo.getKeySn());
-			model.addAttribute("notbefore", sdf1.format(workDealInfo.getWorkCertInfo().getNotbefore()));
-			model.addAttribute("notafter", sdf1.format(workDealInfo.getWorkCertInfo().getNotafter()));
+			model.addAttribute("keySN", oldDealInfo.getKeySn());
+			model.addAttribute("notbefore", sdf1.format(oldDealInfo.getWorkCertInfo().getNotbefore()));
+			model.addAttribute("notafter", sdf1.format(oldDealInfo.getWorkCertInfo().getNotafter()));
 			model.addAttribute("status", workDealInfo.getDealInfoStatus().equals(WorkDealInfoStatus.STATUS_CERT_WAIT)?"等待变更":WorkDealInfoStatus.WorkDealInfoStatusMap.get(workDealInfo.getDealInfoStatus()));
-			if (workDealInfo.getPrevId() != null) {
-				// 获取上一张证书的签名证书序列号
-				WorkDealInfo oldDealInfo = workDealInfoService.get(workDealInfo.getPrevId());
-				model.addAttribute("signSerialNumber", oldDealInfo.getWorkCertInfo().getSerialnumber().toLowerCase());
-			}
+			
 			
 			//秘钥长度
 			if(raAccount.getKeyLen()!=null){
@@ -1196,7 +1208,7 @@ public class UserEnrollController extends BaseController {
 			model.addAttribute("certCNOmit", certCN.length()>20?certCN.substring(0, 20)+"...":certCN);
 			
 		}
-		return "iLetter/zhengshufuwu_bgfw5";
+		return "iLetter/zhengshufuwu_bzfw5";
 	}
 	
 	
