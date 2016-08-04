@@ -1142,15 +1142,18 @@ overflow:hidden;
 height:85px;
 padding:0;
 background:url(../images/gx_step.png) 0 -362px no-repeat;
-margin:20px 50px 0px 25px;
+/* margin:20px 50px 20px 35px; */
+margin-top:20px;
+margin-left:80px;
 overflow:hidden;
 }
 
 .zsfw_bgfw_step5{width:270px;
 height:85px;
 padding:0;
-background:url(../images/bgfw_step.png) 0 -455px no-repeat;
-margin:20px 50px 0px 25px;
+background:url(../images/gx_step.png) 0 -455px no-repeat;
+margin-top:20px;
+margin-left:80px;
 overflow:hidden;
 }
 
