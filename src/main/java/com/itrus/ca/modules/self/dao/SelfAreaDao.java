@@ -26,6 +26,13 @@ public interface SelfAreaDao extends SelfAreaDaoCustom, CrudRepository<SelfArea,
 	@Query("from SelfArea where areaName = ?1")
 	public List<SelfArea> findByAreaName(String areaName);
 
+	
+	
+	
+	
+	@Modifying
+	@Query("from SelfArea where areaName = ?1 and parentId = ?2")
+	public List<SelfArea> findByProvinceName(String areaName,String provincedId);
 }
 
 /**

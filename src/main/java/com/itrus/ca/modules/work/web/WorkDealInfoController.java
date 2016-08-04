@@ -113,6 +113,7 @@ import com.itrus.ca.modules.receipt.entity.ReceiptInvoice;
 import com.itrus.ca.modules.receipt.service.ReceiptDepotInfoService;
 import com.itrus.ca.modules.receipt.service.ReceiptEnterInfoService;
 import com.itrus.ca.modules.receipt.service.ReceiptInvoiceService;
+import com.itrus.ca.modules.self.entity.SelfArea;
 import com.itrus.ca.modules.self.entity.SelfImage;
 import com.itrus.ca.modules.self.service.SelfAreaService;
 import com.itrus.ca.modules.self.service.SelfImageService;
@@ -3661,11 +3662,12 @@ public class WorkDealInfoController extends BaseController {
 		if(workDealInfo.getWorkCompany().getProvince()!=null&&!workDealInfo.getWorkCompany().getProvince().isEmpty()){
 			String provinceId = selfAreaService.findByAreaName(workDealInfo.getWorkCompany().getProvince()).getAreaId();
 			model.addAttribute("provinceId", provinceId);
-		}
+			if(workDealInfo.getWorkCompany().getCity()!=null&&!workDealInfo.getWorkCompany().getCity().isEmpty()){
 						
-		if(workDealInfo.getWorkCompany().getCity()!=null&&!workDealInfo.getWorkCompany().getCity().isEmpty()){
-			String cityId = selfAreaService.findByAreaName(workDealInfo.getWorkCompany().getCity()).getAreaId();
-			model.addAttribute("cityId", cityId);
+				String cityId = selfAreaService.findByProvinceName(workDealInfo.getWorkCompany().getCity(),provinceId).getAreaId();
+				model.addAttribute("cityId", cityId);
+			}
+				
 		}
 		
 		if (dealInfoTypes.size() == 1) {
@@ -4743,14 +4745,15 @@ public class WorkDealInfoController extends BaseController {
 				json.put("district", workCompany.getDistrict());
 				
 				//获得省和市对应self_area表中的id
-				if(workCompany.getProvince()!=null&&!workCompany.getProvince().isEmpty()){
-					String provinceId = selfAreaService.findByAreaName(workCompany.getProvince()).getAreaId();
+				if(workDealInfo.getWorkCompany().getProvince()!=null&&!workDealInfo.getWorkCompany().getProvince().isEmpty()){
+					String provinceId = selfAreaService.findByAreaName(workDealInfo.getWorkCompany().getProvince()).getAreaId();
 					json.put("provinceId", provinceId);
-				}
+					if(workDealInfo.getWorkCompany().getCity()!=null&&!workDealInfo.getWorkCompany().getCity().isEmpty()){
+						
+						String cityId = selfAreaService.findByProvinceName(workDealInfo.getWorkCompany().getCity(),provinceId).getAreaId();
+						json.put("cityId", cityId);
+					}
 				
-				if(workCompany.getCity()!=null&&!workCompany.getCity().isEmpty()){
-					String cityId = selfAreaService.findByAreaName(workCompany.getCity()).getAreaId();
-					json.put("cityId", cityId);
 				}
 				
 				
@@ -5771,12 +5774,15 @@ public class WorkDealInfoController extends BaseController {
 		if(workDealInfo.getWorkCompany().getProvince()!=null&&!workDealInfo.getWorkCompany().getProvince().isEmpty()){
 			String provinceId = selfAreaService.findByAreaName(workDealInfo.getWorkCompany().getProvince()).getAreaId();
 			model.addAttribute("provinceId", provinceId);
+			if(workDealInfo.getWorkCompany().getCity()!=null&&!workDealInfo.getWorkCompany().getCity().isEmpty()){
+				
+				String cityId = selfAreaService.findByProvinceName(workDealInfo.getWorkCompany().getCity(),provinceId).getAreaId();
+				model.addAttribute("cityId", cityId);
+			}
+		
 		}
 		
-		if(workDealInfo.getWorkCompany().getCity()!=null&&!workDealInfo.getWorkCompany().getCity().isEmpty()){
-			String cityId = selfAreaService.findByAreaName(workDealInfo.getWorkCompany().getCity()).getAreaId();
-			model.addAttribute("cityId", cityId);
-		}
+		
 		
 		
 		

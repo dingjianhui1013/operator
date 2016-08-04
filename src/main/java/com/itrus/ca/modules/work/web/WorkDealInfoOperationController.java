@@ -814,11 +814,12 @@ public class WorkDealInfoOperationController extends BaseController {
 		if(workDealInfo.getWorkCompany().getProvince()!=null&&!workDealInfo.getWorkCompany().getProvince().isEmpty()){
 			String provinceId = selfAreaService.findByAreaName(workDealInfo.getWorkCompany().getProvince()).getAreaId();
 			model.addAttribute("provinceId", provinceId);
-		}
+			if(workDealInfo.getWorkCompany().getCity()!=null&&!workDealInfo.getWorkCompany().getCity().isEmpty()){
+						
+				String cityId = selfAreaService.findByProvinceName(workDealInfo.getWorkCompany().getCity(),provinceId).getAreaId();
+				model.addAttribute("cityId", cityId);
+			}
 				
-		if(workDealInfo.getWorkCompany().getCity()!=null&&!workDealInfo.getWorkCompany().getCity().isEmpty()){
-			String cityId = selfAreaService.findByAreaName(workDealInfo.getWorkCompany().getCity()).getAreaId();
-			model.addAttribute("cityId", cityId);
 		}
 				
 		System.out.println("325846");

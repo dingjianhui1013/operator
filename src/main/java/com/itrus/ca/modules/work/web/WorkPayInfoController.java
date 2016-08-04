@@ -1574,13 +1574,14 @@ public class WorkPayInfoController extends BaseController {
 		if(dealInfo.getWorkCompany().getProvince()!=null&&!dealInfo.getWorkCompany().getProvince().isEmpty()){
 			String provinceId = selfAreaService.findByAreaName(dealInfo.getWorkCompany().getProvince()).getAreaId();
 			model.addAttribute("provinceId", provinceId);
-		}
+			if(dealInfo.getWorkCompany().getCity()!=null&&!dealInfo.getWorkCompany().getCity().isEmpty()){
+						
+				String cityId = selfAreaService.findByProvinceName(dealInfo.getWorkCompany().getCity(),provinceId).getAreaId();
+				model.addAttribute("cityId", cityId);
+			}
 				
-		if(dealInfo.getWorkCompany().getCity()!=null&&!dealInfo.getWorkCompany().getCity().isEmpty()){
-			String cityId = selfAreaService.findByAreaName(dealInfo.getWorkCompany().getCity()).getAreaId();
-			model.addAttribute("cityId", cityId);
 		}
-		
+	
 
 		if (dealInfoTypes.size() == 1) {
 			if (dealInfoTypes.get(0).equals(4)) {// 变更

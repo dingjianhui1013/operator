@@ -104,4 +104,16 @@ public class SelfAreaService extends BaseService {
         }
     }
     
+    
+    
+    
+ 
+    public SelfArea findByProvinceName(String areaName,String provincedId){
+    	List<SelfArea> list = selfAreaDao.findByProvinceName(areaName,provincedId);
+    	if(list.size()==1){
+    		return list.get(0);
+        }else{
+        	return null;
+        }
+    }
 }
