@@ -150,7 +150,7 @@ public class SystemAuthorizingRealm extends AuthorizingRealm {
 				if(e.getMessage().contains("Could not open connection")){
 					throw new CaptchaException("证书登录错误！:数据库连接失败！");
 				}
-				e.printStackTrace();
+			//	e.printStackTrace();
 				throw new CaptchaException("证书登录错误！:" + e.getMessage());
 			}
 			
