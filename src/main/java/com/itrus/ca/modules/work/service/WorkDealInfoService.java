@@ -55,6 +55,7 @@ import com.itrus.ca.common.utils.RaAccountUtil;
 import com.itrus.ca.common.utils.StringHelper;
 import com.itrus.ca.modules.constant.WorkDealInfoStatus;
 import com.itrus.ca.modules.constant.WorkDealInfoType;
+import com.itrus.ca.modules.finance.entity.FinancePaymentInfo;
 import com.itrus.ca.modules.finance.service.FinancePaymentInfoService;
 import com.itrus.ca.modules.log.service.LogUtil;
 import com.itrus.ca.modules.profile.entity.ConfigAgentBoundDealInfo;
@@ -74,6 +75,7 @@ import com.itrus.ca.modules.profile.service.ConfigChargeAgentDetailService;
 import com.itrus.ca.modules.profile.service.ConfigChargeAgentService;
 import com.itrus.ca.modules.profile.service.ConfigProductService;
 import com.itrus.ca.modules.profile.service.ConfigRaAccountExtendInfoService;
+import com.itrus.ca.modules.report.vo.WorkDealInfoVO;
 import com.itrus.ca.modules.sys.entity.Office;
 import com.itrus.ca.modules.sys.entity.User;
 import com.itrus.ca.modules.sys.utils.CreateExcelUtils;
@@ -92,6 +94,7 @@ import com.itrus.ca.modules.work.entity.WorkPayInfo;
 import com.itrus.ca.modules.work.entity.WorkUser;
 import com.itrus.ca.modules.work.entity.WorkUserHis;
 import com.itrus.ca.modules.work.vo.WorkDealInfoListVo;
+import com.itrus.ca.modules.work.vo.WorkpaymentInfo_dealinfoVo;
 
 /**
  * 业务办理Service
@@ -7843,5 +7846,140 @@ public class WorkDealInfoService extends BaseService {
 		po.setFirstCertSN(findFirstCertSNById(workDealInfoId));
 		updateFirstCertSN(po);
 	}
+	
+	
+	/**
+	 * 查询用支付信息支付的业务集合
+	 * 
+	 * WorkDealInfo,WorkPayInfo,FinancePaymentInfo,WorkFinancePayInfoRelation,ConfigApp 五张表联合查询
+	 * 
+	 * @param financePaymentInfo
+	 * @return List<WorkpaymentInfo_dealinfoVo>
+	 */
+	public List<WorkpaymentInfo_dealinfoVo> findPaymentDeal(FinancePaymentInfo financePaymentInfo,Long appId,Date startCertTime, Date endCertTime,Date startPayTime,Date endPayTime,List<Long> officeList)throws Exception{
+		StringBuffer sql = new StringBuffer();
+		
+		sql.append("select fpi.company as companyName,fpi.pay_date as dealPayDate,fpi.payment_money as payMoney,fpi.remark as remarks,ca.app_name as aliasName,wdi.business_card_user_date as signDate from work_deal_info wdi,");
+		sql.append(" work_pay_info wpi,");
+		sql.append(" finance_payment_info fpi,");
+		sql.append(" work_finance_pay_info_relation wfpr,");
+		sql.append(" config_app ca");
+		
+		//几个表之间的逻辑关系
+		sql.append(" where wdi.pay_id = wpi.id");
+		sql.append(" and wdi.app_id = ca.id");
+		sql.append(" and wfpr.work_pay_info = wpi.id");
+		sql.append(" and wfpr.finance_pay_info = fpi.id");
+		
+		
+		//条件查询 appId
+		if(appId!=null){
+			sql.append(" and ca.id = ").append(appId);
+		}
+		
+		//条件查询 单位名称模糊查询
+		if (financePaymentInfo.getCompany()!=null) {
+			if (StringUtils.isNotEmpty(financePaymentInfo.getCompany())){
+				sql.append(" and fpi.company like '%").append(financePaymentInfo.getCompany()).append("%'");
+			}
+		}
+		
+		//条件查询 制证初始时间
+		if(startCertTime!=null){
+			sql.append(" and wdi.business_card_user_date >= TO_DATE('" + DateUtils.formatDate(startCertTime, "yyyy-MM-dd 00:00:00")
+			+ "', 'yyyy-MM-dd hh24:mi:ss')");
+		}
+		
+		//条件查询 制证结束时间
+		if(endCertTime!=null){
+			sql.append(" and wdi.business_card_user_date <= TO_DATE('" + DateUtils.formatDate(endCertTime, "yyyy-MM-dd 23:59:59")
+			+ "', 'yyyy-MM-dd hh24:mi:ss')");
+		}
+		
+		//条件查询 支付初始时间
+		if(startPayTime!=null){
+			sql.append(" and fpi.pay_date >= TO_DATE('" + DateUtils.formatDate(startPayTime, "yyyy-MM-dd 00:00:00")
+			+ "', 'yyyy-MM-dd hh24:mi:ss')");
+		}
+		
+		//条件查询 支付结束时间
+		if(endPayTime!=null){
+			sql.append(" and fpi.pay_date <= TO_DATE('" + DateUtils.formatDate(endPayTime, "yyyy-MM-dd 23:59:59")
+			+ "', 'yyyy-MM-dd hh24:mi:ss')");
+		}
+		
+		
+		//条件查询  所办业务要在网点权限范围内
+		sql.append(" and wdi.office_id in (").append(officeList.get(0));
+		
+		for(int i=1;i<officeList.size();i++){
+			sql.append(",").append(officeList.get(i));
+		}
+		sql.append(")");
+		
+		sql.append(" and fpi.DEL_FLAG = ").append(DataEntity.DEL_FLAG_NORMAL);
+		sql.append(" and fpi.quit_money_status != 1");
+		sql.append(" order by fpi.pay_date asc");
+		
+		
+		List<Map> lst = null;
+
+		try {
+			lst = workDealInfoDao.findBySQLListMap(sql.toString(), 0, 0);
+
+		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | ClassNotFoundException
+				| InstantiationException e1) {
+			e1.printStackTrace();
+		}
+		
+		
+		
+		List<WorkpaymentInfo_dealinfoVo> resLst = new ArrayList<WorkpaymentInfo_dealinfoVo>();
+		for (Map e : lst) {
+			WorkpaymentInfo_dealinfoVo vo = new WorkpaymentInfo_dealinfoVo();
+			Iterator<String> it = e.keySet().iterator();
+			while (it.hasNext()) {
+				String k = it.next();
+				if (k.equals("COMPANYNAME")) {
+					if (e.get("COMPANYNAME") != null)
+						vo.setCompanyName(e.get("COMPANYNAME").toString());
+				}
+
+				if (k.equals("DEALPAYDATE")) {
+					if (e.get("DEALPAYDATE") != null)
+						vo.setDealPayDate(new SimpleDateFormat("yyyy-MM-dd").parse(e.get("DEALPAYDATE").toString()));
+
+				}
+
+				if (k.equals("PAYMONEY")) {
+					if (e.get("PAYMONEY") != null)
+						vo.setPayMoney(new Double(e.get("PAYMONEY").toString()));
+				}
+
+				if (k.equals("REMARKS")) {
+					if (e.get("REMARKS") != null)
+						vo.setRemarks(e.get("REMARKS").toString());
+				}
+
+				if (k.equals("ALIASNAME")) {
+					if (e.get("ALIASNAME") != null)
+						vo.setAliasName(e.get("ALIASNAME").toString());
+				}
+
+				if (k.equals("SIGNDATE")) {
+					if (e.get("SIGNDATE") != null)
+						vo.setSignDate(new SimpleDateFormat("yyyy-MM-dd").parse(e.get("SIGNDATE").toString()));
+				}
+
+			}
+			resLst.add(vo);
+		}
+		return resLst;
+		
+	}
+	
+	
+	
+	
 
 }

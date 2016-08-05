@@ -29,6 +29,8 @@ public class ReceivedPaymentsVo {
 	private List<Double> payMethodMoneys;
 	
 	private Double moneys;
+	
+	private List<WorkpaymentInfo_dealinfoVo> paymentDealInfoVo; 
 
 	public Map<String, List<String>> getOfficePayMethod() {
 		return officePayMethod;
@@ -116,6 +118,14 @@ public class ReceivedPaymentsVo {
 
 	public void setMoneys(Double moneys) {
 		this.moneys = moneys;
+	}
+
+	public List<WorkpaymentInfo_dealinfoVo> getPaymentDealInfoVo() {
+		return paymentDealInfoVo;
+	}
+
+	public void setPaymentDealInfoVo(List<WorkpaymentInfo_dealinfoVo> paymentDealInfoVo) {
+		this.paymentDealInfoVo = paymentDealInfoVo;
 	}
 	
 	

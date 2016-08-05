@@ -122,10 +122,8 @@ public class FinancePaymentInfoService extends BaseService {
 				dc.add(Restrictions.like("company", "%"+EscapeUtil.escapeLike(financePaymentInfo.getCompany())+"%"));
 			}
 		}
-		if (StringUtils.isNotEmpty(financePaymentInfo.getCommUserName())) {
-			dc.add(Restrictions.like("commUserName", "%"+EscapeUtil.escapeLike(financePaymentInfo.getCommUserName())+"%"));
-		}
-		//dc.add(Restrictions.not(Restrictions.eq("quitMoneyStatus", 1)));
+		
+		dc.add(Restrictions.ne("quitMoneyStatus", 1));
 		dc.add(Restrictions.eq(FinancePaymentInfo.DEL_FLAG, FinancePaymentInfo.DEL_FLAG_NORMAL));
 		dc.addOrder(Order.desc("id"));
 		return financePaymentInfoDao.find(dc);

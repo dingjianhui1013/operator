@@ -5,13 +5,13 @@ import java.util.List;
 import java.util.Map;
 
 public class WorkpaymentInfo_dealinfoVo {
-	private Long id;
-	private Date dealPayDate;
+	private Long id;                               
+	private Date dealPayDate;        //支付日期(到款日期)
 	private Double payMoney;
-	private String companyName;
-	private String remarks;
-	private String aliasName;
-	private Date signDate;
+	private String companyName;      //公司名称 
+	private String remarks;          //备注
+	private String aliasName;        //应用名称
+	private Date signDate;           //制证日期
 	public Long getId() {
 		return id;
 	}

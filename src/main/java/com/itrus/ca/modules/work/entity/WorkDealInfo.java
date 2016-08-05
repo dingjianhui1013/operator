@@ -106,7 +106,7 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 	private Integer isRevokeBusiness;      //2016.7.18  是否为吊销业务              吊销的情况有多种(吊销业务,遗失补办,key升级等),只有吊销业务时才将此字段设为1
 	private Date revokeDate;               //2016.7.18  吊销时间
 	
-	private Integer isKeyUpgrade;          //2016.7.19 是否為key升级  
+	//private Integer isKeyUpgrade;          //2016.7.19 是否為key升级  
 	
 	private Long configChargeAgentId;
 	private User inputUser;// 录入人
@@ -680,14 +680,14 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 		this.revokeDate = revokeDate;
 	}
 	
-	@Column(name = "is_key_upgrade")
+	/*@Column(name = "is_key_upgrade")
 	public Integer getIsKeyUpgrade() {
 		return isKeyUpgrade;
 	}
 
 	public void setIsKeyUpgrade(Integer isKeyUpgrade) {
 		this.isKeyUpgrade = isKeyUpgrade;
-	}
+	}*/
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "input_user")
