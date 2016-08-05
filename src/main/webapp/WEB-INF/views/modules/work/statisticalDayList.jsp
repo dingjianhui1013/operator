@@ -62,13 +62,7 @@
 		{
 			$("#endTime").val(startTime);
 		}
-
-		else
-		if(appId=="")
-		{
-			top.$.jBox.tip("请选择项目");
-		}else
-		if(startTime=="")
+		else if(startTime=="")
 		{
 			top.$.jBox.tip("请选择统计时间");
 		}else

@@ -91,6 +91,9 @@
 		</div>
 	</form:form>
 	<tags:message content="${message}" />
+	
+	<c:forEach items="${receivedPayments }" var="receivedPayment">
+	
 	<table id="contentTable"
 		class="table table-striped table-bordered table-condensed">
 		<thead>
@@ -104,7 +107,7 @@
 			</tr>
 		</thead>
 		<tbody>
-		<c:forEach items="${workpaymentInfo_dealinfoVo}" var="p_d">
+		<c:forEach items="${receivedPayment.paymentDealInfoVo}" var="p_d">
 			<tr>
 				<td>${p_d.dealPayDate}</td>
 				<td>${p_d.payMoney}</td>
@@ -116,6 +119,10 @@
 		</c:forEach>
 		</tbody>
 	</table>
+	
+	</c:forEach>
+	
+	
 	<script type="text/javascript">
 	$(function(){
 	    $('.editable-select').chosen();
