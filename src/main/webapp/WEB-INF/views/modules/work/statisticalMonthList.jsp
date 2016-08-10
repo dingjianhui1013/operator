@@ -59,23 +59,7 @@
 		var startTime = $("#startTime").val();
 		var endTime = $("#endTime").val();
 		var office= $("#office").val();
-		if(endTime=="")
-		{
-			$("#endTime").val(startTime);
-		}
-
-		else
-		if(appId=="")
-		{
-			top.$.jBox.tip("请选择项目");
-		}else
-		if(startTime=="")
-		{
-			top.$.jBox.tip("请选择统计时间");
-		}else
-			{
-				window.location.href="${ctx}/work/workDealInfo/exportMonthPayment?area="+area+"&appId="+appId+"&startTime="+startTime+"&endTime="+endTime+"&office="+office;
-			}
+		window.location.href="${ctx}/work/workDealInfo/exportMonthPayment?area="+area+"&appId="+appId+"&startTime="+startTime+"&endTime="+endTime+"&office="+office;
 	}
 </script>
 </head>
