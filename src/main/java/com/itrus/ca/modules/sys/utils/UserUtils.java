@@ -222,7 +222,7 @@ public class UserUtils extends BaseService {
 			
 			User user = getUser();
 			
-			List<Office> offsList = officeService.getOfficeByType(user, 1);
+		/*	List<Office> offsList = officeService.getOfficeByType(user, 1);
 			List<Long> areas = Lists.newArrayList();
 			if (offsList.size() > 0) {
 				for (int i = 0; i < offsList.size(); i++) {
@@ -240,8 +240,22 @@ public class UserUtils extends BaseService {
 				} else {
 					officeids.add(-1l);
 				}
+			}*/
+			
+			List<Office> offsList = officeService.getOfficeByType(user, 2);
+			
+			if(offsList.size()>0){
+				for (int i = 0; i < offsList.size(); i++) {
+					officeids.add(offsList.get(i).getId());
+				}
 			}
+			
 		}
+			
+			
+			
+			
+			
 		
 		
 		return officeids;

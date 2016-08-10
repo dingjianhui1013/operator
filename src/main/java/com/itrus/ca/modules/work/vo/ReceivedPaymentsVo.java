@@ -5,6 +5,7 @@ package com.itrus.ca.modules.work.vo;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 public class ReceivedPaymentsVo {
 	
@@ -13,8 +14,13 @@ public class ReceivedPaymentsVo {
 	private Map<String, Set<String>> officeDistrict;
 	private Map<String, List<String>> districtPayMethod;
 	private Map<String, List<Double>> districtMoneys;
-
 	
+	
+	private Map<String, Map<String,List<Double>>> officeDistrictMoney; 
+	
+	private Map<String, Map<String,List<String>>> officeDistrictPayMethod; 
+
+	private Set<String> district;
 	
 	private List<Workoffice_MoneyVo>  officeMoneyVo;
 	
@@ -31,6 +37,8 @@ public class ReceivedPaymentsVo {
 	private Double moneys;
 	
 	private List<WorkpaymentInfo_dealinfoVo> paymentDealInfoVo; 
+	
+	private Set<String> month;
 
 	public Map<String, List<String>> getOfficePayMethod() {
 		return officePayMethod;
@@ -126,6 +134,38 @@ public class ReceivedPaymentsVo {
 
 	public void setPaymentDealInfoVo(List<WorkpaymentInfo_dealinfoVo> paymentDealInfoVo) {
 		this.paymentDealInfoVo = paymentDealInfoVo;
+	}
+
+	public Set<String> getMonth() {
+		return month;
+	}
+
+	public void setMonth(Set<String> month) {
+		this.month = month;
+	}
+
+	public Set<String> getDistrict() {
+		return district;
+	}
+
+	public void setDistrict(Set<String> district) {
+		this.district = district;
+	}
+
+	public Map<String, Map<String, List<Double>>> getOfficeDistrictMoney() {
+		return officeDistrictMoney;
+	}
+
+	public void setOfficeDistrictMoney(Map<String, Map<String, List<Double>>> officeDistrictMoney) {
+		this.officeDistrictMoney = officeDistrictMoney;
+	}
+
+	public Map<String, Map<String, List<String>>> getOfficeDistrictPayMethod() {
+		return officeDistrictPayMethod;
+	}
+
+	public void setOfficeDistrictPayMethod(Map<String, Map<String, List<String>>> officeDistrictPayMethod) {
+		this.officeDistrictPayMethod = officeDistrictPayMethod;
 	}
 	
 	

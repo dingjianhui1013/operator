@@ -16,6 +16,9 @@ public class Workoffice_district_MoneyVo {
 	private Boolean xjMoney;
 	private Boolean alipayMoney;
 	private String date;
+	
+	
+	
 	public String getOfficeName() {
 		return officeName;
 	}
