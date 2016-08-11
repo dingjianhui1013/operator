@@ -52,6 +52,7 @@ import org.hibernate.search.query.DatabaseRetrievalMethod;
 import org.hibernate.search.query.ObjectLookupMethod;
 import org.hibernate.transform.ResultTransformer;
 import org.hibernate.transform.Transformers;
+import org.springframework.transaction.annotation.Transactional;
 import org.wltea.analyzer.lucene.IKAnalyzer;
 
 import com.itrus.ca.common.annotation.VOAnnotation;
@@ -179,6 +180,7 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 	 * @param parameter
 	 * @return
 	 */
+	@Transactional(readOnly = false)
 	public int update(String qlString, Object... parameter) {
 		return createQuery(qlString, parameter).executeUpdate();
 	}
@@ -211,12 +213,14 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 		return findBySql(page, sqlString, null, parameter);
 	}
 
+	@Transactional(readOnly = false)
 	public void exeSql(final String sql) {
 		try {
 			getSession().doReturningWork(new ReturningWork() {
 				public SQLQuery execute(Connection connection)
 						throws SQLException {
-					getSession().createSQLQuery(sql).executeUpdate();
+					Session session = getSession();
+					session.createSQLQuery(sql).executeUpdate();
 					return null;
 				}
 			});
@@ -305,6 +309,7 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 	 * @param parameter
 	 * @return
 	 */
+	@Transactional(readOnly = false)
 	public int updateBySql(String sqlString, Object... parameter) {
 		return createSqlQuery(sqlString, parameter).executeUpdate();
 	}
