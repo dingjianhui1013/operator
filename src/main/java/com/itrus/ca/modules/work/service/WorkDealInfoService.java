@@ -7832,8 +7832,11 @@ public class WorkDealInfoService extends BaseService {
 		WorkDealInfo po = get(workDealInfoId);
 		String firstCertSn = findFirstCertSNById(workDealInfoId);
 		po.setFirstCertSN(firstCertSn);
-		workDealInfoDao.save(po);
+		// workDealInfoDao.save(po);
 
+		String sql = "update work_deal_info set FIRST_CERT_SN='" + firstCertSn
+				+ "' where id=" + po.getId();
+		workDealInfoDao.exeSql(sql);
 	}
 
 	/**
