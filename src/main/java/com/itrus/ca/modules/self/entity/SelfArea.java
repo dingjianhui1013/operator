@@ -1,7 +1,5 @@
 package com.itrus.ca.modules.self.entity;
 
-
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -56,8 +54,8 @@ public class SelfArea implements java.io.Serializable {
 
 	// Property accessors
 	@SequenceGenerator(name = "COMMON_SEQUENCE", sequenceName = "COMMON_SEQUENCE")
-    @Id
-    @GeneratedValue(generator = "COMMON_SEQUENCE", strategy = GenerationType.SEQUENCE)
+	@Id
+	@GeneratedValue(generator = "COMMON_SEQUENCE", strategy = GenerationType.SEQUENCE)
 	public Long getId() {
 		return this.id;
 	}
@@ -66,7 +64,7 @@ public class SelfArea implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@Column(name = "AREA_ID", length = 40)
+	@Column(name = "AREA_ID", columnDefinition = "NVARCHAR2(40)")
 	public String getAreaId() {
 		return this.areaId;
 	}
@@ -75,7 +73,7 @@ public class SelfArea implements java.io.Serializable {
 		this.areaId = areaId;
 	}
 
-	@Column(name = "AREA_NAME", length = 100)
+	@Column(name = "AREA_NAME", columnDefinition = "NVARCHAR2(100)")
 	public String getAreaName() {
 		return this.areaName;
 	}
@@ -84,7 +82,7 @@ public class SelfArea implements java.io.Serializable {
 		this.areaName = areaName;
 	}
 
-	@Column(name = "PARENT_ID", length = 40)
+	@Column(name = "PARENT_ID", columnDefinition = "NVARCHAR2(40)")
 	public String getParentId() {
 		return this.parentId;
 	}
@@ -93,7 +91,7 @@ public class SelfArea implements java.io.Serializable {
 		this.parentId = parentId;
 	}
 
-	@Column(name = "AREA_LEVEL", length = 100)
+	@Column(name = "AREA_LEVEL", columnDefinition = "NVARCHAR2(100)")
 	public String getAreaLevel() {
 		return this.areaLevel;
 	}
@@ -102,7 +100,7 @@ public class SelfArea implements java.io.Serializable {
 		this.areaLevel = areaLevel;
 	}
 
-	@Column(name = "STATUS", length = 100)
+	@Column(name = "STATUS", columnDefinition = "NVARCHAR2(100)")
 	public String getStatus() {
 		return this.status;
 	}
@@ -111,7 +109,7 @@ public class SelfArea implements java.io.Serializable {
 		this.status = status;
 	}
 
-	@Column(name = "LASTMODIFYDATE", length = 100)
+	@Column(name = "LASTMODIFYDATE", columnDefinition = "NVARCHAR2(100)")
 	public String getLastmodifydate() {
 		return this.lastmodifydate;
 	}
@@ -120,7 +118,7 @@ public class SelfArea implements java.io.Serializable {
 		this.lastmodifydate = lastmodifydate;
 	}
 
-	@Column(name = "LASTMODIFYPERS", length = 60)
+	@Column(name = "LASTMODIFYPERS", columnDefinition = "NVARCHAR2(60)")
 	public String getLastmodifypers() {
 		return this.lastmodifypers;
 	}
@@ -129,7 +127,7 @@ public class SelfArea implements java.io.Serializable {
 		this.lastmodifypers = lastmodifypers;
 	}
 
-	@Column(name = "ISSTANDARDCODE", length = 4)
+	@Column(name = "ISSTANDARDCODE", columnDefinition = "NVARCHAR2(4)")
 	public String getIsstandardcode() {
 		return this.isstandardcode;
 	}
@@ -138,7 +136,7 @@ public class SelfArea implements java.io.Serializable {
 		this.isstandardcode = isstandardcode;
 	}
 
-	@Column(name = "DATASTANDARD", length = 60)
+	@Column(name = "DATASTANDARD", columnDefinition = "NVARCHAR2(60)")
 	public String getDatastandard() {
 		return this.datastandard;
 	}
@@ -147,7 +145,7 @@ public class SelfArea implements java.io.Serializable {
 		this.datastandard = datastandard;
 	}
 
-	@Column(name = "DELETE_TAG", length = 20)
+	@Column(name = "DELETE_TAG", columnDefinition = "NVARCHAR2(20)")
 	public String getDeleteTag() {
 		return this.deleteTag;
 	}
