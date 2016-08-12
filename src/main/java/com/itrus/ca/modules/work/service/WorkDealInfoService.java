@@ -2186,10 +2186,10 @@ public class WorkDealInfoService extends BaseService {
 		dc.createAlias("workUser", "workUser");
 		dc.createAlias("createBy", "createBy");
 		dc.createAlias("updateBy", "updateBy");
-		
+
 		dc.createAlias("configApp", "configApp");
 		dc.createAlias("configProduct", "configProduct");
-		
+
 		dc.add(Restrictions.in("officeId", offices));
 
 		if (workDealInfo.getInputUser() != null
@@ -3163,43 +3163,43 @@ public class WorkDealInfoService extends BaseService {
 
 	}
 
-	 public List<WorkDealInfo> findByDayPay1(Date startTime, Date endTime,
-	 List<Long> officeids, Long appId) {
-	long s = System.currentTimeMillis();
-	 DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
-	 dc.createAlias("workPayInfo", "workPayInfo");
-	 dc.add(Restrictions.isNotNull("workPayInfo"));
-	 dc.add(Restrictions.eq("workPayInfo.delFlag",
-	 WorkPayInfo.DEL_FLAG_NORMAL));
-	 List<String> status = Lists.newArrayList();
-	 status.add(WorkDealInfoStatus.STATUS_CERT_OBTAINED);
-	 status.add(WorkDealInfoStatus.STATUS_CERT_WAIT);
-	 dc.add(Restrictions.in("dealInfoStatus", status));
-	 if (startTime != null) {
-	 endTime.setHours(23);
-	 endTime.setMinutes(59);
-	 endTime.setSeconds(59);
-	 if (startTime != null) {
-	 dc.add(Restrictions.ge("workPayInfo.createDate", startTime));
-	 dc.add(Restrictions.le("workPayInfo.createDate", endTime));
-	 }
-	 // if (dealInfoByAreaIds != null && dealInfoByAreaIds.size() > 0) {
-	 // dc.add(Restrictions.in("id", dealInfoByAreaIds));
-	 // }
-	 if (appId != null) {
-	 dc.add(Restrictions.eq("configApp.id", appId));
-	 }
-	
-	 if (officeids != null && officeids.size() > 0) {
-	 dc.add(Restrictions.in("officeId", officeids));
-	 }
-	 dc.addOrder(Order.asc("workPayInfo.createDate"));
-	 return workDealInfoDao.find(dc);
-	 } else {
-	 return null;
-	 }
-	
-	 }
+	public List<WorkDealInfo> findByDayPay1(Date startTime, Date endTime,
+			List<Long> officeids, Long appId) {
+		long s = System.currentTimeMillis();
+		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
+		dc.createAlias("workPayInfo", "workPayInfo");
+		dc.add(Restrictions.isNotNull("workPayInfo"));
+		dc.add(Restrictions.eq("workPayInfo.delFlag",
+				WorkPayInfo.DEL_FLAG_NORMAL));
+		List<String> status = Lists.newArrayList();
+		status.add(WorkDealInfoStatus.STATUS_CERT_OBTAINED);
+		status.add(WorkDealInfoStatus.STATUS_CERT_WAIT);
+		dc.add(Restrictions.in("dealInfoStatus", status));
+		if (startTime != null) {
+			endTime.setHours(23);
+			endTime.setMinutes(59);
+			endTime.setSeconds(59);
+			if (startTime != null) {
+				dc.add(Restrictions.ge("workPayInfo.createDate", startTime));
+				dc.add(Restrictions.le("workPayInfo.createDate", endTime));
+			}
+			// if (dealInfoByAreaIds != null && dealInfoByAreaIds.size() > 0) {
+			// dc.add(Restrictions.in("id", dealInfoByAreaIds));
+			// }
+			if (appId != null) {
+				dc.add(Restrictions.eq("configApp.id", appId));
+			}
+
+			if (officeids != null && officeids.size() > 0) {
+				dc.add(Restrictions.in("officeId", officeids));
+			}
+			dc.addOrder(Order.asc("workPayInfo.createDate"));
+			return workDealInfoDao.find(dc);
+		} else {
+			return null;
+		}
+
+	}
 
 	public List<MonthPayment> findByDayPay(Date startTime, Date endTime,
 			List<Long> officeids, Long appId) throws ParseException {
@@ -3224,11 +3224,10 @@ public class WorkDealInfoService extends BaseService {
 			sqlBuffer.append(" AND p.create_date>=to_date('"
 					+ new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
 							.format(startTime) + "','yyyy-MM-dd HH24:mi:ss')");
-			
+
 		}
-		
-		
-		if(endTime !=null){
+
+		if (endTime != null) {
 			endTime.setHours(23);
 			endTime.setMinutes(59);
 			endTime.setSeconds(59);
@@ -3236,7 +3235,7 @@ public class WorkDealInfoService extends BaseService {
 					+ new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
 							.format(endTime) + "','yyyy-MM-dd HH24:mi:ss')");
 		}
-		
+
 		if (appId != null) {
 			sqlBuffer.append(" AND w.app_id=" + appId);
 		}
@@ -3332,7 +3331,7 @@ public class WorkDealInfoService extends BaseService {
 			endTime.setHours(23);
 			endTime.setMinutes(59);
 			endTime.setSeconds(59);
-		
+
 			if (startTime != null) {
 				dc.add(Restrictions.ge("workPayInfo.createDate", startTime));
 				dc.add(Restrictions.le("workPayInfo.createDate", endTime));
@@ -3477,7 +3476,7 @@ public class WorkDealInfoService extends BaseService {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("workPayInfo", "workPayInfo");
 		dc.add(Restrictions.isNotNull("workPayInfo"));
-		
+
 		dc.add(Restrictions.eq("workPayInfo.delFlag",
 				WorkPayInfo.DEL_FLAG_NORMAL));
 		List<String> status = Lists.newArrayList();
@@ -3488,7 +3487,7 @@ public class WorkDealInfoService extends BaseService {
 			endTime.setHours(23);
 			endTime.setMinutes(59);
 			endTime.setSeconds(59);
-			
+
 			if (startTime != null) {
 				dc.add(Restrictions.ge("workPayInfo.createDate", startTime));
 				dc.add(Restrictions.le("workPayInfo.createDate", endTime));
@@ -4377,8 +4376,9 @@ public class WorkDealInfoService extends BaseService {
 
 		// 只有一条的情况
 		if (lst != null && lst.size() == 1) {
-			lst.get(0).setDelFlag("0");
-			updateDelflag(lst.get(0));
+			WorkDealInfo po = lst.get(0);
+			po.setDelFlag("0");
+			workDealInfoDao.save(po);
 			return;
 		}
 
@@ -4387,41 +4387,20 @@ public class WorkDealInfoService extends BaseService {
 			if (pre == null && i != (lst.size() - 1)) {
 				continue;
 			}
+			WorkDealInfo po = lst.get(i);
 			if (pre != null) {
-				lst.get(i).setPrevId(pre.getId());
-				updatePreId(lst.get(i));
+				po.setPrevId(pre.getId());
+				workDealInfoDao.save(po);
 			}
 
 			if (i == 0) {
-				lst.get(i).setDelFlag("0");
-				updateDelflag(lst.get(i));
+				po.setDelFlag("0");
+				workDealInfoDao.save(po);
 			} else {
-				lst.get(i).setDelFlag("1");
-				updateDelflag(lst.get(i));
+				po.setDelFlag("1");
+				workDealInfoDao.save(po);
 			}
 		}
-	}
-
-	@Transactional(readOnly = false)
-	public void updatePreId(WorkDealInfo old) {
-		String sql = "update work_deal_info set prev_id=" + old.getPrevId()
-				+ " where id=" + old.getId();
-		// workDealInfoDao.update(sql, old.getPrevId(), old.getId());
-		workDealInfoDao.exeSql(sql);
-	}
-
-	@Transactional(readOnly = false)
-	public void updateDelflag(WorkDealInfo old) {
-		String sql = "update work_deal_info set del_flag=" + old.getDelFlag()
-				+ " where id=" + old.getId();
-		workDealInfoDao.exeSql(sql);
-	}
-
-	@Transactional(readOnly = false)
-	public void updateFirstCertSN(WorkDealInfo old) {
-		String sql = "update work_deal_info set FIRST_CERT_SN='"
-				+ old.getFirstCertSN() + "' where id=" + old.getId();
-		workDealInfoDao.exeSql(sql);
 	}
 
 	public void processPreId(Set<String> all) {
@@ -4638,7 +4617,7 @@ public class WorkDealInfoService extends BaseService {
 		dc.createAlias("configApp", "configApp");
 		dc.add(Restrictions.eq("officeId", officeId));
 		dc.add(Restrictions.eq("configApp.id", appId));
-		
+
 		dc.add(Restrictions.ge("businessCardUserDate", date));
 		dc.add(Restrictions.lt("businessCardUserDate", calendar.getTime()));
 		List<String> statusIntegers = new ArrayList<String>();
@@ -4680,7 +4659,7 @@ public class WorkDealInfoService extends BaseService {
 		dc.createAlias("configApp", "configApp");
 		dc.add(Restrictions.eq("officeId", officeId));
 		dc.add(Restrictions.eq("configApp.id", appId));
-		
+
 		dc.add(Restrictions.ge("businessCardUserDate", date));
 		dc.add(Restrictions.lt("businessCardUserDate", calendar.getTime()));
 
@@ -7743,8 +7722,10 @@ public class WorkDealInfoService extends BaseService {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.add(Restrictions.eq("certSn", firstCertSN));
 		dc.add(Restrictions.eq("dealInfoType", WorkDealInfoType.TYPE_ADD_CERT));
-
-		return workDealInfoDao.find(dc).get(0);
+		List<WorkDealInfo> lst = workDealInfoDao.find(dc);
+		if (lst == null || lst.size() <= 0)
+			return null;
+		return lst.get(0);
 	}
 
 	/**
@@ -7752,6 +7733,7 @@ public class WorkDealInfoService extends BaseService {
 	 * 
 	 * @return Long
 	 */
+	@Transactional(readOnly = false)
 	public void fixAllDataFirstCertSN(int maxCount) {
 
 		String ct = "select count(*) from WORK_DEAL_INFO where FIRST_CERT_SN is null ";
@@ -7840,100 +7822,105 @@ public class WorkDealInfoService extends BaseService {
 	 * @param workDealInfoId
 	 * @return List<WorkDealInfo>
 	 */
-	public void fixFirstCertSN(Long workDealInfoId) {
-
+	@Transactional(readOnly = false)
+	private void fixFirstCertSN(Long workDealInfoId) {
 		WorkDealInfo po = get(workDealInfoId);
 		po.setFirstCertSN(findFirstCertSNById(workDealInfoId));
-		updateFirstCertSN(po);
+		workDealInfoDao.save(po);
 	}
-	
-	
+
 	/**
 	 * 查询用支付信息支付的业务集合
 	 * 
-	 * WorkDealInfo,WorkPayInfo,FinancePaymentInfo,WorkFinancePayInfoRelation,ConfigApp 五张表联合查询
+	 * WorkDealInfo,WorkPayInfo,FinancePaymentInfo,WorkFinancePayInfoRelation,
+	 * ConfigApp 五张表联合查询
 	 * 
 	 * @param financePaymentInfo
 	 * @return List<WorkpaymentInfo_dealinfoVo>
 	 */
-	public List<WorkpaymentInfo_dealinfoVo> findPaymentDeal(FinancePaymentInfo financePaymentInfo,Long appId,Date startCertTime, Date endCertTime,Date startPayTime,Date endPayTime,List<Long> officeList)throws Exception{
+	public List<WorkpaymentInfo_dealinfoVo> findPaymentDeal(
+			FinancePaymentInfo financePaymentInfo, Long appId,
+			Date startCertTime, Date endCertTime, Date startPayTime,
+			Date endPayTime, List<Long> officeList) throws Exception {
 		StringBuffer sql = new StringBuffer();
-		
+
 		sql.append("select fpi.company as companyName,fpi.pay_date as dealPayDate,fpi.payment_money as payMoney,fpi.remark as remarks,ca.app_name as aliasName,wdi.business_card_user_date as signDate from work_deal_info wdi,");
 		sql.append(" work_pay_info wpi,");
 		sql.append(" finance_payment_info fpi,");
 		sql.append(" work_finance_pay_info_relation wfpr,");
 		sql.append(" config_app ca");
-		
-		//几个表之间的逻辑关系
+
+		// 几个表之间的逻辑关系
 		sql.append(" where wdi.pay_id = wpi.id");
 		sql.append(" and wdi.app_id = ca.id");
 		sql.append(" and wfpr.work_pay_info = wpi.id");
 		sql.append(" and wfpr.finance_pay_info = fpi.id");
-		
-		
-		//条件查询 appId
-		if(appId!=null){
+
+		// 条件查询 appId
+		if (appId != null) {
 			sql.append(" and ca.id = ").append(appId);
 		}
-		
-		//条件查询 单位名称模糊查询
-		if (financePaymentInfo.getCompany()!=null) {
-			if (StringUtils.isNotEmpty(financePaymentInfo.getCompany())){
-				sql.append(" and fpi.company like '%").append(financePaymentInfo.getCompany()).append("%'");
+
+		// 条件查询 单位名称模糊查询
+		if (financePaymentInfo.getCompany() != null) {
+			if (StringUtils.isNotEmpty(financePaymentInfo.getCompany())) {
+				sql.append(" and fpi.company like '%")
+						.append(financePaymentInfo.getCompany()).append("%'");
 			}
 		}
-		
-		//条件查询 制证初始时间
-		if(startCertTime!=null){
-			sql.append(" and wdi.business_card_user_date >= TO_DATE('" + DateUtils.formatDate(startCertTime, "yyyy-MM-dd 00:00:00")
-			+ "', 'yyyy-MM-dd hh24:mi:ss')");
+
+		// 条件查询 制证初始时间
+		if (startCertTime != null) {
+			sql.append(" and wdi.business_card_user_date >= TO_DATE('"
+					+ DateUtils
+							.formatDate(startCertTime, "yyyy-MM-dd 00:00:00")
+					+ "', 'yyyy-MM-dd hh24:mi:ss')");
 		}
-		
-		//条件查询 制证结束时间
-		if(endCertTime!=null){
-			sql.append(" and wdi.business_card_user_date <= TO_DATE('" + DateUtils.formatDate(endCertTime, "yyyy-MM-dd 23:59:59")
-			+ "', 'yyyy-MM-dd hh24:mi:ss')");
+
+		// 条件查询 制证结束时间
+		if (endCertTime != null) {
+			sql.append(" and wdi.business_card_user_date <= TO_DATE('"
+					+ DateUtils.formatDate(endCertTime, "yyyy-MM-dd 23:59:59")
+					+ "', 'yyyy-MM-dd hh24:mi:ss')");
 		}
-		
-		//条件查询 支付初始时间
-		if(startPayTime!=null){
-			sql.append(" and fpi.pay_date >= TO_DATE('" + DateUtils.formatDate(startPayTime, "yyyy-MM-dd 00:00:00")
-			+ "', 'yyyy-MM-dd hh24:mi:ss')");
+
+		// 条件查询 支付初始时间
+		if (startPayTime != null) {
+			sql.append(" and fpi.pay_date >= TO_DATE('"
+					+ DateUtils.formatDate(startPayTime, "yyyy-MM-dd 00:00:00")
+					+ "', 'yyyy-MM-dd hh24:mi:ss')");
 		}
-		
-		//条件查询 支付结束时间
-		if(endPayTime!=null){
-			sql.append(" and fpi.pay_date <= TO_DATE('" + DateUtils.formatDate(endPayTime, "yyyy-MM-dd 23:59:59")
-			+ "', 'yyyy-MM-dd hh24:mi:ss')");
+
+		// 条件查询 支付结束时间
+		if (endPayTime != null) {
+			sql.append(" and fpi.pay_date <= TO_DATE('"
+					+ DateUtils.formatDate(endPayTime, "yyyy-MM-dd 23:59:59")
+					+ "', 'yyyy-MM-dd hh24:mi:ss')");
 		}
-		
-		
-		//条件查询  所办业务要在网点权限范围内
+
+		// 条件查询 所办业务要在网点权限范围内
 		sql.append(" and wdi.office_id in (").append(officeList.get(0));
-		
-		for(int i=1;i<officeList.size();i++){
+
+		for (int i = 1; i < officeList.size(); i++) {
 			sql.append(",").append(officeList.get(i));
 		}
 		sql.append(")");
-		
+
 		sql.append(" and fpi.DEL_FLAG = ").append(DataEntity.DEL_FLAG_NORMAL);
 		sql.append(" and fpi.quit_money_status != 1");
 		sql.append(" order by fpi.pay_date asc");
-		
-		
+
 		List<Map> lst = null;
 
 		try {
 			lst = workDealInfoDao.findBySQLListMap(sql.toString(), 0, 0);
 
-		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | ClassNotFoundException
+		} catch (IllegalAccessException | IllegalArgumentException
+				| InvocationTargetException | ClassNotFoundException
 				| InstantiationException e1) {
 			e1.printStackTrace();
 		}
-		
-		
-		
+
 		List<WorkpaymentInfo_dealinfoVo> resLst = new ArrayList<WorkpaymentInfo_dealinfoVo>();
 		for (Map e : lst) {
 			WorkpaymentInfo_dealinfoVo vo = new WorkpaymentInfo_dealinfoVo();
@@ -7947,7 +7934,8 @@ public class WorkDealInfoService extends BaseService {
 
 				if (k.equals("DEALPAYDATE")) {
 					if (e.get("DEALPAYDATE") != null)
-						vo.setDealPayDate(new SimpleDateFormat("yyyy-MM-dd").parse(e.get("DEALPAYDATE").toString()));
+						vo.setDealPayDate(new SimpleDateFormat("yyyy-MM-dd")
+								.parse(e.get("DEALPAYDATE").toString()));
 
 				}
 
@@ -7968,18 +7956,15 @@ public class WorkDealInfoService extends BaseService {
 
 				if (k.equals("SIGNDATE")) {
 					if (e.get("SIGNDATE") != null)
-						vo.setSignDate(new SimpleDateFormat("yyyy-MM-dd").parse(e.get("SIGNDATE").toString()));
+						vo.setSignDate(new SimpleDateFormat("yyyy-MM-dd")
+								.parse(e.get("SIGNDATE").toString()));
 				}
 
 			}
 			resLst.add(vo);
 		}
 		return resLst;
-		
+
 	}
-	
-	
-	
-	
 
 }
