@@ -3589,15 +3589,20 @@ public class WorkDealInfoService extends BaseService {
 	}
 
 	public Long findDealInfoMax() {
-		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
-		dc.add(Restrictions.eq(WorkDealInfo.DEL_FLAG,
-				WorkDealInfo.DEL_FLAG_NORMAL));
-		dc.addOrder(Order.desc("id"));
-		if (workDealInfoDao.find(dc).size() > 0) {
-			return workDealInfoDao.find(dc).get(0).getId();
-		} else {
 
+		String sql = "select id from WORK_DEAL_INFO where rownum<=1 order by id desc";
+		List<Map> lst = null;
+		try {
+			lst = workDealInfoDao.findBySQLListMap(sql, 0, 0);
+		} catch (IllegalAccessException | IllegalArgumentException
+				| InvocationTargetException | ClassNotFoundException
+				| InstantiationException e) {
+			e.printStackTrace();
+		}
+		if (lst == null || lst.size() <= 0) {
 			return 0l;
+		} else {
+			return new Long(lst.get(0).get("ID").toString());
 		}
 
 	}
@@ -7825,8 +7830,10 @@ public class WorkDealInfoService extends BaseService {
 	@Transactional(readOnly = false)
 	private void fixFirstCertSN(Long workDealInfoId) {
 		WorkDealInfo po = get(workDealInfoId);
-		po.setFirstCertSN(findFirstCertSNById(workDealInfoId));
+		String firstCertSn = findFirstCertSNById(workDealInfoId);
+		po.setFirstCertSN(firstCertSn);
 		workDealInfoDao.save(po);
+
 	}
 
 	/**
