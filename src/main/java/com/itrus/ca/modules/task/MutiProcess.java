@@ -87,6 +87,7 @@ public class MutiProcess implements Runnable {
 			.getBean(OfficeService.class);
 
 	Logger log = Logger.getLogger(MutiProcess.class);
+
 	private List<BasicInfoScca> sccaList;
 	private Long officeId;
 	private User createBy;
@@ -419,7 +420,6 @@ public class MutiProcess implements Runnable {
 							.getTempStyle()));
 
 					workDealInfo.setConfigChargeAgentId(s1.getAgentId());
-					workDealInfo.setFirstCertSN(s1.getFirstCertSN());
 
 					workPayInfo.setWorkTotalMoney(openAccountMoney + addCert);
 					workPayInfo.setWorkPayedMoney(0d);
@@ -438,8 +438,16 @@ public class MutiProcess implements Runnable {
 					workDealInfo.setCanSettle(false);
 					s1.setUsed(true);
 
-					usedBasicInfo.add(s1);
-					unSavedDealInfos.add(workDealInfo);
+					// 没有firstCertSN的数据不做导入workDealInfo,和删除BASE_INFO_SCCA的操作
+					if (StringHelper.isNull(s1.getFirstCertSN())) {
+						log.error("BasicInfoScca无firstCertSN,不进行操作,id:"
+								+ s1.getId());
+						sjNum++;
+						continue;
+					} else {
+						usedBasicInfo.add(s1);
+						unSavedDealInfos.add(workDealInfo);
+					}
 
 					// log.error("新增业务数据生成完毕...当前第"+count+"条...");
 					log.debug("开始创建第" + number + "个线程,第" + sjNum + "条数据,中间表id："
