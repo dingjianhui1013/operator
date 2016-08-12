@@ -147,8 +147,7 @@
 		var url = "${ctx}/ca/makeCert?reqOverrideValidity=" + day
 		+ "&certProvider=" + cspStr + "&keySn=" + keySN + "&csr=" + csr
 		+ "&dealInfoId=${workDealInfo.id}&addCertDays="+$("#addCertDays").val()+"&_="+new Date().getTime();
-		$
-				.ajax({
+		$.ajax({
 					url : url,
 					async : false,
 					dataType : 'json',
