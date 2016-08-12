@@ -787,28 +787,22 @@ public class CertController extends BaseController {
 				}
 				
 				
-				//只有遗失补办吊销,其余情况都不吊销
+				
 				List<Integer> revokeList = new ArrayList<Integer>();
 				revokeList.add(WorkDealInfoType.TYPE_LOST_CHILD);
-			
+				revokeList.add(WorkDealInfoType.TYPE_DAMAGED_REPLACED);
 				// 吊销证书
-				if (dealInfo.getPrevId() != null && revokeList.contains(dealInfo.getDealInfoType1())) {
+				if (dealInfo.getPrevId() != null /*&& revokeList.contains(dealInfo.getDealInfoType())*/) {
 					WorkDealInfo old = workDealInfoService.get(dealInfo.getPrevId());
-					
-					if(old.getNotafter().after(new Date())){
-						revokeOldCert(old.getId());
-						old.setDealInfoStatus(WorkDealInfoStatus.STATUS_CERT_REVOKE);
-						workDealInfoService.save(old);	
-					}
+					revokeOldCert(old.getId());
+					old.setDealInfoStatus(WorkDealInfoStatus.STATUS_CERT_REVOKE);
+					workDealInfoService.save(old);
 				}
-				json.put("status", 1);
 			} else {
-				System.out.println("installCertResult : cert install failed. dealInfo id = "+ dealInfoId + ",result = " + result);
 				dealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_ABNORMAL_USER);// 异常业务
 				workDealInfoService.save(dealInfo);
-				json.put("status", -1);
 			}
-
+			json.put("status", 1);
 		} catch (Exception e) {
 			e.printStackTrace();
 			json.put("status", -1);
@@ -860,13 +854,11 @@ public class CertController extends BaseController {
 				// old.setDealInfoStatus(WorkDealInfoStatus.STATUS_CERT_UNABLE);
 				// workDealInfoService.save(old);
 				// }
-				json.put("status", 1);
 			} else {
-				System.out.println("installResult4Enroll : cert install failed. dealInfo id = "+ dealInfoId + ",result = " + result);
 				dealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_ABNORMAL_USER);// 异常业务
 				workDealInfoService.save(dealInfo);
-				json.put("status", -1);
 			}
+			json.put("status", 1);
 		} catch (Exception e) {
 			e.printStackTrace();
 			json.put("status", -1);
@@ -891,8 +883,6 @@ public class CertController extends BaseController {
 			caService.revokeCaCert(dealInfo.getCertSn(), "", raAccount);
 
 			dealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_CERT_REVOKE);
-			dealInfo.setIsRevokeBusiness(1);
-			dealInfo.setRevokeDate(new Date());
 			WorkCertInfo certInfo = dealInfo.getWorkCertInfo();
 			certInfo.setStatus(3);
 			certInfo.setRevokeDate(new Date());
@@ -1058,7 +1048,7 @@ public class CertController extends BaseController {
 		user.getOffice().getName();
 		String sn = sdf.format(date).toString().substring(2);
 		List<WorkDealInfo> list = workDealInfoService.findNum(workDealInfo, "%" + sn + "%");
-		int num =  (list == null?0:list.size()) + 1;
+		int num = list.size() + 1;
 		String numstr = "";
 		if (num > 0 && num < 10) {
 			numstr = "00" + num;

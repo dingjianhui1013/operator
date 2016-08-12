@@ -64,7 +64,7 @@ public class SelfArea implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@Column(name = "AREA_ID", columnDefinition = "NVARCHAR2(40)")
+	@Column(name = "AREA_ID", columnDefinition = "NVARCHAR2(20)")
 	public String getAreaId() {
 		return this.areaId;
 	}
