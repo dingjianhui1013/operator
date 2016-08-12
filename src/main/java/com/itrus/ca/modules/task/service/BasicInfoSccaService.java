@@ -3,7 +3,9 @@
  */
 package com.itrus.ca.modules.task.service;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.criterion.DetachedCriteria;
@@ -23,6 +25,7 @@ import com.itrus.ca.modules.task.entity.BasicInfoScca;
 
 /**
  * 中间表数据Service
+ * 
  * @author ZhangJingtao
  * @version 2014-08-18
  */
@@ -31,51 +34,72 @@ import com.itrus.ca.modules.task.entity.BasicInfoScca;
 public class BasicInfoSccaService extends BaseService {
 
 	@SuppressWarnings("unused")
-	private static Logger logger = LoggerFactory.getLogger(BasicInfoSccaService.class);
-	
+	private static Logger logger = LoggerFactory
+			.getLogger(BasicInfoSccaService.class);
+
 	@Autowired
 	private BasicInfoSccaDao basicInfoSccaDao;
-	
+
 	public BasicInfoScca get(Long id) {
 		return basicInfoSccaDao.findOne(id);
 	}
-	
-	public Page<BasicInfoScca> find(Page<BasicInfoScca> page, BasicInfoScca basicInfoScca) {
+
+	public Page<BasicInfoScca> find(Page<BasicInfoScca> page,
+			BasicInfoScca basicInfoScca) {
 		DetachedCriteria dc = basicInfoSccaDao.createDetachedCriteria();
-		if (StringUtils.isNotEmpty(basicInfoScca.getName())){
-			dc.add(Restrictions.like("name", "%"+EscapeUtil.escapeLike(basicInfoScca.getName())+"%"));
+		if (StringUtils.isNotEmpty(basicInfoScca.getName())) {
+			dc.add(Restrictions.like("name",
+					"%" + EscapeUtil.escapeLike(basicInfoScca.getName()) + "%"));
 		}
 		dc.addOrder(Order.desc("id"));
 		return basicInfoSccaDao.find(page, dc);
 	}
-	
+
 	@Transactional(readOnly = false)
 	public void save(BasicInfoScca basicInfoScca) {
 		basicInfoSccaDao.save(basicInfoScca);
 	}
-	
-	@Transactional(readOnly  = false)
-	public void  saveList(List<BasicInfoScca>  sccas){
+
+	@Transactional(readOnly = false)
+	public void saveList(List<BasicInfoScca> sccas) {
 		basicInfoSccaDao.save(sccas);
 	}
-	
+
 	@Transactional(readOnly = false)
 	public void delete(BasicInfoScca basicInfoScca) {
 		basicInfoSccaDao.delete(basicInfoScca);
 	}
-	
-	@Transactional(readOnly  = false)
-	public void  deleteList(List<BasicInfoScca>  sccas){
-		basicInfoSccaDao.delete(sccas);
-	}
-	
-	
-
 
 	@Transactional(readOnly = false)
-	public List<BasicInfoScca> findAll(){
+	public void deleteList(List<BasicInfoScca> sccas) {
+		basicInfoSccaDao.delete(sccas);
+	}
+
+	@Transactional(readOnly = false)
+	public List<BasicInfoScca> findAll() {
 		DetachedCriteria dc = basicInfoSccaDao.createDetachedCriteria();
-		dc.add(Restrictions.or(Restrictions.ne("used", true),Restrictions.isNull("used")));
+		dc.add(Restrictions.or(Restrictions.ne("used", true),
+				Restrictions.isNull("used")));
 		return (List<BasicInfoScca>) basicInfoSccaDao.find(dc);
 	}
+
+	public long count(boolean firstCertSnIsNull) {
+		String sql = "select count(*) c from BASE_INFO_SCCA";
+		if (firstCertSnIsNull)
+			sql += " where FIRST_CERT_SN is null";
+		List<Map> lst = null;
+		try {
+			lst = basicInfoSccaDao.findBySQLListMap(sql, 0, 0);
+		} catch (IllegalAccessException | IllegalArgumentException
+				| InvocationTargetException | ClassNotFoundException
+				| InstantiationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		if (lst == null || lst.size() < 0)
+			return 0l;
+		Map m = lst.get(0);
+		return new Long(m.get("C").toString());
+	}
+
 }
