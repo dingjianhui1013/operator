@@ -679,88 +679,92 @@ public class WorkDealInfoController extends BaseController {
 			double moneyCountMoney = 0L;
 			double bankCountMoney = 0L;
 			double alipayCountMoney = 0L;
+			
+			List<WorkDealInfo> countList = workDealInfoService.findByDealPay(
+					 workDealInfo,
+					startTime, endTime, appId, officeids);
 
-			if (page.getList().size() > 0) {
-				for (int i = 0; i < page.getList().size(); i++) {
-					if (page.getList().get(i).getWorkPayInfo()
+			if (countList.size() > 0) {
+				for (int i = 0; i < countList.size(); i++) {
+					if (countList.get(i).getWorkPayInfo()
 							.getRelationMethod() == null) {
-						if (page.getList().get(i).getWorkPayInfo()
+						if (countList.get(i).getWorkPayInfo()
 								.getMethodPos() == true) {
 							posCount += 1;
-							if (page.getList().get(i).getWorkPayInfo()
+							if (countList.get(i).getWorkPayInfo()
 									.getPosMoney() != null) {
-								if (page.getList().get(i).getWorkPayInfo()
+								if (countList.get(i).getWorkPayInfo()
 										.getPosMoney() > 0) {
-									posCountMoney += page.getList().get(i)
+									posCountMoney += countList.get(i)
 											.getWorkPayInfo().getPosMoney();
 								} else {
-									posCountMoney += (-page.getList().get(i)
+									posCountMoney += (-countList.get(i)
 											.getWorkPayInfo().getPosMoney());
 								}
 							}
 						}
-						if (page.getList().get(i).getWorkPayInfo()
+						if (countList.get(i).getWorkPayInfo()
 								.getMethodBank() == true) {
 							bankCount += 1;
-							if (page.getList().get(i).getWorkPayInfo()
+							if (countList.get(i).getWorkPayInfo()
 									.getBankMoney() != null) {
-								if (page.getList().get(i).getWorkPayInfo()
+								if (countList.get(i).getWorkPayInfo()
 										.getBankMoney() > 0) {
-									bankCountMoney += page.getList().get(i)
+									bankCountMoney += countList.get(i)
 											.getWorkPayInfo().getBankMoney();
 								} else {
-									bankCountMoney += (-page.getList().get(i)
+									bankCountMoney += (-countList.get(i)
 											.getWorkPayInfo().getBankMoney());
 								}
 							}
 						}
-						if (page.getList().get(i).getWorkPayInfo()
+						if (countList.get(i).getWorkPayInfo()
 								.getMethodMoney() == true) {
 							moneyCount += 1;
-							if (page.getList().get(i).getWorkPayInfo()
+							if (countList.get(i).getWorkPayInfo()
 									.getMoney() != null) {
-								if (page.getList().get(i).getWorkPayInfo()
+								if (countList.get(i).getWorkPayInfo()
 										.getMoney() > 0) {
-									moneyCountMoney += page.getList().get(i)
+									moneyCountMoney += countList.get(i)
 											.getWorkPayInfo().getMoney();
 								} else {
-									moneyCountMoney += (-page.getList().get(i)
+									moneyCountMoney += (-countList.get(i)
 											.getWorkPayInfo().getMoney());
 								}
 							}
 						}
-						if (page.getList().get(i).getWorkPayInfo()
+						if (countList.get(i).getWorkPayInfo()
 								.getMethodAlipay() == true) {
 							alipayCount += 1;
-							if (page.getList().get(i).getWorkPayInfo()
+							if (countList.get(i).getWorkPayInfo()
 									.getAlipayMoney() != null) {
-								if (page.getList().get(i).getWorkPayInfo()
+								if (countList.get(i).getWorkPayInfo()
 										.getAlipayMoney() > 0) {
-									alipayCountMoney += page.getList().get(i)
+									alipayCountMoney += countList.get(i)
 											.getWorkPayInfo().getAlipayMoney();
 								} else {
-									alipayCountMoney += (-page.getList().get(i)
+									alipayCountMoney += (-countList.get(i)
 											.getWorkPayInfo().getAlipayMoney());
 								}
 							}
 						}
-						if (page.getList().get(i).getWorkPayInfo()
+						if (countList.get(i).getWorkPayInfo()
 								.getMethodGov() != null) {
-							if (page.getList().get(i).getWorkPayInfo()
+							if (countList.get(i).getWorkPayInfo()
 									.getMethodGov() == true) {
 								govCount += 1;
 							}
 						}
-						if (page.getList().get(i).getWorkPayInfo()
+						if (countList.get(i).getWorkPayInfo()
 								.getMethodContract() != null) {
-							if (page.getList().get(i).getWorkPayInfo()
+							if (countList.get(i).getWorkPayInfo()
 									.getMethodContract() == true) {
 								contractCount += 1;
 							}
 						}
 					} else {
 						List<WorkFinancePayInfoRelation> workfinancePayinfos = workFinancePayInfoRelationService
-								.findByPayInfoId(page.getList().get(i)
+								.findByPayInfoId(countList.get(i)
 										.getWorkPayInfo().getId());
 						Set<String> payMethods = new LinkedHashSet<String>();
 						for (int w = 0; w < workfinancePayinfos.size(); w++) {
@@ -836,7 +840,7 @@ public class WorkDealInfoController extends BaseController {
 								alipayCount += 1;
 							}
 						}
-						Id_paymethod.put(page.getList().get(i).getId(),
+						Id_paymethod.put(countList.get(i).getId(),
 								payMethods);
 					}
 				}
@@ -1629,9 +1633,7 @@ public class WorkDealInfoController extends BaseController {
 			
 			ReceivedPaymentsVo paymentsVo = new ReceivedPaymentsVo();
 			
-			Map<String, Set<String>> office_District = new HashMap<>();
-			
-			
+			Map<String, Set<String>> office_District = new TreeMap<>();
 			
 			
 			Map<String, Map<String,List<Double>>> officeDistrictMoney = new TreeMap<>(); 
@@ -1666,6 +1668,7 @@ public class WorkDealInfoController extends BaseController {
 			for (int o = 0; o < offs.length; o++) {
 
 				Set<String> dis = new LinkedHashSet<String>();
+				
 				for (int d = 0; d < districts.length; d++) {
 					for (int i = 0; i < list.size(); i++) {
 						if (list.get(i).getWorkCompany().getDistrict() != null) {
@@ -1896,8 +1899,8 @@ public class WorkDealInfoController extends BaseController {
 			double moneys = 0L;
 			
 			for(Long officeId:offs){
-				Map<String, List<Double>> district_Moneys = new HashMap<>();
-				Map<String, List<String>> district_payMethod = new HashMap<>();
+				Map<String, List<Double>> district_Moneys = new TreeMap<>();
+				Map<String, List<String>> district_payMethod = new TreeMap<>();
 				String officeName = officeService.get(officeId).getName();
 				
 				for (int d = 0; d < districts.length; d++) {
@@ -2034,7 +2037,7 @@ public class WorkDealInfoController extends BaseController {
 		//用于后台循环展示使用
 		List<ConfigApp> configAppList = Lists.newArrayList();
 		
-		if(companyName == null){
+		if(companyName == null||companyName.isEmpty()){
 			configAppList = UserUtils.getAppList();
 		}else{
 			configAppList.add(configAppService.findByAppname(companyName));
@@ -7235,16 +7238,20 @@ public class WorkDealInfoController extends BaseController {
 		List<Long> officeids = UserUtils.getOfficeIdList(area, office, null);
 
 		
+
 		//循环所有应用
 		for(ConfigApp configapp: configAppList){
-			List<WorkDealInfo> list = workDealInfoService.findByProjectPay(startTime, endTime, officeids, configapp.getId());
+			List<WorkDealInfo> list = workDealInfoService.findByProjectPay(
+					startTime, endTime, officeids, configapp.getId());
 			if (list != null && list.size()>0) {
 				
 				ReceivedPaymentsVo paymentsVo = new ReceivedPaymentsVo();
 				
-				Map<String, Set<String>> office_District = new HashMap<>();
-				Map<String, List<String>> district_payMethod = new HashMap<>();
-				Map<String, List<Double>> district_Moneys = new HashMap<>();
+				Map<String, Set<String>> office_District = new TreeMap<>();
+				
+				
+				Map<String, Map<String,List<Double>>> officeDistrictMoney = new TreeMap<>(); 
+				Map<String, Map<String,List<String>>> officeDistrictPayMethod = new TreeMap<>(); 
 				
 				List<WorkDate_MoneVo> w_m = new ArrayList<WorkDate_MoneVo>();			
 				List<Workoffice_district_MoneyVo> odms = new ArrayList<Workoffice_district_MoneyVo>();
@@ -7260,7 +7267,7 @@ public class WorkDealInfoController extends BaseController {
 						offices.add(list.get(i).getOfficeId());
 					}
 				}
-				Set<String> district = new LinkedHashSet<String>();
+				Set<String> district = new TreeSet<>();//LinkedHashSet<String>();
 				for (int i = 0; i < list.size(); i++) {
 					if (list.get(i).getWorkCompany().getDistrict() != null) {
 						district.add(list.get(i).getWorkCompany().getDistrict());
@@ -7269,12 +7276,13 @@ public class WorkDealInfoController extends BaseController {
 					}
 				}
 
-				Object offs[] = offices.toArray();
+				Long offs[] = offices.toArray(new Long[offices.size()]);
 				Object months[] = month.toArray();
 				Object districts[] = district.toArray();
 				for (int o = 0; o < offs.length; o++) {
 
 					Set<String> dis = new LinkedHashSet<String>();
+					
 					for (int d = 0; d < districts.length; d++) {
 						for (int i = 0; i < list.size(); i++) {
 							if (list.get(i).getWorkCompany().getDistrict() != null) {
@@ -7294,281 +7302,306 @@ public class WorkDealInfoController extends BaseController {
 
 				}
 				for (int m = 0; m < months.length; m++) {
-
-					for (int d = 0; d < districts.length; d++) {
-						double countPostMoney = 0L;
-						double countBankMoney = 0L;
-						double countXjMoney = 0L;
-						double countAlipayMoney = 0L;
-						double countMoney = 0L;
-
-						for (int i = 0; i < list.size(); i++) {
-							String mo = new SimpleDateFormat("yyyy-MM-dd").format(list.get(i).getWorkPayInfo().getCreateDate());
-							if (list.get(i).getWorkCompany().getDistrict() != null) {
-								if (((String) months[m]).indexOf(mo) != -1 && list.get(i).getWorkCompany().getDistrict().equals((String) districts[d])) {
-									double postMoney = 0L;
-									double bankMoney = 0L;
-									double xjMoney = 0L;
-									double alipayMoney = 0L;
-									if (list.get(i).getWorkPayInfo().getRelationMethod() == null) {
-										if (list.get(i).getWorkPayInfo().getMethodPos() == true) {
-											if (list.get(i).getWorkPayInfo().getPosMoney() >= 0) {
-												postMoney = list.get(i).getWorkPayInfo().getPosMoney();
-											} else {
-												postMoney = (-list.get(i).getWorkPayInfo().getPosMoney());
-											}
-										}
-										if (list.get(i).getWorkPayInfo().getMethodBank() == true) {
-											if (list.get(i).getWorkPayInfo().getBankMoney() >= 0) {
-												bankMoney = list.get(i).getWorkPayInfo().getBankMoney();
-											} else {
-												bankMoney = (-list.get(i).getWorkPayInfo().getBankMoney());
-											}
-										}
-										if (list.get(i).getWorkPayInfo().getMethodMoney() == true) {
-											if (list.get(i).getWorkPayInfo().getMoney() >= 0) {
-												xjMoney = list.get(i).getWorkPayInfo().getMoney();
-											} else {
-												xjMoney = (-list.get(i).getWorkPayInfo().getMoney());
-											}
-
-										}
-										if (list.get(i).getWorkPayInfo().getMethodAlipay() == true) {
-											if (list.get(i).getWorkPayInfo().getAlipayMoney() >= 0) {
-												alipayMoney = list.get(i).getWorkPayInfo().getAlipayMoney();
-											} else {
-												alipayMoney = (-list.get(i).getWorkPayInfo().getAlipayMoney());
-											}
-
-										}
-									} else {
-										List<WorkFinancePayInfoRelation> workfinancePayinfos = workFinancePayInfoRelationService.findByPayInfoId(list.get(i).getWorkPayInfo().getId());
-										for (int w = 0; w < workfinancePayinfos.size(); w++) {
-											if (workfinancePayinfos.get(w).getMoney() >= 0) {
-												if (workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod() == 1) {
-													if (workfinancePayinfos.get(w).getMoney() >= 0) {
-														xjMoney = workfinancePayinfos.get(w).getMoney();
-													} else {
-														xjMoney = (-workfinancePayinfos.get(w).getMoney());
-													}
-
-												}
-												if (workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod() == 2) {
-													if (workfinancePayinfos.get(w).getMoney() >= 0) {
-														postMoney = workfinancePayinfos.get(w).getMoney();
-													} else {
-														postMoney = (-workfinancePayinfos.get(w).getMoney());
-													}
-
-												}
-												if (workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod() == 3) {
-													if (workfinancePayinfos.get(w).getMoney() >= 0) {
-														bankMoney = workfinancePayinfos.get(w).getMoney();
-													} else {
-														bankMoney = (-workfinancePayinfos.get(w).getMoney());
-													}
-
-												}
-												if (workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod() == 4) {
-													if (workfinancePayinfos.get(w).getMoney() >= 0) {
-														alipayMoney = workfinancePayinfos.get(w).getMoney();
-													} else {
-														alipayMoney = (-workfinancePayinfos.get(w).getMoney());
-													}
-
+					
+					for(Long officeId:offs){
+						String officeName = officeService.get(officeId).getName();
+						for (int d = 0; d < districts.length; d++) {
+							
+							double countPostMoney = 0L;
+							double countBankMoney = 0L;
+							double countXjMoney = 0L;
+							double countAlipayMoney = 0L;
+							double countMoney = 0L;
+							
+						
+							for (int i = 0; i < list.size(); i++) {
+								String mo = new SimpleDateFormat("yyyy-MM-dd").format(list.get(i).getWorkPayInfo().getCreateDate());
+								if (list.get(i).getWorkCompany().getDistrict() != null) {
+									
+									if (((String) months[m]).indexOf(mo) != -1&&officeId.longValue()==list.get(i).getOfficeId().longValue() &&list.get(i).getWorkCompany().getDistrict().equals((String) districts[d])) {
+										double postMoney = 0L;
+										double bankMoney = 0L;
+										double xjMoney = 0L;
+										double alipayMoney = 0L;
+										if (list.get(i).getWorkPayInfo().getRelationMethod() == null) {
+											if (list.get(i).getWorkPayInfo().getMethodPos() == true) {
+												if (list.get(i).getWorkPayInfo().getPosMoney() >= 0) {
+													postMoney = list.get(i).getWorkPayInfo().getPosMoney();
+												} else {
+													postMoney = (-list.get(i).getWorkPayInfo().getPosMoney());
 												}
 											}
+											if (list.get(i).getWorkPayInfo().getMethodBank() == true) {
+												if (list.get(i).getWorkPayInfo().getBankMoney() >= 0) {
+													bankMoney = list.get(i).getWorkPayInfo().getBankMoney();
+												} else {
+													bankMoney = (-list.get(i).getWorkPayInfo().getBankMoney());
+												}
+											}
+											if (list.get(i).getWorkPayInfo().getMethodMoney() == true) {
+												if (list.get(i).getWorkPayInfo().getMoney() >= 0) {
+													xjMoney = list.get(i).getWorkPayInfo().getMoney();
+												} else {
+													xjMoney = (-list.get(i).getWorkPayInfo().getMoney());
+												}
+
+											}
+											if (list.get(i).getWorkPayInfo().getMethodAlipay() == true) {
+												if (list.get(i).getWorkPayInfo().getAlipayMoney() >= 0) {
+													alipayMoney = list.get(i).getWorkPayInfo().getAlipayMoney();
+												} else {
+													alipayMoney = (-list.get(i).getWorkPayInfo().getAlipayMoney());
+												}
+
+											}
+										} else {
+											List<WorkFinancePayInfoRelation> workfinancePayinfos = workFinancePayInfoRelationService.findByPayInfoId(list.get(i).getWorkPayInfo().getId());
+											for (int w = 0; w < workfinancePayinfos.size(); w++) {
+												if (workfinancePayinfos.get(w).getMoney() >= 0) {
+													if (workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod() == 1) {
+														if (workfinancePayinfos.get(w).getMoney() >= 0) {
+															xjMoney = workfinancePayinfos.get(w).getMoney();
+														} else {
+															xjMoney = (-workfinancePayinfos.get(w).getMoney());
+														}
+
+													}
+													if (workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod() == 2) {
+														if (workfinancePayinfos.get(w).getMoney() >= 0) {
+															postMoney = workfinancePayinfos.get(w).getMoney();
+														} else {
+															postMoney = (-workfinancePayinfos.get(w).getMoney());
+														}
+
+													}
+													if (workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod() == 3) {
+														if (workfinancePayinfos.get(w).getMoney() >= 0) {
+															bankMoney = workfinancePayinfos.get(w).getMoney();
+														} else {
+															bankMoney = (-workfinancePayinfos.get(w).getMoney());
+														}
+
+													}
+													if (workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod() == 4) {
+														if (workfinancePayinfos.get(w).getMoney() >= 0) {
+															alipayMoney = workfinancePayinfos.get(w).getMoney();
+														} else {
+															alipayMoney = (-workfinancePayinfos.get(w).getMoney());
+														}
+
+													}
+												}
+											}
 										}
+										countPostMoney += postMoney;
+										countBankMoney += bankMoney;
+										countXjMoney += xjMoney;
+										countAlipayMoney += alipayMoney;
+										countMoney += (postMoney + bankMoney + xjMoney + alipayMoney);
+
 									}
-									countPostMoney += postMoney;
-									countBankMoney += bankMoney;
-									countXjMoney += xjMoney;
-									countAlipayMoney += alipayMoney;
-									countMoney += (postMoney + bankMoney + xjMoney + alipayMoney);
 
-								}
+								} else {
 
-							} else {
-
-								if (((String) months[m]).indexOf(mo) != -1
-										&& (districts[d].equals("其他"))) {
-									double postMoney = 0L;
-									double bankMoney = 0L;
-									double xjMoney = 0L;
-									double alipayMoney = 0L;
-									if (list.get(i).getWorkPayInfo().getRelationMethod() == null) {
-										if (list.get(i).getWorkPayInfo().getMethodPos() == true) {
-											if (list.get(i).getWorkPayInfo().getPosMoney() >= 0) {
-												postMoney = list.get(i).getWorkPayInfo().getPosMoney();
-											} else {
-												postMoney = (-list.get(i).getWorkPayInfo().getPosMoney());
-											}
-										}
-										if (list.get(i).getWorkPayInfo().getMethodBank() == true) {
-											if (list.get(i).getWorkPayInfo().getBankMoney() >= 0) {
-												bankMoney = list.get(i).getWorkPayInfo().getBankMoney();
-											} else {
-												bankMoney = (-list.get(i).getWorkPayInfo().getBankMoney());
-											}
-										}
-										if (list.get(i).getWorkPayInfo().getMethodMoney() == true) {
-											if (list.get(i).getWorkPayInfo().getMoney() >= 0) {
-												xjMoney = list.get(i).getWorkPayInfo().getMoney();
-											} else {
-												xjMoney = (-list.get(i).getWorkPayInfo().getMoney());
-											}
-
-										}
-										if (list.get(i).getWorkPayInfo().getMethodAlipay() == true) {
-											if (list.get(i).getWorkPayInfo().getAlipayMoney() >= 0) {
-												alipayMoney = list.get(i).getWorkPayInfo().getAlipayMoney();
-											} else {
-												alipayMoney = (-list.get(i).getWorkPayInfo().getAlipayMoney());
-											}
-
-										}
-									} else {
-										List<WorkFinancePayInfoRelation> workfinancePayinfos = workFinancePayInfoRelationService.findByPayInfoId(list.get(i).getWorkPayInfo().getId());
-										for (int w = 0; w < workfinancePayinfos.size(); w++) {
-											if (workfinancePayinfos.get(w).getMoney() >= 0) {
-												if (workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod() == 1) {
-													if (workfinancePayinfos.get(w).getMoney() >= 0) {
-														xjMoney = workfinancePayinfos.get(w).getMoney();
-													} else {
-														xjMoney = (-workfinancePayinfos.get(w).getMoney());
-													}
-
+									if (((String) months[m]).indexOf(mo) != -1&&officeId.longValue()==list.get(i).getOfficeId().longValue()&&(districts[d].equals("其他"))) {
+										double postMoney = 0L;
+										double bankMoney = 0L;
+										double xjMoney = 0L;
+										double alipayMoney = 0L;
+										if (list.get(i).getWorkPayInfo().getRelationMethod() == null) {
+											if (list.get(i).getWorkPayInfo().getMethodPos() == true) {
+												if (list.get(i).getWorkPayInfo().getPosMoney() >= 0) {
+													postMoney = list.get(i).getWorkPayInfo().getPosMoney();
+												} else {
+													postMoney = (-list.get(i).getWorkPayInfo().getPosMoney());
 												}
-												if (workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod() == 2) {
-													if (workfinancePayinfos.get(w).getMoney() >= 0) {
-														postMoney = workfinancePayinfos.get(w).getMoney();
-													} else {
-														postMoney = (-workfinancePayinfos.get(w).getMoney());
-													}
-
+											}
+											if (list.get(i).getWorkPayInfo().getMethodBank() == true) {
+												if (list.get(i).getWorkPayInfo().getBankMoney() >= 0) {
+													bankMoney = list.get(i).getWorkPayInfo().getBankMoney();
+												} else {
+													bankMoney = (-list.get(i).getWorkPayInfo().getBankMoney());
 												}
-												if (workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod() == 3) {
-													if (workfinancePayinfos.get(w).getMoney() >= 0) {
-														bankMoney = workfinancePayinfos.get(w).getMoney();
-													} else {
-														bankMoney = (-workfinancePayinfos.get(w).getMoney());
-													}
-
+											}
+											if (list.get(i).getWorkPayInfo().getMethodMoney() == true) {
+												if (list.get(i).getWorkPayInfo().getMoney() >= 0) {
+													xjMoney = list.get(i).getWorkPayInfo().getMoney();
+												} else {
+													xjMoney = (-list.get(i).getWorkPayInfo().getMoney());
 												}
-												if (workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod() == 4) {
-													if (workfinancePayinfos.get(w).getMoney() >= 0) {
-														alipayMoney = workfinancePayinfos.get(w).getMoney();
-													} else {
-														alipayMoney = (-workfinancePayinfos.get(w).getMoney());
-													}
 
+											}
+											if (list.get(i).getWorkPayInfo().getMethodAlipay() == true) {
+												if (list.get(i).getWorkPayInfo().getAlipayMoney() >= 0) {
+													alipayMoney = list.get(i).getWorkPayInfo().getAlipayMoney();
+												} else {
+													alipayMoney = (-list.get(i).getWorkPayInfo().getAlipayMoney());
+												}
+
+											}
+										} else {
+											List<WorkFinancePayInfoRelation> workfinancePayinfos = workFinancePayInfoRelationService.findByPayInfoId(list.get(i).getWorkPayInfo().getId());
+											for (int w = 0; w < workfinancePayinfos.size(); w++) {
+												if (workfinancePayinfos.get(w).getMoney() >= 0) {
+													if (workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod() == 1) {
+														if (workfinancePayinfos.get(w).getMoney() >= 0) {
+															xjMoney = workfinancePayinfos.get(w).getMoney();
+														} else {
+															xjMoney = (-workfinancePayinfos.get(w).getMoney());
+														}
+
+													}
+													if (workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod() == 2) {
+														if (workfinancePayinfos.get(w).getMoney() >= 0) {
+															postMoney = workfinancePayinfos.get(w).getMoney();
+														} else {
+															postMoney = (-workfinancePayinfos.get(w).getMoney());
+														}
+
+													}
+													if (workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod() == 3) {
+														if (workfinancePayinfos.get(w).getMoney() >= 0) {
+															bankMoney = workfinancePayinfos.get(w).getMoney();
+														} else {
+															bankMoney = (-workfinancePayinfos.get(w).getMoney());
+														}
+
+													}
+													if (workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod() == 4) {
+														if (workfinancePayinfos.get(w).getMoney() >= 0) {
+															alipayMoney = workfinancePayinfos.get(w).getMoney();
+														} else {
+															alipayMoney = (-workfinancePayinfos.get(w).getMoney());
+														}
+
+													}
 												}
 											}
 										}
+										countPostMoney += postMoney;
+										countBankMoney += bankMoney;
+										countXjMoney += xjMoney;
+										countAlipayMoney += alipayMoney;
+										countMoney += (postMoney + bankMoney + xjMoney + alipayMoney);
+
 									}
-									countPostMoney += postMoney;
-									countBankMoney += bankMoney;
-									countXjMoney += xjMoney;
-									countAlipayMoney += alipayMoney;
-									countMoney += (postMoney + bankMoney + xjMoney + alipayMoney);
 
 								}
 
 							}
+					
+
+							Workoffice_district_MoneyVo dm = new Workoffice_district_MoneyVo();
+							dm.setDate((String) months[m]);
+							dm.setDistrictName((String) districts[d]);
+							dm.setCountPostMoney(countPostMoney);
+							dm.setCountBankMoney(countBankMoney);
+							dm.setCountXjMoney(countXjMoney);
+							dm.setCountAlipayMoney(countAlipayMoney);
+							dm.setOfficeName(officeName);
+							odms.add(dm);
 
 						}
-						Workoffice_district_MoneyVo dm = new Workoffice_district_MoneyVo();
-						dm.setDate((String) months[m]);
-						dm.setDistrictName((String) districts[d]);
-						dm.setCountPostMoney(countPostMoney);
-						dm.setCountBankMoney(countBankMoney);
-						dm.setCountXjMoney(countXjMoney);
-						dm.setCountAlipayMoney(countAlipayMoney);
-						odms.add(dm);
-
 					}
+					
+
+				
+
 
 				}
 
 				double moneys = 0L;
-				for (int d = 0; d < districts.length; d++) {
-					int post = 0;
-					int bank = 0;
-					int xj = 0;
-					int alipay = 0;
-					for (int od = 0; od < odms.size(); od++) {
-						if (odms.get(od).getDistrictName().equals(districts[d])) {
-							if (odms.get(od).getCountPostMoney() > 0) {
-								post++;
-							}
-							if (odms.get(od).getCountBankMoney() > 0) {
-								bank++;
-							}
-							if (odms.get(od).getCountXjMoney() > 0) {
-								xj++;
-							}
-							if (odms.get(od).getCountAlipayMoney() > 0) {
-								alipay++;
-							}
-						}
-					}
-					List<String> payMethods = Lists.newArrayList();
-					List<Double> dis_Money = Lists.newArrayList();
-					if (post > 0) {
-						double postMoney = 0L;
+				
+				for(Long officeId:offs){
+					Map<String, List<Double>> district_Moneys = new TreeMap<>();
+					Map<String, List<String>> district_payMethod = new TreeMap<>();
+					String officeName = officeService.get(officeId).getName();
+					
+					for (int d = 0; d < districts.length; d++) {
+						int post = 0;
+						int bank = 0;
+						int xj = 0;
+						int alipay = 0;
 						for (int od = 0; od < odms.size(); od++) {
-							if (odms.get(od).getDistrictName().equals(districts[d])) {
-								odms.get(od).setPostMoney(true);
-								postMoney += odms.get(od).getCountPostMoney();
+							if (odms.get(od).getDistrictName().equals(districts[d]) && officeName.equals(odms.get(od).getOfficeName()) ) {
+								if (odms.get(od).getCountPostMoney() > 0) {
+									post++;
+								}
+								if (odms.get(od).getCountBankMoney() > 0) {
+									bank++;
+								}
+								if (odms.get(od).getCountXjMoney() > 0) {
+									xj++;
+								}
+								if (odms.get(od).getCountAlipayMoney() > 0) {
+									alipay++;
+								}
 							}
 						}
-						moneys += postMoney;
-						dis_Money.add(postMoney);
-						payMethods.add("pos付款");
-					}
-					if (bank > 0) {
-						double bankMoney = 0.0;
-						for (int od = 0; od < odms.size(); od++) {
-							if (odms.get(od).getDistrictName().equals(districts[d])) {
-								odms.get(od).setBankMoney(true);
-								bankMoney += odms.get(od).getCountBankMoney();
+						List<String> payMethods = Lists.newArrayList();
+						List<Double> dis_Money = Lists.newArrayList();
+						if (post > 0) {
+							double postMoney = 0L;
+							for (int od = 0; od < odms.size(); od++) {
+								if (odms.get(od).getDistrictName().equals(districts[d])&& officeName.equals(odms.get(od).getOfficeName())) {
+									odms.get(od).setPostMoney(true);
+									postMoney += odms.get(od).getCountPostMoney();
+								}
 							}
+							moneys += postMoney;
+							dis_Money.add(postMoney);
+							payMethods.add("pos付款");
 						}
-						moneys += bankMoney;
-						dis_Money.add(bankMoney);
-						payMethods.add("银行转账");
-					}
-					if (xj > 0) {
-						double xjMoney = 0.0;
-						for (int od = 0; od < odms.size(); od++) {
-							if (odms.get(od).getDistrictName().equals(districts[d])) {
-								odms.get(od).setXjMoney(true);
-								xjMoney += odms.get(od).getCountXjMoney();
+						if (bank > 0) {
+							double bankMoney = 0.0;
+							for (int od = 0; od < odms.size(); od++) {
+								if (odms.get(od).getDistrictName().equals(districts[d])&& officeName.equals(odms.get(od).getOfficeName())) {
+									odms.get(od).setBankMoney(true);
+									bankMoney += odms.get(od).getCountBankMoney();
+								}
 							}
+							moneys += bankMoney;
+							dis_Money.add(bankMoney);
+							payMethods.add("银行转账");
 						}
-						moneys += xjMoney;
-						dis_Money.add(xjMoney);
-						payMethods.add("现金付款");
-					}
-					if (alipay > 0) {
-						double alipayMoney = 0.0;
-						for (int od = 0; od < odms.size(); od++) {
-							if (odms.get(od).getDistrictName().equals(districts[d])) {
-								odms.get(od).setAlipayMoney(true);
-								alipayMoney += odms.get(od).getCountAlipayMoney();
+						if (xj > 0) {
+							double xjMoney = 0.0;
+							for (int od = 0; od < odms.size(); od++) {
+								if (odms.get(od).getDistrictName().equals(districts[d])&& officeName.equals(odms.get(od).getOfficeName())) {
+									odms.get(od).setXjMoney(true);
+									xjMoney += odms.get(od).getCountXjMoney();
+								}
 							}
+							moneys += xjMoney;
+							dis_Money.add(xjMoney);
+							payMethods.add("现金付款");
 						}
-						moneys += alipayMoney;
-						dis_Money.add(alipayMoney);
-						payMethods.add("支付宝");
+						if (alipay > 0) {
+							double alipayMoney = 0.0;
+							for (int od = 0; od < odms.size(); od++) {
+								if (odms.get(od).getDistrictName().equals(districts[d])&& officeName.equals(odms.get(od).getOfficeName())) {
+									odms.get(od).setAlipayMoney(true);
+									alipayMoney += odms.get(od).getCountAlipayMoney();
+								}
+							}
+							moneys += alipayMoney;
+							dis_Money.add(alipayMoney);
+							payMethods.add("支付宝");
+						}
+						if (payMethods != null && payMethods.size() > 0) {
+							district_payMethod.put((String) districts[d], payMethods);
+						}
+						if (dis_Money != null && dis_Money.size() > 0) {
+							district_Moneys.put((String) districts[d], dis_Money);
+						}
 					}
-					if (payMethods != null && payMethods.size() > 0) {
-						district_payMethod.put((String) districts[d], payMethods);
-					}
-					if (dis_Money != null && dis_Money.size() > 0) {
-						district_Moneys.put((String) districts[d], dis_Money);
-					}
+					
+					officeDistrictMoney.put(officeName, district_Moneys);
+					officeDistrictPayMethod.put(officeName, district_payMethod);
+					
 				}
+				
+
 				
 				if(moneys==0d){
 					continue;
@@ -7576,16 +7609,22 @@ public class WorkDealInfoController extends BaseController {
 				
 				paymentsVo.setDates(months);
 				paymentsVo.setAppName(configapp.getAppName());
-				paymentsVo.setDistrictMoneys(district_Moneys);
+			//	paymentsVo.setDistrictMoneys(district_Moneys);
 				paymentsVo.setOfficeDistrictMoneyVo(odms);
 				paymentsVo.setDateMoneyVo(w_m);
 				paymentsVo.setOfficeDistrict(office_District);
-				paymentsVo.setDistrictPayMethod(district_payMethod);
+			//	paymentsVo.setDistrictPayMethod(district_payMethod);
 				paymentsVo.setMoneys(moneys);
 				paymentsVo.setMonth(month);
+				paymentsVo.setOfficeDistrictMoney(officeDistrictMoney);
+				paymentsVo.setOfficeDistrictPayMethod(officeDistrictPayMethod);
 				paymentsVos.add(paymentsVo);
 			}				
 		}
+		
+		
+		
+		
 		HSSFWorkbook wb = new HSSFWorkbook();
 		HSSFSheet sheet = wb.createSheet("项目回款统计表");
 		HSSFCellStyle style = wb.createCellStyle();
@@ -7596,9 +7635,6 @@ public class WorkDealInfoController extends BaseController {
 		font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
 		font.setFontHeightInPoints((short) 14);
 		style.setFont(font);
-
-		/*sheet.addMergedRegion(new Region(1, (short) 0, 3, (short) 0));
-		sheet.addMergedRegion(new Region(1, (short) 1, 3, (short) 1));*/
 		HSSFRow row0 = sheet.createRow(0);
 		HSSFCell cell0 = row0.createCell(0);
 		cell0.setCellValue(new SimpleDateFormat("yyyy-MM-dd").format(startTime)+ "至" + new SimpleDateFormat("yyyy-MM-dd").format(endTime)+ "项目回款统计表");
@@ -7624,72 +7660,100 @@ public class WorkDealInfoController extends BaseController {
 			int aa = 0;
 			int i1 = 2;
 
-			Iterator<Map.Entry<String, Set<String>>> off_dis = paymentsVo.getOfficeDistrict().entrySet().iterator();
-			while (off_dis.hasNext()) {
-				int index = 0;
-				int qu = 0;
-				int count = 0;
-				Entry<String, Set<String>> off = off_dis.next();
+			
+			
+			Iterator<Map.Entry<String, Map<String, List<String>>>> off_dis_paymethods = paymentsVo.getOfficeDistrictPayMethod().entrySet().iterator();
+			
+			int index = 0;
+			
+			while (off_dis_paymethods.hasNext()) {
 				
-				for (int o = 0; o < off.getValue().size(); o++) {
-					int index1 = 0;
-					Object districts[] = off.getValue().toArray();
-					Iterator<Map.Entry<String, List<String>>> dis_payM = paymentsVo.getDistrictPayMethod().entrySet().iterator();
-					while (dis_payM.hasNext()) {
-						Entry<String, List<String>> dp = dis_payM.next();
-						if (dp.getKey().equals(districts[o])) {
-							qu++;
-							index += dp.getValue().size();
-							index1 += dp.getValue().size();
-							for (int d = 0; d < dp.getValue().size(); d++) {
-								row3.createCell(aa + 2).setCellValue(
-										dp.getValue().get(d));
-								aa++;
-							}
-						}
+				int qu = 0;
+				Entry<String, Map<String, List<String>>> off_dis_paymethod = off_dis_paymethods.next();
+				
+				Iterator<Map.Entry<String, List<String>>> dis_paymethods = off_dis_paymethod.getValue().entrySet().iterator();
+				
+				while(dis_paymethods.hasNext()){
+					Entry<String, List<String>> dis_paymethod =dis_paymethods.next();
+					
+					List<String> paymethods = dis_paymethod.getValue();
+					
+					for(String paymethod:paymethods){
+					
+						qu++;
+						
 					}
-					if (index1 == 1) {
-						row2.createCell(i1).setCellValue(districts[o] + "");
-						i1++;
-					}
-					if (index1 > 1) {
-						sheet.addMergedRegion(new Region(2+previous, (short) i1, 2+previous,(short) (i1 + index1 - 1)));
-						row2.createCell(i1).setCellValue(districts[o] + "");
-						i1 = i1 + index1;
-					}
-				}
-				if (index == 1) {
-					if (qu == 1) {
-						row1.createCell(ii).setCellValue(off.getKey());
-						sheet.addMergedRegion(new Region(1+previous, (short) ii, 2+previous, (short) ii));
-						ii = ii + qu;
-					}
-					if (qu > 1) {
-						row1.createCell(ii).setCellValue(off.getKey());
-						sheet.addMergedRegion(new Region(1+previous, (short) ii, 1+previous, (short) (ii + qu - 1)));
-						ii = ii + qu;
-					}
-				}
-				if (index > 1) {
-					for (int o1 = 0; o1 < off.getValue().size(); o1++) {
-						Object districts[] = off.getValue().toArray();
-						Iterator<Map.Entry<String, List<String>>> dis_payM1 = paymentsVo.getDistrictPayMethod().entrySet().iterator();
-						while (dis_payM1.hasNext()) {
-							Entry<String, List<String>> dp = dis_payM1.next();
-							if (dp.getKey().equals(districts[o1])) {
-								count += dp.getValue().size();
-
-							}
-						}
-					}
-					sheet.addMergedRegion(new Region(1+previous, (short) ii, 1+previous, (short) (ii + count - 1)));
-					row1.createCell(ii).setCellValue(off.getKey());
-					ii = ii + count;
-				}
+				}	
+				sheet.addMergedRegion(new Region(1+previous, (short) (2+index), 1+previous, (short) (2+index+qu-1)));
+				row1.createCell(2+index).setCellValue(off_dis_paymethod.getKey());
+				index = index+qu;	
 			}
-			sheet.addMergedRegion(new Region(0, (short) 0, 0, (short) (ii)));
-			row1.createCell(ii).setCellValue("合计");
-			sheet.addMergedRegion(new Region(1+previous, (short) ii, 3+previous, (short) ii));
+			
+			off_dis_paymethods = paymentsVo.getOfficeDistrictPayMethod().entrySet().iterator();
+			index=0;
+			while (off_dis_paymethods.hasNext()) {
+				
+			
+				Entry<String, Map<String, List<String>>> off_dis_paymethod = off_dis_paymethods.next();
+				
+				Iterator<Map.Entry<String, List<String>>> dis_paymethods = off_dis_paymethod.getValue().entrySet().iterator();
+				
+				while(dis_paymethods.hasNext()){
+					
+					int qu = 0;
+					
+					Entry<String, List<String>> dis_paymethod =dis_paymethods.next();
+					
+					List<String> paymethods = dis_paymethod.getValue();
+					
+					for(String paymethod:paymethods){
+					
+						qu++;
+						
+					}
+					
+					sheet.addMergedRegion(new Region(2+previous, (short) (2+index), 2+previous, (short) (2+index+qu-1)));
+					row2.createCell(2+index).setCellValue(dis_paymethod.getKey());
+					index = index+qu;
+				}
+				
+			
+				
+			}
+			
+			
+		off_dis_paymethods = paymentsVo.getOfficeDistrictPayMethod().entrySet().iterator();
+		int qu = 0;
+			while (off_dis_paymethods.hasNext()) {
+				
+				
+				Entry<String, Map<String, List<String>>> off_dis_paymethod = off_dis_paymethods.next();
+				
+				Iterator<Map.Entry<String, List<String>>> dis_paymethods = off_dis_paymethod.getValue().entrySet().iterator();
+				
+				while(dis_paymethods.hasNext()){
+					Entry<String, List<String>> dis_paymethod =dis_paymethods.next();
+					
+					List<String> paymethods = dis_paymethod.getValue();
+					
+					for(String paymethod:paymethods){
+						sheet.addMergedRegion(new Region(2+previous, (short) (2+qu), 2+previous, (short) (2+qu)));
+						row3.createCell(2+qu).setCellValue(paymethod);
+						
+						qu++;
+						
+					}
+					
+					
+				}
+				
+			
+				
+			}
+			
+			sheet.addMergedRegion(new Region(0, (short) 0, 0, (short) (qu+2)));
+			row1.createCell(qu+2).setCellValue("合计");
+			sheet.addMergedRegion(new Region(1+previous, (short) (qu+2), 3+previous, (short) (qu+2)));
 			Object months[] = paymentsVo.getMonth().toArray();
 			for (int m = 0; m < months.length; m++) {
 				double countMoneys = 0L;
@@ -7705,9 +7769,7 @@ public class WorkDealInfoController extends BaseController {
 					Object districts[] = entry.getValue().toArray();
 					for (int d = 0; d < districts.length; d++) {
 						for (int od = 0; od < odms.size(); od++) {
-							if (odms.get(od).getDate().equals(months[m])
-									&& odms.get(od).getDistrictName()
-											.equals(districts[d])) {
+							if (odms.get(od).getDate().equals(months[m])&& entry.getKey().equals(odms.get(od).getOfficeName()) &&odms.get(od).getDistrictName().equals(districts[d])) {
 								if (odms.get(od).getPostMoney()) {
 									rown.createCell(2 + a).setCellValue(odms.get(od).getCountPostMoney());
 									countMoneys += odms.get(od).getCountPostMoney();
@@ -7734,32 +7796,35 @@ public class WorkDealInfoController extends BaseController {
 					}
 				}
 				
-				rown.createCell(ii).setCellValue(countMoneys);
+				rown.createCell(qu+2).setCellValue(countMoneys);
 			}
 			HSSFRow rowz = sheet.createRow(3 + 1 +  paymentsVo.getMonth().size() + previous);
 			rowz.createCell(0).setCellValue("合计");
-			Iterator<Map.Entry<String, Set<String>>> f_ds = paymentsVo.getOfficeDistrict().entrySet().iterator();
+			Iterator<Map.Entry<String,Map<String,List<Double>>>> office_district_moneys = paymentsVo.getOfficeDistrictMoney().entrySet().iterator();
 			int a = 0;
 			double money = 0L;
-			while (f_ds.hasNext()) {
-				Entry<String, Set<String>> entry = f_ds.next();
-				Object districts[] = entry.getValue().toArray();
-				for (int d = 0; d < districts.length; d++) {
-					Iterator<Entry<String, List<Double>>> d_m = paymentsVo.getDistrictMoneys().entrySet().iterator();
-					while (d_m.hasNext()) {
-						Entry<String, List<Double>> dm = d_m.next();
-						if (dm.getKey().equals(districts[d])) {
-							for (int m = 0; m < dm.getValue().size(); m++) {
-								rowz.createCell(2 + a).setCellValue(dm.getValue().get(m));
-								money += dm.getValue().get(m);
-								a++;
-							}
-						}
-
+			while (office_district_moneys.hasNext()) {
+				Entry<String,Map<String,List<Double>>> office_district_money = office_district_moneys.next();
+				Iterator<Map.Entry<String,List<Double>>> district_moneys = office_district_money.getValue().entrySet().iterator();
+				
+				while(district_moneys.hasNext()){
+					
+					Entry<String,List<Double>> district_money = district_moneys.next();
+					
+					List<Double> moneys = district_money.getValue();
+					
+					for(Double rowmoney:moneys){
+						rowz.createCell(2+a).setCellValue(rowmoney);
+						money += rowmoney;
+						a++;
 					}
 				}
+				
 			}
-			rowz.createCell(ii).setCellValue(money);
+			
+			rowz.createCell(2+a).setCellValue(money);
+			
+			//rowz.createCell(ii).setCellValue(money);
 			//previous:之前所占行
 			//3:表头所占两行
 			//ms.length body所占行数
@@ -8986,7 +9051,7 @@ public class WorkDealInfoController extends BaseController {
 
 			// 保存经办人信息
 			WorkUser workUser = new WorkUser();
-			// workUser.setId(workuserId);
+			 //workUser.setId(workuserId);
 			workUser.setStatus(1);
 			workUser.setContactName(contactName);
 			workUser.setConCertType(conCertType);

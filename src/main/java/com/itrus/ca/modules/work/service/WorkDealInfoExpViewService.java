@@ -207,6 +207,9 @@ public class WorkDealInfoExpViewService extends BaseService {
 		}
 
 		if (query.getPaymentStartTime() != null) {
+			query.getPaymentStartTime().setHours(00);
+			query.getPaymentStartTime().setMinutes(00);
+			query.getPaymentStartTime().setSeconds(00);
 			dc.add(Restrictions.ge("payUserDate", query.getPaymentStartTime()));
 		}
 		if (query.getPaymentEndTime() != null) {
@@ -219,11 +222,11 @@ public class WorkDealInfoExpViewService extends BaseService {
 		if (query.getLuruStartTime() != null) {
 			dc.add(Restrictions.ge("inputUserDate", query.getLuruStartTime()));
 		}
-		if (query.getLuruStartTime() != null) {
-			query.getLuruStartTime().setHours(23);
-			query.getLuruStartTime().setMinutes(59);
-			query.getLuruStartTime().setSeconds(59);
-			dc.add(Restrictions.le("inputUserDate", query.getLuruStartTime()));
+		if (query.getLuruEndTime() != null) {
+			query.getLuruEndTime().setHours(23);
+			query.getLuruEndTime().setMinutes(59);
+			query.getLuruEndTime().setSeconds(59);
+			dc.add(Restrictions.le("inputUserDate", query.getLuruEndTime()));
 		}
 
 		if (query.getDaoqiStartTime() != null) {
@@ -351,6 +354,7 @@ public class WorkDealInfoExpViewService extends BaseService {
 			po.setDealInfoStatus(e.getDealInfoStatus());
 			po.setBusinessCardUserDate(e.getBusinessCardUserDate());
 			po.setOfficeId(e.getOfficeId());
+			po.setNotafter(e.getNotAfter());
 
 			User inputUser = new User();
 			inputUser.setId(e.getInputUserId());

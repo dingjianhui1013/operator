@@ -33,6 +33,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.json.JSONException;
@@ -2973,6 +2974,7 @@ public class WorkDealInfoService extends BaseService {
 		return workDealInfoDao.find(dc);
 	}
 
+	//按page查
 	public Page<WorkDealInfo> findByDealPay(Page<WorkDealInfo> page,
 			WorkDealInfo workDealInfo, Date startTime, Date endTime,
 			Long appId, List<Long> officeIds) {
@@ -3024,6 +3026,7 @@ public class WorkDealInfoService extends BaseService {
 		return workDealInfoDao.find(page, dc);
 	}
 
+	//按list查
 	public List<WorkDealInfo> findByDealPay(WorkDealInfo workDealInfo,
 			Date startTime, Date endTime, Long appId, List<Long> officeIds) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
@@ -3483,26 +3486,44 @@ public class WorkDealInfoService extends BaseService {
 		status.add(WorkDealInfoStatus.STATUS_CERT_OBTAINED);
 		status.add(WorkDealInfoStatus.STATUS_CERT_WAIT);
 		dc.add(Restrictions.in("dealInfoStatus", status));
+		
+		
+		
 		if (startTime != null) {
+			startTime.setHours(00);
+			startTime.setMinutes(00);
+			startTime.setSeconds(00);
+			
+			dc.add(Restrictions.ge("workPayInfo.createDate", startTime));
+		} 
+		
+		if(endTime !=null){
 			endTime.setHours(23);
 			endTime.setMinutes(59);
 			endTime.setSeconds(59);
 
-			if (startTime != null) {
-				dc.add(Restrictions.ge("workPayInfo.createDate", startTime));
-				dc.add(Restrictions.le("workPayInfo.createDate", endTime));
-			}
+			dc.add(Restrictions.le("workPayInfo.createDate", endTime));
+		}
+			
 			if (appId != null) {
 				dc.add(Restrictions.eq("configApp.id", appId));
 			}
 			if (officeIds != null && officeIds.size() > 0) {
 				dc.add(Restrictions.in("officeId", officeIds));
 			}
+			
+			
+			Disjunction disjunction = Restrictions.disjunction();
+			disjunction.add(Restrictions.eq("workPayInfo.methodPos", true));
+			disjunction.add(Restrictions.eq("workPayInfo.methodMoney", true));
+			disjunction.add(Restrictions.eq("workPayInfo.methodBank", true));
+			disjunction.add(Restrictions.eq("workPayInfo.methodAlipay", true));
+			
+			dc.add(disjunction);
+			
 			dc.addOrder(Order.asc("workPayInfo.createDate"));
 			return workDealInfoDao.find(dc);
-		} else {
-			return null;
-		}
+		
 
 	}
 
@@ -4163,13 +4184,31 @@ public class WorkDealInfoService extends BaseService {
 		}
 	}
 
-	public boolean findByOffice(List<Office> offices) {
-		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
-		dc.createAlias("createBy", "createBy");
-		dc.createAlias("createBy.office", "office");
-		dc.add(Restrictions.in("createBy.office", offices));
-		List<WorkCertInfo> list = workCertInfoDao.find(dc);
-		if (list.size() > 0) {
+	public boolean findByOffice(List<Long> officeIds) {
+		
+		
+		StringBuffer sql = new StringBuffer();
+		
+		sql.append(" select count(*) as ct from work_deal_info wdi where wdi.office_id in (").append(officeIds.get(0));
+		
+		for(int i=1;i<officeIds.size();i++){
+			sql.append(",").append(officeIds.get(i));
+		}
+		
+		sql.append(")");
+		
+		List<Map> ct = null;
+
+		try {
+			ct = workDealInfoDao.findBySQLListMap(sql.toString(), 0, 0);
+		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | ClassNotFoundException
+				| InstantiationException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+		Integer count = new Integer(ct.get(0).get("CT").toString());
+		if (count > 0) {
 			return false;
 		} else {
 			return true;
@@ -7850,7 +7889,7 @@ public class WorkDealInfoService extends BaseService {
 			Date endPayTime, List<Long> officeList) throws Exception {
 		StringBuffer sql = new StringBuffer();
 
-		sql.append("select fpi.company as companyName,fpi.pay_date as dealPayDate,fpi.payment_money as payMoney,fpi.remark as remarks,ca.app_name as aliasName,wdi.business_card_user_date as signDate from work_deal_info wdi,");
+		sql.append("select fpi.company as companyName,fpi.pay_date as dealPayDate,wpi.work_total_money as payMoney,fpi.remarks as remarks,ca.app_name as aliasName,wdi.business_card_user_date as signDate from work_deal_info wdi,");
 		sql.append(" work_pay_info wpi,");
 		sql.append(" finance_payment_info fpi,");
 		sql.append(" work_finance_pay_info_relation wfpr,");

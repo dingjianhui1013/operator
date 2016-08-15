@@ -439,8 +439,15 @@ public class OfficeController extends BaseController {
 		JSONObject json=new JSONObject();
 		Office office = officeService.get(id);
 		List<Office> offices = officeService.findOfficesByParentId(id);
+		
+		List<Long> officeIds = Lists.newArrayList();
+			
+		for(Office off:offices){
+			officeIds.add(off.getId());
+		}
+		
 		offices.add(office);
-		boolean findByoffice = workDealInfoService.findByOffice(offices);
+		boolean findByoffice = workDealInfoService.findByOffice(officeIds);
 		try {
 			if (findByoffice) {
 				json.put("status", 1);
