@@ -10,6 +10,8 @@
 				
 				var opt = document.createElement("OPTION");
 				opt.innerText='省份';
+				opt.value="";
+				
 				$("#s_province").append(opt);
 				$.each(d.list,function(idx, ele) {
 					
@@ -46,6 +48,8 @@
 					
 					var opt = document.createElement("OPTION");
 					opt.innerText='地级市';
+					opt.value="";
+					
 					$("#s_city").append(opt);
 					$.each(d.list,function(idx, ele) {
 						var var_Option = document.createElement("OPTION");
@@ -80,6 +84,7 @@
 				success : function(d) {
 					var opt = document.createElement("OPTION");
 					opt.innerText='市、县级市';
+					opt.value="";
 					$("#s_county").append(opt);
 					$.each(d.list,function(idx, ele) {
 						var var_Option = document.createElement("OPTION");
