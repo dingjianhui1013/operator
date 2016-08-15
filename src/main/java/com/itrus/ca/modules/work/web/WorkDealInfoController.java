@@ -6683,13 +6683,13 @@ public class WorkDealInfoController extends BaseController {
 			Iterator<Map.Entry<String, List<String>>> itt = paymentsVo.getOfficePayMethod().entrySet().iterator();
 			while (itt.hasNext()) {
 				Entry<String, List<String>> entry = itt.next();
-				if (entry.getValue().size() == 1) {
+			/*	if (entry.getValue().size() == 1) {
 					index += (entry.getValue().size());
 					sheet.addMergedRegion(new Region(1+previous, (short) (1 + count + 1), 2+previous,(short) (1 + count + 1)));
 					row1.createCell(1 + count + 1).setCellValue(entry.getKey());
 					count++;
-				}
-				if (entry.getValue().size() > 1) {
+				}*/
+				if (entry.getValue().size() >= 1) {
 					count += entry.getValue().size();
 					sheet.addMergedRegion(new Region(1+previous,(short) (1 + index + 1 + s), 1+previous, (short) (1 + index+ entry.getValue().size() + s)));
 					row1.createCell(1 + 1 + index + s).setCellValue(entry.getKey());
@@ -7115,13 +7115,13 @@ public class WorkDealInfoController extends BaseController {
 			Iterator<Map.Entry<String, List<String>>> itt = paymentsVo.getOfficePayMethod().entrySet().iterator();
 			while (itt.hasNext()) {
 				Entry<String, List<String>> entry = itt.next();
-				if (entry.getValue().size() == 1) {
+				/*if (entry.getValue().size() == 1) {
 					index++;
 					sheet.addMergedRegion(new Region(1+previous, (short) (1 + count + 1), 2+previous, (short) (1 + count + 1)));
 					row1.createCell(1 + count + 1).setCellValue(entry.getKey());
 					count++;
-				}
-				if (entry.getValue().size() > 1) {
+				}*/
+				if (entry.getValue().size() >= 1) {
 					count += entry.getValue().size();
 					sheet.addMergedRegion(new Region(1+previous, (short) (1 + index + 1 + s), 1+previous, (short) (1 + index + entry.getValue().size() + s)));
 					row1.createCell(1 + 1 + index + s).setCellValue(entry.getKey());
