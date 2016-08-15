@@ -67,7 +67,7 @@
 		<thead><tr>
 		<th>序号</th>
 		<th>应用名称</th>
-		<th>签章计费模板类型</th>
+		<th>模板名称</th>
 		<shiro:hasPermission name="signature:signatureChargeAgent:edit"><th>操作</th></shiro:hasPermission>
 		</tr></thead>
 		<tbody>

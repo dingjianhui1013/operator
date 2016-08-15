@@ -346,6 +346,7 @@
 </script>
 <script type="text/javascript" src="${ctxStatic}/jquery/city.js"></script>
 <script type="text/javascript" src="${ctxStatic }/jquery/area.js"></script>
+<script type="text/javascript" src="${ctxStatic }/jquery/commonJs.js"></script>
 
 <script type="text/javascript">
 	function onSubmit() {
@@ -705,9 +706,9 @@
 						<tr>
 						
 							<th class="btmBorder"><span class="prompt" style="color: red; display: none;">*</span>单位联系电话：</th>
-							<td class="btmBorder" ><input type="text" name="companyMobile" class="number"
+							<td class="btmBorder" ><input type="text" name="companyMobile" 
 								id="companyMobile"
-								value="${workDealInfo.workCompany.companyMobile }"  onblur="qxCount('dwtcount')"  onfocus="hqcount('companyMobile','dwtcount')"/><span id="dwtcount" style="color : red; margin-left: 10px"></span></td>
+								value="${workDealInfo.workCompany.companyMobile }"  onblur="checkContactMobil(this,'dwtcount')"  onfocus="hqcount('companyMobile','dwtcount')"/><span id="dwtcount" style="color : red; margin-left: 10px"></span></td>
 						
 						
 							<th><span class="prompt" style="color: red; display: none;">*</span>备注信息：</th>

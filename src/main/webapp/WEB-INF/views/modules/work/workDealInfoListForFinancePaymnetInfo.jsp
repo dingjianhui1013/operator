@@ -57,7 +57,7 @@
 		class="table table-striped table-bordered table-condensed">
 		<thead>
 		<tr>
-			<th colspan="7">总共 ${count} 数据</th>
+			<th colspan="7">总共 ${count} 条数据</th>
 		</tr>
 			<tr>
 				<th>收费流水号</th>

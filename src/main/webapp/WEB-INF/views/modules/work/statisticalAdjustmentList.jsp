@@ -109,11 +109,11 @@
 		<tbody>
 		<c:forEach items="${receivedPayment.paymentDealInfoVo}" var="p_d">
 			<tr>
-				<td>${p_d.dealPayDate}</td>
+				<td><fmt:formatDate value="${p_d.dealPayDate}" pattern="yyyy-MM-dd"/></td>
 				<td>${p_d.payMoney}</td>
 				<td>${p_d.companyName}</td>
 				<td>${p_d.aliasName}</td>
-				<td>${p_d.signDate}</td>
+				<td><fmt:formatDate value="${p_d.signDate}" pattern="yyyy-MM-dd"/></td>
 				<td>${p_d.remarks}</td>
 			</tr>
 		</c:forEach>

@@ -352,7 +352,18 @@ var selected = false;
 		document.all["pIDCard"].value=document.all["conCertNumber"].value;
 	}
 	function onSubmit(){
+		
+		var objCall = $("input[name='year']");
+		var wayvalue = new Array();
+		objCall.each(function(){
+			if(typeof $(this).attr('checked') != 'undefined'){
+				wayvalue.push($(this).val());
+			}
+		});
 	
+		
+	//alert(wayvalue.length);	
+	//alert($("input[name='year']").val());
 		if($("#product").val()==0){
 			top.$.jBox.tip("请选择要办理的产品！");
 			return false;
@@ -395,7 +406,7 @@ var selected = false;
 			top.$.jBox.tip("该应用不存在!"); 
 			$("#app").focus(); //让手机文本框获得焦点 
 			return false;
-		} else if (($("input[name='year']").val() == null || $("input[name='year']").val() == "")  && ($("#expirationDate").val() == null || $("#expirationDate").val() == "") ){
+		} else if (wayvalue.length<1  && ($("#expirationDate").val() == null || $("#expirationDate").val() == "") ){
 			top.$.jBox.tip("请选择申请年限或指定具体到期时间!"); 
 			$("input[name='year']").focus(); //让手机文本框获得焦点 
 			return false;
@@ -469,6 +480,7 @@ var selected = false;
 	src="${ctxStatic}/jquery/jquery.bigautocomplete.js"></script>
 <script type="text/javascript" src="${ctxStatic}/jquery/city.js"></script>
 <script type="text/javascript" src="${ctxStatic}/jquery/area.js"></script>
+<script type="text/javascript" src="${ctxStatic}/jquery/commonJs.js"></script>
 <!--  <script src="http://ie7-js.googlecode.com/svn/version/2.1(beta4)/IE9.js"></script>-->
 <link href="${ctxStatic}/jquery/jquery.bigautocomplete.css"
 	rel="stylesheet" />
@@ -1032,33 +1044,7 @@ var selected = false;
 	
 	
 	
-	function checkContactMobil(obj,o){
-		$("#"+o).hide();
-		var mobil = $(obj).val();
-		
-		
-		var isPhone = /^([0-9]{3,4}-)?[0-9]{7,8}$/;
-	    var isMob=/^((\+?86)|(\(\+86\)))?(13[012356789][0-9]{8}|15[012356789][0-9]{8}|18[02356789][0-9]{8}|147[0-9]{8}|1349[0-9]{7})$/;
-	    var ip = new RegExp(isPhone);
-	    var im = new RegExp(isMob);
-	    
-	    if(ip.test(mobil)||im.test(mobil)){
-	    	if($("#phonepro").text()!=""){
-				$("#phonepro").hide();
-			}
-	    	
-	        return true;
-	    }
-	    else{
-	    	if($("#phonepro").text()!=""){
-
-				return false; 
-			}
-	    	$("#companyMobile").after("<span id='phonepro' style='color:red'>请输入正确的号码</span>");
-	        return false;
-	    }
-		
-	}
+	
 	
 	
 	
@@ -1126,11 +1112,23 @@ var selected = false;
 				$("#supportDateTh").show();
 				$("#supportDateTd").show();
 				$("#expirationDate").val(data.expirationDate);
+				
+				
+				
+				$("#year1").removeAttr("checked");
+				$("#year2").removeAttr("checked");
+				$("#year3").removeAttr("checked");
+				$("#year4").removeAttr("checked");
+				$("#year5").removeAttr("checked");	
+				
+				
+				
 			}
 			if(!data.support){
 				$("#supportDateTh").hide();
 				$("#supportDateTd").hide();
 				$("#expirationDate").val(null);
+				
 			}
 			
 			var arr = [data.nameDisplayName,data.orgunitDisplayName,data.emailDisplayName,data.commonNameDisplayName,data.addtionalField1DisplayName,data.addtionalField2DisplayName,data.addtionalField3DisplayName,data.addtionalField4DisplayName,data.addtionalField5DisplayName,data.addtionalField6DisplayName,data.addtionalField7DisplayName,data.addtionalField8DisplayName]
@@ -1161,7 +1159,33 @@ var selected = false;
 				
 			});
 			
+			if(!data.support){
+				if(data.year1){
+					
+					$("#year1").prop("checked",true);
+					return;
+				}else if(data.year2){
+					$("#year2").prop("checked",true);
+					return;
+				}else if(data.year3){
+					$("#year3").prop("checked",true);
+					return;
+				}else if(data.year4){
+					$("#year4").prop("checked",true);
+					return;
+				}else{
+					$("#year5").prop("checked",true);
+					return;
+				}
+			}
+			
+			
 		});
+		
+		
+		
+		
+		
 		
 	}
 	Array.prototype.unique = function(){
@@ -1322,7 +1346,7 @@ var selected = false;
 						<th id="supportDateTh" style="display: none" >选择截止日期：</th>
 						<td id="supportDateTd" style="display: none">
 								<input class="input-medium Wdate" type="text"
-							 onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});"
+							 onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});" 
 							 maxlength="20" readonly="readonly" value="<fmt:formatDate value="${expirationDate}" pattern="yyyy-MM-dd"/>"
 							name="expirationDate" id="expirationDate"/>
 							</td> 
