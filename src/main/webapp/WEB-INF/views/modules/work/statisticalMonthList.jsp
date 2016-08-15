@@ -129,21 +129,21 @@
 		class="table table-striped table-bordered table-condensed">
 		<thead>
 			<tr>
-				<th  rowspan="2" style="text-align:center;">统计日期</th>
-				<th  rowspan="2" style="text-align:center;">项目名称</th>
+				<th width="7%"  rowspan="2" style="text-align:center;">统计日期</th>
+				<th width="15%" rowspan="2" style="text-align:center;">项目名称</th>
 				<c:forEach items="${receivedPayment.officePayMethod}" var="office_payMethod">
 					<c:set var="index" value="0" />
 					<c:forEach items="${office_payMethod.value}">
 						<c:set var="index" value="${index+1}" />
 					</c:forEach>
 					<c:if test="${index==1}">
-						<th colspan="${index}" rowspan="2" style="text-align:center;">${office_payMethod.key}</th>
+						<th colspan="${index}" rowspan="1" style="text-align:center;">${office_payMethod.key}</th>
 					</c:if>
 					<c:if test="${index>1}">
 						<th colspan="${index}" style="text-align:center;">${office_payMethod.key}</th>
 					</c:if>
 				</c:forEach>
-				<th rowspan="2" style="text-align:center;">合计</th>
+				<th width="5%" rowspan="2" style="text-align:center;">合计</th>
 			</tr>
 			<tr>
 				<c:forEach items="${receivedPayment.officePayMethod}" var="office_payMethod">
@@ -151,7 +151,7 @@
 					<c:forEach items="${office_payMethod.value}">
 						<c:set var="index" value="${index+1}" />
 					</c:forEach>
-					<c:if test="${index>1}">
+					<c:if test="${index>=1}">
 					<c:forEach items="${office_payMethod.value}" var="payMethod">
 						<th style="text-align:center;">${payMethod}</th>
 					</c:forEach>

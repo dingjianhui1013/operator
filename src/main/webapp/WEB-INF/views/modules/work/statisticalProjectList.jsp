@@ -145,8 +145,8 @@
 		<table id="contentTable" class="table table-striped table-bordered table-condensed">
 		<thead>
 			<tr>
-				<th  rowspan="3" style="text-align:center;vertical-align:middle;">统计日期</th>
-				<th  rowspan="3" style="text-align:center;vertical-align:middle;">项目名称</th>
+				<th width="7%" rowspan="3" style="text-align:center;vertical-align:middle;">统计日期</th>
+				<th width="15%" rowspan="3" style="text-align:center;vertical-align:middle;">项目名称</th>
 				
 				<c:forEach items="${receivedPayment.officeDistrictPayMethod }" var="officeDistrictPayMethod">
 				
@@ -168,7 +168,7 @@
 				</c:forEach>
 				
 
-				<th rowspan="3" style="text-align:center; vertical-align:middle;">合计</th>
+				<th width="5%" rowspan="3" style="text-align:center; vertical-align:middle;">合计</th>
 			</tr>
 			<tr>
 			
