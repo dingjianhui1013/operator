@@ -10,8 +10,7 @@
 				
 				var opt = document.createElement("OPTION");
 				opt.innerText='省份';
-				opt.value="";
-				
+				opt.value = "";
 				$("#s_province").append(opt);
 				$.each(d.list,function(idx, ele) {
 					
