@@ -1021,7 +1021,7 @@ public class ClientController {
 			// 最后处理preId用
 			String firstCertSn = all.get(i).getFirstCertSN();
 			if (!StringHelper.isNull(firstCertSn))
-				firstSnAll.add(firstCertSn);
+				firstSnAll.add(firstCertSn.trim());
 		}
 
 		List<Thread> allThread = new ArrayList<Thread>();
@@ -1075,8 +1075,14 @@ public class ClientController {
 		Integer dealInfoCount = workDealInfoService.afterDealInfoId(dealInfoId);
 
 		// 业务链中，只有最后一条是0，前面的都是1
-		workDealInfoService.processPreId(firstSnAll);
-
+		try {
+			new Thread(new ModifyPreidThread(firstSnAll)).start();
+		} catch (Exception e) {
+			e.printStackTrace();
+			json.put("msg", "更新preid出现异常:" + StringHelper.getStackInfo(e));
+			isRunning = false;
+			return json.toString();
+		}
 		json.put("msg", "本次成功提交数据：" + dealInfoCount + "条！");
 
 		System.out.println("使用时间 :"
