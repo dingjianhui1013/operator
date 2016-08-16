@@ -324,8 +324,8 @@ public class MutiProcess implements Runnable {
 					workDealInfo.setConfigProduct(product);
 
 					workDealInfo.setFirstCertSN(StringHelper.isNull(s1
-							.getFirstCertSN()) ? s1.getFirstCertSN().trim()
-							: s1.getFirstCertSN());
+							.getFirstCertSN()) ? s1.getFirstCertSN() : s1
+							.getFirstCertSN().trim());
 
 					// 如果不带首张证书的序列号，则认为不是详情导入，按新增来处理
 					if (StringHelper.isNull(s1.getFirstCertSN()))
