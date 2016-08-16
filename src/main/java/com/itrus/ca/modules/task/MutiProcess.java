@@ -21,10 +21,12 @@ import com.itrus.ca.modules.constant.WorkType;
 import com.itrus.ca.modules.profile.entity.ConfigAgentOfficeRelation;
 import com.itrus.ca.modules.profile.entity.ConfigApp;
 import com.itrus.ca.modules.profile.entity.ConfigChargeAgent;
+import com.itrus.ca.modules.profile.entity.ConfigChargeAgentBoundConfigProduct;
 import com.itrus.ca.modules.profile.entity.ConfigCommercialAgent;
 import com.itrus.ca.modules.profile.entity.ConfigProduct;
 import com.itrus.ca.modules.profile.service.ConfigAgentAppRelationService;
 import com.itrus.ca.modules.profile.service.ConfigAgentOfficeRelationService;
+import com.itrus.ca.modules.profile.service.ConfigChargeAgentBoundConfigProductService;
 import com.itrus.ca.modules.profile.service.ConfigChargeAgentDetailService;
 import com.itrus.ca.modules.profile.service.ConfigChargeAgentService;
 import com.itrus.ca.modules.profile.service.ConfigProductService;
@@ -85,6 +87,9 @@ public class MutiProcess implements Runnable {
 
 	OfficeService officeService = SpringContextHolder
 			.getBean(OfficeService.class);
+
+	ConfigChargeAgentBoundConfigProductService configChargeAgentBoundConfigProductService = SpringContextHolder
+			.getBean(ConfigChargeAgentBoundConfigProductService.class);
 
 	Logger log = Logger.getLogger(MutiProcess.class);
 
@@ -376,8 +381,29 @@ public class MutiProcess implements Runnable {
 						// ConfigChargeAgent chargeAgent =
 						// configChargeAgentService
 						// .get(workDealInfo.getConfigProduct().getChargeAgentId());
-						ConfigChargeAgent chargeAgent = configChargeAgentService
-								.get(s1.getAgentId());
+
+						ConfigChargeAgent chargeAgent = null;
+
+						List<ConfigChargeAgentBoundConfigProduct> lst = configChargeAgentBoundConfigProductService
+								.findByProductId(product.getId());
+						boolean hasin = false;
+						List<Long> aidlist = new ArrayList<Long>();
+						for (ConfigChargeAgentBoundConfigProduct e : lst) {
+							aidlist.add(e.getAgent().getId());
+							if (e.getAgent().getId().longValue() == s1
+									.getAgentId().longValue())
+								hasin = true;
+						}
+						if (!hasin) {
+							log.error("产品id:" + product.getId()
+									+ ",计费策略ID与系统中的不符: 传入计费策略id:"
+									+ s1.getAgentId() + ",系统中绑定的计费策略id:"
+									+ aidlist);
+							continue;
+						} else {
+							chargeAgent = configChargeAgentService.get(s1
+									.getAgentId());
+						}
 
 						openAccountMoney = configChargeAgentDetailService
 								.selectMoney(chargeAgent,
