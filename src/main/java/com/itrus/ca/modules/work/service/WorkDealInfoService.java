@@ -76,7 +76,6 @@ import com.itrus.ca.modules.profile.service.ConfigChargeAgentDetailService;
 import com.itrus.ca.modules.profile.service.ConfigChargeAgentService;
 import com.itrus.ca.modules.profile.service.ConfigProductService;
 import com.itrus.ca.modules.profile.service.ConfigRaAccountExtendInfoService;
-import com.itrus.ca.modules.report.vo.WorkDealInfoVO;
 import com.itrus.ca.modules.sys.entity.Office;
 import com.itrus.ca.modules.sys.entity.User;
 import com.itrus.ca.modules.sys.utils.CreateExcelUtils;
@@ -2974,7 +2973,7 @@ public class WorkDealInfoService extends BaseService {
 		return workDealInfoDao.find(dc);
 	}
 
-	//按page查
+	// 按page查
 	public Page<WorkDealInfo> findByDealPay(Page<WorkDealInfo> page,
 			WorkDealInfo workDealInfo, Date startTime, Date endTime,
 			Long appId, List<Long> officeIds) {
@@ -3026,7 +3025,7 @@ public class WorkDealInfoService extends BaseService {
 		return workDealInfoDao.find(page, dc);
 	}
 
-	//按list查
+	// 按list查
 	public List<WorkDealInfo> findByDealPay(WorkDealInfo workDealInfo,
 			Date startTime, Date endTime, Long appId, List<Long> officeIds) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
@@ -3486,44 +3485,40 @@ public class WorkDealInfoService extends BaseService {
 		status.add(WorkDealInfoStatus.STATUS_CERT_OBTAINED);
 		status.add(WorkDealInfoStatus.STATUS_CERT_WAIT);
 		dc.add(Restrictions.in("dealInfoStatus", status));
-		
-		
-		
+
 		if (startTime != null) {
 			startTime.setHours(00);
 			startTime.setMinutes(00);
 			startTime.setSeconds(00);
-			
+
 			dc.add(Restrictions.ge("workPayInfo.createDate", startTime));
-		} 
-		
-		if(endTime !=null){
+		}
+
+		if (endTime != null) {
 			endTime.setHours(23);
 			endTime.setMinutes(59);
 			endTime.setSeconds(59);
 
 			dc.add(Restrictions.le("workPayInfo.createDate", endTime));
 		}
-			
-			if (appId != null) {
-				dc.add(Restrictions.eq("configApp.id", appId));
-			}
-			if (officeIds != null && officeIds.size() > 0) {
-				dc.add(Restrictions.in("officeId", officeIds));
-			}
-			
-			
-			Disjunction disjunction = Restrictions.disjunction();
-			disjunction.add(Restrictions.eq("workPayInfo.methodPos", true));
-			disjunction.add(Restrictions.eq("workPayInfo.methodMoney", true));
-			disjunction.add(Restrictions.eq("workPayInfo.methodBank", true));
-			disjunction.add(Restrictions.eq("workPayInfo.methodAlipay", true));
-			
-			dc.add(disjunction);
-			
-			dc.addOrder(Order.asc("workPayInfo.createDate"));
-			return workDealInfoDao.find(dc);
-		
+
+		if (appId != null) {
+			dc.add(Restrictions.eq("configApp.id", appId));
+		}
+		if (officeIds != null && officeIds.size() > 0) {
+			dc.add(Restrictions.in("officeId", officeIds));
+		}
+
+		Disjunction disjunction = Restrictions.disjunction();
+		disjunction.add(Restrictions.eq("workPayInfo.methodPos", true));
+		disjunction.add(Restrictions.eq("workPayInfo.methodMoney", true));
+		disjunction.add(Restrictions.eq("workPayInfo.methodBank", true));
+		disjunction.add(Restrictions.eq("workPayInfo.methodAlipay", true));
+
+		dc.add(disjunction);
+
+		dc.addOrder(Order.asc("workPayInfo.createDate"));
+		return workDealInfoDao.find(dc);
 
 	}
 
@@ -4185,23 +4180,25 @@ public class WorkDealInfoService extends BaseService {
 	}
 
 	public boolean findByOffice(List<Long> officeIds) {
-		
-		
+
 		StringBuffer sql = new StringBuffer();
-		
-		sql.append(" select count(*) as ct from work_deal_info wdi where wdi.office_id in (").append(officeIds.get(0));
-		
-		for(int i=1;i<officeIds.size();i++){
+
+		sql.append(
+				" select count(*) as ct from work_deal_info wdi where wdi.office_id in (")
+				.append(officeIds.get(0));
+
+		for (int i = 1; i < officeIds.size(); i++) {
 			sql.append(",").append(officeIds.get(i));
 		}
-		
+
 		sql.append(")");
-		
+
 		List<Map> ct = null;
 
 		try {
 			ct = workDealInfoDao.findBySQLListMap(sql.toString(), 0, 0);
-		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | ClassNotFoundException
+		} catch (IllegalAccessException | IllegalArgumentException
+				| InvocationTargetException | ClassNotFoundException
 				| InstantiationException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -4415,6 +4412,7 @@ public class WorkDealInfoService extends BaseService {
 		return (int) workDealInfoDao.count(dc);
 	}
 
+	@Transactional(readOnly = false)
 	public void processSinglePreid(String firstCertSN) {
 		List<WorkDealInfo> lst = findByFirstCertSN(firstCertSN);
 
@@ -4427,6 +4425,7 @@ public class WorkDealInfoService extends BaseService {
 		}
 
 		for (int i = 0; i < lst.size(); i++) {
+
 			WorkDealInfo pre = findPreByFirstCertSN(lst.get(i));
 			if (pre == null && i != (lst.size() - 1)) {
 				continue;
@@ -4434,19 +4433,18 @@ public class WorkDealInfoService extends BaseService {
 			WorkDealInfo po = lst.get(i);
 			if (pre != null) {
 				po.setPrevId(pre.getId());
-				workDealInfoDao.save(po);
 			}
-
 			if (i == 0) {
 				po.setDelFlag("0");
-				workDealInfoDao.save(po);
 			} else {
 				po.setDelFlag("1");
-				workDealInfoDao.save(po);
 			}
+
+			workDealInfoDao.save(po);
 		}
 	}
 
+	@Transactional(readOnly = false)
 	public void processPreId(Set<String> all) {
 		for (String e : all) {
 			// 根据首张证书序列判定是否需要处理workDealInfo表内的preId字段
@@ -7764,12 +7762,12 @@ public class WorkDealInfoService extends BaseService {
 
 	public WorkDealInfo findFirstByFirstCertSN(String firstCertSN) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
-		
-		//改: 由于导入的数据certsn与firstcertsn不一定一样  所以改用firstCertSn匹配,也一样 主要由新增那个条件控制
-		//dc.add(Restrictions.eq("certSn", firstCertSN));
-		
+
+		// 改: 由于导入的数据certsn与firstcertsn不一定一样 所以改用firstCertSn匹配,也一样 主要由新增那个条件控制
+		// dc.add(Restrictions.eq("certSn", firstCertSN));
+
 		dc.add(Restrictions.eq("firstCertSN", firstCertSN));
-		
+
 		dc.add(Restrictions.eq("dealInfoType", WorkDealInfoType.TYPE_ADD_CERT));
 		List<WorkDealInfo> lst = workDealInfoDao.find(dc);
 		if (lst == null || lst.size() <= 0)
@@ -7876,7 +7874,7 @@ public class WorkDealInfoService extends BaseService {
 		WorkDealInfo po = get(workDealInfoId);
 		String firstCertSn = findFirstCertSNById(workDealInfoId);
 		po.setFirstCertSN(firstCertSn);
-		 workDealInfoDao.save(po);
+		workDealInfoDao.save(po);
 	}
 
 	/**
