@@ -114,7 +114,7 @@ public class MutiProcess implements Runnable {
 	}
 
 	@Override
-	@Transactional
+	@Transactional(readOnly=false)
 	public void run() {
 		sccaList.size();
 		System.out.println(sccaList.size());
