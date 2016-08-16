@@ -7764,7 +7764,12 @@ public class WorkDealInfoService extends BaseService {
 
 	public WorkDealInfo findFirstByFirstCertSN(String firstCertSN) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
-		dc.add(Restrictions.eq("certSn", firstCertSN));
+		
+		//改: 由于导入的数据certsn与firstcertsn不一定一样  所以改用firstCertSn匹配,也一样 主要由新增那个条件控制
+		//dc.add(Restrictions.eq("certSn", firstCertSN));
+		
+		dc.add(Restrictions.eq("firstCertSN", firstCertSN));
+		
 		dc.add(Restrictions.eq("dealInfoType", WorkDealInfoType.TYPE_ADD_CERT));
 		List<WorkDealInfo> lst = workDealInfoDao.find(dc);
 		if (lst == null || lst.size() <= 0)
