@@ -100,7 +100,7 @@ public class ConfigRaAccountService extends BaseService {
 	//根据Id得到ra信息
 		public List<ConfigRaAccount> findById(Long Id) {
 			DetachedCriteria dc = configRaAccountDao.createDetachedCriteria();
-			if (StringUtils.isNotEmpty(Id.toString())) {
+			if (Id!=null) {
 				dc.add(Restrictions.eq("id",Id) );
 			}
 			return configRaAccountDao.find(dc);
