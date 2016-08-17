@@ -71,7 +71,7 @@
 			<label class="control-label">RA模板:</label>
 			<div class="controls">
 				<select id="raAccountId" name="raAccountId">
-				       <option value="1">请选择</option>
+				       <option value="">请选择</option>
 						<c:forEach items="${configRaAccounts}" var="raConfig">
 							<option value="${raConfig.id}"
 							<c:if test="${productRaAccount eq raConfig.id }">
@@ -85,7 +85,7 @@
 			<label class="control-label">证书模板:</label>
 			<div class="controls">
 				<select id="raAccountExtedId" name="raAccountExtedId">
-				        <option value="1">请选择</option>
+				        <option value="">请选择</option>
 						<c:forEach items="${raAccountExtendInfos}" var="certConfig">
 							<option value="${certConfig.id}"
 							<c:if test="${productCertAccount eq certConfig.id }">
