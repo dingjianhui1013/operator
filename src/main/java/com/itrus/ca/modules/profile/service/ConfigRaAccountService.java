@@ -102,8 +102,11 @@ public class ConfigRaAccountService extends BaseService {
 			DetachedCriteria dc = configRaAccountDao.createDetachedCriteria();
 			if (Id!=null) {
 				dc.add(Restrictions.eq("id",Id) );
+				return configRaAccountDao.find(dc);
 			}
-			return configRaAccountDao.find(dc);
+			
+			return null;
+			
 		}
 	
 	//判断ra是否关联证书

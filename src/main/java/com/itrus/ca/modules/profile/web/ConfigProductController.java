@@ -112,12 +112,23 @@ public class ConfigProductController extends BaseController {
 //			添加ra模板
 //			List<ConfigRaAccount> configRaAccounts= configRaAccountService.findByProductId(product.getId());
 			List<ConfigRaAccount> configRaAccounts= configRaAccountService.findById(product.getRaAccountId());
-			for(ConfigRaAccount configRaAccount :configRaAccounts){
-				product.getConfigRaAccounts().add(configRaAccount);
+			
+			if(configRaAccounts!=null){
+				for(ConfigRaAccount configRaAccount :configRaAccounts){
+					product.getConfigRaAccounts().add(configRaAccount);
+				}	
 			}
+			
+			
 			//添加证书模板
-			List<ConfigRaAccountExtendInfo> raAccountExtendInfos=configRaAccountExtendInfoService.findById(product.getRaAccountExtedId());
-			map.put(product.getId(), raAccountExtendInfos.get(0));
+			
+			
+			if(product.getRaAccountExtedId()!=null){
+				List<ConfigRaAccountExtendInfo> raAccountExtendInfos=configRaAccountExtendInfoService.findById(product.getRaAccountExtedId());
+				map.put(product.getId(), raAccountExtendInfos.get(0));	
+			}
+			
+			
 		}
 		 for (int i = 0; i < page.size(); i++) {
 		  page.get(i).setProductName(ProductType.getProductTypeName(Integer.valueOf(page.get(i).getProductName())));
