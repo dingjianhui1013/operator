@@ -25,23 +25,7 @@
 			});
 		});
 		
-		
-		
-		
-		function save(){
-			
-			if($("#raAccountId").val()=="1"){
-				top.$.jBox.tip("请选择RA模板！");
-				return false;
-			}
-			
-			
-			if($("#raAccountExtedId").val()=="1"){
-				top.$.jBox.tip("请选择证书模板！");
-				return false;
-			}
-		}
-		
+	
 	</script>
 </head>
 <body>
@@ -121,7 +105,7 @@
 		</div>
 		<div class="form-actions">
 			<shiro:hasPermission name="profile:configProduct:edit">
-			<input id="btnSubmit" class="btn btn-primary" type="submit" onclick="return save()" value="保 存"/>&nbsp;</shiro:hasPermission>
+			<input id="btnSubmit" class="btn btn-primary" type="submit" value="保 存"/>&nbsp;</shiro:hasPermission>
 			<input id="btnCancel" class="btn" type="button" value="返 回" onclick="history.go(-1)"/>
 		</div>
 	</form:form>
