@@ -114,7 +114,7 @@ public class MutiProcess implements Runnable {
 	}
 
 	@Override
-	@Transactional(readOnly=false)
+	@Transactional(readOnly = false)
 	public void run() {
 		sccaList.size();
 		System.out.println(sccaList.size());
@@ -270,6 +270,7 @@ public class MutiProcess implements Runnable {
 
 				certInfo.setNotafter(dnf.parse(s1.getNotafter()));
 				certInfo.setNotbefore(dnf.parse(s1.getNotbefore()));
+				certInfo.setSignDate(dnf.parse(s1.getProcessTime()));
 				certInfo.setKeySn("");// 这次不需要keySn即使有也不记录
 				certInfo.setTrustDeviceCount(1);// 默认送1个
 				certInfo.setTrustDeviceDate(dnf.parse(s1.getNotafter()));// 可信设备时间
