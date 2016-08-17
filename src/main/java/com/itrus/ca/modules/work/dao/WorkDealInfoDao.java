@@ -49,7 +49,7 @@ public interface WorkDealInfoDao extends WorkDealInfoDaoCustom,
 	public List<WorkDealInfo> findktydsb1(String keySn);
 
 	@Modifying
-	@Query("From WorkDealInfo w where w.firstCertSN=?1 order by w.creactDate DESC ")
+	@Query("From WorkDealInfo w where w.firstCertSN=?1 order by w.createDate DESC ")
 	public List<WorkDealInfo> findByFirstCertSN(String firstCertSN);
 
 	@Modifying
