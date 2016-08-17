@@ -24,6 +24,24 @@
 				}
 			});
 		});
+		
+		
+		
+		
+		function save(){
+			
+			if($("#raAccountId").val()=="1"){
+				top.$.jBox.tip("请选择RA模板！");
+				return false;
+			}
+			
+			
+			if($("#raAccountExtedId").val()=="1"){
+				top.$.jBox.tip("请选择证书模板！");
+				return false;
+			}
+		}
+		
 	</script>
 </head>
 <body>
@@ -69,7 +87,7 @@
 			<label class="control-label">RA模板:</label>
 			<div class="controls">
 				<select id="raAccountId" name="raAccountId">
-				       <option value="">请选择</option>
+				       <option value="1">请选择</option>
 						<c:forEach items="${configRaAccounts}" var="raConfig">
 							<option value="${raConfig.id}"
 							<c:if test="${productRaAccount eq raConfig.id }">
@@ -83,7 +101,7 @@
 			<label class="control-label">证书模板:</label>
 			<div class="controls">
 				<select id="raAccountExtedId" name="raAccountExtedId">
-				        <option value="">请选择</option>
+				        <option value="1">请选择</option>
 						<c:forEach items="${raAccountExtendInfos}" var="certConfig">
 							<option value="${certConfig.id}"
 							<c:if test="${productCertAccount eq certConfig.id }">
@@ -103,7 +121,7 @@
 		</div>
 		<div class="form-actions">
 			<shiro:hasPermission name="profile:configProduct:edit">
-			<input id="btnSubmit" class="btn btn-primary" type="submit" value="保 存"/>&nbsp;</shiro:hasPermission>
+			<input id="btnSubmit" class="btn btn-primary" type="submit" onclick="return save()" value="保 存"/>&nbsp;</shiro:hasPermission>
 			<input id="btnCancel" class="btn" type="button" value="返 回" onclick="history.go(-1)"/>
 		</div>
 	</form:form>
