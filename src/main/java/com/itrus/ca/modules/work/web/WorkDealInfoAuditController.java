@@ -1178,12 +1178,22 @@ public class WorkDealInfoAuditController extends BaseController {
 				}
 				
 				workPayInfo.setElectron(payInfo.getElectron());
-				
-				if (newAdd > oldAdd) {
-					workPayInfo.setMoney(newAdd - oldAdd);
-				}else{
-					workPayInfo.setMoney(oldAdd - newAdd);
+				if(iseq.equals(1)){
+					if (newAdd < oldAdd) {
+						workPayInfo.setMoney(newAdd - oldAdd);
+					}else{
+						workPayInfo.setMoney(oldAdd - newAdd);
+					}
 				}
+				
+				if(iseq.equals(2)){
+					if (newAdd > oldAdd) {
+						workPayInfo.setMoney(newAdd - oldAdd);
+					}else{
+						workPayInfo.setMoney(oldAdd - newAdd);
+					}
+				}
+				
 				workPayInfo.setAlipayMoney(0d);
 				workPayInfo.setPosMoney(0d);
 				workPayInfo.setBankMoney(0d);
