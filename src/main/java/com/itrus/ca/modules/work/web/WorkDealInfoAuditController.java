@@ -919,6 +919,8 @@ public class WorkDealInfoAuditController extends BaseController {
 				workDealInfo.setCommercialAgent(configAgentOfficeRelations.get(0).getConfigCommercialAgent());// 鍔冲姟鍏崇郴澶栭敭
 			}
 			
+			
+			workDealInfo.setCertSn(dealInfo.getCertSn());
 			workDealInfo.setCertSort(dealInfo.getCertSort());
 			workDealInfo.setWorkUser(dealInfo.getWorkUser());
 			workDealInfo.setWorkCompany(dealInfo.getWorkCompany());
