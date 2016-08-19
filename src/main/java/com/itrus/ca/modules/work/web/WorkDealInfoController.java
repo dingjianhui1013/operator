@@ -1353,31 +1353,31 @@ public class WorkDealInfoController extends BaseController {
 										if (list.get(i).getMethodPos() == 1) {
 											if (list.get(i).getPosMoney() >= 0) {
 												postMoney = list.get(i).getPosMoney();
-											} else {
+											}/* else {
 												postMoney = (-list.get(i).getPosMoney());
-											}
+											}*/
 										}
 										if (list.get(i).getMethodBank() == 1) {
 											if (list.get(i).getBankMoney() >= 0) {
 												bankMoney = list.get(i).getBankMoney();
-											} else {
+											} /*else {
 												bankMoney = (-list.get(i).getBankMoney());
-											}
+											}*/
 										}
 										if (list.get(i).getMethodMoney() == 1) {
 											if (list.get(i).getMoney() >= 0) {
 												xjMoney = list.get(i).getMoney();
-											} else {
+											}/* else {
 												xjMoney = (-list.get(i).getMoney());
-											}
+											}*/
 
 										}
 										if (list.get(i).getMethodAlipay() == 1) {
 											if (list.get(i).getAlipayMoney() >= 0) {
 												alipayMoney = list.get(i).getAlipayMoney();
-											} else {
+											}/* else {
 												alipayMoney = (-list.get(i).getAlipayMoney());
-											}
+											}*/
 
 										}
 									} else {
@@ -1387,33 +1387,33 @@ public class WorkDealInfoController extends BaseController {
 												if (workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod() == 1) {
 													if (workfinancePayinfos.get(w).getMoney() >= 0) {
 														xjMoney = workfinancePayinfos.get(w).getMoney();
-													} else {
+													} /*else {
 														xjMoney = (-workfinancePayinfos.get(w).getMoney());
-													}
+													}*/
 
 												}
 												if (workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod() == 2) {
 													if (workfinancePayinfos.get(w).getMoney() >= 0) {
 														postMoney = workfinancePayinfos.get(w).getMoney();
-													} else {
+													} /*else {
 														postMoney = (-workfinancePayinfos.get(w).getMoney());
-													}
+													}*/
 
 												}
 												if (workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod() == 3) {
 													if (workfinancePayinfos.get(w).getMoney() >= 0) {
 														bankMoney = workfinancePayinfos.get(w).getMoney();
-													} else {
+													}/* else {
 														bankMoney = (-workfinancePayinfos.get(w).getMoney());
-													}
+													}*/
 
 												}
 												if (workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod() == 4) {
 													if (workfinancePayinfos.get(w).getMoney() >= 0) {
 														alipayMoney = workfinancePayinfos.get(w).getMoney();
-													} else {
+													}/* else {
 														alipayMoney = (-workfinancePayinfos.get(w).getMoney());
-													}
+													}*/
 
 												}
 											}
@@ -1713,31 +1713,31 @@ public class WorkDealInfoController extends BaseController {
 										if (list.get(i).getWorkPayInfo().getMethodPos() == true) {
 											if (list.get(i).getWorkPayInfo().getPosMoney() >= 0) {
 												postMoney = list.get(i).getWorkPayInfo().getPosMoney();
-											} else {
+											} /*else {
 												postMoney = (-list.get(i).getWorkPayInfo().getPosMoney());
-											}
+											}*/
 										}
 										if (list.get(i).getWorkPayInfo().getMethodBank() == true) {
 											if (list.get(i).getWorkPayInfo().getBankMoney() >= 0) {
 												bankMoney = list.get(i).getWorkPayInfo().getBankMoney();
-											} else {
+											} /*else {
 												bankMoney = (-list.get(i).getWorkPayInfo().getBankMoney());
-											}
+											}*/
 										}
 										if (list.get(i).getWorkPayInfo().getMethodMoney() == true) {
 											if (list.get(i).getWorkPayInfo().getMoney() >= 0) {
 												xjMoney = list.get(i).getWorkPayInfo().getMoney();
-											} else {
+											} /*else {
 												xjMoney = (-list.get(i).getWorkPayInfo().getMoney());
-											}
+											}*/
 
 										}
 										if (list.get(i).getWorkPayInfo().getMethodAlipay() == true) {
 											if (list.get(i).getWorkPayInfo().getAlipayMoney() >= 0) {
 												alipayMoney = list.get(i).getWorkPayInfo().getAlipayMoney();
-											} else {
+											} /*else {
 												alipayMoney = (-list.get(i).getWorkPayInfo().getAlipayMoney());
-											}
+											}*/
 
 										}
 									} else {
@@ -1747,33 +1747,33 @@ public class WorkDealInfoController extends BaseController {
 												if (workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod() == 1) {
 													if (workfinancePayinfos.get(w).getMoney() >= 0) {
 														xjMoney = workfinancePayinfos.get(w).getMoney();
-													} else {
+													}/* else {
 														xjMoney = (-workfinancePayinfos.get(w).getMoney());
-													}
+													}*/
 
 												}
 												if (workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod() == 2) {
 													if (workfinancePayinfos.get(w).getMoney() >= 0) {
 														postMoney = workfinancePayinfos.get(w).getMoney();
-													} else {
+													}/* else {
 														postMoney = (-workfinancePayinfos.get(w).getMoney());
-													}
+													}*/
 
 												}
 												if (workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod() == 3) {
 													if (workfinancePayinfos.get(w).getMoney() >= 0) {
 														bankMoney = workfinancePayinfos.get(w).getMoney();
-													} else {
+													} /*else {
 														bankMoney = (-workfinancePayinfos.get(w).getMoney());
-													}
+													}*/
 
 												}
 												if (workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod() == 4) {
 													if (workfinancePayinfos.get(w).getMoney() >= 0) {
 														alipayMoney = workfinancePayinfos.get(w).getMoney();
-													} else {
+													} /*else {
 														alipayMoney = (-workfinancePayinfos.get(w).getMoney());
-													}
+													}*/
 
 												}
 											}
@@ -1798,31 +1798,31 @@ public class WorkDealInfoController extends BaseController {
 										if (list.get(i).getWorkPayInfo().getMethodPos() == true) {
 											if (list.get(i).getWorkPayInfo().getPosMoney() >= 0) {
 												postMoney = list.get(i).getWorkPayInfo().getPosMoney();
-											} else {
+											} /*else {
 												postMoney = (-list.get(i).getWorkPayInfo().getPosMoney());
-											}
+											}*/
 										}
 										if (list.get(i).getWorkPayInfo().getMethodBank() == true) {
 											if (list.get(i).getWorkPayInfo().getBankMoney() >= 0) {
 												bankMoney = list.get(i).getWorkPayInfo().getBankMoney();
-											} else {
+											} /*else {
 												bankMoney = (-list.get(i).getWorkPayInfo().getBankMoney());
-											}
+											}*/
 										}
 										if (list.get(i).getWorkPayInfo().getMethodMoney() == true) {
 											if (list.get(i).getWorkPayInfo().getMoney() >= 0) {
 												xjMoney = list.get(i).getWorkPayInfo().getMoney();
-											} else {
+											} /*else {
 												xjMoney = (-list.get(i).getWorkPayInfo().getMoney());
-											}
+											}*/
 
 										}
 										if (list.get(i).getWorkPayInfo().getMethodAlipay() == true) {
 											if (list.get(i).getWorkPayInfo().getAlipayMoney() >= 0) {
 												alipayMoney = list.get(i).getWorkPayInfo().getAlipayMoney();
-											} else {
+											} /*else {
 												alipayMoney = (-list.get(i).getWorkPayInfo().getAlipayMoney());
-											}
+											}*/
 
 										}
 									} else {
@@ -1832,33 +1832,33 @@ public class WorkDealInfoController extends BaseController {
 												if (workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod() == 1) {
 													if (workfinancePayinfos.get(w).getMoney() >= 0) {
 														xjMoney = workfinancePayinfos.get(w).getMoney();
-													} else {
+													}/* else {
 														xjMoney = (-workfinancePayinfos.get(w).getMoney());
-													}
+													}*/
 
 												}
 												if (workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod() == 2) {
 													if (workfinancePayinfos.get(w).getMoney() >= 0) {
 														postMoney = workfinancePayinfos.get(w).getMoney();
-													} else {
+													} /*else {
 														postMoney = (-workfinancePayinfos.get(w).getMoney());
-													}
+													}*/
 
 												}
 												if (workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod() == 3) {
 													if (workfinancePayinfos.get(w).getMoney() >= 0) {
 														bankMoney = workfinancePayinfos.get(w).getMoney();
-													} else {
+													} /*else {
 														bankMoney = (-workfinancePayinfos.get(w).getMoney());
-													}
+													}*/
 
 												}
 												if (workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod() == 4) {
 													if (workfinancePayinfos.get(w).getMoney() >= 0) {
 														alipayMoney = workfinancePayinfos.get(w).getMoney();
-													} else {
+													}/* else {
 														alipayMoney = (-workfinancePayinfos.get(w).getMoney());
-													}
+													}*/
 
 												}
 											}
@@ -6431,34 +6431,34 @@ public class WorkDealInfoController extends BaseController {
 									if (list.get(i).getMethodPos() == 1) {
 										if (list.get(i).getPosMoney() >= 0) {
 											postMoney = list.get(i).getPosMoney();
-										} else {
+										} /*else {
 											postMoney = (-list.get(i).getPosMoney());
-										}
+										}*/
 									}
 									if (list.get(i).getMethodBank() == 1) {
 										if (list.get(i).getBankMoney() >= 0) {
 											bankMoney = list.get(i).getBankMoney();
-										} else {
+										} /*else {
 											bankMoney = (-list.get(i)
 													.getBankMoney());
-										}
+										}*/
 									}
 									if (list.get(i).getMethodMoney() == 1) {
 										if (list.get(i).getMoney() >= 0) {
 											xjMoney = list.get(i).getMoney();
-										} else {
+										}/* else {
 											xjMoney = (-list.get(i).getMoney());
-										}
+										}*/
 
 									}
 									if (list.get(i).getMethodAlipay() == 1) {
 										if (list.get(i).getAlipayMoney() >= 0) {
 											alipayMoney = list.get(i)
 													.getAlipayMoney();
-										} else {
+										} /*else {
 											alipayMoney = (-list.get(i)
 													.getAlipayMoney());
-										}
+										}*/
 
 									}
 								} else {
@@ -6468,33 +6468,33 @@ public class WorkDealInfoController extends BaseController {
 											if (workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod() == 1) {
 												if (workfinancePayinfos.get(w).getMoney() >= 0) {
 													xjMoney = workfinancePayinfos.get(w).getMoney();
-												} else {
+												} /*else {
 													xjMoney = (-workfinancePayinfos.get(w).getMoney());
-												}
+												}*/
 
 											}
 											if (workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod() == 2) {
 												if (workfinancePayinfos.get(w).getMoney() >= 0) {
 													postMoney = workfinancePayinfos.get(w).getMoney();
-												} else {
+												} /*else {
 													postMoney = (-workfinancePayinfos.get(w).getMoney());
-												}
+												}*/
 
 											}
 											if (workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod() == 3) {
 												if (workfinancePayinfos.get(w).getMoney() >= 0) {
 													bankMoney = workfinancePayinfos.get(w).getMoney();
-												} else {
+												} /*else {
 													bankMoney = (-workfinancePayinfos.get(w).getMoney());
-												}
+												}*/
 
 											}
 											if (workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod() == 4) {
 												if (workfinancePayinfos.get(w).getMoney() >= 0) {
 													alipayMoney = workfinancePayinfos.get(w).getMoney();
-												} else {
+												} /*else {
 													alipayMoney = (-workfinancePayinfos.get(w).getMoney());
-												}
+												}*/
 
 											}
 										}
@@ -6852,31 +6852,31 @@ public class WorkDealInfoController extends BaseController {
 									if (list.get(i).getMethodPos() == 1) {
 										if (list.get(i).getPosMoney() >= 0) {
 											postMoney = list.get(i).getPosMoney();
-										} else {
+										}/* else {
 											postMoney = (-list.get(i).getPosMoney());
-										}
+										}*/
 									}
 									if (list.get(i).getMethodBank() == 1) {
 										if (list.get(i).getBankMoney() >= 0) {
 											bankMoney = list.get(i).getBankMoney();
-										} else {
+										} /*else {
 											bankMoney = (-list.get(i).getBankMoney());
-										}
+										}*/
 									}
 									if (list.get(i).getMethodMoney() == 1) {
 										if (list.get(i).getMoney() >= 0) {
 											xjMoney = list.get(i).getMoney();
-										} else {
+										} /*else {
 											xjMoney = (-list.get(i).getMoney());
-										}
+										}*/
 
 									}
 									if (list.get(i).getMethodAlipay() == 1) {
 										if (list.get(i).getAlipayMoney() >= 0) {
 											alipayMoney = list.get(i).getAlipayMoney();
-										} else {
+										}/* else {
 											alipayMoney = (-list.get(i).getAlipayMoney());
-										}
+										}*/
 
 									}
 								} else {
@@ -6886,33 +6886,33 @@ public class WorkDealInfoController extends BaseController {
 											if (workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod() == 1) {
 												if (workfinancePayinfos.get(w).getMoney() >= 0) {
 													xjMoney = workfinancePayinfos.get(w).getMoney();
-												} else {
+												} /*else {
 													xjMoney = (-workfinancePayinfos.get(w).getMoney());
-												}
+												}*/
 
 											}
 											if (workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod() == 2) {
 												if (workfinancePayinfos.get(w).getMoney() >= 0) {
 													postMoney = workfinancePayinfos.get(w).getMoney();
-												} else {
+												} /*else {
 													postMoney = (-workfinancePayinfos.get(w).getMoney());
-												}
+												}*/
 
 											}
 											if (workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod() == 3) {
 												if (workfinancePayinfos.get(w).getMoney() >= 0) {
 													bankMoney = workfinancePayinfos.get(w).getMoney();
-												} else {
+												} /*else {
 													bankMoney = (-workfinancePayinfos.get(w).getMoney());
-												}
+												}*/
 
 											}
 											if (workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod() == 4) {
 												if (workfinancePayinfos.get(w).getMoney() >= 0) {
 													alipayMoney = workfinancePayinfos.get(w).getMoney();
-												} else {
+												} /*else {
 													alipayMoney = (-workfinancePayinfos.get(w).getMoney());
-												}
+												}*/
 
 											}
 										}
@@ -7327,31 +7327,31 @@ public class WorkDealInfoController extends BaseController {
 											if (list.get(i).getWorkPayInfo().getMethodPos() == true) {
 												if (list.get(i).getWorkPayInfo().getPosMoney() >= 0) {
 													postMoney = list.get(i).getWorkPayInfo().getPosMoney();
-												} else {
+												} /*else {
 													postMoney = (-list.get(i).getWorkPayInfo().getPosMoney());
-												}
+												}*/
 											}
 											if (list.get(i).getWorkPayInfo().getMethodBank() == true) {
 												if (list.get(i).getWorkPayInfo().getBankMoney() >= 0) {
 													bankMoney = list.get(i).getWorkPayInfo().getBankMoney();
-												} else {
+												} /*else {
 													bankMoney = (-list.get(i).getWorkPayInfo().getBankMoney());
-												}
+												}*/
 											}
 											if (list.get(i).getWorkPayInfo().getMethodMoney() == true) {
 												if (list.get(i).getWorkPayInfo().getMoney() >= 0) {
 													xjMoney = list.get(i).getWorkPayInfo().getMoney();
-												} else {
+												} /*else {
 													xjMoney = (-list.get(i).getWorkPayInfo().getMoney());
-												}
+												}*/
 
 											}
 											if (list.get(i).getWorkPayInfo().getMethodAlipay() == true) {
 												if (list.get(i).getWorkPayInfo().getAlipayMoney() >= 0) {
 													alipayMoney = list.get(i).getWorkPayInfo().getAlipayMoney();
-												} else {
+												} /*else {
 													alipayMoney = (-list.get(i).getWorkPayInfo().getAlipayMoney());
-												}
+												}*/
 
 											}
 										} else {
@@ -7361,33 +7361,33 @@ public class WorkDealInfoController extends BaseController {
 													if (workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod() == 1) {
 														if (workfinancePayinfos.get(w).getMoney() >= 0) {
 															xjMoney = workfinancePayinfos.get(w).getMoney();
-														} else {
+														} /*else {
 															xjMoney = (-workfinancePayinfos.get(w).getMoney());
-														}
+														}*/
 
 													}
 													if (workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod() == 2) {
 														if (workfinancePayinfos.get(w).getMoney() >= 0) {
 															postMoney = workfinancePayinfos.get(w).getMoney();
-														} else {
+														} /*else {
 															postMoney = (-workfinancePayinfos.get(w).getMoney());
-														}
+														}*/
 
 													}
 													if (workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod() == 3) {
 														if (workfinancePayinfos.get(w).getMoney() >= 0) {
 															bankMoney = workfinancePayinfos.get(w).getMoney();
-														} else {
+														} /*else {
 															bankMoney = (-workfinancePayinfos.get(w).getMoney());
-														}
+														}*/
 
 													}
 													if (workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod() == 4) {
 														if (workfinancePayinfos.get(w).getMoney() >= 0) {
 															alipayMoney = workfinancePayinfos.get(w).getMoney();
-														} else {
+														} /*else {
 															alipayMoney = (-workfinancePayinfos.get(w).getMoney());
-														}
+														}*/
 
 													}
 												}
@@ -7412,31 +7412,31 @@ public class WorkDealInfoController extends BaseController {
 											if (list.get(i).getWorkPayInfo().getMethodPos() == true) {
 												if (list.get(i).getWorkPayInfo().getPosMoney() >= 0) {
 													postMoney = list.get(i).getWorkPayInfo().getPosMoney();
-												} else {
+												} /*else {
 													postMoney = (-list.get(i).getWorkPayInfo().getPosMoney());
-												}
+												}*/
 											}
 											if (list.get(i).getWorkPayInfo().getMethodBank() == true) {
 												if (list.get(i).getWorkPayInfo().getBankMoney() >= 0) {
 													bankMoney = list.get(i).getWorkPayInfo().getBankMoney();
-												} else {
+												} /*else {
 													bankMoney = (-list.get(i).getWorkPayInfo().getBankMoney());
-												}
+												}*/
 											}
 											if (list.get(i).getWorkPayInfo().getMethodMoney() == true) {
 												if (list.get(i).getWorkPayInfo().getMoney() >= 0) {
 													xjMoney = list.get(i).getWorkPayInfo().getMoney();
-												} else {
+												} /*else {
 													xjMoney = (-list.get(i).getWorkPayInfo().getMoney());
-												}
+												}*/
 
 											}
 											if (list.get(i).getWorkPayInfo().getMethodAlipay() == true) {
 												if (list.get(i).getWorkPayInfo().getAlipayMoney() >= 0) {
 													alipayMoney = list.get(i).getWorkPayInfo().getAlipayMoney();
-												} else {
+												} /*else {
 													alipayMoney = (-list.get(i).getWorkPayInfo().getAlipayMoney());
-												}
+												}*/
 
 											}
 										} else {
@@ -7446,33 +7446,33 @@ public class WorkDealInfoController extends BaseController {
 													if (workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod() == 1) {
 														if (workfinancePayinfos.get(w).getMoney() >= 0) {
 															xjMoney = workfinancePayinfos.get(w).getMoney();
-														} else {
+														} /*else {
 															xjMoney = (-workfinancePayinfos.get(w).getMoney());
-														}
+														}*/
 
 													}
 													if (workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod() == 2) {
 														if (workfinancePayinfos.get(w).getMoney() >= 0) {
 															postMoney = workfinancePayinfos.get(w).getMoney();
-														} else {
+														} /*else {
 															postMoney = (-workfinancePayinfos.get(w).getMoney());
-														}
+														}*/
 
 													}
 													if (workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod() == 3) {
 														if (workfinancePayinfos.get(w).getMoney() >= 0) {
 															bankMoney = workfinancePayinfos.get(w).getMoney();
-														} else {
+														} /*else {
 															bankMoney = (-workfinancePayinfos.get(w).getMoney());
-														}
+														}*/
 
 													}
 													if (workfinancePayinfos.get(w).getFinancePaymentInfo().getPaymentMethod() == 4) {
 														if (workfinancePayinfos.get(w).getMoney() >= 0) {
 															alipayMoney = workfinancePayinfos.get(w).getMoney();
-														} else {
+														} /*else {
 															alipayMoney = (-workfinancePayinfos.get(w).getMoney());
-														}
+														}*/
 
 													}
 												}

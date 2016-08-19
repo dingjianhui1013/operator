@@ -313,7 +313,7 @@ public class WorkDealInfoService extends BaseService {
 					WorkDealInfo.DEL_FLAG_NORMAL));
 		}
 		dc.addOrder(Order.desc("id"));
-		return workDealInfoDao.find(page, dc);
+		return workDealInfoDao.find(page, dc);     
 	}
 
 	public Page<WorkDealInfo> findByGuiDang(Page<WorkDealInfo> page,
