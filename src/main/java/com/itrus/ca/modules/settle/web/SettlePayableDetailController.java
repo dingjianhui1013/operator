@@ -591,7 +591,7 @@ public class SettlePayableDetailController extends BaseController {
 
 			// 找到整个业务链
 			List<WorkDealInfo> infos = workDealInfoService
-					.findChainByFirstCertSN(dealInfo.getCertSn(), endTime,
+					.findChainByFirstCertSN(dealInfo.getFirstCertSN(), endTime,
 							endLastDate);
 
 			List<PayableDetailVo> detailList = new ArrayList<PayableDetailVo>();
