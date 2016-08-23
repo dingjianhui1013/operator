@@ -92,95 +92,68 @@ public class ClientController {
 
 	@Autowired
 	KeyUsbKeyService keyUsbKeyService;
-
 	@Autowired
 	KeyUsbKeyInvoiceService keyUsbKeyInvoiceService;
-
 	@Autowired
 	ReceiptEnterInfoService receiptEnterInfoService;
-
 	@Autowired
 	ReceiptInvoiceService receiptInvoiceService;
-
 	@Autowired
 	WorkDealInfoService workDealInfoService;
-
 	@Autowired
 	ReceiptDepotInfoService receiptDepotInfoService;
-
 	@Autowired
 	ReceiptLogService receiptLogService;
-
 	@Autowired
 	private ConfigAppService configAppService;
-
 	@Autowired
 	ConfigAppOfficeRelationService configAppOfficeRelationService;
-
 	@Autowired
 	StatisticCertDataService statisticCertDataService;
-
 	@Autowired
 	StatisticAppDataService statisticAppDataService;
-
 	@Autowired
 	private KeyDepotGeneralStatisticsService keyDepotGeneralStatisticsService;
-
 	@Autowired
 	private KeyUsbKeyDepotService keyUsbKeyDepotService;
-
 	@Autowired
 	private StatisticCertDataProductService statisticCertDataProductService;
-
 	@Autowired
 	private OfficeService officeService;
-
 	@Autowired
 	private StatisticDayDataService statisticDayDataService;
-
 	@Autowired
 	private SendMsgService msgService;
-
 	@Autowired
 	private ConfigAgentAppRelationService configAgentAppRelationService;
-
 	@Autowired
 	private ConfigAgentOfficeRelationService configAgentOfficeRelationService;
-
 	@Autowired
 	private WorkCertInfoService workCertInfoService;
-
 	@Autowired
 	private WorkLogService workLogService;
-
 	@Autowired
 	private ConfigChargeAgentDetailService configChargeAgentDetailService;
 	@Autowired
 	private ConfigChargeAgentService configChargeAgentService;
-
 	@Autowired
 	private WorkPayInfoService workPayInfoService;
-
 	@Autowired
 	private WorkUserService workUserService;
-
 	@Autowired
 	private WorkCompanyService workCompanyService;
-
 	@Autowired
 	private ConfigProductService configProductService;
-
 	@Autowired
 	private WorkCompanyHisService workCompanyHisService;
-
 	@Autowired
 	private WorkUserHisService workUserHisService;
-
 	@Autowired
 	private BasicInfoSccaService basicInfoSccaService;
-
 	@Autowired
 	private WorkCertApplyInfoService workCertApplyInfoService;
+	@Autowired
+	private UpdateFirstCertSNThread updateFirstCertSNThread;
 
 	private LogUtil logUtil = new LogUtil();
 
@@ -940,8 +913,8 @@ public class ClientController {
 	public String updateFirstCertSN(Integer updateCount) throws JSONException {
 		JSONObject json = new JSONObject();
 		// 修复所有现有数据里，没有firstCertSn字段的记录
-		workDealInfoService.fixAllDataFirstCertSN(updateCount);
-
+		//workDealInfoService.fixAllDataFirstCertSN(updateCount);
+		updateFirstCertSNThread.process(updateCount);
 		json.put("msg", "完成");
 
 		return json.toString();
