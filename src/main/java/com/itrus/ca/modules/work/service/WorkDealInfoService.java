@@ -313,7 +313,7 @@ public class WorkDealInfoService extends BaseService {
 					WorkDealInfo.DEL_FLAG_NORMAL));
 		}
 		dc.addOrder(Order.desc("id"));
-		return workDealInfoDao.find(page, dc);     
+		return workDealInfoDao.find(page, dc);
 	}
 
 	public Page<WorkDealInfo> findByGuiDang(Page<WorkDealInfo> page,
@@ -3207,16 +3207,22 @@ public class WorkDealInfoService extends BaseService {
 			List<Long> officeids, Long appId) throws ParseException {
 		StringBuffer sqlBuffer = new StringBuffer();
 		String sqlString = "SELECT p.id as workPayInfoId,"
-				+ " w.office_id as officeId," + " p.CREATE_DATE as createDate,"
+				+ " w.office_id as officeId,"
+				+ " p.CREATE_DATE as createDate,"
 				+ " p.RELATION_METHOD as realtionMethod,"
-				+ " p.method_pos as methodPos," + " p.POS_MONEY as posMoney,"
+				+ " p.method_pos as methodPos,"
+				+ " p.POS_MONEY as posMoney,"
 				+ " p.METHOD_BANK as methodBank,"
 				+ " p.BANK_MONEY as bankMoney,"
-				+ " p.METHOD_MONEY as methodMoney," + " p.MONEY as money,"
+				+ " p.METHOD_MONEY as methodMoney,"
+				+ " p.MONEY as money,"
 				+ " p.METHOD_ALIPAY as methodAlipay,"
-				+ " p.ALIPAY_MONEY as alipayMoney" + " FROM work_deal_info w"
-				+ " INNER JOIN work_pay_info p" + " ON w.pay_id =p.id"
-				+ " WHERE w.pay_id IS NOT NULL" + " AND p.del_flag =0"
+				+ " p.ALIPAY_MONEY as alipayMoney"
+				+ " FROM work_deal_info w"
+				+ " INNER JOIN work_pay_info p"
+				+ " ON w.pay_id =p.id"
+				+ " WHERE w.pay_id IS NOT NULL"
+				+ " AND p.del_flag =0"
 				+ " AND w.deal_info_status  IN (7,9)"
 				+ " AND (p.method_pos!=0 or p.METHOD_BANK!=0 OR p.METHOD_MONEY!=0 OR p.METHOD_ALIPAY!=0 or p.RELATION_METHOD IS NOT NULL)";
 		sqlBuffer.append(sqlString);
@@ -3503,27 +3509,24 @@ public class WorkDealInfoService extends BaseService {
 			dc.add(Restrictions.le("workPayInfo.createDate", endTime));
 		}
 
-			
-			if (appId != null) {
-				dc.add(Restrictions.eq("configApp.id", appId));
-			}
-			if (officeIds != null && officeIds.size() > 0) {
-				dc.add(Restrictions.in("officeId", officeIds));
-			}
-			
-			
-			Disjunction disjunction = Restrictions.disjunction();
-			disjunction.add(Restrictions.eq("workPayInfo.methodPos", true));
-			disjunction.add(Restrictions.eq("workPayInfo.methodMoney", true));
-			disjunction.add(Restrictions.eq("workPayInfo.methodBank", true));
-			disjunction.add(Restrictions.eq("workPayInfo.methodAlipay", true));
-			disjunction.add(Restrictions.isNotNull("workPayInfo.relationMethod"));
-			
-			dc.add(disjunction);
-			
-			dc.addOrder(Order.asc("workPayInfo.createDate"));
-			return workDealInfoDao.find(dc);
-		
+		if (appId != null) {
+			dc.add(Restrictions.eq("configApp.id", appId));
+		}
+		if (officeIds != null && officeIds.size() > 0) {
+			dc.add(Restrictions.in("officeId", officeIds));
+		}
+
+		Disjunction disjunction = Restrictions.disjunction();
+		disjunction.add(Restrictions.eq("workPayInfo.methodPos", true));
+		disjunction.add(Restrictions.eq("workPayInfo.methodMoney", true));
+		disjunction.add(Restrictions.eq("workPayInfo.methodBank", true));
+		disjunction.add(Restrictions.eq("workPayInfo.methodAlipay", true));
+		disjunction.add(Restrictions.isNotNull("workPayInfo.relationMethod"));
+
+		dc.add(disjunction);
+
+		dc.addOrder(Order.asc("workPayInfo.createDate"));
+		return workDealInfoDao.find(dc);
 
 	}
 
@@ -4444,8 +4447,11 @@ public class WorkDealInfoService extends BaseService {
 			} else {
 				po.setDelFlag("1");
 			}
-
-			workDealInfoDao.save(po);
+			String sql = "update work_deal_info set DEL_FLAG='"
+					+ po.getDelFlag() + "',prev_id=" + po.getPrevId()
+					+ " where id=" + po.getId();
+			workDealInfoDao.exeSql(sql);
+			// workDealInfoDao.save(po);
 		}
 	}
 
