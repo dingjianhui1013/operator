@@ -18,15 +18,15 @@ import com.itrus.ca.modules.work.service.WorkDealInfoService;
 public class UpdateFirstCertSNThread {
 	@Autowired
 	WorkDealInfoService workDealInfoService;
-	
+
 	private static int MAX_THREAD = 10;
-	
+
 	public void process(int updateCount) {
 		// workDealInfoService.fixAllDataFirstCertSN(updateCount);
 
 		List<Long> lst = workDealInfoService
 				.findNullFirstCertSNByCount(updateCount);
-		
+
 		int count = lst.size();
 		int size = lst.size() > 300 ? lst.size() / MAX_THREAD : lst.size();
 		int end = 0;
@@ -34,6 +34,8 @@ public class UpdateFirstCertSNThread {
 		for (int i = 0; i < MAX_THREAD; i++) {
 			start = i == 0 ? 0 : end;
 			end = size + i * size;
+			if (end > count)
+				break;
 			new Thread(new Inner(lst.subList(start, end))).start();
 		}
 		if (end < count) {

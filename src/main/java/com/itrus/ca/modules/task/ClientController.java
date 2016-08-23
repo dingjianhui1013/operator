@@ -913,8 +913,9 @@ public class ClientController {
 	public String updateFirstCertSN(Integer updateCount) throws JSONException {
 		JSONObject json = new JSONObject();
 		// 修复所有现有数据里，没有firstCertSn字段的记录
-		//workDealInfoService.fixAllDataFirstCertSN(updateCount);
+		// workDealInfoService.fixAllDataFirstCertSN(updateCount);
 		updateFirstCertSNThread.process(updateCount);
+		json.put("statu", "0");
 		json.put("msg", "完成");
 
 		return json.toString();
