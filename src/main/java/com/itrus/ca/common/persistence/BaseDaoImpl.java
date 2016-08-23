@@ -19,7 +19,6 @@ import java.util.regex.Pattern;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.queryParser.QueryParser;
@@ -39,6 +38,7 @@ import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
@@ -61,7 +61,6 @@ import com.itrus.ca.common.utils.ReflectHelper;
 import com.itrus.ca.common.utils.Reflections;
 import com.itrus.ca.common.utils.StringHelper;
 import com.itrus.ca.common.utils.StringUtils;
-import com.itrus.ca.modules.task.ClientController;
 
 /**
  * DAO支持类实现
@@ -222,7 +221,9 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 				public SQLQuery execute(Connection connection)
 						throws SQLException {
 					Session session = getSession();
+					Transaction tx = session.getTransaction();
 					session.createSQLQuery(sql).executeUpdate();
+					tx.commit();
 					return null;
 				}
 			});
