@@ -19,6 +19,7 @@ import java.util.regex.Pattern;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.queryParser.QueryParser;
@@ -60,6 +61,7 @@ import com.itrus.ca.common.utils.ReflectHelper;
 import com.itrus.ca.common.utils.Reflections;
 import com.itrus.ca.common.utils.StringHelper;
 import com.itrus.ca.common.utils.StringUtils;
+import com.itrus.ca.modules.task.ClientController;
 
 /**
  * DAO支持类实现
@@ -225,8 +227,8 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 				}
 			});
 		} catch (Exception e) {
-			e.printStackTrace();
-
+			//e.printStackTrace();
+			//Logger log = Logger.getLogger("");
 		}
 	}
 
