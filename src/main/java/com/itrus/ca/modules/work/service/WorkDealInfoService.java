@@ -4447,11 +4447,8 @@ public class WorkDealInfoService extends BaseService {
 			} else {
 				po.setDelFlag("1");
 			}
-			String sql = "update work_deal_info set DEL_FLAG='"
-					+ po.getDelFlag() + "',prev_id=" + po.getPrevId()
-					+ " where id=" + po.getId();
-			workDealInfoDao.exeSql(sql);
-			// workDealInfoDao.save(po);
+
+			workDealInfoDao.save(po);
 		}
 	}
 
@@ -7787,6 +7784,36 @@ public class WorkDealInfoService extends BaseService {
 	}
 
 	/**
+	 * 根据指定总数,查出没有first_cert_sn的数据
+	 * 
+	 * @param maxCount
+	 * @return List<Long>
+	 */
+	@Transactional(readOnly = true)
+	public List<Long> findNullFirstCertSNByCount(int maxCount) {
+		String ct = "select count(*) from WORK_DEAL_INFO where FIRST_CERT_SN is null ";
+		if (maxCount > 0) {
+			ct += " and rownum<=" + maxCount;
+		}
+
+		List l = workDealInfoDao.findBySql(ct);
+		int c = new Integer(l.get(0).toString());
+
+		String sql = "select id from WORK_DEAL_INFO where FIRST_CERT_SN is null";
+		boolean loop = false;
+		if (maxCount > 0) {
+			sql += " and rownum<=" + maxCount;
+		}
+
+		List<BigDecimal> lst = workDealInfoDao.findBySql(sql);
+		List<Long> res = new ArrayList<Long>();
+		for (BigDecimal e : lst) {
+			res.add(e.longValue());
+		}
+		return res;
+	}
+
+	/**
 	 * 找出所有没有first_cert_sn的记录
 	 * 
 	 * @return Long
@@ -7881,11 +7908,14 @@ public class WorkDealInfoService extends BaseService {
 	 * @return List<WorkDealInfo>
 	 */
 	@Transactional(readOnly = false)
-	private void fixFirstCertSN(Long workDealInfoId) {
+	public void fixFirstCertSN(Long workDealInfoId) {
 		WorkDealInfo po = get(workDealInfoId);
 		String firstCertSn = findFirstCertSNById(workDealInfoId);
 		po.setFirstCertSN(firstCertSn);
-		workDealInfoDao.save(po);
+
+		String sql = "update work_deal_info set FIRST_CERT_SN='"
+				+ po.getFirstCertSN() + "' where id=" + po.getId();
+		workDealInfoDao.exeSql(sql);
 	}
 
 	/**
