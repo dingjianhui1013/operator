@@ -325,9 +325,12 @@ public class CertController extends BaseController {
 			
 
 				CertificateRequest request = RaAccountUtil.outRequest(dealInfo, extendInfo);
-				System.out.println("==========");
-				System.out.println(caCert.getReqBuf());
+				/*System.out.println("==========");
+				System.out.println(caCert.getReqBuf());*/
 				
+				
+				log.debug("==========");
+				log.debug(caCert.getReqBuf());
 				
 				/*String reqBuf = caCert.getReqBuf();
 				caCert.setReqBuf(null);*/
@@ -492,7 +495,10 @@ public class CertController extends BaseController {
 			return json.toString();
 		}
 		
-		System.out.println("json:"+json.toString());
+		//System.out.println("json:"+json.toString());
+		
+		log.debug("json:"+json.toString());
+		
 		logUtil.saveSysLog("业务中心", "制证：编号" + dealInfoId, "");
 		return json.toString();
 	}

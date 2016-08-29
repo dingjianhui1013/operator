@@ -140,7 +140,10 @@ public class IxinController {
 		String contextPath = request.getContextPath();
 		url = url.replace(contextPath, "").replace("/"+ixinProjectName, "");
 		url = ixinURL + url;
-		System.out.println("url:" + url);
+	
+		
+		log.debug("url:" + url);
+		
 		HttpClient client = new DefaultHttpClient();
 		List<ConfigApp> apps = new ArrayList<ConfigApp>();
 		List<Office> offices = officeService.getOfficeByType(UserUtils.getUser(), 2);

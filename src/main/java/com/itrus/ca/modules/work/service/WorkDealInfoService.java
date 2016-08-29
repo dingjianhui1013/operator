@@ -5779,16 +5779,16 @@ public class WorkDealInfoService extends BaseService {
 				WorkDealInfoStatus.STATUS_CERT_OBTAINED));
 		dc.add(Restrictions.ge("businessCardUserDate", date));
 		dc.add(Restrictions.lt("businessCardUserDate", calendar.getTime()));
+		
+		dc.add(Restrictions.or(Restrictions.isNull("isSJQY"), Restrictions.ne("isSJQY", 1)));
 
 		List<WorkDealInfo> dealInfos = workDealInfoDao.find(dc);
 		List<String> keys = new ArrayList<String>();
 		for (WorkDealInfo workDealInfo : dealInfos) {
-			if (workDealInfo.getIsSJQY() == null
-					|| !workDealInfo.getIsSJQY().equals(1)) {
-				if (!keys.contains(workDealInfo.getKeySn())) {
-					keys.add(workDealInfo.getKeySn());
-				}
+			if (!keys.contains(workDealInfo.getKeySn())) {
+				keys.add(workDealInfo.getKeySn());
 			}
+			
 		}
 		return keys.size();
 	}

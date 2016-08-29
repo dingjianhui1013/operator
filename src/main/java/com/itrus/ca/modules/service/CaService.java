@@ -127,7 +127,10 @@ public class CaService {
 					Certificate cert = cf
 							.generateCertificate(new ByteArrayInputStream(Base64
 									.decodeBase64(base64Cert)));
-					System.out.println(cert);
+					//System.out.println(cert);
+					
+					log.debug(cert);
+					
 				} catch (CertificateException e) {
 					e.printStackTrace();
 				}
@@ -271,31 +274,7 @@ public class CaService {
 		return certificateResponse;
 	}
 
-//	public static String getCertSn4ICA(String sn) {
-//		sn = sn.toUpperCase();
-//		int len = sn.length();
-//		if (len%2==0) {//偶数长度
-//			String first = sn.substring(0, 1);
-//			if (first.compareTo("7") > 0) {
-//				return "00" + sn;
-//			} else {
-//				return sn;
-//			}
-//		}else {//奇数长度
-//			return "0"+sn;
-//		}
-//	}
-//	
-//	public static String getOldCertSn4ICA(String sn) {
-//		sn = sn.toUpperCase();
-//		String second = sn.substring(0, 2);
-//		String first = sn.substring(0,1);
-//		if (second.equals("00")) {
-//			return sn.substring(2, sn.length());
-//		} else {
-//			return sn;
-//		}
-//	}
+
 	
 	/**
 	 * ICA方式返回的结果转换成TCA方式的结果
@@ -342,13 +321,21 @@ public class CaService {
 		response.setInstallMode("");//ICA使用installCertKmc 第二种方式
 		response.setCertSerialnumberKmc(result.getCertSerialNumberKmc());
 		
-		System.out.println("证书序列号:"+response.getCertSerialNumber());
+		/*System.out.println("证书序列号:"+response.getCertSerialNumber());
 		System.out.println("证书有效期:"+response.getCertNotBefore()+"===="+response.getCertNotAfter());
 		System.out.println("subjectdn"+response.getCertSubjectDn());
 		System.out.println("issuerDn"+response.getCertIssuerDn());
 		System.out.println("signBuf:"+response.getCertSignBuf());
-		System.out.println("加密证书序列号（双证时存在）:"+result.getCertSerialNumberKmc());
-//		response.setInstallMode(result.getcert);
+		System.out.println("加密证书序列号（双证时存在）:"+result.getCertSerialNumberKmc());*/
+
+		
+		log.debug("证书序列号:"+response.getCertSerialNumber());
+		log.debug("证书有效期:"+response.getCertNotBefore()+"===="+response.getCertNotAfter());
+		log.debug("subjectdn"+response.getCertSubjectDn());
+		log.debug("issuerDn"+response.getCertIssuerDn());
+		log.debug("signBuf:"+response.getCertSignBuf());
+		log.debug("加密证书序列号（双证时存在）:"+result.getCertSerialNumberKmc());
+		
 		
 		return response;
 	}
@@ -388,12 +375,21 @@ public class CaService {
 		response.setInstallMode("");//ICA使用installCertKmc 第二种方式
 		response.setCertSerialnumberKmc(certInfo.getCertSerialnumberKmc());
 		
-		System.out.println("证书序列号:"+response.getCertSerialNumber());
+		/*System.out.println("证书序列号:"+response.getCertSerialNumber());
 		System.out.println("证书有效期:"+response.getCertNotBefore()+"===="+response.getCertNotAfter());
 		System.out.println("subjectdn"+response.getCertSubjectDn());
 		System.out.println("issuerDn"+response.getCertIssuerDn());
 		System.out.println("signBuf:"+response.getCertSignBuf());
-		System.out.println("加密证书序列号（双证时存在）:"+certInfo.getCertSerialnumberKmc());
+		System.out.println("加密证书序列号（双证时存在）:"+certInfo.getCertSerialnumberKmc());*/
+		
+		
+		
+		log.debug("证书序列号:"+response.getCertSerialNumber());
+		log.debug("证书有效期:"+response.getCertNotBefore()+"===="+response.getCertNotAfter());
+		log.debug("subjectdn"+response.getCertSubjectDn());
+		log.debug("issuerDn"+response.getCertIssuerDn());
+		log.debug("signBuf:"+response.getCertSignBuf());
+		log.debug("加密证书序列号（双证时存在）:"+certInfo.getCertSerialnumberKmc());
 		
 		return response;
 	}
@@ -418,10 +414,16 @@ public class CaService {
 				revokeRequest.setCertRevokeReason(reason==null? RevokeRequest.certificateHold:reason);
 				revokeRequest.setCertReqChallenge(USER_PIN);
 				RevokeResponse revokeResponse = client.revokeCertificate(revokeRequest);
-				System.out.println("Revoke Cert:");
-				System.out.println(revokeResponse.getCertSerialNumber());
+				//System.out.println("Revoke Cert:");
+				log.debug("Revoke Cert:");
+				/*System.out.println(revokeResponse.getCertSerialNumber());
 				System.out.println(revokeResponse.getCertRevokeReason());
-				System.out.println(revokeResponse.getCertRevokeDate());
+				System.out.println(revokeResponse.getCertRevokeDate());*/
+				
+				log.debug(revokeResponse.getCertSerialNumber());
+				log.debug(revokeResponse.getCertRevokeReason());
+				log.debug(revokeResponse.getCertRevokeDate());
+				
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -439,8 +441,13 @@ public class CaService {
 				revokeResult = raCertManager.revokeCert(certSn,
 				(challenge!=null && !challenge.isEmpty())? challenge:PASSWORD, 
 				(reason!=null && !reason.isEmpty())? reason:RevokeRequest.certificateHold);
-				System.out.println(revokeResult.getBaseMessage());
-				System.out.println(revokeResult.getExtMessage());
+				/*System.out.println(revokeResult.getBaseMessage());
+				System.out.println(revokeResult.getExtMessage());*/
+				
+				log.debug(revokeResult.getBaseMessage());
+				log.debug(revokeResult.getExtMessage());
+				
+				
 			} catch (RaServiceUnavailable e) {
 				return false;
 			}

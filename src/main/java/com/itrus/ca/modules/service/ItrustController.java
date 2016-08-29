@@ -106,8 +106,10 @@ public class ItrustController {
 							ra.put("serviceUrl", raAccount.getMobileDeviceUrl());
 							ra.put("id", raAccount.getId());
 							ra.put("accountHash", raAccount.getAccountHash());
-							System.out.println(wdi.getWorkCertInfo().getTrustDeviceCount());
-							System.out.println(wdi.getWorkCertInfo().getTrustDeviceCount());
+							
+							
+							log.debug(wdi.getWorkCertInfo().getTrustDeviceCount());
+							
 							
 							json.put("trustDeviceCount", wdi.getWorkCertInfo()
 									.getTrustDeviceCount() == null ? 0 : wdi
