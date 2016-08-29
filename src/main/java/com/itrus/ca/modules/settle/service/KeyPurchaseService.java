@@ -123,7 +123,6 @@ public class KeyPurchaseService extends BaseService {
 			dc.add(Restrictions.eq("appName", keyPurchase.getAppName()));
 		}
 		if(supplierName!=null){
-			//System.out.println(supplierName);
 			dc.add(Restrictions.like("appName", "%"+supplierName+"%"));
 		}
 		if(keySn !=null){
@@ -173,7 +172,6 @@ public class KeyPurchaseService extends BaseService {
 			dc.add(Restrictions.eq("appName", keyPurchase.getAppName()));
 		}
 		if(supplierName!=null){
-			//System.out.println(supplierName);
 			dc.add(Restrictions.like("appName", "%"+supplierName+"%"));
 		}
 	/*	if(keyPurchase.getKeySn()!=null && !"".equals(keyPurchase.getKeySn())){
