@@ -262,6 +262,9 @@ public class CaService {
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+			}  catch(Exception e){
+				log.error("");
+				e.printStackTrace();
 			}
 		}
 		/* revoke certificate action */

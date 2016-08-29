@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.http.conn.HttpHostConnectException;
+import org.apache.log4j.Logger;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Restrictions;
 import org.json.JSONException;
@@ -65,6 +66,8 @@ import com.itrus.ca.modules.work.service.WorkLogService;
 @Controller
 @RequestMapping(value = "/ca")
 public class CertController extends BaseController {
+	
+	Logger log = Logger.getLogger(CertController.class);
 	@Autowired
 	SystemService systemService;
 	
@@ -478,6 +481,7 @@ public class CertController extends BaseController {
 		}
 		
 		catch(Exception e){
+			log.error("");
 			e.printStackTrace();
 			json.put("status", -1);
 			json.put("msg", "申请证书失败,可能原因:制证服务器未连接！");
