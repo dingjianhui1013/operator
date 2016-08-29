@@ -483,7 +483,6 @@ public class ProjectCertificationDetailsController extends BaseController {
 		// 损坏更换证书
 		int damageCertificate = 0;
 		
-		// System.out.println(configApp.getAppName());
 		for (int i = 0; i < list.size(); i++) {
 
 			if (list.get(i).getDealInfoType() != null) {

@@ -13,6 +13,8 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFFont;
@@ -40,6 +42,7 @@ import com.itrus.ca.common.utils.DateUtils;
 import com.itrus.ca.common.web.BaseController;
 import com.itrus.ca.modules.key.entity.KeyGeneralInfo;
 import com.itrus.ca.modules.key.service.KeyGeneralInfoService;
+import com.itrus.ca.modules.key.web.KeyUsbKeyController;
 import com.itrus.ca.modules.profile.entity.ConfigChargeSupplierDetail;
 import com.itrus.ca.modules.profile.entity.ConfigSupplierProductRelation;
 import com.itrus.ca.modules.profile.service.ConfigChargeSupplierDetailService;
@@ -61,7 +64,7 @@ import freemarker.template.SimpleDate;
 @Controller
 @RequestMapping(value = "${adminPath}/settle/keyPurchase")
 public class KeyPurchaseController extends BaseController {
-
+	static Log log = LogFactory.getLog(KeyPurchaseController.class);
 	@Autowired
 	private KeyPurchaseService keyPurchaseService;
 	
@@ -255,7 +258,7 @@ public class KeyPurchaseController extends BaseController {
 		KeyPurchase kp= keyPurchaseService.findById(keyID);
 		kp.setStatus(1);
 		kp.setRemarks(remarks);
-		System.out.println(remarks);
+		log.debug(remarks);
 		keyPurchaseService.save(kp);
 		addMessage(redirectAttributes, "修改key采购记录成功");
 		return "redirect:"+Global.getAdminPath()+"/settle/keyPurchase/?repage";

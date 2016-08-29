@@ -15,6 +15,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.http.impl.cookie.DateUtils;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -41,6 +43,7 @@ import com.itrus.ca.common.web.BaseController;
 import com.itrus.ca.modules.constant.ProductType;
 import com.itrus.ca.modules.constant.WorkDealInfoStatus;
 import com.itrus.ca.modules.constant.WorkDealInfoType;
+import com.itrus.ca.modules.key.web.KeyUsbKeyController;
 import com.itrus.ca.modules.profile.entity.ConfigAgentAppRelation;
 import com.itrus.ca.modules.profile.entity.ConfigApp;
 import com.itrus.ca.modules.profile.entity.ConfigCommercialAgent;
@@ -71,6 +74,7 @@ import com.itrus.ca.modules.work.service.WorkPayInfoService;
 @RequestMapping(value = "${adminPath}/settle/agentSettle")
 public class AgentSettleController extends BaseController {
 
+	static Log log = LogFactory.getLog(AgentSettleController.class);
 	@Autowired
 	private ConfigCommercialAgentService configCommercialAgentService;
 
@@ -421,7 +425,7 @@ public class AgentSettleController extends BaseController {
 			model.addAttribute("configProducts", configProducts);
 		}
 		List<ConfigApp> configApps = configAppService.selectAll();
-		System.out.println(nameList.size());
+		log.debug(nameList.size());
 		model.addAttribute("ConfigCommercialAgents", nameList);
 		
 		model.addAttribute("agentName", agentName);
