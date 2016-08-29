@@ -165,9 +165,15 @@ public class CaService {
 			userInfo.setUserSurName(certificateRequest.getUserSurname());
 
 			userInfo.setCertNotBeforeDate(new Date());
-			System.out.println("CN:"+certificateRequest.getUserName());
+			/*System.out.println("CN:"+certificateRequest.getUserName());
 			System.out.println("O:"+certificateRequest.getUserOrganization());
-			System.out.println("OU:"+certificateRequest.getUserOrgunit());
+			System.out.println("OU:"+certificateRequest.getUserOrgunit());*/
+			
+			log.debug("CN:"+certificateRequest.getUserName());
+			log.debug("O:"+certificateRequest.getUserOrganization());
+			log.debug("OU:"+certificateRequest.getUserOrgunit());
+			
+			
 			if (raAccount.getIsSingleCert()!=null&&!raAccount.getIsSingleCert()) {//双证
 				userInfo.setKeyMode("ENROLL"); 
 				userInfo.setCertKmcReq2("kmcClientVersion=20110501");	// 加密证书申请通道。
@@ -177,10 +183,17 @@ public class CaService {
 			userInfo.setCertReqOverrideValidity(validityDays+""); //设置证书有效期，如果注释，则取证书模板默认有效期
 
 //			RaCertManager raCertManager = RaFactory.getRaCertManager("iTruschina Co., Ltd.",  "Test Service");//(O,OU)
-			System.out.println("O:"+raAccount.getAccountOrganization());
+			/*System.out.println("O:"+raAccount.getAccountOrganization());
 			System.out.println("OU"+raAccount.getAccountOrgUnit());
 			System.out.println("AA密码:"+raAccount.getAaPassword());
-			System.out.println("申请天数:"+userInfo.getCertReqOverrideValidity());
+			System.out.println("申请天数:"+userInfo.getCertReqOverrideValidity());*/
+			
+			log.debug("O:"+raAccount.getAccountOrganization());
+			log.debug("OU"+raAccount.getAccountOrgUnit());
+			log.debug("AA密码:"+raAccount.getAaPassword());
+			log.debug("申请天数:"+userInfo.getCertReqOverrideValidity());
+			
+			
 			
 			
 			RaCertManager raCertManager = RaFactory.getRaCertManager(raAccount.getAccountOrganization(),
@@ -203,7 +216,8 @@ public class CaService {
 					PickupResult pickupResult = (PickupResult) operationResult;
 					System.out.println(pickupResult.getBaseMessage());
 					if (pickupResult.isSuccess()) {
-						System.out.println("申请证书成功...");
+						//System.out.println("申请证书成功...");
+						log.debug("申请证书成功...");
 						certificateResponse = transPickupResultToResp(pickupResult, reqBuf, validityDays.toString());
 					}
 				}
