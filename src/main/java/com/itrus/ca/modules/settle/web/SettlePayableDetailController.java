@@ -15,6 +15,8 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFFont;
@@ -41,8 +43,8 @@ import com.itrus.ca.common.utils.DateUtils;
 import com.itrus.ca.common.web.BaseController;
 import com.itrus.ca.modules.constant.ProductType;
 import com.itrus.ca.modules.constant.WorkDealInfoType;
+import com.itrus.ca.modules.key.web.KeyUsbKeyController;
 import com.itrus.ca.modules.profile.entity.ConfigAgentAppRelation;
-
 import com.itrus.ca.modules.profile.entity.ConfigChargeAgent;
 import com.itrus.ca.modules.profile.entity.ConfigCommercialAgent;
 import com.itrus.ca.modules.profile.entity.ConfigProduct;
@@ -53,7 +55,6 @@ import com.itrus.ca.modules.profile.service.ConfigProductService;
 import com.itrus.ca.modules.settle.vo.PayableDetailVo;
 import com.itrus.ca.modules.settle.vo.SettleCollectVO;
 import com.itrus.ca.modules.work.entity.WorkDealInfo;
-
 import com.itrus.ca.modules.work.service.WorkDealInfoService;
 
 /**
@@ -65,6 +66,7 @@ import com.itrus.ca.modules.work.service.WorkDealInfoService;
 @Controller
 @RequestMapping(value = "${adminPath}/settle/settlePayableDetail")
 public class SettlePayableDetailController extends BaseController {
+	static Log log = LogFactory.getLog(SettlePayableDetailController.class);
 	@Autowired
 	private ConfigCommercialAgentService configCommercialAgentService;
 
@@ -1061,7 +1063,7 @@ public class SettlePayableDetailController extends BaseController {
 		for (int i = 0; i < products.size(); i++) {
 			json = new JSONObject();
 			json.put("id", products.get(i).getId());
-			System.out.println(products.get(i).getId()
+			log.debug(products.get(i).getId()
 					+ "===="
 					+ ProductType.productTypeStrMap.get(products.get(i)
 							.getProductName()));

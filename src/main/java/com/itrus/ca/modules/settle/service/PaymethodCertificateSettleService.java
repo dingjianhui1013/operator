@@ -1905,7 +1905,7 @@ public class PaymethodCertificateSettleService extends BaseService {
 					|| !StringUtils.equals(rowPrev.getCell(i) == null ? "" : rowPrev.getCell(i).getStringCellValue(),
 							rowPrev.getCell(i - 1) == null ? "" : rowPrev.getCell(i - 1).getStringCellValue()))) {
 				cellValue = row.getCell(i).getStringCellValue();
-				System.out.println("i:" + i + "\t" + row.getCell(i).getStringCellValue());
+				logger.debug("i:" + i + "\t" + row.getCell(i).getStringCellValue());
 				sheet.addMergedRegion(new CellRangeAddress(row.getRowNum(), row.getRowNum(), cellStart, i - 1));
 				cellStart = i;
 			}

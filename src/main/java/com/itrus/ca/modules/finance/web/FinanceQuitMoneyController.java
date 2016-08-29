@@ -62,7 +62,6 @@ public class FinanceQuitMoneyController {
 						, HttpServletRequest request
 						, HttpServletResponse response
 						, Model model){
-//		System.out.println(result.getErrorCount());
 		try {
 			
 	

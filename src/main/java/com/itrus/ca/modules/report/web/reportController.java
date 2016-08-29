@@ -5,7 +5,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
-
 import java.util.Date;
 import java.util.List;
 
@@ -15,6 +14,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFRow;
@@ -35,16 +37,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.ContextLoader;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import com.google.common.collect.Lists;
 import com.itrus.ca.common.persistence.Page;
 import com.itrus.ca.common.utils.DateUtils;
 import com.itrus.ca.common.utils.StringHelper;
 import com.itrus.ca.common.utils.excel.ExportExcel;
 import com.itrus.ca.common.web.BaseController;
-
 import com.itrus.ca.modules.constant.ReportQueryType;
-
 import com.itrus.ca.modules.constant.WorkDealInfoType;
+import com.itrus.ca.modules.key.web.KeyUsbKeyController;
 import com.itrus.ca.modules.profile.entity.ConfigApp;
 import com.itrus.ca.modules.profile.entity.ConfigAppOfficeRelation;
 import com.itrus.ca.modules.profile.service.ConfigAppOfficeRelationService;
@@ -52,12 +54,9 @@ import com.itrus.ca.modules.profile.service.ConfigAppService;
 import com.itrus.ca.modules.report.service.ReportService;
 import com.itrus.ca.modules.report.vo.WorkDealInfoVO;
 import com.itrus.ca.modules.sys.entity.Office;
-
 import com.itrus.ca.modules.sys.service.OfficeService;
 import com.itrus.ca.modules.sys.utils.UserUtils;
-
 import com.itrus.ca.modules.work.entity.WorkDealInfo;
-
 import com.itrus.ca.modules.work.service.WorkDealInfoService;
 
 /**
@@ -66,7 +65,7 @@ import com.itrus.ca.modules.work.service.WorkDealInfoService;
 @Controller
 @RequestMapping(value = "${adminPath}/report/businessReport")
 public class reportController extends BaseController {
-
+	static Log log = LogFactory.getLog(reportController.class);
 	@Autowired
 	private WorkDealInfoService workDealInfoService;
 
@@ -106,19 +105,19 @@ public class reportController extends BaseController {
 				
 				WebApplicationContext wac = ContextLoader.getCurrentWebApplicationContext();   
 				String[] names = wac.getBeanDefinitionNames();  
-				for(int i=0; i<names.length; i++){  
-				    System.out.println("---"+names[i]);  
+				for(int i=0; i<names.length; i++){
+				    log.debug("---"+names[i]);  
 				      
 				}  
 				EntityManagerFactory factory = (EntityManagerFactory)wac.getBean("entityManagerFactory");
 				
-				System.out.println(factory);
+				log.debug(factory);
 				
 				EntityManager em = factory.createEntityManager();
 				
 				Session session = em.unwrap(org.hibernate.Session.class);
 				
-				System.out.println(session);
+				log.debug(session);
 		
 		if (startTime == null && endTime == null) {
 			startTime = StringHelper.getFirstDayOfLastMonth();

@@ -15,6 +15,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.log4j.Logger;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -44,7 +47,7 @@ import com.itrus.ca.modules.sys.service.OfficeService;
 import com.itrus.ca.modules.sys.utils.UserUtils;
 import com.itrus.ca.modules.work.entity.WorkFinancePayInfoRelation;
 import com.itrus.ca.modules.work.entity.WorkPayInfo;
-
+import com.itrus.ca.modules.work.service.WorkDealInfoService;
 import com.itrus.ca.modules.finance.entity.FinancePaymentInfo;
 import com.itrus.ca.modules.finance.service.FinancePaymentInfoService;
 import com.itrus.ca.modules.key.entity.KeyDepotGeneralStatistics;
@@ -69,6 +72,7 @@ import com.itrus.ca.modules.key.service.KeyUsbKeyService;
 @RequestMapping(value = "${adminPath}/key/keyUsbKeyDepot")
 public class KeyUsbKeyDepotController extends BaseController {
 
+	static Log log = LogFactory.getLog(KeyUsbKeyController.class);
 	@Autowired
 	private ConfigAppOfficeRelationService configAppOfficeRelationService;
 	
@@ -98,6 +102,7 @@ public class KeyUsbKeyDepotController extends BaseController {
 	
 	@Autowired
 	private ConfigSupplierService configSupplierService;
+	
 	
 	@ModelAttribute
 	public KeyUsbKeyDepot get(@RequestParam(required=false) Long id) {
@@ -135,7 +140,7 @@ public class KeyUsbKeyDepotController extends BaseController {
 		List<Office> offices =  officeService.getOfficeByType(user, 2);
 		
 		for (int i = 0; i < offices.size(); i++) {
-			System.out.print(offices.get(i).getId()+"-");
+			log.debug(offices.get(i).getId()+"-");
 		}
 		
 		
@@ -668,7 +673,7 @@ public class KeyUsbKeyDepotController extends BaseController {
 			List<Office> offices =  officeService.getOfficeByType(UserUtils.getUser(), 2);
 			
 			for (int i = 0; i < offices.size(); i++) {
-				System.out.print(offices.get(i).getId()+"-");
+				log.debug(offices.get(i).getId()+"-");
 			}
 			
 			model.addAttribute("depotList", keyUsbKeyDepotService.findListByOffices(depot,offices));              //所有的库房id(前提是权限内的并且除自己以外)

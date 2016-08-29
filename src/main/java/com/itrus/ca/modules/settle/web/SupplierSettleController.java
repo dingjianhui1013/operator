@@ -11,6 +11,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -32,6 +34,7 @@ import com.itrus.ca.common.utils.DateUtils;
 import com.itrus.ca.common.web.BaseController;
 import com.itrus.ca.modules.constant.ProductType;
 import com.itrus.ca.modules.constant.WorkDealInfoType;
+import com.itrus.ca.modules.key.web.KeyUsbKeyController;
 import com.itrus.ca.modules.profile.entity.ConfigChargeSupplierDetail;
 import com.itrus.ca.modules.profile.entity.ConfigSupplier;
 import com.itrus.ca.modules.profile.service.ConfigChargeSupplierDetailService;
@@ -43,7 +46,7 @@ import com.itrus.ca.modules.settle.service.SettleVTNService;
 @Controller
 @RequestMapping(value = "${adminPath}/settle/supplierSettle")
 public class SupplierSettleController extends BaseController{
-
+	static Log log = LogFactory.getLog(SupplierSettleController.class);
 	@Autowired
 	private ConfigSupplierService configSupplierService;
 	
@@ -191,7 +194,7 @@ public class SupplierSettleController extends BaseController{
 		Integer year4 = 0;
 		Integer year5 = 0;
 		for (Map<String, Object> m : list) {
-			System.out.println(m.get("OU"));
+			log.debug(m.get("OU"));
 		   total += Integer.parseInt(String.valueOf(m.get("TOTAL_AMOUNT")));
            replace += Integer.parseInt(String.valueOf(m.get("REPLACE_AMOUNT")));
            revoke += Integer.parseInt(String.valueOf(m.get("REVOKE_AMOUNT")));
@@ -245,7 +248,7 @@ public class SupplierSettleController extends BaseController{
         }catch(Exception e){
         	e.printStackTrace();
         }
-	 System.out.println("创建成功！");
+	 log.debug("创建成功！");
 	}
 	
 	

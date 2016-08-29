@@ -349,7 +349,6 @@ public class FinancePaymentInfoController extends BaseController {
 	@RequiresPermissions("finance:financePaymentInfo:view")
 	@RequestMapping(value ="summary")
 	public String Summary() {
-		System.out.println("成功进入");
 		return "modules/finance/yearSummary";
 	}
 }

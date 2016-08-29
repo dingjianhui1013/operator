@@ -145,7 +145,7 @@ public class ReportService extends BaseService {
 
 		
 		
-		System.out.println(sql);
+		logger.debug(sql.toString());
 
 		List<Map> ct = null;
 

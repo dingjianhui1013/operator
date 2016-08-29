@@ -179,9 +179,9 @@ public class ReceiptInvoiceService extends BaseService {
 	@Transactional(readOnly = false)
 	public boolean receiptIncoiceI(double money,Office office,String companyName,Long dealInfoId){
 		ReceiptInvoice receiptInvoice = new ReceiptInvoice();
-		System.out.println("==========发票出库查询=========");
+		logger.debug("==========发票出库查询=========");
 		List<ReceiptDepotInfo> depotInfos =receiptDepotInfoService.findDepotByOffice(office);
-		System.out.println("==========发票出库查询结束=========");
+		logger.debug("==========发票出库查询结束=========");
 		if(depotInfos.size()>0){
 			ReceiptInvoice invoice = this.findByCompanyNameDealInfoId(companyName, dealInfoId);
 			if (invoice==null) {
@@ -211,9 +211,9 @@ public class ReceiptInvoiceService extends BaseService {
 	@Transactional(readOnly = false)
 	public boolean receiptIncoiceIYDSBSL(double money,Office office,String companyName,Long dealInfoId){
 		ReceiptInvoice receiptInvoice = new ReceiptInvoice();
-		System.out.println("==========发票出库查询=========");
+		logger.debug("==========发票出库查询=========");
 		List<ReceiptDepotInfo> depotInfos =receiptDepotInfoService.findDepotByOffice(office);
-		System.out.println("==========发票出库查询结束=========");
+		logger.debug("==========发票出库查询结束=========");
 		if(depotInfos.size()>0){
 		
 			ReceiptDepotInfo receiptDepotInfo = depotInfos.get(0);
@@ -279,9 +279,9 @@ public class ReceiptInvoiceService extends BaseService {
 	@Transactional(readOnly = false)
 	public boolean receiptIncoiceT(double money,Office office,String companyName){
 		ReceiptInvoice receiptInvoice = new ReceiptInvoice();
-		System.out.println("==========发票出库查询=========");
+		logger.debug("==========发票出库查询=========");
 		ReceiptDepotInfo depotInfos =receiptDepotInfoService.get(KeyDepotId.RECEIPT_DEPOT_ID);
-		System.out.println("==========发票出库查询结束=========");
+		logger.debug("==========发票出库查询结束=========");
 		if(depotInfos!=null){
 			ReceiptDepotInfo receiptDepotInfo = depotInfos;
 			receiptInvoice.setReceiptDepotInfo(receiptDepotInfo);

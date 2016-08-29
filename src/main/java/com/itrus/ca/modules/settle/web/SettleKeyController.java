@@ -257,7 +257,6 @@ public class SettleKeyController extends BaseController {
 
 			List<SettleKey> settles = settleKeyService.exportSettle(supplierId,keyId,keySn,startTime,endTime); 
 		       
-//			System.out.println(settles.size());
 			Workbook wb = new HSSFWorkbook();// 定义工作簿
 			CellStyle style = wb.createCellStyle(); //样式对象
 			Cell cell =null;

@@ -13,6 +13,9 @@ import java.util.regex.Pattern;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.log4j.Logger;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -30,6 +33,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.itrus.ca.common.config.Global;
 import com.itrus.ca.common.persistence.Page;
 import com.itrus.ca.common.web.BaseController;
+import com.itrus.ca.modules.key.web.KeyUsbKeyController;
 import com.itrus.ca.modules.log.service.LogUtil;
 import com.itrus.ca.modules.profile.entity.ConfigRaAccount;
 import com.itrus.ca.modules.profile.service.ConfigProductService;
@@ -51,6 +55,7 @@ import com.itrus.util.CipherUtils;
 @RequestMapping(value = "${adminPath}/profile/configRaAccount")
 public class ConfigRaAccountController extends BaseController {
 
+	static Log log = LogFactory.getLog(ConfigRaAccountController.class);
 	@Autowired
 	private ConfigRaAccountService configRaAccountService;
 
@@ -457,7 +462,7 @@ public class ConfigRaAccountController extends BaseController {
 				Boolean flag = false;
 
 				while ((line = bufferedReader.readLine()) != null){
-					System.out.println(line);
+					log.debug(line);
 					if(line.contains("ttl") || line.contains("TTL")){
 						flag = true;
 						break;
@@ -468,12 +473,12 @@ public class ConfigRaAccountController extends BaseController {
 				bufferedReader.close();
 				process.destroy();
 				if(flag){
-					System.out.println(address + "连通");
+					log.debug(address + "连通");
 					jsonObject.put("status","0");
 					jsonObject.put("msg","服务地址可用！");
 					return jsonObject.toString();
 				}else{
-					System.out.println(address+"连不通");
+					log.debug(address+"连不通");
 					jsonObject.put("status","0");
 					jsonObject.put("msg","服务地址不可用！");
 					return jsonObject.toString();
