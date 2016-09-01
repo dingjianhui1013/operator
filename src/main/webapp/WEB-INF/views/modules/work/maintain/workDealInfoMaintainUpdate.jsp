@@ -167,7 +167,7 @@
 											$("#word1").show();
 										} else {
 											$("#year1").hide();
-											$("#word1").hide();"D:/Program Files/tomcat7/apache-tomcat-7.0.68/work/Catalina/localhost/operator/org/apache/jsp/WEB_002dINF/views/modules/work/maintain/workDealInfoMaintainUpdate_jsp.java"
+											$("#word1").hide();
 										}
 										if (data.year2) {
 											$("#year2").show();
@@ -522,17 +522,20 @@
 	function setJBRName(){
 		var name = $("#contactName1").val();
 		$("#pName").val(name);
+		$("#pNameH").val(name);
 	}
 	
 	function setJBRCard(o){
 		var card = $("#conCertNumber1").val();
 		$("#pIDCard").val(card);
+		$("#pIDCardH").val(card);
 		$("#"+o).hide();
 	}
 	
 	function setJBRMail(){
 		var mail = $("#contacEmail").val();
 		$("#pEmail").val(mail);
+		$("#pEmailH").val(mail);
 	}
 		
 	
@@ -796,10 +799,11 @@
 						<tr>
 						<th><span class="prompt"
 								style="color: red; display: none;">*</span>计费策略类型：</th>
-							<td class="tdWidth"><select id="agentId"
-								name="agentId">
-									<option value="0">请选择</option>
-							</select> <input type="hidden" id="boundId">
+							<td class="tdWidth">
+							<select id="agentId" name="agentId">
+								<option value="0">请选择</option> 
+							</select> 
+							<input type="hidden" id="boundId">
 							<input type="hidden" value="${workDealInfo.payType}" id="payType" />
 							</td>
 						
@@ -1082,17 +1086,20 @@
 						</tr>
 						<tr>
 							<th><span class="prompt" style="color: red; display: none;">*</span>经办人姓名:</th>
-							<td><input type="text" name="pName" id="pName" disabled="disabled"
-								value="${workDealInfo.workCertInfo.workCertApplyInfo.name }" /></td>
+							<td><input type="text" id="pName" disabled="disabled"
+								value="${workDealInfo.workCertInfo.workCertApplyInfo.name }" />
+								<input type="hidden" id="pNameH" name="pName" /></td>
 								
 								<th class="btmBorder"><span class="prompt" style="color: red; display: none;">*</span>经办人身份证号:</th>
 								<td class="btmBorder"><input type="text" name="pIDCard" id="pIDCard" disabled="disabled"
-								value="${workDealInfo.workCertInfo.workCertApplyInfo.idCard }" /></td>
+								value="${workDealInfo.workCertInfo.workCertApplyInfo.idCard }" />
+								<input type="hidden" id="pIDCardH" name="pIDCard" /></td>
 						</tr>
 						<tr>
 							<th><span class="prompt" style="color: red; display: none;">*</span>经办人邮箱:</th>
 							<td><input type="text" name="pEmail" id="pEmail" disabled="disabled"
-								value="${workDealInfo.workCertInfo.workCertApplyInfo.email }" /></td>
+								value="${workDealInfo.workCertInfo.workCertApplyInfo.email }" />
+								<input type="hidden" id="pEmailH" name="pEmail" /></td>
 						</tr>
 					</tbody>
 				</table>
