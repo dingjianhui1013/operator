@@ -2,6 +2,7 @@ package com.itrus.ca.modules.service;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -81,6 +82,12 @@ public class ItrustController {
 			certsn = certsn.toUpperCase();
 			log.info("certSn:"+certsn);
 			log.info("IP:"+request.getRemoteAddr());
+			Enumeration e = request.getHeaderNames();
+		    while(e.hasMoreElements()){
+		        String k = e.nextElement().toString();
+		        String v = request.getHeader(k);     
+		        log.info("header - key: " + k + " | value: " + v);
+		    }
 			WorkDealInfo wdi = itrustService.findBySn(certsn, 0);
 			if (wdi != null) {
 				if (wdi.getWorkCertInfo().getNotafter().before(new Date())) {// 验证有效期
@@ -162,6 +169,12 @@ public class ItrustController {
 			json.put("status", 0);
 			log.info("keySn:"+keysn);
 			log.info("IP:"+request.getRemoteAddr());
+			 Enumeration e = request.getHeaderNames();
+			    while(e.hasMoreElements()){
+			        String k = e.nextElement().toString();
+			        String v = request.getHeader(k);     
+			        log.info("header - key: " + k + " | value: " + v);
+			    }
 			WorkDealInfo wdi = itrustService.findBySn(keysn, 1);
 			if (wdi != null) {
 				if (wdi.getWorkCertInfo().getNotafter().before(new Date())) {
