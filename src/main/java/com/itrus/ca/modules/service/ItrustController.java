@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.log4j.Logger;
 import org.apache.shiro.authz.annotation.RequiresGuest;
 import org.json.JSONException;
@@ -68,6 +71,8 @@ public class ItrustController {
 	@ResponseBody
 	public String getCertProjectByCert(
 			@PathVariable(value = "sn") String certsn,
+			HttpServletRequest request,
+			HttpServletResponse response,
 			@RequestParam(required = false) String include)
 			throws JSONException {
 		JSONObject json = new JSONObject();
@@ -75,6 +80,7 @@ public class ItrustController {
 			json.put("status", 0); 
 			certsn = certsn.toUpperCase();
 			log.info("certSn:"+certsn);
+			log.info("IP:"+request.getRemoteAddr());
 			WorkDealInfo wdi = itrustService.findBySn(certsn, 0);
 			if (wdi != null) {
 				if (wdi.getWorkCertInfo().getNotafter().before(new Date())) {// 验证有效期
@@ -147,12 +153,15 @@ public class ItrustController {
 	@RequestMapping(value = "/key/{sn}/project")
 	@ResponseBody
 	public String getCertProjectByKey(@PathVariable(value = "sn") String keysn,
+			HttpServletRequest request,
+			HttpServletResponse response,
 			@RequestParam(required = false) String include)
 			throws JSONException {
 		JSONObject json = new JSONObject();
 		try {
 			json.put("status", 0);
 			log.info("keySn:"+keysn);
+			log.info("IP:"+request.getRemoteAddr());
 			WorkDealInfo wdi = itrustService.findBySn(keysn, 1);
 			if (wdi != null) {
 				if (wdi.getWorkCertInfo().getNotafter().before(new Date())) {
