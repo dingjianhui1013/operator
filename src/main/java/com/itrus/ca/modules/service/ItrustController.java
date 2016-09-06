@@ -153,7 +153,7 @@ public class ItrustController {
 	/**
 	 * 根据key序列号查询
 	 * 
-	 * @param certsn
+	 * @param keysn
 	 * @return 应用，产品(包含证书是否是通用)， 通用? 返回所有支持通用应用列表
 	 * @throws JSONException
 	 */
@@ -164,11 +164,18 @@ public class ItrustController {
 			HttpServletResponse response,
 			@RequestParam(required = false) String include)
 			throws JSONException {
+		response.setCharacterEncoding("utf-8");
+		
 		JSONObject json = new JSONObject();
 		try {
 			json.put("status", 0);
 			log.info("keySn:"+keysn);
-			log.info("IP:"+request.getRemoteAddr());
+			
+			
+			log.info("IP:"+getIp(request));
+			
+				
+			
 			 Enumeration e = request.getHeaderNames();
 			    while(e.hasMoreElements()){
 			        String k = e.nextElement().toString();
@@ -338,4 +345,23 @@ public class ItrustController {
 		}
 		return json;
 	}
+	
+	
+	
+	
+	public static String getIp(HttpServletRequest request) {
+		String ip = request.getHeader("x-forwarded-for");
+		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip))
+			ip = request.getHeader("Proxy-Client-IP");
+
+		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip))
+			ip = request.getHeader("WL-Proxy-Client-IP");
+
+		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip))
+			ip = request.getRemoteAddr();
+		return ip;
+	}
+
+	
+	
 }
