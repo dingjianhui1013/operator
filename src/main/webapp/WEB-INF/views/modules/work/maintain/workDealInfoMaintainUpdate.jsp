@@ -249,7 +249,7 @@
 														.show();
 												if(arrList[i] != "contacEmail"){
 													
-													$("input[name='" + arrList[i] + "']").attr("disabled","disabled");
+													$("input[name='" + arrList[i] + "']").attr("readonly","readonly");
 												}
 												
 												
