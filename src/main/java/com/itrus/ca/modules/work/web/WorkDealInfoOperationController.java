@@ -20,6 +20,8 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -93,6 +95,8 @@ import com.itrus.ca.modules.work.service.WorkUserService;
 @RequestMapping(value = "${adminPath}/work/workDealInfoOperation")
 public class WorkDealInfoOperationController extends BaseController {
 
+	private static Logger log = LoggerFactory.getLogger(WorkDealInfoOperationController.class);
+	
 	@Autowired
 	private WorkLogService workLogService;
 
@@ -1856,6 +1860,9 @@ public class WorkDealInfoOperationController extends BaseController {
 			 @RequestParam(value="transactorImage", required=false) MultipartFile transactorImage,
 			 HttpServletRequest request
 			) {
+		
+		long start = System.currentTimeMillis();
+		
 		//保存新业务信息(dealInfoType存在即为更新，dealInfoType1存在即为补办(1：遗失补办，2：损坏更换)，dealInfoType2存在即为变更)
 		WorkDealInfo workDealInfo1 = workDealInfoService.get(workDealInfoId);
 		if (workDealInfo1.getDelFlag().equals("1")) {
@@ -1867,6 +1874,7 @@ public class WorkDealInfoOperationController extends BaseController {
 		
 
 			//变更业务保存单位信息
+		
 		WorkCompany workCompany = new WorkCompany();
 		WorkCompany oldWorkCompany = workDealInfo1.getWorkCompany();
 		
@@ -1931,7 +1939,11 @@ public class WorkDealInfoOperationController extends BaseController {
 		if(remarks!=null && !remarks.equals("")){
 			workCompany.setRemarks(remarks);
 		}
+		long start1 = System.currentTimeMillis();
 		workCompanyService.save(workCompany);
+		long end1 = System.currentTimeMillis();
+		log.debug("更新业务提交workCompany用时:"+(end1-start1)+"ms");
+		
 		companyHis = workCompanyService.change(workCompany);
 		workCompanyHisService.save(companyHis);
 		
@@ -1978,7 +1990,11 @@ public class WorkDealInfoOperationController extends BaseController {
 					workUser.setContactEmail(oldUser.getContactEmail());;
 				}
 				workUser.setWorkCompany(workCompany);
+				long start2 = System.currentTimeMillis();
 				workUserService.save(workUser);
+				long end2 = System.currentTimeMillis();
+				log.debug("更新业务提交workUser用时:"+(end2-start2)+"ms");
+				
 				WorkUserHis userHis = workUserService.change(workUser, companyHis);
 				workUserHisService.save(userHis);
 		
@@ -2084,14 +2100,25 @@ public class WorkDealInfoOperationController extends BaseController {
 		}
 		workCertApplyInfo.setProvince(workCompany.getProvince());
 		workCertApplyInfo.setCity(workCompany.getCity());
+		
+		long start3 = System.currentTimeMillis();
 		workCertApplyInfoService.save(workCertApplyInfo);
+		long end3 = System.currentTimeMillis();
+		log.debug("更新业务提交workCertApplyInfo用时:"+(end3-start3)+"ms");
+		
 		
 		WorkCertInfo oldCertInfo = workDealInfo1.getWorkCertInfo();
 		WorkCertInfo workCertInfo = new WorkCertInfo();
 		workCertInfo.setWorkCertApplyInfo(workCertApplyInfo);
 		workCertInfo.setRenewalPrevId(oldCertInfo.getId());
 		workCertInfo.setCreateDate( workCertInfoService.getCreateDate(oldCertInfo.getId()));
+		
+		long start4 = System.currentTimeMillis();
 		workCertInfoService.save(workCertInfo);
+		long end4 = System.currentTimeMillis();
+		log.debug("更新业务提交workCertInfo用时:"+(end4-start4)+"ms");
+		
+		
 		// 给上张证书存nextId
 		oldCertInfo.setRenewalNextId(workCertInfo.getId());
 		workCertInfoService.save(oldCertInfo);
@@ -2142,7 +2169,11 @@ public class WorkDealInfoOperationController extends BaseController {
 			workDealInfo.setSelfImage(image);
 		}
 		
+		long start5 = System.currentTimeMillis();
 		workDealInfoService.save(workDealInfo);
+		long end5 = System.currentTimeMillis();
+		log.debug("更新业务提交workDealInfo用时:"+(end5-start5)+"ms");
+		
 		
 		ConfigAgentBoundDealInfo dealInfoBound = new ConfigAgentBoundDealInfo();
 		dealInfoBound.setDealInfo(workDealInfo);
@@ -2160,6 +2191,9 @@ public class WorkDealInfoOperationController extends BaseController {
 		workLog.setWorkCompany(workDealInfo.getWorkCompany());
 		workLog.setOffice(UserUtils.getUser().getOffice());
 		workLogService.save(workLog);
+		
+		long end = System.currentTimeMillis();
+		log.debug("更新业务提交总用时:"+(end-start)+"ms");
 		
 		return "redirect:" + Global.getAdminPath()
 				+ "/work/workDealInfo/pay?id=" + workDealInfo.getId();

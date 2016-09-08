@@ -972,8 +972,13 @@ public class WorkDealInfoService extends BaseService {
 		List<Map> lst = null;
 		List<Map> ct = null;
 		try {
+			long start = System.currentTimeMillis();
 			lst = workDealInfoDao.findBySQLListMap(sql, page.getPageNo(),
 					page.getPageSize());
+			long end = System.currentTimeMillis();
+			
+			log.debug("workDealInfoListQueryList用时:"+(end-start)+"ms");
+			
 			ct = workDealInfoDao.findBySQLListMap(sqlCount, 1, 1);
 		} catch (IllegalAccessException | IllegalArgumentException
 				| InvocationTargetException | ClassNotFoundException
@@ -7867,7 +7872,7 @@ public class WorkDealInfoService extends BaseService {
 		sql2 += "id=";
 		sql2 += workDealInfoId;
 		sql2 += " connect by prior PREV_ID = id order by id asc";
-
+		
 		try {
 			List<Map> lst = workDealInfoDao.findBySQLListMap(sql, 0, 0);
 			if (lst == null || lst.size() <= 0) {
@@ -7889,6 +7894,9 @@ public class WorkDealInfoService extends BaseService {
 				}
 			}
 
+		
+			
+			
 			if (!hasFirst) {
 				return findFirstCertSNById(new Long(lst.get(0).get("ID")
 						.toString()));

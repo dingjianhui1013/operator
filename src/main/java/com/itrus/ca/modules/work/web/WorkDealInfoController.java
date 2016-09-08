@@ -55,6 +55,8 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -123,6 +125,7 @@ import com.itrus.ca.modules.service.ItrustProxyUtil;
 import com.itrus.ca.modules.sys.entity.Office;
 import com.itrus.ca.modules.sys.entity.Role;
 import com.itrus.ca.modules.sys.entity.User;
+import com.itrus.ca.modules.sys.security.SystemAuthorizingRealm;
 import com.itrus.ca.modules.sys.service.OfficeService;
 import com.itrus.ca.modules.sys.utils.UserUtils;
 import com.itrus.ca.modules.work.entity.MonthPayment;
@@ -172,6 +175,8 @@ import com.itrus.ca.modules.work.vo.WorkpaymentInfo_dealinfoVo;
 @Controller
 @RequestMapping(value = "${adminPath}/work/workDealInfo")
 public class WorkDealInfoController extends BaseController {
+	
+	private static Logger log = LoggerFactory.getLogger(WorkDealInfoController.class);
 
 	@Autowired
 	private WorkUserService workUserService;
@@ -302,9 +307,12 @@ public class WorkDealInfoController extends BaseController {
 			@RequestParam(value = "alias", required = false) Long alias,
 			@RequestParam(value = "productName", required = false) String productName)
 			throws ParseException {
+
+		long start = System.currentTimeMillis();
+		
 		User user = UserUtils.getUser();
 		workDealInfo.setCreateBy(user.getCreateBy());
-
+		
 		List<ConfigApp> configAppList = configAppService.selectAll();
 		model.addAttribute("configAppList", configAppList);
 		model.addAttribute("alias", alias);
@@ -356,6 +364,11 @@ public class WorkDealInfoController extends BaseController {
 		// 经信委
 		model.addAttribute("expirationDate",
 				StringHelper.getLastDateOfCurrentYear());
+		
+		long end = System.currentTimeMillis();
+		
+		log.debug("workDealInfoList用时:"+(end-start)+"ms");
+		
 		return "modules/work/workDealInfoList";
 	}
 
@@ -2706,6 +2719,10 @@ public class WorkDealInfoController extends BaseController {
 
 			Integer classifying, String pName, String pEmail, String pIDCard,
 			String contactSex, Integer lable, String areaRemark) {
+		
+		long start = System.currentTimeMillis();
+		
+		
 		ConfigApp configApp = configAppService.get(appId);
 		WorkCompany workCompany = workCompanyService.finByNameAndNumber(
 				companyName, organizationNumber);
@@ -2781,9 +2798,15 @@ public class WorkDealInfoController extends BaseController {
 
 			return "modules/work/workDealInfoForm";
 		}
+		
+		long start1 = System.currentTimeMillis();
 		workCompanyService.save(workCompany);
+		long end1 = System.currentTimeMillis();
+		log.debug("业务新增提交保存workCompany用时:"+(end1-start1)+"ms");
+		long start2 = System.currentTimeMillis();
 		workUserService.save(workUser);
-
+		long end2 = System.currentTimeMillis();
+		log.debug("业务新增提交保存workUser用时:"+(end2-start2)+"ms");
 		ConfigCommercialAgent commercialAgent = configAgentAppRelationService
 				.findAgentByApp(configApp);
 		workDealInfo.setConfigCommercialAgent(commercialAgent);
@@ -2853,15 +2876,23 @@ public class WorkDealInfoController extends BaseController {
 		workCertApplyInfo.setEmail(pEmail);
 		workCertApplyInfo.setIdCard(pIDCard);
 
+		long start3 = System.currentTimeMillis();
 		workCertApplyInfoService.save(workCertApplyInfo);
-
+		long end3 = System.currentTimeMillis();
+		log.debug("业务新增提交保存workCertApplyInfo用时:"+(end3-start3)+"ms");
+		
 		if (workDealInfo.getWorkCertInfo() != null) {
 			workCertInfo = workDealInfo.getWorkCertInfo();
 		} else {
 			workCertInfo = new WorkCertInfo();
 		}
 		workCertInfo.setWorkCertApplyInfo(workCertApplyInfo);
+		
+		long start4 = System.currentTimeMillis();
 		workCertInfoService.save(workCertInfo);
+		long end4 = System.currentTimeMillis();
+		log.debug("业务新增提交保存workCertInfo用时:"+(end4-start4)+"ms");
+		
 		workDealInfo.setWorkCertInfo(workCertInfo);
 
 		workDealInfo.setInputUser(UserUtils.getUser());
@@ -2871,8 +2902,10 @@ public class WorkDealInfoController extends BaseController {
 				.getId());
 		workDealInfo.setOfficeId(UserUtils.getUser().getOffice().getId());
 
+		long start5 = System.currentTimeMillis();
 		workDealInfoService.save(workDealInfo);
-
+		long end5 = System.currentTimeMillis();
+		log.debug("业务新增提交保存workDealInfo用时:"+(end5-start5)+"ms");
 		if (workDealInfoId == null) {
 			ConfigAgentBoundDealInfo dealInfoBound = new ConfigAgentBoundDealInfo();
 			dealInfoBound.setDealInfo(workDealInfo);
@@ -2909,6 +2942,11 @@ public class WorkDealInfoController extends BaseController {
 				+ workDealInfo.getWorkCompany().getCompanyName(), "");
 		logUtil.saveSysLog("业务办理", "新增业务保存：编号" + workDealInfo.getId() + "单位名称："
 				+ workDealInfo.getWorkCompany().getCompanyName(), "");
+		
+		long end = System.currentTimeMillis();
+		
+		log.debug("业务新增提交总用时:"+(end-start)+"ms");
+		
 		return "redirect:" + Global.getAdminPath()
 				+ "/work/workDealInfo/pay?id=" + workDealInfo.getId();
 	}
@@ -3588,7 +3626,7 @@ public class WorkDealInfoController extends BaseController {
 			Integer agentId, Long agentDetailId) {
 
 		// Integer agentId,Long agentDetailId,
-
+		long start = System.currentTimeMillis();
 		WorkCompany workCompany = workCompanyService.finByNameAndNumber(
 				companyName, organizationNumber);
 
@@ -3656,9 +3694,14 @@ public class WorkDealInfoController extends BaseController {
 		// ConfigProduct configProduct = configProductService.findByIdOrLable(
 		// appId, product, lable);
 
+		long start1 = System.currentTimeMillis();
 		workCompanyService.save(workCompany);
+		long end1 = System.currentTimeMillis();
+		log.debug("业务新增保存workCompany用时:"+(end1-start1)+"ms");
+		long start2 = System.currentTimeMillis();
 		workUserService.save(workUser);
-
+		long end2 = System.currentTimeMillis();
+		log.debug("业务新增保存workUser用时:"+(end2-start2)+"ms");
 		workDealInfo.setConfigApp(configApp);
 		ConfigCommercialAgent commercialAgent = configAgentAppRelationService
 				.findAgentByApp(configApp);
@@ -3701,22 +3744,32 @@ public class WorkDealInfoController extends BaseController {
 		workUserHisService.save(workUserHis);
 		workDealInfo.setWorkUserHis(workUserHis);
 		// 保存申请人信息
+		
 		WorkCertApplyInfo workCertApplyInfo = new WorkCertApplyInfo();
 		WorkCertInfo workCertInfo = new WorkCertInfo();
-		;
+		
 		workCertApplyInfo.setName(pName);
 		workCertApplyInfo.setEmail(pEmail);
 		workCertApplyInfo.setIdCard(pIDCard);
 		workCertApplyInfo.setProvince(workCompany.getProvince());
 		workCertApplyInfo.setCity(workCompany.getCity());
+		long start3 = System.currentTimeMillis();
 		workCertApplyInfoService.save(workCertApplyInfo);
+		long end3 = System.currentTimeMillis();
+		log.debug("业务新增保存workCertApplyInfo用时:"+(end3-start3)+"ms");
 		workCertInfo.setWorkCertApplyInfo(workCertApplyInfo);
+		long start4 = System.currentTimeMillis();
 		workCertInfoService.save(workCertInfo);
+		long end4 = System.currentTimeMillis();
+		log.debug("业务新增保存workCertInfo用时:"+(end4-start4)+"ms");
 		workDealInfo.setWorkCertInfo(workCertInfo);
 		workDealInfo.setAreaId(UserUtils.getUser().getOffice().getParent()
 				.getId());
 		workDealInfo.setOfficeId(UserUtils.getUser().getOffice().getId());
+		long start5 = System.currentTimeMillis();
 		workDealInfoService.save(workDealInfo);
+		long end5 = System.currentTimeMillis();
+		log.debug("业务新增保存workDealInfo用时:"+(end5-start5)+"ms");
 		// 录入人日志保存
 		WorkLog workLog = new WorkLog();
 		workLog.setRecordContent(recordContent);
@@ -3730,6 +3783,9 @@ public class WorkDealInfoController extends BaseController {
 		logUtil.saveSysLog("业务中心", "新增业务暂时保存：编号" + workDealInfo.getId()
 				+ "单位名称：" + workDealInfo.getWorkCompany().getCompanyName(), "");
 
+		long end = System.currentTimeMillis();
+		log.debug("业务新增保存总用时:"+(end-start)+"ms");
+		
 		return "redirect:" + Global.getAdminPath() + "/work/workDealInfo/";
 	}
 
@@ -9010,7 +9066,8 @@ public class WorkDealInfoController extends BaseController {
 			Integer lable, Integer classifying, String pName, String pEmail,
 			String pIDCard, String contactSex, String areaRemark,
 			Integer agentId, Long agentDetailId) {
-
+		
+		long start = System.currentTimeMillis();
 		JSONObject json = new JSONObject();
 		try {
 			WorkCompany workCompany = workCompanyService.finByNameAndNumber(
@@ -9085,9 +9142,18 @@ public class WorkDealInfoController extends BaseController {
 
 			ConfigProduct configProduct = bound.getProduct();
 
+			
+			long start1 = System.currentTimeMillis();
 			workCompanyService.save(workCompany);
+			long end1 = System.currentTimeMillis();
+			log.debug("新增业务保存并再次添加workCompany用时:"+(start1-end1)+"ms");
+			
+			
+			long start2 = System.currentTimeMillis();
 			workUserService.save(workUser);
-
+			long end2 = System.currentTimeMillis();
+			log.debug("新增业务保存并再次添加workUser用时:"+(start2-end2)+"ms");
+			
 			workDealInfo.setConfigApp(configApp);
 			ConfigCommercialAgent commercialAgent = configAgentAppRelationService
 					.findAgentByApp(configApp);
@@ -9147,7 +9213,12 @@ public class WorkDealInfoController extends BaseController {
 			workCertApplyInfo.setEmail(pEmail);
 			workCertApplyInfo.setIdCard(pIDCard);
 
+			long start3 = System.currentTimeMillis();
 			workCertApplyInfoService.save(workCertApplyInfo);
+			long end3 = System.currentTimeMillis();
+			log.debug("新增业务保存并再次添加workCertApplyInfo用时:"+(start3-end3)+"ms");
+			
+			
 			// 保存work_cert_info
 			if (workDealInfo.getWorkCertInfo() != null) {
 				workCertInfo = workDealInfo.getWorkCertInfo();
@@ -9155,12 +9226,22 @@ public class WorkDealInfoController extends BaseController {
 				workCertInfo = new WorkCertInfo();
 			}
 			workCertInfo.setWorkCertApplyInfo(workCertApplyInfo);
+			
+			long start4 = System.currentTimeMillis();
 			workCertInfoService.save(workCertInfo);
+			long end4 = System.currentTimeMillis();
+			log.debug("新增业务保存并再次添加workCertInfo用时:"+(start4-end4)+"ms");
+			
 			workDealInfo.setWorkCertInfo(workCertInfo);
 			workDealInfo.setAreaId(UserUtils.getUser().getOffice().getParent()
 					.getId());
 			workDealInfo.setOfficeId(UserUtils.getUser().getOffice().getId());
+			
+			long start5 = System.currentTimeMillis();
 			workDealInfoService.save(workDealInfo);
+			long end5 = System.currentTimeMillis();
+			log.debug("新增业务保存并再次添加workDealInfo用时:"+(start5-end5)+"ms");
+			
 			// 录入人日志保存
 			WorkLog workLog = new WorkLog();
 			workLog.setRecordContent(recordContent);
@@ -9185,6 +9266,9 @@ public class WorkDealInfoController extends BaseController {
 				// TODO: handle exception
 			}
 		}
+		
+		long end = System.currentTimeMillis();
+		log.debug("新增业务保存并再次添加总用时:"+(end-start)+"ms");
 		return json.toString();
 	}
 
