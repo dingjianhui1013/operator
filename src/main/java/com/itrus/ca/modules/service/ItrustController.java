@@ -169,18 +169,18 @@ public class ItrustController {
 		JSONObject json = new JSONObject();
 		try {
 			json.put("status", 0);
-			log.info("keySn:"+keysn);
+		/*	log.info("keySn:"+keysn);
 			
 			
 			log.info("IP:"+getIp(request));
-			
+			*/
 				
 			
 			 Enumeration e = request.getHeaderNames();
 			    while(e.hasMoreElements()){
 			        String k = e.nextElement().toString();
 			        String v = request.getHeader(k);     
-			        log.info("header - key: " + k + " | value: " + v);
+			       /* log.info("header - key: " + k + " | value: " + v);*/
 			    }
 			WorkDealInfo wdi = itrustService.findBySn(keysn, 1);
 			if (wdi != null) {
@@ -238,7 +238,7 @@ public class ItrustController {
 			e.printStackTrace();
 			json.put("msg", "系统异常");
 		}
-		log.info("result:"+json.toString());
+		/*log.info("result:"+json.toString());*/
 		return json.toString();
 	}
 
