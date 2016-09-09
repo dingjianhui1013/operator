@@ -420,7 +420,8 @@ public class CertController extends BaseController {
 			json.put("certKmcRep2", caCert.getCertKmcRep2());
 			json.put("installMode", caCert.getInstallMode());
 
-			if (dealInfo.getDealInfoType() == null) {
+		/*
+		 * 	if (dealInfo.getDealInfoType() == null) {
 
 				ConfigAgentBoundDealInfo dealInfoBound = new ConfigAgentBoundDealInfo();
 				dealInfoBound.setDealInfo(dealInfo);
@@ -442,7 +443,7 @@ public class CertController extends BaseController {
 				configChargeAgentService.save(agent);
 				logUtil.saveSysLog("计费策略模版", "更改剩余数量和使用数量成功!", "");
 			}
-
+*/
 		}
 		
 		
@@ -795,6 +796,31 @@ public class CertController extends BaseController {
 						}	
 					}	
 				}
+				
+				
+				if (dealInfo.getDealInfoType() == null) {
+
+					ConfigAgentBoundDealInfo dealInfoBound = new ConfigAgentBoundDealInfo();
+					dealInfoBound.setDealInfo(dealInfo);
+					ConfigChargeAgent agentBound = configChargeAgentService.get(dealInfo.getConfigChargeAgentId());
+					dealInfoBound.setAgent(agentBound);
+					configAgentBoundDealInfoService.save(dealInfoBound);
+					logUtil.saveSysLog("计费策略模版", "计费策略模版：" + dealInfo.getId() + "--业务编号：" + dealInfo.getId() + "--关联成功!",
+							"");
+
+				}
+
+				if (dealInfo.getDealInfoType() != null && dealInfo.getDealInfoType().equals(0)) {
+
+					ConfigChargeAgent agent = configChargeAgentService.get(dealInfo.getConfigChargeAgentId());
+					Integer avaiNum = agent.getAvailableNum();// 已用数量
+					Integer reseNum = agent.getReserveNum();// 预留数量
+					agent.setAvailableNum(avaiNum + 1);// 已用数量
+					agent.setReserveNum(reseNum - 1);// 预留数量
+					configChargeAgentService.save(agent);
+					logUtil.saveSysLog("计费策略模版", "更改剩余数量和使用数量成功!", "");
+				}
+
 				
 				
 				
