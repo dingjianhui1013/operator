@@ -221,7 +221,7 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 				public SQLQuery execute(Connection connection)
 						throws SQLException {
 					Session session = getSession();
-					org.hibernate.Transaction tx = session.beginTransaction();
+					org.hibernate.Transaction tx = session.getTransaction();
 					session.createSQLQuery(sql).executeUpdate();
 					tx.commit();
 					return null;
