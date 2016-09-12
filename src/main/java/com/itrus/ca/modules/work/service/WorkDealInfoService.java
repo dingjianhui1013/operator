@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -976,9 +977,9 @@ public class WorkDealInfoService extends BaseService {
 			lst = workDealInfoDao.findBySQLListMap(sql, page.getPageNo(),
 					page.getPageSize());
 			long end = System.currentTimeMillis();
-			
-			log.debug("workDealInfoListQueryList用时:"+(end-start)+"ms");
-			
+
+			log.debug("workDealInfoListQueryList用时:" + (end - start) + "ms");
+
 			ct = workDealInfoDao.findBySQLListMap(sqlCount, 1, 1);
 		} catch (IllegalAccessException | IllegalArgumentException
 				| InvocationTargetException | ClassNotFoundException
@@ -2928,6 +2929,64 @@ public class WorkDealInfoService extends BaseService {
 		return workDealInfoDao.find(dc);
 	}
 
+	public Integer findPrevIdIsNull(Integer appId) {
+
+		String sql = "select count(FIRST_CERT_SN) CT from (";
+		sql = sql
+				+ "select count(*) c,FIRST_CERT_SN from WORK_DEAL_INFO where PREV_ID is null";
+		if (appId != null && appId.longValue() > 0) {
+			sql = sql + " and APP_ID=" + appId;
+		}
+		sql += " group by FIRST_CERT_SN";
+		sql += " order by c desc";
+		sql += ")  a where a.c>1";
+		List<Map> m = null;
+		try {
+			m = workDealInfoDao.findBySQLListMap(sql, 0, 0);
+		} catch (IllegalAccessException | IllegalArgumentException
+				| InvocationTargetException | ClassNotFoundException
+				| InstantiationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		if (m == null || m.size() <= 0)
+			return 0;
+		return new Integer(m.get(0).get("CT").toString());
+	}
+
+	// 根据应用名称，查询统计信息
+	public Set<String> findFirstCertSnByAppId(Integer appId, Integer count) {
+		String sql = "select FIRST_CERT_SN,a.c from (";
+		sql = sql
+				+ "select count(*) c,FIRST_CERT_SN from WORK_DEAL_INFO where PREV_ID is null";
+		if (appId != null && appId.longValue() > 0) {
+			sql = sql + " and APP_ID=" + appId;
+		}
+		sql += " group by FIRST_CERT_SN";
+		sql += " order by c desc";
+		sql += ")  a where a.c>1";
+		if (count != null && count.intValue() > 0) {
+			sql = sql + " and rownum<=" + count;
+		}
+		List<Map> lst = null;
+		Set<String> res = new HashSet<String>();
+		try {
+			lst = workDealInfoDao.findBySQLListMap(sql, 0, 0);
+			for (Map e : lst) {
+				if (e.get("FIRST_CERT_SN") == null
+						|| e.get("FIRST_CERT_SN").toString().trim().length() <= 0)
+					continue;
+				res.add(e.get("FIRST_CERT_SN").toString());
+			}
+		} catch (IllegalAccessException | IllegalArgumentException
+				| InvocationTargetException | ClassNotFoundException
+				| InstantiationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return res;
+	}
+
 	// 根据应用和时间，制作证书的集合
 	public List<WorkDealInfo> findByAppIdDate(Long appId, Date date) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
@@ -4433,7 +4492,11 @@ public class WorkDealInfoService extends BaseService {
 		if (lst != null && lst.size() == 1) {
 			WorkDealInfo po = lst.get(0);
 			po.setDelFlag("0");
-			workDealInfoDao.save(po);
+			// workDealInfoDao.save(po);
+
+			String sql = "update work_deal_info set DEL_FLAG='0' where id="
+					+ po.getId();
+			workDealInfoDao.exeSql(sql);
 			return;
 		}
 
@@ -4453,7 +4516,11 @@ public class WorkDealInfoService extends BaseService {
 				po.setDelFlag("1");
 			}
 
-			workDealInfoDao.save(po);
+			// workDealInfoDao.save(po);
+			String sql = "update work_deal_info set DEL_FLAG='"
+					+ po.getDelFlag() + "',prev_id=" + po.getPrevId()
+					+ " where id=" + po.getId();
+			workDealInfoDao.exeSql(sql);
 		}
 	}
 
@@ -5784,8 +5851,9 @@ public class WorkDealInfoService extends BaseService {
 				WorkDealInfoStatus.STATUS_CERT_OBTAINED));
 		dc.add(Restrictions.ge("businessCardUserDate", date));
 		dc.add(Restrictions.lt("businessCardUserDate", calendar.getTime()));
-		
-		dc.add(Restrictions.or(Restrictions.isNull("isSJQY"), Restrictions.ne("isSJQY", 1)));
+
+		dc.add(Restrictions.or(Restrictions.isNull("isSJQY"),
+				Restrictions.ne("isSJQY", 1)));
 
 		List<WorkDealInfo> dealInfos = workDealInfoDao.find(dc);
 		List<String> keys = new ArrayList<String>();
@@ -5793,7 +5861,7 @@ public class WorkDealInfoService extends BaseService {
 			if (!keys.contains(workDealInfo.getKeySn())) {
 				keys.add(workDealInfo.getKeySn());
 			}
-			
+
 		}
 		return keys.size();
 	}
@@ -7795,10 +7863,13 @@ public class WorkDealInfoService extends BaseService {
 	 * @return List<Long>
 	 */
 	@Transactional(readOnly = true)
-	public List<Long> findNullFirstCertSNByCount(int maxCount) {
+	public List<Long> findNullFirstCertSNByCount(int maxCount, int appid) {
 		String ct = "select count(*) from WORK_DEAL_INFO where FIRST_CERT_SN is null ";
 		if (maxCount > 0) {
 			ct += " and rownum<=" + maxCount;
+		}
+		if (appid > 0) {
+			ct += " and APP_ID<=" + appid;
 		}
 
 		List l = workDealInfoDao.findBySql(ct);
@@ -7808,6 +7879,9 @@ public class WorkDealInfoService extends BaseService {
 		boolean loop = false;
 		if (maxCount > 0) {
 			sql += " and rownum<=" + maxCount;
+		}
+		if (appid > 0) {
+			sql += " and APP_ID<=" + appid;
 		}
 
 		List<BigDecimal> lst = workDealInfoDao.findBySql(sql);
@@ -7872,7 +7946,7 @@ public class WorkDealInfoService extends BaseService {
 		sql2 += "id=";
 		sql2 += workDealInfoId;
 		sql2 += " connect by prior PREV_ID = id order by id asc";
-		
+
 		try {
 			List<Map> lst = workDealInfoDao.findBySQLListMap(sql, 0, 0);
 			if (lst == null || lst.size() <= 0) {
@@ -7894,9 +7968,6 @@ public class WorkDealInfoService extends BaseService {
 				}
 			}
 
-		
-			
-			
 			if (!hasFirst) {
 				return findFirstCertSNById(new Long(lst.get(0).get("ID")
 						.toString()));
