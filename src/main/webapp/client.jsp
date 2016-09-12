@@ -10,6 +10,7 @@
 <script type="text/javascript" src="js/test/bootstrap.min.js"></script>
 <script type="text/javascript" src="js/pta_topca.js"></script>
 <script type="text/javascript" src="js/xenroll.js"></script>
+
 <script src="static/My97DatePicker/WdatePicker.js"
 	type="text/javascript"></script>
 <script type="text/javascript">
@@ -37,12 +38,33 @@
 	
 	function updateFirstCertSN(){
 		$("#make").hide();
-		$("#returnJsonData").html("正在生成...........");
-		var url = "test/updateFirstCertSN?updateCount="+$("#updateCount").val()+"&_="+new Date().getTime();
-		$.getJSON(url,function(data){
-			$("#make").show();
-			$("#returnJsonData").html(data.msg);
-		});
+		
+		if(confirm('是否确认修复first_cert_sn?')){
+			$("#returnJsonData").html("正在生成...........");
+			var url = "test/updateFirstCertSN?updateCount="+$("#updateCount").val()+"&appid="+$("#updateAppid").val()+"&_="+new Date().getTime();
+			$.getJSON(url,function(data){
+				$("#make").show();
+				$("#returnJsonData").html(data.msg);
+			});
+		}else{
+			return false;
+		}
+	}
+	
+	function fixPreid(){
+		$("#make").hide();
+		
+		if(confirm('是否确认修复prev_id?')){
+			$("#returnJsonData").html("正在生成...........");
+			var url = "test/fixPreId?prevIdCount="+$("#prevIdCount").val()+"&prevIdAppid="+$("#prevIdAppid").val()+"&_="+new Date().getTime();
+			$.getJSON(url,function(data){
+				$("#make").show();
+				$("#returnJsonData").html(data.msg);
+			});
+		}else{
+			return false;
+		}
+		
 	}
 	
 	function makeUpdateData(){
@@ -78,6 +100,7 @@
 						<li class="active"><a href="#panel-98562" data-toggle="tab">新增业务</a></li>
 						<li><a href="#panel-489367" data-toggle="tab">更新业务</a></li>
 						<li><a href="#panel-4893681" data-toggle="tab">更新首张证书序列号</a></li>
+						<li><a href="#panel-4893682" data-toggle="tab">修复prev_id数据</a></li>
 					</ul>
 					<div class="tab-content">
 						<div class="tab-pane active" id="panel-98562">
@@ -126,10 +149,36 @@
 											<p>更新首张证书数据</p>
 										</blockquote>
 										<br>
-										更新记录数(填0为更新全部，数据多时不建议全部更新):<input id="updateCount" />
-										<br>
+									</div>
+									<div class="span12">
+										<input id="updateCount"/>&nbsp;更新记录数(填0为更新全部，数据多时不建议全部更新) 
+										<br/>
+										<input id="updateAppid"/>&nbsp;应用ID(更新所有应用时填0或不填，慎用)
+										<br/><br/>
 										<button class="btn btn-warning" type="button"
 											onclick="updateFirstCertSN()" id="update">更新首张证书数据</button>
+										<br>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="tab-pane" id="panel-4893682">
+							<div class="container-fluid">
+								<div class="row-fluid">
+									<div class="span12">
+										<blockquote>
+											<p>修复prev_id</p>
+										</blockquote>
+										<br>
+									</div>
+									<div class="span12">
+										<input id="prevIdCount"/>&nbsp;修复记录数(填0为更新全部，数据多时不建议全部更新) 
+										<br/>
+										<input id="prevIdAppid"/>&nbsp;应用ID(指定应用ID，必填)
+										<br/><br/>
+										<button class="btn btn-warning" type="button"
+										onclick="fixPreid()"	 id="update">修复prev_id</button>
+										<br>
 									</div>
 								</div>
 							</div>
