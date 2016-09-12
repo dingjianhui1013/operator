@@ -21,11 +21,11 @@ public class UpdateFirstCertSNThread {
 
 	private static int MAX_THREAD = 10;
 
-	public void process(int updateCount) {
+	public void process(int updateCount, int appid) {
 		// workDealInfoService.fixAllDataFirstCertSN(updateCount);
 
-		List<Long> lst = workDealInfoService
-				.findNullFirstCertSNByCount(updateCount);
+		List<Long> lst = workDealInfoService.findNullFirstCertSNByCount(
+				updateCount, appid);
 
 		int count = lst.size();
 		int size = lst.size() > 300 ? lst.size() / MAX_THREAD : lst.size();
@@ -54,7 +54,15 @@ public class UpdateFirstCertSNThread {
 
 		public void run() {
 			for (Long e : lst) {
-				workDealInfoService.fixFirstCertSN(e);
+				try {
+					workDealInfoService.fixFirstCertSN(e);
+				} catch (IllegalStateException ex) {
+					// 事务问题，可以不显示
+					continue;
+				} catch (Exception ex) {
+					ex.printStackTrace();
+					continue;
+				}
 			}
 		}
 	}

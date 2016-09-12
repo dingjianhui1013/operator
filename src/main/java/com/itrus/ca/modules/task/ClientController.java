@@ -162,6 +162,7 @@ public class ClientController {
 	Logger log = Logger.getLogger(ClientController.class);
 
 	Boolean isRunning;
+	boolean previdRunning;
 	int count;
 
 	public ClientController() {
@@ -910,14 +911,61 @@ public class ClientController {
 
 	@RequestMapping(value = "updateFirstCertSN")
 	@ResponseBody
-	public String updateFirstCertSN(Integer updateCount) throws JSONException {
+	public String updateFirstCertSN(Integer updateCount, Integer appid)
+			throws JSONException {
 		JSONObject json = new JSONObject();
 		// 修复所有现有数据里，没有firstCertSn字段的记录
 		// workDealInfoService.fixAllDataFirstCertSN(updateCount);
-		updateFirstCertSNThread.process(updateCount);
+		updateFirstCertSNThread.process(updateCount, appid == null ? appid : 0);
 		json.put("statu", "0");
 		json.put("msg", "完成");
 
+		return json.toString();
+	}
+
+	@RequestMapping(value = "fixPreId")
+	@ResponseBody
+	public String fixPreId(Integer prevIdCount, Integer prevIdAppid)
+			throws JSONException {
+		JSONObject json = new JSONObject();
+		if (prevIdAppid == null || prevIdAppid.intValue() <= 0) {
+			json.put("statu", "-1");
+			json.put("msg", "APPID不能为空");
+			return json.toString();
+		}
+		if (previdRunning || isRunning) {
+			json.put("statu", "-2");
+			json.put("msg", "另一个修复prev_id任务或导入任务正在进行");
+			return json.toString();
+		}
+
+		previdRunning = true;
+		// 按需要的查出对应数据
+		Integer c = workDealInfoService.findPrevIdIsNull(prevIdAppid);
+		Set<String> lst = workDealInfoService.findFirstCertSnByAppId(
+				prevIdAppid, prevIdCount);
+
+		log.error("开始处理,app_id:" + prevIdAppid + ",prev_id为空记录:" + c
+				+ "条,本次需要处理总数:" + lst.size() + "条");
+		if (lst != null && lst.size() > 0) {
+			try {
+				new Thread(new ModifyPreidThread(lst)).start();
+			} catch (Exception e) {
+				e.printStackTrace();
+				json.put("msg", "更新preid出现异常:" + StringHelper.getStackInfo(e));
+				isRunning = false;
+				return json.toString();
+			}
+		}
+
+		json.put("statu", "0");
+		json.put("msg", "请求提交完成,更新:" + lst.size()
+				+ "条firstCertSN数据，后台异步处理完后会自动停止,处理前总数据量为:" + c + ",还余"
+				+ (c - lst.size()) + "条firstCertSN数据未处理");
+
+		previdRunning = false;
+
+		log.error("异步提交处理完毕,app_id:");
 		return json.toString();
 	}
 
