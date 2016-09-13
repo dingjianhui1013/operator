@@ -234,7 +234,7 @@ public class WorkDealInfoService extends BaseService {
 				"dealInfoType", WorkDealInfoType.TYPE_RETURN_MONEY),
 				Restrictions.eq("dealInfoType",
 						WorkDealInfoType.TYPE_RETURN_WORK)));
-		dc.addOrder(Order.desc("id"));
+		dc.addOrder(Order.desc("createDate"));
 		return workDealInfoDao.find(page, dc);
 	}
 
