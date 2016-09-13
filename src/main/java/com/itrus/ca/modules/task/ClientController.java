@@ -942,7 +942,7 @@ public class ClientController {
 		previdRunning = true;
 		// 按需要的查出对应数据
 		Integer c = workDealInfoService.findPrevIdIsNull(prevIdAppid);
-		Set<String> lst = workDealInfoService.findFirstCertSnByAppId(
+		List<String> lst = workDealInfoService.findFirstCertSnByAppId(
 				prevIdAppid, prevIdCount);
 
 		log.error("开始处理,app_id:" + prevIdAppid + ",prev_id为空记录:" + c
@@ -1034,7 +1034,7 @@ public class ClientController {
 		Integer num = Integer.valueOf(firstSvn.split("-")[3]);
 		String head = firstSvn.replace("-" + firstSvn.split("-")[3], "");
 		// 最后处理preId用，暂存firstCertSN，排重
-		Set<String> firstSnAll = new HashSet<String>();
+		List<String> firstSnAll = new ArrayList<String>();
 		for (int i = 0; i < all.size(); i++) {
 			String svn = getSvn(head, num);
 			num++;
