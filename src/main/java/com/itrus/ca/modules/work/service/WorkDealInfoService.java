@@ -2955,8 +2955,8 @@ public class WorkDealInfoService extends BaseService {
 	}
 
 	// 根据应用名称，查询统计信息
-	public Set<String> findFirstCertSnByAppId(Integer appId, Integer count) {
-		String sql = "select FIRST_CERT_SN,a.c from (";
+	public List<String> findFirstCertSnByAppId(Integer appId, Integer count) {
+		String sql = "select distinct FIRST_CERT_SN,a.c from (";
 		sql = sql
 				+ "select count(*) c,FIRST_CERT_SN from WORK_DEAL_INFO where PREV_ID is null";
 		if (appId != null && appId.longValue() > 0) {
@@ -2969,7 +2969,7 @@ public class WorkDealInfoService extends BaseService {
 			sql = sql + " and rownum<=" + count;
 		}
 		List<Map> lst = null;
-		Set<String> res = new HashSet<String>();
+		List<String> res = new ArrayList<String>();
 		try {
 			lst = workDealInfoDao.findBySQLListMap(sql, 0, 0);
 			for (Map e : lst) {
@@ -4501,7 +4501,6 @@ public class WorkDealInfoService extends BaseService {
 		}
 
 		for (int i = 0; i < lst.size(); i++) {
-
 			WorkDealInfo pre = findPreByFirstCertSN(lst.get(i));
 			if (pre == null && i != (lst.size() - 1)) {
 				continue;
@@ -4521,11 +4520,12 @@ public class WorkDealInfoService extends BaseService {
 					+ po.getDelFlag() + "',prev_id=" + po.getPrevId()
 					+ " where id=" + po.getId();
 			workDealInfoDao.exeSql(sql);
+			log.error("变更prev_id已处理,首证书序列号:"+po.getFirstCertSN());
 		}
 	}
 
 	@Transactional(readOnly = false)
-	public void processPreId(Set<String> all) {
+	public void processPreId(List<String> all) {
 		for (String e : all) {
 			// 根据首张证书序列判定是否需要处理workDealInfo表内的preId字段
 			if (StringHelper.isNull(e))
