@@ -1137,14 +1137,20 @@ public class WorkDealInfoService extends BaseService {
 		if (apply != null) {
 			sql.append(" and configapp5_.id = " + apply);
 		}
-		if (startTime != null && endTime != null) {
+		if (startTime != null) {
 			sql.append(" and workcertin6_.notafter >= TO_DATE('"
 					+ DateUtils.formatDate(startTime, "yyyy-MM-dd 00:00:01")
 					+ "', 'yyyy-MM-dd hh24:mi:ss')");
+			
+		}
+		
+		if(endTime != null){
 			sql.append(" and workcertin6_.notafter <= TO_DATE ('"
 					+ DateUtils.formatDate(endTime, "yyyy-MM-dd 23:59:59")
 					+ "', 'yyyy-MM-dd hh24:mi:ss')");
 		}
+		
+		
 		if (workDealInfo.getWorkCompany() != null) {
 			if (workDealInfo.getWorkCompany().getId() != null) {
 				sql.append(" and workcompan2_.id="
