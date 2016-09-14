@@ -153,6 +153,8 @@ public class ItrustController {
 	/**
 	 * 根据key序列号查询
 	 * 
+	 * 
+	 * I信应用导航功能使用
 	 * @param keysn
 	 * @return 应用，产品(包含证书是否是通用)， 通用? 返回所有支持通用应用列表
 	 * @throws JSONException
