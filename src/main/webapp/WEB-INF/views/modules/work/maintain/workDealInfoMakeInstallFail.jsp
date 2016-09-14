@@ -106,7 +106,7 @@
 
 	function quick(keySN) {
 		
-		
+		console.log("进入quick()方法");
 		
 		var day = baseDay;
 		var csr;
@@ -124,10 +124,16 @@
 			csr = genEnrollCSR($("[name=provider]")[0], len, 1);
 		}
 		csr = filter(csr);
+		
+		console.log("csr:"+csr);
+		
 		if (csr == "") {//异常业务
 			return false;
 		}
 		cspStr = encodeURI(encodeURI(cspStr));
+		
+		console.log("cspStr:"+cspStr);
+		
 		var url = "${ctx}/ca/makeCertInstallFail?certProvider=" + cspStr 
 				+ "&keySn=" + keySN + "&csr=" + csr
 		+ "&dealInfoId=${workDealInfo.id}"+"&_="+new Date().getTime();
@@ -151,6 +157,8 @@
 											.info("证书获取失败,请检查您的证书是否输入,有误或是否已插入USB KEY");
 								}
 							} catch (e) {
+								top.$.jBox
+								.info("证书安装失败, data:"+data);
 							}
 
 							var updateUrl = "${ctx}/ca/installResult?dealInfoId=${workDealInfo.id}&result="+t+"&_="+new Date().getTime();
@@ -195,10 +203,16 @@
 
 	function makeCert() {
 		
+		console.log("进入makeCert()方法");
+		
 		try {
 			var providerName=$("#provider").find("option:selected").text();
 			var keys = ukeyadmin.refresh(); //检测KEY
 			var providerName=$("#provider").find("option:selected").text();
+			
+			console.log("providerName:"+providerName);
+			console.log("keys:"+keys);
+			
 			if (keys == 0 && providerName.indexOf("软证书")==-1) {
 				alert("没有检测到UKEY");
 			} else {
@@ -214,7 +228,10 @@
 				sn = keySn;
 				$("#keySn").attr("value", keySn);
 				$("#keySn").css("color", "red");
-				if(${workDealInfo.dealInfoType==0||workDealInfo.dealInfoType1==2 ||workDealInfo.dealInfoType1==3}){
+				/* if(${workDealInfo.dealInfoType==0||workDealInfo.dealInfoType1==2 ||workDealInfo.dealInfoType1==3}){ */
+					
+				
+					
 				var url = "${ctx}/work/workDealInfo/findByKeySnFailInstall?keySn="+keySn+"&dealId="+${workDealInfo.id}+"&_="+new Date().getTime();
 				$.getJSON(url,function(data){
 					if (data.status==1) {
@@ -241,7 +258,9 @@
 					}
 				});
 				
-				}
+				/* } */
+				
+				
 				
 			}
 		} catch (e) {
