@@ -11,6 +11,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.xml.ws.soap.SOAPFaultException;
+
+import org.apache.cxf.jaxrs.impl.ServletOutputStreamFilter;
 import org.apache.http.conn.HttpHostConnectException;
 import org.apache.log4j.Logger;
 import org.hibernate.criterion.DetachedCriteria;
@@ -446,7 +449,20 @@ public class CertController extends BaseController {
 */
 		}
 		
-		
+		catch(SOAPFaultException e){
+			
+			if(e.getMessage().contains("提交的数据项[userEmail]无效(CA)")){
+				e.printStackTrace();
+				json.put("status", -1);
+				json.put("msg", "申请证书失败,提交的数据项[userEmail]无效(CA)！");
+					// 异常业务
+				dealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_ABNORMAL_USER);// 异常业务
+				workDealInfoService.save(dealInfo);
+				logUtil.saveSysLog("业务中心", "制证失败", e.getMessage());	
+				return json.toString();
+			}
+			
+		}
 		
 		catch (HttpHostConnectException e) {
 			e.printStackTrace();
