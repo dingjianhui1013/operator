@@ -109,7 +109,7 @@
 		console.log("进入quick()方法");
 		
 		var day = baseDay;
-		var csr;
+		/* var csr; */
 		var len = 1024;
 		var selectedItem = $("option:selected", $("[name=provider]")[0]);
 		var cspStr = selectedItem.text();
@@ -120,7 +120,7 @@
 			len = 256;
 		}
 		//新增的生成csr
-		if ($("[name=provider]").val().length > 0) {
+		/* if ($("[name=provider]").val().length > 0) {
 			csr = genEnrollCSR($("[name=provider]")[0], len, 1);
 		}
 		csr = filter(csr);
@@ -129,13 +129,13 @@
 		
 		if (csr == "") {//异常业务
 			return false;
-		}
+		} */
 		cspStr = encodeURI(encodeURI(cspStr));
 		
 		console.log("cspStr:"+cspStr);
 		
 		var url = "${ctx}/ca/makeCertInstallFail?certProvider=" + cspStr 
-				+ "&keySn=" + keySN + "&csr=" + csr
+				+ "&keySn=" + keySN + "&csr=" + 1
 		+ "&dealInfoId=${workDealInfo.id}"+"&_="+new Date().getTime();
 		$
 				.ajax({
@@ -148,6 +148,7 @@
 							try {
 								$("#sort").html(data.sort);
 								var install_result = DoInstallCert(data);
+								alert(istall_result);
 								if (install_result) {
 									t = 1;
 									top.$.jBox.tip("安装证书成功!");
