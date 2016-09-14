@@ -9330,7 +9330,9 @@ public class WorkDealInfoController extends BaseController {
 	@RequestMapping(value = "findByKeySnFailInstall")
 	@ResponseBody
 	public String findByKeySnFailInstall(String keySn, Long dealId) {
+		log.debug("方法findByKeySnFailInstall:start");
 		JSONObject json = new JSONObject();
+		
 		try {
 			Integer isUserInteger = workDealInfoService
 					.findByKey(keySn, dealId);
@@ -9363,6 +9365,7 @@ public class WorkDealInfoController extends BaseController {
 				e1.printStackTrace();
 			}
 		}
+		log.debug("方法findByKeySnFailInstall:end");
 		return json.toString();
 	}
 

@@ -130,6 +130,7 @@ public class CertController extends BaseController {
 	@RequestMapping(value = "validateCspIsValid")
 	@ResponseBody
 	public String validateCspValid(String csp) throws JSONException {
+		log.debug("方法validateCspValid:start");
 		JSONObject json = new JSONObject();
 		try {
 			json.put("status", -1);
@@ -140,6 +141,7 @@ public class CertController extends BaseController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		log.debug("方法validateCspValid:end");
 		return json.toString();
 	}
 
@@ -526,6 +528,11 @@ public class CertController extends BaseController {
 	@ResponseBody
 	public String makeCertInstallFail(Long dealInfoId,  String certProvider,
 			String csr, String keySn) throws Exception {
+		log.debug("方法makeCertInstallFail:start");
+		log.debug("dealInfoId:"+dealInfoId);
+		log.debug("certProvider:"+certProvider);
+		log.debug("csr:"+csr);
+		log.debug("keySn:"+keySn);
 		JSONObject json = new JSONObject();
 		WorkDealInfo dealInfo = workDealInfoService.get(dealInfoId);
 		WorkCertInfo caCert = dealInfo.getWorkCertInfo();
@@ -557,6 +564,7 @@ public class CertController extends BaseController {
 		} else {
 			json.put("kmcvalid", 0);
 		}
+		log.debug("方法makeCertInstallFail:end");
 		return json.toString();
 	}
 	
