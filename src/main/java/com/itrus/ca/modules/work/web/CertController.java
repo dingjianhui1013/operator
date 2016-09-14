@@ -546,7 +546,7 @@ public class CertController extends BaseController {
 			}
 		}
 		caCert.setProvider(certProvider);
-		caCert.setReqBuf(csr);
+		/*caCert.setReqBuf(csr);*/
 		workCertInfoService.save(caCert);
 		
 		SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
