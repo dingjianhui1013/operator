@@ -55,8 +55,9 @@
 		$("#make").hide();
 		
 		if(confirm('是否确认修复prev_id?')){
-			$("#returnJsonData").html("正在生成...........");
-			var url = "test/fixPreId?prevIdCount="+$("#prevIdCount").val()+"&prevIdAppid="+$("#prevIdAppid").val()+"&_="+new Date().getTime();
+			$("#returnJsonData").html("正在修复...........");
+			var url = "test/fixPreId?prevIdCount="+$("#prevIdCount").val()+"&prevIdAppid="+$("#prevIdAppid").val()
+					+"&prevFirstCertSN="+$("#prevFirstCertSN").val()+"&_="+new Date().getTime();
 			$.getJSON(url,function(data){
 				$("#make").show();
 				$("#returnJsonData").html(data.msg);
@@ -64,7 +65,22 @@
 		}else{
 			return false;
 		}
+	}
+	
+	function fixSVN(){
+		$("#make").hide();
 		
+		if(confirm('是否确认修复svn?')){
+			$("#returnJsonData").html("正在修复...........");
+			var url = "test/fixSVN?svnCount="+$("#svnCount").val()+"&svnAppid="+$("#svnAppid").val()
+					+"&_="+new Date().getTime();
+			$.getJSON(url,function(data){
+				$("#make").show();
+				$("#returnJsonData").html(data.msg);
+			});
+		}else{
+			return false;
+		}
 	}
 	
 	function makeUpdateData(){
@@ -101,6 +117,7 @@
 						<li><a href="#panel-489367" data-toggle="tab">更新业务</a></li>
 						<li><a href="#panel-4893681" data-toggle="tab">更新首张证书序列号</a></li>
 						<li><a href="#panel-4893682" data-toggle="tab">修复prev_id数据</a></li>
+						<li><a href="#panel-4893683" data-toggle="tab">修复svn数据</a></li>
 					</ul>
 					<div class="tab-content">
 						<div class="tab-pane active" id="panel-98562">
@@ -172,12 +189,36 @@
 										<br>
 									</div>
 									<div class="span12">
+										
+										<textarea id="prevFirstCertSN" rows="4" cols="150" class="txt"></textarea>&nbsp;可不填,指定首证书序列号,用来单条修复和测试,可以处理多条，用英文输入法的逗号分隔
+										<br/>
 										<input id="prevIdCount"/>&nbsp;修复记录数(填0为更新全部，数据多时不建议全部更新) 
 										<br/>
 										<input id="prevIdAppid"/>&nbsp;应用ID(指定应用ID，必填)
 										<br/><br/>
 										<button class="btn btn-warning" type="button"
 										onclick="fixPreid()"	 id="update">修复prev_id</button>
+										<br>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="tab-pane" id="panel-4893683">
+							<div class="container-fluid">
+								<div class="row-fluid">
+									<div class="span12">
+										<blockquote>
+											<p>修复prev_id</p>
+										</blockquote>
+										<br>
+									</div>
+									<div class="span12">
+										<input id="svnCount"/>&nbsp;修复记录数(填0为更新全部，数据多时不建议全部更新) 
+										<br/>
+										<input id="svnAppid"/>&nbsp;应用ID(指定应用ID，必填)
+										<br/><br/>
+										<button class="btn btn-warning" type="button"
+										onclick="fixSVN()"	 id="update">修复svn</button>
 										<br>
 									</div>
 								</div>
