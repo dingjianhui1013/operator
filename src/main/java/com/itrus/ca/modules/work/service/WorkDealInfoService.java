@@ -33,6 +33,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.hibernate.Query;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Order;
@@ -1141,16 +1142,15 @@ public class WorkDealInfoService extends BaseService {
 			sql.append(" and workcertin6_.notafter >= TO_DATE('"
 					+ DateUtils.formatDate(startTime, "yyyy-MM-dd 00:00:01")
 					+ "', 'yyyy-MM-dd hh24:mi:ss')");
-			
+
 		}
-		
-		if(endTime != null){
+
+		if (endTime != null) {
 			sql.append(" and workcertin6_.notafter <= TO_DATE ('"
 					+ DateUtils.formatDate(endTime, "yyyy-MM-dd 23:59:59")
 					+ "', 'yyyy-MM-dd hh24:mi:ss')");
 		}
-		
-		
+
 		if (workDealInfo.getWorkCompany() != null) {
 			if (workDealInfo.getWorkCompany().getId() != null) {
 				sql.append(" and workcompan2_.id="
@@ -3772,6 +3772,23 @@ public class WorkDealInfoService extends BaseService {
 						companyId);
 	}
 
+	public List<WorkDealInfo> findListAppId(Long appId) {
+		return workDealInfoDao.find("from WorkDealInfo where app_id=" + appId);
+	}
+
+	public String findSvnOne(String svn, Long appid) {
+		String sql = "select svn from work_deal_info where svn like '%" + svn
+				+ "%' and rownum=1 ";
+		if (appid != null && appid.longValue() > 0)
+			sql += " and APP_ID=" + appid;
+		sql += " order by svn desc";
+		List<String> lst = workDealInfoDao.findBySql(sql);
+
+		if (lst == null || lst.size() <= 0)
+			return null;
+		return lst.get(0);
+	}
+
 	@Transactional(readOnly = false)
 	public void save(WorkDealInfo workDealInfo) {
 		if (StringHelper.isNull(workDealInfo.getFirstCertSN())) {
@@ -4161,14 +4178,18 @@ public class WorkDealInfoService extends BaseService {
 				if (list.size() > 0) {
 					String oldSvn = list.get(0).getSvn();
 					num = Integer
-							.parseInt(oldSvn.substring(oldSvn.length() - 3)) + 1;
+							.parseInt(oldSvn.substring(oldSvn.length() - 6)) + 1;
 				}
 				String numStr = "";
 				if (num > 0 && num < 10) {
-					numStr = "000" + num;
+					numStr = "00000" + num;
 				} else if (num > 9 && num < 100) {
-					numStr = "00" + num;
+					numStr = "0000" + num;
 				} else if (num > 99 && num < 1000) {
+					numStr = "000" + num;
+				} else if (num > 999 && num < 10000) {
+					numStr = "00" + num;
+				} else if (num > 9999 && num < 100000) {
 					numStr = "0" + num;
 				} else {
 					numStr = "" + num;
@@ -4184,25 +4205,43 @@ public class WorkDealInfoService extends BaseService {
 		return svn;
 	}
 
+	@Transactional(readOnly = false)
+	public void setSvnToNull(Long appid) {
+		String sql = "update work_deal_info set svn=null where APP_ID=" + appid;
+		try {
+			workDealInfoDao.exeSql(sql);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 	public String getSVN(String officeName) {
+		return getSVN(officeName, null);
+	}
+
+	public String getSVN(String officeName, Long appid) {
 		Date date = new Date();
 		String svn = "";
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMM-");
 		try {
 			String timeSvn = "C-" + officeName + "-"
 					+ sdf.format(date).substring(2);
-			List<WorkDealInfo> list = findSvn("%" + timeSvn + "%");
+			String old = findSvnOne(timeSvn, appid);
 			int num = 1;
-			if (list.size() > 0) {
-				String oldSvn = list.get(0).getSvn();
-				num = Integer.parseInt(oldSvn.substring(oldSvn.length() - 3)) + 1;
+			if (!StringHelper.isNull(old)) {
+				String oldSvn = old;
+				num = Integer.parseInt(oldSvn.substring(oldSvn.length() - 6)) + 1;
 			}
 			String numStr = "";
 			if (num > 0 && num < 10) {
-				numStr = "000" + num;
+				numStr = "00000" + num;
 			} else if (num > 9 && num < 100) {
-				numStr = "00" + num;
+				numStr = "0000" + num;
 			} else if (num > 99 && num < 1000) {
+				numStr = "000" + num;
+			} else if (num > 999 && num < 10000) {
+				numStr = "00" + num;
+			} else if (num > 9999 && num < 100000) {
 				numStr = "0" + num;
 			} else {
 				numStr = "" + num;
@@ -4210,6 +4249,7 @@ public class WorkDealInfoService extends BaseService {
 			svn = timeSvn + numStr;
 		} catch (Exception e) {
 			// TODO: handle exception
+			e.printStackTrace();
 		}
 		return svn;
 	}
@@ -4491,6 +4531,13 @@ public class WorkDealInfoService extends BaseService {
 	}
 
 	@Transactional(readOnly = false)
+	public void modifySvn(Long id, String svn) {
+		String sql = "update work_deal_info set svn='" + svn + "' where id="
+				+ id;
+		workDealInfoDao.exeSql(sql);
+	}
+
+	@Transactional(readOnly = false)
 	public void processSinglePreid(String firstCertSN) {
 		List<WorkDealInfo> lst = findByFirstCertSN(firstCertSN);
 
@@ -4507,11 +4554,11 @@ public class WorkDealInfoService extends BaseService {
 		}
 
 		for (int i = 0; i < lst.size(); i++) {
-			WorkDealInfo pre = findPreByFirstCertSN(lst.get(i));
+			WorkDealInfo po = lst.get(i);
+			WorkDealInfo pre = findPreByFirstCertSN(po);
 			if (pre == null && i != (lst.size() - 1)) {
 				continue;
 			}
-			WorkDealInfo po = lst.get(i);
 			if (pre != null) {
 				po.setPrevId(pre.getId());
 			}
@@ -4526,7 +4573,7 @@ public class WorkDealInfoService extends BaseService {
 					+ po.getDelFlag() + "',prev_id=" + po.getPrevId()
 					+ " where id=" + po.getId();
 			workDealInfoDao.exeSql(sql);
-			log.error("变更prev_id已处理,首证书序列号:"+po.getFirstCertSN());
+			log.error("变更prev_id已处理,首证书序列号:" + po.getFirstCertSN());
 		}
 	}
 
@@ -4535,10 +4582,6 @@ public class WorkDealInfoService extends BaseService {
 		for (String e : all) {
 			// 根据首张证书序列判定是否需要处理workDealInfo表内的preId字段
 			if (StringHelper.isNull(e))
-				continue;
-			// 只1条记录也不处理
-			int c = getCountByFirstCertSN(e);
-			if (c <= 1)
 				continue;
 			// 处理每个唯一证书序列号
 			processSinglePreid(e);
