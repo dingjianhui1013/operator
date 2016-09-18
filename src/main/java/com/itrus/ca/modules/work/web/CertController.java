@@ -561,6 +561,10 @@ public class CertController extends BaseController {
 		json.put("subject", caCert.getSubjectDn());// 主题
 		if (caCert.getCertSignBufKmc() != null) {
 			json.put("kmcvalid", 1);
+			json.put("certKmcBuf", caCert.getCertSignBufKmc());
+			json.put("certKmcRep1", caCert.getCertKmcRep1());
+			json.put("certKmcRep2", caCert.getCertKmcRep2());
+			json.put("installMode", caCert.getInstallMode());
 		} else {
 			json.put("kmcvalid", 0);
 		}
