@@ -18,6 +18,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -287,9 +288,30 @@ public class WorkDealInfoExpViewService extends BaseService {
 			dc.add(Restrictions.or(Restrictions.eq("dealInfoStatus",
 					WorkDealInfoStatus.STATUS_CERT_REVOKE)));
 		} else {
-			dc.add(Restrictions.or(Restrictions.eq("dealInfoStatus",
+			/*dc.add(Restrictions.or(Restrictions.eq("dealInfoStatus",
 					WorkDealInfoStatus.STATUS_CERT_OBTAINED), Restrictions.eq(
-					"dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_REVOKE)));
+					"dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_REVOKE)));*/
+			
+			
+			Disjunction dis1 = Restrictions.disjunction();  
+            
+			dis1.add(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED));  
+			dis1.add(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_REVOKE));
+            
+			Disjunction dis2 = Restrictions.disjunction();  
+            
+			dis2.add(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED));  
+			dis2.add(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_REVOKE));
+			dis2.add(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_WAIT));
+              
+
+			
+			
+			dc.add(Restrictions.or(
+					Restrictions.and(Restrictions.ne("dealInfoType", WorkDealInfoType.TYPE_UPDATE_CERT), dis1),
+					Restrictions.and(Restrictions.eq("dealInfoType", WorkDealInfoType.TYPE_UPDATE_CERT), dis2)));
+			
+			
 		}
 
 		Page<WorkDealInfoExpView> lst = new Page<WorkDealInfoExpView>(request,
