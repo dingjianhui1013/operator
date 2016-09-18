@@ -2939,7 +2939,7 @@ public class WorkDealInfoService extends BaseService {
 
 		String sql = "select count(FIRST_CERT_SN) CT from (";
 		sql = sql
-				+ "select count(*) c,FIRST_CERT_SN from WORK_DEAL_INFO where PREV_ID is null";
+				+ "select count(*) c,FIRST_CERT_SN from WORK_DEAL_INFO where PREV_ID is null and FIRST_CERT_SN is not null ";
 		if (appId != null && appId.longValue() > 0) {
 			sql = sql + " and APP_ID=" + appId;
 		}
@@ -2964,7 +2964,7 @@ public class WorkDealInfoService extends BaseService {
 	public List<String> findFirstCertSnByAppId(Integer appId, Integer count) {
 		String sql = "select distinct FIRST_CERT_SN,a.c from (";
 		sql = sql
-				+ "select count(*) c,FIRST_CERT_SN from WORK_DEAL_INFO where PREV_ID is null";
+				+ "select count(*) c,FIRST_CERT_SN from WORK_DEAL_INFO where PREV_ID is null and FIRST_CERT_SN is not null ";
 		if (appId != null && appId.longValue() > 0) {
 			sql = sql + " and APP_ID=" + appId;
 		}
@@ -4266,12 +4266,54 @@ public class WorkDealInfoService extends BaseService {
 		try {
 			workDealInfoDao.exeSql(sql);
 		} catch (Exception e) {
-			e.printStackTrace();
+		}
+	}
+	
+	@Transactional(readOnly = false)
+	public void setPrevIdToNull(Integer appid) {
+		String sql = "update work_deal_info set prev_id=null where APP_ID=" + appid;
+		try {
+			workDealInfoDao.exeSql(sql);
+		} catch (Exception e) {
 		}
 	}
 
 	public String getSVN(String officeName) {
 		return getSVN(officeName, null);
+	}
+
+	public String getSVN(String officeName, Long appid, int num) {
+		Date date = new Date();
+		String svn = "";
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMM-");
+		try {
+			String timeSvn = "C-" + officeName + "-"
+					+ sdf.format(date).substring(2);
+			String old = findSvnOne(timeSvn, appid);
+			if (!StringHelper.isNull(old)) {
+				String oldSvn = old;
+				num = Integer.parseInt(oldSvn.substring(oldSvn.length() - 6)) + 1;
+			}
+			String numStr = "";
+			if (num > 0 && num < 10) {
+				numStr = "00000" + num;
+			} else if (num > 9 && num < 100) {
+				numStr = "0000" + num;
+			} else if (num > 99 && num < 1000) {
+				numStr = "000" + num;
+			} else if (num > 999 && num < 10000) {
+				numStr = "00" + num;
+			} else if (num > 9999 && num < 100000) {
+				numStr = "0" + num;
+			} else {
+				numStr = "" + num;
+			}
+			svn = timeSvn + numStr;
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		return svn;
 	}
 
 	public String getSVN(String officeName, Long appid) {
