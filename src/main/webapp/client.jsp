@@ -213,8 +213,6 @@
 										<br>
 									</div>
 									<div class="span12">
-										<input id="svnCount"/>&nbsp;修复记录数(填0为更新全部，数据多时不建议全部更新) 
-										<br/>
 										<input id="svnAppid"/>&nbsp;应用ID(指定应用ID，必填)
 										<br/><br/>
 										<button class="btn btn-warning" type="button"
