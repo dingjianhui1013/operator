@@ -959,7 +959,9 @@ public class ClientController {
 
 		previdRunning = true;
 		// 按需要的查出对应数据
-		Integer c = workDealInfoService.findPrevIdIsNull(prevIdAppid);
+		Integer c = workDealInfoService.findPrevIdIsNull(prevIdAppid)
+				+ workDealInfoService.getNeedFixPrevIdCount(prevIdAppid
+						.toString());
 		List<String> lst = workDealInfoService.findFirstCertSnByAppId(
 				prevIdAppid, prevIdCount);
 
@@ -970,10 +972,15 @@ public class ClientController {
 		} else {
 			lst = new ArrayList<String>();
 			String[] flst = StringHelper.splitStr(prevFirstCertSN, ",");
-			c = flst.length;
 			for (String e : flst) {
 				lst.add(e);
 			}
+		}
+
+		List<String> needFixLst = workDealInfoService.getNeedFixPrevId(
+				prevIdAppid.toString(), prevIdCount);
+		if (needFixLst != null && needFixLst.size() > 0) {
+			lst.addAll(needFixLst);
 		}
 
 		log.error("开始处理,app_id:" + prevIdAppid + ",prev_id为空记录:" + c
