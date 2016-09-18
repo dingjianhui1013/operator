@@ -2993,6 +2993,61 @@ public class WorkDealInfoService extends BaseService {
 		return res;
 	}
 
+	public Integer getNeedFixPrevIdCount(String appid) {
+		List<Map> m = null;
+		String sql = getFixPrevIdSql(appid, true);
+		try {
+			m = workDealInfoDao.findBySQLListMap(sql, 0, 0);
+		} catch (IllegalAccessException | IllegalArgumentException
+				| InvocationTargetException | ClassNotFoundException
+				| InstantiationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		if (m == null || m.size() <= 0)
+			return 0;
+		return new Integer(m.get(0).get("CT").toString());
+	}
+
+	public List<String> getNeedFixPrevId(String appid, Integer count) {
+		String sql = getFixPrevIdSql(appid, false);
+		if (count != null && count.intValue() > 0) {
+			sql = sql + " and rownum<=" + count;
+		}
+		List<Map> lst = null;
+		List<String> res = new ArrayList<String>();
+		try {
+			lst = workDealInfoDao.findBySQLListMap(sql, 0, 0);
+			for (Map e : lst) {
+				if (e.get("FIRST_CERT_SN") == null
+						|| e.get("FIRST_CERT_SN").toString().trim().length() <= 0)
+					continue;
+				res.add(e.get("FIRST_CERT_SN").toString());
+			}
+		} catch (IllegalAccessException | IllegalArgumentException
+				| InvocationTargetException | ClassNotFoundException
+				| InstantiationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return res;
+	}
+
+	private String getFixPrevIdSql(String appid, boolean queryCount) {
+		String sql = "select ";
+		sql = queryCount ? sql + " count(*) CT" : sql
+				+ " id,prev_id,first_cert_sn,SVN,DEL_FLAG ";
+		sql += " from WORK_DEAL_INFO where  ";
+		sql += " FIRST_CERT_SN in( ";
+		sql += " select first_cert_sn from ( ";
+		sql += " select count(*) c,FIRST_CERT_SN from WORK_DEAL_INFO ";
+		sql = sql + " where APP_ID= " + appid;
+		sql += " group by FIRST_CERT_SN order by c desc ";
+		sql += " ) where c=1  ";
+		sql += " ) and PREV_ID is not null ";
+		return sql;
+	}
+
 	// 根据应用和时间，制作证书的集合
 	public List<WorkDealInfo> findByAppIdDate(Long appId, Date date) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
