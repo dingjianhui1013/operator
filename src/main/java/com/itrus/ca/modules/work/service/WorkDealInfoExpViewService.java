@@ -308,7 +308,7 @@ public class WorkDealInfoExpViewService extends BaseService {
 			
 			
 			dc.add(Restrictions.or(
-					Restrictions.and(Restrictions.ne("dealInfoType", WorkDealInfoType.TYPE_UPDATE_CERT), dis1),
+					Restrictions.and(Restrictions.or(Restrictions.ne("dealInfoType", WorkDealInfoType.TYPE_UPDATE_CERT), Restrictions.isNull("dealInfoType")), dis1),
 					Restrictions.and(Restrictions.eq("dealInfoType", WorkDealInfoType.TYPE_UPDATE_CERT), dis2)));
 			
 			
