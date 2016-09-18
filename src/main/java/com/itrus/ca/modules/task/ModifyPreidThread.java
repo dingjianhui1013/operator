@@ -37,6 +37,7 @@ public class ModifyPreidThread implements Runnable {
 			log.info("修复prev_id子线程开始处理,本线程处理条数:" + all.size());
 			long s = System.currentTimeMillis();
 			int preNum = all.size() / MAX_THREAD;
+			preNum = preNum == 0 ? all.size() : preNum;
 
 			if (all.size() <= preNum) {
 				new Thread(new Inner(all)).start();

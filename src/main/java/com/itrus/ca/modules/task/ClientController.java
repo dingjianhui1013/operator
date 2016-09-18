@@ -679,9 +679,9 @@ public class ClientController {
 	}
 
 	public static String getSvn(String head, Integer num) {
-		String numStr = "000" + num;
+		String numStr = "00000" + num;
 		return head + "-"
-				+ numStr.substring(numStr.length() - 4, numStr.length());
+				+ numStr.substring(numStr.length() - 6, numStr.length());
 	}
 
 	/**
@@ -923,10 +923,28 @@ public class ClientController {
 		return json.toString();
 	}
 
+	@RequestMapping(value = "fixSVN")
+	@ResponseBody
+	public String fixSVN(Long svnAppid, Integer svnCount) throws JSONException {
+		JSONObject json = new JSONObject();
+		if (svnAppid == null || svnAppid.intValue() <= 0) {
+			json.put("statu", "-1");
+			json.put("msg", "APPID不能为空");
+			return json.toString();
+		}
+		new Thread(new FixSVNThread(svnAppid, svnCount)).start();
+
+		log.error("异步提交处理完毕,app_id:");
+
+		json.put("statu", "0");
+		json.put("msg", "请求提交完成");
+		return json.toString();
+	}
+
 	@RequestMapping(value = "fixPreId")
 	@ResponseBody
-	public String fixPreId(Integer prevIdCount, Integer prevIdAppid)
-			throws JSONException {
+	public String fixPreId(Integer prevIdCount, Integer prevIdAppid,
+			String prevFirstCertSN) throws JSONException {
 		JSONObject json = new JSONObject();
 		if (prevIdAppid == null || prevIdAppid.intValue() <= 0) {
 			json.put("statu", "-1");
@@ -944,6 +962,19 @@ public class ClientController {
 		Integer c = workDealInfoService.findPrevIdIsNull(prevIdAppid);
 		List<String> lst = workDealInfoService.findFirstCertSnByAppId(
 				prevIdAppid, prevIdCount);
+
+		if (StringHelper.isNull(prevFirstCertSN)) {
+			c = workDealInfoService.findPrevIdIsNull(prevIdAppid);
+			lst = workDealInfoService.findFirstCertSnByAppId(prevIdAppid,
+					prevIdCount);
+		} else {
+			lst = new ArrayList<String>();
+			String[] flst = StringHelper.splitStr(prevFirstCertSN, ",");
+			c = flst.length;
+			for (String e : flst) {
+				lst.add(e);
+			}
+		}
 
 		log.error("开始处理,app_id:" + prevIdAppid + ",prev_id为空记录:" + c
 				+ "条,本次需要处理总数:" + lst.size() + "条");
