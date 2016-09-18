@@ -208,7 +208,7 @@
 								<div class="row-fluid">
 									<div class="span12">
 										<blockquote>
-											<p>修复prev_id</p>
+											<p>修复SVN</p>
 										</blockquote>
 										<br>
 									</div>
