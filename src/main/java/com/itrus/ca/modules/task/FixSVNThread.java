@@ -22,7 +22,7 @@ public class FixSVNThread implements Runnable {
 
 	private List<WorkDealInfo> all;
 
-	private static volatile long num = 0;
+	private static volatile Integer num = 1;
 
 	private static final int MAX_THREAD = 30;
 
@@ -45,7 +45,7 @@ public class FixSVNThread implements Runnable {
 		try {
 			workDealInfoService.setSvnToNull(appid);
 		} catch (Exception e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 		int preNum = all.size() / MAX_THREAD;
 		preNum = preNum == 0 ? all.size() : preNum;
@@ -75,34 +75,34 @@ public class FixSVNThread implements Runnable {
 			this.l = lst;
 		}
 
-		public String getSvn(String head, Integer num) {
+		public String getSvn(String head) {
 			String numStr = "00000" + num;
 			return head + "-"
 					+ numStr.substring(numStr.length() - 6, numStr.length());
 		}
 
 		public void run() {
-			try {
-				for (WorkDealInfo e : l) {
+
+			for (WorkDealInfo e : l) {
+				try {
 					Office office = officeService.get(e.getOfficeId());
 					String firstSvn = workDealInfoService.getSVN(
-							office.getName(), appid);
-					Integer num = Integer.valueOf(firstSvn.split("-")[3]);
+							office.getName(), appid,num);
 					String head = firstSvn.replace(
 							"-" + firstSvn.split("-")[3], "");
 
-					workDealInfoService.modifySvn(e.getId(), getSvn(head, num));
+					workDealInfoService.modifySvn(e.getId(), getSvn(head));
 					System.out.println("firstSvn===============" + firstSvn
 							+ " | " + e.getId() + " | " + e.getFirstCertSN());
-
+				} catch (Exception ex) {
+					// 事务问题，可以不显示
+					ex.printStackTrace();
+					log.error(StringHelper.getStackInfo(ex));
+					continue;
 				}
 
-			} catch (IllegalStateException e) {
-				// 事务问题，可以不显示
-			} catch (Exception e) {
-				e.printStackTrace();
-				log.error(StringHelper.getStackInfo(e));
 			}
+
 		}
 	}
 }
