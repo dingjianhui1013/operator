@@ -966,7 +966,6 @@ public class ClientController {
 				prevIdAppid, prevIdCount);
 
 		if (StringHelper.isNull(prevFirstCertSN)) {
-			c = workDealInfoService.findPrevIdIsNull(prevIdAppid);
 			lst = workDealInfoService.findFirstCertSnByAppId(prevIdAppid,
 					prevIdCount);
 		} else {
