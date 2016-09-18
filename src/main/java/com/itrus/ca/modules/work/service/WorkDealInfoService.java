@@ -3846,6 +3846,10 @@ public class WorkDealInfoService extends BaseService {
 
 	@Transactional(readOnly = false)
 	public void save(WorkDealInfo workDealInfo) {
+		log.error("save dealInfo:[firstCertSN:" + workDealInfo.getFirstCertSN()
+				+ "|prevId:" + workDealInfo.getPrevId() + "|certSN:"
+				+ workDealInfo.getCertSn() + "|id:" + workDealInfo.getId()
+				+ "]");
 		if (StringHelper.isNull(workDealInfo.getFirstCertSN())) {
 			// 如果是首条
 			if (workDealInfo.getPrevId() == null
