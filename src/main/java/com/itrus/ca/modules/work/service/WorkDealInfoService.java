@@ -4268,10 +4268,11 @@ public class WorkDealInfoService extends BaseService {
 		} catch (Exception e) {
 		}
 	}
-	
+
 	@Transactional(readOnly = false)
 	public void setPrevIdToNull(Integer appid) {
-		String sql = "update work_deal_info set prev_id=null where APP_ID=" + appid;
+		String sql = "update work_deal_info set prev_id=null where APP_ID="
+				+ appid;
 		try {
 			workDealInfoDao.exeSql(sql);
 		} catch (Exception e) {
@@ -4282,7 +4283,7 @@ public class WorkDealInfoService extends BaseService {
 		return getSVN(officeName, null);
 	}
 
-	public String getSVN(String officeName, Long appid, int num) {
+	public synchronized String getSVN(String officeName, Long appid, int num) {
 		Date date = new Date();
 		String svn = "";
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMM-");
