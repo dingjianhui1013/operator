@@ -22,7 +22,7 @@ public class FixSVNThread implements Runnable {
 
 	private List<WorkDealInfo> all;
 
-	private static volatile Integer num = 1;
+	private static volatile Integer num = 0;
 
 	private static final int MAX_THREAD = 30;
 
@@ -45,7 +45,7 @@ public class FixSVNThread implements Runnable {
 		try {
 			workDealInfoService.setSvnToNull(appid);
 		} catch (Exception e) {
-			//e.printStackTrace();
+			// e.printStackTrace();
 		}
 		int preNum = all.size() / MAX_THREAD;
 		preNum = preNum == 0 ? all.size() : preNum;
@@ -81,23 +81,20 @@ public class FixSVNThread implements Runnable {
 					+ numStr.substring(numStr.length() - 6, numStr.length());
 		}
 
-		public void run() {
+		public synchronized void run() {
 
 			for (WorkDealInfo e : l) {
 				try {
 					Office office = officeService.get(e.getOfficeId());
 					String firstSvn = workDealInfoService.getSVN(
-							office.getName(), appid,num);
+							office.getName(), appid, num);
 					String head = firstSvn.replace(
 							"-" + firstSvn.split("-")[3], "");
-
+					FixSVNThread.num += 1;
 					workDealInfoService.modifySvn(e.getId(), getSvn(head));
-					System.out.println("firstSvn===============" + firstSvn
-							+ " | " + e.getId() + " | " + e.getFirstCertSN());
+
 				} catch (Exception ex) {
 					// 事务问题，可以不显示
-					ex.printStackTrace();
-					log.error(StringHelper.getStackInfo(ex));
 					continue;
 				}
 
