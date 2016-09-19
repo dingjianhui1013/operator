@@ -8113,7 +8113,7 @@ public class WorkDealInfoService extends BaseService {
 				Object tempid = e.get("PREV_ID");
 				if (tempid == null) {
 					hasFirst = true;
-					first_cert_sn = e.get("CERT_SN") == null ? "0" : e.get(
+					first_cert_sn = e.get("CERT_SN") == null ? null : e.get(
 							"CERT_SN").toString();
 					return first_cert_sn;
 				}
