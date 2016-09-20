@@ -83,6 +83,38 @@
 		}
 	}
 	
+	function fixSVN(){
+		$("#make").hide();
+		
+		if(confirm('是否确认修复svn?')){
+			$("#returnJsonData").html("正在修复...........");
+			var url = "test/fixSVN?svnCount=0&svnAppid="+$("#svnAppid").val()
+					+"&_="+new Date().getTime();
+			$.getJSON(url,function(data){
+				$("#make").show();
+				$("#returnJsonData").html(data.msg);
+			});
+		}else{
+			return false;
+		}
+	}
+	
+	function fixFirstCertSN(){
+		$("#make").hide();
+		
+		if(confirm('是否确认修复错位的firstCertSN?')){
+			$("#returnJsonData").html("正在修复...........");
+			var url = "test/fixFirstCertSN?fixFirstCertSnAppid="+$("#fixFirstCertSnAppid").val()
+					+"&_="+new Date().getTime();
+			$.getJSON(url,function(data){
+				$("#make").show();
+				$("#returnJsonData").html(data.msg);
+			});
+		}else{
+			return false;
+		}
+	}
+	
 	function makeUpdateData(){
 		$("#update").hide();
 		var autoPass = 0;
@@ -118,6 +150,7 @@
 						<li><a href="#panel-4893681" data-toggle="tab">更新首张证书序列号</a></li>
 						<li><a href="#panel-4893682" data-toggle="tab">重新生成prev_id数据</a></li>
 						<li><a href="#panel-4893683" data-toggle="tab">修复svn数据</a></li>
+						<li><a href="#panel-4893684" data-toggle="tab">修复错位的firstCertSN数据</a></li>
 					</ul>
 					<div class="tab-content">
 						<div class="tab-pane active" id="panel-98562">
@@ -217,6 +250,25 @@
 										<br/><br/>
 										<button class="btn btn-warning" type="button"
 										onclick="fixSVN()"	 id="update">修复svn</button>
+										<br>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="tab-pane" id="panel-4893684">
+							<div class="container-fluid">
+								<div class="row-fluid">
+									<div class="span12">
+										<blockquote>
+											<p>修复错位的firstCertSN</p>
+										</blockquote>
+										<br>
+									</div>
+									<div class="span12">
+										<input id="fixFirstCertSnAppid"/>&nbsp;应用ID(指定应用ID，必填)
+										<br/><br/>
+										<button class="btn btn-warning" type="button"
+										onclick="fixFirstCertSN()"	 id="update">修复错位的firstCertSN</button>
 										<br>
 									</div>
 								</div>
