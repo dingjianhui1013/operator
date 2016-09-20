@@ -4236,8 +4236,14 @@ public class WorkDealInfoService extends BaseService {
 				int num = 1;
 				if (list.size() > 0) {
 					String oldSvn = list.get(0).getSvn();
-					num = Integer
-							.parseInt(oldSvn.substring(oldSvn.length() - 6)) + 1;
+
+					String[] elm = StringHelper.splitStr(oldSvn, "-");
+					if (elm == null || elm.length < 4
+							|| !StringHelper.isDigit(elm[3])) {
+						num = 1;
+					} else {
+						num = new Integer(elm[3]) + 1;
+					}
 				}
 				String numStr = "";
 				if (num > 0 && num < 10) {
@@ -4256,6 +4262,7 @@ public class WorkDealInfoService extends BaseService {
 				svn = timeSvn + numStr;
 			} catch (Exception e) {
 				// TODO: handle exception
+				e.printStackTrace();
 			}
 		} else {
 			String searchText = "O-客户端-" + sdf.format(new Date());
@@ -4297,7 +4304,13 @@ public class WorkDealInfoService extends BaseService {
 			String old = findSvnOne(timeSvn, appid);
 			if (!StringHelper.isNull(old)) {
 				String oldSvn = old;
-				num = Integer.parseInt(oldSvn.substring(oldSvn.length() - 6)) + 1;
+				String[] elm = StringHelper.splitStr(oldSvn, "-");
+				if (elm == null || elm.length < 4
+						|| !StringHelper.isDigit(elm[3])) {
+					num = 1;
+				} else {
+					num = new Integer(elm[3]) + 1;
+				}
 			}
 			String numStr = "";
 			if (num > 0 && num < 10) {
@@ -4332,7 +4345,13 @@ public class WorkDealInfoService extends BaseService {
 			int num = 1;
 			if (!StringHelper.isNull(old)) {
 				String oldSvn = old;
-				num = Integer.parseInt(oldSvn.substring(oldSvn.length() - 6)) + 1;
+				String[] elm = StringHelper.splitStr(oldSvn, "-");
+				if (elm == null || elm.length < 4
+						|| !StringHelper.isDigit(elm[3])) {
+					num = 1;
+				} else {
+					num = new Integer(elm[3]) + 1;
+				}
 			}
 			String numStr = "";
 			if (num > 0 && num < 10) {
