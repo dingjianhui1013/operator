@@ -3673,6 +3673,19 @@ public class WorkDealInfoService extends BaseService {
 		return workDealInfoDao.find(dc);
 	}
 
+	public WorkDealInfo findByCertSnOne(String certSn) {
+		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
+		if (certSn != null) {
+			dc.add(Restrictions.eq("certSn", certSn));
+		}
+		dc.addOrder(Order.desc("id"));
+
+		List<WorkDealInfo> lst = workDealInfoDao.find(dc);
+		if (lst == null || lst.size() <= 0)
+			return null;
+		return lst.get(0);
+	}
+
 	/**
 	 * 不考虑删除的查询
 	 * 
@@ -4656,6 +4669,17 @@ public class WorkDealInfoService extends BaseService {
 		String sql = "update work_deal_info set svn='" + svn + "' where id="
 				+ id;
 		workDealInfoDao.exeSql(sql);
+	}
+
+	@Transactional(readOnly = false)
+	public void modifyFirstCertSN(Long id, String firstCertSN) {
+		try {
+			String sql = "update work_deal_info set FIRST_CERT_SN='"
+					+ firstCertSN + "' where id=" + id;
+			workDealInfoDao.exeSql(sql);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Transactional(readOnly = false)
@@ -8305,4 +8329,101 @@ public class WorkDealInfoService extends BaseService {
 
 	}
 
+	/**
+	 * 修复指定的first_cert_sn错乱的记录<br>
+	 * 逻辑为根据传入的first_cert_sn，去查对应的cert_sn记录(这记录应该是一条业务链)<br>
+	 * 更新错位的first_cert_sn，然后将业务链重新串一遍<br>
+	 * 
+	 * @param lst
+	 */
+	@Transactional(readOnly = false)
+	public void fixFirstCertSNByError(List<String> lst) {
+		for (String e : lst) {
+			WorkDealInfo l = findByCertSnOne(e);
+			if (l == null || l.getPrevId() == null)
+				continue;
+			String firstCertSN = l.getFirstCertSN();
+			try {
+				// 查上一条
+				List<WorkDealInfo> self = findByFirstCertSN(e);
+				if (self == null || self.size() <= 0)
+					continue;
+				// 更新错误的first_cert_sn
+				modifyFirstCertSN(self.get(0).getId(), firstCertSN);
+				// 重新串业务
+				processSinglePreid(firstCertSN);
+			} catch (Exception ex) {
+				// 事务问题，可忽略
+				ex.printStackTrace();
+				continue;
+			}
+		}
+	}
+
+	/**
+	 * 找出一个指定应用下需要修复的数据
+	 * 
+	 * @param appid
+	 * @return List<WorkDealInfo>
+	 */
+	public List<WorkDealInfo> getNeedFixFirstCertSN(String appid) {
+		String sql = "select ID,PREV_ID,DEL_FLAG,CERT_SN,CREATE_DATE,FIRST_CERT_SN from WORK_DEAL_INFO where CERT_SN in (";
+		sql += " select first_cert_sn from WORK_DEAL_INFO where ";
+		sql += " FIRST_CERT_SN in(";
+		sql += " select first_cert_sn from (";
+		sql = sql
+				+ " select count(*) c,FIRST_CERT_SN from WORK_DEAL_INFO where APP_ID="
+				+ appid;
+		sql += " group by FIRST_CERT_SN order by c desc";
+		sql += " ) where c=1 ";
+		sql += ")";
+		sql += ") and PREV_ID is not null";
+
+		try {
+			List<WorkDealInfo> res = new ArrayList<WorkDealInfo>();
+			List<Map> lst = workDealInfoDao.findBySQLListMap(sql, 0, 0);
+
+			if (lst == null || lst.size() <= 0)
+				return null;
+
+			for (Map e : lst) {
+				WorkDealInfo po = new WorkDealInfo();
+				po.setId(new Long(e.get("ID").toString()));
+				po.setPrevId(new Long(e.get("PREV_ID").toString()));
+				po.setCertSn(e.get("CERT_SN").toString());
+				po.setFirstCertSN(e.get("FIRST_CERT_SN").toString());
+				res.add(po);
+			}
+			return res;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public List<String> getNeedFixFirstCertSNLst(String appid) {
+		String sql = "select first_cert_sn from (";
+		sql = sql
+				+ " select count(*) c,FIRST_CERT_SN from WORK_DEAL_INFO where APP_ID="
+				+ appid;
+		sql += " group by FIRST_CERT_SN order by c desc";
+		sql += " ) where c=1 ";
+
+		try {
+			List<String> res = new ArrayList<String>();
+			List<Map> lst = workDealInfoDao.findBySQLListMap(sql, 0, 0);
+
+			if (lst == null || lst.size() <= 0)
+				return null;
+
+			for (Map e : lst) {
+				res.add(e.get("FIRST_CERT_SN") == null ? null : e.get(
+						"FIRST_CERT_SN").toString());
+			}
+			return res;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 }

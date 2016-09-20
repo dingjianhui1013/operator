@@ -941,6 +941,25 @@ public class ClientController {
 		return json.toString();
 	}
 
+	@RequestMapping(value = "fixFirstCertSN")
+	@ResponseBody
+	public String fixFirstCertSN(String fixFirstCertSnAppid)
+			throws JSONException {
+		JSONObject json = new JSONObject();
+		if (StringHelper.isNull(fixFirstCertSnAppid)) {
+			json.put("statu", "-1");
+			json.put("msg", "APPID不能为空");
+			return json.toString();
+		}
+		List<String> lst = workDealInfoService
+				.getNeedFixFirstCertSNLst(fixFirstCertSnAppid);
+		log.error("开始处理,app_id:" + fixFirstCertSnAppid + ",first_cert_sn错乱的记录");
+
+		new Thread(new FixFirstCertSNThread(lst)).start();
+
+		return json.toString();
+	}
+
 	@RequestMapping(value = "fixPreId")
 	@ResponseBody
 	public String fixPreId(Integer prevIdCount, Integer prevIdAppid,
