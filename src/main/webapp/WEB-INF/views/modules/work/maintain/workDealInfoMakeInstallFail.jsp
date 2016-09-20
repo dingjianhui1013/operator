@@ -148,7 +148,9 @@
 							try {
 								$("#sort").html(data.sort);
 								var install_result = DoInstallCert(data);
-								alert(istall_result);
+
+								alert(install_result);
+
 								if (install_result) {
 									t = 1;
 									top.$.jBox.tip("安装证书成功!");
