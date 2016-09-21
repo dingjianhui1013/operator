@@ -4757,7 +4757,7 @@ public class WorkDealInfoService extends BaseService {
 		//
 		String temp = firstCertSN;
 		String f = firstCertSN.substring(0, 1);
-		Integer first = 0;
+		Integer first = 100;
 		if(StringHelper.isDigit(f)){
 			first = new Integer(firstCertSN.substring(0, 1));
 		}
