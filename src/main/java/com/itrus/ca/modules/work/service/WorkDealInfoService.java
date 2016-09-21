@@ -4692,7 +4692,7 @@ public class WorkDealInfoService extends BaseService {
 			po.setDelFlag("0");
 			// workDealInfoDao.save(po);
 
-			String sql = "update work_deal_info set DEL_FLAG='0',PREV_ID=null where id="
+			String sql = "update work_deal_info set DEL_FLAG='0',PREV_ID=null,DEAL_INFO_TYPE=0 where id="
 					+ po.getId();
 			workDealInfoDao.exeSql(sql);
 			return;
@@ -4748,18 +4748,17 @@ public class WorkDealInfoService extends BaseService {
 	}
 
 	/**
-	 * 43位补零处理
+	 * 补零处理,如果是0-7开头，不补0，从8到F开头，补两个0
 	 * 
 	 * @param firstCertSN
 	 * @return String
 	 */
 	private String zeroProcess(String firstCertSN) {
-		int len = 42 - firstCertSN.length();
+		//
 		String temp = firstCertSN;
-		if (len > 0) {
-			for (int i = 0; i < len; i++) {
-				temp = "0" + temp;
-			}
+		Integer first = new Integer(firstCertSN.substring(0, 1));
+		if (first.intValue() >= 8) {
+			temp = "00" + firstCertSN;
 		}
 		return temp;
 	}
