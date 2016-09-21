@@ -4698,6 +4698,25 @@ public class WorkDealInfoService extends BaseService {
 			return;
 		}
 
+		// 如果是首条,检查业务类型，如果不是新增则改为新增
+		WorkDealInfo p = lst.get(lst.size() - 1);
+		if (p.getCertSn().equals(p.getFirstCertSN())) {
+			if (p.getDealInfoType() != null
+					&& p.getDealInfoType().intValue() != 0) {
+				String update = "update work_deal_info set DEAL_INFO_TYPE=0 where id="
+						+ p.getId();
+				try {
+					workDealInfoDao.exeSql(update);
+				} catch (Exception ex) {
+				}
+				log.error("首证书业务类型已处理为新增,首证书序列号:" + p.getFirstCertSN()
+						+ " | id:" + p.getId());
+			}
+		} else {
+			log.error("业务链首条序列号和首证书序列号不符,首证书序列号:" + p.getFirstCertSN()
+					+ " | id:" + p.getId());
+		}
+
 		for (int i = 0; i < lst.size(); i++) {
 			WorkDealInfo po = lst.get(i);
 			WorkDealInfo pre = findPreByFirstCertSN(po);
@@ -4717,8 +4736,13 @@ public class WorkDealInfoService extends BaseService {
 			String sql = "update work_deal_info set DEL_FLAG='"
 					+ po.getDelFlag() + "',prev_id=" + po.getPrevId()
 					+ " where id=" + po.getId();
-			workDealInfoDao.exeSql(sql);
+			try {
+				workDealInfoDao.exeSql(sql);
+			} catch (Exception ex) {
+
+			}
 			log.error("变更prev_id已处理,首证书序列号:" + po.getFirstCertSN());
+
 		}
 	}
 
