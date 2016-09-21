@@ -4756,7 +4756,11 @@ public class WorkDealInfoService extends BaseService {
 	private String zeroProcess(String firstCertSN) {
 		//
 		String temp = firstCertSN;
-		Integer first = new Integer(firstCertSN.substring(0, 1));
+		String f = firstCertSN.substring(0, 1);
+		Integer first = 0;
+		if(StringHelper.isDigit(f)){
+			first = new Integer(firstCertSN.substring(0, 1));
+		}
 		if (first.intValue() >= 8) {
 			temp = "00" + firstCertSN;
 		}
