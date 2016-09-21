@@ -980,9 +980,7 @@ public class ClientController {
 
 		// 业务数据的prev_id置空
 		try {
-			if (prevIdAppid.intValue() <= 0) {
-				workDealInfoService.setPrevIdToNull(prevIdAppid);
-			}
+			workDealInfoService.setPrevIdToNull(prevIdAppid);
 		} catch (Exception e) {
 		}
 		// 按需要的查出对应数据
