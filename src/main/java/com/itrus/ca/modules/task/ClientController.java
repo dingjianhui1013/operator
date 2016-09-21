@@ -979,10 +979,13 @@ public class ClientController {
 		previdRunning = true;
 
 		// 业务数据的prev_id置空
-		try {
-			workDealInfoService.setPrevIdToNull(prevIdAppid);
-		} catch (Exception e) {
+		if (prevIdCount != null && prevIdCount.intValue() == 0) {
+			try {
+				workDealInfoService.setPrevIdToNull(prevIdAppid);
+			} catch (Exception e) {
+			}
 		}
+
 		// 按需要的查出对应数据
 		Integer c = workDealInfoService.findPrevIdIsNull(prevIdAppid)
 				+ workDealInfoService.getNeedFixPrevIdCount(prevIdAppid
