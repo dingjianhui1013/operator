@@ -382,6 +382,8 @@ public class CertController extends BaseController {
 				dealInfo.setCertSn(caCert.getSerialnumber());
 				dealInfo.setKeySn(keySn);
 				dealInfo.setBusinessCardUser(UserUtils.getUser());
+				
+				
 				dealInfo.setBusinessCardUserDate(new Date());
 				dealInfo.setNotafter(caCert.getNotafter());
 				dealInfo.setAddCertDays(Integer.parseInt(addCertDays));
@@ -407,6 +409,8 @@ public class CertController extends BaseController {
 					selfApplicationService.save(selfApplication);
 				}
 				workDealInfoService.save(dealInfo);
+				
+				
 			}
 
 			SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
