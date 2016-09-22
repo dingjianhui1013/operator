@@ -426,7 +426,8 @@ function genKeyAndCSRExNoCookie(providerFullName, providerType, keyLen, cryptFla
         cenroll.SignAlgOId = szOID_RSA_SHA1RSA;
         cenroll.HashAlgorithm = "SHA1"; //SHA1
         //1：生成密钥在加密位；2：生成密钥在签名位
-        cenroll.KeySpec = 2;    // 20140916 原为 1
+        cenroll.KeySpec = 2;
+        //alert();// 20140916 原为 1
         cenroll.DeleteRequestCert = false;
         var keyflags = 0;
         if (typeof(cryptFlag) != "number") {
@@ -520,6 +521,7 @@ function URLDecode(psEncodeString) {
 }
 
 function installCertKmc(certSign, certKmc, kmcReq1, kmcReq2, kmcReq3, kmcRep1, kmcRep2, kmcRep3, installMode) {
+
     if (certKmc.length < 1)
         certKmc = kmcRep2;
     var kmcRep1Arr = kmcRep1.split("&");
