@@ -1034,6 +1034,25 @@ public class ClientController {
 		return json.toString();
 	}
 
+	@RequestMapping(value = "fixFirstDealInfoType")
+	@ResponseBody
+	public String fixFirstDealInfoType(Integer fixAppId) throws JSONException {
+		JSONObject json = new JSONObject();
+		if (fixAppId == null || fixAppId.intValue() <= 0) {
+			json.put("statu", "-1");
+			json.put("msg", "APPID不能为空");
+			return json.toString();
+		}
+		List<String> lst = workDealInfoService.findFirstCertSnByAppId(fixAppId,
+				0);
+		new Thread(new FixFirstDealInfoTypeThread(lst)).start();
+		json.put("statu", "0");
+		json.put("msg", "请求提交完成,更新:" + lst.size()
+				+ "条firstCertSN数据，后台异步处理完后会自动停止,处理前总数据量为:" + lst.size());
+		log.error("异步提交处理完毕,app_id:" + fixAppId);
+		return json.toString();
+	}
+
 	/**
 	 * 
 	 * @param productId

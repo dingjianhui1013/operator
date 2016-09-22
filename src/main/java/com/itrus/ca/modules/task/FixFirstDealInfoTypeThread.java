@@ -1,41 +1,36 @@
 /**
- *2016年9月20日 下午1:29:16
+ *2016年9月22日 下午2:01:37
  */
 package com.itrus.ca.modules.task;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 
 import com.itrus.ca.common.utils.SpringContextHolder;
-import com.itrus.ca.modules.work.entity.WorkDealInfo;
 import com.itrus.ca.modules.work.service.WorkDealInfoService;
 
 /**
- * 由于代码里的BUG，导致在保存first_cert_sn的时候,<br>
- * 误把上一条记录的cert_sn存了进来，并且变成了一个独立的业务链 ，没有串到业务中去<br>
- * 
  * @author: liubin
+ *
  */
-public class FixFirstCertSNThread implements Runnable {
-	private Logger log = Logger.getLogger("fix");
-	private List<String> all;
-	private static final int MAX_THREAD = 30;
+public class FixFirstDealInfoTypeThread implements Runnable {
 
-	WorkDealInfoService workDealInfoService = SpringContextHolder
+	private static final int MAX_THREAD = 30;
+	private Logger log = Logger.getLogger("fix");
+	private WorkDealInfoService workDealInfoService = SpringContextHolder
 			.getBean(WorkDealInfoService.class);
 
-	public FixFirstCertSNThread(List<String> all) {
+	private List<String> all;
+
+	public FixFirstDealInfoTypeThread(List<String> all) {
 		this.all = all;
 	}
 
-	@Override
 	public void run() {
 		try {
 			int preNum = all.size() / MAX_THREAD;
 			preNum = preNum == 0 ? all.size() : preNum;
-
 			if (all.size() <= preNum) {
 				new Thread(new Inner(all)).start();
 			} else {
@@ -66,7 +61,7 @@ public class FixFirstCertSNThread implements Runnable {
 
 		public synchronized void run() {
 			try {
-				workDealInfoService.fixFirstCertSNByError(l);
+				workDealInfoService.fixDealInfoType(l);
 			} catch (Exception ex) {
 				// 事务问题，可以不显示
 			}

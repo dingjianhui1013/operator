@@ -113,6 +113,7 @@ import com.itrus.ca.modules.work.vo.WorkpaymentInfo_dealinfoVo;
 public class WorkDealInfoService extends BaseService {
 
 	static Log log = LogFactory.getLog(WorkDealInfoService.class);
+	private Log fixLog = LogFactory.getLog("fix");
 
 	private LogUtil logUtil = new LogUtil();
 	private static final int CELL_NUM = 9;
@@ -2962,18 +2963,18 @@ public class WorkDealInfoService extends BaseService {
 
 	// 根据应用名称，查询统计信息
 	public List<String> findFirstCertSnByAppId(Integer appId, Integer count) {
-		String sql = "select distinct FIRST_CERT_SN,a.c from (";
-		sql = sql
-				+ "select count(*) c,FIRST_CERT_SN from WORK_DEAL_INFO where PREV_ID is null and FIRST_CERT_SN is not null ";
+
+		String sql = "select distinct FIRST_CERT_SN from WORK_DEAL_INFO where  FIRST_CERT_SN is not null ";
+		boolean hasWhere = false;
 		if (appId != null && appId.longValue() > 0) {
 			sql = sql + " and APP_ID=" + appId;
+			hasWhere = true;
 		}
-		sql += " group by FIRST_CERT_SN";
-		sql += " order by c desc";
-		sql += ")  a where a.c>1";
 		if (count != null && count.intValue() > 0) {
 			sql = sql + " and rownum<=" + count;
 		}
+		sql += " group by FIRST_CERT_SN";
+
 		List<Map> lst = null;
 		List<String> res = new ArrayList<String>();
 		try {
@@ -4698,26 +4699,6 @@ public class WorkDealInfoService extends BaseService {
 			return;
 		}
 
-		// 如果是首条,检查业务类型，如果不是新增则改为新增
-		WorkDealInfo p = lst.get(lst.size() - 1);
-		String fcn = zeroProcess(p.getFirstCertSN());
-		if (p.getCertSn().equals(fcn)) {
-			if (p.getDealInfoType() != null
-					&& p.getDealInfoType().intValue() != 0) {
-				String update = "update work_deal_info set DEAL_INFO_TYPE=0 where id="
-						+ p.getId();
-				try {
-					workDealInfoDao.exeSql(update);
-				} catch (Exception ex) {
-				}
-				log.error("首证书业务类型已处理为新增,首证书序列号:" + p.getFirstCertSN()
-						+ " | id:" + p.getId());
-			}
-		} else {
-			log.error("业务链首条序列号和首证书序列号不符,首证书序列号:" + p.getFirstCertSN()
-					+ " | id:" + p.getId());
-		}
-
 		for (int i = 0; i < lst.size(); i++) {
 			WorkDealInfo po = lst.get(i);
 			WorkDealInfo pre = findPreByFirstCertSN(po);
@@ -4758,7 +4739,7 @@ public class WorkDealInfoService extends BaseService {
 		String temp = firstCertSN;
 		String f = firstCertSN.substring(0, 1);
 		Integer first = 100;
-		if(StringHelper.isDigit(f)){
+		if (StringHelper.isDigit(f)) {
 			first = new Integer(firstCertSN.substring(0, 1));
 		}
 		if (first.intValue() >= 8) {
@@ -8372,6 +8353,58 @@ public class WorkDealInfoService extends BaseService {
 		}
 		return resLst;
 
+	}
+
+	/**
+	 * xi付指定APPID的记录，让其业务链里的第一条记录的业务类型为新增
+	 * 
+	 * @param lst
+	 */
+	@Transactional(readOnly = false)
+	public void fixDealInfoType(List<String> lst) {
+		for (String e : lst) {
+			try {
+				// 查业务链
+				List<WorkDealInfo> link = findByFirstCertSN(e);
+				if (link == null || link.size() <= 0)
+					continue;
+				// 只有一条的情况
+				if (link != null && link.size() == 1) {
+					WorkDealInfo po = link.get(0);
+					String sql = "update work_deal_info set DEL_FLAG='0',PREV_ID=null,DEAL_INFO_TYPE=0 where id="
+							+ po.getId();
+					try {
+						workDealInfoDao.exeSql(sql);
+					} catch (Exception ex) {
+						continue;
+					}
+				}
+				// 如果是首条,检查业务类型，如果不是新增则改为新增
+				WorkDealInfo p = link.get(link.size() - 1);
+				String fcn = zeroProcess(p.getFirstCertSN());
+				if (p.getCertSn().equals(fcn)) {
+					if (p.getDealInfoType() != null
+							&& p.getDealInfoType().intValue() != 0) {
+						String update = "update work_deal_info set DEAL_INFO_TYPE=0 where id="
+								+ p.getId();
+						try {
+							workDealInfoDao.exeSql(update);
+						} catch (Exception ex) {
+							continue;
+						}
+						fixLog.error("首证书业务类型已处理为新增,首证书序列号:"
+								+ p.getFirstCertSN() + " | id:" + p.getId());
+					}
+				} else {
+					fixLog.error("业务链首条序列号和首证书序列号不符,首证书序列号:"
+							+ p.getFirstCertSN() + " | id:" + p.getId());
+				}
+			} catch (Exception ex) {
+				// 事务问题，可忽略
+				ex.printStackTrace();
+				continue;
+			}
+		}
 	}
 
 	/**
