@@ -149,7 +149,7 @@
 								$("#sort").html(data.sort);
 								var install_result = DoInstallCert(data);
 
-								alert(install_result);
+								
 
 								if (install_result) {
 									t = 1;
