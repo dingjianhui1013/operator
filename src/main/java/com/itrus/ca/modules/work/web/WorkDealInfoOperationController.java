@@ -39,6 +39,7 @@ import com.itrus.ca.common.web.BaseController;
 import com.itrus.ca.modules.constant.ProductType;
 import com.itrus.ca.modules.constant.WorkDealInfoStatus;
 import com.itrus.ca.modules.constant.WorkDealInfoType;
+import com.itrus.ca.modules.log.entity.SysOperateLog;
 import com.itrus.ca.modules.log.service.LogUtil;
 import com.itrus.ca.modules.profile.entity.ConfigAgentBoundDealInfo;
 import com.itrus.ca.modules.profile.entity.ConfigAgentOfficeRelation;
@@ -1864,7 +1865,11 @@ public class WorkDealInfoOperationController extends BaseController {
 		long start = System.currentTimeMillis();
 		
 		//保存新业务信息(dealInfoType存在即为更新，dealInfoType1存在即为补办(1：遗失补办，2：损坏更换)，dealInfoType2存在即为变更)
+		
+		long start1 = System.currentTimeMillis();
 		WorkDealInfo workDealInfo1 = workDealInfoService.get(workDealInfoId);
+		long end1 = System.currentTimeMillis();
+		log.debug("更新业务获取父workDealInfo用时:"+(end1-start1)+"ms");
 		if (workDealInfo1.getDelFlag().equals("1")) {
 			addMessage(redirectAttributes, "此业务正在办理维护！");
 			return "redirect:" + Global.getAdminPath() + "/work/workDealInfo/?repage";
@@ -1874,7 +1879,7 @@ public class WorkDealInfoOperationController extends BaseController {
 		
 
 			//变更业务保存单位信息
-		
+		start1 = System.currentTimeMillis();
 		WorkCompany workCompany = new WorkCompany();
 		WorkCompany oldWorkCompany = workDealInfo1.getWorkCompany();
 		
@@ -1939,15 +1944,25 @@ public class WorkDealInfoOperationController extends BaseController {
 		if(remarks!=null && !remarks.equals("")){
 			workCompany.setRemarks(remarks);
 		}
-		long start1 = System.currentTimeMillis();
+		end1 = System.currentTimeMillis();
+		log.debug("更新业务组装workCompany用时:"+(end1-start1)+"ms");
+		
+		start1 = System.currentTimeMillis();
 		workCompanyService.save(workCompany);
-		long end1 = System.currentTimeMillis();
+		end1 = System.currentTimeMillis();
 		log.debug("更新业务提交workCompany用时:"+(end1-start1)+"ms");
 		
+		start1 = System.currentTimeMillis();
 		companyHis = workCompanyService.change(workCompany);
+		end1 = System.currentTimeMillis();
+		log.debug("更新业务组装WorkCompanyHis用时:"+(end1-start1)+"ms");
+		
+		start1 = System.currentTimeMillis();
 		workCompanyHisService.save(companyHis);
+		end1 = System.currentTimeMillis();
+		log.debug("更新业务提交WorkCompanyHis用时:"+(end1-start1)+"ms");
 		
-		
+		start1 = System.currentTimeMillis();
 		// 保存经办人信息
 				WorkUser workUser = workDealInfo1.getWorkUser();
 				workUser = new WorkUser();
@@ -1990,16 +2005,26 @@ public class WorkDealInfoOperationController extends BaseController {
 					workUser.setContactEmail(oldUser.getContactEmail());;
 				}
 				workUser.setWorkCompany(workCompany);
-				long start2 = System.currentTimeMillis();
-				workUserService.save(workUser);
-				long end2 = System.currentTimeMillis();
-				log.debug("更新业务提交workUser用时:"+(end2-start2)+"ms");
+				end1 = System.currentTimeMillis();
+				log.debug("更新业务组装WorkUser用时:"+(end1-start1)+"ms");
 				
+				start1 = System.currentTimeMillis();
+				workUserService.save(workUser);
+				end1 = System.currentTimeMillis();
+				log.debug("更新业务提交workUser用时:"+(end1-start1)+"ms");
+				
+				start1 = System.currentTimeMillis();
 				WorkUserHis userHis = workUserService.change(workUser, companyHis);
+				end1 = System.currentTimeMillis();
+				log.debug("更新业务组装WorkUserHis用时:"+(end1-start1)+"ms");
+				
+				start1 = System.currentTimeMillis();
 				workUserHisService.save(userHis);
-		
+		        end1 = System.currentTimeMillis();
+		        log.debug("更新业务提交WorkUserHis用时:"+(end1-start1)+"ms");
 		
 			//workDealInfo1
+		start1 = System.currentTimeMillis();        
 		WorkDealInfo workDealInfo = new WorkDealInfo();
 		workDealInfo.setConfigApp(workDealInfo1.getConfigApp());
 		ConfigCommercialAgent commercialAgent = configAgentAppRelationService
@@ -2014,22 +2039,29 @@ public class WorkDealInfoOperationController extends BaseController {
 		
 		ConfigChargeAgentBoundConfigProduct bound =  configChargeAgentBoundConfigProductService.get(agentDetailId);
 		workDealInfo.setPayType(agentId);
+		end1 = System.currentTimeMillis();
+		log.debug("更新业务组装workDealInfo第一部分用时:"+(end1-start1)+"ms");
 		
 		
+		start1 = System.currentTimeMillis();
 		ConfigChargeAgent agent = bound.getAgent();
 		
 		Integer reseUpdateNum = agent.getReserveUpdateNum();
 		Integer surUpdateNum = agent.getSurplusUpdateNum();
 		agent.setReserveUpdateNum(reseUpdateNum+1);
 		agent.setSurplusUpdateNum(surUpdateNum-1);
+		end1 = System.currentTimeMillis();
+		log.debug("更新业务组装ConfigChargeAgent用时:"+(end1-start1)+"ms");
+		
+		start1 = System.currentTimeMillis();
 		configChargeAgentService.save(agent);
+		end1 = System.currentTimeMillis();
+		log.debug("更新业务提交ConfigChargeAgent用时:"+(end1-start1)+"ms");
 		
 		
+		start1 = System.currentTimeMillis();
 		workDealInfo.setConfigChargeAgentId(bound.getAgent().getId());
-		
-		
-		
-		
+	
 		workDealInfo.setWorkUser(workUser);
 		workDealInfo.setWorkCompany(workCompany);
 		workDealInfo.setWorkUserHis(userHis);
@@ -2079,6 +2111,10 @@ public class WorkDealInfoOperationController extends BaseController {
 		} else {
 			workDealInfo.setLastDays(0);
 		}
+		end1 = System.currentTimeMillis();
+		log.debug("更新业务组装workDealInfo第二部分用时:"+(end1-start1)+"ms");
+		
+		start1 = System.currentTimeMillis();
 		WorkCertApplyInfo workCertApplyInfo = new WorkCertApplyInfo();
 		WorkCertApplyInfo oldWorkCertApplyInfo = workDealInfo1.getWorkCertInfo().getWorkCertApplyInfo();
 		
@@ -2100,40 +2136,51 @@ public class WorkDealInfoOperationController extends BaseController {
 		}
 		workCertApplyInfo.setProvince(workCompany.getProvince());
 		workCertApplyInfo.setCity(workCompany.getCity());
+		end1 = System.currentTimeMillis();
+		log.debug("更新业务组装workCertApplyInfo用时:"+(end1-start1)+"ms");
 		
-		long start3 = System.currentTimeMillis();
+		start1 = System.currentTimeMillis();
 		workCertApplyInfoService.save(workCertApplyInfo);
-		long end3 = System.currentTimeMillis();
-		log.debug("更新业务提交workCertApplyInfo用时:"+(end3-start3)+"ms");
+		end1 = System.currentTimeMillis();
+		log.debug("更新业务提交workCertApplyInfo用时:"+(end1-start1)+"ms");
 		
-		
+		start1 = System.currentTimeMillis();
 		WorkCertInfo oldCertInfo = workDealInfo1.getWorkCertInfo();
 		WorkCertInfo workCertInfo = new WorkCertInfo();
 		workCertInfo.setWorkCertApplyInfo(workCertApplyInfo);
 		workCertInfo.setRenewalPrevId(oldCertInfo.getId());
 		workCertInfo.setCreateDate( workCertInfoService.getCreateDate(oldCertInfo.getId()));
+		end1 = System.currentTimeMillis();
+		log.debug("更新业务组装workCertInfo用时:"+(end1-start1)+"ms");
 		
-		long start4 = System.currentTimeMillis();
+		start1 = System.currentTimeMillis();
 		workCertInfoService.save(workCertInfo);
-		long end4 = System.currentTimeMillis();
-		log.debug("更新业务提交workCertInfo用时:"+(end4-start4)+"ms");
+		end1 = System.currentTimeMillis();
+		log.debug("更新业务提交workCertInfo用时:"+(end1-start1)+"ms");
 		
-		
+		start1 = System.currentTimeMillis();
 		// 给上张证书存nextId
 		oldCertInfo.setRenewalNextId(workCertInfo.getId());
+		end1 = System.currentTimeMillis();
+		log.debug("更新业务组装父workCertInfo用时:"+(end1-start1)+"ms");
+		
+		start1 = System.currentTimeMillis();
 		workCertInfoService.save(oldCertInfo);
+		end1 = System.currentTimeMillis();
+		log.debug("更新业务提交父workCertInfo用时:"+(end1-start1)+"ms");
+		
+		start1 = System.currentTimeMillis();
 		workDealInfo.setWorkCertInfo(workCertInfo);
 		workDealInfoService.delete(workDealInfo1.getId());
-		//workDealInfo.setPayType(workDealInfo1.getPayType());
-		//workDealInfo.setConfigChargeAgentId(workDealInfo1.getConfigChargeAgentId());
-		
 		workDealInfo.setInputUser(UserUtils.getUser());
 		workDealInfo.setInputUserDate(new Date());
-		
 		workDealInfo.setAreaId(UserUtils.getUser().getOffice().getParent().getId());
 		workDealInfo.setOfficeId(UserUtils.getUser().getOffice().getId());
+		end1 = System.currentTimeMillis();
+		log.debug("更新业务组装workDealInfo第三部分用时:"+(end1-start1)+"ms");
 		
 		if (companyImage!=null || transactorImage!=null) {
+			start1 = System.currentTimeMillis();
 			SelfImage image = new SelfImage();
 			String companyImageName = saveToux(companyImage,"company", workDealInfo.getWorkCompany().getCompanyType());
 			if (companyImageName !=null ) {
@@ -2167,21 +2214,31 @@ public class WorkDealInfoOperationController extends BaseController {
 			image.setStatus(BaseEntity.SHOW);
 			selfImageService.save(image);
 			workDealInfo.setSelfImage(image);
+			end1 = System.currentTimeMillis();
+			log.debug("更新业务组装workDealInfo图片部分用时:"+(end1-start1)+"ms");
 		}
 		
-		long start5 = System.currentTimeMillis();
+		start1 = System.currentTimeMillis();
 		workDealInfoService.save(workDealInfo);
-		long end5 = System.currentTimeMillis();
-		log.debug("更新业务提交workDealInfo用时:"+(end5-start5)+"ms");
+		end1 = System.currentTimeMillis();
+		log.debug("更新业务提交workDealInfo用时:"+(end1-start1)+"ms");
 		
-		
+		start1 = System.currentTimeMillis();
 		ConfigAgentBoundDealInfo dealInfoBound = new ConfigAgentBoundDealInfo();
 		dealInfoBound.setDealInfo(workDealInfo);
 		dealInfoBound.setAgent(agent);
+		end1 = System.currentTimeMillis();
+		log.debug("更新业务组装ConfigAgentBoundDealInfo用时:"+(end1-start1)+"ms");
+		start1 = System.currentTimeMillis();
 		configAgentBoundDealInfoService.save(dealInfoBound);
+		end1 = System.currentTimeMillis();
+		log.debug("更新业务提交ConfigAgentBoundDealInfo用时:"+(end1-start1)+"ms");
+		
+		
 		logUtil.saveSysLog("计费策略模版", "计费策略模版："+agent.getId()+"--业务编号："+workDealInfo.getId()+"--关联成功!", "");
 		
 		// 保存日志信息
+		start1 = System.currentTimeMillis();
 		WorkLog workLog = new WorkLog();
 		workLog.setRecordContent(recordContent);
 		workLog.setWorkDealInfo(workDealInfo);
@@ -2190,10 +2247,15 @@ public class WorkDealInfoOperationController extends BaseController {
 		workLog.setConfigApp(workDealInfo.getConfigApp());
 		workLog.setWorkCompany(workDealInfo.getWorkCompany());
 		workLog.setOffice(UserUtils.getUser().getOffice());
+		end1 = System.currentTimeMillis();
+		log.debug("更新业务组装WorkLog用时:"+(end1-start1)+"ms");
+		start1 = System.currentTimeMillis();
 		workLogService.save(workLog);
+		end1 = System.currentTimeMillis();
+		log.debug("更新业务提交WorkLog用时:"+(end1-start1)+"ms");
 		
 		long end = System.currentTimeMillis();
-		log.debug("更新业务提交总用时:"+(end-start)+"ms");
+		log.debug("更新业务提交总用时:"+(end-start)+"ms======业务ID:"+workDealInfo.getId());
 		
 		return "redirect:" + Global.getAdminPath()
 				+ "/work/workDealInfo/pay?id=" + workDealInfo.getId();
