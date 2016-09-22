@@ -1491,12 +1491,9 @@ public class StatisticDayDataController extends BaseController {
 
 		// 证书总量
 		certTotal = workDealInfoService
-				.getCertPublishCount(countDate, officeId)+workDealInfoService.getWorkPayCountByUpdate(countDate,
-						countDate, officeId);
+				.getCertPublishCount(countDate, officeId)+workDealInfoService.getWorkPayCountByUpdate(countDate, officeId);
 		// 金额总量
-		paymentTotal = workDealInfoService.getWorkPayMoneyCount(countDate,
-				countDate, officeId) + workDealInfoService.getWorkPayMoneyCountByUpdate(countDate,
-						countDate, officeId);
+		paymentTotal = workDealInfoService.getWorkPayMoneyCount(countDate, officeId) + workDealInfoService.getWorkPayMoneyCountByUpdate(countDate, officeId);
 		// key余量
 
 		statisticDayData.setCertMoneyTotal(paymentTotal);

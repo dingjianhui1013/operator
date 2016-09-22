@@ -4767,36 +4767,28 @@ public class WorkDealInfoService extends BaseService {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.add(Restrictions.eq("officeId", officeId));
 		List<String> statusIntegers = new ArrayList<String>();
+		//更新除外  更新另算
+		dc.add(Restrictions.or(Restrictions.isNull("dealInfoType"), Restrictions.ne("dealInfoType",WorkDealInfoType.TYPE_UPDATE_CERT)));
+		
+		
 		statusIntegers.add(WorkDealInfoStatus.STATUS_CERT_OBTAINED);
 		dc.add(Restrictions.in("dealInfoStatus", statusIntegers));
-		dc.createAlias("workPayInfo", "workPayInfo");
-		dc.add(Restrictions.ge("workPayInfo.updateDate", date));
 		dc.add(Restrictions.or(Restrictions.ne("isSJQY", 1),
 				Restrictions.isNull("isSJQY")));
+		
+		dc.add(Restrictions.ge("businessCardUserDate", date));
+		
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
 		calendar.add(Calendar.DATE, 1);
+		date=calendar.getTime();
+		
+		dc.add(Restrictions.lt("businessCardUserDate", date));
+		
 		dc.add(Restrictions.isNull("dealInfoType3"));
-		dc.add(Restrictions.lt("workPayInfo.updateDate", calendar.getTime()));
 		List<WorkDealInfo> dealinfos = workDealInfoDao.find(dc);
-		int createCount = 0;
-		for (int i = 0; i < dealinfos.size(); i++) {
-			WorkDealInfo dealInfo = dealinfos.get(i);
-			if (dealInfo.getDealInfoStatus().equals("9")) {
-				if (dealInfo.getDealInfoType() != null
-						&& dealInfo.getDealInfoType().equals(1)) {
-					createCount++;
-				} else if (dealInfo.getDealInfoType2() != null
-						&& dealInfo.getDealInfoType2().equals(4)) {
-					createCount++;
-				} else if (dealInfo.getDealInfoType().equals(1)
-						&& dealInfo.getDealInfoType2().equals(4)) {
-					createCount++;
-				}
-			} else {
-				createCount++;
-			}
-		}
+		int createCount = dealinfos.size();
+		
 		dc = workDealInfoDao.createDetachedCriteria();
 		dc.add(Restrictions.eq("officeId", officeId));
 		dc.add(Restrictions.eq("dealInfoStatus",
@@ -4929,18 +4921,25 @@ public class WorkDealInfoService extends BaseService {
 		calendar.add(Calendar.DATE, 1); //
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("configApp", "configApp");
+		
+		//网点
 		dc.add(Restrictions.eq("officeId", officeId));
+		//应用
 		dc.add(Restrictions.eq("configApp.id", appId));
+		//制证日期
 		dc.add(Restrictions.ge("businessCardUserDate", date)); // 改正
 																// 之前用updatedate查
-																// 改为制证时间
+		//制证日期														// 改为制证时间
 		dc.add(Restrictions.lt("businessCardUserDate", calendar.getTime()));
+		//不包含迁移数据
 		dc.add(Restrictions.or(Restrictions.ne("isSJQY", 1),
 				Restrictions.isNull("isSJQY")));
+		//年限
 		if (year != 0) {
 			dc.add(Restrictions.eq("year", year));
 		}
 		dc.add(Restrictions.isNull("dealInfoType3"));
+		
 		dc.add(Restrictions.or(Restrictions.eq("dealInfoType", dealInfoType),
 				Restrictions.eq("dealInfoType1", dealInfoType),
 				Restrictions.eq("dealInfoType2", dealInfoType),
@@ -4960,11 +4959,22 @@ public class WorkDealInfoService extends BaseService {
 		calendar.add(Calendar.DATE, 1); //
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("configApp", "configApp");
+		
+		//网点
 		dc.add(Restrictions.eq("officeId", officeId));
+		
+		//应用
 		dc.add(Restrictions.eq("configApp.id", appId));
 
-		dc.add(Restrictions.ge("businessCardUserDate", date));
-		dc.add(Restrictions.lt("businessCardUserDate", calendar.getTime()));
+		//年限
+		if (year != 0) {
+			dc.add(Restrictions.eq("year", year));
+		}
+		
+		//迁移除外
+		dc.add(Restrictions.or(Restrictions.ne("isSJQY", 1),Restrictions.isNull("isSJQY") ));
+		
+		
 		List<String> statusIntegers = new ArrayList<String>();
 		if (dealInfoType.equals(1)) {
 			dc.add(Restrictions.eq("dealInfoType", dealInfoType));
@@ -4972,21 +4982,29 @@ public class WorkDealInfoService extends BaseService {
 			dc.add(Restrictions.isNull("dealInfoType2"));
 			dc.add(Restrictions.isNull("dealInfoType3"));
 			statusIntegers.add(WorkDealInfoStatus.STATUS_CERT_WAIT);
+			
+			dc.add(Restrictions.ge("payUserDate", date));
+			dc.add(Restrictions.lt("payUserDate", calendar.getTime()));
 		} else if (dealInfoType.equals(4)) {
 			dc.add(Restrictions.eq("dealInfoType2", dealInfoType));
 			dc.add(Restrictions.isNull("dealInfoType"));
 			dc.add(Restrictions.isNull("dealInfoType1"));
 			dc.add(Restrictions.isNull("dealInfoType3"));
-			statusIntegers.add(WorkDealInfoStatus.STATUS_CERT_WAIT);
+			//statusIntegers.add(WorkDealInfoStatus.STATUS_CERT_WAIT);
+			
+			dc.add(Restrictions.ge("businessCardUserDate", date));
+			dc.add(Restrictions.lt("businessCardUserDate", calendar.getTime()));
+			
 		} else if (dealInfoType.equals(2) || dealInfoType.equals(3)) {
 			dc.add(Restrictions.eq("dealInfoType1", dealInfoType));
 			dc.add(Restrictions.isNull("dealInfoType"));
 			dc.add(Restrictions.isNull("dealInfoType2"));
 			dc.add(Restrictions.isNull("dealInfoType3"));
+			
+			dc.add(Restrictions.ge("businessCardUserDate", date));
+			dc.add(Restrictions.lt("businessCardUserDate", calendar.getTime()));
 		}
-		if (year != 0) {
-			dc.add(Restrictions.eq("year", year));
-		}
+		
 
 		statusIntegers.add(WorkDealInfoStatus.STATUS_CERT_OBTAINED);
 		statusIntegers.add(WorkDealInfoStatus.STATUS_CERT_REVOKE);
@@ -5383,44 +5401,52 @@ public class WorkDealInfoService extends BaseService {
 	public double getWorkPayReceiptCount(Date date, Long officeId, Long appId) {
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
-		calendar.add(Calendar.DATE, 1); //
+		calendar.add(Calendar.DATE, 1); 
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
-		dc.add(Restrictions.eq("officeId", officeId));
 		dc.createAlias("configApp", "configApp");
-		dc.add(Restrictions.eq("configApp.id", appId));
-		dc.add(Restrictions.or(Restrictions.eq("dealInfoStatus",
-				WorkDealInfoStatus.STATUS_CERT_OBTAINED), Restrictions.eq(
-				"dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_WAIT)));
 		dc.createAlias("workPayInfo", "workPayInfo");
-		dc.add(Restrictions.gt("workPayInfo.updateDate", date));
-		dc.add(Restrictions.lt("workPayInfo.updateDate", calendar.getTime()));
+		
+		//网点
+		dc.add(Restrictions.eq("officeId", officeId));
+		
+		//应用id
+		dc.add(Restrictions.eq("configApp.id", appId));
+		
+		//使用发票
 		dc.add(Restrictions.eq("workPayInfo.userReceipt", true));
+		
+	    //非迁移
+		dc.add(Restrictions.or(Restrictions.ne("isSJQY", 1), Restrictions.isNull("isSJQY")));
+		
+		
+		//更新单算  其他一起算
+		dc.add(Restrictions.or(
+				Restrictions.and(
+						Restrictions.and(
+								Restrictions.or(Restrictions.ne("dealInfoType", 1),
+										Restrictions.isNull("dealInfoType")),
+								Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED)),
+						Restrictions.and(Restrictions.ge("businessCardUserDate", date),
+								Restrictions.lt("businessCardUserDate", calendar.getTime()))),
+				Restrictions.and(
+						Restrictions.and(Restrictions.eq("dealInfoType", 1),
+								Restrictions
+										.or(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_APPROVE_WAIT),
+												Restrictions.eq("dealInfoStatus",
+														WorkDealInfoStatus.STATUS_CERT_OBTAINED))),
+						Restrictions.and(Restrictions.ge("payUserDate", date),
+								Restrictions.lt("payUserDate", calendar.getTime())))));
+
 
 		List<WorkDealInfo> dealInfos = workDealInfoDao.find(dc);
 		double totalReceipt = 0d;
 		for (WorkDealInfo dealInfo : dealInfos) {
-			try {// 避免null的情况
-				if (dealInfo.getIsSJQY() == null
-						|| !dealInfo.getIsSJQY().equals(1)) {
-					if (dealInfo.getDealInfoStatus().equals("9")) {
-						if (dealInfo.getDealInfoType() != null
-								&& dealInfo.getDealInfoType().equals(1)) {
-							totalReceipt += dealInfo.getWorkPayInfo()
-									.getReceiptAmount();
-						} else if (dealInfo.getDealInfoType2() != null
-								&& dealInfo.getDealInfoType2().equals(4)) {
-							totalReceipt += dealInfo.getWorkPayInfo()
-									.getReceiptAmount();
-						} else if (dealInfo.getDealInfoType().equals(1)
-								&& dealInfo.getDealInfoType2().equals(4)) {
-							totalReceipt += dealInfo.getWorkPayInfo()
-									.getReceiptAmount();
-						}
-					} else {
-						totalReceipt += dealInfo.getWorkPayInfo()
+			try {
+				// 避免null的情况
+				totalReceipt += dealInfo.getWorkPayInfo()
 								.getReceiptAmount();
-					}
-				}
+					
+				
 			} catch (Exception e) {
 				e.printStackTrace();
 				continue;
@@ -5955,50 +5981,33 @@ public class WorkDealInfoService extends BaseService {
 		return totalMoney;
 	}
 
-	public double getWorkPayMoneyCount(Date yesterDay, Date countDate,
+	public double getWorkPayMoneyCount(Date countDate,
 			Long officeId) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.add(Restrictions.eq("officeId", officeId));
+		
+		//更新除外  更新另算
+		dc.add(Restrictions.or(Restrictions.isNull("dealInfoType"), Restrictions.ne("dealInfoType",WorkDealInfoType.TYPE_UPDATE_CERT)));
+
+		
 		List<String> statusIntegers = new ArrayList<String>();
 		statusIntegers.add(WorkDealInfoStatus.STATUS_CERT_OBTAINED);
-		// statusIntegers.add(WorkDealInfoStatus.STATUS_CERT_REVOKE);
 		dc.add(Restrictions.in("dealInfoStatus", statusIntegers));
 		dc.createAlias("workPayInfo", "workPayInfo");
-		dc.add(Restrictions.ge("workPayInfo.updateDate", countDate));
+		dc.add(Restrictions.ge("businessCardUserDate", countDate));
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(countDate);
 		calendar.add(Calendar.DATE, 1);
 		countDate = calendar.getTime();
-		dc.add(Restrictions.lt("workPayInfo.updateDate", countDate));
+		dc.add(Restrictions.lt("businessCardUserDate", countDate));
 		dc.add(Restrictions.isNull("dealInfoType3"));
+		dc.add(Restrictions.or(Restrictions.ne("isSJQY", 1),
+				Restrictions.isNull("isSJQY")));
 		List<WorkDealInfo> dealInfos = workDealInfoDao.find(dc);
 		double totalMoney = 0d;
 		for (WorkDealInfo dealInfo : dealInfos) {
-			try {// 避免null的情况
-					// totalMoney +=
-					// dealInfo.getWorkPayInfo().getWorkPayedMoney();
-				if (dealInfo.getIsSJQY() == null
-						|| !dealInfo.getIsSJQY().equals(1)) {
-					if (dealInfo.getDealInfoStatus().equals("9")) {
-						if (dealInfo.getDealInfoType() != null
-								&& dealInfo.getDealInfoType().equals(1)) {
-							totalMoney += dealInfo.getWorkPayInfo()
-									.getWorkTotalMoney();
-						} else if (dealInfo.getDealInfoType2() != null
-								&& dealInfo.getDealInfoType2().equals(4)) {
-							totalMoney += dealInfo.getWorkPayInfo()
-									.getWorkTotalMoney();
-						} else if (dealInfo.getDealInfoType().equals(1)
-								&& dealInfo.getDealInfoType2().equals(4)) {
-							totalMoney += dealInfo.getWorkPayInfo()
-									.getWorkTotalMoney();
-						}
-					} else {
-						totalMoney += dealInfo.getWorkPayInfo()
-								.getWorkTotalMoney();
-
-					}
-				}
+			try {
+				totalMoney += dealInfo.getWorkPayInfo().getWorkTotalMoney();
 
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -6008,22 +6017,25 @@ public class WorkDealInfoService extends BaseService {
 		return totalMoney;
 	}
 
-	public double getWorkPayMoneyCountByUpdate(Date yesterDay, Date countDate,
+	public double getWorkPayMoneyCountByUpdate(Date countDate,
 			Long officeId) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.add(Restrictions.eq("officeId", officeId));
 		List<String> statusIntegers = new ArrayList<String>();
 		statusIntegers.add(WorkDealInfoStatus.STATUS_CERT_WAIT);
+		statusIntegers.add(WorkDealInfoStatus.STATUS_CERT_OBTAINED);
+		//状态为待制证或已获取
 		dc.add(Restrictions.in("dealInfoStatus", statusIntegers));
 		dc.createAlias("workPayInfo", "workPayInfo");
-		dc.add(Restrictions.ge("workPayInfo.updateDate", countDate));
-		dc.add(Restrictions.eq("dealInfoType",
-				WorkDealInfoType.TYPE_UPDATE_CERT));
+		dc.add(Restrictions.ge("payUserDate", countDate));
+		
+		//更新单算
+		dc.add(Restrictions.eq("dealInfoType",WorkDealInfoType.TYPE_UPDATE_CERT));
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(countDate);
 		calendar.add(Calendar.DATE, 1);
 		countDate = calendar.getTime();
-		dc.add(Restrictions.lt("workPayInfo.updateDate", countDate));
+		dc.add(Restrictions.lt("payUserDate", countDate));
 		dc.add(Restrictions.isNull("dealInfoType3"));
 		List<WorkDealInfo> dealInfos = workDealInfoDao.find(dc);
 		double totalMoney = 0d;
@@ -6033,22 +6045,29 @@ public class WorkDealInfoService extends BaseService {
 		return totalMoney;
 	}
 
-	public int getWorkPayCountByUpdate(Date yesterDay, Date countDate,
+	public int getWorkPayCountByUpdate(Date countDate,
 			Long officeId) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.add(Restrictions.eq("officeId", officeId));
 		List<String> statusIntegers = new ArrayList<String>();
 		statusIntegers.add(WorkDealInfoStatus.STATUS_CERT_WAIT);
+		statusIntegers.add(WorkDealInfoStatus.STATUS_CERT_OBTAINED);
+		
+		//状态为得到或待制证
 		dc.add(Restrictions.in("dealInfoStatus", statusIntegers));
-		dc.createAlias("workPayInfo", "workPayInfo");
-		dc.add(Restrictions.ge("workPayInfo.updateDate", countDate));
-		dc.add(Restrictions.eq("dealInfoType",
-				WorkDealInfoType.TYPE_UPDATE_CERT));
+		dc.add(Restrictions.ge("payUserDate", countDate));
+		
+		//业务类型为更新的 因为只算更新的
+		dc.add(Restrictions.eq("dealInfoType",WorkDealInfoType.TYPE_UPDATE_CERT));
+		dc.add(Restrictions.isNull("dealInfoType1"));
+		dc.add(Restrictions.isNull("dealInfoType2"));
+		dc.add(Restrictions.isNull("dealInfoType3"));
+		
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(countDate);
 		calendar.add(Calendar.DATE, 1);
 		countDate = calendar.getTime();
-		dc.add(Restrictions.lt("workPayInfo.updateDate", countDate));
+		dc.add(Restrictions.lt("payUserDate", countDate));
 		dc.add(Restrictions.isNull("dealInfoType3"));
 		List<WorkDealInfo> dealInfos = workDealInfoDao.find(dc);
 

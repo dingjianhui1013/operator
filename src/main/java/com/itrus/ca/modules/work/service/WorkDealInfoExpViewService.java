@@ -59,8 +59,7 @@ public class WorkDealInfoExpViewService extends BaseService {
 	private LogUtil logUtil = new LogUtil();
 
 	@SuppressWarnings("unused")
-	private static Logger logger = LoggerFactory
-			.getLogger(WorkDealInfoExpViewService.class);
+	private static Logger logger = LoggerFactory.getLogger(WorkDealInfoExpViewService.class);
 
 	@Autowired
 	private WorkDealInfoExpViewDao workDealInfoExpViewDao;
@@ -293,6 +292,17 @@ public class WorkDealInfoExpViewService extends BaseService {
 					"dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_REVOKE)));*/
 			
 			
+			
+			Disjunction dis0 = Restrictions.disjunction();
+			dis0.add(Restrictions.isNotNull("dealInfoType1"));  
+			dis0.add(Restrictions.isNotNull("dealInfoType2"));
+			dis0.add(Restrictions.isNotNull("dealInfoType3"));
+			
+			Disjunction dis = Restrictions.disjunction();
+			dis.add(Restrictions.ne("dealInfoType", WorkDealInfoType.TYPE_UPDATE_CERT));  
+			dis.add(Restrictions.isNull("dealInfoType"));
+			dis.add(Restrictions.and(Restrictions.eq("dealInfoType", 1), dis0));
+			
 			Disjunction dis1 = Restrictions.disjunction();  
             
 			dis1.add(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED));  
@@ -308,10 +318,14 @@ public class WorkDealInfoExpViewService extends BaseService {
 			
 			
 			dc.add(Restrictions.or(
-					Restrictions.and(Restrictions.or(Restrictions.ne("dealInfoType", WorkDealInfoType.TYPE_UPDATE_CERT), Restrictions.isNull("dealInfoType")), dis1),
-					Restrictions.and(Restrictions.eq("dealInfoType", WorkDealInfoType.TYPE_UPDATE_CERT), dis2)));
-			
-			
+					Restrictions.and(dis, dis1),
+					Restrictions.and(
+							Restrictions.and(
+									Restrictions.and(Restrictions.eq("dealInfoType", WorkDealInfoType.TYPE_UPDATE_CERT),
+											Restrictions.isNull("dealInfoType1")),
+									Restrictions.isNull("dealInfoType2")),
+							Restrictions.and(Restrictions.isNull("dealInfoType3"), dis2))));
+
 		}
 
 		Page<WorkDealInfoExpView> lst = new Page<WorkDealInfoExpView>(request,
@@ -334,11 +348,9 @@ public class WorkDealInfoExpViewService extends BaseService {
 	 *            (是否吊销)
 	 * @return
 	 */
-	public Page<WorkDealInfo> find(HttpServletRequest request,
-			HttpServletResponse response, WorkDealInfoExpViewVO query,
-			boolean findAll, boolean isDx) {
-		Page<WorkDealInfoExpView> lst = new Page<WorkDealInfoExpView>(request,
-				response);
+	public Page<WorkDealInfo> find(HttpServletRequest request, HttpServletResponse response,
+			WorkDealInfoExpViewVO query, boolean findAll, boolean isDx) {
+		Page<WorkDealInfoExpView> lst = new Page<WorkDealInfoExpView>(request, response);
 		Page<WorkDealInfo> res = new Page<WorkDealInfo>(request, response);
 		lst = findByView(request, response, query, findAll, isDx);
 		if (lst == null || lst.getList() == null || lst.getList().size() <= 0) {
@@ -427,10 +439,8 @@ public class WorkDealInfoExpViewService extends BaseService {
 	 * @param fileName
 	 * @throws IOException
 	 */
-	public void exportExcel(Map<String, String> query,
-			List<WorkDealInfoExpView> list, String fileName,
-			String information, HttpServletResponse response)
-			throws IOException {
+	public void exportExcel(Map<String, String> query, List<WorkDealInfoExpView> list, String fileName,
+			String information, HttpServletResponse response) throws IOException {
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 		SimpleDateFormat dfm = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
@@ -452,13 +462,11 @@ public class WorkDealInfoExpViewService extends BaseService {
 			}
 			// 鉴证人
 			if (information.indexOf(",jzr") > -1)
-				dealInfoVo.setAttestAtionUserName(dealInfo
-						.getAttestationUserName());
+				dealInfoVo.setAttestAtionUserName(dealInfo.getAttestationUserName());
 			// 产品名称
 			if (information.indexOf(",cpmc") > -1) {
 				ProductType p = new ProductType();
-				dealInfoVo.setProductName(p.getProductTypeName(new Integer(
-						dealInfo.getProductName())));
+				dealInfoVo.setProductName(p.getProductTypeName(new Integer(dealInfo.getProductName())));
 			}
 			// 产品标识
 			if (information.indexOf(",cpbs") > -1) {
@@ -473,39 +481,32 @@ public class WorkDealInfoExpViewService extends BaseService {
 				if (dealInfo.getDealInfoType() == null) {
 					dealInfoType = "";
 				} else {
-					dealInfoType = workDealInfoType
-							.getDealInfoTypeName(dealInfo.getDealInfoType());
+					dealInfoType = workDealInfoType.getDealInfoTypeName(dealInfo.getDealInfoType());
 				}
 				if (dealInfo.getDealInfoType1() == null) {
 					dealInfoType1 = "";
 				} else {
-					dealInfoType1 = workDealInfoType
-							.getDealInfoTypeName(dealInfo.getDealInfoType1());
+					dealInfoType1 = workDealInfoType.getDealInfoTypeName(dealInfo.getDealInfoType1());
 				}
 				if (dealInfo.getDealInfoType2() == null) {
 					dealInfoType2 = "";
 				} else {
-					dealInfoType2 = workDealInfoType
-							.getDealInfoTypeName(dealInfo.getDealInfoType2());
+					dealInfoType2 = workDealInfoType.getDealInfoTypeName(dealInfo.getDealInfoType2());
 				}
 				if (dealInfo.getDealInfoType3() == null) {
 					dealInfoType3 = "";
 				} else {
-					dealInfoType3 = workDealInfoType
-							.getDealInfoTypeName(dealInfo.getDealInfoType3());
+					dealInfoType3 = workDealInfoType.getDealInfoTypeName(dealInfo.getDealInfoType3());
 				}
-				dealInfoVo.setDealInfoType(dealInfoType + "" + dealInfoType1
-						+ "" + dealInfoType2 + "" + dealInfoType3);
+				dealInfoVo.setDealInfoType(dealInfoType + "" + dealInfoType1 + "" + dealInfoType2 + "" + dealInfoType3);
 			}
 			// 经办人姓名
 			if (information.indexOf(",jbrxm") > -1) {
-				dealInfoVo.setCertApplyInfoName(dealInfo
-						.getWorkUserHIsContactName());
+				dealInfoVo.setCertApplyInfoName(dealInfo.getWorkUserHIsContactName());
 			}
 			// 经办人手机号
 			if (information.indexOf(",jbrphone") > -1) {
-				dealInfoVo.setCertApplyInfoPhone(dealInfo
-						.getWorkUserHIsContactPhone());
+				dealInfoVo.setCertApplyInfoPhone(dealInfo.getWorkUserHIsContactPhone());
 			}
 			// key编码
 			if (information.indexOf(",keybm") > -1) {
@@ -560,8 +561,7 @@ public class WorkDealInfoExpViewService extends BaseService {
 			}
 			// 收费金额
 			if (information.indexOf(",sfje") > -1) {
-				dealInfoVo.setTotalMoney(StringHelper
-						.formartDecimalToStr(dealInfo.getWorkTotalMoney()));
+				dealInfoVo.setTotalMoney(StringHelper.formartDecimalToStr(dealInfo.getWorkTotalMoney()));
 			}
 			// 收费人
 			if (information.indexOf(",sfr") > -1) {
@@ -570,9 +570,8 @@ public class WorkDealInfoExpViewService extends BaseService {
 			// 录入日期
 			if (information.indexOf(",lrdate") > -1) {
 				if (dealInfo.getInputUserDate() != null) {
-					dealInfoVo.setInputDate(StringHelper.getSystime(
-							"yyyy-MM-dd HH:mm:ss", dealInfo.getInputUserDate()
-									.getTime()));
+					dealInfoVo.setInputDate(
+							StringHelper.getSystime("yyyy-MM-dd HH:mm:ss", dealInfo.getInputUserDate().getTime()));
 				} else {
 					dealInfoVo.setInputDate("");
 				}
@@ -607,27 +606,23 @@ public class WorkDealInfoExpViewService extends BaseService {
 			}
 			// 到期日期
 			if (information.indexOf(",dqrq") > -1) {
-				String notafterString = dealInfo.getNotAfter() == null ? ""
-						: df.format(dealInfo.getNotAfter());
+				String notafterString = dealInfo.getNotAfter() == null ? "" : df.format(dealInfo.getNotAfter());
 				dealInfoVo.setNotAfter(notafterString);
 			}
 			// 制证人
 			if (information.indexOf(",zzr") > -1) {
-				dealInfoVo.setBusinessCardUserName(dealInfo
-						.getBusinessCardUserName());
+				dealInfoVo.setBusinessCardUserName(dealInfo.getBusinessCardUserName());
 			}
 			// 业务状态
 			if (information.indexOf(",ywzt") > -1) {
 				dealInfoVo
-						.setDealInfoStatus(workDealInfoStatus.WorkDealInfoStatusMap
-								.get(dealInfo.getDealInfoStatus()));
+						.setDealInfoStatus(workDealInfoStatus.WorkDealInfoStatusMap.get(dealInfo.getDealInfoStatus()));
 			}
 			// 收费日期
 			if (information.indexOf(",sfdate") > -1) {
 				if (dealInfo.getPayUserDate() != null) {
-					dealInfoVo.setPayDate(StringHelper.getSystime(
-							"yyyy-MM-dd HH:mm:ss", dealInfo.getPayUserDate()
-									.getTime()));
+					dealInfoVo.setPayDate(
+							StringHelper.getSystime("yyyy-MM-dd HH:mm:ss", dealInfo.getPayUserDate().getTime()));
 				} else {
 					dealInfoVo.setPayDate("");
 				}
@@ -635,15 +630,11 @@ public class WorkDealInfoExpViewService extends BaseService {
 			// 有效期
 			if (information.indexOf(",yxq") > -1) {
 				if (dealInfo.getAddCertDays() == null) {
-					dealInfoVo.setCertDays((dealInfo.getYear() == null ? 0
-							: dealInfo.getYear())
-							* 365
-							+ (dealInfo.getLastDays() == null ? 0 : dealInfo
-									.getLastDays()) + "（天）");
+					dealInfoVo.setCertDays((dealInfo.getYear() == null ? 0 : dealInfo.getYear()) * 365
+							+ (dealInfo.getLastDays() == null ? 0 : dealInfo.getLastDays()) + "（天）");
 				} else {
-					dealInfoVo.setCertDays(dealInfo.getYear() * 365
-							+ dealInfo.getLastDays()
-							+ dealInfo.getAddCertDays() + "（天）");
+					dealInfoVo.setCertDays(
+							dealInfo.getYear() * 365 + dealInfo.getLastDays() + dealInfo.getAddCertDays() + "（天）");
 				}
 			}
 			// 经办人邮箱
@@ -659,9 +650,8 @@ public class WorkDealInfoExpViewService extends BaseService {
 		}
 
 		String queryContent = "业务查询"; // getQueryContent(query);
-		new ExportExcel(queryContent, WorkDealInfoVo.class, varNameList)
-				.setDataList(workDealInfoVos).write(response, fileName)
-				.dispose();
+		new ExportExcel(queryContent, WorkDealInfoVo.class, varNameList).setDataList(workDealInfoVos)
+				.write(response, fileName).dispose();
 	}
 
 	/**

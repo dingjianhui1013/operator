@@ -930,7 +930,8 @@ public class WorkDealInfoAuditController extends BaseController {
 			workDealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_CERT_OBTAINED);
 			workDealInfo.setCreateBy(UserUtils.getUser());
 			workDealInfo.setCreateDate(new Date());
-			workDealInfo.setSvn(dealInfo.getSvn());
+			//workDealInfo.setSvn(dealInfo.getSvn());
+			workDealInfo.setSvn(workDealInfoService.getSVN(0));
 			workDealInfo.setPrevId(dealInfo.getId());
 			workDealInfo.setObtainedDate(new Date());
 			workDealInfo.setKeySn(dealInfo.getKeySn());
