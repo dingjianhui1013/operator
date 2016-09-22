@@ -4721,9 +4721,9 @@ public class WorkDealInfoService extends BaseService {
 			try {
 				workDealInfoDao.exeSql(sql);
 			} catch (Exception ex) {
-
+				continue;
 			}
-			log.error("变更prev_id已处理,首证书序列号:" + po.getFirstCertSN());
+			fixLog.error("变更prev_id已处理,首证书序列号:" + po.getFirstCertSN());
 
 		}
 	}
