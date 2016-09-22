@@ -4695,7 +4695,10 @@ public class WorkDealInfoService extends BaseService {
 
 			String sql = "update work_deal_info set DEL_FLAG='0',PREV_ID=null,DEAL_INFO_TYPE=0 where id="
 					+ po.getId();
-			workDealInfoDao.exeSql(sql);
+			try {
+				workDealInfoDao.exeSql(sql);
+			} catch (Exception e) {
+			}
 			return;
 		}
 
