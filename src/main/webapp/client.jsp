@@ -83,12 +83,12 @@
 		}
 	}
 	
-	function fixSVN(){
+	function fixFirstDealInfoType(){
 		$("#make").hide();
 		
 		if(confirm('是否确认修复svn?')){
 			$("#returnJsonData").html("正在修复...........");
-			var url = "test/fixSVN?svnCount=0&svnAppid="+$("#svnAppid").val()
+			var url = "test/fixFirstDealInfoType?fixAppId="+$("#fixAppId").val()
 					+"&_="+new Date().getTime();
 			$.getJSON(url,function(data){
 				$("#make").show();
@@ -151,6 +151,7 @@
 						<li><a href="#panel-4893682" data-toggle="tab">重新生成prev_id数据</a></li>
 						<li><a href="#panel-4893683" data-toggle="tab">修复svn数据</a></li>
 						<li><a href="#panel-4893684" data-toggle="tab">修复错位的firstCertSN数据</a></li>
+						<li><a href="#panel-4893685" data-toggle="tab">修复首条业务类型</a></li>
 					</ul>
 					<div class="tab-content">
 						<div class="tab-pane active" id="panel-98562">
@@ -274,6 +275,26 @@
 								</div>
 							</div>
 						</div>
+						<div class="tab-pane" id="panel-4893685">
+							<div class="container-fluid">
+								<div class="row-fluid">
+									<div class="span12">
+										<blockquote>
+											<p>修复首条业务类型</p>
+										</blockquote>
+										<br>
+									</div>
+									<div class="span12">
+										<input id="fixAppId"/>&nbsp;应用ID(指定应用ID，必填)
+										<br/><br/>
+										<button class="btn btn-warning" type="button"
+										onclick="fixFirstDealInfoType()"	 id="update">修复首条业务类型</button>
+										<br>
+									</div>
+								</div>
+							</div>
+						</div>
+						
 					</div>
 				</div>
 			</div>
