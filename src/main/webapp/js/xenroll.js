@@ -445,6 +445,7 @@ function URLDecode(psEncodeString) {
 }
 
 function installCertKmc(certSign, certKmc, kmcReq1, kmcReq2, kmcReq3, kmcRep1, kmcRep2, kmcRep3, installMode) {
+
     if (certKmc.length < 1)
         certKmc = kmcRep2;
     var kmcRep1Arr = kmcRep1.split("&");
