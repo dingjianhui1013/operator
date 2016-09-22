@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.UnavailableSecurityManagerException;
 import org.apache.shiro.subject.Subject;
@@ -35,6 +36,7 @@ import com.itrus.ca.modules.sys.entity.Role;
 import com.itrus.ca.modules.sys.entity.User;
 import com.itrus.ca.modules.sys.security.SystemAuthorizingRealm.Principal;
 import com.itrus.ca.modules.sys.service.OfficeService;
+import com.itrus.ca.modules.work.web.CertController;
 
 /**
  * 用户工具类
@@ -43,7 +45,7 @@ import com.itrus.ca.modules.sys.service.OfficeService;
  * @version 2013-5-29
  */
 public class UserUtils extends BaseService {
-
+	static Logger log = Logger.getLogger(UserUtils.class);
 	private static UserDao userDao = SpringContextHolder.getBean(UserDao.class);
 	private static MenuDao menuDao = SpringContextHolder.getBean(MenuDao.class);
 	private static AreaDao areaDao = SpringContextHolder.getBean(AreaDao.class);
@@ -74,7 +76,13 @@ public class UserUtils extends BaseService {
 			user = new User();
 			SecurityUtils.getSubject().logout();
 		}
+		
+		if(user.getId() == null){
+			log.debug("getUser为空");
+		}
+		
 		return user;
+		
 	}
 
 	public static User getUser(boolean isRefresh) {
