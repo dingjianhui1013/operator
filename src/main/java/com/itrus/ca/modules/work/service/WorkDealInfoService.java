@@ -4335,8 +4335,18 @@ public class WorkDealInfoService extends BaseService {
 
 	@Transactional(readOnly = false)
 	public void setPrevIdToNull(Integer appid) {
-		String sql = "update work_deal_info set prev_id=null where APP_ID="
-				+ appid;
+//		String sql = "update work_deal_info set prev_id=null where APP_ID="
+//				+ appid;
+		String sql = "update WORK_DEAL_INFO set PREV_ID=null where id in(";
+		sql +="select id from WORK_DEAL_INFO where FIRST_CERT_SN in(";
+		sql+="select FIRST_CERT_SN from (";
+		sql+="select count(*) c,FIRST_CERT_SN from WORK_DEAL_INFO ";
+		sql+=" where PREV_ID is null and FIRST_CERT_SN is not null ";
+		sql= sql + " and APP_ID="+appid;
+		sql+=" group by FIRST_CERT_SN";
+		sql+=" order by c desc";
+		sql+=" ) a where a.c>1";
+		sql+=" ))";
 		try {
 			workDealInfoDao.exeSql(sql);
 		} catch (Exception e) {
