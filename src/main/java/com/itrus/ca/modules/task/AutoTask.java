@@ -594,7 +594,7 @@ public class AutoTask {
 				officeId);
 		// 金额总量
 		paymentTotal = workDealInfoService.getWorkPayMoneyCount(countDate,
-				nextDay, officeId);
+				 officeId);
 		// key余量
 	
 
