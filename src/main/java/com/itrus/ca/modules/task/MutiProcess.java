@@ -362,7 +362,7 @@ public class MutiProcess implements Runnable {
 						workDealInfo.setUpdateDate(new Date());
 					}
 
-					workDealInfo.setCertSn(certInfo.getSerialnumber());
+					workDealInfo.setCertSn(certInfo.getSerialnumber().trim());
 
 					workDealInfo.setBusinessCardUserDate(StringHelper
 							.getTimestamp(s1.getProcessTime(),
