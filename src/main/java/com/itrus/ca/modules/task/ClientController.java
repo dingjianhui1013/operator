@@ -987,15 +987,15 @@ public class ClientController {
 		}
 
 		// 按需要的查出对应数据
-		Integer c = workDealInfoService.findPrevIdIsNull(prevIdAppid)
-				+ workDealInfoService.getNeedFixPrevIdCount(prevIdAppid
-						.toString());
-		List<String> lst = workDealInfoService.findFirstCertSnByAppId(
-				prevIdAppid, prevIdCount);
+		Integer isNullCount = workDealInfoService.findPrevIdIsNull(prevIdAppid);
+		Integer needFixCount = workDealInfoService
+				.getNeedFixPrevIdCount(prevIdAppid.toString());
+		Integer c = isNullCount + needFixCount;
+		List<String> lst = null;
 
 		if (StringHelper.isNull(prevFirstCertSN)) {
-			lst = workDealInfoService.findFirstCertSnByAppId(prevIdAppid,
-					prevIdCount);
+			lst = workDealInfoService.findPreIdIsNullFirstCertSnByAppId(
+					prevIdAppid, prevIdCount);
 		} else {
 			lst = new ArrayList<String>();
 			String[] flst = StringHelper.splitStr(prevFirstCertSN, ",");
