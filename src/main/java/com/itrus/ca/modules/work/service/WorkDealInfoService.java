@@ -2960,6 +2960,45 @@ public class WorkDealInfoService extends BaseService {
 			return 0;
 		return new Integer(m.get(0).get("CT").toString());
 	}
+	
+	/**
+	 * 查找previd为空,业务链数据大于1条的记录
+	 * 
+	 * @param appId
+	 * @param count
+	 * @return List<String>
+	 */
+	public List<String> findPreIdIsNullFirstCertSnByAppId(Integer appId, Integer count){
+		String sql = "select distinct FIRST_CERT_SN,a.c from (";
+		sql = sql
+				+ "select count(*) c,FIRST_CERT_SN from WORK_DEAL_INFO where PREV_ID is null and FIRST_CERT_SN is not null ";
+		if (appId != null && appId.longValue() > 0) {
+			sql = sql + " and APP_ID=" + appId;
+		}
+		sql += " group by FIRST_CERT_SN";
+		sql += " order by c desc";
+		sql += ")  a where a.c>1";
+		if (count != null && count.intValue() > 0) {
+			sql = sql + " and rownum<=" + count;
+		}
+
+		List<Map> lst = null;
+		List<String> res = new ArrayList<String>();
+		try {
+			lst = workDealInfoDao.findBySQLListMap(sql, 0, 0);
+			for (Map e : lst) {
+				if (e.get("FIRST_CERT_SN") == null
+						|| e.get("FIRST_CERT_SN").toString().trim().length() <= 0)
+					continue;
+				res.add(e.get("FIRST_CERT_SN").toString());
+			}
+		} catch (IllegalAccessException | IllegalArgumentException
+				| InvocationTargetException | ClassNotFoundException
+				| InstantiationException e) {
+			e.printStackTrace();
+		}
+		return res;
+	}
 
 	// 根据应用名称，查询统计信息
 	public List<String> findFirstCertSnByAppId(Integer appId, Integer count) {
