@@ -8253,8 +8253,8 @@ public class WorkDealInfoService extends BaseService {
 				Object tempid = e.get("PREV_ID");
 				if (tempid == null) {
 					hasFirst = true;
-					first_cert_sn = e.get("CERT_SN") == null ? null : e.get(
-							"CERT_SN").toString();
+					first_cert_sn = e.get("FIRST_CERT_SN") == null ? null : e.get(
+							"FIRST_CERT_SN").toString();
 					return first_cert_sn;
 				}
 			}
