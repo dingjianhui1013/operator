@@ -21,12 +21,8 @@ public class UpdateFirstCertSNThread {
 
 	private static int MAX_THREAD = 10;
 
-	public void process(int updateCount, int appid) {
+	public void process(List<Long> lst) {
 		// workDealInfoService.fixAllDataFirstCertSN(updateCount);
-
-		List<Long> lst = workDealInfoService.findNullFirstCertSNByCount(
-				updateCount, appid);
-
 		int count = lst.size();
 		int size = lst.size() > 300 ? lst.size() / MAX_THREAD : lst.size();
 		int end = 0;
