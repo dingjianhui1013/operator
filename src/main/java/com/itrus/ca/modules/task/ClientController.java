@@ -916,9 +916,12 @@ public class ClientController {
 		JSONObject json = new JSONObject();
 		// 修复所有现有数据里，没有firstCertSn字段的记录
 		// workDealInfoService.fixAllDataFirstCertSN(updateCount);
-		updateFirstCertSNThread.process(updateCount, appid == null ? appid : 0);
+
+		List<Long> lst = workDealInfoService.findNullFirstCertSNByCount(
+				updateCount, appid == null ? appid : 0);
+		updateFirstCertSNThread.process(lst);
 		json.put("statu", "0");
-		json.put("msg", "完成");
+		json.put("msg", "完成,待处理条数:" + lst.size());
 
 		return json.toString();
 	}
@@ -953,10 +956,13 @@ public class ClientController {
 		}
 		List<String> lst = workDealInfoService
 				.getNeedFixFirstCertSNLst(fixFirstCertSnAppid);
-		log.error("开始处理,app_id:" + fixFirstCertSnAppid + ",first_cert_sn错乱的记录");
+		log.error("开始处理,app_id:" + fixFirstCertSnAppid
+				+ ",first_cert_sn错乱的记录,记录数范围:" + lst.size());
 
 		new Thread(new FixFirstCertSNThread(lst)).start();
-
+		json.put("statu", "0");
+		json.put("msg", "开始处理,app_id:" + fixFirstCertSnAppid
+				+ ",first_cert_sn错乱的记录,记录数范围:" + lst.size());
 		return json.toString();
 	}
 
