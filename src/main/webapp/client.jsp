@@ -151,7 +151,9 @@
 						<li><a href="#panel-4893682" data-toggle="tab">重新生成prev_id数据</a></li>
 						<li><a href="#panel-4893683" data-toggle="tab">修复svn数据</a></li>
 						<li><a href="#panel-4893684" data-toggle="tab">修复错位的firstCertSN数据</a></li>
+						<!-- 
 						<li><a href="#panel-4893685" data-toggle="tab">修复首条业务类型</a></li>
+						 -->
 					</ul>
 					<div class="tab-content">
 						<div class="tab-pane active" id="panel-98562">
@@ -275,6 +277,7 @@
 								</div>
 							</div>
 						</div>
+						<!-- 
 						<div class="tab-pane" id="panel-4893685">
 							<div class="container-fluid">
 								<div class="row-fluid">
@@ -294,7 +297,7 @@
 								</div>
 							</div>
 						</div>
-						
+						 -->
 					</div>
 				</div>
 			</div>
