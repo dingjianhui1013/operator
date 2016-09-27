@@ -114,6 +114,7 @@ public class WorkDealInfoService extends BaseService {
 
 	static Log log = LogFactory.getLog(WorkDealInfoService.class);
 	private Log fixLog = LogFactory.getLog("fix");
+	private Log updateLog = LogFactory.getLog("update");
 
 	private LogUtil logUtil = new LogUtil();
 	private static final int CELL_NUM = 9;
@@ -3906,10 +3907,16 @@ public class WorkDealInfoService extends BaseService {
 				+ "]");
 		if (StringHelper.isNull(workDealInfo.getFirstCertSN())) {
 			// 如果是首条(无firstCertSn,certSn不是空,业务类型为新增)
-			if (workDealInfo.getPrevId() == null
-					&& !StringHelper.isNull(workDealInfo.getCertSn())
-					&& workDealInfo.getDealInfoType() == 0) {
-				workDealInfo.setFirstCertSN(workDealInfo.getCertSn());
+			if (workDealInfo.getPrevId() == null) {
+				if ((workDealInfo.getDealInfoType() != null && workDealInfo
+						.getDealInfoType() == 0)
+						&& !StringHelper.isNull(workDealInfo.getCertSn()))
+					workDealInfo.setFirstCertSN(workDealInfo.getCertSn());
+				else {
+					// 记录进日志
+					updateLog.error("only id..." + workDealInfo.getId());
+				}
+
 			} else {
 				// 有prev_id则直接查上一条
 				WorkDealInfo w = findPreDealInfo(workDealInfo.getPrevId());
