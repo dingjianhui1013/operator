@@ -77,9 +77,6 @@ public class UserUtils extends BaseService {
 			SecurityUtils.getSubject().logout();
 		}
 		
-		if(user.getId() == null){
-			log.debug("getUser为空");
-		}
 		
 		return user;
 		
