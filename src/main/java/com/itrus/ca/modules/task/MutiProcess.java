@@ -288,7 +288,8 @@ public class MutiProcess implements Runnable {
 					certInfo.setNotafter(dnf.parse(s1.getNotafter()));
 					certInfo.setTrustDeviceDate(dnf.parse(s1.getNotafter()));// 可信设备时间
 				}
-				certInfo.setNotbefore(dnf.parse(s1.getNotbefore()));
+				if(!StringHelper.isNull(s1.getNotbefore()))
+					certInfo.setNotbefore(dnf.parse(s1.getNotbefore()));
 				certInfo.setSignDate(dnf.parse(s1.getProcessTime()));
 				certInfo.setKeySn("");// 这次不需要keySn即使有也不记录
 				certInfo.setTrustDeviceCount(1);// 默认送1个
