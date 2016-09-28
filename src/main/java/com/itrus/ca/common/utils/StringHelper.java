@@ -31,6 +31,19 @@ import sun.misc.BASE64Decoder;
  */
 public class StringHelper {
 
+	private static String phoneMatcher;
+
+	static {
+		StringBuffer query = new StringBuffer();
+		query.append("147\\d{9}");
+		query.append("|1[3,8]\\d{9}");
+		query.append("|15\\[0,1,2,3,5,6,7,8,9]");
+		query.append("|17[3,6,7,8]\\d{8}");
+		query.append("|170[0,1,2,5,7,8,9]\\d{7}");
+
+		phoneMatcher = query.toString();
+	}
+
 	public static StringHelper getInstancle() {
 		return new StringHelper();
 	}
@@ -587,7 +600,7 @@ public class StringHelper {
 
 		Pattern p = null; // 正则表达??
 		Matcher m = null; // 操作的字符串
-		p = Pattern.compile("1[3,5][4,5,6,7,8,9]\\d{8}|15[8,9]\\d{8}");// 匹配移动手机号码
+		p = Pattern.compile(phoneMatcher);// 匹配移动手机号码
 		m = p.matcher(line);
 		if (m.matches())
 			return true;
@@ -617,7 +630,7 @@ public class StringHelper {
 	public static boolean hasPhone(String line) {
 		Pattern p = null; // 正则表达??
 		Matcher m = null; // 操作的字符串
-		p = Pattern.compile("1[3,5][4,5,6,7,8,9]\\d{8}|15[8,9]\\d{8}");// 匹配移动手机号码
+		p = Pattern.compile(phoneMatcher);// 匹配移动手机号码
 		m = p.matcher(line);
 		if (m.find())
 			return true;
@@ -633,7 +646,7 @@ public class StringHelper {
 	public static String getPhone(String line) {
 		Pattern p = null; // 正则表达??
 		Matcher m = null; // 操作的字符串
-		p = Pattern.compile("1[3,5][4,5,6,7,8,9]\\d{8}|15[8,9]\\d{8}");// 匹配移动手机号码
+		p = Pattern.compile(phoneMatcher);// 匹配移动手机号码
 
 		for (int i = 0; i < line.length(); i++) {
 
