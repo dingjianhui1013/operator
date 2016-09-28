@@ -679,6 +679,11 @@ public class WorkPayInfoController extends BaseController {
 					logUtil.saveSysLog("业务中心", "客户端更新业务：编号" + workDealInfo.getId() + "缴费" + workPayedMoney + "元", "");
 					return "redirect:" + Global.getAdminPath() + "/work/workDealInfoAudit/";
 				}
+				
+				if(workDealInfo.getDealInfoType2().equals(WorkDealInfoType.TYPE_INFORMATION_REROUTE)){
+					model.addAttribute("isChangeBusiness",true);
+				}
+				
 				return "modules/work/workDealInfoMaintainAuditMake";
 			} else if (workDealInfo.getDealInfoType2().equals(WorkDealInfoType.TYPE_ADD_CERT)) {
 				return "redirect:" + Global.getAdminPath() + "/work/workDealInfo/";
