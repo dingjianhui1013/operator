@@ -284,13 +284,15 @@ public class MutiProcess implements Runnable {
 
 				// String notafter = s1.getNotafter();
 				
-				if(!StringHelper.isNull(s1.getNotafter()))
+				if(!StringHelper.isNull(s1.getNotafter())){
 					certInfo.setNotafter(dnf.parse(s1.getNotafter()));
+					certInfo.setTrustDeviceDate(dnf.parse(s1.getNotafter()));// 可信设备时间
+				}
 				certInfo.setNotbefore(dnf.parse(s1.getNotbefore()));
 				certInfo.setSignDate(dnf.parse(s1.getProcessTime()));
 				certInfo.setKeySn("");// 这次不需要keySn即使有也不记录
 				certInfo.setTrustDeviceCount(1);// 默认送1个
-				certInfo.setTrustDeviceDate(dnf.parse(s1.getNotafter()));// 可信设备时间
+				
 				String serNum = s1.getSerialnumber();
 				if (serNum != null) {
 					serNum = serNum.trim();
@@ -392,8 +394,9 @@ public class MutiProcess implements Runnable {
 					workDealInfo.setObtainedDate(new Date());
 					workDealInfo.setStatus(0);
 					workDealInfo.setIsSJQY(1);
-
-					workDealInfo.setNotafter(dnf.parse(s1.getNotafter()));
+					
+					if(!StringHelper.isNull(s1.getNotafter()))
+						workDealInfo.setNotafter(dnf.parse(s1.getNotafter()));
 
 					workDealInfo.setKeySn(s1.getKeyAndUsbSn());
 					Double openAccountMoney = 0d;
