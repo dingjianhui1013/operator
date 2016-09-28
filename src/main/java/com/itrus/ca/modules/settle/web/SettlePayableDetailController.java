@@ -3,14 +3,14 @@ package com.itrus.ca.modules.settle.web;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
+
 import java.util.List;
-import java.util.Set;
+
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -43,7 +43,6 @@ import com.itrus.ca.common.utils.DateUtils;
 import com.itrus.ca.common.web.BaseController;
 import com.itrus.ca.modules.constant.ProductType;
 import com.itrus.ca.modules.constant.WorkDealInfoType;
-import com.itrus.ca.modules.key.web.KeyUsbKeyController;
 import com.itrus.ca.modules.profile.entity.ConfigAgentAppRelation;
 import com.itrus.ca.modules.profile.entity.ConfigChargeAgent;
 import com.itrus.ca.modules.profile.entity.ConfigCommercialAgent;
@@ -163,6 +162,8 @@ public class SettlePayableDetailController extends BaseController {
 		 * 重新修改结算方法
 		 * 
 		 */
+		
+		
 		List<SettleCollectVO> collect = Lists.newArrayList();
 		for (Long productId : productIdList) {
 			ConfigProduct product = configProductService.get(productId);
@@ -369,8 +370,13 @@ public class SettlePayableDetailController extends BaseController {
 					if (currentDealNotAfter.getTime() < endLastDate.getTime()) {
 						long between = endLastDate.getTime()
 								- currentDealNotAfter.getTime();
-						long a = between / 31536000000L;
-						waitNum += (int) Math.ceil(a + 1);
+						float a = between / 31536000000f;
+						
+						int a1 = (int)(a*10);
+						
+						double a2 = a1/10f;
+						
+						waitNum += (int) Math.ceil(a2);
 					} else if (currentDealBusiness.getTime() < endLastDate
 							.getTime()
 							&& currentDealNotAfter.getTime() >= endLastDate
@@ -387,8 +393,12 @@ public class SettlePayableDetailController extends BaseController {
 			else if (currentDealNotAfter.getTime() < endLastDate.getTime()) {
 				long between = endLastDate.getTime()
 						- currentDealNotAfter.getTime();
-				long a = between / 31536000000L;
-				waitNum += (int) Math.ceil(a + 1);
+				float a = between / 31536000000f;
+				int a1 = (int)(a*10);
+				
+				double a2 = a1/10f;
+		
+				waitNum += (int) Math.ceil(a2);
 				lastNum += currentDealInfo.getYear();
 				detailVo.setSettleYear(currentDealInfo.getYear().toString());
 				detailList.add(detailVo);
@@ -399,11 +409,21 @@ public class SettlePayableDetailController extends BaseController {
 					&& currentDealNotAfter.getTime() >= endLastDate.getTime()) {
 				long between = endLastDate.getTime()
 						- currentDealBusiness.getTime();
-				long a = between / 31536000000L;
-				int yy = (int) Math.ceil(a + 1);
-				lastNum += yy;
+				float a = between / 31536000000f;
+				int a1 = (int)(a*10);
+				
+				double a2 = a1/10f;
+				
+				int yy = (int) Math.ceil(a2);
+				
+				//结算总年限-已结算年限,最大待结算年限
+				int most = totalAgentYear-yjNum;
+				//当前业务办理年限
+				int current = currentDealInfo.getYear();
+				//先和当前业务办理年限比较,再和最大待结算年限比较
+				lastNum += ((yy<=current?yy:current)<=most?(yy<=current?yy:current):most);
 				waitNum = 0;
-				detailVo.setSettleYear(yy + "");
+				detailVo.setSettleYear(lastNum + "");
 				detailList.add(detailVo);
 			}
 

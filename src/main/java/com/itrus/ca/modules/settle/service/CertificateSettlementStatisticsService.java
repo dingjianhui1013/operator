@@ -193,65 +193,7 @@ public class CertificateSettlementStatisticsService extends BaseService {
 		return resultList;
 	}
 
-	/*
-	 * public HashMap<String, StaticCertMonth>
-	 * getStaticMap(List<CertificateSettlementStatisticsVO> findWorkList) {
-	 * HashMap<String, StaticCertMonth> monthMap = new HashMap<String,
-	 * StaticCertMonth>(); for (int i = 0; i < findWorkList.size(); i++) {
-	 * CertificateSettlementStatisticsVO cssv = findWorkList.get(i);
-	 * StaticCertMonth scm = monthMap.get(cssv.getMonth()); if (scm == null) {
-	 * scm = new StaticCertMonth(); } if (cssv.getDealInfoType() == 0) { // 新增
-	 * switch (cssv.getProductName()) { case "1": // 企业证书 switch
-	 * (cssv.getYear()) { case 1:
-	 * scm.setOneAdd1(cssv.getWorkCount().intValue()); break; case 2:
-	 * scm.setOneAdd2(cssv.getWorkCount().intValue()); break; case 4:
-	 * scm.setOneAdd4(cssv.getWorkCount().intValue()); break; case 5:
-	 * scm.setOneAdd5(cssv.getWorkCount().intValue()); break; } break; case "2":
-	 * // 个人证书（企业） switch (cssv.getYear()) { case 1:
-	 * scm.setTwoAdd1(cssv.getWorkCount().intValue()); break; case 2:
-	 * scm.setTwoAdd2(cssv.getWorkCount().intValue()); break; case 4:
-	 * scm.setTwoAdd4(cssv.getWorkCount().intValue()); break; case 5:
-	 * scm.setTwoAdd5(cssv.getWorkCount().intValue()); break; } break; case
-	 * "6":// 个人证书（个人） switch (cssv.getYear()) { case 1:
-	 * scm.setFourAdd1(cssv.getWorkCount().intValue()); break; case 2:
-	 * scm.setFourAdd2(cssv.getWorkCount().intValue()); break; case 4:
-	 * scm.setFourAdd4(cssv.getWorkCount().intValue()); break; case 5:
-	 * scm.setFourAdd5(cssv.getWorkCount().intValue()); break; } break;
-	 * 
-	 * } } else if (cssv.getDealInfoType() == 1) { // 更新 switch
-	 * (cssv.getProductName()) { case "1": switch (cssv.getYear()) { case 1:
-	 * scm.setOneRenew1(cssv.getWorkCount().intValue()); break; case 2:
-	 * scm.setOneRenew2(cssv.getWorkCount().intValue()); break; case 4:
-	 * scm.setOneRenew4(cssv.getWorkCount().intValue()); break; case 5:
-	 * scm.setOneRenew5(cssv.getWorkCount().intValue()); break; } break; case
-	 * "2": switch (cssv.getYear()) { case 1:
-	 * scm.setTwoRenew1(cssv.getWorkCount().intValue()); break; case 2:
-	 * scm.setTwoRenew2(cssv.getWorkCount().intValue()); break; case 4:
-	 * scm.setTwoRenew4(cssv.getWorkCount().intValue()); break; case 5:
-	 * scm.setTwoRenew5(cssv.getWorkCount().intValue()); break; } break; case
-	 * "6": switch (cssv.getYear()) { case 1:
-	 * scm.setFourRenew1(cssv.getWorkCount().intValue()); break; case 2:
-	 * scm.setFourRenew2(cssv.getWorkCount().intValue()); break; case 4:
-	 * scm.setFourRenew4(cssv.getWorkCount().intValue()); break; case 5:
-	 * scm.setFourRenew5(cssv.getWorkCount().intValue()); break; } break;
-	 * 
-	 * } } else if (cssv.getDealInfoType() == 2) {// 遗失补办
-	 * scm.setReplacementLosted(cssv.getWorkCount().intValue() +
-	 * scm.getReplacementLosted()); } else if (cssv.getDealInfoType() == 3) {//
-	 * 损坏更换 scm.setReplacementDamaged(cssv.getWorkCount().intValue() +
-	 * scm.getReplacementDamaged()); } else if (cssv.getDealInfoType() == 4) {//
-	 * 信息变更 scm.setAlterInfomation(cssv.getWorkCount().intValue() +
-	 * scm.getAlterInfomation()); } else if (cssv.getDealInfoType() == 124 ||
-	 * cssv.getDealInfoType() == 134) {// 组合业务，更新+补办（遗失或损坏）+信息更新
-	 * scm.setAlterInfomation(cssv.getWorkCount().intValue() +
-	 * scm.getAlterInfomation()); } else if (cssv.getDealInfoType() == 120) {//
-	 * 组合业务：更新+遗失补办 scm.setReplacementLosted(cssv.getWorkCount().intValue() +
-	 * scm.getReplacementLosted()); } else if (cssv.getDealInfoType() == 130)
-	 * {// 组合业务：更新+损坏更换 scm.setReplacementDamaged(cssv.getWorkCount().intValue()
-	 * + scm.getReplacementDamaged()); } monthMap.put(cssv.getMonth(), scm);
-	 * 
-	 * } return monthMap; }
-	 */
+	
 
 	public List<CertificateSettlementStatisticsVO> findWorkList1(Long apply, String productType, String workTypes,
 			String officeIdsList, String agentId, Date startDate, Date endDate, boolean multiType) {
