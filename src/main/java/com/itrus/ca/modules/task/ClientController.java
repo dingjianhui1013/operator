@@ -961,8 +961,7 @@ public class ClientController {
 
 		new Thread(new FixFirstCertSNThread(lst)).start();
 		json.put("statu", "0");
-		json.put("msg", "开始处理,app_id:" + fixFirstCertSnAppid
-				+ ",first_cert_sn错乱的记录,记录数范围:" + lst.size());
+		json.put("msg", "开始处理,app_id:" + fixFirstCertSnAppid);
 		return json.toString();
 	}
 
