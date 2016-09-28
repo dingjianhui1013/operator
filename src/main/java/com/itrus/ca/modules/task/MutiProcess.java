@@ -153,6 +153,7 @@ public class MutiProcess implements Runnable {
 
 			Integer sjNum = 1;
 			for (BasicInfoScca s1 : sccaList) {
+				try{
 				log.debug("开始创建第" + number + "个线程,第" + sjNum + "条数据,中间表id："
 						+ s1.getId());
 				WorkCompany company = new WorkCompany();
@@ -165,7 +166,8 @@ public class MutiProcess implements Runnable {
 				String productName = s1.getCertType();
 				String appName = s1.getAppName();
 
-				productName = ProductType.productTypeIdMap.get(productName)
+				Integer pname = ProductType.productTypeIdMap.get(productName);
+				productName = pname==null ? null :ProductType.productTypeIdMap.get(productName)
 						.toString();
 
 				ConfigProduct product = configProductService.findByNamesLabel(
@@ -281,8 +283,9 @@ public class MutiProcess implements Runnable {
 				certInfo.setSubjectDn(s1.getSubjectDn());
 
 				// String notafter = s1.getNotafter();
-
-				certInfo.setNotafter(dnf.parse(s1.getNotafter()));
+				
+				if(!StringHelper.isNull(s1.getNotafter()))
+					certInfo.setNotafter(dnf.parse(s1.getNotafter()));
 				certInfo.setNotbefore(dnf.parse(s1.getNotbefore()));
 				certInfo.setSignDate(dnf.parse(s1.getProcessTime()));
 				certInfo.setKeySn("");// 这次不需要keySn即使有也不记录
@@ -505,6 +508,10 @@ public class MutiProcess implements Runnable {
 							+ s1.getId() + "\t序列号:" + s1.getSerialnumber()
 							+ "\t" + e.getMessage());
 					exlog.error(StringHelper.getStackInfo(e));
+					continue;
+				}
+				}catch(Exception ee){
+					exlog.error(StringHelper.getStackInfo(ee));
 					continue;
 				}
 			}
