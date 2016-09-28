@@ -149,8 +149,10 @@
 						<li><a href="#panel-489367" data-toggle="tab">更新业务</a></li>
 						<li><a href="#panel-4893681" data-toggle="tab">更新首张证书序列号</a></li>
 						<li><a href="#panel-4893682" data-toggle="tab">重新生成prev_id数据</a></li>
+						<!-- 
 						<li><a href="#panel-4893683" data-toggle="tab">修复svn数据</a></li>
-						<li><a href="#panel-4893684" data-toggle="tab">修复错位的firstCertSN数据</a></li>
+						 -->
+						<li><a href="#panel-4893684" data-toggle="tab">整理首证书数据</a></li>
 						<!-- 
 						<li><a href="#panel-4893685" data-toggle="tab">修复首条业务类型</a></li>
 						 -->
@@ -239,6 +241,7 @@
 								</div>
 							</div>
 						</div>
+						<!-- 
 						<div class="tab-pane" id="panel-4893683">
 							<div class="container-fluid">
 								<div class="row-fluid">
@@ -258,6 +261,7 @@
 								</div>
 							</div>
 						</div>
+						 -->
 						<div class="tab-pane" id="panel-4893684">
 							<div class="container-fluid">
 								<div class="row-fluid">
