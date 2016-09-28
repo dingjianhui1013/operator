@@ -42,6 +42,13 @@
 			$("#expirationDate").show();
 		}
 		
+		
+		
+		if(${isChangeBusiness==true}){
+			$("#certSortTr").show();
+		}
+		
+		
 	});
 	
 	
@@ -168,6 +175,9 @@
 			alert("Error: csr is null!")
 			return false;
 		}
+		
+		
+		
 		cspStr = encodeURI(encodeURI(cspStr));
 		var url = "${ctx}/ca/makeCert?reqOverrideValidity=" + day
 				+ "&certProvider=" + cspStr + "&keySn=" + keySN + "&csr=" + csr
@@ -534,15 +544,15 @@
 					<input type="button" style="display: none;" class="btn btn-inverse"
 					value="初始化key" id="csh" onclick="keyInit()" /></td>
 			</tr>
-			<c:if test="${isChangeBusiness==true }">
-			<tr>
+			
+			<tr style="display: none"  id="certSortTr">
 				<td>多证书编号</td>
 				<td><input type="text" id="certSort" onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"  
                                     onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'0')}else{this.value=this.value.replace(/\D/g,'')}" /> 
 				<font color="green">注:多证书编号错误修复</font>
 				</td>
 			</tr>
-			</c:if>
+			
 		</table>
 		<form>
 			<input type="hidden" value="" name="" /> <input type="hidden"
