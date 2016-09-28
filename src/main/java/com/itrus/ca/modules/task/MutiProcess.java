@@ -486,6 +486,7 @@ public class MutiProcess implements Runnable {
 					sjNum++;
 
 				} catch (Exception e) {
+					e.printStackTrace();
 					log.error("Exception at 线程 ：" + number + "\t数据id:"
 							+ s1.getId() + "\t序列号:" + s1.getSerialnumber()
 							+ "\t" + e.getMessage());
@@ -514,7 +515,7 @@ public class MutiProcess implements Runnable {
 			basicInfoSccaService.deleteList(usedBasicInfo);
 
 		} catch (Exception e) {
-			// e.printStackTrace();
+			e.printStackTrace();
 			log.error("Excepton at num:" + this.number + "\t" + e.getMessage());
 		}
 
