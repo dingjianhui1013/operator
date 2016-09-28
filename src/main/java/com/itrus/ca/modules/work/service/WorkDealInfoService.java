@@ -4753,7 +4753,7 @@ public class WorkDealInfoService extends BaseService {
 			po.setDelFlag("0");
 			// workDealInfoDao.save(po);
 
-			String sql = "update work_deal_info set DEL_FLAG='0',PREV_ID=null,DEAL_INFO_TYPE=0 where id="
+			String sql = "update work_deal_info set DEL_FLAG='0',PREV_ID=null where id="
 					+ po.getId();
 			try {
 				workDealInfoDao.exeSql(sql);
