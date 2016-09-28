@@ -159,12 +159,7 @@
 						selected="selected"
 						</c:if>>
 					   ${productType[pro.productName]}${workDealInfo.configProduct.productLabel==0? "(通用)":"(专用)"}
-						<%-- <c:if test='${pro.productName=="1"}'>企业证书</c:if>
-						<c:if test='${pro.productName=="2"}'>个人证书(企业)</c:if> 
-						<c:if test='${pro.productName=="3"}'>机构证书</c:if> 
-						<c:if test='${pro.productName=="4"}'>可信移动设备</c:if> 
-						<c:if test='${pro.productName=="5"}'>电子签章</c:if>
-						<c:if test='${pro.productName=="5"}'>个人证书(机构)</c:if>  --%>
+						
 						</option>
 				</c:forEach>
 			</select> 
