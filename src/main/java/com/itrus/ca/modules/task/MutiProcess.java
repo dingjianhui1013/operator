@@ -7,6 +7,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.log4j.Logger;
 import org.springframework.beans.BeanUtils;
 import org.springframework.transaction.annotation.Transactional;
@@ -92,6 +94,8 @@ public class MutiProcess implements Runnable {
 			.getBean(ConfigChargeAgentBoundConfigProductService.class);
 
 	Logger log = Logger.getLogger(MutiProcess.class);
+	
+	Log exlog = LogFactory.getLog("ex");
 
 	private List<BasicInfoScca> sccaList;
 	private Long officeId;
@@ -244,7 +248,9 @@ public class MutiProcess implements Runnable {
 						user.setConCertType(String.valueOf(s1.getConCertType()));
 					user.setConCertNumber(s1.getConCertNumber());
 					user.setContactEmail(s1.getContactEmail());
-					user.setContactPhone(s1.getContactPhone());
+					if(StringHelper.isPhone(s1.getContactPhone())){
+						user.setContactPhone(s1.getContactPhone());
+					}
 					user.setContactTel(s1.getContactTel());
 					user.setContactSex(s1.getContactSex());
 					user.setWorkCompany(company);
@@ -517,6 +523,7 @@ public class MutiProcess implements Runnable {
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.error("Excepton at num:" + this.number + "\t" + e.getMessage());
+			exlog.error(StringHelper.getStackInfo(e));
 		}
 
 	}
