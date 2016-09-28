@@ -142,22 +142,7 @@ public class ConfigSupplierController extends BaseController {
 					}
 				}
 		}
-//		Type map = new Type();
-//		map.setKey(1);
-//		map.setType("企业证书");
-//		list.add(map);
-//		Type map1 = new Type();
-//		map1.setKey(2);
-//		map1.setType("个人证书");
-//		list.add(map1);
-//		Type map2 = new Type();
-//		map2.setKey(3);
-//		map2.setType("机构证书");
-//		list.add(map2);
-//		Type map3 = new Type();
-//		map3.setKey(4);
-//		map3.setType("签章");
-//		list.add(map3);
+
 
 			list.add(map);
 			
