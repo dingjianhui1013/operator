@@ -9,6 +9,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import com.itrus.ca.common.utils.SpringContextHolder;
+import com.itrus.ca.common.utils.StringHelper;
 import com.itrus.ca.modules.work.entity.WorkDealInfo;
 import com.itrus.ca.modules.work.service.WorkDealInfoService;
 
@@ -20,6 +21,7 @@ import com.itrus.ca.modules.work.service.WorkDealInfoService;
  */
 public class FixFirstCertSNThread implements Runnable {
 	private Logger log = Logger.getLogger("fix");
+	private Logger exLog = Logger.getLogger("ex");
 	private List<String> all;
 	private static final int MAX_THREAD = 30;
 
@@ -54,6 +56,7 @@ public class FixFirstCertSNThread implements Runnable {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			exLog.error(StringHelper.getStackInfo(e));
 		}
 	}
 

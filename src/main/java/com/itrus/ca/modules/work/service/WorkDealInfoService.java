@@ -114,6 +114,7 @@ public class WorkDealInfoService extends BaseService {
 
 	static Log log = LogFactory.getLog(WorkDealInfoService.class);
 	private Log fixLog = LogFactory.getLog("fix");
+	private Log exLog = LogFactory.getLog("ex");
 	private Log updateLog = LogFactory.getLog("update");
 
 	private LogUtil logUtil = new LogUtil();
@@ -4739,7 +4740,6 @@ public class WorkDealInfoService extends BaseService {
 					+ firstCertSN + "' where id=" + id;
 			workDealInfoDao.exeSql(sql);
 		} catch (Exception e) {
-			e.printStackTrace();
 		}
 	}
 
@@ -4761,9 +4761,12 @@ public class WorkDealInfoService extends BaseService {
 			}
 			return;
 		}
-
+		
 		for (int i = 0; i < lst.size(); i++) {
-			WorkDealInfo po = lst.get(i);
+			String sql = "";
+			WorkDealInfo po = null;
+			try{
+			po = lst.get(i);
 			WorkDealInfo pre = findPreByFirstCertSN(po);
 			if (pre == null && i != (lst.size() - 1)) {
 				continue;
@@ -4778,9 +4781,15 @@ public class WorkDealInfoService extends BaseService {
 			}
 
 			// workDealInfoDao.save(po);
-			String sql = "update work_deal_info set DEL_FLAG='"
+			sql = "update work_deal_info set DEL_FLAG='"
 					+ po.getDelFlag() + "',prev_id=" + po.getPrevId()
 					+ " where id=" + po.getId();
+			}catch(Exception ex){
+				ex.printStackTrace();
+				exLog.error(StringHelper.getStackInfo(ex));
+				continue;
+			}
+			
 			try {
 				workDealInfoDao.exeSql(sql);
 			} catch (Exception ex) {

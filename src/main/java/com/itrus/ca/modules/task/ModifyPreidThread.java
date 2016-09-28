@@ -6,6 +6,8 @@ package com.itrus.ca.modules.task;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.log4j.Logger;
 
 import com.itrus.ca.common.utils.SpringContextHolder;
@@ -25,6 +27,7 @@ public class ModifyPreidThread implements Runnable {
 	private List<String> all;
 
 	Logger log = Logger.getLogger(ModifyPreidThread.class);
+	private Log exLog = LogFactory.getLog("ex");
 
 	private static final int MAX_THREAD = 30;
 
@@ -63,6 +66,7 @@ public class ModifyPreidThread implements Runnable {
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.error(StringHelper.getStackInfo(e));
+			exLog.error(StringHelper.getStackInfo(e));
 		}
 	}
 
