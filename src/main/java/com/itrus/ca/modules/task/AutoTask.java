@@ -292,9 +292,7 @@ public class AutoTask {
 			
 		}
 		
-//		productType.add(idMap.get(ProductType.PRODUCT_TYPE_ENT).toString());// 企业证书 1
-//		productType.add(idMap.get(ProductType.PRODUCT_TYPE_PERE).toString());// 个人证书(企业) 2
-//		productType.add(idMap.get(ProductType.PRODUCT_TYPE_PERO).toString());// 个人证书(机构) 6
+
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Calendar calendar = Calendar.getInstance();
 		calendar.add(Calendar.DAY_OF_YEAR, -1);
