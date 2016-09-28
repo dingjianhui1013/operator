@@ -581,13 +581,19 @@ public class StringHelper {
 	}
 
 	/**
-	 * 检查身份证是否合为15位或18位
+	 * 判定是否为有效的身份证
 	 * 
-	 * @param value
+	 * @param idcard
 	 * @return boolean
 	 */
-	public static boolean isIDCard(String value) {
-		return value.matches("\\d{15}|\\d{18}");
+	public static boolean isIdcard(String idcard) {
+		Pattern p = null; // 正则表达??
+		Matcher m = null; // 操作的字符串
+		p = Pattern.compile("(\\d{14}[0-9a-zA-Z])|(\\d{17}[0-9a-zA-Z])");// 匹配移动手机号码
+		m = p.matcher(idcard);
+		if (m.matches())
+			return true;
+		return false;
 	}
 
 	/**
