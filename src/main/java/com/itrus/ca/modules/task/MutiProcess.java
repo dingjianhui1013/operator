@@ -265,7 +265,8 @@ public class MutiProcess implements Runnable {
 
 				// log.error("保存 workUserHis ");
 				certApplyInfo.setName(s1.getName());
-				if (!StringHelper.isIdcard(s1.getIdCard())) {
+				//如果有身份證，但身份證格式不對，則不處理，留在臨時表
+				if (!StringHelper.isNull(s1.getIdCard()) &&!StringHelper.isIdcard(s1.getIdCard())) {
 					exlog.error("idcard error : " + s1.getIdCard() + " | id:"
 							+ s1.getIdCard() + " | firstCertSn:"
 							+ s1.getFirstCertSN() + " | serialnumber(certSn):"
