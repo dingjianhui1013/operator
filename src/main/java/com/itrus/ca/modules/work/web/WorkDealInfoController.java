@@ -311,6 +311,7 @@ public class WorkDealInfoController extends BaseController {
 		long start = System.currentTimeMillis();
 		
 		User user = UserUtils.getUser();
+		System.out.print(user.getName());
 		workDealInfo.setCreateBy(user.getCreateBy());
 		
 		List<ConfigApp> configAppList = configAppService.selectAll();

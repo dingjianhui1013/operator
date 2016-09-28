@@ -676,6 +676,11 @@ public class WorkDealInfoOperationController extends BaseController {
 			model.addAttribute("validiteDays",StringHelper.getDvalueDay(new Date(), workDealInfo.getExpirationDate()));
 		}
 
+		//解决迁移导致的多证书编号错误问题,让用户前台输入进行修改
+		if(workDealInfo.getDealInfoType2()==WorkDealInfoType.TYPE_INFORMATION_REROUTE){
+			model.addAttribute("isChangeBusiness", true);
+		}
+		
 		//秘钥长度可选
 		if(raAccount.getKeyLen()!=null){
 			model.addAttribute("keyLen", raAccount.getKeyLen());
