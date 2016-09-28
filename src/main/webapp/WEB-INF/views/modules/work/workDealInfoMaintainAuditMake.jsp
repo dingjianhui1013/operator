@@ -153,7 +153,7 @@
 		}
 		
 		
-		//如果是更新的:
+		//如果是新增或遗失补办或损坏更换的:
 		if("${workDealInfo.dealInfoType}"=="0" || "${workDealInfo.dealInfoType1}"=="2" || "${workDealInfo.dealInfoType1}"=="3"){
 			//新增的生成csr
 			if ($("[name=provider]").val().length > 0) {
@@ -171,7 +171,7 @@
 		cspStr = encodeURI(encodeURI(cspStr));
 		var url = "${ctx}/ca/makeCert?reqOverrideValidity=" + day
 				+ "&certProvider=" + cspStr + "&keySn=" + keySN + "&csr=" + csr
-				+ "&dealInfoId=${workDealInfo.id}&addCertDays="+$("#addCertDays").val()+"&_="+new Date().getTime();
+				+ "&dealInfoId=${workDealInfo.id}&addCertDays="+$("#addCertDays").val()+"&certSort="+$("#certSort").val()+"&_="+new Date().getTime();
 		$.ajax({
 					url : url,
 					async : false,
@@ -534,6 +534,15 @@
 					<input type="button" style="display: none;" class="btn btn-inverse"
 					value="初始化key" id="csh" onclick="keyInit()" /></td>
 			</tr>
+			<c:if test="${isChangeBusiness==true }">
+			<tr>
+				<td>多证书编号</td>
+				<td><input type="text" id="certSort" onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"  
+                                    onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'0')}else{this.value=this.value.replace(/\D/g,'')}" /> 
+				<font color="green">注:多证书编号错误修复</font>
+				</td>
+			</tr>
+			</c:if>
 		</table>
 		<form>
 			<input type="hidden" value="" name="" /> <input type="hidden"
