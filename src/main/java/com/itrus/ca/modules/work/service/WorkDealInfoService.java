@@ -4750,9 +4750,26 @@ public class WorkDealInfoService extends BaseService {
 		// 只有一条的情况
 		if (lst != null && lst.size() == 1) {
 			WorkDealInfo po = lst.get(0);
-			po.setDelFlag("0");
-			// workDealInfoDao.save(po);
-
+			if (po.getPrevId() != null && po.getPrevId() > 0l) {
+				// 如果存在prev_id,则认为是错位数据,将其首证书序列号按上一条调整
+				WorkDealInfo pre = get(po.getPrevId());
+				if (pre == null)
+					return;
+				String sql = "update work_deal_info set DEL_FLAG='0',FIRST_CERT_SN='"
+						+ pre.getFirstCertSN() + "' where id=" + po.getId();
+				try {
+					workDealInfoDao.exeSql(sql);
+				} catch (Exception e) {
+				}
+				// 更新上一条的del_flag
+				String sql2 = "update work_deal_info set DEL_FLAG='1' where id="
+						+ pre.getId();
+				try {
+					workDealInfoDao.exeSql(sql2);
+				} catch (Exception e) {
+				}
+				return;
+			}
 			String sql = "update work_deal_info set DEL_FLAG='0' where id="
 					+ po.getId();
 			try {
@@ -4761,35 +4778,35 @@ public class WorkDealInfoService extends BaseService {
 			}
 			return;
 		}
-		
+
 		for (int i = 0; i < lst.size(); i++) {
 			String sql = "";
 			WorkDealInfo po = null;
-			try{
-			po = lst.get(i);
-			WorkDealInfo pre = findPreByFirstCertSN(po);
-			if (pre == null && i != (lst.size() - 1)) {
-				continue;
-			}
-			if (pre != null) {
-				po.setPrevId(pre.getId());
-			}
-			if (i == 0) {
-				po.setDelFlag("0");
-			} else {
-				po.setDelFlag("1");
-			}
+			try {
+				po = lst.get(i);
+				WorkDealInfo pre = findPreByFirstCertSN(po);
+				if (pre == null && i != (lst.size() - 1)) {
+					continue;
+				}
+				if (pre != null) {
+					po.setPrevId(pre.getId());
+				}
+				if (i == 0) {
+					po.setDelFlag("0");
+				} else {
+					po.setDelFlag("1");
+				}
 
-			// workDealInfoDao.save(po);
-			sql = "update work_deal_info set DEL_FLAG='"
-					+ po.getDelFlag() + "',prev_id=" + po.getPrevId()
-					+ " where id=" + po.getId();
-			}catch(Exception ex){
+				// workDealInfoDao.save(po);
+				sql = "update work_deal_info set DEL_FLAG='" + po.getDelFlag()
+						+ "',prev_id=" + po.getPrevId() + " where id="
+						+ po.getId();
+			} catch (Exception ex) {
 				ex.printStackTrace();
 				exLog.error(StringHelper.getStackInfo(ex));
 				continue;
 			}
-			
+
 			try {
 				workDealInfoDao.exeSql(sql);
 			} catch (Exception ex) {
@@ -4827,7 +4844,12 @@ public class WorkDealInfoService extends BaseService {
 			if (StringHelper.isNull(e))
 				continue;
 			// 处理每个唯一证书序列号
-			processSinglePreid(e);
+			try {
+				processSinglePreid(e);
+			} catch (Exception ex) {
+				ex.printStackTrace();
+				exLog.error(StringHelper.getStackInfo(ex));
+			}
 		}
 
 	}
