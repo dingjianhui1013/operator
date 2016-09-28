@@ -166,7 +166,7 @@ public class CertController extends BaseController {
 	@RequestMapping(value = "makeCert")
 	@ResponseBody
 	public String makeCert(Long dealInfoId, String reqOverrideValidity, String addCertDays, String certProvider,
-			String csr, String keySn) throws JSONException {
+			String csr, String keySn,Integer certSort) throws JSONException {
 		JSONObject json = new JSONObject();
 		WorkDealInfo dealInfo = workDealInfoService.get(dealInfoId);
 		try {
@@ -206,114 +206,122 @@ public class CertController extends BaseController {
 			Integer amount = 1;
 			if (caCert.getSignBuf() == null || caCert.getSignBuf().length() == 0) {// 异常业务安装证书可能不需要再次申请
 				try {
-					if (dealInfo.getPrevId() == null) {
-						// 个人证书
-						if (dealInfo.getConfigProduct().getProductName().equals("1")) {
+					//如果前台有输入certSort,则赋值
+					if(certSort!=null){
+						dealInfo.setCertSort(certSort);
+					}else{
+						if (dealInfo.getPrevId() == null) {
+							// 个人证书
+							if (dealInfo.getConfigProduct().getProductName().equals("1")) {
 
-							String orgNum = dealInfo.getWorkCompany().getOrganizationNumber();
+								String orgNum = dealInfo.getWorkCompany().getOrganizationNumber();
 
-							Integer certSortInteger = workDealInfoService.getCertSortByOrganizationNumber(orgNum, 1);
-						
-							Integer certSortIntegerSC = 0;
-						
-							if (certSortInteger > certSortIntegerSC) {
-								dealInfo.setCertSort(certSortInteger + 1);
+								Integer certSortInteger = workDealInfoService.getCertSortByOrganizationNumber(orgNum, 1);
+							
+								Integer certSortIntegerSC = 0;
+							
+								if (certSortInteger > certSortIntegerSC) {
+									dealInfo.setCertSort(certSortInteger + 1);
+								} else {
+									dealInfo.setCertSort(certSortIntegerSC + 1);
+								}
+
+							} else if (dealInfo.getConfigProduct().getProductName().equals("2")
+									|| dealInfo.getConfigProduct().getProductName().equals("6")) {
+
+								String conName = dealInfo.getWorkUser().getContactName();
+								String conCertNumber = dealInfo.getWorkUser().getConCertNumber();
+								Integer certSortIntegerSC = 0;
+								Integer certSortInteger = 0;
+								if (conCertNumber != null && !conCertNumber.equals("")) {
+									certSortInteger = workDealInfoService.getCertSortByConCertNumber(conCertNumber);
+									String url = dzsBH;
+									Map<String, String> params = new HashMap<String, String>();
+									params.put("param1", "按个人证件号(含企业和机构个人)查个人证书");
+									params.put("param2", conCertNumber);
+									String res = HttpClientUtil.post(url, params);
+									if (!res.equals("")) {
+										JSONObject jsonReturn = new JSONObject(res);
+										String status = jsonReturn.getString("status");
+										if (status.equals("success")) {
+											certSortIntegerSC = jsonReturn.getInt("certsInSccA");
+										}
+									}
+								} else if (conName != null && !conName.equals("")) {
+									certSortInteger = workDealInfoService.getCertSortByContactName(conName);
+									String url = dzsBH;
+									Map<String, String> params = new HashMap<String, String>();
+									params.put("param1", "按个人姓名(含企业和机构个人)号查个人证书");
+									params.put("param2", conName);
+									String res = HttpClientUtil.post(url, params);
+									if (!res.equals("")) {
+										JSONObject jsonReturn = new JSONObject(res);
+										String status = jsonReturn.getString("status");
+										if (status.equals("success")) {
+											certSortIntegerSC = jsonReturn.getInt("certsInSccA");
+										}
+									}
+								}
+
+								if (certSortInteger > certSortIntegerSC) {
+									dealInfo.setCertSort(certSortInteger + 1);
+								} else {
+									dealInfo.setCertSort(certSortIntegerSC + 1);
+								}
+
+							} else if (dealInfo.getConfigProduct().getProductName().equals("3")) {
+
+								String orgNum = dealInfo.getWorkCompany().getOrganizationNumber();
+								String comPanyName = dealInfo.getWorkCompany().getCompanyName();
+
+								Integer certSortIntegerSC = 0;
+								Integer certSortInteger = 0;
+
+								if (orgNum != null && !orgNum.equals("")) {
+									certSortInteger = workDealInfoService.getCertSortByOrganizationNumber(orgNum, 3);
+
+									String url = dzsBH;
+									Map<String, String> params = new HashMap<String, String>();
+									params.put("param1", "按单位组织机构代码(含企业和机构证书)查单位证书");
+									params.put("param2", orgNum);
+									String res = HttpClientUtil.post(url, params);
+									if (!res.equals("")) {
+										JSONObject jsonReturn = new JSONObject(res);
+										String status = jsonReturn.getString("status");
+										if (status.equals("success")) {
+											certSortIntegerSC = jsonReturn.getInt("certsInSccA");
+										}
+									}
+								} else if (comPanyName != null && !comPanyName.equals("")) {
+									certSortInteger = workDealInfoService.getCertSortByCompanyName(comPanyName, 3);
+									String url = dzsBH;
+									Map<String, String> params = new HashMap<String, String>();
+									params.put("param1", "按单位名称(含企业和机构证书)查单位证书 ");
+									params.put("param2", comPanyName);
+									String res = HttpClientUtil.post(url, params);
+									if (!res.equals("")) {
+										JSONObject jsonReturn = new JSONObject(res);
+										String status = jsonReturn.getString("status");
+										if (status.equals("success")) {
+											certSortIntegerSC = jsonReturn.getInt("certsInSccA");
+										}
+									}
+								}
+								if (certSortInteger > certSortIntegerSC) {
+									dealInfo.setCertSort(certSortInteger + 1);
+								} else {
+									dealInfo.setCertSort(certSortIntegerSC + 1);
+								}
 							} else {
-								dealInfo.setCertSort(certSortIntegerSC + 1);
-							}
-
-						} else if (dealInfo.getConfigProduct().getProductName().equals("2")
-								|| dealInfo.getConfigProduct().getProductName().equals("6")) {
-
-							String conName = dealInfo.getWorkUser().getContactName();
-							String conCertNumber = dealInfo.getWorkUser().getConCertNumber();
-							Integer certSortIntegerSC = 0;
-							Integer certSortInteger = 0;
-							if (conCertNumber != null && !conCertNumber.equals("")) {
-								certSortInteger = workDealInfoService.getCertSortByConCertNumber(conCertNumber);
-								String url = dzsBH;
-								Map<String, String> params = new HashMap<String, String>();
-								params.put("param1", "按个人证件号(含企业和机构个人)查个人证书");
-								params.put("param2", conCertNumber);
-								String res = HttpClientUtil.post(url, params);
-								if (!res.equals("")) {
-									JSONObject jsonReturn = new JSONObject(res);
-									String status = jsonReturn.getString("status");
-									if (status.equals("success")) {
-										certSortIntegerSC = jsonReturn.getInt("certsInSccA");
-									}
-								}
-							} else if (conName != null && !conName.equals("")) {
-								certSortInteger = workDealInfoService.getCertSortByContactName(conName);
-								String url = dzsBH;
-								Map<String, String> params = new HashMap<String, String>();
-								params.put("param1", "按个人姓名(含企业和机构个人)号查个人证书");
-								params.put("param2", conName);
-								String res = HttpClientUtil.post(url, params);
-								if (!res.equals("")) {
-									JSONObject jsonReturn = new JSONObject(res);
-									String status = jsonReturn.getString("status");
-									if (status.equals("success")) {
-										certSortIntegerSC = jsonReturn.getInt("certsInSccA");
-									}
-								}
-							}
-
-							if (certSortInteger > certSortIntegerSC) {
-								dealInfo.setCertSort(certSortInteger + 1);
-							} else {
-								dealInfo.setCertSort(certSortIntegerSC + 1);
-							}
-
-						} else if (dealInfo.getConfigProduct().getProductName().equals("3")) {
-
-							String orgNum = dealInfo.getWorkCompany().getOrganizationNumber();
-							String comPanyName = dealInfo.getWorkCompany().getCompanyName();
-
-							Integer certSortIntegerSC = 0;
-							Integer certSortInteger = 0;
-
-							if (orgNum != null && !orgNum.equals("")) {
-								certSortInteger = workDealInfoService.getCertSortByOrganizationNumber(orgNum, 3);
-
-								String url = dzsBH;
-								Map<String, String> params = new HashMap<String, String>();
-								params.put("param1", "按单位组织机构代码(含企业和机构证书)查单位证书");
-								params.put("param2", orgNum);
-								String res = HttpClientUtil.post(url, params);
-								if (!res.equals("")) {
-									JSONObject jsonReturn = new JSONObject(res);
-									String status = jsonReturn.getString("status");
-									if (status.equals("success")) {
-										certSortIntegerSC = jsonReturn.getInt("certsInSccA");
-									}
-								}
-							} else if (comPanyName != null && !comPanyName.equals("")) {
-								certSortInteger = workDealInfoService.getCertSortByCompanyName(comPanyName, 3);
-								String url = dzsBH;
-								Map<String, String> params = new HashMap<String, String>();
-								params.put("param1", "按单位名称(含企业和机构证书)查单位证书 ");
-								params.put("param2", comPanyName);
-								String res = HttpClientUtil.post(url, params);
-								if (!res.equals("")) {
-									JSONObject jsonReturn = new JSONObject(res);
-									String status = jsonReturn.getString("status");
-									if (status.equals("success")) {
-										certSortIntegerSC = jsonReturn.getInt("certsInSccA");
-									}
-								}
-							}
-							if (certSortInteger > certSortIntegerSC) {
-								dealInfo.setCertSort(certSortInteger + 1);
-							} else {
-								dealInfo.setCertSort(certSortIntegerSC + 1);
+								dealInfo.setCertSort(sort);
 							}
 						} else {
-							dealInfo.setCertSort(sort);
+							dealInfo.setCertSort(workDealInfoService.get(dealInfo.getPrevId()).getCertSort());
 						}
-					} else {
-						dealInfo.setCertSort(workDealInfoService.get(dealInfo.getPrevId()).getCertSort());
 					}
+					
+					
+
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -382,7 +390,7 @@ public class CertController extends BaseController {
 				dealInfo.setCertSn(caCert.getSerialnumber());
 				dealInfo.setKeySn(keySn);
 				dealInfo.setBusinessCardUser(UserUtils.getUser());
-				
+				log.debug("用户:"+UserUtils.getUser().getName()+"====="+"业务ID:"+dealInfo.getId());
 				
 				dealInfo.setBusinessCardUserDate(new Date());
 				dealInfo.setNotafter(caCert.getNotafter());
