@@ -248,7 +248,7 @@ public class MutiProcess implements Runnable {
 						user.setConCertType(String.valueOf(s1.getConCertType()));
 					user.setConCertNumber(s1.getConCertNumber());
 					user.setContactEmail(s1.getContactEmail());
-					if (StringHelper.isPhone(s1.getContactPhone())) {
+					if (!StringHelper.isNull(s1.getContactPhone()) && StringHelper.isPhone(s1.getContactPhone())) {
 						user.setContactPhone(s1.getContactPhone());
 					}
 					user.setContactTel(s1.getContactTel());
