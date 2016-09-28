@@ -5,10 +5,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.log4j.Logger;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -156,7 +156,9 @@ public class ClientController {
 	private UpdateFirstCertSNThread updateFirstCertSNThread;
 
 	private LogUtil logUtil = new LogUtil();
-
+	
+	private Log exLog = LogFactory.getLog("ex");
+	
 	static Long MILL = 86400000L;
 
 	Logger log = Logger.getLogger(ClientController.class);
@@ -1022,6 +1024,7 @@ public class ClientController {
 				new Thread(new ModifyPreidThread(lst)).start();
 			} catch (Exception e) {
 				e.printStackTrace();
+				exLog.error(StringHelper.getStackInfo(e));
 				json.put("msg", "更新preid出现异常:" + StringHelper.getStackInfo(e));
 				isRunning = false;
 				return json.toString();

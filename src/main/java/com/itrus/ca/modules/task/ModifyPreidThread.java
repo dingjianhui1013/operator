@@ -46,10 +46,15 @@ public class ModifyPreidThread implements Runnable {
 				new Thread(new Inner(all)).start();
 			} else {
 				for (int i = 0; i < MAX_THREAD; i++) {
-					int start = i * preNum;
-					int end = (i + 1) * preNum;
-					List<String> l = all.subList(start, end);
-					new Thread(new Inner(l)).start();
+					try {
+						int start = i * preNum;
+						int end = (i + 1) * preNum;
+						List<String> l = all.subList(start, end);
+						new Thread(new Inner(l)).start();
+					} catch (Exception e) {
+						exLog.error(StringHelper.getStackInfo(e));
+						continue;
+					}
 				}
 				int remainder = all.size() % MAX_THREAD; // 余数处理
 				if (remainder > 0) {
@@ -62,6 +67,7 @@ public class ModifyPreidThread implements Runnable {
 			log.info("修复prev_id子线程处理完毕,本线程处理条数:" + all.size() + ",处理时间:"
 					+ (System.currentTimeMillis() - s) / 1000 + "s");
 		} catch (IllegalStateException e) {
+			exLog.error(StringHelper.getStackInfo(e));
 			// 事务问题，可以不显示
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -85,6 +91,7 @@ public class ModifyPreidThread implements Runnable {
 			} catch (Exception e) {
 				e.printStackTrace();
 				log.error(StringHelper.getStackInfo(e));
+				exLog.error(StringHelper.getStackInfo(e));
 			}
 		}
 	}
