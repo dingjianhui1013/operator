@@ -94,7 +94,7 @@ public class MutiProcess implements Runnable {
 			.getBean(ConfigChargeAgentBoundConfigProductService.class);
 
 	Logger log = Logger.getLogger(MutiProcess.class);
-	
+
 	Log exlog = LogFactory.getLog("ex");
 
 	private List<BasicInfoScca> sccaList;
@@ -248,7 +248,7 @@ public class MutiProcess implements Runnable {
 						user.setConCertType(String.valueOf(s1.getConCertType()));
 					user.setConCertNumber(s1.getConCertNumber());
 					user.setContactEmail(s1.getContactEmail());
-					if(StringHelper.isPhone(s1.getContactPhone())){
+					if (StringHelper.isPhone(s1.getContactPhone())) {
 						user.setContactPhone(s1.getContactPhone());
 					}
 					user.setContactTel(s1.getContactTel());
@@ -265,6 +265,13 @@ public class MutiProcess implements Runnable {
 
 				// log.error("保存 workUserHis ");
 				certApplyInfo.setName(s1.getName());
+				if (!StringHelper.isIdcard(s1.getIdCard())) {
+					exlog.error("idcard error : " + s1.getIdCard() + " | id:"
+							+ s1.getIdCard() + " | firstCertSn:"
+							+ s1.getFirstCertSN() + " | serialnumber(certSn):"
+							+ s1.getSerialnumber());
+					continue;
+				}
 				certApplyInfo.setIdCard(s1.getIdCard());
 				certApplyInfo.setEmail(s1.getEmail());
 				// workCertApplyInfoService.save(certApplyInfo);
@@ -496,6 +503,8 @@ public class MutiProcess implements Runnable {
 					log.error("Exception at 线程 ：" + number + "\t数据id:"
 							+ s1.getId() + "\t序列号:" + s1.getSerialnumber()
 							+ "\t" + e.getMessage());
+					exlog.error(StringHelper.getStackInfo(e));
+					continue;
 				}
 			}
 			log.debug("保存 企业历史 数据+实时数据");
