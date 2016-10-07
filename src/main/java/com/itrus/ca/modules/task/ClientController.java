@@ -156,9 +156,9 @@ public class ClientController {
 	private UpdateFirstCertSNThread updateFirstCertSNThread;
 
 	private LogUtil logUtil = new LogUtil();
-	
+
 	private Log exLog = LogFactory.getLog("ex");
-	
+
 	static Long MILL = 86400000L;
 
 	Logger log = Logger.getLogger(ClientController.class);
@@ -956,14 +956,23 @@ public class ClientController {
 			json.put("msg", "APPID不能为空");
 			return json.toString();
 		}
+		// 第一种情况
 		List<String> lst = workDealInfoService
 				.getNeedFixFirstCertSNLst(fixFirstCertSnAppid);
 		log.error("开始处理,app_id:" + fixFirstCertSnAppid
 				+ ",first_cert_sn错乱的记录,记录数范围:" + lst.size());
-
 		new Thread(new FixFirstCertSNThread(lst)).start();
+		// 第二种情况
+		List<String> lst2 = workDealInfoService
+				.getNeedFixFirstCertSNLst2(fixFirstCertSnAppid);
+
+		new Thread(new FixFirstSNThread2(lst2)).start();
+
+		Integer c1 = lst == null ? 0 : lst.size();
+		Integer c2 = lst2 == null ? 0 : lst2.size();
 		json.put("statu", "0");
-		json.put("msg", "开始处理,app_id:" + fixFirstCertSnAppid);
+		json.put("msg", "开始处理,app_id:" + fixFirstCertSnAppid + "数据总数:"
+				+ (c1 + c2));
 		return json.toString();
 	}
 
