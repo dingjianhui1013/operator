@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +19,9 @@ import java.util.regex.Pattern;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.sql.DataSource;
 
+import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.queryParser.QueryParser;
@@ -38,7 +41,6 @@ import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
@@ -53,9 +55,11 @@ import org.hibernate.search.query.DatabaseRetrievalMethod;
 import org.hibernate.search.query.ObjectLookupMethod;
 import org.hibernate.transform.ResultTransformer;
 import org.hibernate.transform.Transformers;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.wltea.analyzer.lucene.IKAnalyzer;
 
+import com.alibaba.druid.pool.DruidDataSource;
 import com.itrus.ca.common.annotation.VOAnnotation;
 import com.itrus.ca.common.utils.ReflectHelper;
 import com.itrus.ca.common.utils.Reflections;
@@ -76,6 +80,9 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 	 */
 	@PersistenceContext
 	private EntityManager entityManager;
+
+	@Autowired
+	private DataSource dataSource;
 
 	/**
 	 * 实体类类型(由构造方法自动赋值)
@@ -214,24 +221,60 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 		return findBySql(page, sqlString, null, parameter);
 	}
 
-	@Transactional(readOnly = false)
-	public void exeSql(final String sql) {
+	public void exeSql(String sql) {
+		Logger log = Logger.getLogger("ex");
+		Connection conn = null;
+		PreparedStatement ps = null;
 		try {
-			getSession().doReturningWork(new ReturningWork() {
-				public SQLQuery execute(Connection connection)
-						throws SQLException {
-					Session session = getSession();
-					org.hibernate.Transaction tx = session.getTransaction();
-					session.createSQLQuery(sql).executeUpdate();
-					tx.commit();
-					return null;
-				}
-			});
+			conn = dataSource.getConnection();
+			conn.setAutoCommit(false);
+			ps = conn.prepareStatement(sql);
+			ps.execute();
+			conn.commit();
 		} catch (Exception e) {
-			//e.printStackTrace();
-			//Logger log = Logger.getLogger("");
+			e.printStackTrace();
+			log.error(StringHelper.getStackInfo(e));
+		} finally {
+			try {
+				if (ps != null)
+					ps.close();
+				if (conn != null)
+					conn.close();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+				log.error(StringHelper.getStackInfo(e1));
+			}
 		}
 	}
+
+	// @Transactional(readOnly = false)
+	// public void exeSql(final String sql) {
+	// try {
+	// getSession().doReturningWork(new ReturningWork() {
+	// public SQLQuery execute(Connection connection)
+	// throws SQLException {
+	//
+	// Session session = getSession();
+	// try {
+	// org.hibernate.Transaction tx = session.getTransaction();
+	// tx.begin();
+	// // session.getTransaction();
+	// session.createSQLQuery(sql).executeUpdate();
+	// tx.commit();
+	// } catch (Exception e) {
+	// e.printStackTrace();
+	// Logger log = Logger.getLogger("ex");
+	// log.error(StringHelper.getStackInfo(e));
+	// }
+	// return null;
+	// }
+	// });
+	// } catch (Exception e) {
+	// // e.printStackTrace();
+	// Logger log = Logger.getLogger("ex");
+	// log.error(StringHelper.getStackInfo(e));
+	// }
+	// }
 
 	/**
 	 * SQL 分页查询
