@@ -2942,7 +2942,9 @@ public class WorkDealInfoService extends BaseService {
 
 		String sql = "select count(FIRST_CERT_SN) CT from (";
 		sql = sql
-				+ "select count(*) c,FIRST_CERT_SN from WORK_DEAL_INFO where PREV_ID is null and FIRST_CERT_SN is not null ";
+				+ "select count(*) c,FIRST_CERT_SN from WORK_DEAL_INFO where PREV_ID is null ";
+		sql = sql + " and FIRST_CERT_SN is not null ";
+		sql = sql + " and FIRST_CERT_SN!='0' ";
 		if (appId != null && appId.longValue() > 0) {
 			sql = sql + " and APP_ID=" + appId;
 		}
@@ -2957,6 +2959,7 @@ public class WorkDealInfoService extends BaseService {
 				| InstantiationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			exLog.error(StringHelper.getStackInfo(e));
 		}
 		if (m == null || m.size() <= 0)
 			return 0;
@@ -2974,7 +2977,9 @@ public class WorkDealInfoService extends BaseService {
 			Integer count) {
 		String sql = "select distinct FIRST_CERT_SN,a.c from (";
 		sql = sql
-				+ "select count(*) c,FIRST_CERT_SN from WORK_DEAL_INFO where PREV_ID is null and FIRST_CERT_SN is not null ";
+				+ "select count(*) c,FIRST_CERT_SN from WORK_DEAL_INFO where PREV_ID is null  ";
+		sql = sql + " and FIRST_CERT_SN is not null";
+		sql = sql + " and FIRST_CERT_SN!='0'";
 		if (appId != null && appId.longValue() > 0) {
 			sql = sql + " and APP_ID=" + appId;
 		}
@@ -2999,6 +3004,7 @@ public class WorkDealInfoService extends BaseService {
 				| InvocationTargetException | ClassNotFoundException
 				| InstantiationException e) {
 			e.printStackTrace();
+			exLog.error(StringHelper.getStackInfo(e));
 		}
 		return res;
 	}
@@ -3046,6 +3052,7 @@ public class WorkDealInfoService extends BaseService {
 				| InstantiationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			exLog.error(StringHelper.getStackInfo(e));
 		}
 		if (m == null || m.size() <= 0)
 			return 0;
@@ -3072,6 +3079,7 @@ public class WorkDealInfoService extends BaseService {
 				| InstantiationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			exLog.error(StringHelper.getStackInfo(e));
 		}
 		return res;
 	}
@@ -3085,6 +3093,7 @@ public class WorkDealInfoService extends BaseService {
 		sql += " select first_cert_sn from ( ";
 		sql += " select count(*) c,FIRST_CERT_SN from WORK_DEAL_INFO ";
 		sql = sql + " where APP_ID= " + appid;
+		sql = sql + " and FIRST_CERT_SN!='0'";
 		sql += " group by FIRST_CERT_SN order by c desc ";
 		sql += " ) where c=1  ";
 		sql += " ) and PREV_ID is not null ";
@@ -4345,7 +4354,7 @@ public class WorkDealInfoService extends BaseService {
 		}
 	}
 
-	@Transactional(readOnly = false)
+	// @Transactional(readOnly = false)
 	public void setPrevIdToNull(Integer appid) {
 		// String sql = "update work_deal_info set prev_id=null where APP_ID="
 		// + appid;
@@ -4743,7 +4752,7 @@ public class WorkDealInfoService extends BaseService {
 		}
 	}
 
-	@Transactional(readOnly = false)
+	// @Transactional(readOnly = false)
 	public void processSinglePreid(String firstCertSN) {
 		List<WorkDealInfo> lst = findByFirstCertSN(firstCertSN);
 
@@ -4760,6 +4769,7 @@ public class WorkDealInfoService extends BaseService {
 				try {
 					workDealInfoDao.exeSql(sql);
 				} catch (Exception e) {
+					exLog.error(StringHelper.getStackInfo(e));
 				}
 				// 更新上一条的del_flag
 				String sql2 = "update work_deal_info set DEL_FLAG='1' where id="
@@ -4767,6 +4777,7 @@ public class WorkDealInfoService extends BaseService {
 				try {
 					workDealInfoDao.exeSql(sql2);
 				} catch (Exception e) {
+					exLog.error(StringHelper.getStackInfo(e));
 				}
 				return;
 			}
@@ -4775,6 +4786,7 @@ public class WorkDealInfoService extends BaseService {
 			try {
 				workDealInfoDao.exeSql(sql);
 			} catch (Exception e) {
+				exLog.error(StringHelper.getStackInfo(e));
 			}
 			return;
 		}
@@ -4812,7 +4824,6 @@ public class WorkDealInfoService extends BaseService {
 			} catch (Exception ex) {
 				continue;
 			}
-			fixLog.error("变更prev_id已处理,首证书序列号:" + po.getFirstCertSN());
 
 		}
 	}
@@ -4837,7 +4848,7 @@ public class WorkDealInfoService extends BaseService {
 		return temp;
 	}
 
-	@Transactional(readOnly = false)
+	// @Transactional(readOnly = false)
 	public void processPreId(List<String> all) {
 		for (String e : all) {
 			// 根据首张证书序列判定是否需要处理workDealInfo表内的preId字段
@@ -5591,6 +5602,7 @@ public class WorkDealInfoService extends BaseService {
 	 * @param curretPo
 	 * @return WorkDealInfo
 	 */
+	@Transactional(readOnly = true)
 	public WorkDealInfo findPreByFirstCertSN(WorkDealInfo current) {
 
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
@@ -8529,19 +8541,53 @@ public class WorkDealInfoService extends BaseService {
 	@Transactional(readOnly = false)
 	public void fixFirstCertSNByError(List<String> lst) {
 		for (String e : lst) {
-			WorkDealInfo l = findByCertSnOne(e);
-			if (l == null || l.getPrevId() == null)
+			// 先用certSn查出自己
+			WorkDealInfo self = findByCertSnOne(e);
+
+			if (self == null || StringHelper.isNull(self.getFirstCertSN())
+					|| StringHelper.isNull(self.getCertSn()))
 				continue;
-			String firstCertSN = l.getFirstCertSN();
+
+			// 再以自己的cert_sn作为first_cert_sn去查业务链中仅有一条的，并且prev_id不为空的记录
+			List<WorkDealInfo> l = findByFirstCertSN(self.getCertSn());
+			if (l == null || l.size() <= 0 || l.size() < 1)
+				continue;
+			WorkDealInfo updatePo = l.get(0);
+			// 如果上一条记录的
+			if (l.size() == 1 && updatePo.getPrevId() == null
+					&& !updatePo.getFirstCertSN().equals(updatePo.getCertSn())) {
+				fixLog.error("业务链数据只有一条，但首证书和证书序列号不一致,id:" + updatePo.getId()
+						+ "|firstCertSN:" + updatePo.getFirstCertSN()
+						+ "|certSN:" + updatePo.getCertSn());
+				continue;
+			}
+
+			WorkDealInfo pre = get(updatePo.getPrevId());
+			if (pre == null)
+				continue;
 			try {
-				// 查上一条
-				List<WorkDealInfo> self = findByFirstCertSN(e);
-				if (self == null || self.size() <= 0)
-					continue;
 				// 更新错误的first_cert_sn
-				modifyFirstCertSN(self.get(0).getId(), firstCertSN);
+				modifyFirstCertSN(updatePo.getId(), pre.getFirstCertSN());
 				// 重新串业务
-				processSinglePreid(firstCertSN);
+				processSinglePreid(pre.getFirstCertSN());
+			} catch (Exception ex) {
+				// 事务问题，可忽略
+				ex.printStackTrace();
+				continue;
+			}
+		}
+	}
+
+	public void fixFirstCertSNByError2(List<String> lst) {
+		for (String e : lst) {
+			List<WorkDealInfo> l = findByFirstCertSN(e);
+			if (l == null || l.size() <= 0)
+				continue;
+			WorkDealInfo self = l.get(0);
+			try {
+
+				// 重新串业务
+				processSinglePreid(l.get(0).getFirstCertSN());
 			} catch (Exception ex) {
 				// 事务问题，可忽略
 				ex.printStackTrace();
@@ -8591,14 +8637,7 @@ public class WorkDealInfoService extends BaseService {
 		}
 	}
 
-	public List<String> getNeedFixFirstCertSNLst(String appid) {
-		String sql = "select first_cert_sn from (";
-		sql = sql
-				+ " select count(*) c,FIRST_CERT_SN from WORK_DEAL_INFO where APP_ID="
-				+ appid;
-		sql += " group by FIRST_CERT_SN order by c desc";
-		sql += " ) where c=1 ";
-
+	private List<String> getFirstCertSNListByAppid(String sql, String columnName) {
 		try {
 			List<String> res = new ArrayList<String>();
 			List<Map> lst = workDealInfoDao.findBySQLListMap(sql, 0, 0);
@@ -8607,13 +8646,57 @@ public class WorkDealInfoService extends BaseService {
 				return null;
 
 			for (Map e : lst) {
-				res.add(e.get("FIRST_CERT_SN") == null ? null : e.get(
-						"FIRST_CERT_SN").toString());
+				if (e.get(columnName) == null)
+					continue;
+				String f = e.get(columnName).toString();
+				res.add(f);
 			}
+
 			return res;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
+	}
+
+	/**
+	 * 业务链只有1条记录，无prev_id，但首证书序列号和自己的序列号不一致<br>
+	 * 
+	 * @param appid
+	 * @return List<String>
+	 */
+	public List<String> getNeedFixFirstCertSNLst2(String appid) {
+		String sql = "select id,prev_id,first_cert_sn,SVN,CERT_SN from WORK_DEAL_INFO where ";
+		sql += "FIRST_CERT_SN in(";
+		sql += "select first_cert_sn from (";
+		sql += "select count(*) c,FIRST_CERT_SN from WORK_DEAL_INFO where APP_ID=802516";
+		sql += " group by FIRST_CERT_SN order by c desc";
+		sql += ") where c=1 ";
+		sql += ") and PREV_ID is not null ";
+		sql += " and ('00'||FIRST_CERT_SN!=CERT_SN and FIRST_CERT_SN!=CERT_SN)";
+		return getFirstCertSNListByAppid(sql, "FIRST_CERT_SN");
+	}
+
+	/**
+	 * 业务链中的数据只有一条，但根据其first_cert_sn，查出对应的cert_sn记录存在prev_id，<br>
+	 * 因为有补零逻辑，所以需要下面二条SQL来验证<br>
+	 * 
+	 * 
+	 * @param appid
+	 * @return List<String>
+	 */
+	public List<String> getNeedFixFirstCertSNLst(String appid) {
+		//
+		String sql = "select id,prev_id,first_cert_sn,SVN,CERT_SN from WORK_DEAL_INFO where ";
+		sql += " CERT_SN in(";
+		sql += "select first_cert_sn from (";
+		sql = sql
+				+ " select count(*) c,FIRST_CERT_SN from WORK_DEAL_INFO where APP_ID="
+				+ appid;
+		sql += " group by FIRST_CERT_SN order by c desc";
+		sql += " ) where c=1 ";
+		sql += ") and PREV_ID is not null and FIRST_CERT_SN!=CERT_SN";
+
+		return getFirstCertSNListByAppid(sql, "CERT_SN");
 	}
 }
