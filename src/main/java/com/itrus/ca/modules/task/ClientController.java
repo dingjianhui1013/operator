@@ -959,8 +959,6 @@ public class ClientController {
 		// 第一种情况
 		List<String> lst = workDealInfoService
 				.getNeedFixFirstCertSNLst(fixFirstCertSnAppid);
-		log.error("开始处理,app_id:" + fixFirstCertSnAppid
-				+ ",first_cert_sn错乱的记录,记录数范围:" + lst.size());
 		new Thread(new FixFirstCertSNThread(lst)).start();
 		// 第二种情况
 		List<String> lst2 = workDealInfoService
