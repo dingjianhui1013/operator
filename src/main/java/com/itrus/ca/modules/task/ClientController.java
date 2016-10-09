@@ -959,11 +959,14 @@ public class ClientController {
 		// 第一种情况
 		List<String> lst = workDealInfoService
 				.getNeedFixFirstCertSNLst(fixFirstCertSnAppid);
+		if (lst == null)
+			lst = new ArrayList<String>();
 		new Thread(new FixFirstCertSNThread(lst)).start();
 		// 第二种情况
 		List<String> lst2 = workDealInfoService
 				.getNeedFixFirstCertSNLst2(fixFirstCertSnAppid);
-
+		if (lst2 == null)
+			lst2 = new ArrayList<String>();
 		new Thread(new FixFirstSNThread2(lst2)).start();
 
 		Integer c1 = lst == null ? 0 : lst.size();
@@ -1028,6 +1031,8 @@ public class ClientController {
 				+ "条,本次需要处理总数:" + lst.size() + "条");
 		if (lst != null && lst.size() > 0) {
 			try {
+				if (lst == null)
+					lst = new ArrayList();
 				new Thread(new ModifyPreidThread(lst)).start();
 			} catch (Exception e) {
 				e.printStackTrace();
