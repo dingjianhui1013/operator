@@ -1091,129 +1091,136 @@ public class ClientController {
 		JSONObject json = new JSONObject();
 		Date startDATE = new Date();
 
-		Long dealInfoId = workDealInfoService.findDealInfoMax();
-
-		SimpleDateFormat certTimeFormat = new SimpleDateFormat(pattern);
-		if (isRunning) {
-			json.put("statu", "0");
-			json.put("msg", "有一个任务进行中，请勿重复操作!");
-			return json.toString();
-		}
-		isRunning = true;
-
 		try {
-			certTimeFormat.format(new Date());
-		} catch (Exception e) {
-			json.put("statu", "0");
-			json.put("msg", "日期格式错误:" + pattern);
-			isRunning = false;
-			return json.toString();
-		}
-		count = 0;
-		json.put("status", -1);
+			Long dealInfoId = workDealInfoService.findDealInfoMax();
 
-		User createBy = new User(1L);
-		// User createBy = UserUtils.getUser();
-		String firstSvn = "";
-		if (officeId != 1L) {
-			Office office = officeService.get(officeId);
-			List<User> users = office.getUserList();
-			if (users.size() == 0) {
+			SimpleDateFormat certTimeFormat = new SimpleDateFormat(pattern);
+			if (isRunning) {
 				json.put("statu", "0");
-				json.put("msg", "当前网点下无用户，无法创建");
+				json.put("msg", "有一个任务进行中，请勿重复操作!");
+				return json.toString();
+			}
+			isRunning = true;
+
+			try {
+				certTimeFormat.format(new Date());
+			} catch (Exception e) {
+				json.put("statu", "0");
+				json.put("msg", "日期格式错误:" + pattern);
 				isRunning = false;
 				return json.toString();
-			} else {
-				createBy = users.get(0);
 			}
-			firstSvn = workDealInfoService.getSVN(office.getName());
-		}
-		List<BasicInfoScca> all = basicInfoSccaService.findAll();
-		if (all.size() == 0) {
-			json.put("statu", "0");
-			json.put("msg", "要导入的数据为空，请检查");
-			isRunning = false;
-			return json.toString();
-		}
-		Integer num = Integer.valueOf(firstSvn.split("-")[3]);
-		String head = firstSvn.replace("-" + firstSvn.split("-")[3], "");
-		// 最后处理preId用，暂存firstCertSN，排重
-		List<String> firstSnAll = new ArrayList<String>();
-		for (int i = 0; i < all.size(); i++) {
-			String svn = getSvn(head, num);
-			num++;
-			all.get(i).setSvnNum(svn);
+			count = 0;
+			json.put("status", -1);
 
-			// 最后处理preId用
-			String firstCertSn = all.get(i).getFirstCertSN();
-			if (!StringHelper.isNull(firstCertSn))
-				firstSnAll.add(firstCertSn.trim());
-		}
-
-		List<Thread> allThread = new ArrayList<Thread>();
-
-		int loopTime = 100;
-		int tempSize = all.size();
-		if (tempSize <= loopTime) {
-			List<BasicInfoScca> transToTrheads = new ArrayList<BasicInfoScca>();
-			for (int i = 0; i < tempSize; i++) {
-				transToTrheads.add(all.get(i));
-			}
-			MutiProcess mp = new MutiProcess(transToTrheads, officeId,
-					createBy, 1);
-			Thread thread = new Thread(mp);
-			thread.start();
-			allThread.add(thread);
-		} else {
-			int divisor = tempSize / loopTime;
-			int remainder = tempSize % loopTime;
-
-			for (int i = 0; i < loopTime; i++) {
-
-				int newSize = divisor;
-				if (i < remainder) {
-					newSize = divisor + 1;
+			User createBy = new User(1L);
+			// User createBy = UserUtils.getUser();
+			String firstSvn = "";
+			if (officeId != 1L) {
+				Office office = officeService.get(officeId);
+				List<User> users = office.getUserList();
+				if (users.size() == 0) {
+					json.put("statu", "0");
+					json.put("msg", "当前网点下无用户，无法创建");
+					isRunning = false;
+					return json.toString();
+				} else {
+					createBy = users.get(0);
 				}
+				firstSvn = workDealInfoService.getSVN(office.getName());
+			}
+			List<BasicInfoScca> all = basicInfoSccaService.findAll();
+			if (all.size() == 0) {
+				json.put("statu", "0");
+				json.put("msg", "要导入的数据为空，请检查");
+				isRunning = false;
+				return json.toString();
+			}
+			Integer num = Integer.valueOf(firstSvn.split("-")[3]);
+			String head = firstSvn.replace("-" + firstSvn.split("-")[3], "");
+			// 最后处理preId用，暂存firstCertSN，排重
+			List<String> firstSnAll = new ArrayList<String>();
+			for (int i = 0; i < all.size(); i++) {
+				String svn = getSvn(head, num);
+				num++;
+				all.get(i).setSvnNum(svn);
+
+				// 最后处理preId用
+				String firstCertSn = all.get(i).getFirstCertSN();
+				if (!StringHelper.isNull(firstCertSn))
+					firstSnAll.add(firstCertSn.trim());
+			}
+
+			List<Thread> allThread = new ArrayList<Thread>();
+
+			int loopTime = 100;
+			int tempSize = all.size();
+			if (tempSize <= loopTime) {
 				List<BasicInfoScca> transToTrheads = new ArrayList<BasicInfoScca>();
-				for (int j = newSize - 1; j >= 0; j--) {
-					transToTrheads.add(all.get(j));
-					all.remove(j);
+				for (int i = 0; i < tempSize; i++) {
+					transToTrheads.add(all.get(i));
 				}
 				MutiProcess mp = new MutiProcess(transToTrheads, officeId,
-						createBy, (i + 1));
+						createBy, 1);
 				Thread thread = new Thread(mp);
 				thread.start();
 				allThread.add(thread);
+			} else {
+				int divisor = tempSize / loopTime;
+				int remainder = tempSize % loopTime;
+
+				for (int i = 0; i < loopTime; i++) {
+
+					int newSize = divisor;
+					if (i < remainder) {
+						newSize = divisor + 1;
+					}
+					List<BasicInfoScca> transToTrheads = new ArrayList<BasicInfoScca>();
+					for (int j = newSize - 1; j >= 0; j--) {
+						transToTrheads.add(all.get(j));
+						all.remove(j);
+					}
+					MutiProcess mp = new MutiProcess(transToTrheads, officeId,
+							createBy, (i + 1));
+					Thread thread = new Thread(mp);
+					thread.start();
+					allThread.add(thread);
+
+				}
 
 			}
 
-		}
+			for (Thread thread1 : allThread) {
+				try {
+					thread1.join();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 
-		for (Thread thread1 : allThread) {
+			Integer dealInfoCount = workDealInfoService
+					.afterDealInfoId(dealInfoId);
+
+			// 业务链中，只有最后一条是0，前面的都是1
 			try {
-				thread1.join();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
+				new Thread(new ModifyPreidThread(firstSnAll)).start();
+			} catch (Exception e) {
 				e.printStackTrace();
+				json.put("msg", "更新preid出现异常:" + StringHelper.getStackInfo(e));
+				isRunning = false;
+				return json.toString();
 			}
-		}
+			json.put("msg", "本次成功提交数据：" + dealInfoCount + "条！");
 
-		Integer dealInfoCount = workDealInfoService.afterDealInfoId(dealInfoId);
-
-		// 业务链中，只有最后一条是0，前面的都是1
-		try {
-			new Thread(new ModifyPreidThread(firstSnAll)).start();
-		} catch (Exception e) {
-			e.printStackTrace();
-			json.put("msg", "更新preid出现异常:" + StringHelper.getStackInfo(e));
+			System.out.println("使用时间 :"
+					+ (System.currentTimeMillis() - startDATE.getTime()));
 			isRunning = false;
-			return json.toString();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			exLog.error(StringHelper.getStackInfo(ex));
+			isRunning = false;
 		}
-		json.put("msg", "本次成功提交数据：" + dealInfoCount + "条！");
-
-		System.out.println("使用时间 :"
-				+ (System.currentTimeMillis() - startDATE.getTime()));
-		isRunning = false;
 		return json.toString();
 	}
 
