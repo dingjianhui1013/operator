@@ -1063,8 +1063,8 @@ public class ClientController {
 			json.put("msg", "APPID不能为空");
 			return json.toString();
 		}
-		List<String> lst = workDealInfoService.findFirstCertSnByAppId(fixAppId,
-				0);
+		List<String> lst = workDealInfoService
+				.findFirstCertSnByAppIdAndFirstDataIsNotAdd(fixAppId, 0);
 		new Thread(new FixFirstDealInfoTypeThread(lst)).start();
 		json.put("statu", "0");
 		json.put("msg", "请求提交完成,更新:" + lst.size()
