@@ -51,6 +51,10 @@ public interface WorkDealInfoDao extends WorkDealInfoDaoCustom,
 	@Modifying
 	@Query("From WorkDealInfo w where w.firstCertSN=?1 order by w.createDate DESC ")
 	public List<WorkDealInfo> findByFirstCertSN(String firstCertSN);
+	
+	@Modifying
+	@Query("From WorkDealInfo w where w.firstCertSN=?1 and w.dealInfoType=?2 order by w.createDate DESC ")
+	public List<WorkDealInfo> findByFirstCertSNAndDealInfoType(String firstCertSN,Integer dealInfoType);
 
 	@Modifying
 	@Query("From WorkDealInfo w where w.keySn=?1 and w.certSn =?2 and delFlag = "
