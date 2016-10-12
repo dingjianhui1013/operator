@@ -86,7 +86,7 @@
 	function fixFirstDealInfoType(){
 		$("#make").hide();
 		
-		if(confirm('是否确认修复svn?')){
+		if(confirm('是否确认修复首条业务类型?')){
 			$("#returnJsonData").html("正在修复...........");
 			var url = "test/fixFirstDealInfoType?fixAppId="+$("#fixAppId").val()
 					+"&_="+new Date().getTime();
@@ -98,6 +98,39 @@
 			return false;
 		}
 	}
+	
+	function fixMutilAdd(){
+		$("#make").hide();
+		
+		if(confirm('是否确认修复同一业务链有多个新增类型?')){
+			$("#returnJsonData").html("正在修复...........");
+			var url = "test/fixMutilAdd?fixAppId="+$("#mutiAppId").val()
+					+"&_="+new Date().getTime();
+			$.getJSON(url,function(data){
+				$("#make").show();
+				$("#returnJsonData").html(data.msg);
+			});
+		}else{
+			return false;
+		}
+	}
+	
+	function fixNotEquals(){
+		$("#make").hide();
+		
+		if(confirm('是否确认修复首证书和首条记录证书不符问题?')){
+			$("#returnJsonData").html("正在修复...........");
+			var url = "test/fixNotEquals?fixAppId="+$("#fixNotEqualsAppId").val()
+					+"&_="+new Date().getTime();
+			$.getJSON(url,function(data){
+				$("#make").show();
+				$("#returnJsonData").html(data.msg);
+			});
+		}else{
+			return false;
+		}
+	}
+	
 	
 	function fixFirstCertSN(){
 		$("#make").hide();
@@ -148,14 +181,14 @@
 						<li class="active"><a href="#panel-98562" data-toggle="tab">新增业务</a></li>
 						<li><a href="#panel-489367" data-toggle="tab">更新业务</a></li>
 						<li><a href="#panel-4893681" data-toggle="tab">更新首张证书序列号</a></li>
-						<li><a href="#panel-4893682" data-toggle="tab">重新生成prev_id数据</a></li>
+						<li><a href="#panel-4893684" data-toggle="tab">step1 - 整理首证书数据</a></li>
+						<li><a href="#panel-4893682" data-toggle="tab">step2 - 重新生成prev_id数据</a></li>
 						<!-- 
 						<li><a href="#panel-4893683" data-toggle="tab">修复svn数据</a></li>
 						 -->
-						<li><a href="#panel-4893684" data-toggle="tab">整理首证书数据</a></li>
-						<!-- 
-						<li><a href="#panel-4893685" data-toggle="tab">修复首条业务类型</a></li>
-						 -->
+						<li><a href="#panel-4893685" data-toggle="tab">修复首条业务类型不是新增问题</a></li>
+						<li><a href="#panel-4893686" data-toggle="tab">修复同一业务链多条新增问题</a></li>
+						<li><a href="#panel-4893687" data-toggle="tab">修复首证书序列号和自身序列号不符问题</a></li>
 					</ul>
 					<div class="tab-content">
 						<div class="tab-pane active" id="panel-98562">
@@ -281,7 +314,6 @@
 								</div>
 							</div>
 						</div>
-						<!-- 
 						<div class="tab-pane" id="panel-4893685">
 							<div class="container-fluid">
 								<div class="row-fluid">
@@ -301,7 +333,44 @@
 								</div>
 							</div>
 						</div>
-						 -->
+						<div class="tab-pane" id="panel-4893686">
+							<div class="container-fluid">
+								<div class="row-fluid">
+									<div class="span12">
+										<blockquote>
+											<p>修复同一业务链有多个新增问题</p>
+										</blockquote>
+										<br>
+									</div>
+									<div class="span12">
+										<input id="mutiAppId"/>&nbsp;应用ID(指定应用ID，必填)
+										<br/><br/>
+										<button class="btn btn-warning" type="button"
+										onclick="fixMutilAdd()"	 id="update">修复多新增类型业务</button>
+										<br>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="tab-pane" id="panel-4893687">
+							<div class="container-fluid">
+								<div class="row-fluid">
+									<div class="span12">
+										<blockquote>
+											<p>修复首证书序列号和首条证书序列号不符问题</p>
+										</blockquote>
+										<br>
+									</div>
+									<div class="span12">
+										<input id="fixNotEqualsAppId"/>&nbsp;应用ID(指定应用ID，必填)
+										<br/><br/>
+										<button class="btn btn-warning" type="button"
+										onclick="fixNotEquals()"	 id="update">修复首证书序列号和首条证书序列号不符问题</button>
+										<br>
+									</div>
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
