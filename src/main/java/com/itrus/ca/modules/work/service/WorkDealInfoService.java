@@ -3008,8 +3008,88 @@ public class WorkDealInfoService extends BaseService {
 		}
 		return res;
 	}
-	
-	
+
+	/**
+	 * 找到首条记录和首证书不符的记录(认为prev_id为空的即为首条)
+	 * 
+	 * @param appId
+	 * @param count
+	 * @return
+	 */
+	public List<String> findFirstCertSnByAppIdAndNotEquals(Integer appId,
+			Integer count) {
+		String sql = "select FIRST_CERT_SN from WORK_DEAL_INFO ";
+		sql += " PREV_ID is null and CERT_SN!=FIRST_CERT_SN AND CERT_SN!='00'||FIRST_CERT_SN ";
+		if (appId != null && appId.longValue() > 0) {
+			sql = sql + " and APP_ID=" + appId;
+		}
+		if (count != null && count.intValue() > 0) {
+			sql = sql + " and rownum<=" + count;
+		}
+
+		List<Map> lst = null;
+		List<String> res = new ArrayList<String>();
+		try {
+			lst = workDealInfoDao.findBySQLListMap(sql, 0, 0);
+			for (Map e : lst) {
+				if (e.get("FIRST_CERT_SN") == null
+						|| e.get("FIRST_CERT_SN").toString().trim().length() <= 0)
+					continue;
+				res.add(e.get("FIRST_CERT_SN").toString());
+			}
+		} catch (IllegalAccessException | IllegalArgumentException
+				| InvocationTargetException | ClassNotFoundException
+				| InstantiationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return res;
+	}
+
+	/**
+	 * 查所有业务链中有多条新增的首证书序列号
+	 * 
+	 * @param appId
+	 * @param count
+	 * @return
+	 */
+	public List<String> findFirstCertSnByAppIdAndMutilAdd(Integer appId,
+			Integer count) {
+		String sql = "select FIRST_CERT_SN from ( ";
+		sql += " SELECT FIRST_CERT_SN,DEAL_INFO_TYPE,count(*) ct FROM WORK_DEAL_INFO WHERE FIRST_CERT_SN IN  ( ";
+		sql += " SELECT first_cert_sn FROM (";
+		sql += " SELECT COUNT (*) c, FIRST_CERT_SN FROM WORK_DEAL_INFO WHERE ";
+		sql += " FIRST_CERT_SN!='0' ";
+		if (appId != null && appId.longValue() > 0) {
+			sql = sql + " and APP_ID=" + appId;
+		}
+		sql += " GROUP BY FIRST_CERT_SN) ";
+		sql += " WHERE c > 1 ";
+		sql += " ) and DEAL_INFO_TYPE='0' group by FIRST_CERT_SN,DEAL_INFO_TYPE order by ct desc ";
+		sql += " ) where ct>1";
+		if (count != null && count.intValue() > 0) {
+			sql = sql + " and rownum<=" + count;
+		}
+
+		List<Map> lst = null;
+		List<String> res = new ArrayList<String>();
+		try {
+			lst = workDealInfoDao.findBySQLListMap(sql, 0, 0);
+			for (Map e : lst) {
+				if (e.get("FIRST_CERT_SN") == null
+						|| e.get("FIRST_CERT_SN").toString().trim().length() <= 0)
+					continue;
+				res.add(e.get("FIRST_CERT_SN").toString());
+			}
+		} catch (IllegalAccessException | IllegalArgumentException
+				| InvocationTargetException | ClassNotFoundException
+				| InstantiationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return res;
+	}
+
 	/**
 	 * 查所有首条记录不是新增类型的首证书
 	 * 
@@ -3017,9 +3097,10 @@ public class WorkDealInfoService extends BaseService {
 	 * @param count
 	 * @return
 	 */
-	public List<String> findFirstCertSnByAppIdAndFirstDataIsNotAdd(Integer appId, Integer count){
+	public List<String> findFirstCertSnByAppIdAndFirstDataIsNotAdd(
+			Integer appId, Integer count) {
 		String sql = "select distinct FIRST_CERT_SN from WORK_DEAL_INFO where  FIRST_CERT_SN is not null ";
-		sql+=" and DEAL_INFO_TYPE!='0' and PREV_ID is null ";
+		sql += " and DEAL_INFO_TYPE!='0' and PREV_ID is null ";
 		if (appId != null && appId.longValue() > 0) {
 			sql = sql + " and APP_ID=" + appId;
 		}
@@ -4012,6 +4093,12 @@ public class WorkDealInfoService extends BaseService {
 
 	public List<WorkDealInfo> findByFirstCertSN(String firstCertSN) {
 		return workDealInfoDao.findByFirstCertSN(firstCertSN);
+	}
+
+	public List<WorkDealInfo> findByFirstCertSNAndDealInfoType(
+			String firstCertSN, Integer dealInfoType) {
+		return workDealInfoDao.findByFirstCertSNAndDealInfoType(firstCertSN,
+				dealInfoType);
 	}
 
 	public List<WorkDealInfo> findgxfw1(String certSn) {
@@ -8518,11 +8605,55 @@ public class WorkDealInfoService extends BaseService {
 	}
 
 	/**
-	 * xi付指定APPID的记录，让其业务链里的第一条记录的业务类型为新增
+	 * 修复首条记录的证书序列号和首证书序列号不符的记录(将首证书序列号更新为记录的证书序列号)
 	 * 
 	 * @param lst
 	 */
-	@Transactional(readOnly = false)
+	public void fixNotEquals(List<String> lst) {
+		
+	}
+
+	/**
+	 * 修复业务链中有多条新增类型的记录
+	 * 
+	 * @param lst
+	 */
+	public void fixMutiAdd(List<String> lst) {
+		for (String e : lst) {
+			try {
+				// 查业务链中为新增的记录
+				List<WorkDealInfo> link = findByFirstCertSNAndDealInfoType(e, 0);
+				if (link == null || link.size() <= 0)
+					continue;
+				// 只有一条的情况
+				if (link != null && link.size() == 1) {
+					fixLog.error("业务链中只有一条新增记录,首证书序列号:" + e);
+					continue;
+				}
+				// 如果是首条,检查业务类型，如果不是新增则改为新增
+				WorkDealInfo p = link.get(0);
+				if (p.getDealInfoType() == 0) {
+					String update = "update work_deal_info set DEAL_INFO_TYPE=1 where id="
+							+ p.getId();
+					try {
+						workDealInfoDao.exeSql(update);
+					} catch (Exception ex) {
+						continue;
+					}
+				}
+			} catch (Exception ex) {
+				// 事务问题，可忽略
+				ex.printStackTrace();
+				continue;
+			}
+		}
+	}
+
+	/**
+	 * 修复指定APPID的记录，让其业务链里的第一条记录的业务类型为新增
+	 * 
+	 * @param lst
+	 */
 	public void fixDealInfoType(List<String> lst) {
 		for (String e : lst) {
 			try {
