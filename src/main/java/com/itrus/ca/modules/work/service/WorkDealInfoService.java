@@ -3008,6 +3008,44 @@ public class WorkDealInfoService extends BaseService {
 		}
 		return res;
 	}
+	
+	
+	/**
+	 * 查所有首条记录不是新增类型的首证书
+	 * 
+	 * @param appId
+	 * @param count
+	 * @return
+	 */
+	public List<String> findFirstCertSnByAppIdAndFirstDataIsNotAdd(Integer appId, Integer count){
+		String sql = "select distinct FIRST_CERT_SN from WORK_DEAL_INFO where  FIRST_CERT_SN is not null ";
+		sql+=" and DEAL_INFO_TYPE!='0' and PREV_ID is null ";
+		if (appId != null && appId.longValue() > 0) {
+			sql = sql + " and APP_ID=" + appId;
+		}
+		if (count != null && count.intValue() > 0) {
+			sql = sql + " and rownum<=" + count;
+		}
+		sql += " group by FIRST_CERT_SN";
+
+		List<Map> lst = null;
+		List<String> res = new ArrayList<String>();
+		try {
+			lst = workDealInfoDao.findBySQLListMap(sql, 0, 0);
+			for (Map e : lst) {
+				if (e.get("FIRST_CERT_SN") == null
+						|| e.get("FIRST_CERT_SN").toString().trim().length() <= 0)
+					continue;
+				res.add(e.get("FIRST_CERT_SN").toString());
+			}
+		} catch (IllegalAccessException | IllegalArgumentException
+				| InvocationTargetException | ClassNotFoundException
+				| InstantiationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return res;
+	}
 
 	// 根据应用名称，查询统计信息
 	public List<String> findFirstCertSnByAppId(Integer appId, Integer count) {
