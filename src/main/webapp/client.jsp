@@ -186,8 +186,8 @@
 						<!-- 
 						<li><a href="#panel-4893683" data-toggle="tab">修复svn数据</a></li>
 						 -->
-						<li><a href="#panel-4893685" data-toggle="tab">修复首条业务类型不是新增问题</a></li>
-						<li><a href="#panel-4893686" data-toggle="tab">修复同一业务链多条新增问题</a></li>
+						<li><a href="#panel-4893685" data-toggle="tab">step3 - 修复首条业务类型不是新增问题</a></li>
+						<li><a href="#panel-4893686" data-toggle="tab">step4 - 修复同一业务链多条新增问题</a></li>
 						<!-- 
 						<li><a href="#panel-4893687" data-toggle="tab">修复首证书序列号和自身序列号不符问题</a></li>
 						 -->
