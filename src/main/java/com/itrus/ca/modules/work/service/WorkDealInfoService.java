@@ -4563,6 +4563,43 @@ public class WorkDealInfoService extends BaseService {
 	}
 
 	/**
+	 * 修复前对库内一些错乱数据初始修复,包括：<br>
+	 * 1.修复吊销数据<br>
+	 * 2.修复首证书未补0的数据<br>
+	 * 3.修复新办的新增业务，首证书为0的数据<br>
+	 * 
+	 * @param appid
+	 */
+	public void initFix(Long appid) {
+		// 1.修复吊销数据
+		String sql1 = "update WORK_DEAL_INFO set DEAL_INFO_TYPE=1";
+		sql1 = sql1 + " WHERE APP_ID =" + appid;
+		sql1 += " AND DEAL_INFO_TYPE is null ";
+		sql1 += " AND DEAL_INFO_TYPE1 is null ";
+		sql1 += " AND DEAL_INFO_TYPE2 is null ";
+
+		// 2.修复首证书未补0的数据
+		String sql2 = "update WORK_DEAL_INFO set FIRST_CERT_SN='00'||FIRST_CERT_SN";
+		sql2 = sql2 + " where APP_ID=" + appid + " and ( ";
+		sql2 += "substr(FIRST_CERT_SN, 0,1)='8' or substr(FIRST_CERT_SN, 0,1)='9' ";
+		sql2 += " or substr(FIRST_CERT_SN, 0,1)='A' or substr(FIRST_CERT_SN, 0,1)='B'";
+		sql2 += " or substr(FIRST_CERT_SN, 0,1)='C' or substr(FIRST_CERT_SN, 0,1)='D'";
+		sql2 += " or substr(FIRST_CERT_SN, 0,1)='E' or substr(FIRST_CERT_SN, 0,1)='F')";
+
+		// 3.修复新办的新增业务，首证书为0的数据
+		String sql3 = "update WORK_DEAL_INFO set FIRST_CERT_SN=CERT_SN where FIRST_CERT_SN='0' and ";
+		sql3 = sql3 + " APP_ID=" + appid;
+		sql3 += " and DEAL_INFO_TYPE=0 and PREV_ID is null";
+
+		try {
+			workDealInfoDao.exeSql(sql1);
+			workDealInfoDao.exeSql(sql2);
+			workDealInfoDao.exeSql(sql3);
+		} catch (Exception e) {
+		}
+	}
+
+	/**
 	 * 1.所有业务链数据大于1条，首证书序列号不为空的,设置为空 2.所有prev_id重复的数据，设置为空
 	 * 
 	 * @param appid
@@ -8777,7 +8814,9 @@ public class WorkDealInfoService extends BaseService {
 				// 如果是首条,检查业务类型，如果不是新增则改为新增
 				WorkDealInfo p = link.get(link.size() - 1);
 				String fcn = zeroProcess(p.getFirstCertSN());
-				if (p.getCertSn().equals(fcn)) {
+				// 特殊情况为:如果证书序列号为空，且在首条，也允许更新
+				if (StringHelper.isNull(p.getCertSn())
+						|| p.getCertSn().equals(fcn)) {
 					if (p.getDealInfoType() != null
 							&& p.getDealInfoType().intValue() != 0) {
 						String update = "update work_deal_info set DEAL_INFO_TYPE=0 where id="
@@ -8868,6 +8907,49 @@ public class WorkDealInfoService extends BaseService {
 	}
 
 	/**
+	 * 
+	 * 
+	 * @param lst
+	 */
+	public void fixFirstCertSNByError3(List<String> lst) {
+		for (String e : lst) {
+			// 先用certSn查出自己
+			WorkDealInfo self = findByCertSnOne(e);
+
+			if (self == null || StringHelper.isNull(self.getFirstCertSN())
+					|| StringHelper.isNull(self.getCertSn()))
+				continue;
+
+			// 再以自己的firstCertSN作为cert_sn去查业务链
+			WorkDealInfo prevPo = findByCertSnOne(self.getFirstCertSN());
+			if (prevPo == null) {
+				fixLog.error("按本条的firstCertSN作为certSN未找到上一条记录,firstCertSN:"
+						+ self.getFirstCertSN() + ",id:" + self.getId());
+				continue;
+			}
+			try {
+
+				List<WorkDealInfo> updateList = findByFirstCertSN(self
+						.getFirstCertSN());
+				for (WorkDealInfo el : updateList) {
+					fixLog.error("首证书变化:更新前 - " + self.getFirstCertSN()
+							+ " , 更新后 - " + prevPo.getFirstCertSN() + " , id:"
+							+ el.getId());
+					// 更新错误的first_cert_sn
+					modifyFirstCertSN(el.getId(), prevPo.getFirstCertSN());
+				}
+				// 重新串业务
+				processSinglePreid(prevPo.getFirstCertSN());
+
+			} catch (Exception ex) {
+				// 事务问题，可忽略
+				ex.printStackTrace();
+				continue;
+			}
+		}
+	}
+
+	/**
 	 * 找出一个指定应用下需要修复的数据
 	 * 
 	 * @param appid
@@ -8940,12 +9022,29 @@ public class WorkDealInfoService extends BaseService {
 		String sql = "select id,prev_id,first_cert_sn,SVN,CERT_SN from WORK_DEAL_INFO where ";
 		sql += "FIRST_CERT_SN in(";
 		sql += "select first_cert_sn from (";
-		sql += "select count(*) c,FIRST_CERT_SN from WORK_DEAL_INFO where APP_ID=802516";
+		sql = sql
+				+ "select count(*) c,FIRST_CERT_SN from WORK_DEAL_INFO where APP_ID="
+				+ appid;
 		sql += " group by FIRST_CERT_SN order by c desc";
 		sql += ") where c=1 ";
 		sql += ") and PREV_ID is not null ";
 		sql += " and ('00'||FIRST_CERT_SN!=CERT_SN and FIRST_CERT_SN!=CERT_SN)";
 		return getFirstCertSNListByAppid(sql, "FIRST_CERT_SN");
+	}
+
+	/**
+	 * 首条记录和首证书不符的
+	 * 
+	 * @param appid
+	 * @return List<String>
+	 */
+	public List<String> getNeedFixFirstCertSNLst3(String appid) {
+		String sql = "select id,PREV_ID,DEL_FLAG,CERT_SN,FIRST_CERT_SN,CREATE_DATE, ";
+		sql += "DEAL_INFO_TYPE,DEAL_INFO_TYPE1,DEAL_INFO_TYPE2,DEAL_INFO_TYPE3,IS_SJQY";
+		sql = sql + " from WORK_DEAL_INFO where app_id=" + appid;
+		sql += " and FIRST_CERT_SN!='0'";
+		sql += " and PREV_ID is null and CERT_SN!=FIRST_CERT_SN AND CERT_SN!='00'||FIRST_CERT_SN";
+		return getFirstCertSNListByAppid(sql, "CERT_SN");
 	}
 
 	/**
