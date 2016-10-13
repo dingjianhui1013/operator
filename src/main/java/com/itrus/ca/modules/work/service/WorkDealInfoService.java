@@ -4121,10 +4121,10 @@ public class WorkDealInfoService extends BaseService {
 			if (workDealInfo.getPrevId() == null) {
 				if ((workDealInfo.getDealInfoType() != null && workDealInfo
 						.getDealInfoType() == 0)
-						&& !StringHelper.isNull(workDealInfo.getCertSn())){
+						&& !StringHelper.isNull(workDealInfo.getCertSn())) {
 					String fcn = zeroProcess(workDealInfo.getCertSn());
 					workDealInfo.setFirstCertSN(fcn);
-				}else {
+				} else {
 					// 记录进日志
 					updateLog.error("only id..." + workDealInfo.getId());
 				}
@@ -4562,7 +4562,11 @@ public class WorkDealInfoService extends BaseService {
 		}
 	}
 
-	// @Transactional(readOnly = false)
+	/**
+	 * 1.所有业务链数据大于1条，首证书序列号不为空的,设置为空 2.所有prev_id重复的数据，设置为空
+	 * 
+	 * @param appid
+	 */
 	public void setPrevIdToNull(Integer appid) {
 		// String sql = "update work_deal_info set prev_id=null where APP_ID="
 		// + appid;
@@ -4578,6 +4582,20 @@ public class WorkDealInfoService extends BaseService {
 		sql += " ))";
 		try {
 			workDealInfoDao.exeSql(sql);
+		} catch (Exception e) {
+		}
+		String sql_prevId = "update WORK_DEAL_INFO set PREV_ID=null ";
+		sql_prevId += "where id in(";
+		sql_prevId += "select id from WORK_DEAL_INFO where PREV_ID in(";
+		sql_prevId += "select PREV_ID from (";
+		sql_prevId += "select count(*) c,PREV_ID from WORK_DEAL_INFO ";
+		sql_prevId = sql_prevId + " where app_id=" + appid;
+		sql_prevId += " group by PREV_ID ";
+		sql_prevId += " ) where c>1 ";
+		sql_prevId += " ) ";
+		sql_prevId += " ) ";
+		try {
+			workDealInfoDao.exeSql(sql_prevId);
 		} catch (Exception e) {
 		}
 	}
