@@ -3134,51 +3134,49 @@ public class WorkDealInfoService extends BaseService {
 
 		String hql = "select id from WorkDealInfo where dealInfoType = 0 and delFlag = 1 ";
 		if (appId != null && appId.longValue() > 0) {
-		   hql = hql + " and configApp=" + appId;
+			hql = hql + " and configApp=" + appId;
 		}
-		
+
 		hql += " order by id";
-		
+
 		List<Object> lst = null;
-		
+
 		try {
 			lst = workDealInfoDao.find(hql);
-			
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return lst;
 	}
-	
-	
-	
-	public List<WorkDealInfoVo> findByPrevId(Long dealInfoId){
+
+	public List<WorkDealInfoVo> findByPrevId(Long dealInfoId) {
 		String hql = "select level, id,PREV_ID,FIRST_CERT_SN";
 		hql += " from WORK_DEAL_INFO start with ";
 		hql += "id=";
 		hql += dealInfoId;
 		hql += " connect by prior id = PREV_ID order by level asc";
-		
-		/*List<WorkDealInfo> list = workDealInfoDao.find(hql);
-		
-		return list;*/
+
+		/*
+		 * List<WorkDealInfo> list = workDealInfoDao.find(hql);
+		 * 
+		 * return list;
+		 */
 		List<Map> lst = null;
 		List<WorkDealInfoVo> res = new ArrayList<WorkDealInfoVo>();
-		
+
 		try {
 			lst = workDealInfoDao.findBySQLListMap(hql, 0, 0);
-			
-			
-			
+
 			for (Map e : lst) {
 				WorkDealInfoVo vo = new WorkDealInfoVo();
-			
+
 				Iterator<String> it = e.keySet().iterator();
 				while (it.hasNext()) {
 					String k = it.next();
 					if (k.equals("LEVEL")) {
-							vo.setLevel(new Long(e.get("LEVEL").toString()));
+						vo.setLevel(new Long(e.get("LEVEL").toString()));
 					}
 
 					if (k.equals("ID")) {
@@ -3186,23 +3184,23 @@ public class WorkDealInfoService extends BaseService {
 					}
 
 					if (k.equals("PREV_ID")) {
-						if(e.get("PREV_ID")!=null){
-							vo.setPrevId(new Long(e.get("PREV_ID").toString()));	
+						if (e.get("PREV_ID") != null) {
+							vo.setPrevId(new Long(e.get("PREV_ID").toString()));
 						}
-						
+
 					}
 					if (k.equals("FIRST_CERT_SN")) {
-						if(e.get("FIRST_CERT_SN")!=null){
-						vo.setFirstCertSN(e.get("FIRST_CERT_SN").toString());
-						}else{
+						if (e.get("FIRST_CERT_SN") != null) {
+							vo.setFirstCertSN(e.get("FIRST_CERT_SN").toString());
+						} else {
 							vo.setFirstCertSN("");
 						}
 					}
 				}
-				
+
 				res.add(vo);
-				
-			}	
+
+			}
 		} catch (IllegalAccessException | IllegalArgumentException
 				| InvocationTargetException | ClassNotFoundException
 				| InstantiationException e) {
@@ -3210,10 +3208,9 @@ public class WorkDealInfoService extends BaseService {
 			e.printStackTrace();
 		}
 		return res;
-		
+
 	}
-	
-	
+
 	public List<String> findFirstCertSnByAppId(Integer appId, Integer count) {
 
 		String sql = "select distinct FIRST_CERT_SN from WORK_DEAL_INFO where  FIRST_CERT_SN is not null ";
@@ -3245,7 +3242,6 @@ public class WorkDealInfoService extends BaseService {
 		}
 		return res;
 	}
-	
 
 	public Integer getNeedFixPrevIdCount(String appid) {
 		List<Map> m = null;
@@ -4125,9 +4121,10 @@ public class WorkDealInfoService extends BaseService {
 			if (workDealInfo.getPrevId() == null) {
 				if ((workDealInfo.getDealInfoType() != null && workDealInfo
 						.getDealInfoType() == 0)
-						&& !StringHelper.isNull(workDealInfo.getCertSn()))
-					workDealInfo.setFirstCertSN(workDealInfo.getCertSn());
-				else {
+						&& !StringHelper.isNull(workDealInfo.getCertSn())){
+					String fcn = zeroProcess(workDealInfo.getCertSn());
+					workDealInfo.setFirstCertSN(fcn);
+				}else {
 					// 记录进日志
 					updateLog.error("only id..." + workDealInfo.getId());
 				}
@@ -5013,6 +5010,7 @@ public class WorkDealInfoService extends BaseService {
 				}
 				if (pre != null) {
 					po.setPrevId(pre.getId());
+					po.setFirstCertSN(pre.getFirstCertSN());
 				}
 				if (i == 0) {
 					po.setDelFlag("0");
@@ -5022,8 +5020,8 @@ public class WorkDealInfoService extends BaseService {
 
 				// workDealInfoDao.save(po);
 				sql = "update work_deal_info set DEL_FLAG='" + po.getDelFlag()
-						+ "',prev_id=" + po.getPrevId() + " where id="
-						+ po.getId();
+						+ "',prev_id=" + po.getPrevId() + ",FIRST_CERT_SN='"
+						+ po.getFirstCertSN() + "' where id=" + po.getId();
 			} catch (Exception ex) {
 				ex.printStackTrace();
 				exLog.error(StringHelper.getStackInfo(ex));
@@ -8696,7 +8694,7 @@ public class WorkDealInfoService extends BaseService {
 	 * @param lst
 	 */
 	public void fixNotEquals(List<String> lst) {
-		
+
 	}
 
 	/**
