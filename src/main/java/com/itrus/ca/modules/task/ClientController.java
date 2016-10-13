@@ -56,6 +56,7 @@ import com.itrus.ca.modules.sys.service.OfficeService;
 import com.itrus.ca.modules.sys.utils.UserUtils;
 import com.itrus.ca.modules.task.entity.BasicInfoScca;
 import com.itrus.ca.modules.task.service.BasicInfoSccaService;
+import com.itrus.ca.modules.task.vo.WorkDealInfoVo;
 import com.itrus.ca.modules.work.entity.WorkCertApplyInfo;
 import com.itrus.ca.modules.work.entity.WorkCertInfo;
 import com.itrus.ca.modules.work.entity.WorkCompany;
@@ -1261,5 +1262,77 @@ public class ClientController {
 		}
 		return json.toString();
 	}
+	
+	
+	
+	
+	
+	@RequestMapping(value = "checkData")
+	@ResponseBody
+	public String checkData(Long appId) throws JSONException {
+		JSONObject json = new JSONObject();
+		if (appId == null || appId.intValue() <= 0) {
+			json.put("statu", "-1");
+			json.put("msg", "APPID不能为空");
+			return json.toString();
+		}
+		List<Object> lst = workDealInfoService.findIdByAppIdAndDealInfoType(appId);
+		
+		
+		List<List<Object>> listArr = createList(lst, 200);
+		
+		
+		List<Thread> allThread = new ArrayList<Thread>();
+		
+		
+		
+		
+		for(int i=0;i<listArr.size();i++){
+			
+			Thread thread = new Thread( new MutiCheckData(listArr.get(i)),"thread"+i);
+			
+			thread.start();
+			
+			allThread.add(thread);
+		}
+		
+		
+		
+		for (Thread thread1 : allThread) {
+			try {
+				thread1.join();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		
+		json.put("statu", "0");
+		json.put("msg", "本次共检查 " + lst.size()
+				+ " 条业务链,详情见控制台输出日志");
+		
+		return json.toString();
+	}
+	
+	
+	 public static List<List<Object>>  createList(List<Object> targe,int size) {  
+	        List<List<Object>> listArr = new ArrayList<List<Object>>();  
+	        //获取被拆分的数组个数  
+	        int arrSize = targe.size()%size==0?targe.size()/size:targe.size()/size+1;  
+	        for(int i=0;i<arrSize;i++) {  
+	            List<Object>  sub = new ArrayList<Object>();  
+	            //把指定索引数据放入到list中  
+	            for(int j=i*size;j<=size*(i+1)-1;j++) {  
+	                if(j<=targe.size()-1) {  
+	                    sub.add(targe.get(j));  
+	                }  
+	            }  
+	            listArr.add(sub);  
+	        }  
+	        return listArr;  
+	    }  
+	
+	
 
 }

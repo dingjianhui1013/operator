@@ -140,6 +140,21 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 	public WorkDealInfo() {
 	}
 
+	
+	
+	
+	
+	public WorkDealInfo(Long id, Long prevId, String firstCertSN) {
+		super();
+		this.id = id;
+		this.prevId = prevId;
+		this.firstCertSN = firstCertSN;
+	}
+
+
+
+
+
 	/** minimal constructor */
 	public WorkDealInfo(ConfigApp configApp, Integer dealInfoType,
 			String dealInfoStatus) {
