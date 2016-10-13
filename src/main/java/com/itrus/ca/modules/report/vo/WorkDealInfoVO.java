@@ -14,7 +14,7 @@ public class WorkDealInfoVO {
 	private Integer unUpdateCount;       //未更新数量
 	private Integer maintenanceCount;    //维护数量
 
-	
+    	
 	
 	private String companyName;
 	private String contactName;
@@ -23,9 +23,7 @@ public class WorkDealInfoVO {
 	private Integer dealInfoType2;
 	private Integer dealInfoType3;
 	
-	
-	
-	
+
 	private Date businessCardDate;
 	
 	@ExcelField(title="应用名称", align=2,sort=1)
