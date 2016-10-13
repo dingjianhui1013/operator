@@ -188,7 +188,9 @@
 						 -->
 						<li><a href="#panel-4893685" data-toggle="tab">修复首条业务类型不是新增问题</a></li>
 						<li><a href="#panel-4893686" data-toggle="tab">修复同一业务链多条新增问题</a></li>
+						<!-- 
 						<li><a href="#panel-4893687" data-toggle="tab">修复首证书序列号和自身序列号不符问题</a></li>
+						 -->
 					</ul>
 					<div class="tab-content">
 						<div class="tab-pane active" id="panel-98562">
@@ -352,6 +354,7 @@
 								</div>
 							</div>
 						</div>
+						<!-- 
 						<div class="tab-pane" id="panel-4893687">
 							<div class="container-fluid">
 								<div class="row-fluid">
@@ -371,6 +374,7 @@
 								</div>
 							</div>
 						</div>
+						 -->
 					</div>
 				</div>
 			</div>
