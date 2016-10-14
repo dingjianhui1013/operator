@@ -3155,7 +3155,7 @@ public class WorkDealInfoService extends BaseService {
 	public List<String> findFirstCertSnByAppIdAndFirstDataIsNotAdd(
 			Integer appId, Integer count) {
 		String sql = "select distinct FIRST_CERT_SN from WORK_DEAL_INFO where  FIRST_CERT_SN is not null ";
-		sql += " and DEAL_INFO_TYPE!='0' and PREV_ID is null ";
+		sql += " and (DEAL_INFO_TYPE!=0 OR DEAL_INFO_TYPE is NULL) and PREV_ID is null ";
 		if (appId != null && appId.longValue() > 0) {
 			sql = sql + " and APP_ID=" + appId;
 		}
