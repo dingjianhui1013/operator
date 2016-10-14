@@ -2544,8 +2544,8 @@ public class WorkDealInfoService extends BaseService {
 	}
 
 	public List<WorkDealInfo> find14(WorkDealInfo workDealInfo, Long area,
-			Long office, Long apply, Integer workType,Date makeCertStart,
-			Date makeCertEnd,Date expiredStart,Date expiredEnd) {
+			Long office, Long apply, Integer workType, Date makeCertStart,
+			Date makeCertEnd, Date expiredStart, Date expiredEnd) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("workPayInfo", "workPayInfo");
 		dc.createAlias("workCompany", "workCompany");
@@ -2625,61 +2625,59 @@ public class WorkDealInfoService extends BaseService {
 		if (workDealInfo.getStatus() != null) {
 			dc.add(Restrictions.eq("status", workDealInfo.getStatus()));
 		}
-		
-		
-		if(makeCertStart !=null){
-			
+
+		if (makeCertStart != null) {
+
 			Calendar cal = Calendar.getInstance();
-			
+
 			cal.setTime(makeCertStart);
-			
+
 			cal.set(Calendar.HOUR_OF_DAY, 0);
 			cal.set(Calendar.MINUTE, 0);
 			cal.set(Calendar.SECOND, 0);
-			
+
 			dc.add(Restrictions.ge("businessCardUserDate", cal.getTime()));
 		}
-		
-		if(makeCertEnd !=null){
-			
+
+		if (makeCertEnd != null) {
+
 			Calendar cal = Calendar.getInstance();
-			
+
 			cal.setTime(makeCertEnd);
-			
+
 			cal.set(Calendar.HOUR_OF_DAY, 23);
 			cal.set(Calendar.MINUTE, 59);
 			cal.set(Calendar.SECOND, 59);
-			
+
 			dc.add(Restrictions.le("businessCardUserDate", cal.getTime()));
 		}
-		
-		if(expiredStart !=null){
-			
+
+		if (expiredStart != null) {
+
 			Calendar cal = Calendar.getInstance();
-			
+
 			cal.setTime(expiredStart);
-			
+
 			cal.set(Calendar.HOUR_OF_DAY, 0);
 			cal.set(Calendar.MINUTE, 0);
 			cal.set(Calendar.SECOND, 0);
-			
+
 			dc.add(Restrictions.ge("notafter", cal.getTime()));
 		}
-		
-		if(expiredEnd !=null){
-			
+
+		if (expiredEnd != null) {
+
 			Calendar cal = Calendar.getInstance();
-			
+
 			cal.setTime(expiredEnd);
-			
+
 			cal.set(Calendar.HOUR_OF_DAY, 23);
 			cal.set(Calendar.MINUTE, 59);
 			cal.set(Calendar.SECOND, 59);
-			
+
 			dc.add(Restrictions.le("notafter", cal.getTime()));
 		}
 
-		
 		return workDealInfoDao.find(dc);
 
 	}
@@ -3207,10 +3205,8 @@ public class WorkDealInfoService extends BaseService {
 		return lst;
 	}
 
-	
-	
-	
-	public List<com.itrus.ca.modules.task.vo.WorkDealInfoVo> findByPrevId(Long dealInfoId){
+	public List<com.itrus.ca.modules.task.vo.WorkDealInfoVo> findByPrevId(
+			Long dealInfoId) {
 
 		String hql = "select level, id,PREV_ID,FIRST_CERT_SN";
 		hql += " from WORK_DEAL_INFO start with ";
@@ -9010,6 +9006,54 @@ public class WorkDealInfoService extends BaseService {
 	}
 
 	/**
+	 * 修复无firstCertSn，有prevId记录
+	 * 
+	 * @param lst
+	 */
+	public void fixFirstCertSNByError4(List<String> lst) {
+		for (String e : lst) {
+			// 先查出自己
+			WorkDealInfo self = get(new Long(e));
+
+			if (self == null) {
+				fixLog.error("修复“无firstCertSn，有prevId记录”时，未查到当前记录,id:" + e);
+				continue;
+			}
+			WorkDealInfo prevPo = get(self.getPrevId());
+			if (prevPo == null) {
+				fixLog.error("修复“无firstCertSn，有prevId记录”时,未查到上一条记录,id:"
+						+ self.getId() + ",prevId:" + self.getPrevId());
+				continue;
+			}
+
+			if (StringHelper.isNull(prevPo.getFirstCertSN())) {
+				fixLog.error("修复“无firstCertSn，有prevId记录”时,上一条记录未查到firstCertSN,id:"
+						+ e + ",prev_id:" + self.getPrevId());
+				continue;
+			}
+			try {
+
+				List<WorkDealInfo> updateList = findByFirstCertSN(self
+						.getFirstCertSN());
+				for (WorkDealInfo el : updateList) {
+					fixLog.error("首证书变化:更新前 - " + self.getFirstCertSN()
+							+ " , 更新后 - " + prevPo.getFirstCertSN() + " , id:"
+							+ el.getId());
+					// 更新错误的first_cert_sn
+					modifyFirstCertSN(el.getId(), prevPo.getFirstCertSN());
+				}
+				// 重新串业务
+				processSinglePreid(prevPo.getFirstCertSN());
+
+			} catch (Exception ex) {
+				// 事务问题，可忽略
+				ex.printStackTrace();
+				continue;
+			}
+		}
+	}
+
+	/**
 	 * 找出一个指定应用下需要修复的数据
 	 * 
 	 * @param appid
@@ -9106,7 +9150,23 @@ public class WorkDealInfoService extends BaseService {
 		sql += " and PREV_ID is null and CERT_SN!=FIRST_CERT_SN AND CERT_SN!='00'||FIRST_CERT_SN";
 		return getFirstCertSNListByAppid(sql, "CERT_SN");
 	}
+	
+	/**
+	 * 业务链有prev_id，无first_cert_sn<br>
+	 * 
+	 * @param appid
+	 * @return List<String>(id)
+	 */
+	public List<String> getNeedFixFirstCertSNLst4(String appid) {
+		String sql = "select id,PREV_ID,DEL_FLAG,CERT_SN,FIRST_CERT_SN,CREATE_DATE, ";
+		sql += "DEAL_INFO_TYPE,DEAL_INFO_TYPE1,DEAL_INFO_TYPE2,DEAL_INFO_TYPE3,";
+		sql += "IS_SJQY,DEAL_INFO_STATUS from WORK_DEAL_INFO";
+		sql = sql + " where FIRST_CERT_SN is null and app_id=" + appid;
+		sql += " and PREV_ID is not null";
 
+		return getFirstCertSNListByAppid(sql, "ID");
+	}
+	
 	/**
 	 * 业务链中的数据只有一条，但根据其first_cert_sn，查出对应的cert_sn记录存在prev_id，<br>
 	 * 因为有补零逻辑，所以需要下面二条SQL来验证<br>
@@ -9129,111 +9189,107 @@ public class WorkDealInfoService extends BaseService {
 
 		return getFirstCertSNListByAppid(sql, "CERT_SN");
 	}
-	
-	
-	
-	
-	public List<WorkDealInfoVo> getAllByHql(String ids){
-		StringBuffer hql =new StringBuffer("select new com.itrus.ca.modules.message.vo.WorkDealInfoVo(wdi.svn,wdi.keySn,wdi.dealInfoStatus,wdi.notafter ");
-		
+
+	public List<WorkDealInfoVo> getAllByHql(String ids) {
+		StringBuffer hql = new StringBuffer(
+				"select new com.itrus.ca.modules.message.vo.WorkDealInfoVo(wdi.svn,wdi.keySn,wdi.dealInfoStatus,wdi.notafter ");
+
 		hql.append(",wcai.name");
-		
+
 		hql.append(",wc.organizationNumber,wc.companyName,wc.legalName,wc.province,wc.city,wc.district,wc.address");
-		
+
 		hql.append(",ca.alias)");
-		
+
 		hql.append(" from WorkDealInfo wdi,WorkCertInfo wci,WorkCertApplyInfo wcai,WorkCompany wc,ConfigApp ca");
-		
+
 		hql.append(" where wdi.workCertInfo = wci.id");
 		hql.append(" and wci.workCertApplyInfo = wcai.id");
 		hql.append(" and wdi.workCompany = wc.id");
 		hql.append(" and wdi.configApp = ca.id");
 		hql.append(" and wdi.id in (").append(ids).append(")");
-		
-		
-		 List<WorkDealInfoVo> list = workDealInfoDao.find(hql.toString());
-		 
-		 return list;
+
+		List<WorkDealInfoVo> list = workDealInfoDao.find(hql.toString());
+
+		return list;
 	}
-	
-	public WorkDealInfoVo getSingleByHql(Long id){
-		StringBuffer hql =new StringBuffer("select new com.itrus.ca.modules.message.vo.WorkDealInfoVo(wdi.svn,wdi.keySn,wdi.dealInfoStatus,wdi.notafter ");
-		
+
+	public WorkDealInfoVo getSingleByHql(Long id) {
+		StringBuffer hql = new StringBuffer(
+				"select new com.itrus.ca.modules.message.vo.WorkDealInfoVo(wdi.svn,wdi.keySn,wdi.dealInfoStatus,wdi.notafter ");
+
 		hql.append(",wcai.name");
-		
+
 		hql.append(",wc.organizationNumber,wc.companyName,wc.legalName,wc.province,wc.city,wc.district,wc.address");
-		
+
 		hql.append(",ca.alias)");
-		
+
 		hql.append(" from WorkDealInfo wdi,WorkCertInfo wci,WorkCertApplyInfo wcai,WorkCompany wc,ConfigApp ca");
-		
+
 		hql.append(" where wdi.workCertInfo = wci.id");
 		hql.append(" and wci.workCertApplyInfo = wcai.id");
 		hql.append(" and wdi.workCompany = wc.id");
 		hql.append(" and wdi.configApp = ca.id");
 		hql.append(" and wdi.id  =").append(id);
-		
-		
-		 List<WorkDealInfoVo> list = workDealInfoDao.find(hql.toString());
-		 
-		 return list.get(0);
+
+		List<WorkDealInfoVo> list = workDealInfoDao.find(hql.toString());
+
+		return list.get(0);
 	}
-	
-	
-	public List<WorkDealInfoVo> findAllByHql(String ids){
-		StringBuffer hql =new StringBuffer("select new com.itrus.ca.modules.message.vo.WorkDealInfoVo(wdi.svn,wdi.keySn,wdi.dealInfoStatus,wdi.notafter ");
-		
+
+	public List<WorkDealInfoVo> findAllByHql(String ids) {
+		StringBuffer hql = new StringBuffer(
+				"select new com.itrus.ca.modules.message.vo.WorkDealInfoVo(wdi.svn,wdi.keySn,wdi.dealInfoStatus,wdi.notafter ");
+
 		hql.append(",wcai.name");
-		
+
 		hql.append(",wc.organizationNumber,wc.companyName,wc.legalName,wc.province,wc.city,wc.district,wc.address");
-		
+
 		hql.append(",ca.alias");
-		
+
 		hql.append(",wu.contactPhone");
-		
+
 		hql.append(",wdi.id,wci.id,wc.id,ca.id,wu.id)");
-		
+
 		hql.append(" from WorkDealInfo wdi,WorkCertInfo wci,WorkCertApplyInfo wcai,WorkCompany wc,ConfigApp ca,WorkUser wu");
-		
+
 		hql.append(" where wdi.workCertInfo = wci.id");
 		hql.append(" and wci.workCertApplyInfo = wcai.id");
 		hql.append(" and wdi.workCompany = wc.id");
 		hql.append(" and wdi.configApp = ca.id");
 		hql.append(" and wdi.workUser = wu.id");
 		hql.append(" and wdi.id in (").append(ids).append(")");
-		
-		
-		 List<WorkDealInfoVo> list = workDealInfoDao.find(hql.toString());
-		 
-		 return list;
+
+		List<WorkDealInfoVo> list = workDealInfoDao.find(hql.toString());
+
+		return list;
 	}
-	
-	public WorkDealInfoVo findSingleByHql(Long id){
-		StringBuffer hql =new StringBuffer("select new com.itrus.ca.modules.message.vo.WorkDealInfoVo(wdi.svn,wdi.keySn,wdi.dealInfoStatus,wdi.notafter ");
-		
+
+	public WorkDealInfoVo findSingleByHql(Long id) {
+		StringBuffer hql = new StringBuffer(
+				"select new com.itrus.ca.modules.message.vo.WorkDealInfoVo(wdi.svn,wdi.keySn,wdi.dealInfoStatus,wdi.notafter ");
+
 		hql.append(",wcai.name");
-		
+
 		hql.append(",wc.organizationNumber,wc.companyName,wc.legalName,wc.province,wc.city,wc.district,wc.address");
-		
+
 		hql.append(",ca.alias");
-		
+
 		hql.append(",wu.contactPhone");
-		
+
 		hql.append(",wdi.id,wci.id,wc.id,ca.id,wu.id)");
-		
+
 		hql.append(" from WorkDealInfo wdi,WorkCertInfo wci,WorkCertApplyInfo wcai,WorkCompany wc,ConfigApp ca,WorkUser wu");
-		
+
 		hql.append(" where wdi.workCertInfo = wci.id");
 		hql.append(" and wci.workCertApplyInfo = wcai.id");
 		hql.append(" and wdi.workCompany = wc.id");
 		hql.append(" and wdi.configApp = ca.id");
 		hql.append(" and wdi.workUser = wu.id");
 		hql.append(" and wdi.id =").append(id);
-		
-		
-		 List<WorkDealInfoVo> list = workDealInfoDao.find(hql.toString());
-		 
-		 return list.get(0);
+
+		List<WorkDealInfoVo> list = workDealInfoDao.find(hql.toString());
+
+		return list.get(0);
 	}
-	
+
 }
