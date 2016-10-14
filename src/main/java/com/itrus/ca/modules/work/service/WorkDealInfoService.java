@@ -4633,6 +4633,7 @@ public class WorkDealInfoService extends BaseService {
 		sql1 += " AND DEAL_INFO_TYPE is null ";
 		sql1 += " AND DEAL_INFO_TYPE1 is null ";
 		sql1 += " AND DEAL_INFO_TYPE2 is null ";
+		sql1 += " AND DEAL_INFO_TYPE3 is null ";
 
 		// 2.修复首证书未补0的数据
 		String sql2 = "update WORK_DEAL_INFO set FIRST_CERT_SN='00'||FIRST_CERT_SN";
@@ -8859,7 +8860,7 @@ public class WorkDealInfoService extends BaseService {
 				// 只有一条的情况
 				if (link != null && link.size() == 1) {
 					WorkDealInfo po = link.get(0);
-					String sql = "update work_deal_info set DEL_FLAG='0',PREV_ID=null,DEAL_INFO_TYPE=0 where id="
+					String sql = "update work_deal_info set DEL_FLAG='0',PREV_ID=null,DEAL_INFO_TYPE=0,DEAL_INFO_TYPE1=null,DEAL_INFO_TYPE2=null,DEAL_INFO_TYPE3=null where id="
 							+ po.getId();
 					try {
 						workDealInfoDao.exeSql(sql);
@@ -8875,7 +8876,7 @@ public class WorkDealInfoService extends BaseService {
 						|| p.getCertSn().equals(fcn)) {
 					if (p.getDealInfoType() != null
 							&& p.getDealInfoType().intValue() != 0) {
-						String update = "update work_deal_info set DEAL_INFO_TYPE=0 where id="
+						String update = "update work_deal_info set DEAL_INFO_TYPE=0,DEAL_INFO_TYPE1=null,DEAL_INFO_TYPE2=null,DEAL_INFO_TYPE3=null where id="
 								+ p.getId();
 						try {
 							workDealInfoDao.exeSql(update);
