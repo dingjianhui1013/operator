@@ -966,6 +966,13 @@ public class ClientController {
 			json.put("msg", "系统内部错误:" + StringHelper.getStackInfo(ex));
 			return json.toString();
 		}
+		// 增加一种情况，首证书为空，但有prev_id的记录
+		List<String> lst4 = workDealInfoService
+				.getNeedFixFirstCertSNLst4(fixFirstCertSnAppid);
+		if (lst4 == null)
+			lst4 = new ArrayList<String>();
+		new Thread(new FixFirstSNThread4(lst4)).start();
+
 		// 第一种情况
 		List<String> lst = workDealInfoService
 				.getNeedFixFirstCertSNLst(fixFirstCertSnAppid);
@@ -988,9 +995,10 @@ public class ClientController {
 		Integer c1 = lst == null ? 0 : lst.size();
 		Integer c2 = lst2 == null ? 0 : lst2.size();
 		Integer c3 = lst3 == null ? 0 : lst3.size();
+		Integer c4 = lst4 == null ? 0 : lst4.size();
 		json.put("statu", "0");
 		json.put("msg", "开始处理,app_id:" + fixFirstCertSnAppid + "数据总数:"
-				+ (c1 + c2 + c3));
+				+ (c1 + c2 + c3 + c4));
 		return json.toString();
 	}
 
