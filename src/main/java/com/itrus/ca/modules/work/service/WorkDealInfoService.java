@@ -61,6 +61,7 @@ import com.itrus.ca.modules.constant.WorkDealInfoType;
 import com.itrus.ca.modules.finance.entity.FinancePaymentInfo;
 import com.itrus.ca.modules.finance.service.FinancePaymentInfoService;
 import com.itrus.ca.modules.log.service.LogUtil;
+import com.itrus.ca.modules.message.vo.WorkDealInfoVo;
 import com.itrus.ca.modules.profile.entity.ConfigAgentBoundDealInfo;
 import com.itrus.ca.modules.profile.entity.ConfigAgentOfficeRelation;
 import com.itrus.ca.modules.profile.entity.ConfigApp;
@@ -82,7 +83,7 @@ import com.itrus.ca.modules.sys.entity.Office;
 import com.itrus.ca.modules.sys.entity.User;
 import com.itrus.ca.modules.sys.utils.CreateExcelUtils;
 import com.itrus.ca.modules.sys.utils.UserUtils;
-import com.itrus.ca.modules.task.vo.WorkDealInfoVo;
+import com.itrus.ca.modules.message.vo.WorkDealInfoVo;
 import com.itrus.ca.modules.work.dao.WorkCertInfoDao;
 import com.itrus.ca.modules.work.dao.WorkCertTrustApplyDao;
 import com.itrus.ca.modules.work.dao.WorkDealInfoDao;
@@ -2543,8 +2544,8 @@ public class WorkDealInfoService extends BaseService {
 	}
 
 	public List<WorkDealInfo> find14(WorkDealInfo workDealInfo, Long area,
-			Long office, Long apply, Integer workType,
-			List<WorkCertInfo> certInfoList) {
+			Long office, Long apply, Integer workType,Date makeCertStart,
+			Date makeCertEnd,Date expiredStart,Date expiredEnd) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
 		dc.createAlias("workPayInfo", "workPayInfo");
 		dc.createAlias("workCompany", "workCompany");
@@ -2624,6 +2625,61 @@ public class WorkDealInfoService extends BaseService {
 		if (workDealInfo.getStatus() != null) {
 			dc.add(Restrictions.eq("status", workDealInfo.getStatus()));
 		}
+		
+		
+		if(makeCertStart !=null){
+			
+			Calendar cal = Calendar.getInstance();
+			
+			cal.setTime(makeCertStart);
+			
+			cal.set(Calendar.HOUR_OF_DAY, 0);
+			cal.set(Calendar.MINUTE, 0);
+			cal.set(Calendar.SECOND, 0);
+			
+			dc.add(Restrictions.ge("businessCardUserDate", cal.getTime()));
+		}
+		
+		if(makeCertEnd !=null){
+			
+			Calendar cal = Calendar.getInstance();
+			
+			cal.setTime(makeCertEnd);
+			
+			cal.set(Calendar.HOUR_OF_DAY, 23);
+			cal.set(Calendar.MINUTE, 59);
+			cal.set(Calendar.SECOND, 59);
+			
+			dc.add(Restrictions.le("businessCardUserDate", cal.getTime()));
+		}
+		
+		if(expiredStart !=null){
+			
+			Calendar cal = Calendar.getInstance();
+			
+			cal.setTime(expiredStart);
+			
+			cal.set(Calendar.HOUR_OF_DAY, 0);
+			cal.set(Calendar.MINUTE, 0);
+			cal.set(Calendar.SECOND, 0);
+			
+			dc.add(Restrictions.ge("notafter", cal.getTime()));
+		}
+		
+		if(expiredEnd !=null){
+			
+			Calendar cal = Calendar.getInstance();
+			
+			cal.setTime(expiredEnd);
+			
+			cal.set(Calendar.HOUR_OF_DAY, 23);
+			cal.set(Calendar.MINUTE, 59);
+			cal.set(Calendar.SECOND, 59);
+			
+			dc.add(Restrictions.le("notafter", cal.getTime()));
+		}
+
+		
 		return workDealInfoDao.find(dc);
 
 	}
@@ -3151,7 +3207,11 @@ public class WorkDealInfoService extends BaseService {
 		return lst;
 	}
 
-	public List<WorkDealInfoVo> findByPrevId(Long dealInfoId) {
+	
+	
+	
+	public List<com.itrus.ca.modules.task.vo.WorkDealInfoVo> findByPrevId(Long dealInfoId){
+
 		String hql = "select level, id,PREV_ID,FIRST_CERT_SN";
 		hql += " from WORK_DEAL_INFO start with ";
 		hql += "id=";
@@ -3164,13 +3224,13 @@ public class WorkDealInfoService extends BaseService {
 		 * return list;
 		 */
 		List<Map> lst = null;
-		List<WorkDealInfoVo> res = new ArrayList<WorkDealInfoVo>();
+		List<com.itrus.ca.modules.task.vo.WorkDealInfoVo> res = new ArrayList<com.itrus.ca.modules.task.vo.WorkDealInfoVo>();
 
 		try {
 			lst = workDealInfoDao.findBySQLListMap(hql, 0, 0);
 
 			for (Map e : lst) {
-				WorkDealInfoVo vo = new WorkDealInfoVo();
+				com.itrus.ca.modules.task.vo.WorkDealInfoVo vo = new com.itrus.ca.modules.task.vo.WorkDealInfoVo();
 
 				Iterator<String> it = e.keySet().iterator();
 				while (it.hasNext()) {
@@ -9069,4 +9129,111 @@ public class WorkDealInfoService extends BaseService {
 
 		return getFirstCertSNListByAppid(sql, "CERT_SN");
 	}
+	
+	
+	
+	
+	public List<WorkDealInfoVo> getAllByHql(String ids){
+		StringBuffer hql =new StringBuffer("select new com.itrus.ca.modules.message.vo.WorkDealInfoVo(wdi.svn,wdi.keySn,wdi.dealInfoStatus,wdi.notafter ");
+		
+		hql.append(",wcai.name");
+		
+		hql.append(",wc.organizationNumber,wc.companyName,wc.legalName,wc.province,wc.city,wc.district,wc.address");
+		
+		hql.append(",ca.alias)");
+		
+		hql.append(" from WorkDealInfo wdi,WorkCertInfo wci,WorkCertApplyInfo wcai,WorkCompany wc,ConfigApp ca");
+		
+		hql.append(" where wdi.workCertInfo = wci.id");
+		hql.append(" and wci.workCertApplyInfo = wcai.id");
+		hql.append(" and wdi.workCompany = wc.id");
+		hql.append(" and wdi.configApp = ca.id");
+		hql.append(" and wdi.id in (").append(ids).append(")");
+		
+		
+		 List<WorkDealInfoVo> list = workDealInfoDao.find(hql.toString());
+		 
+		 return list;
+	}
+	
+	public WorkDealInfoVo getSingleByHql(Long id){
+		StringBuffer hql =new StringBuffer("select new com.itrus.ca.modules.message.vo.WorkDealInfoVo(wdi.svn,wdi.keySn,wdi.dealInfoStatus,wdi.notafter ");
+		
+		hql.append(",wcai.name");
+		
+		hql.append(",wc.organizationNumber,wc.companyName,wc.legalName,wc.province,wc.city,wc.district,wc.address");
+		
+		hql.append(",ca.alias)");
+		
+		hql.append(" from WorkDealInfo wdi,WorkCertInfo wci,WorkCertApplyInfo wcai,WorkCompany wc,ConfigApp ca");
+		
+		hql.append(" where wdi.workCertInfo = wci.id");
+		hql.append(" and wci.workCertApplyInfo = wcai.id");
+		hql.append(" and wdi.workCompany = wc.id");
+		hql.append(" and wdi.configApp = ca.id");
+		hql.append(" and wdi.id  =").append(id);
+		
+		
+		 List<WorkDealInfoVo> list = workDealInfoDao.find(hql.toString());
+		 
+		 return list.get(0);
+	}
+	
+	
+	public List<WorkDealInfoVo> findAllByHql(String ids){
+		StringBuffer hql =new StringBuffer("select new com.itrus.ca.modules.message.vo.WorkDealInfoVo(wdi.svn,wdi.keySn,wdi.dealInfoStatus,wdi.notafter ");
+		
+		hql.append(",wcai.name");
+		
+		hql.append(",wc.organizationNumber,wc.companyName,wc.legalName,wc.province,wc.city,wc.district,wc.address");
+		
+		hql.append(",ca.alias");
+		
+		hql.append(",wu.contactPhone");
+		
+		hql.append(",wdi.id,wci.id,wc.id,ca.id,wu.id)");
+		
+		hql.append(" from WorkDealInfo wdi,WorkCertInfo wci,WorkCertApplyInfo wcai,WorkCompany wc,ConfigApp ca,WorkUser wu");
+		
+		hql.append(" where wdi.workCertInfo = wci.id");
+		hql.append(" and wci.workCertApplyInfo = wcai.id");
+		hql.append(" and wdi.workCompany = wc.id");
+		hql.append(" and wdi.configApp = ca.id");
+		hql.append(" and wdi.workUser = wu.id");
+		hql.append(" and wdi.id in (").append(ids).append(")");
+		
+		
+		 List<WorkDealInfoVo> list = workDealInfoDao.find(hql.toString());
+		 
+		 return list;
+	}
+	
+	public WorkDealInfoVo findSingleByHql(Long id){
+		StringBuffer hql =new StringBuffer("select new com.itrus.ca.modules.message.vo.WorkDealInfoVo(wdi.svn,wdi.keySn,wdi.dealInfoStatus,wdi.notafter ");
+		
+		hql.append(",wcai.name");
+		
+		hql.append(",wc.organizationNumber,wc.companyName,wc.legalName,wc.province,wc.city,wc.district,wc.address");
+		
+		hql.append(",ca.alias");
+		
+		hql.append(",wu.contactPhone");
+		
+		hql.append(",wdi.id,wci.id,wc.id,ca.id,wu.id)");
+		
+		hql.append(" from WorkDealInfo wdi,WorkCertInfo wci,WorkCertApplyInfo wcai,WorkCompany wc,ConfigApp ca,WorkUser wu");
+		
+		hql.append(" where wdi.workCertInfo = wci.id");
+		hql.append(" and wci.workCertApplyInfo = wcai.id");
+		hql.append(" and wdi.workCompany = wc.id");
+		hql.append(" and wdi.configApp = ca.id");
+		hql.append(" and wdi.workUser = wu.id");
+		hql.append(" and wdi.id =").append(id);
+		
+		
+		 List<WorkDealInfoVo> list = workDealInfoDao.find(hql.toString());
+		 
+		 return list.get(0);
+	}
+	
 }
