@@ -147,6 +147,12 @@
 			var province = $("#s_province").val();
 			var city = $("#s_city").val();
 			var district = $("#s_county").val();
+			
+			var makeCertStart = $("#makeCertStart").val();
+			var makeCertEnd = $("#makeCertEnd").val();
+			var expiredStart = $("#expiredStart").val();
+			var expiredEnd = $("#expiredEnd").val();
+			
 			$("#send").removeAttr("href");
 			var url="${ctx}/message/messageSending/selectData";
 			$.ajax({
@@ -154,7 +160,8 @@
 				type:"POST",
 				data:{"apply":apply,"companyName":companyName,"contactName":contactName,"workType":workType,
 						"dealInfoStatus":dealInfoStatus,"areaId":areaId,"officeId":officeId,
-						"province":province,"city":city,"district":district,_:new Date().getTime()},
+						"province":province,"city":city,"district":district,"makeCertStart":makeCertStart,
+						"makeCertEnd":makeCertEnd,"expiredStart":expiredStart,"expiredEnd":expiredEnd,_:new Date().getTime()},
 				dataType:"text",
 				success:function(data)
 				{
@@ -209,8 +216,15 @@
 				+ "&dealInfoStatus=" + dealInfoStatus + "&areaId=" + areaId
 				+ "&officeId=" + officeId + "&smsId=" + smsId + "&_="
 				+ new Date().getTime();
+				
+				
+				
+				
 		var submit = function(v, h, f) {
 			if (v == true) {
+				
+				
+				
 				$.getJSON(url, function(data) {
 					if (data.status == '1') {
 						var html = "";
@@ -267,6 +281,9 @@
 				+ "&officeId=" + officeId + "&smsId=" + smsId + "&_="
 				+ new Date().getTime();
 
+		
+		
+		
 		$.getJSON(	updateUrl,
 						function(data) {
 							var html = "";
