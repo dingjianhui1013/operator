@@ -522,6 +522,7 @@ public class MutiProcess implements Runnable {
 						if (StringHelper.isNull(s1.getFirstCertSN())) {
 							if (s1.getDealInfoType().indexOf("新增") > -1) {
 								// 新增业务，无首证书也入表
+								s1.setFirstCertSN(s1.getSerialnumber().trim());
 								usedBasicInfo.add(s1);
 								unSavedDealInfos.add(workDealInfo);
 							} else {
