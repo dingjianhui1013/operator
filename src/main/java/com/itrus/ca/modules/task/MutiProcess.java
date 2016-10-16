@@ -520,8 +520,19 @@ public class MutiProcess implements Runnable {
 
 						// 没有firstCertSN的数据不做导入workDealInfo,和删除BASE_INFO_SCCA的操作
 						if (StringHelper.isNull(s1.getFirstCertSN())) {
-							log.error("BasicInfoScca无firstCertSN,不进行操作,id:"
-									+ s1.getId());
+							if (s1.getDealInfoType().indexOf("新增") > -1) {
+								// 新增业务，无首证书也入表
+								usedBasicInfo.add(s1);
+								unSavedDealInfos.add(workDealInfo);
+							} else {
+								// 非新增业务，无首证书，不入库
+								log.error("BasicInfoScca无firstCertSN并且不是新增业务,不进行操作,id:"
+										+ s1.getId()
+										+ ",证书序列号:"
+										+ s1.getSerialnumber()
+										+ ",业务类型:"
+										+ s1.getDealInfoType());
+							}
 							sjNum++;
 							continue;
 						} else {
