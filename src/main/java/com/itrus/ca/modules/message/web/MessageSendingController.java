@@ -286,8 +286,7 @@ public class MessageSendingController extends BaseController {
 		SmsConfiguration smsConfiguration = smsConfigurationService.get(smsId);
 		String messageName = smsConfiguration.getMessageName();
 		// System.out.println(messageAddress);
-		String messageAddress = SmsConfigurationController.class.getResource("/").toString().replace("file:", "")
-				.replace("%20", " ");
+		String messageAddress = SmsConfigurationController.class.getResource("/").toString().replace("file:", "").replace("%20", " ");
 		String messageContent =smsConfiguration.getMessageContent();
 		if (StringUtils.contains(messageAddress, "/WEB-INF")) {
 			messageAddress = messageAddress.substring(0, StringUtils.indexOf(messageAddress, "/WEB-INF"));
@@ -304,6 +303,10 @@ public class MessageSendingController extends BaseController {
 		
 		long size = 0l;
 		
+		if(checkIds.startsWith(",")){
+			checkIds = checkIds.substring(1);
+		}
+		
      	String[] ids = checkIds.split(",");
      	
      	StringWriter writer = new StringWriter();
@@ -311,7 +314,7 @@ public class MessageSendingController extends BaseController {
 		 List<Object> errorList = new ArrayList<Object>();
 		
      	
-     	//如果数据量大于1000,则一个个的查,效率就很低了
+     	//如果数据量大于1000,则一个个的查,效率就很低了+_+
      	if(ids.length>=1000){
      		
      		size = ids.length;
@@ -637,6 +640,11 @@ public class MessageSendingController extends BaseController {
 		
 		long size = 0;
 		List<Object> errorList = new ArrayList<Object>();
+		
+		if(checkIds.startsWith(",")){
+			checkIds = checkIds.substring(1);
+		}
+		
 		String[] ids = checkIds.split(",");
 		short s[] = new short[ids.length];
 		
