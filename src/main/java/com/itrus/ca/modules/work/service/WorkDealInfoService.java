@@ -9033,16 +9033,11 @@ public class WorkDealInfoService extends BaseService {
 				continue;
 			}
 			try {
-
-				List<WorkDealInfo> updateList = findByFirstCertSN(self
-						.getFirstCertSN());
-				for (WorkDealInfo el : updateList) {
-					fixLog.error("首证书变化:更新前 - " + self.getFirstCertSN()
-							+ " , 更新后 - " + prevPo.getFirstCertSN() + " , id:"
-							+ el.getId());
-					// 更新错误的first_cert_sn
-					modifyFirstCertSN(el.getId(), prevPo.getFirstCertSN());
-				}
+				fixLog.error("首证书变化:更新前 - " + self.getFirstCertSN()
+						+ " , 更新后 - " + prevPo.getFirstCertSN() + " , id:"
+						+ self.getId());
+				// 更新错误的first_cert_sn
+				modifyFirstCertSN(self.getId(), prevPo.getFirstCertSN());
 				// 重新串业务
 				processSinglePreid(prevPo.getFirstCertSN());
 
@@ -9151,7 +9146,7 @@ public class WorkDealInfoService extends BaseService {
 		sql += " and PREV_ID is null and CERT_SN!=FIRST_CERT_SN AND CERT_SN!='00'||FIRST_CERT_SN";
 		return getFirstCertSNListByAppid(sql, "CERT_SN");
 	}
-	
+
 	/**
 	 * 业务链有prev_id，无first_cert_sn<br>
 	 * 
@@ -9167,7 +9162,7 @@ public class WorkDealInfoService extends BaseService {
 
 		return getFirstCertSNListByAppid(sql, "ID");
 	}
-	
+
 	/**
 	 * 业务链中的数据只有一条，但根据其first_cert_sn，查出对应的cert_sn记录存在prev_id，<br>
 	 * 因为有补零逻辑，所以需要下面二条SQL来验证<br>
