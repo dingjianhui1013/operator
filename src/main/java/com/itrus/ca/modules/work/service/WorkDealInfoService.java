@@ -8873,9 +8873,9 @@ public class WorkDealInfoService extends BaseService {
 				String fcn = zeroProcess(p.getFirstCertSN());
 				// 特殊情况为:如果证书序列号为空，且在首条，也允许更新
 				if (StringHelper.isNull(p.getCertSn())
-						|| p.getCertSn().equals(fcn)) {
-					if (p.getDealInfoType() != null
-							&& p.getDealInfoType().intValue() != 0) {
+						|| p.getCertSn().equals(fcn)
+						|| p.getDealInfoType() != 0) {
+					if (p.getDealInfoType() != 0) {
 						String update = "update work_deal_info set DEAL_INFO_TYPE=0,DEAL_INFO_TYPE1=null,DEAL_INFO_TYPE2=null,DEAL_INFO_TYPE3=null where id="
 								+ p.getId();
 						try {
