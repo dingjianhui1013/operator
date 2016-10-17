@@ -4620,6 +4620,7 @@ public class WorkDealInfoService extends BaseService {
 
 	/**
 	 * 修复前对库内一些错乱数据初始修复,包括：<br>
+	 * 0.首证书，prev_id为空，并且证书号非空，业务状态为7，6（完成）的，把首证书设置成证书号<br>
 	 * 1.修复吊销数据<br>
 	 * 2.修复首证书未补0的数据<br>
 	 * 3.修复新办的新增业务，首证书为0的数据<br>
@@ -4627,6 +4628,12 @@ public class WorkDealInfoService extends BaseService {
 	 * @param appid
 	 */
 	public void initFix(Long appid) {
+		//0.首证书，prev_id为空，并且证书号非空，业务状态为7，6（完成）的，把首证书设置成证书号
+		String sql = "update WORK_DEAL_INFO set FIRST_CERT_SN=cert_sn ";
+		sql = sql + " WHERE APP_ID =" + appid;
+		sql+=" and DEAL_INFO_STATUS IN (7, 6) and FIRST_CERT_SN is null ";
+		sql+=" and PREV_ID is null and cert_sn is not null ";
+		
 		// 1.修复吊销数据
 		String sql1 = "update WORK_DEAL_INFO set DEAL_INFO_TYPE=1";
 		sql1 = sql1 + " WHERE APP_ID =" + appid;
@@ -4649,6 +4656,7 @@ public class WorkDealInfoService extends BaseService {
 		sql3 += " and DEAL_INFO_TYPE=0 and PREV_ID is null";
 
 		try {
+			workDealInfoDao.exeSql(sql);
 			workDealInfoDao.exeSql(sql1);
 			workDealInfoDao.exeSql(sql2);
 			workDealInfoDao.exeSql(sql3);
@@ -9113,7 +9121,7 @@ public class WorkDealInfoService extends BaseService {
 	}
 
 	/**
-	 * 业务链只有1条记录，无prev_id，但首证书序列号和自己的序列号不一致<br>
+	 * 业务链只有1条记录，有prev_id，但首证书序列号和自己的序列号不一致<br>
 	 * 
 	 * @param appid
 	 * @return List<String>
