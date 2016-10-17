@@ -959,7 +959,7 @@ public class ClientController {
 		}
 
 		try {
-			// 前置修复3个部分
+			// 前置修复4个部分
 			workDealInfoService.initFix(new Long(fixFirstCertSnAppid));
 		} catch (Exception ex) {
 			json.put("statu", "-2");
@@ -973,13 +973,13 @@ public class ClientController {
 			lst4 = new ArrayList<String>();
 		new Thread(new FixFirstSNThread4(lst4)).start();
 
-		// 第一种情况
+		// 业务链中的数据只有一条，但根据其first_cert_sn，查出对应的cert_sn记录存在prev_id
 		List<String> lst = workDealInfoService
 				.getNeedFixFirstCertSNLst(fixFirstCertSnAppid);
 		if (lst == null)
 			lst = new ArrayList<String>();
 		new Thread(new FixFirstCertSNThread(lst)).start();
-		// 第二种情况
+		// 业务链只有1条记录，有prev_id，但首证书序列号和自己的序列号不一致
 		List<String> lst2 = workDealInfoService
 				.getNeedFixFirstCertSNLst2(fixFirstCertSnAppid);
 		if (lst2 == null)
