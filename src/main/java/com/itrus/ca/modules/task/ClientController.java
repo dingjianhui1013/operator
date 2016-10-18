@@ -1004,9 +1004,10 @@ public class ClientController {
 		Integer c2 = lst2 == null ? 0 : lst2.size();
 		Integer c3 = lst3 == null ? 0 : lst3.size();
 		Integer c4 = lst4 == null ? 0 : lst4.size();
+		Integer c5 = lst5 == null ? 0 : lst5.size();
 		json.put("statu", "0");
 		json.put("msg", "开始处理,app_id:" + fixFirstCertSnAppid + "数据总数:"
-				+ (c1 + c2 + c3 + c4));
+				+ (c1 + c2 + c3 + c4 + c5));
 		return json.toString();
 	}
 
