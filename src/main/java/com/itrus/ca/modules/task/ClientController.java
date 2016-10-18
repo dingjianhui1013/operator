@@ -966,7 +966,15 @@ public class ClientController {
 			json.put("msg", "系统内部错误:" + StringHelper.getStackInfo(ex));
 			return json.toString();
 		}
-		// 增加一种情况，首证书为空，但有prev_id的记录
+
+		// 业务链中不是第一条，首证书非空，prev_id非空，但prev_id的首证书和本条的首证书不一样的ID
+		List<String> lst5 = workDealInfoService
+				.getNeedFixFirstCertSNLst5(fixFirstCertSnAppid);
+		if (lst5 == null)
+			lst5 = new ArrayList<String>();
+		workDealInfoService.fixFirstCertSNByError5(lst5);
+
+		// 首证书为空，但有prev_id的记录
 		List<String> lst4 = workDealInfoService
 				.getNeedFixFirstCertSNLst4(fixFirstCertSnAppid);
 		if (lst4 == null)
@@ -985,7 +993,7 @@ public class ClientController {
 		if (lst2 == null)
 			lst2 = new ArrayList<String>();
 		new Thread(new FixFirstSNThread2(lst2)).start();
-		// 第三种情况
+		// 首条记录和首证书不符的
 		List<String> lst3 = workDealInfoService
 				.getNeedFixFirstCertSNLst3(fixFirstCertSnAppid);
 		if (lst3 == null)
