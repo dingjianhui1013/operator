@@ -9056,6 +9056,52 @@ public class WorkDealInfoService extends BaseService {
 			}
 		}
 	}
+	
+	/**
+	 * 修复有prevId和首证书，但自己和prev_id的首证书不同的记录
+	 * 
+	 * @param lst
+	 */
+	public void fixFirstCertSNByError5(List<String> lst) {
+		for (String e : lst) {
+			// 先查出自己
+			WorkDealInfo self = get(new Long(e));
+
+			if (self == null) {
+				fixLog.error("修复“有firstCertSn，有prevId记录，但首证书不同记录”时，未查到当前记录,id:" + e);
+				continue;
+			}
+			WorkDealInfo prevPo = get(self.getPrevId());
+			if (prevPo == null) {
+				fixLog.error("修复“有firstCertSn，有prevId记录，但首证书不同记录”时,未查到上一条记录,id:"
+						+ self.getId() + ",prevId:" + self.getPrevId());
+				continue;
+			}
+
+			if (StringHelper.isNull(prevPo.getFirstCertSN())) {
+				fixLog.error("修复“有firstCertSn，有prevId记录，但首证书不同记录”时,上一条记录未查到firstCertSN,id:"
+						+ e + ",prev_id:" + self.getPrevId());
+				continue;
+			}
+			if(prevPo.getFirstCertSN().equals(self.getFirstCertSN())){
+				continue;
+			}
+			try {
+				fixLog.error("首证书变化:更新前 - " + self.getFirstCertSN()
+						+ " , 更新后 - " + prevPo.getFirstCertSN() + " , id:"
+						+ self.getId());
+				// 更新错误的first_cert_sn
+				modifyFirstCertSN(self.getId(), prevPo.getFirstCertSN());
+				// 重新串业务
+				//processSinglePreid(prevPo.getFirstCertSN());
+
+			} catch (Exception ex) {
+				// 事务问题，可忽略
+				ex.printStackTrace();
+				continue;
+			}
+		}
+	}
 
 	/**
 	 * 找出一个指定应用下需要修复的数据
@@ -9155,6 +9201,24 @@ public class WorkDealInfoService extends BaseService {
 		return getFirstCertSNListByAppid(sql, "CERT_SN");
 	}
 
+	
+	/**
+	 * 业务链中不是第一条，首证书非空，prev_id非空，但prev_id的首证书和本条的首证书不一样的ID
+	 * 
+	 * @param appid
+	 * @return List<String>
+	 */
+	public List<String> getNeedFixFirstCertSNLst5(String appid) {
+		String sql = "select a.id,a.PREV_ID,a.DEL_FLAG,a.CERT_SN,a.FIRST_CERT_SN,a.CREATE_DATE,";
+		sql += "a.DEAL_INFO_TYPE,a.DEAL_INFO_TYPE1,a.DEAL_INFO_TYPE2,a.DEAL_INFO_TYPE3,";
+		sql += "a.IS_SJQY,a.DEAL_INFO_STATUS from WORK_DEAL_INFO a left join WORK_DEAL_INFO b";
+		sql = sql + " on a.PREV_ID=b.ID and a.PREV_ID is not null and a.APP_ID=" + appid;
+		sql += " and a.DEL_FLAG=0";
+		sql+=" and a.FIRST_CERT_SN is not null where a.PREV_ID=b.ID and a.first_cert_sn!=b.first_cert_sn";
+		sql+=" and b.first_cert_sn!='0'";
+		return getFirstCertSNListByAppid(sql, "ID");
+	}
+	
 	/**
 	 * 业务链有prev_id，无first_cert_sn<br>
 	 * 
