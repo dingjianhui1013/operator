@@ -44,9 +44,9 @@
 		
 		
 		
-		if(${isChangeBusiness==true}){
+		/* if(${isChangeBusiness==true}){
 			$("#certSortTr").show();
-		}
+		} */
 		
 		
 	});
@@ -181,7 +181,7 @@
 		cspStr = encodeURI(encodeURI(cspStr));
 		var url = "${ctx}/ca/makeCert?reqOverrideValidity=" + day
 				+ "&certProvider=" + cspStr + "&keySn=" + keySN + "&csr=" + csr
-				+ "&dealInfoId=${workDealInfo.id}&addCertDays="+$("#addCertDays").val()+"&certSort="+$("#certSort").val()+"&_="+new Date().getTime();
+				+ "&dealInfoId=${workDealInfo.id}&addCertDays="+$("#addCertDays").val()+/* "&certSort="+$("#certSort").val()+ */"&_="+new Date().getTime();
 		$.ajax({
 					url : url,
 					async : false,
@@ -545,13 +545,13 @@
 					value="初始化key" id="csh" onclick="keyInit()" /></td>
 			</tr>
 			
-			<tr style="display: none"  id="certSortTr">
+			<!-- <tr style="display: none"  id="certSortTr">
 				<td>多证书编号</td>
 				<td><input type="text" id="certSort" onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"  
                                     onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'0')}else{this.value=this.value.replace(/\D/g,'')}" /> 
 				<font color="green">注:多证书编号错误修复</font>
 				</td>
-			</tr>
+			</tr> -->
 			
 		</table>
 		<form>
