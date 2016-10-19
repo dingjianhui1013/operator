@@ -195,6 +195,14 @@ public class SettlePayableDetailController extends BaseController {
 			if (first == null) {
 				continue;
 			}
+			
+			if(first.getBusinessCardUserDate()==null){
+				log.debug("首条业务的id:"+first.getId());
+				
+				continue;
+			}
+			
+			
 			if (first.getBusinessCardUserDate().after(
 					new Date(comAgent.getAgentContractStart().getTime()))
 					&& first.getBusinessCardUserDate().before(
@@ -629,6 +637,14 @@ public class SettlePayableDetailController extends BaseController {
 			if (first == null) {
 				continue;
 			}
+			
+			if(first.getBusinessCardUserDate()==null){
+				log.debug("首条业务的id:"+first.getId());
+				
+				continue;
+			}
+			
+			
 			if (first.getBusinessCardUserDate().after(
 					new Date(comAgent.getAgentContractStart().getTime()))
 					&& first.getBusinessCardUserDate().before(
@@ -676,6 +692,14 @@ public class SettlePayableDetailController extends BaseController {
 					continue;
 				}
 
+				Calendar preDealBusinessCalendar = Calendar.getInstance();
+				preDealBusinessCalendar.setTime(prvedDealInfo.getBusinessCardUserDate());
+				preDealBusinessCalendar.set(Calendar.HOUR_OF_DAY, 0);
+				preDealBusinessCalendar.set(Calendar.SECOND, 0);
+				preDealBusinessCalendar.set(Calendar.MINUTE, 0);
+				
+				Date preDealBusiness = preDealBusinessCalendar.getTime();
+				
 				Calendar preNotAfterCalendar = Calendar.getInstance();
 				preNotAfterCalendar.setTime(prvedDealInfo.getNotafter());
 				preNotAfterCalendar.set(Calendar.HOUR_OF_DAY, 0);
@@ -743,6 +767,28 @@ public class SettlePayableDetailController extends BaseController {
 					yjNum += prvedDealInfo.getYear();
 					detailVo.setSettleYear(prvedDealInfo.getYear().toString());
 					detailList.add(detailVo);
+				}else{
+					long between = endLastDate.getTime()
+							- preDealBusiness.getTime();
+					float a = between / 31536000000f;
+					int a1 = (int)(a*10);
+					
+					double a2 = a1/10f;
+					
+					int yy = (int) Math.ceil(a2);
+					
+					//结算总年限-已结算年限,最大待结算年限
+					int most = totalAgentYear-yjNum;
+					//当前业务办理年限
+					int current = prvedDealInfo.getYear();
+					//先和当前业务办理年限比较,再和最大待结算年限比较
+					lastNum += ((yy<=current?yy:current)<=most?(yy<=current?yy:current):most);
+					
+					yjNum += lastNum;
+					
+					waitNum = 0;
+					detailVo.setSettleYear(lastNum + "");
+					detailList.add(detailVo);
 				}
 
 			}
@@ -797,69 +843,79 @@ public class SettlePayableDetailController extends BaseController {
 			detailVo.setStartDate(currentDealInfo.getBusinessCardUserDate()); // 起始时间
 			detailVo.setEndDate(currentDealInfo.getNotafter()); // 到期时间
 
-			// 如果模板类型不是标准, 则结算年限为0
-			if (!agent.getTempStyle().equals("1")) {
+			
+			//如果之前的业务已经用完了结算年限,那么本次就不用管了
+			if(yjNum==totalAgentYear){
+				waitNum = 0;
+				detailVo.setSettleYear("0");
+				detailList.add(detailVo);
+				lastNum = 0;
+			}else{
+				// 如果模板类型不是标准, 则结算年限为0
+				if (!agent.getTempStyle().equals("1")) {
 
-				if (currentDealBusiness != null) {
-					if (currentDealNotAfter.getTime() < endLastDate.getTime()) {
-						long between = endLastDate.getTime()
-								- currentDealNotAfter.getTime();
-						float a = between / 31536000000f;
-						
-						int a1 = (int)(a*10);
-						
-						double a2 = a1/10f;
-						
-						waitNum += (int) Math.ceil(a2);
-					} else if (currentDealBusiness.getTime() < endLastDate
-							.getTime()
-							&& currentDealNotAfter.getTime() >= endLastDate
-									.getTime()) {
-						waitNum = 0;
+					if (currentDealBusiness != null) {
+						if (currentDealNotAfter.getTime() < endLastDate.getTime()) {
+							long between = endLastDate.getTime()
+									- currentDealNotAfter.getTime();
+							float a = between / 31536000000f;
+							
+							int a1 = (int)(a*10);
+							
+							double a2 = a1/10f;
+							
+							waitNum += (int) Math.ceil(a2);
+						} else if (currentDealBusiness.getTime() < endLastDate
+								.getTime()
+								&& currentDealNotAfter.getTime() >= endLastDate
+										.getTime()) {
+							waitNum = 0;
+						}
+
+						detailVo.setSettleYear("0");
+						detailList.add(detailVo);
 					}
 
-					detailVo.setSettleYear("0");
+				}
+				// 如果业务到期时间在最终截止日期之内,则参与结算 结算年限为证书办理年限
+				else if (currentDealNotAfter.getTime() < endLastDate.getTime()) {
+					long between = endLastDate.getTime()
+							- currentDealNotAfter.getTime();
+					float a = between / 31536000000f;
+					int a1 = (int)(a*10);
+					
+					double a2 = a1/10f;
+			
+					waitNum += (int) Math.ceil(a2);
+					lastNum += currentDealInfo.getYear();
+					detailVo.setSettleYear(currentDealInfo.getYear().toString());
 					detailList.add(detailVo);
 				}
 
+				// 如果业务制证时间在最终截止日期之内而业务到期时间在最终截止日期之外,结算年限为
+				else if (currentDealBusiness.getTime() < endLastDate.getTime()
+						&& currentDealNotAfter.getTime() >= endLastDate.getTime()) {
+					long between = endLastDate.getTime()
+							- currentDealBusiness.getTime();
+					float a = between / 31536000000f;
+					int a1 = (int)(a*10);
+					
+					double a2 = a1/10f;
+					
+					int yy = (int) Math.ceil(a2);
+					
+					//结算总年限-已结算年限,最大待结算年限
+					int most = totalAgentYear-yjNum;
+					//当前业务办理年限
+					int current = currentDealInfo.getYear();
+					//先和当前业务办理年限比较,再和最大待结算年限比较
+					lastNum += ((yy<=current?yy:current)<=most?(yy<=current?yy:current):most);
+					waitNum = 0;
+					detailVo.setSettleYear(lastNum + "");
+					detailList.add(detailVo);
+				}
 			}
-			// 如果业务到期时间在最终截止日期之内,则参与结算 结算年限为证书办理年限
-			else if (currentDealNotAfter.getTime() < endLastDate.getTime()) {
-				long between = endLastDate.getTime()
-						- currentDealNotAfter.getTime();
-				float a = between / 31536000000f;
-				int a1 = (int)(a*10);
-				
-				double a2 = a1/10f;
-		
-				waitNum += (int) Math.ceil(a2);
-				lastNum += currentDealInfo.getYear();
-				detailVo.setSettleYear(currentDealInfo.getYear().toString());
-				detailList.add(detailVo);
-			}
-
-			// 如果业务制证时间在最终截止日期之内而业务到期时间在最终截止日期之外,结算年限为
-			else if (currentDealBusiness.getTime() < endLastDate.getTime()
-					&& currentDealNotAfter.getTime() >= endLastDate.getTime()) {
-				long between = endLastDate.getTime()
-						- currentDealBusiness.getTime();
-				float a = between / 31536000000f;
-				int a1 = (int)(a*10);
-				
-				double a2 = a1/10f;
-				
-				int yy = (int) Math.ceil(a2);
-				
-				//结算总年限-已结算年限,最大待结算年限
-				int most = totalAgentYear-yjNum;
-				//当前业务办理年限
-				int current = currentDealInfo.getYear();
-				//先和当前业务办理年限比较,再和最大待结算年限比较
-				lastNum += ((yy<=current?yy:current)<=most?(yy<=current?yy:current):most);
-				waitNum = 0;
-				detailVo.setSettleYear(lastNum + "");
-				detailList.add(detailVo);
-			}
+			
 
 			// 汇总
 			for (SettleCollectVO vo : collect) {
