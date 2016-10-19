@@ -9031,8 +9031,9 @@ public class WorkDealInfoService extends BaseService {
 	public void fixErrorFirstCertSN(List<String> lst) {
 		for (String e : lst) {
 			// 计数器+1
-			//FixErrorFirstCertSNThread.plusCount();
-			//log.debug("fixErrorFirstCertSN count: " + FixErrorFirstCertSNThread.getCount());
+			// FixErrorFirstCertSNThread.plusCount();
+			// log.debug("fixErrorFirstCertSN count: " +
+			// FixErrorFirstCertSNThread.getCount());
 
 			List<WorkDealInfo> link = findByFirstCertSN(e);
 			if (link == null || link.size() <= 0)
@@ -9047,8 +9048,17 @@ public class WorkDealInfoService extends BaseService {
 			// 如果有prevId则去查上一条记录
 			if (p.getPrevId() != null && p.getPrevId() > 0) {
 				WorkDealInfo prevPo = get(p.getPrevId());
-				if (StringHelper.isNull(prevPo.getFirstCertSN()))
-					continue;
+				if (StringHelper.isNull(prevPo.getFirstCertSN())) {
+					// 上一条记录没有首证书，但业务类型为新增，先把上一条记录的首证书更新为自己，再继续处理
+					if (prevPo.getDealInfoType() == 0) {
+						String fsn = zeroProcess(prevPo.getCertSn());
+						modifyFirstCertSN(prevPo.getId(), fsn);
+						prevPo.setFirstCertSN(fsn);
+					} else {
+						// 非新增业务则跳过
+						continue;
+					}
+				}
 				// 把原来错误的首证书更新为prevId查出记录的首证书
 				modifyFirstCertSN(e, prevPo.getFirstCertSN());
 				fixLog.error("错位首证书修复,原始首证书:" + e + ",更新为:"
