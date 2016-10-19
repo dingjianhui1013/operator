@@ -947,6 +947,41 @@ public class ClientController {
 		return json.toString();
 	}
 
+	@RequestMapping(value = "fixErrorFirstCertSn")
+	@ResponseBody
+	public String fixErrorFirstCertSn(String fixErrorFirstCertSnAppId)
+			throws JSONException {
+		JSONObject json = new JSONObject();
+		if (StringHelper.isNull(fixErrorFirstCertSnAppId)) {
+			json.put("statu", "-1");
+			json.put("msg", "APPID不能为空");
+			return json.toString();
+		}
+
+		try {
+			// 前置修复4个部分
+			workDealInfoService.initFix(new Long(fixErrorFirstCertSnAppId));
+		} catch (Exception ex) {
+			json.put("statu", "-2");
+			json.put("msg", "系统内部错误:" + StringHelper.getStackInfo(ex));
+			return json.toString();
+		}
+
+		// 业务链所有首证书都查出来
+		List<String> lst = workDealInfoService.findFirstCertSnByAppId(
+				new Integer(fixErrorFirstCertSnAppId), 0);
+		if (lst == null)
+			lst = new ArrayList<String>();
+		new Thread(new FixErrorFirstCertSNThread(lst)).start();
+
+		Integer c1 = lst == null ? 0 : lst.size();
+
+		json.put("statu", "0");
+		json.put("msg", "开始处理,app_id:" + fixErrorFirstCertSnAppId + "数据总数:"
+				+ (c1));
+		return json.toString();
+	}
+
 	@RequestMapping(value = "fixFirstCertSN")
 	@ResponseBody
 	public String fixFirstCertSN(String fixFirstCertSnAppid)
