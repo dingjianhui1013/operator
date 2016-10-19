@@ -9031,8 +9031,8 @@ public class WorkDealInfoService extends BaseService {
 	public void fixErrorFirstCertSN(List<String> lst) {
 		for (String e : lst) {
 			// 计数器+1
-			FixErrorFirstCertSNThread.plusCount();
-			log.debug("fixErrorFirstCertSN count: " + FixErrorFirstCertSNThread.getCount());
+			//FixErrorFirstCertSNThread.plusCount();
+			//log.debug("fixErrorFirstCertSN count: " + FixErrorFirstCertSNThread.getCount());
 
 			List<WorkDealInfo> link = findByFirstCertSN(e);
 			if (link == null || link.size() <= 0)
