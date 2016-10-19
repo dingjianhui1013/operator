@@ -83,6 +83,7 @@ import com.itrus.ca.modules.sys.entity.Office;
 import com.itrus.ca.modules.sys.entity.User;
 import com.itrus.ca.modules.sys.utils.CreateExcelUtils;
 import com.itrus.ca.modules.sys.utils.UserUtils;
+import com.itrus.ca.modules.task.FixErrorFirstCertSNThread;
 import com.itrus.ca.modules.message.vo.WorkDealInfoVo;
 import com.itrus.ca.modules.work.dao.WorkCertInfoDao;
 import com.itrus.ca.modules.work.dao.WorkCertTrustApplyDao;
@@ -4628,12 +4629,12 @@ public class WorkDealInfoService extends BaseService {
 	 * @param appid
 	 */
 	public void initFix(Long appid) {
-		//0.首证书，prev_id为空，并且证书号非空，业务状态为7，6（完成）的，把首证书设置成证书号
+		// 0.首证书，prev_id为空，并且证书号非空，业务状态为7，6（完成）的，把首证书设置成证书号
 		String sql = "update WORK_DEAL_INFO set FIRST_CERT_SN=cert_sn ";
 		sql = sql + " WHERE APP_ID =" + appid;
-		sql+=" and DEAL_INFO_STATUS IN (7, 6) and FIRST_CERT_SN is null ";
-		sql+=" and PREV_ID is null and cert_sn is not null ";
-		
+		sql += " and DEAL_INFO_STATUS IN (7, 6) and FIRST_CERT_SN is null ";
+		sql += " and PREV_ID is null and cert_sn is not null ";
+
 		// 1.修复吊销数据
 		String sql1 = "update WORK_DEAL_INFO set DEAL_INFO_TYPE=1";
 		sql1 = sql1 + " WHERE APP_ID =" + appid;
@@ -5078,6 +5079,14 @@ public class WorkDealInfoService extends BaseService {
 			workDealInfoDao.exeSql(sql);
 		} catch (Exception e) {
 		}
+	}
+
+	@Transactional(readOnly = false)
+	public void modifyFirstCertSN(String oldFirstCertSN, String newFIrstCertSN) {
+		String sql = "update work_deal_info set FIRST_CERT_SN='"
+				+ newFIrstCertSN + "' where FIRST_CERT_SN='" + oldFirstCertSN
+				+ "'";
+		workDealInfoDao.exeSql(sql);
 	}
 
 	// @Transactional(readOnly = false)
@@ -8997,9 +9006,9 @@ public class WorkDealInfoService extends BaseService {
 				List<WorkDealInfo> updateList = findByFirstCertSN(self
 						.getFirstCertSN());
 				for (WorkDealInfo el : updateList) {
-					fixLog.error("首证书变化:更新前 - " + self.getFirstCertSN()
-							+ " , 更新后 - " + prevPo.getFirstCertSN() + " , id:"
-							+ el.getId());
+					// fixLog.error("首证书变化:更新前 - " + self.getFirstCertSN()
+					// + " , 更新后 - " + prevPo.getFirstCertSN() + " , id:"
+					// + el.getId());
 					// 更新错误的first_cert_sn
 					modifyFirstCertSN(el.getId(), prevPo.getFirstCertSN());
 				}
@@ -9011,6 +9020,43 @@ public class WorkDealInfoService extends BaseService {
 				ex.printStackTrace();
 				continue;
 			}
+		}
+	}
+
+	/**
+	 * 逐条检查并修复错位的首证书
+	 * 
+	 * @param lst
+	 */
+	public void fixErrorFirstCertSN(List<String> lst) {
+		for (String e : lst) {
+			// 计数器+1
+			FixErrorFirstCertSNThread.plusCount();
+			log.debug("fixErrorFirstCertSN count: " + FixErrorFirstCertSNThread.getCount());
+
+			List<WorkDealInfo> link = findByFirstCertSN(e);
+			if (link == null || link.size() <= 0)
+				continue;
+			int first = link.size() == 0 ? 0 : link.size() - 1;
+			// 取第一条数据
+			WorkDealInfo p = link.get(first);
+
+			// 如果第一条记录没有prevId，则跳过不处理
+			if (p.getPrevId() == null)
+				continue;
+			// 如果有prevId则去查上一条记录
+			if (p.getPrevId() != null && p.getPrevId() > 0) {
+				WorkDealInfo prevPo = get(p.getPrevId());
+				if (StringHelper.isNull(prevPo.getFirstCertSN()))
+					continue;
+				// 把原来错误的首证书更新为prevId查出记录的首证书
+				modifyFirstCertSN(e, prevPo.getFirstCertSN());
+				fixLog.error("错位首证书修复,原始首证书:" + e + ",更新为:"
+						+ prevPo.getFirstCertSN());
+				// 重新串业务
+				processSinglePreid(prevPo.getFirstCertSN());
+			}
+
 		}
 	}
 
@@ -9041,9 +9087,9 @@ public class WorkDealInfoService extends BaseService {
 				continue;
 			}
 			try {
-				fixLog.error("首证书变化:更新前 - " + self.getFirstCertSN()
-						+ " , 更新后 - " + prevPo.getFirstCertSN() + " , id:"
-						+ self.getId());
+				// fixLog.error("首证书变化:更新前 - " + self.getFirstCertSN()
+				// + " , 更新后 - " + prevPo.getFirstCertSN() + " , id:"
+				// + self.getId());
 				// 更新错误的first_cert_sn
 				modifyFirstCertSN(self.getId(), prevPo.getFirstCertSN());
 				// 重新串业务
@@ -9056,7 +9102,7 @@ public class WorkDealInfoService extends BaseService {
 			}
 		}
 	}
-	
+
 	/**
 	 * 修复有prevId和首证书，但自己和prev_id的首证书不同的记录
 	 * 
@@ -9068,7 +9114,8 @@ public class WorkDealInfoService extends BaseService {
 			WorkDealInfo self = get(new Long(e));
 
 			if (self == null) {
-				fixLog.error("修复“有firstCertSn，有prevId记录，但首证书不同记录”时，未查到当前记录,id:" + e);
+				fixLog.error("修复“有firstCertSn，有prevId记录，但首证书不同记录”时，未查到当前记录,id:"
+						+ e);
 				continue;
 			}
 			WorkDealInfo prevPo = get(self.getPrevId());
@@ -9083,17 +9130,17 @@ public class WorkDealInfoService extends BaseService {
 						+ e + ",prev_id:" + self.getPrevId());
 				continue;
 			}
-			if(prevPo.getFirstCertSN().equals(self.getFirstCertSN())){
+			if (prevPo.getFirstCertSN().equals(self.getFirstCertSN())) {
 				continue;
 			}
 			try {
-				fixLog.error("首证书变化:更新前 - " + self.getFirstCertSN()
-						+ " , 更新后 - " + prevPo.getFirstCertSN() + " , id:"
-						+ self.getId());
+				// fixLog.error("首证书变化:更新前 - " + self.getFirstCertSN()
+				// + " , 更新后 - " + prevPo.getFirstCertSN() + " , id:"
+				// + self.getId());
 				// 更新错误的first_cert_sn
 				modifyFirstCertSN(self.getId(), prevPo.getFirstCertSN());
 				// 重新串业务
-				//processSinglePreid(prevPo.getFirstCertSN());
+				// processSinglePreid(prevPo.getFirstCertSN());
 
 			} catch (Exception ex) {
 				// 事务问题，可忽略
@@ -9201,7 +9248,6 @@ public class WorkDealInfoService extends BaseService {
 		return getFirstCertSNListByAppid(sql, "CERT_SN");
 	}
 
-	
 	/**
 	 * 业务链中不是第一条，首证书非空，prev_id非空，但prev_id的首证书和本条的首证书不一样的ID
 	 * 
@@ -9212,13 +9258,15 @@ public class WorkDealInfoService extends BaseService {
 		String sql = "select a.id,a.PREV_ID,a.DEL_FLAG,a.CERT_SN,a.FIRST_CERT_SN,a.CREATE_DATE,";
 		sql += "a.DEAL_INFO_TYPE,a.DEAL_INFO_TYPE1,a.DEAL_INFO_TYPE2,a.DEAL_INFO_TYPE3,";
 		sql += "a.IS_SJQY,a.DEAL_INFO_STATUS from WORK_DEAL_INFO a left join WORK_DEAL_INFO b";
-		sql = sql + " on a.PREV_ID=b.ID and a.PREV_ID is not null and a.APP_ID=" + appid;
+		sql = sql
+				+ " on a.PREV_ID=b.ID and a.PREV_ID is not null and a.APP_ID="
+				+ appid;
 		sql += " and a.DEL_FLAG=0";
-		sql+=" and a.FIRST_CERT_SN is not null where a.PREV_ID=b.ID and a.first_cert_sn!=b.first_cert_sn";
-		sql+=" and b.first_cert_sn!='0'";
+		sql += " and a.FIRST_CERT_SN is not null where a.PREV_ID=b.ID and a.first_cert_sn!=b.first_cert_sn";
+		sql += " and b.first_cert_sn!='0'";
 		return getFirstCertSNListByAppid(sql, "ID");
 	}
-	
+
 	/**
 	 * 业务链有prev_id，无first_cert_sn<br>
 	 * 
