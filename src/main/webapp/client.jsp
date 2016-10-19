@@ -135,9 +135,24 @@
 	function fixFirstCertSN(){
 		$("#make").hide();
 		
-		if(confirm('是否确认修复错位的firstCertSN?')){
+		if(confirm('是否确认修复firstCertSN?')){
 			$("#returnJsonData").html("正在修复...........");
 			var url = "test/fixFirstCertSN?fixFirstCertSnAppid="+$("#fixFirstCertSnAppid").val()
+					+"&_="+new Date().getTime();
+			$.getJSON(url,function(data){
+				$("#make").show();
+				$("#returnJsonData").html(data.msg);
+			});
+		}else{
+			return false;
+		}
+	}
+	
+	function fixErrorFirstCertSn(){
+		$("#make").hide();
+		if(confirm('是否确认修复错位首证书的firstCertSN?')){
+			$("#returnJsonData").html("正在修复...........");
+			var url = "test/fixErrorFirstCertSn?fixErrorFirstCertSnAppId="+$("#fixErrorFirstCertSnAppId").val()
 					+"&_="+new Date().getTime();
 			$.getJSON(url,function(data){
 				$("#make").show();
@@ -181,6 +196,7 @@
 						<li class="active"><a href="#panel-98562" data-toggle="tab">新增业务</a></li>
 						<li><a href="#panel-489367" data-toggle="tab">更新业务</a></li>
 						<li><a href="#panel-4893681" data-toggle="tab">更新首张证书序列号</a></li>
+						<li><a href="#panel-4893688" data-toggle="tab">step0 - 修复错位首证书数据(较慢)</a></li>
 						<li><a href="#panel-4893684" data-toggle="tab">step1 - 整理首证书数据</a></li>
 						<li><a href="#panel-4893682" data-toggle="tab">step2 - 重新生成prev_id数据</a></li>
 						<!-- 
@@ -375,6 +391,25 @@
 							</div>
 						</div>
 						 -->
+						 <div class="tab-pane" id="panel-4893688">
+							<div class="container-fluid">
+								<div class="row-fluid">
+									<div class="span12">
+										<blockquote>
+											<p>修复错位首证书数据(较慢)</p>
+										</blockquote>
+										<br>
+									</div>
+									<div class="span12">
+										<input id="fixErrorFirstCertSnAppId"/>&nbsp;应用ID(指定应用ID，必填)
+										<br/><br/>
+										<button class="btn btn-warning" type="button"
+										onclick="fixErrorFirstCertSn()"	 id="update">修复错位首证书数据</button>
+										<br>
+									</div>
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
