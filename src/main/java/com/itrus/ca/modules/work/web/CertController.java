@@ -649,16 +649,22 @@ public class CertController extends BaseController {
 			Integer amount = 1;
 			if (caCert.getSignBuf() == null || caCert.getSignBuf().length() == 0) {// 异常业务安装证书可能不需要再次申请
 				try {
-					if (dealInfo.getCertSort() == null) {
-						// 个人证书
-						if (dealInfo.getConfigProduct().getProductName().equals("2")
-								|| dealInfo.getConfigProduct().getProductName().equals("6")) {
-							sort = workDealInfoService.getMultiNumByWorkUser(dealInfo.getWorkUser().getId());
-						} else {
-							sort = workDealInfoService.getMultiNumByWorkCompany(dealInfo.getWorkCompany().getId());
-						}
-						dealInfo.setCertSort(sort);
+					if(dealInfo.getPrevId()==null){
+						if (dealInfo.getCertSort() == null) {
+							// 个人证书
+							if (dealInfo.getConfigProduct().getProductName().equals("2")
+									|| dealInfo.getConfigProduct().getProductName().equals("6")) {
+								sort = workDealInfoService.getMultiNumByWorkUser(dealInfo.getWorkUser().getId());
+							} else {
+								sort = workDealInfoService.getMultiNumByWorkCompany(dealInfo.getWorkCompany().getId());
+							}
+							dealInfo.setCertSort(sort);
+						}	
+					}else{
+						dealInfo.setCertSort(workDealInfoService.get(dealInfo.getPrevId()).getCertSort());
 					}
+					
+					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
