@@ -103,6 +103,24 @@ public class MutiProcess implements Runnable {
 	private Long officeId;
 	private User createBy;
 	private Integer number;
+	
+	private static HashMap<String, WorkCompany> companyHash = new HashMap<String, WorkCompany>();
+	// 保存经办人信息，以concert_num（经办人证件号）为准
+	private static HashMap<String, WorkUser> userHash = new HashMap<String, WorkUser>();
+	// 存储开户费 产品id为key
+	private static HashMap<Long, Double> openAccountHash = new HashMap<Long, Double>();
+	// 存储 新增证书费用
+	private static HashMap<Long, Double> addMoneyHash = new HashMap<Long, Double>();
+	// 存储 代理商 appId --key
+	private static HashMap<Long, ConfigCommercialAgent> commercialAgentHash = new HashMap<Long, ConfigCommercialAgent>();
+	
+	public static void clearCacheInfo(){
+		companyHash = new HashMap<String, WorkCompany>();
+		userHash = new HashMap<String, WorkUser>();
+		openAccountHash = new HashMap<Long, Double>();
+		addMoneyHash = new HashMap<Long, Double>();
+		commercialAgentHash = new HashMap<Long, ConfigCommercialAgent>();
+	}
 
 	public MutiProcess() {
 	}
@@ -122,20 +140,7 @@ public class MutiProcess implements Runnable {
 	@Override
 	@Transactional(readOnly = false)
 	public void run() {
-		sccaList.size();
-		System.out.println(sccaList.size());
-
 		try {
-			HashMap<String, WorkCompany> companyHash = new HashMap<String, WorkCompany>();
-			// 保存经办人信息，以concert_num（经办人证件号）为准
-			HashMap<String, WorkUser> userHash = new HashMap<String, WorkUser>();
-			// 存储开户费 产品id为key
-			HashMap<Long, Double> openAccountHash = new HashMap<Long, Double>();
-			// 存储 新增证书费用
-			HashMap<Long, Double> addMoneyHash = new HashMap<Long, Double>();
-			// 存储 代理商 appId --key
-			HashMap<Long, ConfigCommercialAgent> commercialAgentHash = new HashMap<Long, ConfigCommercialAgent>();
-
 			// Office office = createBy.getOffice();
 			Office office = officeService.get(officeId);
 			List<ConfigAgentOfficeRelation> configAgentOfficeRelations = configAgentOfficeRelationService
@@ -155,6 +160,8 @@ public class MutiProcess implements Runnable {
 
 			Integer sjNum = 1;
 			for (BasicInfoScca s1 : sccaList) {
+				// 暂存
+				basicInfoSccaService.saveImpTemp(s1.getFirstCertSN());
 				try {
 					log.debug("开始创建第" + number + "个线程,第" + sjNum + "条数据,中间表id："
 							+ s1.getId());

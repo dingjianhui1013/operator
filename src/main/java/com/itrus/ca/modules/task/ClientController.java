@@ -155,6 +155,8 @@ public class ClientController {
 	private WorkCertApplyInfoService workCertApplyInfoService;
 	@Autowired
 	private UpdateFirstCertSNThread updateFirstCertSNThread;
+	@Autowired
+	private ProcessImpService processImpService;
 
 	private LogUtil logUtil = new LogUtil();
 
@@ -1180,17 +1182,75 @@ public class ClientController {
 		return json.toString();
 	}
 
-	/**
-	 * 
-	 * @param productId
-	 * @param officeId
-	 * @throws JSONException
-	 * @date:2014年8月18日
-	 * @user:Zhang Jingtao
-	 * @return_type:String
-	 */
 	@RequestMapping(value = "importNewDealInfo")
 	@ResponseBody
+	public String importNewDealInfoFinal(
+			Long officeId,
+			@RequestParam(defaultValue = "yyyy-MM-dd HH:mm:ss", required = false) String pattern)
+			throws JSONException {
+		JSONObject json = new JSONObject();
+		Date startDATE = new Date();
+		try {
+			SimpleDateFormat certTimeFormat = new SimpleDateFormat(pattern);
+			if (isRunning) {
+				json.put("statu", "0");
+				json.put("msg", "有一个任务进行中，请勿重复操作!");
+				return json.toString();
+			}
+			isRunning = true;
+
+			try {
+				certTimeFormat.format(new Date());
+			} catch (Exception e) {
+				json.put("statu", "0");
+				json.put("msg", "日期格式错误:" + pattern);
+				isRunning = false;
+				return json.toString();
+			}
+			count = 0;
+			json.put("status", -1);
+			if (!checkHasUser(officeId)) {
+				json.put("statu", "0");
+				json.put("msg", "当前网点下无用户，无法创建");
+				isRunning = false;
+				return json.toString();
+			}
+
+			long count = basicInfoSccaService.getCount();
+			if (count == 0) {
+				json.put("statu", "0");
+				json.put("msg", "要导入的数据为空，请检查");
+				isRunning = false;
+				return json.toString();
+			}
+			// 开始处理
+			processImpService.process(null, officeId, 1000);
+
+			MutiProcess.clearCacheInfo();
+			json.put("msg", "本次成功提交数据：" + count + "条！");
+
+			System.out.println("使用时间 :"
+					+ (System.currentTimeMillis() - startDATE.getTime()));
+			isRunning = false;
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			exLog.error(StringHelper.getStackInfo(ex));
+			isRunning = false;
+		}
+		return json.toString();
+	}
+
+	private boolean checkHasUser(long officeId) {
+		Office office = officeService.get(officeId);
+		List<User> users = office.getUserList();
+		if (users.size() == 0) {
+			return false;
+		}
+		return true;
+	}
+
+	//@RequestMapping(value = "importNewDealInfo")
+	//@ResponseBody
 	public String importNewDealInfo(
 			Long officeId,
 			@RequestParam(defaultValue = "yyyy-MM-dd HH:mm:ss", required = false) String pattern)
