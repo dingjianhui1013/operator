@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -33,7 +32,6 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.hibernate.Query;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Order;
@@ -83,8 +81,7 @@ import com.itrus.ca.modules.sys.entity.Office;
 import com.itrus.ca.modules.sys.entity.User;
 import com.itrus.ca.modules.sys.utils.CreateExcelUtils;
 import com.itrus.ca.modules.sys.utils.UserUtils;
-import com.itrus.ca.modules.task.FixErrorFirstCertSNThread;
-import com.itrus.ca.modules.message.vo.WorkDealInfoVo;
+import com.itrus.ca.modules.task.service.BasicInfoSccaService;
 import com.itrus.ca.modules.work.dao.WorkCertInfoDao;
 import com.itrus.ca.modules.work.dao.WorkCertTrustApplyDao;
 import com.itrus.ca.modules.work.dao.WorkDealInfoDao;
@@ -191,6 +188,8 @@ public class WorkDealInfoService extends BaseService {
 
 	@Autowired
 	private WorkFinancePayInfoRelationService workFinancePayInfoRelationService;
+	@Autowired
+	private BasicInfoSccaService basicInfoSccaService;
 
 	static Long YEAR_MILL = 31536000000L;
 
@@ -5088,6 +5087,8 @@ public class WorkDealInfoService extends BaseService {
 				+ "'";
 		workDealInfoDao.exeSql(sql);
 	}
+	
+	
 
 	// @Transactional(readOnly = false)
 	public void processSinglePreid(String firstCertSN) {
@@ -5096,6 +5097,7 @@ public class WorkDealInfoService extends BaseService {
 		// 只有一条的情况
 		if (lst != null && lst.size() == 1) {
 			WorkDealInfo po = lst.get(0);
+			basicInfoSccaService.deleteImpTempByFirstCertSN(po.getFirstCertSN());
 			if (po.getPrevId() != null && po.getPrevId() > 0l) {
 				// 如果存在prev_id,则认为是错位数据,将其首证书序列号按上一条调整
 				WorkDealInfo pre = get(po.getPrevId());
@@ -5159,6 +5161,7 @@ public class WorkDealInfoService extends BaseService {
 
 			try {
 				workDealInfoDao.exeSql(sql);
+				basicInfoSccaService.deleteImpTempByFirstCertSN(po.getFirstCertSN());
 			} catch (Exception ex) {
 				continue;
 			}
