@@ -305,14 +305,21 @@ public class KeyAllocateApplyController extends BaseController {
 		JSONObject json = new JSONObject();
 		try {
 
+			
+			
 			KeyAllocateApply apply = keyAllocateApplyService.get(applyId);
+			
+			//获得上级库房,因为分级后不一定是总库房
+			KeyUsbKeyDepot higherLevelDepot = apply.getKeyUsbKeyDepot().getParent();
+			
+			
 			List<KeyAllocateApplyDetailed> applyDetials = keyAllocateApplyDetailedService
 					.findByApplyId(applyId);
 			//获得总网点depotId
 			if (keyAllocateApply.getApprovalOpinion().equals(0)) {
 				for (int i = 0; i < applyDetials.size(); i++) {
 					List<KeyDepotGeneralStatistics> staList = keyDepotGeneralStatisticsService
-							.findByDepotIdAndGeneId(KeyDepotId.MAIN_DEPOT_ID, applyDetials.get(i)
+							.findByDepotIdAndGeneId(higherLevelDepot.getId(), applyDetials.get(i)
 									.getKeyGeneralInfo().getId());
 					if (staList.size() > 0) {
 						KeyDepotGeneralStatistics sta = staList.get(0);
@@ -348,7 +355,7 @@ public class KeyAllocateApplyController extends BaseController {
 
 			for (int i = 0; i < applyDetials.size(); i++) {
 				List<KeyDepotGeneralStatistics> staList = keyDepotGeneralStatisticsService
-						.findByDepotIdAndGeneId(KeyDepotId.MAIN_DEPOT_ID, applyDetials.get(i)
+						.findByDepotIdAndGeneId(higherLevelDepot.getId(), applyDetials.get(i)
 								.getKeyGeneralInfo().getId());
 
 				KeyDepotGeneralStatistics sta = staList.get(0);
@@ -368,8 +375,8 @@ public class KeyAllocateApplyController extends BaseController {
 				
 				KeyDepotId mainDepot = new KeyDepotId();
 				
-				KeyUsbKeyDepot depot = keyUsbKeyDepotService.get(mainDepot.MAIN_DEPOT_ID);
-				out.setKeyUsbKeyDepot(depot);
+				//KeyUsbKeyDepot depot = keyUsbKeyDepotService.get(mainDepot.MAIN_DEPOT_ID);
+				out.setKeyUsbKeyDepot(higherLevelDepot);
 				out.setKeyUsbKeyDepotReceive(apply.getKeyUsbKeyDepot());
 				out.setStartDate(new Date());
 				keyUsbKeyInvoiceService.save(out);
