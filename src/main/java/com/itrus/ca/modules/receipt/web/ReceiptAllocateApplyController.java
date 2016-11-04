@@ -313,7 +313,11 @@ public class ReceiptAllocateApplyController extends BaseController {
 	public String saveSP(String reqDate, ReceiptAllocateApply receiptAllocateApply) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		if(receiptAllocateApply.getState()==1){
-			ReceiptDepotInfo receiptDepotInfo = receiptDepotInfoService.get(KeyDepotId.RECEIPT_DEPOT_ID);
+			
+			ReceiptDepotInfo receiptDepotInfo = receiptAllocateApply.getReceiptDepotInfo().getParent();
+			
+			
+			
 			List<ReceiptAllocateApplyDetail> details = receiptAllocateApplyDetailService.getByApplyId(receiptAllocateApply.getId());
 			String mesString = "";
 			for (int i = 0; i < details.size(); i++) {
@@ -327,9 +331,8 @@ public class ReceiptAllocateApplyController extends BaseController {
 			}
 			if(!mesString.equals("")){
 				map.put("status", 2);
-				map.put("msg","出库失败，总库发票类型（"+mesString+"）不足");
-//				receiptAllocateApply.setState(0);
-//				logUtil.saveSysLog("发票管理","总库调拨出库失败(总库余额不足)","");
+				map.put("msg","出库失败，上级库房发票类型（"+mesString+"）不足");
+
 				return new JSONObject(map).toString();
 			}else{
 				
