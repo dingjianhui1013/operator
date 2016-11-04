@@ -3,7 +3,12 @@
  */
 package com.itrus.ca.modules.task;
 
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 
@@ -22,9 +27,12 @@ public class FixSVNThread implements Runnable {
 
 	private List<WorkDealInfo> all;
 
-	private static volatile Integer num = 0;
+	private static Map<String, Integer> num = new Hashtable<String, Integer>();
 
 	private static final int MAX_THREAD = 30;
+
+	private Set<String> allsvn = Collections
+			.synchronizedSet(new HashSet<String>());
 
 	private Long appid;
 
@@ -42,11 +50,11 @@ public class FixSVNThread implements Runnable {
 	}
 
 	public void run() {
-		try {
-			workDealInfoService.setSvnToNull(appid);
-		} catch (Exception e) {
-			// e.printStackTrace();
-		}
+		// try {
+		// workDealInfoService.setSvnToNull(appid);
+		// } catch (Exception e) {
+		// // e.printStackTrace();
+		// }
 		int preNum = all.size() / MAX_THREAD;
 		preNum = preNum == 0 ? all.size() : preNum;
 
@@ -68,6 +76,25 @@ public class FixSVNThread implements Runnable {
 		}
 	}
 
+	public static Integer getNum(String officeName) {
+		if (num.containsKey(officeName)) {
+			if (num.get(officeName) == null) {
+				num.put(officeName, 0);
+				return 0;
+			} else {
+				return num.get(officeName);
+			}
+		} else {
+			num.put(officeName, 0);
+			return 0;
+		}
+	}
+
+	public static void plus(String officeName, Integer current) {
+		Integer n = current + 1;
+		num.put(officeName, n);
+	}
+
 	private class Inner implements Runnable {
 		private List<WorkDealInfo> l;
 
@@ -75,23 +102,23 @@ public class FixSVNThread implements Runnable {
 			this.l = lst;
 		}
 
-		public String getSvn(String head) {
-			String numStr = "00000" + num;
-			return head + "-"
-					+ numStr.substring(numStr.length() - 6, numStr.length());
+		public synchronized String getSvn(String head, String officeName) {
+			String numStr = StringHelper.completeText(num.get(officeName)
+					.toString(), 6);
+			return head + "-" + numStr;
 		}
 
 		public synchronized void run() {
-
 			for (WorkDealInfo e : l) {
 				try {
 					Office office = officeService.get(e.getOfficeId());
-					String firstSvn = workDealInfoService.getSVN(
-							office.getName(), appid, num);
-					String head = firstSvn.replace(
-							"-" + firstSvn.split("-")[3], "");
-					FixSVNThread.num += 1;
-					workDealInfoService.modifySvn(e.getId(), getSvn(head));
+					String firstSvn = workDealInfoService.getSVN(e,
+							office.getName(), appid, getNum(office.getName()));
+					String[] ele = firstSvn.split("-");
+					String head = firstSvn.replace("-" + ele[3], "");
+					Integer current = getNum(office.getName());
+					String svn = getSvnByHead(office.getName(), head,current);
+					workDealInfoService.modifySvn(e.getId(), svn);
 
 				} catch (Exception ex) {
 					// 事务问题，可以不显示
@@ -100,6 +127,17 @@ public class FixSVNThread implements Runnable {
 
 			}
 
+		}
+
+		private synchronized String getSvnByHead(String officeName,
+				String head, Integer current) {
+			plus(officeName, current);
+			String svn = getSvn(head, officeName);
+			if (allsvn.contains(svn)) {
+				return getSvnByHead(officeName, head, current);
+			}
+			allsvn.add(svn);
+			return svn;
 		}
 	}
 }

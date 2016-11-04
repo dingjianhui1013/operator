@@ -4154,8 +4154,8 @@ public class WorkDealInfoService extends BaseService {
 	}
 
 	public String findSvnOne(String svn, Long appid) {
-		String sql = "select svn from work_deal_info where svn like '%" + svn
-				+ "%' and rownum=1 ";
+		String sql = "select svn from work_deal_info where svn like '%"
+				+ svn + "%' and rownum<=1";
 		if (appid != null && appid.longValue() > 0)
 			sql += " and APP_ID=" + appid;
 		sql += " order by svn desc";
@@ -4706,13 +4706,58 @@ public class WorkDealInfoService extends BaseService {
 		return getSVN(officeName, null);
 	}
 
-	public synchronized String getSVN(String officeName, Long appid, int num) {
+	/**
+	 * 根据原来的svn重新得到一条新的序列
+	 * 
+	 * @param po
+	 * @return String
+	 */
+	public synchronized String getSVN(WorkDealInfo po, String officeName,
+			Long appid, int num) {
+		String svn = "";
+		try {
+			String poOldSvn = po.getSvn();
+			String oldTimeSvn = poOldSvn.substring(0,
+					poOldSvn.lastIndexOf("-") + 1);
+			String old = findSvnOne(oldTimeSvn, appid);
+			if (!StringHelper.isNull(old)) {
+				String oldSvn = old;
+				String[] elm = StringHelper.splitStr(oldSvn, "-");
+				if (elm == null || elm.length < 4
+						|| !StringHelper.isDigit(elm[3])) {
+					num = 1;
+				} else {
+					num = new Integer(elm[3]) + 1;
+				}
+				oldTimeSvn = oldSvn.substring(0, oldSvn.lastIndexOf("-") + 1);
+			}
+			String numStr = StringHelper.completeText(
+					new Integer(num).toString(), 6);
+			svn = oldTimeSvn + numStr;
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		return svn;
+	}
+
+	/**
+	 * @param officeName
+	 * @param appid
+	 * @param num
+	 * @param modifyPrefix
+	 *            (true=改变前缀,false=不改变前缀)
+	 * @return String
+	 */
+	public synchronized String getSVN(String officeName, Long appid, int num,
+			boolean modifyPrefix) {
 		Date date = new Date();
 		String svn = "";
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMM-");
 		try {
 			String timeSvn = "C-" + officeName + "-"
 					+ sdf.format(date).substring(2);
+			String oldTimeSvn = "C-" + officeName + "-";
 			String old = findSvnOne(timeSvn, appid);
 			if (!StringHelper.isNull(old)) {
 				String oldSvn = old;
@@ -4723,6 +4768,7 @@ public class WorkDealInfoService extends BaseService {
 				} else {
 					num = new Integer(elm[3]) + 1;
 				}
+				oldTimeSvn = oldSvn.substring(0, oldSvn.lastIndexOf("-") + 1);
 			}
 			String numStr = "";
 			if (num > 0 && num < 10) {
@@ -4738,7 +4784,10 @@ public class WorkDealInfoService extends BaseService {
 			} else {
 				numStr = "" + num;
 			}
-			svn = timeSvn + numStr;
+			if (modifyPrefix)
+				svn = timeSvn + numStr;
+			else
+				svn = oldTimeSvn + numStr;
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
@@ -5087,8 +5136,6 @@ public class WorkDealInfoService extends BaseService {
 				+ "'";
 		workDealInfoDao.exeSql(sql);
 	}
-	
-	
 
 	// @Transactional(readOnly = false)
 	public void processSinglePreid(String firstCertSN) {
@@ -5097,7 +5144,8 @@ public class WorkDealInfoService extends BaseService {
 		// 只有一条的情况
 		if (lst != null && lst.size() == 1) {
 			WorkDealInfo po = lst.get(0);
-			basicInfoSccaService.deleteImpTempByFirstCertSN(po.getFirstCertSN());
+			basicInfoSccaService
+					.deleteImpTempByFirstCertSN(po.getFirstCertSN());
 			if (po.getPrevId() != null && po.getPrevId() > 0l) {
 				// 如果存在prev_id,则认为是错位数据,将其首证书序列号按上一条调整
 				WorkDealInfo pre = get(po.getPrevId());
@@ -5161,7 +5209,8 @@ public class WorkDealInfoService extends BaseService {
 
 			try {
 				workDealInfoDao.exeSql(sql);
-				basicInfoSccaService.deleteImpTempByFirstCertSN(po.getFirstCertSN());
+				basicInfoSccaService.deleteImpTempByFirstCertSN(po
+						.getFirstCertSN());
 			} catch (Exception ex) {
 				continue;
 			}
@@ -9034,8 +9083,9 @@ public class WorkDealInfoService extends BaseService {
 	public void fixErrorFirstCertSN(List<String> lst) {
 		for (String e : lst) {
 			// 计数器+1
-			//FixErrorFirstCertSNThread.plusCount();
-			//log.debug("fixErrorFirstCertSN count: " + FixErrorFirstCertSNThread.getCount());
+			// FixErrorFirstCertSNThread.plusCount();
+			// log.debug("fixErrorFirstCertSN count: " +
+			// FixErrorFirstCertSNThread.getCount());
 
 			List<WorkDealInfo> link = findByFirstCertSN(e);
 			if (link == null || link.size() <= 0)
