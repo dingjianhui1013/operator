@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.http.protocol.HttpContext;
+import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -81,6 +82,7 @@ import com.itrus.ca.modules.work.service.WorkCertInfoService;
 import com.itrus.ca.modules.work.service.WorkCertTrustApplyService;
 import com.itrus.ca.modules.work.service.WorkDealInfoService;
 import com.itrus.ca.modules.work.service.WorkPayInfoService;
+import com.itrus.ca.modules.work.web.CertController;
 
 /**
  * 前台服务controller
@@ -91,6 +93,8 @@ import com.itrus.ca.modules.work.service.WorkPayInfoService;
 @Controller
 @RequestMapping(value = "/enroll")
 public class UserEnrollController extends BaseController {
+	
+	Logger log = Logger.getLogger(UserEnrollController.class);
 
 	@Autowired
 	private ConfigAppService configAppService;
@@ -274,6 +278,7 @@ public class UserEnrollController extends BaseController {
 				json.put("startDate", sdf.format(certInfo.getNotbefore()));
 				json.put("endDate", sdf.format(certInfo.getNotafter()));
 
+				log.debug("certCN===="+json.get("certCN"));
 				
 				WorkDealInfo current = workDealInfoService.findDealInfo(dealInfos.get(0).getId());
 				
@@ -767,6 +772,9 @@ public class UserEnrollController extends BaseController {
 				model.addAttribute("keySn", keyUnlock.getKeySn());
 				model.addAttribute("reqCode", keyUnlock.getReqCode());
 				model.addAttribute("certCn", keyUnlock.getCertCn());
+				
+				
+				log.debug("certCN===="+keyUnlock.getCertCn());
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -859,7 +867,7 @@ public class UserEnrollController extends BaseController {
 				json.put("certTime", sdf.format(workDealInfo.getWorkCertInfo().getNotbefore())
 						+ " 到 " + sdf.format(workDealInfo.getWorkCertInfo().getNotafter()));
 				
-
+				log.debug("certCN===="+json.get("certCN"));
 				
 				if (workDealInfo.getWorkCertInfo() != null) {
 					if (workDealInfo.getWorkCertInfo().getRenewalNextId() != null) {
@@ -1084,6 +1092,8 @@ public class UserEnrollController extends BaseController {
 			
 			model.addAttribute("certCN", certCN);
 			
+			log.debug("certCN===="+certCN);
+			
 			model.addAttribute("certCNOmit", certCN.length()>20?certCN.substring(0, 20)+"...":certCN);
 			SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
 			model.addAttribute("keySN", workDealInfo.getKeySn());
@@ -1126,6 +1136,8 @@ public class UserEnrollController extends BaseController {
 			String certCN = extendInfo.getCommonNameDisplayName().equals("0")?workDealInfo.getWorkCompany().getCompanyName():(extendInfo.getCommonNameDisplayName().equals("1")?workDealInfo.getWorkUser().getContactName():workDealInfo.getWorkUserHis().getContactName());
 			
 			model.addAttribute("certCN", certCN);
+			
+			log.debug("certCN===="+certCN);
 			
 			model.addAttribute("certCNOmit", certCN.length()>20?certCN.substring(0, 20)+"...":certCN);
 			SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
@@ -1179,6 +1191,9 @@ public class UserEnrollController extends BaseController {
 			String certCN = extendInfo.getCommonNameDisplayName().equals("0")?dealInfo.getWorkCompany().getCompanyName():(extendInfo.getCommonNameDisplayName().equals("1")?dealInfo.getWorkUser().getContactName():dealInfo.getWorkUserHis().getContactName());
 			
 			model.addAttribute("certCN", certCN);
+			
+			log.debug("certCN===="+certCN);
+			
 			model.addAttribute("certCNOmit", certCN.length()>20?certCN.substring(0, 20)+"...":certCN);
 			
 		}
@@ -1205,6 +1220,9 @@ public class UserEnrollController extends BaseController {
 			String certCN = extendInfo.getCommonNameDisplayName().equals("0")?dealInfo.getWorkCompany().getCompanyName():(extendInfo.getCommonNameDisplayName().equals("1")?dealInfo.getWorkUser().getContactName():dealInfo.getWorkUserHis().getContactName());
 			
 			model.addAttribute("certCN", certCN);
+			
+			log.debug("certCN===="+certCN);
+			
 			model.addAttribute("certCNOmit", certCN.length()>20?certCN.substring(0, 20)+"...":certCN);
 			
 		}
