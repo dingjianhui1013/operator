@@ -14,6 +14,9 @@
 <script type="text/javascript">
 	var sn;
 	var keySn = external.ukeyserial;
+	var keySN;
+	var day;
+	var csr;
 	var cspStr;
 	var baseDay = parseInt("${workDealInfo.year*365+workDealInfo.lastDays }");
 	var vProgressTimeTAG; 
@@ -36,9 +39,9 @@ function setCount() {
 		timeout = 0;
 	}
 	if(timeout==4){
-		var keySN = keySn;
-		var day = baseDay;
-		var csr;
+		keySN = keySn;
+		day = baseDay;
+		
 		var len = 1024;
 		cspStr = external.cspname;
 		csr = getCsrByOldCert(len);
