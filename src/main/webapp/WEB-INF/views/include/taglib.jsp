@@ -6,7 +6,19 @@
 <%@ taglib prefix="fns" uri="/WEB-INF/tlds/fns.tld" %>
 <%@ taglib prefix="fnc" uri="/WEB-INF/tlds/fnc.tld" %>
 <%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
-<c:set var="ctx" scope="session" value="${pageContext.request.contextPath}${fns:getAdminPath()}"/>
-<c:set var="ctxStatic" value="${pageContext.request.contextPath}/static"/>
-<c:set var="js" value="${pageContext.request.contextPath}/js"/>
-<c:set var="ctxILetter" value="${pageContext.request.contextPath}"/>
+<%@ page  language="java" 
+	import="com.itrus.ca.common.config.Global"	
+	import="org.apache.commons.logging.*"
+	import="java.util.*"
+	import="java.text.*"
+	import="java.math.*"
+ %>
+<%
+	String rootPath = Global.getConfig("server.root");
+	request.setAttribute("server.root", rootPath);
+%>
+<c:set var="rootPath" value="<%=rootPath %>"/>
+<c:set var="ctx" scope="session" value="${rootPath}${fns:getAdminPath()}"/>
+<c:set var="ctxStatic" value="${rootPath}/static"/>
+<c:set var="js" value="${rootPath}/js"/>
+<c:set var="ctxILetter" value="${rootPath}"/>
