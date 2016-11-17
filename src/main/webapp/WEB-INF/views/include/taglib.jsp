@@ -6,15 +6,9 @@
 <%@ taglib prefix="fns" uri="/WEB-INF/tlds/fns.tld" %>
 <%@ taglib prefix="fnc" uri="/WEB-INF/tlds/fnc.tld" %>
 <%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
-<%@ page  language="java" 
-	import="com.itrus.ca.common.config.Global"	
-	import="org.apache.commons.logging.*"
-	import="java.util.*"
-	import="java.text.*"
-	import="java.math.*"
- %>
+
 <%
-	String rootPath = Global.getConfig("server.root");
+	String rootPath = com.itrus.ca.common.config.Global.getConfig("server.root");
 	request.setAttribute("server.root", rootPath);
 %>
 <c:set var="rootPath" value="<%=rootPath %>"/>
