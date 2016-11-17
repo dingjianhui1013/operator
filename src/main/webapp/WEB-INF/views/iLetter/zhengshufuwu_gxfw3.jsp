@@ -9,8 +9,8 @@
 <script type="text/javascript" src="${ctxStatic}/cert/pta_topca.js"></script>
 <script type="text/javascript" src="${ctxStatic}/cert/xenroll.js"></script>
 <script type="text/javascript" src="${ctxStatic}/msg/msg.js"></script>
-<link href="http://libs.baidu.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
-<script src="http://libs.baidu.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+<link href="${ctxStatic}/bootstrap/3.0.3/css/bootstrap.css" type="text/css" rel="stylesheet" />
+<script src="${ctxStatic}/bootstrap/3.0.3/js/bootstrap.js" type="text/javascript"></script>
 <script type="text/javascript">
 	var sn;
 	var keySn = external.ukeyserial;
