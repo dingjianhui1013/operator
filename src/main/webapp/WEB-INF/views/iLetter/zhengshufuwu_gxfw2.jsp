@@ -6,7 +6,9 @@
 <meta name="decorator" content="default" />
 <link href="${ctxStatic}/iLetter/css/main.css" type="text/css" rel="stylesheet"/>
 <script type="text/javascript" src="${ctxStatic}/msg/msg.js"></script>
+<!-- 
 <script type="text/javascript" src="${ctxStatic}/iLetter/js/jquery-1.8.3.min.js"></script>
+-->
 <script type="text/javascript">
 	var dealInfoId ;
 	var keySn = external.ukeyserial;

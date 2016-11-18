@@ -5,12 +5,15 @@
 <title>天威诚信i信客户端管理</title>
 <meta name="decorator" content="default" />
 <link href="${ctxStatic}/iLetter/css/main.css" type="text/css" rel="stylesheet"/>
+<!-- 
 <script type="text/javascript" src="${ctxStatic}/iLetter/js/jquery-1.8.3.min.js"></script>
+<link href="${ctxStatic}/bootstrap/3.0.3/css/bootstrap.css" type="text/css" rel="stylesheet" />
+<script src="${ctxStatic}/bootstrap/3.0.3/js/bootstrap.js" type="text/javascript"></script>
+-->
 <script type="text/javascript" src="${ctxStatic}/cert/pta_topca.js"></script>
 <script type="text/javascript" src="${ctxStatic}/cert/xenroll.js"></script>
 <script type="text/javascript" src="${ctxStatic}/msg/msg.js"></script>
-<link href="${ctxStatic}/bootstrap/3.0.3/css/bootstrap.css" type="text/css" rel="stylesheet" />
-<script src="${ctxStatic}/bootstrap/3.0.3/js/bootstrap.js" type="text/javascript"></script>
+
 <script type="text/javascript">
 	var sn;
 	var keySn = external.ukeyserial;
