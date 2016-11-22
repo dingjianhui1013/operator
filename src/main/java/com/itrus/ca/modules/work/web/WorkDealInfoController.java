@@ -10056,7 +10056,7 @@ public class WorkDealInfoController extends BaseController {
 			Model model) throws Exception {
 		
 		
-		String file = request.getHeader("_File").substring(3);
+		String file = request.getHeader("_File");
 		
 		String ParentDirectory = new File(request.getSession().getServletContext().getRealPath("")).getParent();
 		
