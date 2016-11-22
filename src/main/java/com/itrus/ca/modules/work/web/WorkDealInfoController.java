@@ -2867,7 +2867,7 @@ public class WorkDealInfoController extends BaseController {
 		workDealInfo.setClassifying(classifying);
 		workDealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_ENTRY_SUCCESS);
 		workDealInfo.setCreateBy(UserUtils.getUser());
-		workDealInfo.setCreateDate(new Date());
+		workDealInfo.setCreateDate(new Date()); 
 		workDealInfo.setPayType(agentId);
 
 		WorkCompanyHis workCompanyHis = workCompanyService.change(workCompany);
@@ -10060,7 +10060,7 @@ public class WorkDealInfoController extends BaseController {
 		
 		String ParentDirectory = new File(request.getSession().getServletContext().getRealPath("")).getParent();
 		
-		String saveto = ParentDirectory+File.separator+imgFileUpload+File.separator+file;
+		String saveto = ParentDirectory+File.separator+imgFileUpload;
 		
 		System.out.println(saveto);
 		
@@ -10075,7 +10075,15 @@ public class WorkDealInfoController extends BaseController {
 		int len, num;
 
 		inp = request.getInputStream();
-		fos = new FileOutputStream(new File(saveto));
+		
+		File fileout = 	new File(saveto);
+		if(!fileout.exists()){
+			fileout.mkdir();
+		}
+		
+		fos = new FileOutputStream(fileout+File.separator+file);
+		
+		
 		buf = new byte[128];
 		num = 0;
 
