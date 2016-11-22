@@ -6,15 +6,37 @@
 <title>业务办理管理</title>
 <meta name="decorator" content="default" />
 <style type="text/css">
+
+
+
+.zoominner {background: none repeat scroll 0 0 #FFFFFF; padding: 5px 10px 10px; text-align: left;}
+.zoominner p {height:30px; _position:absolute; _right:2px; _top:5px;}
+.zoominner p a { background: url("../images/imgzoom_tb.gif") no-repeat scroll 0 0 transparent; float: left; height: 17px; line-height: 100px; margin-left: 10px; overflow: hidden; width: 17px;}
+.zoominner p a.imgadjust {background-position: -40px 0;}
+.zoominner p a.imgclose { background-position: -80px 0; cursor:pointer;}
+.y {float: right; margin-bottom:10px;}
+.ctnlist .text img{ cursor:pointer;}
+#imgzoom_cover{background-color:#000000; filter:progid:DXImageTransform.Microsoft.Alpha(Opacity=70); opacity:0.7; position:absolute; z-index:800; top:0px; left: 0px; width:100%; display:none;}
+#imgzoom{ display:none; z-index:801; position:absolute;}
+#imgzoom_img{_width:300px; _height:200px; width:700px; height:600px; background:url(../images/imageloading.gif) center center no-repeat;}
+#imgzoom_zoomlayer{ _width:300px; _height:200px; _position:relative; _padding-top:30px; min-width:300px; min-height:200px;}
+
+
+
+
+
+
+
+
 .table-condensed th{width:140px;}
 .table-condensed td{width:275px;}
 input[readonly]{width:206px;}
 .btmBorder{border-bottom:1px solid #ddd}
 .accordion-heading,.table th,.accordion-heading,.table td{ vertical-align: middle;}
+  .uploadPicBox{position:relative; width:10%; float:left}
+  .closeBtn{position:absolute;top:7px; right:0px; width:40px; color:#333; font-size:20px;}
+ .closeBtn:hover{text-decoration: none;color:#333; }
 </style>
-
-
-
 
 <script type="text/javascript">
 var ctx = "${ctx}";
@@ -23,14 +45,9 @@ var city;
 var district;
 var appData;
 var selected = false;
-
-
-
 	$(document).ready(function() {
 		
-						getPrivince();
-    	
-		
+						getPrivince();	
 						$("#name").focus();
 						$("#inputForm").validate(
 								{
@@ -79,9 +96,7 @@ var selected = false;
 								});
 								$("#pIDCard").bind("propertychange", function() {
 									count('pIDCard','IDcount')
-								});
-								
-								
+								});	
 							}else{
 								$("#organizationNumber").attr("onpropertychange","count('organizationNumber','zdcount')");
 								$("#comCertficateNumber").attr("onpropertychange","count('comCertficateNumber','zjcount')");
@@ -91,13 +106,7 @@ var selected = false;
 								$("#contactTel").attr("onpropertychange","count('contactTel','ywidcount')");
 								$("#pIDCard").attr("onpropertychange","count('pIDCard','IDcount')");
 									
-							}
-							 
-							
-							
-							
-							
-							
+							}	
 						}else{
 							$("#organizationNumber").attr("oninput","count('organizationNumber','zdcount')");
 							$("#comCertficateNumber").attr("oninput","count('comCertficateNumber','zjcount')");
@@ -378,7 +387,7 @@ var selected = false;
 				return false;
 			}
 		}
-		if($("#tt").val()!="" && !checkDwmc($("#tt"))){
+		if($("#companyName").val()!="" && !checkDwmc($("#companyName"))){
 			top.$.jBox.tip("单位名称格式有误!");
 			return false;
 		}
@@ -481,10 +490,13 @@ var selected = false;
 <script type="text/javascript" src="${ctxStatic}/jquery/city.js"></script>
 <script type="text/javascript" src="${ctxStatic}/jquery/area.js"></script>
 <script type="text/javascript" src="${ctxStatic}/jquery/commonJs.js"></script>
+<script type="text/javascript" src="${ctxStatic }/js/content_zoom.js"></script>
+<script type="text/javascript" src="${ctxStatic }/js/common.js"></script>
 <!--  <script src="http://ie7-js.googlecode.com/svn/version/2.1(beta4)/IE9.js"></script>-->
 <link href="${ctxStatic}/jquery/jquery.bigautocomplete.css"
 	rel="stylesheet" />
 <script type="text/javascript">
+
 	function os(obj) {
 		
 		if($("#product").val()==0){
@@ -503,7 +515,7 @@ var selected = false;
 		}
 		
 		
-		if($("#tt").val()!="" && !checkDwmc($("#tt"))){
+		if($("#companyName").val()!="" && !checkDwmc($("#companyName"))){
 			top.$.jBox.tip("单位名称格式有误!");
 			return false;
 		}
@@ -613,7 +625,7 @@ var selected = false;
 			top.$.jBox.tip("请选择要办理的产品!");
 			return false;
 		}
-		if($("#tt").val()!="" && !checkDwmc($("#tt"))){
+		if($("#companyName").val()!="" && !checkDwmc($("#companyName"))){
 			top.$.jBox.tip("单位名称格式有误!");
 			return false;
 		}
@@ -978,7 +990,7 @@ var selected = false;
 			if($("#dwmcpro").text()!=""){
 				return false;
 			}
-			$("#tt").after("<span id='dwmcpro' style='color:red'>格式错误!</span>");
+			$("#companyName").after("<span id='dwmcpro' style='color:red'>格式错误!</span>");
 			return false;
 		}
 		if($("#dwmcpro").text()!=""){
@@ -1216,7 +1228,7 @@ var selected = false;
 	}
 	function obtainCompanyInformation()
 	{
-		var companyName=$("#tt").val();
+		var companyName=$("#companyName").val();
 		var productId = $("#product").val();
 		if(companyName!=null&&companyName!="")
 			{
@@ -1238,30 +1250,80 @@ var selected = false;
 	
 	
 	
-	
-		
-	
-	
-	
 </script>
 
 </head>
 <body style="overflow: scroll">
+
 	<ul class="nav nav-tabs">
 		<li><a href="${ctx}/work/workDealInfo/">业务办理列表</a></li>
 		<li class="active"><a
 			href="${ctx}/work/workDealInfo/form?id=${workDealInfo.id}">业务新增</a></li>
 	</ul>
+	
+	
+	
+	
+	
+	<div id="modal-container" class="modal hide fade" style="width:800px;height:700px;right:10%;top:34px" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		
+		<!--图像采集区域 -->
+		<div id="imageCollection" style="width: 800px; height: 700px;display: none">
+        <object id="VideoInputCtl" classid="CLSID:30516390-004F-40B9-9FC6-C9096B59262E" style="width: 100%; height: 80%;"></object>
+    	
+    	
+    	<div class="control-group">
+		
+			<div class="control-group" align="center">
+				<button id="qrsq" class="btn btn-primary" onclick="changeDevice()">切换摄像头</button>&nbsp;&nbsp;&nbsp;			
+				<button id="qrsq" class="btn btn-primary" onclick="setPropertyDevice()">设置装置属性</button>&nbsp;&nbsp;&nbsp;
+				<button id="qrsq" class="btn btn-primary" onclick="getcompanyinfo()">单位信息录入</button>&nbsp;&nbsp;&nbsp;
+				<button id="qrsq" class="btn btn-primary" onclick="getholderinfo()">持有人信息录入</button>&nbsp;&nbsp;&nbsp;
+				<button id="qrsq" class="btn btn-primary" onclick="getoperatorinfo()">经办人信息录入</button><br>
+				<button id="qrsq" class="btn btn-primary" onclick="applicationphotograph()">申请表拍照</button>&nbsp;&nbsp;&nbsp;
+				<button id="qrsq" class="btn btn-primary" onclick="workCompanyphotograph()">单位证件拍照</button>&nbsp;&nbsp;&nbsp;
+				<button id="qrsq" class="btn btn-primary" onclick="workCertApplyInfophotograph()">经办人身份证拍照</button>&nbsp;&nbsp;&nbsp;
+				<button id="qrsq" class="btn btn-primary" onclick="workUserphotograph()">持有人身份证拍照</button>&nbsp;&nbsp;&nbsp;
+				<button id="qrsq" class="btn btn-primary" onclick="headphotograph()">照片拍照</button>&nbsp;&nbsp;&nbsp;
+				<button class="btn" data-dismiss="modal" aria-hidden="true">取消</button> 
+			</div>
+		</div>
+    	
+    	
+    	
+    	</div>
+		
+	</div>
+	
+	
 	<form:form id="inputForm" action="${ctx}/work/workDealInfo/save"
 		method="POST" class="form-horizontal">
 		<tags:message content="${message}" />
+		
+		<div id="append_parent"></div>
+		
+		
+		<div class="list ctnlist">
+
+		<div class="text">
+		<p>
+
+		<p id="imgLayer" align="left" >
+		<input id="imgNames" name="imgNames" type="hidden"/>
+		</p>
+		</div>
+		</div>
+		
 		<div class="row-fluid">
 			<div class="span12">
 				<table class="table table-striped table-bordered table-condensed">
 					<tbody>
 						<tr>
-							<th colspan="4" style="font-size: 20px;"><span
-								class="prompt" style="color: red; display: none;">*</span>基本信息</th>
+							<th colspan="1" style="font-size: 20px;"><span
+								class="prompt" style="color: red; display: none;">*</span>基本信息</th>	
+							<th colspan="3"> <a href="#modal-container" data-toggle="modal">
+							<input class="btn btn-primary" onclick="scanningInfoEnter()" data-toggle="modal" value="扫描录入" /></a>	
+							</th>	
 						</tr>
 						<tr>
 							<th><span class="prompt" style="color: red; display: none;">*</span>应用名称：</th>
@@ -1359,6 +1421,11 @@ var selected = false;
 				</table>
 			</div>
 		</div>
+		
+		
+		
+		
+		
 		<div class="row-fluid">
 			<div class="span12">
 				<table class="table table-striped table-bordered table-condensed">
@@ -1369,7 +1436,7 @@ var selected = false;
 						<tr>
 							<th><span class="prompt" style="color: red; display: none;">*</span>单位名称：</th>
 							<td><input type="text" name="companyName" maxlength="50"
-								value="${workCompany.companyName }" id="tt"
+								value="${workCompany.companyName }" id="companyName"
 								onchange="checkDwmc(this)" onblur="obtainCompanyInformation()"> <input type="hidden"
 								name="companyId" value="${workCompany.id }" id="companyId"></td>
 							<th><span class="prompt" style="color: red; display: none;">*</span>单位类型：</th>
@@ -1486,12 +1553,15 @@ var selected = false;
 				</table>
 			</div>
 		</div>
+		
+	
+		
 		<div class="row-fluid">
 			<div class="span12">
 				<table class="table table-striped table-bordered table-condensed">
 					<tbody>
 						<tr>
-							<th colspan="4" style="font-size: 20px;">证书持有人信息</th>
+							<th colspan="4" style="font-size: 20px;">证书持有人信息   </th> 
 						</tr>
 						<tr>
 							<th><span class="prompt" style="color: red; display: none;">*</span>证书持有人姓名:</th>
