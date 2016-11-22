@@ -504,7 +504,12 @@ public class WorkPayInfoController extends BaseController {
 		if (workDealInfo.getDealInfoType() == WorkDealInfoType.TYPE_ADD_CERT) {
 			workDealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_ADD_USER);
 		} else {
-			workDealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_CERT_WAIT);
+			if(workDealInfo.getDealInfoType() == WorkDealInfoType.TYPE_UPDATE_CERT){
+				workDealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_ADD_USER);
+			}else{
+				//遗失变更等 均需要进行鉴证
+				workDealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_ADD_USER);
+			}
 			if(workDealInfo.getSelfApplyId()!=null){
 				SelfApplication selfApplication=selfApplicationService.get(workDealInfo.getSelfApplyId());
 				selfApplication.setStatus(SelfApplicationStatus.makeApply);
@@ -646,8 +651,13 @@ public class WorkPayInfoController extends BaseController {
 						model.addAttribute("onlyUpdate", "onlyUpdate");
 					}
 				}
-
-				return "modules/work/workDealInfoMaintainAuditMake";
+				
+				//更新 
+				if(workDealInfo.getDealInfoType().equals(WorkDealInfoType.TYPE_UPDATE_CERT)){
+					return "redirect:" + Global.getAdminPath() + "/work/workDealInfo/";
+				}else{//信息变更
+					return "modules/work/workDealInfoMaintainAuditMake";
+				}
 			} else if (workDealInfo.getDealInfoType().equals(WorkDealInfoType.TYPE_ADD_CERT)) {
 				return "redirect:" + Global.getAdminPath() + "/work/workDealInfo/";
 			} else if (workDealInfo.getDealInfoType().equals(WorkDealInfoType.TYPE_LOST_CHILD)
@@ -668,7 +678,9 @@ public class WorkPayInfoController extends BaseController {
 				return "redirect:" + Global.getAdminPath() + "/work/workDealInfo/";
 			} else if (workDealInfo.getDealInfoType1().equals(WorkDealInfoType.TYPE_LOST_CHILD)
 					|| workDealInfo.getDealInfoType1().equals(WorkDealInfoType.TYPE_DAMAGED_REPLACED)) {
-				return "modules/work/workDealInfoReissueAuditMake";
+				//遗失补办和损坏变更返回列表
+				return "redirect:" + Global.getAdminPath() + "/work/workDealInfo/";
+				//return "modules/work/workDealInfoReissueAuditMake";
 			}
 		}
 		if (workDealInfo.getDealInfoType2() != null) {
@@ -683,8 +695,8 @@ public class WorkPayInfoController extends BaseController {
 				if(workDealInfo.getDealInfoType2().equals(WorkDealInfoType.TYPE_INFORMATION_REROUTE)){
 					model.addAttribute("isChangeBusiness",true);
 				}
-				
-				return "modules/work/workDealInfoMaintainAuditMake";
+				return "redirect:" + Global.getAdminPath() + "/work/workDealInfo/";
+				//return "modules/work/workDealInfoMaintainAuditMake";
 			} else if (workDealInfo.getDealInfoType2().equals(WorkDealInfoType.TYPE_ADD_CERT)) {
 				return "redirect:" + Global.getAdminPath() + "/work/workDealInfo/";
 			} else if (workDealInfo.getDealInfoType2().equals(WorkDealInfoType.TYPE_LOST_CHILD)

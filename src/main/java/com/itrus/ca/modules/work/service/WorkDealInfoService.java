@@ -753,11 +753,13 @@ public class WorkDealInfoService extends BaseService {
 		if (workDealInfo.getDealInfoStatus() == null) {
 			dc.add(Restrictions.or(Restrictions.eq("dealInfoStatus", "12"),
 					Restrictions.eq("dealInfoStatus", "0"),
+					Restrictions.eq("dealInfoStatus", "16"),
 					Restrictions.eq("dealInfoStatus", "13")));
 		} else {
 			if (workDealInfo.getDealInfoStatus().equals("-1")) {
 				dc.add(Restrictions.or(Restrictions.eq("dealInfoStatus", "12"),
 						Restrictions.eq("dealInfoStatus", "0"),
+						Restrictions.eq("dealInfoStatus", "16"),
 						Restrictions.eq("dealInfoStatus", "13")));
 			} else {
 				dc.add(Restrictions.eq("dealInfoStatus",

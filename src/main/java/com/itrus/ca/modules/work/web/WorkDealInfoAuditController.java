@@ -49,6 +49,7 @@ import com.itrus.ca.modules.log.service.LogUtil;
 import com.itrus.ca.modules.profile.dao.ConfigSupplierProductRelationDao;
 import com.itrus.ca.modules.profile.entity.ConfigAgentBoundDealInfo;
 import com.itrus.ca.modules.profile.entity.ConfigAgentOfficeRelation;
+import com.itrus.ca.modules.profile.entity.ConfigAppOfficeRelation;
 import com.itrus.ca.modules.profile.entity.ConfigChargeAgent;
 import com.itrus.ca.modules.profile.entity.ConfigChargeAgentBoundConfigProduct;
 import com.itrus.ca.modules.profile.entity.ConfigCommercialAgent;
@@ -56,12 +57,15 @@ import com.itrus.ca.modules.profile.entity.ConfigProduct;
 import com.itrus.ca.modules.profile.entity.ConfigRaAccount;
 import com.itrus.ca.modules.profile.entity.ConfigSupplier;
 import com.itrus.ca.modules.profile.entity.ConfigSupplierProductRelation;
+import com.itrus.ca.modules.profile.entity.ProductTypeObj;
 import com.itrus.ca.modules.profile.service.ConfigAgentAppRelationService;
 import com.itrus.ca.modules.profile.service.ConfigAgentBoundDealInfoService;
 import com.itrus.ca.modules.profile.service.ConfigAgentOfficeRelationService;
+import com.itrus.ca.modules.profile.service.ConfigAppOfficeRelationService;
 import com.itrus.ca.modules.profile.service.ConfigChargeAgentBoundConfigProductService;
 import com.itrus.ca.modules.profile.service.ConfigChargeAgentDetailService;
 import com.itrus.ca.modules.profile.service.ConfigChargeAgentService;
+import com.itrus.ca.modules.profile.service.ConfigProductService;
 import com.itrus.ca.modules.profile.service.ConfigRaAccountService;
 import com.itrus.ca.modules.receipt.entity.ReceiptDepotInfo;
 import com.itrus.ca.modules.receipt.entity.ReceiptEnterInfo;
@@ -69,6 +73,9 @@ import com.itrus.ca.modules.receipt.entity.ReceiptInvoice;
 import com.itrus.ca.modules.receipt.service.ReceiptDepotInfoService;
 import com.itrus.ca.modules.receipt.service.ReceiptEnterInfoService;
 import com.itrus.ca.modules.receipt.service.ReceiptInvoiceService;
+import com.itrus.ca.modules.self.entity.SelfImage;
+import com.itrus.ca.modules.self.service.SelfAreaService;
+import com.itrus.ca.modules.self.service.SelfImageService;
 import com.itrus.ca.modules.service.CaService;
 import com.itrus.ca.modules.settle.web.UpdateQuantityStatistics;
 import com.itrus.ca.modules.statistic.service.StatisticCertDataService;
@@ -153,7 +160,7 @@ public class WorkDealInfoAuditController extends BaseController {
 
 	@Autowired
 	private ConfigAgentOfficeRelationService configAgentOfficeRelationService;
-
+	
 	@Autowired
 	CaService caService;
 
@@ -189,6 +196,16 @@ public class WorkDealInfoAuditController extends BaseController {
 
 	@Autowired
 	private ReceiptInvoiceService receiptInvoiceService;
+	
+	@Autowired
+	private ConfigAppOfficeRelationService configAppOfficeRelationService;
+	
+	@Autowired
+	private ConfigProductService configProductService;
+	@Autowired
+	private SelfAreaService selfAreaService;
+	@Autowired
+	private SelfImageService selfImageService;
 
 	private LogUtil logUtil = new LogUtil();
 
@@ -286,74 +303,668 @@ public class WorkDealInfoAuditController extends BaseController {
 	 */
 	@RequestMapping("auditFrom")
 	public String auditFrom(WorkDealInfo workDealInfo, HttpServletRequest request, HttpServletResponse response,
-			Model model) {
-		model.addAttribute("proType", ProductType.productTypeStrMap);
-		model.addAttribute("workDealInfo", workDealInfo);
+			Model model,RedirectAttributes redirectAttributes) {
 
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		model.addAttribute("user", UserUtils.getUser());
-		model.addAttribute("date", sdf.format(new Date()));
-		if (workDealInfo.getId() != null) {
-			List<WorkLog> list = workLogService.findByDealInfo(workDealInfo);
-			model.addAttribute("workLog", list);
+		String name = workDealInfo.getWorkUser().getContactName();
+		//新增   验证第一页
+		model.addAttribute("pageType", "audit");
+		if(workDealInfo.getDealInfoType()==WorkDealInfoType.TYPE_ADD_CERT){
+			model.addAttribute("proType", ProductType.productTypeStrMap);
+			model.addAttribute("workDealInfo", workDealInfo);
+			
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			model.addAttribute("user", UserUtils.getUser());
+			model.addAttribute("date", sdf.format(new Date()));
+			if (workDealInfo.getId() != null) {
+				List<WorkLog> list = workLogService.findByDealInfo(workDealInfo);
+				model.addAttribute("workLog", list);
+			}
+			if (workDealInfo.getWorkCertInfo() != null) {
+				model.addAttribute("workCertApplyInfo", workDealInfo.getWorkCertInfo().getWorkCertApplyInfo());
+			}
+			if (workDealInfo.getDealInfoStatus().equals(WorkDealInfoStatus.STATUS_UPDATE_USER)) {
+				model.addAttribute("canEdit", true);
+			} else {
+				model.addAttribute("canEdit", false);
+			}
+			
+			if (workDealInfo.getIsIxin() != null && workDealInfo.getIsIxin()) {
+				
+				ConfigProduct configProduct = workDealInfo.getConfigProduct();
+				List<ConfigChargeAgentBoundConfigProduct> boundList = configChargeAgentBoundConfigProductService
+						.findByProIdAll(configProduct.getId());
+				Set<Integer> nameSet = new HashSet<Integer>();
+				for (int i = 0; i < boundList.size(); i++) {
+					nameSet.add(Integer.parseInt(boundList.get(i).getAgent().getTempStyle()));
+				}
+				
+				model.addAttribute("boundLabelList", nameSet);
+				ConfigChargeAgent chargeAgent = chargeAgentService.get(workDealInfo.getConfigChargeAgentId());
+				model.addAttribute("tempStyle", chargeAgent.getTempStyle());
+				
+			} else {
+				ConfigChargeAgent agent = configChargeAgentService.get(workDealInfo.getConfigChargeAgentId());
+				model.addAttribute("jfMB", agent.getTempName());
+				
+			}
+			
+			if(workDealInfo.getExpirationDate()!=null){
+				model.addAttribute("expirationDate", workDealInfo.getExpirationDate());
+			}
+			
+			List<CommonAttach> attachs = attachService.findCommonAttachByWorkDealInfo(workDealInfo.getId());
+			
+			if(attachs!=null&&attachs.size()>0){
+			String imgNames = "";
+				
+				for(int i =0;i<attachs.size();i++){
+					
+					if(i==0){
+						imgNames+=attachs.get(0).getAttachName();
+					}else{
+						imgNames+=","+attachs.get(i).getAttachName();	
+					}
+					
+					
+				}
+				
+				model.addAttribute("imgNames", imgNames);
+				
+			}
+			
+			return "modules/work/workDealInfoAuditACUForm";
+		}else{
+			if (workDealInfo.getId() != null) {
+				List<WorkLog> list = workLogService.findByDealInfo(workDealInfo);
+				model.addAttribute("workLog", list);
+			}
+			
+			//类型判断
+			Integer dealInfoType = workDealInfo.getDealInfoType();
+			Integer dealInfoType1 = workDealInfo.getDealInfoType1();
+			Integer dealInfoType2 = workDealInfo.getDealInfoType2();
+			
+			if(dealInfoType!=null){
+				if(dealInfoType==1){//更新证书
+					if(dealInfoType1!=null){
+						if(dealInfoType1==2){//遗失补办
+							if(dealInfoType2!=null){
+								if(dealInfoType2==4){//信息变更
+									return typeForm("1,2,3",workDealInfo,model,"1",redirectAttributes);
+								}
+							}
+							//更新+遗失补办
+							return typeForm(",2,3",workDealInfo,model,"1",redirectAttributes);
+						}else if(dealInfoType1==3){
+							if(dealInfoType2!=null){
+								if(dealInfoType2==4){//信息变更
+									return typeForm("1,2,3",workDealInfo,model,"2",redirectAttributes);
+								}
+							}
+							//更新+损坏更换
+							return typeForm(",2,3",workDealInfo,model,"2",redirectAttributes);
+						}
+					}else{
+						if(dealInfoType2!=null){
+							if(dealInfoType2==4){//信息变更
+								return typeForm("1,3",workDealInfo,model,"1",redirectAttributes);
+							}
+						}
+						return typeForm(",3",workDealInfo,model,"1",redirectAttributes);					
+					}
+				}else{
+					return null;
+				}
+			}else{
+				if(dealInfoType1!=null){
+					if(dealInfoType1==2){//遗失补办
+						if(dealInfoType2!=null){
+							if(dealInfoType2==3){//+信息变更
+								return typeForm("1,2",workDealInfo,model,"1",redirectAttributes);	
+							}
+						}
+						return typeForm(",2",workDealInfo,model,"1",redirectAttributes);	
+					}else if(dealInfoType1==3){//损坏更换
+						if(dealInfoType2!=null){
+							if(dealInfoType2==4){//+信息变更
+								return typeForm("1,2",workDealInfo,model,"2",redirectAttributes);	
+							}
+						}
+						return typeForm(",2",workDealInfo,model,"2",redirectAttributes);	
+					}
+				}else{
+					if(dealInfoType2!=null){
+						return typeForm("1",workDealInfo,model,"1",redirectAttributes);	
+					}
+				}
+			}
+			
+			return null;	
+		}
+	}
+
+	/**
+	 * 验证
+	 * 
+	 * @param workDealInfo
+	 * @param request
+	 * @param response
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping("verifyFrom")
+	public String verifyFrom(WorkDealInfo workDealInfo, HttpServletRequest request, HttpServletResponse response,
+			Model model,RedirectAttributes redirectAttributes) {
+		//新增   验证第一页
+		model.addAttribute("pageType", "verify");
+		if(workDealInfo.getDealInfoType()==WorkDealInfoType.TYPE_ADD_CERT){
+			model.addAttribute("proType", ProductType.productTypeStrMap);
+			model.addAttribute("workDealInfo", workDealInfo);
+			
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			model.addAttribute("user", UserUtils.getUser());
+			model.addAttribute("date", sdf.format(new Date()));
+			if (workDealInfo.getId() != null) {
+				List<WorkLog> list = workLogService.findByDealInfo(workDealInfo);
+				model.addAttribute("workLog", list);
+			}
+			if (workDealInfo.getWorkCertInfo() != null) {
+				model.addAttribute("workCertApplyInfo", workDealInfo.getWorkCertInfo().getWorkCertApplyInfo());
+			}
+			if (workDealInfo.getDealInfoStatus().equals(WorkDealInfoStatus.STATUS_UPDATE_USER)) {
+				model.addAttribute("canEdit", true);
+			} else {
+				model.addAttribute("canEdit", false);
+			}
+			
+			if (workDealInfo.getIsIxin() != null && workDealInfo.getIsIxin()) {
+				
+				ConfigProduct configProduct = workDealInfo.getConfigProduct();
+				List<ConfigChargeAgentBoundConfigProduct> boundList = configChargeAgentBoundConfigProductService
+						.findByProIdAll(configProduct.getId());
+				Set<Integer> nameSet = new HashSet<Integer>();
+				for (int i = 0; i < boundList.size(); i++) {
+					nameSet.add(Integer.parseInt(boundList.get(i).getAgent().getTempStyle()));
+				}
+				
+				model.addAttribute("boundLabelList", nameSet);
+				ConfigChargeAgent chargeAgent = chargeAgentService.get(workDealInfo.getConfigChargeAgentId());
+				model.addAttribute("tempStyle", chargeAgent.getTempStyle());
+				
+			} else {
+				ConfigChargeAgent agent = configChargeAgentService.get(workDealInfo.getConfigChargeAgentId());
+				model.addAttribute("jfMB", agent.getTempName());
+				
+			}
+			
+			if(workDealInfo.getExpirationDate()!=null){
+				model.addAttribute("expirationDate", workDealInfo.getExpirationDate());
+			}
+			
+
+			
+			List<CommonAttach> attachs = attachService.findCommonAttachByWorkDealInfo(workDealInfo.getId());
+			
+			if(attachs!=null&&attachs.size()>0){
+			String imgNames = "";
+				
+				for(int i =0;i<attachs.size();i++){
+					
+					if(i==0){
+						imgNames+=attachs.get(0).getAttachName();
+					}else{
+						imgNames+=","+attachs.get(i).getAttachName();	
+					}
+					
+					
+				}
+				
+				model.addAttribute("imgNames", imgNames);
+				
+			}
+
+			
+			return "modules/work/workDealInfoAuditACUForm";
+		}else{
+			if (workDealInfo.getId() != null) {
+				List<WorkLog> list = workLogService.findByDealInfo(workDealInfo);
+				model.addAttribute("workLog", list);
+			}
+			//类型判断
+			Integer dealInfoType = workDealInfo.getDealInfoType();
+			Integer dealInfoType1 = workDealInfo.getDealInfoType1();
+			Integer dealInfoType2 = workDealInfo.getDealInfoType2();
+			
+			if(dealInfoType!=null){
+				if(dealInfoType==1){//更新证书
+					if(dealInfoType1!=null){
+						if(dealInfoType1==2){//遗失补办
+							if(dealInfoType2!=null){
+								if(dealInfoType2==4){//信息变更
+									return typeForm("1,2,3",workDealInfo,model,"1",redirectAttributes);
+								}
+							}
+							//更新+遗失补办
+							return typeForm(",2,3",workDealInfo,model,"1",redirectAttributes);
+						}else if(dealInfoType1==3){
+							if(dealInfoType2!=null){
+								if(dealInfoType2==4){//信息变更
+									return typeForm("1,2,3",workDealInfo,model,"2",redirectAttributes);
+								}
+							}
+							//更新+损坏更换
+							return typeForm(",2,3",workDealInfo,model,"2",redirectAttributes);
+						}
+					}else{
+						if(dealInfoType2!=null){
+							if(dealInfoType2==4){//信息变更
+								return typeForm("1,3",workDealInfo,model,"1",redirectAttributes);
+							}
+						}
+						return typeForm(",3",workDealInfo,model,"1",redirectAttributes);					
+					}
+				}else{
+					return null;
+				}
+			}else{
+				if(dealInfoType1!=null){
+					if(dealInfoType1==2){//遗失补办
+						if(dealInfoType2!=null){
+							if(dealInfoType2==3){//+信息变更
+								return typeForm("1,2",workDealInfo,model,"1",redirectAttributes);	
+							}
+						}
+						return typeForm(",2",workDealInfo,model,"1",redirectAttributes);	
+					}else if(dealInfoType1==3){//损坏更换
+						if(dealInfoType2!=null){
+							if(dealInfoType2==4){//+信息变更
+								return typeForm("1,2",workDealInfo,model,"2",redirectAttributes);	
+							}
+						}
+						return typeForm(",2",workDealInfo,model,"2",redirectAttributes);	
+					}
+				}else{
+					if(dealInfoType2!=null){
+						return typeForm("1",workDealInfo,model,"1",redirectAttributes);	
+					}
+				}
+			}
+			
+			return null;
+		}
+		
+	}
+	
+	public String typeForm(String dealType, WorkDealInfo workDealInfo,
+			Model model, String reissueType,
+			RedirectAttributes redirectAttributes) {
+		boolean inOffice = false;
+		List<ConfigAppOfficeRelation> configAppOfficeRelations = configAppOfficeRelationService
+				.findAllByOfficeId(UserUtils.getUser().getOffice().getId());
+		for (ConfigAppOfficeRelation appOffice : configAppOfficeRelations) {
+			if (appOffice.getConfigApp().getId()
+					.equals(workDealInfo.getConfigApp().getId())) {
+				inOffice = true;
+			}
+		}
+		workDealInfo.setIsMainTain("mainTain");
+		workDealInfoService.save(workDealInfo);
+		String[] type = dealType.replace(",", " ").split(" ");
+		for (int i = 0; i < type.length; i++) {
+			if (type[i].equals("1")) {
+				model.addAttribute("change", "1");
+				if (!inOffice) {
+					redirectAttributes.addAttribute("fd", UUID.randomUUID()
+							.toString());
+					addMessage(redirectAttributes, "此业务应用未授权给当前网点，请到业务办理网点变更！");
+					return "redirect:" + Global.getAdminPath()
+							+ "/work/workDealInfo/?repage";
+				}
+			} else if (type[i].equals("2")) {
+				if (reissueType.equals("1")) {
+					model.addAttribute("reissue", "1");
+				} else {
+					model.addAttribute("reissue", "2");
+				}
+				if (!inOffice) {
+					redirectAttributes.addAttribute("fd", UUID.randomUUID()
+							.toString());
+					addMessage(redirectAttributes, "此业务应用未授权给当前网点，请到业务办理网点补办！");
+					return "redirect:" + Global.getAdminPath()
+							+ "/work/workDealInfo/?repage";
+				}
+			} else if (type[i].equals("3")) {
+				model.addAttribute("update", "3");
+
+				ConfigProduct configProduct = workDealInfo.getConfigProduct();
+				String[] years = configChargeAgentDetailService
+						.getChargeAgentYears(configProduct.getChargeAgentId(),
+								WorkDealInfoType.TYPE_UPDATE_CERT);
+				for (int j = 0; j < years.length; j++) {
+					switch (years[j]) {
+					case "1":
+						model.addAttribute("year1", true);
+						break;
+					case "2":
+						model.addAttribute("year2", true);
+						break;
+					case "4":
+						model.addAttribute("year4", true);
+						break;
+					case "5":
+						model.addAttribute("year5", true);
+						break;
+					}
+				}
+
+					
+				 if (!inOffice) { redirectAttributes.addAttribute("fd",
+				UUID.randomUUID().toString()); addMessage(redirectAttributes,
+				"请到业务办理网点更新！"); return "redirect:" + Global.getAdminPath() +
+						"/work/workDealInfo/?repage"; }
+					 
+			} else if (type[i].equals("4")) {
+				model.addAttribute("revoke", "4");
+				if (!inOffice) {
+					redirectAttributes.addAttribute("fd", UUID.randomUUID()
+							.toString());
+					addMessage(redirectAttributes, "此业务应用未授权给当前网点，请到业务办理网点吊销！");
+					return "redirect:" + Global.getAdminPath()
+							+ "/work/workDealInfo/?repage";
+				}
+			} else if (type[i].equals("5")) {
+
+				model.addAttribute("reissue", "2");
+
+				if (!inOffice) {
+					redirectAttributes.addAttribute("fd", UUID.randomUUID()
+							.toString());
+					addMessage(redirectAttributes, "此业务应用未授权给当前网点，请到业务办理网点补办！");
+					return "redirect:" + Global.getAdminPath()
+							+ "/work/workDealInfo/?repage";
+				}
+			}
 		}
 		if (workDealInfo.getWorkCertInfo() != null) {
-			model.addAttribute("workCertApplyInfo", workDealInfo.getWorkCertInfo().getWorkCertApplyInfo());
+			model.addAttribute("workCertApplyInfo", workDealInfo
+					.getWorkCertInfo().getWorkCertApplyInfo());
 		}
-		if (workDealInfo.getDealInfoStatus().equals(WorkDealInfoStatus.STATUS_UPDATE_USER)) {
-			model.addAttribute("canEdit", true);
-		} else {
-			model.addAttribute("canEdit", false);
+		model.addAttribute("pro", ProductType.productTypeStrMap);
+
+		model.addAttribute("user", UserUtils.getUser());
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		model.addAttribute("date", sdf.format(new Date()));
+
+		ConfigChargeAgent chargeAgent = null;
+		if (workDealInfo.getConfigChargeAgentId() != null) {
+			chargeAgent = chargeAgentService.get(workDealInfo
+					.getConfigChargeAgentId());
+
+		}
+		// model.addAttribute("tempStyle", chargeAgent.getTempStyle());
+
+		if (workDealInfo.getPayType() == null) {
+			workDealInfo
+					.setPayType(Integer.parseInt(chargeAgent.getTempStyle()));
 		}
 
-		if (workDealInfo.getIsIxin() != null && workDealInfo.getIsIxin()) {
+		model.addAttribute("workDealInfo", workDealInfo);
+
+		// 获得应用下的产品
+		List<ConfigProduct> products = configProductService
+				.findByAppAndProName(workDealInfo.getConfigApp().getId(),
+						workDealInfo.getConfigProduct().getProductName());
+		List<ProductTypeObj> listProductTypeObjs = new ArrayList<ProductTypeObj>();
+		for (int i = 0; i < products.size(); i++) {
+			String ssssi = ProductType.productTypeStrMap.get(products.get(i)
+					.getProductName())
+					+ "["
+					+ (products.get(i).getProductLabel() == 0 ? "通用" : "专用")
+					+ "]";
+			ProductTypeObj obj = new ProductTypeObj(products.get(i).getId()
+					.intValue(), ssssi);
+			listProductTypeObjs.add(obj);
+		}
+		model.addAttribute("proList", listProductTypeObjs);
+
+		model.addAttribute("expirationDate",StringHelper.getLastDateOfCurrentYear());
+		
+		//获得省和市对应self_area表中的id
+		if(workDealInfo.getWorkCompany().getProvince()!=null&&!workDealInfo.getWorkCompany().getProvince().isEmpty()){
+			String provinceId = selfAreaService.findByAreaName(workDealInfo.getWorkCompany().getProvince()).getAreaId();
+			model.addAttribute("provinceId", provinceId);
+			if(workDealInfo.getWorkCompany().getCity()!=null&&!workDealInfo.getWorkCompany().getCity().isEmpty()){
+				
+				String cityId = selfAreaService.findByProvinceName(workDealInfo.getWorkCompany().getCity(),provinceId).getAreaId();
+				model.addAttribute("cityId", cityId);
+			}
+		
+		}
+		
+		if (dealType.indexOf("1") >= 0) {
+
+			model.addAttribute("isOK", "isNo");
+
+		} else {
+
+			if (dealType.indexOf("3") >= 0) {
+
+				model.addAttribute("isOK", "isYes");
+			} else {
+
+				model.addAttribute("isOK", "isNo");
+
+			}
+		}
+
+		model.addAttribute("dealType", dealType);
+
+		ArrayList<String> dealInfoTypes = new ArrayList<String>();
+		for (int i = 0; i < type.length; i++) {
+			if (type[i] != null && !type[i].equals("")) {
+				dealInfoTypes.add(type[i]);
+			}
+		}
+
+		if (workDealInfo.getSelfApplyId() != null) {
+			model.addAttribute("imgUrl", Global.getConfig("images.path"));
+			SelfImage selfImage = selfImageService
+					.findByApplicationId(workDealInfo.getSelfApplyId());
+			workDealInfo.setSelfImage(selfImage);
+		}
+		if (workDealInfo.getSelfImage() != null) {
+			model.addAttribute("imgUrl", Global.getConfig("images.path"));
+		}
+
+		if (dealInfoTypes.size() == 1) {
+			if (dealInfoTypes.get(0).equals("1")) {
+
+				ConfigProduct configProduct = workDealInfo.getConfigProduct();
+				List<ConfigChargeAgentBoundConfigProduct> boundList = configChargeAgentBoundConfigProductService
+						.findByProIdAll(configProduct.getId());
+				Set<Integer> nameSet = new HashSet<Integer>();
+				for (int i = 0; i < boundList.size(); i++) {
+					nameSet.add(Integer.parseInt(boundList.get(i).getAgent()
+							.getTempStyle()));
+				}
+
+				model.addAttribute("boundLabelList", nameSet);
+
+				List<WorkLog> list = workLogService
+						.findByDealInfo(workDealInfo);
+				model.addAttribute("workLog", list);
+
+				if (chargeAgent != null) {
+					model.addAttribute("tempStyle", chargeAgent.getTempStyle());
+				}
+
+				return "modules/work/maintain/workDealInfoMaintainChangeCheck";
+			} else if (dealInfoTypes.get(0).equals("2")) {
+				ConfigProduct configProduct = workDealInfo.getConfigProduct();
+				List<ConfigChargeAgentBoundConfigProduct> boundList = configChargeAgentBoundConfigProductService
+						.findByProIdAll(configProduct.getId());
+				Set<Integer> nameSet = new HashSet<Integer>();
+				for (int i = 0; i < boundList.size(); i++) {
+					nameSet.add(Integer.parseInt(boundList.get(i).getAgent()
+							.getTempStyle()));
+				}
+
+				model.addAttribute("boundLabelList", nameSet);
+
+				List<WorkLog> list = workLogService
+						.findByDealInfo(workDealInfo);
+				model.addAttribute("workLog", list);
+				if (chargeAgent != null) {
+					model.addAttribute("tempStyle", chargeAgent.getTempStyle());
+				}
+
+				// model.addAttribute("tempStyle", chargeAgent.getTempStyle());
+				return "modules/work/maintain/workDealInfoMaintainLostCheck";
+			} else if (dealInfoTypes.get(0).equals("3")) {
+				ConfigProduct configProduct = workDealInfo.getConfigProduct();
+				List<ConfigChargeAgentBoundConfigProduct> boundList = configChargeAgentBoundConfigProductService
+						.findByProIdAll(configProduct.getId());
+				Set<Integer> nameSet = new HashSet<Integer>();
+				for (int i = 0; i < boundList.size(); i++) {
+					nameSet.add(Integer.parseInt(boundList.get(i).getAgent()
+							.getTempStyle()));
+				}
+
+				model.addAttribute("boundLabelList", nameSet);
+
+				List<WorkLog> list = workLogService
+						.findByDealInfo(workDealInfo);
+				model.addAttribute("workLog", list);
+				if (chargeAgent != null) {
+					model.addAttribute("tempStyle", chargeAgent.getTempStyle());
+				}
+				// model.addAttribute("tempStyle", chargeAgent.getTempStyle());
+				return "modules/work/maintain/workDealInfoMaintainUpdateCheck";
+			} else if (dealInfoTypes.get(0).equals("4")) {
+				ConfigChargeAgent agent = configChargeAgentService
+						.get(workDealInfo.getConfigChargeAgentId());
+				model.addAttribute("jfMB", agent.getTempName());
+				return "modules/work/maintain/workDealInfoMaintainRevoke";
+			} /*else if (dealInfoTypes.get(0).equals("5")) {
+				ConfigProduct configProduct = workDealInfo.getConfigProduct();
+				List<ConfigChargeAgentBoundConfigProduct> boundList = configChargeAgentBoundConfigProductService
+						.findByProIdAll(configProduct.getId());
+				Set<Integer> nameSet = new HashSet<Integer>();
+				for (int i = 0; i < boundList.size(); i++) {
+					nameSet.add(Integer.parseInt(boundList.get(i).getAgent()
+							.getTempStyle()));
+				}
+
+				model.addAttribute("boundLabelList", nameSet);
+
+				List<WorkLog> list = workLogService
+						.findByDealInfo(workDealInfo);
+				model.addAttribute("workLog", list);
+				if (chargeAgent != null) {
+					model.addAttribute("tempStyle", chargeAgent.getTempStyle());
+				}
+
+				// key升级
+				model.addAttribute("isKeyUpgrade", 1);
+				return "modules/work/maintain/workDealInfoMaintainLost";
+
+			}
+*/
+		} else if (dealInfoTypes.size() == 2) {
+			if (dealInfoTypes.get(0).equals("1")
+					&& dealInfoTypes.get(1).equals("2")) {
+				ConfigProduct configProduct = workDealInfo.getConfigProduct();
+				List<ConfigChargeAgentBoundConfigProduct> boundList = configChargeAgentBoundConfigProductService
+						.findByProIdAll(configProduct.getId());
+				Set<Integer> nameSet = new HashSet<Integer>();
+				for (int i = 0; i < boundList.size(); i++) {
+					nameSet.add(Integer.parseInt(boundList.get(i).getAgent()
+							.getTempStyle()));
+				}
+
+				model.addAttribute("boundLabelList", nameSet);
+
+				List<WorkLog> list = workLogService
+						.findByDealInfo(workDealInfo);
+				model.addAttribute("workLog", list);
+
+				if (chargeAgent != null) {
+					model.addAttribute("tempStyle", chargeAgent.getTempStyle());
+				}
+
+				// model.addAttribute("tempStyle", chargeAgent.getTempStyle());
+
+				return "modules/work/maintain/workDealInfoMaintainChangeCheck";
+			} else if (dealInfoTypes.get(0).equals("2")
+					&& dealInfoTypes.get(1).equals("3")) {
+				ConfigProduct configProduct = workDealInfo.getConfigProduct();
+				List<ConfigChargeAgentBoundConfigProduct> boundList = configChargeAgentBoundConfigProductService
+						.findByProIdAll(configProduct.getId());
+				Set<Integer> nameSet = new HashSet<Integer>();
+				for (int i = 0; i < boundList.size(); i++) {
+					nameSet.add(Integer.parseInt(boundList.get(i).getAgent()
+							.getTempStyle()));
+				}
+				model.addAttribute("boundLabelList", nameSet);
+				List<WorkLog> list = workLogService
+						.findByDealInfo(workDealInfo);
+				model.addAttribute("workLog", list);
+				if (chargeAgent != null) {
+					model.addAttribute("tempStyle", chargeAgent.getTempStyle());
+				}
+				// model.addAttribute("tempStyle", chargeAgent.getTempStyle());
+				return "modules/work/maintain/workDealInfoMaintainUpdateCheck";
+			} else if (dealInfoTypes.get(0).equals("1")
+					&& dealInfoTypes.get(1).equals("3")) {
+				ConfigProduct configProduct = workDealInfo.getConfigProduct();
+				List<ConfigChargeAgentBoundConfigProduct> boundList = configChargeAgentBoundConfigProductService
+						.findByProIdAll(configProduct.getId());
+				Set<Integer> nameSet = new HashSet<Integer>();
+				for (int i = 0; i < boundList.size(); i++) {
+					nameSet.add(Integer.parseInt(boundList.get(i).getAgent()
+							.getTempStyle()));
+				}
+
+				model.addAttribute("boundLabelList", nameSet);
+
+				List<WorkLog> list = workLogService
+						.findByDealInfo(workDealInfo);
+				model.addAttribute("workLog", list);
+				if (chargeAgent != null) {
+					model.addAttribute("tempStyle", chargeAgent.getTempStyle());
+				}
+				// model.addAttribute("tempStyle", chargeAgent.getTempStyle());
+				return "modules/work/maintain/workDealInfoMaintainUpdateChangeCheck";
+			}
+		} else if (dealInfoTypes.size() == 3) {
 
 			ConfigProduct configProduct = workDealInfo.getConfigProduct();
 			List<ConfigChargeAgentBoundConfigProduct> boundList = configChargeAgentBoundConfigProductService
 					.findByProIdAll(configProduct.getId());
 			Set<Integer> nameSet = new HashSet<Integer>();
 			for (int i = 0; i < boundList.size(); i++) {
-				nameSet.add(Integer.parseInt(boundList.get(i).getAgent().getTempStyle()));
+				nameSet.add(Integer.parseInt(boundList.get(i).getAgent()
+						.getTempStyle()));
 			}
 
 			model.addAttribute("boundLabelList", nameSet);
-			ConfigChargeAgent chargeAgent = chargeAgentService.get(workDealInfo.getConfigChargeAgentId());
-			model.addAttribute("tempStyle", chargeAgent.getTempStyle());
 
-		} else {
-			ConfigChargeAgent agent = configChargeAgentService.get(workDealInfo.getConfigChargeAgentId());
-			model.addAttribute("jfMB", agent.getTempName());
+			List<WorkLog> list = workLogService.findByDealInfo(workDealInfo);
+			model.addAttribute("workLog", list);
 
-		}
-		
-		if(workDealInfo.getExpirationDate()!=null){
-			model.addAttribute("expirationDate", workDealInfo.getExpirationDate());
-		}
-		
-		
-		List<CommonAttach> attachs = attachService.findCommonAttachByWorkDealInfo(workDealInfo.getId());
-		
-		if(attachs!=null&&attachs.size()>0){
-		String imgNames = "";
-			
-			for(int i =0;i<attachs.size();i++){
-				
-				if(i==0){
-					imgNames+=attachs.get(0).getAttachName();
-				}else{
-					imgNames+=","+attachs.get(i).getAttachName();	
-				}
-				
-				
+			if (chargeAgent != null) {
+				model.addAttribute("tempStyle", chargeAgent.getTempStyle());
 			}
-			
-			model.addAttribute("imgNames", imgNames);
-			
+
+			// model.addAttribute("tempStyle", chargeAgent.getTempStyle());
+			return "modules/work/maintain/workDealInfoMaintainUpdateChangeCheck";
+		} else {
+			return "modules/work/workDealInfoMaintain";
 		}
-
-		return "modules/work/workDealInfoAuditACUForm";
+		
+		return "modules/work/workDealInfoMaintain";
 	}
-
+	
 	@RequestMapping("updateLoad")
 	public String updateLoad(WorkDealInfo workDealInfo, String recordContent, Integer year, HttpServletRequest request,
 			HttpServletResponse response, Model model, String contactName, String conCertType, String contacEmail,
@@ -363,9 +974,12 @@ public class WorkDealInfoAuditController extends BaseController {
 		// 标注为i信端更新
 
 		workDealInfo.setPayType(agentId);
-		ConfigChargeAgentBoundConfigProduct bound = configChargeAgentBoundConfigProductService.get(agentDetailId);
-
-		workDealInfo.setConfigChargeAgentId(bound.getAgent().getId());
+		if(agentDetailId!=null){
+			ConfigChargeAgentBoundConfigProduct bound = configChargeAgentBoundConfigProductService.get(agentDetailId);
+			
+			workDealInfo.setConfigChargeAgentId(bound.getAgent().getId());
+			
+		}
 		// workDealInfo.setIsIxin(true);
 		// 保存日志信息
 		WorkLog workLog = new WorkLog();
@@ -509,6 +1123,111 @@ public class WorkDealInfoAuditController extends BaseController {
 		// workDealInfo.workPayInfo.methodBank
 		model.addAttribute("fpir", list);
 		model.addAttribute("infos", payInfos);
+		
+		model.addAttribute("pageType", "audit");
+		return "modules/work/workDealInfoAuditLoad";
+	}
+	
+	/**
+	 * 验证第二页面
+	 * 
+	 * @param workDealInfo
+	 * @param request
+	 * @param response
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping("verifyLoad")
+	public String verifyLoad(WorkDealInfo workDealInfo, String recordContent, HttpServletRequest request,
+			HttpServletResponse response, Model model) {
+
+		model.addAttribute("product",
+				ProductType.getProductTypeName(Integer.parseInt(workDealInfo.getConfigProduct().getProductName())));
+		model.addAttribute("dealInfoType", WorkDealInfoType.getDealInfoTypeName(workDealInfo.getDealInfoType()));
+		model.addAttribute("dealInfoType1", WorkDealInfoType.getDealInfoTypeName(workDealInfo.getDealInfoType1()));
+		WorkLog workLog = new WorkLog();
+		workLog.setRecordContent(recordContent);
+		workLog.setWorkDealInfo(workDealInfo);
+		workLog.setCreateDate(new Date());
+		workLog.setCreateBy(UserUtils.getUser());
+		workLog.setConfigApp(workDealInfo.getConfigApp());
+		workLog.setWorkCompany(workDealInfo.getWorkCompany());
+		workLog.setOffice(UserUtils.getUser().getOffice());
+		workLogService.save(workLog);
+		model.addAttribute("workPayInfo", workDealInfo.getWorkPayInfo());
+		List<String[]> payInfos = new ArrayList<String[]>();
+		WorkPayInfo payInfo = workDealInfo.getWorkPayInfo();
+		if (payInfo != null) {
+			SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			String companyName = workDealInfo.getWorkCompany().getCompanyName();
+			String userName = workDealInfo.getPayUser().getName();
+			String officeName = workDealInfo.getPayUser().getOffice().getName();
+			String date = sdf1.format(workDealInfo.getCreateDate());
+			if (payInfo.getMethodMoney() && payInfo.getMoney() > 0L) {
+				String[] s = new String[] { payInfo.getSn(), companyName, payInfo.getMoney().toString(), officeName,
+						userName, date, "现金", "" };
+				payInfos.add(s);
+			}
+			if (payInfo.getMethodBank() && payInfo.getBankMoney() > 0L) {
+				String[] s = new String[] { payInfo.getSn(), companyName, payInfo.getBankMoney().toString(), officeName,
+						userName, date, "银行转账", "" };
+				payInfos.add(s);
+			}
+			if (payInfo.getMethodPos() && payInfo.getPosMoney() > 0L) {
+				String[] s = new String[] { payInfo.getSn(), companyName, payInfo.getPosMoney().toString(), officeName,
+						userName, date, "POS收款", "" };
+				payInfos.add(s);
+			}
+			if (payInfo.getMethodAlipay() && payInfo.getAlipayMoney() > 0L) {
+				String[] s = new String[] { payInfo.getSn(), companyName, payInfo.getAlipayMoney().toString(),
+						officeName, userName, date, "支付宝转账", "" };
+				payInfos.add(s);
+			}
+			/*
+			 * if (payInfo.getMethodGov()) { String[] s = new String[] {
+			 * payInfo.getSn(), companyName, "", officeName, userName, date,
+			 * "政府统一采购", "" }; payInfos.add(s); } if
+			 * (payInfo.getMethodContract()) { String[] s = new String[] {
+			 * payInfo.getSn(), companyName, "", officeName, userName, date,
+			 * "合同采购", "" }; payInfos.add(s); }
+			 */
+		}
+		List<WorkFinancePayInfoRelation> list = workFinancePayInfoRelationService
+				.findByPayInfo(workDealInfo.getWorkPayInfo());
+		for (int i = 0; i < list.size(); i++) {
+			if (list.get(i).getFinancePaymentInfo().getPaymentMethod().equals(1)) {
+
+				workDealInfo.getWorkPayInfo().setMethodMoney(true);
+				workDealInfo.getWorkPayInfo()
+						.setMoney(list.get(i).getMoney() + workDealInfo.getWorkPayInfo().getMoney());
+
+			} else if (list.get(i).getFinancePaymentInfo().getPaymentMethod().equals(2)) {
+
+				workDealInfo.getWorkPayInfo().setMethodPos(true);
+				workDealInfo.getWorkPayInfo()
+						.setPosMoney(list.get(i).getMoney() + workDealInfo.getWorkPayInfo().getPosMoney());
+
+			} else if (list.get(i).getFinancePaymentInfo().getPaymentMethod().equals(3)) {
+
+				workDealInfo.getWorkPayInfo().setMethodBank(true);
+				workDealInfo.getWorkPayInfo()
+						.setBankMoney(list.get(i).getMoney() + workDealInfo.getWorkPayInfo().getBankMoney());
+
+			} else if (list.get(i).getFinancePaymentInfo().getPaymentMethod().equals(4)) {
+
+				workDealInfo.getWorkPayInfo().setMethodAlipay(true);
+				workDealInfo.getWorkPayInfo()
+						.setAlipayMoney(list.get(i).getMoney() + workDealInfo.getWorkPayInfo().getAlipayMoney());
+			}
+
+		}
+
+		model.addAttribute("workDealInfo", workDealInfo);
+		// workDealInfo.workPayInfo.methodMoney
+		// workDealInfo.workPayInfo.methodBank
+		model.addAttribute("fpir", list);
+		model.addAttribute("infos", payInfos);
+		model.addAttribute("pageType", "verify");
 		return "modules/work/workDealInfoAuditLoad";
 	}
 
@@ -611,7 +1330,11 @@ public class WorkDealInfoAuditController extends BaseController {
 
 			workDealInfo.setDelFlag("1");
 		} else {
-			workDealInfo.setDealInfoStatus("4");
+			if(workDealInfo.getStatus()==0){
+				workDealInfo.setDealInfoStatus("17");
+			}else{				
+				workDealInfo.setDealInfoStatus("4");
+			}
 		}
 		WorkLog workLog = new WorkLog();
 		workLog.setConfigApp(workDealInfo.getConfigApp());
@@ -1147,12 +1870,27 @@ public class WorkDealInfoAuditController extends BaseController {
 		return "redirect:" + Global.getAdminPath() + "/work/workDealInfo/list";
 	}
 	
-	
-	
-	
-	
-	
-	
+	/**
+	 * 验证证书
+	 * 更改鉴别状态，加入鉴别人  返回审核列表
+	 * @return
+	 */
+	@RequestMapping("verifyDealInfo")
+	public String verifyDealInfo(WorkDealInfo workDealInfo, HttpServletRequest request, HttpServletResponse response,
+			Model model) {
+		ConfigRaAccount raAccount = raAccountService.get(workDealInfo.getConfigProduct().getRaAccountId());	
+		List<String[]> list = RaAccountUtil.outPageLine(workDealInfo, raAccount.getConfigRaAccountExtendInfo());
+		model.addAttribute("list", list);
+		model.addAttribute("workDealInfo", workDealInfo);
+
+		workDealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_VERIFICATE_WAIT);
+
+		workDealInfo.setAttestationUser(UserUtils.getUser());
+		workDealInfo.setAttestationUserDate(new Date());
+		workDealInfoService.save(workDealInfo);
+		
+		return "redirect:" + Global.getAdminPath() + "/work/workDealInfoAudit/list";
+	}	
 	
 	/**
 	 * 制作证书
@@ -1169,8 +1907,8 @@ public class WorkDealInfoAuditController extends BaseController {
 
 		workDealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_APPROVE_WAIT);
 
-		workDealInfo.setAttestationUser(UserUtils.getUser());
-		workDealInfo.setAttestationUserDate(new Date());
+		workDealInfo.setVerifyUser(UserUtils.getUser());
+		workDealInfo.setVerifyUserDate(new Date());
 		workDealInfoService.save(workDealInfo);
 		
 		//秘钥长度
