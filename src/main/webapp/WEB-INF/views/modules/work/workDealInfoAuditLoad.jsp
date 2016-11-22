@@ -7,16 +7,27 @@
 <meta name="decorator" content="default" />
 <script type="text/javascript">
 	function buttonFrom() {
-		window.location.href = "${ctx}/work/workDealInfoAudit/makeDealInfo?id=${workDealInfo.id}";
+		var pageType = '${pageType}';
+		if(pageType=='audit'){
+			window.location.href = "${ctx}/work/workDealInfoAudit/verifyDealInfo?id=${workDealInfo.id}";	
+		}else{
+			window.location.href = "${ctx}/work/workDealInfoAudit/makeDealInfo?id=${workDealInfo.id}";
+		}
 	}
 	function backMoney() {
 		window.location.href = "${ctx}/work/workDealInfoAudit/list";
 	}
 	function refuse() {
+		var pageType = '${pageType}';
+		if(pageType=='audit'){
+			pageType='鉴别';
+		}else{
+			pageType='验证';
+		}
 		top.$.jBox
 				.open(
 						"iframe:${ctx}/work/workDealInfoAudit/jujueFrom?id=${workDealInfo.id}",
-						"审核拒绝",
+						pageType+"拒绝",
 						600,
 						400,
 						{
@@ -24,14 +35,20 @@
 								"确定" : "ok",
 								"取消" : true
 							},
-							bottomText : "填写审核拒绝的原因",
+							bottomText : "填写"+pageType+"拒绝的原因",
 							submit : function(v, h, f) {
 								var suggest = h.find("iframe")[0].contentWindow
 										.$("#suggest")[0].value;
 								//nodes = selectedTree.getSelectedNodes();
 								if (v == "ok") {
-									window.location.href = "${ctx}/work/workDealInfoAudit/jujue?id=${workDealInfo.id}&remarks="
+									if(pageType=='鉴别'){
+										window.location.href = "${ctx}/work/workDealInfoAudit/jujue?status=0&id=${workDealInfo.id}&remarks="
 											+ suggest;
+									}else{
+										window.location.href = "${ctx}/work/workDealInfoAudit/jujue?status=1&id=${workDealInfo.id}&remarks="
+											+ suggest;
+									}
+									
 									return true;
 								}
 							},

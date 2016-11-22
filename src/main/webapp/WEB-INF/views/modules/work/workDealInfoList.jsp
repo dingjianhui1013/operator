@@ -1313,7 +1313,7 @@ $(document).ready(
 					<c:if test="${workDealInfo.dealInfoStatus==9 }">
 							<shiro:hasPermission name="work:workDealInfo:makezheng"><a
 								href="${ctx}/work/workDealInfoOperation/make?id=${workDealInfo.id}">制证</a></shiro:hasPermission>&nbsp;&nbsp;
-					</c:if> <c:if test="${workDealInfo.dealInfoStatus==4 }">
+					</c:if> <c:if test="${workDealInfo.dealInfoStatus==4||workDealInfo.dealInfoStatus==17}">
 							<a
 								href="${ctx}/work/workDealInfoOperation/errorForm?id=${workDealInfo.id}">再次编辑</a>&nbsp;&nbsp;
 					</c:if> <c:if
@@ -1324,6 +1324,11 @@ $(document).ready(
 					<c:if test="${workDealInfo.dealInfoStatus == 13}">
 						<shiro:hasPermission name="work:workDealInfo:makezheng">
 						<a href="${ctx}/work/workDealInfoAudit/makeDealInfo?id=${workDealInfo.id}">制证</a>
+						</shiro:hasPermission>
+					</c:if>
+					<c:if test="${workDealInfo.dealInfoStatus == 16}">
+						<shiro:hasPermission name="work:workDealInfo:yanzheng">
+						<a href="${ctx}/work/workDealInfoAudit/verifyFrom?id=${workDealInfo.id}">验证</a>
 						</shiro:hasPermission>
 					</c:if>
 					</td>

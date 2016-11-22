@@ -165,8 +165,14 @@ $(document).ready(function() {
 		});
 	}
 	function buttonFrom() {
+		var pageType = '${pageType}';
+		if(pageType=='audit'){
+			$("#recordForm").attr("action", "${ctx}/work/workDealInfoAudit/auditLoad");
+		}else{
+			$("#recordForm").attr("action", "${ctx}/work/workDealInfoAudit/verifyLoad");
+		}
 		var saveYear = 0;
-		if ($("#dealInfoType").val() == 0) {
+		if ($("#dealInfoType").val() == 0 ||$("#dealInfoType").val() == 1 ) {//新增证书和更新证书
 			$("input[name=recordContent]").val($("#recordContent").val());
 			$("#recordForm").submit();
 		}else if("${workDealInfo.isIxin}"){
@@ -282,10 +288,16 @@ $(document).ready(function() {
 	}
 	function refuse() {
 		//top.$.jBox.open("iframe:${ctx}/work/workDealInfoAudit/jujueFrom?id=${workDealInfo.id}", "审核拒绝",600,400);
+		var pageType = '${pageType}';
+		if(pageType=='audit'){
+			pageType='鉴别';
+		}else{
+			pageType='验证';
+		}
 		top.$.jBox
 				.open(
 						"iframe:${ctx}/work/workDealInfoAudit/jujueFrom?id=${workDealInfo.id}",
-						"审核拒绝",
+						pageType+"拒绝",
 						600,
 						400,
 						{
@@ -293,14 +305,20 @@ $(document).ready(function() {
 								"确定" : "ok",
 								"取消" : true
 							},
-							bottomText : "填写审核拒绝的原因",
+							bottomText : "填写"+pageType+"拒绝的原因",
 							submit : function(v, h, f) {
 								var suggest = h.find("iframe")[0].contentWindow
 										.$("#suggest")[0].value;
 								//nodes = selectedTree.getSelectedNodes();
 								if (v == "ok") {
-									window.location.href = "${ctx}/work/workDealInfoAudit/jujue?id=${workDealInfo.id}&remarks="
+									if(pageType=='鉴别'){
+										window.location.href = "${ctx}/work/workDealInfoAudit/jujue?status=0&id=${workDealInfo.id}&remarks="
 											+ suggest;
+									}else{
+										window.location.href = "${ctx}/work/workDealInfoAudit/jujue?status=1&id=${workDealInfo.id}&remarks="
+											+ suggest;
+									}
+									
 									return true;
 								}
 							},

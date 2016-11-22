@@ -89,15 +89,19 @@
 				<td>${wdiStatus[workDealInfo.dealInfoStatus]}</td>
 				<td>
 					<c:if test="${workDealInfo.dealInfoStatus == 12 || workDealInfo.dealInfoStatus == 0}">
-					<shiro:hasPermission name="work:workDealInfo:jianzheng">
-					<a href="${ctx}/work/workDealInfoAudit/auditFrom?id=${workDealInfo.id}">鉴证</a>
-					</shiro:hasPermission>
+						<shiro:hasPermission name="work:workDealInfo:jianzheng">
+						<a href="${ctx}/work/workDealInfoAudit/auditFrom?id=${workDealInfo.id}">鉴别</a>
+						</shiro:hasPermission>
 					</c:if>
-					
+					<c:if test="${workDealInfo.dealInfoStatus == 16}">
+						<shiro:hasPermission name="work:workDealInfo:yanzheng">
+						<a href="${ctx}/work/workDealInfoAudit/verifyFrom?id=${workDealInfo.id}">验证</a>
+						</shiro:hasPermission>
+					</c:if>
 					<c:if test="${workDealInfo.dealInfoStatus == 13}">
-					<shiro:hasPermission name="work:workDealInfo:makezheng">
-					<a href="${ctx}/work/workDealInfoAudit/makeDealInfo?id=${workDealInfo.id}">制证</a>
-					</shiro:hasPermission>
+						<shiro:hasPermission name="work:workDealInfo:makezheng">
+						<a href="${ctx}/work/workDealInfoAudit/makeDealInfo?id=${workDealInfo.id}">制证</a>
+						</shiro:hasPermission>
 					</c:if>
 					
 				</td>
