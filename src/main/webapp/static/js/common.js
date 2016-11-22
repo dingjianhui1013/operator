@@ -78,6 +78,9 @@ function PreviewImage(fileObj, imgPreviewId, divPreviewId, picBigBoxId) {
 				var reader = new FileReader();
 				reader.onload = function(e) {
 					imgPreview.setAttribute("src", e.target.result);
+					
+					alert(e.target.result);
+					
 					$('#' + picBigBoxId + ' img').attr("src", e.target.result);
 				}
 				reader.readAsDataURL(fileObj.files[0]);
