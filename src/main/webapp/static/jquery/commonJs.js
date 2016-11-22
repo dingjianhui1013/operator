@@ -252,16 +252,28 @@ function workUserphotograph(){
  * 拍照后上传
  * 
  * */
-function Upload(path)
+function Upload(path,imgName)
 {
+	var curWwwPath = window.document.location.href;
+    
+    var pathName = window.document.location.pathname;
+    var pos = curWwwPath.indexOf(pathName);
+	//获取主机地址，如： http://localhost:8083
+    var localhostPaht = curWwwPath.substring(0, pos);
+    
+    var projectName = pathName.substring(0, pathName.substr(1).indexOf('/') + 1);
+  
+	
+	
+	
 	var address = "http://localhost:8080/operator/work/workDealInfo/saveUploadImg";
 	
 	var header = '';
 	var result = "";
 
-	if (path.replace(/^\s+|\s+$/g, '') != '')
+	if (imgName.replace(/^\s+|\s+$/g, '') != '')
 	{
-		header += '_File: ' + path + '\r\n';
+		header += '_File: ' + imgName + '\r\n';
 	}
 
 	var str = VideoInputCtl.HttpPostFileH(address, path, header, result);//http上传功能
@@ -282,7 +294,7 @@ function afterUpload(imgName){
 	VideoInputCtl.GrabToFile(path);
 	
 	
-	if(Upload(path)==1){
+	if(Upload(path,imgName)==1){
 		var str = "<img src='/images/"+imgName+"' style='width: 100px; height: 80px;'><br>"+getDisplayName(imgName)+" &nbsp;&nbsp;&nbsp;";
 		
 		$("#imgLayer").append(str);
