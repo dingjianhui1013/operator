@@ -1306,7 +1306,7 @@ var selected = false;
 		<div class="list ctnlist">
 
 		<div class="text">
-		<p>
+		
 
 		<p id="imgLayer" align="left" >
 		<input id="imgNames" name="imgNames" type="hidden"/>
