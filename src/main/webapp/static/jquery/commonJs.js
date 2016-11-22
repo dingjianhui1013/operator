@@ -24,11 +24,13 @@
  * 设置全局变量
  * 
  * */
-var szDefaultDevice = "[1a3c:010d]";          //设置装置的默认摄像头为主摄像头
+var szDefaultDevice = "[1a3c:010d]";            //设置装置的默认摄像头为主摄像头
 
-var nDeviceIndex = 1;                         //装置的编号(0:旋转摄像头;1:主摄像头)
+var nDeviceIndex = 1;                           //装置的编号(0:旋转摄像头;1:主摄像头)
 
 var localStoragePath = "D:\\operator\\temp\\";  //本地存放图片的路径
+
+var suffixImg = ".jpg";                         //设置图片后缀,固定为jpg格式
 
 
 /**
@@ -186,7 +188,7 @@ function setPropertyDevice(){
  * */
 function workCompanyphotograph(){
 
-	var imgName = "workcompany-"+ new Date().getTime()+".jpg";
+	var imgName = "workcompany-"+ new Date().getTime()+suffixImg;
 	afterUpload(imgName);	
 	
 }
@@ -200,7 +202,7 @@ function workCompanyphotograph(){
  * */
 function applicationphotograph(){
 
-	var imgName = "application-"+ new Date().getTime()+".jpg";
+	var imgName = "application-"+ new Date().getTime()+suffixImg;
 	afterUpload(imgName);	
 	
 }
@@ -213,7 +215,7 @@ function applicationphotograph(){
  * */
 function workCertApplyInfophotograph(){
 
-	var imgName = "workcertapplyinfo-"+ new Date().getTime()+".jpg";
+	var imgName = "workcertapplyinfo-"+ new Date().getTime()+suffixImg;
 	afterUpload(imgName);	
 	
 }
@@ -226,7 +228,7 @@ function workCertApplyInfophotograph(){
  * */
 function headphotograph(){
 
-	var imgName = "head-"+ new Date().getTime()+".jpg";
+	var imgName = "head-"+ new Date().getTime()+suffixImg;
 	afterUpload(imgName);	
 	
 }
@@ -239,7 +241,7 @@ function headphotograph(){
  * */
 function workUserphotograph(){
 
-	var imgName = "workuser-"+ new Date().getTime()+".jpg";
+	var imgName = "workuser-"+ new Date().getTime()+suffixImg;
 	afterUpload(imgName);	
 	
 }
