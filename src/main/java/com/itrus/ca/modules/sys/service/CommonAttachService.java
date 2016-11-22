@@ -40,6 +40,31 @@ public class CommonAttachService extends BaseService {
 		return attachDao.find(dc);
 	}
 	
+	@Transactional
+	public CommonAttach findCommonAttachByattachName(String attachName){
+		DetachedCriteria dc = attachDao.createDetachedCriteria();
+		dc.add(Restrictions.eq("attachName", attachName));
+		List<CommonAttach> attachs = attachDao.find(dc);
+		
+		if(attachs.size()==1){
+			return attachs.get(0);
+		}else{
+			return null;
+		}
+	}
+	
+	
+	@Transactional(readOnly = true)
+	public List<CommonAttach> findCommonAttachByWorkDealInfo(Long workDealInfoId){
+		DetachedCriteria dc = attachDao.createDetachedCriteria();
+		
+		dc.createAlias("workDealInfo", "workDealInfo");
+		
+		dc.add(Restrictions.eq("workDealInfo.id", workDealInfoId));
+		return attachDao.find(dc);
+	}
+	
+	
 	@Transactional(readOnly = false)
 	public void delAttach(Long id){
 		attachDao.delete(id);
