@@ -11,7 +11,10 @@ import javax.persistence.SequenceGenerator;
 import static javax.persistence.GenerationType.IDENTITY;
 
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import com.itrus.ca.modules.work.entity.WorkDealInfo;
 
 /**
  * CommonAttach entity. @author MyEclipse Persistence Tools
@@ -29,11 +32,11 @@ public class CommonAttach implements java.io.Serializable {
 	// Fields
 
 	private Long id;
-	private String attachName;
+	private String attachName;         //名称
 	private Long contentId;
 	private String oldFileName;
-	private String path;
-	private String realPath;
+	private String path;               //路径
+	private String realPath;           //真实路径
 	private String remark;
 	private Integer status;
 	private String suffix;
@@ -43,14 +46,31 @@ public class CommonAttach implements java.io.Serializable {
 	private String uploadUserOrgName;
 	private Integer uploadUserOrgid;
 	private Integer uploadUserid;
-	private Timestamp uploadTime;
-	private String groupid;
+	private Timestamp uploadTime;      //上传时间
+	private String groupid;   
+	
+	private WorkDealInfo workDealInfo;     //对应的业务数据
 
 	// Constructors
 
 	/** default constructor */
 	public CommonAttach() {
 	}
+	
+	
+	
+	
+
+	public CommonAttach(String attachName, String realPath, Timestamp uploadTime) {
+		super();
+		this.attachName = attachName;
+		this.realPath = realPath;
+		this.uploadTime = uploadTime;
+	}
+
+
+
+
 
 	/** full constructor */
 	public CommonAttach(String attachName, Long contentId, String oldFileName,
@@ -234,5 +254,24 @@ public class CommonAttach implements java.io.Serializable {
 	public void setGroupid(String groupid) {
 		this.groupid = groupid;
 	}
+
+
+
+
+    @ManyToOne
+	public WorkDealInfo getWorkDealInfo() {
+		return workDealInfo;
+	}
+
+
+
+
+
+	public void setWorkDealInfo(WorkDealInfo workDealInfo) {
+		this.workDealInfo = workDealInfo;
+	}
+	
+	
+	
 
 }
