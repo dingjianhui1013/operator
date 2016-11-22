@@ -6,7 +6,11 @@ package com.itrus.ca.modules.work.web;
 
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.security.InvalidAlgorithmParameterException;
@@ -122,10 +126,12 @@ import com.itrus.ca.modules.self.entity.SelfImage;
 import com.itrus.ca.modules.self.service.SelfAreaService;
 import com.itrus.ca.modules.self.service.SelfImageService;
 import com.itrus.ca.modules.service.ItrustProxyUtil;
+import com.itrus.ca.modules.sys.entity.CommonAttach;
 import com.itrus.ca.modules.sys.entity.Office;
 import com.itrus.ca.modules.sys.entity.Role;
 import com.itrus.ca.modules.sys.entity.User;
 import com.itrus.ca.modules.sys.security.SystemAuthorizingRealm;
+import com.itrus.ca.modules.sys.service.CommonAttachService;
 import com.itrus.ca.modules.sys.service.OfficeService;
 import com.itrus.ca.modules.sys.utils.UserUtils;
 import com.itrus.ca.modules.work.entity.MonthPayment;
@@ -178,6 +184,12 @@ public class WorkDealInfoController extends BaseController {
 	
 	private static Logger log = LoggerFactory.getLogger(WorkDealInfoController.class);
 
+	@Value(value = "${imgFileUpload.path}")
+	private String imgFileUpload;
+	
+	@Autowired
+	private CommonAttachService attachService;
+	
 	@Autowired
 	private WorkUserService workUserService;
 
@@ -2705,6 +2717,9 @@ public class WorkDealInfoController extends BaseController {
 			String product,
 			Integer dealInfoType,
 			Integer year,
+			
+			String imgNames,     //上传的图片名称
+			
 			Date expirationDate, // 经信委到期时间 和年限二选一
 			Long workDealInfoId, Integer yar, Long companyId,
 			String companyName, String companyType, String organizationNumber,
@@ -2917,6 +2932,21 @@ public class WorkDealInfoController extends BaseController {
 			logUtil.saveSysLog("计费策略模版", "计费策略模版：" + agent.getId() + "--业务编号："
 					+ workDealInfo.getId() + "--关联成功!", "");
 		}
+		
+		if(imgNames.length()>0){
+			String [] imgs= imgNames.split(",");
+			
+			CommonAttach attach = null;
+			
+			for(int i=0;i<imgs.length;i++){
+				attach = attachService.findCommonAttachByattachName(imgs[i]);
+				attach.setWorkDealInfo(workDealInfo);
+				
+				attachService.saveAttach(attach);
+			}	
+		}
+		
+		
 
 		// 录入人日志保存
 		WorkLog workLog1 = new WorkLog();
@@ -10013,4 +10043,56 @@ public class WorkDealInfoController extends BaseController {
 		return sb.toString();
 
 	}
+	
+	
+	
+	
+	
+	@RequestMapping(value = "saveUploadImg")
+	@ResponseBody
+	public void saveUploadImg(
+			HttpServletRequest request,
+			HttpServletResponse response,
+			Model model) throws Exception {
+		
+		
+		String file = request.getHeader("_File").substring(3);
+		
+		String ParentDirectory = new File(request.getSession().getServletContext().getRealPath("")).getParent();
+		
+		String saveto = ParentDirectory+File.separator+imgFileUpload+File.separator+file;
+		
+		System.out.println(saveto);
+		
+		if (file != null)
+		{
+			file = new String(file.getBytes("ISO8859-1"), "UTF-8");
+		}
+		
+		InputStream inp;
+		OutputStream fos;
+		byte[] buf;
+		int len, num;
+
+		inp = request.getInputStream();
+		fos = new FileOutputStream(new File(saveto));
+		buf = new byte[128];
+		num = 0;
+
+		while ((len = inp.read(buf)) != -1)
+		{
+			fos.write(buf, 0, len);
+		}
+		
+		fos.close();
+		
+		
+		CommonAttach attach = new CommonAttach(file, saveto, new Timestamp(System.currentTimeMillis()));
+		
+		attachService.saveAttach(attach);
+		
+	}
+	
+	
+	
 }

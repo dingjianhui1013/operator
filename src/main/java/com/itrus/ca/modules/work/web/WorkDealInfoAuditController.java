@@ -72,7 +72,9 @@ import com.itrus.ca.modules.receipt.service.ReceiptInvoiceService;
 import com.itrus.ca.modules.service.CaService;
 import com.itrus.ca.modules.settle.web.UpdateQuantityStatistics;
 import com.itrus.ca.modules.statistic.service.StatisticCertDataService;
+import com.itrus.ca.modules.sys.entity.CommonAttach;
 import com.itrus.ca.modules.sys.entity.Office;
+import com.itrus.ca.modules.sys.service.CommonAttachService;
 import com.itrus.ca.modules.sys.utils.UserUtils;
 import com.itrus.ca.modules.work.entity.WorkCertApplyInfo;
 import com.itrus.ca.modules.work.entity.WorkCertInfo;
@@ -103,6 +105,10 @@ import com.itrus.ca.modules.work.service.WorkUserService;
 @RequestMapping(value = "${adminPath}/work/workDealInfoAudit")
 public class WorkDealInfoAuditController extends BaseController {
 
+	
+	@Autowired
+	private CommonAttachService attachService;
+	
 	@Autowired
 	private WorkDealInfoService workDealInfoService;
 
@@ -322,6 +328,27 @@ public class WorkDealInfoAuditController extends BaseController {
 		
 		if(workDealInfo.getExpirationDate()!=null){
 			model.addAttribute("expirationDate", workDealInfo.getExpirationDate());
+		}
+		
+		
+		List<CommonAttach> attachs = attachService.findCommonAttachByWorkDealInfo(workDealInfo.getId());
+		
+		if(attachs!=null&&attachs.size()>0){
+		String imgNames = "";
+			
+			for(int i =0;i<attachs.size();i++){
+				
+				if(i==0){
+					imgNames+=attachs.get(0).getAttachName();
+				}else{
+					imgNames+=","+attachs.get(i).getAttachName();	
+				}
+				
+				
+			}
+			
+			model.addAttribute("imgNames", imgNames);
+			
 		}
 
 		return "modules/work/workDealInfoAuditACUForm";
