@@ -50,28 +50,28 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 	 */
 	private static final long serialVersionUID = 6803990965287582259L;
 	private Long id;
-	private ConfigApp configApp;
-	private WorkCompany workCompany;
+	private ConfigApp configApp;               //应用
+	private WorkCompany workCompany;           //单位
 	private WorkCompanyHis workCompanyHis;
-	private WorkUser workUser;
+	private WorkUser workUser;                 //经办人
 	private WorkUserHis workUserHis;
-	private Integer dealInfoType;
+	private Integer dealInfoType;              //业务类型       
 	private Integer dealInfoType1;
 	private Integer dealInfoType2;
 	private Integer dealInfoType3;
 	private String dealInfoStatus;
-	private Integer year;
+	private Integer year;                     //办理年限
 
 	// 2016.06.06 具体到期时间 经信委
 	private Date expirationDate;
 
-	private ConfigProduct configProduct;
-	private String certSn;
-	private String keySn;
+	private ConfigProduct configProduct;      //产品
+	private String certSn;                    //证书编号
+	private String keySn;					  //key编码
 	private Integer certSort;
 	private Set<WorkLog> workLogs = new HashSet<WorkLog>(0);
-	private WorkPayInfo workPayInfo;
-	private WorkCertInfo workCertInfo;
+	private WorkPayInfo workPayInfo;          //支付信息
+	private WorkCertInfo workCertInfo;        //证书信息
 	private String dealTypeName;
 	private Integer status;
 	private String archiveNo;
@@ -82,7 +82,7 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 	private Integer downLoad;
 	private Integer trustDeviceCount;
 	private ConfigCommercialAgent configCommercialAgent;// 市场推广代理商
-	private String svn;
+	private String svn;                      //SVN
 	private Boolean canSettle;
 	private String refuse;
 	private Boolean manMadeDamage;
@@ -111,12 +111,16 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 	private Long configChargeAgentId;
 	private User inputUser;// 录入人
 	private User payUser;// 缴费人
-	private User attestationUser;// 鉴证人
+	private User attestationUser;// 鉴别人
+	private User verifyUser;// 验证人
+	
 	private User businessCardUser;// 制证人
 
 	private Date inputUserDate;// 录入人时间
 	private Date payUserDate;// 缴费人时间
-	private Date attestationUserDate;// 鉴证人时间
+	private Date attestationUserDate;// 鉴别人时间
+	private Date verifyUserDate;// 验证人时间
+	
 	private Date businessCardUserDate;// 制证人时间
 
 	private List<PayableDetailVo> detailList;
@@ -170,8 +174,8 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 			Integer year, String certSn, String keySn, Integer certSort,
 			Integer trustDeviceCount, Set<WorkLog> workLogs,
 			Long configChargeAgentId, Integer isSJQY, User inputUser,
-			User payUser, User attestationUser, User businessCardUser,
-			Date inputUserDate, Date payUserDate, Date attestationUserDate,
+			User payUser, User attestationUser,User verifyUser, User businessCardUser,
+			Date inputUserDate, Date payUserDate, Date attestationUserDate,Date verifyUserDate,
 			Date businessCardUserDate, Long officeId, Long areaId,
 			Long selfApplyId, String IsMainTain) {
 		this.configApp = configApp;
@@ -192,10 +196,12 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 		this.inputUser = inputUser;
 		this.payUser = payUser;
 		this.attestationUser = attestationUser;
+		this.verifyUser=verifyUser;
 		this.businessCardUser = businessCardUser;
 		this.inputUserDate = inputUserDate;
 		this.payUserDate = payUserDate;
 		this.attestationUserDate = attestationUserDate;
+		this.verifyUserDate=verifyUserDate;
 		this.businessCardUserDate = businessCardUserDate;
 		this.officeId = officeId;
 		this.areaId = areaId;
@@ -733,6 +739,16 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 	public void setAttestationUser(User attestationUser) {
 		this.attestationUser = attestationUser;
 	}
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "verify_user")
+	public User getVerifyUser() {
+		return verifyUser;
+	}
+
+	public void setVerifyUser(User verifyUser) {
+		this.verifyUser = verifyUser;
+	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "business_card_user")
@@ -772,6 +788,16 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 
 	public void setAttestationUserDate(Date attestationUserDate) {
 		this.attestationUserDate = attestationUserDate;
+	}
+	
+	@Temporal(TemporalType.DATE)
+	@Column(name = "verify_user_date")
+	public Date getVerifyUserDate() {
+		return verifyUserDate;
+	}
+
+	public void setVerifyUserDate(Date verifyUserDate) {
+		this.verifyUserDate = verifyUserDate;
 	}
 
 	@Temporal(TemporalType.DATE)
