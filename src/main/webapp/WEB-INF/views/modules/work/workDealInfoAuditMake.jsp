@@ -20,6 +20,7 @@
 	    ukeyadmin = $(objStr).appendTo(document.body)[0];
 		//生成provider
 		$.each(legibleNameMap, function(idx, value, ele) {
+			//alert(idx+"==="+value);
 			$("#provider").append("<option value='1'>" + idx + "</option>");
 		});
 		checkKeyGene();
