@@ -490,8 +490,8 @@ var selected = false;
 <script type="text/javascript" src="${ctxStatic}/jquery/city.js"></script>
 <script type="text/javascript" src="${ctxStatic}/jquery/area.js"></script>
 <script type="text/javascript" src="${ctxStatic}/jquery/commonJs.js"></script>
-<script type="text/javascript" src="${ctxStatic }/js/content_zoom.js"></script>
-<script type="text/javascript" src="${ctxStatic }/js/common.js"></script>
+<script type="text/javascript" src="${ctxStatic}/js/content_zoom.js"></script>
+<script type="text/javascript" src="${ctxStatic}/js/common.js"></script>
 <!--  <script src="http://ie7-js.googlecode.com/svn/version/2.1(beta4)/IE9.js"></script>-->
 <link href="${ctxStatic}/jquery/jquery.bigautocomplete.css"
 	rel="stylesheet" />
@@ -1280,11 +1280,11 @@ var selected = false;
 				<button id="qrsq" class="btn btn-primary" onclick="getcompanyinfo()">单位信息录入</button>&nbsp;&nbsp;&nbsp;
 				<button id="qrsq" class="btn btn-primary" onclick="getholderinfo()">持有人信息录入</button>&nbsp;&nbsp;&nbsp;
 				<button id="qrsq" class="btn btn-primary" onclick="getoperatorinfo()">经办人信息录入</button><br>
-				<button id="qrsq" class="btn btn-primary" onclick="applicationphotograph()">申请表拍照</button>&nbsp;&nbsp;&nbsp;
-				<button id="qrsq" class="btn btn-primary" onclick="workCompanyphotograph()">单位证件拍照</button>&nbsp;&nbsp;&nbsp;
-				<button id="qrsq" class="btn btn-primary" onclick="workCertApplyInfophotograph()">经办人身份证拍照</button>&nbsp;&nbsp;&nbsp;
-				<button id="qrsq" class="btn btn-primary" onclick="workUserphotograph()">持有人身份证拍照</button>&nbsp;&nbsp;&nbsp;
-				<button id="qrsq" class="btn btn-primary" onclick="headphotograph()">照片拍照</button>&nbsp;&nbsp;&nbsp;
+				<button id="qrsq" class="btn btn-primary" onclick="applicationphotograph('${imgPath}')">申请表拍照</button>&nbsp;&nbsp;&nbsp;
+				<button id="qrsq" class="btn btn-primary" onclick="workCompanyphotograph('${imgPath}')">单位证件拍照</button>&nbsp;&nbsp;&nbsp;
+				<button id="qrsq" class="btn btn-primary" onclick="workCertApplyInfophotograph('${imgPath}')">经办人身份证拍照</button>&nbsp;&nbsp;&nbsp;
+				<button id="qrsq" class="btn btn-primary" onclick="workUserphotograph('${imgPath}')">持有人身份证拍照</button>&nbsp;&nbsp;&nbsp;
+				<button id="qrsq" class="btn btn-primary" onclick="headphotograph('${imgPath}')">照片拍照</button>&nbsp;&nbsp;&nbsp;
 				<button class="btn" data-dismiss="modal" aria-hidden="true">取消</button> 
 			</div>
 		</div>
