@@ -24,15 +24,17 @@
  * 设置全局变量
  * 
  * */
-var szDefaultDevice = "[1a3c:010d]";            //设置装置的默认摄像头为主摄像头
+var szDefaultDevice = "[1a3c:010d]";                  //设置装置的默认摄像头为主摄像头
 
-var nDeviceIndex = 1;                           //装置的编号(0:旋转摄像头;1:主摄像头)
+var nDeviceIndex = 1;                                 //装置的编号(0:旋转摄像头;1:主摄像头)
 
-var localStoragePath = "D:\\operator\\temp\\";  //本地存放图片的路径
+var localStoragePath = "D:\\operator\\temp\\";        //本地存放图片的路径
 
-var suffixImg = ".jpg";                         //设置图片后缀,固定为jpg格式
+var suffixImg = ".jpg";                               //设置图片后缀,固定为jpg格式
 
+var requestURI = "/work/workDealInfo/saveUploadImg";  //图片上传的请求路径
 
+var fileUploadPath = "";
 /**
  * @author 萧龙纳云
  * 
@@ -186,64 +188,74 @@ function setPropertyDevice(){
  * 
  * 单位证件拍照
  * */
-function workCompanyphotograph(){
-
+function workCompanyphotograph(imgPath){
+	
+	if(fileUploadPath.length == 0){
+		fileUploadPath = imgPath
+	}
+	
 	var imgName = "workcompany-"+ new Date().getTime()+suffixImg;
 	afterUpload(imgName);	
-	
 }
-
-
 
 /**
  * @author 萧龙纳云
  * 
  * 申请表拍照
  * */
-function applicationphotograph(){
+function applicationphotograph(imgPath){
 
+	if(fileUploadPath.length == 0){
+		fileUploadPath = imgPath
+	}
+	
 	var imgName = "application-"+ new Date().getTime()+suffixImg;
 	afterUpload(imgName);	
-	
 }
-
 
 /**
  * @author 萧龙纳云
  * 
  * 经办人身份证拍照
  * */
-function workCertApplyInfophotograph(){
+function workCertApplyInfophotograph(imgPath){
 
+	if(fileUploadPath.length == 0){
+		fileUploadPath = imgPath
+	}
+	
 	var imgName = "workcertapplyinfo-"+ new Date().getTime()+suffixImg;
 	afterUpload(imgName);	
-	
 }
-
 
 /**
  * @author 萧龙纳云
  * 
  * 头像拍照
  * */
-function headphotograph(){
+function headphotograph(imgPath){
 
+	if(fileUploadPath.length == 0){
+		fileUploadPath = imgPath
+	}
+	
 	var imgName = "head-"+ new Date().getTime()+suffixImg;
 	afterUpload(imgName);	
-	
 }
-
 
 /**
  * @author 萧龙纳云
  * 
  * 持有人身份证拍照
  * */
-function workUserphotograph(){
+function workUserphotograph(imgPath){
 
+	if(fileUploadPath.length == 0){
+		fileUploadPath = imgPath
+	}
+	
 	var imgName = "workuser-"+ new Date().getTime()+suffixImg;
 	afterUpload(imgName);	
-	
 }
 
 /**
@@ -253,33 +265,47 @@ function workUserphotograph(){
  * 
  * */
 function Upload(path,imgName)
-{
-	var curWwwPath = window.document.location.href;
-    
-    var pathName = window.document.location.pathname;
-    var pos = curWwwPath.indexOf(pathName);
-	//获取主机地址，如： http://localhost:8083
-    var localhostPaht = curWwwPath.substring(0, pos);
-    
-    var projectName = pathName.substring(0, pathName.substr(1).indexOf('/') + 1);
-  
-	
-	
-	
-	var address = "http://localhost:8080/operator/work/workDealInfo/saveUploadImg";
+{	
+	var address = getAddress()+requestURI;
 	
 	var header = '';
 	var result = "";
 
 	if (imgName.replace(/^\s+|\s+$/g, '') != '')
 	{
-		header += '_File: ' + imgName + '\r\n';
+		header += '_FileName: ' + imgName + '\r\n';
 	}
 
 	var str = VideoInputCtl.HttpPostFileH(address, path, header, result);//http上传功能
 		
    return str;
 }
+
+
+
+/**
+ * @author 萧龙纳云
+ * 
+ * 获得地址:协议名称+IP地址+端口号+项目根目录
+ * 
+ * */
+function getAddress(){
+	//获得当前全部路径
+	var currentPath = window.document.location.href;
+	
+    //获取当前从根目录开始之后的路径
+	var pathName = window.document.location.pathname;
+   
+    //获取当前从根目录开始之前的路径
+    var localhostPath = currentPath.substring(0, currentPath.indexOf(pathName));
+   
+    //获取当前的根目录
+    var projectName = pathName.substring(0, pathName.substr(1).indexOf('/') + 1);
+    
+    return localhostPath+projectName;
+}
+
+
 
 
 /**
@@ -295,7 +321,7 @@ function afterUpload(imgName){
 	
 	
 	if(Upload(path,imgName)==1){
-		var str = "<img src='/images/"+imgName+"' style='width: 100px; height: 80px;'><br>"+getDisplayName(imgName)+" &nbsp;&nbsp;&nbsp;";
+		var str = "<img src='/"+fileUploadPath+"/"+imgName+"' style='width: 100px; height: 80px;'><br>"+getDisplayName(imgName)+" &nbsp;&nbsp;&nbsp;";
 		
 		$("#imgLayer").append(str);
 		
