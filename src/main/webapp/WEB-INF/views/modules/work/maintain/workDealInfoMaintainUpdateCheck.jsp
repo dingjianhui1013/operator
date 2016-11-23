@@ -14,10 +14,22 @@
 .btmBorder{border-bottom:1px solid #ddd}
 .accordion-heading,.table th,.accordion-heading,.table td{ vertical-align: middle;}
 
+.zoominner {background: none repeat scroll 0 0 #FFFFFF; padding: 5px 10px 10px; text-align: left;}
+.zoominner p {height:30px; _position:absolute; _right:2px; _top:5px;}
+.zoominner p a { background: url("../images/imgzoom_tb.gif") no-repeat scroll 0 0 transparent; float: left; height: 17px; line-height: 100px; margin-left: 10px; overflow: hidden; width: 17px;}
+.zoominner p a.imgadjust {background-position: -40px 0;}
+.zoominner p a.imgclose { background-position: -80px 0; cursor:pointer;}
+.y {float: right; margin-bottom:10px;}
+.ctnlist .text img{ cursor:pointer;}
+#imgzoom_cover{background-color:#000000; filter:progid:DXImageTransform.Microsoft.Alpha(Opacity=70); opacity:0.7; position:absolute; z-index:800; top:0px; left: 0px; width:100%; display:none;}
+#imgzoom{ display:none; z-index:801; position:absolute;}
+#imgzoom_img{_width:300px; _height:200px; width:700px; height:600px; background:url(../images/imageloading.gif) center center no-repeat;}
+#imgzoom_zoomlayer{ _width:300px; _height:200px; _position:relative; _padding-top:30px; min-width:300px; min-height:200px;}
+
 </style>
 <script type="text/javascript" src="${ctxStatic }/js/content_zoom.js"></script>
 <script type="text/javascript" src="${ctxStatic }/js/common.js"></script>
-
+<script type="text/javascript" src="${ctxStatic}/jquery/commonJs.js"></script>
 <script type="text/javascript">
     var ctx = "${ctx}";
     var province = "${workDealInfo.workCompany.province}";
@@ -27,6 +39,31 @@
 
 <script type="text/javascript">
 	$(document).ready(function() {
+		
+						//图片的显示
+						if("${imgNames}"!=null && "${imgNames}"!=""){
+							
+							
+							var imgNames = "${imgNames}";
+							
+							var str1 = new Array();                      
+							str1 = imgNames.split(",");  
+					
+							for(var i = 0;i < str1.length; i++){
+								var str = "<img src='/images/"+str1[i]+"' style='width: 100px; height: 80px;'>";
+								
+								$("#imgLayer").append(str);
+								
+								var imgBoxMod=$(".ctnlist .text img");
+								
+							    imgPop(imgBoxMod);
+							}
+							
+								
+							
+							
+						}				
+		
 						getPrivince();
 						$('div.small_pic a').fancyZoom({scaleImg: true, closeOnClick: true});
 						$("#name").focus();
@@ -658,13 +695,28 @@ function buttonFrom() {
 	<ul class="nav nav-tabs">
 		<li><a href="${ctx}/work/workDealInfo/list">业务办理列表</a></li>
 		<li class="active"><a
-			href="${ctx}/work/workDealInfo/typeForm?id=${workDealInfo.id}&reissueType=${reissue}&dealType=${dealType}">业务<c:if test="${not empty update}">更新</c:if><c:if test="${not empty change}">变更</c:if><c:if test="${not empty reissue}">补办</c:if><c:if test="${not empty revoke}">吊销</c:if></a></li>
+			href="#">业务<c:if test="${not empty update}">更新</c:if><c:if test="${not empty change}">变更</c:if><c:if test="${not empty reissue}">补办</c:if><c:if test="${not empty revoke}">吊销</c:if></a></li>
 	</ul>
 	<form:form id="inputForm"
 		action="${ctx}/work/workDealInfoOperation/maintainSaveUpdate" 
 		method="post" enctype="multipart/form-data"
 		class="form-horizontal">
 		<tags:message content="${message}" />
+		
+		<div id="append_parent"></div>
+		
+		
+		<div class="list ctnlist">
+
+		<div class="text">
+		
+
+		<p id="imgLayer" align="left" >
+		<input id="imgNames" name="imgNames" type="hidden"/>
+		</p>
+		</div>
+		</div>
+		
 		<div class="row-fluid disabled">
 			<div class="span12">
 				<table class="table table-striped table-bordered table-condensed">
@@ -692,7 +744,7 @@ function buttonFrom() {
 							<c:if test="${workDealInfo.dealInfoType==1}">
 								<td>
 								<input type="checkbox" disabled="disabled" checked="checked" value="0" name="dealInfoType">
-								<font color="grey" style="">更新证书</font>
+								<font style="">更新证书</font>
 								<input type="hidden" value="0" name="dealInfoType">
 								<c:if test="${workDealInfo.dealInfoType1==2}"><input type="checkbox" disabled="disabled" checked="checked" value = "1"
 									name="dealInfoType1"><font style="">遗失补办</font><input type="hidden" value="1" name="dealInfoType1"></c:if>

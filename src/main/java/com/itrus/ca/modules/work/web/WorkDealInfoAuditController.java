@@ -379,6 +379,26 @@ public class WorkDealInfoAuditController extends BaseController {
 				model.addAttribute("workLog", list);
 			}
 			
+			List<CommonAttach> attachs = attachService.findCommonAttachByWorkDealInfo(workDealInfo.getId());
+			
+			if(attachs!=null&&attachs.size()>0){
+			String imgNames = "";
+				
+				for(int i =0;i<attachs.size();i++){
+					
+					if(i==0){
+						imgNames+=attachs.get(0).getAttachName();
+					}else{
+						imgNames+=","+attachs.get(i).getAttachName();	
+					}
+					
+					
+				}
+				
+				model.addAttribute("imgNames", imgNames);
+				
+			}
+			
 			//类型判断
 			Integer dealInfoType = workDealInfo.getDealInfoType();
 			Integer dealInfoType1 = workDealInfo.getDealInfoType1();
@@ -419,7 +439,7 @@ public class WorkDealInfoAuditController extends BaseController {
 				if(dealInfoType1!=null){
 					if(dealInfoType1==2){//遗失补办
 						if(dealInfoType2!=null){
-							if(dealInfoType2==3){//+信息变更
+							if(dealInfoType2==4){//+信息变更
 								return typeForm("1,2",workDealInfo,model,"1",redirectAttributes);	
 							}
 						}
@@ -530,6 +550,27 @@ public class WorkDealInfoAuditController extends BaseController {
 				List<WorkLog> list = workLogService.findByDealInfo(workDealInfo);
 				model.addAttribute("workLog", list);
 			}
+			
+			List<CommonAttach> attachs = attachService.findCommonAttachByWorkDealInfo(workDealInfo.getId());
+			
+			if(attachs!=null&&attachs.size()>0){
+			String imgNames = "";
+				
+				for(int i =0;i<attachs.size();i++){
+					
+					if(i==0){
+						imgNames+=attachs.get(0).getAttachName();
+					}else{
+						imgNames+=","+attachs.get(i).getAttachName();	
+					}
+					
+					
+				}
+				
+				model.addAttribute("imgNames", imgNames);
+				
+			}
+			
 			//类型判断
 			Integer dealInfoType = workDealInfo.getDealInfoType();
 			Integer dealInfoType1 = workDealInfo.getDealInfoType1();
@@ -570,7 +611,7 @@ public class WorkDealInfoAuditController extends BaseController {
 				if(dealInfoType1!=null){
 					if(dealInfoType1==2){//遗失补办
 						if(dealInfoType2!=null){
-							if(dealInfoType2==3){//+信息变更
+							if(dealInfoType2==4){//+信息变更
 								return typeForm("1,2",workDealInfo,model,"1",redirectAttributes);	
 							}
 						}

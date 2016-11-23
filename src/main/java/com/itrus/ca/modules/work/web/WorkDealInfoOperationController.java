@@ -64,6 +64,8 @@ import com.itrus.ca.modules.profile.service.ConfigRaAccountService;
 import com.itrus.ca.modules.self.entity.SelfImage;
 import com.itrus.ca.modules.self.service.SelfAreaService;
 import com.itrus.ca.modules.self.service.SelfImageService;
+import com.itrus.ca.modules.sys.entity.CommonAttach;
+import com.itrus.ca.modules.sys.service.CommonAttachService;
 import com.itrus.ca.modules.sys.utils.UserUtils;
 import com.itrus.ca.modules.work.entity.WorkCertApplyInfo;
 import com.itrus.ca.modules.work.entity.WorkCertInfo;
@@ -142,6 +144,9 @@ public class WorkDealInfoOperationController extends BaseController {
 	
 	@Autowired
 	ConfigRaAccountService raAccountService;
+	
+	@Autowired
+	private CommonAttachService attachService;
 	
 	@Autowired
 	private WorkFinancePayInfoRelationService workFinancePayInfoRelationService;
@@ -780,6 +785,7 @@ public class WorkDealInfoOperationController extends BaseController {
 	public String errorForm(Long id, Model model,RedirectAttributes redirectAttributes) {
 		WorkDealInfo workDealInfo = workDealInfoService.get(id);
 		if(workDealInfo.getDealInfoType()!=null&&workDealInfo.getDealInfoType()==0){ //新增证书的重新编辑
+			
 			WorkCompany workCompany = workDealInfo.getWorkCompany();
 			WorkUser workUser = workDealInfo.getWorkUser();
 			model.addAttribute("workCompany", workCompany);
@@ -841,6 +847,25 @@ public class WorkDealInfoOperationController extends BaseController {
 			Integer dealInfoType1 = workDealInfo.getDealInfoType1();
 			Integer dealInfoType2 = workDealInfo.getDealInfoType2();
 			
+			List<CommonAttach> attachs = attachService.findCommonAttachByWorkDealInfo(workDealInfo.getId());
+			
+			if(attachs!=null&&attachs.size()>0){
+			String imgNames = "";
+				
+				for(int i =0;i<attachs.size();i++){
+					
+					if(i==0){
+						imgNames+=attachs.get(0).getAttachName();
+					}else{
+						imgNames+=","+attachs.get(i).getAttachName();	
+					}
+					
+					
+				}
+				
+				model.addAttribute("imgNames", imgNames);
+				
+			}
 			if(dealInfoType!=null){
 				if(dealInfoType==1){//更新证书
 					if(dealInfoType1!=null){
@@ -876,7 +901,7 @@ public class WorkDealInfoOperationController extends BaseController {
 				if(dealInfoType1!=null){
 					if(dealInfoType1==2){//遗失补办
 						if(dealInfoType2!=null){
-							if(dealInfoType2==3){//+信息变更
+							if(dealInfoType2==4){//+信息变更
 								return typeForm("1,2",workDealInfo,model,"1",redirectAttributes);	
 							}
 						}
@@ -1788,7 +1813,6 @@ public class WorkDealInfoOperationController extends BaseController {
 			@RequestParam(value="product", required=true)Long productId,
 			Integer agentId,Long agentDetailId, //获取计费策略类型  获取计费策略模版
 			Integer dealInfoType2,Integer dealInfoType1,Boolean manMadeDamage,
-			
 			Model model, String pName, String pEmail, String pIDCard,String contactSex,String areaRemark,
 		 Long newInfoId, RedirectAttributes redirectAttributes,
 		 @RequestParam(value="companyImage", required=false) MultipartFile companyImage ,
@@ -1900,7 +1924,7 @@ public class WorkDealInfoOperationController extends BaseController {
 		workDealInfo.setClassifying(workDealInfo1.getClassifying());
 		workDealInfo.setSvn(workDealInfoService.getSVN(0));
 		workDealInfo.setPrevId(workDealInfo1.getId());
-		if (workDealInfo1.getWorkCertInfo().getNotafter().after(new Date())) {
+		if (workDealInfo1.getWorkCertInfo().getNotafter()!=null&&workDealInfo1.getWorkCertInfo().getNotafter().after(new Date())) {
 			int day = getLastCertDay(workDealInfo1.getWorkCertInfo()
 					.getNotafter());
 			workDealInfo.setLastDays(day);
@@ -1972,6 +1996,21 @@ public class WorkDealInfoOperationController extends BaseController {
 			workDealInfo.setSelfImage(image);
 		}
 		workDealInfoService.save(workDealInfo);
+		
+		String imgNames=request.getParameter("imgNames");     
+		if(imgNames!=null&&imgNames.length()>0){
+			String [] imgs= imgNames.split(",");
+			
+			CommonAttach attach = null;
+			
+			for(int i=0;i<imgs.length;i++){
+				attach = attachService.findCommonAttachByattachName(imgs[i]);
+				attach.setWorkDealInfo(workDealInfo);
+				
+				attachService.saveAttach(attach);
+			}	
+		}
+		
 		// 保存日志信息
 		WorkLog workLog = new WorkLog();
 		workLog.setRecordContent(recordContent);
@@ -2260,6 +2299,22 @@ public class WorkDealInfoOperationController extends BaseController {
 		
 		
 		workDealInfoService.save(workDealInfo);
+		
+		//上传的图片名称
+		String imgNames=request.getParameter("imgNames");     
+		if(imgNames!=null&&imgNames.length()>0){
+			String [] imgs= imgNames.split(",");
+			
+			CommonAttach attach = null;
+			
+			for(int i=0;i<imgs.length;i++){
+				attach = attachService.findCommonAttachByattachName(imgs[i]);
+				attach.setWorkDealInfo(workDealInfo);
+				
+				attachService.saveAttach(attach);
+			}	
+		}
+				
 		// 保存日志信息
 		WorkLog workLog = new WorkLog();
 		workLog.setRecordContent(recordContent);
@@ -2675,6 +2730,21 @@ public class WorkDealInfoOperationController extends BaseController {
 		
 		
 		logUtil.saveSysLog("计费策略模版", "计费策略模版："+agent.getId()+"--业务编号："+workDealInfo.getId()+"--关联成功!", "");
+		
+		//上传的图片名称
+		String imgNames=request.getParameter("imgNames");     
+		if(imgNames!=null&&imgNames.length()>0){
+			String [] imgs= imgNames.split(",");
+			
+			CommonAttach attach = null;
+			
+			for(int i=0;i<imgs.length;i++){
+				attach = attachService.findCommonAttachByattachName(imgs[i]);
+				attach.setWorkDealInfo(workDealInfo);
+				
+				attachService.saveAttach(attach);
+			}	
+		}
 		
 		// 保存日志信息
 		start1 = System.currentTimeMillis();
