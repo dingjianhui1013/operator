@@ -10,20 +10,24 @@
 <style type="text/css">
 
 .zoominner {background: none repeat scroll 0 0 #FFFFFF; padding: 5px 10px 10px; text-align: left;}
-.zoominner p {height:30px; _position:absolute; _right:2px; _top:5px;}
-.zoominner p a { background: url("../images/imgzoom_tb.gif") no-repeat scroll 0 0 transparent; float: left; height: 17px; line-height: 100px; margin-left: 10px; overflow: hidden; width: 17px;}
-.zoominner p a.imgadjust {background-position: -40px 0;}
-.zoominner p a.imgclose { background-position: -80px 0; cursor:pointer;}
+/* .zoominner p {height:30px; _position:absolute; _right:2px; _top:5px;}
+.zoominner p a { /* background: url("../images/imgzoom_tb.gif") no-repeat scroll 0 0 transparent;  float: left; height: 17px; line-height: 100px; margin-left: 10px;  overflow: hidden;  width: 17px;}
+.zoominner p a.imgadjust {background-position: -40px 0;} */
+.zoominner a.imgclose{ cursor:pointer;position:absolute;z-index:9999;right:-6px; top:-6px; color:#333; font-size:30px; display:block;}
+.zoominner a.imgclose:hover{text-decoration:none;}
 .y {float: right; margin-bottom:10px;}
 .ctnlist .text img{ cursor:pointer;}
 #imgzoom_cover{background-color:#000000; filter:progid:DXImageTransform.Microsoft.Alpha(Opacity=70); opacity:0.7; position:absolute; z-index:800; top:0px; left: 0px; width:100%; display:none;}
 #imgzoom{ display:none; z-index:801; position:absolute;}
 #imgzoom_img{_width:300px; _height:200px; width:700px; height:600px; background:url(../images/imageloading.gif) center center no-repeat;}
-#imgzoom_zoomlayer{ _width:300px; _height:200px; _position:relative; _padding-top:30px; min-width:300px; min-height:200px;}
+#imgzoom_zoomlayer{ _width:300px; _height:200px; _position:relative; _padding-top:30px; min-width:300px; min-height:200px; padding:17px;}
 
-
-
-
+.imgLayerBox{margin-bottom:20px;overflow:hidden;}
+.uploadImgList{ float:left; border:1px solid #ddd;margin-right:10px; padding:2px; position:relative}
+.uploadImgName{ text-align:center; font-size:12px; font-weight:bold; margin-top:4px; height:22px; line-height:22px;border-top:1px solid #ddd;margin-bottom:0px;}
+.smBtn{width:100px; height:20px;}
+.btnGrop{margin-bottom:5px;}
+.s-closeBtn{ position:absolute; right:-4px; top:0px; font-size:20px; cursor:pointer;}
 
 
 .accordion-heading, .table th{width:140px;}
@@ -38,28 +42,23 @@
 $(document).ready(function() {
 			
 	
-			if("${imgNames}"!=null && "${imgNames}"!=""){
-				
-				
-				var imgNames = "${imgNames}";
-				
-				var str1 = new Array();                      
-				str1 = imgNames.split(",");  
-		
-				for(var i = 0;i < str1.length; i++){
-					var str = "<img src='/images/"+str1[i]+"' style='width: 100px; height: 80px;'>";
-					
-					$("#imgLayer").append(str);
-					
-					var imgBoxMod=$(".ctnlist .text img");
-					
-				    imgPop(imgBoxMod);
-				}
-				
-					
-				
-				
-			}
+	if("${imgNames}"!=null && "${imgNames}"!=""){
+		var imgNames = "${imgNames}";
+		$("#imgNames").val(imgNames);
+		var str1 = new Array();                      
+		str1 = imgNames.split(",");  
+
+		for(var i = 0;i < str1.length; i++){
+			var str = $("<div class='uploadImgList'><img src='/images/"+str1[i]+"' style='width: 100px; height: 80px;'>"+'<p class="uploadImgName">'+getDisplayName(str1[i])+'</p></div>');
+			
+			$("#imgLayer").append(str);
+			
+			var imgBoxMod=$(".ctnlist .text img");
+			
+		    imgPop(imgBoxMod);
+		    //imgDel(str);
+		}
+	}
 	
 	
 	
@@ -498,11 +497,9 @@ $(document).ready(function() {
 		<div class="list ctnlist">
 
 		<div class="text">
-		<p>
-
-		<p id="imgLayer" align="left" >
-			
-		</p>
+		<div id="imgLayer" align="left" class="imgLayerBox">
+		<input id="imgNames" name="imgNames" type="hidden"/>
+		</div>
 		</div>
 		</div>
 		

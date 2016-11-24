@@ -41,7 +41,6 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -76,6 +75,7 @@ import com.google.common.collect.Lists;
 import com.itrus.ca.common.config.Global;
 import com.itrus.ca.common.persistence.Page;
 import com.itrus.ca.common.utils.AdminPinEncKey;
+import com.itrus.ca.common.utils.Base64ImageTransform;
 import com.itrus.ca.common.utils.DateUtils;
 import com.itrus.ca.common.utils.PayinfoUtil;
 import com.itrus.ca.common.utils.RaAccountUtil;
@@ -2937,7 +2937,12 @@ public class WorkDealInfoController extends BaseController {
 			String [] imgs= imgNames.split(",");
 			
 			CommonAttach attach = null;
-			
+			//把以前的删除掉
+			List<CommonAttach> befor = attachService.findCommonAttachByWorkDealInfo(workDealInfoId);
+			for(CommonAttach c:befor){
+				c.setStatus(-1);
+				attachService.saveAttach(c);
+			}
 			for(int i=0;i<imgs.length;i++){
 				attach = attachService.findCommonAttachByattachName(imgs[i]);
 				attach.setWorkDealInfo(workDealInfo);
@@ -5287,6 +5292,8 @@ public class WorkDealInfoController extends BaseController {
 		}
 		workDealInfo.setIsMainTain("mainTain");
 		workDealInfoService.save(workDealInfo);
+		//区别再次编辑的页面
+		model.addAttribute("iseditor", "iseditor");
 		String[] type = dealType.replace(",", " ").split(" ");
 		for (int i = 0; i < type.length; i++) {
 			if (type[i].equals("1")) {
@@ -10048,57 +10055,40 @@ public class WorkDealInfoController extends BaseController {
 	
 	
 	
+	/**
+	 * 保存证书页面上传来的base64的图片
+	 * @param request
+	 * @param response
+	 * @param model
+	 * @throws Exception
+	 */
 	@RequestMapping(value = "saveUploadImg")
 	@ResponseBody
-	public void saveUploadImg(
+	public String saveUploadImg(
 			HttpServletRequest request,
 			HttpServletResponse response,
 			Model model) throws Exception {
-		
-		
-		String file = request.getHeader("_FileName");
+		//参数 文件名 和文件base64字符串
+		String file = request.getParameter("_FileName");
+		String szBase64 = request.getParameter("szBase64");
 		
 		String ParentDirectory = new File(request.getSession().getServletContext().getRealPath("")).getParent();
-		
 		String saveto = ParentDirectory+File.separator+imgFileUpload;
-		
-		
-		
-		if (file != null)
-		{
-			file = new String(file.getBytes("ISO8859-1"),"UTF-8");
+		log.debug("图片保存路径："+saveto);
+		if (file != null&&!"".equals(file)&&szBase64!=null&&!"".equals(szBase64)){
+			//file = new String(file.getBytes("ISO8859-1"), "UTF-8");
+			String serverPath = saveto+File.separator+file;
+			File fileout = 	new File(saveto);
+			if(!fileout.exists()){
+				fileout.mkdir();
+			}
+			if(Base64ImageTransform.GenerateImage(szBase64, serverPath)){
+				CommonAttach attach = new CommonAttach(file, saveto, new Timestamp(System.currentTimeMillis()));
+				attachService.saveAttach(attach);
+				return "true";
+			}
 		}
-		
-		InputStream inp;
-		OutputStream fos;
-		byte[] buf;
-		int len, num;
-
-		inp = request.getInputStream();
-		
-		File fileout = 	new File(saveto);
-		if(!fileout.exists()){
-			fileout.mkdir();
-		}
-		
-		fos = new FileOutputStream(fileout+File.separator+file);
-		
-		
-		buf = new byte[128];
-		num = 0;
-
-		while ((len = inp.read(buf)) != -1)
-		{
-			fos.write(buf, 0, len);
-		}
-		
-		fos.close();
-		
-		
-		CommonAttach attach = new CommonAttach(file, saveto, new Timestamp(System.currentTimeMillis()));
-		
-		attachService.saveAttach(attach);
-		
+		return "false";
 	}
 	
 	

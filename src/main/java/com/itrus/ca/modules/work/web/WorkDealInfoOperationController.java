@@ -789,6 +789,26 @@ public class WorkDealInfoOperationController extends BaseController {
 		WorkDealInfo workDealInfo = workDealInfoService.get(id);
 		if(workDealInfo.getDealInfoType()!=null&&workDealInfo.getDealInfoType()==0){ //新增证书的重新编辑
 			
+			List<CommonAttach> attachs = attachService.findCommonAttachByWorkDealInfo(workDealInfo.getId());
+			
+			if(attachs!=null&&attachs.size()>0){
+			String imgNames = "";
+				
+				for(int i =0;i<attachs.size();i++){
+					
+					if(i==0){
+						imgNames+=attachs.get(0).getAttachName();
+					}else{
+						imgNames+=","+attachs.get(i).getAttachName();	
+					}
+					
+					
+				}
+				
+				model.addAttribute("imgNames", imgNames);
+				
+			}
+			
 			WorkCompany workCompany = workDealInfo.getWorkCompany();
 			WorkUser workUser = workDealInfo.getWorkUser();
 			model.addAttribute("workCompany", workCompany);
@@ -869,6 +889,11 @@ public class WorkDealInfoOperationController extends BaseController {
 				model.addAttribute("imgNames", imgNames);
 				
 			}
+			List<WorkLog> list = workLogService.findByDealInfo(workDealInfo);
+			//区别再次编辑的页面
+			model.addAttribute("iseditor", "iseditor");
+			model.addAttribute("workLog", list);
+			
 			if(dealInfoType!=null){
 				if(dealInfoType==1){//更新证书
 					if(dealInfoType1!=null){
@@ -1123,10 +1148,6 @@ public class WorkDealInfoOperationController extends BaseController {
 
 				model.addAttribute("boundLabelList", nameSet);
 
-				List<WorkLog> list = workLogService
-						.findByDealInfo(workDealInfo);
-				model.addAttribute("workLog", list);
-
 				if (chargeAgent != null) {
 					model.addAttribute("tempStyle", chargeAgent.getTempStyle());
 				}
@@ -1144,9 +1165,6 @@ public class WorkDealInfoOperationController extends BaseController {
 
 				model.addAttribute("boundLabelList", nameSet);
 
-				List<WorkLog> list = workLogService
-						.findByDealInfo(workDealInfo);
-				model.addAttribute("workLog", list);
 				if (chargeAgent != null) {
 					model.addAttribute("tempStyle", chargeAgent.getTempStyle());
 				}
@@ -1165,9 +1183,6 @@ public class WorkDealInfoOperationController extends BaseController {
 
 				model.addAttribute("boundLabelList", nameSet);
 
-				List<WorkLog> list = workLogService
-						.findByDealInfo(workDealInfo);
-				model.addAttribute("workLog", list);
 				if (chargeAgent != null) {
 					model.addAttribute("tempStyle", chargeAgent.getTempStyle());
 				}
@@ -1217,10 +1232,6 @@ public class WorkDealInfoOperationController extends BaseController {
 
 				model.addAttribute("boundLabelList", nameSet);
 
-				List<WorkLog> list = workLogService
-						.findByDealInfo(workDealInfo);
-				model.addAttribute("workLog", list);
-
 				if (chargeAgent != null) {
 					model.addAttribute("tempStyle", chargeAgent.getTempStyle());
 				}
@@ -1239,9 +1250,7 @@ public class WorkDealInfoOperationController extends BaseController {
 							.getTempStyle()));
 				}
 				model.addAttribute("boundLabelList", nameSet);
-				List<WorkLog> list = workLogService
-						.findByDealInfo(workDealInfo);
-				model.addAttribute("workLog", list);
+
 				if (chargeAgent != null) {
 					model.addAttribute("tempStyle", chargeAgent.getTempStyle());
 				}
@@ -1260,9 +1269,6 @@ public class WorkDealInfoOperationController extends BaseController {
 
 				model.addAttribute("boundLabelList", nameSet);
 
-				List<WorkLog> list = workLogService
-						.findByDealInfo(workDealInfo);
-				model.addAttribute("workLog", list);
 				if (chargeAgent != null) {
 					model.addAttribute("tempStyle", chargeAgent.getTempStyle());
 				}
@@ -1281,9 +1287,6 @@ public class WorkDealInfoOperationController extends BaseController {
 			}
 
 			model.addAttribute("boundLabelList", nameSet);
-
-			List<WorkLog> list = workLogService.findByDealInfo(workDealInfo);
-			model.addAttribute("workLog", list);
 
 			if (chargeAgent != null) {
 				model.addAttribute("tempStyle", chargeAgent.getTempStyle());
@@ -2005,7 +2008,12 @@ public class WorkDealInfoOperationController extends BaseController {
 			String [] imgs= imgNames.split(",");
 			
 			CommonAttach attach = null;
-			
+			//把以前的删除掉
+			List<CommonAttach> befor = attachService.findCommonAttachByWorkDealInfo(workDealInfoId);
+			for(CommonAttach c:befor){
+				c.setStatus(-1);
+				attachService.saveAttach(c);
+			}
 			for(int i=0;i<imgs.length;i++){
 				attach = attachService.findCommonAttachByattachName(imgs[i]);
 				attach.setWorkDealInfo(workDealInfo);
@@ -2309,7 +2317,12 @@ public class WorkDealInfoOperationController extends BaseController {
 			String [] imgs= imgNames.split(",");
 			
 			CommonAttach attach = null;
-			
+			//把以前的删除掉
+			List<CommonAttach> befor = attachService.findCommonAttachByWorkDealInfo(workDealInfoId);
+			for(CommonAttach c:befor){
+				c.setStatus(-1);
+				attachService.saveAttach(c);
+			}
 			for(int i=0;i<imgs.length;i++){
 				attach = attachService.findCommonAttachByattachName(imgs[i]);
 				attach.setWorkDealInfo(workDealInfo);
@@ -2737,6 +2750,12 @@ public class WorkDealInfoOperationController extends BaseController {
 			
 			CommonAttach attach = null;
 			
+			//把以前的删除掉
+			List<CommonAttach> befor = attachService.findCommonAttachByWorkDealInfo(workDealInfoId);
+			for(CommonAttach c:befor){
+				c.setStatus(-1);
+				attachService.saveAttach(c);
+			}
 			for(int i=0;i<imgs.length;i++){
 				attach = attachService.findCommonAttachByattachName(imgs[i]);
 				attach.setWorkDealInfo(workDealInfo);

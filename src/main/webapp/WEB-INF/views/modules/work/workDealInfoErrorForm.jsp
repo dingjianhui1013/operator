@@ -13,16 +13,24 @@
 .accordion-heading,.table th,.accordion-heading,.table td{ vertical-align: middle;}
 
 .zoominner {background: none repeat scroll 0 0 #FFFFFF; padding: 5px 10px 10px; text-align: left;}
-.zoominner p {height:30px; _position:absolute; _right:2px; _top:5px;}
-.zoominner p a { background: url("../images/imgzoom_tb.gif") no-repeat scroll 0 0 transparent; float: left; height: 17px; line-height: 100px; margin-left: 10px; overflow: hidden; width: 17px;}
-.zoominner p a.imgadjust {background-position: -40px 0;}
-.zoominner p a.imgclose { background-position: -80px 0; cursor:pointer;}
+/* .zoominner p {height:30px; _position:absolute; _right:2px; _top:5px;}
+.zoominner p a { /* background: url("../images/imgzoom_tb.gif") no-repeat scroll 0 0 transparent;  float: left; height: 17px; line-height: 100px; margin-left: 10px;  overflow: hidden;  width: 17px;}
+.zoominner p a.imgadjust {background-position: -40px 0;} */
+.zoominner a.imgclose{ cursor:pointer;position:absolute;z-index:9999;right:-6px; top:-6px; color:#333; font-size:30px; display:block;}
+.zoominner a.imgclose:hover{text-decoration:none;}
 .y {float: right; margin-bottom:10px;}
 .ctnlist .text img{ cursor:pointer;}
 #imgzoom_cover{background-color:#000000; filter:progid:DXImageTransform.Microsoft.Alpha(Opacity=70); opacity:0.7; position:absolute; z-index:800; top:0px; left: 0px; width:100%; display:none;}
 #imgzoom{ display:none; z-index:801; position:absolute;}
 #imgzoom_img{_width:300px; _height:200px; width:700px; height:600px; background:url(../images/imageloading.gif) center center no-repeat;}
-#imgzoom_zoomlayer{ _width:300px; _height:200px; _position:relative; _padding-top:30px; min-width:300px; min-height:200px;}
+#imgzoom_zoomlayer{ _width:300px; _height:200px; _position:relative; _padding-top:30px; min-width:300px; min-height:200px; padding:17px;}
+
+.imgLayerBox{margin-bottom:20px;overflow:hidden;}
+.uploadImgList{ float:left; border:1px solid #ddd;margin-right:10px; padding:2px; position:relative}
+.uploadImgName{ text-align:center; font-size:12px; font-weight:bold; margin-top:4px; height:22px; line-height:22px;border-top:1px solid #ddd;margin-bottom:0px;}
+.smBtn{width:100px; height:20px;}
+.btnGrop{margin-bottom:5px;}
+.s-closeBtn{ position:absolute; right:-4px; top:0px; font-size:20px; cursor:pointer;}
 
 </style>
 <script type="text/javascript" src="${ctxStatic}/jquery/commonJs.js"></script>
@@ -40,18 +48,19 @@
 		
 		if("${imgNames}"!=null && "${imgNames}"!=""){
 			var imgNames = "${imgNames}";
-			
+			$("#imgNames").val(imgNames);
 			var str1 = new Array();                      
 			str1 = imgNames.split(",");  
 	
 			for(var i = 0;i < str1.length; i++){
-				var str = "<img src='/images/"+str1[i]+"' style='width: 100px; height: 80px;'>";
+				var str = $("<div class='uploadImgList'><img src='/images/"+str1[i]+"' style='width: 100px; height: 80px;'>"+'<p class="uploadImgName">'+getDisplayName(str1[i])+'</p><span class="s-closeBtn icon-remove-sign" data="'+str1[i]+'"></span></div>');
 				
 				$("#imgLayer").append(str);
 				
 				var imgBoxMod=$(".ctnlist .text img");
 				
 			    imgPop(imgBoxMod);
+			    imgDel(str);
 			}
 		}
 		
@@ -647,16 +656,20 @@ $("#agentId").change(function(){
     	<div class="control-group">
 		
 			<div class="control-group" align="center">
-				<button id="qrsq" class="btn btn-primary" onclick="changeDevice()">切换摄像头</button>&nbsp;&nbsp;&nbsp;			
-				<button id="qrsq" class="btn btn-primary" onclick="setPropertyDevice()">设置装置属性</button>&nbsp;&nbsp;&nbsp;
-				<button id="qrsq" class="btn btn-primary" onclick="getcompanyinfo()">单位信息录入</button>&nbsp;&nbsp;&nbsp;
-				<button id="qrsq" class="btn btn-primary" onclick="getholderinfo()">持有人信息录入</button>&nbsp;&nbsp;&nbsp;
-				<button id="qrsq" class="btn btn-primary" onclick="getoperatorinfo()">经办人信息录入</button><br>
-				<button id="qrsq" class="btn btn-primary" onclick="applicationphotograph('${imgPath}')">申请表拍照</button>&nbsp;&nbsp;&nbsp;
-				<button id="qrsq" class="btn btn-primary" onclick="workCompanyphotograph('${imgPath}')">单位证件拍照</button>&nbsp;&nbsp;&nbsp;
-				<button id="qrsq" class="btn btn-primary" onclick="workCertApplyInfophotograph('${imgPath}')">经办人身份证拍照</button>&nbsp;&nbsp;&nbsp;
-				<button id="qrsq" class="btn btn-primary" onclick="workUserphotograph('${imgPath}')">持有人身份证拍照</button>&nbsp;&nbsp;&nbsp;
-				<button id="qrsq" class="btn btn-primary" onclick="headphotograph('${imgPath}')">照片拍照</button>&nbsp;&nbsp;&nbsp;
+				<div class="form-group btnGrop">
+					<button id="qrsq" class="btn btn-primary" onclick="changeDevice()">切换摄像头</button>&nbsp;&nbsp;&nbsp;			
+					<button id="qrsq" class="btn btn-primary" onclick="setPropertyDevice()">设置装置属性</button>&nbsp;&nbsp;&nbsp;
+					<button id="qrsq" class="btn btn-primary" onclick="getcompanyinfo()">单位信息录入</button>&nbsp;&nbsp;&nbsp;
+					<button id="qrsq" class="btn btn-primary" onclick="getholderinfo()">持有人信息录入</button>&nbsp;&nbsp;&nbsp;
+					<button id="qrsq" class="btn btn-primary" onclick="getoperatorinfo()">经办人信息录入</button>
+				</div>
+				<div class="form-group btnGrop">
+					<button id="qrsq" class="btn btn-primary" onclick="applicationphotograph('${imgPath}')">申请表拍照</button>&nbsp;&nbsp;&nbsp;
+					<button id="qrsq" class="btn btn-primary" onclick="workCompanyphotograph('${imgPath}')">单位证件拍照</button>&nbsp;&nbsp;&nbsp;
+					<button id="qrsq" class="btn btn-primary" onclick="workCertApplyInfophotograph('${imgPath}')">经办人身份证拍照</button>&nbsp;&nbsp;&nbsp;
+					<button id="qrsq" class="btn btn-primary" onclick="workUserphotograph('${imgPath}')">持有人身份证拍照</button>&nbsp;&nbsp;&nbsp;
+					<button id="qrsq" class="btn btn-primary" onclick="headphotograph('${imgPath}')">照片拍照</button>&nbsp;&nbsp;&nbsp;
+				</div>
 				<button class="btn" data-dismiss="modal" aria-hidden="true">取消</button> 
 			</div>
 		</div>
@@ -679,9 +692,9 @@ $("#agentId").change(function(){
 		<div class="text">
 		
 
-		<p id="imgLayer" align="left" >
+		<div id="imgLayer" align="left" class="imgLayerBox">
 		<input id="imgNames" name="imgNames" type="hidden"/>
-		</p>
+		</div>
 		</div>
 		</div>
 		
@@ -694,7 +707,7 @@ $("#agentId").change(function(){
 							<th colspan="1" style="font-size: 20px;"><span
 								class="prompt" style="color: red; display: none;">*</span>基本信息</th>	
 							<th colspan="3"> <a href="#modal-container" data-toggle="modal">
-							<input class="btn btn-primary" onclick="scanningInfoEnter()" data-toggle="modal" value="扫描录入" /></a>	
+							<input class="btn btn-primary smBtn" onclick="scanningInfoEnter()" data-toggle="modal" value="扫描录入" /></a>	
 							</th>
 						</tr>
 						<tr>

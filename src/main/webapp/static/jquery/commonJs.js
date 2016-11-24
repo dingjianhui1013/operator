@@ -1,4 +1,4 @@
-//各个业务界面重复的js很多 之后如果再有重复的js写到这里 或者有时间把之前那些js拿出来整合到这里
+//各个业务界面重复的js很多 之后如果再有重复的js写到这里 或者有时间把之前那些js拿出来整合到这里  引入改js之前 务必先引入jQuery
 
 /**
  * VideoInput ActiveX API:
@@ -265,7 +265,7 @@ function workUserphotograph(imgPath){
  * 拍照后上传
  * 
  * */
-function Upload(path,imgName)
+function Upload(imgName,szBase64)
 {	
 	var address = getAddress()+requestURI;
 	console.log(address);
@@ -277,7 +277,18 @@ function Upload(path,imgName)
 		header += '_FileName: ' + imgName + '\r\n';
 	}
 
-	var str = VideoInputCtl.HttpPostFileH(address, path, header, result);//http上传功能
+	 $.ajax({
+	        type: "post",
+	        dataType: "text",
+	        url: requestURI,
+	        data: {"_FileName":imgName,"szBase64":szBase64},
+	        success: function (data) {
+	            if (data != "") {
+	            	str==1
+
+	            }
+	        }
+	    });
 		
    return str;
 }
@@ -306,7 +317,21 @@ function getAddress(){
     return localhostPath+projectName;
 }
 
-
+//内容页图片删除
+function imgDel(imgDiv){
+		imgDiv.find("span").each(function(i,one){
+			$(one).live('click',function(){
+				var name = $(one).attr("data");
+				$(this).closest(".uploadImgList").remove();
+				
+				var imageNames = $("#imgNames").val();
+				imageNames=imageNames.replace(","+name+",",",");
+				imageNames=imageNames.replace(","+name,"");
+				imageNames=imageNames.replace(name+",","");
+				$("#imgNames").val(imageNames);
+			});
+		});
+}
 
 
 /**
@@ -315,27 +340,41 @@ function getAddress(){
  * 上传后的操作
  * */
 function afterUpload(imgName){
-	
 	var path = localStoragePath+imgName;
 	
-	VideoInputCtl.GrabToFile(path);
+	//VideoInputCtl.GrabToFile(path);
 
-	
-	if(Upload(path,imgName)==1){
-		var str = "<div class='uploadImgList'><img src='/"+fileUploadPath+"/"+imgName+"' style='width: 100px; height: 80px;'>"+'<p class="uploadImgName">'+getDisplayName(imgName)+'</p><span class="s-closeBtn icon-remove-sign"></span></div>';
-		
-		$("#imgLayer").append(str);
-		
-		var imgBoxMod=$(".ctnlist .text img");
-		
-	    imgPop(imgBoxMod);
-		
-	    if($("#imgNames").val()==""){
-			$("#imgNames").val(imgName);
-		}else{
-			$("#imgNames").val($("#imgNames").val()+","+imgName);
-		}
-	};
+	var szBase64 = VideoInputCtl.GrabToBase64(".jpg");
+
+	var address = getAddress()+requestURI;
+
+	if (imgName.replace(/^\s+|\s+$/g, '') != '')
+	{
+		$.ajax({
+			type: "post",
+			dataType: "text",
+			url: address,
+			data: {"_FileName":imgName,"szBase64":szBase64},
+			success: function (data) {
+				if (data == 'true') {
+					var str = $("<div class='uploadImgList'><img src='data:image/tiff;base64,"+szBase64+"' style='width: 100px; height: 80px;'>"+'<p class="uploadImgName">'+getDisplayName(imgName)+'</p><span class="s-closeBtn icon-remove-sign" data="'+imgName+'"></span></div>');
+					
+					$("#imgLayer").append(str);
+					
+					var imgBoxMod=$(".ctnlist .text img");
+					
+				    imgPop(imgBoxMod);
+				    imgDel(str);
+				    if($("#imgNames").val()==""){
+						$("#imgNames").val(imgName);
+					}else{
+						$("#imgNames").val($("#imgNames").val()+","+imgName);
+					}
+					
+				}
+			}
+		});
+	}
 }
 
 
@@ -453,9 +492,6 @@ function checkContactMobil(obj,o){
 }
 
 
-
-
-
 /**
  * 点击图片放大js
  * 
@@ -498,7 +534,7 @@ $("#append_parent .imgclose").live('click',function(){
     $("#imgzoom").css("display","none");
     $("#imgzoom_cover").css("display","none");
 })
-   
+
 //弹出窗口位置
 function imgboxPlace(){
     var cwinwidth=$("#imgzoom").width();
