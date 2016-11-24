@@ -34,7 +34,7 @@ var suffixImg = ".jpg";                               //设置图片后缀,固�
 
 var requestURI = "/work/workDealInfo/saveUploadImg";  //图片上传的请求路径
 
-var fileUploadPath = "";
+var fileUploadPath = "";                              //上传路径,从application.properties 中获取.
 /**
  * @author 萧龙纳云
  * 
@@ -203,12 +203,13 @@ function workCompanyphotograph(imgPath){
  * 
  * 申请表拍照
  * */
-function applicationphotograph(imgPath){
+function applicationphotograph(imgPath,clientAddr){
 
+	
 	if(fileUploadPath.length == 0){
 		fileUploadPath = imgPath
 	}
-	
+
 	var imgName = "application-"+ new Date().getTime()+suffixImg;
 	afterUpload(imgName);	
 }
@@ -267,7 +268,7 @@ function workUserphotograph(imgPath){
 function Upload(path,imgName)
 {	
 	var address = getAddress()+requestURI;
-	
+	console.log(address);
 	var header = '';
 	var result = "";
 
@@ -318,10 +319,10 @@ function afterUpload(imgName){
 	var path = localStoragePath+imgName;
 	
 	VideoInputCtl.GrabToFile(path);
-	
+
 	
 	if(Upload(path,imgName)==1){
-		var str = "<img src='/"+fileUploadPath+"/"+imgName+"' style='width: 100px; height: 80px;'><br>"+getDisplayName(imgName)+" &nbsp;&nbsp;&nbsp;";
+		var str = "<div class='uploadImgList'><img src='/"+fileUploadPath+"/"+imgName+"' style='width: 100px; height: 80px;'>"+'<p class="uploadImgName">'+getDisplayName(imgName)+'</p><span class="s-closeBtn icon-remove-sign"></span></div>';
 		
 		$("#imgLayer").append(str);
 		
@@ -473,10 +474,9 @@ function imgPop(imgBoxMod){
     	
     	var str = "<div id='imgzoom'>"
     				+"<div id='imgzoom_zoomlayer' class='zoominner'>"
-    					+"<p><span class='y'>"
-    						+"<a title='在新窗口打开' target='_blank' class='imglink' id='imgzoom_imglink' href=''>在新窗口打开</a>"
-    						+"<a title='关闭' class='imgclose'>关闭</a></span>"
-    					+"</p>"
+//    					+"<p><span class='y'>"
+    						+"<a title='关闭' class='imgclose'><span class='icon-remove-sign'></span></a>"
+//    					+"</span></p>"
     					+"<div id='imgzoom_img' class='hm'>"
     					+"<img src='' id='imgzoom_zoom' style='cursor:pointer'>"
     					+"</div>"
