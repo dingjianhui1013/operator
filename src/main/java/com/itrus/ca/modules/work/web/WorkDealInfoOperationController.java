@@ -100,6 +100,9 @@ public class WorkDealInfoOperationController extends BaseController {
 
 	private static Logger log = LoggerFactory.getLogger(WorkDealInfoOperationController.class);
 	
+	
+	
+	
 	@Autowired
 	private WorkLogService workLogService;
 
@@ -2338,7 +2341,7 @@ public class WorkDealInfoOperationController extends BaseController {
 	@RequiresPermissions("work:workDealInfo:edit")
 	@RequestMapping(value = "maintainSaveUpdate")
 	public String maintainSaveUpdate(Long workDealInfoId, 
-			
+			String imgNames,
 			String companyName,String companyType,String organizationNumber,String orgExpirationTime,String selectLv,
 			String comCertificateType, String comCertficateNumber, String comCertficateTime,String legalName, String s_province, String s_city,
 			String s_county, String areaRemark,String address, String companyMobile,String remarks, 
@@ -2729,11 +2732,7 @@ public class WorkDealInfoOperationController extends BaseController {
 		log.debug("更新业务提交ConfigAgentBoundDealInfo用时:"+(end1-start1)+"ms");
 		
 		
-		logUtil.saveSysLog("计费策略模版", "计费策略模版："+agent.getId()+"--业务编号："+workDealInfo.getId()+"--关联成功!", "");
-		
-		//上传的图片名称
-		String imgNames=request.getParameter("imgNames");     
-		if(imgNames!=null&&imgNames.length()>0){
+		if(imgNames.length()>0){
 			String [] imgs= imgNames.split(",");
 			
 			CommonAttach attach = null;
@@ -2745,6 +2744,12 @@ public class WorkDealInfoOperationController extends BaseController {
 				attachService.saveAttach(attach);
 			}	
 		}
+
+		
+		
+		logUtil.saveSysLog("计费策略模版", "计费策略模版："+agent.getId()+"--业务编号："+workDealInfo.getId()+"--关联成功!", "");
+		
+		
 		
 		// 保存日志信息
 		start1 = System.currentTimeMillis();
