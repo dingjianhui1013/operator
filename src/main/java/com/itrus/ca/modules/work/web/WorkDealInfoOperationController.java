@@ -2017,7 +2017,7 @@ public class WorkDealInfoOperationController extends BaseController {
 			for(int i=0;i<imgs.length;i++){
 				attach = attachService.findCommonAttachByattachName(imgs[i]);
 				attach.setWorkDealInfo(workDealInfo);
-				
+				attach.setStatus(null);
 				attachService.saveAttach(attach);
 			}	
 		}
@@ -2326,7 +2326,7 @@ public class WorkDealInfoOperationController extends BaseController {
 			for(int i=0;i<imgs.length;i++){
 				attach = attachService.findCommonAttachByattachName(imgs[i]);
 				attach.setWorkDealInfo(workDealInfo);
-				
+				attach.setStatus(null);
 				attachService.saveAttach(attach);
 			}	
 		}
@@ -2759,7 +2759,7 @@ public class WorkDealInfoOperationController extends BaseController {
 			for(int i=0;i<imgs.length;i++){
 				attach = attachService.findCommonAttachByattachName(imgs[i]);
 				attach.setWorkDealInfo(workDealInfo);
-				
+				attach.setStatus(null);
 				attachService.saveAttach(attach);
 			}	
 		}
