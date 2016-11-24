@@ -10062,11 +10062,11 @@ public class WorkDealInfoController extends BaseController {
 		
 		String saveto = ParentDirectory+File.separator+imgFileUpload;
 		
-		System.out.println(saveto);
+		
 		
 		if (file != null)
 		{
-			file = new String(file.getBytes("ISO8859-1"), "UTF-8");
+			file = new String(file.getBytes("ISO8859-1"),"UTF-8");
 		}
 		
 		InputStream inp;
