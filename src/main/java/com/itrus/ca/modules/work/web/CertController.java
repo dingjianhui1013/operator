@@ -782,7 +782,7 @@ public class CertController extends BaseController {
 		// }
 		return json.toString();
 	}
-
+	
 	/**
 	 * 证书安装完后调用
 	 * 
@@ -807,10 +807,23 @@ public class CertController extends BaseController {
 				workCertInfoService.save(workCertInfo);
 				dealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_CERT_OBTAINED);// 审核通过
 				dealInfo.setObtainedDate(new Date());
-				if (dealInfo.getWorkPayInfo().getMethodGov() || dealInfo.getWorkPayInfo().getMethodContract()) {
+				/*if (dealInfo.getWorkPayInfo().getMethodGov() || dealInfo.getWorkPayInfo().getMethodContract()) {
 					dealInfo.setUserSn(getHTSn(dealInfo));
 				} else {
 					dealInfo.setUserSn(getZFSn(dealInfo));
+				}*/
+				List<ConfigChargeAgent> configChargeAgentList = configChargeAgentService.findById(dealInfo.getConfigChargeAgentId());
+				if(configChargeAgentList!=null&&configChargeAgentList.size()>0){
+					ConfigChargeAgent config = configChargeAgentList.get(0);
+					//模板类型1标准 2政府统一采购 3合同采购
+					String configType = config.getTempStyle();
+					if(configType.equals("1")){
+						dealInfo.setUserSn(getBZSn(dealInfo));
+					}else if(configType.equals("2")){
+						dealInfo.setUserSn(getZFSn(dealInfo));
+					}else if(configType.equals("3")){
+						dealInfo.setUserSn(getHTSn(dealInfo));
+					}
 				}
 				dealInfo.setStatus(0);// 待归档
 				workDealInfoService.save(dealInfo);
@@ -1088,6 +1101,7 @@ public class CertController extends BaseController {
 		}
 	}
 
+	
 	/**
 	 * 按照合同生成归档编码
 	 * 
@@ -1096,50 +1110,69 @@ public class CertController extends BaseController {
 	 */
 	private String getHTSn(WorkDealInfo workDealInfo) {
 		Date date = new Date();
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMM-");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMM");
 		workDealInfo.setStatus(0);
-		User user = UserUtils.getUser();
-		user.getOffice().getName();
-		String sn = sdf.format(date).toString().substring(2);
+		User user = systemService.getUser(1L);
+		String sn = sdf.format(date).toString();
 		List<WorkDealInfo> list = workDealInfoService.findNum(workDealInfo, "%" + sn + "%");
 		int num = list.size() + 1;
-		String numstr = "";
-		if (num > 0 && num < 10) {
-			numstr = "00" + num;
-		} else if (num > 9 && num < 100) {
-			numstr = "0" + num;
-		} else {
-			numstr = "" + num;
+		String numstr = num+"";
+		if(numstr.length()<4){
+			for(int i=4-numstr.length();i>0;i--){
+				numstr = "0"+numstr;
+			}
 		}
-		String archiveSn = "SCCA-JZ-" + user.getOffice().getName() + "-" + workDealInfo.getConfigApp().getAppName()
-				+ "-" + sn + numstr;
+		String archiveSn = "SCCA_" + workDealInfo.getConfigApp().getAppName()	+ "_" + sn + numstr;
 		return archiveSn;
 	}
 
 	/**
-	 * 按照自费生成归档编码
+	 * 按照政府统一采购生成归档编码
 	 * 
 	 * @param workDealInfo
 	 * @return
 	 */
 	private String getZFSn(WorkDealInfo workDealInfo) {
 		Date date = new Date();
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd-");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMM");
+		workDealInfo.setStatus(0);
+		User user = UserUtils.getUser();
+		user.getOffice().getName();
+		String sn = sdf.format(date).toString();
+		List<WorkDealInfo> list = workDealInfoService.findNum(workDealInfo, "%" + sn + "%");
+		int num = list.size() + 1;
+		String numstr = num+"";
+		if(numstr.length()<5){
+			for(int i=5-numstr.length();i>0;i--){
+				numstr = "0"+numstr;
+			}
+		}
+		String archiveSn = "SCCA_统一采购_" + sn + numstr;
+		return archiveSn;
+	}
+
+	/**
+	 * 按照标准生成归档编码
+	 * 
+	 * @param workDealInfo
+	 * @return
+	 */
+	private String getBZSn(WorkDealInfo workDealInfo) {
+		Date date = new Date();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
 		workDealInfo.setStatus(0);
 		User user = UserUtils.getUser();
 		user.getOffice().getName();
 		String sn = sdf.format(date).toString().substring(2);
 		List<WorkDealInfo> list = workDealInfoService.findNum(workDealInfo, "%" + sn + "%");
 		int num = list.size() + 1;
-		String numstr = "";
-		if (num > 0 && num < 10) {
-			numstr = "00" + num;
-		} else if (num > 9 && num < 100) {
-			numstr = "0" + num;
-		} else {
-			numstr = "" + num;
+		String numstr = num+"";
+		if(numstr.length()<4){
+			for(int i=4-numstr.length();i>0;i--){
+				numstr = "0"+numstr;
+			}
 		}
-		String archiveSn = "SCCA-JZ-" + user.getOffice().getName() + "-" + sn + numstr;
+		String archiveSn = "SCCA_" + user.getOffice().getName() + "_" + sn + numstr;
 		return archiveSn;
 	}
 
@@ -1169,6 +1202,7 @@ public class CertController extends BaseController {
 				+ "-" + sn + numstr;
 		return archiveSn;
 	}
+	
 
 	/**
 	 * 按照自费生成归档编码

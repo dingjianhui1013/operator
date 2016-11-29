@@ -91,6 +91,7 @@ import com.itrus.ca.modules.work.entity.WorkCertInfo;
 import com.itrus.ca.modules.work.entity.WorkCompany;
 import com.itrus.ca.modules.work.entity.WorkCompanyHis;
 import com.itrus.ca.modules.work.entity.WorkDealInfo;
+import com.itrus.ca.modules.work.entity.WorkDealInfoExpView;
 import com.itrus.ca.modules.work.entity.WorkLog;
 import com.itrus.ca.modules.work.entity.WorkPayInfo;
 import com.itrus.ca.modules.work.entity.WorkUser;
@@ -9463,4 +9464,366 @@ public class WorkDealInfoService extends BaseService {
 		return list.get(0);
 	}
 
+	public Page<WorkDealInfo> findByGuiDang(
+			HttpServletRequest request,
+			HttpServletResponse response,
+			WorkDealInfo workDealInfo, Map<String, String> queryStr,boolean findAll) {
+		
+		//Page<WorkDealInfoExpView> lst = new Page<WorkDealInfoExpView>(request, response);
+		Page<WorkDealInfo> page = new Page<WorkDealInfo>(request, response);
+		String sql = "select * "
+				+ getFind4GuiDangSql(workDealInfo, queryStr);
+		
+		
+		String sqlCount = "select count(*) ct "
+				+ getFind4GuiDangSql(workDealInfo, queryStr);
+
+		try {
+			List<Map> ct = workDealInfoDao.findBySQLListMap(sqlCount, 1, 1);
+			
+			int count = new Integer(ct.get(0).get("CT").toString());
+			page.setCount(count);
+		
+			if (findAll)
+				page.setPageSize(-1);
+
+			List<Map> lst = workDealInfoDao.findBySQLListMap(sql, page.getPageNo(),
+					page.getPageSize());
+			if (lst == null || lst.size() <= 0) {
+				return page;
+			}
+			//把lst 转换成对象
+			List<WorkDealInfo> resList = viewToDealInfo(lst);
+			page.setList(resList);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return page;
+	}
+
+	/**
+	 * 为了减少前台显示的重构部分，把视图转换成表对象
+	 * 
+	 * @param lst
+	 * @return List<WorkDealInfo>
+	 */
+	private List<WorkDealInfo> viewToDealInfo(List<Map> lst) {
+		List<WorkDealInfo> resList = new ArrayList<WorkDealInfo>();
+		for (Map e : lst) {
+			WorkDealInfo po = new WorkDealInfo();
+			try {
+				po = new WorkDealInfo();
+				po.setId(Long.parseLong(e.get("ID").toString()));
+				po.setSvn(e.get("SVN")==null?null:e.get("SVN").toString());
+				
+				WorkCompany company = new WorkCompany();
+				company.setCompanyName(e.get("COMPANYNAME")==null?null:e.get("COMPANYNAME").toString());
+				po.setWorkCompany(company);
+
+				po.setSvn(e.get("CONFIGAPPNAME")==null?null:e.get("CONFIGAPPNAME").toString());
+				
+				ConfigApp configApp = new ConfigApp();
+				configApp.setAppName(e.get("CONFIGAPPNAME")==null?null:e.get("CONFIGAPPNAME").toString());
+				po.setConfigApp(configApp);
+				
+				po.setYear(e.get("YEAR")==null?null:Integer.parseInt(e.get("YEAR").toString()));
+				po.setDealInfoStatus(e.get("CONFIGAPPNAME")==null?null:e.get("CONFIGAPPNAME").toString());
+				
+				po.setLastDays(e.get("LASTDAYS")==null?null:Integer.parseInt(e.get("LASTDAYS").toString()));
+				
+				ConfigProduct configProduct = new ConfigProduct();
+				configProduct.setProductName(e.get("PRODUCTNAME")==null?null:e.get("PRODUCTNAME").toString());
+				po.setConfigProduct(configProduct);
+				
+				po.setKeySn(e.get("KEYSN")==null?null:e.get("KEYSN").toString());
+				
+				po.setDealInfoType(e.get("DEALINFOTYPE")==null?null:Integer.parseInt(e.get("DEALINFOTYPE").toString()));
+				po.setDealInfoType1(e.get("DEALINFOTYPE1")==null?null:Integer.parseInt(e.get("DEALINFOTYPE1").toString()));
+				po.setDealInfoType2(e.get("DEALINFOTYPE2")==null?null:Integer.parseInt(e.get("DEALINFOTYPE2").toString()));
+				po.setDealInfoType3(e.get("DEALINFOTYPE3")==null?null:Integer.parseInt(e.get("DEALINFOTYPE3").toString()));
+				
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+				WorkCertInfo workCertInfo = new WorkCertInfo();
+				workCertInfo.setSignDate(e.get("SIGNDATE")==null?null:sdf.parse(e.get("SIGNDATE").toString()));
+				workCertInfo.setNotbefore(e.get("NOTBEFORE")==null?null:sdf.parse(e.get("NOTBEFORE").toString()));
+				po.setWorkCertInfo(workCertInfo);
+				
+				
+				WorkCertApplyInfo workCertApplyInfo = new WorkCertApplyInfo();
+				workCertApplyInfo.setName(e.get("CERTAPPLYINFONAME")==null?null:e.get("CERTAPPLYINFONAME").toString());
+				po.setWorkCertInfo(workCertInfo);
+				
+				po.setSvn(e.get("SVN")==null?null:e.get("SVN").toString());
+				po.setAddCertDays(e.get("ADDCERTDAYS")==null?null:Integer.parseInt(e.get("ADDCERTDAYS").toString()));
+				po.setNotafter(e.get("NOTAFTER")==null?null:sdf.parse(e.get("NOTAFTER").toString()));
+				
+				User updateUser = new User();
+				updateUser.setName(e.get("UPDATENAME")==null?null:e.get("UPDATENAME").toString());
+				po.setUpdateBy(updateUser);
+				po.setArchiveDate(e.get("ARCHIVEDATE")==null?null:Timestamp.valueOf(e.get("ARCHIVEDATE").toString()));
+				po.setUserSn(e.get("USERSN")==null?null:e.get("USERSN").toString());
+			} catch (NumberFormatException e1) {
+				e1.printStackTrace();
+			} catch (ParseException e1) {
+				e1.printStackTrace();
+			}
+			
+			/*po.setDealInfoType(e.getDealInfoType());
+			po.setDealInfoType1(e.getDealInfoType1());
+			po.setDealInfoType2(e.getDealInfoType2());
+			po.setDealInfoType3(e.getDealInfoType3());
+			po.setKeySn(e.getKeySN());
+			po.setAddCertDays(e.getAddCertDays());
+			po.setYear(e.getYear());
+			po.setLastDays(e.getLastDays());
+			po.setDealInfoStatus(e.getDealInfoStatus());
+			po.setBusinessCardUserDate(e.getBusinessCardUserDate());
+			po.setOfficeId(e.getOfficeId());
+			po.setNotafter(e.getNotAfter());
+
+			User inputUser = new User();
+			inputUser.setId(e.getInputUserId());
+			inputUser.setName(e.getInputUserName());
+			po.setInputUser(inputUser);
+
+			ConfigApp configApp = new ConfigApp();
+			configApp.setId(e.getAppId());
+			configApp.setAlias(e.getAppAlias());
+			po.setConfigApp(configApp);
+
+			WorkCompany company = new WorkCompany();
+			company.setId(e.getWorkCompanyId());
+			company.setCompanyName(e.getCompanyName());
+			company.setOrganizationNumber(e.getOrganizationNumber());
+			po.setWorkCompany(company);
+
+			WorkUser workUser = new WorkUser();
+			workUser.setId(e.getWorkUserId());
+			workUser.setContactName(e.getContactName());
+			workUser.setConCertNumber(e.getConCertNumber());
+			po.setWorkUser(workUser);
+
+			WorkCertApplyInfo workCertApplyInfo = new WorkCertApplyInfo();
+			workCertApplyInfo.setName(e.getCertApplyInfoName());
+
+			WorkCertInfo workCertInfo = new WorkCertInfo();
+			workCertInfo.setId(e.getCertId());
+			workCertInfo.setWorkCertApplyInfo(workCertApplyInfo);
+			workCertInfo.setSignDate(e.getSignDate());
+			workCertInfo.setNotafter(e.getNotAfter());
+			workCertInfo.setNotbefore(e.getNotbefore());
+			po.setWorkCertInfo(workCertInfo);
+
+			ConfigProduct configProduct = new ConfigProduct();
+			configProduct.setId(e.getProductId());
+			configProduct.setProductName(e.getProductName());
+			configProduct.setId(e.getProductId());
+			po.setConfigProduct(configProduct);*/
+
+			resList.add(po);
+		}
+		return resList;
+	}
+	
+	private String getFind4GuiDangSql(WorkDealInfo workDealInfo, Map<String, String> queryStr) {
+		StringBuffer sql = new StringBuffer();
+		String sqls = dataScopeFilterByWorkDealInfo(UserUtils.getUser(),
+				"areaId", "officeId").toString();
+		sqls = sqls.substring(1, sqls.length() - 1);
+		sqls = sqls.replace("officeId", "office_Id");
+		sql.append(" from(select wdi.id as id," + "wdi.svn as svn,"
+				+ "ca.app_name as configAppName,"
+				+ "wc.company_name as companyName,"
+				+ "cp.product_name as productName,"
+				+ "wdi.deal_info_type as dealInfoType,"
+				+ "wdi.deal_info_type1 as dealInfoType1,"
+				+ "wdi.deal_info_type2 as dealInfoType2,"
+				+ "wdi.deal_info_type3 as dealInfoType3,"
+				+ "wci.notafter as notafter,"
+				+ "wci.notbefore as notbefore,"
+				+ "wdi.key_sn as keySn,"
+				+ "wci.sign_date as signDate,"
+				+ "wdi.add_cert_days as addCertDays,"
+				+ "wdi.year as year ," + "wdi.last_days as lastDays,"
+				+ "wdi.deal_info_status as dealInfoStatus,"
+				+ "su.name as updatename,"
+				+ "wdi.archive_date as  archiveDate,"
+				+ "wdi.user_sn as userSn,"   
+				+ "workCertApplyInfo.name as certApplyInfoName  ");
+		sql.append("  from work_deal_info wdi left join work_company wc on wdi.work_company_id=wc.id  ");
+		sql.append("	left join config_product cp on wdi.product_id = cp.id ");
+		sql.append("	left join config_charge_agent cca on wdi.config_agent_id = cca.id ");
+		sql.append("	left join work_pay_info wpi on wdi.pay_id=wpi.id ");
+		sql.append("	left join work_user wu on wu.id=wdi.work_user_id ");
+		sql.append("	left join sys_user su on su.id=wdi.update_by  ");
+		sql.append("	left join config_app ca on wdi.app_id=ca.id ");
+		sql.append("	left join work_cert_info wci on wdi.cert_id=wci.id ");
+		sql.append("    left join work_cert_apply_info workCertApplyInfo on wci.apply_info=workCertApplyInfo.id ");
+
+		if ("".equals(sqls)) {
+			sql.append("where (wdi.is_ixin is not null or 1=1) and wdi.del_flag=0");
+		} else {
+			sql.append("where (wdi.is_ixin is not null or (wdi." + sqls
+					+ ")) and wdi.del_flag=0");
+		}
+
+		String area = queryStr.get("area");//受理区域
+		String officeId = queryStr.get("officeId");//受理网点
+		String certType = queryStr.get("certType");//产品名称
+		String workType = queryStr.get("workType");//业务类型
+		String payType = queryStr.get("payType");//计费策略
+		String payMethod = queryStr.get("payMethod");//付款方式
+		
+		/*if (startTime != null) {
+			sql.append(" and workcertin6_.notafter >= TO_DATE('"
+					+ DateUtils.formatDate(startTime, "yyyy-MM-dd 00:00:01")
+					+ "', 'yyyy-MM-dd hh24:mi:ss')");
+
+		}
+
+		if (endTime != null) {
+			sql.append(" and workcertin6_.notafter <= TO_DATE ('"
+					+ DateUtils.formatDate(endTime, "yyyy-MM-dd 23:59:59")
+					+ "', 'yyyy-MM-dd hh24:mi:ss')");
+		}*/
+
+		//单位名称
+		if (workDealInfo.getWorkCompany() != null) {
+			if (workDealInfo.getWorkCompany().getId() != null) {
+				sql.append(" and wc.id="
+						+ workDealInfo.getWorkCompany().getId());
+			}
+			if (workDealInfo.getWorkCompany().getCompanyName() != null
+					&& !workDealInfo.getWorkCompany().getCompanyName()
+							.equals("")) {
+				sql.append(" and wc.company_name like '%"
+						+ workDealInfo.getWorkCompany().getCompanyName() + "%'");
+			}
+			if (workDealInfo.getWorkCompany().getOrganizationNumber() != null
+					&& !workDealInfo.getWorkCompany().getOrganizationNumber()
+							.equals("")) {
+				sql.append(" and wc.organization_number = '"
+						+ workDealInfo.getWorkCompany().getOrganizationNumber()
+						+ "'");
+			}
+			//省市县
+			if (workDealInfo.getWorkCompany().getProvince() != null
+					&& !workDealInfo.getWorkCompany().getProvince()
+							.equals("") && !workDealInfo.getWorkCompany().getProvince()
+							.equals("省份")) {
+				sql.append(" and wc.province = '"
+						+ workDealInfo.getWorkCompany().getProvince()
+						+ "'");
+			}
+			if (workDealInfo.getWorkCompany().getCity() != null
+					&& !workDealInfo.getWorkCompany().getCity()
+							.equals("")&& !workDealInfo.getWorkCompany().getCity()
+							.equals("地级市")) {
+				sql.append(" and wc.city = '"
+						+ workDealInfo.getWorkCompany().getCity()
+						+ "'");
+			}
+			if (workDealInfo.getWorkCompany().getDistrict() != null
+					&& !workDealInfo.getWorkCompany().getDistrict()
+							.equals("")&& !workDealInfo.getWorkCompany().getDistrict()
+							.equals("市、县级市")) {
+				sql.append(" and wc.district = '"
+						+ workDealInfo.getWorkCompany().getDistrict()
+						+ "'");
+			}
+		}
+		//联系人姓名 联系人电话 固定电话
+		if (workDealInfo.getWorkUser() != null) {
+			if (workDealInfo.getWorkUser().getContactName() != null
+					&& !workDealInfo.getWorkUser().getContactName().equals("")) {
+				sql.append(" and wu.contact_name like '%"
+						+ EscapeUtil.escapeLike(workDealInfo.getWorkUser()
+								.getContactName()) + "%'");
+			}
+			if (workDealInfo.getWorkUser().getContactTel() != null
+					&& !workDealInfo.getWorkUser().getContactTel().equals("")) {
+				sql.append(" and wu.contact_tel like '%"
+						+ EscapeUtil.escapeLike(workDealInfo.getWorkUser()
+								.getContactTel()) + "%'");
+			}
+			if (workDealInfo.getWorkUser().getContactPhone() != null
+					&& !workDealInfo.getWorkUser().getContactPhone().equals("")) {
+				sql.append(" and wu.contact_phone like '%"
+						+ EscapeUtil.escapeLike(workDealInfo.getWorkUser()
+								.getContactPhone()) + "%'");
+			}
+		}
+		if (workDealInfo.getDealInfoStatus() != null
+				&& !workDealInfo.getDealInfoStatus().equals("")) {
+			sql.append(" and wdi.deal_info_status = "
+					+ workDealInfo.getDealInfoStatus());
+		}
+		//key 序列号
+		if (StringUtils.isNotEmpty(workDealInfo.getKeySn())) {
+			sql.append(" and wdi.key_sn like '%"
+					+ EscapeUtil.escapeLike(workDealInfo.getKeySn()) + "%'");
+		}
+		if (workDealInfo.getStatus() != null) {
+			sql.append(" and wdi.status = " + workDealInfo.getStatus());
+		}
+		//受理区域，受理网点，产品名称
+		if (area != null && !area.equals("")) {
+			sql.append(" and wdi.area_id = " + area);
+		}
+		if (officeId != null && !officeId.equals("")) {
+			sql.append(" and wdi.office_id = " + officeId);
+		}
+		if (certType != null && !certType.equals("")) {
+			sql.append(" and cp.product_name = " + certType);
+		}
+		
+		//业务类型 ,模板策略 ,付款方式
+		if (workType != null && !workType.equals("")) {
+			if (workType.equals("5")){
+				sql.append(" and ( wdi.deal_info_type <> 11 or wdi.deal_info_type is null ");
+			}else{
+				sql.append(" and ( wdi.deal_info_type = "+workType+
+						" or wdi.deal_info_type1 = "+workType+
+						" or wdi.deal_info_type2 = "+workType+
+						" or wdi.deal_info_type3 = "+workType+" )");
+			}
+		}
+		if (workDealInfo.getPayType() != null && workDealInfo.getPayType()!=0) {
+			sql.append(" and wdi.pay_type = " + workDealInfo.getPayType());
+		}
+		if (workDealInfo.getWorkPayInfo() != null) {
+			if (workDealInfo.getWorkPayInfo().getMethodMoney() == true) {
+				sql.append(" and (wpi.method_money=1 or wpi.relation_method=0) ");
+			}
+			if (workDealInfo.getWorkPayInfo().getMethodPos() == true) {
+				sql.append(" and (wpi.method_pos=1 or wpi.relation_method=1) ");
+			}
+			if (workDealInfo.getWorkPayInfo().getMethodBank() == true) {
+				sql.append(" and (wpi.method_bank=1 or wpi.relation_method=2) ");
+			}
+			if (workDealInfo.getWorkPayInfo().getMethodAlipay() == true) {
+				sql.append(" and (wpi.method_alipay=1 or wpi.relation_method=3) ");
+			}
+			if (workDealInfo.getWorkPayInfo().getMethodGov() == true) {
+				sql.append(" and wpi.method_gov = 1 ");
+			}
+			if (workDealInfo.getWorkPayInfo().getMethodContract() == true) {
+				sql.append(" and wpi.method_contract = 1 ");
+			}
+		}
+		/*if (makeCertStartTime != null && makeCertEndTime != null) {
+			sql.append(" and workcertin6_.sign_date >= TO_DATE('"
+					+ DateUtils.formatDate(makeCertStartTime,
+							"yyyy-MM-dd 00:00:01")
+					+ "', 'yyyy-MM-dd hh24:mi:ss')");
+			sql.append(" and workcertin6_.sign_date <= TO_DATE ('"
+					+ DateUtils.formatDate(makeCertEndTime,
+							"yyyy-MM-dd 23:59:59")
+					+ "', 'yyyy-MM-dd hh24:mi:ss')");
+		}*/
+		sql.append(" order by wdi.create_date desc,wdi.svn asc)");
+		return sql.toString();
+	}
 }
