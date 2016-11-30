@@ -10072,8 +10072,11 @@ public class WorkDealInfoController extends BaseController {
 		String file = request.getParameter("_FileName");
 		String szBase64 = request.getParameter("szBase64");
 		
-		String ParentDirectory = new File(request.getSession().getServletContext().getRealPath("")).getParent();
-		String saveto = ParentDirectory+File.separator+imgFileUpload;
+		//String ParentDirectory = new File(request.getSession().getServletContext().getRealPath("")).getParent();
+		//String saveto = ParentDirectory+File.separator+imgFileUpload;
+
+		String saveto = Global.getConfig("images.url");
+		
 		log.debug("图片保存路径："+saveto);
 		if (file != null&&!"".equals(file)&&szBase64!=null&&!"".equals(szBase64)){
 			//file = new String(file.getBytes("ISO8859-1"), "UTF-8");

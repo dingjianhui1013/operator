@@ -304,7 +304,7 @@ public class WorkDealInfoAuditController extends BaseController {
 	@RequestMapping("auditFrom")
 	public String auditFrom(WorkDealInfo workDealInfo, HttpServletRequest request, HttpServletResponse response,
 			Model model,RedirectAttributes redirectAttributes) {
-
+		String url = Global.getConfig("images.path");
 		String name = workDealInfo.getWorkUser().getContactName();
 		//新增   验证第一页
 		model.addAttribute("pageType", "audit");
@@ -355,23 +355,16 @@ public class WorkDealInfoAuditController extends BaseController {
 			List<CommonAttach> attachs = attachService.findCommonAttachByWorkDealInfo(workDealInfo.getId());
 			
 			if(attachs!=null&&attachs.size()>0){
-			String imgNames = "";
-				
+				String imgNames = "";
 				for(int i =0;i<attachs.size();i++){
-					
 					if(i==0){
-						imgNames+=attachs.get(0).getAttachName();
+						imgNames+=url+"/"+attachs.get(0).getAttachName();
 					}else{
-						imgNames+=","+attachs.get(i).getAttachName();	
+						imgNames+=","+url+"/"+attachs.get(i).getAttachName();	
 					}
-					
-					
 				}
-				
 				model.addAttribute("imgNames", imgNames);
-				
 			}
-			
 			return "modules/work/workDealInfoAuditACUForm";
 		}else{
 			if (workDealInfo.getId() != null) {
@@ -382,21 +375,16 @@ public class WorkDealInfoAuditController extends BaseController {
 			List<CommonAttach> attachs = attachService.findCommonAttachByWorkDealInfo(workDealInfo.getId());
 			
 			if(attachs!=null&&attachs.size()>0){
-			String imgNames = "";
-				
+				String imgNames = "";
 				for(int i =0;i<attachs.size();i++){
 					
 					if(i==0){
-						imgNames+=attachs.get(0).getAttachName();
+						imgNames+=url+"/"+attachs.get(0).getAttachName();
 					}else{
-						imgNames+=","+attachs.get(i).getAttachName();	
+						imgNames+=","+url+"/"+attachs.get(i).getAttachName();	
 					}
-					
-					
 				}
-				
 				model.addAttribute("imgNames", imgNames);
-				
 			}
 			
 			//类型判断
@@ -475,6 +463,7 @@ public class WorkDealInfoAuditController extends BaseController {
 	@RequestMapping("verifyFrom")
 	public String verifyFrom(WorkDealInfo workDealInfo, HttpServletRequest request, HttpServletResponse response,
 			Model model,RedirectAttributes redirectAttributes) {
+		String url = Global.getConfig("images.path");
 		//新增   验证第一页
 		model.addAttribute("pageType", "verify");
 		if(workDealInfo.getDealInfoType()==WorkDealInfoType.TYPE_ADD_CERT){
@@ -526,24 +515,16 @@ public class WorkDealInfoAuditController extends BaseController {
 			List<CommonAttach> attachs = attachService.findCommonAttachByWorkDealInfo(workDealInfo.getId());
 			
 			if(attachs!=null&&attachs.size()>0){
-			String imgNames = "";
-				
+				String imgNames = "";
 				for(int i =0;i<attachs.size();i++){
-					
 					if(i==0){
-						imgNames+=attachs.get(0).getAttachName();
+						imgNames+=url+"/"+attachs.get(0).getAttachName();
 					}else{
-						imgNames+=","+attachs.get(i).getAttachName();	
+						imgNames+=","+url+"/"+attachs.get(i).getAttachName();	
 					}
-					
-					
 				}
-				
 				model.addAttribute("imgNames", imgNames);
-				
 			}
-
-			
 			return "modules/work/workDealInfoAuditACUForm";
 		}else{
 			if (workDealInfo.getId() != null) {
@@ -554,21 +535,15 @@ public class WorkDealInfoAuditController extends BaseController {
 			List<CommonAttach> attachs = attachService.findCommonAttachByWorkDealInfo(workDealInfo.getId());
 			
 			if(attachs!=null&&attachs.size()>0){
-			String imgNames = "";
-				
+				String imgNames = "";
 				for(int i =0;i<attachs.size();i++){
-					
 					if(i==0){
-						imgNames+=attachs.get(0).getAttachName();
+						imgNames+=url+"/"+attachs.get(0).getAttachName();
 					}else{
-						imgNames+=","+attachs.get(i).getAttachName();	
+						imgNames+=","+url+"/"+attachs.get(i).getAttachName();	
 					}
-					
-					
 				}
-				
 				model.addAttribute("imgNames", imgNames);
-				
 			}
 			
 			//类型判断

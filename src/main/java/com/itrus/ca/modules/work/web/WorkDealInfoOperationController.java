@@ -786,6 +786,7 @@ public class WorkDealInfoOperationController extends BaseController {
 	@RequiresPermissions("work:workDealInfo:edit")
 	@RequestMapping("errorForm")
 	public String errorForm(Long id, Model model,RedirectAttributes redirectAttributes) {
+		String url = Global.getConfig("images.path");
 		WorkDealInfo workDealInfo = workDealInfoService.get(id);
 		if(workDealInfo.getDealInfoType()!=null&&workDealInfo.getDealInfoType()==0){ //新增证书的重新编辑
 			
@@ -873,21 +874,15 @@ public class WorkDealInfoOperationController extends BaseController {
 			List<CommonAttach> attachs = attachService.findCommonAttachByWorkDealInfo(workDealInfo.getId());
 			
 			if(attachs!=null&&attachs.size()>0){
-			String imgNames = "";
-				
+				String imgNames = "";
 				for(int i =0;i<attachs.size();i++){
-					
 					if(i==0){
-						imgNames+=attachs.get(0).getAttachName();
+						imgNames+=url+"/"+attachs.get(0).getAttachName();
 					}else{
-						imgNames+=","+attachs.get(i).getAttachName();	
+						imgNames+=","+url+"/"+attachs.get(i).getAttachName();	
 					}
-					
-					
 				}
-				
 				model.addAttribute("imgNames", imgNames);
-				
 			}
 			List<WorkLog> list = workLogService.findByDealInfo(workDealInfo);
 			//区别再次编辑的页面

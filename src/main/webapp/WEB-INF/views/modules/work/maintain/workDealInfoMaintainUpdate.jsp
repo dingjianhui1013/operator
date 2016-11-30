@@ -53,19 +53,20 @@
 		
 						if("${imgNames}"!=null && "${imgNames}"!=""){
 							var imgNames = "${imgNames}";
-							$("#imgNames").val(imgNames);
 							var str1 = new Array();                      
 							str1 = imgNames.split(",");  
 					
+							var namestr = "";
 							for(var i = 0;i < str1.length; i++){
-								var str = $("<div class='uploadImgList'><img src='/images/"+str1[i]+"' style='width: 100px; height: 80px;'>"+'<p class="uploadImgName">'+getDisplayName(str1[i])+'</p><span class="s-closeBtn icon-remove-sign" data="'+str1[i]+'"></span></div>');
-								
+								var str = $("<div class='uploadImgList'><img src='"+str1[i]+"' style='width: 100px; height: 80px;'>"+'<p class="uploadImgName">'+getDisplayName(str1[i])+'</p><span class="s-closeBtn icon-remove-sign" data="'+str1[i]+'"></span></div>');
 								$("#imgLayer").append(str);
-								
 								var imgBoxMod=$(".ctnlist .text img");
-								
 							    imgPop(imgBoxMod);
 							    imgDel(str);
+							    namestr+=str1[i].substring(str1[i].lastIndexOf('/')+1,str1[i].length)+",";
+							}
+							if(namestr!=''){
+								$("#imgNames").val(namestr.substring(0,namestr.length-1));
 							}
 						}
 		
