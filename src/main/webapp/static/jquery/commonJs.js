@@ -128,15 +128,19 @@ function getholderinfo(){
 	
 	VideoInputCtl.SetDeviceIdcard(nDeviceIndex, 1);         //开启 or 关闭 读取二代证功能
 	
-	//VideoInputCtl.GrabToFile(localStoragePath+"Test.jpg");  //需先执行拍照功能，才可取得此次二代证资讯
+	VideoInputCtl.GrabToFile(localStoragePath+"Test.jpg");  //需先执行拍照功能，才可取得此次二代证资讯
     var names = VideoInputCtl.GetIdcardResult(0);
+    alert(names);
     var idno = VideoInputCtl.GetIdcardResult(5);
     $("#contactName").val(names);
     $("#conCertNumber").val(idno);
 	
-    if( $("#pIDCard").val()==""&&$("#pName").val()==""){
+    if($("#pIDCard").val()==""&&$("#pName").val()==""){
     	$("#pIDCard").val(idno);
     	$("#pName").val(names);
+    	
+    }
+    if((names!=null&&names!=''&&names!=undefined)||(idno!=null&&idno!=''&&idno!=undefined)){
     	top.$.jBox.tip("持有人信息录入成功");
     }
    
@@ -153,7 +157,7 @@ function getholderinfo(){
 function getoperatorinfo(){
 	VideoInputCtl.SetDeviceIdcard(nDeviceIndex, 1);        //开启 or 关闭 读取二代证功能
 	
-	//VideoInputCtl.GrabToFile(localStoragePath+"Test.jpg"); //需先执行拍照功能，才可取得此次二代证资讯
+	VideoInputCtl.GrabToFile(localStoragePath+"Test.jpg"); //需先执行拍照功能，才可取得此次二代证资讯
     var names = VideoInputCtl.GetIdcardResult(0);
 
 	var idno = VideoInputCtl.GetIdcardResult(5);
@@ -177,7 +181,7 @@ function getcompanyinfo(){
 	 
 	 VideoInputCtl.SetDeviceQRcode(nDeviceIndex, 1);           //开启 or 关闭 QRcode功能
 	 
-	 //VideoInputCtl.GrabToFile(localStoragePath+"Test.jpg");    //将照片存放到本地路径下
+	 VideoInputCtl.GrabToFile(localStoragePath+"Test.jpg");    //将照片存放到本地路径下
 
      if (VideoInputCtl.GetDeviceQRcode(nDeviceIndex)) {
          var nCount = VideoInputCtl.GetQRcodeCount();
