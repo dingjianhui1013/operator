@@ -46,8 +46,10 @@ import com.itrus.ca.modules.profile.entity.ProductTypeObj;
 import com.itrus.ca.modules.profile.entity.WorkDealInfoTypeObj;
 import com.itrus.ca.modules.profile.service.ConfigAppService;
 import com.itrus.ca.modules.sys.entity.Area;
+import com.itrus.ca.modules.sys.entity.CommonAttach;
 import com.itrus.ca.modules.sys.entity.Office;
 import com.itrus.ca.modules.sys.entity.User;
+import com.itrus.ca.modules.sys.service.CommonAttachService;
 import com.itrus.ca.modules.sys.service.OfficeService;
 import com.itrus.ca.modules.sys.utils.UserUtils;
 import com.itrus.ca.modules.work.entity.WorkCompany;
@@ -93,6 +95,9 @@ public class WorkDealInfoFilingController extends BaseController {
 	
 	@Autowired
 	private OfficeService officeService;
+	
+	@Autowired
+	private CommonAttachService attachService;
 	
 	@Autowired
 	private ConfigAppService configAppService;
@@ -564,6 +569,20 @@ public class WorkDealInfoFilingController extends BaseController {
 		model.addAttribute("wdiStatus",
 				WorkDealInfoStatus.WorkDealInfoStatusMap);
 		model.addAttribute("workDealInfo", workDealInfo);
+		//显示图片
+		List<CommonAttach> attachs = attachService.findCommonAttachByWorkDealInfo(workDealInfo.getId());
+		String url = Global.getConfig("images.path");
+		if(attachs!=null&&attachs.size()>0){
+			String imgNames = "";
+			for(int i =0;i<attachs.size();i++){
+				if(i==0){
+					imgNames+=url+"/"+attachs.get(0).getAttachName();
+				}else{
+					imgNames+=","+url+"/"+attachs.get(i).getAttachName();	
+				}
+			}
+			model.addAttribute("imgNames", imgNames);
+		}
 		return "modules/work/workDealInfoFilingFormF";
 	}
 

@@ -34,17 +34,21 @@
 .btnGrop{margin-bottom:5px;}
 .s-closeBtn{ position:absolute; right:-4px; top:0px; font-size:20px; cursor:pointer;}
 
-</style>	
-<script type="text/javascript" src="${ctxStatic }/js/content_zoom.js"></script>
-<script type="text/javascript" src="${ctxStatic }/js/common.js"></script>
-<script type="text/javascript" src="${ctxStatic}/jquery/commonJs.js"></script>
+</style>
+
 <script type="text/javascript">
     var ctx = "${ctx}";
+    var ctxStatic = "${ctxStatic}";
+    var imgPath = "${imgPath}";
     var province = "${workDealInfo.workCompany.province}";
     var city = "${workDealInfo.workCompany.city}";
     var district = "${workDealInfo.workCompany.district}";
 </script>
-
+<script type="text/javascript" src="${ctxStatic}/dialog/zDrag.js"></script>
+<script type="text/javascript" src="${ctxStatic}/dialog/zDialog.js"></script>	
+<script type="text/javascript" src="${ctxStatic }/js/content_zoom.js"></script>
+<script type="text/javascript" src="${ctxStatic }/js/common.js"></script>
+<script type="text/javascript" src="${ctxStatic}/jquery/commonJs.js"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
 		
@@ -737,40 +741,6 @@
 			href="${ctx}/work/workDealInfo/typeForm?id=${workDealInfo.id}&reissueType=${reissue}&dealType=${dealType}">业务<c:if test="${not empty update}">更新</c:if><c:if test="${not empty change}">变更</c:if><c:if test="${not empty reissue}">补办</c:if><c:if test="${not empty revoke}">吊销</c:if></a></li>
 	</ul>
 	
-	<div id="modal-container" class="modal hide fade" style="width:900px;height:700px;left:50%;margin-left:-450px;top:0" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-		
-		<!--图像采集区域 -->
-		<div id="imageCollection" style=" width: 800px; height: 700px;display: none">
-        <object id="VideoInputCtl" classid="CLSID:30516390-004F-40B9-9FC6-C9096B59262E" style="width: 100%; height: 80%;"></object>
-    	
-    	
-    	<div class="control-group">
-		
-			<div class="control-group" align="center">
-				<div class="form-group btnGrop">
-					<button id="qrsq" class="btn btn-primary" onclick="changeDevice()">切换摄像头</button>&nbsp;&nbsp;&nbsp;			
-					<button id="qrsq" class="btn btn-primary" onclick="setPropertyDevice()">设置装置属性</button>&nbsp;&nbsp;&nbsp;
-					<button id="qrsq" class="btn btn-primary" onclick="getcompanyinfo()">单位信息录入</button>&nbsp;&nbsp;&nbsp;
-					<button id="qrsq" class="btn btn-primary" onclick="getholderinfo()">持有人信息录入</button>&nbsp;&nbsp;&nbsp;
-					<button id="qrsq" class="btn btn-primary" onclick="getoperatorinfo()">经办人信息录入</button>
-				</div>
-				<div class="form-group btnGrop">
-					<button id="qrsq" class="btn btn-primary" onclick="applicationphotograph('${imgPath}')">申请表拍照</button>&nbsp;&nbsp;&nbsp;
-					<button id="qrsq" class="btn btn-primary" onclick="workCompanyphotograph('${imgPath}')">单位证件拍照</button>&nbsp;&nbsp;&nbsp;
-					<button id="qrsq" class="btn btn-primary" onclick="workCertApplyInfophotograph('${imgPath}')">经办人身份证拍照</button>&nbsp;&nbsp;&nbsp;
-					<button id="qrsq" class="btn btn-primary" onclick="workUserphotograph('${imgPath}')">持有人身份证拍照</button>&nbsp;&nbsp;&nbsp;
-					<button id="qrsq" class="btn btn-primary" onclick="headphotograph('${imgPath}')">照片拍照</button>&nbsp;&nbsp;&nbsp;
-				</div>
-				<button class="btn" data-dismiss="modal" aria-hidden="true">取消</button> 
-			</div>
-		</div>
-    	
-    	
-    	
-    	</div>
-		
-	</div>
-	
 	<form:form id="inputForm"
 		action="${ctx}/work/workDealInfoOperation/maintainSaveUpdate" 
 		method="post" enctype="multipart/form-data"
@@ -798,8 +768,8 @@
 							<!-- <th colspan="4" style="font-size: 20px;">基本信息</th> -->
 							<th colspan="1" style="font-size: 20px;"><span
 								class="prompt" style="color: red; display: none;">*</span>基本信息</th>	
-							<th colspan="3"> <a href="#modal-container" data-toggle="modal">
-							<input class="btn btn-primary smBtn" onclick="scanningInfoEnter()" data-toggle="modal" value="扫描录入" /></a>	
+							<th colspan="3"> <a href="#" data-toggle="modal">
+							<input id="scan" class="btn btn-primary smBtn" onclick="scanningInfoEnter()" data-toggle="modal" value="扫描录入" /></a>	
 							</th>
 						</tr>
 						<tr>

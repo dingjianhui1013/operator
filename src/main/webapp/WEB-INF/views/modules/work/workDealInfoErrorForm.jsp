@@ -33,14 +33,18 @@
 .s-closeBtn{ position:absolute; right:-4px; top:0px; font-size:20px; cursor:pointer;}
 
 </style>
-<script type="text/javascript" src="${ctxStatic}/jquery/commonJs.js"></script>
+
 <script type="text/javascript">
     var ctx = "${ctx}";
+    var ctxStatic = "${ctxStatic}";
+    var imgPath = "${imgPath}";
     var province = "${workDealInfo.workCompany.province}";
     var city = "${workDealInfo.workCompany.city}";
     var district = "${workDealInfo.workCompany.district}";
 </script>
-
+<script type="text/javascript" src="${ctxStatic}/dialog/zDrag.js"></script>
+<script type="text/javascript" src="${ctxStatic}/dialog/zDialog.js"></script>
+<script type="text/javascript" src="${ctxStatic}/jquery/commonJs.js"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
 		
@@ -647,7 +651,7 @@ $("#agentId").change(function(){
 			href="${ctx}/work/workDealInfoOperation/errorForm?id=${workDealInfo.id}">业务编辑</a></li>
 	</ul>
 	
-	<div id="modal-container" class="modal hide fade" style="width:800px;height:700px;right:10%;top:34px" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<%-- <div id="modal-container" class="modal hide fade" style="width:800px;height:700px;right:10%;top:34px" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		
 		<!--图像采集区域 -->
 		<div id="imageCollection" style="width: 800px; height: 700px;display: none">
@@ -679,7 +683,7 @@ $("#agentId").change(function(){
     	
     	</div>
 		
-	</div>
+	</div> --%>
 	
 	<form:form id="inputForm" action="${ctx}/work/workDealInfo/save"
 		method="POST" class="form-horizontal">
@@ -707,8 +711,8 @@ $("#agentId").change(function(){
 							<!-- <th colspan="4" style="font-size: 20px;"><span class="prompt" style="color:red; display: none;">*</span>基本信息</th> -->
 							<th colspan="1" style="font-size: 20px;"><span
 								class="prompt" style="color: red; display: none;">*</span>基本信息</th>	
-							<th colspan="3"> <a href="#modal-container" data-toggle="modal">
-							<input class="btn btn-primary smBtn" onclick="scanningInfoEnter()" data-toggle="modal" value="扫描录入" /></a>	
+							<th colspan="3"> <a href="#" data-toggle="modal">
+							<input id="scan" class="btn btn-primary smBtn" onclick="scanningInfoEnter()" data-toggle="modal" value="扫描录入" /></a>	
 							</th>
 						</tr>
 						<tr>

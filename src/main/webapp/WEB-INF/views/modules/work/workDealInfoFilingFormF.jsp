@@ -7,14 +7,118 @@
 <meta name="decorator" content="default" />
 <link href="${ctxStatic}/jquery/jquery.bigautocomplete.css"
 	rel="stylesheet" />
+<style type="text/css">
+
+.zoominner {background: none repeat scroll 0 0 #FFFFFF; padding: 5px 10px 10px; text-align: left;}
+/* .zoominner p {height:30px; _position:absolute; _right:2px; _top:5px;}
+.zoominner p a { /* background: url("../images/imgzoom_tb.gif") no-repeat scroll 0 0 transparent;  float: left; height: 17px; line-height: 100px; margin-left: 10px;  overflow: hidden;  width: 17px;}
+.zoominner p a.imgadjust {background-position: -40px 0;} */
+.zoominner a.imgclose{ cursor:pointer;position:absolute;z-index:9999;right:-6px; top:-6px; color:#333; font-size:30px; display:block;}
+.zoominner a.imgclose:hover{text-decoration:none;}
+.y {float: right; margin-bottom:10px;}
+.ctnlist .text img{ cursor:pointer;}
+#imgzoom_cover{background-color:#000000; filter:progid:DXImageTransform.Microsoft.Alpha(Opacity=70); opacity:0.7; position:absolute; z-index:800; top:0px; left: 0px; width:100%; display:none;}
+#imgzoom{ display:none; z-index:801; position:absolute;}
+#imgzoom_img{_width:300px; _height:200px; width:700px; height:600px; background:url(../images/imageloading.gif) center center no-repeat;}
+#imgzoom_zoomlayer{ _width:300px; _height:200px; _position:relative; _padding-top:30px; min-width:300px; min-height:200px; padding:17px;}
+
+.imgLayerBox{margin-bottom:20px;overflow:hidden;}
+.uploadImgList{ float:left; border:1px solid #ddd;margin-right:10px; padding:2px; position:relative}
+.uploadImgName{ text-align:center; font-size:12px; font-weight:bold; margin-top:4px; height:22px; line-height:22px;border-top:1px solid #ddd;margin-bottom:0px;}
+.smBtn{width:100px; height:20px;}
+.btnGrop{margin-bottom:5px;}
+.s-closeBtn{ position:absolute; right:-4px; top:0px; font-size:20px; cursor:pointer;}
+
+</style>
+<script type="text/javascript" src="${ctxStatic}/jquery/commonJs.js"></script>
 <script type="text/javascript">
 	$(document).ready(
 		function() {
 			$('div.small_pic a').fancyZoom({scaleImg: true, closeOnClick: true});
+			//图片的显示
+			if("${imgNames}"!=null && "${imgNames}"!=""){
+				var imgNames = "${imgNames}";
+				var str1 = new Array();                      
+				str1 = imgNames.split(",");  
+		
+				var namestr = "";
+				for(var i = 0;i < str1.length; i++){
+					var str = $("<div class='uploadImgList'><img src='"+str1[i]+"' style='width: 100px; height: 80px;'>"+'<p class="uploadImgName">'+getDisplayName(str1[i])+'</p></div>');
+					$("#imgLayer").append(str);
+					var imgBoxMod=$(".ctnlist .text img");
+					imgPop1(imgBoxMod);
+				    //imgDel(str);
+				    namestr+=str1[i].substring(str1[i].lastIndexOf('/')+1,str1[i].length)+",";
+				}
+				if(namestr!=''){
+					$("#imgNames").val(namestr.substring(0,namestr.length-1));
+				}
+			}
+			
+	        //关闭按钮
+			$("#append_parent .imgclose").live('click',function(){
+			    $("#imgzoom").css("display","none");
+			    $("#imgzoom_cover").css("display","none");
+			})
 	});
+	
+	//内容页图片点击放大效果函数主体开始
+	function imgPop1(imgBoxMod){
+	    imgBoxMod.each(function(){
+		    //超过最大尺寸时自动缩放内容页图片尺寸
+		    var ctnImgWidth=$(this).width();
+		    if(ctnImgWidth>618){
+		            $(this).width(618);
+		        }
+		    //点击图片弹出层放大图片效果
+		    $(this).click( function(){
+		    	
+		    	var str = "<div id='imgzoom'>"
+		    				+"<div id='imgzoom_zoomlayer' class='zoominner'>"
+	//	    					+"<p><span class='y'>"
+		    						+"<a title='关闭' class='imgclose'><span class='icon-remove-sign'></span></a>"
+	//	    					+"</span></p>"
+		    					+"<div id='imgzoom_img' class='hm'>"
+		    					+"<img src='' id='imgzoom_zoom' style='cursor:pointer'>"
+		    					+"</div>"
+		    				+"</div>"
+		    			   +"</div>"
+		    			   +"<div id='imgzoom_cover'></div>";
+		    	
+		        $("#append_parent").html(str); //生成HTML代码
+		        var domHeight =$(document).height(); //文档区域高度
+		        $("#imgzoom_cover").css({"display":"block","height":domHeight});
+		        var imgLink=$(this).attr("src");
+		        $("#imgzoom_img #imgzoom_zoom").attr("src",imgLink);
+		        $("#imgzoom").css("display","block");
+		        imgboxPlace1();
+		        })
+		})
+	}
+	
+	//弹出窗口位置
+	function imgboxPlace1(){
+	    var cwinwidth=$("#imgzoom").width();
+	    var cwinheight=$("#imgzoom").height();
+	    var browserwidth =$(window).width();//窗口可视区域宽度
+	    var browserheight =$(window).height(); //窗口可视区域高度
+	    var scrollLeft=$(window).scrollLeft(); //滚动条的当前左边界值
+	    var scrollTop=$(window).scrollTop(); //滚动条的当前上边界值 
+	    var imgload_left=scrollLeft+(browserwidth-cwinwidth)/2;
+	    var imgload_top=scrollTop+(browserheight-cwinheight)/2+100;
+	    $("#imgzoom").css({"left":imgload_left,"top":imgload_top});
+	}
 </script>
 </head>
 <body>
+		<div id="append_parent"></div>
+		<div class="list ctnlist">
+		<div class="text">
+		<div id="imgLayer" align="left" class="imgLayerBox">
+			<input id="imgNames" name="imgNames" type="hidden"/>
+		</div>
+		</div>
+		</div>
 	<table class="table table-striped table-bordered table-condensed">
 		<thead>
 			<tr>

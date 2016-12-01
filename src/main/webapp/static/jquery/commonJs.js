@@ -1,4 +1,4 @@
-//各个业务界面重复的js很多 之后如果再有重复的js写到这里 或者有时间把之前那些js拿出来整合到这里  引入改js之前 务必先引入jQuery
+//各个业务界面重复的js很多 之后如果再有重复的js写到这里 或者有时间把之前那些js拿出来整合到这里  引入改js之前 务必先引入jQuery zDrag zDialog
 
 /**
  * VideoInput ActiveX API:
@@ -42,14 +42,41 @@ var fileUploadPath = "";                              //上传路径,从applicat
  * */
 function scanningInfoEnter() {
 	
-	$("#imageCollection").show();
-	
+	//$("#imageCollection").show();
+	var diag = new Dialog();
+	diag.Width = 900;
+	diag.Height = 700;
+	diag.Title = "扫描录入";
+	var html ='<div style="width:100%;height:100%;top:0;background-color:white">';
+		html+='<object id="VideoInputCtl" classid="CLSID:30516390-004F-40B9-9FC6-C9096B59262E" style="width: 100%; height: 80%;"></object>';
+		html+='<div class="control-group">';
+		html+='<div class="control-group" align="center" >';
+		html+='	<div class="form-group btnGrop">';
+		html+='	<button id="qrsq" class="btn btn-primary" onclick="changeDevice()">切换摄像头</button>&nbsp;&nbsp;&nbsp;';			
+		html+='	<button id="qrsq" class="btn btn-primary" onclick="setPropertyDevice()">设置装置属性</button>&nbsp;&nbsp;&nbsp;';
+		html+='	<button id="qrsq" class="btn btn-primary" onclick="getcompanyinfo()">单位信息录入</button>&nbsp;&nbsp;&nbsp;';
+		html+='	<button id="qrsq" class="btn btn-primary" onclick="getholderinfo()">持有人信息录入</button>&nbsp;&nbsp;&nbsp;';
+		html+='	<button id="qrsq" class="btn btn-primary" onclick="getoperatorinfo()">经办人信息录入</button>';
+		html+='	</div>';
+		html+='	<div class="form-group btnGrop">';
+		html+='		<button id="qrsq" class="btn btn-primary" onclick="applicationphotograph('+imgPath+')">申请表拍照</button>&nbsp;&nbsp;&nbsp;';
+		html+='		<button id="qrsq" class="btn btn-primary" onclick="workCompanyphotograph('+imgPath+')">单位证件拍照</button>&nbsp;&nbsp;&nbsp;';
+		html+='		<button id="qrsq" class="btn btn-primary" onclick="workCertApplyInfophotograph('+imgPath+')">经办人身份证拍照</button>&nbsp;&nbsp;&nbsp;';
+		html+='		<button id="qrsq" class="btn btn-primary" onclick="workUserphotograph('+imgPath+')">持有人身份证拍照</button>&nbsp;&nbsp;&nbsp;';
+		html+='		<button id="qrsq" class="btn btn-primary" onclick="headphotograph('+imgPath+')">照片拍照</button>&nbsp;&nbsp;&nbsp;';
+		html+='	</div>';
+		/*html+='	<button class="btn" data-dismiss="modal" aria-hidden="true">取消</button> ';*/
+		html+='</div>';
+		html+='</div>';
+	diag.InnerHtml=html;
+	diag.show();
+	diag.CancelEvent=release;
 	var nDeviceCount = VideoInputCtl.GetDeviceCount();
-  
     var szDeviceName = VideoInputCtl.GetDeviceName(1);
         
     if (nDeviceCount > 0 && szDefaultDevice.length > 0)
         opendevice();
+    
 }
 
 
@@ -62,7 +89,6 @@ function opendevice() {
 
     if (!VideoInputCtl.IsDeviceOpened(nDeviceIndex))
         VideoInputCtl.OpenDevice(nDeviceIndex);
-
     VideoInputCtl.StartPlayDevice(nDeviceIndex);
     VideoInputCtl.SetDeleteAfterHttpPost(true);
 }
@@ -148,17 +174,16 @@ function getcompanyinfo(){
 	 VideoInputCtl.SetDeviceQRcode(nDeviceIndex, 1);           //开启 or 关闭 QRcode功能
 	 
 	 VideoInputCtl.GrabToFile(localStoragePath+"Test.jpg");    //将照片存放到本地路径下
-	 
+
      if (VideoInputCtl.GetDeviceQRcode(nDeviceIndex)) {
          var nCount = VideoInputCtl.GetQRcodeCount();
-         
+
              szType = VideoInputCtl.GetQRcodeTypeName(0);
              szText = VideoInputCtl.GetQRcodeContent(0);
       
              console.log(szText);
              
              var strs = splitQRcode(szText);
-             
              if(strs!=null){
             	 $("#companyName").val(strs[2]);
             	 $("#organizationNumber").val(strs[0]);
@@ -209,7 +234,6 @@ function applicationphotograph(imgPath,clientAddr){
 	if(fileUploadPath.length == 0){
 		fileUploadPath = imgPath
 	}
-
 	var imgName = "application-"+ new Date().getTime()+suffixImg;
 	afterUpload(imgName);	
 }
@@ -242,6 +266,20 @@ function headphotograph(imgPath){
 	
 	var imgName = "head-"+ new Date().getTime()+suffixImg;
 	afterUpload(imgName);	
+}
+
+/**
+ * @author 萧龙纳云
+ * 
+ * 关闭头像
+ * */
+function release() {
+	var nDeviceIndex = VideoInputCtl.GetDeviceIndex();
+
+	if (VideoInputCtl.IsDeviceOpened(nDeviceIndex))
+	{
+		VideoInputCtl.CloseDevice(nDeviceIndex);
+	}
 }
 
 /**
@@ -347,7 +385,6 @@ function afterUpload(imgName){
 	var szBase64 = VideoInputCtl.GrabToBase64(".jpg");
 
 	var address = getAddress()+requestURI;
-
 	if (imgName.replace(/^\s+|\s+$/g, '') != '')
 	{
 		$.ajax({
