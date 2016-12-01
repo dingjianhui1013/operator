@@ -184,8 +184,8 @@ public class WorkDealInfoController extends BaseController {
 	
 	private static Logger log = LoggerFactory.getLogger(WorkDealInfoController.class);
 
-	@Value(value = "${imgFileUpload.path}")
-	private String imgFileUpload;
+/*	@Value(value = "${imgFileUpload.path}")
+	private String imgFileUpload;*/
 	
 	@Autowired
 	private CommonAttachService attachService;
