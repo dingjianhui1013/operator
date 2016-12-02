@@ -108,9 +108,8 @@ function opendevice() {
     
     
     
-    var gg = VideoInputCtl.StartPlayDevice(nDeviceIndex);
-    
-    alert(gg);
+    VideoInputCtl.StartPlayDevice(nDeviceIndex);
+   
     VideoInputCtl.SetDeleteAfterHttpPost(true);
 }
 
