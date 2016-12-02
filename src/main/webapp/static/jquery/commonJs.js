@@ -71,9 +71,15 @@ function scanningInfoEnter() {
 	diag.InnerHtml=html;
 	diag.show();
 	diag.CancelEvent=release;
-	var nDeviceCount = VideoInputCtl.GetDeviceCount();
-    var szDeviceName = VideoInputCtl.GetDeviceName(1);
-        
+	
+	var nDeviceCount = VideoInputCtl.GetDeviceCount();    
+    for (var i = 0; i < nDeviceCount; i++) {
+        var szDeviceName = VideoInputCtl.GetDeviceName(i);
+        if (szDefaultDevice.length > 0
+            && szDeviceName.indexOf(szDefaultDevice) >= 0)
+        	nDeviceIndex = i;
+    }
+    
     if (nDeviceCount > 0 && szDefaultDevice.length > 0)
         opendevice();
     
