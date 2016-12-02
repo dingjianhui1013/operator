@@ -3294,6 +3294,21 @@ public class WorkDealInfoController extends BaseController {
 				
 		}
 		
+		//显示图片
+		List<CommonAttach> attachs = attachService.findCommonAttachByWorkDealInfo(workDealInfo.getId());
+		String url = Global.getConfig("images.path");
+		if(attachs!=null&&attachs.size()>0){
+			String imgNames = "";
+			for(int i =0;i<attachs.size();i++){
+				if(i==0){
+					imgNames+=url+"/"+attachs.get(0).getAttachName();
+				}else{
+					imgNames+=","+url+"/"+attachs.get(i).getAttachName();	
+				}
+			}
+			model.addAttribute("imgNames", imgNames);
+		}
+		
 		if (dealInfoTypes.size() == 1) {
 			if (dealInfoTypes.get(0).equals(4)) {// 变更
 				return "modules/work/maintain/workDealInfoMaintainReturnChange";

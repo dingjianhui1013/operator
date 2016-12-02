@@ -581,19 +581,13 @@ function imgboxPlace(){
     var cwinheight=$("#imgzoom").height();
     var browserwidth =$(window).width();//窗口可视区域宽度
     var browserheight =$(window).height(); //窗口可视区域高度
-    
-   
-    
-    
+
     var scrollLeft=$(window).scrollLeft(); //滚动条的当前左边界值
     var scrollTop=$(window).scrollTop(); //滚动条的当前上边界值 
-    
-    
-   
-    
+
     var imgload_left=scrollLeft+(browserwidth-cwinwidth)/2;
     var imgload_top=scrollTop+(browserheight-cwinheight)/2;
-    $("#imgzoom").css({"left":imgload_left,"top":imgload_top});
+    $("#imgzoom").css({"left":imgload_left,"top":20});
     }
 }
 
