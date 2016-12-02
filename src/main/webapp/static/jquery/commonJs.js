@@ -42,13 +42,22 @@ var requestURI = "/work/workDealInfo/saveUploadImg";  //图片上传的请求路
  * */
 function scanningInfoEnter() {
 	
-	//$("#imageCollection").show();
+	var urlArray = new Array();
+	urlArray = window.location.toString().split('/');
+    var base = urlArray[0]+'//' + window.location.host + '/' + urlArray[3];
+	
+    var codeBase = base+"/download/VideoInputCtlSetup.exe";
+	
+ 
+    
+    //codeBase="'+codeBase+'"
+    
 	var diag = new Dialog();
 	diag.Width = 600;
 	diag.Height = 420;
 	diag.Title = "扫描录入";
 	var html ='<div style="width:100%;height:100%;top:0;background-color:white;">';
-		html+='<object id="VideoInputCtl" classid="CLSID:30516390-004F-40B9-9FC6-C9096B59262E" style="width: 100%; height: 83%;"></object>';
+		html+='<object id="VideoInputCtl" codeBase="'+codeBase+'" classid="CLSID:30516390-004F-40B9-9FC6-C9096B59262E" style="width: 100%; height: 83%;"></object>';
 		html+='<div class="control-group" style="width: 100%; height: 17%;">';
 		html+='<div class="control-group" align="center">';
 		html+='	<div class="form-group btnGrop">';
@@ -65,7 +74,7 @@ function scanningInfoEnter() {
 		html+='		<button id="qrsq" class="btn btn-primary" onclick="applicationphotograph('+imgPath+')" style="margin-right:0px">&nbsp;申请表拍照&nbsp;</button>';
 		html+='		<button id="qrsq" class="btn btn-primary" onclick="setPropertyDevice()" style="margin-right:0px">&nbsp;装置&nbsp;属性&nbsp;</button>';
 		html+='	</div>';
-		/*html+='	<button class="btn" data-dismiss="modal" aria-hidden="true">取消</button> ';*/
+		
 		html+='</div>';
 		html+='</div>';
 	diag.InnerHtml=html;
@@ -95,7 +104,13 @@ function opendevice() {
 
     if (!VideoInputCtl.IsDeviceOpened(nDeviceIndex))
         VideoInputCtl.OpenDevice(nDeviceIndex);
-    VideoInputCtl.StartPlayDevice(nDeviceIndex);
+    
+    
+    
+    
+    var gg = VideoInputCtl.StartPlayDevice(nDeviceIndex);
+    
+    alert(gg);
     VideoInputCtl.SetDeleteAfterHttpPost(true);
 }
 
