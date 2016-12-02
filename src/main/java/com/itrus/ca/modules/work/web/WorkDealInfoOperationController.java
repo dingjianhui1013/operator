@@ -793,23 +793,16 @@ public class WorkDealInfoOperationController extends BaseController {
 			List<CommonAttach> attachs = attachService.findCommonAttachByWorkDealInfo(workDealInfo.getId());
 			
 			if(attachs!=null&&attachs.size()>0){
-			String imgNames = "";
-				
+				String imgNames = "";
 				for(int i =0;i<attachs.size();i++){
-					
 					if(i==0){
-						imgNames+=attachs.get(0).getAttachName();
+						imgNames+=url+"/"+attachs.get(0).getAttachName();
 					}else{
-						imgNames+=","+attachs.get(i).getAttachName();	
+						imgNames+=","+url+"/"+attachs.get(i).getAttachName();	
 					}
-					
-					
 				}
-				
 				model.addAttribute("imgNames", imgNames);
-				
 			}
-			
 			WorkCompany workCompany = workDealInfo.getWorkCompany();
 			WorkUser workUser = workDealInfo.getWorkUser();
 			model.addAttribute("workCompany", workCompany);
