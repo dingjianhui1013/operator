@@ -34,7 +34,7 @@ var suffixImg = ".jpg";                               //设置图片后缀,固�
 
 var requestURI = "/work/workDealInfo/saveUploadImg";  //图片上传的请求路径
 
-var fileUploadPath = "";                              //上传路径,从application.properties 中获取.
+//var fileUploadPath = "";                              //上传路径,从application.properties 中获取.
 /**
  * @author 萧龙纳云
  * 
@@ -130,7 +130,6 @@ function getholderinfo(){
 	
 	VideoInputCtl.GrabToFile(localStoragePath+"Test.jpg");  //需先执行拍照功能，才可取得此次二代证资讯
     var names = VideoInputCtl.GetIdcardResult(0);
-    alert(names);
     var idno = VideoInputCtl.GetIdcardResult(5);
     $("#contactName").val(names);
     $("#conCertNumber").val(idno);
@@ -223,11 +222,6 @@ function setPropertyDevice(){
  * 单位证件拍照
  * */
 function workCompanyphotograph(imgPath){
-	
-	if(fileUploadPath.length == 0){
-		fileUploadPath = imgPath
-	}
-	
 	var imgName = "workcompany-"+ new Date().getTime()+suffixImg;
 	afterUpload(imgName);	
 }
@@ -238,11 +232,6 @@ function workCompanyphotograph(imgPath){
  * 申请表拍照
  * */
 function applicationphotograph(imgPath,clientAddr){
-
-	
-	if(fileUploadPath.length == 0){
-		fileUploadPath = imgPath
-	}
 	var imgName = "application-"+ new Date().getTime()+suffixImg;
 	afterUpload(imgName);	
 }
@@ -253,11 +242,6 @@ function applicationphotograph(imgPath,clientAddr){
  * 经办人身份证拍照
  * */
 function workCertApplyInfophotograph(imgPath){
-
-	if(fileUploadPath.length == 0){
-		fileUploadPath = imgPath
-	}
-	
 	var imgName = "workcertapplyinfo-"+ new Date().getTime()+suffixImg;
 	afterUpload(imgName);	
 }
@@ -268,11 +252,6 @@ function workCertApplyInfophotograph(imgPath){
  * 头像拍照
  * */
 function headphotograph(imgPath){
-
-	if(fileUploadPath.length == 0){
-		fileUploadPath = imgPath
-	}
-	
 	var imgName = "head-"+ new Date().getTime()+suffixImg;
 	afterUpload(imgName);	
 }
@@ -296,12 +275,7 @@ function release() {
  * 
  * 持有人身份证拍照
  * */
-function workUserphotograph(imgPath){
-
-	if(fileUploadPath.length == 0){
-		fileUploadPath = imgPath
-	}
-	
+function workUserphotograph(imgPath){	
 	var imgName = "workuser-"+ new Date().getTime()+suffixImg;
 	afterUpload(imgName);	
 }
