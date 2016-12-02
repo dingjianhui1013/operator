@@ -566,11 +566,17 @@ function imgPop(imgBoxMod){
         var imgLink=$(this).attr("src");
         $("#imgzoom_img #imgzoom_zoom").attr("src",imgLink);
         $("#imgzoom").css("display","block");
-        imgboxPlace();
+        imgboxPlace();       
         })
 })
         //关闭按钮
 $("#append_parent .imgclose").live('click',function(){
+    $("#imgzoom").css("display","none");
+    $("#imgzoom_cover").css("display","none");
+})
+
+//关闭
+$("#imgzoom_zoom").live('click',function(){
     $("#imgzoom").css("display","none");
     $("#imgzoom_cover").css("display","none");
 })

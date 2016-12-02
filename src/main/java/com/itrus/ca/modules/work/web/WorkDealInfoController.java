@@ -2609,7 +2609,24 @@ public class WorkDealInfoController extends BaseController {
 			model.addAttribute("workCertApplyInfo", workDealInfo
 					.getWorkCertInfo().getWorkCertApplyInfo());
 		}
+		
+		String url = Global.getConfig("images.path");
 		if (workDealInfo.getId() != null) {
+			
+			List<CommonAttach> attachs = attachService.findCommonAttachByWorkDealInfo(workDealInfo.getId());
+			
+			if(attachs!=null&&attachs.size()>0){
+				String imgNames = "";
+				for(int i =0;i<attachs.size();i++){
+					if(i==0){
+						imgNames+=url+"/"+attachs.get(0).getAttachName();
+					}else{
+						imgNames+=","+url+"/"+attachs.get(i).getAttachName();	
+					}
+				}
+				model.addAttribute("imgNames", imgNames);
+			}
+			
 
 			ConfigProduct configProduct = workDealInfo.getConfigProduct();
 
