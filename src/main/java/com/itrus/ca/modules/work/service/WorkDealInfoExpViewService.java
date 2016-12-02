@@ -544,7 +544,10 @@ public class WorkDealInfoExpViewService extends BaseService {
 			}
 			// 行政所属区
 			if (information.indexOf(",xzssq") > -1) {
-				dealInfoVo.setAreaName(dealInfo.getAreaName());
+				//dealInfoVo.setAreaName(dealInfo.getAreaName());
+				dealInfoVo.setProvince(dealInfo.getProvince());
+				dealInfoVo.setCity(dealInfo.getCity());
+				dealInfoVo.setCounty(dealInfo.getDistrict());
 			}
 			// 计费策略类型
 			if (information.indexOf(",jfcllx") > -1) {
@@ -729,7 +732,9 @@ public class WorkDealInfoExpViewService extends BaseService {
 		}
 		// 行政所属区
 		if (information.indexOf(",xzssq") > -1) {
-			varNameList.add("areaName");
+			varNameList.add("province");
+			varNameList.add("city");
+			varNameList.add("county");
 		}
 		// 计费策略类型
 		if (information.indexOf(",jfcllx") > -1) {

@@ -57,6 +57,12 @@ public class WorkDealInfoVo {
 	private String payType;
 	@ExcelField(title = "收费金额", align = 2, sort = 26)
 	private String totalMoney;
+	@ExcelField(title = "省份", align = 2, sort = 25)
+	private String province;
+	@ExcelField(title = "地级市", align = 2, sort = 25)
+	private String city;
+	@ExcelField(title = "市、县级市", align = 2, sort = 25)
+	private String county;
 
 	public String getPayType() {
 		return payType;
@@ -272,6 +278,30 @@ public class WorkDealInfoVo {
 
 	public void setAreaName(String areaName) {
 		this.areaName = areaName;
+	}
+
+	public String getProvince() {
+		return province;
+	}
+
+	public void setProvince(String province) {
+		this.province = province;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public String getCounty() {
+		return county;
+	}
+
+	public void setCounty(String county) {
+		this.county = county;
 	}
 
 }

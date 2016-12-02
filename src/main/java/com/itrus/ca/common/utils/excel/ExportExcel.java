@@ -459,8 +459,8 @@ public class ExportExcel {
 						val = Reflections.invokeGetter(e, ef.value());
 					} else {
 						if (os[1] instanceof Field) {
-							val = Reflections.invokeGetter(e,
-									((Field) os[1]).getName());
+							String name = ((Field) os[1]).getName();	
+							val = Reflections.invokeGetter(e,((Field) os[1]).getName());							
 						} else if (os[1] instanceof Method) {
 							val = Reflections.invokeMethod(e,
 									((Method) os[1]).getName(), new Class[] {},

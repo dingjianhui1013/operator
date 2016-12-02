@@ -3196,7 +3196,22 @@ public class WorkDealInfoController extends BaseController {
 		boolean inOffice = false;
 		workDealInfo.setDealInfoStatus("15");
 		workDealInfoService.save(workDealInfo);
-
+			
+		String url = Global.getConfig("images.path");
+		List<CommonAttach> attachs = attachService.findCommonAttachByWorkDealInfo(workDealInfo.getId());
+		
+		if(attachs!=null&&attachs.size()>0){
+			String imgNames = "";
+			for(int i =0;i<attachs.size();i++){
+				if(i==0){
+					imgNames+=url+"/"+attachs.get(0).getAttachName();
+				}else{
+					imgNames+=","+url+"/"+attachs.get(i).getAttachName();	
+				}
+			}
+			model.addAttribute("imgNames", imgNames);
+		}
+		
 		List<ConfigAppOfficeRelation> configAppOfficeRelations = configAppOfficeRelationService
 				.findAllByOfficeId(UserUtils.getUser().getOffice().getId());
 		for (ConfigAppOfficeRelation appOffice : configAppOfficeRelations) {
@@ -3292,21 +3307,6 @@ public class WorkDealInfoController extends BaseController {
 				model.addAttribute("cityId", cityId);
 			}
 				
-		}
-		
-		//显示图片
-		List<CommonAttach> attachs = attachService.findCommonAttachByWorkDealInfo(workDealInfo.getId());
-		String url = Global.getConfig("images.path");
-		if(attachs!=null&&attachs.size()>0){
-			String imgNames = "";
-			for(int i =0;i<attachs.size();i++){
-				if(i==0){
-					imgNames+=url+"/"+attachs.get(0).getAttachName();
-				}else{
-					imgNames+=","+url+"/"+attachs.get(i).getAttachName();	
-				}
-			}
-			model.addAttribute("imgNames", imgNames);
 		}
 		
 		if (dealInfoTypes.size() == 1) {
@@ -4241,9 +4241,10 @@ public class WorkDealInfoController extends BaseController {
 				lis.add(workCompany.get(i).getId());
 			}
 			json.put("Idlis", lis);
-
-			ConfigProduct product = configProductService.get(productId);
-			json.put("productId", product.getProductName());
+			if(productId!=null){
+				ConfigProduct product = configProductService.get(productId);
+				json.put("productId", product.getProductName());
+			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -5296,6 +5297,22 @@ public class WorkDealInfoController extends BaseController {
 	public String typeForm(String dealType, WorkDealInfo workDealInfo,
 			Model model, String reissueType,
 			RedirectAttributes redirectAttributes) {
+		
+		String url = Global.getConfig("images.path");
+		List<CommonAttach> attachs = attachService.findCommonAttachByWorkDealInfo(workDealInfo.getId());
+		
+		if(attachs!=null&&attachs.size()>0){
+			String imgNames = "";
+			for(int i =0;i<attachs.size();i++){
+				if(i==0){
+					imgNames+=url+"/"+attachs.get(0).getAttachName();
+				}else{
+					imgNames+=","+url+"/"+attachs.get(i).getAttachName();	
+				}
+			}
+			model.addAttribute("imgNames", imgNames);
+		}
+		
 		boolean inOffice = false;
 		List<ConfigAppOfficeRelation> configAppOfficeRelations = configAppOfficeRelationService
 				.findAllByOfficeId(UserUtils.getUser().getOffice().getId());
