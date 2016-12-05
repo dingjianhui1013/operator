@@ -65,7 +65,7 @@
 				$("#imgLayer").append(str);
 				var imgBoxMod=$(".ctnlist .text img");
 			    imgPop(imgBoxMod);
-			    //imgDel(str);
+			    imgDel(str);
 			    namestr+=str1[i].substring(str1[i].lastIndexOf('/')+1,str1[i].length)+",";
 			}
 			if(namestr!=''){

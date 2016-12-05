@@ -159,9 +159,9 @@ function getholderinfo(){
     	$("#pName").val(names);
     	
     }
-    if((names!=null&&names!=''&&names!=undefined)||(idno!=null&&idno!=''&&idno!=undefined)){
-    	top.$.jBox.tip("持有人信息录入成功");
-    }
+//    if((names!=null&&names!=''&&names!=undefined)||(idno!=null&&idno!=''&&idno!=undefined)){
+//    	top.$.jBox.tip("持有人信息录入成功");
+//    }
    
 }
 
@@ -183,7 +183,7 @@ function getoperatorinfo(){
 	if(names!=null&&names!=''){
 		$("#pName").val(names);
 		$("#pIDCard").val(idno);
-		top.$.jBox.tip("经办人信息录入成功");
+		//top.$.jBox.tip("经办人信息录入成功");
 	}
 	
 }
@@ -214,7 +214,7 @@ function getcompanyinfo(){
              if(strs!=null){
             	 $("#companyName").val(strs[2]);
             	 $("#organizationNumber").val(strs[0]);
-            	 top.$.jBox.tip("单位信息录入成功");
+            	// top.$.jBox.tip("单位信息录入成功");
              }
              
              else{
@@ -362,14 +362,23 @@ function getAddress(){
 function imgDel(imgDiv){
 		imgDiv.find("span").each(function(i,one){
 			$(one).live('click',function(){
-				var name = $(one).attr("data");
-				$(this).closest(".uploadImgList").remove();
-				
-				var imageNames = $("#imgNames").val();
-				imageNames=imageNames.replace(","+name+",",",");
-				imageNames=imageNames.replace(","+name,"");
-				imageNames=imageNames.replace(name+",","");
-				$("#imgNames").val(imageNames);
+				top.$.jBox.confirm("确定吗？", "提示", function (v, h, f) {
+				    if (v == 'ok'){
+				    	var name = $(one).attr("data");
+				    	$(one).closest(".uploadImgList").remove();
+				    	name = name.substring(name.lastIndexOf('/')+1,name.length)
+				    	var imageNames = $("#imgNames").val();
+				    	imageNames=imageNames.replace(","+name+",",",");
+				    	imageNames=imageNames.replace(","+name,"");
+				    	imageNames=imageNames.replace(name+",","");
+				    	imageNames=imageNames.replace(name,"");
+				    	//console.log(imageNames);
+				    	$("#imgNames").val(imageNames);
+				    }else if (v == 'cancel'){
+				    	
+				    }
+				    return true; //close
+				});
 			});
 		});
 }
