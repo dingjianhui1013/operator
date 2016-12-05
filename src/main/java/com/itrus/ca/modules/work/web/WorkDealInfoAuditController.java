@@ -1916,33 +1916,187 @@ public class WorkDealInfoAuditController extends BaseController {
 	@RequestMapping("makeDealInfo")
 	public String makeDealInfo(WorkDealInfo workDealInfo, HttpServletRequest request, HttpServletResponse response,
 			Model model) {
+		
+		//新增
 		ConfigRaAccount raAccount = raAccountService.get(workDealInfo.getConfigProduct().getRaAccountId());	
 		List<String[]> list = RaAccountUtil.outPageLine(workDealInfo, raAccount.getConfigRaAccountExtendInfo());
 		model.addAttribute("list", list);
 		model.addAttribute("workDealInfo", workDealInfo);
-
-		workDealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_APPROVE_WAIT);
-
-		workDealInfo.setVerifyUser(UserUtils.getUser());
-		workDealInfo.setVerifyUserDate(new Date());
-		workDealInfoService.save(workDealInfo);
-		
-		//秘钥长度
-		if(raAccount.getKeyLen()!=null){
-			model.addAttribute("keyLen", raAccount.getKeyLen());
+		if(workDealInfo.getDealInfoType()!=null&&workDealInfo.getDealInfoType()==0){
+			workDealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_APPROVE_WAIT);
+			workDealInfo.setVerifyUser(UserUtils.getUser());
+			workDealInfo.setVerifyUserDate(new Date());
+			workDealInfoService.save(workDealInfo);
+			
+			//秘钥长度
+			if(raAccount.getKeyLen()!=null){
+				model.addAttribute("keyLen", raAccount.getKeyLen());
+			}
+			
+			
+			//经信委
+			if(workDealInfo.getExpirationDate()!=null){
+				model.addAttribute("expirationDate", workDealInfo.getExpirationDate());
+				model.addAttribute("addCertDays",StringHelper.getDvalueDay(new Date(), workDealInfo.getExpirationDate())-workDealInfo.getYear()*365);
+				model.addAttribute("validiteDays",StringHelper.getDvalueDay(new Date(), workDealInfo.getExpirationDate()));
+			}
+			
+			model.addAttribute("pt", ProductType.productTypeStrMap);
+			model.addAttribute("wdiType", WorkDealInfoType.WorkDealInfoTypeMap);
+			return "modules/work/workDealInfoAuditMake";
+		}else{
+			
+			//其他
+			workDealInfo = workDealInfoService.get(workDealInfo.getId());
+			model.addAttribute("pt", ProductType.productTypeStrMap);
+			model.addAttribute("wdiType", WorkDealInfoType.WorkDealInfoTypeMap);
+			
+			workDealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_APPROVE_WAIT);
+			workDealInfo.setVerifyUser(UserUtils.getUser());
+			workDealInfo.setVerifyUserDate(new Date());
+			workDealInfoService.save(workDealInfo);
+			
+			if(workDealInfo.getDealInfoType()!=null&&workDealInfo.getDealInfoType1()==null){
+				if (workDealInfo.getDealInfoType().equals(WorkDealInfoType.TYPE_UPDATE_CERT)) {
+					model.addAttribute("isShow", "No");
+				}else{
+					
+					model.addAttribute("isShow", "Yes");
+				}
+			}else if (workDealInfo.getDealInfoType()==null&&workDealInfo.getDealInfoType1()==null) {
+				model.addAttribute("isShow", "No");
+			}else{
+				
+				
+				model.addAttribute("isShow", "Yes");
+			}
+			
+			ArrayList<Integer> dealInfoTypes = new ArrayList<Integer>();
+			if (workDealInfo.getDealInfoType()!=null) {
+				dealInfoTypes.add(workDealInfo.getDealInfoType());
+			}
+			if(workDealInfo.getDealInfoType1()!=null){
+				dealInfoTypes.add(workDealInfo.getDealInfoType1());
+			}
+			if(workDealInfo.getDealInfoType2()!=null){
+				dealInfoTypes.add(workDealInfo.getDealInfoType2());
+			}
+			if(workDealInfo.getDealInfoType3()!=null){
+				dealInfoTypes.add(workDealInfo.getDealInfoType3());
+			}
+			if(dealInfoTypes.size()==1){
+				if(dealInfoTypes.get(0).equals(1)){
+					model.addAttribute("onlyUpdate","onlyUpdate");
+				}
+			}
+			
+			
+			//经信委
+			if(workDealInfo.getExpirationDate()!=null){
+				model.addAttribute("expirationDate", workDealInfo.getExpirationDate());
+				model.addAttribute("addCertDays",StringHelper.getDvalueDay(new Date(), workDealInfo.getExpirationDate())-workDealInfo.getYear()*365-workDealInfo.getLastDays());
+				model.addAttribute("validiteDays",StringHelper.getDvalueDay(new Date(), workDealInfo.getExpirationDate()));
+			}
+			
+			//解决迁移导致的多证书编号错误问题,让用户前台输入进行修改
+			if(workDealInfo.getDealInfoType2()==WorkDealInfoType.TYPE_INFORMATION_REROUTE){
+				model.addAttribute("isChangeBusiness", true);
+			}
+			
+			//秘钥长度可选
+			if(raAccount.getKeyLen()!=null){
+				model.addAttribute("keyLen", raAccount.getKeyLen());
+			}
+			
+			
+			if (workDealInfo.getPrevId()!=null) {
+				//获取上一张证书的签名证书序列号
+				WorkDealInfo oldDealInfo = workDealInfoService.get(workDealInfo.getPrevId());
+				try {
+					model.addAttribute("signSerialNumber", oldDealInfo.getWorkCertInfo().getSerialnumber().toLowerCase());
+				} catch (Exception e) {
+				}
+			}
+			if (workDealInfo.getDealInfoType() != null) {
+				if (workDealInfo.getDealInfoType().equals(
+						WorkDealInfoType.TYPE_UPDATE_CERT)
+						|| (workDealInfo.getDealInfoType()
+								.equals(WorkDealInfoType.TYPE_INFORMATION_REROUTE))) {
+					return "modules/work/workDealInfoMaintainAuditMake";
+				} else if (workDealInfo.getDealInfoType().equals(
+						WorkDealInfoType.TYPE_ADD_CERT)) {
+					return "modules/work/workDealInfoAuditMake";
+				} else if (workDealInfo.getDealInfoType().equals(
+						WorkDealInfoType.TYPE_LOST_CHILD)
+						|| workDealInfo.getDealInfoType().equals(
+								WorkDealInfoType.TYPE_DAMAGED_REPLACED)) {
+					return "modules/work/workDealInfoReissueAuditMake";
+				} else if (workDealInfo.getDealInfoType().equals(
+						WorkDealInfoType.TYPE_RETURN_MONEY)){
+					return "modules/work/workDealInfoBackMoneyAuditMake";
+				}
+			}
+			if (workDealInfo.getDealInfoType1() != null) {
+				if (workDealInfo.getDealInfoType1().equals(
+						WorkDealInfoType.TYPE_UPDATE_CERT)
+						|| (workDealInfo.getDealInfoType1()
+								.equals(WorkDealInfoType.TYPE_INFORMATION_REROUTE))) {
+					return "modules/work/workDealInfoMaintainAuditMake";
+				} else if (workDealInfo.getDealInfoType1().equals(
+						WorkDealInfoType.TYPE_ADD_CERT)) {
+					return "modules/work/workDealInfoAuditMake";
+				} else if (workDealInfo.getDealInfoType1().equals(
+						WorkDealInfoType.TYPE_LOST_CHILD)
+						|| workDealInfo.getDealInfoType1().equals(
+								WorkDealInfoType.TYPE_DAMAGED_REPLACED)) {
+					return "modules/work/workDealInfoReissueAuditMake";
+				} else if (workDealInfo.getDealInfoType1().equals(
+						WorkDealInfoType.TYPE_RETURN_MONEY)){
+					return "modules/work/workDealInfoBackMoneyAuditMake";
+				}
+			}
+			if (workDealInfo.getDealInfoType2() != null) {
+				if (workDealInfo.getDealInfoType2().equals(
+						WorkDealInfoType.TYPE_UPDATE_CERT)
+						|| (workDealInfo.getDealInfoType2()
+								.equals(WorkDealInfoType.TYPE_INFORMATION_REROUTE))) {
+					return "modules/work/workDealInfoMaintainAuditMake";
+				} else if (workDealInfo.getDealInfoType2().equals(
+						WorkDealInfoType.TYPE_ADD_CERT)) {
+					return "modules/work/workDealInfoAuditMake";
+				} else if (workDealInfo.getDealInfoType2().equals(
+						WorkDealInfoType.TYPE_LOST_CHILD)
+						|| workDealInfo.getDealInfoType2().equals(
+								WorkDealInfoType.TYPE_DAMAGED_REPLACED)) {
+					return "modules/work/workDealInfoReissueAuditMake";
+				} else if (workDealInfo.getDealInfoType2().equals(
+						WorkDealInfoType.TYPE_RETURN_MONEY)){
+					return "modules/work/workDealInfoBackMoneyAuditMake";
+				}
+			}
+			if (workDealInfo.getDealInfoType3() != null) {
+				if (workDealInfo.getDealInfoType3().equals(
+						WorkDealInfoType.TYPE_UPDATE_CERT)
+						|| (workDealInfo.getDealInfoType3()
+								.equals(WorkDealInfoType.TYPE_INFORMATION_REROUTE))) {
+					return "modules/work/workDealInfoMaintainAuditMake";
+				} else if (workDealInfo.getDealInfoType3().equals(
+						WorkDealInfoType.TYPE_ADD_CERT)) {
+					return "modules/work/workDealInfoAuditMake";
+				} else if (workDealInfo.getDealInfoType3().equals(
+						WorkDealInfoType.TYPE_LOST_CHILD)
+						|| workDealInfo.getDealInfoType3().equals(
+								WorkDealInfoType.TYPE_DAMAGED_REPLACED)) {
+					return "modules/work/workDealInfoReissueAuditMake";
+				} else if (workDealInfo.getDealInfoType3().equals(
+						WorkDealInfoType.TYPE_RETURN_MONEY)){
+					return "modules/work/workDealInfoBackMoneyAuditMake";
+				}
+			}
+			
+			return "modules/work/workDealInfoAuditMake";
 		}
-	   
 		
-		//经信委
-		if(workDealInfo.getExpirationDate()!=null){
-			model.addAttribute("expirationDate", workDealInfo.getExpirationDate());
-			model.addAttribute("addCertDays",StringHelper.getDvalueDay(new Date(), workDealInfo.getExpirationDate())-workDealInfo.getYear()*365);
-			model.addAttribute("validiteDays",StringHelper.getDvalueDay(new Date(), workDealInfo.getExpirationDate()));
-		}
-
-		model.addAttribute("pt", ProductType.productTypeStrMap);
-		model.addAttribute("wdiType", WorkDealInfoType.WorkDealInfoTypeMap);
-		return "modules/work/workDealInfoAuditMake";
 	}
 
 	/**
