@@ -1323,7 +1323,10 @@ $(document).ready(
 					</c:if>
 					<c:if test="${workDealInfo.dealInfoStatus == 13}">
 						<shiro:hasPermission name="work:workDealInfo:makezheng">
-						<a href="${ctx}/work/workDealInfoAudit/makeDealInfo?id=${workDealInfo.id}">制证</a>
+						<%-- <a href="${ctx}/work/workDealInfoAudit/makeDealInfo?id=${workDealInfo.id}">制证</a> --%>
+						
+						<a href="${ctx}/work/workDealInfoOperation/make?id=${workDealInfo.id}">制证</a>
+						
 						</shiro:hasPermission>
 					</c:if>
 					<c:if test="${workDealInfo.dealInfoStatus == 16}">
