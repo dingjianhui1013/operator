@@ -822,7 +822,7 @@ public class CertController extends BaseController {
 					}else if(configType.equals("2")){
 						dealInfo.setUserSn(getZFSn(dealInfo));
 					}else if(configType.equals("3")){
-						dealInfo.setUserSn(getHTSn(dealInfo));
+						dealInfo.setUserSn(getHTSn(dealInfo,config));
 					}
 				}
 				dealInfo.setStatus(0);// 待归档
@@ -1106,9 +1106,10 @@ public class CertController extends BaseController {
 	 * 按照合同生成归档编码
 	 * 
 	 * @param workDealInfo
+	 * @param config 
 	 * @return
 	 */
-	private String getHTSn(WorkDealInfo workDealInfo) {
+	private String getHTSn(WorkDealInfo workDealInfo, ConfigChargeAgent config) {
 		Date date = new Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMM");
 		workDealInfo.setStatus(0);
@@ -1122,7 +1123,8 @@ public class CertController extends BaseController {
 				numstr = "0"+numstr;
 			}
 		}
-		String archiveSn = "SCCA_" + workDealInfo.getConfigApp().getAppName()	+ "_" + sn + numstr;
+		
+		String archiveSn = "SCCA_" + config.getTempName() + "_" + sn + numstr;
 		return archiveSn;
 	}
 

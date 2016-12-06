@@ -60,6 +60,11 @@
 			    $("#imgzoom").css("display","none");
 			    $("#imgzoom_cover").css("display","none");
 			})
+			//关闭
+			$("#imgzoom_zoom").live('click',function(){
+			    $("#imgzoom").css("display","none");
+			    $("#imgzoom_cover").css("display","none");
+			})
 	});
 	
 	//内容页图片点击放大效果函数主体开始
