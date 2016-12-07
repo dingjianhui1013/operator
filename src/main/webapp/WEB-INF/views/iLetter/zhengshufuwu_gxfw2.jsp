@@ -26,7 +26,7 @@
 			dataType:"json",
 			success:function(d){
 				dealInfoId =d.dealInfoId;
-				if(d.status == 12){
+				if(d.status == 5 || d.status == 12){
 					window.location.href="${ctxILetter}/enroll/gxfw1Nextform?dealInfoId="+d.id+"&mmssgg=SQ4X85Q63F25G8R9E63R";
 				}else if(d.status == 1){
 					//$("#msg").html("证书下载异常");
@@ -34,7 +34,7 @@
 				}else if(d.status == 2){
 					$("#msg").html("退费用户");
 					flag = true;
-				}else if(d.status == 11){
+				}else if(d.status == 11|| d.status == 13){
 					//$("#msg").html("审核通过");
 					<!--indow.location.href="${ctxILetter}/enroll/gxfw1Nextform?dealInfoId="+dealInfoId;-->
 					window.location.href="${ctxILetter}/enroll/gxfw2Nextform?id="+d.id;

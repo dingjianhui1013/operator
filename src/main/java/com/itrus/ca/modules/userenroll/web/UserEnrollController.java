@@ -875,11 +875,15 @@ public class UserEnrollController extends BaseController {
 						List<WorkDealInfo> infos = workDealInfoService.findgx(workDealInfo.getWorkCertInfo()
 										.getRenewalNextId());
 						// 传递前台审批状态 0为新建未审核 1为异常业务 2为退费用户 3为审核通过 4为 审核不通过11审核通过待获取
-						if (infos.get(0).getDelFlag().equals("1")) {
-							json.put("status","4");
+						if (infos!=null&&infos.size()>0){
+							if(infos.get(0).getDelFlag().equals("1")) {
+								json.put("status","4");
+							}else{
+								
+								json.put("status", infos.get(0).getDealInfoStatus());
+							}
 						}else{
-							
-							json.put("status", infos.get(0).getDealInfoStatus());
+							json.put("status","0");
 						}
 						
 						
