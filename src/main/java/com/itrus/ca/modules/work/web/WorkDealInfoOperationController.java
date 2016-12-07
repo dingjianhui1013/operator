@@ -12,8 +12,10 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
@@ -39,7 +41,6 @@ import com.itrus.ca.common.web.BaseController;
 import com.itrus.ca.modules.constant.ProductType;
 import com.itrus.ca.modules.constant.WorkDealInfoStatus;
 import com.itrus.ca.modules.constant.WorkDealInfoType;
-import com.itrus.ca.modules.log.entity.SysOperateLog;
 import com.itrus.ca.modules.log.service.LogUtil;
 import com.itrus.ca.modules.profile.entity.ConfigAgentBoundDealInfo;
 import com.itrus.ca.modules.profile.entity.ConfigAgentOfficeRelation;
@@ -1996,19 +1997,29 @@ public class WorkDealInfoOperationController extends BaseController {
 			String [] imgs= imgNames.split(",");
 			
 			CommonAttach attach = null;
-			//把以前的删除掉
+			//把以前查询出来
 			List<CommonAttach> befor = attachService.findCommonAttachByWorkDealInfo(workDealInfoId);
+			Map<String,CommonAttach> map = new HashMap<String,CommonAttach>();//键值对保存 便于查询
 			for(CommonAttach c:befor){
-				c.setStatus(-1);
-				attachService.saveAttach(c);
+				map.put(c.getAttachName(), c);
 			}
 			for(int i=0;i<imgs.length;i++){
-				attach = attachService.findCommonAttachByattachName(imgs[i]);
-				attach.setWorkDealInfo(workDealInfo);
-				attach.setStatus(null);
-				attachService.saveAttach(attach);
+				CommonAttach comm = map.get(imgs[i]);
+				if(comm!=null){
+					//以前的图片复制一份保存
+					CommonAttach cattach = new CommonAttach(comm);
+					cattach.setWorkDealInfo(workDealInfo);
+					cattach.setStatus(null);
+					attachService.saveAttach(cattach);
+				}else{//新图片直接修改workDealInfo
+					attach = attachService.findCommonAttachByattachName(imgs[i]);
+					attach.setWorkDealInfo(workDealInfo);
+					attach.setStatus(null);
+					attachService.saveAttach(attach);
+				}
 			}	
-		}
+		}	
+		
 		
 		// 保存日志信息
 		WorkLog workLog = new WorkLog();
@@ -2299,25 +2310,34 @@ public class WorkDealInfoOperationController extends BaseController {
 		
 		workDealInfoService.save(workDealInfo);
 		
-		//上传的图片名称
 		String imgNames=request.getParameter("imgNames");     
 		if(imgNames!=null&&imgNames.length()>0){
 			String [] imgs= imgNames.split(",");
 			
 			CommonAttach attach = null;
-			//把以前的删除掉
+			//把以前查询出来
 			List<CommonAttach> befor = attachService.findCommonAttachByWorkDealInfo(workDealInfoId);
+			Map<String,CommonAttach> map = new HashMap<String,CommonAttach>();//键值对保存 便于查询
 			for(CommonAttach c:befor){
-				c.setStatus(-1);
-				attachService.saveAttach(c);
+				map.put(c.getAttachName(), c);
 			}
 			for(int i=0;i<imgs.length;i++){
-				attach = attachService.findCommonAttachByattachName(imgs[i]);
-				attach.setWorkDealInfo(workDealInfo);
-				attach.setStatus(null);
-				attachService.saveAttach(attach);
+				CommonAttach comm = map.get(imgs[i]);
+				if(comm!=null){
+					//以前的图片复制一份保存
+					CommonAttach cattach = new CommonAttach(comm);
+					cattach.setWorkDealInfo(workDealInfo);
+					cattach.setStatus(null);
+					attachService.saveAttach(cattach);
+				}else{//新图片直接修改workDealInfo
+					attach = attachService.findCommonAttachByattachName(imgs[i]);
+					attach.setWorkDealInfo(workDealInfo);
+					attach.setStatus(null);
+					attachService.saveAttach(attach);
+				}
 			}	
-		}
+		}	
+		
 				
 		// 保存日志信息
 		WorkLog workLog = new WorkLog();
@@ -2342,7 +2362,6 @@ public class WorkDealInfoOperationController extends BaseController {
 	@RequiresPermissions("work:workDealInfo:edit")
 	@RequestMapping(value = "maintainSaveUpdate")
 	public String maintainSaveUpdate(Long workDealInfoId, 
-			String imgNames,
 			String companyName,String companyType,String organizationNumber,String orgExpirationTime,String selectLv,
 			String comCertificateType, String comCertficateNumber, String comCertficateTime,String legalName, String s_province, String s_city,
 			String s_county, String areaRemark,String address, String companyMobile,String remarks, 
@@ -2732,27 +2751,33 @@ public class WorkDealInfoOperationController extends BaseController {
 		end1 = System.currentTimeMillis();
 		log.debug("更新业务提交ConfigAgentBoundDealInfo用时:"+(end1-start1)+"ms");
 		
-		
-		if(imgNames.length()>0){
+		String imgNames=request.getParameter("imgNames");     
+		if(imgNames!=null&&imgNames.length()>0){
 			String [] imgs= imgNames.split(",");
 			
 			CommonAttach attach = null;
-			
-			//把以前的删除掉
+			//把以前查询出来
 			List<CommonAttach> befor = attachService.findCommonAttachByWorkDealInfo(workDealInfoId);
+			Map<String,CommonAttach> map = new HashMap<String,CommonAttach>();//键值对保存 便于查询
 			for(CommonAttach c:befor){
-				c.setStatus(-1);
-				attachService.saveAttach(c);
+				map.put(c.getAttachName(), c);
 			}
 			for(int i=0;i<imgs.length;i++){
-				attach = attachService.findCommonAttachByattachName(imgs[i]);
-				attach.setWorkDealInfo(workDealInfo);
-				attach.setStatus(null);
-				attachService.saveAttach(attach);
+				CommonAttach comm = map.get(imgs[i]);
+				if(comm!=null){
+					//以前的图片复制一份保存
+					CommonAttach cattach = new CommonAttach(comm);
+					cattach.setWorkDealInfo(workDealInfo);
+					cattach.setStatus(null);
+					attachService.saveAttach(cattach);
+				}else{//新图片直接修改workDealInfo
+					attach = attachService.findCommonAttachByattachName(imgs[i]);
+					attach.setWorkDealInfo(workDealInfo);
+					attach.setStatus(null);
+					attachService.saveAttach(attach);
+				}
 			}	
-		}
-
-		
+		}	
 		
 		logUtil.saveSysLog("计费策略模版", "计费策略模版："+agent.getId()+"--业务编号："+workDealInfo.getId()+"--关联成功!", "");
 		

@@ -38,7 +38,7 @@ public class CommonAttach implements java.io.Serializable {
 	private String path;               //路径
 	private String realPath;           //真实路径
 	private String remark;
-	private Integer status;
+	private Integer status;            //-1 图片失效
 	private String suffix;
 	private String uploadCount;
 	private Integer uploadModel;
@@ -56,7 +56,24 @@ public class CommonAttach implements java.io.Serializable {
 	/** default constructor */
 	public CommonAttach() {
 	}
-	
+	public CommonAttach(CommonAttach commonAttach) {
+		this.attachName = commonAttach.getAttachName();
+		this.realPath = commonAttach.getRealPath();
+		this.uploadTime = commonAttach.getUploadTime();
+		this.contentId = commonAttach.getContentId();
+		this.oldFileName = commonAttach.getOldFileName();
+		this.path = commonAttach.getPath();
+		this.remark = commonAttach.getRemark();
+		this.status = commonAttach.getStatus();
+		this.suffix = commonAttach.getSuffix();
+		this.uploadCount = commonAttach.getUploadCount();
+		this.uploadModel = commonAttach.getUploadModel();
+		this.uploadUserName = commonAttach.getUploadUserName();
+		this.uploadUserOrgName = commonAttach.getUploadUserOrgName();
+		this.uploadUserOrgid = commonAttach.getUploadUserOrgid();
+		this.uploadUserid = commonAttach.getUploadUserid();
+		this.groupid = commonAttach.getGroupid();
+	}
 	
 	
 	

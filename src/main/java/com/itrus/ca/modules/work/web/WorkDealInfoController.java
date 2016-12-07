@@ -2949,26 +2949,32 @@ public class WorkDealInfoController extends BaseController {
 			logUtil.saveSysLog("计费策略模版", "计费策略模版：" + agent.getId() + "--业务编号："
 					+ workDealInfo.getId() + "--关联成功!", "");
 		}
-		
-		if(imgNames.length()>0){
+		if(imgNames!=null&&imgNames.length()>0){
 			String [] imgs= imgNames.split(",");
 			
 			CommonAttach attach = null;
-			//把以前的删除掉
+			//把以前查询出来
 			List<CommonAttach> befor = attachService.findCommonAttachByWorkDealInfo(workDealInfoId);
+			Map<String,CommonAttach> map = new HashMap<String,CommonAttach>();//键值对保存 便于查询
 			for(CommonAttach c:befor){
-				c.setStatus(-1);
-				attachService.saveAttach(c);
+				map.put(c.getAttachName(), c);
 			}
 			for(int i=0;i<imgs.length;i++){
-				attach = attachService.findCommonAttachByattachName(imgs[i]);
-				attach.setWorkDealInfo(workDealInfo);
-				attach.setStatus(null);
-				attachService.saveAttach(attach);
+				CommonAttach comm = map.get(imgs[i]);
+				if(comm!=null){
+					//以前的图片复制一份保存
+					CommonAttach cattach = new CommonAttach(comm);
+					cattach.setWorkDealInfo(workDealInfo);
+					cattach.setStatus(null);
+					attachService.saveAttach(cattach);
+				}else{//新图片直接修改workDealInfo
+					attach = attachService.findCommonAttachByattachName(imgs[i]);
+					attach.setWorkDealInfo(workDealInfo);
+					attach.setStatus(null);
+					attachService.saveAttach(attach);
+				}
 			}	
-		}
-		
-		
+		}	
 
 		// 录入人日志保存
 		WorkLog workLog1 = new WorkLog();
@@ -9654,7 +9660,13 @@ public class WorkDealInfoController extends BaseController {
 					configAgentBoundDealInfoService.deleteById(bound.getId());
 				}
 			}
-
+			
+			List<CommonAttach> attachs = attachService.findCommonAttachByWorkDealInfo(id);
+			if(attachs!=null&&attachs.size()>0){
+				for(CommonAttach c:attachs){					
+					attachService.delAttach(c.getId());
+				}
+			}
 			workDealInfoService.deleteWork(id);
 			workCertInfoService.delete(certId);
 			workDealInfoService.deleteReturnById(dealPreId);
@@ -9770,6 +9782,13 @@ public class WorkDealInfoController extends BaseController {
 			WorkDealInfo dealinfo = workDealInfoService.get(id);
 			Long certId = dealinfo.getWorkCertInfo().getId();
 			Long dealPreId = dealinfo.getPrevId();
+			
+			List<CommonAttach> attachs = attachService.findCommonAttachByWorkDealInfo(id);
+			if(attachs!=null&&attachs.size()>0){
+				for(CommonAttach c:attachs){					
+					attachService.delAttach(c.getId());
+				}
+			}
 			workDealInfoService.deleteWork(id);
 			workCertInfoService.delete(certId);
 			workDealInfoService.deleteReturnById(dealPreId);
