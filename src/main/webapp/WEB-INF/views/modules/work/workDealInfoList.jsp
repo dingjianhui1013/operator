@@ -242,6 +242,9 @@ $(document).ready(
 								}else if(dealType.indexOf("4")>=0){
 									window.location.href = "${ctx}/work/workDealInfo/typeForm?id="+id+"&reissueType="+reissueType+"&dealType="+dealType;
 									
+								}else if(dealType.indexOf("6")>=0){
+									window.location.href = "${ctx}/work/workDealInfo/typeForm?id="+id+"&reissueType="+reissueType+"&dealType="+dealType;
+									
 								}else{
 									$.getJSON(url + "&_="+new Date().getTime(),	function(data){
 										if (data.status==1){

@@ -65,6 +65,16 @@ public class CommonAttachService extends BaseService {
 		return attachDao.find(dc);
 	}
 	
+	@Transactional(readOnly = true)
+	public List<CommonAttach> findCommonAttachByWorkDealInfoAll(Long workDealInfoId){
+		DetachedCriteria dc = attachDao.createDetachedCriteria();
+		
+		dc.createAlias("workDealInfo", "workDealInfo");
+		
+		dc.add(Restrictions.eq("workDealInfo.id", workDealInfoId));
+		return attachDao.find(dc);
+	}
+	
 	
 	@Transactional(readOnly = false)
 	public void delAttach(Long id){

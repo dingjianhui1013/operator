@@ -403,7 +403,6 @@
 			}
 		}
 		
-		
 		$("#newInfoId").val(getCookie("work_deal_info_id"));
 		delCookie("work_deal_info_id");
 		$("#inputForm").submit();
@@ -544,6 +543,7 @@
 		action="${ctx}/work/workDealInfoOperation/maintainSaveChange" 
 		method="post" enctype="multipart/form-data"
 		class="form-horizontal">
+		<input id="iseditor" name="iseditor" type="hidden" value="${iseditor}"/>
 		<tags:message content="${message}" />
 		<div id="append_parent"></div>
 		

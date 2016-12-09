@@ -12,7 +12,9 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -38,6 +40,8 @@ import com.itrus.ca.modules.profile.service.ConfigChargeAgentBoundConfigProductS
 import com.itrus.ca.modules.profile.service.ConfigRaAccountService;
 import com.itrus.ca.modules.self.entity.SelfImage;
 import com.itrus.ca.modules.self.service.SelfImageService;
+import com.itrus.ca.modules.sys.entity.CommonAttach;
+import com.itrus.ca.modules.sys.service.CommonAttachService;
 import com.itrus.ca.modules.sys.utils.UserUtils;
 import com.itrus.ca.modules.work.entity.WorkCertApplyInfo;
 import com.itrus.ca.modules.work.entity.WorkCompany;
@@ -93,6 +97,9 @@ public class WorkDealInfoOperationSedController extends BaseController {
 	
 	@Autowired
 	private SelfImageService selfImageService;
+	
+	@Autowired
+	private CommonAttachService attachService;
 	
 	/*
 	 * 信息变更界面保存方法
@@ -270,6 +277,41 @@ public class WorkDealInfoOperationSedController extends BaseController {
 		}
 		
 		workDealInfoService.save(workDealInfo1);
+		
+		String imgNames=request.getParameter("imgNames");     
+		List<CommonAttach> befor = attachService.findCommonAttachByWorkDealInfo(workDealInfoId);
+		//把以前查询出来
+		Map<String,CommonAttach> map = new HashMap<String,CommonAttach>();//键值对保存 便于查询
+		for(CommonAttach c:befor){
+			map.put(c.getAttachName(), c);
+		}
+		if(imgNames!=null&&imgNames.length()>0){
+			String [] imgs= imgNames.split(",");
+			CommonAttach attach = null;
+			for(int i=0;i<imgs.length;i++){
+				CommonAttach comm = map.get(imgs[i]);
+				if(comm!=null){
+					map.remove(imgs[i]);
+					//以前的图片复制一份保存
+					comm.setWorkDealInfo(workDealInfo1);
+					comm.setStatus(null);
+					attachService.saveAttach(comm);
+				}else{//新图片直接修改workDealInfo
+					attach = attachService.findCommonAttachByattachName(imgs[i]);
+					if(attach!=null){
+						attach.setWorkDealInfo(workDealInfo1);
+						attach.setStatus(null);
+						attachService.saveAttach(attach);
+					}
+				}
+			}
+		}	
+		for(String s:map.keySet()){
+			CommonAttach comm = map.get(s);
+			comm.setStatus(-1);
+			attachService.saveAttach(comm);
+		}
+		
 		// 保存日志信息
 		WorkLog workLog = new WorkLog();
 		workLog.setRecordContent(recordContent);
@@ -382,6 +424,39 @@ public class WorkDealInfoOperationSedController extends BaseController {
 		}
 		
 		workDealInfoService.save(workDealInfo1);
+		String imgNames=request.getParameter("imgNames");     
+		List<CommonAttach> befor = attachService.findCommonAttachByWorkDealInfo(workDealInfoId);
+		//把以前查询出来
+		Map<String,CommonAttach> map = new HashMap<String,CommonAttach>();//键值对保存 便于查询
+		for(CommonAttach c:befor){
+			map.put(c.getAttachName(), c);
+		}
+		if(imgNames!=null&&imgNames.length()>0){
+			String [] imgs= imgNames.split(",");
+			CommonAttach attach = null;
+			for(int i=0;i<imgs.length;i++){
+				CommonAttach comm = map.get(imgs[i]);
+				if(comm!=null){
+					map.remove(imgs[i]);
+					//以前的图片复制一份保存
+					comm.setWorkDealInfo(workDealInfo1);
+					comm.setStatus(null);
+					attachService.saveAttach(comm);
+				}else{//新图片直接修改workDealInfo
+					attach = attachService.findCommonAttachByattachName(imgs[i]);
+					if(attach!=null){
+						attach.setWorkDealInfo(workDealInfo1);
+						attach.setStatus(null);
+						attachService.saveAttach(attach);
+					}
+				}
+			}
+		}	
+		for(String s:map.keySet()){
+			CommonAttach comm = map.get(s);
+			comm.setStatus(-1);
+			attachService.saveAttach(comm);
+		}
 		// 保存日志信息
 		WorkLog workLog = new WorkLog();
 		workLog.setRecordContent(recordContent);

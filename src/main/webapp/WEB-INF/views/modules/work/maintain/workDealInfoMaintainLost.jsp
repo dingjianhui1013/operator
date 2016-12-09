@@ -508,6 +508,7 @@
 		action="${ctx}/work/workDealInfoOperation/maintainSaveLost"
 		method="post" enctype="multipart/form-data"
 		class="form-horizontal">
+		<input id="iseditor" name="iseditor" type="hidden" value="${iseditor}"/>
 		<tags:message content="${message}" />
 		
 		<div id="append_parent"></div>

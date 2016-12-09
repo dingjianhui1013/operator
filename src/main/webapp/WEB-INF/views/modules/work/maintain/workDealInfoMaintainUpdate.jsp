@@ -769,7 +769,7 @@
 		method="post" enctype="multipart/form-data"
 		class="form-horizontal">
 		<tags:message content="${message}" />
-		
+		<input id="iseditor" name="iseditor" type="hidden" value="${iseditor}"/>
 		<div id="append_parent"></div>
 		
 		

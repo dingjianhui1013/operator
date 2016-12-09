@@ -85,7 +85,14 @@
 				</td>
 
 				<td>${proType[workDealInfo.configProduct.productName]}</td>
-				<td>${wdiType[workDealInfo.dealInfoType]}&nbsp;&nbsp;${wdiType[workDealInfo.dealInfoType1]}&nbsp;&nbsp;${wdiType[workDealInfo.dealInfoType2]}&nbsp;&nbsp;${wdiType[workDealInfo.dealInfoType3]}</td>
+
+				<td>${wdiType[workDealInfo.dealInfoType]}
+					<c:if test="${workDealInfo.dealInfoType!=null}">&nbsp;&nbsp;</c:if>
+					${wdiType[workDealInfo.dealInfoType1]}
+					<c:if test="${workDealInfo.dealInfoType1!=null}">&nbsp;&nbsp;</c:if>
+					${wdiType[workDealInfo.dealInfoType2]}
+					<c:if test="${workDealInfo.dealInfoType2!=null}">&nbsp;&nbsp;</c:if>
+					${wdiType[workDealInfo.dealInfoType3]}</td>
 				<td>${wdiStatus[workDealInfo.dealInfoStatus]}</td>
 				<td>
 					<c:if test="${workDealInfo.dealInfoStatus == 12 || workDealInfo.dealInfoStatus == 0}">

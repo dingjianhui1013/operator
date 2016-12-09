@@ -20,6 +20,7 @@
 				$("#type1").removeAttr("checked");
 				$("#type2").removeAttr("checked");
 				$("#type3").removeAttr("checked");
+				$("#type6").removeAttr("checked");
 				
 				/* $("#type5").removeAttr("checked"); */
 			} 
@@ -28,6 +29,7 @@
 		function onType1(obj) {
 			if ($(obj).prop("checked")) {
 				$("#type4").removeAttr("checked");
+				$("#type6").removeAttr("checked");
 			/* 	$("#type5").removeAttr("checked"); */
 			}
 			if ($("#type2").prop("checked")){
@@ -37,6 +39,16 @@
 			}
 		}
 		
+		function onType2(obj) {
+			if ($(obj).prop("checked")) {
+				$("#type1").removeAttr("checked");
+				$("#type2").removeAttr("checked");
+				$("#type3").removeAttr("checked");
+				$("#type4").removeAttr("checked");
+				/* $("#type5").removeAttr("checked"); */
+			} 
+			$("#reissueType").hide();
+		}
 		
 		
 		/* function onKeyUpgrade(obj){
@@ -68,7 +80,7 @@
 		<input type="checkbox" onclick="javascript:onType1(this);" value="3"
 			id="type3" name="dealType" />更新<br> 
 		<input type="checkbox" onclick="javascript:onType(this);" id="type4" value="4" name="dealType" />吊销<br>
-		
+		<input type="checkbox" onclick="javascript:onType2(this);" id="type6" value="6" name="dealType" />业务电子数据补录<br>
 	<!-- 	<input type="checkbox" onclick="javascript:onKeyUpgrade(this);" id="type5" value="5" name="dealType" />key升级 -->
 		
 	</div>
