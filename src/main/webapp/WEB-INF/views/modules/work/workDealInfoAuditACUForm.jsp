@@ -36,7 +36,13 @@
 .btmBorder{border-bottom:1px solid #ddd}
 .accordion-heading,.table th,.accordion-heading,.table td{ vertical-align: middle;}
 </style>
-
+<script type="text/javascript">
+	var ctx = "${ctx}";
+	var ctxStatic = "${ctxStatic}";
+	var imgPath = "${imgPath}";
+</script>
+<script type="text/javascript" src="${ctxStatic}/dialog/zDrag.js"></script>
+<script type="text/javascript" src="${ctxStatic}/dialog/zDialog.js"></script>
 <script type="text/javascript" src="${ctxStatic}/jquery/commonJs.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
@@ -49,7 +55,7 @@ $(document).ready(function() {
 
 		var namestr = "";
 		for(var i = 0;i < str1.length; i++){
-			var str = $("<div class='uploadImgList'><img src='"+str1[i]+"' style='width: 100px; height: 80px;'>"+'<p class="uploadImgName">'+getDisplayName(str1[i])+'</p><span class="s-closeBtn icon-remove-sign" data="'+str1[i]+'"></span></div>');
+			var str = $("<div class='uploadImgList'><img src='"+str1[i]+"' style='width: 100px; height: 80px;'>"+'<p class="uploadImgName">'+getDisplayName(str1[i])+'</p></div>');
 			$("#imgLayer").append(str);
 			var imgBoxMod=$(".ctnlist .text img");
 		    imgPop(imgBoxMod);
@@ -515,7 +521,16 @@ $(document).ready(function() {
 				<table class="table table-striped table-bordered table-condensed">
 					<tbody>
 						<tr>
-							<th colspan="4" style="font-size: 20px;">基本信息</th>
+							<c:if test="${iseditor !='iseditor'}">
+								<th colspan="4" style="font-size: 20px;">基本信息</th>
+							</c:if>
+							<c:if test="${iseditor =='iseditor'}">
+								<th colspan="1" style="font-size: 20px;"><span
+									class="prompt" style="color: red; display: none;">*</span>基本信息</th>	
+								<th colspan="3"> <a href="#" data-toggle="modal">
+								<input id="scan" class="btn btn-primary smBtn" onclick="scanningInfoEnter()" data-toggle="modal" value="扫描录入" /></a>	
+								</th>
+							</c:if>
 						</tr>
 						<tr>
 							<th>代办应用：</th>
@@ -928,19 +943,41 @@ style="display:none"</c:if> --%>>
 			</div>
 		</div>
 		<input type="hidden" name="deal_info_status" value="5">
+		<c:if test="${iseditor =='iseditor'}">
+			<div class="control-group span12">
+				<div class="span12">
+					<table class="table">
+						<tbody>
+							<tr>
+								<td style="text-align: center; width: 100%; border-top: none;"
+									colspan="2"><shiro:hasPermission
+										name="work:workDealInfo:edit">
+										<input id="btnSubmit" class="btn btn-primary" type="button"
+											onclick="onSubmit()" value="提 交" />&nbsp;</shiro:hasPermission> <input
+									id="btnCancel" class="btn" type="button" value="返 回"
+									onclick="history.go(-1)" /> <input type="hidden" id="isOK"
+									name="isOK" value="${isOK }"></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</c:if>
 	</form:form>
-	<div class="form-actions"
-		style="text-align: center; width: 100%; border-top: none;">
-		<input type="button" class="btn btn-primary" value="通过"
-			onclick="javascript:buttonFrom()" /> <input class="btn"
-			type="button" value="拒绝" onclick="javascript:refuse()" /> <span
-			id="mssg" style="color: red"></span>
-	</div>
-
-	<form id="recordForm" method="post"
-		action="${ctx}/work/workDealInfoAudit/auditLoad">
-		<input type="hidden" name="recordContent"> <input
-			type="hidden" name="id" value="${workDealInfo.id}">
-	</form>
+	<c:if test="${iseditor !='iseditor'}">
+		<div class="form-actions"
+			style="text-align: center; width: 100%; border-top: none;">
+			<input type="button" class="btn btn-primary" value="通过"
+				onclick="javascript:buttonFrom()" /> <input class="btn"
+				type="button" value="拒绝" onclick="javascript:refuse()" /> <span
+				id="mssg" style="color: red"></span>
+		</div>
+	
+		<form id="recordForm" method="post"
+			action="${ctx}/work/workDealInfoAudit/auditLoad">
+			<input type="hidden" name="recordContent"> <input
+				type="hidden" name="id" value="${workDealInfo.id}">
+		</form>
+	</c:if>
 </body>
 </html>

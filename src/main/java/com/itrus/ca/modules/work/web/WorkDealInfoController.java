@@ -2949,16 +2949,16 @@ public class WorkDealInfoController extends BaseController {
 			logUtil.saveSysLog("计费策略模版", "计费策略模版：" + agent.getId() + "--业务编号："
 					+ workDealInfo.getId() + "--关联成功!", "");
 		}
+		//把以前查询出来
+		List<CommonAttach> befor = attachService.findCommonAttachByWorkDealInfo(workDealInfoId);
+		Map<String,CommonAttach> map = new HashMap<String,CommonAttach>();//键值对保存 便于查询
+		for(CommonAttach c:befor){
+			map.put(c.getAttachName(), c);
+		}
 		if(imgNames!=null&&imgNames.length()>0){
 			String [] imgs= imgNames.split(",");
 			
 			CommonAttach attach = null;
-			//把以前查询出来
-			List<CommonAttach> befor = attachService.findCommonAttachByWorkDealInfo(workDealInfoId);
-			Map<String,CommonAttach> map = new HashMap<String,CommonAttach>();//键值对保存 便于查询
-			for(CommonAttach c:befor){
-				map.put(c.getAttachName(), c);
-			}
 			for(int i=0;i<imgs.length;i++){
 				CommonAttach comm = map.get(imgs[i]);
 				if(comm!=null){
@@ -2976,12 +2976,12 @@ public class WorkDealInfoController extends BaseController {
 					}
 				}
 			}
-			for(String s:map.keySet()){
-				CommonAttach comm = map.get(s);
-				comm.setStatus(-1);
-				attachService.saveAttach(comm);
-			}
 		}	
+		for(String s:map.keySet()){
+			CommonAttach comm = map.get(s);
+			comm.setStatus(-1);
+			attachService.saveAttach(comm);
+		}
 
 		// 录入人日志保存
 		WorkLog workLog1 = new WorkLog();
@@ -3704,7 +3704,7 @@ public class WorkDealInfoController extends BaseController {
 			String contactTel, String deal_info_status, String recordContent,
 			Integer lable, Integer classifying, String pName, String pEmail,
 			String pIDCard, String contactSex, String areaRemark,
-			Integer agentId, Long agentDetailId) {
+			Integer agentId, Long agentDetailId,HttpServletRequest request) {
 
 		// Integer agentId,Long agentDetailId,
 		long start = System.currentTimeMillis();
@@ -3851,6 +3851,43 @@ public class WorkDealInfoController extends BaseController {
 		workDealInfoService.save(workDealInfo);
 		long end5 = System.currentTimeMillis();
 		log.debug("业务新增保存workDealInfo用时:"+(end5-start5)+"ms");
+		
+		//把以前查询出来
+		String imgNames=request.getParameter("imgNames");
+		List<CommonAttach> befor = attachService.findCommonAttachByWorkDealInfo(workDealInfoId);
+		Map<String,CommonAttach> map = new HashMap<String,CommonAttach>();//键值对保存 便于查询
+		for(CommonAttach c:befor){
+			map.put(c.getAttachName(), c);
+		}
+		if(imgNames!=null&&imgNames.length()>0){
+			String [] imgs= imgNames.split(",");
+			
+			CommonAttach attach = null;
+			for(int i=0;i<imgs.length;i++){
+				CommonAttach comm = map.get(imgs[i]);
+				if(comm!=null){
+					map.remove(imgs[i]);
+					//以前的图片复制一份保存
+					comm.setWorkDealInfo(workDealInfo);
+					comm.setStatus(null);
+					attachService.saveAttach(comm);
+				}else{//新图片直接修改workDealInfo
+					attach = attachService.findCommonAttachByattachName(imgs[i]);
+					if(attach!=null){
+						attach.setWorkDealInfo(workDealInfo);
+						attach.setStatus(null);
+						attachService.saveAttach(attach);						
+					}
+				}
+			}
+		}	
+		for(String s:map.keySet()){
+			CommonAttach comm = map.get(s);
+			comm.setStatus(-1);
+			attachService.saveAttach(comm);
+		}
+
+		
 		// 录入人日志保存
 		WorkLog workLog = new WorkLog();
 		workLog.setRecordContent(recordContent);
@@ -5768,6 +5805,48 @@ public class WorkDealInfoController extends BaseController {
 					return typeFormCheck(",3",workDealInfo,model,"1",redirectAttributes);					
 				}
 			}else{
+				if(workDealInfo.getDealInfoType()==WorkDealInfoType.TYPE_ADD_CERT){
+					model.addAttribute("proType", ProductType.productTypeStrMap);
+					model.addAttribute("workDealInfo", workDealInfo);
+					
+					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+					model.addAttribute("user", UserUtils.getUser());
+					model.addAttribute("date", sdf.format(new Date()));
+					if (workDealInfo.getWorkCertInfo() != null) {
+						model.addAttribute("workCertApplyInfo", workDealInfo.getWorkCertInfo().getWorkCertApplyInfo());
+					}
+					if (workDealInfo.getDealInfoStatus().equals(WorkDealInfoStatus.STATUS_UPDATE_USER)) {
+						model.addAttribute("canEdit", true);
+					} else {
+						model.addAttribute("canEdit", false);
+					}
+					
+					if (workDealInfo.getIsIxin() != null && workDealInfo.getIsIxin()) {
+						
+						ConfigProduct configProduct = workDealInfo.getConfigProduct();
+						List<ConfigChargeAgentBoundConfigProduct> boundList = configChargeAgentBoundConfigProductService
+								.findByProIdAll(configProduct.getId());
+						Set<Integer> nameSet = new HashSet<Integer>();
+						for (int i = 0; i < boundList.size(); i++) {
+							nameSet.add(Integer.parseInt(boundList.get(i).getAgent().getTempStyle()));
+						}
+						
+						model.addAttribute("boundLabelList", nameSet);
+						ConfigChargeAgent chargeAgent = chargeAgentService.get(workDealInfo.getConfigChargeAgentId());
+						model.addAttribute("tempStyle", chargeAgent.getTempStyle());
+						
+					} else {
+						ConfigChargeAgent agent = configChargeAgentService.get(workDealInfo.getConfigChargeAgentId());
+						model.addAttribute("jfMB", agent.getTempName());
+						
+					}
+					
+					if(workDealInfo.getExpirationDate()!=null){
+						model.addAttribute("expirationDate", workDealInfo.getExpirationDate());
+					}
+					
+					return "modules/work/workDealInfoAuditACUForm";
+				}
 				return null;
 			}
 		}else{
@@ -9617,7 +9696,7 @@ public class WorkDealInfoController extends BaseController {
 			String contactTel, String deal_info_status, String recordContent,
 			Integer lable, Integer classifying, String pName, String pEmail,
 			String pIDCard, String contactSex, String areaRemark,
-			Integer agentId, Long agentDetailId) {
+			Integer agentId, Long agentDetailId,HttpServletRequest request) {
 		
 		long start = System.currentTimeMillis();
 		JSONObject json = new JSONObject();
@@ -9793,6 +9872,42 @@ public class WorkDealInfoController extends BaseController {
 			workDealInfoService.save(workDealInfo);
 			long end5 = System.currentTimeMillis();
 			log.debug("新增业务保存并再次添加workDealInfo用时:"+(start5-end5)+"ms");
+			
+			//把以前查询出来
+			String imgNames=request.getParameter("imgNames");
+			List<CommonAttach> befor = attachService.findCommonAttachByWorkDealInfo(workDealInfoId);
+			Map<String,CommonAttach> map = new HashMap<String,CommonAttach>();//键值对保存 便于查询
+			for(CommonAttach c:befor){
+				map.put(c.getAttachName(), c);
+			}
+			if(imgNames!=null&&imgNames.length()>0){
+				String [] imgs= imgNames.split(",");
+				
+				CommonAttach attach = null;
+				for(int i=0;i<imgs.length;i++){
+					CommonAttach comm = map.get(imgs[i]);
+					if(comm!=null){
+						map.remove(imgs[i]);
+						//以前的图片复制一份保存
+						comm.setWorkDealInfo(workDealInfo);
+						comm.setStatus(null);
+						attachService.saveAttach(comm);
+					}else{//新图片直接修改workDealInfo
+						attach = attachService.findCommonAttachByattachName(imgs[i]);
+						if(attach!=null){
+							attach.setWorkDealInfo(workDealInfo);
+							attach.setStatus(null);
+							attachService.saveAttach(attach);						
+						}
+					}
+				}
+			}	
+			for(String s:map.keySet()){
+				CommonAttach comm = map.get(s);
+				comm.setStatus(-1);
+				attachService.saveAttach(comm);
+			}
+
 			
 			// 录入人日志保存
 			WorkLog workLog = new WorkLog();
