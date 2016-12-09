@@ -16,6 +16,7 @@
  	var certSn = external.certInfo(0,"SerialNumber");
  	//var certSn = "77D38704879DD7D95C4EE9EE7148BFEFA144E787";
  	var flag = false;
+ 	var keyStatus = null;
 	$(function(){
 		$("#certSn").attr("value",certSn);
 		$("#keySn").attr("value",keySn);
@@ -29,6 +30,9 @@
 				if(d.status == 5 || d.status == 12){
 					$("#msg").html("证书未审核请耐心等待！");
 					window.location.href="${ctxILetter}/enroll/gxfw1Nextform?dealInfoId="+d.id;
+				}else if(d.status == -1){
+					$("#msg").html("当前业务数据状态不允许申请更新，请查证");
+					keyStatus=-1;
 				}else if(d.status == 1){
 					$("#msg").html("证书下载异常");
 					window.location.href="${ctxILetter}/enroll/gxfw2Nextform?id="+d.id;
@@ -83,9 +87,13 @@
 	function nextStep(){
 		$('#aHref').attr('href','javascript:void(0);');
 		if(!flag){
-			$("#msg").html("UKEY状态错误，不允许申请");
-			$("#nextt").removeClass().addClass("gray_nextStep"); 
-			$('#aHref').attr('href','javascript:nextStep()');
+			if(keyStatus==-1){
+				$("#msg").html("当前业务数据状态不允许申请更新，请查证");
+			}else{
+				$("#msg").html("UKEY状态错误，不允许申请");
+				$("#nextt").removeClass().addClass("gray_nextStep"); 
+				$('#aHref').attr('href','javascript:nextStep()');
+			}
 		}else{
 			$.ajax({
 				url:"${ctxILetter}/enroll/gxfw1Submit?dealInfoId="+dealInfoId+"&_"+Math.random() * 10,

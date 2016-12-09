@@ -28,6 +28,8 @@
 				dealInfoId =d.dealInfoId;
 				if(d.status == 5 || d.status == 12){
 					window.location.href="${ctxILetter}/enroll/gxfw1Nextform?dealInfoId="+d.id+"&mmssgg=SQ4X85Q63F25G8R9E63R";
+				}else if(d.status == -1){
+					$("#msg").html("当前业务数据状态不允许申请更新，请查证");
 				}else if(d.status == 1){
 					//$("#msg").html("证书下载异常");
 					window.location.href="${ctxILetter}/enroll/gxfw2Nextform?id="+d.id;

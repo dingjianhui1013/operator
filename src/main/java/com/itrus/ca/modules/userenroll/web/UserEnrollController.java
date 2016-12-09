@@ -874,34 +874,35 @@ public class UserEnrollController extends BaseController {
 						// 存在更新过的证书
 						List<WorkDealInfo> infos = workDealInfoService.findgx(workDealInfo.getWorkCertInfo()
 										.getRenewalNextId());
-						// 传递前台审批状态 0为新建未审核 1为异常业务 2为退费用户 3为审核通过 4为 审核不通过11审核通过待获取
+							// 传递前台审批状态 0为新建未审核 1为异常业务 2为退费用户 3为审核通过 4为 审核不通过11审核通过待获取
 						if (infos!=null&&infos.size()>0){
-							if(infos.get(0).getDelFlag().equals("1")) {
-								json.put("status","4");
+							//判断业务是不是更新（仅含有更新）
+							if ( WorkDealInfoType.TYPE_UPDATE_CERT.equals(infos.get(0).getDealInfoType())){		
+								if(infos.get(0).getDelFlag().equals("1")) {
+									json.put("status","4");
+								}else{
+									
+									json.put("status", infos.get(0).getDealInfoStatus());
+								}
 							}else{
-								
-								json.put("status", infos.get(0).getDealInfoStatus());
+								//正在处理的业务不是更新，不允许申请更新
+								json.put("status","-1");
 							}
-						}else{
-							json.put("status","0");
+							// 传递前台审批状态，如果为业务为后台办理更新并未制证可在i信端做制证操作，即未持key更新业务。 106 后台更新审批通过待制证
+							if ( WorkDealInfoType.TYPE_UPDATE_CERT.equals(infos.get(0).getDealInfoType())
+									&& WorkDealInfoStatus.STATUS_CERT_WAIT.equals(infos.get(0).getDealInfoStatus())) {
+								json.put("updateStatus", 106);
+							}
+							json.put("remarks", infos.get(0).getRemarks());
+							json.put("archiveNo", (infos.get(0).getArchiveNo()!=null?1:0));
+							json.put("id",infos.get(0).getId());
+							json.put("remarks", infos.get(0).getRemarks());
+							return json.toString();
+						}else {
+							// 没有更新过证书 可以继续使用 9为没有更新过的业务 可以更新操作
+							json.put("status", 104);
 						}
-						
-						
-						
-						// 传递前台审批状态，如果为业务为后台办理更新并未制证可在i信端做制证操作，即未持key更新业务。 106 后台更新审批通过待制证
-						if ( WorkDealInfoType.TYPE_UPDATE_CERT.equals(infos.get(0).getDealInfoType())
-								&& WorkDealInfoStatus.STATUS_CERT_WAIT.equals(infos.get(0).getDealInfoStatus())) {
-							json.put("updateStatus", 106);
-						}
-						json.put("remarks", infos.get(0).getRemarks());
-						json.put("archiveNo", (infos.get(0).getArchiveNo()!=null?1:0));
-						json.put("id",infos.get(0).getId());
-						json.put("remarks", infos.get(0).getRemarks());
-						return json.toString();
-					} else {
-						// 没有更新过证书 可以继续使用 9为没有更新过的业务 可以更新操作
-						json.put("status", 104);
-					}
+					} 
 				}
 				//判断是否可以更新证书（当前时间距离证书有效期小于30）
 				if (workDealInfo.getWorkCertInfo().getNotafter()!=null) {
