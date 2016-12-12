@@ -893,7 +893,7 @@ public class UserEnrollController extends BaseController {
 									&& WorkDealInfoStatus.STATUS_CERT_WAIT.equals(infos.get(0).getDealInfoStatus())) {
 								json.put("updateStatus", 106);
 							}
-							json.put("remarks", infos.get(0).getRemarks());
+							json.put("remarks", infos.get(0).getRemarks()==null?"":infos.get(0).getRemarks());
 							json.put("archiveNo", (infos.get(0).getArchiveNo()!=null?1:0));
 							json.put("id",infos.get(0).getId());
 							json.put("remarks", infos.get(0).getRemarks());
@@ -902,6 +902,9 @@ public class UserEnrollController extends BaseController {
 							// 没有更新过证书 可以继续使用 9为没有更新过的业务 可以更新操作
 							json.put("status", 104);
 						}
+					}else {
+						// 没有更新过证书 可以继续使用 9为没有更新过的业务 可以更新操作
+						json.put("status", 104);
 					} 
 				}
 				//判断是否可以更新证书（当前时间距离证书有效期小于30）
