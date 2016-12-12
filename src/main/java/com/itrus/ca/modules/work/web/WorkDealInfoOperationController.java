@@ -797,9 +797,9 @@ public class WorkDealInfoOperationController extends BaseController {
 				String imgNames = "";
 				for(int i =0;i<attachs.size();i++){
 					if(i==0){
-						imgNames+=url+"/"+attachs.get(0).getAttachName();
+						imgNames+=url+"/"+attachs.get(0).getAttachName()+"##"+attachs.get(0).getStatus();
 					}else{
-						imgNames+=","+url+"/"+attachs.get(i).getAttachName();	
+						imgNames+=","+url+"/"+attachs.get(i).getAttachName()+"##"+attachs.get(i).getStatus();	
 					}
 				}
 				model.addAttribute("imgNames", imgNames);
@@ -871,9 +871,9 @@ public class WorkDealInfoOperationController extends BaseController {
 				String imgNames = "";
 				for(int i =0;i<attachs.size();i++){
 					if(i==0){
-						imgNames+=url+"/"+attachs.get(0).getAttachName();
+						imgNames+=url+"/"+attachs.get(0).getAttachName()+"##"+attachs.get(0).getStatus();
 					}else{
-						imgNames+=","+url+"/"+attachs.get(i).getAttachName();	
+						imgNames+=","+url+"/"+attachs.get(i).getAttachName()+"##"+attachs.get(i).getStatus();	
 					}
 				}
 				model.addAttribute("imgNames", imgNames);
@@ -2074,24 +2074,19 @@ public class WorkDealInfoOperationController extends BaseController {
 				if(comm!=null){
 					map.remove(imgs[i]);
 					//以前的图片复制一份保存
-					CommonAttach cattach = new CommonAttach(comm);
-					cattach.setWorkDealInfo(workDealInfo);
-					cattach.setStatus(null);
-					attachService.saveAttach(cattach);
+					comm.setWorkDealInfo(workDealInfo);
+					comm.setStatus(null);
+					attachService.saveAttach(comm);
 				}else{//新图片直接修改workDealInfo
 					attach = attachService.findCommonAttachByattachName(imgs[i]);
 					if(attach!=null){
 						attach.setWorkDealInfo(workDealInfo);
-						attach.setStatus(null);
+						attach.setStatus(-2);
+						attach.setRemark("补录图片");
 						attachService.saveAttach(attach);
 					}
 				}
 			}
-			/*for(String s:map.keySet()){
-				CommonAttach comm = map.get(s);
-				comm.setStatus(-1);
-				attachService.saveAttach(comm);
-			}*/
 		}	
 		
 		// 保存日志信息

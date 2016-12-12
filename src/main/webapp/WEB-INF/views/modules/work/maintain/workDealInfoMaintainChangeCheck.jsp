@@ -61,11 +61,19 @@
 	
 			var namestr = "";
 			for(var i = 0;i < str1.length; i++){
-				var str = $("<div class='uploadImgList'><img src='"+str1[i]+"' style='width: 100px; height: 80px;'>"+'<p class="uploadImgName">'+getDisplayName(str1[i])+'</p></div>');
+				//取出图片的状态
+				var imgstatus = str1[i].substring(str1[i].lastIndexOf('##')+2,str1[i].length);
+				var str ='';
+				if(imgstatus==-2){
+					str = $("<div class='uploadImgList' style='border-style:solid;border-width:2px;border-color:green' ><img src='"+str1[i]+"' style='width: 100px; height: 80px;'>"+'<p class="uploadImgName">'+getDisplayName(str1[i])+'</p></div>');
+				}else{
+					str = $("<div class='uploadImgList'><img src='"+str1[i]+"' style='width: 100px; height: 80px;'>"+'<p class="uploadImgName">'+getDisplayName(str1[i])+'</p></div>');
+				}
 				$("#imgLayer").append(str);
 				var imgBoxMod=$(".ctnlist .text img");
 			    imgPop(imgBoxMod);
 			    //imgDel(str);
+			    str1[i]=str1[i].substring(0,str1[i].lastIndexOf('##'));
 			    namestr+=str1[i].substring(str1[i].lastIndexOf('/')+1,str1[i].length)+",";
 			}
 			if(namestr!=''){
@@ -575,13 +583,26 @@ function buttonFrom() {
 		$("#"+c).show();
  		$("#"+c).html($("#"+o).val().length);
 	}
+	
+	function onSubmit() {
+		var content =$("input[id=recordContent]").val();
+		$("#inputForm").attr(
+				"action",
+				"${ctx}/work/workDealInfoOperation/maintainAddSave?workDealInfoId="+${workDealInfo.id}+"&recordContent="+content);
+		$("#inputForm").submit();
+	}
 </script>
 </head>
 <body>
 	<ul class="nav nav-tabs">
 		<li><a href="${ctx}/work/workDealInfo/list">业务办理列表</a></li>
-		<li class="active"><a
+		<c:if test="${iseditor !='iseditor'}">
+			<li class="active"><a
 			href="#">业务变更<c:if test="${not empty reissue}">补办</c:if></a></li>
+		</c:if>
+		<c:if test="${iseditor =='iseditor'}">
+			<li class="active"><a href="#">业务补录</a></li>
+		</c:if>
 	</ul>
 	<form:form id="inputForm"
 		action="${ctx}/work/workDealInfoOperation/maintainAddSave" 
@@ -616,7 +637,7 @@ function buttonFrom() {
 								<th colspan="1" style="font-size: 20px;"><span
 									class="prompt" style="color: red; display: none;">*</span>基本信息</th>	
 								<th colspan="3"> <a href="#" data-toggle="modal">
-								<input id="scan" class="btn btn-primary smBtn" onclick="scanningInfoEnter()" data-toggle="modal" value="扫描录入" /></a>	
+								<input id="scan" class="btn btn-primary smBtn" onclick="scanningInfoEnter(false)" data-toggle="modal" value="扫描录入" /></a>	
 								</th>
 							</c:if>
 						</tr>
@@ -985,9 +1006,8 @@ function buttonFrom() {
 							</tr>
 						</c:forEach>
 						<tr>
-
 							<td>${workLog.size()+1 }</td>
-							<td><input type="text" id="recordContent"></td>
+							<td><input type="text" id="recordContent" name="recordContent"></td>
 							<td>${user.name }</td>
 							<td>${user.office.name }</td>
 							<td>${date }</td>

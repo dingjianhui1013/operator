@@ -576,9 +576,9 @@ public class WorkDealInfoFilingController extends BaseController {
 			String imgNames = "";
 			for(int i =0;i<attachs.size();i++){
 				if(i==0){
-					imgNames+=url+"/"+attachs.get(0).getAttachName();
+					imgNames+=url+"/"+attachs.get(0).getAttachName()+"##"+attachs.get(0).getStatus();
 				}else{
-					imgNames+=","+url+"/"+attachs.get(i).getAttachName();	
+					imgNames+=","+url+"/"+attachs.get(i).getAttachName()+"##"+attachs.get(i).getStatus();	
 				}
 			}
 			model.addAttribute("imgNames", imgNames);

@@ -38,7 +38,7 @@ public class CommonAttach implements java.io.Serializable {
 	private String path;               //路径
 	private String realPath;           //真实路径
 	private String remark;
-	private Integer status;            //-1 图片失效
+	private Integer status;            //-1 图片失效  -2 补录图片
 	private String suffix;
 	private String uploadCount;
 	private Integer uploadModel;

@@ -37,10 +37,10 @@ var requestURI = "/work/workDealInfo/saveUploadImg";  //图片上传的请求路
 //var fileUploadPath = "";                              //上传路径,从application.properties 中获取.
 /**
  * @author 萧龙纳云
- * 
+ * flag : 信息是否可以录入
  * 点击扫描录入,触发开启装置事件
  * */
-function scanningInfoEnter() {
+function scanningInfoEnter(flag) {
 	
 	var urlArray = new Array();
 	urlArray = window.location.toString().split('/');
@@ -48,7 +48,7 @@ function scanningInfoEnter() {
 	
     var codeBase = base+"/download/VideoInputCtlSetup.exe";
 	
- 
+     
     
     //codeBase="'+codeBase+'"
     
@@ -61,9 +61,9 @@ function scanningInfoEnter() {
 		html+='<div class="control-group" style="width: 100%; height: 17%;">';
 		html+='<div class="control-group" align="center">';
 		html+='	<div class="form-group btnGrop">';
-		html+='		<button id="qrsq" class="btn btn-primary" onclick="getcompanyinfo()" style="margin-left:0px;margin-right:7px">单位信息录入</button>';
-		html+='		<button id="qrsq" class="btn btn-primary" onclick="getholderinfo()" style="margin-right:6px">持有人信息录入</button>';
-		html+='		<button id="qrsq" class="btn btn-primary" onclick="getoperatorinfo()" style="margin-right:6px">经办人信息录入</button>';
+		html+='		<button id="qrsq" class="btn btn-primary" onclick="getcompanyinfo('+flag+')" style="margin-left:0px;margin-right:7px">单位信息录入</button>';
+		html+='		<button id="qrsq" class="btn btn-primary" onclick="getholderinfo('+flag+')" style="margin-right:6px">持有人信息录入</button>';
+		html+='		<button id="qrsq" class="btn btn-primary" onclick="getoperatorinfo('+flag+')" style="margin-right:6px">经办人信息录入</button>';
 		html+='		<button id="qrsq" class="btn btn-primary" onclick="changeDevice()" style="margin-right:7px">&nbsp;切换摄像头&nbsp;</button>';			
 		html+='		<button id="qrsq" class="btn btn-primary" onclick="headphotograph('+imgPath+')" style="margin-right:0px">&nbsp;现场&nbsp;图像&nbsp;</button>';
 		html+='	</div>';
@@ -144,24 +144,28 @@ function changeDevice() {
  * 经办人姓名
  * 经办人身份证
  * */
-function getholderinfo(){
-	
-	VideoInputCtl.SetDeviceIdcard(nDeviceIndex, 1);         //开启 or 关闭 读取二代证功能
-	
-	VideoInputCtl.GrabToFile(localStoragePath+"Test.jpg");  //需先执行拍照功能，才可取得此次二代证资讯
-    var names = VideoInputCtl.GetIdcardResult(0);
-    var idno = VideoInputCtl.GetIdcardResult(5);
-    $("#contactName").val(names);
-    $("#conCertNumber").val(idno);
-	
-    if($("#pIDCard").val()==""&&$("#pName").val()==""){
-    	$("#pIDCard").val(idno);
-    	$("#pName").val(names);
-    	
-    }
+function getholderinfo(flag){
+	if(flag==true){
+		VideoInputCtl.SetDeviceIdcard(nDeviceIndex, 1);         //开启 or 关闭 读取二代证功能
+		
+		VideoInputCtl.GrabToFile(localStoragePath+"Test.jpg");  //需先执行拍照功能，才可取得此次二代证资讯
+		var names = VideoInputCtl.GetIdcardResult(0);
+		var idno = VideoInputCtl.GetIdcardResult(5);
+		if($("#contactName").attr("disabled")!='disabled'&&$("#conCertNumber").attr("disabled")!='disabled'){
+			$("#contactName").val(names);
+			$("#conCertNumber").val(idno);
+		}
+		
+		if($("#pIDCard").attr("disabled")!='disabled'&&$("#pName").attr("disabled")!='disabled'
+			&&$("#pIDCard").val()==""&&$("#pName").val()==""){
+			$("#pIDCard").val(idno);
+			$("#pName").val(names);
+			
+		}
 //    if((names!=null&&names!=''&&names!=undefined)||(idno!=null&&idno!=''&&idno!=undefined)){
 //    	top.$.jBox.tip("持有人信息录入成功");
 //    }
+	}
    
 }
 
@@ -173,17 +177,20 @@ function getholderinfo(){
  * 身份证号
  * 
  * */
-function getoperatorinfo(){
-	VideoInputCtl.SetDeviceIdcard(nDeviceIndex, 1);        //开启 or 关闭 读取二代证功能
-	
-	VideoInputCtl.GrabToFile(localStoragePath+"Test.jpg"); //需先执行拍照功能，才可取得此次二代证资讯
-    var names = VideoInputCtl.GetIdcardResult(0);
-
-	var idno = VideoInputCtl.GetIdcardResult(5);
-	if(names!=null&&names!=''){
-		$("#pName").val(names);
-		$("#pIDCard").val(idno);
-		//top.$.jBox.tip("经办人信息录入成功");
+function getoperatorinfo(flag){
+	if(flag==true){
+		VideoInputCtl.SetDeviceIdcard(nDeviceIndex, 1);        //开启 or 关闭 读取二代证功能
+		
+		VideoInputCtl.GrabToFile(localStoragePath+"Test.jpg"); //需先执行拍照功能，才可取得此次二代证资讯
+		var names = VideoInputCtl.GetIdcardResult(0);
+		
+		var idno = VideoInputCtl.GetIdcardResult(5);
+		if($("#pName").attr("disabled")!='disabled'&&$("#pIDCard").attr("disabled")!='disabled'
+			&&names!=null&&names!=''){
+			$("#pName").val(names);
+			$("#pIDCard").val(idno);
+			//top.$.jBox.tip("经办人信息录入成功");
+		}
 	}
 	
 }
@@ -195,33 +202,34 @@ function getoperatorinfo(){
  * 
  * 利用高拍仪读取单位证件信息并录入到单位信息中
  * */
-function getcompanyinfo(){
-	 nDeviceIndex = VideoInputCtl.GetDeviceIndex();
-	 
-	 VideoInputCtl.SetDeviceQRcode(nDeviceIndex, 1);           //开启 or 关闭 QRcode功能
-	 
-	 VideoInputCtl.GrabToFile(localStoragePath+"Test.jpg");    //将照片存放到本地路径下
-
-     if (VideoInputCtl.GetDeviceQRcode(nDeviceIndex)) {
-         var nCount = VideoInputCtl.GetQRcodeCount();
-
-             szType = VideoInputCtl.GetQRcodeTypeName(0);
-             szText = VideoInputCtl.GetQRcodeContent(0);
-      
-             console.log(szText);
-             
-             var strs = splitQRcode(szText);
-             if(strs!=null){
-            	 $("#companyName").val(strs[2]);
-            	 $("#organizationNumber").val(strs[0]);
-            	// top.$.jBox.tip("单位信息录入成功");
-             }
-             
-             else{
-            	 $("#companyName").val("");
-            	 $("#organizationNumber").val("");
-             }
-     }
+function getcompanyinfo(flag){
+	if(flag==true&&$("#companyName").attr("disabled")!='disabled'&&$("#organizationNumber").attr("disabled")!='disabled'){
+		
+		nDeviceIndex = VideoInputCtl.GetDeviceIndex();
+		
+		VideoInputCtl.SetDeviceQRcode(nDeviceIndex, 1);           //开启 or 关闭 QRcode功能
+		
+		VideoInputCtl.GrabToFile(localStoragePath+"Test.jpg");    //将照片存放到本地路径下
+		
+		if (VideoInputCtl.GetDeviceQRcode(nDeviceIndex)) {
+			var nCount = VideoInputCtl.GetQRcodeCount();
+			
+			szType = VideoInputCtl.GetQRcodeTypeName(0);
+			szText = VideoInputCtl.GetQRcodeContent(0);
+			
+			console.log(szText);
+			
+			var strs = splitQRcode(szText);
+			if(strs!=null){
+				$("#companyName").val(strs[2]);
+				$("#organizationNumber").val(strs[0]);
+				// top.$.jBox.tip("单位信息录入成功");
+			}else{
+				$("#companyName").val("");
+				$("#organizationNumber").val("");
+			}
+		}
+	}
      
 }
 

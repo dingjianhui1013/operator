@@ -61,7 +61,7 @@ public class CommonAttachService extends BaseService {
 		dc.createAlias("workDealInfo", "workDealInfo");
 		
 		dc.add(Restrictions.eq("workDealInfo.id", workDealInfoId));
-		dc.add(Restrictions.isNull("status"));
+		dc.add(Restrictions.or(Restrictions.isNull("status"),Restrictions.eq("status", -2)));
 		return attachDao.find(dc);
 	}
 	

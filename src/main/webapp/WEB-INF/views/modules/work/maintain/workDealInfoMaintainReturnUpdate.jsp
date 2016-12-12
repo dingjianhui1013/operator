@@ -62,11 +62,19 @@
 	
 			var namestr = "";
 			for(var i = 0;i < str1.length; i++){
-				var str = $("<div class='uploadImgList'><img src='"+str1[i]+"' style='width: 100px; height: 80px;'>"+'<p class="uploadImgName">'+getDisplayName(str1[i])+'</p><span class="s-closeBtn icon-remove-sign" data="'+str1[i]+'"></span></div>');
+				//取出图片的状态
+				var imgstatus = str1[i].substring(str1[i].lastIndexOf('##')+2,str1[i].length);
+				var str ='';
+				if(imgstatus==-2){
+					str = $("<div class='uploadImgList' style='border-style:solid;border-width:2px;border-color:green' ><img src='"+str1[i]+"' style='width: 100px; height: 80px;'>"+'<p class="uploadImgName">'+getDisplayName(str1[i])+'</p></div>');
+				}else{
+					str = $("<div class='uploadImgList'><img src='"+str1[i]+"' style='width: 100px; height: 80px;'>"+'<p class="uploadImgName">'+getDisplayName(str1[i])+'</p></div>');
+				}
 				$("#imgLayer").append(str);
 				var imgBoxMod=$(".ctnlist .text img");
 			    imgPop(imgBoxMod);
 			    imgDel(str);
+			    str1[i]=str1[i].substring(0,str1[i].lastIndexOf('##'));
 			    namestr+=str1[i].substring(str1[i].lastIndexOf('/')+1,str1[i].length)+",";
 			}
 			if(namestr!=''){

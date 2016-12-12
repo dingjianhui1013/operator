@@ -55,11 +55,19 @@ $(document).ready(function() {
 
 		var namestr = "";
 		for(var i = 0;i < str1.length; i++){
-			var str = $("<div class='uploadImgList'><img src='"+str1[i]+"' style='width: 100px; height: 80px;'>"+'<p class="uploadImgName">'+getDisplayName(str1[i])+'</p></div>');
+			//取出图片的状态
+			var imgstatus = str1[i].substring(str1[i].lastIndexOf('##')+2,str1[i].length);
+			var str ='';
+			if(imgstatus==-2){
+				str = $("<div class='uploadImgList' style='border-style:solid;border-width:2px;border-color:green' ><img src='"+str1[i]+"' style='width: 100px; height: 80px;'>"+'<p class="uploadImgName">'+getDisplayName(str1[i])+'</p></div>');
+			}else{
+				str = $("<div class='uploadImgList'><img src='"+str1[i]+"' style='width: 100px; height: 80px;'>"+'<p class="uploadImgName">'+getDisplayName(str1[i])+'</p></div>');
+			}
 			$("#imgLayer").append(str);
 			var imgBoxMod=$(".ctnlist .text img");
 		    imgPop(imgBoxMod);
 		    //imgDel(str);
+		    str1[i]=str1[i].substring(0,str1[i].lastIndexOf('##'));
 		    namestr+=str1[i].substring(str1[i].lastIndexOf('/')+1,str1[i].length)+",";
 		}
 		if(namestr!=''){
@@ -478,16 +486,27 @@ $(document).ready(function() {
 		showYear();
 	} 
 	
-	
+	function onSubmit() {
+		var content =$("input[id=recordContent]").val();
+		$("#inputForm").attr(
+				"action",
+				"${ctx}/work/workDealInfoOperation/maintainAddSave?workDealInfoId="+${workDealInfo.id}+"&recordContent="+content);
+		$("#inputForm").submit();
+	}
 </script>
 </head>
 <body>
 	<ul class="nav nav-tabs">
 		<li><a href="${ctx}/work/workDealInfoAudit/list">业务审核列表</a></li>
-		<li class="active"><a
-			href="${ctx}/work/workDealInfoAudit/auditFrom?id=${workDealInfo.id}">业务审核
-
-		</a></li>
+		<c:if test="${iseditor !='iseditor'}">
+			<li class="active"><a
+				href="${ctx}/work/workDealInfoAudit/auditFrom?id=${workDealInfo.id}">业务审核
+	
+			</a></li>
+		</c:if>
+		<c:if test="${iseditor =='iseditor'}">
+			<li class="active"><a href="#">业务补录</a></li>
+		</c:if>
 	</ul>
 	<form:form id="inputForm" modelAttribute="workDealInfo"
 		action="${ctx}/work/workDealInfo/save" method="post"
@@ -528,7 +547,7 @@ $(document).ready(function() {
 								<th colspan="1" style="font-size: 20px;"><span
 									class="prompt" style="color: red; display: none;">*</span>基本信息</th>	
 								<th colspan="3"> <a href="#" data-toggle="modal">
-								<input id="scan" class="btn btn-primary smBtn" onclick="scanningInfoEnter()" data-toggle="modal" value="扫描录入" /></a>	
+								<input id="scan" class="btn btn-primary smBtn" onclick="scanningInfoEnter(false)" data-toggle="modal" value="扫描录入" /></a>	
 								</th>
 							</c:if>
 						</tr>
@@ -658,7 +677,7 @@ $(document).ready(function() {
 						</tr>
 						<tr>
 							<th><span class="prompt" style="color: red; display: none;">*</span>单位名称：</th>
-							<td><input type="text" name="companyName"
+							<td><input type="text" name="companyName" id="companyName"
 								disabled="disabled"
 								value="${workDealInfo.workCompany.companyName}"></td>
 							<th><span class="prompt" style="color: red; display: none;">*</span>单位类型：</th>
@@ -688,7 +707,7 @@ test="${workDealInfo.workCompany.companyType==5 }">selected</c:if>>其他</optio
 						<tr>
 							<th><span class="prompt" style="color: red; display: none;">*</span>组织机构代码：</th>
 							<td><input type="text" name="organizationNumber"
-								disabled="disabled"
+								disabled="disabled" id="organizationNumber"
 								value="${workDealInfo.workCompany.organizationNumber}" /></td>
 							<th><span class="prompt" style="color: red; display: none;">*</span>组织机构代码有效期：</th>
 							<td><input class="input-medium Wdate" disabled="disabled"
@@ -933,7 +952,7 @@ style="display:none"</c:if> --%>>
 						<tr>
 
 							<td>${workLog.size()+1 }</td>
-							<td><input type="text" id="recordContent"></td>
+							<td><input type="text" id="recordContent" name="recordContent"></td>
 							<td>${user.name }</td>
 							<td>${user.office.name }</td>
 							<td>${date }</td>
