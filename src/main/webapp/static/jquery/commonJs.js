@@ -145,7 +145,7 @@ function changeDevice() {
  * 经办人身份证
  * */
 function getholderinfo(flag){
-	if(flag==true){
+	if(flag!=false){
 		VideoInputCtl.SetDeviceIdcard(nDeviceIndex, 1);         //开启 or 关闭 读取二代证功能
 		
 		VideoInputCtl.GrabToFile(localStoragePath+"Test.jpg");  //需先执行拍照功能，才可取得此次二代证资讯
@@ -178,7 +178,7 @@ function getholderinfo(flag){
  * 
  * */
 function getoperatorinfo(flag){
-	if(flag==true){
+	if(flag!=false){
 		VideoInputCtl.SetDeviceIdcard(nDeviceIndex, 1);        //开启 or 关闭 读取二代证功能
 		
 		VideoInputCtl.GrabToFile(localStoragePath+"Test.jpg"); //需先执行拍照功能，才可取得此次二代证资讯
@@ -203,7 +203,7 @@ function getoperatorinfo(flag){
  * 利用高拍仪读取单位证件信息并录入到单位信息中
  * */
 function getcompanyinfo(flag){
-	if(flag==true&&$("#companyName").attr("disabled")!='disabled'&&$("#organizationNumber").attr("disabled")!='disabled'){
+	if(flag!=false&&$("#companyName").attr("disabled")!='disabled'&&$("#organizationNumber").attr("disabled")!='disabled'){
 		
 		nDeviceIndex = VideoInputCtl.GetDeviceIndex();
 		
