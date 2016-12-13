@@ -3854,7 +3854,7 @@ public class WorkDealInfoController extends BaseController {
 		
 		//把以前查询出来
 		String imgNames=request.getParameter("imgNames");
-		List<CommonAttach> befor = attachService.findCommonAttachByWorkDealInfo(workCertInfo.getId());
+		List<CommonAttach> befor = attachService.findCommonAttachByWorkDealInfo(workDealInfo.getId());
 		Map<String,CommonAttach> map = new HashMap<String,CommonAttach>();//键值对保存 便于查询
 		for(CommonAttach c:befor){
 			map.put(c.getAttachName(), c);
@@ -3874,9 +3874,16 @@ public class WorkDealInfoController extends BaseController {
 				}else{//新图片直接修改workDealInfo
 					attach = attachService.findCommonAttachByattachName(imgs[i]);
 					if(attach!=null){
-						attach.setWorkDealInfo(workDealInfo);
-						attach.setStatus(null);
-						attachService.saveAttach(attach);						
+						if(workDealInfoId==null){
+							CommonAttach newattach = new CommonAttach(attach);
+							newattach.setWorkDealInfo(workDealInfo);
+							newattach.setStatus(null);
+							attachService.saveAttach(newattach);
+						}else{
+							attach.setWorkDealInfo(workDealInfo);
+							attach.setStatus(null);
+							attachService.saveAttach(attach);						
+						}
 					}
 				}
 			}
@@ -9902,9 +9909,16 @@ public class WorkDealInfoController extends BaseController {
 					}else{//新图片直接修改workDealInfo
 						attach = attachService.findCommonAttachByattachName(imgs[i]);
 						if(attach!=null){
-							attach.setWorkDealInfo(workDealInfo);
-							attach.setStatus(null);
-							attachService.saveAttach(attach);						
+							if(workDealInfoId==null){
+								CommonAttach newattach = new CommonAttach(attach);
+								newattach.setWorkDealInfo(workDealInfo);
+								newattach.setStatus(null);
+								attachService.saveAttach(newattach);
+							}else{
+								attach.setWorkDealInfo(workDealInfo);
+								attach.setStatus(null);
+								attachService.saveAttach(attach);						
+							}
 						}
 					}
 				}
