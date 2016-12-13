@@ -104,10 +104,7 @@ function opendevice() {
 
     if (!VideoInputCtl.IsDeviceOpened(nDeviceIndex))
         VideoInputCtl.OpenDevice(nDeviceIndex);
-    
-    
-    
-    
+   
     VideoInputCtl.StartPlayDevice(nDeviceIndex);
    
     VideoInputCtl.SetDeleteAfterHttpPost(true);
@@ -166,6 +163,7 @@ function getholderinfo(flag){
 //    	top.$.jBox.tip("持有人信息录入成功");
 //    }
 	}
+
    
 }
 
