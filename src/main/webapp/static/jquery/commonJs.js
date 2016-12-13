@@ -148,16 +148,13 @@ function getholderinfo(flag){
 		VideoInputCtl.GrabToFile(localStoragePath+"Test.jpg");  //需先执行拍照功能，才可取得此次二代证资讯
 		var names = VideoInputCtl.GetIdcardResult(0);
 		var idno = VideoInputCtl.GetIdcardResult(5);
-		if($("#contactName").attr("disabled")!='disabled'&&$("#conCertNumber").attr("disabled")!='disabled'){
-			$("#contactName").val(names);
-			$("#conCertNumber").val(idno);
+		if($("input[name='contactName']").attr("disabled")!='disabled'&&$("input[name='conCertNumber']").attr("disabled")!='disabled'){
+			$("input[name='contactName']").val(names);
+			$("input[name='conCertNumber']").val(idno);
 		}
-		
-		if($("#pIDCard").attr("disabled")!='disabled'&&$("#pName").attr("disabled")!='disabled'
-			&&$("#pIDCard").val()==""&&$("#pName").val()==""){
+		if($("#pIDCard").attr("disabled")!='disabled'&&$("#pName").attr("disabled")!='disabled'){
 			$("#pIDCard").val(idno);
 			$("#pName").val(names);
-			
 		}
 //    if((names!=null&&names!=''&&names!=undefined)||(idno!=null&&idno!=''&&idno!=undefined)){
 //    	top.$.jBox.tip("持有人信息录入成功");

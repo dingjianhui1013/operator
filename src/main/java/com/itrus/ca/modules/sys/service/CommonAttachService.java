@@ -46,7 +46,7 @@ public class CommonAttachService extends BaseService {
 		dc.add(Restrictions.eq("attachName", attachName));
 		List<CommonAttach> attachs = attachDao.find(dc);
 		
-		if(attachs.size()==1){
+		if(attachs.size()>=1){
 			return attachs.get(0);
 		}else{
 			return null;

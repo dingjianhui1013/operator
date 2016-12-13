@@ -16,7 +16,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.aspectj.internal.lang.annotation.ajcDeclareAnnotation;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,9 +26,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.google.common.collect.Lists;
 import com.itrus.ca.common.config.Global;
-import com.itrus.ca.common.persistence.BaseEntity;
 import com.itrus.ca.common.persistence.Page;
 import com.itrus.ca.common.utils.PayinfoUtil;
 import com.itrus.ca.common.utils.RaAccountUtil;
@@ -44,7 +41,6 @@ import com.itrus.ca.modules.key.entity.KeyUsbKeyInvoice;
 import com.itrus.ca.modules.key.service.KeyUsbKeyInvoiceService;
 import com.itrus.ca.modules.log.service.LogUtil;
 import com.itrus.ca.modules.profile.entity.ConfigAgentBoundDealInfo;
-import com.itrus.ca.modules.profile.entity.ConfigApp;
 import com.itrus.ca.modules.profile.entity.ConfigAppOfficeRelation;
 import com.itrus.ca.modules.profile.entity.ConfigChargeAgent;
 import com.itrus.ca.modules.profile.entity.ConfigChargeAgentBoundConfigProduct;
@@ -68,8 +64,9 @@ import com.itrus.ca.modules.self.entity.SelfApplication;
 import com.itrus.ca.modules.self.service.SelfApplicationService;
 import com.itrus.ca.modules.self.service.SelfAreaService;
 import com.itrus.ca.modules.self.utils.SelfApplicationStatus;
+import com.itrus.ca.modules.sys.entity.CommonAttach;
 import com.itrus.ca.modules.sys.entity.Office;
-import com.itrus.ca.modules.sys.entity.User;
+import com.itrus.ca.modules.sys.service.CommonAttachService;
 import com.itrus.ca.modules.sys.utils.UserUtils;
 import com.itrus.ca.modules.work.entity.WorkDealInfo;
 import com.itrus.ca.modules.work.entity.WorkFinancePayInfoRelation;
@@ -99,6 +96,9 @@ public class WorkPayInfoController extends BaseController {
 	@Autowired
 	private FinancePaymentInfoService financePaymentInfoService;
 
+	@Autowired
+	private CommonAttachService attachService;
+	
 	@Autowired
 	private WorkDealInfoService workDealInfoService;
 
@@ -1526,6 +1526,21 @@ public class WorkPayInfoController extends BaseController {
 		dealInfo.setDealInfoStatus("15");
 		workDealInfoService.save(dealInfo);
 
+		String url = Global.getConfig("images.path");
+		List<CommonAttach> attachs = attachService.findCommonAttachByWorkDealInfo(workDealInfoId);
+		
+		if(attachs!=null&&attachs.size()>0){
+			String imgNames = "";
+			for(int i =0;i<attachs.size();i++){
+				if(i==0){
+					imgNames+=url+"/"+attachs.get(0).getAttachName()+"##"+attachs.get(0).getStatus();
+				}else{
+					imgNames+=","+url+"/"+attachs.get(i).getAttachName()+"##"+attachs.get(i).getStatus();	
+				}
+			}
+			model.addAttribute("imgNames", imgNames);
+		}
+		
 		List<ConfigAppOfficeRelation> configAppOfficeRelations = configAppOfficeRelationService
 				.findAllByOfficeId(UserUtils.getUser().getOffice().getId());
 		for (ConfigAppOfficeRelation appOffice : configAppOfficeRelations) {
