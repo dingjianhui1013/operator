@@ -134,6 +134,10 @@ import com.itrus.ca.modules.sys.security.SystemAuthorizingRealm;
 import com.itrus.ca.modules.sys.service.CommonAttachService;
 import com.itrus.ca.modules.sys.service.OfficeService;
 import com.itrus.ca.modules.sys.utils.UserUtils;
+import com.itrus.ca.modules.task.FixSVNThread;
+import com.itrus.ca.modules.task.MutiBatchUpdate;
+import com.itrus.ca.modules.task.entity.BatchUpdateInfoScca;
+import com.itrus.ca.modules.task.service.BatchUpdateInfoSccaService;
 import com.itrus.ca.modules.work.entity.MonthPayment;
 import com.itrus.ca.modules.work.entity.WorkCertApplyInfo;
 import com.itrus.ca.modules.work.entity.WorkCertInfo;
@@ -286,6 +290,9 @@ public class WorkDealInfoController extends BaseController {
 	
 	@Autowired
 	private SelfAreaService selfAreaService;
+	
+	@Autowired
+	private BatchUpdateInfoSccaService batchUpdateInfoSccaService;
 
 	@Value(value = "${ixin.url}")
 	private String ixinUrl;
@@ -10099,10 +10106,16 @@ public class WorkDealInfoController extends BaseController {
 
 	@RequestMapping(value = "checkUpdateByIds")
 	@ResponseBody
-	public String checkUpdateByIds(String dealInfoIds) throws JSONException {
+	public String checkUpdateByIds(String dealInfoIds,String remarkInfo) throws JSONException {
 		JSONObject json = new JSONObject();
 		try {
+			
+			
+			
 			String[] dealInfos = dealInfoIds.split(",");
+			
+			
+			
 			List<Long> dealIdList = new ArrayList<Long>();
 			for (int i = 0; i < dealInfos.length; i++) {
 				if (!dealInfos[i].equals("")) {
@@ -10110,10 +10123,19 @@ public class WorkDealInfoController extends BaseController {
 				}
 
 			}
-
-			List<ConfigProduct> productNames = workDealInfoService
-					.findByDistinkIds(dealIdList);
-			if (productNames.size() > 1) {
+			
+			
+			List<ConfigProduct> products;
+			
+			if(!StringHelper.isNull(remarkInfo)){
+			    products = workDealInfoService.findByDistinkIds(remarkInfo);
+			}else{
+				products = workDealInfoService.findByDistinkIds(dealIdList);
+			}
+			
+			
+		
+			if (products.size() > 1) {
 				json.put("status", 1);
 				json.put("isUpdate", 0);
 
@@ -10121,9 +10143,12 @@ public class WorkDealInfoController extends BaseController {
 				json.put("html", html);
 				return json.toString();
 			}
+			
+			
+			
 
 			String html = "";
-			List<String> companyNames = new ArrayList<>();
+/*			List<String> companyNames = new ArrayList<>();
 			for (int i = 0; i < dealInfos.length; i++) {
 				if (dealInfos[i].equals("1") || dealInfos[i].equals("")) {
 					continue;
@@ -10151,11 +10176,11 @@ public class WorkDealInfoController extends BaseController {
 				if (i < (companyNames.size() - 1)) {
 					html += "<br>&nbsp;&nbsp;&nbsp;&nbsp;";
 				}
-			}
+			}*/
 			if (html.equals("")) {
 				json.put("isUpdate", 1);
 
-				Long proIdd = productNames.get(0).getId();
+				Long proIdd = products.get(0).getId();
 				List<ConfigChargeAgentBoundConfigProduct> bounds = configChargeAgentBoundConfigProductService
 						.findByProductId(proIdd);
 				Set<Integer> nameSet = new HashSet<Integer>();
@@ -10165,10 +10190,10 @@ public class WorkDealInfoController extends BaseController {
 				}
 				json.put("boundLabelList", nameSet);
 
-				json.put("appIdd", productNames.get(0).getConfigApp().getId());
-				json.put("productNamee", productNames.get(0).getProductName());
+				json.put("appIdd", products.get(0).getConfigApp().getId());
+				json.put("productNamee", products.get(0).getProductName());
 				json.put("updateSize", dealIdList.size());
-				json.put("labell", productNames.get(0).getProductLabel());
+				json.put("labell", products.get(0).getProductLabel());
 
 			} else {
 				json.put("isUpdate", 0);
@@ -10403,226 +10428,157 @@ public class WorkDealInfoController extends BaseController {
 			Date expirationDate,// 经信委 年限和日期二选一
 			Long bounddId, String methodPay) {
 
-		ConfigChargeAgentBoundConfigProduct bound = configChargeAgentBoundConfigProductService
-				.get(bounddId);
+		
+		long start = System.currentTimeMillis();
+		
+		boolean success = true;
+		
+		//找到计费策略agent
+		ConfigChargeAgentBoundConfigProduct bound = configChargeAgentBoundConfigProductService.get(bounddId);
 		ConfigChargeAgent agent = bound.getAgent();
+		
 		String[] infoIds = dealInfoIds.split(",");
+
+		String timeSvn = workDealInfoService.getTimeSvn();
+		int num = workDealInfoService.getNumSvn(timeSvn);
+		
+		User user = UserUtils.getUser();
+		Office office = user.getOffice();
+		
+		
+		
+		Double money = configChargeAgentDetailService.getChargeMoney(agent.getId(), 1, yearU!=null?yearU:StringHelper.getDvalueYear(expirationDate));
+		
+		List<ConfigAgentOfficeRelation> configAgentOfficeRelations = configAgentOfficeRelationService.findByOffice(office);
+		ConfigAgentOfficeRelation configAgentOfficeRelation = null;
+		if(configAgentOfficeRelations.size()>0){
+			configAgentOfficeRelation = configAgentOfficeRelations.get(0);
+		}
+		
+		List<ReceiptDepotInfo> depotInfos = receiptDepotInfoService.findDepotByOffice(office);
+		ReceiptDepotInfo depotInfo = null;
+		if(depotInfos.size()>0){
+			depotInfo = depotInfos.get(0);
+		}
+		
+		WorkDealInfo workDealInfo1 = null;
+		
+		log.debug("开始执行:");
+		
+		
+		
 		for (int i = 0; i < infoIds.length; i++) {
+			
+			Long infoId = Long.parseLong(infoIds[i]);
+			
 			try {
-				Long infoId = Long.parseLong(infoIds[i]);
-				WorkDealInfo workDealInfo1 = workDealInfoService.get(infoId);
+	
+				workDealInfo1 = get(infoId);
 				if (workDealInfo1.getDelFlag().equals("1")) {
+					log.debug("该业务已被删除,不符合更新条件,业务Id为"+infoId);
 					continue;
 				}
-
-				WorkCompanyHis companyHis = null;
-				// 保存经办人信息
-				WorkUser workUser = workDealInfo1.getWorkUser();
-				WorkUserHis userHis = workUserService.change(workUser,
-						companyHis);
-				workUserHisService.save(userHis);
-
-				// 变更业务保存单位信息
-				WorkCompany workCompany = workDealInfo1.getWorkCompany();
-				companyHis = workCompanyService.change(workCompany);
-				workCompanyHisService.save(companyHis);
-
-				// workDealInfo1
-				WorkDealInfo workDealInfo = new WorkDealInfo();
-				workDealInfo.setConfigApp(workDealInfo1.getConfigApp());
-				ConfigCommercialAgent commercialAgent = configAgentAppRelationService
-						.findAgentByApp(workDealInfo.getConfigApp());
-				workDealInfo.setConfigCommercialAgent(commercialAgent);
-				List<ConfigAgentOfficeRelation> configAgentOfficeRelations = configAgentOfficeRelationService
-						.findByOffice(UserUtils.getUser().getOffice());
-				if (configAgentOfficeRelations.size() > 0) {
-					workDealInfo.setCommercialAgent(configAgentOfficeRelations
-							.get(0).getConfigCommercialAgent());// 劳务关系外键
-				}
-
-				workDealInfo.setPayType(Integer.parseInt(agent.getTempStyle()));
-
-				Integer reseUpdateNum = agent.getReserveUpdateNum();
-				Integer surUpdateNum = agent.getSurplusUpdateNum();
-				agent.setReserveUpdateNum(reseUpdateNum + 1);
-				agent.setSurplusUpdateNum(surUpdateNum - 1);
-				configChargeAgentService.save(agent);
-				workDealInfo.setConfigChargeAgentId(agent.getId());
-				workDealInfo.setWorkUser(workUser);
-				workDealInfo.setWorkCompany(workCompany);
-				workDealInfo.setWorkUserHis(userHis);
-				workDealInfo.setWorkCompanyHis(companyHis);
-				workDealInfo.setConfigProduct(workDealInfo1.getConfigProduct());
-
-				// 经信委
-				if (yearU != null && expirationDate == null) {
-					workDealInfo.setYear(yearU);
-					workDealInfo.setExpirationDate(null);
-				} else {
-					workDealInfo.setYear(StringHelper
-							.getDvalueYear(expirationDate));
-					workDealInfo.setExpirationDate(expirationDate);
-				}
-
-				workDealInfo
-						.setDealInfoStatus(WorkDealInfoStatus.STATUS_ENTRY_SUCCESS);
-				workDealInfo.setDealInfoType(WorkDealInfoType.TYPE_UPDATE_CERT);
-				workDealInfo.setCreateBy(UserUtils.getUser());
-				workDealInfo.setCreateDate(new Date());
-				workDealInfo.setClassifying(workDealInfo1.getClassifying());
-				workDealInfo.setSvn(workDealInfoService.getSVN(0));
-				workDealInfo.setPrevId(workDealInfo1.getId());
-				if (workDealInfo1.getWorkCertInfo().getNotafter()
-						.after(new Date())) {
-					int day = getLastCertDay(workDealInfo1.getWorkCertInfo()
-							.getNotafter());
-					workDealInfo.setLastDays(day);
-				} else {
-					workDealInfo.setLastDays(0);
-				}
-				WorkCertApplyInfo workCertApplyInfo = workDealInfo1
-						.getWorkCertInfo().getWorkCertApplyInfo();
-				workCertApplyInfoService.save(workCertApplyInfo);
-				WorkCertInfo oldCertInfo = workDealInfo1.getWorkCertInfo();
-				WorkCertInfo workCertInfo = new WorkCertInfo();
-				workCertInfo.setWorkCertApplyInfo(workCertApplyInfo);
-				workCertInfo.setRenewalPrevId(oldCertInfo.getId());
-				workCertInfo.setCreateDate(workCertInfoService
-						.getCreateDate(oldCertInfo.getId()));
-				workCertInfoService.save(workCertInfo);
-				// 给上张证书存nextId
-				oldCertInfo.setRenewalNextId(workCertInfo.getId());
-				workCertInfoService.save(oldCertInfo);
-				workDealInfo.setWorkCertInfo(workCertInfo);
-				workDealInfoService.delete(workDealInfo1.getId());
-
-				workDealInfo.setInputUser(UserUtils.getUser());
-				workDealInfo.setInputUserDate(new Date());
-				workDealInfoService.save(workDealInfo);
-
-				ConfigAgentBoundDealInfo dealInfoBound = new ConfigAgentBoundDealInfo();
-				dealInfoBound.setDealInfo(workDealInfo);
-				dealInfoBound.setAgent(agent);
-				configAgentBoundDealInfoService.save(dealInfoBound);
-				logUtil.saveSysLog("计费策略模版", "计费策略模版：" + agent.getId()
-						+ "--业务编号：" + workDealInfo.getId() + "--关联成功!", "");
-
-				// 保存日志信息
-				WorkLog workLog = new WorkLog();
-				workLog.setRecordContent("批量更新");
-				workLog.setWorkDealInfo(workDealInfo);
-				workLog.setCreateDate(new Date());
-				workLog.setCreateBy(UserUtils.getUser());
-				workLog.setConfigApp(workDealInfo.getConfigApp());
-				workLog.setWorkCompany(workDealInfo.getWorkCompany());
-				workLog.setOffice(UserUtils.getUser().getOffice());
-				workLogService.save(workLog);
-
-				WorkPayInfo workPayInfo = new WorkPayInfo();
-				workPayInfo.setOpenAccountMoney(0d);
-				workPayInfo.setAddCert(0d);
-
-				Double money = configChargeAgentDetailService.getChargeMoney(
-						agent.getId(), 1, yearU);
-
-				if (methodPay.equals("0")) {
-					workPayInfo.setMethodPos(true);
-				} else if (methodPay.equals("1")) {
-					workPayInfo.setMethodMoney(true);
-				} else if (methodPay.equals("2")) {
-					workPayInfo.setMethodBank(true);
-				}
-
-				if (agent.getTempStyle().equals("2")) {
-					workPayInfo.setMethodGov(true);
-				} else if (agent.getTempStyle().equals("3")) {
-					workPayInfo.setMethodContract(true);
-				} else {
-					workPayInfo.setMethodGov(false);
-					workPayInfo.setMethodContract(false);
-				}
-
-				workPayInfo.setUpdateCert(money);
-				workPayInfo.setErrorReplaceCert(0d);
-				workPayInfo.setLostReplaceCert(0d);
-				workPayInfo.setInfoChange(0d);
-				workPayInfo.setElectron(0d);
-				workPayInfo.setOldOpenAccountMoney(0d);
-				workPayInfo.setOldAddCert(0d);
-				workPayInfo.setOldUpdateCert(0d);
-				workPayInfo.setOldErrorReplaceCert(0d);
-				workPayInfo.setOldLostReplaceCert(0d);
-				workPayInfo.setOldInfoChange(0d);
-				workPayInfo.setOldElectron(0d);
-
-				double bindMoney = money;
-				workPayInfo.setMoney(bindMoney);
-
-				workPayInfo.setWorkTotalMoney(money);
-				workPayInfo.setWorkPayedMoney(money);
-				workPayInfo.setWorkReceivaMoney(money);
-				workPayInfo.setUserReceipt(true);
-				workPayInfo.setReceiptAmount(money);
-				workPayInfo.setSn(PayinfoUtil.getPayInfoNo());
-				workPayInfoService.save(workPayInfo);
-
-				workDealInfo.setWorkPayInfo(workPayInfo);
-
-				workDealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_CERT_WAIT);
-
-				workDealInfoService.checkWorkDealInfoNeedSettle(workDealInfo);
-
-				if (workDealInfo.getDealInfoType().equals(1)) {
-					ConfigChargeAgent agentAfter = configChargeAgentService
-							.get(workDealInfo.getConfigChargeAgentId());
-					agent.setAvailableUpdateNum(agentAfter
-							.getAvailableUpdateNum() + 1);// 已用数量
-					agent.setReserveUpdateNum(agentAfter.getReserveUpdateNum() - 1);// 预留数量
-					configChargeAgentService.save(agent);
-					logUtil.saveSysLog("计费策略模版", "更改剩余数量和使用数量成功!", "");
-				}
-
-				workDealInfo.setPayUser(UserUtils.getUser());
-				workDealInfo.setPayUserDate(new Date());
-
-				workDealInfo.setAreaId(UserUtils.getUser().getOffice()
-						.getParent().getId());
-				workDealInfo.setOfficeId(UserUtils.getUser().getOffice()
-						.getId());
-
-				workDealInfoService.save(workDealInfo);
-				ConfigRaAccount raAccount = raAccountService.get(workDealInfo
-						.getConfigProduct().getRaAccountId());
-				List<String[]> list = RaAccountUtil.outPageLine(workDealInfo,
-						raAccount.getConfigRaAccountExtendInfo());
-
-				logUtil.saveSysLog("业务中心", "业务维护：编号" + workDealInfo.getId()
-						+ "缴费" + money + "元", "");
-				ReceiptInvoice receiptInvoice = new ReceiptInvoice();
-				Office office = workDealInfo.getCreateBy().getOffice();
-				List<ReceiptDepotInfo> depotInfos = receiptDepotInfoService
-						.findDepotByOffice(office);
-				receiptInvoice.setReceiptDepotInfo(depotInfos.get(0));
-				receiptInvoice.setCompanyName(workDealInfo.getWorkCompany()
-						.getCompanyName());
-				receiptInvoice.setReceiptMoney(workDealInfo.getWorkPayInfo()
-						.getReceiptAmount());
-				receiptInvoice.setReceiptType(0);// 销售出库
-				receiptInvoice.setDealInfoId(workDealInfo.getId());
-				receiptInvoiceService.save(receiptInvoice);
-				ReceiptDepotInfo receiptDepotInfo = depotInfos.get(0);
-				receiptDepotInfo.setReceiptResidue(receiptDepotInfo
-						.getReceiptResidue()
-						- workDealInfo.getWorkPayInfo().getReceiptAmount());
-				receiptDepotInfo.setReceiptOut(receiptDepotInfo.getReceiptOut()
-						+ workDealInfo.getWorkPayInfo().getReceiptAmount());
-				receiptDepotInfoService.save(receiptDepotInfo);
+				
+				workDealInfoService.executeSingleUpdate(infoId,agent,yearU,expirationDate,methodPay,workDealInfo1,money,user,office,configAgentOfficeRelation,depotInfo,timeSvn,num,i);
+				List<BatchUpdateInfoScca> sccas = batchUpdateInfoSccaService.findByDealInfoId(workDealInfo1.getId());
+				batchUpdateInfoSccaService.deleteList(sccas);
+				
+				log.debug("更新成功!业务Id为"+infoId);
+				log.debug("已执行"+(i+1)+"条数据");
 			} catch (Exception e) {
-				// TODO: handle exception
+				
+				success = false;
+				
+                log.debug("在执行第"+(i+1)+"条业务时出现异常,更新失败!业务Id为"+infoId);	
 				e.printStackTrace();
+			
+				
+				try {
+					Integer availableNum= agent.getAvailableUpdateNum();
+					Integer surUpdateNum = agent.getSurplusUpdateNum();
+					agent.setAvailableUpdateNum(availableNum+i);
+					agent.setSurplusUpdateNum(surUpdateNum - i);
+					configChargeAgentService.save(agent);
+					
+					logUtil.saveSysLog("计费策略模版", "更改剩余数量和使用数量成功!", "");
+					
+					log.debug("计费策略模板(id:"+agent.getId()+")的剩余更新数量和使用更新数量更新成功! 使用更新数量+"+i+",剩余更新数量-"+i);
+					
+					
+					
+					if(depotInfo!=null){
+						depotInfo.setReceiptResidue(depotInfo.getReceiptResidue() - money*i);
+						depotInfo.setReceiptOut(depotInfo.getReceiptOut() + money*i);
+						receiptDepotInfoService.save(depotInfo);
+						
+						log.debug("发票库存(id:"+depotInfo.getId()+")更新成功! 剩余量-"+(money*i)+",出库量+"+(money*i));
+					}
+					
+					
+				} catch (Exception e2) {
+					log.debug("异常:计费策略模板的Id为"+agent.getId()+",成功的业务数量为:"+i);
+					
+					if(depotInfo!=null){
+						log.debug("异常:发票库存的Id为"+depotInfo.getId()+",成功的业务数量为:"+i+";每笔业务缴费:"+money);
+					}
+				}
+				
+				
+				
+				long end = System.currentTimeMillis();
+				
+				log.debug("执行强制结束,用时:"+(end-start));
+				
+				break;
+				
+				
 			}
+			
+					
 		}
-		return "redirect:" + Global.getAdminPath() + "/work/workDealInfo/";
+		
+		if(success){
+			try {
+				Integer availableNum= agent.getAvailableUpdateNum();
+				Integer surUpdateNum = agent.getSurplusUpdateNum();
+				agent.setAvailableUpdateNum(availableNum+infoIds.length);
+				agent.setSurplusUpdateNum(surUpdateNum - infoIds.length);
+				configChargeAgentService.save(agent);
+				
+				logUtil.saveSysLog("计费策略模版", "更改剩余数量和使用数量成功!", "");
+				
+				log.debug("计费策略模板(id:"+agent.getId()+")的剩余更新数量和使用更新数量更新成功! 使用更新数量+"+infoIds.length+",剩余更新数量-"+infoIds.length);
+				
+				
+				
+				if(depotInfo!=null){
+					depotInfo.setReceiptResidue(depotInfo.getReceiptResidue() - money*infoIds.length);
+					depotInfo.setReceiptOut(depotInfo.getReceiptOut() + money*infoIds.length);
+					receiptDepotInfoService.save(depotInfo);
+					
+					log.debug("发票库存(id:"+depotInfo.getId()+")更新成功! 剩余量-"+(money*infoIds.length)+",出库量+"+(money*infoIds.length));
+				}
+				
+				
+			} catch (Exception e2) {
+				log.debug("异常:计费策略模板的Id为"+agent.getId()+",成功的业务数量为:"+infoIds.length);
+				
+				if(depotInfo!=null){
+					log.debug("异常:发票库存的Id为"+depotInfo.getId()+",成功的业务数量为:"+infoIds.length+";每笔业务缴费:"+money);
+				}
+			}
+			
+			
+			long end = System.currentTimeMillis();
+			
+			log.debug("执行结束,用时:"+(end-start));
+			
+			return "redirect:" + Global.getAdminPath() + "/work/workDealInfo/";	
+		}
+		
+		
+		return null;
+		
 	}
 
 	@RequestMapping(value = "returnDZZ")
@@ -10647,6 +10603,7 @@ public class WorkDealInfoController extends BaseController {
 			@RequestParam(value = "dealInfoStatus", required = false) String dealInfoStatus,
 			@RequestParam(value = "organizationNumber", required = false) String organizationNumber,
 			@RequestParam(value = "keySn", required = false) String keySn,
+			@RequestParam(value = "remarkInfo", required = false) String remarkInfo,
 			@RequestParam(value = "companyName", required = false) String companyName,
 			@RequestParam(value = "startTime", required = false) Date startTime,
 			@RequestParam(value = "endTime", required = false) Date endTime,
@@ -10658,6 +10615,7 @@ public class WorkDealInfoController extends BaseController {
 
 		workDealInfo.setDealInfoStatus(dealInfoStatus);
 		workDealInfo.setKeySn(keySn);
+		workDealInfo.setRemarkInfo(remarkInfo);
 		WorkCompany workCompany = new WorkCompany();
 		workCompany.setCompanyName(companyName);
 		workCompany.setOrganizationNumber(organizationNumber);

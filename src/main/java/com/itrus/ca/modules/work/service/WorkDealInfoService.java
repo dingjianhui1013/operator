@@ -42,6 +42,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -67,6 +68,7 @@ import com.itrus.ca.modules.profile.entity.ConfigChargeAgent;
 import com.itrus.ca.modules.profile.entity.ConfigChargeAgentBoundConfigProduct;
 import com.itrus.ca.modules.profile.entity.ConfigCommercialAgent;
 import com.itrus.ca.modules.profile.entity.ConfigProduct;
+import com.itrus.ca.modules.profile.entity.ConfigRaAccount;
 import com.itrus.ca.modules.profile.entity.ConfigRaAccountExtendInfo;
 import com.itrus.ca.modules.profile.service.ConfigAgentAppRelationService;
 import com.itrus.ca.modules.profile.service.ConfigAgentBoundDealInfoService;
@@ -77,11 +79,18 @@ import com.itrus.ca.modules.profile.service.ConfigChargeAgentDetailService;
 import com.itrus.ca.modules.profile.service.ConfigChargeAgentService;
 import com.itrus.ca.modules.profile.service.ConfigProductService;
 import com.itrus.ca.modules.profile.service.ConfigRaAccountExtendInfoService;
+import com.itrus.ca.modules.profile.service.ConfigRaAccountService;
+import com.itrus.ca.modules.receipt.entity.ReceiptDepotInfo;
+import com.itrus.ca.modules.receipt.entity.ReceiptInvoice;
+import com.itrus.ca.modules.receipt.service.ReceiptDepotInfoService;
+import com.itrus.ca.modules.receipt.service.ReceiptInvoiceService;
 import com.itrus.ca.modules.sys.entity.Office;
 import com.itrus.ca.modules.sys.entity.User;
 import com.itrus.ca.modules.sys.utils.CreateExcelUtils;
 import com.itrus.ca.modules.sys.utils.UserUtils;
+import com.itrus.ca.modules.task.entity.BatchUpdateInfoScca;
 import com.itrus.ca.modules.task.service.BasicInfoSccaService;
+import com.itrus.ca.modules.task.service.BatchUpdateInfoSccaService;
 import com.itrus.ca.modules.work.dao.WorkCertInfoDao;
 import com.itrus.ca.modules.work.dao.WorkCertTrustApplyDao;
 import com.itrus.ca.modules.work.dao.WorkDealInfoDao;
@@ -133,10 +142,22 @@ public class WorkDealInfoService extends BaseService {
 
 	@Autowired
 	private WorkCertInfoDao workCertInfoDao;
+	
+	@Autowired
+	private ReceiptDepotInfoService receiptDepotInfoService;
 
 	@Autowired
 	private ConfigAppService configAppService;
 
+	@Autowired
+	private ConfigRaAccountService raAccountService;
+
+	@Autowired
+	private ReceiptInvoiceService receiptInvoiceService;
+	
+	/*@Autowired
+	private BatchUpdateInfoSccaService batchUpdateInfoSccaService;*/
+	
 	@Autowired
 	private ConfigProductService configProductService;
 
@@ -194,6 +215,7 @@ public class WorkDealInfoService extends BaseService {
 
 	static Long YEAR_MILL = 31536000000L;
 
+	
 	public WorkDealInfo get(Long id) {
 		return workDealInfoDao.findOne(id);
 	}
@@ -1061,6 +1083,13 @@ public class WorkDealInfoService extends BaseService {
 					if (e.get("KEYSN") != null)
 						vo.setKeySn(e.get("KEYSN").toString());
 				}
+				
+				if(k.equals("REMARKINFO")){
+					if (e.get("REMARKINFO") != null)
+						vo.setRemarkInfo(e.get("REMARKINFO").toString());
+				}
+				
+				
 				if (k.equals("SIGNDATE")) {
 					if (e.get("SIGNDATE") != null)
 						vo.setSignDate(new SimpleDateFormat("yyyy-MM-dd")
@@ -1118,6 +1147,7 @@ public class WorkDealInfoService extends BaseService {
 				+ "workcertin6_.notafter as notafter,"
 				+ "workcertin6_.notbefore as notbefore,"
 				+ "this_.key_sn as keySn,"
+				+ "this_.remarkInfo as remarkInfo,"
 				+ "workcertin6_.sign_date as signDate,"
 				+ "this_.add_cert_days as addCertDays,"
 				+ "this_.year as year ," + "this_.last_days as lastDays,"
@@ -1196,6 +1226,14 @@ public class WorkDealInfoService extends BaseService {
 			sql.append(" and this_.key_sn like '%"
 					+ EscapeUtil.escapeLike(workDealInfo.getKeySn()) + "%'");
 		}
+		
+		
+		if (StringUtils.isNotEmpty(workDealInfo.getRemarkInfo())) {
+			sql.append(" and this_.remarkinfo like '%"
+					+ EscapeUtil.escapeLike(workDealInfo.getRemarkInfo()) + "%'");
+		}
+		
+		
 		if (workDealInfo.getStatus() != null) {
 			sql.append(" and this_.status = " + workDealInfo.getStatus());
 		}
@@ -4171,10 +4209,10 @@ public class WorkDealInfoService extends BaseService {
 
 	@Transactional(readOnly = false)
 	public void save(WorkDealInfo workDealInfo) {
-		log.error("save dealInfo:[firstCertSN:" + workDealInfo.getFirstCertSN()
+		/*log.error("save dealInfo:[firstCertSN:" + workDealInfo.getFirstCertSN()
 				+ "|prevId:" + workDealInfo.getPrevId() + "|certSN:"
 				+ workDealInfo.getCertSn() + "|id:" + workDealInfo.getId()
-				+ "]");
+				+ "]");*/
 		if (StringHelper.isNull(workDealInfo.getFirstCertSN())) {
 			// 如果是首条(无firstCertSn,certSn不是空,业务类型为新增)
 			if (workDealInfo.getPrevId() == null) {
@@ -4558,6 +4596,58 @@ public class WorkDealInfoService extends BaseService {
 		return workDealInfoDao.findSvn(svn);
 	}
 
+	
+	
+	public String getTimeSvn(){
+		Date date = new Date();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMM-");
+		User user = UserUtils.getUser();
+		return "C-" + user.getOffice().getName() + "-"
+				+ sdf.format(date).substring(2);
+	}
+	
+	
+	public int getNumSvn(String timeSvn){
+		List<WorkDealInfo> list = findSvn("%" + timeSvn + "%");
+		int num = 1;
+		if (list.size() > 0) {
+			String oldSvn = list.get(0).getSvn();
+
+			String[] elm = StringHelper.splitStr(oldSvn, "-");
+			if (elm == null || elm.length < 4
+					|| !StringHelper.isDigit(elm[3])) {
+				num = 1;
+			} else {
+				num = new Integer(elm[3]) + 1;
+			}
+		}
+		
+		return num;
+	}
+	
+	public String getNumStrSvn(int num){
+		String numStr = "";
+		
+		if (num > 0 && num < 10) {
+			numStr = "00000" + num;
+		} else if (num > 9 && num < 100) {
+			numStr = "0000" + num;
+		} else if (num > 99 && num < 1000) {
+			numStr = "000" + num;
+		} else if (num > 999 && num < 10000) {
+			numStr = "00" + num;
+		} else if (num > 9999 && num < 100000) {
+			numStr = "0" + num;
+		} else {
+			numStr = "" + num;
+		}
+		
+		
+		return numStr;
+	}
+	
+	
+	
 	/**
 	 * 生成业务编号 serviceType是区分客户端办理和柜台办理 0是柜台，1是客户端
 	 * 
@@ -4565,41 +4655,15 @@ public class WorkDealInfoService extends BaseService {
 	 * @return
 	 */
 	public String getSVN(Integer serviceType) {
-		Date date = new Date();
+		
 		String svn = "";
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMM-");
 		if (serviceType == 0) {
 			try {
-				User user = UserUtils.getUser();
-				String timeSvn = "C-" + user.getOffice().getName() + "-"
-						+ sdf.format(date).substring(2);
-				List<WorkDealInfo> list = findSvn("%" + timeSvn + "%");
-				int num = 1;
-				if (list.size() > 0) {
-					String oldSvn = list.get(0).getSvn();
-
-					String[] elm = StringHelper.splitStr(oldSvn, "-");
-					if (elm == null || elm.length < 4
-							|| !StringHelper.isDigit(elm[3])) {
-						num = 1;
-					} else {
-						num = new Integer(elm[3]) + 1;
-					}
-				}
-				String numStr = "";
-				if (num > 0 && num < 10) {
-					numStr = "00000" + num;
-				} else if (num > 9 && num < 100) {
-					numStr = "0000" + num;
-				} else if (num > 99 && num < 1000) {
-					numStr = "000" + num;
-				} else if (num > 999 && num < 10000) {
-					numStr = "00" + num;
-				} else if (num > 9999 && num < 100000) {
-					numStr = "0" + num;
-				} else {
-					numStr = "" + num;
-				}
+				String timeSvn = getTimeSvn();
+				int num = getNumSvn(timeSvn);
+				String numStr = getNumStrSvn(num);
+	
 				svn = timeSvn + numStr;
 			} catch (Exception e) {
 				// TODO: handle exception
@@ -8153,6 +8217,12 @@ public class WorkDealInfoService extends BaseService {
 	public List<ConfigProduct> findByDistinkIds(List<Long> ids) {
 		return workDealInfoDao.findByDistinkIds(ids);
 	}
+	
+	
+	
+	public List<ConfigProduct> findByDistinkIds(String remarkInfo) {
+		return workDealInfoDao.findByDistinkIds(remarkInfo);
+	}
 
 	public WorkDealInfo findByRevokeStatus(String keySn) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
@@ -8592,6 +8662,29 @@ public class WorkDealInfoService extends BaseService {
 			return null;
 		return lst.get(0);
 	}
+	
+	
+	
+	/**
+	 * @author 萧龙纳云
+	 * 
+	 *         根据firstCertSN字段得到业务链最后一张证书业务
+	 * @param 首张证书序列号
+	 * @return WorkDealInfo 业务链末条业务
+	 */
+
+	public WorkDealInfo findLastByFirstCertSN(String firstCertSN) {
+		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
+		dc.add(Restrictions.eq("firstCertSN", firstCertSN));
+		dc.add(Restrictions.eq("delFlag", "0"));
+		List<WorkDealInfo> lst = workDealInfoDao.find(dc);
+		if (lst == null || lst.size() <= 0)
+			return null;
+		return lst.get(0);
+	}
+	
+	
+	
 
 	/**
 	 * 根据指定总数,查出没有first_cert_sn的数据
@@ -9826,4 +9919,297 @@ public class WorkDealInfoService extends BaseService {
 		sql.append(" order by wdi.create_date desc,wdi.svn asc)");
 		return sql.toString();
 	}
+	
+	
+	
+	
+	
+	@Transactional(readOnly=false)
+	public void executeBatchUpdate(String[] infoIds,ConfigChargeAgent agent,Integer yearU,Date expirationDate, String methodPay){
+		
+		String timeSvn = getTimeSvn();
+		int num = getNumSvn(timeSvn);
+		
+		User user = UserUtils.getUser();
+		Office office = user.getOffice();
+		
+		Double receiptMoney = 0d;
+		
+		
+		List<ConfigAgentOfficeRelation> configAgentOfficeRelations = configAgentOfficeRelationService.findByOffice(office);
+		ConfigAgentOfficeRelation configAgentOfficeRelation = null;
+		if(configAgentOfficeRelations.size()>0){
+			configAgentOfficeRelation = configAgentOfficeRelations.get(0);
+		}
+		
+		List<ReceiptDepotInfo> depotInfos = receiptDepotInfoService.findDepotByOffice(office);
+		ReceiptDepotInfo depotInfo = null;
+		if(depotInfos.size()>0){
+			depotInfo = depotInfos.get(0);
+		}
+		
+		
+		WorkDealInfo workDealInfo1 = null;
+		
+		
+		Double money = configChargeAgentDetailService.getChargeMoney(agent.getId(), 1, yearU!=null?yearU:StringHelper.getDvalueYear(expirationDate));
+	
+		for (int i = 0; i < infoIds.length; i++) {
+			try {
+				Long infoId = Long.parseLong(infoIds[i]);
+				
+				receiptMoney += money;
+				
+				executeSingleUpdate(infoId,agent,yearU,expirationDate,methodPay,workDealInfo1,money,user,office,configAgentOfficeRelation,depotInfo,timeSvn,num,i);
+			
+			
+			} catch (Exception e) {
+				
+				Integer availableNum= agent.getAvailableNum();
+				Integer surUpdateNum = agent.getSurplusUpdateNum();
+				agent.setAvailableNum(availableNum+1);
+				agent.setSurplusUpdateNum(surUpdateNum - i);
+				configChargeAgentService.save(agent);
+				logUtil.saveSysLog("计费策略模版", "更改剩余数量和使用数量成功!", "");
+					
+				e.printStackTrace();
+				break;
+			}
+			
+			
+	}
+		
+		
+		if(depotInfo!=null){
+			depotInfo.setReceiptResidue(depotInfo.getReceiptResidue() - receiptMoney);
+			depotInfo.setReceiptOut(depotInfo.getReceiptOut() + receiptMoney);
+			receiptDepotInfoService.save(depotInfo);	
+		}
+		
+		Integer availableNum= agent.getAvailableNum();
+		
+		Integer surUpdateNum = agent.getSurplusUpdateNum();
+		agent.setReserveUpdateNum(availableNum +infoIds.length+1 );
+		agent.setSurplusUpdateNum(surUpdateNum - (infoIds.length+1));
+		configChargeAgentService.save(agent);
+		logUtil.saveSysLog("计费策略模版", "更改剩余数量和使用数量成功!", "");	
+	
+	
+	}
+	
+	
+	@Transactional
+	public void executeSingleUpdate(Long infoId,ConfigChargeAgent agent,Integer yearU,Date expirationDate, 
+			String methodPay,WorkDealInfo workDealInfo1,Double money,User user,Office office,ConfigAgentOfficeRelation configAgentOfficeRelation,
+			ReceiptDepotInfo depotInfo,String timeSvn,int num,int i){
+		
+		WorkCompanyHis companyHis = null;
+		// 保存经办人信息
+		WorkUser workUser = workDealInfo1.getWorkUser();
+		WorkUserHis userHis = workUserService.change(workUser,companyHis);
+		workUserHisService.save(userHis);
+		// 变更业务保存单位信息
+		WorkCompany workCompany = workDealInfo1.getWorkCompany();
+		companyHis = workCompanyService.change(workCompany);
+		workCompanyHisService.save(companyHis);
+
+		// workDealInfo1
+		WorkDealInfo workDealInfo = new WorkDealInfo();
+		workDealInfo.setConfigApp(workDealInfo1.getConfigApp());
+		ConfigCommercialAgent commercialAgent = configAgentAppRelationService
+				.findAgentByApp(workDealInfo.getConfigApp());
+		workDealInfo.setConfigCommercialAgent(commercialAgent);
+		
+		if (configAgentOfficeRelation!=null) {
+			workDealInfo.setCommercialAgent(configAgentOfficeRelation.getConfigCommercialAgent());// 劳务关系外键
+		}
+
+		workDealInfo.setPayType(Integer.parseInt(agent.getTempStyle()));
+
+		
+		workDealInfo.setConfigChargeAgentId(agent.getId());
+		workDealInfo.setWorkUser(workUser);
+		workDealInfo.setWorkCompany(workCompany);
+		workDealInfo.setWorkUserHis(userHis);
+		workDealInfo.setWorkCompanyHis(companyHis);
+		workDealInfo.setConfigProduct(workDealInfo1.getConfigProduct());
+
+		// 经信委
+		if (yearU != null && expirationDate == null) {
+			workDealInfo.setYear(yearU);
+			workDealInfo.setExpirationDate(null);
+		} else {
+			workDealInfo.setYear(StringHelper.getDvalueYear(expirationDate));
+			workDealInfo.setExpirationDate(expirationDate);
+		}
+
+		workDealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_ENTRY_SUCCESS);
+		workDealInfo.setDealInfoType(WorkDealInfoType.TYPE_UPDATE_CERT);
+		workDealInfo.setCreateBy(user);
+		workDealInfo.setCreateDate(new Date());
+		workDealInfo.setClassifying(workDealInfo1.getClassifying());
+		workDealInfo.setPrevId(workDealInfo1.getId());
+		if(workDealInfo1.getRemarkInfo()==null){
+			workDealInfo.setSvn(getSVN(0));	
+		}else{
+			int serno = num+i+1;
+			String numStr = getNumStrSvn(serno);
+			workDealInfo.setSvn(timeSvn+numStr);	
+		}
+		
+		if (workDealInfo1.getWorkCertInfo().getNotafter().after(new Date())) {
+			int day = getLastCertDay(workDealInfo1.getWorkCertInfo().getNotafter());
+			workDealInfo.setLastDays(day);
+		} else {
+			workDealInfo.setLastDays(0);
+		}
+		WorkCertApplyInfo workCertApplyInfo = workDealInfo1.getWorkCertInfo().getWorkCertApplyInfo();
+		workCertApplyInfoService.save(workCertApplyInfo);
+		WorkCertInfo oldCertInfo = workDealInfo1.getWorkCertInfo();
+		WorkCertInfo workCertInfo = new WorkCertInfo();
+		workCertInfo.setWorkCertApplyInfo(workCertApplyInfo);
+		workCertInfo.setRenewalPrevId(oldCertInfo.getId());
+		workCertInfo.setCreateDate(workCertInfoService.getCreateDate(oldCertInfo.getId()));
+		workCertInfoService.save(workCertInfo);
+		// 给上张证书存nextId
+		oldCertInfo.setRenewalNextId(workCertInfo.getId());
+		workCertInfoService.save(oldCertInfo);
+		workDealInfo.setWorkCertInfo(workCertInfo);
+		delete(workDealInfo1.getId());
+
+		workDealInfo.setInputUser(user);
+		workDealInfo.setInputUserDate(new Date());
+		save(workDealInfo);
+
+		ConfigAgentBoundDealInfo dealInfoBound = new ConfigAgentBoundDealInfo();
+		dealInfoBound.setDealInfo(workDealInfo);
+		dealInfoBound.setAgent(agent);
+		configAgentBoundDealInfoService.save(dealInfoBound);
+		logUtil.saveSysLog("计费策略模版", "计费策略模版：" + agent.getId()
+				+ "--业务编号：" + workDealInfo.getId() + "--关联成功!", "");
+
+		// 保存日志信息
+		WorkLog workLog = new WorkLog();
+		workLog.setRecordContent("批量更新");
+		workLog.setWorkDealInfo(workDealInfo);
+		workLog.setCreateDate(new Date());
+		workLog.setCreateBy(user);
+		workLog.setConfigApp(workDealInfo.getConfigApp());
+		workLog.setWorkCompany(workDealInfo.getWorkCompany());
+		workLog.setOffice(office);
+		workLogService.save(workLog);
+
+		WorkPayInfo workPayInfo = new WorkPayInfo();
+		workPayInfo.setOpenAccountMoney(0d);
+		workPayInfo.setAddCert(0d);
+
+		
+
+		if (methodPay.equals("0")) {
+			workPayInfo.setMethodPos(true);
+		} else if (methodPay.equals("1")) {
+			workPayInfo.setMethodMoney(true);
+		} else if (methodPay.equals("2")) {
+			workPayInfo.setMethodBank(true);
+		}
+
+		if (agent.getTempStyle().equals("2")) {
+			workPayInfo.setMethodGov(true);
+		} else if (agent.getTempStyle().equals("3")) {
+			workPayInfo.setMethodContract(true);
+		} else {
+			workPayInfo.setMethodGov(false);
+			workPayInfo.setMethodContract(false);
+		}
+
+		workPayInfo.setUpdateCert(money);
+		workPayInfo.setErrorReplaceCert(0d);
+		workPayInfo.setLostReplaceCert(0d);
+		workPayInfo.setInfoChange(0d);
+		workPayInfo.setElectron(0d);
+		workPayInfo.setOldOpenAccountMoney(0d);
+		workPayInfo.setOldAddCert(0d);
+		workPayInfo.setOldUpdateCert(0d);
+		workPayInfo.setOldErrorReplaceCert(0d);
+		workPayInfo.setOldLostReplaceCert(0d);
+		workPayInfo.setOldInfoChange(0d);
+		workPayInfo.setOldElectron(0d);
+
+		double bindMoney = money;
+		workPayInfo.setMoney(bindMoney);
+
+		workPayInfo.setWorkTotalMoney(money);
+		workPayInfo.setWorkPayedMoney(money);
+		workPayInfo.setWorkReceivaMoney(money);
+		workPayInfo.setUserReceipt(true);
+		workPayInfo.setReceiptAmount(money);
+		workPayInfo.setSn(PayinfoUtil.getPayInfoNo());
+		workPayInfoService.save(workPayInfo);
+
+		workDealInfo.setWorkPayInfo(workPayInfo);
+
+		workDealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_CERT_WAIT);
+
+		checkWorkDealInfoNeedSettle(workDealInfo);
+
+		workDealInfo.setPayUser(user);
+		workDealInfo.setPayUserDate(new Date());
+
+		workDealInfo.setAreaId(office.getParent().getId());
+		workDealInfo.setOfficeId(office.getId());
+
+		save(workDealInfo);
+		ConfigRaAccount raAccount = raAccountService.get(workDealInfo.getConfigProduct().getRaAccountId());
+		List<String[]> list = RaAccountUtil.outPageLine(workDealInfo,raAccount.getConfigRaAccountExtendInfo());
+
+		logUtil.saveSysLog("业务中心", "业务维护：编号" + workDealInfo.getId()
+				+ "缴费" + money + "元", "");
+		ReceiptInvoice receiptInvoice = new ReceiptInvoice();
+
+		
+		receiptInvoice.setReceiptDepotInfo(depotInfo);
+		receiptInvoice.setCompanyName(workDealInfo.getWorkCompany().getCompanyName());
+		receiptInvoice.setReceiptMoney(money);
+		receiptInvoice.setReceiptType(0);// 销售出库
+		receiptInvoice.setDealInfoId(workDealInfo.getId());
+		receiptInvoiceService.save(receiptInvoice);
+		
+	}
+	
+	
+	
+	private int getLastCertDay(Date notAfter) {
+		
+		Long MILL = 86400000L;
+		
+		Long notAfterLong = notAfter.getTime();
+		Long nowLong = System.currentTimeMillis();
+		if (notAfterLong < nowLong) {
+			return 0;
+		}
+
+		long d = (notAfterLong - nowLong) / MILL;
+
+		long hour1 = (notAfterLong - nowLong) % MILL;
+		if (hour1 > 0) {
+			d += 1;
+		}
+		return (int) d;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

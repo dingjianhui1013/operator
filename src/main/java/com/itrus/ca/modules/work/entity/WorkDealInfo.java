@@ -139,6 +139,12 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 	private Timestamp openTime; // 证书首次签发日期
 
 	private String firstCertSN; // 首个证书序列号，用来串起需要明细的导入数据
+	
+	
+	private String remarkInfo;  // 2016/12/07 批量更新用的查询字段
+	
+	
+	
 
 	/** default constructor */
 	public WorkDealInfo() {
@@ -225,7 +231,6 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	// @ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "app_id", nullable = false)
 	public ConfigApp getConfigApp() {
 		return this.configApp;
@@ -921,4 +926,33 @@ public class WorkDealInfo extends DataEntity implements java.io.Serializable {
 		this.expirationDate = expirationDate;
 	}
 
+
+
+
+	@Column(name = "remarkinfo")
+	public String getRemarkInfo() {
+		return remarkInfo;
+	}
+
+
+
+
+
+	public void setRemarkInfo(String remarkInfo) {
+		this.remarkInfo = remarkInfo;
+	}
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

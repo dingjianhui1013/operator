@@ -74,6 +74,12 @@ public interface WorkDealInfoDao extends WorkDealInfoDaoCustom,
 	@Query("select DISTINCT(w.configProduct) From WorkDealInfo w where w.id  in ?1")
 	public List<ConfigProduct> findByDistinkIds(List<Long> ids);
 
+	
+	@Modifying
+	@Query("select DISTINCT(w.configProduct) From WorkDealInfo w where w.id  in (select scca.workDealInfoId from BatchUpdateInfoScca scca where scca.remark like ?1 and scca.statusCode = 1)")
+	public List<ConfigProduct> findByDistinkIds(String remarkInfo);
+	
+	
 	@Modifying
 	@Query("update WorkDealInfo set firstCertSN=?2 where id = ?1")
 	public void modifyFirstCertSN(Long id, String firstCertSn);
