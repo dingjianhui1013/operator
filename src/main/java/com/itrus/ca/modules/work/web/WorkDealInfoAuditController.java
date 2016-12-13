@@ -353,35 +353,52 @@ public class WorkDealInfoAuditController extends BaseController {
 			if(workDealInfo.getExpirationDate()!=null){
 				model.addAttribute("expirationDate", workDealInfo.getExpirationDate());
 			}
-			
-			List<CommonAttach> attachs = attachService.findCommonAttachByWorkDealInfo(workDealInfo.getPrevId());
-			
-			if(attachs!=null&&attachs.size()>0){
-				String imgNames = "";
-				for(int i =0;i<attachs.size();i++){
-					if(i==0){
-						imgNames+=url+"/"+attachs.get(0).getAttachName()+"##"+attachs.get(0).getStatus();
-					}else{
-						imgNames+=","+url+"/"+attachs.get(i).getAttachName()+"##"+attachs.get(i).getStatus();	
+			if (workDealInfo.getIsIxin() != null && workDealInfo.getIsIxin()) {
+				List<CommonAttach> attachs = attachService.findCommonAttachByWorkDealInfo(workDealInfo.getPrevId());
+				
+				if(attachs!=null&&attachs.size()>0){
+					String imgNames = "";
+					for(int i =0;i<attachs.size();i++){
+						if(i==0){
+							imgNames+=url+"/"+attachs.get(0).getAttachName()+"##"+attachs.get(0).getStatus();
+						}else{
+							imgNames+=","+url+"/"+attachs.get(i).getAttachName()+"##"+attachs.get(i).getStatus();	
+						}
 					}
+					model.addAttribute("imgNames", imgNames);
 				}
-				model.addAttribute("imgNames", imgNames);
+				//把以前查询出来
+				List<CommonAttach> befor = attachService.findCommonAttachByWorkDealInfo(workDealInfo.getId());
+				if(befor.size()<=0){
+					for(int i=0;i<attachs.size();i++){
+						CommonAttach comm = attachs.get(i);
+						if(comm!=null){
+							//以前的图片复制一份保存
+							CommonAttach attach =comm;
+							attach.setWorkDealInfo(workDealInfo);
+							attach.setStatus(null);
+							attachService.saveAttach(attach);
+						}
+					}
+				}	
+				return "modules/work/workDealInfoAuditACUForm";
+			}else{
+
+				List<CommonAttach> attachs = attachService.findCommonAttachByWorkDealInfo(workDealInfo.getId());
+				
+				if(attachs!=null&&attachs.size()>0){
+					String imgNames = "";
+					for(int i =0;i<attachs.size();i++){
+						if(i==0){
+							imgNames+=url+"/"+attachs.get(0).getAttachName()+"##"+attachs.get(0).getStatus();
+						}else{
+							imgNames+=","+url+"/"+attachs.get(i).getAttachName()+"##"+attachs.get(i).getStatus();	
+						}
+					}
+					model.addAttribute("imgNames", imgNames);
+				}
+				return "modules/work/workDealInfoAuditACUForm";
 			}
-			//把以前查询出来
-			List<CommonAttach> befor = attachService.findCommonAttachByWorkDealInfo(workDealInfo.getId());
-			if(befor.size()<=0){
-				for(int i=0;i<attachs.size();i++){
-					CommonAttach comm = attachs.get(i);
-					if(comm!=null){
-						//以前的图片复制一份保存
-						CommonAttach attach =comm;
-						attach.setWorkDealInfo(workDealInfo);
-						attach.setStatus(null);
-						attachService.saveAttach(attach);
-					}
-				}
-			}	
-			return "modules/work/workDealInfoAuditACUForm";
 		}else{
 			if (workDealInfo.getId() != null) {
 				List<WorkLog> list = workLogService.findByDealInfo(workDealInfo);
