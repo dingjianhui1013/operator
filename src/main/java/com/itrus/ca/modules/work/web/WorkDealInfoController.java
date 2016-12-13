@@ -3854,7 +3854,7 @@ public class WorkDealInfoController extends BaseController {
 		
 		//把以前查询出来
 		String imgNames=request.getParameter("imgNames");
-		List<CommonAttach> befor = attachService.findCommonAttachByWorkDealInfo(workDealInfoId);
+		List<CommonAttach> befor = attachService.findCommonAttachByWorkDealInfo(workCertInfo.getId());
 		Map<String,CommonAttach> map = new HashMap<String,CommonAttach>();//键值对保存 便于查询
 		for(CommonAttach c:befor){
 			map.put(c.getAttachName(), c);
@@ -9874,7 +9874,7 @@ public class WorkDealInfoController extends BaseController {
 			
 			//把以前查询出来
 			String imgNames=request.getParameter("imgNames");
-			List<CommonAttach> befor = attachService.findCommonAttachByWorkDealInfo(workDealInfoId);
+			List<CommonAttach> befor = attachService.findCommonAttachByWorkDealInfo(workDealInfo.getId());
 			Map<String,CommonAttach> map = new HashMap<String,CommonAttach>();//键值对保存 便于查询
 			for(CommonAttach c:befor){
 				map.put(c.getAttachName(), c);
@@ -9888,9 +9888,17 @@ public class WorkDealInfoController extends BaseController {
 					if(comm!=null){
 						map.remove(imgs[i]);
 						//以前的图片复制一份保存
-						comm.setWorkDealInfo(workDealInfo);
-						comm.setStatus(null);
-						attachService.saveAttach(comm);
+						if(workDealInfoId==null){
+							CommonAttach newcomm = comm;
+							newcomm.setWorkDealInfo(workDealInfo);
+							newcomm.setStatus(null);
+							attachService.saveAttach(newcomm);
+						}else{
+							comm.setWorkDealInfo(workDealInfo);
+							comm.setStatus(null);
+							attachService.saveAttach(comm);
+						}
+						
 					}else{//新图片直接修改workDealInfo
 						attach = attachService.findCommonAttachByattachName(imgs[i]);
 						if(attach!=null){
@@ -10286,55 +10294,57 @@ public class WorkDealInfoController extends BaseController {
 
 			if (isOut) {
 				WorkPayInfo payInfo = dealInfo.getWorkPayInfo();
-				Set<WorkFinancePayInfoRelation> relations = payInfo
-						.getWorkFinancePayInfoRelations();
-				if (relations.size() != 0) {
-					for (WorkFinancePayInfoRelation relation : relations) {// 退费
-						FinancePaymentInfo financePaymentInfo = relation
-								.getFinancePaymentInfo();
-						financePaymentInfo.setBingdingTimes(financePaymentInfo
-								.getBingdingTimes() - 1);
-						financePaymentInfo.setResidueMoney(financePaymentInfo
-								.getResidueMoney() + relation.getMoney());// 返还金额
-						financePaymentInfoService.save(financePaymentInfo);
-						workFinancePayInfoRelationService.delete(relation
-								.getId());
+				Set<WorkFinancePayInfoRelation> relations = null;
+				if(payInfo!=null){
+					relations = payInfo.getWorkFinancePayInfoRelations();
+					if (relations!=null&&relations.size() != 0) {
+						for (WorkFinancePayInfoRelation relation : relations) {// 退费
+							FinancePaymentInfo financePaymentInfo = relation
+									.getFinancePaymentInfo();
+							financePaymentInfo.setBingdingTimes(financePaymentInfo
+									.getBingdingTimes() - 1);
+							financePaymentInfo.setResidueMoney(financePaymentInfo
+									.getResidueMoney() + relation.getMoney());// 返还金额
+							financePaymentInfoService.save(financePaymentInfo);
+							workFinancePayInfoRelationService.delete(relation
+									.getId());
+						}
 					}
+					Double money = dealInfo.getWorkPayInfo().getReceiptAmount();
+					if (money > 0d) {
+						ReceiptDepotInfo receiptDepotInfo = receiptDepotInfoService
+								.findDepotByOffice(
+										dealInfo.getCreateBy().getOffice()).get(0);
+						// 修改余额
+						receiptDepotInfo.setReceiptResidue(receiptDepotInfo
+								.getReceiptResidue() + money);
+						receiptDepotInfo.setReceiptTotal(receiptDepotInfo
+								.getReceiptTotal() + money);
+						
+						// 创建入库信息
+						ReceiptEnterInfo receiptEnterInfo = new ReceiptEnterInfo();
+						receiptEnterInfo.setReceiptDepotInfo(receiptDepotInfo);
+						receiptEnterInfo.setNow_Money(Double.valueOf(money));
+						receiptEnterInfo.setBeforMoney(receiptEnterInfo
+								.getReceiptDepotInfo().getReceiptResidue()
+								- Double.valueOf(money));
+						receiptEnterInfo.setReceiptMoney(receiptEnterInfo
+								.getReceiptDepotInfo().getReceiptResidue());
+						receiptEnterInfo.setReceiptType(4);// 退费入库
+						receiptEnterInfoService.save(receiptEnterInfo);
+						
+						logUtil.saveSysLog("更新业务办理重新缴费",
+								"库房" + receiptDepotInfo.getReceiptName()
+								+ "添加入库信息成功", "");
+						receiptDepotInfoService.save(receiptDepotInfo);
+					}
+					workPayInfoService.delete(dealInfo.getWorkPayInfo().getId());
+					dealInfo.setWorkPayInfo(null);
 				}
-				Double money = dealInfo.getWorkPayInfo().getReceiptAmount();
 
-				if (money > 0d) {
-					ReceiptDepotInfo receiptDepotInfo = receiptDepotInfoService
-							.findDepotByOffice(
-									dealInfo.getCreateBy().getOffice()).get(0);
-					// 修改余额
-					receiptDepotInfo.setReceiptResidue(receiptDepotInfo
-							.getReceiptResidue() + money);
-					receiptDepotInfo.setReceiptTotal(receiptDepotInfo
-							.getReceiptTotal() + money);
-
-					// 创建入库信息
-					ReceiptEnterInfo receiptEnterInfo = new ReceiptEnterInfo();
-					receiptEnterInfo.setReceiptDepotInfo(receiptDepotInfo);
-					receiptEnterInfo.setNow_Money(Double.valueOf(money));
-					receiptEnterInfo.setBeforMoney(receiptEnterInfo
-							.getReceiptDepotInfo().getReceiptResidue()
-							- Double.valueOf(money));
-					receiptEnterInfo.setReceiptMoney(receiptEnterInfo
-							.getReceiptDepotInfo().getReceiptResidue());
-					receiptEnterInfo.setReceiptType(4);// 退费入库
-					receiptEnterInfoService.save(receiptEnterInfo);
-
-					logUtil.saveSysLog("更新业务办理重新缴费",
-							"库房" + receiptDepotInfo.getReceiptName()
-									+ "添加入库信息成功", "");
-					receiptDepotInfoService.save(receiptDepotInfo);
-				}
 
 			}
 
-			workPayInfoService.delete(dealInfo.getWorkPayInfo().getId());
-			dealInfo.setWorkPayInfo(null);
 			dealInfo.setDealInfoStatus("5");
 			workDealInfoService.save(dealInfo);
 

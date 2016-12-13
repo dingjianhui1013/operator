@@ -7,9 +7,11 @@ package com.itrus.ca.modules.work.web;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
@@ -308,7 +310,7 @@ public class WorkDealInfoAuditController extends BaseController {
 		String name = workDealInfo.getWorkUser().getContactName();
 		//新增   验证第一页
 		model.addAttribute("pageType", "audit");
-		if(workDealInfo.getDealInfoType()==WorkDealInfoType.TYPE_ADD_CERT){
+		if(workDealInfo.getDealInfoType()==WorkDealInfoType.TYPE_ADD_CERT||(workDealInfo.getIsIxin()!=null&&workDealInfo.getIsIxin())){
 			model.addAttribute("proType", ProductType.productTypeStrMap);
 			model.addAttribute("workDealInfo", workDealInfo);
 			
@@ -352,7 +354,7 @@ public class WorkDealInfoAuditController extends BaseController {
 				model.addAttribute("expirationDate", workDealInfo.getExpirationDate());
 			}
 			
-			List<CommonAttach> attachs = attachService.findCommonAttachByWorkDealInfo(workDealInfo.getId());
+			List<CommonAttach> attachs = attachService.findCommonAttachByWorkDealInfo(workDealInfo.getPrevId());
 			
 			if(attachs!=null&&attachs.size()>0){
 				String imgNames = "";
@@ -365,6 +367,20 @@ public class WorkDealInfoAuditController extends BaseController {
 				}
 				model.addAttribute("imgNames", imgNames);
 			}
+			//把以前查询出来
+			List<CommonAttach> befor = attachService.findCommonAttachByWorkDealInfo(workDealInfo.getId());
+			if(befor.size()<=0){
+				for(int i=0;i<attachs.size();i++){
+					CommonAttach comm = attachs.get(i);
+					if(comm!=null){
+						//以前的图片复制一份保存
+						CommonAttach attach =comm;
+						attach.setWorkDealInfo(workDealInfo);
+						attach.setStatus(null);
+						attachService.saveAttach(attach);
+					}
+				}
+			}	
 			return "modules/work/workDealInfoAuditACUForm";
 		}else{
 			if (workDealInfo.getId() != null) {

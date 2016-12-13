@@ -84,7 +84,7 @@ $(document).ready(function() {
 				var lable = "${workDealInfo.configProduct.productLabel}";
 				$("#agentId").attr("onchange","setStyleList("+lable+")");
 				var agentHtml="";
-				alert(boundLabelList);
+				//alert(boundLabelList);
 				var obj= $.parseJSON(boundLabelList);
 				$.each(obj, function(i, item){
 					 if(item==1){

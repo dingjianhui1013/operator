@@ -986,7 +986,7 @@ public class UserEnrollController extends BaseController {
 			new_dealInfo.setCreateDate(new Timestamp(new Date().getTime()));
 			new_dealInfo.setStatus(workDealInfo.getStatus());
 			new_dealInfo.setDownLoad(0);
-			new_dealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_ENTRY_SUCCESS);
+			new_dealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_UPDATE_USER);
 			new_dealInfo.setWorkCertInfo(certInfo);
 			new_dealInfo.setNotafter(new Timestamp(afterDate.getTime()));
 			new_dealInfo.setPayType(workDealInfo.getPayType());
