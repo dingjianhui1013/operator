@@ -55,7 +55,9 @@ import com.itrus.ca.modules.sys.entity.User;
 import com.itrus.ca.modules.sys.service.OfficeService;
 import com.itrus.ca.modules.sys.utils.UserUtils;
 import com.itrus.ca.modules.task.entity.BasicInfoScca;
+import com.itrus.ca.modules.task.entity.BatchUpdateInfoScca;
 import com.itrus.ca.modules.task.service.BasicInfoSccaService;
+import com.itrus.ca.modules.task.service.BatchUpdateInfoSccaService;
 import com.itrus.ca.modules.task.vo.WorkDealInfoVo;
 import com.itrus.ca.modules.work.entity.WorkCertApplyInfo;
 import com.itrus.ca.modules.work.entity.WorkCertInfo;
@@ -157,6 +159,8 @@ public class ClientController {
 	private UpdateFirstCertSNThread updateFirstCertSNThread;
 	@Autowired
 	private ProcessImpService processImpService;
+	@Autowired
+	private BatchUpdateInfoSccaService batchUpdateInfoSccaService;
 
 	private LogUtil logUtil = new LogUtil();
 
@@ -1449,5 +1453,94 @@ public class ClientController {
 		}
 		return listArr;
 	}
+	
+	public static List<List<BatchUpdateInfoScca>> createList2(List<BatchUpdateInfoScca> targe, int size) {
+		List<List<BatchUpdateInfoScca>> listArr = new ArrayList<List<BatchUpdateInfoScca>>();
+		// 获取被拆分的数组个数
+		int arrSize = targe.size() % size == 0 ? targe.size() / size : targe
+				.size() / size + 1;
+		for (int i = 0; i < arrSize; i++) {
+			List<BatchUpdateInfoScca> sub = new ArrayList<BatchUpdateInfoScca>();
+			// 把指定索引数据放入到list中
+			for (int j = i * size; j <= size * (i + 1) - 1; j++) {
+				if (j <= targe.size() - 1) {
+					sub.add(targe.get(j));
+				}
+			}
+			listArr.add(sub);
+		}
+		return listArr;
+	}
+	
+	
+	@RequestMapping(value = "makeRemarkForBatchUpdateData")
+	@ResponseBody
+	public String makeRemarkForBatchUpdateData() throws JSONException {
+		
+		
+		long start = System.currentTimeMillis();
+		
+		JSONObject json = new JSONObject();
+		
+	/*	int success = 0;            //成功
+		int certNoMatch = 0;        //证书序列号未匹配
+		int keyNoMatch = 0;         //key编码未匹配
+		int notInUpdateScope = 0;   //未在更新时间范围
+*/		
+		
+		
+		
+		
+		
+		List<BatchUpdateInfoScca> infos = batchUpdateInfoSccaService.findAll();
+		
+	    if(infos.size()==0){
+	    	json.put("msg", "请先将数据导入临时表!");
+	    	return json.toString();
+	    }
+
+		List<List<BatchUpdateInfoScca>> listArr = createList2(infos, 500);
+
+		List<Thread> allThread = new ArrayList<Thread>();
+        
+		log.debug("导入开始:");
+		
+		for (int i = 0; i < listArr.size(); i++) {
+
+			Thread thread = new Thread(new MutiMakeRemarkForBatchUpdate(listArr.get(i)),
+					"thread" + i);
+
+			thread.start();
+
+			allThread.add(thread);
+		}
+
+		for (Thread thread1 : allThread) {
+			try {
+				thread1.join();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		log.debug("本次导入结束");
+	
+		
+
+		long end = System.currentTimeMillis();
+		
+		json.put("statu", "0");
+		json.put("msg", "本次共操作" + infos.size() + " 条数据,耗时 "+(end-start)/1000+"s,详情可以参照临时表(BATCH_UPDATE_INFO_SCCA)中的statusCode字段:1 导入成功 2 未匹配证书序列号 3 未匹配KEY序列号 4 业务不是制证成功或吊销状态 5 业务未在更新范围内");
+
+		return json.toString();
+	}
+	
+	
+	
+	
+	
+	
+	
 
 }
