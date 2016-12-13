@@ -176,6 +176,19 @@
 			$("#returnJsonData").html(data.msg);
 		});
 	};
+	
+	
+	function makeRemarkForBatchUpdateData(){
+		$("#batchUpdate").hide();
+		$("#returnJsonData").html("正在生成,问题数据在后台日志有输出...");
+		var url = "test/makeRemarkForBatchUpdateData?_="+new Date().getTime();
+		$.getJSON(url,function(data){
+			$("#batchUpdate").show();
+			$("#returnJsonData").html(data.msg);
+		});
+	}
+	
+	
 </script>
 </head>
 <body>
@@ -202,9 +215,10 @@
 						<li><a href="#panel-4893682" data-toggle="tab">step2 - 重新生成prev_id数据</a></li>
 						<li><a href="#panel-4893685" data-toggle="tab">step3 - 修复首条业务类型不是新增问题</a></li>
 						<li><a href="#panel-4893686" data-toggle="tab">step4 - 修复同一业务链多条新增问题</a></li>
-						<!-- 
-						<li><a href="#panel-4893687" data-toggle="tab">修复首证书序列号和自身序列号不符问题</a></li>
-						 -->
+						<hr/>
+						<li><a href="#panel-4893690" data-toggle="tab">生成备注信息</a></li>
+						
+						
 					</ul>
 					<div class="tab-content">
 						<div class="tab-pane active" id="panel-98562">
@@ -366,27 +380,7 @@
 								</div>
 							</div>
 						</div>
-						<!-- 
-						<div class="tab-pane" id="panel-4893687">
-							<div class="container-fluid">
-								<div class="row-fluid">
-									<div class="span12">
-										<blockquote>
-											<p>修复首证书序列号和首条证书序列号不符问题</p>
-										</blockquote>
-										<br>
-									</div>
-									<div class="span12">
-										<input id="fixNotEqualsAppId"/>&nbsp;应用ID(指定应用ID，必填)
-										<br/><br/>
-										<button class="btn btn-warning" type="button"
-										onclick="fixNotEquals()"	 id="update">修复首证书序列号和首条证书序列号不符问题</button>
-										<br>
-									</div>
-								</div>
-							</div>
-						</div>
-						 -->
+						
 						 <div class="tab-pane" id="panel-4893688">
 							<div class="container-fluid">
 								<div class="row-fluid">
@@ -406,6 +400,26 @@
 								</div>
 							</div>
 						</div>
+						
+						
+						<div class="tab-pane" id="panel-4893690">
+							<div class="container-fluid">
+								<div class="row-fluid">
+									<div class="span12">
+										<blockquote>
+											<p>生成备注数据</p>
+											<small>为业务表生成备注信息,为批量更新做准备</small>
+										</blockquote>
+										<br>
+										<button class="btn btn-warning" type="button"
+											onclick="makeRemarkForBatchUpdateData()" id="batchUpdate">生成备注数据</button>
+									</div>
+								</div>
+							</div>
+						</div>
+						
+						
+						
 					</div>
 				</div>
 			</div>

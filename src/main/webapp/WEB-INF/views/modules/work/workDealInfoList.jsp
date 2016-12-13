@@ -465,13 +465,46 @@ $(document).ready(
 		}
 	}
 	
+	
+	
+	
+	
 	function updateCertOK(){
 		var checkIds = $("#checkIds").val();
 		if(checkIds==null||checkIds==""){
 			top.$.jBox.tip("请选择您要更新的证书！");
 		}else{
-			var url = "${ctx}/work/workDealInfo/checkUpdateByIds?dealInfoIds="+checkIds+"&_="+new Date().getTime();
-			$.getJSON(url,function(data){
+			var url = "${ctx}/work/workDealInfo/checkUpdateByIds";
+			
+			$.ajax({
+		        url:url,
+		        data:{"dealInfoIds":checkIds,"remarkInfo":$("#remarkInfo").val(),_:new Date().getTime()},
+		        type:"POST",
+		        dataType:"json",
+		        success:function(data){
+		        	
+		        	if (data.status==1){
+						if (data.isUpdate==0) {
+							var info = "错误信息为:<br>&nbsp;&nbsp;&nbsp;&nbsp;"+data.html;
+							top.$.jBox.info(info);
+						}else{
+							$("#appIdd").val(data.appIdd);
+							$("#updateSize").val(data.updateSize);
+							$("#productNamee").val(data.productNamee);
+							$("#labell").val(data.labell);
+							var lable = data.labell;
+							showAgentByUpdate(lable);
+							$("#declareDivUpdate").show();
+						}
+					}else{
+						top.$.jBox.tip("系统异常");
+					}
+		        }
+		    });	
+			
+			
+			
+			/* $.getJSON(url,function(data){
 				if (data.status==1){
 					if (data.isUpdate==0) {
 						var info = "错误信息为:<br>&nbsp;&nbsp;&nbsp;&nbsp;"+data.html;
@@ -488,7 +521,7 @@ $(document).ready(
 				}else{
 					top.$.jBox.tip("系统异常");
 				}
-			});
+			}); */
 		}
 		
 	}
@@ -707,13 +740,19 @@ $(document).ready(
 		var checkIds = $("#checkIds").val();
 		var expirationDate = $("#expirationDate").val(); */
 		
-		$("#dealInfoIds").val($("#checkIds").val());
 		
-		 top.$.jBox.tip("正在批量更新业务...", 'loading');
-			/*  window.location.href = "${ctx}/work/workDealInfo/updateDealInfos?dealInfoIds="
-			+ checkIds + "&year=" + year + "&expirationDate=" + expirationDate +  "&bounddId=" + bounddId + "&methodPay="+methodPay ; */ 
+		if(confirm('是否确认批量更新?')){
+			$("#dealInfoIds").val($("#checkIds").val());
 			
-			$("#updateBatch").submit();
+			 top.$.jBox.tip("正在批量更新业务...", 'loading');
+
+				$("#updateBatch").submit();
+		}else{
+			return false;
+		}
+		
+		
+	
 		
 	}
 	
@@ -1059,6 +1098,7 @@ $(document).ready(
 		var dealInfoStatus = $("#dealInfoStatus").val();
 		var organizationNumber = $("#organizationNumber").val();
 		var keySn = $("#keySn").val();
+		var remarkInfo = $("#remarkInfo").val();
 		var companyName = $("#companyName").val();
 		var startTime = $("#startTime").val();
 		var endTime = $("#endTime").val();
@@ -1070,7 +1110,7 @@ $(document).ready(
 						url:url,
 						type:"POST",
 						data:{"alias":alias,"productName":productName,"organizationNumber":organizationNumber,
-								"dealInfoStatus":dealInfoStatus,"keySn":keySn,"companyName":companyName,
+								"dealInfoStatus":dealInfoStatus,"keySn":keySn,"companyName":companyName,"remarkInfo":remarkInfo,
 								"startTime":startTime,"endTime":endTime,"makeCertStartTime":makeCertStartTime,"makeCertEndTime":makeCertEndTime,_:new Date().getTime()},
 						dataType:"text",
 						success:function(data)
@@ -1166,9 +1206,7 @@ $(document).ready(
 			<br>
 		</div>
 		<div style="margin-top: 8px">
-<!-- 			&nbsp;&nbsp;<label>证书持有人姓名：</label> -->
-<%-- 			<form:input path="workUser.contactName" htmlEscape="false" --%>
-<%-- 				maxlength="50" class="input-medium" /> --%>
+
 			&nbsp;&nbsp;<label>组代码号：</label>
 			&nbsp;&nbsp; <form:input path="workCompany.organizationNumber" htmlEscape="false" id="organizationNumber"
 				maxlength="50" class="input-medium" />
@@ -1178,6 +1216,12 @@ $(document).ready(
 			<label>单位名称：</label>
 			<form:input path="workCompany.companyName" htmlEscape="false" id="companyName"
 				maxlength="50" class="input-medium" />
+				
+				
+			<label>备注信息：</label>
+			<form:input path="remarkInfo" htmlEscape="false" id="remarkInfo"
+			maxlength="50" class="input-medium" />	
+				
 				
 		</div>
 		<div style="margin-top: 8px">
@@ -1485,7 +1529,7 @@ $(document).ready(
 			<h3>批量更新</h3>
 		</div>
 		<div class="modal-body">
-			<form id="updateBatch"
+			<form id="updateBatch" method="post"
 				action="${ctx}/work/workDealInfo/updateDealInfos"
 				enctype="multipart/form-data">
 			<div class="row-fluid">
