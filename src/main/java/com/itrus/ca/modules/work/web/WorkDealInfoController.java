@@ -135,7 +135,7 @@ import com.itrus.ca.modules.sys.service.CommonAttachService;
 import com.itrus.ca.modules.sys.service.OfficeService;
 import com.itrus.ca.modules.sys.utils.UserUtils;
 import com.itrus.ca.modules.task.FixSVNThread;
-import com.itrus.ca.modules.task.MutiBatchUpdate;
+
 import com.itrus.ca.modules.task.entity.BatchUpdateInfoScca;
 import com.itrus.ca.modules.task.service.BatchUpdateInfoSccaService;
 import com.itrus.ca.modules.work.entity.MonthPayment;
