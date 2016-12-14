@@ -9781,7 +9781,15 @@ public class WorkDealInfoService extends BaseService {
 					+ DateUtils.formatDate(endTime, "yyyy-MM-dd 23:59:59")
 					+ "', 'yyyy-MM-dd hh24:mi:ss')");
 		}*/
-
+		/*if (workDealInfo.getDealInfoStatus() != null) {
+			dc.add(Restrictions.eq("dealInfoStatus",
+					workDealInfo.getDealInfoStatus()));
+		}
+		*/
+		
+		//显示所有业务完成的数据
+		sql.append(" and wdi.deal_info_status="+WorkDealInfoStatus.STATUS_CERT_OBTAINED);
+		
 		//单位名称
 		if (workDealInfo.getWorkCompany() != null) {
 			if (workDealInfo.getWorkCompany().getId() != null) {
