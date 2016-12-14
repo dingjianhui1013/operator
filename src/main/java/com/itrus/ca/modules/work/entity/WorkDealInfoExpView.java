@@ -128,6 +128,15 @@ public class WorkDealInfoExpView implements java.io.Serializable {
 	private Long attestationId;
 	@Column(name = "ATTESTATION_USER_NAME", columnDefinition = "NVARCHAR2(255)")
 	private String attestationUserName;
+	
+	
+	/*@Column(name = "VERIFY_USER")
+	private Long verifyId;
+	@Column(name = "VERIFY_USER_NAME", columnDefinition = "NVARCHAR2(255)")
+	private String verifyUserName;
+	*/
+	
+	
 	@Column(name = "PROVINCE", length = 100, columnDefinition = "NVARCHAR2(100)")
 	private String province;
 	@Column(name = "CITY", length = 100, columnDefinition = "NVARCHAR2(100)")
@@ -658,5 +667,21 @@ public class WorkDealInfoExpView implements java.io.Serializable {
 	public void setAppName(String appName) {
 		this.appName = appName;
 	}
+
+/*	public Long getVerifyId() {
+		return verifyId;
+	}
+
+	public void setVerifyId(Long verifyId) {
+		this.verifyId = verifyId;
+	}
+
+	public String getVerifyUserName() {
+		return verifyUserName;
+	}
+
+	public void setVerifyUserName(String verifyUserName) {
+		this.verifyUserName = verifyUserName;
+	}*/
 
 }
