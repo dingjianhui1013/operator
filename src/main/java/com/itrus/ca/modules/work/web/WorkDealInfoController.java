@@ -323,6 +323,7 @@ public class WorkDealInfoController extends BaseController {
 			RedirectAttributes redirectAttributes,
 			@RequestParam(value = "checkIds", required = false) String checkIds,
 			@RequestParam(value = "isSelectedAll", required = false) Integer isSelectedAll,
+			@RequestParam(value = "isSelectButton", required = false) Integer isSelectButton,
 			@RequestParam(value = "alias", required = false) Long alias,
 			@RequestParam(value = "productName", required = false) String productName)
 			throws ParseException {
@@ -365,7 +366,14 @@ public class WorkDealInfoController extends BaseController {
 		}
 		model.addAttribute("checkIds", checkIds);
 
-		model.addAttribute("isSelectedAll", isSelectedAll);
+		
+		if(isSelectButton!=null&&isSelectButton==1){
+			model.addAttribute("isSelectedAll", 0);
+		}else{
+			model.addAttribute("isSelectedAll", isSelectedAll);	
+		}
+		
+		
 
 		model.addAttribute("workType", workDealInfo.getDealInfoStatus());
 
@@ -10194,6 +10202,8 @@ public class WorkDealInfoController extends BaseController {
 				json.put("productNamee", products.get(0).getProductName());
 				json.put("updateSize", dealIdList.size());
 				json.put("labell", products.get(0).getProductLabel());
+				
+				json.put("count", dealInfos.length);
 
 			} else {
 				json.put("isUpdate", 0);
@@ -10611,6 +10621,8 @@ public class WorkDealInfoController extends BaseController {
 			@RequestParam(value = "makeCertEndTime", required = false) Date makeCertEndTime,
 			Model model) throws Exception {
 
+		JSONObject json = new JSONObject();
+		
 		WorkDealInfo workDealInfo = new WorkDealInfo();
 
 		workDealInfo.setDealInfoStatus(dealInfoStatus);
@@ -10636,7 +10648,12 @@ public class WorkDealInfoController extends BaseController {
 			}
 		}
 		sb = sb.replace(sb.length() - 1, sb.length(), "");
-		return sb.toString();
+		
+		json.put("checkIds", sb);
+		
+		json.put("count", list.size());
+		
+		return json.toString();
 
 	}
 
