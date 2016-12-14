@@ -155,6 +155,16 @@ public class WorkDealInfoExpViewService extends BaseService {
 					+ query.getWorkDealInfo().getAttestationUser().getName()
 					+ "%"));
 		}
+		
+		
+		/*if (query.getWorkDealInfo().getVerifyUser() != null
+				&& !query.getWorkDealInfo().getVerifyUser().getName()
+						.equals("")) {
+			dc.add(Restrictions.like("verifyUserName", "%"
+					+ query.getWorkDealInfo().getVerifyUser().getName()
+					+ "%"));
+		}*/
+		
 
 		if (query.getWorkDealInfo().getWorkCompany() != null
 				&& StringUtils.isNotEmpty(query.getWorkDealInfo()

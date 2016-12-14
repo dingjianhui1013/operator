@@ -1208,6 +1208,17 @@ public class WorkDealInfoService extends BaseService {
 						+ "'");
 			}
 		}
+		
+		
+		if(workDealInfo.getConfigProduct()!=null){
+			if(workDealInfo.getConfigProduct().getProductLabel()!=null){
+				sql.append(" and configprod7_.product_label ="
+						+ workDealInfo.getConfigProduct().getProductLabel());
+				
+				
+			}
+		}
+		
 
 		if (workDealInfo.getWorkUser() != null) {
 			if (workDealInfo.getWorkUser().getContactName() != null
