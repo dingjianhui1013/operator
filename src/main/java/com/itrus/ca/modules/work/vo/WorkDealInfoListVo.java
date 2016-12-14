@@ -11,6 +11,9 @@ public class WorkDealInfoListVo {
 	private String certApplyInfoName;
 	private String productName;
 	private String keySn;
+	
+	private String remarkInfo;
+	
 	private Date signDate;
 	private Date notafter;
 	private Date notbefore;
@@ -142,6 +145,12 @@ public class WorkDealInfoListVo {
 	}
 	public void setCanUpdate(Integer canUpdate) {
 		this.canUpdate = canUpdate;
+	}
+	public String getRemarkInfo() {
+		return remarkInfo;
+	}
+	public void setRemarkInfo(String remarkInfo) {
+		this.remarkInfo = remarkInfo;
 	}
 	
 	
