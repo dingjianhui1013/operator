@@ -148,11 +148,17 @@ function getholderinfo(flag){
 		VideoInputCtl.GrabToFile(localStoragePath+"Test.jpg");  //需先执行拍照功能，才可取得此次二代证资讯
 		var names = VideoInputCtl.GetIdcardResult(0);
 		var idno = VideoInputCtl.GetIdcardResult(5);
-		if($("input[name='contactName']").attr("disabled")!='disabled'&&$("input[name='conCertNumber']").attr("disabled")!='disabled'){
+		if($("input[name='contactName']").attr("disabled")!='disabled'
+			&&$("input[name='conCertNumber']").attr("disabled")!='disabled'
+				&&$("input[name='contactName']").attr("readonly")!='readonly'
+					&&$("input[name='conCertNumber']").attr("readonly")!='readonly'
+				&&names!=null&&names!=''){
 			$("input[name='contactName']").val(names);
 			$("input[name='conCertNumber']").val(idno);
 		}
-		if($("#pIDCard").attr("disabled")!='disabled'&&$("#pName").attr("disabled")!='disabled'){
+		if($("#pIDCard").attr("disabled")!='disabled'&&!$("#pName").attr("disabled")!='disabled'
+			&&$("#pIDCard").attr("readonly")!='readonly'&&$("#pIDCard").attr("readonly")!='readonly'
+			&&names!=null&&names!=''){
 			$("#pIDCard").val(idno);
 			$("#pName").val(names);
 		}
@@ -181,6 +187,7 @@ function getoperatorinfo(flag){
 		
 		var idno = VideoInputCtl.GetIdcardResult(5);
 		if($("#pName").attr("disabled")!='disabled'&&$("#pIDCard").attr("disabled")!='disabled'
+			&&$("#pName").attr("readonly")!='readonly'&&$("#pName").attr("readonly")!='readonly'
 			&&names!=null&&names!=''){
 			$("#pName").val(names);
 			$("#pIDCard").val(idno);
@@ -198,7 +205,10 @@ function getoperatorinfo(flag){
  * 利用高拍仪读取单位证件信息并录入到单位信息中
  * */
 function getcompanyinfo(flag){
-	if(flag!=false&&$("#companyName").attr("disabled")!='disabled'&&$("#organizationNumber").attr("disabled")!='disabled'){
+	if(flag!=false&&$("#companyName").attr("disabled")!='disabled'
+		&&$("#organizationNumber").attr("disabled")!='disabled'
+		&&$("#companyName").attr("readonly")!='readonly'
+		&&$("#organizationNumber").attr("readonly")!='readonly'){
 		
 		nDeviceIndex = VideoInputCtl.GetDeviceIndex();
 		
