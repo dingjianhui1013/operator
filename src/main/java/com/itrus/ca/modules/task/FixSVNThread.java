@@ -50,11 +50,7 @@ public class FixSVNThread implements Runnable {
 	}
 
 	public void run() {
-		// try {
-		// workDealInfoService.setSvnToNull(appid);
-		// } catch (Exception e) {
-		// // e.printStackTrace();
-		// }
+		
 		int preNum = all.size() / MAX_THREAD;
 		preNum = preNum == 0 ? all.size() : preNum;
 

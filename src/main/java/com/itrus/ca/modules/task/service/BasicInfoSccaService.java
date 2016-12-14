@@ -176,4 +176,7 @@ public class BasicInfoSccaService extends BaseService {
 		return new Long(m.get("C").toString());
 	}
 
+	
+	
+	
 }
