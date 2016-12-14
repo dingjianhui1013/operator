@@ -70,7 +70,7 @@ public class SystemAuthorizingRealm extends AuthorizingRealm {
 	 * 认证回调函数, 登录时调用
 	 */
 	@Override
-	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authcToken) throws AuthenticationException {
+	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authcToken)  {
 		UsernamePasswordToken token = (UsernamePasswordToken) authcToken;
 		
 		if(token.getLoginType()!=null&&token.getLoginType().equals("1")){
