@@ -103,6 +103,9 @@ public class WorkUserService extends BaseService {
 	}
 	public WorkUserHis change(WorkUser workUser, WorkCompanyHis workCompanyHis){
 		WorkUserHis workUserHis = new WorkUserHis();
+		
+		
+		
 		workUserHis.setAddress(workUser.getAddress());
 		workUserHis.setConCertNumber(workUser.getConCertNumber());
 		workUserHis.setConCertType(workUser.getConCertType());
