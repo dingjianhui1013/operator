@@ -397,6 +397,9 @@ $(document).ready(
 		if (check.is(":checked") == true) {
 			$('input:checkbox').each(function() {
 		        $(this).attr('checked', true);
+		        
+		        
+		        
 			});
 			for (var a = 0; a <xz.length; a++) {
 				var check = $($("#contentTable").find("[name='oneDealCheck']")[a]);
@@ -408,6 +411,8 @@ $(document).ready(
 						}else{
 							checkIds+=","+check.val();
 						}
+						
+						/* $("#selectedCount").text(parseInt($("#selectedCount").text())+1); */
 					}
 				}
 			}
@@ -420,12 +425,16 @@ $(document).ready(
 		}else{
 			$('input:checkbox').each(function () {
 		        $(this).attr('checked',false);
+		        
+		        
 			});
 			for (var a = 0; a <xz.length; a++) {
 				var check = $($("#contentTable").find("[name='oneDealCheck']")[a]);
 				if (check.is(":checked") == false && check.val()!="${page.pageNo}") {
 					checkIds = checkIds.replace(check.val(), "");
 					checkIds = checkIds.replace(",,", ",");
+					
+					/* $("#selectedCount").text($("#selectedCount").text()-1); */
 				}
 			}
 			if (checkIds==",") {
@@ -495,33 +504,17 @@ $(document).ready(
 							var lable = data.labell;
 							showAgentByUpdate(lable);
 							$("#declareDivUpdate").show();
+							
+							
+							$("#selectedCount").text(data.count);
+							$("#displayCount").show();
+							
 						}
 					}else{
 						top.$.jBox.tip("系统异常");
 					}
 		        }
 		    });	
-			
-			
-			
-			/* $.getJSON(url,function(data){
-				if (data.status==1){
-					if (data.isUpdate==0) {
-						var info = "错误信息为:<br>&nbsp;&nbsp;&nbsp;&nbsp;"+data.html;
-						top.$.jBox.info(info);
-					}else{
-						$("#appIdd").val(data.appIdd);
-						$("#updateSize").val(data.updateSize);
-						$("#productNamee").val(data.productNamee);
-						$("#labell").val(data.labell);
-						var lable = data.labell;
-						showAgentByUpdate(lable);
-						$("#declareDivUpdate").show();
-					}
-				}else{
-					top.$.jBox.tip("系统异常");
-				}
-			}); */
 		}
 		
 	}
@@ -529,6 +522,8 @@ $(document).ready(
 	function hideUpdateDiv(){
 		
 		$("#declareDivUpdate").hide();
+		
+		$("#displayCount").hide();
 		
 	}
 	
@@ -1065,6 +1060,7 @@ $(document).ready(
 	}
 	
 	function replaceChecks(){
+	    $("#isSelectButton").val(1);			
 		$("#checkIds").val("");
 	}
 	
@@ -1115,7 +1111,10 @@ $(document).ready(
 						dataType:"text",
 						success:function(data)
 						{
-							$("#checkIds").val(data);
+							data = eval( '(' + data + ')' );
+
+							
+							$("#checkIds").val(data.checkIds);
 							$("#isSelectedAll").val(1);
 							var xz = $("#contentTable").find("[name='oneDealCheck']");
 							for (var a = 0; a < xz.length; a++) {
@@ -1129,7 +1128,11 @@ $(document).ready(
 							 
 							 
 							 $("#selectAllData").val("取消");
-							$("#selectAllData").attr("onclick","deleteSelect()");	 
+							$("#selectAllData").attr("onclick","deleteSelect()");
+							
+								
+							/* $("#selectedCount").text(data.count); */
+							
 						}
 					}); 
 	}
@@ -1146,6 +1149,9 @@ $(document).ready(
 		$("#isSelectedAll").val(0);
 		$("#selectAllData").val("全选");
 		$("#selectAllData").attr("onclick","selectData()");	
+		
+		
+		/* $("#selectedCount").text(0); */
 	} 
 	
 	
@@ -1218,13 +1224,16 @@ $(document).ready(
 				maxlength="50" class="input-medium" />
 				
 				
-			<label>备注信息：</label>
-			<form:input path="remarkInfo" htmlEscape="false" id="remarkInfo"
-			maxlength="50" class="input-medium" />	
+			
+			
 				
 				
 		</div>
 		<div style="margin-top: 8px">
+		
+		    
+		
+		
 			&nbsp;&nbsp;<label>到期日期：&nbsp;</label> &nbsp;&nbsp;<input class="input-medium Wdate" type="text"
 				required="required" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});"
 				value="<fmt:formatDate value="${startTime}" pattern="yyyy-MM-dd"/>" maxlength="20" readonly="readonly"
@@ -1242,6 +1251,9 @@ $(document).ready(
 				<br />
 				<br />
 				<div style="padding-left:100px;">
+				
+				
+				
 				<a target="_blank" href="${ctx}/template/xls/batchImportDealInfo.xlsx" class="btn btn-primary">批量新增模板下载</a>
 				&nbsp;&nbsp;&nbsp;&nbsp;
 				<a id="manyAdd" data-toggle="modal" href="#declareDiv" class="btn btn-primary">批量新增导入</a>&nbsp;&nbsp;&nbsp;&nbsp;
@@ -1255,25 +1267,34 @@ $(document).ready(
 				&nbsp;&nbsp;&nbsp;&nbsp;
 				<a data-toggle="modal" href="${ctx}/work/workDealInfo/deleteList" class="btn btn-primary">删除批量新增信息</a>
 				<input type="hidden"  name="checkIds"  id="checkIds"  value="${checkIds }"/>&nbsp;&nbsp;&nbsp;&nbsp;
+				<input id="isSelectButton" type="hidden" value="0" name="isSelectButton"/>
+				
 				<input id="btnSubmit"
 				class="btn btn-primary" type="submit" onclick="replaceChecks()" value="查询" />
 				&nbsp;&nbsp;&nbsp;&nbsp;
 				
-				
-				</div>
+				<label>备注信息：</label>
+			<%-- <form:input path="remarkInfo" htmlEscape="false" id="remarkInfo"
+			maxlength="50" class="input-medium" />	 --%>
+			
+			
+			<form:select path="remarkInfo" id="remarkInfo">
+				<form:option value="">请选择备注信息</form:option>
+				<form:option value="机关单位">机关单位</form:option>
+				<form:option value="事业单位">事业单位</form:option>
+			</form:select>
+			
+			</div>
 		</div>
 	</form:form>
 	<tags:message content="${message}" />
+	
+	<p id="displayCount" style="display: none">已选择 <span style="color:blue" id="selectedCount">0</span> 条数据</p> 
+	
 	<table id="contentTable"
 		class="table table-striped table-bordered table-condensed">
 		<thead>
 			<tr>
-				<%-- <th><input type="checkbox" id="checkAll" name="oneDealCheck" value="${page.pageNo}" 
-				<c:forEach items="${ids }" var="id">
-					<c:if test="${id==page.pageNo}"> checked="checked"</c:if>
-				</c:forEach>
-				onchange="checkAll(this)"
-				/> </th> --%>
 				
 				<th><input type="checkbox" id="checkAll" name="checkAll"
 				
