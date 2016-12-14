@@ -64,7 +64,7 @@ import com.itrus.ca.modules.work.service.WorkDealInfoService;
  * @author HuHao
  * @version 2016-07-14
  */
-@Controller
+@Controller()
 @RequestMapping(value = "${adminPath}/ixin/ixinData")
 public class IxinDataController extends BaseController {
 
