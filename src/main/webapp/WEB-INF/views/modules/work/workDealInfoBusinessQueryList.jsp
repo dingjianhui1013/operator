@@ -310,7 +310,7 @@
 			<table cellpadding="3">
 				<tr>
 					<td><input type="checkbox"  onclick="changeDisplayItems(this.value)" value="ywbh" name="displayItems" checked="checked"/>业务编号</td>
-					<td><input type="checkbox"  onclick="changeDisplayItems(this.value)" value="jzr" name="displayItems"/>鉴证人</td>
+					<td><input type="checkbox"  onclick="changeDisplayItems(this.value)" value="jzr" name="displayItems"/>鉴别人</td>
 					<td><input type="checkbox"  onclick="changeDisplayItems(this.value)" value="cpmc" name="displayItems" checked="checked"/>产品名称</td>
 					<td><input type="checkbox"  onclick="changeDisplayItems(this.value)" value="cpbs" name="displayItems"/>产品标识</td>
 					<td><input type="checkbox"  onclick="changeDisplayItems(this.value)" value="ywlx" name="displayItems" checked="checked"/>业务类型</td>
@@ -377,6 +377,9 @@
 					</c:if>>${type.name}</option>
 				</c:forEach>
 			</select> 
+			
+			
+
 			<br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			<label>业务类型：</label> <select name="workType" id="workType">
 				<option value="">请选择业务类型</option>
@@ -396,9 +399,14 @@
 			<label>录入人：</label> 
 			<form:input path="inputUser.name" htmlEscape="false"
 				maxlength="16" class="input-medium" id="createByname"/>
-			<label>鉴证人：</label> 
+			<label>鉴别人：</label> 
 			<form:input path="attestationUser.name" htmlEscape="false"
 				maxlength="16" class="input-medium" id="updateByname"/>
+			
+			<%-- <label>验证人：</label> 	
+			<form:input path="verifyUser.name" htmlEscape="false"
+				maxlength="16" class="input-medium" id="verifyByname"/>	 --%>
+				
 			<br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			<label>制证人：</label> 
 			<form:input path="businessCardUser.name" htmlEscape="false"

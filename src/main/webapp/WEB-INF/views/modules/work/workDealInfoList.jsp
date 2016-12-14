@@ -1199,6 +1199,16 @@ $(document).ready(
 				<option value="4" <c:if test="${productName==4}">selected="selected"</c:if>>可信移动设备</option>
 				<option value="6" <c:if test="${productName==6}">selected="selected"</c:if>>个人证书(机构)</option>
 			</select>
+			
+			<label>&nbsp;&nbsp;产品标识：</label>
+			<form:select path="configProduct.productLabel" id="configProductLabel">
+				<form:option value="">请选择产品标识</form:option>
+				<form:option value="0">通用</form:option>
+				<form:option value="1">专用</form:option>
+			</form:select>
+			
+			
+			
 			<label>业务状态：</label>
 			<select name="dealInfoStatus" id="dealInfoStatus">
 				<option value="">请选择业务类型</option>
