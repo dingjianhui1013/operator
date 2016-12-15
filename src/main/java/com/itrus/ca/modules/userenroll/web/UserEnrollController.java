@@ -37,6 +37,7 @@ import com.google.common.collect.Lists;
 import com.itrus.ca.common.persistence.Page;
 import com.itrus.ca.common.utils.FileDownloadUtil;
 import com.itrus.ca.common.utils.PayinfoUtil;
+import com.itrus.ca.common.utils.StringHelper;
 import com.itrus.ca.common.utils.StringUtils;
 import com.itrus.ca.common.web.BaseController;
 import com.itrus.ca.modules.constant.ProductType;
@@ -1101,6 +1102,13 @@ public class UserEnrollController extends BaseController {
 			model.addAttribute("certCN", certCN);
 			
 			log.debug("certCN===="+certCN);
+			
+			
+			//经信委
+			if(workDealInfo.getExpirationDate()!=null){
+				model.addAttribute("addCertDays",StringHelper.getDvalueDay(new Date(), workDealInfo.getExpirationDate())-workDealInfo.getYear()*365-workDealInfo.getLastDays());
+				
+			}
 			
 			model.addAttribute("certCNOmit", certCN.length()>20?certCN.substring(0, 20)+"...":certCN);
 			SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
