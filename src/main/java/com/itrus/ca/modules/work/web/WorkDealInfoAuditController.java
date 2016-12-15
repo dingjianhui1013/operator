@@ -1069,7 +1069,7 @@ public class WorkDealInfoAuditController extends BaseController {
 		oldCertInfo.setWorkCertApplyInfo(workCertApplyInfo);
 		workCertInfoService.save(oldCertInfo);
 		workDealInfoService.save(workDealInfo);
-		model.addAttribute("pageType", "audit");
+		model.addAttribute("pageType", "verify");
 		return "modules/work/workDealInfoAuditLoad";
 		//return "redirect:" + Global.getAdminPath() + "/work/workDealInfo/pay?id=" + workDealInfo.getId();
 	}

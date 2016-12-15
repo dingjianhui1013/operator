@@ -436,8 +436,10 @@ $(document).ready(function() {
 				$("#year5").hide();
 				$("#word5").hide();
 			}
-			$("input[name='year']:eq("+(${workDealInfo.year}-1)+")").attr("checked",'checked');
-			$("input[name='manMadeDamage'][value='" + ${workDealInfo.manMadeDamage} + "']").attr("checked",'checked');
+			if('${workDealInfo.year}'!=''){
+				$("input[name='year']:eq("+(${workDealInfo.year}-1)+")").attr("checked",'checked');
+				$("input[name='manMadeDamage'][value='" + ${workDealInfo.manMadeDamage} + "']").attr("checked",'checked');
+			}
 			
 			//经信委
 			if(data.support){
