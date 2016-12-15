@@ -9766,13 +9766,20 @@ public class WorkDealInfoService extends BaseService {
 		sql.append("	left join work_cert_info wci on wdi.cert_id=wci.id ");
 		sql.append("    left join work_cert_apply_info workCertApplyInfo on wci.apply_info=workCertApplyInfo.id ");
 
-		if ("".equals(sqls)) {
+		/*if ("".equals(sqls)) {
 			sql.append("where (wdi.is_ixin is not null or 1=1) and wdi.del_flag=0");
 		} else {
 			sql.append("where (wdi.is_ixin is not null or (wdi." + sqls
 					+ ")) and wdi.del_flag=0");
-		}
+		}*/
 
+		if ("".equals(sqls)) {
+			sql.append("where (wdi.is_ixin is not null or 1=1) ");
+		} else {
+			sql.append("where (wdi.is_ixin is not null or (wdi." + sqls
+					+ ")) ");
+		}
+		
 		String area = queryStr.get("area");//受理区域
 		String officeId = queryStr.get("officeId");//受理网点
 		String certType = queryStr.get("certType");//产品名称
