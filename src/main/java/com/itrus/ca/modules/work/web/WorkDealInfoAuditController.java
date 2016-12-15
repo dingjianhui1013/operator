@@ -350,9 +350,23 @@ public class WorkDealInfoAuditController extends BaseController {
 				
 			}
 			
-			if(workDealInfo.getExpirationDate()!=null){
+			if(workDealInfo.getIsIxin()!=null&&workDealInfo.getIsIxin()){
+				
+				model.addAttribute("isIxin", true);
+				
+			}else if(workDealInfo.getExpirationDate()!=null){
 				model.addAttribute("expirationDate", workDealInfo.getExpirationDate());
 			}
+			
+			
+			if(workDealInfo.getIsIxin()!=null&&workDealInfo.getIsIxin()){
+				
+				
+			
+			}
+			
+			
+			
 			if (workDealInfo.getIsIxin() != null && workDealInfo.getIsIxin()) {
 				List<CommonAttach> attachs = attachService.findCommonAttachByWorkDealInfo(workDealInfo.getPrevId());
 				
@@ -1015,11 +1029,27 @@ public class WorkDealInfoAuditController extends BaseController {
 	}
 	
 	@RequestMapping("updateLoad")
-	public String updateLoad(WorkDealInfo workDealInfo, String recordContent, Integer year, HttpServletRequest request,
+	public String updateLoad(WorkDealInfo workDealInfo, String recordContent, Integer year,
+			
+			Date expirationDate, // 经信委到期时间 和年限二选一
+			
+			HttpServletRequest request,
 			HttpServletResponse response, Model model, String contactName, String conCertType, String contacEmail,
 			String conCertNumber, String contactPhone, String contactTel, String pName, String contactSex,
 			String pEmail, String pIDCard, Integer agentId, Long agentDetailId) {
-		workDealInfo.setYear(year);
+		
+		
+		// 经信委
+		if (year != 0 && expirationDate == null) {
+			workDealInfo.setYear(year);
+			workDealInfo.setExpirationDate(null);
+		} else {
+			workDealInfo.setYear(StringHelper.getDvalueYear(expirationDate));
+			workDealInfo.setExpirationDate(expirationDate);
+		}
+		
+		
+		
 		// 标注为i信端更新
 
 		workDealInfo.setPayType(agentId);
