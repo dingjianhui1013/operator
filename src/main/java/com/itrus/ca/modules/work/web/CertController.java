@@ -55,7 +55,9 @@ import com.itrus.ca.modules.service.CaService;
 import com.itrus.ca.modules.settle.web.UpdateQuantityStatistics;
 import com.itrus.ca.modules.signature.entity.SignatureInfo;
 import com.itrus.ca.modules.signature.service.SignatureInfoService;
+import com.itrus.ca.modules.sys.entity.Office;
 import com.itrus.ca.modules.sys.entity.User;
+import com.itrus.ca.modules.sys.service.OfficeService;
 import com.itrus.ca.modules.sys.service.SystemService;
 import com.itrus.ca.modules.sys.utils.UserUtils;
 import com.itrus.ca.modules.work.entity.WorkCertApplyInfo;
@@ -99,6 +101,9 @@ public class CertController extends BaseController {
 
 	@Autowired
 	UpdateQuantityStatistics updateQuantityStatistics;
+	
+	@Autowired
+	OfficeService officeService;
 	
 	
 	@Autowired
@@ -1151,8 +1156,10 @@ public class CertController extends BaseController {
 		Date date = new Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMM");
 		workDealInfo.setStatus(0);
-		User user = UserUtils.getUser();
-		user.getOffice().getName();
+		
+		
+		
+		
 		String sn = sdf.format(date).toString();
 		List<WorkDealInfo> list = workDealInfoService.findNum(workDealInfo, "%" + sn + "%");
 		int num = list.size() + 1;
@@ -1176,8 +1183,7 @@ public class CertController extends BaseController {
 		Date date = new Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
 		workDealInfo.setStatus(0);
-		User user = UserUtils.getUser();
-		user.getOffice().getName();
+		Office office = officeService.get(workDealInfo.getOfficeId());
 		String sn = sdf.format(date).toString().substring(2);
 		List<WorkDealInfo> list = workDealInfoService.findNum(workDealInfo, "%" + sn + "%");
 		int num = list.size() + 1;
@@ -1187,7 +1193,7 @@ public class CertController extends BaseController {
 				numstr = "0"+numstr;
 			}
 		}
-		String archiveSn = "SCCA_" + user.getOffice().getName() + "_" + sn + numstr;
+		String archiveSn = "SCCA_" + office.getName() + "_" + sn + numstr;
 		return archiveSn;
 	}
 
