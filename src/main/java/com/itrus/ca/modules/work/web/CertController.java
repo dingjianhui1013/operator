@@ -625,7 +625,7 @@ public class CertController extends BaseController {
 
 	@RequestMapping(value = "enrollMakeCert")
 	@ResponseBody
-	public String enrollMakeCert(Long dealInfoId, String reqOverrideValidity, String certProvider, String csr,
+	public String enrollMakeCert(Long dealInfoId, String reqOverrideValidity,String addCertDays, String certProvider, String csr,
 			String keySn) throws JSONException {
 		JSONObject json = new JSONObject();
 		WorkDealInfo dealInfo = workDealInfoService.get(dealInfoId);
@@ -633,12 +633,20 @@ public class CertController extends BaseController {
 			certProvider = URLDecoder.decode(certProvider, "UTF-8");
 			WorkCertInfo caCert = dealInfo.getWorkCertInfo();
 			WorkCertApplyInfo applyInfo = caCert.getWorkCertApplyInfo();
+			
 			if (reqOverrideValidity != null) {
-				reqOverrideValidity = reqOverrideValidity.replace(",", "");
-				caCert.setReqOverrideValidity(Integer.valueOf(reqOverrideValidity));
+				reqOverrideValidity = reqOverrideValidity.replace(",","");
+				if(!addCertDays.equals("")){
+					caCert.setReqOverrideValidity(Integer.valueOf(reqOverrideValidity) + Integer.valueOf(addCertDays));
+				}else{
+					caCert.setReqOverrideValidity(Integer.valueOf(reqOverrideValidity));
+				}	
+				
 			} else {
 				caCert.setReqOverrideValidity(365);
 			}
+			
+		
 			caCert.setProvider(certProvider);
 			json.put("status", -1);
 			if (caCert.getReqBuf() == null) {

@@ -1999,6 +1999,12 @@ public class WorkDealInfoOperationController extends BaseController {
 		for(CommonAttach c:befor){
 			map.put(c.getAttachName(), c);
 		}
+		
+		
+		
+		//
+		
+		
 		if(imgNames!=null&&imgNames.length()>0){
 			String [] imgs= imgNames.split(",");
 			

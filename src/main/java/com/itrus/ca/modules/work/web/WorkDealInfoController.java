@@ -5409,6 +5409,14 @@ public class WorkDealInfoController extends BaseController {
 				model.addAttribute("imgNames", imgNames);
 			}
 			
+			
+			if(UserUtils.getUser().getOffice().getParent().getId()==1){
+				addMessage(redirectAttributes, "当前网点没有办理业务的权限！");
+				return "redirect:" + Global.getAdminPath()
+						+ "/work/workDealInfo/?repage";
+			}
+			
+			
 			boolean inOffice = false;
 			List<ConfigAppOfficeRelation> configAppOfficeRelations = configAppOfficeRelationService
 					.findAllByOfficeId(UserUtils.getUser().getOffice().getId());
