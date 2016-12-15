@@ -76,7 +76,18 @@ $(document).ready(function() {
 	}
 	
 	
+	$("input[name='year']").change(function(){
+		$("#expirationDate").val("");						
+	});
 	
+	$("#expirationDate").blur(function(){
+		
+		$("#year1").removeAttr("checked");
+		$("#year2").removeAttr("checked");
+		$("#year3").removeAttr("checked");
+		$("#year4").removeAttr("checked");
+		$("#year5").removeAttr("checked");
+	});
 	
 	
 			if("${workDealInfo.id}"!=null && "${workDealInfo.id}"!="" && "${workDealInfo.isIxin}"){
@@ -191,6 +202,11 @@ $(document).ready(function() {
 		});
 	}
 	function buttonFrom() {
+		
+		
+		
+		
+		
 		var pageType = '${pageType}';
 		if(pageType=='audit'){
 			$("#recordForm").attr("action", "${ctx}/work/workDealInfoAudit/auditLoad");
@@ -226,9 +242,9 @@ $(document).ready(function() {
 							if ($("#year5").prop("checked") == true) {
 								saveYear = $("#year5").val();
 							}
-							if (saveYear == 0) {
-								$("#mmsg").html("请选择更新年限");
-								$("#mssg").html("请选择更新年限");
+							if ((saveYear == 0)  && ($("#expirationDate").val() == null || $("#expirationDate").val() == "")) {
+								$("#mmsg").html("请选择更新年限或指定截止日期");
+								$("#mssg").html("请选择更新年限或指定截止日期");
 							} else {
 								$("#inputForm").attr(
 										"action",
@@ -244,6 +260,9 @@ $(document).ready(function() {
 					
 				}
 			}else{
+				
+				
+				
 				if ($("#year1").prop("checked") == true) {
 					saveYear = $("#year1").val();
 				}
@@ -259,9 +278,9 @@ $(document).ready(function() {
 				if ($("#year5").prop("checked") == true) {
 					saveYear = $("#year5").val();
 				}
-				if (saveYear == 0) {
-					$("#mmsg").html("请选择更新年限");
-					$("#mssg").html("请选择更新年限");
+				if ((saveYear == 0)  && ($("#expirationDate").val() == null || $("#expirationDate").val() == "")) {
+					$("#mmsg").html("请选择更新年限或指定截止日期");
+					$("#mssg").html("请选择更新年限或指定截止日期");
 				} else {
 					$("#inputForm").attr(
 							"action",
@@ -675,7 +694,15 @@ $(document).ready(function() {
 							</td>
 							</c:if>	
 							
-							
+							<c:if test="${isIxin==true }">
+							<th id="supportDateTh">指定截止日期：</th>
+							<td id="supportDateTd">
+								<input class="input-medium Wdate" type="text"
+							 onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});" 
+							 maxlength="20" readonly="readonly" value="<fmt:formatDate value="${expirationDate}" pattern="yyyy-MM-dd"/>"
+							name="expirationDate" id="expirationDate"/>
+							</td>
+							</c:if>	
 																
 								
 							
