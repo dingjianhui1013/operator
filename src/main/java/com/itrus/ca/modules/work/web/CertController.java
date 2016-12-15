@@ -925,10 +925,23 @@ public class CertController extends BaseController {
 				workCertInfoService.save(workCertInfo);
 				dealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_CERT_OBTAINED);// 审核通过
 				dealInfo.setObtainedDate(new Date());
-				if (dealInfo.getWorkPayInfo().getMethodGov() || dealInfo.getWorkPayInfo().getMethodContract()) {
+				/*if (dealInfo.getWorkPayInfo().getMethodGov() || dealInfo.getWorkPayInfo().getMethodContract()) {
 					dealInfo.setUserSn(getHSn(dealInfo));
 				} else {
 					dealInfo.setUserSn(getZSn(dealInfo));
+				}*/
+				List<ConfigChargeAgent> configChargeAgentList = configChargeAgentService.findById(dealInfo.getConfigChargeAgentId());
+				if(configChargeAgentList!=null&&configChargeAgentList.size()>0){
+					ConfigChargeAgent config = configChargeAgentList.get(0);
+					//模板类型1标准 2政府统一采购 3合同采购
+					String configType = config.getTempStyle();
+					if(configType.equals("1")){
+						dealInfo.setUserSn(getBZSn(dealInfo));
+					}else if(configType.equals("2")){
+						dealInfo.setUserSn(getZFSn(dealInfo));
+					}else if(configType.equals("3")){
+						dealInfo.setUserSn(getHTSn(dealInfo,config));
+					}
 				}
 				dealInfo.setStatus(0);// 待归档
 				workDealInfoService.save(dealInfo);
