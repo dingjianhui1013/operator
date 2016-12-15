@@ -554,6 +554,7 @@ public class WorkDealInfoAuditController extends BaseController {
 			}
 			
 			if(workDealInfo.getExpirationDate()!=null){
+
 				model.addAttribute("expirationDate", workDealInfo.getExpirationDate());
 			}
 			
@@ -1100,8 +1101,8 @@ public class WorkDealInfoAuditController extends BaseController {
 		workCertInfoService.save(oldCertInfo);
 		workDealInfoService.save(workDealInfo);
 		model.addAttribute("pageType", "verify");
-		return "modules/work/workDealInfoAuditLoad";
-		//return "redirect:" + Global.getAdminPath() + "/work/workDealInfo/pay?id=" + workDealInfo.getId();
+		//return "modules/work/workDealInfoAuditLoad";
+		return "redirect:" + Global.getAdminPath() + "/work/workDealInfo/pay?id=" + workDealInfo.getId();
 	}
 
 	/**

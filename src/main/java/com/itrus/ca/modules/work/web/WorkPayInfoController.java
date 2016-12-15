@@ -505,7 +505,11 @@ public class WorkPayInfoController extends BaseController {
 			workDealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_ADD_USER);
 		} else {
 			if(workDealInfo.getDealInfoType() == WorkDealInfoType.TYPE_UPDATE_CERT){
-				workDealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_ADD_USER);
+				if(workDealInfo.getIsIxin()!=null&&workDealInfo.getIsIxin()){
+					workDealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_VERIFICATE_WAIT);
+				}else{
+					workDealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_ADD_USER);
+				}
 			}else{
 				//遗失变更等 均需要进行鉴证
 				workDealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_ADD_USER);
