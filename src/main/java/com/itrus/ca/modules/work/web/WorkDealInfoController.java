@@ -3862,6 +3862,10 @@ public class WorkDealInfoController extends BaseController {
 		workDealInfo.setAreaId(UserUtils.getUser().getOffice().getParent()
 				.getId());
 		workDealInfo.setOfficeId(UserUtils.getUser().getOffice().getId());
+		
+		workDealInfo.setInputUser(UserUtils.getUser());
+		workDealInfo.setInputUserDate(new Date());
+		
 		long start5 = System.currentTimeMillis();
 		workDealInfoService.save(workDealInfo);
 		long end5 = System.currentTimeMillis();
@@ -9889,6 +9893,8 @@ public class WorkDealInfoController extends BaseController {
 					.getId());
 			workDealInfo.setOfficeId(UserUtils.getUser().getOffice().getId());
 			
+			workDealInfo.setInputUser(UserUtils.getUser());
+			workDealInfo.setInputUserDate(new Date());
 			long start5 = System.currentTimeMillis();
 			workDealInfoService.save(workDealInfo);
 			long end5 = System.currentTimeMillis();
@@ -10533,18 +10539,10 @@ public class WorkDealInfoController extends BaseController {
 					}
 				}
 				
-				
-				
 				long end = System.currentTimeMillis();
-				
 				log.debug("执行强制结束,用时:"+(end-start));
-				
-				break;
-				
-				
-			}
-			
-					
+				break;	
+			}			
 		}
 		
 		if(success){
