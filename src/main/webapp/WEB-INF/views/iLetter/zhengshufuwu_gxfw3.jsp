@@ -59,7 +59,7 @@ function setCount() {
 		cspStr = encodeURI(encodeURI(cspStr));
 		var url = "${ctx}/ca/enrollMakeCert?reqOverrideValidity=" + day
 			+ "&certProvider=" + cspStr + "&keySn=" + keySN + "&csr=" + csr
-			+ "&dealInfoId=${workDealInfo.id}&_="+new Date().getTime();
+			+ "&dealInfoId=${workDealInfo.id}&addCertDays="+$("#addCertDays").val()+"&_="+new Date().getTime();
 		$.ajax({
 			url : url,
 			async : false,
@@ -228,6 +228,9 @@ function setCount() {
    证书CN：</a> ${certCNOmit } <br />
 					证书有效期：${notbefore }到  ${notafter }<br />
 					审核状态：<span style="font-weight:bold;">${status}</span>
+					
+					<input type="hidden"  value="${addCertDays}"/>
+					
         		</td>
         	</tr>
      	</table>
