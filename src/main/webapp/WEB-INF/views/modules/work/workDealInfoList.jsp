@@ -1191,7 +1191,7 @@ $(document).ready(
 			</select>
 			<label>&nbsp;&nbsp;产品名称：</label>
 			<select name="productName"
-				id="productName">
+				id="productName" style='width:150px;'>
 				<option value="">请选择产品</option>
 				<option value="1"  <c:if test="${productName==1}">selected="selected"</c:if>>企业证书</option>
 				<option value="2" <c:if test="${productName==2}">selected="selected"</c:if>>个人证书(企业)</option>
@@ -1199,9 +1199,8 @@ $(document).ready(
 				<option value="4" <c:if test="${productName==4}">selected="selected"</c:if>>可信移动设备</option>
 				<option value="6" <c:if test="${productName==6}">selected="selected"</c:if>>个人证书(机构)</option>
 			</select>
-			
 			<label>&nbsp;&nbsp;产品标识：</label>
-			<form:select path="configProduct.productLabel" id="configProductLabel">
+			<form:select path="configProduct.productLabel" id="configProductLabel" style='width:150px;'>
 				<form:option value="">请选择产品标识</form:option>
 				<form:option value="0">通用</form:option>
 				<form:option value="1">专用</form:option>
@@ -1210,7 +1209,7 @@ $(document).ready(
 			
 			
 			<label>业务状态：</label>
-			<select name="dealInfoStatus" id="dealInfoStatus">
+			<select name="dealInfoStatus" id="dealInfoStatus" style='width:150px;'>
 				<option value="">请选择业务类型</option>
 				<c:forEach items="${wdiStatus}" var="type">
 					<option value="${type.key}"
@@ -1288,7 +1287,7 @@ $(document).ready(
 			maxlength="50" class="input-medium" />	 --%>
 			
 			
-			<form:select path="remarkInfo" id="remarkInfo">
+			<form:select path="remarkInfo" id="remarkInfo" style='width:150px;'>
 				<form:option value="">请选择备注信息</form:option>
 				<form:option value="机关单位">机关单位</form:option>
 				<form:option value="事业单位">事业单位</form:option>
