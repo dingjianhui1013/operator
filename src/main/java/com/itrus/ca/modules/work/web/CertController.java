@@ -640,6 +640,7 @@ public class CertController extends BaseController {
 					caCert.setReqOverrideValidity(Integer.valueOf(reqOverrideValidity) + Integer.valueOf(addCertDays));
 				}else{
 					caCert.setReqOverrideValidity(Integer.valueOf(reqOverrideValidity));
+					addCertDays = "0";
 				}	
 				
 			} else {
