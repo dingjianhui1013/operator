@@ -701,7 +701,7 @@ public class CertController extends BaseController {
 
 				CertificateRequest request = RaAccountUtil.outRequest(dealInfo, extendInfo);
 				CertificateResponse certificateResponse = caService.getCaCert(request, caCert.getReqBuf(),
-						Integer.valueOf(reqOverrideValidity), raAccount);
+						Integer.valueOf(reqOverrideValidity) + Integer.valueOf(addCertDays), raAccount);
 
 				caCert.setType(certificateResponse.getCertType());
 				caCert.setSignBuf(certificateResponse.getCertSignBuf());

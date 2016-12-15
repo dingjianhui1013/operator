@@ -229,7 +229,7 @@ function setCount() {
 					证书有效期：${notbefore }到  ${notafter }<br />
 					审核状态：<span style="font-weight:bold;">${status}</span>
 					
-					<input type="hidden"  value="${addCertDays}"/>
+					<input id="addCertDays" type="hidden"  value="${addCertDays}"/>
 					
         		</td>
         	</tr>

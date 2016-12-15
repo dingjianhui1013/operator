@@ -140,6 +140,18 @@ $(document).ready(function() {
 				$("#applyYear").hide();
 			}
 			
+			var pageType = '${pageType}';
+			if(pageType=='audit'){
+				pageType='鉴别';
+			}else{
+				pageType='验证';
+				$("input[name='year']").each(function(i,one){
+					$(one).attr("disabled","disabled");
+				})
+				$("#agentId").attr("disabled","disabled");
+				$("#agentDetailId").attr("disabled","disabled");
+				
+			}
 			
 		});
 	function showAgent(){
@@ -186,10 +198,7 @@ $(document).ready(function() {
 			$("#recordForm").attr("action", "${ctx}/work/workDealInfoAudit/verifyLoad");
 		}
 		var saveYear = 0;
-		if ($("#dealInfoType").val() == 0 ||$("#dealInfoType").val() == 1 ) {//新增证书和更新证书
-			$("input[name=recordContent]").val($("#recordContent").val());
-			$("#recordForm").submit();
-		}else if("${workDealInfo.isIxin}"){
+		if("${workDealInfo.isIxin}"){
 			if($("#agentDetailId").val()!=0 && $("#agentId").val()!=1){
 				if($("#surplusNum").val()==0){
 					top.$.jBox.tip("此计费策略模版剩余数量为零，不能进行业务办理！"); 
@@ -271,6 +280,9 @@ $(document).ready(function() {
 			
 			
 			
+		}else if ($("#dealInfoType").val() == 0 ||$("#dealInfoType").val() == 1 ) {//新增证书和更新证书
+			$("input[name=recordContent]").val($("#recordContent").val());
+			$("#recordForm").submit();
 		}else {
 			if ($("#year1").prop("checked") == true) {
 				saveYear = $("#year1").val();
@@ -424,6 +436,8 @@ $(document).ready(function() {
 				$("#year5").hide();
 				$("#word5").hide();
 			}
+			$("input[name='year']:eq("+(${workDealInfo.year}-1)+")").attr("checked",'checked');
+			$("input[name='manMadeDamage'][value='" + ${workDealInfo.manMadeDamage} + "']").attr("checked",'checked');
 			
 			//经信委
 			if(data.support){

@@ -499,7 +499,7 @@ public class WorkDealInfoAuditController extends BaseController {
 		String url = Global.getConfig("images.path");
 		//新增   验证第一页
 		model.addAttribute("pageType", "verify");
-		if(workDealInfo.getDealInfoType()==WorkDealInfoType.TYPE_ADD_CERT){
+		if(workDealInfo.getDealInfoType()==WorkDealInfoType.TYPE_ADD_CERT||(workDealInfo.getIsIxin()!=null&&workDealInfo.getIsIxin())){
 			model.addAttribute("proType", ProductType.productTypeStrMap);
 			model.addAttribute("workDealInfo", workDealInfo);
 			
@@ -1069,8 +1069,9 @@ public class WorkDealInfoAuditController extends BaseController {
 		oldCertInfo.setWorkCertApplyInfo(workCertApplyInfo);
 		workCertInfoService.save(oldCertInfo);
 		workDealInfoService.save(workDealInfo);
-
-		return "redirect:" + Global.getAdminPath() + "/work/workDealInfo/pay?id=" + workDealInfo.getId();
+		model.addAttribute("pageType", "audit");
+		return "modules/work/workDealInfoAuditLoad";
+		//return "redirect:" + Global.getAdminPath() + "/work/workDealInfo/pay?id=" + workDealInfo.getId();
 	}
 
 	/**
