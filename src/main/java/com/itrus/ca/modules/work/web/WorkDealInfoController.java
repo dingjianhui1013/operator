@@ -10152,6 +10152,16 @@ public class WorkDealInfoController extends BaseController {
 			if(!StringHelper.isNull(remarkInfo)){
 			    products = workDealInfoService.findByDistinkIds(remarkInfo);
 			}else{
+				
+				if(dealInfos.length>=1000){
+					json.put("status", 1);
+					json.put("isUpdate", 0);
+
+					String html = "数据量过大,请缩小数据范围!";
+					json.put("html", html);
+					return json.toString();
+				}
+				
 				products = workDealInfoService.findByDistinkIds(dealIdList);
 			}
 			
