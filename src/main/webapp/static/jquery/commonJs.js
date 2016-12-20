@@ -378,7 +378,9 @@ function imgDel(imgDiv){
 				top.$.jBox.confirm("确定吗？", "提示", function (v, h, f) {
 				    if (v == 'ok'){
 				    	var name = $(one).attr("data");
-				    	name=name.substring(0,name.lastIndexOf('##'));
+				    	if(name.lastIndexOf('##')!=-1){
+				    		name=name.substring(0,name.lastIndexOf('##'));				    		
+				    	};
 				    	$(one).closest(".uploadImgList").remove();
 				    	name = name.substring(name.lastIndexOf('/')+1,name.length)
 				    	var imageNames = $("#imgNames").val();
@@ -386,7 +388,7 @@ function imgDel(imgDiv){
 				    	imageNames=imageNames.replace(","+name,"");
 				    	imageNames=imageNames.replace(name+",","");
 				    	imageNames=imageNames.replace(name,"");
-				    	console.log(imageNames);
+				    	//console.log(imageNames);
 				    	$("#imgNames").val(imageNames);
 				    }else if (v == 'cancel'){
 				    	
@@ -433,7 +435,6 @@ function afterUpload(imgName){
 					}else{
 						$("#imgNames").val($("#imgNames").val()+","+imgName);
 					}
-					
 				}
 			}
 		});
