@@ -1,5 +1,6 @@
 package com.itrus.ca.modules.service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
@@ -9,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
-import org.apache.shiro.authz.annotation.RequiresGuest;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,13 +69,16 @@ public class ItrustController {
 	 * @throws JSONException
 	 */
 	@RequestMapping(value = "/cert/{sn}/project")
-	@ResponseBody
-	public String getCertProjectByCert(
+//	@ResponseBody
+	public void getCertProjectByCert(
 			@PathVariable(value = "sn") String certsn,
 			HttpServletRequest request,
 			HttpServletResponse response,
 			@RequestParam(required = false) String include)
-			throws JSONException {
+			throws JSONException,IOException {
+		response.setStatus(response.SC_OK);
+		response.setContentType("application/json");
+		response.setCharacterEncoding("utf-8");
 		JSONObject json = new JSONObject();
 		try {
 			json.put("status", 0); 
@@ -147,7 +150,9 @@ public class ItrustController {
 			json.put("msg", "系统异常");
 		}
 		log.info("result:"+json.toString());
-		return json.toString();
+//		return json.toString();
+		response.getWriter().println(json.toString());
+		response.flushBuffer();
 	}
 
 	/**
@@ -160,12 +165,14 @@ public class ItrustController {
 	 * @throws JSONException
 	 */
 	@RequestMapping(value = "/key/{sn}/project")
-	@ResponseBody
-	public String getCertProjectByKey(@PathVariable(value = "sn") String keysn,
+//	@ResponseBody
+	public void getCertProjectByKey(@PathVariable(value = "sn") String keysn,
 			HttpServletRequest request,
 			HttpServletResponse response,
 			@RequestParam(required = false) String include)
-			throws JSONException {
+			throws JSONException,IOException {
+		response.setStatus(response.SC_OK);
+		response.setContentType("application/json");
 		response.setCharacterEncoding("utf-8");
 		
 		JSONObject json = new JSONObject();
@@ -241,7 +248,9 @@ public class ItrustController {
 			json.put("msg", "系统异常");
 		}
 		/*log.info("result:"+json.toString());*/
-		return json.toString();
+//		return json.toString();
+		response.getWriter().println(json.toString());
+		response.flushBuffer();
 	}
 
 	/**
@@ -253,9 +262,13 @@ public class ItrustController {
 	 */
 
 	@RequestMapping(value = "/profiles/{id}")
-	@ResponseBody
-	public String findRaProfile(@PathVariable(value = "id") Long raId)
-			throws JSONException {
+//	@ResponseBody
+	public void findRaProfile(@PathVariable(value = "id") Long raId,
+			HttpServletResponse response)
+			throws JSONException,IOException {
+		response.setStatus(response.SC_OK);
+		response.setContentType("application/json");
+		response.setCharacterEncoding("utf-8");
 		JSONObject json = new JSONObject();
 		try {
 			json.put("status", 0);
@@ -278,7 +291,9 @@ public class ItrustController {
 			e.printStackTrace();
 			json.put("msg", "系统异常");
 		}
-		return json.toString();
+//		return json.toString();
+		response.getWriter().println(json.toString());
+		response.flushBuffer();
 	}
 
 	/**
@@ -288,9 +303,13 @@ public class ItrustController {
 	 * @throws JSONException
 	 */
 	@RequestMapping(value = "/cert/{sn}/device")
-	@ResponseBody
-	public String getCertTrustDevice(@PathVariable(value = "sn") String sn)
-			throws JSONException {
+//	@ResponseBody
+	public void getCertTrustDevice(@PathVariable(value = "sn") String sn,
+			HttpServletResponse response)
+			throws JSONException,IOException {
+		response.setStatus(response.SC_OK);
+		response.setContentType("application/json");
+		response.setCharacterEncoding("utf-8");
 		JSONObject json = new JSONObject();
 		try {
 			sn = sn.toUpperCase();
@@ -320,7 +339,9 @@ public class ItrustController {
 			json.put("msg", "系统异常");
 		}
 		log.info("result:"+json.toString());
-		return json.toString();
+//		return json.toString();
+		response.getWriter().println(json.toString());
+		response.flushBuffer();
 	}
 
 	public JSONObject appToJson(ConfigApp app) {
