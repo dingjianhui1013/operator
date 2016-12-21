@@ -2590,6 +2590,9 @@ public class WorkDealInfoService extends BaseService {
 			expiredEnd.setSeconds(59);
 			dc.add(Restrictions.le("notafter", expiredEnd));
 		}
+		
+		
+		dc.add(Restrictions.eq("delFlag", 0));
 
 		return workDealInfoDao.find(page, dc);
 
