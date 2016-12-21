@@ -4,6 +4,7 @@
  */
 package com.itrus.ca.modules.work.web;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -793,6 +794,21 @@ public class WorkDealInfoAuditController extends BaseController {
 
 		model.addAttribute("expirationDate",StringHelper.getLastDateOfCurrentYear());
 		
+		
+		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");  
+		
+		// 经信委
+		if (chargeAgent.getIsSupportExpirationDate() != null
+					&& chargeAgent.getIsSupportExpirationDate() == 1) {
+			model.addAttribute("isSupport", true);
+
+				if (workDealInfo.getExpirationDate() != null) {
+						model.addAttribute("expirationDate",
+						format.format(workDealInfo.getExpirationDate()));
+				}
+		}
+		
+		
 		//获得省和市对应self_area表中的id
 		if(workDealInfo.getWorkCompany().getProvince()!=null&&!workDealInfo.getWorkCompany().getProvince().isEmpty()){
 			String provinceId = selfAreaService.findByAreaName(workDealInfo.getWorkCompany().getProvince()).getAreaId();
@@ -804,6 +820,9 @@ public class WorkDealInfoAuditController extends BaseController {
 			}
 		
 		}
+		
+		
+		
 		
 		if (dealType.indexOf("1") >= 0) {
 
