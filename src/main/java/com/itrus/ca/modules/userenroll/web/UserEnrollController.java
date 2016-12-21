@@ -1106,6 +1106,11 @@ public class UserEnrollController extends BaseController {
 			
 			//经信委
 			if(workDealInfo.getExpirationDate()!=null){
+				
+                workDealInfo.setAddCertDays(StringHelper.getDvalueDay(new Date(), workDealInfo.getExpirationDate())-workDealInfo.getYear()*365-workDealInfo.getLastDays());
+                
+                workDealInfoService.save(workDealInfo);
+				
 				model.addAttribute("addCertDays",StringHelper.getDvalueDay(new Date(), workDealInfo.getExpirationDate())-workDealInfo.getYear()*365-workDealInfo.getLastDays());
 				
 			}
