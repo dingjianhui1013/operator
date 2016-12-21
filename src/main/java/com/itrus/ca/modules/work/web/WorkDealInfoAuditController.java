@@ -2010,6 +2010,18 @@ public class WorkDealInfoAuditController extends BaseController {
 			workDealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_APPROVE_WAIT);
 			workDealInfo.setVerifyUser(UserUtils.getUser());
 			workDealInfo.setVerifyUserDate(new Date());
+			
+			//经信委
+			if(workDealInfo.getExpirationDate()!=null){
+				
+				workDealInfo.setAddCertDays(StringHelper.getDvalueDay(new Date(), workDealInfo.getExpirationDate())-workDealInfo.getYear()*365);
+				
+				
+				model.addAttribute("expirationDate", workDealInfo.getExpirationDate());
+				model.addAttribute("addCertDays",StringHelper.getDvalueDay(new Date(), workDealInfo.getExpirationDate())-workDealInfo.getYear()*365);
+				model.addAttribute("validiteDays",StringHelper.getDvalueDay(new Date(), workDealInfo.getExpirationDate()));
+			}
+			
 			workDealInfoService.save(workDealInfo);
 			
 			//秘钥长度
@@ -2018,12 +2030,7 @@ public class WorkDealInfoAuditController extends BaseController {
 			}
 			
 			
-			//经信委
-			if(workDealInfo.getExpirationDate()!=null){
-				model.addAttribute("expirationDate", workDealInfo.getExpirationDate());
-				model.addAttribute("addCertDays",StringHelper.getDvalueDay(new Date(), workDealInfo.getExpirationDate())-workDealInfo.getYear()*365);
-				model.addAttribute("validiteDays",StringHelper.getDvalueDay(new Date(), workDealInfo.getExpirationDate()));
-			}
+			
 			
 			model.addAttribute("pt", ProductType.productTypeStrMap);
 			model.addAttribute("wdiType", WorkDealInfoType.WorkDealInfoTypeMap);
@@ -2038,6 +2045,18 @@ public class WorkDealInfoAuditController extends BaseController {
 			workDealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_APPROVE_WAIT);
 			workDealInfo.setVerifyUser(UserUtils.getUser());
 			workDealInfo.setVerifyUserDate(new Date());
+			
+			//经信委
+			if(workDealInfo.getExpirationDate()!=null){
+				
+				workDealInfo.setAddCertDays(StringHelper.getDvalueDay(new Date(), workDealInfo.getExpirationDate())-workDealInfo.getYear()*365);
+				
+				model.addAttribute("expirationDate", workDealInfo.getExpirationDate());
+				model.addAttribute("addCertDays",StringHelper.getDvalueDay(new Date(), workDealInfo.getExpirationDate())-workDealInfo.getYear()*365-workDealInfo.getLastDays());
+				model.addAttribute("validiteDays",StringHelper.getDvalueDay(new Date(), workDealInfo.getExpirationDate()));
+			}
+			
+			
 			workDealInfoService.save(workDealInfo);
 			
 			if(workDealInfo.getDealInfoType()!=null&&workDealInfo.getDealInfoType1()==null){
@@ -2075,12 +2094,7 @@ public class WorkDealInfoAuditController extends BaseController {
 			}
 			
 			
-			//经信委
-			if(workDealInfo.getExpirationDate()!=null){
-				model.addAttribute("expirationDate", workDealInfo.getExpirationDate());
-				model.addAttribute("addCertDays",StringHelper.getDvalueDay(new Date(), workDealInfo.getExpirationDate())-workDealInfo.getYear()*365-workDealInfo.getLastDays());
-				model.addAttribute("validiteDays",StringHelper.getDvalueDay(new Date(), workDealInfo.getExpirationDate()));
-			}
+			
 			
 			//解决迁移导致的多证书编号错误问题,让用户前台输入进行修改
 			if(workDealInfo.getDealInfoType2()==WorkDealInfoType.TYPE_INFORMATION_REROUTE){

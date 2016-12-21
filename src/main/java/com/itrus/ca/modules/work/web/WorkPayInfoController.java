@@ -636,6 +636,10 @@ public class WorkPayInfoController extends BaseController {
 		
 		//经信委
 				if(workDealInfo.getExpirationDate()!=null){
+					
+					workDealInfo.setAddCertDays(StringHelper.getDvalueDay(new Date(), workDealInfo.getExpirationDate())-workDealInfo.getYear()*365-workDealInfo.getLastDays());
+					workDealInfoService.save(workDealInfo);
+					
 					model.addAttribute("expirationDate", workDealInfo.getExpirationDate());
 					model.addAttribute("addCertDays",StringHelper.getDvalueDay(new Date(), workDealInfo.getExpirationDate())-workDealInfo.getYear()*365-workDealInfo.getLastDays());
 					model.addAttribute("validiteDays",StringHelper.getDvalueDay(new Date(), workDealInfo.getExpirationDate()));
