@@ -93,6 +93,7 @@
 				<th>单位电话</th>
 				<th>应用名称</th>
 				<th>产品名称</th>
+				<th>产品标识</th>
 				<th>业务类型</th>
 				<th>Key序列号</th>
 				<th>经办人电话</th>
@@ -112,6 +113,10 @@
 					<td>${workDealInfo.workCompany.companyMobile}</td>
 					<td>${workDealInfo.configApp.appName}</td>
 					<td>${proType[workDealInfo.configProduct.productName]}</td>
+					
+					<td><c:if test="${workDealInfo.configProduct.productLabel==0 }">通用</c:if>
+					<c:if test="${workDealInfo.configProduct.productLabel==1 }">专用</c:if></td>
+					
 					<td>${wdiType[workDealInfo.dealInfoType]}&nbsp;&nbsp;${wdiType[workDealInfo.dealInfoType1]}&nbsp;&nbsp;${wdiType[workDealInfo.dealInfoType2]}&nbsp;&nbsp;${wdiType[workDealInfo.dealInfoType3]}</td>
 					<td>${workDealInfo.keySn }</td>
 					<td>${workDealInfo.workUser.contactPhone}</td>
