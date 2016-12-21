@@ -2895,6 +2895,9 @@ public class WorkDealInfoService extends BaseService {
 			dc.add(Restrictions.eq("dealInfoStatus",
 					workDealInfo.getDealInfoStatus()));
 		}
+		
+		dc.add(Restrictions.eq("dealInfoStatus", WorkDealInfoStatus.STATUS_CERT_OBTAINED));
+		
 		if (StringUtils.isNotEmpty(workDealInfo.getKeySn())) {
 			dc.add(Restrictions.like("keySn",
 					"%" + EscapeUtil.escapeLike(workDealInfo.getKeySn()) + "%"));
