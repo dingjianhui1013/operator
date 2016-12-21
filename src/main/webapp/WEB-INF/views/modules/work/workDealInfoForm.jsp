@@ -1020,7 +1020,7 @@ var selected = false;
 	}
 
 	function checkDwmc(obj) {
-		var dwmc = $(obj).val();
+		/* var dwmc = $(obj).val();
 
 		if(!/^[\u4e00-\u9fa5a-zA-Z0-9\.*,'、\-_() （） ]+$/.test(dwmc)) {
 			if($("#dwmcpro").text()!=""){
@@ -1031,7 +1031,7 @@ var selected = false;
 		}
 		if($("#dwmcpro").text()!=""){
 			$("#dwmcpro").hide();
-		}
+		} */
 		return true;
 	}
 	

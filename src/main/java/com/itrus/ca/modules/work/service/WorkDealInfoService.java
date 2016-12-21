@@ -9812,7 +9812,12 @@ public class WorkDealInfoService extends BaseService {
 		*/
 		
 		//显示所有业务完成的数据
-		sql.append(" and wdi.deal_info_status="+WorkDealInfoStatus.STATUS_CERT_OBTAINED);
+		sql.append(
+				" and ( wdi.deal_info_status="+WorkDealInfoStatus.STATUS_CERT_OBTAINED 
+				+" or ( wdi.deal_info_status="+WorkDealInfoStatus.STATUS_CERT_REVOKE
+				//+" and (wdi.is_revoke_business <> 1 or wdi.is_revoke_business is null)"
+				+ " ) )"
+				);
 		
 		//单位名称
 		if (workDealInfo.getWorkCompany() != null) {
