@@ -259,6 +259,15 @@
 										}
 										
 										
+										//经信委
+										if(${isSupport==true}){
+											$("#supportDateTh").show();
+											$("#supportDateTd").show();
+											
+										 $("#expirationDate").val("${expirationDate}"); 
+											
+										}
+										
 										var boundId =  $("#agentDetailId").val(); 
 										var url="${ctx}/work/workDealInfo/checkSurplusNum?boundId="+boundId+"&_="+new Date().getTime();
 										
@@ -310,6 +319,16 @@
 							}
 						}
 						
+						
+						
+						//经信委
+						if(${isSupport==true}){
+							$("#supportDateTh").show();
+							$("#supportDateTd").show();
+							
+						 $("#expirationDate").val("${expirationDate}"); 
+							
+						}
 						
 						
 							$("#product").change(function(){

@@ -253,17 +253,19 @@
 										}
 										
 										
+										//经信委
+										if(${isSupport==true}){
+											$("#supportDateTh").show();
+											$("#supportDateTd").show();
+											
+										 $("#expirationDate").val("${expirationDate}"); 
+											
+										}
+										
+										
 										var boundId =  $("#agentDetailId").val(); 
 										var url="${ctx}/work/workDealInfo/checkSurplusNum?boundId="+boundId+"&_="+new Date().getTime();
-										/* $.getJSON(url,function(data){
-											$("#surplusNum").val(data.surplusNum);
-											if($("#surplusNum").val()==0 && $("#agentId").val()!=1){
-												top.$.jBox.tip("此计费策略模版剩余数量为零，不能进行业务办理！");
-												$("#agentMes").show();
-											}else{
-												$("#agentMes").hide();
-											}
-										}); */
+										
 										
 										
 										var arr = [ data.nameDisplayName,
@@ -313,8 +315,18 @@
 						}
 						
 						
+						//经信委
+						if(${isSupport==true}){
+							$("#supportDateTh").show();
+							$("#supportDateTd").show();
+							
+						 $("#expirationDate").val("${expirationDate}"); 
+							
+						}
 						
-							$("#product").change(function(){
+						
+						
+						$("#product").change(function(){
 							
 							var product = $("#product").val();
 							var agentHtml="";
