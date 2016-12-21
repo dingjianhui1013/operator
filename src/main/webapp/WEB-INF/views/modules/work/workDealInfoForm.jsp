@@ -1022,7 +1022,7 @@ var selected = false;
 	function checkDwmc(obj) {
 		var dwmc = $(obj).val();
 
-		if(!/^[\u4e00-\u9fa5a-zA-Z0-9\.*,'\-_() （） ]+$/.test(dwmc)) {
+		if(!/^[\u4e00-\u9fa5a-zA-Z0-9\.*,'、\-_() （） ]+$/.test(dwmc)) {
 			if($("#dwmcpro").text()!=""){
 				return false;
 			}
@@ -1034,6 +1034,8 @@ var selected = false;
 		}
 		return true;
 	}
+	
+	
 	function checkSqr(obj){
 		var sqr = $(obj).val();
 
