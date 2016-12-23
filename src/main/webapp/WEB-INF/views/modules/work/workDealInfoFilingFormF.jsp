@@ -164,6 +164,20 @@
 				<th>申请年数:</th>
 				<td>${workDealInfo.year}年</td>
 			</tr>
+			
+			
+			<tr>
+				<th>制证时间:</th>
+				<td>
+					<fmt:formatDate value="${workDealInfo.obtainedDate}" pattern="yyyy-MM-dd"/>
+				</td>
+				<th>到期日期:</th>
+				<td>
+					<fmt:formatDate value="${workDealInfo.notafter}" pattern="yyyy-MM-dd"/>
+				</td>
+			</tr>
+			
+			
 			<tr>
 				<th>移动设备申请数量:</th>
 				<td><c:if
