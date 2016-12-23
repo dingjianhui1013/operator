@@ -171,7 +171,7 @@
 				<td>
 					<fmt:formatDate value="${workDealInfo.obtainedDate}" pattern="yyyy-MM-dd"/>
 				</td>
-				<th>结束日期:</th>
+				<th>结束时间:</th>
 				<td>
 					<fmt:formatDate value="${workDealInfo.notafter}" pattern="yyyy-MM-dd"/>
 				</td>
