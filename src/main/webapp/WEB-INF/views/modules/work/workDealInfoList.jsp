@@ -480,6 +480,9 @@ $(document).ready(
 	
 	function updateCertOK(){
 		var checkIds = $("#checkIds").val();
+		
+		alert(checkIds);
+		
 		if(checkIds==null||checkIds==""){
 			top.$.jBox.tip("请选择您要更新的证书！");
 		}else{
@@ -1270,7 +1273,7 @@ $(document).ready(
 				<input
 				class="btn btn-primary" type="button" onclick="selectData()" id="selectAllData" value="全选" />
 				<input type="hidden"  name="isSelectedAll"  id="isSelectedAll"  value="${isSelectedAll }"/>
-				<a id="manyUpdate" data-toggle="modal" href="javaScript:updateCertOK();" class="btn btn-primary">批量更新证书</a>
+				<a id="manyUpdate" data-toggle="modal" href="#" onclick="updateCertOK()" class="btn btn-primary">批量更新证书</a>
 			 
 			
 				&nbsp;&nbsp;&nbsp;&nbsp;
