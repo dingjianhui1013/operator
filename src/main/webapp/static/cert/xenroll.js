@@ -661,7 +661,9 @@ function loadItrusEnroll() {
 }
 
 function filter(str){
-    str = str.replace(/\+/g,"%2B");
-    str = str.replace(/\&/g,"%26");
+	if(str){
+		str = str.replace(/\+/g,"%2B");
+	    str = str.replace(/\&/g,"%26");	
+	}
     return str;
 }
