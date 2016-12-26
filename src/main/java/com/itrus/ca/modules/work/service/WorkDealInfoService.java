@@ -2592,7 +2592,7 @@ public class WorkDealInfoService extends BaseService {
 		}
 		
 		
-		dc.add(Restrictions.eq("delFlag", 0));
+		dc.add(Restrictions.eq("delFlag", DataEntity.DEL_FLAG_NORMAL));
 
 		return workDealInfoDao.find(page, dc);
 
