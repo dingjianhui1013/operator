@@ -9,9 +9,9 @@
 <meta name="author" content="iTrusChina" />
 <meta name="copyright" content="iTrusChina" />
 <link href='../userEnroll/css/main.css' rel='stylesheet' type='text/css'>
-<!-- 
+
 <script type="text/javascript" src="../userEnroll/js/jquery-1.8.3.min.js"></script>
- -->
+
 <script type="text/javascript" src="#springUrl('/')resources/js/pta_topca.js"></script>
 <script type="text/javascript" src="#springUrl('/')resources/js/xenroll.js"></script>
 </head>

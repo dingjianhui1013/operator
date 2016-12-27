@@ -5,11 +5,11 @@
 <title>天威诚信i信客户端管理</title>
 <meta name="decorator" content="default" />
 <link href="${ctxStatic}/iLetter/css/main.css" type="text/css" rel="stylesheet"/>
-<!-- 
+ 
 <script type="text/javascript" src="${ctxStatic}/iLetter/js/jquery-1.8.3.min.js"></script>
 <link href="${ctxStatic}/bootstrap/3.0.3/css/bootstrap.css" type="text/css" rel="stylesheet" />
 <script src="${ctxStatic}/bootstrap/3.0.3/js/bootstrap.js" type="text/javascript"></script>
--->
+
 <script type="text/javascript" src="${ctxStatic}/cert/pta_topca.js"></script>
 <script type="text/javascript" src="${ctxStatic}/cert/xenroll.js"></script>
 <script type="text/javascript" src="${ctxStatic}/msg/msg.js"></script>
@@ -148,45 +148,6 @@ function setCount() {
 		$("#close_a").attr("onclick","javascript:void(0)");
 	}
 
-	function quick() {
-		var keySN = keySn;
-		var day = baseDay;
-		var csr;
-		var len = 1024;
-		cspStr = external.cspname;
-		//if ($("[name=provider]").val().length > 0) {
-		//	csr = genEnrollCSR($("[name=provider]")[0], len, 1);
-		//}
-		//如果是更新的:
-		csr = getCsrByOldCert(len);
-		csr = filter(csr);
-		if (csr == "") {//异常业务
-			$("#msg").html("异常业务");
-		}else{
-			cspStr = encodeURI(encodeURI(cspStr));
-			var url = "${ctx}/ca/enrollMakeCert?reqOverrideValidity=" + day
-					+ "&certProvider=" + cspStr + "&keySn=" + keySN + "&csr=" + csr
-					+ "&dealInfoId=${workDealInfo.id}&_="+new Date().getTime();
-			
-			$.ajax({
-				url : url,
-				async : false,
-				dataType : 'json',
-				success : function(data) {
-					if (data.status == 1) {
-						DoInstallCert1(data);
-						//$("#msg").html("制证成功");
-						var updateUrl = "${ctx}/ca/installResult4Enroll?dealInfoId=${workDealInfo.id}&result=1&_="+new Date().getTime();
-						$.getJSON(updateUrl,function(res) {
-							window.location.href="${ctxILetter}/enroll/gxfw3Nextform?id=${workDealInfo.id}";
-						});
-					} else {
-						$("#msg").html(data.msg);
-					}
-				}
-			});
-		}
-	}
 	function backToMain(){
 		 window.location=external.GetCookie("zhengshufuwu");
 	}
