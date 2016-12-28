@@ -2472,7 +2472,7 @@ public class WorkDealInfoService extends BaseService {
 			Date makeCertStart, Date makeCertEnd, Date expiredStart,
 			Date expiredEnd) {
 		DetachedCriteria dc = workDealInfoDao.createDetachedCriteria();
-		dc.createAlias("workPayInfo", "workPayInfo");
+		//dc.createAlias("workPayInfo", "workPayInfo");
 		dc.createAlias("workCompany", "workCompany");
 		dc.createAlias("workUser", "workUser");
 		dc.createAlias("createBy", "createBy");
