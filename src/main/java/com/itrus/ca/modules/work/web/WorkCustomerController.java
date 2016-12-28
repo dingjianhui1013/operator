@@ -102,6 +102,27 @@ public class WorkCustomerController extends BaseController {
 		String url = "modules/customer/workDealInfoFilingListF";
 		Page<WorkDealInfo> page = workDealInfoService.findCustomer(
 				new Page<WorkDealInfo>(request, response), workDealInfo , startTime , endTime );
+		
+		
+		List<WorkDealInfo> list = page.getList();
+		
+		for(WorkDealInfo info : list){
+			if(info.getDealInfoStatus()==WorkDealInfoStatus.STATUS_CERT_OBTAINED||info.getDealInfoStatus()==WorkDealInfoStatus.STATUS_CERT_REVOKE){
+				info.setNotafter(info.getNotafter());
+			}else{
+				if(info.getPrevId()==null){
+					info.setNotafter(null);
+				}else{
+					WorkDealInfo prevInfo = workDealInfoService.get(info.getPrevId());
+					info.setNotafter(prevInfo.getNotafter());
+				}
+			}
+			
+		}
+		
+		page.setList(list);
+		
+		
 		model.addAttribute("proType", ProductType.productTypeStrMap);
 		model.addAttribute("wdiType", WorkDealInfoType.WorkDealInfoTypeMap);
 		model.addAttribute("wdiStatus",

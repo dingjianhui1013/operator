@@ -98,6 +98,7 @@
 				<th>Key序列号</th>
 				<th>经办人电话</th>
 				<th>证书到期时间</th>
+				<th>用户证书到期时间</th>
 				<th>操作</th>
 		<tbody>
 			<c:forEach items="${page.list}" var="workDealInfo">
@@ -121,6 +122,9 @@
 					<td>${workDealInfo.keySn }</td>
 					<td>${workDealInfo.workUser.contactPhone}</td>
 					<td><fmt:formatDate value="${workDealInfo.workCertInfo.notafter}" pattern="yyyy-MM-dd"/></td>
+					
+					<td><fmt:formatDate value="${workDealInfo.notafter}" pattern="yyyy-MM-dd"/></td>
+					
 					<td><a
 						href="${ctx}/work/customer/insertCustomerFrom?id=${workDealInfo.id}">新增客服记录</a>
 					</td>
