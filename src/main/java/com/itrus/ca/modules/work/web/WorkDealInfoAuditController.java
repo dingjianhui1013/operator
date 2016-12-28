@@ -800,10 +800,11 @@ public class WorkDealInfoAuditController extends BaseController {
 		// 经信委
 		if (chargeAgent.getIsSupportExpirationDate() != null
 					&& chargeAgent.getIsSupportExpirationDate() == 1) {
-			model.addAttribute("isSupport", true);
+			
 
 				if (workDealInfo.getExpirationDate() != null) {
-						model.addAttribute("expirationDate",
+					model.addAttribute("isSupport", true);
+					model.addAttribute("expirationDate",
 						format.format(workDealInfo.getExpirationDate()));
 				}
 		}
