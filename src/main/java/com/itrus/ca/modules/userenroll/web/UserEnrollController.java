@@ -953,8 +953,8 @@ public class UserEnrollController extends BaseController {
 			calendar.add(calendar.YEAR, year);
 			Date afterDate = calendar.getTime();
 			// 新证书的有效期设置
-			certInfo.setNotbefore(new Timestamp(new Date().getTime()));
-			certInfo.setNotafter(new Timestamp(afterDate.getTime()));
+			/*certInfo.setNotbefore(new Timestamp(new Date().getTime()));
+			certInfo.setNotafter(new Timestamp(afterDate.getTime()));*/
 			certInfo.setWorkCertApplyInfo(workCertInfo.getWorkCertApplyInfo());
 			workCertInfoService.save(certInfo);
 			// 添加更新证书的 下级证书
