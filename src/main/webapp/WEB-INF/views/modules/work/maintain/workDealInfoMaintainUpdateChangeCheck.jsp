@@ -246,7 +246,7 @@
 										}
 										$("input[name='year']:eq("+(${workDealInfo.year}-1)+")").attr("checked",'checked');
 										$("input[name='manMadeDamage'][value='" + ${workDealInfo.manMadeDamage} + "']").attr("checked",'checked');
-										//经信委
+										/* //经信委
 										if(data.support){
 											$("#supportDateTh").show();
 											$("#supportDateTd").show();
@@ -256,7 +256,7 @@
 											$("#supportDateTh").hide();
 											$("#supportDateTd").hide();
 											$("#expirationDate").val(null);
-										}
+										} */
 										
 										
 										//经信委
