@@ -16,11 +16,21 @@
 		return false;
 	}
 	
+	
+	function deletefun(){
+		
+	}
+	
+	
 	function showAssessmentForm(applyId){
+		
 		var url = "${ctx}/key/keyAllocateApply/listModel?applyId="+applyId+"&_="+new Date().getTime();
 		top.$.jBox.open("iframe:"+url, "调拨审批", 600, 280, {
 				buttons:{"确定":"ok","关闭":true}, submit:function(v, h, f){
 					if(v == 'ok'){
+						
+						$("#assessment").attr("onclick","deletefun()");	
+						
 						var table = h.find("iframe")[0].contentWindow.assessmentForm;
 						//console.log(table);
 						var url = $(table).attr('action')+"?_="+new Date().getTime();
@@ -37,14 +47,25 @@
 										 setTimeout(function (){
 						            		    //something you want delayed
 											 $("#searchForm").submit();
-						            		   }, 5000); // how long do you want the delay to be? 
+						            		   }, 5); // how long do you want the delay to be? 
 									}else if(data.status=="0"){
 										top.$.jBox.tip("审批失败，请采购网点所需要的Key类型产品！");
+										 setTimeout(function (){
+						            		    //something you want delayed
+											 $("#searchForm").submit();
+						            		   }, 5); // how long do you want the delay to be? 
 									}else if(data.status=="2"){
 										top.$.jBox.tip("审批失败，请采购网点所需要的Key类型产品库存不足，请采购！");
+										 setTimeout(function (){
+						            		    //something you want delayed
+											 $("#searchForm").submit();
+						            		   }, 5); // how long do you want the delay to be? 
 									}else if(data.status =="3"){
 									   top.$.jBox.tip("审批失败，申请数量应小于总库余量！");
-
+									   setTimeout(function (){
+					            		    //something you want delayed
+										 $("#searchForm").submit();
+					            		   }, 5); // how long do you want the delay to be? 
 								   }
 								}
 							  
@@ -194,7 +215,7 @@
 						
 							
 							<c:if test="${keyAllocateApply.state==1 }">
-						<a href="javascript:void(0)"  onclick="showAssessmentForm(${keyAllocateApply.id})">审批</a>
+						<a href="javascript:void(0)" id="assessment"  onclick="showAssessmentForm(${keyAllocateApply.id})">审批</a>
 						</c:if>
 
 							

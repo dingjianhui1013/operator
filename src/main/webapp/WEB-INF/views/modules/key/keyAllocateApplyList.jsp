@@ -24,11 +24,18 @@
 		});
 	}
 	
+	function deletefun(){
+		
+	}
+	
+	
 	function showAllocateApplyArrival(applyId){
 		var url = "${ctx}/key/keyAllocateApply/AllocateApplyArrivalShow?applyId="+applyId;
 		top.$.jBox.open("iframe:"+url, "确认到货", 600, 280, {
 				buttons:{"确定":"ok","关闭":true}, submit:function(v, h, f){
 					if(v == 'ok'){
+						
+						$("#assessment").attr("onclick","deletefun()");	
 						
 						var url = "${ctx}/key/keyAllocateApply/arrivalSave?applyId="+applyId+"&_="+new Date().getTime();
 						 $.getJSON(url,function(data){
@@ -37,7 +44,7 @@
 				            	  setTimeout(function (){
 				            		    //something you want delayed
 				            			window.location.reload();
-				            		   }, 5000); // how long do you want the delay to be? 
+				            		   }, 5); // how long do you want the delay to be? 
 				            
 				            }else{
 				            	top.$.jBox.tip("入库失败!");	
@@ -138,7 +145,7 @@
 						<shiro:hasPermission name="key:keyAllocateApply:edit">
 					        	<c:if test="${keyAllocateApply.state==2 && keyAllocateApply.keyUsbKeyDepot.id==depot.id}">
 					     <a
-							href="javascript:void(0)" onclick="showAllocateApplyArrival(${keyAllocateApply.id})">确认到货</a>			
+							href="javascript:void(0)" id="assessment" onclick="showAllocateApplyArrival(${keyAllocateApply.id})">确认到货</a>			
 						</c:if>
 						</shiro:hasPermission>
 						<c:if test="${keyAllocateApply.state==3 }">
