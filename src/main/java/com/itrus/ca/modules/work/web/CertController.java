@@ -841,6 +841,12 @@ public class CertController extends BaseController {
 				}
 				dealInfo.setStatus(0);// 待归档
 				workDealInfoService.save(dealInfo);
+				
+				log.debug("业务表制证成功,当前时间为:"+new Date());
+				Thread thread = Thread.currentThread();
+				log.debug("当前线程为:"+thread.getName());
+				
+				
 				// 发票出库
 				if (dealInfo.getWorkPayInfo().getUserReceipt()) {
 					receiptInvoiceService.receiptIncoiceI(dealInfo.getWorkPayInfo().getReceiptAmount(),
@@ -909,7 +915,19 @@ public class CertController extends BaseController {
 				}
 			} else {
 				dealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_ABNORMAL_USER);// 异常业务
+					
+				Calendar calendar =  Calendar.getInstance();
+				
+				calendar.set(1970, 1, 1, 0, 0, 0);
+				
+				dealInfo.setObtainedDate(calendar.getTime());
+				
 				workDealInfoService.save(dealInfo);
+				
+				log.debug("业务表制证失败,当前时间为:"+new Date());
+				Thread thread = Thread.currentThread();
+				log.debug("当前线程为:"+thread.getName());
+				
 			}
 			json.put("status", 1);
 		} catch (Exception e) {
