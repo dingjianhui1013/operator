@@ -107,7 +107,7 @@ public class WorkCustomerController extends BaseController {
 		List<WorkDealInfo> list = page.getList();
 		
 		for(WorkDealInfo info : list){
-			if(info.getDealInfoStatus()==WorkDealInfoStatus.STATUS_CERT_OBTAINED||info.getDealInfoStatus()==WorkDealInfoStatus.STATUS_CERT_REVOKE){
+			if(info.getDealInfoStatus().equals(WorkDealInfoStatus.STATUS_CERT_OBTAINED)||info.getDealInfoStatus().equals(WorkDealInfoStatus.STATUS_CERT_REVOKE)){
 				info.setNotafter(info.getNotafter());
 			}else{
 				if(info.getPrevId()==null){
