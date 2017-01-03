@@ -1108,9 +1108,7 @@ public class UserEnrollController extends BaseController {
 			model.addAttribute("status", status);
 
 			log.debug("certCN===="+certCN);
-			SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
-			model.addAttribute("notbefore", sdf1.format(workDealInfo.getWorkCertInfo().getNotbefore()));
-			model.addAttribute("notafter", sdf1.format(workDealInfo.getWorkCertInfo().getNotafter()));
+			
 			
 			//经信委
 			if(workDealInfo.getExpirationDate()!=null){
@@ -1133,6 +1131,12 @@ public class UserEnrollController extends BaseController {
 				WorkDealInfo oldDealInfo = workDealInfoService.get(workDealInfo.getPrevId());
 				model.addAttribute("signSerialNumber", oldDealInfo.getWorkCertInfo().getSerialnumber().toLowerCase());
 			}
+			
+			
+			SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
+			model.addAttribute("notbefore", sdf1.format(workDealInfo.getWorkCertInfo().getNotbefore()));
+			model.addAttribute("notafter", sdf1.format(workDealInfo.getWorkCertInfo().getNotafter()));
+			
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
