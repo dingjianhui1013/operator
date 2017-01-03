@@ -1101,8 +1101,16 @@ public class UserEnrollController extends BaseController {
 			
 			model.addAttribute("certCN", certCN);
 			
-			log.debug("certCN===="+certCN);
+			String status = workDealInfo.getDealInfoStatus().equals(WorkDealInfoStatus.STATUS_APPROVE_WAIT)?"等待更新":WorkDealInfoStatus.WorkDealInfoStatusMap.get(workDealInfo.getDealInfoStatus());
 			
+			log.debug("status===="+status);
+			
+			model.addAttribute("status", status);
+
+			log.debug("certCN===="+certCN);
+			SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
+			model.addAttribute("notbefore", sdf1.format(workDealInfo.getWorkCertInfo().getNotbefore()));
+			model.addAttribute("notafter", sdf1.format(workDealInfo.getWorkCertInfo().getNotafter()));
 			
 			//经信委
 			if(workDealInfo.getExpirationDate()!=null){
@@ -1116,11 +1124,10 @@ public class UserEnrollController extends BaseController {
 			}
 			
 			model.addAttribute("certCNOmit", certCN.length()>20?certCN.substring(0, 20)+"...":certCN);
-			SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
+			
 			model.addAttribute("keySN", workDealInfo.getKeySn());
-			model.addAttribute("notbefore", sdf1.format(workDealInfo.getWorkCertInfo().getNotbefore()));
-			model.addAttribute("notafter", sdf1.format(workDealInfo.getWorkCertInfo().getNotafter()));
-			model.addAttribute("status", workDealInfo.getDealInfoStatus().equals(WorkDealInfoStatus.STATUS_CERT_WAIT)?"等待更新":WorkDealInfoStatus.WorkDealInfoStatusMap.get(workDealInfo.getDealInfoStatus()));
+			
+			
 			if (workDealInfo.getPrevId() != null) {
 				// 获取上一张证书的签名证书序列号
 				WorkDealInfo oldDealInfo = workDealInfoService.get(workDealInfo.getPrevId());
