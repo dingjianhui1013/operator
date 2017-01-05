@@ -17,6 +17,10 @@
 <script type="text/javascript">
 	var sn;
 	var keySn = external.ukeyserial;
+	
+	document.getElementById("keyNumber").innerText = keySn;
+	
+	
 	var keySN;
 	var day;
 	var csr;
@@ -184,7 +188,7 @@ function setCount() {
         		<td width="24%"></td>
         		<td width="2%"></td>
         		<td width="74%" valign="top">
-					Key序列号：${keySN } <br />
+					Key序列号：<span id="keyNumber"></span> <br />
 					  <a id="certA" href="#" data-toggle="tooltip" data-placement="top" title="${certCN }">
    证书CN：</a> ${certCNOmit } <br />
 					证书有效期：${notbefore }到  ${notafter }<br />
