@@ -94,7 +94,7 @@ import com.itrus.ca.modules.work.web.CertController;
 @Controller
 @RequestMapping(value = "/enroll")
 public class UserEnrollController extends BaseController {
-	
+
 	Logger log = Logger.getLogger(UserEnrollController.class);
 
 	@Autowired
@@ -127,7 +127,6 @@ public class UserEnrollController extends BaseController {
 	@Autowired
 	ConfigRaAccountService raAccountService;
 
-	
 	@Autowired
 	private SystemService systemService;
 
@@ -157,17 +156,22 @@ public class UserEnrollController extends BaseController {
 	// 通过AJAX判断
 	@RequestMapping(value = "bbfw1Submit")
 	@ResponseBody
-	public String bbfw1Submit(String certSn, Integer dealInfoType, Integer year) throws JSONException {
+	public String bbfw1Submit(String certSn, Integer dealInfoType, Integer year)
+			throws JSONException {
 		JSONObject json = new JSONObject();
 		Double money = 0.00;
 		try {
 			String appName = "";
-			List<WorkDealInfo> workDealInfos = dealInfoService.findByCertSn(certSn);
+			List<WorkDealInfo> workDealInfos = dealInfoService
+					.findByCertSn(certSn);
 			if (workDealInfos.size() > 0) {
 				ConfigChargeAgent configChargeAgent = configChargeAgentService
-						.get(workDealInfos.get(0).getConfigProduct().getChargeAgentId());
-				int i = workDealInfos.get(0).getConfigProduct().getProductLabel();
-				money = configChargeAgentDetailService.selectMoney(configChargeAgent, dealInfoType, year, i);
+						.get(workDealInfos.get(0).getConfigProduct()
+								.getChargeAgentId());
+				int i = workDealInfos.get(0).getConfigProduct()
+						.getProductLabel();
+				money = configChargeAgentDetailService.selectMoney(
+						configChargeAgent, dealInfoType, year, i);
 				appName = workDealInfos.get(0).getConfigApp().getAppName();
 				if (money == null) {
 					money = 0.00;
@@ -185,11 +189,13 @@ public class UserEnrollController extends BaseController {
 	// 通过AJAX判断
 	@RequestMapping(value = "appName")
 	@ResponseBody
-	public String appName(String certSn, Integer dealInfoType, Integer year) throws JSONException {
+	public String appName(String certSn, Integer dealInfoType, Integer year)
+			throws JSONException {
 		JSONObject json = new JSONObject();
 		try {
 			String appName = "";
-			List<WorkDealInfo> workDealInfos = dealInfoService.findByCertSn(certSn);
+			List<WorkDealInfo> workDealInfos = dealInfoService
+					.findByCertSn(certSn);
 			if (workDealInfos.size() > 0) {
 				appName = workDealInfos.get(0).getConfigApp().getAppName();
 			}
@@ -214,7 +220,6 @@ public class UserEnrollController extends BaseController {
 		return json.toString();
 	}
 
-
 	@RequestMapping("changeApp")
 	@ResponseBody
 	public String changeApp(Long configAppId) {
@@ -227,8 +232,12 @@ public class UserEnrollController extends BaseController {
 				json = new JSONObject();
 				ConfigProduct configProduct = configProducts.get(i);
 				json.put("id", configProduct.getId());
-				json.put("productName", ProductType.productTypeMap.get(new Integer(configProduct.getProductName()))
-						+ ((configProduct.getProductLabel() == 1) ? "(专用)" : "(通用)"));
+				json.put(
+						"productName",
+						ProductType.productTypeMap.get(new Integer(
+								configProduct.getProductName()))
+								+ ((configProduct.getProductLabel() == 1) ? "(专用)"
+										: "(通用)"));
 				array.put(json);
 			}
 		} catch (Exception e) {
@@ -262,7 +271,8 @@ public class UserEnrollController extends BaseController {
 	// 通过AJAX判断
 	@RequestMapping(value = "bbfw")
 	@ResponseBody
-	public String bbfw(String keySn, String certSn, int dealInfoType) throws JSONException {
+	public String bbfw(String keySn, String certSn, int dealInfoType)
+			throws JSONException {
 		JSONObject json = new JSONObject();
 		Double money = 0.00;
 		String appName = "";
@@ -270,32 +280,42 @@ public class UserEnrollController extends BaseController {
 			List<WorkDealInfo> dealInfos = dealInfoService.findgxfw1(certSn);
 			if (dealInfos.size() > 0) {
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日");
-				WorkCertInfo certInfo = dealInfos.get(0).getWorkCertInfo();	
-				
-				//证书序列号 证书CN 证书起始日期和结束日期
+				WorkCertInfo certInfo = dealInfos.get(0).getWorkCertInfo();
+
+				// 证书序列号 证书CN 证书起始日期和结束日期
 				json.put("certSn", certInfo.getSerialnumber());
-				ConfigRaAccountExtendInfo extendInfo = configRaAccountExtendInfoService.get(dealInfos.get(0).getConfigProduct().getRaAccountExtedId());		
-				json.put("certCN", extendInfo.getCommonNameDisplayName().equals("0")?dealInfos.get(0).getWorkCompany().getCompanyName():(extendInfo.getCommonNameDisplayName().equals("1")?dealInfos.get(0).getWorkUser().getContactName():dealInfos.get(0).getWorkUserHis().getContactName()));
+				ConfigRaAccountExtendInfo extendInfo = configRaAccountExtendInfoService
+						.get(dealInfos.get(0).getConfigProduct()
+								.getRaAccountExtedId());
+				json.put(
+						"certCN",
+						extendInfo.getCommonNameDisplayName().equals("0") ? dealInfos
+								.get(0).getWorkCompany().getCompanyName()
+								: (extendInfo.getCommonNameDisplayName()
+										.equals("1") ? dealInfos.get(0)
+										.getWorkUser().getContactName()
+										: dealInfos.get(0).getWorkUserHis()
+												.getContactName()));
 				json.put("startDate", sdf.format(certInfo.getNotbefore()));
 				json.put("endDate", sdf.format(certInfo.getNotafter()));
 
-				log.debug("certCN===="+json.get("certCN"));
-				
-				WorkDealInfo current = workDealInfoService.findDealInfo(dealInfos.get(0).getId());
-				
+				log.debug("certCN====" + json.get("certCN"));
+
+				WorkDealInfo current = workDealInfoService
+						.findDealInfo(dealInfos.get(0).getId());
+
 				// 如果业务已经到达待制证状态,返回业务的id
-				if(current!=null){
-					if ( WorkDealInfoType.TYPE_INFORMATION_REROUTE.equals(current.getDealInfoType2())
-							&& WorkDealInfoStatus.STATUS_CERT_WAIT.equals(current.getDealInfoStatus())) {
+				if (current != null) {
+					if (WorkDealInfoType.TYPE_INFORMATION_REROUTE
+							.equals(current.getDealInfoType2())
+							&& WorkDealInfoStatus.STATUS_CERT_WAIT
+									.equals(current.getDealInfoStatus())) {
 						json.put("updateStatus", 106);
 						json.put("dealInfoId", current.getId());
 						return json.toString();
 					}
 				}
-				
-				
-				
-				
+
 				ConfigChargeAgent configChargeAgent = configChargeAgentService
 						.get(dealInfos.get(0).getConfigChargeAgentId());
 
@@ -305,7 +325,8 @@ public class UserEnrollController extends BaseController {
 					year = dealInfos.get(0).getYear();
 				}
 				if (dealInfoType != 5) {
-					money = configChargeAgentDetailService.selectMoney(configChargeAgent, dealInfoType, year, i);
+					money = configChargeAgentDetailService.selectMoney(
+							configChargeAgent, dealInfoType, year, i);
 				}
 				appName = dealInfos.get(0).getConfigApp().getAppName();
 				if (money == null) {
@@ -333,7 +354,8 @@ public class UserEnrollController extends BaseController {
 	}
 
 	@RequestMapping(value = "bbfw2form")
-	public String bbfw2form(Long configProductId, Long configAppId, Model model, Long configAgentId) {
+	public String bbfw2form(Long configProductId, Long configAppId,
+			Model model, Long configAgentId) {
 		model.addAttribute("configProductId", configProductId);
 		model.addAttribute("configAppId", configAppId);
 		System.out.println(configAppId);
@@ -348,7 +370,8 @@ public class UserEnrollController extends BaseController {
 		// ConfigChargeAgent agent =
 		// configChargeAgentService.get(product.getChargeAgentId());
 		ConfigChargeAgent agent = configChargeAgentService.get(configAgentId);
-		List<ConfigChargeAgentDetail> list2 = configChargeAgentDetailService.findByConfigChargeAgent(agent);
+		List<ConfigChargeAgentDetail> list2 = configChargeAgentDetailService
+				.findByConfigChargeAgent(agent);
 		if (list2.size() == 0) {
 			List<ConfigApp> configApps = configAppService.selectAll();
 			model.addAttribute("configApps", configApps);
@@ -369,16 +392,18 @@ public class UserEnrollController extends BaseController {
 	}
 
 	@RequestMapping(value = "bbfw2Nextform")
-	public String bbfw2Nextform(Long configAppid, Model model, HttpServletRequest request,
-			HttpServletResponse response) {
+	public String bbfw2Nextform(Long configAppid, Model model,
+			HttpServletRequest request, HttpServletResponse response) {
 		List<ConfigAppOfficeRelation> configAppOfficeRelations = configAppOfficeRelationService
 				.findAllByAppId(configAppid);
 		if (configAppOfficeRelations.size() > 0) {
 			List<Long> officeIds = Lists.newArrayList();
 			for (int i = 0; i < configAppOfficeRelations.size(); i++) {
-				officeIds.add(configAppOfficeRelations.get(i).getOffice().getId());
+				officeIds.add(configAppOfficeRelations.get(i).getOffice()
+						.getId());
 			}
-			List<Office> page = officeService.findByIds(new Page<Office>(request, response), officeIds);
+			List<Office> page = officeService.findByIds(new Page<Office>(
+					request, response), officeIds);
 			model.addAttribute("offices", page);
 		}
 		return "iLetter/zhengshufuwu_bbfw3";
@@ -404,10 +429,12 @@ public class UserEnrollController extends BaseController {
 	}
 
 	@RequestMapping(value = "bzfw2Nextform")
-	public String bzfw2Nextform(String certSn, Model model, HttpServletRequest request, HttpServletResponse response) {
+	public String bzfw2Nextform(String certSn, Model model,
+			HttpServletRequest request, HttpServletResponse response) {
 		try {
 			if (certSn != null) {
-				List<WorkDealInfo> workDealInfos = workDealInfoService.findByCertSnIgnoreDel(certSn);
+				List<WorkDealInfo> workDealInfos = workDealInfoService
+						.findByCertSnIgnoreDel(certSn);
 				if (workDealInfos.size() > 0) {
 					List<Long> appIds = Lists.newArrayList();
 					for (int i = 0; i < workDealInfos.size(); i++) {
@@ -418,9 +445,11 @@ public class UserEnrollController extends BaseController {
 					if (configAppOfficeRelations.size() > 0) {
 						List<Long> officeIds = Lists.newArrayList();
 						for (int i = 0; i < configAppOfficeRelations.size(); i++) {
-							officeIds.add(configAppOfficeRelations.get(i).getOffice().getId());
+							officeIds.add(configAppOfficeRelations.get(i)
+									.getOffice().getId());
 						}
-						List<Office> page = officeService.findByIds(new Page<Office>(request, response), officeIds);
+						List<Office> page = officeService.findByIds(
+								new Page<Office>(request, response), officeIds);
 						model.addAttribute("offices", page);
 					}
 				}
@@ -450,10 +479,12 @@ public class UserEnrollController extends BaseController {
 	}
 
 	@RequestMapping(value = "dxfw2Nextform")
-	public String dxfw2Nextform(String certSn, Model model, HttpServletRequest request, HttpServletResponse response) {
+	public String dxfw2Nextform(String certSn, Model model,
+			HttpServletRequest request, HttpServletResponse response) {
 		try {
 			if (certSn != null) {
-				List<WorkDealInfo> workDealInfos = workDealInfoService.findByCertSnIgnoreDel(certSn);
+				List<WorkDealInfo> workDealInfos = workDealInfoService
+						.findByCertSnIgnoreDel(certSn);
 				if (workDealInfos.size() > 0) {
 					List<Long> appIds = Lists.newArrayList();
 					for (int i = 0; i < workDealInfos.size(); i++) {
@@ -464,9 +495,11 @@ public class UserEnrollController extends BaseController {
 					if (configAppOfficeRelations.size() > 0) {
 						List<Long> officeIds = Lists.newArrayList();
 						for (int i = 0; i < configAppOfficeRelations.size(); i++) {
-							officeIds.add(configAppOfficeRelations.get(i).getOffice().getId());
+							officeIds.add(configAppOfficeRelations.get(i)
+									.getOffice().getId());
 						}
-						List<Office> page = officeService.findByIds(new Page<Office>(request, response), officeIds);
+						List<Office> page = officeService.findByIds(
+								new Page<Office>(request, response), officeIds);
 						model.addAttribute("offices", page);
 					}
 				}
@@ -484,8 +517,6 @@ public class UserEnrollController extends BaseController {
 		return "iLetter/zhengshufuwu_ktydsb1";
 	}
 
-
-
 	// 通过AJAX判断
 	@RequestMapping(value = "ktydsb1Submit")
 	@ResponseBody
@@ -493,13 +524,15 @@ public class UserEnrollController extends BaseController {
 		JSONObject json = new JSONObject();
 		try {
 			boolean getInfoFlag = false;
-			WorkCertTrustApply apply = trustApplyService.getTrustByStatus(certSn);
+			WorkCertTrustApply apply = trustApplyService
+					.getTrustByStatus(certSn);
 			if (apply != null) {
 				json.put("year", apply.getYear());
 				json.put("count", apply.getApplyCount());
 				json.put("money", apply.getMoney());
 				json.put("status", apply.getStatus());
-				WorkCertInfo certInfo = workDealInfoService.findByCertSn(certSn).get(0).getWorkCertInfo();
+				WorkCertInfo certInfo = workDealInfoService
+						.findByCertSn(certSn).get(0).getWorkCertInfo();
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 				json.put("count1", certInfo.getTrustDeviceCount());
 				json.put("date", sdf.format(certInfo.getTrustDeviceDate()));
@@ -509,7 +542,8 @@ public class UserEnrollController extends BaseController {
 				json.put("status", 2);
 			}
 			if (getInfoFlag) {
-				List<WorkDealInfo> dealInfos = workDealInfoService.findgxfw1(certSn);
+				List<WorkDealInfo> dealInfos = workDealInfoService
+						.findgxfw1(certSn);
 				if (dealInfos.size() > 0) {
 					SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日");
 					WorkCertInfo certInfo = dealInfos.get(0).getWorkCertInfo();
@@ -527,7 +561,8 @@ public class UserEnrollController extends BaseController {
 	}
 
 	@RequestMapping(value = "ktydsbShow")
-	public String ktydsbShow(Model model, @RequestParam(required = false) String money, Long id,
+	public String ktydsbShow(Model model,
+			@RequestParam(required = false) String money, Long id,
 			@RequestParam(required = false) String msg) {
 		if (money != null) {
 			model.addAttribute("money", money + "元");
@@ -546,7 +581,8 @@ public class UserEnrollController extends BaseController {
 
 	@RequestMapping(value = "ktydsb1Nextform")
 	@ResponseBody
-	public String ktydsb1Nextform(String count, String certsn, String keySn) throws JSONException {
+	public String ktydsb1Nextform(String count, String certsn, String keySn)
+			throws JSONException {
 		JSONObject json = new JSONObject();
 		if (count.equals("")) {
 			json.put("msg", "请填写申请数量！");
@@ -561,7 +597,8 @@ public class UserEnrollController extends BaseController {
 				WorkDealInfo workDealInfo = dealInfos.get(0);
 				WorkCertInfo certInfo = workDealInfo.getWorkCertInfo();
 				WorkCertTrustApply applyInfo = new WorkCertTrustApply();
-				if (certInfo.getNotafter() == null || certInfo.getNotafter().before(new Date())) {
+				if (certInfo.getNotafter() == null
+						|| certInfo.getNotafter().before(new Date())) {
 					json.put("msg", "证书已过期");
 					json.put("status", 0);
 					return json.toString();
@@ -599,8 +636,10 @@ public class UserEnrollController extends BaseController {
 				ConfigChargeAgent configChargeAgent = configChargeAgentService
 						.get(workDealInfo.getConfigChargeAgentId());
 				int i = workDealInfo.getConfigProduct().getProductLabel();
-				Double yearMoney = configChargeAgentDetailService.selectTrust1Money(configChargeAgent, i);// 该应用申请移动设备1年的钱数
-				Double halfYearMoney = configChargeAgentDetailService.selectTrust0Money(configChargeAgent, i);// 该应用申请移动设备半年的钱数
+				Double yearMoney = configChargeAgentDetailService
+						.selectTrust1Money(configChargeAgent, i);// 该应用申请移动设备1年的钱数
+				Double halfYearMoney = configChargeAgentDetailService
+						.selectTrust0Money(configChargeAgent, i);// 该应用申请移动设备半年的钱数
 
 				totalMoney = intYear * yearMoney;// 算出整数部分的钱数
 				if (doubleYear > 0.5) {
@@ -628,8 +667,10 @@ public class UserEnrollController extends BaseController {
 					ConfigApp app = workDealInfo.getConfigApp();
 					if (app.getGovDeviceAmount() != null) {// 数量限制不是null
 						Long appId = workDealInfo.getConfigApp().getId();
-						Integer curValidDevice = workDealInfoService.getValidDeviceTotal(appId);
-						if (curValidDevice + Integer.valueOf(count) > app.getGovDeviceAmount()) {// 数量超过...
+						Integer curValidDevice = workDealInfoService
+								.getValidDeviceTotal(appId);
+						if (curValidDevice + Integer.valueOf(count) > app
+								.getGovDeviceAmount()) {// 数量超过...
 							json.put("msg", "当前应用可信移动设备数量超过最大限制");
 							json.put("id", -1L);
 							json.put("status", -1);
@@ -640,9 +681,11 @@ public class UserEnrollController extends BaseController {
 
 						WorkPayInfo workPayInfo = new WorkPayInfo();
 
-						workPayInfo.setWorkTotalMoney(totalMoney * Integer.valueOf(count));
+						workPayInfo.setWorkTotalMoney(totalMoney
+								* Integer.valueOf(count));
 						workPayInfo.setWorkPayedMoney(0d);
-						workPayInfo.setWorkReceivaMoney(totalMoney * Integer.valueOf(count));
+						workPayInfo.setWorkReceivaMoney(totalMoney
+								* Integer.valueOf(count));
 						workPayInfo.setUserReceipt(false);
 						workPayInfo.setReceiptAmount(0d);
 						workPayInfo.setSn(PayinfoUtil.getPayInfoNo());
@@ -657,7 +700,8 @@ public class UserEnrollController extends BaseController {
 						if (certInfo.getTrustDeviceCount() != null) {
 							valid = certInfo.getTrustDeviceCount();
 						}
-						certInfo.setTrustDeviceCount(valid + Integer.valueOf(count));
+						certInfo.setTrustDeviceCount(valid
+								+ Integer.valueOf(count));
 						certInfo.setTrustDeviceDate(certInfo.getNotafter());
 						workCertInfoService.save(certInfo);
 						autoPass = true;
@@ -681,10 +725,12 @@ public class UserEnrollController extends BaseController {
 					json.put("msg", "开通申请已提交成功，您需要支付费用");
 					json.put("status", 1);
 				} else {// 新的流程
-					SimpleDateFormat certSdf = new SimpleDateFormat("yyyy-MM-dd");
+					SimpleDateFormat certSdf = new SimpleDateFormat(
+							"yyyy-MM-dd");
 					json.put("count", count);
 					json.put("id", applyInfo.getId());
-					json.put("date", certSdf.format(applyInfo.getWorkCertInfo().getNotafter()));
+					json.put("date", certSdf.format(applyInfo.getWorkCertInfo()
+							.getNotafter()));
 					json.put("status", 2);
 				}
 			} else {
@@ -702,14 +748,16 @@ public class UserEnrollController extends BaseController {
 	// 通过AJAX判断
 	@RequestMapping(value = "ktydsb2Submit")
 	@ResponseBody
-	public String ktydsb2Submit(String ukey, String certSn) throws JSONException {
+	public String ktydsb2Submit(String ukey, String certSn)
+			throws JSONException {
 		JSONObject json = new JSONObject();
 		WorkCertTrustApply apply = trustApplyService.getTrustByStatus(certSn);
 		try {
 			json.put("status", apply.getStatus());
 			json.put("id", apply.getId());
 			json.put("count", apply.getApplyCount());
-			WorkCertInfo certInfo = workDealInfoService.findByCertSn(certSn).get(0).getWorkCertInfo();
+			WorkCertInfo certInfo = workDealInfoService.findByCertSn(certSn)
+					.get(0).getWorkCertInfo();
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 			json.put("date", sdf.format(certInfo.getTrustDeviceDate()));
 			System.out.println(certInfo.getTrustDeviceCount());
@@ -720,17 +768,20 @@ public class UserEnrollController extends BaseController {
 	}
 
 	@RequestMapping(value = "ktydsb2Nextform")
-	public String ktydsb2Nextform(Model model, String count, String date, Integer status, Long id) {
+	public String ktydsb2Nextform(Model model, String count, String date,
+			Integer status, Long id) {
 		if (status != null) {
 			model.addAttribute("status", 1);
 		} else {
 			model.addAttribute("status", 0);
 		}
 		if (id != null) {
-			WorkCertTrustApply workCertTrustApply = workCertTrustApplyService.get(id);
+			WorkCertTrustApply workCertTrustApply = workCertTrustApplyService
+					.get(id);
 			workCertTrustApply.setState(1);
 			workCertTrustApplyService.save(workCertTrustApply);
-			model.addAttribute("suggest", "拒绝原因:" + workCertTrustApply.getSuggest());
+			model.addAttribute("suggest",
+					"拒绝原因:" + workCertTrustApply.getSuggest());
 		}
 		model.addAttribute("count", count);
 		model.addAttribute("date", date);
@@ -773,9 +824,8 @@ public class UserEnrollController extends BaseController {
 				model.addAttribute("keySn", keyUnlock.getKeySn());
 				model.addAttribute("reqCode", keyUnlock.getReqCode());
 				model.addAttribute("certCn", keyUnlock.getCertCn());
-				
-				
-				log.debug("certCN===="+keyUnlock.getCertCn());
+
+				log.debug("certCN====" + keyUnlock.getCertCn());
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -823,11 +873,12 @@ public class UserEnrollController extends BaseController {
 	}
 
 	@RequestMapping(value = "jsfw3Nextform")
-	public String jsfw3Nextform(Model model, String msg, HttpServletRequest request,
+	public String jsfw3Nextform(Model model, String msg,
+			HttpServletRequest request,
 			@RequestParam(required = false) String keySn, Long id) {
 		model.addAttribute("status", "解锁失败，错误码" + msg);
-		logUtil.saveTerminalLog(request.getRemoteHost(), keySn + "解锁失败:" + msg, StringUtils.getRemoteAddr(request),
-				keySn, "申请解锁");
+		logUtil.saveTerminalLog(request.getRemoteHost(), keySn + "解锁失败:" + msg,
+				StringUtils.getRemoteAddr(request), keySn, "申请解锁");
 		// 解锁失败不允许再次申请，直接更新为解锁失败状态
 		try {
 			KeyUnlock unlock = keyUnlockService.get(id);
@@ -851,9 +902,10 @@ public class UserEnrollController extends BaseController {
 		JSONObject json = new JSONObject();
 		Map<String, Object> map = new HashMap<String, Object>();
 		try {
-			List<WorkDealInfo> dealInfos = workDealInfoService.findgxfw1(certSn);
-			System.out.println("更新业务证书序列号:"+certSn);
-			System.out.println("查询到的业务数量:"+dealInfos.size());
+			List<WorkDealInfo> dealInfos = workDealInfoService
+					.findgxfw1(certSn);
+			System.out.println("更新业务证书序列号:" + certSn);
+			System.out.println("查询到的业务数量:" + dealInfos.size());
 			if (dealInfos.size() == 0) {
 				// 未发现此Ukey绑定业务
 				json.put("status", 103);
@@ -862,59 +914,90 @@ public class UserEnrollController extends BaseController {
 				WorkDealInfo workDealInfo = dealInfos.get(0);
 				json.put("dealInfoId", workDealInfo.getId());
 				json.put("certSn", workDealInfo.getCertSn());
-				
-				ConfigRaAccountExtendInfo extendInfo = configRaAccountExtendInfoService.get(workDealInfo.getConfigProduct().getRaAccountExtedId());		
-				json.put("certCN", extendInfo.getCommonNameDisplayName().equals("0")?workDealInfo.getWorkCompany().getCompanyName():(extendInfo.getCommonNameDisplayName().equals("1")?workDealInfo.getWorkUser().getContactName():workDealInfo.getWorkUserHis().getContactName()));
-				json.put("certTime", sdf.format(workDealInfo.getWorkCertInfo().getNotbefore())
-						+ " 到 " + sdf.format(workDealInfo.getWorkCertInfo().getNotafter()));
-				
-				log.debug("certCN===="+json.get("certCN"));
-				
+
+				ConfigRaAccountExtendInfo extendInfo = configRaAccountExtendInfoService
+						.get(workDealInfo.getConfigProduct()
+								.getRaAccountExtedId());
+				json.put("certCN", extendInfo.getCommonNameDisplayName()
+						.equals("0") ? workDealInfo.getWorkCompany()
+						.getCompanyName() : (extendInfo
+						.getCommonNameDisplayName().equals("1") ? workDealInfo
+						.getWorkUser().getContactName() : workDealInfo
+						.getWorkUserHis().getContactName()));
+				json.put(
+						"certTime",
+						sdf.format(workDealInfo.getWorkCertInfo()
+								.getNotbefore())
+								+ " 到 "
+								+ sdf.format(workDealInfo.getWorkCertInfo()
+										.getNotafter()));
+
+				log.debug("certCN====" + json.get("certCN"));
+
 				if (workDealInfo.getWorkCertInfo() != null) {
 					if (workDealInfo.getWorkCertInfo().getRenewalNextId() != null) {
 						// 存在更新过的证书
-						List<WorkDealInfo> infos = workDealInfoService.findgx(workDealInfo.getWorkCertInfo()
+						List<WorkDealInfo> infos = workDealInfoService
+								.findgx(workDealInfo.getWorkCertInfo()
 										.getRenewalNextId());
-							// 传递前台审批状态 0为新建未审核 1为异常业务 2为退费用户 3为审核通过 4为 审核不通过11审核通过待获取
-						if (infos!=null&&infos.size()>0){
-							//判断业务是不是更新（仅含有更新）
-							if ( WorkDealInfoType.TYPE_UPDATE_CERT.equals(infos.get(0).getDealInfoType())){		
-								if(infos.get(0).getDelFlag().equals("1")) {
-									json.put("status","4");
-								}else{
-									
-									json.put("status", infos.get(0).getDealInfoStatus());
+						// 传递前台审批状态 0为新建未审核 1为异常业务 2为退费用户 3为审核通过 4为
+						// 审核不通过11审核通过待获取
+						if (infos != null && infos.size() > 0) {
+							// 判断业务是不是更新（仅含有更新）
+							if ((WorkDealInfoType.TYPE_UPDATE_CERT.equals(infos.get(0).getDealInfoType())
+									&& infos.get(0).getDealInfoType1() == null
+									&& infos.get(0).getDealInfoType2() == null 
+									&& infos.get(0).getDealInfoType3() == null)
+									|| 
+								(WorkDealInfoType.TYPE_UPDATE_CERT.equals(infos.get(0).getDealInfoType())
+									&& infos.get(0).getDealInfoType1() == null
+									&& infos.get(0).getDealInfoType2().equals(WorkDealInfoType.TYPE_INFORMATION_REROUTE) 
+									&& infos.get(0).getDealInfoType3() == null)) {
+								if (infos.get(0).getDelFlag().equals("1")) {
+									json.put("status", "4");
+								} else {
+
+									json.put("status", infos.get(0)
+											.getDealInfoStatus());
 								}
-							}else{
-								//正在处理的业务不是更新，不允许申请更新
-								json.put("status","-1");
+							} else {
+								// 正在处理的业务不是更新，不允许申请更新
+								json.put("status", "-1");
 							}
-							// 传递前台审批状态，如果为业务为后台办理更新并未制证可在i信端做制证操作，即未持key更新业务。 106 后台更新审批通过待制证
-							if ( WorkDealInfoType.TYPE_UPDATE_CERT.equals(infos.get(0).getDealInfoType())
-									&& WorkDealInfoStatus.STATUS_CERT_WAIT.equals(infos.get(0).getDealInfoStatus())) {
+							// 传递前台审批状态，如果为业务为后台办理更新并未制证可在i信端做制证操作，即未持key更新业务。
+							// 106 后台更新审批通过待制证
+							if (WorkDealInfoType.TYPE_UPDATE_CERT.equals(infos
+									.get(0).getDealInfoType())
+									&& WorkDealInfoStatus.STATUS_CERT_WAIT
+											.equals(infos.get(0)
+													.getDealInfoStatus())) {
 								json.put("updateStatus", 106);
 							}
-							json.put("remarks", infos.get(0).getRemarks()==null?"":infos.get(0).getRemarks());
-							json.put("archiveNo", (infos.get(0).getArchiveNo()!=null?1:0));
-							json.put("id",infos.get(0).getId());
+							json.put("remarks",
+									infos.get(0).getRemarks() == null ? ""
+											: infos.get(0).getRemarks());
+							json.put("archiveNo",
+									(infos.get(0).getArchiveNo() != null ? 1
+											: 0));
+							json.put("id", infos.get(0).getId());
 							json.put("remarks", infos.get(0).getRemarks());
 							return json.toString();
-						}else {
+						} else {
 							// 没有更新过证书 可以继续使用 9为没有更新过的业务 可以更新操作
 							json.put("status", 104);
 						}
-					}else {
+					} else {
 						// 没有更新过证书 可以继续使用 9为没有更新过的业务 可以更新操作
 						json.put("status", 104);
-					} 
+					}
 				}
-				//判断是否可以更新证书（当前时间距离证书有效期小于30）
-				if (workDealInfo.getWorkCertInfo().getNotafter()!=null) {
-					Date now  = new Date();
+				// 判断是否可以更新证书（当前时间距离证书有效期小于30）
+				if (workDealInfo.getWorkCertInfo().getNotafter() != null) {
+					Date now = new Date();
 					Date last = workDealInfo.getWorkCertInfo().getNotafter();
-					long between=(last.getTime()-now.getTime())/1000;//除以1000是为了转换成秒
-					Long iLong = 60*24*60*60*1l;
-					if (between>iLong) {
+					long between = (last.getTime() - now.getTime()) / 1000;// 除以1000是为了转换成秒
+					Long iLong = 60 * 24 * 60 * 60 * 1l;
+					if (between > iLong) {
 						json.put("status", 105);
 					}
 				}
@@ -922,18 +1005,19 @@ public class UserEnrollController extends BaseController {
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
-		
+
 		return json.toString();
 	}
 
 	// 通过AJAX判断 更新新业务
 	@RequestMapping(value = "gxfw1Submit")
 	@ResponseBody
-	public String gxfw1Submit(Integer year, String certSn, String keySn, Integer dealInfoId,
-			HttpServletRequest request) {
+	public String gxfw1Submit(Integer year, String certSn, String keySn,
+			Integer dealInfoId, HttpServletRequest request) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		try {
-			WorkDealInfo workDealInfo = workDealInfoService.get(new Long(dealInfoId));
+			WorkDealInfo workDealInfo = workDealInfoService.get(new Long(
+					dealInfoId));
 
 			workDealInfo.setDelFlag("1");
 
@@ -947,14 +1031,17 @@ public class UserEnrollController extends BaseController {
 			WorkCertInfo certInfo = new WorkCertInfo();
 			// 获取更新前证书信息 并且将赋予下级证书ID
 			certInfo.setRenewalPrevId(workCertInfo.getId());
-			certInfo.setCreateDate(workCertInfoService.getCreateDate(workCertInfo.getId()));
+			certInfo.setCreateDate(workCertInfoService
+					.getCreateDate(workCertInfo.getId()));
 			Calendar calendar = new GregorianCalendar();
 			calendar.setTime(workCertInfo.getNotafter());
 			calendar.add(calendar.YEAR, year);
 			Date afterDate = calendar.getTime();
 			// 新证书的有效期设置
-			/*certInfo.setNotbefore(new Timestamp(new Date().getTime()));
-			certInfo.setNotafter(new Timestamp(afterDate.getTime()));*/
+			/*
+			 * certInfo.setNotbefore(new Timestamp(new Date().getTime()));
+			 * certInfo.setNotafter(new Timestamp(afterDate.getTime()));
+			 */
 			certInfo.setWorkCertApplyInfo(workCertInfo.getWorkCertApplyInfo());
 			workCertInfoService.save(certInfo);
 			// 添加更新证书的 下级证书
@@ -966,7 +1053,8 @@ public class UserEnrollController extends BaseController {
 			if (keySn != null && !keySn.equals("")) {
 				new_dealInfo.setKeySn(keySn);
 			}
-			User user = systemService.getUser(workDealInfo.getCreateBy().getId());
+			User user = systemService.getUser(workDealInfo.getCreateBy()
+					.getId());
 			new_dealInfo.setWorkUserHis(workDealInfo.getWorkUserHis());
 			new_dealInfo.setWorkCompanyHis(workDealInfo.getWorkCompanyHis());
 			new_dealInfo.setPrevId(workDealInfo.getId());
@@ -974,7 +1062,8 @@ public class UserEnrollController extends BaseController {
 			// new_dealInfo.setUpdateBy(new User(1L));
 			new_dealInfo.setCreateBy(user);// 四川1期改造，将更新证书归属到证书新增申请网点
 			new_dealInfo.setUpdateBy(user);// 四川1期改造，将更新证书归属到证书新增申请网点
-			new_dealInfo.setLastDays(getLastCertDay(workCertInfo.getNotafter()));
+			new_dealInfo
+					.setLastDays(getLastCertDay(workCertInfo.getNotafter()));
 			new_dealInfo.setSvn(workDealInfoService.getSVN(1));
 			new_dealInfo.setConfigApp(workDealInfo.getConfigApp());
 			new_dealInfo.setConfigProduct(workDealInfo.getConfigProduct());
@@ -987,22 +1076,24 @@ public class UserEnrollController extends BaseController {
 			new_dealInfo.setCreateDate(new Timestamp(new Date().getTime()));
 			new_dealInfo.setStatus(workDealInfo.getStatus());
 			new_dealInfo.setDownLoad(0);
-			new_dealInfo.setDealInfoStatus(WorkDealInfoStatus.STATUS_UPDATE_USER);
+			new_dealInfo
+					.setDealInfoStatus(WorkDealInfoStatus.STATUS_UPDATE_USER);
 			new_dealInfo.setWorkCertInfo(certInfo);
 			new_dealInfo.setNotafter(new Timestamp(afterDate.getTime()));
 			new_dealInfo.setPayType(workDealInfo.getPayType());
 
 			new_dealInfo.setInputUserDate(new Date());
 
-			new_dealInfo.setConfigChargeAgentId(workDealInfo.getConfigChargeAgentId());
+			new_dealInfo.setConfigChargeAgentId(workDealInfo
+					.getConfigChargeAgentId());
 
 			new_dealInfo.setOfficeId(workDealInfo.getOfficeId());
 			new_dealInfo.setAreaId(workDealInfo.getAreaId());
 
 			dealInfoService.save(new_dealInfo);
 
-			logUtil.saveTerminalLog(request.getRemoteHost(), "申请更新业务", StringUtils.getRemoteAddr(request), certSn,
-					"申请更新");
+			logUtil.saveTerminalLog(request.getRemoteHost(), "申请更新业务",
+					StringUtils.getRemoteAddr(request), certSn, "申请更新");
 			// double money = configChargeAgentDetailService.selectMoney(
 			// configChargeAgent,1, new_dealInfo.getYear(), new_dealInfo
 			// .getConfigProduct().getProductLabel());
@@ -1035,7 +1126,8 @@ public class UserEnrollController extends BaseController {
 	@RequestMapping(value = "gxfw1Nextform")
 	public String gxfw1Nextform(Model model, Long dealInfoId, String mmssgg) {
 		try {
-			WorkDealInfo workDealInfo = workDealInfoService.get(new Long(dealInfoId));
+			WorkDealInfo workDealInfo = workDealInfoService.get(new Long(
+					dealInfoId));
 			// double money = configChargeAgentDetailService.selectMoney(
 			// configChargeAgent,1, workDealInfo.getYear(), workDealInfo
 			// .getConfigProduct().getProductLabel());
@@ -1063,7 +1155,8 @@ public class UserEnrollController extends BaseController {
 		certSn = getCertSn(certSn);
 		JSONObject json = new JSONObject();
 		try {
-			List<WorkDealInfo> workDealInfos = workDealInfoService.findgxfw1(certSn);
+			List<WorkDealInfo> workDealInfos = workDealInfoService
+					.findgxfw1(certSn);
 			if (workDealInfos.size() == 0) {
 				// 未发现存在更新的证书
 				json.put("status", "101");
@@ -1071,7 +1164,8 @@ public class UserEnrollController extends BaseController {
 				WorkDealInfo workDealInfo = workDealInfos.get(0);
 				if (workDealInfo.getWorkCertInfo() != null) {
 					List<WorkDealInfo> dealInfos = workDealInfoService
-							.findgx(workDealInfo.getWorkCertInfo().getRenewalNextId());
+							.findgx(workDealInfo.getWorkCertInfo()
+									.getRenewalNextId());
 					if (dealInfos.size() == 0) {
 						// 未查到下个业务信息
 						json.put("status", "102");
@@ -1093,104 +1187,136 @@ public class UserEnrollController extends BaseController {
 		try {
 			WorkDealInfo workDealInfo = workDealInfoService.get(new Long(id));
 			model.addAttribute("workDealInfo", workDealInfo);
-			
-			//证书CN
-			ConfigRaAccountExtendInfo extendInfo = configRaAccountExtendInfoService.get(workDealInfo.getConfigProduct().getRaAccountExtedId());		
-	
-			String certCN = extendInfo.getCommonNameDisplayName().equals("0")?workDealInfo.getWorkCompany().getCompanyName():(extendInfo.getCommonNameDisplayName().equals("1")?workDealInfo.getWorkUser().getContactName():workDealInfo.getWorkUserHis().getContactName());
-			
+
+			// 证书CN
+			ConfigRaAccountExtendInfo extendInfo = configRaAccountExtendInfoService
+					.get(workDealInfo.getConfigProduct().getRaAccountExtedId());
+
+			String certCN = extendInfo.getCommonNameDisplayName().equals("0") ? workDealInfo
+					.getWorkCompany().getCompanyName() : (extendInfo
+					.getCommonNameDisplayName().equals("1") ? workDealInfo
+					.getWorkUser().getContactName() : workDealInfo
+					.getWorkUserHis().getContactName());
+
 			model.addAttribute("certCN", certCN);
-			
-			String status = workDealInfo.getDealInfoStatus().equals(WorkDealInfoStatus.STATUS_APPROVE_WAIT)?"等待更新":WorkDealInfoStatus.WorkDealInfoStatusMap.get(workDealInfo.getDealInfoStatus());
-			
-			log.debug("status===="+status);
-			
+
+			String status = workDealInfo.getDealInfoStatus().equals(
+					WorkDealInfoStatus.STATUS_APPROVE_WAIT) ? "等待更新"
+					: WorkDealInfoStatus.WorkDealInfoStatusMap.get(workDealInfo
+							.getDealInfoStatus());
+
+			log.debug("status====" + status);
+
 			model.addAttribute("status", status);
 
-			log.debug("certCN===="+certCN);
-			
-			
-			//经信委
-			if(workDealInfo.getExpirationDate()!=null){
-				
-                workDealInfo.setAddCertDays(StringHelper.getDvalueDay(new Date(), workDealInfo.getExpirationDate())-workDealInfo.getYear()*365-workDealInfo.getLastDays());
-                
-                workDealInfoService.save(workDealInfo);
-				
-				model.addAttribute("addCertDays",StringHelper.getDvalueDay(new Date(), workDealInfo.getExpirationDate())-workDealInfo.getYear()*365-workDealInfo.getLastDays());
-				
+			log.debug("certCN====" + certCN);
+
+			// 经信委
+			if (workDealInfo.getExpirationDate() != null) {
+
+				workDealInfo.setAddCertDays(StringHelper.getDvalueDay(
+						new Date(), workDealInfo.getExpirationDate())
+						- workDealInfo.getYear()
+						* 365
+						- workDealInfo.getLastDays());
+
+				workDealInfoService.save(workDealInfo);
+
+				model.addAttribute(
+						"addCertDays",
+						StringHelper.getDvalueDay(new Date(),
+								workDealInfo.getExpirationDate())
+								- workDealInfo.getYear()
+								* 365
+								- workDealInfo.getLastDays());
+
 			}
-			
-			model.addAttribute("certCNOmit", certCN.length()>20?certCN.substring(0, 20)+"...":certCN);
-			
+
+			model.addAttribute("certCNOmit",
+					certCN.length() > 20 ? certCN.substring(0, 20) + "..."
+							: certCN);
+
 			model.addAttribute("keySN", workDealInfo.getKeySn());
-			
-			
+
 			if (workDealInfo.getPrevId() != null) {
 				// 获取上一张证书的签名证书序列号
-				WorkDealInfo oldDealInfo = workDealInfoService.get(workDealInfo.getPrevId());
-				model.addAttribute("signSerialNumber", oldDealInfo.getWorkCertInfo().getSerialnumber().toLowerCase());
+				WorkDealInfo oldDealInfo = workDealInfoService.get(workDealInfo
+						.getPrevId());
+				model.addAttribute("signSerialNumber", oldDealInfo
+						.getWorkCertInfo().getSerialnumber().toLowerCase());
 			}
-			
-			
+
 			SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
-			model.addAttribute("notbefore", sdf1.format(workDealInfo.getWorkCertInfo().getNotbefore()));
-			model.addAttribute("notafter", sdf1.format(workDealInfo.getWorkCertInfo().getNotafter()));
-			
+			model.addAttribute("notbefore",
+					sdf1.format(workDealInfo.getWorkCertInfo().getNotbefore()));
+			model.addAttribute("notafter",
+					sdf1.format(workDealInfo.getWorkCertInfo().getNotafter()));
+
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
 		return "iLetter/zhengshufuwu_gxfw3";
 	}
-	
-	
-	//跳转到变更服务第四个页面
+
+	// 跳转到变更服务第四个页面
 	@RequestMapping(value = "bgfw3Nextform")
 	public String bgfw3Nextform(Model model, Long id) {
 		try {
 			WorkDealInfo workDealInfo = workDealInfoService.get(new Long(id));
 			model.addAttribute("workDealInfo", workDealInfo);
-			
+
 			WorkDealInfo oldDealInfo = null;
-			
+
 			if (workDealInfo.getPrevId() != null) {
 				// 获取上一张证书的签名证书序列号
 				oldDealInfo = workDealInfoService.get(workDealInfo.getPrevId());
-				model.addAttribute("signSerialNumber", oldDealInfo.getWorkCertInfo().getSerialnumber().toLowerCase());
+				model.addAttribute("signSerialNumber", oldDealInfo
+						.getWorkCertInfo().getSerialnumber().toLowerCase());
 			}
-			
-			
-			ConfigRaAccount raAccount = raAccountService.get(oldDealInfo.getConfigProduct().getRaAccountId());	
-			
-			//证书CN
-			ConfigRaAccountExtendInfo extendInfo = configRaAccountExtendInfoService.get(oldDealInfo.getConfigProduct().getRaAccountExtedId());		
-	
-			String certCN = extendInfo.getCommonNameDisplayName().equals("0")?workDealInfo.getWorkCompany().getCompanyName():(extendInfo.getCommonNameDisplayName().equals("1")?workDealInfo.getWorkUser().getContactName():workDealInfo.getWorkUserHis().getContactName());
-			
+
+			ConfigRaAccount raAccount = raAccountService.get(oldDealInfo
+					.getConfigProduct().getRaAccountId());
+
+			// 证书CN
+			ConfigRaAccountExtendInfo extendInfo = configRaAccountExtendInfoService
+					.get(oldDealInfo.getConfigProduct().getRaAccountExtedId());
+
+			String certCN = extendInfo.getCommonNameDisplayName().equals("0") ? workDealInfo
+					.getWorkCompany().getCompanyName() : (extendInfo
+					.getCommonNameDisplayName().equals("1") ? workDealInfo
+					.getWorkUser().getContactName() : workDealInfo
+					.getWorkUserHis().getContactName());
+
 			model.addAttribute("certCN", certCN);
-			
-			log.debug("certCN===="+certCN);
-			
-			model.addAttribute("certCNOmit", certCN.length()>20?certCN.substring(0, 20)+"...":certCN);
+
+			log.debug("certCN====" + certCN);
+
+			model.addAttribute("certCNOmit",
+					certCN.length() > 20 ? certCN.substring(0, 20) + "..."
+							: certCN);
 			SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
 			model.addAttribute("keySN", oldDealInfo.getKeySn());
-			model.addAttribute("notbefore", sdf1.format(oldDealInfo.getWorkCertInfo().getNotbefore()));
-			model.addAttribute("notafter", sdf1.format(oldDealInfo.getWorkCertInfo().getNotafter()));
-			model.addAttribute("status", workDealInfo.getDealInfoStatus().equals(WorkDealInfoStatus.STATUS_CERT_WAIT)?"等待变更":WorkDealInfoStatus.WorkDealInfoStatusMap.get(workDealInfo.getDealInfoStatus()));
-			
-			
-			//秘钥长度
-			if(raAccount.getKeyLen()!=null){
+			model.addAttribute("notbefore",
+					sdf1.format(oldDealInfo.getWorkCertInfo().getNotbefore()));
+			model.addAttribute("notafter",
+					sdf1.format(oldDealInfo.getWorkCertInfo().getNotafter()));
+			model.addAttribute(
+					"status",
+					workDealInfo.getDealInfoStatus().equals(
+							WorkDealInfoStatus.STATUS_CERT_WAIT) ? "等待变更"
+							: WorkDealInfoStatus.WorkDealInfoStatusMap
+									.get(workDealInfo.getDealInfoStatus()));
+
+			// 秘钥长度
+			if (raAccount.getKeyLen() != null) {
 				model.addAttribute("keyLen", raAccount.getKeyLen());
 			}
-		   
+
 		} catch (Exception e) {
-			
+
 		}
 		return "iLetter/zhengshufuwu_bzfw4";
 	}
-	
-	
 
 	// 通过AJAX判断
 	@RequestMapping(value = "gxfw3Submit")
@@ -1208,60 +1334,76 @@ public class UserEnrollController extends BaseController {
 	@RequestMapping(value = "gxfw3Nextform")
 	public String gxfw3Nextform(Model model, Long id) {
 		WorkDealInfo dealInfo1 = workDealInfoService.get(id);
-		WorkDealInfo dealInfo = workDealInfoService.findDealInfo(dealInfo1.getPrevId());
+		WorkDealInfo dealInfo = workDealInfoService.findDealInfo(dealInfo1
+				.getPrevId());
 		WorkCertInfo certInfo = dealInfo.getWorkCertInfo();
 		if (certInfo != null) {
 			model.addAttribute("sn", dealInfo.getKeySn());
 			SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
-			model.addAttribute("notbefore", sdf1.format(certInfo.getNotbefore()));
+			model.addAttribute("notbefore",
+					sdf1.format(certInfo.getNotbefore()));
 			model.addAttribute("notafter", sdf1.format(certInfo.getNotafter()));// 有效期
-			
-			//证书CN
-			
-			ConfigRaAccountExtendInfo extendInfo = configRaAccountExtendInfoService.get(dealInfo.getConfigProduct().getRaAccountExtedId());		
-	
-			String certCN = extendInfo.getCommonNameDisplayName().equals("0")?dealInfo.getWorkCompany().getCompanyName():(extendInfo.getCommonNameDisplayName().equals("1")?dealInfo.getWorkUser().getContactName():dealInfo.getWorkUserHis().getContactName());
-			
+
+			// 证书CN
+
+			ConfigRaAccountExtendInfo extendInfo = configRaAccountExtendInfoService
+					.get(dealInfo.getConfigProduct().getRaAccountExtedId());
+
+			String certCN = extendInfo.getCommonNameDisplayName().equals("0") ? dealInfo
+					.getWorkCompany().getCompanyName() : (extendInfo
+					.getCommonNameDisplayName().equals("1") ? dealInfo
+					.getWorkUser().getContactName() : dealInfo.getWorkUserHis()
+					.getContactName());
+
 			model.addAttribute("certCN", certCN);
-			
-			log.debug("certCN===="+certCN);
-			
-			model.addAttribute("certCNOmit", certCN.length()>20?certCN.substring(0, 20)+"...":certCN);
-			
+
+			log.debug("certCN====" + certCN);
+
+			model.addAttribute("certCNOmit",
+					certCN.length() > 20 ? certCN.substring(0, 20) + "..."
+							: certCN);
+
 		}
 		return "iLetter/zhengshufuwu_gxfw4";
 	}
 
-	
-	//变更4跳转到变更5页面(变更成功后)
+	// 变更4跳转到变更5页面(变更成功后)
 	@RequestMapping(value = "bgfw4Nextform")
 	public String bgfw4Nextform(Model model, Long id) {
 		WorkDealInfo dealInfo1 = workDealInfoService.get(id);
-		WorkDealInfo dealInfo = workDealInfoService.findDealInfo(dealInfo1.getPrevId());
+		WorkDealInfo dealInfo = workDealInfoService.findDealInfo(dealInfo1
+				.getPrevId());
 		WorkCertInfo certInfo = dealInfo.getWorkCertInfo();
 		if (certInfo != null) {
 			model.addAttribute("sn", dealInfo.getKeySn());
 			SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
-			model.addAttribute("notbefore", sdf1.format(certInfo.getNotbefore()));
+			model.addAttribute("notbefore",
+					sdf1.format(certInfo.getNotbefore()));
 			model.addAttribute("notafter", sdf1.format(certInfo.getNotafter()));// 有效期
-			
-			//证书CN
-			
-			ConfigRaAccountExtendInfo extendInfo = configRaAccountExtendInfoService.get(dealInfo.getConfigProduct().getRaAccountExtedId());		
-	
-			String certCN = extendInfo.getCommonNameDisplayName().equals("0")?dealInfo.getWorkCompany().getCompanyName():(extendInfo.getCommonNameDisplayName().equals("1")?dealInfo.getWorkUser().getContactName():dealInfo.getWorkUserHis().getContactName());
-			
+
+			// 证书CN
+
+			ConfigRaAccountExtendInfo extendInfo = configRaAccountExtendInfoService
+					.get(dealInfo.getConfigProduct().getRaAccountExtedId());
+
+			String certCN = extendInfo.getCommonNameDisplayName().equals("0") ? dealInfo
+					.getWorkCompany().getCompanyName() : (extendInfo
+					.getCommonNameDisplayName().equals("1") ? dealInfo
+					.getWorkUser().getContactName() : dealInfo.getWorkUserHis()
+					.getContactName());
+
 			model.addAttribute("certCN", certCN);
-			
-			log.debug("certCN===="+certCN);
-			
-			model.addAttribute("certCNOmit", certCN.length()>20?certCN.substring(0, 20)+"...":certCN);
-			
+
+			log.debug("certCN====" + certCN);
+
+			model.addAttribute("certCNOmit",
+					certCN.length() > 20 ? certCN.substring(0, 20) + "..."
+							: certCN);
+
 		}
 		return "iLetter/zhengshufuwu_bzfw5";
 	}
-	
-	
+
 	@RequestMapping(value = "gxfw3falseNextform")
 	public String gxfw3errorNextform(Model model) {
 		return "iLetter/zhengshufuwu_gxfw4error";
@@ -1298,14 +1440,16 @@ public class UserEnrollController extends BaseController {
 	}
 
 	@RequestMapping(value = "downloadTemplate")
-	public ModelAndView templateDownLoad(String fileName, HttpServletRequest request, HttpServletResponse response)
+	public ModelAndView templateDownLoad(String fileName,
+			HttpServletRequest request, HttpServletResponse response)
 			throws UnsupportedEncodingException {
 		fileName = URLDecoder.decode(fileName, "utf-8");
 		String filePath = deployPath + "/template/xls/" + fileName;
 		String contentType = "application/octet-stream"; // 二级制流,不知道文件类型可用，.*
 		// String contentType = "application/x-xls";//.xls格式文件
 		try {
-			FileDownloadUtil.download(request, response, contentType, filePath, fileName);
+			FileDownloadUtil.download(request, response, contentType, filePath,
+					fileName);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1314,13 +1458,15 @@ public class UserEnrollController extends BaseController {
 	}
 
 	@RequestMapping(value = "downloadDoc")
-	public ModelAndView templateDownLoadDoc(String fileName, HttpServletRequest request, HttpServletResponse response)
+	public ModelAndView templateDownLoadDoc(String fileName,
+			HttpServletRequest request, HttpServletResponse response)
 			throws UnsupportedEncodingException {
 		fileName = URLDecoder.decode(fileName, "utf-8");
 		String filePath = deployPath + "/template/doc/" + fileName;
 		String contentType = "application/octet-stream";
 		try {
-			FileDownloadUtil.download(request, response, contentType, filePath, fileName);
+			FileDownloadUtil.download(request, response, contentType, filePath,
+					fileName);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
