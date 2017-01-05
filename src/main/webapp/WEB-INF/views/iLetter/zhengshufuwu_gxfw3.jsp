@@ -18,7 +18,9 @@
 	var sn;
 	var keySn = external.ukeyserial;
 	
-	document.getElementById("keyNumber").innerText = keySn;
+	$(function(){
+		$("#keyNumber").html(keySn);
+	})
 	
 	
 	var keySN;
