@@ -101,9 +101,14 @@ public class ReceiptAllocateApplyController extends BaseController {
 	@RequiresPermissions("receipt:receiptAllocateApply:view")
 	@RequestMapping(value = {"list", ""})
 	public String list(ReceiptAllocateApply receiptAllocateApply, HttpServletRequest request, HttpServletResponse response, Model model,
-			Date startTime, Date endTime, Integer state) {
+			Date startTime, Date endTime, Integer state,RedirectAttributes redirectAttributes) {
 		
 		ReceiptDepotInfo depot = getDeoptByOfficeId(UserUtils.getUser().getOffice().getId());
+		
+		if(depot==null){
+			addMessage(redirectAttributes, "当前网点没有库房无法申请！");
+			return "redirect:" + Global.getAdminPath() + "/receipt/receiptDepotInfo/?repage";
+		}
 		
 		model.addAttribute("depot", depot);
 		model.addAttribute("startTime", startTime);

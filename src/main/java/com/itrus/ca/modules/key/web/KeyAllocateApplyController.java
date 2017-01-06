@@ -109,7 +109,7 @@ public class KeyAllocateApplyController extends BaseController {
 			@RequestParam(value = "state", required = false) Integer state,
 			@RequestParam(value = "startTime", required = false) Date startTime,
 			@RequestParam(value = "endTime", required = false) Date endTime,
-			Model model) {
+			Model model,RedirectAttributes redirectAttributes) {
 		User user = UserUtils.getUser();
 		if (!user.isAdmin()) {
 			keyAllocateApply.setCreateBy(user);
@@ -123,6 +123,11 @@ public class KeyAllocateApplyController extends BaseController {
 		
 		List<KeyUsbKeyDepot> depots = keyUsbKeyDepotService
 				.findByOfficeIds(offices);
+		
+		if(depots.size()==0){
+			addMessage(redirectAttributes, "当前网点没有库房无法申请！");
+			return "redirect:" + Global.getAdminPath() + "/key/keyUsbKeyDepot/?repage";
+		}
 		
 		
 		model.addAttribute("depot", depots.get(0));
