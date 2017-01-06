@@ -809,6 +809,9 @@ public class StatisticDayDataController extends BaseController {
 		row2.createCell(9).setCellValue("发票");
 
 		
+		
+		
+		
 		List<String> monthList = getMonthList(startTime + "-01", endTime
 				+ "-01");
 		List<StatisticMonthData> sumList = new ArrayList<StatisticMonthData>();
@@ -1309,6 +1312,9 @@ public class StatisticDayDataController extends BaseController {
 //				 officeId);
 		
 		
+		
+		
+		
 		Collections.sort(dates);
 		if (dates.size() != 0) {// 有未进行的统计
 			jsonObject.put("status", "2");
@@ -1489,20 +1495,20 @@ public class StatisticDayDataController extends BaseController {
 		statisticDayData.setReceiptStoreTotal(statisticDayData
 				.getReceiptTotal() + receiptIn - receiptOut);// 余量
 
-		// 证书总量
-		certTotal = workDealInfoService
-				.getCertPublishCount(countDate, officeId)+workDealInfoService.getWorkPayCountByUpdate(countDate, officeId);
+		// 证书总量 ----> 不单算了,直接取循环相加的值,保证两边数据一致
+		/*certTotal = workDealInfoService
+				.getCertPublishCount(countDate, officeId)+workDealInfoService.getWorkPayCountByUpdate(countDate, officeId);*/
 		// 金额总量
 		paymentTotal = workDealInfoService.getWorkPayMoneyCount(countDate, officeId) + workDealInfoService.getWorkPayMoneyCountByUpdate(countDate, officeId);
 		// key余量
 
 		statisticDayData.setCertMoneyTotal(paymentTotal);
-		statisticDayData.setCertTotal(certTotal);
+		//statisticDayData.setCertTotal(certTotal);
 		statisticDayData.setCreateDate(new Date());
 
 		statisticDayData.setOffice(officeService.get(officeId));
 		statisticDayData.setStatisticDate(countDate);
-		session.setAttribute("statisticDayData", statisticDayData);
+		
 		//	statisticDayDataService.save(statisticDayData);
 
 		// ======================日经营汇总表结束========================
@@ -1668,20 +1674,26 @@ public class StatisticDayDataController extends BaseController {
 					countDate, officeId, 5, app.getId(),
 					WorkDealInfoType.TYPE_INFORMATION_REROUTE,WorkDealInfoType.TYPE_DAMAGED_REPLACED,WorkDealInfoType.TYPE_UPDATE_CERT));
 			
-			certData.setCertTotal(certData.getAdd1() + certData.getAdd2()+ certData.getAdd3()
-					+ certData.getAdd4()+ certData.getAdd5()
-					+ certData.getRenew1() + certData.getRenew2() + certData.getRenew3()
-					+ certData.getRenew4() + certData.getRenew5()
-					+ certData.getModifyNum() + certData.getReissueNum()
-					+ certData.getLostReplaceNum() 
-					+ certData.getUpdateChangeNum() + certData.getUpdateChangeNum2() + certData.getUpdateChangeNum3() + certData.getUpdateChangeNum4() + certData.getUpdateChangeNum5()
-					+ certData.getUpdateLostNum() + certData.getUpdateLostNum2() + certData.getUpdateLostNum3() + certData.getUpdateLostNum4() + certData.getUpdateLostNum5() 
-					+ certData.getUpdateReplaceNum() + certData.getUpdateReplaceNum2() + certData.getUpdateReplaceNum3() + certData.getUpdateReplaceNum4() + certData.getUpdateReplaceNum5()
-					+ certData.getChangeLostNum() 
-					+ certData.getChangeReplaceNum()
-					+ certData.getChangeUpdateLostNum() + certData.getChangeUpdateLostNum2() + certData.getChangeUpdateLostNum3() + certData.getChangeUpdateLostNum4() + certData.getChangeUpdateLostNum5() 
-					+ certData.getChangeUpdateReplaceNum() + certData.getChangeUpdateReplaceNum2() + certData.getChangeUpdateReplaceNum3() + certData.getChangeUpdateReplaceNum4() + certData.getChangeUpdateReplaceNum5()
-					);
+			int certTotalApp = certData.getAdd1() + certData.getAdd2()+ certData.getAdd3()
+			+ certData.getAdd4()+ certData.getAdd5()
+			+ certData.getRenew1() + certData.getRenew2() + certData.getRenew3()
+			+ certData.getRenew4() + certData.getRenew5()
+			+ certData.getModifyNum() + certData.getReissueNum()
+			+ certData.getLostReplaceNum() 
+			+ certData.getUpdateChangeNum() + certData.getUpdateChangeNum2() + certData.getUpdateChangeNum3() + certData.getUpdateChangeNum4() + certData.getUpdateChangeNum5()
+			+ certData.getUpdateLostNum() + certData.getUpdateLostNum2() + certData.getUpdateLostNum3() + certData.getUpdateLostNum4() + certData.getUpdateLostNum5() 
+			+ certData.getUpdateReplaceNum() + certData.getUpdateReplaceNum2() + certData.getUpdateReplaceNum3() + certData.getUpdateReplaceNum4() + certData.getUpdateReplaceNum5()
+			+ certData.getChangeLostNum() 
+			+ certData.getChangeReplaceNum()
+			+ certData.getChangeUpdateLostNum() + certData.getChangeUpdateLostNum2() + certData.getChangeUpdateLostNum3() + certData.getChangeUpdateLostNum4() + certData.getChangeUpdateLostNum5() 
+			+ certData.getChangeUpdateReplaceNum() + certData.getChangeUpdateReplaceNum2() + certData.getChangeUpdateReplaceNum3() + certData.getChangeUpdateReplaceNum4() + certData.getChangeUpdateReplaceNum5();
+			
+			certData.setCertTotal(certTotalApp);
+			
+			//证书总量取各个应用下证书总量的和,保证总量和各个应用小计之和对应
+			certTotal += certTotalApp;
+			
+			
 			certData.setReceiptTotal(workDealInfoService
 					.getWorkPayReceiptCount(countDate, officeId, app.getId()));
 			certData.setKeyTotal(workDealInfoService.getKeyPublishTimesCount(
@@ -1692,6 +1704,10 @@ public class StatisticDayDataController extends BaseController {
 			appDatas.add(certData);
 			// statisticAppDataService.save(certData);
 		}
+		
+		
+		statisticDayData.setCertTotal(certTotal);
+		session.setAttribute("statisticDayData", statisticDayData);
 		session.setAttribute("appDatas", appDatas);
 	}
 

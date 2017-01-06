@@ -5515,12 +5515,13 @@ public class WorkDealInfoService extends BaseService {
 		if (year != 0) {
 			dc.add(Restrictions.eq("year", year));
 		}
+		
+		dc.add(Restrictions.eq("dealInfoType", dealInfoType));
+		
+		dc.add(Restrictions.isNull("dealInfoType1"));
+		dc.add(Restrictions.isNull("dealInfoType2"));
 		dc.add(Restrictions.isNull("dealInfoType3"));
 
-		dc.add(Restrictions.or(Restrictions.eq("dealInfoType", dealInfoType),
-				Restrictions.eq("dealInfoType1", dealInfoType),
-				Restrictions.eq("dealInfoType2", dealInfoType),
-				Restrictions.eq("dealInfoType3", dealInfoType)));
 		List<String> statusIntegers = new ArrayList<String>();
 		statusIntegers.add(WorkDealInfoStatus.STATUS_CERT_OBTAINED);
 		statusIntegers.add(WorkDealInfoStatus.STATUS_CERT_REVOKE);
@@ -5558,17 +5559,17 @@ public class WorkDealInfoService extends BaseService {
 			dc.add(Restrictions.isNull("dealInfoType1"));
 			dc.add(Restrictions.isNull("dealInfoType2"));
 			dc.add(Restrictions.isNull("dealInfoType3"));
-			statusIntegers.add(WorkDealInfoStatus.STATUS_CERT_WAIT);
-
-			dc.add(Restrictions.ge("payUserDate", date));
-			dc.add(Restrictions.lt("payUserDate", calendar.getTime()));
+			//状态为已验证待制证
+			statusIntegers.add(WorkDealInfoStatus.STATUS_APPROVE_WAIT);
+			//按验证时间查询
+			dc.add(Restrictions.ge("verifyUserDate", date));
+			dc.add(Restrictions.lt("verifyUserDate", calendar.getTime()));
 		} else if (dealInfoType.equals(4)) {
 			dc.add(Restrictions.eq("dealInfoType2", dealInfoType));
 			dc.add(Restrictions.isNull("dealInfoType"));
 			dc.add(Restrictions.isNull("dealInfoType1"));
 			dc.add(Restrictions.isNull("dealInfoType3"));
-			// statusIntegers.add(WorkDealInfoStatus.STATUS_CERT_WAIT);
-
+	
 			dc.add(Restrictions.ge("businessCardUserDate", date));
 			dc.add(Restrictions.lt("businessCardUserDate", calendar.getTime()));
 
@@ -5598,9 +5599,14 @@ public class WorkDealInfoService extends BaseService {
 		dc.createAlias("configApp", "configApp");
 		dc.add(Restrictions.eq("officeId", officeId));
 		dc.add(Restrictions.eq("configApp.id", appId));
+		
+		// 迁移除外
+		dc.add(Restrictions.or(Restrictions.ne("isSJQY", 1),
+				Restrictions.isNull("isSJQY")));
 
-		dc.add(Restrictions.ge("businessCardUserDate", date));
-		dc.add(Restrictions.lt("businessCardUserDate", calendar.getTime()));
+		//更新+变更 和 更新一样,验证之后就算
+		dc.add(Restrictions.ge("verifyUserDate", date));
+		dc.add(Restrictions.lt("verifyUserDate", calendar.getTime()));
 
 		dc.add(Restrictions.eq("dealInfoType", dealInfoTypeUpdate));
 		dc.add(Restrictions.isNull("dealInfoType1"));
@@ -5614,7 +5620,7 @@ public class WorkDealInfoService extends BaseService {
 		List<String> statusIntegers = new ArrayList<String>();
 		statusIntegers.add(WorkDealInfoStatus.STATUS_CERT_OBTAINED);
 		statusIntegers.add(WorkDealInfoStatus.STATUS_CERT_REVOKE);
-		statusIntegers.add(WorkDealInfoStatus.STATUS_CERT_WAIT);
+		statusIntegers.add(WorkDealInfoStatus.STATUS_APPROVE_WAIT);
 		dc.add(Restrictions.in("dealInfoStatus", statusIntegers));
 		return (int) workDealInfoDao.count(dc);
 	}
@@ -5629,6 +5635,11 @@ public class WorkDealInfoService extends BaseService {
 		dc.createAlias("configApp", "configApp");
 		dc.add(Restrictions.eq("officeId", officeId));
 		dc.add(Restrictions.eq("configApp.id", appId));
+		
+		// 迁移除外
+		dc.add(Restrictions.or(Restrictions.ne("isSJQY", 1),
+			Restrictions.isNull("isSJQY")));
+		
 		dc.add(Restrictions.ge("businessCardUserDate", date));
 		dc.add(Restrictions.lt("businessCardUserDate", calendar.getTime()));
 
@@ -5658,6 +5669,13 @@ public class WorkDealInfoService extends BaseService {
 		dc.createAlias("configApp", "configApp");
 		dc.add(Restrictions.eq("officeId", officeId));
 		dc.add(Restrictions.eq("configApp.id", appId));
+		
+		
+		
+		// 迁移除外
+		dc.add(Restrictions.or(Restrictions.ne("isSJQY", 1),
+			Restrictions.isNull("isSJQY")));
+		
 		dc.add(Restrictions.ge("businessCardUserDate", date));
 		dc.add(Restrictions.lt("businessCardUserDate", calendar.getTime()));
 
@@ -5689,6 +5707,12 @@ public class WorkDealInfoService extends BaseService {
 		dc.createAlias("configApp", "configApp");
 		dc.add(Restrictions.eq("officeId", officeId));
 		dc.add(Restrictions.eq("configApp.id", appId));
+		
+		// 迁移除外
+		dc.add(Restrictions.or(Restrictions.ne("isSJQY", 1),
+			Restrictions.isNull("isSJQY")));
+		
+		
 		dc.add(Restrictions.ge("businessCardUserDate", date));
 		dc.add(Restrictions.lt("businessCardUserDate", calendar.getTime()));
 		dc.add(Restrictions.eq("dealInfoType", dealInfoTypeUpdate));
@@ -6565,7 +6589,9 @@ public class WorkDealInfoService extends BaseService {
 		dc.add(Restrictions.or(Restrictions.isNull("dealInfoType"),
 				Restrictions.ne("dealInfoType",
 						WorkDealInfoType.TYPE_UPDATE_CERT)));
-
+		
+		
+		
 		List<String> statusIntegers = new ArrayList<String>();
 		statusIntegers.add(WorkDealInfoStatus.STATUS_CERT_OBTAINED);
 		dc.add(Restrictions.in("dealInfoStatus", statusIntegers));
