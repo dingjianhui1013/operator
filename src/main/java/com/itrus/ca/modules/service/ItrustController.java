@@ -76,6 +76,8 @@ public class ItrustController {
 			HttpServletResponse response,
 			@RequestParam(required = false) String include)
 			throws JSONException,IOException {
+		long start = System.currentTimeMillis();
+		
 		response.setStatus(response.SC_OK);
 		response.setContentType("application/json");
 		response.setCharacterEncoding("utf-8");
@@ -153,6 +155,11 @@ public class ItrustController {
 //		return json.toString();
 		response.getWriter().println(json.toString());
 		response.flushBuffer();
+		
+		long end = System.currentTimeMillis();
+		
+		log.debug("getCertProjectByCert方法共用时 "+(end-start)+" ms");
+		log.debug(json.toString());
 	}
 
 	/**
@@ -171,6 +178,9 @@ public class ItrustController {
 			HttpServletResponse response,
 			@RequestParam(required = false) String include)
 			throws JSONException,IOException {
+		
+		long start = System.currentTimeMillis();
+		
 		response.setStatus(response.SC_OK);
 		response.setContentType("application/json");
 		response.setCharacterEncoding("utf-8");
@@ -251,6 +261,11 @@ public class ItrustController {
 //		return json.toString();
 		response.getWriter().println(json.toString());
 		response.flushBuffer();
+		
+		long end = System.currentTimeMillis();
+		
+		log.debug("getCertProjectByKey方法共用时 "+(end-start)+" ms");
+		log.debug(json.toString());
 	}
 
 	/**
