@@ -56,7 +56,7 @@ function setCount() {
 		cspStr = encodeURI(encodeURI(cspStr));
 		var url = "${ctx}/ca/enrollMakeCert?reqOverrideValidity=" + day
 			+ "&certProvider=" + cspStr + "&keySn=" + keySN + "&csr=" + csr
-			+ "&dealInfoId=${workDealInfo.id}&_="+new Date().getTime();
+			+ "&dealInfoId=${workDealInfo.id}&addCertDays=0&_="+new Date().getTime();
 		$.ajax({
 			url : url,
 			async : false,
