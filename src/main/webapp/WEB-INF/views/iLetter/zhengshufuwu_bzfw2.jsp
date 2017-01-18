@@ -3,7 +3,7 @@
 <html>
 <head>
 <title>天威诚信i信客户端管理</title>
-<meta name="decorator" content="default" />
+<meta name="decorator" content="iletter" />
 <link href="${ctxStatic}/iLetter/css/main.css" type="text/css" rel="stylesheet"/>
 
 <script type="text/javascript" src="${ctxStatic}/iLetter/js/jquery-1.8.3.min.js"></script>
