@@ -307,12 +307,16 @@ public class UserEnrollController extends BaseController {
 				// 如果业务已经到达待制证状态,返回业务的id
 				if (current != null) {
 					if (WorkDealInfoType.TYPE_INFORMATION_REROUTE
-							.equals(current.getDealInfoType2())
-							&& WorkDealInfoStatus.STATUS_CERT_WAIT
-									.equals(current.getDealInfoStatus())) {
-						json.put("updateStatus", 106);
-						json.put("dealInfoId", current.getId());
-						return json.toString();
+							.equals(current.getDealInfoType2())) {
+						
+						if(WorkDealInfoStatus.STATUS_ABNORMAL_USER.equals(current.getDealInfoStatus())|| WorkDealInfoStatus.STATUS_VERIFICATE_WAIT
+								.equals(current.getDealInfoStatus())){
+							json.put("updateStatus", 106);
+							json.put("dealInfoId", current.getId());
+							return json.toString();
+						}
+						
+						
 					}
 				}
 
