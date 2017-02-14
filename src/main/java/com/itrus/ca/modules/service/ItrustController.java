@@ -151,15 +151,15 @@ public class ItrustController {
 			e.printStackTrace();
 			json.put("msg", "系统异常");
 		}
-		log.info("result:"+json.toString());
+		//log.info("result:"+json.toString());
 //		return json.toString();
 		response.getWriter().println(json.toString());
 		response.flushBuffer();
 		
 		long end = System.currentTimeMillis();
 		
-		log.debug("getCertProjectByCert方法共用时 "+(end-start)+" ms");
-		log.debug(json.toString());
+		//log.debug("getCertProjectByCert方法共用时 "+(end-start)+" ms");
+		//log.debug(json.toString());
 	}
 
 	/**
@@ -188,10 +188,10 @@ public class ItrustController {
 		JSONObject json = new JSONObject();
 		try {
 			json.put("status", 0);
-		/*	log.info("keySn:"+keysn);
+			//log.debug("keySn:"+keysn);
 			
 			
-			log.info("IP:"+getIp(request));
+			/*log.info("IP:"+getIp(request));
 			*/
 				
 			
@@ -264,8 +264,8 @@ public class ItrustController {
 		
 		long end = System.currentTimeMillis();
 		
-		log.debug("getCertProjectByKey方法共用时 "+(end-start)+" ms");
-		log.debug(json.toString());
+		//log.debug("getCertProjectByKey方法共用时 "+(end-start)+" ms");
+		//log.debug(json.toString());
 	}
 
 	/**

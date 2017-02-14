@@ -13,6 +13,7 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -41,6 +42,7 @@ import com.itrus.ca.modules.sys.entity.User;
 import com.itrus.ca.modules.sys.service.SystemService;
 import com.itrus.ca.modules.sys.utils.UserUtils;
 import com.itrus.ca.modules.sys.web.LoginController;
+import com.itrus.ca.modules.work.web.CertController;
 
 import cn.topca.sp.cvm.CVM;
 import cn.topca.sp.svm.SVM;
@@ -54,6 +56,8 @@ import cn.topca.sp.x509.X509Certificate;
 @Service
 @DependsOn({"userDao","roleDao","menuDao"})
 public class SystemAuthorizingRealm extends AuthorizingRealm {
+	
+	Logger log = Logger.getLogger(SystemAuthorizingRealm.class);
 
 	//@Autowired
 	//private SysCrlContextService sysCrlContextService;
@@ -74,22 +78,19 @@ public class SystemAuthorizingRealm extends AuthorizingRealm {
 		UsernamePasswordToken token = (UsernamePasswordToken) authcToken;
 		
 		if(token.getLoginType()!=null&&token.getLoginType().equals("1")){
-			/*HttpSession session = token.getSession();
-			 if(session==null){
-				 throw new CaptchaException("session过期,请重新登录");
-			 }*/
 			
 			try {
 				
 				String randomString = (String)CacheUtils.get("randomString");
-				//String randomString = (String)session.getAttribute("randomString");
 				if(randomString==null){
 					 throw new CaptchaException("session过期,请重新登录");
 				}
 				
 				String toSign = "LOGONDATA:"+randomString;
 				
+				log.debug("原文:"+toSign);
 				byte[] signedDate = Base64.decodeBase64(token.getSignedData());
+				log.debug("Base64密文:"+signedDate);
 				X509Certificate certificate = SVM.verifyPKCS7SignedData(signedDate, toSign.getBytes());
 			
 				/*User user = getSystemService().getUserByLoginName(certificate.getCertSubjectNames().getItem("CN"));*/
