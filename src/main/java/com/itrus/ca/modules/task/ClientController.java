@@ -317,6 +317,7 @@ public class ClientController {
 					company.setCity(s1.getSCity());
 					company.setDistrict(s1.getSCounty());
 					company.setAddress(s1.getAddress());
+					company.setRemarks(s1.getRemark());
 					company.setCompanyIp(s1.getCompanyMobile());
 					if (company.getCompanyType() == null
 							|| company.getCompanyType().equals("null")) {
