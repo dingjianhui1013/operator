@@ -69,14 +69,6 @@ public class LoginController extends BaseController{
 			systemService.updateUserLoginInfo(user.getId(),StringUtils.getRemoteAddr(request));
 			return "redirect:"+Global.getAdminPath();
 		}
-		String randomString = UUID.randomUUID().toString();
-		
-		CacheUtils.put("randomString", randomString);
-		
-		//改用cache
-		/*HttpSession session = request.getSession();
-		session.setAttribute("randomString", randomString);*/
-		model.addAttribute("randomString", randomString);
 		
 		try {
 			JSONObject dd = new JSONObject();
@@ -90,23 +82,7 @@ public class LoginController extends BaseController{
 			e.printStackTrace();
 		}
 		
-		/*StringBuffer subjects = new StringBuffer();
-		subjects.append("[\"\",\"");
-		
-		List<SysCrlContext> sysCrlContexts = sysCrlContextService.findAll();
-		
-		for(int i=0;i<sysCrlContexts.size();i++){
-			if(i==sysCrlContexts.size()-1){
-				subjects.append(sysCrlContexts.get(i).getCertSubject()+"\"]");
-				break;
-			}
-			subjects.append(sysCrlContexts.get(i).getCertSubject()+"\",\"");
-		}
-		
-		model.addAttribute("subjects", subjects);*/
-		
-		
-		
+	
 		return "modules/sys/sysLogin";
 	}
 
@@ -132,31 +108,17 @@ public class LoginController extends BaseController{
 			model.addAttribute("isValidateCodeLogin", isValidateCodeLogin(username, true, false));
 		}
 		
-		String randomString = (String)CacheUtils.get("randomString");
+		/*String randomString = (String)CacheUtils.get("randomString");
 		
 		if(randomString==null){
 			randomString = UUID.randomUUID().toString();
 			CacheUtils.put("randomString", randomString);
 		}
-		model.addAttribute("randomString", randomString);	
+		model.addAttribute("randomString", randomString);	*/
 		
 		model.addAttribute("type", type);
 		
-		/*StringBuffer subjects = new StringBuffer();
-		
-		subjects.append("[\"\",\"");
-		
-		List<SysCrlContext> sysCrlContexts = sysCrlContextService.findAll();
-		
-		for(int i=0;i<sysCrlContexts.size();i++){
-			if(i==sysCrlContexts.size()-1){
-				subjects.append(sysCrlContexts.get(i).getCertSubject()+"\"]");
-				break;
-			}
-			subjects.append(sysCrlContexts.get(i).getCertSubject()+"\",\"");
-		}
-		
-		model.addAttribute("subjects", subjects);*/
+	
 		
 		try {
 			JSONObject dd = new JSONObject();

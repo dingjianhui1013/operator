@@ -21,12 +21,11 @@ public class UsernamePasswordToken extends org.apache.shiro.authc.UsernamePasswo
 	//登录类型
 	private String loginType;
 	
+	//原文
+	private String randomString;
 	
-	
+	//签名值
 	private String signedData;
-	
-	//session  里边的东西任意取
-	//private HttpSession session;
 	
 	
 	public String getCaptcha() {
@@ -45,13 +44,13 @@ public class UsernamePasswordToken extends org.apache.shiro.authc.UsernamePasswo
 		this.loginType = loginType;
 	}
 	
-	/*public HttpSession getSession() {
-		return session;
+	public String getRandomString() {
+		return randomString;
 	}
 
-	public void setSession(HttpSession session) {
-		this.session = session;
-	}*/
+	public void setRandomString(String randomString) {
+		this.randomString = randomString;
+	}
 
 	public String getSignedData() {
 		return signedData;
@@ -72,12 +71,12 @@ public class UsernamePasswordToken extends org.apache.shiro.authc.UsernamePasswo
 	}
 	
 	public UsernamePasswordToken(String username, char[] password,
-			boolean rememberMe, String host, String captcha,String signedData,String loginType){
+			boolean rememberMe, String host, String captcha,String signedData,String randomString,String loginType){
 		super(username, password, rememberMe, host);
 		this.captcha = captcha;
 		this.loginType = loginType;
 		this.signedData = signedData;
-		//this.session = session;
+		this.randomString = randomString;
 	}
 
 }

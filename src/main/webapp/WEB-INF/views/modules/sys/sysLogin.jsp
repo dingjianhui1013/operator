@@ -1,12 +1,19 @@
 
+<%@page import="java.util.UUID"%>
 <%@ page contentType="text/html;charset=UTF-8" %>
+<%@ page import="java.lang.*"%>
 <%@ page import="org.apache.shiro.web.filter.authc.FormAuthenticationFilter"%>
 <%@ include file="/WEB-INF/views/include/taglib.jsp"%>
+
+<%
+	String randomString = UUID.randomUUID().toString();
+%>
+
 <!DOCTYPE html>
 <html>
 <head>
 	<title>${fns:getConfig('productName')} 登录</title>
-	<meta name="decorator" content="default"/>
+	 <meta name="decorator" content="default"/>
 	<style type="text/css">
       html,body,table{background-color:#f5f5f5;width:100%;height:500px;text-align:center;}.form-signin-heading{font-size:36px;margin-bottom:20px;color:#0663a2;}
       .form-signin{position:relative;text-align:left;width:330px;padding:15px 20px 5px;margin:0 auto 20px;background-color:#fff;border:1px solid #e5e5e5;
@@ -35,11 +42,6 @@
 			if(${type==0}){
 				login();
 			}
-			
-			/* arrayIssuerDN = ["C=CN, O=CFCA Operation CA2","CN=天诚安信测试RSA1024用户CA, OU=TOPCA, O=TOPCA, C=CN","C=CN, O=四川省数字证书认证管理中心有限公司, OU=SCEB CA, CN=SCEB CA"]; */
-			/* arrayIssuerDN = ${subjects}; */
-		 	/* arrayIssuerDN=["CN=天诚安信测试RSA1024用户CA, OU=TOPCA, O=TOPCA, C=CN"]; */
-		 	
 		 	
 		 	if(${crlList}.list==""){
 		 		arrayIssuerDN = "";
@@ -93,12 +95,7 @@
 		function getCertInfo(){
 			var index = SignForm.CertList.value;
 			var CurCert = arrayCerts[index];
-			/* $("#caInfo").show();
-			$("#qfz").html(CurCert.Issuer);
-			$("#zt").html(CurCert.Subject);
-			$("#xlh").html(CurCert.SerialNumber);
-			$("#ks").html(CurCert.ValidFrom+"");
-			$("#js").html(CurCert.ValidTo+""); */
+			
 		}
 		
 		function tabSccaLogin(){
@@ -106,7 +103,6 @@
 			$("#sub").css("display","none");
 			$("#sccaLoginId").show();
 			$("#passlogin").show();
-			/* $("#caInfo").show(); */
 			$("#certLogin").show();
 			$("#caInfo").show();
 			$(".selectzsBox").show();
@@ -139,12 +135,7 @@
 					objCertList.add(el);
 				}
 				var CurCert = arrayCerts[0];
-				/* $("#caInfo").show();
-				$("#qfz").html(CurCert.Issuer);
-				$("#zt").html(CurCert.Subject);
-				$("#xlh").html(CurCert.SerialNumber);
-				$("#ks").html(CurCert.ValidFrom+"");
-				$("#js").html(CurCert.ValidTo+""); */
+				
 			}
 			
 		}
@@ -154,7 +145,6 @@
 			$("#sub").css("display","none");
 			$("#sccaLoginId").show();
 			$("#passlogin").show();
-			/* $("#caInfo").show(); */
 			$("#certLogin").show();
 			
 		 	if(logonSign()){
@@ -175,7 +165,6 @@
 		$("#sub").css("display","block");
 		$("#sccaLoginId").hide();
 		$("#passlogin").hide();
-		/* $("#caInfo").hide(); */
 		$(".selectzsBox").hide();
 		$("#certLogin").hide();
 	}
@@ -201,26 +190,15 @@
 	<div  class="selectzsBox">
 		<form name="SignForm" id="certLogin" action="${ctx}/sys/certLogin" method="post">
 				<strong>请选择证书：</strong>
-				<select name="CertList" onchange="getCertInfo();" style="width:71%;"></select>
-				
-				
-			
+				<select name="CertList" onchange="getCertInfo()" style="width:71%;"></select>
 		</form>
-		<!-- <div id="caInfo" class="caInfo">
-			<p>颁发者:<span id="qfz"></span></p>
-			<p>主题:<span id="zt"></span></p>
-			<p>序列号:<span id="xlh"></span></p>
-			<p>开始:<span id="ks"></span></p>
-			<p>结束:<span id="js"></span></p>
-		</div>	 -->
 	</div>
 	<form id="loginForm" class="form-signin" action="${ctx}/login" method="post">
-		
-		<input type="hidden" value="${randomString }" id="randomString" />
-		
+			
 		<div style="display:none" id="plogin">
 			<label class="input-label" for="username">登录名</label>
 			<input name="signedData" type="hidden" id="signedData" />
+			<input name="randomString" id="randomString" type="hidden" value="<%=randomString%>">
 			<input type="text" id="username" name="username" class="input-block-level required" value="${username}">
 			<label class="input-label" for="password">密码</label>
 			<input type="hidden" id="type" name="type" value = "0" />
@@ -231,15 +209,15 @@
 			<tags:validateCode name="validateCode" inputCssStyle="margin-bottom:0;"/>
 		</div></c:if>
 		<div class="form-group-sign">
-			<input class="btn btn-large btn-primary" type="button" onclick="sccaLogin();" value="证书登录" id="sccaLoginId"/>
+			<input class="btn btn-large btn-primary" type="button" onclick="sccaLogin()" value="证书登录" id="sccaLoginId"/>
 		</div>
 		<div class="form-group-sign">
-			<input class="btn btn-large btn-primary" type="button" onclick="login();" value="密码登录" id="passlogin"/>
+			<input class="btn btn-large btn-primary" type="button" onclick="login()" value="密码登录" id="passlogin"/>
 		</div>
 		<div style="display:none" id="sub">
 			<div class="btnBox">
 				<input class="btn btn-large btn-primary" type="submit" value="登  录"  style="width:45%;margin-right:25px;*margin-right:20px"/>
-				<input class="btn btn-large btn-primary" type="button" onclick="tabSccaLogin();" value="证书登录" id="sccaLoginId" style="width:45%;"/>
+				<input class="btn btn-large btn-primary" type="button" onclick="tabSccaLogin()" value="证书登录" id="sccaLoginId" style="width:45%;"/>
 			</div>
 			<label for="rememberMe" title="下次不需要再登录"><input type="checkbox" id="rememberMe" name="rememberMe"/> 记住我（公共场所慎用）</label>
 		</div>

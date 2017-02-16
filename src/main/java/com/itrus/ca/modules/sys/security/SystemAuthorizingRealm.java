@@ -6,6 +6,7 @@
 package com.itrus.ca.modules.sys.security;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -59,9 +60,6 @@ public class SystemAuthorizingRealm extends AuthorizingRealm {
 	
 	Logger log = Logger.getLogger(SystemAuthorizingRealm.class);
 
-	//@Autowired
-	//private SysCrlContextService sysCrlContextService;
-
 	private SystemService systemService;
 	
 	@Value(value = "${isCheckRevoked}")
@@ -81,27 +79,33 @@ public class SystemAuthorizingRealm extends AuthorizingRealm {
 			
 			try {
 				
-				String randomString = (String)CacheUtils.get("randomString");
+				String randomString = token.getRandomString();
 				if(randomString==null){
-					 throw new CaptchaException("session过期,请重新登录");
+					 throw new CaptchaException("请重新登录");
 				}
 				
 				String toSign = "LOGONDATA:"+randomString;
 				
 				log.debug("原文:"+toSign);
 				byte[] signedDate = Base64.decodeBase64(token.getSignedData());
-				log.debug("Base64密文:"+signedDate);
+				log.debug("Base64密文:"+Arrays.toString(signedDate));
 				X509Certificate certificate = SVM.verifyPKCS7SignedData(signedDate, toSign.getBytes());
-			
+				log.debug("证书对象:"+certificate);
+				
+				log.debug("身份证号:"+certificate.getCertSubjectNames().getItem("SN"));
+				
 				/*User user = getSystemService().getUserByLoginName(certificate.getCertSubjectNames().getItem("CN"));*/
 				
 				User user = getSystemService().getUserByIdentityNumber(certificate.getCertSubjectNames().getItem("SN"));
-				
+				log.debug("用户对象:"+user);
 				
 				
 				if (user==null) {
 					throw new CaptchaException("用户不存在！");
 				}
+				
+				log.debug("用户名:"+user.getLoginName());
+				
 				if(user.getLoginType()==null||!user.getLoginType().equals("1")){
 					throw new CaptchaException("用户不支持证书登录！");
 					//return null;
@@ -112,8 +116,11 @@ public class SystemAuthorizingRealm extends AuthorizingRealm {
 				}
 				
 				CVM cvm = SingleCvm.getInstance().getCVM();
+				log.debug("isCheckRevoked:"+isCheckRevoked);
+				log.debug("isCheckValidPeriod:"+isCheckValidPeriod);
+				
 				int status = cvm.verifyCertificate(certificate,Boolean.parseBoolean(isCheckRevoked),Boolean.parseBoolean(isCheckValidPeriod));
-			    
+			    log.debug("状态码:"+status);
 				if(status!=0){
 					if(status==-1){
 						throw new CaptchaException("严重系统错误,CVM初始化失败,请检查配置文件和日志！");
@@ -152,6 +159,7 @@ public class SystemAuthorizingRealm extends AuthorizingRealm {
 					throw new CaptchaException("证书登录错误！:数据库连接失败！");
 				}
 			//	e.printStackTrace();
+				log.debug("错误信息:"+e.getMessage());
 				throw new CaptchaException("证书登录错误！:" + e.getMessage());
 			}
 			

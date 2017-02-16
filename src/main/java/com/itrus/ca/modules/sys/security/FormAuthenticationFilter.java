@@ -43,12 +43,12 @@ public class FormAuthenticationFilter extends org.apache.shiro.web.filter.authc.
 		
 		String signedData = request.getParameter("signedData");
 		
-		//之前将随机数放到session,现在改放到cache
-		//HttpSession session = ((HttpServletRequest)request).getSession();
+		String randomString = request.getParameter("randomString");
+		
+	
 		
 		if(loginType!=null&&loginType.equals("1")){
 			
-			//String signedData = request.getParameter("signedData");
 			
 			String username = getUsername(request);
 			String password = "certLogin";
@@ -57,7 +57,7 @@ public class FormAuthenticationFilter extends org.apache.shiro.web.filter.authc.
 			String host = getHost(request);
 			String captcha = getCaptcha(request);
 			
-			return new UsernamePasswordToken(username, password.toCharArray(), rememberMe, host, captcha,signedData,loginType);
+			return new UsernamePasswordToken(username, password.toCharArray(), rememberMe, host, captcha,signedData,randomString,loginType);
 		}
 		String username = getUsername(request);
 		String password = getPassword(request);
