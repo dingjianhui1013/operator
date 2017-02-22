@@ -4479,6 +4479,7 @@ public class WorkDealInfoController extends BaseController {
 				SimpleDateFormat smd = new SimpleDateFormat("yyyy-MM-dd");
 
 				json.put("companyId", workCompany.getId());
+				json.put("companyName", workCompany.getCompanyName());
 				json.put("organizationNumber",
 						workCompany.getOrganizationNumber());
 				json.put("companyType", workCompany.getCompanyType());

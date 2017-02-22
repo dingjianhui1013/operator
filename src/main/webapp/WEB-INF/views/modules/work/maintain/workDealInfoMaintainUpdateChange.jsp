@@ -18,18 +18,18 @@
 /* .zoominner p {height:30px; _position:absolute; _right:2px; _top:5px;}
 .zoominner p a { /* background: url("../images/imgzoom_tb.gif") no-repeat scroll 0 0 transparent;  float: left; height: 17px; line-height: 100px; margin-left: 10px;  overflow: hidden;  width: 17px;}
 .zoominner p a.imgadjust {background-position: -40px 0;} */
-.zoominner a.imgclose{ cursor:pointer;position:absolute;z-index:9999;right:-6px; top:-6px; color:#333; font-size:30px; display:block;}
+.zoominner a.imgclose{ cursor:pointer;position:absolute;z-index:9999;right:0px; top:0px; color:#333; font-size:30px; display:block;}
 .zoominner a.imgclose:hover{text-decoration:none;}
 .y {float: right; margin-bottom:10px;}
 .ctnlist .text img{ cursor:pointer;}
 #imgzoom_cover{background-color:#000000; filter:progid:DXImageTransform.Microsoft.Alpha(Opacity=70); opacity:0.7; position:absolute; z-index:800; top:0px; left: 0px; width:100%; display:none;}
 #imgzoom{ display:none; z-index:801; position:absolute;}
 #imgzoom_img{_width:300px; _height:200px; width:700px; height:600px; background:url(../images/imageloading.gif) center center no-repeat;}
-#imgzoom_zoomlayer{ _width:300px; _height:200px; _position:relative; _padding-top:30px; min-width:300px; min-height:200px; padding:17px;}
+#imgzoom_zoomlayer{ _width:300px; _height:200px; _position:relative; _padding-top:30px; min-width:600px; min-height:500px; padding:110px 110px 50px;}
 
 .imgLayerBox{margin-bottom:20px;overflow:hidden;}
-.uploadImgList{ float:left; border:1px solid #ddd;margin-right:10px; padding:2px; position:relative}
-.uploadImgName{ text-align:center; font-size:12px; font-weight:bold; margin-top:4px; height:22px; line-height:22px;border-top:1px solid #ddd;margin-bottom:0px;}
+.uploadImgList{ float:left; border:1px solid #ddd;margin-right:10px; padding:15px 2px 10px; min-height:110px; position:relative}
+.uploadImgName{ text-align:center; font-size:12px; font-weight:bold; margin-top:15px; height:22px; line-height:22px;border-top:1px solid #ddd;margin-bottom:0px;}
 .smBtn{width:100px; height:20px;}
 .btnGrop{margin-bottom:5px;}
 .s-closeBtn{ position:absolute; right:-4px; top:0px; font-size:20px; cursor:pointer;}
@@ -65,9 +65,9 @@
 				var imgstatus = str1[i].substring(str1[i].lastIndexOf('##')+2,str1[i].length);
 				var str ='';
 				if(imgstatus==-2){
-					str = $("<div class='uploadImgList' style='border-style:solid;border-width:2px;border-color:green' ><img src='"+str1[i].substring(0,str1[i].lastIndexOf('##'))+"' style='width: 100px; height: 80px;'>"+'<p class="uploadImgName">'+getDisplayName(str1[i])+'</p><span class="s-closeBtn icon-remove-sign" data="'+str1[i]+'"></span></div>');
+					str = $("<div class='uploadImgList' style='border-style:solid;border-width:2px;border-color:green' ><img src='"+str1[i].substring(0,str1[i].lastIndexOf('##'))+"' style='width: 100px; height: 80px;' imgRotation='"+canRotation(str1[i])+"'>"+'<p class="uploadImgName">'+getDisplayName(str1[i])+'</p><span class="s-closeBtn icon-remove-sign" data="'+str1[i]+'"></span></div>');
 				}else{
-					str = $("<div class='uploadImgList'><img src='"+str1[i].substring(0,str1[i].lastIndexOf('##'))+"' style='width: 100px; height: 80px;'>"+'<p class="uploadImgName">'+getDisplayName(str1[i])+'</p><span class="s-closeBtn icon-remove-sign" data="'+str1[i]+'"></span></div>');
+					str = $("<div class='uploadImgList'><img src='"+str1[i].substring(0,str1[i].lastIndexOf('##'))+"' style='width: 100px; height: 80px;' imgRotation='"+canRotation(str1[i])+"'>"+'<p class="uploadImgName">'+getDisplayName(str1[i])+'</p><span class="s-closeBtn icon-remove-sign" data="'+str1[i]+'"></span></div>');
 				}
 				$("#imgLayer").append(str);
 				var imgBoxMod=$(".ctnlist .text img");
@@ -777,8 +777,12 @@
 							<!-- <th colspan="4" style="font-size: 20px;">基本信息</th> -->
 							<th colspan="1" style="font-size: 20px;"><span
 								class="prompt" style="color: red; display: none;">*</span>基本信息</th>	
-							<th colspan="3"> <a href="#" data-toggle="modal">
-							<input id="scan" class="btn btn-primary smBtn" onclick="scanningInfoEnter()" data-toggle="modal" value="扫描录入" /></a>	
+							<th colspan="3"> 
+							<shiro:hasPermission name="work:workDealInfo:saomiao">
+								<a href="#" data-toggle="modal">
+									<input id="scan" class="btn btn-primary smBtn" onclick="scanningInfoEnter()" data-toggle="modal" value="扫描录入" />
+								</a>
+							</shiro:hasPermission>	
 							</th>
 						</tr>
 						<tr>

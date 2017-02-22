@@ -35,6 +35,9 @@ var suffixImg = ".jpg";                               //设置图片后缀,固�
 var requestURI = "/work/workDealInfo/saveUploadImg";  //图片上传的请求路径
 
 //var fileUploadPath = "";                              //上传路径,从application.properties 中获取.
+
+var companyNameModify = false;                        //判断单位名称是否修改过
+
 /**
  * @author 萧龙纳云
  * flag : 信息是否可以录入
@@ -78,6 +81,13 @@ function scanningInfoEnter(flag) {
 		html+='</div>';
 		html+='</div>';
 	diag.InnerHtml=html;
+	diag.CancelEvent = function(){
+		diag.close();
+		if(companyNameModify){
+			$("#companyName").trigger("blur");
+			companyNameModify=false;
+		}
+	};  
 	diag.show();
 	diag.CancelEvent=release;
 	
@@ -206,19 +216,17 @@ function getoperatorinfo(flag){
  * */
 function getcompanyinfo(flag){
 	if(flag!=false&&$("#companyName").attr("disabled")!='disabled'
-		&&$("#organizationNumber").attr("disabled")!='disabled'
+		&&$("input[name='organizationNumber'").attr("disabled")!='disabled'
 		&&$("#companyName").attr("readonly")!='readonly'
-		&&$("#organizationNumber").attr("readonly")!='readonly'){
+		&&$("input[name='organizationNumber'").attr("readonly")!='readonly'){
 		
 		nDeviceIndex = VideoInputCtl.GetDeviceIndex();
-		
 		VideoInputCtl.SetDeviceQRcode(nDeviceIndex, 1);           //开启 or 关闭 QRcode功能
 		
 		VideoInputCtl.GrabToFile(localStoragePath+"Test.jpg");    //将照片存放到本地路径下
 		
 		if (VideoInputCtl.GetDeviceQRcode(nDeviceIndex)) {
 			var nCount = VideoInputCtl.GetQRcodeCount();
-			
 			szType = VideoInputCtl.GetQRcodeTypeName(0);
 			szText = VideoInputCtl.GetQRcodeContent(0);
 			
@@ -227,11 +235,13 @@ function getcompanyinfo(flag){
 			var strs = splitQRcode(szText);
 			if(strs!=null){
 				$("#companyName").val(strs[2]);
-				$("#organizationNumber").val(strs[0]);
+				companyNameModify=true;
+				//$("#companyName").val("罗蒙集团股份有限公司");
+				$("input[name='organizationNumber'").val(strs[0]);
 				// top.$.jBox.tip("单位信息录入成功");
 			}else{
 				$("#companyName").val("");
-				$("#organizationNumber").val("");
+				$("input[name='organizationNumber'").val("");
 			}
 		}
 	}
@@ -422,7 +432,7 @@ function afterUpload(imgName){
 			data: {"_FileName":imgName,"szBase64":szBase64},
 			success: function (data) {
 				if (data == 'true') {
-					var str = $("<div class='uploadImgList'><img src='data:image/tiff;base64,"+szBase64+"' style='width: 100px; height: 80px;'>"+'<p class="uploadImgName">'+getDisplayName(imgName)+'</p><span class="s-closeBtn icon-remove-sign" data="'+imgName+'"></span></div>');
+					var str = $("<div class='uploadImgList'><img src='data:image/tiff;base64,"+szBase64+"' style='width: 100px; height: 80px;' imgRotation='"+canRotation(imgName)+"'>"+'<p class="uploadImgName">'+getDisplayName(imgName)+'</p><span class="s-closeBtn icon-remove-sign" data="'+imgName+'"></span></div>');
 					
 					$("#imgLayer").append(str);
 					
@@ -499,13 +509,44 @@ function splitQRcode(stringObj){
 		
 		var strs = [];                                    //定义一个数组,来装载最终的字符数组
 		
+		var type=false;
 		
 		for(var i = 0;i < strFirst.length; i++) {
 			var strFirstSplit = strFirst[i];
 			var strSecond = new Array();                  //定义一个数组,来装载第二次分割后的字符
 			strSecond = strFirstSplit.split("：");		  //以冒号(中文)做第二次分割
+			//alert(strFirstSplit);
+			if(i==0){
+				if(strSecond[0].indexOf("统一社会信用代码")!=-1){
+					strs[0]=strSecond[1];
+				}else if(strSecond[0].indexOf("注册号")!=-1){
+					strs[0]='';
+				}else{
+					alert("证件信息不符合规则");
+					return;
+				}				
+			}
 			
-			strs.push(strSecond[1]);                      //将第二个字符放入strs,也就是冒号后的部分
+			switch(strSecond[0])
+			 {
+			 case '注册号'||'企业注册号':
+				 strs[1]=strSecond[1];
+			   break;
+			 case '名称':
+				 strs[2]=strSecond[1];
+			   break;
+			 case '登记机关':
+				 strs[3]=strSecond[1];
+			   break;
+			 case '登记日期':
+				 strs[4]=strSecond[1];
+			   break;
+			 case '企业信用信息公示系统网址':
+				 strs[5]=strSecond[1];
+			   break;
+			 }	 
+			
+			//strs.push(strSecond[1]);                      //将第二个字符放入strs,也就是冒号后的部分
 		}	
 		
 		return strs;
@@ -563,12 +604,14 @@ function checkContactMobil(obj,o){
 
 //内容页图片点击放大效果函数主体开始
 function imgPop(imgBoxMod){
-    imgBoxMod.each(function(){
+    imgBoxMod.each(function(i,one){
     //超过最大尺寸时自动缩放内容页图片尺寸
-    var ctnImgWidth=$(this).width();
+    var ctnImgWidth=$(one).width();
     if(ctnImgWidth>618){
-            $(this).width(618);
+            $(one).width(618);
         }
+    //判断图片是否该旋转
+    var ifRotation = $(this).attr("imgRotation");
     //点击图片弹出层放大图片效果
     $(this).click( function(){
     	
@@ -590,8 +633,15 @@ function imgPop(imgBoxMod){
         var imgLink=$(this).attr("src");
         $("#imgzoom_img #imgzoom_zoom").attr("src",imgLink);
         $("#imgzoom").css("display","block");
+        if(ifRotation=='true'){ 
+        	$("#imgzoom_zoom").rotate(90);        	
+        }
         imgboxPlace();       
-        })
+    })
+    if(ifRotation=='true'){ 
+    	console.log(ifRotation);
+    	$(one).rotate(90);
+    }
 })
         //关闭按钮
 $("#append_parent .imgclose").live('click',function(){
@@ -621,6 +671,19 @@ function imgboxPlace(){
     }
 }
 
+function canRotation(imgName){
+	if(imgName.indexOf("application")>-1){
+		return true;
+	}else if(imgName.indexOf("workcompany")>-1){
+		return true;
+	}else if(imgName.indexOf("workcertapplyinfo")>-1){
+		return false;
+	}else if(imgName.indexOf("workuser")>-1){
+		return false;
+	}else if(imgName.indexOf("head")>-1){
+		return false;
+	}
+}
 
 
 	

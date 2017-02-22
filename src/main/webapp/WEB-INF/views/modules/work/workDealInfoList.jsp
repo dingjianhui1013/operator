@@ -1294,6 +1294,7 @@ $(document).ready(
 				<form:option value="">请选择备注信息</form:option>
 				<form:option value="机关单位">机关单位</form:option>
 				<form:option value="事业单位">事业单位</form:option>
+				<form:option value="老系统已开权限">老系统已开权限</form:option>
 			</form:select>
 			
 			</div>

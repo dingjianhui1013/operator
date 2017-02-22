@@ -29,3 +29,4 @@
 <script type="text/javascript" src="${js}/validation/validation.js"></script>
 <script type="text/javascript" src="${ctxStatic}/jquery/cancelBackspace.js"></script>
 <script type="text/javascript" src="${js}/content_zoom.js"></script>
+<script src="${ctxStatic}/jquery/jquery.rotate.js" type="text/javascript"></script>
