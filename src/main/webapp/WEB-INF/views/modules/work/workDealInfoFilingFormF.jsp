@@ -105,7 +105,7 @@
 		        $("#imgzoom_cover").css({"display":"block","height":domHeight});
 		        var imgLink=$(this).attr("src");
 		        $("#imgzoom_img #imgzoom_zoom").attr("src",imgLink);
-		        $(str)$("#imgzoom").css("display","block");
+		        $("#imgzoom").css("display","block");
 		        if(ifRotation=='true'){ 
 			        $("#imgzoom_zoom").rotate(90);
 		        }
