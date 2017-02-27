@@ -276,6 +276,8 @@
 												data.orgunitDisplayName,
 												data.emailDisplayName,
 												data.commonNameDisplayName,
+												data.commonNameDisplayName2,
+												data.organizationDisplayName,
 												data.addtionalField1DisplayName,
 												data.addtionalField2DisplayName,
 												data.addtionalField3DisplayName,
@@ -789,7 +791,7 @@ function buttonFrom() {
 								name="dealInfoType1"><font style="">损坏更换</font><input type="hidden" value="2" name="dealInfoType1"></c:if>
 							
 							&nbsp;&nbsp;
-								<!-- <input class="btn btn-primary" type="button" value="更改业务类型" onclick="changeDealInfoType()"  /> -->
+								
 							</td>
 						</tr>
 						<tr>
@@ -849,7 +851,7 @@ function buttonFrom() {
 							 <input type="radio" name="manMadeDamage"value="false">否</td>
 						
 						</c:if>
-							<th id="supportDateTh" style="display: none">选择截止日期：</th>
+						<th id="supportDateTh" style="display: none">选择截止日期：</th>
 						<td id="supportDateTd" style="display: none">
 								<input class="input-medium Wdate" type="text"
 							 onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});"
@@ -857,6 +859,14 @@ function buttonFrom() {
 							name="expirationDate" id="expirationDate"/>
 							</td>
 						
+						</tr>
+						
+						
+						<!--多证书编号  -->
+						<tr>
+						<th>多证书编号</th>
+						<td><input type="text" name="certSort" disabled="disabled" 
+								value="${workDealInfo.certSort }" /></td>
 						</tr>
 						
 						
@@ -875,8 +885,6 @@ function buttonFrom() {
 							<th><span class="prompt" style="  display: none;">*</span>单位名称：</th>
 							<td class="tdWidth"><input type="text" name="companyName" id="companyName"
 								maxlength="50" value="${workDealInfo.workCompany.companyName}" />
-
-
 							</td>
 							<th>单位类型：</th>
 							<td><select name="companyType">
@@ -893,13 +901,22 @@ function buttonFrom() {
 							</select></td>
 
 						</tr>
+						
 						<tr>
+							<th><span class="prompt" style="  display: none;">*</span>二级单位名称：</th>
+							<td class="tdWidth"><input type="text" name="twoLevelCompanyName" id="twoLevelCompanyName"
+								maxlength="50" value="${workDealInfo.workCompany.twoLevelCompanyName}" />
+							</td>
+							
 							<th><span class="prompt" style="  display: none;">*</span>组织机构代码：</th>
 							<td class="tdWidth"><input type="text" name="organizationNumber"
 								id="organizationNumber1"
 								onkeyup="value=value.replace(/[^\w\.\/]/ig,'')"
 								value="${workDealInfo.workCompany.organizationNumber}"
-								maxlength="18"  onblur="qxCount('zzcount')" onfocus="hqcount('organizationNumber1','zzcount')"/><span id="zzcount" style="  margin-left: 10px"></span></td>
+								maxlength="18"  onblur="qxCount('zzcount')" onfocus="hqcount('organizationNumber1','zzcount')"/><span id="zzcount" style="  margin-left: 10px"></span></td>		
+						</tr>
+						
+						<tr>
 							<th>组织机构代码有效期：</th>
 							<td><input class="input-medium Wdate"
 								
@@ -907,8 +924,6 @@ function buttonFrom() {
 								maxlength="20" readonly="readonly" name="orgExpirationTime"
 								value="<fmt:formatDate value="${workDealInfo.workCompany.orgExpirationTime }" pattern="yyyy-MM-dd"/>"></input></td>
 
-						</tr>
-						<tr>
 							<th>服务级别：</th>
 							<td class="tdWidth"><select name="selectLv">
 									<option value="0" id="selectLv0"
@@ -916,6 +931,8 @@ function buttonFrom() {
 									<option value="1" id="selectLv1"
 										<c:if test="${workDealInfo.workCompany.selectLv==1}">selected</c:if>>普通客户</option>
 							</select></td>
+						</tr>
+						<tr>
 							<th>单位证照：</th>
 							<td><select name="comCertificateType">
 									<option value="0" id="comCertificateType0"
@@ -927,25 +944,26 @@ function buttonFrom() {
 									<option value="3" id="comCertificateType3"
 										<c:if test="${workDealInfo.workCompany.comCertificateType==3 }">selected</c:if>>其他</option>
 							</select></td>
-
-						</tr>
-						<tr>
+							
+							
 							<th><span class="prompt" style="  display: none;">*</span>证件号：</th>
 							<td class="tdWidth"><input type="text" name="comCertficateNumber"
 								id="comCertficateNumber1" maxlength="18"
 								value="${workDealInfo.workCompany.comCertficateNumber}" onblur="qxCount('zjcount')" onfocus="hqcount('comCertficateNumber1','zjcount')"/>
 								<span id="zjcount" style="  margin-left: 10px"></span></td>
+						</tr>
+						<tr>
 							<th>单位证照有效期：</th>
 							<td><input class="input-medium Wdate" type="text"
 								onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});" maxlength="20"
 								readonly="readonly" name="comCertficateTime"
 								value="<fmt:formatDate value="${workDealInfo.workCompany.comCertficateTime }"  pattern="yyyy-MM-dd"/>"></input></td>
 
-						</tr>
-						<tr>
 							<th><span class="prompt" style="  display: none;">*</span>法人姓名：</th>
 							<td class="tdWidth" style="vertical-align: middle;"><input type="text" name="legalName"
 								value="${workDealInfo.workCompany.legalName}"></td>
+						</tr>
+						<tr>	
 							<th>行政所属区：</th>
 							<td><select id="s_province" name="s_province" onchange="getCity(this.options[this.options.selectedIndex].id)" style="width: 103px;"></select>&nbsp;&nbsp; 
 								<select id="s_city" name="s_city" onchange="getTown(this.options[this.options.selectedIndex].id)" style="width: 103px;"></select>&nbsp;&nbsp; 
@@ -960,31 +978,24 @@ function buttonFrom() {
 								</script>	
 
 							</td>
+							
+							<th>区域备注：</th>
+							<td><input type="text" name="areaRemark"   value="${workDealInfo.workCompany.areaRemark }"></td>
 						</tr>
 						<tr>
-						
-						<th>区域备注：</th>
-						<td><input type="text" name="areaRemark"   value="${workDealInfo.workCompany.areaRemark }"></td>
-						
 							<th><span class="prompt" style="  display: none;">*</span>街道地址：</th>
 							<td class="tdWidth"><input type="text" name="address"
 								value="${workDealInfo.workCompany.address}"></td>
-												</tr>
-						<tr>
-						
+								
 							<th class="btmBorder"><span class="prompt" style="  display: none;">*</span>单位联系电话：</th>
 							<td class="btmBorder"><input type="text" name="companyMobile" class="number"
 								id="companyMobile"
-								value="${workDealInfo.workCompany.companyMobile }"  onblur="qxCount('dwtcount')" onfocus="hqcount('companyMobile','dwtcount')"/><span id="dwtcount" style="  margin-left: 10px"></span></td>
-						
-						
-						
+								value="${workDealInfo.workCompany.companyMobile }"  onblur="qxCount('dwtcount')" onfocus="hqcount('companyMobile','dwtcount')"/><span id="dwtcount" style="  margin-left: 10px"></span></td>	
+						</tr>
+						<tr>
 							<th><span class="prompt" style="  display: none;">*</span>备注信息：</th>
 							<td class="tdWidth"><input type="text" name="remarks" id="remarks"
 								value="${workDealInfo.workCompany.remarks }"></td>
-								
-							
-							
 						</tr>
 						
 						

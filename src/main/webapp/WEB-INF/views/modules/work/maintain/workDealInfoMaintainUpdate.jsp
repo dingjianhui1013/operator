@@ -280,6 +280,8 @@
 												data.orgunitDisplayName,
 												data.emailDisplayName,
 												data.commonNameDisplayName,
+												data.commonNameDisplayName2,
+												data.organizationDisplayName,
 												data.addtionalField1DisplayName,
 												data.addtionalField2DisplayName,
 												data.addtionalField3DisplayName,
@@ -911,6 +913,12 @@
 							 maxlength="20" readonly="readonly" <%-- value="<fmt:formatDate value="${expirationDate}" pattern="yyyy-MM-dd"/>" --%>
 							name="expirationDate" id="expirationDate"/>
 							</td>
+						
+						
+						<!--多证书编号  -->
+						<th>多证书编号：</th>
+						<td><input type="text" name="certSort" 
+								value="${workDealInfo.certSort }"  /></td>
 							
 						</tr>
 						
@@ -931,9 +939,8 @@
 							<th><span class="prompt" style="color: red; display: none;">*</span>单位名称：</th>
 							<td class="tdWidth"><input type="text" name="companyName" id="companyName"
 								maxlength="50" value="${workDealInfo.workCompany.companyName}" />
-
-
 							</td>
+							
 							<th>单位类型：</th>
 							<td><select name="companyType">
 									<option value="1" id="companyType1"
@@ -949,13 +956,23 @@
 							</select></td>
 
 						</tr>
+						
 						<tr>
+							<th><span class="prompt" style="color: red; display: none;">*</span>二级单位名称：</th>
+							<td class="tdWidth"><input type="text" name="twoLevelCompanyName" id="twoLevelCompanyName"
+								maxlength="50" value="${workDealInfo.workCompany.twoLevelCompanyName}" />
+							</td>
+							
 							<th><span class="prompt" style="color: red; display: none;">*</span>组织机构代码：</th>
 							<td class="tdWidth"><input type="text" name="organizationNumber"
 								id="organizationNumber1"
 								onkeyup="value=value.replace(/[^\w\.\/]/ig,'')"
 								value="${workDealInfo.workCompany.organizationNumber}"
 								maxlength="18"  onblur="qxCount('zzcount')" onfocus="hqcount('organizationNumber1','zzcount')"/><span id="zzcount" style="color: red; margin-left: 10px"></span></td>
+						</tr>
+						
+						<tr>
+							
 							<th>组织机构代码有效期：</th>
 							<td><input class="input-medium Wdate"
 								
@@ -963,8 +980,7 @@
 								maxlength="20" readonly="readonly" name="orgExpirationTime"
 								value="<fmt:formatDate value="${workDealInfo.workCompany.orgExpirationTime }" pattern="yyyy-MM-dd"/>"></input></td>
 
-						</tr>
-						<tr>
+
 							<th>服务级别：</th>
 							<td class="tdWidth"><select name="selectLv">
 									<option value="0" id="selectLv0"
@@ -972,6 +988,9 @@
 									<option value="1" id="selectLv1"
 										<c:if test="${workDealInfo.workCompany.selectLv==1}">selected</c:if>>普通客户</option>
 							</select></td>
+						</tr>
+						<tr>
+							
 							<th>单位证照：</th>
 							<td><select name="comCertificateType">
 									<option value="0" id="comCertificateType0"
@@ -984,23 +1003,25 @@
 										<c:if test="${workDealInfo.workCompany.comCertificateType==3 }">selected</c:if>>其他</option>
 							</select></td>
 
-						</tr>
-						<tr>
 							<th><span class="prompt" style="color: red; display: none;">*</span>证件号：</th>
 							<td class="tdWidth"><input type="text" name="comCertficateNumber"
 								id="comCertficateNumber1" maxlength="18"
 								value="${workDealInfo.workCompany.comCertficateNumber}"  onblur="qxCount('zjhcount')" onfocus="hqcount('comCertficateNumber1','zjhcount')"/><span id="zjhcount" style="color: red; margin-left: 10px"></span></td>
+						</tr>
+						<tr>
+							
 							<th>单位证照有效期：</th>
 							<td><input class="input-medium Wdate" type="text"
 								onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});" maxlength="20"
 								readonly="readonly" name="comCertficateTime"
 								value="<fmt:formatDate value="${workDealInfo.workCompany.comCertficateTime }"  pattern="yyyy-MM-dd"/>"></input></td>
 
-						</tr>
-						<tr>
 							<th><span class="prompt" style="color: red; display: none;">*</span>法人姓名：</th>
 							<td class="tdWidth" style="vertical-align: middle;"><input type="text" name="legalName"
 								value="${workDealInfo.workCompany.legalName}"></td>
+						</tr>
+						<tr>
+							
 							<th>行政所属区：</th>
 							<td><select id="s_province" name="s_province" onchange="getCity(this.options[this.options.selectedIndex].id)" style="width: 105px;"></select>&nbsp;&nbsp; 
 								<select id="s_city" name="s_city" onchange="getTown(this.options[this.options.selectedIndex].id)" style="width: 105px;"></select>&nbsp;&nbsp; 
@@ -1015,20 +1036,14 @@
 								</script>
 								</td>
 
-
-						</tr>
-						<tr>
-						
 							<th>区域备注：</th>
-							<td><input type="text" name="areaRemark"  value="${workDealInfo.workCompany.areaRemark }"></td>			
-										
+							<td><input type="text" name="areaRemark"  value="${workDealInfo.workCompany.areaRemark }"></td>	
+						</tr>
+						<tr>			
 							<th><span class="prompt" style="color: red; display: none;">*</span>街道地址：</th>
 							<td class="tdWidth"><input type="text" name="address"
 								value="${workDealInfo.workCompany.address}"></td>
 							
-						</tr>
-						<tr>
-						
 							<th class="btmBorder"><span class="prompt" style="color: red; display: none;">*</span>单位联系电话：</th>
 							<td class="btmBorder"><input type="text" name="companyMobile" 
 								id="companyMobile"
@@ -1038,13 +1053,11 @@
 								
 								onfocus="hqcount('companyMobile','dwtcount')"/>
 								<span id="dwtcount" style="color: red; margin-left: 10px"></span></td>
-						
-						
+						</tr>
+						<tr>
 							<th><span class="prompt" style="color: red; display: none;">*</span>备注信息：</th>
 							<td class="tdWidth"><input type="text" name="remarks" id="remarks"
-								value="${workDealInfo.workCompany.remarks }"></td>
-								
-															
+								value="${workDealInfo.workCompany.remarks }"></td>								
 						</tr>
 						
 						<c:if test="${workDealInfo.selfImage.id!=null }">
@@ -1065,8 +1078,8 @@
 			                            </div>
 									</div>
 							</td>
-							</tr>
-								</c:if>
+						</tr>
+						</c:if>
 						
 						
 

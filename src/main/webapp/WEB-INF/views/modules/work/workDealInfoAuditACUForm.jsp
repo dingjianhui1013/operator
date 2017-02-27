@@ -186,7 +186,7 @@ $(document).ready(function() {
 		//var url = "${ctx}/work/workDealInfo/showYear?lable="+lable+"&productName="+productName+"&app="+$("#appId").val()+"&infoType=0&_="+new Date().getTime();
 		var url = "${ctx}/work/workDealInfoSed/showYearNew?boundId="+agentId+"&infoType=0&_="+new Date().getTime();
 		$.getJSON(url, function(data) {
-			var arr = [data.nameDisplayName,data.orgunitDisplayName,data.emailDisplayName,data.commonNameDisplayName,data.addtionalField1DisplayName,data.addtionalField2DisplayName,data.addtionalField3DisplayName,data.addtionalField4DisplayName,data.addtionalField5DisplayName,data.addtionalField6DisplayName,data.addtionalField7DisplayName,data.addtionalField8DisplayName]
+			var arr = [data.nameDisplayName,data.orgunitDisplayName,data.emailDisplayName,data.commonNameDisplayName,data.commonNameDisplayName2,data.organizationDisplayName,data.addtionalField1DisplayName,data.addtionalField2DisplayName,data.addtionalField3DisplayName,data.addtionalField4DisplayName,data.addtionalField5DisplayName,data.addtionalField6DisplayName,data.addtionalField7DisplayName,data.addtionalField8DisplayName]
 			var arrList = $.unique(arr);
 			//清除所有必填项显示
 			$(".prompt").css("display","none");
@@ -460,6 +460,7 @@ $(document).ready(function() {
 				$("input[name='manMadeDamage'][value='" + ${workDealInfo.manMadeDamage} + "']").attr("checked",'checked');
 			}
 			
+			
 			//经信委
 			if(data.support){
 				$("#supportDateTh").show();
@@ -711,6 +712,19 @@ $(document).ready(function() {
 								
 							
 						</tr>
+						
+						
+						<!--多证书编号  -->
+						<tr>
+						<th>多证书编号</th>
+						<td><input type="text" name="certSort" disabled="disabled" 
+								value="${workDealInfo.certSort }" /></td>
+						
+						</tr>
+						
+						
+						
+						
 					</tbody>
 				</table>
 			</div>
@@ -730,91 +744,69 @@ $(document).ready(function() {
 							<th><span class="prompt" style="color: red; display: none;">*</span>单位类型：</th>
 							<td><select name="companyType" disabled="disabled">
 									<option value="1" id="companyType1"
-										<c:if 
-
-test="${workDealInfo.workCompany.companyType==1 }">selected</c:if>>企业</option>
+										<c:if test="${workDealInfo.workCompany.companyType==1 }">selected</c:if>>企业</option>
 									<option value="2" id="companyType2"
-										<c:if 
-
-test="${workDealInfo.workCompany.companyType==2 }">selected</c:if>>事业单位</option>
+										<c:if test="${workDealInfo.workCompany.companyType==2 }">selected</c:if>>事业单位</option>
 									<option value="3" id="companyType3"
-										<c:if 
-
-test="${workDealInfo.workCompany.companyType==3 }">selected</c:if>>政府机关</option>
+										<c:if test="${workDealInfo.workCompany.companyType==3 }">selected</c:if>>政府机关</option>
 									<option value="4" id="companyType4"
-										<c:if 
-
-test="${workDealInfo.workCompany.companyType==4 }">selected</c:if>>社会团体</option>
+										<c:if test="${workDealInfo.workCompany.companyType==4 }">selected</c:if>>社会团体</option>
 									<option value="5" id="companyType5"
-										<c:if 
-
-test="${workDealInfo.workCompany.companyType==5 }">selected</c:if>>其他</option>
+										<c:if test="${workDealInfo.workCompany.companyType==5 }">selected</c:if>>其他</option>
 							</select></td>
 						</tr>
+						
 						<tr>
+							<th><span class="prompt" style="color: red; display: none;">*</span>二级单位名称：</th>
+							<td><input type="text" name="twoLevelCompanyName" id="twoLevelCompanyName"
+								disabled="disabled"
+								value="${workDealInfo.workCompany.twoLevelCompanyName}"></td>
+							
 							<th><span class="prompt" style="color: red; display: none;">*</span>组织机构代码：</th>
 							<td><input type="text" name="organizationNumber"
 								disabled="disabled" id="organizationNumber"
 								value="${workDealInfo.workCompany.organizationNumber}" /></td>
+						</tr>
+						
+						
+						<tr>
 							<th><span class="prompt" style="color: red; display: none;">*</span>组织机构代码有效期：</th>
 							<td><input class="input-medium Wdate" disabled="disabled"
 								type="text" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});"
 								maxlength="20" readonly="readonly" name="orgExpirationTime"
-								value="<fmt:formatDate 
-
-value="${workDealInfo.workCompany.orgExpirationTime }" pattern="yyyy-MM-dd"/>"></input></td>
-						</tr>
-						<tr>
+								value="<fmt:formatDate value="${workDealInfo.workCompany.orgExpirationTime }" pattern="yyyy-MM-dd"/>"></input></td>
+								
 							<th><span class="prompt" style="color: red; display: none;">*</span>服务级别：</th>
 							<td><select name="selectLv" disabled="disabled">
 									<option value="0" id="selectLv0"
-										<c:if 
-
-test="${workDealInfo.workCompany.selectLv==0}">selected</c:if>>大客户</option>
+										<c:if test="${workDealInfo.workCompany.selectLv==0}">selected</c:if>>大客户</option>
 									<option value="1" id="selectLv1"
-										<c:if 
-
-test="${workDealInfo.workCompany.selectLv==1}">selected</c:if>>普通客户</option>
-							</select></td>
-							<th><span class="prompt" style="color: red; display: none;">*</span>单位证照：</th>
-							<td><select name="comCertificateType" disabled="disabled">
-									<option
-										<c:if 
-
-test="${workDealInfo.workCompany.comCertificateType==0}">selected="selected"</c:if>>营业执照</option>
-									<option
-										<c:if 
-
-test="${workDealInfo.workCompany.comCertificateType==1}">selected="selected"</c:if>>事业单位法人登记证</option>
-									<option
-										<c:if 
-
-test="${workDealInfo.workCompany.comCertificateType==2}">selected="selected"</c:if>>社会团体登记证</option>
-									<option
-										<c:if 
-
-test="${workDealInfo.workCompany.comCertificateType==3}">selected="selected"</c:if>>其他</option>
-							</select></td>
-
+										<c:if test="${workDealInfo.workCompany.selectLv==1}">selected</c:if>>普通客户</option>
+							</select></td>	
 						</tr>
 						<tr>
+							<th><span class="prompt" style="color: red; display: none;">*</span>单位证照：</th>
+							<td><select name="comCertificateType" disabled="disabled">
+									<option <c:if test="${workDealInfo.workCompany.comCertificateType==0}">selected="selected"</c:if>>营业执照</option>
+									<option <c:if test="${workDealInfo.workCompany.comCertificateType==1}">selected="selected"</c:if>>事业单位法人登记证</option>
+									<option <c:if test="${workDealInfo.workCompany.comCertificateType==2}">selected="selected"</c:if>>社会团体登记证</option>
+									<option <c:if test="${workDealInfo.workCompany.comCertificateType==3}">selected="selected"</c:if>>其他</option>
+							</select></td>
+							
 							<th><span class="prompt" style="color: red; display: none;">*</span>单位证照有效期：</th>
 							<td><input class="input-medium Wdate" type="text"
 								disabled="disabled"
 								onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});" maxlength="20"
 								readonly="readonly" name="comCertficateTime"
-								value="<fmt:formatDate 
-
-value="${workDealInfo.workCompany.comCertficateTime }"  pattern="yyyy-MM-dd"/>"></input></td>
+								value="<fmt:formatDate value="${workDealInfo.workCompany.comCertficateTime }"  pattern="yyyy-MM-dd"/>"></input></td>
+						</tr>
+						<tr>
 							<th><span class="prompt" style="color: red; display: none;">*</span>法人姓名：</th>
 							<td><input type="text" name="legalName" disabled="disabled"
 								value="${workDealInfo.workCompany.legalName}"></td>
-						</tr>
-						<tr>
+								
 							<th>行政所属区：</th>
 							<td>
-							
-							
 							<select id="s_province" name="s_province" disabled="disabled"
 								style="width: 100px;">
 							</select>&nbsp;&nbsp; <select id="s_city" name="s_city" disabled="disabled"
@@ -832,33 +824,28 @@ value="${workDealInfo.workCompany.comCertficateTime }"  pattern="yyyy-MM-dd"/>">
 									value="${workDealInfo.workCompany.areaRemark }" disabled="disabled" style="width:242px">
 								</div>
 							</c:if>
-						
-								
-								
-							
-							</td>
+							</td>	
+						</tr>
+						<tr>
 							<th>街道地址：</th>
 							<td><input type="text" name="address" disabled="disabled"
 								value="${workDealInfo.workCompany.address}"></td>
-						</tr>
-						<tr>
+								
 							<th>证件号：</th>
 							<td><input type="text" name="comCertficateNumber"
 								disabled="disabled"
-								value="${workDealInfo.workCompany.comCertficateNumber}" /></td>
+								value="${workDealInfo.workCompany.comCertficateNumber}" /></td>	
+						</tr>
+						<tr>
 							<th class="btmBorder">单位联系电话：</th>
 							<td class="btmBorder"><input type="text" name="companyMobile"
 								disabled="disabled" id="companyMobile"
 								value="${workDealInfo.workCompany.companyMobile }"></td>
-						</tr>
-						<tr>
+								
 							<th>备注信息：</th>
 							<td><input type="text" name="remarks" disabled="disabled"
-								id="remarks" value="${workDealInfo.workCompany.remarks 
-
-}"></td>
+								id="remarks" value="${workDealInfo.workCompany.remarks}"></td>	
 						</tr>
-
 					</tbody>
 				</table>
 			</div>

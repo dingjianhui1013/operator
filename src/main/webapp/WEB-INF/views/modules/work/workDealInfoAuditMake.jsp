@@ -167,6 +167,7 @@
 											.info("证书获取失败,请检查您的证书是否输入,有误或是否已插入USB KEY");
 								}
 							} catch (e) {
+								top.$.jBox.tip("证书安装过程失败!");
 							}
 							var updateUrl = "${ctx}/ca/installResult?dealInfoId=${workDealInfo.id}&result="+t+"&_="+new Date().getTime();
 							$.getJSON(

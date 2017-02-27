@@ -1190,6 +1190,10 @@ public class UserEnrollController extends BaseController {
 	public String gxfw2Nextform(Model model, Long id) {
 		try {
 			WorkDealInfo workDealInfo = workDealInfoService.get(new Long(id));
+			
+			
+			
+			
 			model.addAttribute("workDealInfo", workDealInfo);
 
 			// 证书CN

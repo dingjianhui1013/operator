@@ -216,7 +216,7 @@ public class CertController extends BaseController {
 						dealInfo.setCertSort(certSort);
 					}else{
 						if (dealInfo.getPrevId() == null) {
-							// 个人证书
+							// 企业证书
 							if (dealInfo.getConfigProduct().getProductName().equals("1")) {
 
 								String orgNum = dealInfo.getWorkCompany().getOrganizationNumber();
@@ -646,6 +646,7 @@ public class CertController extends BaseController {
 			} else {
 				caCert.setReqOverrideValidity(365);
 			}
+			
 			
 		
 			caCert.setProvider(certProvider);

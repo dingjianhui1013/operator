@@ -5,6 +5,9 @@
 <head>
 <title>业务办理管理</title>
 <meta name="decorator" content="default" />
+
+<script type="text/javascript" src="${ctxStatic}/jquery/commonJs.js"></script>
+
 <style type="text/css">
 
 
@@ -273,6 +276,10 @@ var selected = false;
 						
 						$("#product").change(function(){
 							
+							
+							
+							
+							
 							var product = $("#product").val();
 							var agentHtml="";
 							var styleHtml="";
@@ -317,7 +324,11 @@ var selected = false;
 									
 									
 									}); 	
+							}else{
+								generateCertSort();
 							}
+							
+							
 							
 						});
 						
@@ -525,7 +536,7 @@ var selected = false;
 <script type="text/javascript" src="${ctxStatic}/jquery/area.js"></script>
 <script type="text/javascript" src="${ctxStatic}/dialog/zDrag.js"></script>
 <script type="text/javascript" src="${ctxStatic}/dialog/zDialog.js"></script>
-<script type="text/javascript" src="${ctxStatic}/jquery/commonJs.js"></script>
+
 <script type="text/javascript" src="${ctxStatic}/js/content_zoom.js"></script>
 <script type="text/javascript" src="${ctxStatic}/js/common.js"></script>
 <!--  <script src="http://ie7-js.googlecode.com/svn/version/2.1(beta4)/IE9.js"></script>-->
@@ -1032,6 +1043,10 @@ var selected = false;
 		if($("#dwmcpro").text()!=""){
 			$("#dwmcpro").hide();
 		} */
+		
+		
+		
+		
 		return true;
 	}
 	
@@ -1181,7 +1196,9 @@ var selected = false;
 				
 			}
 			
-			var arr = [data.nameDisplayName,data.orgunitDisplayName,data.emailDisplayName,data.commonNameDisplayName,data.addtionalField1DisplayName,data.addtionalField2DisplayName,data.addtionalField3DisplayName,data.addtionalField4DisplayName,data.addtionalField5DisplayName,data.addtionalField6DisplayName,data.addtionalField7DisplayName,data.addtionalField8DisplayName]
+			generateCertSort();
+			
+			var arr = [data.nameDisplayName,data.orgunitDisplayName,data.emailDisplayName,data.commonNameDisplayName,data.commonNameDisplayName2,data.organizationDisplayName,data.addtionalField1DisplayName,data.addtionalField2DisplayName,data.addtionalField3DisplayName,data.addtionalField4DisplayName,data.addtionalField5DisplayName,data.addtionalField6DisplayName,data.addtionalField7DisplayName,data.addtionalField8DisplayName]
 			var arrList = arr.unique();
 			//清除所有必填项显示
 			$(".prompt").css("display","none");
@@ -1230,13 +1247,7 @@ var selected = false;
 			}
 			
 			
-		});
-		
-		
-		
-		
-		
-		
+		});	
 	}
 	Array.prototype.unique = function(){
 		 this.sort(); //先排序
@@ -1296,45 +1307,7 @@ var selected = false;
 		<li class="active"><a
 			href="${ctx}/work/workDealInfo/form?id=${workDealInfo.id}">业务新增</a></li>
 	</ul>
-	
-	
-	
-	
-	<%-- <div id="modal-container" class="modal hide fade" style="width:900px;height:700px;left:50%;margin-left:-450px;top:0" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		
-		<!--图像采集区域 -->
-		<div id="imageCollection" style=" width: 800px; height: 700px;display: none">
-        <object id="VideoInputCtl" classid="CLSID:30516390-004F-40B9-9FC6-C9096B59262E" style="width: 100%; height: 80%;"></object>
-    	
-    	
-    	<div class="control-group">
-		
-			<div class="control-group" align="center">
-				<div class="form-group btnGrop">
-					<button id="qrsq" class="btn btn-primary" onclick="changeDevice()">切换摄像头</button>&nbsp;&nbsp;&nbsp;			
-					<button id="qrsq" class="btn btn-primary" onclick="setPropertyDevice()">设置装置属性</button>&nbsp;&nbsp;&nbsp;
-					<button id="qrsq" class="btn btn-primary" onclick="getcompanyinfo()">单位信息录入</button>&nbsp;&nbsp;&nbsp;
-					<button id="qrsq" class="btn btn-primary" onclick="getholderinfo()">持有人信息录入</button>&nbsp;&nbsp;&nbsp;
-					<button id="qrsq" class="btn btn-primary" onclick="getoperatorinfo()">经办人信息录入</button>
-				</div>
-				<div class="form-group btnGrop">
-					<button id="qrsq" class="btn btn-primary" onclick="applicationphotograph(${imgPath})">申请表拍照</button>&nbsp;&nbsp;&nbsp;
-					<button id="qrsq" class="btn btn-primary" onclick="workCompanyphotograph('${imgPath}')">单位证件拍照</button>&nbsp;&nbsp;&nbsp;
-					<button id="qrsq" class="btn btn-primary" onclick="workCertApplyInfophotograph('${imgPath}')">经办人身份证拍照</button>&nbsp;&nbsp;&nbsp;
-					<button id="qrsq" class="btn btn-primary" onclick="workUserphotograph('${imgPath}')">持有人身份证拍照</button>&nbsp;&nbsp;&nbsp;
-					<button id="qrsq" class="btn btn-primary" onclick="headphotograph('${imgPath}')">照片拍照</button>&nbsp;&nbsp;&nbsp;
-				</div>
-				<button class="btn" data-dismiss="modal" aria-hidden="true">取消</button> 
-			</div>
-		</div>
-    	
-    	
-    	
-    	</div>
-		
-	</div> --%>
-	
-	
 	<form:form id="inputForm" action="${ctx}/work/workDealInfo/save"
 		method="POST" class="form-horizontal">
 		<tags:message content="${message}" />
@@ -1357,7 +1330,7 @@ var selected = false;
 		<div class="row-fluid">
 			<div class="span12">
 				<table class="table table-striped table-bordered table-condensed">
-					<tbody>
+					<tbody id="workDealInfoBody">
 						<tr>
 							<th colspan="1" style="font-size: 20px;"><span
 								class="prompt" style="color: red; display: none;">*</span>基本信息</th>	
@@ -1448,7 +1421,7 @@ var selected = false;
 							</td>
 						
 
-						<tr>
+						<tr id="supportDateTr">
 						<th id="supportDateTh" style="display: none" >选择截止日期：</th>
 						<td id="supportDateTd" style="display: none">
 								<input class="input-medium Wdate" type="text"
@@ -1473,7 +1446,7 @@ var selected = false;
 		<div class="row-fluid">
 			<div class="span12">
 				<table class="table table-striped table-bordered table-condensed">
-					<tbody>
+					<tbody id="workCompanyBody">
 						<tr>
 							<th colspan="4" style="font-size: 20px;">单位信息</th>
 						</tr>
@@ -1481,7 +1454,7 @@ var selected = false;
 							<th><span class="prompt" style="color: red; display: none;">*</span>单位名称：</th>
 							<td><input type="text" name="companyName" maxlength="50"
 								value="${workCompany.companyName }" id="companyName"
-								onchange="checkDwmc(this)" onblur="obtainCompanyInformation()"> <input type="hidden"
+								onchange="generateCertSort()" onblur="obtainCompanyInformation()"> <input type="hidden"
 								name="companyId" value="${workCompany.id }" id="companyId"></td>
 							<th><span class="prompt" style="color: red; display: none;">*</span>单位类型：</th>
 							<td><select name="companyType">
@@ -1495,16 +1468,28 @@ var selected = false;
 										<c:if test="${workCompany.companyType==5 }">selected</c:if>>其他</option>
 							</select></td>
 						</tr>
+						
 						<tr>
+							<th><span class="prompt" style="color: red; display: none;">*</span>二级单位名称：</th>
+							<td><input type="text" name="twoLevelCompanyName" maxlength="50"
+								value="${workCompany.twoLevelCompanyName }" id="twoLevelCompanyName"> </td>
+						
 							<th><span class="prompt" style="color: red; display: none;">*</span>组织机构代码：</th>
 							<td><input  type="text" name="organizationNumber"
 								onkeyup="value=value.replace(/[^\w\.\/]/ig,'')"
 								value="${workCompany.organizationNumber }" maxlength="18"
 								id="organizationNumber"
 								
+								onchange="generateCertSort()"
+								
 								onblur="qxCount('zdcount')"
 								onfocus="hqcount('organizationNumber','zdcount')" /><span
 								id="zdcount" style="color: red; margin-left: 10px"></span></td>
+						</tr>
+						
+						
+						<tr>
+							
 							<th><span class="prompt" style="color: red; display: none;">*</span>组织机构代码有效期：</th>
 							<td><input class="input-medium Wdate"
 								value="<fmt:formatDate value="${workCompany.orgExpirationTime }" pattern="yyyy-MM-dd"/>"
@@ -1512,8 +1497,7 @@ var selected = false;
 								maxlength="20" readonly="readonly" name="orgExpirationTime"
 								id="orgExpirationTime" /></td>
 
-						</tr>
-						<tr>
+
 							<th><span class="prompt" style="color: red; display: none;">*</span>服务级别：</th>
 							<td><select name="selectLv">
 									<option value="0" id="selectLv0"
@@ -1521,6 +1505,9 @@ var selected = false;
 									<option value="1" id="selectLv1"
 										<c:if test="${workDealInfo.workCompany.selectLv==1}">selected</c:if>>普通客户</option>
 							</select></td>
+						</tr>
+						<tr>
+							
 							<th><span class="prompt" style="color: red; display: none;">*</span>单位证照：</th>
 							<td><select name="comCertificateType">
 									<option value="0" id="comCertificateType0"
@@ -1532,8 +1519,8 @@ var selected = false;
 									<option value="3" id="comCertificateType3"
 										<c:if test="${workCompany.comCertificateType==3 }">selected</c:if>>其他</option>
 							</select></td>
-						</tr>
-						<tr>
+							
+							
 							<th><span class="prompt" style="color: red; display: none;">*</span>证件号：</th>
 							<td><input type="text" name="comCertficateNumber"
 								value="${workCompany.comCertficateNumber }" maxlength="18"
@@ -1542,17 +1529,23 @@ var selected = false;
 								onblur="qxCount('zjcount')"
 								onfocus="hqcount('comCertficateNumber','zjcount')" /><span
 								id="zjcount" style="color: red; margin-left: 10px"></span></td>
+						</tr>
+						<tr>
+							
 							<th><span class="prompt" style="color: red; display: none;">*</span>单位证照有效期：</th>
 							<td><input class="input-medium Wdate" type="text"
 								value="<fmt:formatDate value="${workCompany.comCertficateTime }"  pattern="yyyy-MM-dd"/>"
 								onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});" maxlength="20"
 								readonly="readonly" name="comCertficateTime"
 								id="comCertficateTime" /></td>
-						</tr>
-						<tr>
+								
+								
 							<th><span class="prompt" style="color: red; display: none;">*</span>法人姓名：</th>
 							<td style="vertical-align:middle"><input type="text" name="legalName" id="legalName"
-								value="${workCompany.legalName }" maxlength="20"></td>
+								value="${workCompany.legalName }" maxlength="20"></td>	
+						</tr>
+						<tr>
+							
 							<th style="vertical-align:middle"><span class="prompt" style="color: red; display: none;">*</span>行政所属区：</th>
 							<td><select id="s_province" onchange="getCity(this.options[this.options.selectedIndex].id)" name="s_province" style="width: 100px;*width:77px"></select>&nbsp;&nbsp; 
 								<select id="s_city" onchange="getTown(this.options[this.options.selectedIndex].id)" name="s_city" style="width: 100px;*width:77px"></select>&nbsp;&nbsp; 
@@ -1564,22 +1557,21 @@ var selected = false;
 							
 								
 								</td>
+								
+								
+							 <th>区域备注：</th> 
+							<td><input type="text" name="areaRemark"
+										value="${workCompany.areaRemark }" maxlength="50" ></td>	
 						</tr>
 						
 						
 						<tr>
-						    <th>区域备注：</th> 
-							<td><input type="text" name="areaRemark"
-										value="${workCompany.areaRemark }" maxlength="50" ></td>
+						   
 							<th><span class="prompt" style="color: red; display: none;">*</span>街道地址：</th>
 							<td><input type="text" name="address" id="address"
 								value="${workCompany.address }" maxlength="50"></td>
 							
-
-						</tr>
-						<tr>
-						
-								<th class="btmBorder"><span class="prompt" style="color: red; display: none;">*</span>单位联系电话：</th>
+							<th class="btmBorder"><span class="prompt" style="color: red; display: none;">*</span>单位联系电话：</th>
 								<td class="btmBorder"><input type="text" name="companyMobile"
 								id="companyMobile" value="${workCompany.companyMobile }"
 								 
@@ -1587,8 +1579,8 @@ var selected = false;
 								onblur="checkContactMobil(this,'dwcount')"
 								onfocus="hqcount('companyMobile','dwcount')" /><span
 								id="dwcount" style="color: red; margin-left: 10px"></span></td>
-						
-						
+						</tr>
+						<tr>
 							<th><span class="prompt" style="color: red; display: none;">*</span>备注信息：</th>
 							<td><input type="text" name="remarks" id="remarks"
 								value="${workCompany.remarks }"></td>
@@ -1603,17 +1595,17 @@ var selected = false;
 		<div class="row-fluid">
 			<div class="span12">
 				<table class="table table-striped table-bordered table-condensed">
-					<tbody>
+					<tbody id="workUserBody">
 						<tr>
 							<th colspan="4" style="font-size: 20px;">证书持有人信息   </th> 
 						</tr>
 						<tr>
 							<th><span class="prompt" style="color: red; display: none;">*</span>证书持有人姓名:</th>
 							<td><input type="text" name="contactName" id="contactName"
-								maxlength="20" value="${workUser.contactName }"
+								maxlength="20" value="${workUser.contactName }" onchange="generateCertSort()"
 								onblur="nameFill(this)" /></td>
 							<th><span class="prompt" style="color: red; display: none;">*</span>证书持有人证件:</th>
-							<td><select name="conCertType">
+							<td><select onchange="generateCertSort()" id="conCertType" name="conCertType">
 									<option value="0" id="conCertType0"
 										<c:if test="${workUser.conCertType==0 }">selected</c:if>>身份证</option>
 									<option value="1" id="conCertType1"
@@ -1627,7 +1619,7 @@ var selected = false;
 							<td><input type="text" name="conCertNumber" maxlength="18"
 								id="conCertNumber" value="${workUser.conCertNumber }"
 								onkeyup="numberFill()" 
-								
+								onchange="generateCertSort()"
 								onblur="qxCount('zjhcount')"
 								onfocus="hqcount('conCertNumber','zjhcount')" /><span
 								id="zjhcount" style="color: red; margin-left: 10px"></span></td>
@@ -1653,7 +1645,7 @@ var selected = false;
 								onfocus="hqcount('contactTel','ywidcount')" /><span
 								id="ywidcount" style="color: red; margin-left: 10px"></span></td>
 						</tr>
-						<tr>
+						<tr id="workUserTr">
 							<th  style="background:#f9f9f9"><span class="prompt" style="color: red; display: none;">*</span>证书持有人性别:</th>
 							<td><input name="contactSex" id="sex0"
 								<c:if test="${workUser.contactSex=='男' }">checked</c:if>
@@ -1667,7 +1659,7 @@ var selected = false;
 			</div>
 		</div>
 		<div class="row-fluid">
-			<div class="span12" id="proposer"<%-- <c:if test="${workDealInfo.configProduct.productName!=2}"> style="display:none"</c:if> --%>>
+			<div class="span12" id="proposer">
 				<table class="table table-striped table-bordered table-condensed">
 					<tbody>
 						<tr>
@@ -1770,4 +1762,10 @@ var selected = false;
 
 </body>
  
+ 
+
 </html>
+
+
+
+

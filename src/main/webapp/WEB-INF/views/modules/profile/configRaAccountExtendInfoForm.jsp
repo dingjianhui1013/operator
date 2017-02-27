@@ -99,6 +99,8 @@ $(document).ready(
 						<form:option value="0">单位名称</form:option>
 						<form:option value="1">证书持有人名称</form:option>
 						<form:option value="2">经办人姓名</form:option>
+						<form:option value="3">个人姓名_一级单位名称</form:option>
+						<form:option value="4">个人姓名_二级单位名称</form:option>
 					</form:select>
 			</div>
 		</div>
@@ -116,6 +118,20 @@ $(document).ready(
 					</form:select>
 			</div>
 		</div>
+		
+		
+		 <div class="control-group">
+			<label class="control-label">O:</label>
+			<div class="controls">					
+					<form:select path="organizationDisplayName">
+						<form:option value="-1">无</form:option>
+						<form:option value="0">单位名称</form:option>
+						<form:option value="1">持有人身份证所属省</form:option>
+					</form:select>
+			</div>
+		</div> 
+		
+		
 		<div class="control-group">
 			<label class="control-label">accountOrgunit:</label>
 			<div class="controls">					
@@ -146,6 +162,7 @@ $(document).ready(
 						<form:option value="4">组织机构代码</form:option>
 						<form:option value="5">经办人身份证号</form:option>
 						<form:option value="6">证书类型</form:option>
+						<form:option value="7">二级单位名称</form:option>
 					</form:select>
 			</div>
 		</div>

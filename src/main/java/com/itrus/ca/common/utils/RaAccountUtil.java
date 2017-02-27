@@ -47,6 +47,7 @@ public class RaAccountUtil {
 		String flag = new String();
 		// 取出所有信息
 		String c_name = company.getCompanyName();
+		String c_name2 = company.getTwoLevelCompanyName();
 		String c_orgNum = company.getOrganizationNumber();
 		String c_certNum = company.getComCertficateNumber();
 
@@ -55,6 +56,9 @@ public class RaAccountUtil {
 		String u_conCertNum = user.getConCertNumber();
 		String u_uid = user.getContactTel();
 
+		String u_province = getProvince(u_conCertNum);
+		
+		
 		String a_name = applyInfo.getName();
 		String a_idCard = applyInfo.getIdCard();
 		String a_email = applyInfo.getEmail();
@@ -74,6 +78,10 @@ public class RaAccountUtil {
 				value = u_contactName;
 			} else if (flag.endsWith("2")) {
 				value = a_name;
+			} else if (flag.endsWith("3")) {
+				value = u_contactName+"_"+c_name;
+			} else if (flag.endsWith("4")){
+				value = u_contactName+"_"+c_name2;
 			}
 			request.setUserName(value);
 		}
@@ -93,8 +101,22 @@ public class RaAccountUtil {
 				value = u_conCertNum;
 			}
 			request.setUserSurname(value);
-			//request.setUserOrganization(value);
+			
 		}
+		
+		
+		if(!extendInfo.getOrganizationDisplayName().equals("-1")){
+			flag = extendInfo.getOrganizationDisplayName();
+			String value = new String();
+			if (flag.equals("0")) {
+				value = c_name;
+			} else if (flag.endsWith("1")) {
+				value = u_province;
+			} 
+			request.setUserOrganization(value);
+		}
+		
+		
 		if (!extendInfo.getEmailDisplayName().equals("-1")) {
 			flag = extendInfo.getEmailDisplayName();
 			String value = new String();
@@ -131,6 +153,8 @@ public class RaAccountUtil {
 				value = a_idCard;
 			} else if (flag.equals("6")) {
 				value = productName;
+			} else if (flag.equals("7")) {
+				value = c_name2;
 			}
 			request.setUserAdditionalField1(value);
 		}
@@ -569,29 +593,36 @@ public class RaAccountUtil {
 			if (extendInfo!=null&&!"-1".equals(extendInfo.getCommonNameDisplayName())) {
 				flag = extendInfo.getCommonNameDisplayName();
 				String value = new String();
+				String value1 = new String();
 				if (flag.equals("0")) {
 					value = "companyName";
 				} else if (flag.endsWith("1")) {
 					value = "contactName";
 				} else if (flag.endsWith("2")) {
 					value = "pName";
+				} else if (flag.endsWith("3")){
+					value = "contactName";
+					value1 = "companyName";
+				}else if(flag.endsWith("4")){
+					value = "contactName";
+					value1 = "twoLevelCompanyName";
 				}
 				json.put("commonNameDisplayName", value);
+				
+				if(!value1.equals("")){
+					json.put("commonNameDisplayName2", value1);
+				}
 			}
-//			if (extendInfo!=null&&!extendInfo.getOrganizationDisplayName().equals("-1")) {
-//				flag = extendInfo.getOrganizationDisplayName();
-//				String value = new String();
-//				if (flag.equals("0")) {
-//					value = "organizationNumber";
-//				} else if (flag.endsWith("1")) {
-//					value = "conCertNumber";
-//				} else if (flag.endsWith("2")) {
-//					value = "pIDCard";
-//				} else if (flag.endsWith("3")) {
-//					value = "companyName";
-//				}
-//				json.put("orgunitDisplayName", value);
-//			}
+			if (extendInfo!=null&&!extendInfo.getOrganizationDisplayName().equals("-1")) {
+				flag = extendInfo.getOrganizationDisplayName();
+				String value = new String();
+				if (flag.equals("0")) {
+					value = "companyName";
+				} else if (flag.endsWith("1")) {
+					value = "conCertNumber";
+				} 
+				json.put("organizationDisplayName", value);
+			}
 
 			if (extendInfo!=null&&!extendInfo.getEmailDisplayName().equals("-1")) {
 				flag = extendInfo.getEmailDisplayName();
@@ -632,6 +663,8 @@ public class RaAccountUtil {
 					value = "pIDCard";
 				} else if (flag.equals("6")){
 					value = "product";
+				} else if (flag.equals("7")){
+					value = "twoLevelCompanyName";
 				}
 				json.put("addtionalField1DisplayName", value);
 			}
@@ -887,4 +920,89 @@ public class RaAccountUtil {
 		return fields;
 	}
 	
+	
+	
+	
+	public static String getProvince(String conCertNum){
+		
+		String province = "";
+		
+		String first2Num = conCertNum.trim().substring(0, 2);
+		
+		if(first2Num.equals("11")){
+			province = "北京市";
+		}else if(first2Num.equals("12")){
+			province = "天津市";
+		}else if(first2Num.equals("13")){
+			province = "河北省";
+		}else if(first2Num.equals("14")){
+			province = "山西省";
+		}else if(first2Num.equals("15")){
+			province = "内蒙古自治区";
+		}else if(first2Num.equals("21")){
+			province = "辽宁省";
+		}else if(first2Num.equals("22")){
+			province = "吉林省";
+		}else if(first2Num.equals("23")){
+			province = "黑龙江省";
+		}else if(first2Num.equals("31")){
+			province = "上海市";
+		}else if(first2Num.equals("32")){
+			province = "江苏省";
+		}else if(first2Num.equals("33")){
+			province = "浙江省";
+		}else if(first2Num.equals("34")){
+			province = "安徽省";
+		}else if(first2Num.equals("35")){
+			province = "福建省";
+		}else if(first2Num.equals("36")){
+			province = "江西省";
+		}else if(first2Num.equals("37")){
+			province = "山东省";
+		}else if(first2Num.equals("41")){
+			province = "河南省";
+		}else if(first2Num.equals("42")){
+			province = "湖北省";
+		}else if(first2Num.equals("43")){
+			province = "湖南省";
+		}else if(first2Num.equals("44")){
+			province = "广东省";
+		}else if(first2Num.equals("45")){
+			province = "广西壮族自治区";
+		}else if(first2Num.equals("46")){
+			province = "海南省";
+		}else if(first2Num.equals("50")){
+			province = "重庆市";
+		}else if(first2Num.equals("51")){
+			province = "四川省";
+		}else if(first2Num.equals("52")){
+			province = "贵州省";
+		}else if(first2Num.equals("53")){
+			province = "云南省";
+		}else if(first2Num.equals("54")){
+			province = "西藏自治区";
+		}else if(first2Num.equals("61")){
+			province = "陕西省";
+		}else if(first2Num.equals("62")){
+			province = "甘肃省";
+		}else if(first2Num.equals("63")){
+			province = "青海省";
+		}else if(first2Num.equals("64")){
+			province = "宁夏回族自治区";
+		}else if(first2Num.equals("65")){
+			province = "新疆维吾尔自治区";
+		}else if(first2Num.equals("71")){
+			province = "台湾省";
+		}else if(first2Num.equals("81")){
+			province = "香港特别行政区";
+		}else if(first2Num.equals("82")){
+			province = "澳门特别行政区";
+		}else {
+			province = "未知省份";
+		}
+	
+	
+		return province;
+
+	}
 }

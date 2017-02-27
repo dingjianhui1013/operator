@@ -330,6 +330,8 @@ public class WorkDealInfoController extends BaseController {
 
 		long start = System.currentTimeMillis();
 		
+		
+		
 		User user = UserUtils.getUser();
 		System.out.print(user.getName());
 		workDealInfo.setCreateBy(user.getCreateBy());
@@ -2750,11 +2752,13 @@ public class WorkDealInfoController extends BaseController {
 			Integer dealInfoType,
 			Integer year,
 			
+			Integer certSort,    //多证书编号
+			
 			String imgNames,     //上传的图片名称
 			
 			Date expirationDate, // 经信委到期时间 和年限二选一
 			Long workDealInfoId, Integer yar, Long companyId,
-			String companyName, String companyType, String organizationNumber,
+			String companyName,String twoLevelCompanyName, String companyType, String organizationNumber,
 			String orgExpirationTime, String selectLv,
 			String comCertificateType, String comCertficateNumber,
 			String comCertficateTime, String legalName, String s_province,
@@ -2781,6 +2785,7 @@ public class WorkDealInfoController extends BaseController {
 		// 保存单位信息
 		ConfigProduct configProduct = bound.getProduct();
 		workCompany.setCompanyName(companyName);
+		workCompany.setTwoLevelCompanyName(twoLevelCompanyName);
 		workCompany.setCompanyType(companyType);
 		workCompany.setComCertificateType(comCertificateType);
 
@@ -2846,6 +2851,8 @@ public class WorkDealInfoController extends BaseController {
 
 			return "modules/work/workDealInfoForm";
 		}
+		//保存多证书编号
+		workDealInfo.setCertSort(certSort);
 		
 		long start1 = System.currentTimeMillis();
 		workCompanyService.save(workCompany);
@@ -3706,8 +3713,11 @@ public class WorkDealInfoController extends BaseController {
 			String product,
 			Integer dealInfType1,
 			Integer year,
+			
+			Integer certSort,
+			
 			Date expirationDate, // 到期时间 和年限二选一
-			Integer yar, Long companyId, String companyName,
+			Integer yar, Long companyId, String companyName,String twoLevelCompanyName,
 			String companyType, String organizationNumber,
 			String orgExpirationTime, String selectLv,
 			String comCertificateType, String comCertficateNumber,
@@ -3729,6 +3739,7 @@ public class WorkDealInfoController extends BaseController {
 		// 保存单位信息
 
 		workCompany.setCompanyName(companyName);
+		workCompany.setTwoLevelCompanyName(twoLevelCompanyName);
 		workCompany.setCompanyType(companyType);
 		workCompany.setComCertificateType(comCertificateType);
 		Timestamp ts = new Timestamp(System.currentTimeMillis());
@@ -3780,6 +3791,9 @@ public class WorkDealInfoController extends BaseController {
 
 			return "modules/work/workDealInfoForm";
 		}
+		
+		//保存多证书编号
+		workDealInfo.setCertSort(certSort);
 		ConfigApp configApp = configAppService.get(appId);
 
 		ConfigChargeAgentBoundConfigProduct bound = configChargeAgentBoundConfigProductService
@@ -9717,8 +9731,11 @@ public class WorkDealInfoController extends BaseController {
 			String product,
 			Integer dealInfType1,
 			Integer year,
+			
+			Integer certSort,
+			
 			Date expirationDate, // 到期时间 和年限二选一
-			Integer yar, Long companyId, String companyName,
+			Integer yar, Long companyId, String companyName,String twoLevelCompanyName,
 			String companyType, String organizationNumber,
 			String orgExpirationTime, String selectLv,
 			String comCertificateType, String comCertficateNumber,
@@ -9741,6 +9758,7 @@ public class WorkDealInfoController extends BaseController {
 			// 保存单位信息
 
 			workCompany.setCompanyName(companyName);
+			workCompany.setTwoLevelCompanyName(twoLevelCompanyName);
 			workCompany.setCompanyType(companyType);
 			workCompany.setComCertificateType(comCertificateType);
 			Timestamp ts = new Timestamp(System.currentTimeMillis());
@@ -9799,6 +9817,10 @@ public class WorkDealInfoController extends BaseController {
 				json.put("status", -1);
 				return json.toString();
 			}
+			
+			//保存多证书编号
+			workDealInfo.setCertSort(certSort);
+			
 			ConfigApp configApp = configAppService.get(appId);
 		
 
@@ -10751,6 +10773,50 @@ public class WorkDealInfoController extends BaseController {
 		return "false";
 	}
 	
+	
+
+	
+	/**
+	 * 生成多证书编号
+	 */
+	@RequestMapping(value = "generateCertSort")
+	@ResponseBody
+	public String generateCertSort(
+			HttpServletRequest request,
+			HttpServletResponse response,
+			@RequestParam(value = "productName", required = false) Integer productName,
+			@RequestParam(value = "orgNum", required = false) String orgNum,
+			@RequestParam(value = "conCertNum", required = false) String conCertNum,
+			@RequestParam(value = "contactName", required = false) String contactName,
+			@RequestParam(value = "companyName", required = false) String companyName,
+			Model model) throws Exception {
+
+		Integer certSortInteger = null;
+		
+		JSONObject json = new JSONObject();
+		
+		if(productName==1){
+			certSortInteger = workDealInfoService.getCertSortByOrganizationNumber(orgNum, productName);	
+		}else if(productName==2){
+			if(conCertNum!=null&&contactName==null){
+				certSortInteger = workDealInfoService.getCertSortByConCertNumber(conCertNum);	
+			}else{
+				certSortInteger = workDealInfoService.getCertSortByContactName(contactName);
+			}
+				
+		}else if(productName==3){
+			if(conCertNum!=null&&contactName==null){
+				certSortInteger = workDealInfoService.getCertSortByOrganizationNumber(conCertNum,productName);
+			}else{
+				certSortInteger = workDealInfoService.getCertSortByCompanyName(contactName,productName);
+			}
+		}
+		
+		json.put("certSort", certSortInteger);
+		
+		return json.toString();
+
+	}	
 	
 	
 }

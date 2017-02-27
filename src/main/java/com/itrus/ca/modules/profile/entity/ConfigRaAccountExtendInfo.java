@@ -19,6 +19,7 @@ public class ConfigRaAccountExtendInfo implements java.io.Serializable {
 	private Long id;
 	private String certName;
 	private String commonNameDisplayName;
+		
 	private String nameDisplayName;// 3.组织机构代码 4.经办人身份证号
 	private String orgunitDisplayName;
 	private String emailDisplayName;
@@ -34,7 +35,7 @@ public class ConfigRaAccountExtendInfo implements java.io.Serializable {
 	private String addtionalField10DisplayName;
 	private String personal;
 	private String organization;
-	private String organizationDisplayName;
+	private String organizationDisplayName;        //2017.2.27  这个字段没有在用,所以作为O的值.
 
 	private Set<ConfigRaAccount> configRaAccounts = new HashSet<ConfigRaAccount>(
 			0);
@@ -122,6 +123,8 @@ public class ConfigRaAccountExtendInfo implements java.io.Serializable {
 	public void setCommonNameDisplayName(String commonNameDisplayName) {
 		this.commonNameDisplayName = commonNameDisplayName;
 	}
+	
+
 
 	@Column(name = "email_display_name", columnDefinition = "NVARCHAR2(255)")
 	public String getEmailDisplayName() {

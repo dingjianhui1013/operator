@@ -1804,8 +1804,9 @@ public class WorkDealInfoOperationController extends BaseController {
 	@RequestMapping(value = "maintainSaveChange" , method = RequestMethod.POST)
 	public String maintainSaveChange(Long workDealInfoId, String orgExpirationTime,
 			String selectLv, String comCertificateType, String organizationNumber,
-			String comCertficateNumber, String comCertficateTime, String companyName,String companyType,
+			String comCertficateNumber, String comCertficateTime, String companyName,String twoLevelCompanyName,String companyType,
 			String legalName, String s_province, String s_city,
+			Integer certSort,
 			String s_county, String address, String companyMobile,
 			String remarks, Integer workType, String contactName,
 			String conCertType, String contacEmail, String conCertNumber,
@@ -1848,6 +1849,7 @@ public class WorkDealInfoOperationController extends BaseController {
 			}
 			//4月17号修改，变更业务可变更单位名称以及组织机构代码
 			workCompany.setCompanyName(companyName);
+			workCompany.setTwoLevelCompanyName(twoLevelCompanyName);
 			workCompany.setOrganizationNumber(organizationNumber);
 			workCompany.setCompanyType(companyType);
 			
@@ -1885,6 +1887,7 @@ public class WorkDealInfoOperationController extends BaseController {
 			//workDealInfo1
 		WorkDealInfo workDealInfo = new WorkDealInfo();
 		workDealInfo.setConfigApp(workDealInfo1.getConfigApp());
+		workDealInfo.setCertSort(certSort);
 		ConfigCommercialAgent commercialAgent = configAgentAppRelationService
 				.findAgentByApp(workDealInfo.getConfigApp());
 		workDealInfo.setConfigCommercialAgent(commercialAgent);
@@ -2187,6 +2190,8 @@ public class WorkDealInfoOperationController extends BaseController {
 	@RequestMapping(value = "maintainSaveLost")
 	public String maintainSaveLost(Long workDealInfoId, 			
 			
+			Integer certSort,
+			
 			String contactName,
 			String conCertType, String contacEmail, String conCertNumber,
 			String contactPhone, String contactTel,String contactSex, String recordContent,
@@ -2272,6 +2277,7 @@ public class WorkDealInfoOperationController extends BaseController {
 			//workDealInfo1
 		WorkDealInfo workDealInfo = new WorkDealInfo();
 		workDealInfo.setConfigApp(workDealInfo1.getConfigApp());
+		workDealInfo.setCertSort(certSort);
 		ConfigCommercialAgent commercialAgent = configAgentAppRelationService
 				.findAgentByApp(workDealInfo.getConfigApp());
 		workDealInfo.setConfigCommercialAgent(commercialAgent);
@@ -2447,11 +2453,12 @@ public class WorkDealInfoOperationController extends BaseController {
 	@RequiresPermissions("work:workDealInfo:edit")
 	@RequestMapping(value = "maintainSaveUpdate")
 	public String maintainSaveUpdate(Long workDealInfoId, 
-			String companyName,String companyType,String organizationNumber,String orgExpirationTime,String selectLv,
+			String companyName,String twoLevelCompanyName,String companyType,String organizationNumber,String orgExpirationTime,String selectLv,
 			String comCertificateType, String comCertficateNumber, String comCertficateTime,String legalName, String s_province, String s_city,
 			String s_county, String areaRemark,String address, String companyMobile,String remarks, 
 			@RequestParam(value="product", required=true) Long productId ,
 			Integer year,Date expirationDate,//经信委
+			Integer certSort,
 			Integer dealInfoType,Integer dealInfoType1,Integer dealInfoType2 , 
 			Integer agentId,Long agentDetailId, //获取计费策略类型  获取计费策略模版
 			String contactName,String conCertType, String contacEmail, String conCertNumber,
@@ -2489,6 +2496,11 @@ public class WorkDealInfoOperationController extends BaseController {
 			workCompany.setCompanyName(companyName);
 		}else{
 			workCompany.setCompanyName(oldWorkCompany.getCompanyName());
+		}
+		if(twoLevelCompanyName!=null && !twoLevelCompanyName.equals("")){
+			workCompany.setTwoLevelCompanyName(twoLevelCompanyName);
+		}else{
+			workCompany.setTwoLevelCompanyName(oldWorkCompany.getTwoLevelCompanyName());
 		}
 		if(companyType!=null && !companyType.equals("")){
 			workCompany.setCompanyType(companyType);
@@ -2629,6 +2641,7 @@ public class WorkDealInfoOperationController extends BaseController {
 		start1 = System.currentTimeMillis();        
 		WorkDealInfo workDealInfo = new WorkDealInfo();
 		workDealInfo.setConfigApp(workDealInfo1.getConfigApp());
+		workDealInfo.setCertSort(certSort);
 		ConfigCommercialAgent commercialAgent = configAgentAppRelationService
 				.findAgentByApp(workDealInfo.getConfigApp());
 		workDealInfo.setConfigCommercialAgent(commercialAgent);

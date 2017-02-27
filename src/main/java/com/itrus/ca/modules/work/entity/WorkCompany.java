@@ -30,7 +30,10 @@ public class WorkCompany extends BaseEntity implements java.io.Serializable {
 	// Fields
 
 	private Long id;
-	private String companyName; // 单位名称
+	private String companyName;          // 单位名称
+	
+	private String twoLevelCompanyName;  // 二级单位名称
+	
 	private String comEnglishName;
 	private String companyType;          // 单位类型
 	private String comCertificateType;   // 单位证照
@@ -136,6 +139,15 @@ public class WorkCompany extends BaseEntity implements java.io.Serializable {
 
 	public void setCompanyName(String companyName) {
 		this.companyName = companyName;
+	}
+
+	@Column(name = "two_level_company_name", length = 100,columnDefinition = "NVARCHAR2(100)")
+	public String getTwoLevelCompanyName() {
+		return twoLevelCompanyName;
+	}
+
+	public void setTwoLevelCompanyName(String twoLevelCompanyName) {
+		this.twoLevelCompanyName = twoLevelCompanyName;
 	}
 
 	@Column(name = "com_english_name", length = 100,columnDefinition = "NVARCHAR2(100)")

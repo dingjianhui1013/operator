@@ -331,6 +331,11 @@ public class WorkDealInfoAuditController extends BaseController {
 				model.addAttribute("canEdit", false);
 			}
 			
+			
+			
+			
+			
+			
 			if (workDealInfo.getIsIxin() != null && workDealInfo.getIsIxin()) {
 				
 				ConfigProduct configProduct = workDealInfo.getConfigProduct();
@@ -358,15 +363,7 @@ public class WorkDealInfoAuditController extends BaseController {
 			}else if(workDealInfo.getExpirationDate()!=null){
 				model.addAttribute("expirationDate", workDealInfo.getExpirationDate());
 			}
-			
-			
-			if(workDealInfo.getIsIxin()!=null&&workDealInfo.getIsIxin()){
-				
-				
-			
-			}
-			
-			
+					
 			
 			if (workDealInfo.getIsIxin() != null && workDealInfo.getIsIxin()) {
 				List<CommonAttach> attachs = attachService.findCommonAttachByWorkDealInfo(workDealInfo.getPrevId());
