@@ -9,8 +9,11 @@
 <%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
 
 <%
-	String rootPath = com.itrus.ca.common.config.Global.getConfig("server.root");
+	//String rootPath = com.itrus.ca.common.config.Global.getConfig("server.root");
+    String path = request.getContextPath();  
+    String rootPath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";  
     String imgPath = com.itrus.ca.common.config.Global.getConfig("imgFileUpload.path");
+    
 	request.setAttribute("server.root", rootPath);
 	request.setAttribute("imgFileUpload.path", imgPath);
 %>
