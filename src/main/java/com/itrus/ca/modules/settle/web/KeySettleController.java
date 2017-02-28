@@ -87,7 +87,7 @@ public class KeySettleController extends BaseController {
 		}
 	}
 	
-	@RequiresPermissions("settle:keySettle:view")
+	//@RequiresPermissions("settle:keySettle:view")
 	@RequestMapping(value = {"list", ""})
 	public String list(KeySettle keySettle, KeyPurchase keypurchase,
 			@RequestParam(value = "supplierId", required = false) Long supplierId,

@@ -85,7 +85,7 @@ public class KeyPurchaseController extends BaseController {
 		}
 	}
 	
-	@RequiresPermissions("settle:keyPurchase:view")
+	//@RequiresPermissions("settle:keyPurchase:view")
 	@RequestMapping(value = {"list", ""})
 	public String list(KeyPurchase keyPurchase, HttpServletRequest request, HttpServletResponse response, Model model) {
 		User user = UserUtils.getUser();
