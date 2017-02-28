@@ -563,6 +563,8 @@ public class WorkDealInfoFilingController extends BaseController {
 			model.addAttribute("bangD", "绑定");
 		}
 		List<WorkLog> workLogs = workLogService.findByDealInfo(workDealInfo);
+		Office office = officeService.get(workDealInfo.getOfficeId());
+		model.addAttribute("office", office);
 		model.addAttribute("workLogs", workLogs);
 		model.addAttribute("proType", ProductType.productTypeStrMap);
 		model.addAttribute("wdiType", WorkDealInfoType.WorkDealInfoTypeMap);

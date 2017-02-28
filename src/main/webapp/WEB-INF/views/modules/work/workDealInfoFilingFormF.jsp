@@ -204,7 +204,7 @@
 			</tr>
 			<tr>
 				<th>受理网点:</th>
-				<td>${workDealInfo.createBy.office.name }</td>
+				<td>${office.name }</td>
 				<th>Key序列号:</th>
 				<td>${workDealInfo.keySn }</td>
 			</tr>
