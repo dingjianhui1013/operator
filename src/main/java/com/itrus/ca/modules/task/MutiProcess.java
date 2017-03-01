@@ -633,11 +633,13 @@ public class MutiProcess implements Runnable {
 		workCompanyHis.setAnnualInspection(workCompany.getAnnualInspection());
 		workCompanyHis.setBusinessNumber(workCompany.getBusinessNumber());
 		workCompanyHis.setCity(workCompany.getCity());
-		if (StringHelper.isDigit(workCompany.getComCertficateNumber()))
-			workCompanyHis.setComCertficateNumber(workCompany
-					.getComCertficateNumber());
-		else
-			workCompanyHis.setComCertficateNumber("1");
+//		if (StringHelper.isDigit(workCompany.getComCertficateNumber()))
+//			workCompanyHis.setComCertficateNumber(workCompany
+//					.getComCertficateNumber());
+//		else
+//			workCompanyHis.setComCertficateNumber("1");
+		workCompanyHis.setComCertficateNumber(workCompany
+				.getComCertficateNumber());
 		workCompanyHis.setComCertficateTime(workCompany.getComCertficateTime());
 		workCompanyHis.setComCertificateType(workCompany
 				.getComCertificateType());
