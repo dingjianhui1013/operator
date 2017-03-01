@@ -103,7 +103,7 @@ public class MutiProcess implements Runnable {
 	private Long officeId;
 	private User createBy;
 	private Integer number;
-	
+
 	private static HashMap<String, WorkCompany> companyHash = new HashMap<String, WorkCompany>();
 	// 保存经办人信息，以concert_num（经办人证件号）为准
 	private static HashMap<String, WorkUser> userHash = new HashMap<String, WorkUser>();
@@ -113,8 +113,8 @@ public class MutiProcess implements Runnable {
 	private static HashMap<Long, Double> addMoneyHash = new HashMap<Long, Double>();
 	// 存储 代理商 appId --key
 	private static HashMap<Long, ConfigCommercialAgent> commercialAgentHash = new HashMap<Long, ConfigCommercialAgent>();
-	
-	public static void clearCacheInfo(){
+
+	public static void clearCacheInfo() {
 		companyHash = new HashMap<String, WorkCompany>();
 		userHash = new HashMap<String, WorkUser>();
 		openAccountHash = new HashMap<Long, Double>();
@@ -211,11 +211,15 @@ public class MutiProcess implements Runnable {
 						}
 
 						company.setSelectLv(String.valueOf(s1.getSelectLv()));
-						if (StringHelper.isDigit(s1.getComCertficateNumber()))
-							company.setComCertficateNumber(s1
-									.getComCertficateNumber());
-						else
-							company.setComCertficateNumber("1");
+						// if
+						// (StringHelper.isDigit(s1.getComCertficateNumber()))
+						// company.setComCertficateNumber(s1
+						// .getComCertficateNumber());
+						// else
+						// company.setComCertficateNumber("1");
+						//2017.03.01,建平说工商注册号可以直接往里写，去掉判断是否数字
+						company.setComCertficateNumber(s1
+								.getComCertficateNumber());
 
 						if (s1.getComCertificateTime() != null
 								&& !s1.getComCertificateTime().equals("")) {
