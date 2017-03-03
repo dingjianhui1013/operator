@@ -152,10 +152,11 @@ public class MutiProcess implements Runnable {
 			List<WorkPayInfo> payInfos = new ArrayList<WorkPayInfo>();
 			List<WorkCertApplyInfo> certApplyInfos = new ArrayList<WorkCertApplyInfo>();
 			List<WorkCertInfo> certInfos = new ArrayList<WorkCertInfo>();
-			List<WorkCompanyHis> companyHisList = new ArrayList<WorkCompanyHis>();
+			// List<WorkCompanyHis> companyHisList = new
+			// ArrayList<WorkCompanyHis>();
 			List<WorkUserHis> userHisList = new ArrayList<WorkUserHis>();
 			List<WorkUser> userList = new ArrayList<WorkUser>();
-			List<WorkCompany> companyList = new ArrayList<WorkCompany>();
+			// List<WorkCompany> companyList = new ArrayList<WorkCompany>();
 			SimpleDateFormat dnf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 
 			Integer sjNum = 1;
@@ -217,7 +218,7 @@ public class MutiProcess implements Runnable {
 						// .getComCertficateNumber());
 						// else
 						// company.setComCertficateNumber("1");
-						//2017.03.01,建平说工商注册号可以直接往里写，去掉判断是否数字
+						// 2017.03.01,建平说工商注册号可以直接往里写，去掉判断是否数字
 						company.setComCertficateNumber(s1
 								.getComCertficateNumber());
 
@@ -246,15 +247,16 @@ public class MutiProcess implements Runnable {
 								|| company.getSelectLv().equals("null")) {
 							company.setSelectLv(null);
 						}
-						// workCompanyService.save(company);
-						companyList.add(company);
+						company.setRemarks(s1.getRemark());
+						workCompanyService.save(company);
+						// companyList.add(company);
 
 						companyHash.put(company.getCompanyName(), company);
 						companyHis = change(company);
 					}
 					// log.debug("保存company_his信息");
-					// workCompanyHisService.save(companyHis);
-					companyHisList.add(companyHis);
+					workCompanyHisService.save(companyHis);
+					// companyHisList.add(companyHis);
 
 					String conCerNum = s1.getConCertNumber();// 经办人证件号
 					if (userHash.get(conCerNum) != null) {
@@ -570,9 +572,9 @@ public class MutiProcess implements Runnable {
 					continue;
 				}
 			}
-			log.debug("保存 企业历史 数据+实时数据");
-			workCompanyService.save(companyList);
-			workCompanyHisService.save(companyHisList);
+			// log.debug("保存 企业历史 数据+实时数据");
+			// workCompanyService.save(companyList);
+			// workCompanyHisService.save(companyHisList);
 
 			log.debug("保存 用户历史 数据+实时数据 ");
 			workUserService.save(userList);
@@ -633,11 +635,11 @@ public class MutiProcess implements Runnable {
 		workCompanyHis.setAnnualInspection(workCompany.getAnnualInspection());
 		workCompanyHis.setBusinessNumber(workCompany.getBusinessNumber());
 		workCompanyHis.setCity(workCompany.getCity());
-//		if (StringHelper.isDigit(workCompany.getComCertficateNumber()))
-//			workCompanyHis.setComCertficateNumber(workCompany
-//					.getComCertficateNumber());
-//		else
-//			workCompanyHis.setComCertficateNumber("1");
+		// if (StringHelper.isDigit(workCompany.getComCertficateNumber()))
+		// workCompanyHis.setComCertficateNumber(workCompany
+		// .getComCertficateNumber());
+		// else
+		// workCompanyHis.setComCertficateNumber("1");
 		workCompanyHis.setComCertficateNumber(workCompany
 				.getComCertficateNumber());
 		workCompanyHis.setComCertficateTime(workCompany.getComCertficateTime());
@@ -664,6 +666,7 @@ public class MutiProcess implements Runnable {
 		workCompanyHis.setSelectLv(workCompany.getSelectLv());
 		workCompanyHis.setTcpNumber(workCompany.getTcpNumber());
 		workCompanyHis.setZipCode(workCompany.getZipCode());
+		workCompanyHis.setRemarks(workCompany.getRemarks());
 		return workCompanyHis;
 	}
 
